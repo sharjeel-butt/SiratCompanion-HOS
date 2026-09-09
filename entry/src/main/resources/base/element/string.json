@@ -1,16 +1,24 @@
 {
   "string": [
     {
+      "name": "app_name",
+      "value": "Sirat Companion"
+    },
+    {
       "name": "module_desc",
       "value": "module description"
     },
     {
       "name": "EntryAbility_desc",
-      "value": "description"
+      "value": "Accurate prayer times, Islamic calendar, and prayer tracker – all in one beautiful HarmonyOS app."
     },
     {
       "name": "EntryAbility_label",
-      "value": "label"
+      "value": "Sirat Companion"
+    },
+    {
+      "name": "location_permission_reason",
+      "value": "This app needs your location to show prayer times for your city"
     }
   ]
 }

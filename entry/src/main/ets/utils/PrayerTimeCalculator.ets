@@ -1,0 +1,314 @@
+// entry/src/main/ets/utils/PrayerTimeCalculator.ets
+
+// ---- Enums ----
+
+export enum CalculationMethod {
+  KARACHI = 'Karachi',
+  JAFARI = 'Jafari',
+  ISNA = 'ISNA',
+  MWL = 'MWL'
+}
+
+export enum AsrShadowRule {
+  STANDARD = 1,
+  HANAFI = 2
+}
+
+// ---- Interfaces (All explicit, no object literals as types) ----
+
+export interface DailyPrayerTimes {
+  dhuhr: string;
+  asr: string;
+  maghrib: string;
+  isha: string;
+  fajr: string;
+  date: Date;
+  methodUsed: string;
+  asrRuleUsed: string;
+}
+
+interface SolarPosition {
+  declination: number;
+  equationOfTime: number;
+}
+
+export interface CalculationParameters {
+  fajrAngle: number;
+  ishaAngle: number;
+  methodName: string;
+}
+
+export interface MethodOption {
+  value: CalculationMethod;
+  label: string;
+}
+
+export interface AsrRuleOption {   // <-- NEW: explicitly defined
+  value: AsrShadowRule;
+  label: string;
+}
+
+// ---- Astronomical Constants ----
+
+class Astronomy {
+  static readonly J2000 = 2451545.0;
+  static readonly OBLIQUITY_2000 = 23.439291;
+  static readonly MEAN_ANOMALY_2000 = 357.5291;
+  static readonly MEAN_LONGITUDE_2000 = 280.4665;
+  static readonly ECCENTRICITY_CORRECTION = 0.98560028;
+  static readonly SECONDS_IN_DAY = 86400;
+}
+
+// ---- Main Calculator ----
+
+export class PrayerTimeCalculator {
+
+  // ---- Predefined methods ----
+
+  static readonly KARACHI: CalculationParameters = {
+    fajrAngle: 18,
+    ishaAngle: 18,
+    methodName: 'University of Islamic Sciences, Karachi'
+  };
+
+  static readonly JAFARI: CalculationParameters = {
+    fajrAngle: 16,
+    ishaAngle: 14,
+    methodName: 'Shia Ithna Ashari, Leva Institute, Qum'
+  };
+
+  static readonly ISNA: CalculationParameters = {
+    fajrAngle: 15,
+    ishaAngle: 15,
+    methodName: 'Islamic Society of North America'
+  };
+
+  static readonly MWL: CalculationParameters = {
+    fajrAngle: 18,
+    ishaAngle: 17,
+    methodName: 'Muslim World League'
+  };
+
+  // ---- Public API ----
+
+  static getParameters(method: CalculationMethod): CalculationParameters {
+    switch (method) {
+      case CalculationMethod.KARACHI:
+        return PrayerTimeCalculator.KARACHI;
+      case CalculationMethod.JAFARI:
+        return PrayerTimeCalculator.JAFARI;
+      case CalculationMethod.ISNA:
+        return PrayerTimeCalculator.ISNA;
+      case CalculationMethod.MWL:
+        return PrayerTimeCalculator.MWL;
+      default:
+        return PrayerTimeCalculator.KARACHI;
+    }
+  }
+
+  static getAvailableMethods(): Array<MethodOption> {
+    return [
+      { value: CalculationMethod.KARACHI, label: 'Karachi (18°/18°)' },
+      { value: CalculationMethod.JAFARI, label: 'Jafari - Leva Institute (16°/14°)' },
+      { value: CalculationMethod.ISNA, label: 'ISNA (15°/15°)' },
+      { value: CalculationMethod.MWL, label: 'Muslim World League (18°/17°)' }
+    ];
+  }
+
+  // FIXED: Uses explicit AsrRuleOption interface
+  static getAvailableAsrRules(): Array<AsrRuleOption> {
+    return [
+      { value: AsrShadowRule.STANDARD, label: 'Standard (Shafi\'i / Maliki / Hanbali)' },
+      { value: AsrShadowRule.HANAFI, label: 'Hanafi' }
+    ];
+  }
+
+  static calculate(
+    date: Date,
+    latitude: number,
+    longitude: number,
+    timezoneOffset: number,
+    method: CalculationMethod,
+    asrRule: AsrShadowRule = AsrShadowRule.STANDARD
+  ): DailyPrayerTimes {
+    const params = PrayerTimeCalculator.getParameters(method);
+    const solarPos = PrayerTimeCalculator.getSolarPosition(date);
+    const dec = solarPos.declination;
+    const eot = solarPos.equationOfTime;
+
+    const dhuhrUTC = 12 - (longitude / 15) - (eot / 60);
+    const dhuhr = PrayerTimeCalculator.dateFromUTCHours(date, dhuhrUTC + timezoneOffset);
+
+    const sunriseUTC = PrayerTimeCalculator.calculateTimeForAltitude(
+      date, latitude, longitude, dec, eot, 0, false
+    );
+    const sunsetUTC = PrayerTimeCalculator.calculateTimeForAltitude(
+      date, latitude, longitude, dec, eot, 0, true
+    );
+    const sunrise = PrayerTimeCalculator.dateFromUTCHours(date, sunriseUTC + timezoneOffset);
+    const sunset = PrayerTimeCalculator.dateFromUTCHours(date, sunsetUTC + timezoneOffset);
+
+    const fajrUTC = PrayerTimeCalculator.calculateTimeForAltitude(
+      date, latitude, longitude, dec, eot, -params.fajrAngle, false
+    );
+    const ishaUTC = PrayerTimeCalculator.calculateTimeForAltitude(
+      date, latitude, longitude, dec, eot, -params.ishaAngle, true
+    );
+    const fajr = PrayerTimeCalculator.dateFromUTCHours(date, fajrUTC + timezoneOffset);
+    const isha = PrayerTimeCalculator.dateFromUTCHours(date, ishaUTC + timezoneOffset);
+
+    const asrAltitude = PrayerTimeCalculator.calculateAsrAltitude(latitude, dec, asrRule);
+    const asrUTC = PrayerTimeCalculator.calculateTimeForAltitude(
+      date, latitude, longitude, dec, eot, asrAltitude, true
+    );
+    const asr = PrayerTimeCalculator.dateFromUTCHours(date, asrUTC + timezoneOffset);
+
+    const maghrib = new Date(sunset);
+
+    return {
+      dhuhr: PrayerTimeCalculator.formatTime(dhuhr),
+      asr: PrayerTimeCalculator.formatTime(asr),
+      maghrib: PrayerTimeCalculator.formatTime(maghrib),
+      isha: PrayerTimeCalculator.formatTime(isha),
+      fajr: PrayerTimeCalculator.formatTime(fajr),
+      date: new Date(date),
+      methodUsed: params.methodName,
+      asrRuleUsed: asrRule === AsrShadowRule.STANDARD ? 'Standard (Shafi\'i)' : 'Hanafi'
+    };
+  }
+
+  static calculateWithDeviceTimezone(
+    date: Date,
+    latitude: number,
+    longitude: number,
+    method: CalculationMethod,
+    asrRule: AsrShadowRule = AsrShadowRule.STANDARD
+  ): DailyPrayerTimes {
+    const timezoneOffset = PrayerTimeCalculator.getCurrentTimezoneOffset(date);
+    return PrayerTimeCalculator.calculate(date, latitude, longitude, timezoneOffset, method, asrRule);
+  }
+
+  // ---- Internal Astronomical Methods ----
+
+  private static getSolarPosition(date: Date): SolarPosition {
+    const jd = PrayerTimeCalculator.calculateJulianDay(date);
+    const daysSinceJ2000 = jd - Astronomy.J2000;
+
+    let meanAnomaly = Astronomy.MEAN_ANOMALY_2000 + Astronomy.ECCENTRICITY_CORRECTION * daysSinceJ2000;
+    meanAnomaly = PrayerTimeCalculator.normalizeAngle(meanAnomaly);
+
+    let meanLongitude = Astronomy.MEAN_LONGITUDE_2000 + Astronomy.ECCENTRICITY_CORRECTION * daysSinceJ2000;
+    meanLongitude = PrayerTimeCalculator.normalizeAngle(meanLongitude);
+
+    const mRad = meanAnomaly * Math.PI / 180;
+    const eqCenter = 1.91482 * Math.sin(mRad) - 0.00099 * Math.sin(2 * mRad) + 0.00002 * Math.sin(3 * mRad);
+
+    let eclipticLongitude = meanLongitude + eqCenter;
+    const centuries = daysSinceJ2000 / 36525;
+    const obliquity = Astronomy.OBLIQUITY_2000 - 0.0130042 * centuries;
+
+    const eclRad = eclipticLongitude * Math.PI / 180;
+    const oblRad = obliquity * Math.PI / 180;
+
+    const sinDec = Math.sin(eclRad) * Math.sin(oblRad);
+    const dec = Math.asin(sinDec) * 180 / Math.PI;
+
+    let ra = Math.atan2(Math.sin(eclRad) * Math.cos(oblRad), Math.cos(eclRad));
+    ra = ra * 180 / Math.PI;
+
+    let eot = 4 * (meanLongitude - ra);
+    if (eot > 20) eot = eot - 1440;
+    if (eot < -20) eot = eot + 1440;
+
+    return { declination: dec, equationOfTime: eot };
+  }
+
+  private static calculateJulianDay(date: Date): number {
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate() + date.getHours() / 24 + date.getMinutes() / 1440 + date.getSeconds() / 86400;
+
+    if (month <= 2) {
+      year -= 1;
+      month += 12;
+    }
+
+    const a = Math.floor(year / 100);
+    const b = 2 - a + Math.floor(a / 4);
+    return Math.floor(365.25 * (year + 4716)) + Math.floor(30.6001 * (month + 1)) + day + b - 1524.5;
+  }
+
+  private static normalizeAngle(degrees: number): number {
+    let angle = degrees % 360;
+    if (angle < 0) {
+      angle += 360;
+    }
+    return angle;
+  }
+
+  private static calculateTimeForAltitude(
+    date: Date,
+    latitude: number,
+    longitude: number,
+    declinationDeg: number,
+    equationOfTimeMinutes: number,
+    targetAltitudeDeg: number,
+    isAfternoon: boolean
+  ): number {
+    const rad = Math.PI / 180;
+    const latRad = latitude * rad;
+    const decRad = declinationDeg * rad;
+    const altRad = targetAltitudeDeg * rad;
+
+    const numerator = Math.sin(altRad) - Math.sin(latRad) * Math.sin(decRad);
+    const denominator = Math.cos(latRad) * Math.cos(decRad);
+    let cosHA = numerator / denominator;
+
+    if (cosHA > 1) cosHA = 1;
+    if (cosHA < -1) cosHA = -1;
+
+    const haRad = Math.acos(cosHA);
+    let haDeg = haRad * 180 / Math.PI;
+
+    if (!isAfternoon) {
+      haDeg = -haDeg;
+    }
+
+    const solarNoonUTC = 12 - (longitude / 15) - (equationOfTimeMinutes / 60);
+    return solarNoonUTC + (haDeg / 15);
+  }
+
+  private static calculateAsrAltitude(
+    latitude: number,
+    declinationDeg: number,
+    rule: AsrShadowRule
+  ): number {
+    const rad = Math.PI / 180;
+    const latRad = latitude * rad;
+    const decRad = declinationDeg * rad;
+    const delta = Math.abs(latRad - decRad);
+    const multiplier = rule as number;
+
+    const altitudeRad = Math.atan(1 / (multiplier + Math.tan(delta)));
+    return altitudeRad * 180 / Math.PI;
+  }
+
+  // ---- Utility Methods ----
+
+  private static dateFromUTCHours(date: Date, utcHours: number): Date {
+    const result = new Date(date);
+    result.setHours(0, 0, 0, 0);
+    result.setMinutes(utcHours * 60);
+    return result;
+  }
+
+  private static formatTime(date: Date): string {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  }
+
+  private static getCurrentTimezoneOffset(date: Date): number {
+    return -date.getTimezoneOffset() / 60;
+  }
+}
