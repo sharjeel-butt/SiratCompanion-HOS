@@ -1,9 +1,11 @@
+// entry/src/main/ets/models/Prayer.ets
+
 export interface Prayer {
   id: string;
   name: string;
   arabicName: string;
   time: string;
-  status: 'next' | 'pray' | 'express' | 'abbreviation' | 'locked';
+  status: 'next' | 'pray' | 'both' | 'prayed' | 'express' | 'abbreviation' | 'locked';
   checked?: boolean;
 }
 
@@ -12,5 +14,6 @@ export interface ExtraTiming {
   name: string;
   arabicName: string;
   time: string;
-  status: 'abbreviation' | 'normal';
+  status: 'next' | 'pray' | 'both' | 'prayed' | 'express' | 'abbreviation' | 'locked';
+  icon?: string;   // <-- NEW: optional icon
 }
