@@ -1,6 +1,6 @@
 // entry/src/main/ets/utils/DateUtils.ets
 
-import { IslamicEvent, UpcomingImportantDate } from '../models/DateModels';
+import { UpcomingImportantDate } from '../models/DateModels';
 import { IMPORTANT_ISLAMIC_EVENTS } from '../data/IslamicEvents';
 
 export class DateHelper {
