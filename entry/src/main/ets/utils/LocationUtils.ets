@@ -34,6 +34,32 @@ export class LocationHelper {
   }
 
   /**
+   * Reverse-geocode coordinates into a city name.
+   * Returns 'Unknown location' if lookup fails.
+   */
+  static async reverseGeocode(latitude: number, longitude: number): Promise<string> {
+    try {
+      const reverseRequest: geoLocationManager.ReverseGeoCodeRequest = {
+        latitude: latitude,
+        longitude: longitude,
+        maxItems: 1,
+        locale: 'en'
+      };
+      const results = await geoLocationManager.getAddressesFromLocation(reverseRequest);
+      if (results && results.length > 0) {
+        const addr = results[0];
+        const city = addr.locality || addr.administrativeArea || addr.subLocality || '';
+        if (city.length > 0) return city.toUpperCase();
+      }
+      return 'Unknown location';
+    } catch (err) {
+      const error = err as BusinessError;
+      console.error(`[LocationHelper] reverseGeocode failed: ${error.code}, ${error.message}`);
+      return 'Unknown location';
+    }
+  }
+
+  /**
    * Check if the system location master switch is ON.
    */
   static async isLocationEnabled(): Promise<boolean> {
@@ -50,19 +76,12 @@ export class LocationHelper {
    * Throws errors: 'GPS_OFF', 'PERMISSION_DENIED', or generic.
    */
   static async fetchLocationData(context: Context): Promise<LocationData> {
-    // 1. Check if location master switch is ON
     const enabled = await LocationHelper.isLocationEnabled();
-    if (!enabled) {
-      throw new Error('GPS_OFF');
-    }
+    if (!enabled) throw new Error('GPS_OFF');
 
-    // 2. Check permission
     const hasPermission = await LocationHelper.requestLocationPermission(context);
-    if (!hasPermission) {
-      throw new Error('PERMISSION_DENIED');
-    }
+    if (!hasPermission) throw new Error('PERMISSION_DENIED');
 
-    // 3. Get the coordinates
     const request: geoLocationManager.CurrentLocationRequest = {
       priority: geoLocationManager.LocationRequestPriority.LOW_POWER,
       timeoutMs: 10000,
@@ -70,25 +89,13 @@ export class LocationHelper {
     };
     const location = await geoLocationManager.getCurrentLocation(request);
 
-    // 4. Reverse geocode to get the city name
-    const reverseRequest: geoLocationManager.ReverseGeoCodeRequest = {
-      latitude: location.latitude,
-      longitude: location.longitude,
-      maxItems: 1,
-      locale: 'en'
-    };
-    const geocodeResults = await geoLocationManager.getAddressesFromLocation(reverseRequest);
-
-    let cityName = 'Unknown location';
-    if (geocodeResults && geocodeResults.length > 0) {
-      const address = geocodeResults[0];
-      cityName = address.locality || address.administrativeArea || 'Unknown location';
-    }
+    // Reuse the new method
+    const cityName = await LocationHelper.reverseGeocode(location.latitude, location.longitude);
 
     return {
       latitude: location.latitude,
       longitude: location.longitude,
-      cityName: cityName.toUpperCase()
+      cityName: cityName
     };
   }
 

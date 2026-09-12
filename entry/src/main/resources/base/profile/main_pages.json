@@ -1,6 +1,9 @@
 {
   "src": [
     "pages/Index",
+    "pages/CustomizePage",
+    "pages/QiblaPage",
+    "pages/TasbihPage",
     "pages/SettingsPage"
   ]
 }
