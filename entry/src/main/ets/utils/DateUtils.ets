@@ -83,6 +83,19 @@ export class DateHelper {
     return `${hijriDate} (${georgianDate})`;
   }
 
+  /**
+   * Islamic (Hijri) date for any given date.
+   * Example: "19 Rabi I 1448"
+   */
+  static getFormattedHijriDateFor(date: Date): string {
+    const hijriFormatter = new Intl.DateTimeFormat('en-u-ca-islamic', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+    return hijriFormatter.format(date).replace(' AH', '');
+  }
+
   static getFormattedHijriDate(): string {
     const now = new Date();
     const hijriFormatter = new Intl.DateTimeFormat('en-u-ca-islamic', {

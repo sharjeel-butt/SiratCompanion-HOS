@@ -1,35 +1,68 @@
 // entry/src/main/ets/utils/LocationCache.ets
 
-import { STORAGE_KEY_CACHED_LAT, STORAGE_KEY_CACHED_LNG, STORAGE_KEY_CACHED_CITY } from '../common/StorageKeys';
+import { PreferencesHelper } from './PreferencesHelper';
 
-export interface CachedLocation {
+// ---- Interfaces ----
+
+/**
+ * Fallback location coordinates (used when no GPS fix and no cache exist).
+ */
+export interface FallbackLocation {
   latitude: number;
   longitude: number;
   cityName: string;
 }
 
-export const FALLBACK_LOCATION: CachedLocation = {
+/**
+ * Full cached location including the time of last refresh.
+ */
+export interface CachedLocation {
+  latitude: number;
+  longitude: number;
+  cityName: string;
+  lastRefreshTime: number;
+}
+
+// ---- Constants ----
+
+export const FALLBACK_LOCATION: FallbackLocation = {
   latitude: 33.6844,
   longitude: 73.0479,
   cityName: 'DEFAULT LOCATION'
 };
 
+// ---- Storage keys ----
+const KEY_LAT     = 'gps_lat';
+const KEY_LNG     = 'gps_lng';
+const KEY_CITY    = 'gps_city';
+const KEY_REFRESH = 'gps_refresh';
+
+// ---- Class ----
+
 export class LocationCache {
 
-  static load(): CachedLocation | null {
-    const lat = AppStorage.get<number>(STORAGE_KEY_CACHED_LAT);
-    const lng = AppStorage.get<number>(STORAGE_KEY_CACHED_LNG);
-    const city = AppStorage.get<string>(STORAGE_KEY_CACHED_CITY);
+  static async load(): Promise<CachedLocation | null> {
+    const lat     = await PreferencesHelper.getNumber(KEY_LAT, NaN);
+    const lng     = await PreferencesHelper.getNumber(KEY_LNG, NaN);
+    const city    = await PreferencesHelper.getString(KEY_CITY, '');
+    const refresh = await PreferencesHelper.getNumber(KEY_REFRESH, 0);
 
-    if (lat !== undefined && lng !== undefined && city) {
-      return { latitude: lat, longitude: lng, cityName: city };
+    if (!isNaN(lat) && !isNaN(lng) && city.length > 0) {
+      const result: CachedLocation = {
+        latitude: lat,
+        longitude: lng,
+        cityName: city,
+        lastRefreshTime: refresh
+      };
+      return result;
     }
     return null;
   }
 
   static save(lat: number, lng: number, city: string): void {
-    AppStorage.setOrCreate(STORAGE_KEY_CACHED_LAT, lat);
-    AppStorage.setOrCreate(STORAGE_KEY_CACHED_LNG, lng);
-    AppStorage.setOrCreate(STORAGE_KEY_CACHED_CITY, city);
+    PreferencesHelper.setNumber(KEY_LAT, lat);
+    PreferencesHelper.setNumber(KEY_LNG, lng);
+    PreferencesHelper.setString(KEY_CITY, city);
+    PreferencesHelper.setNumber(KEY_REFRESH, Date.now());
   }
 }

@@ -19,6 +19,10 @@
     {
       "name": "location_permission_reason",
       "value": "This app needs your location to show prayer times for your city"
+    },
+    {
+      "name": "sensor_permission_reason",
+      "value": "This app needs sensor access to show the Qibla direction."
     }
   ]
 }
