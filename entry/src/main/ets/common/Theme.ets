@@ -6,10 +6,6 @@ export enum ThemeMode {
   SYSTEM = 'System'
 }
 
-/**
- * A snapshot of every color used in the app.
- * Pages hold this in @State so theme changes re-render reliably.
- */
 export class ThemeColors {
   primaryGreen: string = '#F5F2EC';
   cardDark: string = '#FFFFFF';
@@ -40,11 +36,11 @@ export class ThemeColors {
   categoryAppearance: string = '#9C88FF';
   categoryCounter: string = '#4CC9F0';
   categoryAbout: string = '#F4A261';
+  categoryHijriCalendar: string = '#06B6D4';
 }
 
 export class Theme {
 
-  // ---- Layout constants (theme-independent) ----
   static readonly radiusSmall = 8;
   static readonly radiusMedium = 16;
   static readonly radiusLarge = 24;
@@ -52,11 +48,6 @@ export class Theme {
   static readonly paddingMedium = 16;
   static readonly paddingLarge = 24;
 
-  /**
-   * Return a fresh ThemeColors instance for the given mode.
-   * @param mode "Light" | "Dark" | "System"
-   * @param isSystemDark true if the OS is in dark mode
-   */
   static getColors(mode: string, isSystemDark: boolean): ThemeColors {
     let effective = mode;
     if (mode === ThemeMode.SYSTEM) {
@@ -95,8 +86,8 @@ export class Theme {
       c.categoryAppearance = '#A78BFA';
       c.categoryCounter = '#38BDF8';
       c.categoryAbout = '#FBBF24';
+      c.categoryHijriCalendar = '#22D3EE';
     }
-    // Light is the default (already set in the constructor)
 
     return c;
   }

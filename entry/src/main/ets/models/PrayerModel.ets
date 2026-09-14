@@ -1,4 +1,4 @@
-// entry/src/main/ets/models/Prayer.ets
+// entry/src/main/ets/models/PrayerModel.ets
 
 export interface Prayer {
   id: string;

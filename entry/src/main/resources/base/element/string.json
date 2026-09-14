@@ -1,16 +1,12 @@
 {
   "string": [
     {
-      "name": "app_name",
-      "value": "Sirat Companion"
-    },
-    {
       "name": "module_desc",
-      "value": "module description"
+      "value": "Sirat Companion entry module"
     },
     {
       "name": "EntryAbility_desc",
-      "value": "Accurate prayer times, Islamic calendar, and prayer tracker – all in one beautiful HarmonyOS app."
+      "value": "Your Daily Islamic Companion"
     },
     {
       "name": "EntryAbility_label",
@@ -18,11 +14,11 @@
     },
     {
       "name": "location_permission_reason",
-      "value": "This app needs your location to show prayer times for your city"
+      "value": "Used to calculate prayer times and Qibla direction for your location"
     },
     {
       "name": "sensor_permission_reason",
-      "value": "This app needs sensor access to show the Qibla direction."
+      "value": "Used for the Qibla compass"
     }
   ]
 }

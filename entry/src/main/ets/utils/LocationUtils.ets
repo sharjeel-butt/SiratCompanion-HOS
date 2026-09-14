@@ -1,15 +1,22 @@
 // entry/src/main/ets/utils/LocationUtils.ets
 
 import { geoLocationManager } from '@kit.LocationKit';
-import { abilityAccessCtrl, Permissions, PermissionRequestResult, Context } from '@kit.AbilityKit';
+import { abilityAccessCtrl, Context, PermissionRequestResult, Permissions } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { promptAction } from '@kit.ArkUI';
+import { i18n } from '@kit.LocalizationKit';
+import { OfflineCityLookup } from './OfflineCityLookup';
 
 // ----- Interface for location result -----
 export interface LocationData {
   latitude: number;
   longitude: number;
   cityName: string;
+}
+
+interface ReverseResult {
+  kind: 'city' | 'country';
+  value: string;
 }
 
 export class LocationHelper {
@@ -35,27 +42,137 @@ export class LocationHelper {
 
   /**
    * Reverse-geocode coordinates into a city name.
-   * Returns 'Unknown location' if lookup fails.
+   *
+   * Order of resolution:
+   *   1. Offline city table (instant, no network, top ~60 cities)
+   *   2. System geocoder — tries the device locale then fallbacks
+   *   3. countryName as a last resort
+   *   4. 'Unknown location'
    */
   static async reverseGeocode(latitude: number, longitude: number): Promise<string> {
+    // 1. Offline nearest-city match
+    const offline = OfflineCityLookup.nearest(latitude, longitude);
+    if (offline !== null) {
+      console.info(`[LocationHelper] reverseGeocode offline match: ${offline}`);
+      return offline;
+    }
+
+    // 2. System geocoder, several locales
+    const locales = LocationHelper.buildLocaleCandidates();
+    let lastCountry: string | null = null;
+
+    for (const locale of locales) {
+      const result = await LocationHelper.tryReverseGeocode(latitude, longitude, locale);
+      if (result !== null) {
+        if (result.kind === 'city') return result.value;
+        if (result.kind === 'country') lastCountry = result.value;
+      }
+    }
+
+    // 3. Country as a fallback when no city was found
+    if (lastCountry !== null) {
+      console.info(`[LocationHelper] reverseGeocode country-only fallback: ${lastCountry}`);
+      return lastCountry;
+    }
+
+    console.warn('[LocationHelper] reverseGeocode: no data at all');
+    return 'Unknown location';
+  }
+
+  /**
+   * Build a de-duplicated list of locale strings to try, in order.
+   * The device's system language goes first.
+   */
+  private static buildLocaleCandidates(): string[] {
+    const out: string[] = [];
+
+    // Device language (e.g. "zh", "ur", "ar")
     try {
-      const reverseRequest: geoLocationManager.ReverseGeoCodeRequest = {
+      const sysLocale = i18n.System.getSystemLocale();      // "zh-Hans-CN"
+      const lang = sysLocale.split('-')[0];
+      if (lang.length > 0) out.push(lang);
+    } catch (err) {
+      // ignore — fall through to defaults
+    }
+
+    // Common fallbacks. Order matters: 'en' first because most
+    // geocoding services return Latin script by default, then the
+    // languages most likely to unlock region-restricted data.
+    const fallbacks = ['en', 'zh', 'ur', 'ar'];
+    for (const f of fallbacks) {
+      if (out.indexOf(f) === -1) out.push(f);
+    }
+
+    return out;
+  }
+
+  /**
+   * Single-locale reverse geocode attempt.
+   * Returns null if nothing usable was found, otherwise an object
+   * describing whether we got a city-level or country-level result.
+   */
+  private static async tryReverseGeocode(
+    latitude: number,
+    longitude: number,
+    locale: string
+  ): Promise<ReverseResult | null> {
+    try {
+      const request: geoLocationManager.ReverseGeoCodeRequest = {
         latitude: latitude,
         longitude: longitude,
         maxItems: 1,
-        locale: 'en'
+        locale: locale
       };
-      const results = await geoLocationManager.getAddressesFromLocation(reverseRequest);
-      if (results && results.length > 0) {
-        const addr = results[0];
-        const city = addr.locality || addr.administrativeArea || addr.subLocality || '';
-        if (city.length > 0) return city.toUpperCase();
+
+      const results = await geoLocationManager.getAddressesFromLocation(request);
+      if (!results || results.length === 0) {
+        console.info(`[LocationHelper] reverseGeocode locale='${locale}': no results`);
+        return null;
       }
-      return 'Unknown location';
+
+      const addr = results[0];
+
+      console.info(
+        `[LocationHelper] reverseGeocode locale='${locale}' raw: ` +
+          `placeName="${addr.placeName}", ` +
+          `locality="${addr.locality}", ` +
+          `subLocality="${addr.subLocality}", ` +
+          `adminArea="${addr.administrativeArea}", ` +
+          `subAdminArea="${addr.subAdministrativeArea}", ` +
+          `countryName="${addr.countryName}"`
+      );
+
+      // City-level fields, most specific first
+      const cityCandidates: Array<string | undefined> = [
+        addr.locality,
+        addr.subAdministrativeArea,
+        addr.administrativeArea,
+        addr.subLocality,
+        addr.placeName
+      ];
+
+      for (const s of cityCandidates) {
+        if (typeof s === 'string' && s.length > 0) {
+          const r: ReverseResult = { kind: 'city', value: s.toUpperCase() };
+          return r;
+        }
+      }
+
+      // Nothing city-level — remember the country for a possible
+      // later fallback.
+      if (typeof addr.countryName === 'string' && addr.countryName.length > 0) {
+        const r: ReverseResult = { kind: 'country', value: addr.countryName.toUpperCase() };
+        return r;
+      }
+
+      return null;
     } catch (err) {
       const error = err as BusinessError;
-      console.error(`[LocationHelper] reverseGeocode failed: ${error.code}, ${error.message}`);
-      return 'Unknown location';
+      console.warn(
+        `[LocationHelper] reverseGeocode locale='${locale}' failed: ` +
+          `${error.code}, ${error.message}`
+      );
+      return null;
     }
   }
 
@@ -97,14 +214,6 @@ export class LocationHelper {
       longitude: location.longitude,
       cityName: cityName
     };
-  }
-
-  /**
-   * Legacy method: keep for backward compatibility (only returns city).
-   */
-  static async fetchCityName(context: Context): Promise<string> {
-    const data = await LocationHelper.fetchLocationData(context);
-    return data.cityName;
   }
 
   /**

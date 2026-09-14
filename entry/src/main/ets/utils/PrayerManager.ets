@@ -1,8 +1,8 @@
 // entry/src/main/ets/utils/PrayerManager.ets
 
-import { Prayer, ExtraTiming } from '../models/Prayer';
+import { ExtraTiming, Prayer } from '../models/PrayerModel';
 import { DailyPrayerTimes } from './PrayerTimeCalculator';
-import { PrayerOffsets } from './SettingsHelper';
+import { PrayerOffsets } from '../helper/SettingsHelper';
 
 export interface PrayerCheckState {
   fajr: boolean;
@@ -229,7 +229,22 @@ export class PrayerManager {
   // STATUS RECALCULATION (date-aware)
   // ============================================================
 
-  static updateStatuses(prayers: Prayer[], viewingDate?: Date): Prayer[] {
+  /**
+   * Recompute prayer statuses.
+   *
+   * @param prayers               Prayer list (already carries times + checked flags)
+   * @param viewingDate           The date being viewed. If omitted, assumes today.
+   * @param locationOffsetHours   Effective offset of the *location* being shown
+   *                              (hours east of UTC). When provided, "current time"
+   *                              is computed in the location's local time, so
+   *                              statuses stay correct even when the user is
+   *                              viewing a distant city.
+   */
+  static updateStatuses(
+    prayers: Prayer[],
+    viewingDate?: Date,
+    locationOffsetHours?: number
+  ): Prayer[] {
     // Non-today dates: no NEXT/Pray highlighting, but keep the "Prayed" badge
     if (viewingDate) {
       const today = new Date();
@@ -243,19 +258,43 @@ export class PrayerManager {
           name: p.name,
           arabicName: p.arabicName,
           time: p.time,
-          // ✅ Show "Prayed" if checked, otherwise no label
           status: p.checked ? 'prayed' : 'abbreviation',
           checked: p.checked
         } as Prayer));
       }
     }
 
-    // Today: existing logic
     const now = new Date();
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    // Compute "current minutes" in the location's local time.
+    let currentMinutes: number;
+    if (locationOffsetHours !== undefined) {
+      const deviceOffset = -now.getTimezoneOffset() / 60;
+      const deltaMinutes = Math.round((locationOffsetHours - deviceOffset) * 60);
+      const deviceMinutes = now.getHours() * 60 + now.getMinutes();
+      currentMinutes = (((deviceMinutes + deltaMinutes) % 1440) + 1440) % 1440;
+    } else {
+      currentMinutes = now.getHours() * 60 + now.getMinutes();
+    }
+
     const times = prayers.map(p => PrayerManager.timeToMinutes(p.time));
     const n = times.length;
     if (n === 0) return prayers;
+
+    // Pre-Fajr window
+    const fajrMinutes = times[0];
+    if (fajrMinutes > 0 && currentMinutes < fajrMinutes) {
+      return prayers.map((p, i): Prayer => {
+        let status: string;
+        if (p.checked) status = 'prayed';
+        else if (i === 0) status = 'next';
+        else status = 'abbreviation';
+        return {
+          id: p.id, name: p.name, arabicName: p.arabicName,
+          time: p.time, status: status, checked: p.checked
+        } as Prayer;
+      });
+    }
 
     let timePrayIndex = -1;
     for (let i = 0; i < n; i++) {
@@ -290,12 +329,8 @@ export class PrayerManager {
       else status = 'abbreviation';
 
       return {
-        id: p.id,
-        name: p.name,
-        arabicName: p.arabicName,
-        time: p.time,
-        status: status,
-        checked: p.checked
+        id: p.id, name: p.name, arabicName: p.arabicName,
+        time: p.time, status: status, checked: p.checked
       } as Prayer;
     });
   }
@@ -374,15 +409,6 @@ export class PrayerManager {
       console.error(`Failed to parse state for ${dateKey}: ${JSON.stringify(err)}`);
       return PrayerManager.applyDayNames(resetPrayers, date);
     }
-  }
-
-  // Backward-compatible wrappers
-  static saveTodayState(prayers: Prayer[]): void {
-    PrayerManager.saveStateForDate(PrayerManager.getDateKey(), prayers);
-  }
-
-  static loadTodayState(prayers: Prayer[]): Prayer[] {
-    return PrayerManager.loadStateForDate(PrayerManager.getDateKey(), prayers, new Date());
   }
 
   // ============================================================

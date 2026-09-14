@@ -1,8 +1,12 @@
-// entry/src/main/ets/utils/SettingsHelper.ets
+// entry/src/main/ets/helper/SettingsHelper.ets
 
 import { ThemeMode } from '../common/Theme';
-import { STORAGE_KEY_THEME_MODE } from '../common/StorageKeys';
-import { CalculationMethod, AsrShadowRule } from './PrayerTimeCalculator';
+import {
+  STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_HIJRI_OFFSET,
+  STORAGE_KEY_LANGUAGE
+} from '../common/StorageKeys';
+import { CalculationMethod, AsrShadowRule } from '../utils/PrayerTimeCalculator';
 import { PreferencesHelper } from './PreferencesHelper';
 import {
   PickerItem,
@@ -10,11 +14,12 @@ import {
   LocationMode,
   ManualCoords
 } from '../models/SettingsModels';
+import { L } from './LocalizationHelper';
+import { STORAGE_KEY_WIZARD_COMPLETED } from '../common/StorageKeys';
 
 const KEY_METHOD  = 'calc_method';
 const KEY_ASR     = 'asr_rule';
 const KEY_SOURCE  = 'calc_source';
-const KEY_COUNTER = 'counter';
 
 const KEY_LOCATION_MODE  = 'location_mode';
 const KEY_MANUAL_LAT     = 'manual_lat';
@@ -25,16 +30,11 @@ const KEY_MANUAL_CITY    = 'manual_city';
 const KEY_SHOW_EXTRA_TIMINGS  = 'show_extra_timings';
 const KEY_SHOW_ISLAMIC_EVENTS = 'show_islamic_events';
 
-// Prayer offset keys (values are minutes, negative = subtract)
 const KEY_OFFSET_FAJR    = 'offset_fajr';
 const KEY_OFFSET_DHUHR   = 'offset_dhuhr';
 const KEY_OFFSET_ASR     = 'offset_asr';
 const KEY_OFFSET_MAGHRIB = 'offset_maghrib';
 const KEY_OFFSET_ISHA    = 'offset_isha';
-
-// ============================================================
-// INTERFACES
-// ============================================================
 
 export interface PrayerOffsets {
   fajr: number;
@@ -56,22 +56,16 @@ export interface LoadedSettings {
   method: CalculationMethod;
   asr: AsrShadowRule;
   source: CalculationSource;
-  counter: number;
   showExtraTimings: boolean;
   showIslamicEvents: boolean;
 }
 
 export class SettingsHelper {
 
-  // ============================================================
-  // GENERAL SETTINGS
-  // ============================================================
-
   static async loadAll(): Promise<LoadedSettings> {
     const methodStr = await PreferencesHelper.getString(KEY_METHOD, CalculationMethod.KARACHI);
     const asrNum    = await PreferencesHelper.getNumber(KEY_ASR, AsrShadowRule.STANDARD as number);
     const sourceStr = await PreferencesHelper.getString(KEY_SOURCE, CalculationSource.LOCAL);
-    const counter   = await PreferencesHelper.getNumber(KEY_COUNTER, 0);
     const showExtraTimings  = await PreferencesHelper.getBoolean(KEY_SHOW_EXTRA_TIMINGS, true);
     const showIslamicEvents = await PreferencesHelper.getBoolean(KEY_SHOW_ISLAMIC_EVENTS, true);
 
@@ -79,7 +73,6 @@ export class SettingsHelper {
       method: methodStr as CalculationMethod,
       asr: asrNum as AsrShadowRule,
       source: sourceStr as CalculationSource,
-      counter,
       showExtraTimings,
       showIslamicEvents
     };
@@ -95,10 +88,6 @@ export class SettingsHelper {
 
   static saveSource(source: CalculationSource): void {
     PreferencesHelper.setString(KEY_SOURCE, source);
-  }
-
-  static saveCounter(value: number): void {
-    PreferencesHelper.setNumber(KEY_COUNTER, value);
   }
 
   static saveShowExtraTimings(value: boolean): void {
@@ -133,11 +122,8 @@ export class SettingsHelper {
     await PreferencesHelper.setNumber(KEY_OFFSET_ASR, offsets.asr);
     await PreferencesHelper.setNumber(KEY_OFFSET_MAGHRIB, offsets.maghrib);
     await PreferencesHelper.setNumber(KEY_OFFSET_ISHA, offsets.isha);
-
-    console.info(`[SettingsHelper] Saved offsets: fajr=${offsets.fajr}, dhuhr=${offsets.dhuhr}, asr=${offsets.asr}, maghrib=${offsets.maghrib}, isha=${offsets.isha}`);
   }
 
-  // Expose keys so the Settings page can save individual offsets
   static readonly OFFSET_KEYS: OffsetKeys = {
     fajr: KEY_OFFSET_FAJR,
     dhuhr: KEY_OFFSET_DHUHR,
@@ -158,6 +144,7 @@ export class SettingsHelper {
 
   static saveLocationMode(mode: LocationMode): void {
     PreferencesHelper.setString(KEY_LOCATION_MODE, mode);
+    SettingsHelper.bumpLocationVersion();
   }
 
   static async getManualCoords(): Promise<ManualCoords> {
@@ -176,9 +163,14 @@ export class SettingsHelper {
     await PreferencesHelper.setNumber(KEY_MANUAL_REFRESH, refresh);
     await PreferencesHelper.setString(KEY_MANUAL_CITY, cityName);
 
-    console.info(`[SettingsHelper] Saved manual coords: ${lat}, ${lng} (${cityName})`);
-
+    SettingsHelper.bumpLocationVersion();
     return { lat, lng, refresh, cityName };
+  }
+
+  private static bumpLocationVersion(): void {
+    const prev = AppStorage.get<number>('location_version');
+    const next = (prev === undefined ? 0 : prev) + 1;
+    AppStorage.setOrCreate('location_version', next);
   }
 
   // ============================================================
@@ -187,36 +179,62 @@ export class SettingsHelper {
 
   static getCalcMethodLabel(method: CalculationMethod): string {
     switch (method) {
-      case CalculationMethod.KARACHI: return 'University of Islamic Sciences, Karachi';
-      case CalculationMethod.JAFARI:  return 'Shia Ithna Ashari (Leva Institute, Qum)';
-      case CalculationMethod.ISNA:    return 'Islamic Society of North America';
-      case CalculationMethod.MWL:     return 'Muslim World League';
-      default: return 'Karachi';
+      case CalculationMethod.KARACHI: return L.get('method_karachi');
+      case CalculationMethod.JAFARI:  return L.get('method_jafari');
+      case CalculationMethod.ISNA:    return L.get('method_isna');
+      case CalculationMethod.MWL:     return L.get('method_mwl');
+      default:                        return L.get('method_karachi');
     }
   }
 
   static getAsrRuleLabel(rule: AsrShadowRule): string {
     switch (rule) {
-      case AsrShadowRule.STANDARD: return 'Standard (Shafi\'i / Maliki / Hanbali)';
-      case AsrShadowRule.HANAFI:   return 'Hanafi';
-      default: return 'Standard';
+      case AsrShadowRule.STANDARD: return L.get('asr_standard');
+      case AsrShadowRule.HANAFI:   return L.get('asr_hanafi');
+      default:                     return L.get('asr_standard');
     }
   }
 
   static getCalcSourceLabel(source: CalculationSource): string {
     switch (source) {
-      case CalculationSource.LOCAL: return 'Local Formula (Offline)';
-      case CalculationSource.API:   return 'API (Online)';
-      default: return 'Local Formula (Offline)';
+      case CalculationSource.LOCAL: return L.get('source_local');
+      case CalculationSource.API:   return L.get('source_api');
+      default:                      return L.get('source_local');
     }
   }
 
+  static getThemeModeLabel(mode: string): string {
+    switch (mode) {
+      case ThemeMode.LIGHT:  return L.get('theme_light');
+      case ThemeMode.DARK:   return L.get('theme_dark');
+      case ThemeMode.SYSTEM: return L.get('theme_system');
+      default:               return L.get('theme_system');
+    }
+  }
   static getLocationModeLabel(mode: LocationMode): string {
     switch (mode) {
       case LocationMode.GPS:    return 'GPS';
       case LocationMode.MANUAL: return 'Manual Location';
       default: return 'GPS';
     }
+  }
+
+  static getCalcMethodShortLabel(method: CalculationMethod): string {
+    switch (method) {
+      case CalculationMethod.KARACHI: return 'Karachi';
+      case CalculationMethod.JAFARI:  return 'Jafari';
+      case CalculationMethod.ISNA:    return 'ISNA';
+      case CalculationMethod.MWL:     return 'MWL';
+      default: return 'Karachi';
+    }
+  }
+
+  static getAsrRuleShortLabel(rule: AsrShadowRule): string {
+    return rule === AsrShadowRule.HANAFI ? 'Hanafi' : 'Standard';
+  }
+
+  static getCalcSourceShortLabel(source: CalculationSource): string {
+    return source === CalculationSource.API ? 'Online' : 'Local';
   }
 
   // ============================================================
@@ -255,19 +273,8 @@ export class SettingsHelper {
   // ============================================================
 
   static saveThemeMode(mode: string): void {
-    // Write to AppStorage immediately (for reactivity across pages)
     AppStorage.setOrCreate(STORAGE_KEY_THEME_MODE, mode);
-    // Write to disk via PreferencesHelper for durability
     PreferencesHelper.setString(STORAGE_KEY_THEME_MODE, mode);
-  }
-
-  static getThemeModeLabel(mode: string): string {
-    switch (mode) {
-      case ThemeMode.LIGHT: return 'Light';
-      case ThemeMode.DARK: return 'Dark';
-      case ThemeMode.SYSTEM: return 'Use System Settings';
-      default: return 'Use System Settings';
-    }
   }
 
   static buildThemePickerItems(current: string): PickerItem[] {
@@ -277,5 +284,58 @@ export class SettingsHelper {
         label: SettingsHelper.getThemeModeLabel(m),
         selected: m === current
       }));
+  }
+
+  // ============================================================
+  // HIJRI OFFSET
+  // ============================================================
+
+  static async getHijriOffset(): Promise<number> {
+    const cached = AppStorage.get<number>(STORAGE_KEY_HIJRI_OFFSET);
+    if (cached !== undefined) return cached;
+
+    const loaded = await PreferencesHelper.getNumber(STORAGE_KEY_HIJRI_OFFSET, 0);
+    AppStorage.setOrCreate(STORAGE_KEY_HIJRI_OFFSET, loaded);
+    return loaded;
+  }
+
+  static saveHijriOffset(days: number): void {
+    AppStorage.setOrCreate(STORAGE_KEY_HIJRI_OFFSET, days);
+    PreferencesHelper.setNumber(STORAGE_KEY_HIJRI_OFFSET, days);
+  }
+
+  // ============================================================
+  // LANGUAGE
+  // ============================================================
+
+  static async getLanguage(): Promise<string> {
+    const cached = AppStorage.get<string>(STORAGE_KEY_LANGUAGE);
+    if (cached !== undefined) return cached;
+
+    const loaded = await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE, 'en');
+    AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, loaded);
+    return loaded;
+  }
+
+  static saveLanguage(lang: string): void {
+    AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, lang);
+    PreferencesHelper.setString(STORAGE_KEY_LANGUAGE, lang);
+  }
+
+  // ============================================================
+  // WIZARD
+  // ============================================================
+
+  static async isWizardCompleted(): Promise<boolean> {
+    return PreferencesHelper.getBoolean(STORAGE_KEY_WIZARD_COMPLETED, false);
+  }
+
+  static markWizardCompleted(): void {
+    PreferencesHelper.setBoolean(STORAGE_KEY_WIZARD_COMPLETED, true);
+  }
+
+  /** Reset for testing — clears the flag so the wizard runs again. */
+  static resetWizard(): void {
+    PreferencesHelper.setBoolean(STORAGE_KEY_WIZARD_COMPLETED, false);
   }
 }

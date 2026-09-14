@@ -1,5 +1,7 @@
 // entry/src/main/ets/utils/PrayerTimeCalculator.ets
 
+import { TimezoneResolver } from './TimezoneResolver';
+
 // ---- Enums ----
 
 export enum CalculationMethod {
@@ -222,8 +224,18 @@ export class PrayerTimeCalculator {
     method: CalculationMethod,
     asrRule: AsrShadowRule = AsrShadowRule.STANDARD
   ): DailyPrayerTimes {
-    const timezoneOffset = PrayerTimeCalculator.getCurrentTimezoneOffset(date);
-    return PrayerTimeCalculator.calculate(date, latitude, longitude, timezoneOffset, method, asrRule);
+    const effectiveOffset = TimezoneResolver.effectiveOffsetForLocation(
+      latitude, longitude, date
+    );
+
+    console.info(
+      `[PrayerTimeCalculator] effective offset=${effectiveOffset} ` +
+        `for lat=${latitude.toFixed(4)}, lng=${longitude.toFixed(4)}`
+    );
+
+    return PrayerTimeCalculator.calculate(
+      date, latitude, longitude, effectiveOffset, method, asrRule
+    );
   }
 
   // ============================================================
