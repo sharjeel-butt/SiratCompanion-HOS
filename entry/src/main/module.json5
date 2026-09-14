@@ -16,7 +16,7 @@
         "srcEntry": "./ets/entryability/EntryAbility.ets",
         "icon": "$media:app_icon",
         "label": "$string:EntryAbility_label",
-        "startWindowIcon": "$media:transparent",
+        "startWindowIcon": "$media:splash_logo",
         "startWindowBackground": "$color:start_window_background",
         "exported": true,
         "skills": [
@@ -42,6 +42,9 @@
       }
     ],
     "requestPermissions": [
+      {
+        "name": "ohos.permission.VIBRATE"
+      },
       {
         "name": "ohos.permission.APPROXIMATELY_LOCATION",
         "reason": "$string:location_permission_reason",

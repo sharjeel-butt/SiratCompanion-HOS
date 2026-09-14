@@ -4,16 +4,26 @@ import { router, promptAction } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { mediaquery } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
-import { Prayer, ExtraTiming } from '../models/Prayer';
+import { PageTheme } from '../common/PageTheme';
+import { Prayer, ExtraTiming } from '../models/PrayerModel';
 import { DateHelper } from '../utils/DateUtils';
 import { LocationHelper, LocationData } from '../utils/LocationUtils';
 import { UpcomingImportantDate } from '../models/DateModels';
-import { PrayerTimeCalculator, CalculationMethod, AsrShadowRule, DailyPrayerTimes } from '../utils/PrayerTimeCalculator';
 import { PrayerManager } from '../utils/PrayerManager';
-import { SettingsHelper, PrayerOffsets } from '../utils/SettingsHelper';
-import { LocationCache, FALLBACK_LOCATION } from '../utils/LocationCache';
+import { SettingsHelper, PrayerOffsets } from '../helper/SettingsHelper';
+import { LocationCache } from '../utils/LocationCache';
 import { CalculationSource, LocationMode } from '../models/SettingsModels';
-import { STORAGE_KEY_THEME_MODE } from '../common/StorageKeys';
+import {
+  STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_NAV_DIRECTION,
+  STORAGE_KEY_LOCATION_VERSION,
+  STORAGE_KEY_LANGUAGE
+} from '../common/StorageKeys';
+import { HomeController } from '../utils/HomeController';
+import { CalculationMethod, AsrShadowRule } from '../utils/PrayerTimeCalculator';
+import { NavHelper } from '../helper/NavHelper';
+import { TimezoneResolver } from '../utils/TimezoneResolver';
+import { L } from '../helper/LocalizationHelper';
 
 interface DialogResult {
   index: number;
@@ -24,14 +34,24 @@ interface DialogResult {
 struct Index {
 
   // ============================================================
-  // THEME
+  // THEME + NAV + LANGUAGE
   // ============================================================
 
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
 
-  @State colors: ThemeColors = Theme.getColors(ThemeMode.LIGHT, false);
+  @StorageLink(STORAGE_KEY_NAV_DIRECTION)
+  navDirection: string = 'forward';
+
+  @StorageLink(STORAGE_KEY_LOCATION_VERSION)
+  @Watch('onLocationVersionChanged')
+  locationVersion: number = 0;
+
+  @StorageLink(STORAGE_KEY_LANGUAGE)
+  appLanguage: string = 'en';
+
+  @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
 
   // ============================================================
@@ -81,40 +101,103 @@ struct Index {
 
   @State showExtraTimings: boolean = true;
   @State showIslamicEvents: boolean = true;
-
   @State showBottomSheet: boolean = false;
-
-  // ---- Floating bar ----
   @State activeFloatingTab: string = 'home';
 
   private statusTimerId: number = -1;
   private settingsLoaded: boolean = false;
+  private settingsLoading: boolean = false;
 
   // ============================================================
-  // THEME HELPERS
+  // LOCALIZATION HELPERS
   // ============================================================
 
-  private isSystemDark(): boolean {
-    try {
-      const listener = mediaquery.matchMediaSync('(dark-mode: true)');
-      return listener.matches;
-    } catch (err) {
-      return false;
+  private tr(key: string): string {
+    return L.get(key, this.appLanguage);
+  }
+
+  private isRtl(): boolean {
+    return L.isRtlLang(this.appLanguage);
+  }
+
+  private translatePrayerName(raw: string): string {
+    switch (raw) {
+      case 'Fajr':    return this.tr('prayer_fajr');
+      case 'Dhuhr':   return this.tr('prayer_dhuhr');
+      case 'Asr':     return this.tr('prayer_asr');
+      case 'Maghrib': return this.tr('prayer_maghrib');
+      case 'Isha':    return this.tr('prayer_isha');
+      case 'Jummah':  return this.tr('prayer_jummah');
+      default:        return raw;
     }
   }
+
+  private translateTimingName(raw: string): string {
+    switch (raw) {
+      case 'Imsak':       return this.tr('timing_imsak');
+      case 'Sunrise':     return this.tr('timing_sunrise');
+      case 'Sunset':      return this.tr('timing_sunset');
+      case 'First Third': return this.tr('timing_first_third');
+      case 'Midnight':    return this.tr('timing_midnight');
+      case 'Last Third':  return this.tr('timing_last_third');
+      default:            return raw;
+    }
+  }
+
+  /**
+   * Translate a stored Islamic event into the current language.
+   * Falls back to the stored English name if the key is missing.
+   */
+  private translateEventName(e: UpcomingImportantDate): string {
+    if (e.key && e.key.length > 0) {
+      const translated = this.tr('event_' + e.key);
+      if (translated !== 'event_' + e.key) return translated;
+    }
+    return e.name;
+  }
+
+  // ============================================================
+  // THEME HANDLERS
+  // ============================================================
 
   private isDarkMode(): boolean {
     if (this.themeMode === ThemeMode.DARK) return true;
     if (this.themeMode === ThemeMode.LIGHT) return false;
-    return this.isSystemDark();
-  }
-
-  private applyTheme(): void {
-    this.colors = Theme.getColors(this.themeMode, this.isSystemDark());
+    return PageTheme.isSystemDark();
   }
 
   private onThemeModeChanged(): void {
-    this.colors = Theme.getColors(this.themeMode, this.isSystemDark());
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  private async onLocationVersionChanged(): Promise<void> {
+    const mode = await SettingsHelper.getLocationMode();
+    const loc = await HomeController.loadLocationForMode(mode);
+
+    this.locationMode = mode;
+    this.latitude = loc.latitude;
+    this.longitude = loc.longitude;
+    this.currentLocation = loc.displayName;
+    this.isLoadingLocation = false;
+
+    this.refreshPrayerTimes();
+    this.updateTodayHeaderData();
+  }
+
+  // ============================================================
+  // PAGE TRANSITION
+  // ============================================================
+
+  pageTransition() {
+    PageTransitionEnter({ type: RouteType.Push, duration: 300, curve: Curve.Friction })
+      .slide(this.navDirection === 'forward' ? SlideEffect.Right : SlideEffect.Left)
+    PageTransitionExit({ type: RouteType.Push, duration: 300, curve: Curve.Friction })
+      .slide(this.navDirection === 'forward' ? SlideEffect.Left : SlideEffect.Right)
+
+    PageTransitionEnter({ type: RouteType.Pop, duration: 300, curve: Curve.Friction })
+      .slide(SlideEffect.Left)
+    PageTransitionExit({ type: RouteType.Pop, duration: 300, curve: Curve.Friction })
+      .slide(SlideEffect.Right)
   }
 
   // ============================================================
@@ -122,16 +205,10 @@ struct Index {
   // ============================================================
 
   aboutToAppear(): void {
-    this.applyTheme();
-
-    try {
-      this.systemDarkListener = mediaquery.matchMediaSync('(dark-mode: true)');
-      this.systemDarkListener.on('change', (result: mediaquery.MediaQueryResult) => {
-        if (this.themeMode === ThemeMode.SYSTEM) {
-          this.colors = Theme.getColors(this.themeMode, result.matches);
-        }
-      });
-    } catch (err) { /* ignore */ }
+    this.colors = PageTheme.compute(this.themeMode);
+    this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
+      this.colors = c;
+    });
 
     this.hijriDateString = DateHelper.getFormattedHijriDate();
     this.upcomingImportantDates = DateHelper.getUpcomingImportantDates();
@@ -141,17 +218,17 @@ struct Index {
 
     this.statusTimerId = setInterval(() => {
       if (this.dateOffset === 0) {
-        this.prayers = PrayerManager.updateStatuses(this.prayers, this.viewingDate);
+        this.prayers = PrayerManager.updateStatuses(
+          this.prayers, this.viewingDate, this.getLocationOffsetHours()
+        );
       }
       this.updateTodayHeaderData();
     }, 60000);
   }
 
   aboutToDisappear(): void {
-    if (this.systemDarkListener) {
-      this.systemDarkListener.off('change');
-      this.systemDarkListener = null;
-    }
+    PageTheme.uninstallSystemListener(this.systemDarkListener);
+    this.systemDarkListener = null;
     if (this.statusTimerId !== -1) {
       clearInterval(this.statusTimerId);
       this.statusTimerId = -1;
@@ -159,14 +236,32 @@ struct Index {
   }
 
   onPageShow(): void {
-    this.applyTheme();
+    this.colors = PageTheme.compute(this.themeMode);
     this.loadSettingsAndLocation();
-    this.prayers = PrayerManager.updateStatuses(this.prayers, this.viewingDate);
+    this.prayers = PrayerManager.updateStatuses(
+      this.prayers, this.viewingDate, this.getLocationOffsetHours()
+    );
     this.activeFloatingTab = 'home';
+  }
+
+  onBackPress(): boolean {
+    NavHelper.prepareBackward();
+    return false;
   }
 
   private async initialize(): Promise<void> {
     await this.loadSettingsAndLocation();
+  }
+
+  // ============================================================
+  // OFFSET LOOKUP
+  // ============================================================
+
+  private getLocationOffsetHours(): number {
+    if (this.latitude === 0 && this.longitude === 0) return 0;
+    return TimezoneResolver.effectiveOffsetForLocation(
+      this.latitude, this.longitude, new Date()
+    );
   }
 
   // ============================================================
@@ -182,114 +277,55 @@ struct Index {
 
     if (!skipReload) {
       this.prayers = PrayerManager.loadStateForDate(this.viewingDateKey, this.prayers, this.viewingDate);
-      this.prayers = PrayerManager.updateStatuses(this.prayers, this.viewingDate);
+      this.prayers = PrayerManager.updateStatuses(
+        this.prayers, this.viewingDate, this.getLocationOffsetHours()
+      );
       this.refreshPrayerTimes();
     }
   }
 
-  private goToNextDay(): void {
-    this.dateOffset += 1;
-    this.refreshViewingDate();
-  }
-
-  private goToPreviousDay(): void {
-    this.dateOffset -= 1;
-    this.refreshViewingDate();
-  }
+  private goToNextDay(): void { this.dateOffset += 1; this.refreshViewingDate(); }
+  private goToPreviousDay(): void { this.dateOffset -= 1; this.refreshViewingDate(); }
 
   // ============================================================
   // SETTINGS + LOCATION
   // ============================================================
 
   private async loadSettingsAndLocation(): Promise<void> {
-    const data = await SettingsHelper.loadAll();
-    const mode = await SettingsHelper.getLocationMode();
-
-    this.calcMethod = data.method;
-    this.asrRule    = data.asr;
-    this.calcSource = data.source;
-    this.locationMode = mode;
-
-    this.showExtraTimings  = data.showExtraTimings;
-    this.showIslamicEvents = data.showIslamicEvents;
-
-    this.offsets = await SettingsHelper.getPrayerOffsets();
-
-    if (mode === LocationMode.MANUAL) {
-      const coords = await SettingsHelper.getManualCoords();
-      this.latitude = coords.lat;
-      this.longitude = coords.lng;
-      if (coords.lat !== 0 || coords.lng !== 0) {
-        const city = coords.cityName.length > 0 ? coords.cityName : 'Manual Location';
-        this.currentLocation = `${city} (Manual)`;
-      } else {
-        this.currentLocation = 'Set Manual Location in Settings';
-      }
-      this.isLoadingLocation = false;
-    } else {
-      const cached = await LocationCache.load();
-      if (cached) {
-        this.latitude = cached.latitude;
-        this.longitude = cached.longitude;
-        this.currentLocation = cached.cityName;
-      } else {
-        this.latitude = FALLBACK_LOCATION.latitude;
-        this.longitude = FALLBACK_LOCATION.longitude;
-        this.currentLocation = FALLBACK_LOCATION.cityName;
-      }
-      if (!this.settingsLoaded) {
-        this.fetchLocationInBackground();
-      }
-    }
-
-    this.prayers = PrayerManager.loadStateForDate(
-      this.viewingDateKey,
-      this.prayers,
-      this.viewingDate
-    );
-
-    this.refreshPrayerTimes();
-    this.updateTodayHeaderData();
-    this.settingsLoaded = true;
-  }
-
-  // ============================================================
-  // TODAY'S HEADER DATA
-  // ============================================================
-
-  private updateTodayHeaderData(): void {
-    if (this.latitude === 0 && this.longitude === 0) return;
-    if (this.calcSource !== CalculationSource.LOCAL) return;
+    if (this.settingsLoading) return;
+    this.settingsLoading = true;
 
     try {
-      const times: DailyPrayerTimes = PrayerTimeCalculator.calculateWithDeviceTimezone(
-        new Date(), this.latitude, this.longitude, this.calcMethod, this.asrRule
+      const data = await SettingsHelper.loadAll();
+      const mode = await SettingsHelper.getLocationMode();
+
+      this.calcMethod = data.method;
+      this.asrRule    = data.asr;
+      this.calcSource = data.source;
+      this.locationMode = mode;
+      this.showExtraTimings  = data.showExtraTimings;
+      this.showIslamicEvents = data.showIslamicEvents;
+      this.offsets = await SettingsHelper.getPrayerOffsets();
+
+      const loc = await HomeController.loadLocationForMode(mode);
+      this.latitude = loc.latitude;
+      this.longitude = loc.longitude;
+      this.currentLocation = loc.displayName;
+      this.isLoadingLocation = false;
+
+      if (!loc.isManual && !this.settingsLoaded) {
+        this.fetchLocationInBackground();
+      }
+
+      this.prayers = PrayerManager.loadStateForDate(
+        this.viewingDateKey, this.prayers, this.viewingDate
       );
 
-      const todayPrayers: Prayer[] = [
-        { id: 'fajr',    name: 'Fajr',    arabicName: 'الفجر',   time: times.fajr,    status: 'abbreviation', checked: false },
-        { id: 'dhuhr',   name: 'Dhuhr',   arabicName: 'الظهر',   time: times.dhuhr,   status: 'abbreviation', checked: false },
-        { id: 'asr',     name: 'Asr',     arabicName: 'العصر',   time: times.asr,     status: 'abbreviation', checked: false },
-        { id: 'maghrib', name: 'Maghrib', arabicName: 'المغرب',  time: times.maghrib, status: 'abbreviation', checked: false },
-        { id: 'isha',    name: 'Isha',    arabicName: 'العشاء',  time: times.isha,    status: 'abbreviation', checked: false }
-      ];
-
-      const withOffsets = PrayerManager.applyTimesToPrayers(todayPrayers, times, this.offsets, new Date());
-      const withStatus = PrayerManager.updateStatuses(withOffsets, new Date());
-
-      const current = PrayerManager.getCurrentPrayer(withStatus);
-      const next = PrayerManager.getNextPrayer(withStatus);
-
-      if (current) {
-        this.todayCurrentPrayerName = current.name;
-        this.todayCurrentPrayerTime = current.time;
-      }
-      if (next) {
-        this.todayNextPrayerName = next.name;
-        this.todayNextPrayerTime = next.time;
-      }
-    } catch (err) {
-      console.error('Failed to update today header:', JSON.stringify(err));
+      this.refreshPrayerTimes();
+      this.updateTodayHeaderData();
+      this.settingsLoaded = true;
+    } finally {
+      this.settingsLoading = false;
     }
   }
 
@@ -298,49 +334,48 @@ struct Index {
   // ============================================================
 
   private refreshPrayerTimes(): void {
-    if (this.latitude === 0 && this.longitude === 0) return;
     if (this.calcSource !== CalculationSource.LOCAL) return;
 
-    try {
-      const times: DailyPrayerTimes = PrayerTimeCalculator.calculateWithDeviceTimezone(
-        this.viewingDate, this.latitude, this.longitude, this.calcMethod, this.asrRule
-      );
+    const snap = HomeController.buildPrayersForDate(
+      this.viewingDate, this.latitude, this.longitude,
+      this.calcMethod, this.asrRule, this.offsets, this.prayers
+    );
+    if (snap) this.prayers = snap.prayers;
 
-      const updatedPrayers = PrayerManager.applyTimesToPrayers(
-        this.prayers, times, this.offsets, this.viewingDate
-      );
-      this.extraTimings = PrayerManager.applyTimesToExtraTimings(
-        this.extraTimings, times, this.offsets
-      );
-      this.prayers = PrayerManager.updateStatuses(updatedPrayers, this.viewingDate);
-    } catch (err) {
-      console.error(`Prayer calculation failed: ${(err as Error).message}`);
-    }
+    this.extraTimings = HomeController.buildExtraTimings(
+      this.viewingDate, this.latitude, this.longitude,
+      this.calcMethod, this.asrRule, this.offsets, this.extraTimings
+    );
+  }
+
+  private updateTodayHeaderData(): void {
+    if (this.calcSource !== CalculationSource.LOCAL) return;
+    const hdr = HomeController.buildTodayHeader(
+      this.latitude, this.longitude, this.calcMethod, this.asrRule,
+      this.offsets, this.prayers
+    );
+    if (!hdr) return;
+    this.todayCurrentPrayerName = hdr.currentName;
+    this.todayCurrentPrayerTime = hdr.currentTime;
+    this.todayNextPrayerName = hdr.nextName;
+    this.todayNextPrayerTime = hdr.nextTime;
   }
 
   // ============================================================
-  // GPS FETCH
+  // GPS
   // ============================================================
 
   private async fetchLocationInBackground(): Promise<void> {
     if (this.locationMode === LocationMode.MANUAL) return;
     try {
       const data: LocationData = await LocationHelper.fetchLocationData(getContext(this));
-      const changed =
-        Math.abs(data.latitude - this.latitude) > 0.01 ||
-          Math.abs(data.longitude - this.longitude) > 0.01 ||
-          data.cityName !== this.currentLocation;
-
       this.latitude = data.latitude;
       this.longitude = data.longitude;
       this.currentLocation = data.cityName;
       this.isLoadingLocation = false;
-      LocationCache.save(data.latitude, data.longitude, data.cityName);
-
-      if (changed) {
-        this.refreshPrayerTimes();
-        this.updateTodayHeaderData();
-      }
+      await LocationCache.save(data.latitude, data.longitude, data.cityName);
+      this.refreshPrayerTimes();
+      this.updateTodayHeaderData();
     } catch (err) {
       const error = err as Error;
       this.isLoadingLocation = false;
@@ -353,10 +388,6 @@ struct Index {
       }
     }
   }
-
-  // ============================================================
-  // REFRESH LOCATION
-  // ============================================================
 
   private async refreshLocation(): Promise<void> {
     if (this.isLoadingLocation) return;
@@ -374,7 +405,7 @@ struct Index {
         await SettingsHelper.saveManualCoords(manual.lat, manual.lng, cityName);
         this.latitude = manual.lat;
         this.longitude = manual.lng;
-        this.currentLocation = `${cityName} (Manual)`;
+        this.currentLocation = `${cityName} (${this.tr('manual_location')})`;
         this.refreshPrayerTimes();
         this.updateTodayHeaderData();
       } catch (err) {
@@ -390,7 +421,7 @@ struct Index {
       this.latitude = data.latitude;
       this.longitude = data.longitude;
       this.currentLocation = data.cityName;
-      LocationCache.save(data.latitude, data.longitude, data.cityName);
+      await LocationCache.save(data.latitude, data.longitude, data.cityName);
       this.refreshPrayerTimes();
       this.updateTodayHeaderData();
     } catch (err) {
@@ -424,7 +455,9 @@ struct Index {
     });
 
     PrayerManager.saveStateForDate(this.viewingDateKey, this.prayers);
-    this.prayers = PrayerManager.updateStatuses(this.prayers, this.viewingDate);
+    this.prayers = PrayerManager.updateStatuses(
+      this.prayers, this.viewingDate, this.getLocationOffsetHours()
+    );
   }
 
   private closeBottomSheet(): void {
@@ -436,6 +469,7 @@ struct Index {
   private navigateToQibla(): void {
     this.closeBottomSheet();
     setTimeout(() => {
+      NavHelper.prepare('compass', 'home');
       router.pushUrl({ url: 'pages/QiblaPage' })
         .catch((err: Error) => console.error('Navigation failed:', JSON.stringify(err)));
     }, 320);
@@ -444,6 +478,7 @@ struct Index {
   private navigateToCustomize(): void {
     this.closeBottomSheet();
     setTimeout(() => {
+      NavHelper.prepareForward();
       router.pushUrl({ url: 'pages/CustomizePage' })
         .catch((err: Error) => console.error('Navigation failed:', JSON.stringify(err)));
     }, 320);
@@ -452,6 +487,7 @@ struct Index {
   private navigateToSettings(): void {
     this.closeBottomSheet();
     setTimeout(() => {
+      NavHelper.prepareForward();
       router.pushUrl({ url: 'pages/SettingsPage' })
         .catch((err: Error) => console.error('Navigation failed:', JSON.stringify(err)));
     }, 320);
@@ -459,11 +495,11 @@ struct Index {
 
   private exitApp(): void {
     promptAction.showDialog({
-      title: 'Exit',
-      message: 'Are you sure you want to exit Sirat Companion?',
+      title: this.tr('exit'),
+      message: this.tr('exit_confirm_message'),
       buttons: [
-        { text: 'Cancel', color: this.colors.dialogCancel },
-        { text: 'Exit', color: this.colors.accentGold }
+        { text: this.tr('cancel'), color: this.colors.dialogCancel },
+        { text: this.tr('exit'), color: this.colors.accentGold }
       ]
     }).then((result: DialogResult) => {
       if (result.index === 1) {
@@ -481,6 +517,7 @@ struct Index {
       return;
     }
     if (tabId === 'tasbih') {
+      NavHelper.prepare('tasbih', 'home');
       router.pushUrl({ url: 'pages/TasbihPage' })
         .catch((err: Error) => console.error('Navigation failed:', JSON.stringify(err)));
       return;
@@ -489,11 +526,13 @@ struct Index {
       this.navigateToQibla();
       return;
     }
+    if (tabId === 'calendar') {
+      NavHelper.prepare('calendar', 'home');
+      router.pushUrl({ url: 'pages/HijriCalendarPage' })
+        .catch((err: Error) => console.error('Navigation failed:', JSON.stringify(err)));
+      return;
+    }
   }
-
-  // ============================================================
-  // UI LOOKUPS
-  // ============================================================
 
   private getStatusColor(status: string): string {
     switch (status) {
@@ -508,11 +547,11 @@ struct Index {
 
   private getStatusLabel(status: string): string {
     switch (status) {
-      case 'next':    return 'NEXT';
-      case 'pray':    return 'Pray';
-      case 'both':    return 'Pray  ·  NEXT';
-      case 'prayed':  return '✓ Prayed';
-      case 'express': return 'Express';
+      case 'next':    return this.tr('status_next');
+      case 'pray':    return this.tr('status_pray');
+      case 'both':    return this.tr('status_both');
+      case 'prayed':  return this.tr('status_prayed');
+      case 'express': return this.tr('status_express');
       default:        return '';
     }
   }
@@ -524,27 +563,22 @@ struct Index {
   build() {
     Stack() {
       Column() {
-        this.HeaderWithHamburger();
+        this.HeaderWithHamburger()
 
         Scroll() {
           Column() {
-            this.NextPrayerSection();
+            this.NextPrayerSection()
 
             if (this.calcSource === CalculationSource.LOCAL) {
-              this.PrayersSection();
-              if (this.showExtraTimings) {
-                this.ExtraTimingsSection();
-              }
+              this.PrayersSection()
+              if (this.showExtraTimings) this.ExtraTimingsSection()
             } else {
-              this.ComingSoonCard();
+              this.ComingSoonCard()
             }
 
-            if (this.showIslamicEvents) {
-              this.ImportantDatesCard();
-            }
+            if (this.showIslamicEvents) this.ImportantDatesCard()
 
-            // Bottom spacer — leaves room for the floating bar
-            Column().height(110);
+            Column().height(130)
           }
           .width('100%')
         }
@@ -557,116 +591,8 @@ struct Index {
       }
       .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
 
-      // ============================================================
-      // FLOATING BAR — centered + frosted glass (3 tabs)
-      // ============================================================
-      Row() {
-        Row() {
-          // ---- Home ----
-          Column() {
-            Text('🏠')
-              .fontSize(24)
-              .opacity(this.activeFloatingTab === 'home' ? 1.0 : 0.7)
+      this.FloatingBar()
 
-            Text('Home')
-              .fontSize(11)
-              .fontWeight(this.activeFloatingTab === 'home' ? FontWeight.Bold : FontWeight.Normal)
-              .fontColor(this.activeFloatingTab === 'home'
-                ? (this.isDarkMode() ? '#4ADE80' : '#0F5132')
-                : (this.isDarkMode() ? 'rgba(241,245,249,0.65)' : 'rgba(26,26,26,0.55)'))
-              .margin({ top: 3 })
-          }
-          .layoutWeight(1)
-          .height('100%')
-          .justifyContent(FlexAlign.Center)
-          .onClick(() => { this.onFloatingBarTap('home'); })
-
-          // Divider
-          Divider()
-            .vertical(true)
-            .height(28)
-            .color(this.isDarkMode() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
-
-          // ---- Tasbih ----
-          Column() {
-            Text('📿')
-              .fontSize(24)
-              .opacity(this.activeFloatingTab === 'tasbih' ? 1.0 : 0.7)
-
-            Text('Tasbih')
-              .fontSize(11)
-              .fontWeight(this.activeFloatingTab === 'tasbih' ? FontWeight.Bold : FontWeight.Normal)
-              .fontColor(this.activeFloatingTab === 'tasbih'
-                ? (this.isDarkMode() ? '#4ADE80' : '#0F5132')
-                : (this.isDarkMode() ? 'rgba(241,245,249,0.65)' : 'rgba(26,26,26,0.55)'))
-              .margin({ top: 3 })
-          }
-          .layoutWeight(1)
-          .height('100%')
-          .justifyContent(FlexAlign.Center)
-          .onClick(() => { this.onFloatingBarTap('tasbih'); })
-
-          // Divider
-          Divider()
-            .vertical(true)
-            .height(28)
-            .color(this.isDarkMode() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
-
-          // ---- Compass ----
-          Column() {
-            Text('🧭')
-              .fontSize(24)
-              .opacity(this.activeFloatingTab === 'compass' ? 1.0 : 0.7)
-
-            Text('Compass')
-              .fontSize(11)
-              .fontWeight(this.activeFloatingTab === 'compass' ? FontWeight.Bold : FontWeight.Normal)
-              .fontColor(this.activeFloatingTab === 'compass'
-                ? (this.isDarkMode() ? '#4ADE80' : '#0F5132')
-                : (this.isDarkMode() ? 'rgba(241,245,249,0.65)' : 'rgba(26,26,26,0.55)'))
-              .margin({ top: 3 })
-          }
-          .layoutWeight(1)
-          .height('100%')
-          .justifyContent(FlexAlign.Center)
-          .onClick(() => { this.onFloatingBarTap('compass'); })
-        }
-        .width('84%')
-        .height(68)
-        .backgroundBlurStyle(
-          BlurStyle.Thin,
-          {
-            colorMode: this.isDarkMode() ? ThemeColorMode.DARK : ThemeColorMode.LIGHT,
-            adaptiveColor: AdaptiveColor.DEFAULT,
-            scale: 1.0
-          }
-        )
-        .backgroundColor(
-          this.isDarkMode()
-            ? 'rgba(20, 27, 46, 0.50)'
-            : 'rgba(255, 255, 255, 0.35)'
-        )
-        .borderRadius(34)
-        .border({
-          width: 1,
-          color: this.isDarkMode()
-            ? 'rgba(74, 222, 128, 0.35)'
-            : 'rgba(255, 255, 255, 0.65)'
-        })
-        .shadow({
-          radius: 28,
-          color: this.isDarkMode()
-            ? 'rgba(0, 0, 0, 0.50)'
-            : 'rgba(0, 0, 0, 0.14)',
-          offsetX: 0,
-          offsetY: 10
-        })
-      }
-      .width('100%')
-      .justifyContent(FlexAlign.Center)
-      .position({ bottom: 24 })
-
-      // Dimmer
       if (this.showBottomSheet) {
         Column()
           .width('100%').height('100%')
@@ -676,15 +602,16 @@ struct Index {
           .transition({ type: TransitionType.Delete, opacity: 1 })
       }
 
-      // Bottom sheet
       if (this.showBottomSheet) {
         Column() {
           Row().width(40).height(4).backgroundColor(this.colors.overlayDimSoft)
             .borderRadius(2).margin({ top: 8 })
 
           Row() {
-            Text('Sirat').fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
-            Text('Companion').fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.accentGold)
+            Text('Sirat')
+              .fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+            Text('Companion')
+              .fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.accentGold)
               .margin({ left: 8 })
           }
           .width('100%').padding({ top: 16, bottom: 16 }).justifyContent(FlexAlign.Center)
@@ -692,9 +619,9 @@ struct Index {
           Divider().color(this.colors.borderSoft).width('80%').margin({ bottom: 16 })
 
           Column() {
-            this.BottomSheetItem('✏️', 'Customize', () => { this.navigateToCustomize(); })
-            this.BottomSheetItem('⚙️', 'Settings', () => { this.navigateToSettings(); })
-            this.BottomSheetItem('🚪', 'Exit', () => {
+            this.BottomSheetItem('✏️', this.tr('title_customize'), () => { this.navigateToCustomize(); })
+            this.BottomSheetItem('⚙️', this.tr('title_settings'), () => { this.navigateToSettings(); })
+            this.BottomSheetItem('🚪', this.tr('exit'), () => {
               this.closeBottomSheet();
               setTimeout(() => { this.exitApp(); }, 320);
             })
@@ -714,7 +641,99 @@ struct Index {
     }
     .width('100%').height('100%')
     .backgroundColor(this.colors.primaryGreen)
+    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
+  }
+
+  // ============================================================
+  // FLOATING BAR
+  // ============================================================
+
+  @Builder
+  FloatingBar() {
+    Row() {
+      Row() {
+        Column() {
+          Text('🏠').fontSize(22).opacity(this.activeFloatingTab === 'home' ? 1.0 : 0.7)
+          Text(this.tr('tab_home'))
+            .fontSize(10)
+            .fontWeight(this.activeFloatingTab === 'home' ? FontWeight.Bold : FontWeight.Normal)
+            .fontColor(this.activeFloatingTab === 'home'
+              ? (this.isDarkMode() ? '#4ADE80' : '#0F5132')
+              : (this.isDarkMode() ? 'rgba(241,245,249,0.65)' : 'rgba(26,26,26,0.55)'))
+            .margin({ top: 2 })
+        }
+        .layoutWeight(1).height('100%').justifyContent(FlexAlign.Center)
+        .onClick(() => { this.onFloatingBarTap('home'); })
+
+        Divider().vertical(true).height(28)
+          .color(this.isDarkMode() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
+
+        Column() {
+          Text('📿').fontSize(22).opacity(this.activeFloatingTab === 'tasbih' ? 1.0 : 0.7)
+          Text(this.tr('tab_tasbih'))
+            .fontSize(10)
+            .fontWeight(this.activeFloatingTab === 'tasbih' ? FontWeight.Bold : FontWeight.Normal)
+            .fontColor(this.activeFloatingTab === 'tasbih'
+              ? (this.isDarkMode() ? '#4ADE80' : '#0F5132')
+              : (this.isDarkMode() ? 'rgba(241,245,249,0.65)' : 'rgba(26,26,26,0.55)'))
+            .margin({ top: 2 })
+        }
+        .layoutWeight(1).height('100%').justifyContent(FlexAlign.Center)
+        .onClick(() => { this.onFloatingBarTap('tasbih'); })
+
+        Divider().vertical(true).height(28)
+          .color(this.isDarkMode() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
+
+        Column() {
+          Text('🧭').fontSize(22).opacity(this.activeFloatingTab === 'compass' ? 1.0 : 0.7)
+          Text(this.tr('tab_compass'))
+            .fontSize(10)
+            .fontWeight(this.activeFloatingTab === 'compass' ? FontWeight.Bold : FontWeight.Normal)
+            .fontColor(this.activeFloatingTab === 'compass'
+              ? (this.isDarkMode() ? '#4ADE80' : '#0F5132')
+              : (this.isDarkMode() ? 'rgba(241,245,249,0.65)' : 'rgba(26,26,26,0.55)'))
+            .margin({ top: 2 })
+        }
+        .layoutWeight(1).height('100%').justifyContent(FlexAlign.Center)
+        .onClick(() => { this.onFloatingBarTap('compass'); })
+
+        Divider().vertical(true).height(28)
+          .color(this.isDarkMode() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
+
+        Column() {
+          Text('📅').fontSize(22).opacity(this.activeFloatingTab === 'calendar' ? 1.0 : 0.7)
+          Text(this.tr('tab_calendar'))
+            .fontSize(10)
+            .fontWeight(this.activeFloatingTab === 'calendar' ? FontWeight.Bold : FontWeight.Normal)
+            .fontColor(this.activeFloatingTab === 'calendar'
+              ? (this.isDarkMode() ? '#4ADE80' : '#0F5132')
+              : (this.isDarkMode() ? 'rgba(241,245,249,0.65)' : 'rgba(26,26,26,0.55)'))
+            .margin({ top: 2 })
+        }
+        .layoutWeight(1).height('100%').justifyContent(FlexAlign.Center)
+        .onClick(() => { this.onFloatingBarTap('calendar'); })
+      }
+      .width('92%').height(68)
+      .backgroundBlurStyle(BlurStyle.Thin, {
+        colorMode: this.isDarkMode() ? ThemeColorMode.DARK : ThemeColorMode.LIGHT,
+        adaptiveColor: AdaptiveColor.DEFAULT,
+        scale: 1.0
+      })
+      .backgroundColor(this.isDarkMode() ? 'rgba(20, 27, 46, 0.50)' : 'rgba(255, 255, 255, 0.35)')
+      .borderRadius(34)
+      .border({
+        width: 1,
+        color: this.isDarkMode() ? 'rgba(74, 222, 128, 0.35)' : 'rgba(255, 255, 255, 0.65)'
+      })
+      .shadow({
+        radius: 28,
+        color: this.isDarkMode() ? 'rgba(0, 0, 0, 0.50)' : 'rgba(0, 0, 0, 0.14)',
+        offsetX: 0, offsetY: 10
+      })
+    }
+    .width('100%').justifyContent(FlexAlign.Center)
+    .position({ bottom: 24 })
   }
 
   // ============================================================
@@ -726,7 +745,6 @@ struct Index {
     Column() {
       Row() {
         Column() {
-          // Date pill
           Row() {
             Text('🌙').fontSize(12)
             Text(this.hijriDateString)
@@ -738,7 +756,6 @@ struct Index {
           .border({ width: 1, color: this.colors.borderSoft })
           .alignSelf(ItemAlign.Start)
 
-          // Location pill
           Row() {
             Text('📍').fontSize(15)
             Text(this.currentLocation)
@@ -763,14 +780,13 @@ struct Index {
       }
       .width('100%').padding({ top: 32, bottom: 8 }).alignItems(VerticalAlign.Top)
 
-      // Current Prayer card
       Column() {
         Row() {
-          Text('CURRENT PRAYER')
+          Text(this.tr('current_prayer'))
             .fontSize(12).fontColor(this.colors.textMuted).letterSpacing(2).fontWeight(FontWeight.Medium)
           Blank()
           Row() {
-            Text(this.todayCurrentPrayerName)
+            Text(this.translatePrayerName(this.todayCurrentPrayerName))
               .fontSize(16).fontColor(this.colors.accentGold).fontWeight(FontWeight.Bold)
             Text('   ')
             Text(this.todayCurrentPrayerTime)
@@ -783,81 +799,62 @@ struct Index {
       }
       .width('100%').margin({ top: 4, bottom: 12 })
 
-      // ============================================================
-      // Settings pills — values only, single row, clickable
-      // ============================================================
       Row() {
-        // ---- Convention value pill ----
         Row() {
           Text('🕌').fontSize(13).margin({ right: 6 })
-          Text(SettingsHelper.getCalcMethodLabel(this.calcMethod))
-            .fontSize(12)
-            .fontColor(this.colors.accentGold)
-            .fontWeight(FontWeight.Medium)
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .layoutWeight(1)
+          Text(SettingsHelper.getCalcMethodShortLabel(this.calcMethod))
+            .fontSize(12).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
+            .maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis }).layoutWeight(1)
         }
-        .layoutWeight(1)
-        .height(34).padding({ left: 12, right: 12 })
+        .layoutWeight(1).height(34).padding({ left: 12, right: 12 })
         .backgroundColor(this.colors.cardDark).borderRadius(17)
-        .border({ width: 1, color: this.colors.borderSoft })
-        .margin({ right: 4 })
+        .border({ width: 1, color: this.colors.borderSoft }).margin({ right: 4 })
         .onClick(() => { this.navigateToSettings(); })
 
-        // ---- Madhab value pill ----
         Row() {
           Text('🌅').fontSize(13).margin({ right: 6 })
-          Text(SettingsHelper.getAsrRuleLabel(this.asrRule))
-            .fontSize(12)
-            .fontColor(this.colors.accentGold)
-            .fontWeight(FontWeight.Medium)
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .layoutWeight(1)
+          Text(SettingsHelper.getAsrRuleShortLabel(this.asrRule))
+            .fontSize(12).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
+            .maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis }).layoutWeight(1)
         }
-        .layoutWeight(1)
-        .height(34).padding({ left: 12, right: 12 })
+        .layoutWeight(1).height(34).padding({ left: 12, right: 12 })
         .backgroundColor(this.colors.cardDark).borderRadius(17)
-        .border({ width: 1, color: this.colors.borderSoft })
-        .margin({ right: 4 })
+        .border({ width: 1, color: this.colors.borderSoft }).margin({ right: 4 })
         .onClick(() => { this.navigateToSettings(); })
 
-        // ---- Source value pill ----
         Row() {
           Text('🌐').fontSize(13).margin({ right: 6 })
-          Text(SettingsHelper.getCalcSourceLabel(this.calcSource))
-            .fontSize(12)
-            .fontColor(this.colors.accentGold)
-            .fontWeight(FontWeight.Medium)
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .layoutWeight(1)
+          Text(SettingsHelper.getCalcSourceShortLabel(this.calcSource))
+            .fontSize(12).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
+            .maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis }).layoutWeight(1)
         }
-        .layoutWeight(1)
-        .height(34).padding({ left: 12, right: 12 })
+        .layoutWeight(1).height(34).padding({ left: 12, right: 12 })
         .backgroundColor(this.colors.cardDark).borderRadius(17)
         .border({ width: 1, color: this.colors.borderSoft })
         .onClick(() => { this.navigateToSettings(); })
       }
-      .width('100%')
-      .padding({ bottom: 8 })
-      .alignItems(VerticalAlign.Center)
+      .width('100%').padding({ bottom: 8 }).alignItems(VerticalAlign.Center)
     }
     .width('100%').padding({ left: 16, right: 16 }).backgroundColor(this.colors.primaryGreen)
   }
+
+  // ============================================================
+  // NEXT PRAYER
+  // ============================================================
 
   @Builder
   NextPrayerSection() {
     Column() {
       Row() {
-        Text('NEXT PRAYER')
+        Text(this.tr('next_prayer'))
           .fontSize(12).fontColor(this.colors.textMuted).letterSpacing(2).fontWeight(FontWeight.Medium)
         Blank()
         Row() {
-          Text(this.todayNextPrayerName).fontSize(16).fontColor(this.colors.accentGold).fontWeight(FontWeight.Bold)
+          Text(this.translatePrayerName(this.todayNextPrayerName))
+            .fontSize(16).fontColor(this.colors.accentGold).fontWeight(FontWeight.Bold)
           Text('   ')
-          Text(this.todayNextPrayerTime).fontSize(16).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+          Text(this.todayNextPrayerTime)
+            .fontSize(16).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
         }
       }
       .width('100%').padding({ top: 12, bottom: 12, left: 16, right: 16 })
@@ -867,18 +864,26 @@ struct Index {
     .width('100%').padding({ left: 16, right: 16 }).margin({ top: 4, bottom: 12 })
   }
 
+  // ============================================================
+  // PRAYERS LIST
+  // ============================================================
+
   @Builder
   PrayersSection() {
     Column() {
-      Row() {
-        Text(`TODAY'S PRAYERS  ${this.prayers.filter(p => p.checked).length} of ${this.prayers.length}`)
+      Row({ space: 8 }) {
+        Text(this.tr('todays_prayers'))
           .fontSize(14).fontColor(this.colors.textWhite).fontWeight(FontWeight.Bold)
           .maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis })
+        Text(`${this.prayers.filter(p => p.checked).length} / ${this.prayers.length}`)
+          .fontSize(14).fontColor(this.colors.textWhite).fontWeight(FontWeight.Bold)
+          .direction(Direction.Ltr)
       }
       .width('100%').justifyContent(FlexAlign.Start).padding({ bottom: 8 })
 
       Row() {
-        Text('◀').fontSize(14).fontColor(this.colors.accentGold)
+        Text('◀')
+          .fontSize(14).fontColor(this.colors.accentGold)
           .width(36).height(36).textAlign(TextAlign.Center).borderRadius(18)
           .backgroundColor(this.colors.cardDark).border({ width: 1, color: this.colors.borderSoft })
           .onClick(() => { this.goToPreviousDay(); })
@@ -888,12 +893,14 @@ struct Index {
           .layoutWeight(1).textAlign(TextAlign.Center).maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
 
-        Text('▶').fontSize(14).fontColor(this.colors.accentGold)
+        Text('▶')
+          .fontSize(14).fontColor(this.colors.accentGold)
           .width(36).height(36).textAlign(TextAlign.Center).borderRadius(18)
           .backgroundColor(this.colors.cardDark).border({ width: 1, color: this.colors.borderSoft })
           .onClick(() => { this.goToNextDay(); })
       }
       .width('100%').padding({ bottom: 12 }).alignItems(VerticalAlign.Center)
+      .direction(Direction.Ltr)
 
       Column() {
         ForEach(this.prayers, (prayer: Prayer) => {
@@ -923,7 +930,7 @@ struct Index {
 
       Column() {
         Row() {
-          Text(prayer.name)
+          Text(this.translatePrayerName(prayer.name))
             .fontSize(16).fontColor(this.colors.textWhite)
             .fontWeight(prayer.checked ? FontWeight.Normal : FontWeight.Medium)
             .opacity(prayer.checked ? 0.5 : 1.0)
@@ -944,10 +951,14 @@ struct Index {
     .margin({ bottom: 4 })
   }
 
+  // ============================================================
+  // EXTRA TIMINGS
+  // ============================================================
+
   @Builder
   ExtraTimingsSection() {
     Column() {
-      Text('EXTRA TIMINGS')
+      Text(this.tr('extra_timings'))
         .fontSize(16).fontColor(this.colors.textWhite).fontWeight(FontWeight.Bold)
         .width('100%').padding({ left: 16, right: 16, bottom: 12 })
 
@@ -969,7 +980,7 @@ struct Index {
       Text(timing.icon ?? '•').fontSize(22).width(36).textAlign(TextAlign.Center)
       Column() {
         Row() {
-          Text(timing.name).fontSize(16).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+          Text(this.translateTimingName(timing.name)).fontSize(16).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
           Text('  ')
           Text(timing.arabicName).fontSize(13).fontColor(this.colors.textMuted)
         }
@@ -982,28 +993,32 @@ struct Index {
     .alignItems(VerticalAlign.Center).borderRadius(Theme.radiusSmall).margin({ bottom: 2 })
   }
 
+  // ============================================================
+  // EVENTS CARD
+  // ============================================================
+
   @Builder
   ImportantDatesCard() {
     Column() {
       Row() {
         Text('📅').fontSize(16).margin({ right: 8 })
-        Text('UPCOMING ISLAMIC EVENTS')
+        Text(this.tr('upcoming_islamic_events'))
           .fontSize(14).fontColor(this.colors.accentGold).fontWeight(FontWeight.Bold).letterSpacing(1.5)
       }
       .width('100%').justifyContent(FlexAlign.Start).padding({ left: 4, bottom: 14 })
 
       Column() {
         if (this.upcomingImportantDates.length === 0) {
-          Text('Loading important dates...').fontSize(14).fontColor(this.colors.textMuted)
+          Text(this.tr('loading_location')).fontSize(14).fontColor(this.colors.textMuted)
         } else {
-          Text(this.upcomingImportantDates[0].name.toUpperCase())
+          Text(this.translateEventName(this.upcomingImportantDates[0]).toUpperCase())
             .fontSize(14).fontColor(this.colors.accentGoldLight).fontWeight(FontWeight.Medium).textAlign(TextAlign.Center)
           Text(this.upcomingImportantDates[0].hijriDate)
             .fontSize(12).fontColor(this.colors.textMuted).margin({ top: 4 }).textAlign(TextAlign.Center)
 
           if (this.upcomingImportantDates.length > 1) {
             Divider().width('80%').color(this.colors.borderSoft).margin({ top: 14, bottom: 14 })
-            Text(this.upcomingImportantDates[1].name.toUpperCase())
+            Text(this.translateEventName(this.upcomingImportantDates[1]).toUpperCase())
               .fontSize(14).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium).textAlign(TextAlign.Center)
             Text(this.upcomingImportantDates[1].hijriDate)
               .fontSize(12).fontColor(this.colors.textMuted).margin({ top: 4 }).textAlign(TextAlign.Center)
@@ -1019,14 +1034,18 @@ struct Index {
     .alignItems(HorizontalAlign.Start)
   }
 
+  // ============================================================
+  // COMING SOON CARD
+  // ============================================================
+
   @Builder
   ComingSoonCard() {
     Column() {
       Text('🌐').fontSize(56).margin({ bottom: 12 })
-      Text('Online Prayer Times').fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
-      Text('Coming Soon').fontSize(13).fontColor(this.colors.accentGold).letterSpacing(1).margin({ top: 4 })
+      Text(this.tr('online_prayer_times')).fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+      Text(this.tr('coming_soon')).fontSize(13).fontColor(this.colors.accentGold).letterSpacing(1).margin({ top: 4 })
       Divider().width('60%').color(this.colors.borderSoft).margin({ top: 16, bottom: 16 })
-      Text('Switch back to Local Formula in Settings to see prayer times for your location.')
+      Text(this.tr('online_switch_hint'))
         .fontSize(12).fontColor(this.colors.textMuted).textAlign(TextAlign.Center).lineHeight(18).maxLines(4)
     }
     .width('92%').padding(28).backgroundColor(this.colors.cardDark)
@@ -1034,6 +1053,10 @@ struct Index {
     .shadow({ radius: 12, color: this.colors.shadowCard, offsetX: 0, offsetY: 4 })
     .margin({ top: 4, bottom: 24 }).alignItems(HorizontalAlign.Center)
   }
+
+  // ============================================================
+  // BOTTOM SHEET ITEM
+  // ============================================================
 
   @Builder
   BottomSheetItem(icon: string, label: string, onClick: () => void) {

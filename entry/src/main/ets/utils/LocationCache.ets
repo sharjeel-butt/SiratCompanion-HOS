@@ -1,21 +1,14 @@
 // entry/src/main/ets/utils/LocationCache.ets
 
-import { PreferencesHelper } from './PreferencesHelper';
+import { PreferencesHelper } from '../helper/PreferencesHelper';
+import { STORAGE_KEY_LOCATION_VERSION } from '../common/StorageKeys';
 
-// ---- Interfaces ----
-
-/**
- * Fallback location coordinates (used when no GPS fix and no cache exist).
- */
 export interface FallbackLocation {
   latitude: number;
   longitude: number;
   cityName: string;
 }
 
-/**
- * Full cached location including the time of last refresh.
- */
 export interface CachedLocation {
   latitude: number;
   longitude: number;
@@ -23,21 +16,16 @@ export interface CachedLocation {
   lastRefreshTime: number;
 }
 
-// ---- Constants ----
-
 export const FALLBACK_LOCATION: FallbackLocation = {
   latitude: 33.6844,
   longitude: 73.0479,
   cityName: 'DEFAULT LOCATION'
 };
 
-// ---- Storage keys ----
 const KEY_LAT     = 'gps_lat';
 const KEY_LNG     = 'gps_lng';
 const KEY_CITY    = 'gps_city';
 const KEY_REFRESH = 'gps_refresh';
-
-// ---- Class ----
 
 export class LocationCache {
 
@@ -59,10 +47,22 @@ export class LocationCache {
     return null;
   }
 
-  static save(lat: number, lng: number, city: string): void {
-    PreferencesHelper.setNumber(KEY_LAT, lat);
-    PreferencesHelper.setNumber(KEY_LNG, lng);
-    PreferencesHelper.setString(KEY_CITY, city);
-    PreferencesHelper.setNumber(KEY_REFRESH, Date.now());
+  /**
+   * Persist the cache AND bump a global version counter so any page
+   * that observes the version (currently Home) reloads its state.
+   *
+   * This method is async — callers must await it before doing
+   * anything that reads from the cache (e.g. navigating Home).
+   */
+  static async save(lat: number, lng: number, city: string): Promise<void> {
+    await PreferencesHelper.setNumber(KEY_LAT, lat);
+    await PreferencesHelper.setNumber(KEY_LNG, lng);
+    await PreferencesHelper.setString(KEY_CITY, city);
+    await PreferencesHelper.setNumber(KEY_REFRESH, Date.now());
+
+    // Notify any observers that the location has changed.
+    const prev = AppStorage.get<number>(STORAGE_KEY_LOCATION_VERSION);
+    const next = (prev === undefined ? 0 : prev) + 1;
+    AppStorage.setOrCreate(STORAGE_KEY_LOCATION_VERSION, next);
   }
 }

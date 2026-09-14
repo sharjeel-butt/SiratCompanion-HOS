@@ -21,3 +21,8 @@ export const STORAGE_KEY_OFFSET_MAGHRIB = 'offset_maghrib';
 export const STORAGE_KEY_OFFSET_ISHA = 'offset_isha';
 
 export const STORAGE_KEY_THEME_MODE = 'theme_mode';
+export const STORAGE_KEY_NAV_DIRECTION = 'nav_direction';
+export const STORAGE_KEY_LOCATION_VERSION = 'location_version';
+export const STORAGE_KEY_HIJRI_OFFSET = 'hijri_offset';
+export const STORAGE_KEY_LANGUAGE = 'app_language';
+export const STORAGE_KEY_WIZARD_COMPLETED = 'wizard_completed';

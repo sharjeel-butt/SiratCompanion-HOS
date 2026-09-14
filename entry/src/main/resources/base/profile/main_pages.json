@@ -1,9 +1,11 @@
 {
   "src": [
+    "pages/WizardPage",
     "pages/Index",
     "pages/CustomizePage",
     "pages/QiblaPage",
     "pages/TasbihPage",
-    "pages/SettingsPage"
+    "pages/SettingsPage",
+    "pages/HijriCalendarPage"
   ]
 }
