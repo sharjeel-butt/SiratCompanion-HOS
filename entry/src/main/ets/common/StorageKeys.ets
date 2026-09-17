@@ -26,3 +26,11 @@ export const STORAGE_KEY_LOCATION_VERSION = 'location_version';
 export const STORAGE_KEY_HIJRI_OFFSET = 'hijri_offset';
 export const STORAGE_KEY_LANGUAGE = 'app_language';
 export const STORAGE_KEY_WIZARD_COMPLETED = 'wizard_completed';
+
+export const STORAGE_KEY_NOTIF_MASTER = 'notif_master_enabled';
+export const STORAGE_KEY_NOTIF_BEFORE_MINUTES = 'notif_before_minutes';
+export const STORAGE_KEY_NOTIF_FAJR = 'notif_fajr';
+export const STORAGE_KEY_NOTIF_DHUHR = 'notif_dhuhr';
+export const STORAGE_KEY_NOTIF_ASR = 'notif_asr';
+export const STORAGE_KEY_NOTIF_MAGHRIB = 'notif_maghrib';
+export const STORAGE_KEY_NOTIF_ISHA = 'notif_isha';

@@ -19,6 +19,10 @@
     {
       "name": "sensor_permission_reason",
       "value": "Used for the Qibla compass"
+    },
+    {
+      "name": "notification_permission_reason",
+      "value": "To send you prayer time reminders"
     }
   ]
 }

@@ -97,8 +97,8 @@ export class L {
     m.set('tab_compass', 'Compass');
     m.set('tab_calendar', 'Calendar');
 
-    m.set('current_prayer', 'CURRENT PRAYER');
-    m.set('next_prayer', 'NEXT PRAYER');
+    m.set('current_prayer', 'Current');
+    m.set('next_prayer', 'Next');
     m.set('todays_prayers', "TODAY'S PRAYERS");
     m.set('extra_timings', 'EXTRA TIMINGS');
     m.set('upcoming_islamic_events', 'UPCOMING ISLAMIC EVENTS');
@@ -152,8 +152,8 @@ export class L {
     m.set('city_name_optional', 'City name (optional)');
     m.set('city_name_placeholder', 'Leave blank to auto-detect');
 
-    m.set('hijri_offset', 'Hijri Offset');
-    m.set('hijri_offset_desc', 'Shift the Islamic date by ±3 days');
+    m.set('hijri_offset', 'Hijri Date & Calendar Offset');
+    m.set('hijri_offset_desc', 'Shift both the Islamic date and the calendar by ±3 days');
     m.set('matching_standard', 'Matching the standard calculation');
 
     m.set('about_version', 'Version');
@@ -274,6 +274,21 @@ export class L {
     m.set('wizard_next', 'Next');
     m.set('wizard_finish', 'Get Started');
 
+    m.set('category_notifications', 'Notifications');
+    m.set('notifications_master', 'Enable Notifications');
+    m.set('notifications_master_desc', 'Get reminders before and at prayer time');
+    m.set('notify_before', 'Notify Before');
+    m.set('notify_before_desc', 'How many minutes before the prayer for the first reminder');
+    m.set('notify_prayers', 'Prayer Reminders');
+    m.set('notify_prayers_desc', 'Choose which prayers send reminders');
+    m.set('notifications_footer', 'Reminders are scheduled for the next 3 days and renew each time you open the app');
+    m.set('notification_permission_denied', 'Notification permission is required to enable reminders');
+    m.set('notif_before_title', 'Prayer Reminder');
+    m.set('notif_before_content', 'is in');
+    m.set('notif_exact_title', 'Prayer Time');
+    m.set('notif_exact_content', 'It is now time for');
+    m.set('notif_minutes_suffix', 'min');
+
     return m;
   }
 
@@ -292,8 +307,8 @@ export class L {
     m.set('tab_compass', '指南针');
     m.set('tab_calendar', '日历');
 
-    m.set('current_prayer', '当前礼拜');
-    m.set('next_prayer', '下一次礼拜');
+    m.set('current_prayer', '当前');
+    m.set('next_prayer', '下一个');
     m.set('todays_prayers', '今日礼拜');
     m.set('extra_timings', '额外时间');
     m.set('upcoming_islamic_events', '即将到来的伊斯兰节日');
@@ -347,8 +362,8 @@ export class L {
     m.set('city_name_optional', '城市名称（可选）');
     m.set('city_name_placeholder', '留空自动检测');
 
-    m.set('hijri_offset', '回历偏移');
-    m.set('hijri_offset_desc', '将伊斯兰日期偏移 ±3 天');
+    m.set('hijri_offset', '回历日期与日历偏移');
+    m.set('hijri_offset_desc', '将伊斯兰日期和日历同时偏移 ±3 天');
     m.set('matching_standard', '与标准计算一致');
 
     m.set('about_version', '版本');
@@ -469,6 +484,21 @@ export class L {
     m.set('wizard_next', '下一步');
     m.set('wizard_finish', '开始使用');
 
+    m.set('category_notifications', '通知');
+    m.set('notifications_master', '启用通知');
+    m.set('notifications_master_desc', '在礼拜前和礼拜时接收提醒');
+    m.set('notify_before', '提前通知');
+    m.set('notify_before_desc', '第一个提醒在礼拜前多少分钟发送');
+    m.set('notify_prayers', '礼拜提醒');
+    m.set('notify_prayers_desc', '选择哪些礼拜发送提醒');
+    m.set('notifications_footer', '提醒已安排在未来 3 天内，每次打开应用都会重新安排');
+    m.set('notification_permission_denied', '需要通知权限才能启用提醒');
+    m.set('notif_before_title', '礼拜提醒');
+    m.set('notif_before_content', '距离');
+    m.set('notif_exact_title', '礼拜时间');
+    m.set('notif_exact_content', '现在是');
+    m.set('notif_minutes_suffix', '分钟');
+
     return m;
   }
 
@@ -487,8 +517,8 @@ export class L {
     m.set('tab_compass', 'القبلة');
     m.set('tab_calendar', 'التقويم');
 
-    m.set('current_prayer', 'الصلاة الحالية');
-    m.set('next_prayer', 'الصلاة القادمة');
+    m.set('current_prayer', 'الحالي');
+    m.set('next_prayer', 'التالي');
     m.set('todays_prayers', 'صلوات اليوم');
     m.set('extra_timings', 'الأوقات الإضافية');
     m.set('upcoming_islamic_events', 'المناسبات الإسلامية القادمة');
@@ -542,8 +572,8 @@ export class L {
     m.set('city_name_optional', 'اسم المدينة (اختياري)');
     m.set('city_name_placeholder', 'اتركه فارغاً للكشف التلقائي');
 
-    m.set('hijri_offset', 'إزاحة التقويم الهجري');
-    m.set('hijri_offset_desc', 'أزح التاريخ الإسلامي بمقدار ±3 أيام');
+    m.set('hijri_offset', 'إزاحة التاريخ والتقويم الهجري');
+    m.set('hijri_offset_desc', 'أزح التاريخ والتقويم الإسلامي بمقدار ±3 أيام');
     m.set('matching_standard', 'مطابق للحساب القياسي');
 
     m.set('about_version', 'الإصدار');
@@ -663,6 +693,21 @@ export class L {
     m.set('wizard_retry', 'إعادة المحاولة');
     m.set('wizard_next', 'التالي');
     m.set('wizard_finish', 'ابدأ الآن');
+
+    m.set('category_notifications', 'الإشعارات');
+    m.set('notifications_master', 'تفعيل الإشعارات');
+    m.set('notifications_master_desc', 'تذكيرات قبل وقت الصلاة وعنده');
+    m.set('notify_before', 'التنبيه قبل');
+    m.set('notify_before_desc', 'كم دقيقة قبل الصلاة لإرسال التنبيه الأول');
+    m.set('notify_prayers', 'تذكيرات الصلاة');
+    m.set('notify_prayers_desc', 'اختر الصلوات التي تُرسل تذكيرات');
+    m.set('notifications_footer', 'التذكيرات مُجدولة للأيام الثلاثة القادمة وتتجدد في كل مرة تفتح فيها التطبيق');
+    m.set('notification_permission_denied', 'إذن الإشعارات مطلوب لتفعيل التذكيرات');
+    m.set('notif_before_title', 'تذكير بالصلاة');
+    m.set('notif_before_content', 'بعد');
+    m.set('notif_exact_title', 'وقت الصلاة');
+    m.set('notif_exact_content', 'حان الآن وقت صلاة');
+    m.set('notif_minutes_suffix', 'دقيقة');
 
     return m;
   }

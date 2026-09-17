@@ -2,6 +2,15 @@
 
 import { ThemeMode } from '../common/Theme';
 import {
+  STORAGE_KEY_NOTIF_MASTER,
+  STORAGE_KEY_NOTIF_BEFORE_MINUTES,
+  STORAGE_KEY_NOTIF_FAJR,
+  STORAGE_KEY_NOTIF_DHUHR,
+  STORAGE_KEY_NOTIF_ASR,
+  STORAGE_KEY_NOTIF_MAGHRIB,
+  STORAGE_KEY_NOTIF_ISHA
+} from '../common/StorageKeys';
+import {
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE
@@ -44,6 +53,16 @@ export interface PrayerOffsets {
   isha: number;
 }
 
+export interface NotificationsSettings {
+  masterEnabled: boolean;
+  beforeMinutes: number;
+  fajrEnabled: boolean;
+  dhuhrEnabled: boolean;
+  asrEnabled: boolean;
+  maghribEnabled: boolean;
+  ishaEnabled: boolean;
+}
+
 export interface OffsetKeys {
   fajr: string;
   dhuhr: string;
@@ -76,6 +95,49 @@ export class SettingsHelper {
       showExtraTimings,
       showIslamicEvents
     };
+  }
+
+  // ============================================================
+  // NOTIFICATIONS
+  // ============================================================
+
+  static async getNotificationSettings(): Promise<NotificationsSettings> {
+    const master = await PreferencesHelper.getBoolean(STORAGE_KEY_NOTIF_MASTER, false);
+    const before = await PreferencesHelper.getNumber(STORAGE_KEY_NOTIF_BEFORE_MINUTES, 10);
+    const fajr = await PreferencesHelper.getBoolean(STORAGE_KEY_NOTIF_FAJR, true);
+    const dhuhr = await PreferencesHelper.getBoolean(STORAGE_KEY_NOTIF_DHUHR, true);
+    const asr = await PreferencesHelper.getBoolean(STORAGE_KEY_NOTIF_ASR, true);
+    const maghrib = await PreferencesHelper.getBoolean(STORAGE_KEY_NOTIF_MAGHRIB, true);
+    const isha = await PreferencesHelper.getBoolean(STORAGE_KEY_NOTIF_ISHA, true);
+
+    const out: NotificationsSettings = {
+      masterEnabled: master,
+      beforeMinutes: before,
+      fajrEnabled: fajr,
+      dhuhrEnabled: dhuhr,
+      asrEnabled: asr,
+      maghribEnabled: maghrib,
+      ishaEnabled: isha
+    };
+    return out;
+  }
+
+  static saveNotifMaster(value: boolean): void {
+    PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_MASTER, value);
+  }
+
+  static saveNotifBeforeMinutes(minutes: number): void {
+    PreferencesHelper.setNumber(STORAGE_KEY_NOTIF_BEFORE_MINUTES, minutes);
+  }
+
+  static saveNotifPrayer(prayerId: string, value: boolean): void {
+    switch (prayerId) {
+      case 'fajr':    PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_FAJR, value); break;
+      case 'dhuhr':   PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_DHUHR, value); break;
+      case 'asr':     PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_ASR, value); break;
+      case 'maghrib': PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_MAGHRIB, value); break;
+      case 'isha':    PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_ISHA, value); break;
+    }
   }
 
   static saveMethod(method: CalculationMethod): void {
