@@ -1,6 +1,6 @@
 // entry/src/main/ets/models/PrayerModel.ets
 
-export interface Prayer {
+export interface PrayerModel {
   id: string;
   name: string;
   arabicName: string;
@@ -15,5 +15,5 @@ export interface ExtraTiming {
   arabicName: string;
   time: string;
   status: 'next' | 'pray' | 'both' | 'prayed' | 'express' | 'abbreviation' | 'locked';
-  icon?: string;   // <-- NEW: optional icon
+  icon?: string;
 }

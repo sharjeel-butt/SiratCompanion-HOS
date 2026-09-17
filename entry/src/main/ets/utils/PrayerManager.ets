@@ -1,6 +1,6 @@
 // entry/src/main/ets/utils/PrayerManager.ets
 
-import { ExtraTiming, Prayer } from '../models/PrayerModel';
+import { ExtraTiming, PrayerModel } from '../models/PrayerModel';
 import { DailyPrayerTimes } from './PrayerTimeCalculator';
 import { PrayerOffsets } from '../helper/SettingsHelper';
 
@@ -104,7 +104,7 @@ export class PrayerManager {
    * - Future dates: all disabled
    * - Already checked: always enabled (so user can uncheck)
    */
-  static isPrayerCheckable(prayer: Prayer, viewingDate?: Date): boolean {
+  static isPrayerCheckable(prayer: PrayerModel, viewingDate?: Date): boolean {
     // Normalize today and viewing date to midnight
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -138,11 +138,11 @@ export class PrayerManager {
   // FRIDAY NAMING
   // ============================================================
 
-  static applyDayNames(prayers: Prayer[], date?: Date): Prayer[] {
+  static applyDayNames(prayers: PrayerModel[], date?: Date): PrayerModel[] {
     const ref = date ? new Date(date) : new Date();
     const isFriday = ref.getDay() === 5;   // 0=Sun, 5=Fri
 
-    return prayers.map((p): Prayer => {
+    return prayers.map((p): PrayerModel => {
       if (p.id === 'dhuhr') {
         return {
           id: p.id,
@@ -151,7 +151,7 @@ export class PrayerManager {
           time: p.time,
           status: p.status,
           checked: p.checked
-        } as Prayer;
+        } as PrayerModel;
       }
       return p;
     });
@@ -162,12 +162,12 @@ export class PrayerManager {
   // ============================================================
 
   static applyTimesToPrayers(
-    prayers: Prayer[],
+    prayers: PrayerModel[],
     times: DailyPrayerTimes,
     offsets: PrayerOffsets = DEFAULT_OFFSETS,
     date?: Date
-  ): Prayer[] {
-    const mapped = prayers.map((prayer): Prayer => {
+  ): PrayerModel[] {
+    const mapped = prayers.map((prayer): PrayerModel => {
       let rawTime = prayer.time;
       let offset = 0;
 
@@ -188,7 +188,7 @@ export class PrayerManager {
         time: finalTime,
         status: prayer.status,
         checked: prayer.checked
-      } as Prayer;
+      } as PrayerModel;
     });
 
     return PrayerManager.applyDayNames(mapped, date);
@@ -232,7 +232,7 @@ export class PrayerManager {
   /**
    * Recompute prayer statuses.
    *
-   * @param prayers               Prayer list (already carries times + checked flags)
+   * @param prayers               PrayerModel list (already carries times + checked flags)
    * @param viewingDate           The date being viewed. If omitted, assumes today.
    * @param locationOffsetHours   Effective offset of the *location* being shown
    *                              (hours east of UTC). When provided, "current time"
@@ -241,10 +241,10 @@ export class PrayerManager {
    *                              viewing a distant city.
    */
   static updateStatuses(
-    prayers: Prayer[],
+    prayers: PrayerModel[],
     viewingDate?: Date,
     locationOffsetHours?: number
-  ): Prayer[] {
+  ): PrayerModel[] {
     // Non-today dates: no NEXT/Pray highlighting, but keep the "Prayed" badge
     if (viewingDate) {
       const today = new Date();
@@ -253,14 +253,14 @@ export class PrayerManager {
       view.setHours(0, 0, 0, 0);
 
       if (view.getTime() !== today.getTime()) {
-        return prayers.map((p): Prayer => ({
+        return prayers.map((p): PrayerModel => ({
           id: p.id,
           name: p.name,
           arabicName: p.arabicName,
           time: p.time,
           status: p.checked ? 'prayed' : 'abbreviation',
           checked: p.checked
-        } as Prayer));
+        } as PrayerModel));
       }
     }
 
@@ -281,10 +281,10 @@ export class PrayerManager {
     const n = times.length;
     if (n === 0) return prayers;
 
-    // Pre-Fajr window
+    // ---- Pre-Fajr window ----
     const fajrMinutes = times[0];
     if (fajrMinutes > 0 && currentMinutes < fajrMinutes) {
-      return prayers.map((p, i): Prayer => {
+      return prayers.map((p, i): PrayerModel => {
         let status: string;
         if (p.checked) status = 'prayed';
         else if (i === 0) status = 'next';
@@ -292,9 +292,30 @@ export class PrayerManager {
         return {
           id: p.id, name: p.name, arabicName: p.arabicName,
           time: p.time, status: status, checked: p.checked
-        } as Prayer;
+        } as PrayerModel;
       });
     }
+
+    // ---- Post-Isha window ----
+    // Past the last prayer of the day (Isha) but before midnight.
+    // Isha stays "current" if unchecked; otherwise no current prayer.
+    // The header computes tomorrow's Fajr as "next" when there is
+    // no next prayer in today's array.
+    const ishaMinutes = times[n - 1];
+    if (ishaMinutes > 0 && currentMinutes > ishaMinutes) {
+      return prayers.map((p, i): PrayerModel => {
+        let status: string;
+        if (p.checked) status = 'prayed';
+        else if (i === n - 1) status = 'pray';  // Isha still current
+        else status = 'abbreviation';
+        return {
+          id: p.id, name: p.name, arabicName: p.arabicName,
+          time: p.time, status: status, checked: p.checked
+        } as PrayerModel;
+      });
+    }
+
+    // ---- Normal window (between Fajr and Isha inclusive) ----
 
     let timePrayIndex = -1;
     for (let i = 0; i < n; i++) {
@@ -306,21 +327,16 @@ export class PrayerManager {
     for (let i = 0; i < n; i++) {
       if (times[i] > currentMinutes) { timeNextIndex = i; break; }
     }
-    if (timeNextIndex === -1) timeNextIndex = 0;
+    // No fallback — the post-Isha window already returned above, so
+    // timeNextIndex will always be found here.
 
-    let actualPrayIndex = -1;
-    for (let i = 0; i < n; i++) {
-      const idx = (timePrayIndex + i) % n;
-      if (!prayers[idx].checked) { actualPrayIndex = idx; break; }
-    }
+    // Current and next are decided by time ONLY — not by which
+    // prayers are already checked. A prayer remains "current" for
+    // its whole window even after the user marks it as prayed.
+    const actualPrayIndex = timePrayIndex;
+    const actualNextIndex = timeNextIndex;
 
-    let actualNextIndex = -1;
-    for (let i = 0; i < n; i++) {
-      const idx = (timeNextIndex + i) % n;
-      if (!prayers[idx].checked) { actualNextIndex = idx; break; }
-    }
-
-    return prayers.map((p, i): Prayer => {
+    return prayers.map((p, i): PrayerModel => {
       let status: string;
       if (p.checked) status = 'prayed';
       else if (i === actualPrayIndex && i === actualNextIndex) status = 'both';
@@ -331,7 +347,7 @@ export class PrayerManager {
       return {
         id: p.id, name: p.name, arabicName: p.arabicName,
         time: p.time, status: status, checked: p.checked
-      } as Prayer;
+      } as PrayerModel;
     });
   }
 
@@ -339,7 +355,7 @@ export class PrayerManager {
   // DATE-WISE PERSISTENCE (per-date storage)
   // ============================================================
 
-  static saveStateForDate(dateKey: string, prayers: Prayer[]): void {
+  static saveStateForDate(dateKey: string, prayers: PrayerModel[]): void {
     const storageKey = `prayer_state_${dateKey}`;
 
     const state: PrayerCheckState = {
@@ -361,19 +377,19 @@ export class PrayerManager {
     AppStorage.setOrCreate(storageKey, JSON.stringify(state));
   }
 
-  static loadStateForDate(dateKey: string, prayers: Prayer[], date?: Date): Prayer[] {
+  static loadStateForDate(dateKey: string, prayers: PrayerModel[], date?: Date): PrayerModel[] {
     const storageKey = `prayer_state_${dateKey}`;
     PersistentStorage.persistProp(storageKey, '');
 
     // ✅ Reset all checkboxes to false FIRST
-    const resetPrayers = prayers.map((p): Prayer => ({
+    const resetPrayers = prayers.map((p): PrayerModel => ({
       id: p.id,
       name: p.name,
       arabicName: p.arabicName,
       time: p.time,
       status: p.status,
       checked: false
-    } as Prayer));
+    } as PrayerModel));
 
     const json = AppStorage.get<string>(storageKey);
 
@@ -385,7 +401,7 @@ export class PrayerManager {
     try {
       const state = JSON.parse(json) as PrayerCheckState;
 
-      const mapped = resetPrayers.map((p): Prayer => {
+      const mapped = resetPrayers.map((p): PrayerModel => {
         let checked = false;
         switch (p.id) {
           case 'fajr':     checked = state.fajr === true; break;
@@ -401,7 +417,7 @@ export class PrayerManager {
           time: p.time,
           status: p.status,
           checked: checked
-        } as Prayer;
+        } as PrayerModel;
       });
 
       return PrayerManager.applyDayNames(mapped, date);
@@ -415,13 +431,58 @@ export class PrayerManager {
   // HEADER HELPERS
   // ============================================================
 
-  static getCurrentPrayer(prayers: Prayer[]): Prayer | null {
-    const p = prayers.find(x => x.status === 'pray' || x.status === 'both');
-    return p ? p : null;
+  /**
+   * The current prayer is the last prayer whose time has already
+   * passed — regardless of whether it has been marked as prayed.
+   * Returns null in the pre-Fajr window (nothing today has passed).
+   */
+  static getCurrentPrayer(
+    prayers: PrayerModel[],
+    locationOffsetHours?: number
+  ): PrayerModel | null {
+    if (prayers.length === 0) return null;
+    const currentMinutes = PrayerManager.getCurrentMinutesInLocation(locationOffsetHours);
+
+    let currentIdx = -1;
+    for (let i = 0; i < prayers.length; i++) {
+      const t = PrayerManager.timeToMinutes(prayers[i].time);
+      if (t > 0 && t <= currentMinutes) currentIdx = i;
+    }
+    if (currentIdx === -1) return null;
+    return prayers[currentIdx];
   }
 
-  static getNextPrayer(prayers: Prayer[]): Prayer | null {
-    const p = prayers.find(x => x.status === 'next' || x.status === 'both');
-    return p ? p : null;
+  /**
+   * The next prayer is the first prayer whose time has NOT yet
+   * passed. Returns null when all prayers today have passed
+   * (caller falls back to the extended timeline for night extras).
+   */
+  static getNextPrayer(
+    prayers: PrayerModel[],
+    locationOffsetHours?: number
+  ): PrayerModel | null {
+    if (prayers.length === 0) return null;
+    const currentMinutes = PrayerManager.getCurrentMinutesInLocation(locationOffsetHours);
+
+    for (let i = 0; i < prayers.length; i++) {
+      const t = PrayerManager.timeToMinutes(prayers[i].time);
+      if (t > currentMinutes) return prayers[i];
+    }
+    return null;
+  }
+
+  /**
+   * "Now" in the location's local time, expressed as minutes from
+   * midnight. Falls back to the device clock when no offset is given.
+   */
+  private static getCurrentMinutesInLocation(locationOffsetHours?: number): number {
+    const now = new Date();
+    if (locationOffsetHours === undefined) {
+      return now.getHours() * 60 + now.getMinutes();
+    }
+    const deviceOffset = -now.getTimezoneOffset() / 60;
+    const deltaMinutes = Math.round((locationOffsetHours - deviceOffset) * 60);
+    const deviceMinutes = now.getHours() * 60 + now.getMinutes();
+    return (((deviceMinutes + deltaMinutes) % 1440) + 1440) % 1440;
   }
 }

@@ -1,11 +1,12 @@
 // entry/src/main/ets/pages/Index.ets
 
 import { router, promptAction } from '@kit.ArkUI';
+import { NotificationHelper } from '../helper/NotificationHelper';
 import { common } from '@kit.AbilityKit';
 import { mediaquery } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
-import { Prayer, ExtraTiming } from '../models/PrayerModel';
+import { PrayerModel, ExtraTiming } from '../models/PrayerModel';
 import { DateHelper } from '../utils/DateUtils';
 import { LocationHelper, LocationData } from '../utils/LocationUtils';
 import { UpcomingImportantDate } from '../models/DateModels';
@@ -17,7 +18,8 @@ import {
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_NAV_DIRECTION,
   STORAGE_KEY_LOCATION_VERSION,
-  STORAGE_KEY_LANGUAGE
+  STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_HIJRI_OFFSET
 } from '../common/StorageKeys';
 import { HomeController } from '../utils/HomeController';
 import { CalculationMethod, AsrShadowRule } from '../utils/PrayerTimeCalculator';
@@ -34,7 +36,7 @@ interface DialogResult {
 struct Index {
 
   // ============================================================
-  // THEME + NAV + LANGUAGE
+  // THEME + NAV + LANGUAGE + HIJRI OFFSET
   // ============================================================
 
   @StorageLink(STORAGE_KEY_THEME_MODE)
@@ -49,7 +51,12 @@ struct Index {
   locationVersion: number = 0;
 
   @StorageLink(STORAGE_KEY_LANGUAGE)
+  @Watch('onLanguageChangedInHome')
   appLanguage: string = 'en';
+
+  @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
+  @Watch('onHijriOffsetChangedInHome')
+  hijriOffset: number = 0;
 
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
@@ -76,7 +83,7 @@ struct Index {
 
   @State upcomingImportantDates: UpcomingImportantDate[] = [];
 
-  @State prayers: Prayer[] = [
+  @State prayers: PrayerModel[] = [
     { id: 'fajr',    name: 'Fajr',    arabicName: 'الفجر',   time: '--:--', status: 'abbreviation', checked: false },
     { id: 'dhuhr',   name: 'Dhuhr',   arabicName: 'الظهر',   time: '--:--', status: 'abbreviation', checked: false },
     { id: 'asr',     name: 'Asr',     arabicName: 'العصر',   time: '--:--', status: 'abbreviation', checked: false },
@@ -103,6 +110,7 @@ struct Index {
   @State showIslamicEvents: boolean = true;
   @State showBottomSheet: boolean = false;
   @State activeFloatingTab: string = 'home';
+  @State private isRefreshingHome: boolean = false;
 
   private statusTimerId: number = -1;
   private settingsLoaded: boolean = false;
@@ -145,10 +153,21 @@ struct Index {
   }
 
   /**
+   * Translate either a prayer name or an extra timing name.
+   * Used by the Current / Next header rows, where the value could be
+   * any of the 9 timeline events.
+   */
+  private translateEventName(raw: string): string {
+    const asPrayer = this.translatePrayerName(raw);
+    if (asPrayer !== raw) return asPrayer;
+    return this.translateTimingName(raw);
+  }
+
+  /**
    * Translate a stored Islamic event into the current language.
    * Falls back to the stored English name if the key is missing.
    */
-  private translateEventName(e: UpcomingImportantDate): string {
+  private translateUpcomingEventName(e: UpcomingImportantDate): string {
     if (e.key && e.key.length > 0) {
       const translated = this.tr('event_' + e.key);
       if (translated !== 'event_' + e.key) return translated;
@@ -182,6 +201,20 @@ struct Index {
 
     this.refreshPrayerTimes();
     this.updateTodayHeaderData();
+    this.refreshHijriDates();
+  }
+
+  private async onLanguageChangedInHome(): Promise<void> {
+    // Notification titles/content are localized at schedule time, so
+    // they need to be rebuilt when the language changes.
+    await NotificationHelper.rescheduleAll();
+  }
+
+
+  private onHijriOffsetChangedInHome(): void {
+    // Re-render the Hijri date strings whenever the offset changes
+    // (e.g. from Settings → Hijri Calendar).
+    this.refreshHijriDates();
   }
 
   // ============================================================
@@ -210,7 +243,7 @@ struct Index {
       this.colors = c;
     });
 
-    this.hijriDateString = DateHelper.getFormattedHijriDate();
+    this.refreshHijriDates();
     this.upcomingImportantDates = DateHelper.getUpcomingImportantDates();
 
     this.refreshViewingDate(true);
@@ -254,6 +287,22 @@ struct Index {
   }
 
   // ============================================================
+  // HIJRI DATE HELPERS
+  // ============================================================
+
+  private refreshHijriDates(): void {
+    const today = new Date();
+    const shiftedToday = new Date(today);
+    shiftedToday.setDate(shiftedToday.getDate() + this.hijriOffset);
+    this.hijriDateString = DateHelper.getFormattedHijriDateFor(shiftedToday);
+
+    const viewed = new Date(this.viewingDate);
+    const shiftedViewed = new Date(viewed);
+    shiftedViewed.setDate(shiftedViewed.getDate() + this.hijriOffset);
+    this.viewingHijriDate = DateHelper.getFormattedHijriDateFor(shiftedViewed);
+  }
+
+  // ============================================================
   // OFFSET LOOKUP
   // ============================================================
 
@@ -273,7 +322,10 @@ struct Index {
     d.setDate(d.getDate() + this.dateOffset);
     this.viewingDate = d;
     this.viewingDateKey = PrayerManager.getDateKeyForDate(d);
-    this.viewingHijriDate = DateHelper.getFormattedHijriDateFor(d);
+
+    const shifted = new Date(d);
+    shifted.setDate(shifted.getDate() + this.hijriOffset);
+    this.viewingHijriDate = DateHelper.getFormattedHijriDateFor(shifted);
 
     if (!skipReload) {
       this.prayers = PrayerManager.loadStateForDate(this.viewingDateKey, this.prayers, this.viewingDate);
@@ -324,6 +376,11 @@ struct Index {
       this.refreshPrayerTimes();
       this.updateTodayHeaderData();
       this.settingsLoaded = true;
+
+      // Renew the notification queue every time settings or the app
+      // open. Safe to call repeatedly — it cancels first, then
+      // reschedules.
+      await NotificationHelper.rescheduleAll();
     } finally {
       this.settingsLoading = false;
     }
@@ -437,6 +494,29 @@ struct Index {
   }
 
   // ============================================================
+  // SWIPE-TO-REFRESH
+  // ============================================================
+
+  private async handleHomeRefresh(): Promise<void> {
+    try {
+      await this.loadSettingsAndLocation();
+
+      if (this.locationMode === LocationMode.GPS) {
+        await this.refreshLocation();
+      }
+
+      this.prayers = PrayerManager.updateStatuses(
+        this.prayers, this.viewingDate, this.getLocationOffsetHours()
+      );
+      this.refreshPrayerTimes();
+      this.updateTodayHeaderData();
+      this.refreshHijriDates();
+    } finally {
+      this.isRefreshingHome = false;
+    }
+  }
+
+  // ============================================================
   // EVENT HANDLERS
   // ============================================================
 
@@ -444,12 +524,13 @@ struct Index {
     const target = this.prayers.find(p => p.id === id);
     if (!target || !PrayerManager.isPrayerCheckable(target, this.viewingDate)) return;
 
-    this.prayers = this.prayers.map((p): Prayer => {
+    this.prayers = this.prayers.map((p): PrayerModel => {
       if (p.id === id) {
-        return {
+        const updated: PrayerModel = {
           id: p.id, name: p.name, arabicName: p.arabicName,
           time: p.time, status: p.status, checked: !p.checked
-        } as Prayer;
+        };
+        return updated;
       }
       return p;
     });
@@ -458,6 +539,12 @@ struct Index {
     this.prayers = PrayerManager.updateStatuses(
       this.prayers, this.viewingDate, this.getLocationOffsetHours()
     );
+
+    // The Current / Next header always reflects TODAY. Toggling a
+    // checkbox on a previous (or future) date must not touch it.
+    if (this.dateOffset === 0) {
+      this.updateTodayHeaderData();
+    }
   }
 
   private closeBottomSheet(): void {
@@ -565,29 +652,34 @@ struct Index {
       Column() {
         this.HeaderWithHamburger()
 
-        Scroll() {
-          Column() {
-            this.NextPrayerSection()
+        Refresh({ refreshing: $$this.isRefreshingHome }) {
+          Scroll() {
+            Column() {
+              this.NextPrayerSection()
 
-            if (this.calcSource === CalculationSource.LOCAL) {
-              this.PrayersSection()
-              if (this.showExtraTimings) this.ExtraTimingsSection()
-            } else {
-              this.ComingSoonCard()
+              if (this.calcSource === CalculationSource.LOCAL) {
+                this.PrayersSection()
+                if (this.showExtraTimings) this.ExtraTimingsSection()
+              } else {
+                this.ComingSoonCard()
+              }
+
+              if (this.showIslamicEvents) this.ImportantDatesCard()
+
+              Column().height(130)
             }
-
-            if (this.showIslamicEvents) this.ImportantDatesCard()
-
-            Column().height(130)
+            .width('100%')
           }
           .width('100%')
+          .backgroundColor(this.colors.primaryGreen)
+          .scrollable(ScrollDirection.Vertical)
+          .scrollBar(BarState.Auto)
+          .edgeEffect(EdgeEffect.Spring)
         }
         .layoutWeight(1)
         .width('100%')
         .backgroundColor(this.colors.primaryGreen)
-        .scrollable(ScrollDirection.Vertical)
-        .scrollBar(BarState.Auto)
-        .edgeEffect(EdgeEffect.Spring)
+        .onRefreshing(() => { this.handleHomeRefresh(); })
       }
       .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
 
@@ -608,10 +700,8 @@ struct Index {
             .borderRadius(2).margin({ top: 8 })
 
           Row() {
-            Text('Sirat')
-              .fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
-            Text('Companion')
-              .fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.accentGold)
+            Text('Sirat').fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+            Text('Companion').fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.accentGold)
               .margin({ left: 8 })
           }
           .width('100%').padding({ top: 16, bottom: 16 }).justifyContent(FlexAlign.Center)
@@ -783,10 +873,10 @@ struct Index {
       Column() {
         Row() {
           Text(this.tr('current_prayer'))
-            .fontSize(12).fontColor(this.colors.textMuted).letterSpacing(2).fontWeight(FontWeight.Medium)
+            .fontSize(12).fontColor(this.colors.textMuted).letterSpacing(1).fontWeight(FontWeight.Medium)
           Blank()
           Row() {
-            Text(this.translatePrayerName(this.todayCurrentPrayerName))
+            Text(this.translateEventName(this.todayCurrentPrayerName))
               .fontSize(16).fontColor(this.colors.accentGold).fontWeight(FontWeight.Bold)
             Text('   ')
             Text(this.todayCurrentPrayerTime)
@@ -847,10 +937,10 @@ struct Index {
     Column() {
       Row() {
         Text(this.tr('next_prayer'))
-          .fontSize(12).fontColor(this.colors.textMuted).letterSpacing(2).fontWeight(FontWeight.Medium)
+          .fontSize(12).fontColor(this.colors.textMuted).letterSpacing(1).fontWeight(FontWeight.Medium)
         Blank()
         Row() {
-          Text(this.translatePrayerName(this.todayNextPrayerName))
+          Text(this.translateEventName(this.todayNextPrayerName))
             .fontSize(16).fontColor(this.colors.accentGold).fontWeight(FontWeight.Bold)
           Text('   ')
           Text(this.todayNextPrayerTime)
@@ -903,9 +993,9 @@ struct Index {
       .direction(Direction.Ltr)
 
       Column() {
-        ForEach(this.prayers, (prayer: Prayer) => {
+        ForEach(this.prayers, (prayer: PrayerModel) => {
           this.PrayerItem(prayer)
-        }, (prayer: Prayer) => `${this.viewingDateKey}-${prayer.id}-${prayer.name}-${prayer.status}-${prayer.checked ? '1' : '0'}-${prayer.time}`)
+        }, (prayer: PrayerModel) => `${this.viewingDateKey}-${prayer.id}-${prayer.name}-${prayer.status}-${prayer.checked ? '1' : '0'}-${prayer.time}`)
       }
       .width('100%').backgroundColor(this.colors.cardDark).borderRadius(Theme.radiusMedium)
       .border({ width: 1, color: this.colors.borderSoft })
@@ -916,7 +1006,7 @@ struct Index {
   }
 
   @Builder
-  PrayerItem(prayer: Prayer) {
+  PrayerItem(prayer: PrayerModel) {
     Row() {
       Checkbox({ name: prayer.id })
         .width(20).height(20).selectedColor(this.colors.accentGold)
@@ -1001,7 +1091,8 @@ struct Index {
   ImportantDatesCard() {
     Column() {
       Row() {
-        Text('📅').fontSize(16).margin({ right: 8 })
+        Text('📅').fontSize(16)
+          .margin({ left: this.isRtl() ? 8 : 0, right: this.isRtl() ? 0 : 8 })
         Text(this.tr('upcoming_islamic_events'))
           .fontSize(14).fontColor(this.colors.accentGold).fontWeight(FontWeight.Bold).letterSpacing(1.5)
       }
@@ -1011,14 +1102,14 @@ struct Index {
         if (this.upcomingImportantDates.length === 0) {
           Text(this.tr('loading_location')).fontSize(14).fontColor(this.colors.textMuted)
         } else {
-          Text(this.translateEventName(this.upcomingImportantDates[0]).toUpperCase())
+          Text(this.translateUpcomingEventName(this.upcomingImportantDates[0]).toUpperCase())
             .fontSize(14).fontColor(this.colors.accentGoldLight).fontWeight(FontWeight.Medium).textAlign(TextAlign.Center)
           Text(this.upcomingImportantDates[0].hijriDate)
             .fontSize(12).fontColor(this.colors.textMuted).margin({ top: 4 }).textAlign(TextAlign.Center)
 
           if (this.upcomingImportantDates.length > 1) {
             Divider().width('80%').color(this.colors.borderSoft).margin({ top: 14, bottom: 14 })
-            Text(this.translateEventName(this.upcomingImportantDates[1]).toUpperCase())
+            Text(this.translateUpcomingEventName(this.upcomingImportantDates[1]).toUpperCase())
               .fontSize(14).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium).textAlign(TextAlign.Center)
             Text(this.upcomingImportantDates[1].hijriDate)
               .fontSize(12).fontColor(this.colors.textMuted).margin({ top: 4 }).textAlign(TextAlign.Center)

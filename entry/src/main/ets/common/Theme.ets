@@ -37,6 +37,7 @@ export class ThemeColors {
   categoryCounter: string = '#4CC9F0';
   categoryAbout: string = '#F4A261';
   categoryHijriCalendar: string = '#06B6D4';
+  categoryNotifications: string = '#F59E0B';
 }
 
 export class Theme {
@@ -63,6 +64,7 @@ export class Theme {
       c.accentGold = '#4ADE80';
       c.accentGoldLight = '#86EFAC';
       c.textWhite = '#F1F5F9';
+      c.categoryNotifications = '#FBBF24';
       c.textLight = '#CBD5E1';
       c.textMuted = '#94A3B8';
       c.textOnAccent = '#0B1220';

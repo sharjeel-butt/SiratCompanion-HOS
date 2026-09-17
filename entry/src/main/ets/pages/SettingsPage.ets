@@ -1,6 +1,8 @@
 // entry/src/main/ets/pages/SettingsPage.ets
 
 import { router } from '@kit.ArkUI';
+import { bundleManager } from '@kit.AbilityKit';
+import { common } from '@kit.AbilityKit';
 import { mediaquery } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
@@ -16,6 +18,8 @@ import {
 } from '../common/StorageKeys';
 import { PrayerOffsetsHelper, OffsetKey } from '../helper/PrayerOffsetsHelper';
 import { L } from '../helper/LocalizationHelper';
+import { NotificationHelper, MIN_BEFORE_MINUTES, MAX_BEFORE_MINUTES, STEP_BEFORE_MINUTES } from '../helper/NotificationHelper';
+import { NotificationsSettings } from '../helper/SettingsHelper';
 
 const MAX_HIJRI_OFFSET = 3;
 
@@ -40,6 +44,7 @@ struct SettingsPage {
 
   /** Plain @State mirror — guarantees a re-render on language change. */
   @State private currentLanguage: string = 'en';
+
 
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
@@ -67,6 +72,14 @@ struct SettingsPage {
   @State isRefreshing: boolean = false;
 
   @State expandedCategory: string | null = 'Prayer Times';
+  @State notifMaster: boolean = false;
+  @State notifBefore: number = 10;
+  @State notifFajr: boolean = true;
+  @State notifDhuhr: boolean = true;
+  @State notifAsr: boolean = true;
+  @State notifMaghrib: boolean = true;
+  @State notifIsha: boolean = true;
+  @State notifRefreshing: boolean = false;
   @State showMethodPicker: boolean = false;
   @State showAsrPicker: boolean = false;
   @State showSourcePicker: boolean = false;
@@ -131,6 +144,15 @@ struct SettingsPage {
     this.locationMode = mode;
 
     const manual = await SettingsHelper.getManualCoords();
+    const ns = await SettingsHelper.getNotificationSettings();
+    this.notifMaster = ns.masterEnabled;
+    this.notifBefore = ns.beforeMinutes;
+    this.notifFajr = ns.fajrEnabled;
+    this.notifDhuhr = ns.dhuhrEnabled;
+    this.notifAsr = ns.asrEnabled;
+    this.notifMaghrib = ns.maghribEnabled;
+    this.notifIsha = ns.ishaEnabled;
+
     this.manualLatInput  = manual.lat !== 0 ? manual.lat.toString() : '';
     this.manualLngInput  = manual.lng !== 0 ? manual.lng.toString() : '';
     this.manualCityInput = manual.cityName;
@@ -196,7 +218,79 @@ struct SettingsPage {
     await this.reload();
   }
 
-  // ---- Prayer offsets ----
+  // ---- Notifications ----
+
+  private async toggleNotifMaster(value: boolean): Promise<void> {
+    if (value) {
+      const ctx = getContext(this) as common.UIAbilityContext;
+      const granted = await NotificationHelper.requestPermission(ctx);
+      if (!granted) {
+        this.notifMaster = false;
+        this.getUIContext().getPromptAction().showToast({
+          message: this.tr('notification_permission_denied'), duration: 2500
+        });
+        return;
+      }
+    }
+
+    this.notifMaster = value;
+    SettingsHelper.saveNotifMaster(value);
+    await NotificationHelper.rescheduleAll();
+  }
+
+  private async changeNotifBefore(delta: number): Promise<void> {
+    let next = this.notifBefore + delta;
+    if (next < MIN_BEFORE_MINUTES) next = MIN_BEFORE_MINUTES;
+    if (next > MAX_BEFORE_MINUTES) next = MAX_BEFORE_MINUTES;
+    if (next === this.notifBefore) return;
+
+    this.notifBefore = next;
+    SettingsHelper.saveNotifBeforeMinutes(next);
+    await NotificationHelper.rescheduleAll();
+  }
+
+  private async toggleNotifPrayer(prayerId: string, value: boolean): Promise<void> {
+    switch (prayerId) {
+      case 'fajr':    this.notifFajr = value; break;
+      case 'dhuhr':   this.notifDhuhr = value; break;
+      case 'asr':     this.notifAsr = value; break;
+      case 'maghrib': this.notifMaghrib = value; break;
+      case 'isha':    this.notifIsha = value; break;
+    }
+    SettingsHelper.saveNotifPrayer(prayerId, value);
+    await NotificationHelper.rescheduleAll();
+  }
+
+  private getNotifPrayerValue(prayerId: string): boolean {
+    switch (prayerId) {
+      case 'fajr':    return this.notifFajr;
+      case 'dhuhr':   return this.notifDhuhr;
+      case 'asr':     return this.notifAsr;
+      case 'maghrib': return this.notifMaghrib;
+      case 'isha':    return this.notifIsha;
+      default:        return false;
+    }
+  }
+
+  private formatNotifBefore(): string {
+    if (this.notifBefore === 0) return '0';
+    return `${this.notifBefore}`;
+  }
+
+  private getAppVersionName(): string {
+    try {
+      const info = bundleManager.getBundleInfoForSelfSync(
+        bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION
+      );
+      return info.versionName;
+    } catch (err) {
+      const error = err as BusinessError;
+      console.warn(`[SettingsPage] getBundleInfoForSelfSync failed: ${error.code} ${error.message}`);
+      return '—';
+    }
+  }
+
+  // ---- PrayerModel offsets ----
 
   private getStorageKeyForOffset(key: OffsetKey): string {
     switch (key) {
@@ -380,15 +474,26 @@ struct SettingsPage {
 
         Scroll() {
           Column() {
-            // ---- Prayer Times ----
+            // ---- PrayerModel Times ----
             this.CategoryHeader(
               this.tr('category_prayer_times'),
               '🕌',
               this.colors.categoryPrayerTimes,
-              'Prayer Times'
+              'PrayerModel Times'
             )
-            if (this.expandedCategory === 'Prayer Times') {
+            if (this.expandedCategory === 'PrayerModel Times') {
               this.PrayerTimesContent()
+            }
+
+            // ---- Notifications ----
+            this.CategoryHeader(
+              this.tr('category_notifications'),
+              '🔔',
+              this.colors.categoryNotifications,
+              'Notifications'
+            )
+            if (this.expandedCategory === 'Notifications') {
+              this.NotificationsContent()
             }
 
             // ---- Hijri Calendar ----
@@ -604,6 +709,138 @@ struct SettingsPage {
     }
     .width('100%').padding({ top: 4, bottom: 4 })
     .backgroundColor(this.colors.tintSubtle).borderRadius(12)
+  }
+
+  // ============================================================
+  // NOTIFICATIONS
+  // ============================================================
+
+  @Builder
+  NotificationsContent() {
+    Column() {
+      // ---- Master toggle ----
+      Row() {
+        Column() {
+          Text(this.tr('notifications_master'))
+            .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+          Text(this.tr('notifications_master_desc'))
+            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+        Toggle({ type: ToggleType.Switch, isOn: this.notifMaster })
+          .selectedColor(this.colors.accentGold)
+          .onChange((isOn: boolean) => { this.toggleNotifMaster(isOn); })
+      }
+      .width('100%')
+      .padding({ top: 14, bottom: 14, left: 16, right: 16 })
+      .backgroundColor(this.colors.tintSubtle).borderRadius(12).margin({ bottom: 8 })
+
+      if (this.notifMaster) {
+        // ---- Notify Before stepper ----
+        Column() {
+          Row() {
+            Column() {
+              Text(this.tr('notify_before'))
+                .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+              Text(this.tr('notify_before_desc'))
+                .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+            }
+            .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+            Button() {
+              Text('\u2212').fontSize(20).fontWeight(FontWeight.Bold)
+                .fontColor(this.notifBefore <= MIN_BEFORE_MINUTES
+                  ? this.colors.textMuted : this.colors.textWhite)
+            }
+            .width(38).height(38)
+            .backgroundColor(this.colors.tintMedium).borderRadius(10)
+            .border({ width: 1, color: this.colors.borderMedium })
+            .enabled(this.notifBefore > MIN_BEFORE_MINUTES)
+            .onClick(() => { this.changeNotifBefore(-STEP_BEFORE_MINUTES); })
+
+            Column() {
+              Text(this.formatNotifBefore())
+                .fontSize(18).fontWeight(FontWeight.Bold)
+                .fontColor(this.notifBefore === 0
+                  ? this.colors.textMuted : this.colors.accentGold)
+              Text(this.tr('notif_minutes_suffix'))
+                .fontSize(10).fontColor(this.colors.textMuted)
+            }
+            .width(64).alignItems(HorizontalAlign.Center)
+
+            Button() {
+              Text('+').fontSize(20).fontWeight(FontWeight.Bold)
+                .fontColor(this.notifBefore >= MAX_BEFORE_MINUTES
+                  ? this.colors.textMuted : this.colors.textOnAccent)
+            }
+            .width(38).height(38)
+            .backgroundColor(this.notifBefore >= MAX_BEFORE_MINUTES
+              ? this.colors.tintMedium : this.colors.accentGold)
+            .borderRadius(10)
+            .enabled(this.notifBefore < MAX_BEFORE_MINUTES)
+            .onClick(() => { this.changeNotifBefore(STEP_BEFORE_MINUTES); })
+          }
+          .width('100%').alignItems(VerticalAlign.Center)
+        }
+        .width('100%')
+        .padding({ top: 14, bottom: 14, left: 16, right: 16 })
+        .backgroundColor(this.colors.tintSubtle).borderRadius(12).margin({ bottom: 8 })
+
+        // ---- Per-prayer toggles ----
+        Column() {
+          Row() {
+            Column() {
+              Text(this.tr('notify_prayers'))
+                .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+              Text(this.tr('notify_prayers_desc'))
+                .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+            }
+            .alignItems(HorizontalAlign.Start).layoutWeight(1)
+          }
+          .width('100%').padding({ bottom: 8 })
+
+          this.NotifPrayerRow('Fajr',    'fajr')
+          this.NotifPrayerRow('Dhuhr',   'dhuhr')
+          this.NotifPrayerRow('Asr',     'asr')
+          this.NotifPrayerRow('Maghrib', 'maghrib')
+          this.NotifPrayerRow('Isha',    'isha')
+        }
+        .width('100%')
+        .padding(14)
+        .backgroundColor(this.colors.tintSubtle).borderRadius(12).margin({ bottom: 8 })
+
+        // ---- Footer note ----
+        Row() {
+          Text('ℹ️').fontSize(12).margin({ right: 6 }).opacity(0.7)
+          Text(this.tr('notifications_footer'))
+            .fontSize(10).fontColor(this.colors.textMuted).fontStyle(FontStyle.Italic)
+            .layoutWeight(1).lineHeight(15)
+        }
+        .width('100%')
+        .padding({ left: 6, right: 6, top: 4 })
+        .alignItems(VerticalAlign.Top)
+      }
+    }
+    .width('100%').padding(12)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(16)
+    .border({ width: 1, color: this.colors.borderSoft })
+    .margin({ bottom: 12 })
+  }
+
+  @Builder
+  NotifPrayerRow(label: string, prayerId: string) {
+    Row() {
+      Text(this.tr('prayer_' + prayerId))
+        .fontSize(14).fontColor(this.colors.textWhite).layoutWeight(1)
+
+      Toggle({ type: ToggleType.Switch, isOn: this.getNotifPrayerValue(prayerId) })
+        .selectedColor(this.colors.accentGold)
+        .onChange((isOn: boolean) => { this.toggleNotifPrayer(prayerId, isOn); })
+    }
+    .width('100%')
+    .padding({ top: 6, bottom: 6, left: 2, right: 2 })
   }
 
   @Builder
@@ -836,7 +1073,7 @@ struct SettingsPage {
         Text(this.tr('app_name')).fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
         Text(this.tr('app_tagline')).fontSize(12).fontColor(this.colors.accentGold).margin({ top: 4 })
         Divider().color(this.colors.borderSoft).width('80%').margin({ top: 14, bottom: 14 })
-        this.AboutRow(this.tr('about_version'), '1.2.0')
+        this.AboutRow(this.tr('about_version'), this.getAppVersionName())
         this.AboutRow(this.tr('about_platform'), 'HarmonyOS')
         this.AboutRow(this.tr('about_copyright'), this.tr('app_name'))
       }

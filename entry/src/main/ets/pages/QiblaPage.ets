@@ -332,15 +332,15 @@ struct QiblaPage {
                 .fontSize(14).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
                 .margin({ left: 8 })
                 .maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis })
-                .layoutWeight(1)
             }
             .constraintSize({ maxWidth: 260 })
-            .height(34)
+            .height(38)
             .padding({ left: 14, right: 14 })
             .backgroundColor(this.colors.cardDark)
             .borderRadius(17)
             .border({ width: 1, color: this.colors.borderSoft })
             .margin({ top: 20 })
+            .alignItems(VerticalAlign.Center)
             .onClick(() => { this.openLocationSettings(); })
 
             this.CompassView()
