@@ -532,9 +532,7 @@ struct HijriCalendarPage {
         .onClick(() => { this.onFloatingBarTap('home'); })
 
         Divider().vertical(true).height(28)
-          .color(PageTheme.isSystemDark()
-            ? 'rgba(74,222,128,0.20)'
-            : 'rgba(15,81,50,0.12)')
+          .color(PageTheme.isSystemDark() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
 
         // ---- Tasbih ----
         Column() {
@@ -550,9 +548,7 @@ struct HijriCalendarPage {
         .onClick(() => { this.onFloatingBarTap('tasbih'); })
 
         Divider().vertical(true).height(28)
-          .color(PageTheme.isSystemDark()
-            ? 'rgba(74,222,128,0.20)'
-            : 'rgba(15,81,50,0.12)')
+          .color(PageTheme.isSystemDark() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
 
         // ---- Compass ----
         Column() {
@@ -568,9 +564,7 @@ struct HijriCalendarPage {
         .onClick(() => { this.onFloatingBarTap('compass'); })
 
         Divider().vertical(true).height(28)
-          .color(PageTheme.isSystemDark()
-            ? 'rgba(74,222,128,0.20)'
-            : 'rgba(15,81,50,0.12)')
+          .color(PageTheme.isSystemDark() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
 
         // ---- Calendar (active) ----
         Column() {
@@ -584,17 +578,14 @@ struct HijriCalendarPage {
         .onClick(() => { this.onFloatingBarTap('calendar'); })
       }
       .width('92%').height(68)
-      .backgroundBlurStyle(
-        BlurStyle.Thin,
-        {
-          colorMode: PageTheme.isSystemDark() ? ThemeColorMode.DARK : ThemeColorMode.LIGHT,
-          adaptiveColor: AdaptiveColor.DEFAULT,
-          scale: 1.0
-        }
-      )
-      .backgroundColor(
-        PageTheme.isSystemDark() ? 'rgba(20, 27, 46, 0.50)' : 'rgba(255, 255, 255, 0.35)'
-      )
+      .backgroundBlurStyle(BlurStyle.Thin, {
+        colorMode: PageTheme.isSystemDark() ? ThemeColorMode.DARK : ThemeColorMode.LIGHT,
+        adaptiveColor: AdaptiveColor.DEFAULT,
+        scale: 1.0
+      })
+      .backgroundColor(PageTheme.isSystemDark()
+        ? 'rgba(20, 27, 46, 0.50)'
+        : 'rgba(255, 255, 255, 0.35)')
       .borderRadius(34)
       .border({
         width: 1,
