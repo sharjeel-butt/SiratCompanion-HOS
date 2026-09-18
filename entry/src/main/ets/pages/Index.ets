@@ -724,6 +724,7 @@ struct Index {
 
       this.FloatingBar()
 
+
       if (this.showBottomSheet) {
         Column()
           .width('100%').height('100%')
@@ -782,6 +783,7 @@ struct Index {
   FloatingBar() {
     Row() {
       Row() {
+        // ---- Home ----
         Column() {
           Text('🏠').fontSize(22).opacity(this.activeFloatingTab === 'home' ? 1.0 : 0.7)
           Text(this.tr('tab_home'))
@@ -798,6 +800,7 @@ struct Index {
         Divider().vertical(true).height(28)
           .color(this.isDarkMode() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
 
+        // ---- Tasbih ----
         Column() {
           Text('📿').fontSize(22).opacity(this.activeFloatingTab === 'tasbih' ? 1.0 : 0.7)
           Text(this.tr('tab_tasbih'))
@@ -814,6 +817,7 @@ struct Index {
         Divider().vertical(true).height(28)
           .color(this.isDarkMode() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
 
+        // ---- Compass ----
         Column() {
           Text('🧭').fontSize(22).opacity(this.activeFloatingTab === 'compass' ? 1.0 : 0.7)
           Text(this.tr('tab_compass'))
@@ -830,6 +834,7 @@ struct Index {
         Divider().vertical(true).height(28)
           .color(this.isDarkMode() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
 
+        // ---- Calendar ----
         Column() {
           Text('📅').fontSize(22).opacity(this.activeFloatingTab === 'calendar' ? 1.0 : 0.7)
           Text(this.tr('tab_calendar'))

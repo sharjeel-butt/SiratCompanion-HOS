@@ -18,6 +18,7 @@ import { NavHelper } from '../helper/NavHelper';
 import { L } from '../helper/LocalizationHelper';
 import { OfflineCityLookup } from '../utils/OfflineCityLookup'
 
+
 /** Sensor interval (must match QiblaSensorHelper). */
 const SENSOR_INTERVAL_MS = 100;
 
@@ -545,6 +546,7 @@ struct QiblaPage {
   FloatingBar() {
     Row() {
       Row() {
+        // ---- Home ----
         Column() {
           Text('🏠').fontSize(22).opacity(0.7)
           Text(this.tr('tab_home'))
@@ -558,10 +560,9 @@ struct QiblaPage {
         .onClick(() => { this.onFloatingBarTap('home'); })
 
         Divider().vertical(true).height(28)
-          .color(PageTheme.isSystemDark()
-            ? 'rgba(74,222,128,0.20)'
-            : 'rgba(15,81,50,0.12)')
+          .color(PageTheme.isSystemDark() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
 
+        // ---- Tasbih ----
         Column() {
           Text('📿').fontSize(22).opacity(0.7)
           Text(this.tr('tab_tasbih'))
@@ -575,10 +576,9 @@ struct QiblaPage {
         .onClick(() => { this.onFloatingBarTap('tasbih'); })
 
         Divider().vertical(true).height(28)
-          .color(PageTheme.isSystemDark()
-            ? 'rgba(74,222,128,0.20)'
-            : 'rgba(15,81,50,0.12)')
+          .color(PageTheme.isSystemDark() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
 
+        // ---- Compass (active) ----
         Column() {
           Text('🧭').fontSize(22).opacity(1.0)
           Text(this.tr('tab_compass'))
@@ -590,10 +590,9 @@ struct QiblaPage {
         .onClick(() => { this.onFloatingBarTap('compass'); })
 
         Divider().vertical(true).height(28)
-          .color(PageTheme.isSystemDark()
-            ? 'rgba(74,222,128,0.20)'
-            : 'rgba(15,81,50,0.12)')
+          .color(PageTheme.isSystemDark() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
 
+        // ---- Calendar ----
         Column() {
           Text('📅').fontSize(22).opacity(0.7)
           Text(this.tr('tab_calendar'))
@@ -607,17 +606,14 @@ struct QiblaPage {
         .onClick(() => { this.onFloatingBarTap('calendar'); })
       }
       .width('92%').height(68)
-      .backgroundBlurStyle(
-        BlurStyle.Thin,
-        {
-          colorMode: PageTheme.isSystemDark() ? ThemeColorMode.DARK : ThemeColorMode.LIGHT,
-          adaptiveColor: AdaptiveColor.DEFAULT,
-          scale: 1.0
-        }
-      )
-      .backgroundColor(
-        PageTheme.isSystemDark() ? 'rgba(20, 27, 46, 0.50)' : 'rgba(255, 255, 255, 0.35)'
-      )
+      .backgroundBlurStyle(BlurStyle.Thin, {
+        colorMode: PageTheme.isSystemDark() ? ThemeColorMode.DARK : ThemeColorMode.LIGHT,
+        adaptiveColor: AdaptiveColor.DEFAULT,
+        scale: 1.0
+      })
+      .backgroundColor(PageTheme.isSystemDark()
+        ? 'rgba(20, 27, 46, 0.50)'
+        : 'rgba(255, 255, 255, 0.35)')
       .borderRadius(34)
       .border({
         width: 1,
