@@ -6,7 +6,7 @@ import { common } from '@kit.AbilityKit';
 import { mediaquery } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
-import { CalculationMethod, AsrShadowRule } from '../utils/PrayerTimeCalculator';
+import { CalculationMethod, AsrShadowRule, HighLatitudeRule } from '../utils/PrayerTimeCalculator';
 import { SettingsHelper, PrayerOffsets } from '../helper/SettingsHelper';
 import { LocationHelper, LocationData } from '../utils/LocationUtils';
 import { LocationCache } from '../utils/LocationCache';
@@ -55,6 +55,7 @@ struct SettingsPage {
 
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
   @State asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
+  @State highLatRule: HighLatitudeRule = HighLatitudeRule.NONE;
   @State calcSource: CalculationSource = CalculationSource.LOCAL;
 
   @State showOffsets: boolean = false;
@@ -82,6 +83,7 @@ struct SettingsPage {
   @State notifRefreshing: boolean = false;
   @State showMethodPicker: boolean = false;
   @State showAsrPicker: boolean = false;
+  @State showHighLatPicker: boolean = false;
   @State showSourcePicker: boolean = false;
 
   // ============================================================
@@ -137,6 +139,7 @@ struct SettingsPage {
     this.calcMethod = data.method;
     this.asrRule    = data.asr;
     this.calcSource = data.source;
+    this.highLatRule = await SettingsHelper.getHighLatRule();
 
     this.offsets = await SettingsHelper.getPrayerOffsets();
 
@@ -199,6 +202,13 @@ struct SettingsPage {
     this.asrRule = rule;
     SettingsHelper.saveAsrRule(rule);
     this.showAsrPicker = false;
+  }
+
+  private pickHighLatRule(id: string): void {
+    const rule = id as HighLatitudeRule;
+    this.highLatRule = rule;
+    SettingsHelper.saveHighLatRule(rule);
+    this.showHighLatPicker = false;
   }
 
   private pickSource(id: string): void {
@@ -549,12 +559,12 @@ struct SettingsPage {
           () => { this.showAsrPicker = false; })
       }
 
-      if (this.showSourcePicker) {
+      if (this.showHighLatPicker) {
         this.PickerOverlay(
-          this.tr('source'), '🌐',
-          SettingsHelper.buildSourcePickerItems(this.calcSource),
-          (id: string) => { this.pickSource(id); },
-          () => { this.showSourcePicker = false; })
+          this.tr('high_latitude'), '🌐',
+          SettingsHelper.buildHighLatPickerItems(this.highLatRule),
+          (id: string) => { this.pickHighLatRule(id); },
+          () => { this.showHighLatPicker = false; })
       }
     }
     .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
@@ -664,6 +674,22 @@ struct SettingsPage {
 
       // Prayer Offsets
       this.PrayerOffsetsCard()
+
+      // High Latitude
+      Row() {
+        Column() {
+          Text(this.tr('high_latitude')).fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+          Text(this.tr('high_latitude_desc')).fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+          Text(SettingsHelper.getHighLatRuleLabel(this.highLatRule)).fontSize(12).fontColor(this.colors.accentGold)
+            .maxLines(2).textOverflow({ overflow: TextOverflow.Ellipsis }).margin({ top: 6 })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+      }
+      .width('100%')
+      .padding({ top: 14, bottom: 14, left: 16, right: 16 })
+      .backgroundColor(this.colors.tintSubtle).borderRadius(12).margin({ bottom: 8 })
+      .onClick(() => { this.showHighLatPicker = true; })
 
       Divider().color(this.colors.borderSoft).margin({ top: 8, bottom: 8 })
       this.LocationBlock()

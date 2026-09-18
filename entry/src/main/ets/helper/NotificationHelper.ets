@@ -131,6 +131,7 @@ export class NotificationHelper {
 
     let scheduledCount = 0;
 
+    const highLatRule = await SettingsHelper.getHighLatRule();
     for (let dayOffset = 0; dayOffset < DAYS_AHEAD; dayOffset++) {
       const day = new Date(anchor);
       day.setDate(day.getDate() + dayOffset);
@@ -138,7 +139,7 @@ export class NotificationHelper {
       let times: DailyPrayerTimes;
       try {
         times = PrayerTimeCalculator.calculateWithDeviceTimezone(
-          day, latitude, longitude, method, asrRule
+          day, latitude, longitude, method, asrRule, highLatRule
         );
       } catch (err) {
         continue;

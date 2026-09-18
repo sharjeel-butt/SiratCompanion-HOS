@@ -25,6 +25,9 @@ import {
 } from '../models/SettingsModels';
 import { L } from './LocalizationHelper';
 import { STORAGE_KEY_WIZARD_COMPLETED } from '../common/StorageKeys';
+import { HighLatitudeRule } from '../utils/PrayerTimeCalculator';
+import { STORAGE_KEY_HIGH_LAT_RULE } from '../common/StorageKeys';
+import { STORAGE_KEY_VIBRATION_ENABLED } from '../common/StorageKeys';
 
 const KEY_METHOD  = 'calc_method';
 const KEY_ASR     = 'asr_rule';
@@ -95,6 +98,53 @@ export class SettingsHelper {
       showExtraTimings,
       showIslamicEvents
     };
+  }
+
+  // ============================================================
+  // HIGH-LATITUDE RULE
+  // ============================================================
+
+  static async getHighLatRule(): Promise<HighLatitudeRule> {
+    const stored = await PreferencesHelper.getString(
+      STORAGE_KEY_HIGH_LAT_RULE, HighLatitudeRule.NONE
+    );
+    switch (stored) {
+      case HighLatitudeRule.MIDDLE_OF_NIGHT: return HighLatitudeRule.MIDDLE_OF_NIGHT;
+      case HighLatitudeRule.ONE_SEVENTH:     return HighLatitudeRule.ONE_SEVENTH;
+      case HighLatitudeRule.ANGLE_BASED:     return HighLatitudeRule.ANGLE_BASED;
+      default:                                return HighLatitudeRule.NONE;
+    }
+  }
+
+  static saveHighLatRule(rule: HighLatitudeRule): void {
+    PreferencesHelper.setString(STORAGE_KEY_HIGH_LAT_RULE, rule);
+  }
+
+  static getHighLatRuleLabel(rule: HighLatitudeRule): string {
+    switch (rule) {
+      case HighLatitudeRule.NONE:            return L.get('highlat_none');
+      case HighLatitudeRule.MIDDLE_OF_NIGHT: return L.get('highlat_middle');
+      case HighLatitudeRule.ONE_SEVENTH:     return L.get('highlat_one_seventh');
+      case HighLatitudeRule.ANGLE_BASED:     return L.get('highlat_angle');
+      default:                                return L.get('highlat_none');
+    }
+  }
+
+  static buildHighLatPickerItems(current: HighLatitudeRule): PickerItem[] {
+    const rules = [
+      HighLatitudeRule.NONE,
+      HighLatitudeRule.MIDDLE_OF_NIGHT,
+      HighLatitudeRule.ONE_SEVENTH,
+      HighLatitudeRule.ANGLE_BASED
+    ];
+    return rules.map((r): PickerItem => {
+      const item: PickerItem = {
+        id: r,
+        label: SettingsHelper.getHighLatRuleLabel(r),
+        selected: r === current
+      };
+      return item;
+    });
   }
 
   // ============================================================
@@ -399,5 +449,19 @@ export class SettingsHelper {
   /** Reset for testing — clears the flag so the wizard runs again. */
   static resetWizard(): void {
     PreferencesHelper.setBoolean(STORAGE_KEY_WIZARD_COMPLETED, false);
+  }
+
+  // ============================================================
+  // VIBRATION
+  // ============================================================
+
+  static getVibrationEnabled(): boolean {
+    const cached = AppStorage.get<boolean>(STORAGE_KEY_VIBRATION_ENABLED);
+    return cached === undefined ? true : cached;
+  }
+
+  static saveVibrationEnabled(value: boolean): void {
+    AppStorage.setOrCreate(STORAGE_KEY_VIBRATION_ENABLED, value);
+    PreferencesHelper.setBoolean(STORAGE_KEY_VIBRATION_ENABLED, value);
   }
 }

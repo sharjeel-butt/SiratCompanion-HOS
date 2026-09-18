@@ -22,7 +22,7 @@ import {
   STORAGE_KEY_HIJRI_OFFSET
 } from '../common/StorageKeys';
 import { HomeController } from '../utils/HomeController';
-import { CalculationMethod, AsrShadowRule } from '../utils/PrayerTimeCalculator';
+import { CalculationMethod, AsrShadowRule, HighLatitudeRule } from '../utils/PrayerTimeCalculator';
 import { NavHelper } from '../helper/NavHelper';
 import { TimezoneResolver } from '../utils/TimezoneResolver';
 import { L } from '../helper/LocalizationHelper';
@@ -111,6 +111,7 @@ struct Index {
   @State showBottomSheet: boolean = false;
   @State activeFloatingTab: string = 'home';
   @State private isRefreshingHome: boolean = false;
+  @State highLatRule: HighLatitudeRule = HighLatitudeRule.NONE;
 
   private statusTimerId: number = -1;
   private settingsLoaded: boolean = false;
@@ -248,15 +249,7 @@ struct Index {
 
     this.refreshViewingDate(true);
     this.initialize();
-
-    this.statusTimerId = setInterval(() => {
-      if (this.dateOffset === 0) {
-        this.prayers = PrayerManager.updateStatuses(
-          this.prayers, this.viewingDate, this.getLocationOffsetHours()
-        );
-      }
-      this.updateTodayHeaderData();
-    }, 60000);
+    this.startStatusTimer();
   }
 
   aboutToDisappear(): void {
@@ -270,10 +263,36 @@ struct Index {
 
   onPageShow(): void {
     this.colors = PageTheme.compute(this.themeMode);
+
+    // If the calendar day rolled over while the app was in the
+    // background, snap the viewer back to today. Only do this when
+    // the user was not intentionally browsing another date
+    // (dateOffset === 0).
+    if (this.dateOffset === 0) {
+      const now = new Date();
+      const viewDay = new Date(this.viewingDate);
+      viewDay.setHours(0, 0, 0, 0);
+      const todayMidnight = new Date(now);
+      todayMidnight.setHours(0, 0, 0, 0);
+
+      if (viewDay.getTime() !== todayMidnight.getTime()) {
+        // Rebuild the viewing date, the date key, and the Hijri
+        // string; skip the reload because loadSettingsAndLocation
+        // runs right after and does a full refresh anyway.
+        this.refreshViewingDate(true);
+      }
+    }
+
     this.loadSettingsAndLocation();
+
+    // Force an immediate status + header refresh. The 60 s interval
+    // is paused while the app is backgrounded, so without this the
+    // header stays stale until the next tick.
     this.prayers = PrayerManager.updateStatuses(
       this.prayers, this.viewingDate, this.getLocationOffsetHours()
     );
+    this.updateTodayHeaderData();
+    this.refreshHijriDates();
     this.activeFloatingTab = 'home';
   }
 
@@ -284,6 +303,23 @@ struct Index {
 
   private async initialize(): Promise<void> {
     await this.loadSettingsAndLocation();
+  }
+
+  private startStatusTimer(): void {
+    if (this.statusTimerId !== -1) {
+      clearInterval(this.statusTimerId);
+      this.statusTimerId = -1;
+    }
+
+
+    this.statusTimerId = setInterval(() => {
+      if (this.dateOffset === 0) {
+        this.prayers = PrayerManager.updateStatuses(
+          this.prayers, this.viewingDate, this.getLocationOffsetHours()
+        );
+      }
+      this.updateTodayHeaderData();
+    }, 60000);
   }
 
   // ============================================================
@@ -358,6 +394,7 @@ struct Index {
       this.showExtraTimings  = data.showExtraTimings;
       this.showIslamicEvents = data.showIslamicEvents;
       this.offsets = await SettingsHelper.getPrayerOffsets();
+      this.highLatRule = await SettingsHelper.getHighLatRule();
 
       const loc = await HomeController.loadLocationForMode(mode);
       this.latitude = loc.latitude;
@@ -395,13 +432,15 @@ struct Index {
 
     const snap = HomeController.buildPrayersForDate(
       this.viewingDate, this.latitude, this.longitude,
-      this.calcMethod, this.asrRule, this.offsets, this.prayers
+      this.calcMethod, this.asrRule, this.highLatRule,
+      this.offsets, this.prayers
     );
     if (snap) this.prayers = snap.prayers;
 
     this.extraTimings = HomeController.buildExtraTimings(
       this.viewingDate, this.latitude, this.longitude,
-      this.calcMethod, this.asrRule, this.offsets, this.extraTimings
+      this.calcMethod, this.asrRule, this.highLatRule,
+      this.offsets, this.extraTimings
     );
   }
 
@@ -409,7 +448,7 @@ struct Index {
     if (this.calcSource !== CalculationSource.LOCAL) return;
     const hdr = HomeController.buildTodayHeader(
       this.latitude, this.longitude, this.calcMethod, this.asrRule,
-      this.offsets, this.prayers
+      this.highLatRule, this.offsets, this.prayers
     );
     if (!hdr) return;
     this.todayCurrentPrayerName = hdr.currentName;

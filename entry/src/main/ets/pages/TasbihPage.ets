@@ -251,6 +251,7 @@ struct TasbihPage {
     if (isComplete && hasNext) {
       this.persist();
       this.advanceLock = true;
+      // Strong single pulse — this dhikr is done, next one starts soon.
       HapticHelper.confirm();
 
       setTimeout(() => {
@@ -265,7 +266,8 @@ struct TasbihPage {
     }
 
     if (isComplete && !hasNext) {
-      HapticHelper.confirm();
+      // Double pulse — the whole Tasbih is finished.
+      HapticHelper.complete();
       this.getUIContext().getPromptAction().showToast({
         message: this.tr('all_dhikrs_complete'), duration: 1800
       });

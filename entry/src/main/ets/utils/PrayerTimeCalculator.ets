@@ -16,6 +16,18 @@ export enum AsrShadowRule {
   HANAFI = 2
 }
 
+export enum HighLatitudeRule {
+  NONE = 'None',
+  MIDDLE_OF_NIGHT = 'MiddleOfNight',
+  ONE_SEVENTH = 'OneSeventh',
+  ANGLE_BASED = 'AngleBased'
+}
+
+export interface HighLatRuleOption {
+  value: HighLatitudeRule;
+  label: string;
+}
+
 // ---- Interfaces ----
 
 export interface DailyPrayerTimes {
@@ -63,7 +75,16 @@ class Astronomy {
   static readonly OBLIQUITY_2000 = 23.439291;
   static readonly MEAN_ANOMALY_2000 = 357.5291;
   static readonly MEAN_LONGITUDE_2000 = 280.4665;
-  static readonly ECCENTRICITY_CORRECTION = 0.98560028;
+
+  static readonly MEAN_LONGITUDE_RATE = 360 / 365.2422;   // ≈ 0.98564736
+  static readonly MEAN_ANOMALY_RATE   = 360 / 365.2596;   // ≈ 0.98560028
+
+  /**
+   * Minutes to add after astronomical solar noon before declaring
+   * Dhuhr. Standard conventions: Umm al-Qura +2, Egyptian +2,
+   * ISNA / MWL / Karachi / Jafari +0. Set to 0 to disable.
+   */
+  static readonly DHUHR_SAFETY_MIN = 2;
 }
 
 // ---- Main Calculator ----
@@ -121,11 +142,72 @@ export class PrayerTimeCalculator {
     ];
   }
 
-  static getAvailableAsrRules(): Array<AsrRuleOption> {
+  static getAvailableHighLatRules(): Array<HighLatRuleOption> {
     return [
-      { value: AsrShadowRule.STANDARD, label: 'Standard (Shafi\'i / Maliki / Hanbali)' },
-      { value: AsrShadowRule.HANAFI,   label: 'Hanafi' }
+      { value: HighLatitudeRule.NONE,            label: 'None' },
+      { value: HighLatitudeRule.MIDDLE_OF_NIGHT, label: 'Middle of Night' },
+      { value: HighLatitudeRule.ONE_SEVENTH,     label: 'One Seventh of Night' },
+      { value: HighLatitudeRule.ANGLE_BASED,     label: 'Angle Based' }
     ];
+  }
+
+  /**
+   * Check whether the Sun ever reaches the given (negative) altitude
+   * on this date. Returns false when the hour-angle formula produces
+   * a value outside [-1, 1] — meaning the Sun stays above the target
+   * altitude all night (summer) or never descends to it (winter).
+   */
+  private static isAngleReachable(
+    latitude: number,
+    declinationDeg: number,
+    altitudeDeg: number
+  ): boolean {
+    const rad = Math.PI / 180;
+    const latRad = latitude * rad;
+    const decRad = declinationDeg * rad;
+    const altRad = altitudeDeg * rad;
+    const numerator = Math.sin(altRad) - Math.sin(latRad) * Math.sin(decRad);
+    const denominator = Math.cos(latRad) * Math.cos(decRad);
+    const cosHA = numerator / denominator;
+    return cosHA >= -1 && cosHA <= 1;
+  }
+
+  /**
+   * High-latitude fallback. Returns the fallback Fajr / Isha time
+   * based on the rule, the night duration, and the angle.
+   *
+   * @param base        Sunrise (for Fajr) or Sunset (for Isha)
+   * @param nightMs     Night duration in milliseconds (sunset -> sunrise)
+   * @param angle       The Fajr or Isha angle in degrees
+   * @param rule        The high-latitude rule
+   * @param goBackward  true for Fajr (subtract portion), false for Isha
+   */
+  private static applyHighLatFallback(
+    base: Date,
+    nightMs: number,
+    angle: number,
+    rule: HighLatitudeRule,
+    goBackward: boolean
+  ): Date {
+    let factor: number;
+    switch (rule) {
+      case HighLatitudeRule.MIDDLE_OF_NIGHT:
+        factor = 1 / 2;
+        break;
+      case HighLatitudeRule.ONE_SEVENTH:
+        factor = 1 / 7;
+        break;
+      case HighLatitudeRule.ANGLE_BASED:
+        factor = angle / 60;
+        break;
+      default:
+        factor = 0;
+    }
+    const portionMs = nightMs * factor;
+    const result = new Date(
+      base.getTime() + (goBackward ? -portionMs : portionMs)
+    );
+    return result;
   }
 
   /**
@@ -138,7 +220,8 @@ export class PrayerTimeCalculator {
     longitude: number,
     timezoneOffset: number,
     method: CalculationMethod,
-    asrRule: AsrShadowRule = AsrShadowRule.STANDARD
+    asrRule: AsrShadowRule = AsrShadowRule.STANDARD,
+    highLatRule: HighLatitudeRule = HighLatitudeRule.NONE
   ): DailyPrayerTimes {
     const params = PrayerTimeCalculator.getParameters(method);
 
@@ -151,17 +234,60 @@ export class PrayerTimeCalculator {
     const dhuhrUTC = 12 - (longitude / 15) - (eot / 60);
     const dhuhr = PrayerTimeCalculator.dateFromUTCHours(date, dhuhrUTC + timezoneOffset);
 
-    // Sunrise & Sunset (altitude = 0°)
-    const sunriseUTC = PrayerTimeCalculator.calculateTimeForAltitude(date, latitude, longitude, dec, eot, 0, false);
-    const sunsetUTC  = PrayerTimeCalculator.calculateTimeForAltitude(date, latitude, longitude, dec, eot, 0, true);
+    // Sunrise & Sunset — apparent altitude −0.833°
+    const SUN_HORIZON_ALTITUDE = -0.833;
+    const sunriseUTC = PrayerTimeCalculator.calculateTimeForAltitude(
+      date, latitude, longitude, dec, eot, SUN_HORIZON_ALTITUDE, false
+    );
+    const sunsetUTC  = PrayerTimeCalculator.calculateTimeForAltitude(
+      date, latitude, longitude, dec, eot, SUN_HORIZON_ALTITUDE, true
+    );
     const sunrise = PrayerTimeCalculator.dateFromUTCHours(date, sunriseUTC + timezoneOffset);
     const sunset  = PrayerTimeCalculator.dateFromUTCHours(date, sunsetUTC + timezoneOffset);
 
-    // Fajr & Isha (negative altitudes based on convention)
-    const fajrUTC = PrayerTimeCalculator.calculateTimeForAltitude(date, latitude, longitude, dec, eot, -params.fajrAngle, false);
-    const ishaUTC = PrayerTimeCalculator.calculateTimeForAltitude(date, latitude, longitude, dec, eot, -params.ishaAngle, true);
-    const fajr = PrayerTimeCalculator.dateFromUTCHours(date, fajrUTC + timezoneOffset);
-    const isha = PrayerTimeCalculator.dateFromUTCHours(date, ishaUTC + timezoneOffset);
+    // Fajr & Isha — apply high-latitude fallback when the Sun never
+    // reaches the angle and the user has chosen a fallback rule.
+    const fajrReachable = PrayerTimeCalculator.isAngleReachable(latitude, dec, -params.fajrAngle);
+    const ishaReachable = PrayerTimeCalculator.isAngleReachable(latitude, dec, -params.ishaAngle);
+
+    // Tomorrow's solar data — used both for the high-latitude night
+    // duration and for the night-division calculation below.
+    const tomorrow = new Date(date);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowSolarPos = PrayerTimeCalculator.getSolarPosition(tomorrow);
+    const tomorrowSunriseUTC = PrayerTimeCalculator.calculateTimeForAltitude(
+      tomorrow, latitude, longitude,
+      tomorrowSolarPos.declination, tomorrowSolarPos.equationOfTime,
+      SUN_HORIZON_ALTITUDE, false
+    );
+    const tomorrowSunrise = PrayerTimeCalculator.dateFromUTCHours(
+      tomorrow, tomorrowSunriseUTC + timezoneOffset
+    );
+    const nightMs = tomorrowSunrise.getTime() - sunset.getTime();
+
+    let fajr: Date;
+    if (fajrReachable || highLatRule === HighLatitudeRule.NONE) {
+      const fajrUTC = PrayerTimeCalculator.calculateTimeForAltitude(
+        date, latitude, longitude, dec, eot, -params.fajrAngle, false
+      );
+      fajr = PrayerTimeCalculator.dateFromUTCHours(date, fajrUTC + timezoneOffset);
+    } else {
+      fajr = PrayerTimeCalculator.applyHighLatFallback(
+        sunrise, nightMs, params.fajrAngle, highLatRule, true
+      );
+    }
+
+    let isha: Date;
+    if (ishaReachable || highLatRule === HighLatitudeRule.NONE) {
+      const ishaUTC = PrayerTimeCalculator.calculateTimeForAltitude(
+        date, latitude, longitude, dec, eot, -params.ishaAngle, true
+      );
+      isha = PrayerTimeCalculator.dateFromUTCHours(date, ishaUTC + timezoneOffset);
+    } else {
+      isha = PrayerTimeCalculator.applyHighLatFallback(
+        sunset, nightMs, params.ishaAngle, highLatRule, false
+      );
+    }
 
     // Asr (positive altitude based on shadow rule)
     const asrAltitude = PrayerTimeCalculator.calculateAsrAltitude(latitude, dec, asrRule);
@@ -176,9 +302,8 @@ export class PrayerTimeCalculator {
     imsak.setMinutes(imsak.getMinutes() - 10);
 
     // ---- Night divisions (Maghrib → tomorrow's Fajr) ----
-    const tomorrow = new Date(date);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const tomorrowSolarPos = PrayerTimeCalculator.getSolarPosition(tomorrow);
+    // `tomorrow` and `tomorrowSolarPos` are declared above and reused
+    // here. Only tomorrow's Fajr needs a fresh calculation.
     const tomorrowFajrUTC = PrayerTimeCalculator.calculateTimeForAltitude(
       tomorrow, latitude, longitude,
       tomorrowSolarPos.declination, tomorrowSolarPos.equationOfTime,
@@ -222,7 +347,8 @@ export class PrayerTimeCalculator {
     latitude: number,
     longitude: number,
     method: CalculationMethod,
-    asrRule: AsrShadowRule = AsrShadowRule.STANDARD
+    asrRule: AsrShadowRule = AsrShadowRule.STANDARD,
+    highLatRule: HighLatitudeRule = HighLatitudeRule.NONE
   ): DailyPrayerTimes {
     const effectiveOffset = TimezoneResolver.effectiveOffsetForLocation(
       latitude, longitude, date
@@ -234,7 +360,7 @@ export class PrayerTimeCalculator {
     );
 
     return PrayerTimeCalculator.calculate(
-      date, latitude, longitude, effectiveOffset, method, asrRule
+      date, latitude, longitude, effectiveOffset, method, asrRule, highLatRule
     );
   }
 
@@ -254,17 +380,28 @@ export class PrayerTimeCalculator {
     const jd = PrayerTimeCalculator.calculateJulianDay(date);
     const daysSinceJ2000 = jd - Astronomy.J2000;
 
-    // Sun's mean anomaly
-    let meanAnomaly = Astronomy.MEAN_ANOMALY_2000 + Astronomy.ECCENTRICITY_CORRECTION * daysSinceJ2000;
+    // Sun's mean anomaly — uses the anomalistic year rate
+    let meanAnomaly = Astronomy.MEAN_ANOMALY_2000
+      + Astronomy.MEAN_ANOMALY_RATE * daysSinceJ2000;
     meanAnomaly = PrayerTimeCalculator.normalizeAngle(meanAnomaly);
 
-    // Sun's mean longitude
-    let meanLongitude = Astronomy.MEAN_LONGITUDE_2000 + Astronomy.ECCENTRICITY_CORRECTION * daysSinceJ2000;
+    // Sun's mean longitude — uses the tropical year rate
+    let meanLongitude = Astronomy.MEAN_LONGITUDE_2000
+      + Astronomy.MEAN_LONGITUDE_RATE * daysSinceJ2000;
     meanLongitude = PrayerTimeCalculator.normalizeAngle(meanLongitude);
 
     // Equation of center
+    // Meeus, Astronomical Algorithms, eq. 25.3 (low-precision form)
+    // C = (1.914602 − 0.004817·T − 0.000014·T²)·sin M
+    //   + (0.019993 − 0.000101·T)·sin 2M
+    //   + 0.000289·sin 3M
+    // where T is centuries from J2000.
+    const T = daysSinceJ2000 / 36525;
     const mRad = meanAnomaly * Math.PI / 180;
-    const eqCenter = 1.91482 * Math.sin(mRad) - 0.00099 * Math.sin(2 * mRad) + 0.00002 * Math.sin(3 * mRad);
+    const eqCenter =
+      (1.914602 - 0.004817 * T - 0.000014 * T * T) * Math.sin(mRad)
+        + (0.019993 - 0.000101 * T) * Math.sin(2 * mRad)
+        + 0.000289 * Math.sin(3 * mRad);
 
     // Ecliptic longitude
     const eclipticLongitude = meanLongitude + eqCenter;
@@ -394,12 +531,14 @@ export class PrayerTimeCalculator {
   // ============================================================
 
   private static dateFromUTCHours(date: Date, utcHours: number): Date {
-    const result = new Date(date);
-    result.setHours(0, 0, 0, 0);
-    result.setMinutes(utcHours * 60);
-    return result;
+    const midnight = new Date(date);
+    midnight.setHours(0, 0, 0, 0);
+    // setMinutes() truncates the fractional part. Convert to
+    // milliseconds and add to preserve seconds so formatTime can
+    // round to the nearest minute properly.
+    const msOffset = Math.round(utcHours * 3600 * 1000);
+    return new Date(midnight.getTime() + msOffset);
   }
-
   private static minutesToDate(baseDate: Date, totalMinutes: number): Date {
     const result = new Date(baseDate);
     result.setHours(0, 0, 0, 0);
@@ -407,12 +546,15 @@ export class PrayerTimeCalculator {
     return result;
   }
 
-  /**
-   * Format a Date as "H:MM AM/PM" (12-hour clock).
-   */
   private static formatTime(date: Date): string {
-    let hours = date.getHours();
-    const minutes = date.getMinutes();
+    // Round to the nearest minute: if seconds >= 30, add 1 min before
+    // reading hours/minutes. This matches how most published prayer
+    // timetables round, and eliminates the systematic −1 min bias
+    // that pure truncation introduces.
+    const rounded = new Date(date.getTime() + 30000);
+
+    let hours = rounded.getHours();
+    const minutes = rounded.getMinutes();
     const ampm = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12;
     if (hours === 0) hours = 12;
