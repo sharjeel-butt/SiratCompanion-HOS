@@ -34,3 +34,5 @@ export const STORAGE_KEY_NOTIF_DHUHR = 'notif_dhuhr';
 export const STORAGE_KEY_NOTIF_ASR = 'notif_asr';
 export const STORAGE_KEY_NOTIF_MAGHRIB = 'notif_maghrib';
 export const STORAGE_KEY_NOTIF_ISHA = 'notif_isha';
+export const STORAGE_KEY_HIGH_LAT_RULE = 'high_lat_rule';
+export const STORAGE_KEY_VIBRATION_ENABLED = 'vibration_enabled';

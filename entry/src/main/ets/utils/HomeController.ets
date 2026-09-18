@@ -5,7 +5,8 @@ import {
   DailyPrayerTimes,
   PrayerTimeCalculator,
   CalculationMethod,
-  AsrShadowRule
+  AsrShadowRule,
+  HighLatitudeRule
 } from './PrayerTimeCalculator';
 import { PrayerManager } from './PrayerManager';
 import { PrayerOffsets } from '../helper/SettingsHelper';
@@ -57,6 +58,7 @@ export class HomeController {
     longitude: number,
     method: CalculationMethod,
     asrRule: AsrShadowRule,
+    highLatRule: HighLatitudeRule,
     offsets: PrayerOffsets,
     template: PrayerModel[]
   ): HomePrayerSnapshot | null {
@@ -64,7 +66,7 @@ export class HomeController {
 
     try {
       const times: DailyPrayerTimes = PrayerTimeCalculator.calculateWithDeviceTimezone(
-        date, latitude, longitude, method, asrRule
+        date, latitude, longitude, method, asrRule, highLatRule
       );
       const withOffsets: PrayerModel[] = PrayerManager.applyTimesToPrayers(
         template, times, offsets, date
@@ -94,13 +96,14 @@ export class HomeController {
     longitude: number,
     method: CalculationMethod,
     asrRule: AsrShadowRule,
+    highLatRule: HighLatitudeRule,
     offsets: PrayerOffsets,
     template: ExtraTiming[]
   ): ExtraTiming[] {
     if (latitude === 0 && longitude === 0) return template;
     try {
       const times: DailyPrayerTimes = PrayerTimeCalculator.calculateWithDeviceTimezone(
-        date, latitude, longitude, method, asrRule
+        date, latitude, longitude, method, asrRule, highLatRule
       );
       return PrayerManager.applyTimesToExtraTimings(template, times, offsets);
     } catch (err) {
@@ -117,6 +120,7 @@ export class HomeController {
     longitude: number,
     method: CalculationMethod,
     asrRule: AsrShadowRule,
+    highLatRule: HighLatitudeRule,
     offsets: PrayerOffsets,
     template: PrayerModel[]
   ): HomeHeaderSnapshot | null {
@@ -124,7 +128,7 @@ export class HomeController {
     const today = new Date();
     try {
       const times: DailyPrayerTimes = PrayerTimeCalculator.calculateWithDeviceTimezone(
-        today, latitude, longitude, method, asrRule
+        today, latitude, longitude, method, asrRule, highLatRule
       );
       const withOffsets: PrayerModel[] = PrayerManager.applyTimesToPrayers(
         template, times, offsets, today
@@ -140,7 +144,7 @@ export class HomeController {
         withStatus, offsetHours
       );
       const nextEvent: NextEventInfo | null = HomeController.computeNextEvent(
-        today, latitude, longitude, method, asrRule, offsets
+        today, latitude, longitude, method, asrRule, highLatRule, offsets
       );
 
       const snapshot: HomeHeaderSnapshot = {
@@ -158,6 +162,16 @@ export class HomeController {
   // ============================================================
   // TIMELINE — next event including extras after Isha
   // ============================================================
+  //
+  // The event sequence is:
+  //   Fajr -> Dhuhr -> Asr -> Maghrib -> Isha
+  //        -> First Third -> Midnight -> Last Third -> Imsak
+  //        -> (next day) Fajr -> ...
+  //
+  // We build events for yesterday, today, and tomorrow, then pick
+  // the first one strictly after `now`. Including yesterday covers
+  // the "just past midnight" window where yesterday's Last Third is
+  // still ahead.
 
   static computeNextEvent(
     now: Date,
@@ -165,6 +179,7 @@ export class HomeController {
     longitude: number,
     method: CalculationMethod,
     asrRule: AsrShadowRule,
+    highLatRule: HighLatitudeRule,
     offsets: PrayerOffsets
   ): NextEventInfo | null {
     const events: TimelineEvent[] = [];
@@ -178,7 +193,7 @@ export class HomeController {
 
       try {
         const times: DailyPrayerTimes = PrayerTimeCalculator.calculateWithDeviceTimezone(
-          day, latitude, longitude, method, asrRule
+          day, latitude, longitude, method, asrRule, highLatRule
         );
         HomeController.appendDayEvents(events, day, times, offsets);
       } catch (err) {
@@ -274,6 +289,14 @@ export class HomeController {
     events.push(imsakEv);
   }
 
+  /**
+   * Parse "5:24 AM" into an absolute Date.
+   *
+   * @param isEveningEvent When true, an early-morning (0-5 AM) result
+   *        means the event actually happens on the following calendar
+   *        day. Needed for First Third / Midnight / Last Third, which
+   *        can spill past midnight of the prayer day.
+   */
   private static parseToDate(
     timeStr: string,
     prayerDay: Date,

@@ -1,11 +1,25 @@
 {
   "app": {
-    "signingConfigs": [],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\sharj\\.ohos\\config\\default_SiratCompanion_tu9KjqcsGm8LgBvXOaEpwxAR8JokrKVL9PIJy0h03CU=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B7999CFFB0A3DC82AAEF93488861AA3BD9EDF75770F19F75937C42156F46CFC50C349B026A8A69B",
+          "profile": "C:\\Users\\sharj\\.ohos\\config\\default_SiratCompanion_tu9KjqcsGm8LgBvXOaEpwxAR8JokrKVL9PIJy0h03CU=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\sharj\\.ohos\\config\\default_SiratCompanion_tu9KjqcsGm8LgBvXOaEpwxAR8JokrKVL9PIJy0h03CU=.p12",
+          "storePassword": "0000001B7025A9B4A37107BE6B0893CADA2AD71B15F463D4174FBB8344CA2CA0D471FECD928B33A08CCB96"
+        }
+      }
+    ],
     "products": [
       {
         "name": "default",
         "signingConfig": "default",
-        "targetSdkVersion": "26.0.0",
+        "targetSdkVersion": "6.0.2(22)",
         "compatibleSdkVersion": "6.0.0(20)",
         "runtimeOS": "HarmonyOS",
         "buildOption": {
@@ -18,7 +32,7 @@
     ],
     "buildModeSet": [
       {
-        "name": "debug",
+        "name": "debug"
       },
       {
         "name": "release"
@@ -38,6 +52,5 @@
         }
       ]
     }
-  ],
-
+  ]
 }

@@ -31,6 +31,7 @@ struct CustomizePage {
 
   @State showExtraTimings: boolean = true;
   @State showIslamicEvents: boolean = true;
+  @State vibrationEnabled: boolean = true;
 
   @State expandedCategory: string | null = 'UI Customization';
   @State showThemePicker: boolean = false;
@@ -124,6 +125,7 @@ struct CustomizePage {
     const data = await SettingsHelper.loadAll();
     this.showExtraTimings  = data.showExtraTimings;
     this.showIslamicEvents = data.showIslamicEvents;
+    this.vibrationEnabled = SettingsHelper.getVibrationEnabled();
   }
 
   private toggleShowExtraTimings(value: boolean): void {
@@ -134,6 +136,11 @@ struct CustomizePage {
   private toggleShowIslamicEvents(value: boolean): void {
     this.showIslamicEvents = value;
     SettingsHelper.saveShowIslamicEvents(value);
+  }
+
+  private toggleVibration(value: boolean): void {
+    this.vibrationEnabled = value;
+    SettingsHelper.saveVibrationEnabled(value);
   }
 
   private buildLanguageItems(): PickerItem[] {
@@ -319,6 +326,24 @@ struct CustomizePage {
         Toggle({ type: ToggleType.Switch, isOn: this.showIslamicEvents })
           .selectedColor(this.colors.accentGold)
           .onChange((isOn: boolean) => { this.toggleShowIslamicEvents(isOn); })
+      }
+      .width('100%')
+      .padding({ top: 14, bottom: 14, left: 16, right: 16 })
+      .backgroundColor(this.colors.tintSubtle).borderRadius(12).margin({ bottom: 8 })
+
+      // ---- Vibration ----
+      Row() {
+        Column() {
+          Text(this.tr('haptic_feedback'))
+            .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+          Text(this.tr('haptic_feedback_desc'))
+            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+        Toggle({ type: ToggleType.Switch, isOn: this.vibrationEnabled })
+          .selectedColor(this.colors.accentGold)
+          .onChange((isOn: boolean) => { this.toggleVibration(isOn); })
       }
       .width('100%')
       .padding({ top: 14, bottom: 14, left: 16, right: 16 })

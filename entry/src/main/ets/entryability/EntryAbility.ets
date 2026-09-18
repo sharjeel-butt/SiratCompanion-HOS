@@ -8,7 +8,8 @@ import {
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
-  STORAGE_KEY_WIZARD_COMPLETED
+  STORAGE_KEY_WIZARD_COMPLETED,
+  STORAGE_KEY_VIBRATION_ENABLED
 } from '../common/StorageKeys';
 import { ThemeMode } from '../common/Theme';
 
@@ -34,6 +35,10 @@ export default class EntryAbility extends UIAbility {
 
       const savedLanguage = await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE, 'en');
       AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, savedLanguage);
+      const vibrationEnabled = await PreferencesHelper.getBoolean(
+        STORAGE_KEY_VIBRATION_ENABLED, true
+      );
+      AppStorage.setOrCreate(STORAGE_KEY_VIBRATION_ENABLED, vibrationEnabled);
 
       const wizardDone = await PreferencesHelper.getBoolean(STORAGE_KEY_WIZARD_COMPLETED, false);
       const startPage = wizardDone ? 'pages/Index' : 'pages/WizardPage';

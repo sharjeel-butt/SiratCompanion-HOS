@@ -288,6 +288,14 @@ export class L {
     m.set('notif_exact_title', 'Prayer Time');
     m.set('notif_exact_content', 'It is now time for');
     m.set('notif_minutes_suffix', 'min');
+    m.set('high_latitude', 'High Latitude');
+    m.set('high_latitude_desc', 'Fallback for Fajr and Isha when the Sun does not reach the angle');
+    m.set('highlat_none', 'None');
+    m.set('highlat_middle', 'Middle of Night');
+    m.set('highlat_one_seventh', 'One Seventh of Night');
+    m.set('highlat_angle', 'Angle Based');
+    m.set('haptic_feedback', 'Vibration');
+    m.set('haptic_feedback_desc', 'Vibrate when counting Tasbih');
 
     return m;
   }
@@ -498,6 +506,14 @@ export class L {
     m.set('notif_exact_title', '礼拜时间');
     m.set('notif_exact_content', '现在是');
     m.set('notif_minutes_suffix', '分钟');
+    m.set('high_latitude', '高纬度');
+    m.set('high_latitude_desc', '当太阳未到达所需角度时，晨礼和宵礼的回退方式');
+    m.set('highlat_none', '无');
+    m.set('highlat_middle', '夜半');
+    m.set('highlat_one_seventh', '七分之一夜');
+    m.set('highlat_angle', '基于角度');
+    m.set('haptic_feedback', '振动');
+    m.set('haptic_feedback_desc', '念珠计数时振动');
 
     return m;
   }
@@ -708,6 +724,14 @@ export class L {
     m.set('notif_exact_title', 'وقت الصلاة');
     m.set('notif_exact_content', 'حان الآن وقت صلاة');
     m.set('notif_minutes_suffix', 'دقيقة');
+    m.set('high_latitude', 'خطوط العرض العليا');
+    m.set('high_latitude_desc', 'طريقة احتياطية للفجر والعشاء عندما لا تصل الشمس إلى الزاوية المطلوبة');
+    m.set('highlat_none', 'بدون');
+    m.set('highlat_middle', 'منتصف الليل');
+    m.set('highlat_one_seventh', 'سُبع الليل');
+    m.set('highlat_angle', 'حسب الزاوية');
+    m.set('haptic_feedback', 'الاهتزاز');
+    m.set('haptic_feedback_desc', 'اهتزاز عند عدّ التسبيح');
 
     return m;
   }

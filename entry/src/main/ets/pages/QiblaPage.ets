@@ -16,6 +16,7 @@ import { LocationCache } from '../utils/LocationCache';
 import { LocationMode } from '../models/SettingsModels';
 import { NavHelper } from '../helper/NavHelper';
 import { L } from '../helper/LocalizationHelper';
+import { OfflineCityLookup } from '../utils/OfflineCityLookup'
 
 /** Sensor interval (must match QiblaSensorHelper). */
 const SENSOR_INTERVAL_MS = 100;
@@ -48,6 +49,9 @@ struct QiblaPage {
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = 'en';
+
+  /** Magnetic declination (degrees East) for the current location. */
+  @State declinationDeg: number = 0;
 
   @State private currentLanguage: string = 'en';
 
@@ -192,8 +196,9 @@ struct QiblaPage {
     // ---- First reading: seed the state ----
     if (this.firstReading) {
       this.smoothedHeading = rawHeading;
-      this.roseAngle = -rawHeading;
-      this.needleAngle = this.qiblaBearing - rawHeading;
+      const trueHeading = rawHeading + this.declinationDeg;
+      this.roseAngle = -trueHeading;
+      this.needleAngle = this.qiblaBearing - trueHeading;
       this.firstReading = false;
       return;
     }
@@ -204,12 +209,16 @@ struct QiblaPage {
     const hDelta = this.shortestDelta(this.smoothedHeading, rawHeading);
     this.smoothedHeading = (this.smoothedHeading + hDelta * HEADING_SMOOTHING + 360) % 360;
 
-    // ---- Rose rotates opposite to device heading ----
-    const targetRose = -this.smoothedHeading;
+    // Magnetic heading -> true heading by adding declination
+    // (East positive, West negative).
+    const trueHeading = this.smoothedHeading + this.declinationDeg;
+
+    // ---- Rose rotates opposite to true heading ----
+    const targetRose = -trueHeading;
     this.roseAngle = this.unwrap(this.roseAngle, targetRose);
 
-    // ---- Needle points at Qibla relative to device ----
-    const targetNeedle = this.qiblaBearing - this.smoothedHeading;
+    // ---- Needle points at Qibla relative to true north ----
+    const targetNeedle = this.qiblaBearing - trueHeading;
     this.needleAngle = this.unwrap(this.needleAngle, targetNeedle);
   }
 
@@ -249,8 +258,12 @@ struct QiblaPage {
     this.qiblaBearing = QiblaCalculator.calculateBearing(this.latitude, this.longitude);
     this.distanceKm = QiblaCalculator.calculateDistance(this.latitude, this.longitude);
 
+    // Correct the magnetic sensor heading to true north.
+    this.declinationDeg = OfflineCityLookup.declinationFor(this.latitude, this.longitude);
+
     // Recompute the needle target now that the bearing may have changed.
-    const targetNeedle = this.qiblaBearing - this.smoothedHeading;
+    const trueHeading = this.smoothedHeading + this.declinationDeg;
+    const targetNeedle = this.qiblaBearing - trueHeading;
     this.needleAngle = this.unwrap(this.needleAngle, targetNeedle);
   }
 
