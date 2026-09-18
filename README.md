@@ -416,9 +416,8 @@ You are free to use, modify, and distribute this software, including for commerc
 
 ## Contact
 
-- **Issues** — [github.com/your-org/sirat-companion/issues](https://github.com/your-org/sirat-companion/issues)
-- **Discussions** — [github.com/your-org/sirat-companion/discussions](https://github.com/your-org/sirat-companion/discussions)
-- **Telegram** — [t.me/siratcompanion](https://t.me/siratcompanion)
+- **Issues** — [github.com/sharjeel-butt/SiratCompanion-HOS/issues](https://github.com/sharjeel-butt/SiratCompanion-HOS/issues).
+- **Telegram** — [t.me/siratcompanionhos](https://t.me/siratcompanionhos)
 
 ---
 
