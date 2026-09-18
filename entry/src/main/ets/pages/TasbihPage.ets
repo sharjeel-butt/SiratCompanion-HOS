@@ -17,6 +17,7 @@ import { NavHelper } from '../helper/NavHelper';
 import { HapticHelper } from '../helper/HapticHelper';
 import { L } from '../helper/LocalizationHelper';
 
+
 // ============================================================
 // BEAD VISUAL CONSTANTS
 // ============================================================
@@ -752,12 +753,14 @@ struct TasbihPage {
   FloatingBar() {
     Row() {
       Row() {
-        // Home
+        // ---- Home ----
         Column() {
           Text('🏠').fontSize(22).opacity(0.7)
           Text(this.tr('tab_home'))
             .fontSize(10).fontWeight(FontWeight.Normal)
-            .fontColor(PageTheme.isSystemDark() ? 'rgba(241,245,249,0.65)' : 'rgba(26,26,26,0.55)')
+            .fontColor(PageTheme.isSystemDark()
+              ? 'rgba(241,245,249,0.65)'
+              : 'rgba(26,26,26,0.55)')
             .margin({ top: 2 })
         }
         .layoutWeight(1).height('100%').justifyContent(FlexAlign.Center)
@@ -766,7 +769,7 @@ struct TasbihPage {
         Divider().vertical(true).height(28)
           .color(PageTheme.isSystemDark() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
 
-        // Tasbih (active)
+        // ---- Tasbih (active) ----
         Column() {
           Text('📿').fontSize(22).opacity(1.0)
           Text(this.tr('tab_tasbih'))
@@ -780,12 +783,14 @@ struct TasbihPage {
         Divider().vertical(true).height(28)
           .color(PageTheme.isSystemDark() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
 
-        // Compass
+        // ---- Compass ----
         Column() {
           Text('🧭').fontSize(22).opacity(0.7)
           Text(this.tr('tab_compass'))
             .fontSize(10).fontWeight(FontWeight.Normal)
-            .fontColor(PageTheme.isSystemDark() ? 'rgba(241,245,249,0.65)' : 'rgba(26,26,26,0.55)')
+            .fontColor(PageTheme.isSystemDark()
+              ? 'rgba(241,245,249,0.65)'
+              : 'rgba(26,26,26,0.55)')
             .margin({ top: 2 })
         }
         .layoutWeight(1).height('100%').justifyContent(FlexAlign.Center)
@@ -794,29 +799,28 @@ struct TasbihPage {
         Divider().vertical(true).height(28)
           .color(PageTheme.isSystemDark() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
 
-        // Calendar
+        // ---- Calendar ----
         Column() {
           Text('📅').fontSize(22).opacity(0.7)
           Text(this.tr('tab_calendar'))
             .fontSize(10).fontWeight(FontWeight.Normal)
-            .fontColor(PageTheme.isSystemDark() ? 'rgba(241,245,249,0.65)' : 'rgba(26,26,26,0.55)')
+            .fontColor(PageTheme.isSystemDark()
+              ? 'rgba(241,245,249,0.65)'
+              : 'rgba(26,26,26,0.55)')
             .margin({ top: 2 })
         }
         .layoutWeight(1).height('100%').justifyContent(FlexAlign.Center)
         .onClick(() => { this.onFloatingBarTap('calendar'); })
       }
       .width('92%').height(68)
-      .backgroundBlurStyle(
-        BlurStyle.Thin,
-        {
-          colorMode: PageTheme.isSystemDark() ? ThemeColorMode.DARK : ThemeColorMode.LIGHT,
-          adaptiveColor: AdaptiveColor.DEFAULT,
-          scale: 1.0
-        }
-      )
-      .backgroundColor(
-        PageTheme.isSystemDark() ? 'rgba(20, 27, 46, 0.50)' : 'rgba(255, 255, 255, 0.35)'
-      )
+      .backgroundBlurStyle(BlurStyle.Thin, {
+        colorMode: PageTheme.isSystemDark() ? ThemeColorMode.DARK : ThemeColorMode.LIGHT,
+        adaptiveColor: AdaptiveColor.DEFAULT,
+        scale: 1.0
+      })
+      .backgroundColor(PageTheme.isSystemDark()
+        ? 'rgba(20, 27, 46, 0.50)'
+        : 'rgba(255, 255, 255, 0.35)')
       .borderRadius(34)
       .border({
         width: 1,
