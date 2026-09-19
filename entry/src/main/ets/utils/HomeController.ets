@@ -126,9 +126,10 @@ export class HomeController {
   ): HomeHeaderSnapshot | null {
     if (latitude === 0 && longitude === 0) return null;
     const today = new Date();
+    const anchor = HomeController.getLocationAnchor(latitude, longitude, today);
     try {
       const times: DailyPrayerTimes = PrayerTimeCalculator.calculateWithDeviceTimezone(
-        today, latitude, longitude, method, asrRule, highLatRule
+        anchor, latitude, longitude, method, asrRule, highLatRule
       );
       const withOffsets: PrayerModel[] = PrayerManager.applyTimesToPrayers(
         template, times, offsets, today
@@ -184,7 +185,7 @@ export class HomeController {
   ): NextEventInfo | null {
     const events: TimelineEvent[] = [];
 
-    const anchor = new Date(now);
+    const anchor = HomeController.getLocationAnchor(latitude, longitude, now);
     anchor.setHours(0, 0, 0, 0);
 
     for (let delta = -1; delta <= 1; delta++) {
@@ -329,6 +330,32 @@ export class HomeController {
       result.setDate(result.getDate() + 1);
     }
     return result;
+  }
+
+  /**
+   * Returns a Date whose local Y/M/D matches the calendar day at the
+   * given coordinates. Used as the anchor for prayer time calculation
+   * so the app always works with the location's "today", not the
+   * device's "today".
+   *
+   * The returned Date is offset such that its UTC fields equal the
+   * location's local Y/M/D — matching what calculateJulianDay() reads.
+   */
+  private static getLocationAnchor(
+    latitude: number,
+    longitude: number,
+    now: Date
+  ): Date {
+    if (latitude === 0 && longitude === 0) {
+      return new Date(now);
+    }
+
+    const locationOffset = TimezoneResolver.effectiveOffsetForLocation(
+      latitude, longitude, now
+    );
+    const deviceOffset = -now.getTimezoneOffset() / 60;
+    const deltaMs = (locationOffset - deviceOffset) * 3600 * 1000;
+    return new Date(now.getTime() + deltaMs);
   }
 
   private static formatEventTime(date: Date): string {

@@ -2,23 +2,36 @@
   "app": {
     "signingConfigs": [
       {
-        "name": "default",
+        "name": "debug",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "C:\\Users\\sharj\\.ohos\\config\\default_SiratCompanion_tu9KjqcsGm8LgBvXOaEpwxAR8JokrKVL9PIJy0h03CU=.cer",
+          "certpath": "C:/Users/sharj/.ohos/config/debug_SiratCompanion_tu9KjqcsGm8LgBvXOaEpwxAR8JokrKVL9PIJy0h03CU=.cer",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001B7999CFFB0A3DC82AAEF93488861AA3BD9EDF75770F19F75937C42156F46CFC50C349B026A8A69B",
-          "profile": "C:\\Users\\sharj\\.ohos\\config\\default_SiratCompanion_tu9KjqcsGm8LgBvXOaEpwxAR8JokrKVL9PIJy0h03CU=.p7b",
+          "keyPassword": "0000001BD52150436085F1D4E7DC463387FA7838AA5E93796E23CC337ABFE1F9F8D83F2B2F04A72C6CBB7A",
+          "profile": "C:/Users/sharj/.ohos/config/debug_SiratCompanion_tu9KjqcsGm8LgBvXOaEpwxAR8JokrKVL9PIJy0h03CU=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\sharj\\.ohos\\config\\default_SiratCompanion_tu9KjqcsGm8LgBvXOaEpwxAR8JokrKVL9PIJy0h03CU=.p12",
-          "storePassword": "0000001B7025A9B4A37107BE6B0893CADA2AD71B15F463D4174FBB8344CA2CA0D471FECD928B33A08CCB96"
+          "storeFile": "C:/Users/sharj/.ohos/config/debug_SiratCompanion_tu9KjqcsGm8LgBvXOaEpwxAR8JokrKVL9PIJy0h03CU=.p12",
+          "storePassword": "0000001B039808DC0EDAE44BB4006A13301D2811CD0042913BE18668B6D826888CEB578EC6338F8B3E5699"
+        }
+      },
+      {
+        "name": "release",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "D:/Smartphone/Key and Certificate/SiratCompanion/release/rel_siratcompanion_19092026.cer",
+          "keyAlias": "siratcompanion_key",
+          "keyPassword": "0000001E9CCC5C1B7B27102CD9422146634D94EC5797461D3D13BD0B9E171EEC0477E26239E7D950C2FCB959EE5C",
+          "profile": "D:/Smartphone/Key and Certificate/SiratCompanion/release/SiratCompanionRelProfRelease.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "D:/Smartphone/Key and Certificate/SiratCompanion/release/key_siratcomp_19092026.p12",
+          "storePassword": "0000001E9886846275535630CA6D35DED923609F6BA30E93904556DD4B157C61C6DD78866E0E34B3CF144C981CCC"
         }
       }
     ],
     "products": [
       {
         "name": "default",
-        "signingConfig": "default",
+        "signingConfig": "debug",
         "compatibleSdkVersion": "6.0.0(20)",
         "targetSdkVersion": "6.0.2(22)",
         "runtimeOS": "HarmonyOS",
