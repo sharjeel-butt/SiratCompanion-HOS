@@ -1,7 +1,7 @@
 # Privacy Policy — Sirat Companion
 
-**Last updated:** September 19, 2025
-**Effective date:** September 19, 2025
+**Last updated:** September 19, 2026
+**Effective date:** September 19, 2026
 
 [English](#english) · [中文](#chinese) · [العربية](#arabic)
 
