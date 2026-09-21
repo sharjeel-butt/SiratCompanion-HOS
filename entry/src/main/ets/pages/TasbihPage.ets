@@ -1,33 +1,33 @@
 // entry/src/main/ets/pages/TasbihPage.ets
 
-import { router } from '@kit.ArkUI';
-import { mediaquery } from '@kit.ArkUI';
+import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { ThemeColors, ThemeMode } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
-import {
-  STORAGE_KEY_THEME_MODE,
-  STORAGE_KEY_NAV_DIRECTION,
-  STORAGE_KEY_LANGUAGE
-} from '../common/StorageKeys';
-import { Tasbih, Dhikr, DhikrFields, BeadView } from '../models/TasbihModels';
+import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_NAV_DIRECTION, STORAGE_KEY_THEME_MODE } from '../common/StorageKeys';
+import { BeadView, Dhikr, DhikrFields, Tasbih } from '../models/TasbihModels';
 import { TasbihManager } from '../utils/TasbihManager';
 import { TasbihStorage } from '../utils/TasbihStorage';
 import { NavHelper } from '../helper/NavHelper';
 import { HapticHelper } from '../helper/HapticHelper';
+import { SettingsHelper } from '../helper/SettingsHelper';
 import { L } from '../helper/LocalizationHelper';
-
+import { BeadCanvasConfig, BeadRenderStyle, TasbihCanvasRenderer } from '../helper/TasbihCanvasRenderer';
 
 // ============================================================
 // BEAD VISUAL CONSTANTS
 // ============================================================
 
-const BEAD_SIZE       = 24;
-const BEAD_GAP        = 6;
+const BEAD_SIZE = 28;
+const BEAD_GAP = 7;
+const BEAD_STEP = BEAD_SIZE + BEAD_GAP;
 const SWIPE_THRESHOLD = 50;
 const STRING_WIDTH    = 2;
 const STRING_LINE_COLOR = 'rgba(232, 164, 76, 0.35)';
+const FISHEYE_ANIM_MS = 180;
+const TOP_SHIFT_MS = 250;
 
+// 3D bead gradients: [highlight, base, shadow]
 const SHADE_HEAD_HI    = '#F5C57A';
 const SHADE_HEAD_BASE  = '#D18F35';
 const SHADE_HEAD_LO    = '#7A4A10';
@@ -67,7 +67,6 @@ struct TasbihPage {
   @Watch('onLanguageChanged')
   appLanguage: string = 'en';
 
-  /** Plain @State mirror — guarantees a re-render on language change. */
   @State private currentLanguage: string = 'en';
 
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
@@ -113,7 +112,31 @@ struct TasbihPage {
   private advanceLock: boolean = false;
 
   // ============================================================
-  // LOCALIZATION + DIRECTION HELPERS
+  // CANVAS RENDERING
+  // ============================================================
+
+  @State private renderStyle: BeadRenderStyle = 'premium';
+  @State private canvasWidth: number = 72;
+  @State private canvasHeight: number = 0;
+  private ctx: CanvasRenderingContext2D = new CanvasRenderingContext2D(new RenderingContextSettings(true));
+  private canvasReady: boolean = false;
+  // ============================================================
+  // FISHEYE
+  // ============================================================
+
+  @State private fingerY: number = -1;
+  @State private fisheyeStrength: number = 0;
+  private fisheyeAnimId: number = -1;
+  // ============================================================
+  // ROLLING TOP-STACK SHIFT
+  // ============================================================
+
+  @State private topShiftActive: boolean = false;
+  @State private topShiftProgress: number = 0;
+  private topShiftTimerId: number = -1;
+
+  // ============================================================
+  // LOCALIZATION + DIRECTION
   // ============================================================
 
   private tr(key: string): string {
@@ -163,6 +186,9 @@ struct TasbihPage {
       this.colors = c;
     });
 
+    const storedStyle = await SettingsHelper.getTasbihRenderStyle();
+    this.renderStyle = storedStyle === 'classic' ? 'classic' : 'premium';
+
     const ctx = getContext(this) as common.UIAbilityContext;
     await TasbihStorage.init(ctx);
     const loaded = await TasbihStorage.load(TasbihManager.createDefaults());
@@ -175,6 +201,14 @@ struct TasbihPage {
   aboutToDisappear(): void {
     PageTheme.uninstallSystemListener(this.systemDarkListener);
     this.systemDarkListener = null;
+    if (this.fisheyeAnimId !== -1) {
+      clearInterval(this.fisheyeAnimId);
+      this.fisheyeAnimId = -1;
+    }
+    if (this.topShiftTimerId !== -1) {
+      clearInterval(this.topShiftTimerId);
+      this.topShiftTimerId = -1;
+    }
   }
 
   onPageShow(): void {
@@ -216,10 +250,111 @@ struct TasbihPage {
     }
 
     this.beadView = next;
+    this.drawCanvasBeads();
   }
 
   private persist(): void {
     TasbihStorage.save(this.tasbihs, this.activeTasbihId, this.activeDhikrIndex);
+  }
+
+  // ============================================================
+  // CANVAS DRAWING
+  // ============================================================
+
+  private drawCanvasBeads(): void {
+    if (!this.canvasReady || this.canvasHeight <= 0) {
+      return;
+    }
+    if (this.renderStyle !== 'premium') {
+      return;
+    }
+
+    const cfg: BeadCanvasConfig = {
+      topCount: this.beadView.topIds.length,
+      bottomCount: this.beadView.bottomIds.length,
+      isComplete: this.beadView.isComplete,
+      fingerY: this.fingerY,
+      fisheyeStrength: this.fisheyeStrength,
+      beadRadius: BEAD_SIZE / 2,
+      beadGap: BEAD_GAP,
+      renderStyle: this.renderStyle,
+      isDark: PageTheme.isSystemDark(),
+      stringColor: STRING_LINE_COLOR,
+      topShiftProgress: this.topShiftProgress
+    };
+
+    TasbihCanvasRenderer.drawCanvas(
+      this.ctx,
+      this.canvasWidth,
+      this.canvasHeight,
+      cfg
+    );
+  }
+
+  // ============================================================
+  // FISHEYE
+  // ============================================================
+
+  private startFisheye(): void {
+    this.animateFisheyeTo(1);
+  }
+
+  private fadeFisheye(): void {
+    this.animateFisheyeTo(0);
+  }
+
+  private animateFisheyeTo(target: number): void {
+    if (this.fisheyeAnimId !== -1) {
+      clearInterval(this.fisheyeAnimId);
+      this.fisheyeAnimId = -1;
+    }
+    const start = this.fisheyeStrength;
+    const startTime = Date.now();
+    const duration = FISHEYE_ANIM_MS;
+
+    this.fisheyeAnimId = setInterval(() => {
+      const t = Math.min((Date.now() - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      this.fisheyeStrength = start + (target - start) * eased;
+      this.drawCanvasBeads();
+      if (t >= 1) {
+        clearInterval(this.fisheyeAnimId);
+        this.fisheyeAnimId = -1;
+        if (target === 0) {
+          this.fingerY = -1;
+          this.drawCanvasBeads();
+        }
+      }
+    }, 16);
+  }
+
+  // ============================================================
+  // ROLLING TOP-STACK SHIFT
+  // ============================================================
+
+  private startTopShift(): void {
+    if (this.topShiftTimerId !== -1) {
+      clearInterval(this.topShiftTimerId);
+      this.topShiftTimerId = -1;
+    }
+    this.topShiftActive = true;
+    this.topShiftProgress = 0;
+    const startTime = Date.now();
+
+    this.topShiftTimerId = setInterval(() => {
+      const t = Math.min((Date.now() - startTime) / TOP_SHIFT_MS, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      this.topShiftProgress = eased;
+      this.drawCanvasBeads();
+
+      if (t >= 1) {
+        clearInterval(this.topShiftTimerId);
+        this.topShiftTimerId = -1;
+        this.topShiftActive = false;
+        this.topShiftProgress = 0;
+        this.drawCanvasBeads();
+      }
+    }, 16);
   }
 
   // ============================================================
@@ -234,10 +369,18 @@ struct TasbihPage {
 
     HapticHelper.tick();
 
+    const wasAtCap = this.beadView.topAtCap;
+
     animateTo({ duration: 260, curve: Curve.EaseOut }, () => {
       this.tasbihs = TasbihManager.increment(this.tasbihs, this.activeTasbihId, dhikr.id);
       this.refreshBeadView();
     });
+
+    // Rolling window: if the top stack was already full and stayed full,
+    // animate the enter/exit shift.
+    if (wasAtCap && this.beadView.topAtCap) {
+      this.startTopShift();
+    }
 
     const updatedDhikr = this.getActiveDhikr();
     if (!updatedDhikr) {
@@ -252,7 +395,6 @@ struct TasbihPage {
     if (isComplete && hasNext) {
       this.persist();
       this.advanceLock = true;
-      // Strong single pulse — this dhikr is done, next one starts soon.
       HapticHelper.confirm();
 
       setTimeout(() => {
@@ -267,7 +409,6 @@ struct TasbihPage {
     }
 
     if (isComplete && !hasNext) {
-      // Double pulse — the whole Tasbih is finished.
       HapticHelper.complete();
       this.getUIContext().getPromptAction().showToast({
         message: this.tr('all_dhikrs_complete'), duration: 1800
@@ -308,6 +449,39 @@ struct TasbihPage {
     });
   }
 
+  private resetWholeTasbih(): void {
+    if (this.advanceLock) {
+      return;
+    }
+    const dhikr = this.getActiveDhikr();
+    if (!dhikr) {
+      return;
+    }
+
+    promptAction.showDialog({
+      title: this.tr('reset_all_confirm_title'),
+      message: this.tr('reset_all_confirm_message'),
+      buttons: [
+        { text: this.tr('cancel'), color: this.colors.dialogCancel },
+        { text: this.tr('reset'), color: '#E53935' }
+      ]
+    }).then((result: promptAction.ShowDialogSuccessResponse) => {
+      if (result.index === 1) {
+        animateTo({ duration: 260, curve: Curve.EaseOut }, () => {
+          this.tasbihs = TasbihManager.resetAll(this.tasbihs, this.activeTasbihId);
+          this.activeDhikrIndex = 0;
+          this.refreshBeadView();
+        });
+        this.persist();
+        this.getUIContext().getPromptAction().showToast({
+          message: this.tr('reset_all_done'), duration: 1200
+        });
+      }
+    }).catch((err: Error) => {
+      console.error('[TasbihPage] reset dialog failed:', JSON.stringify(err));
+    });
+  }
+
   // ============================================================
   // SWIPE — vertical
   // ============================================================
@@ -318,12 +492,19 @@ struct TasbihPage {
       if (event.type === TouchType.Down) {
         this.swipeStartY = y;
         this.swipeLastY = y;
+        this.fingerY = y;
+        this.startFisheye();
+        this.drawCanvasBeads();
       } else if (event.type === TouchType.Move) {
         this.swipeLastY = y;
+        this.fingerY = y;
+        this.drawCanvasBeads();
       }
     }
+
     if (event.type === TouchType.Up) {
       const delta = this.swipeLastY - this.swipeStartY;
+      this.fadeFisheye();
       if (Math.abs(delta) > SWIPE_THRESHOLD) {
         if (delta < 0) this.increment();
         else this.decrement();
@@ -544,16 +725,46 @@ struct TasbihPage {
                 .fontSize(10).fontColor(this.colors.textMuted).opacity(0.7)
                 .margin({ top: 6 })
 
+              // Two reset pills
               Row() {
-                Text('↺').fontSize(14).fontColor(this.colors.textMuted)
-                Text(this.tr('reset')).fontSize(12).fontColor(this.colors.textMuted).margin({ left: 6 })
+                // Reset current dhikr
+                Row() {
+                  Text('↺').fontSize(14).fontColor(this.colors.textMuted)
+                  Text(this.tr('reset')).fontSize(12).fontColor(this.colors.textMuted).margin({ left: 6 })
+                }
+                .padding({
+                  left: 16,
+                  right: 16,
+                  top: 8,
+                  bottom: 8
+                })
+                .backgroundColor(this.colors.tintSubtle)
+                .borderRadius(16)
+                .border({ width: 1, color: this.colors.borderSoft })
+                .onClick(() => {
+                  this.resetCurrent();
+                })
+
+                // Reset all dhikrs in this Tasbih
+                Row() {
+                  Text('↻').fontSize(14).fontColor(this.colors.textMuted)
+                  Text(this.tr('reset_all')).fontSize(12).fontColor(this.colors.textMuted).margin({ left: 6 })
+                }
+                .padding({
+                  left: 16,
+                  right: 16,
+                  top: 8,
+                  bottom: 8
+                })
+                .backgroundColor(this.colors.tintSubtle)
+                .borderRadius(16)
+                .border({ width: 1, color: this.colors.borderSoft })
+                .margin({ left: 8 })
+                .onClick(() => {
+                  this.resetWholeTasbih();
+                })
               }
-              .padding({ left: 16, right: 16, top: 8, bottom: 8 })
-              .backgroundColor(this.colors.tintSubtle)
-              .borderRadius(16)
-              .border({ width: 1, color: this.colors.borderSoft })
               .margin({ top: 20, bottom: 8 })
-              .onClick(() => { this.resetCurrent(); })
             } else {
               this.EmptyState()
             }
@@ -564,7 +775,11 @@ struct TasbihPage {
           .padding({ left: 24, right: 8, top: 16, bottom: 110 })
 
           // RIGHT COLUMN — Vertical bead string
-          this.BeadStringColumn()
+          if (this.renderStyle === 'classic') {
+            this.BeadStringColumnClassic()
+          } else {
+            this.BeadStringColumnCanvas()
+          }
         }
         .layoutWeight(1)
         .width('100%')
@@ -587,7 +802,7 @@ struct TasbihPage {
   }
 
   // ============================================================
-  // 3D BEAD
+  // 3D BEAD — classic renderer
   // ============================================================
 
   @Builder
@@ -611,20 +826,14 @@ struct TasbihPage {
     }
     .width(BEAD_SIZE)
     .height(BEAD_SIZE)
-    .direction(Direction.Ltr)
   }
 
   // ============================================================
-  // VERTICAL BEAD STRING COLUMN
+  // CLASSIC VERTICAL BEAD STRING
   // ============================================================
-  //
-  // Direction is forced to LTR so the bead column always sits on
-  // the physical right edge of the screen, keeping the same visual
-  // layout as English. The counter stays on the left regardless of
-  // language.
 
   @Builder
-  BeadStringColumn() {
+  BeadStringColumnClassic() {
     Stack() {
       // String line
       Column()
@@ -645,14 +854,25 @@ struct TasbihPage {
             }
           }
           .margin({ top: i === 0 ? 0 : BEAD_GAP })
-          .transition({ type: TransitionType.Insert, translate: { x: 0, y: 60 }, opacity: 0 })
-          .transition({ type: TransitionType.Delete, translate: { x: 0, y: 60 }, opacity: 0 })
-        }, (i: number) => {
-          const isTail = i === this.beadView.topIds.length - 1;
-          return (this.beadView.topAtCap && isTail)
-            ? `top-${i}-p${this.topPulseTick}`
-            : `top-${i}`;
-        })
+          .translate({ y: -this.topShiftProgress * BEAD_STEP })
+          .opacity((i === 0 && this.topShiftProgress > 0)
+            ? 1 - this.topShiftProgress
+            : 1)
+        }, (i: number) => `top-${i}`)
+
+        // Extra bead entering from below during shift
+        if (this.topShiftActive) {
+          Column() {
+            if (this.beadView.isComplete) {
+              this.Bead(SHADE_DONE_HI, SHADE_DONE_BASE, SHADE_DONE_LO)
+            } else {
+              this.Bead(SHADE_GOLD_HI, SHADE_GOLD_BASE, SHADE_GOLD_LO)
+            }
+          }
+          .margin({ top: BEAD_GAP })
+          .translate({ y: -this.topShiftProgress * BEAD_STEP })
+          .opacity(this.topShiftProgress)
+        }
 
         // Flexible gap
         Blank().layoutWeight(1)
@@ -667,15 +887,43 @@ struct TasbihPage {
             }
           }
           .margin({ top: i === 0 ? 0 : BEAD_GAP })
-          .transition({ type: TransitionType.Insert, translate: { x: 0, y: -60 }, opacity: 0 })
-          .transition({ type: TransitionType.Delete, translate: { x: 0, y: -60 }, opacity: 0 })
         }, (i: number) => `bottom-${i}`)
       }
       .width('100%')
       .height('100%')
       .alignItems(HorizontalAlign.Center)
     }
-    .width(60)
+    .width(72)
+    .height('100%')
+    .padding({ top: 16, bottom: 110, right: 40 })
+    .direction(Direction.Ltr)
+  }
+
+  // ============================================================
+  // PREMIUM CANVAS BEAD STRING
+  // ============================================================
+
+  @Builder
+  BeadStringColumnCanvas() {
+    Stack() {
+      Canvas(this.ctx)
+        .width('100%')
+        .height('100%')
+        .onReady(() => {
+          this.canvasReady = true;
+          this.drawCanvasBeads();
+        })
+        .onAreaChange((oldArea: Area, newArea: Area) => {
+          const w = Number(newArea.width);
+          const h = Number(newArea.height);
+          if (w > 0 && h > 0) {
+            this.canvasWidth = w;
+            this.canvasHeight = h;
+            this.drawCanvasBeads();
+          }
+        })
+    }
+    .width(72)
     .height('100%')
     .padding({ top: 16, bottom: 110, right: 40 })
     .direction(Direction.Ltr)
@@ -705,7 +953,6 @@ struct TasbihPage {
   @Builder
   TopBar() {
     Row() {
-      // Tasbih pill
       Row() {
         Text('📿').fontSize(14).margin({ right: 6 }).flexShrink(0)
         Text(this.getActiveTasbih() ? this.getActiveTasbih()!.name : this.tr('tab_tasbih'))
@@ -723,7 +970,6 @@ struct TasbihPage {
 
       Blank()
 
-      // Dhikr pill
       Row() {
         Text(this.getActiveDhikr() && this.getActiveDhikr()!.transliteration.length > 0
           ? this.getActiveDhikr()!.transliteration
@@ -746,21 +992,19 @@ struct TasbihPage {
   }
 
   // ============================================================
-  // FLOATING BAR — 4 tabs, Tasbih active
+  // FLOATING BAR
   // ============================================================
 
   @Builder
   FloatingBar() {
     Row() {
       Row() {
-        // ---- Home ----
+        // Home
         Column() {
           Text('🏠').fontSize(22).opacity(0.7)
           Text(this.tr('tab_home'))
             .fontSize(10).fontWeight(FontWeight.Normal)
-            .fontColor(PageTheme.isSystemDark()
-              ? 'rgba(241,245,249,0.65)'
-              : 'rgba(26,26,26,0.55)')
+            .fontColor(PageTheme.isSystemDark() ? 'rgba(241,245,249,0.65)' : 'rgba(26,26,26,0.55)')
             .margin({ top: 2 })
         }
         .layoutWeight(1).height('100%').justifyContent(FlexAlign.Center)
@@ -769,7 +1013,7 @@ struct TasbihPage {
         Divider().vertical(true).height(28)
           .color(PageTheme.isSystemDark() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
 
-        // ---- Tasbih (active) ----
+        // Tasbih (active)
         Column() {
           Text('📿').fontSize(22).opacity(1.0)
           Text(this.tr('tab_tasbih'))
@@ -783,14 +1027,12 @@ struct TasbihPage {
         Divider().vertical(true).height(28)
           .color(PageTheme.isSystemDark() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
 
-        // ---- Compass ----
+        // Compass
         Column() {
           Text('🧭').fontSize(22).opacity(0.7)
           Text(this.tr('tab_compass'))
             .fontSize(10).fontWeight(FontWeight.Normal)
-            .fontColor(PageTheme.isSystemDark()
-              ? 'rgba(241,245,249,0.65)'
-              : 'rgba(26,26,26,0.55)')
+            .fontColor(PageTheme.isSystemDark() ? 'rgba(241,245,249,0.65)' : 'rgba(26,26,26,0.55)')
             .margin({ top: 2 })
         }
         .layoutWeight(1).height('100%').justifyContent(FlexAlign.Center)
@@ -799,28 +1041,29 @@ struct TasbihPage {
         Divider().vertical(true).height(28)
           .color(PageTheme.isSystemDark() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
 
-        // ---- Calendar ----
+        // Calendar
         Column() {
           Text('📅').fontSize(22).opacity(0.7)
           Text(this.tr('tab_calendar'))
             .fontSize(10).fontWeight(FontWeight.Normal)
-            .fontColor(PageTheme.isSystemDark()
-              ? 'rgba(241,245,249,0.65)'
-              : 'rgba(26,26,26,0.55)')
+            .fontColor(PageTheme.isSystemDark() ? 'rgba(241,245,249,0.65)' : 'rgba(26,26,26,0.55)')
             .margin({ top: 2 })
         }
         .layoutWeight(1).height('100%').justifyContent(FlexAlign.Center)
         .onClick(() => { this.onFloatingBarTap('calendar'); })
       }
       .width('92%').height(68)
-      .backgroundBlurStyle(BlurStyle.Thin, {
-        colorMode: PageTheme.isSystemDark() ? ThemeColorMode.DARK : ThemeColorMode.LIGHT,
-        adaptiveColor: AdaptiveColor.DEFAULT,
-        scale: 1.0
-      })
-      .backgroundColor(PageTheme.isSystemDark()
-        ? 'rgba(20, 27, 46, 0.50)'
-        : 'rgba(255, 255, 255, 0.35)')
+      .backgroundBlurStyle(
+        BlurStyle.Thin,
+        {
+          colorMode: PageTheme.isSystemDark() ? ThemeColorMode.DARK : ThemeColorMode.LIGHT,
+          adaptiveColor: AdaptiveColor.DEFAULT,
+          scale: 1.0
+        }
+      )
+      .backgroundColor(
+        PageTheme.isSystemDark() ? 'rgba(20, 27, 46, 0.50)' : 'rgba(255, 255, 255, 0.35)'
+      )
       .borderRadius(34)
       .border({
         width: 1,

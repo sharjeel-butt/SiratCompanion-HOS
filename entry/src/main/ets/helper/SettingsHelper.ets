@@ -2,32 +2,25 @@
 
 import { ThemeMode } from '../common/Theme';
 import {
-  STORAGE_KEY_NOTIF_MASTER,
-  STORAGE_KEY_NOTIF_BEFORE_MINUTES,
-  STORAGE_KEY_NOTIF_FAJR,
-  STORAGE_KEY_NOTIF_DHUHR,
-  STORAGE_KEY_NOTIF_ASR,
-  STORAGE_KEY_NOTIF_MAGHRIB,
-  STORAGE_KEY_NOTIF_ISHA
-} from '../common/StorageKeys';
-import {
-  STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_HIGH_LAT_RULE,
   STORAGE_KEY_HIJRI_OFFSET,
-  STORAGE_KEY_LANGUAGE
+  STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_NOTIF_ASR,
+  STORAGE_KEY_NOTIF_BEFORE_MINUTES,
+  STORAGE_KEY_NOTIF_DHUHR,
+  STORAGE_KEY_NOTIF_FAJR,
+  STORAGE_KEY_NOTIF_ISHA,
+  STORAGE_KEY_NOTIF_MAGHRIB,
+  STORAGE_KEY_NOTIF_MASTER,
+  STORAGE_KEY_TASBIH_RENDER_STYLE,
+  STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_VIBRATION_ENABLED,
+  STORAGE_KEY_WIZARD_COMPLETED
 } from '../common/StorageKeys';
-import { CalculationMethod, AsrShadowRule } from '../utils/PrayerTimeCalculator';
+import { AsrShadowRule, CalculationMethod, HighLatitudeRule } from '../utils/PrayerTimeCalculator';
 import { PreferencesHelper } from './PreferencesHelper';
-import {
-  PickerItem,
-  CalculationSource,
-  LocationMode,
-  ManualCoords
-} from '../models/SettingsModels';
+import { CalculationSource, LocationMode, ManualCoords, PickerItem } from '../models/SettingsModels';
 import { L } from './LocalizationHelper';
-import { STORAGE_KEY_WIZARD_COMPLETED } from '../common/StorageKeys';
-import { HighLatitudeRule } from '../utils/PrayerTimeCalculator';
-import { STORAGE_KEY_HIGH_LAT_RULE } from '../common/StorageKeys';
-import { STORAGE_KEY_VIBRATION_ENABLED } from '../common/StorageKeys';
 
 const KEY_METHOD  = 'calc_method';
 const KEY_ASR     = 'asr_rule';
@@ -463,5 +456,17 @@ export class SettingsHelper {
   static saveVibrationEnabled(value: boolean): void {
     AppStorage.setOrCreate(STORAGE_KEY_VIBRATION_ENABLED, value);
     PreferencesHelper.setBoolean(STORAGE_KEY_VIBRATION_ENABLED, value);
+  }
+
+  // ============================================================
+  // TASBIH RENDER STYLE
+  // ============================================================
+
+  static async getTasbihRenderStyle(): Promise<string> {
+    return PreferencesHelper.getString(STORAGE_KEY_TASBIH_RENDER_STYLE, 'premium');
+  }
+
+  static saveTasbihRenderStyle(style: string): void {
+    PreferencesHelper.setString(STORAGE_KEY_TASBIH_RENDER_STYLE, style);
   }
 }

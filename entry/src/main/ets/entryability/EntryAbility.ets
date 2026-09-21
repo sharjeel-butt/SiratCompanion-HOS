@@ -1,17 +1,18 @@
 // entry/src/main/ets/entryability/EntryAbility.ets
 
-import { UIAbility, AbilityConstant, Want } from '@kit.AbilityKit';
+import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { window } from '@kit.ArkUI';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { PreferencesHelper } from '../helper/PreferencesHelper';
 import {
-  STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
-  STORAGE_KEY_WIZARD_COMPLETED,
-  STORAGE_KEY_VIBRATION_ENABLED
+  STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_VIBRATION_ENABLED,
+  STORAGE_KEY_WIZARD_COMPLETED
 } from '../common/StorageKeys';
 import { ThemeMode } from '../common/Theme';
+import { AppLogger } from '../helper/AppLogger';
 
 /** How long the splash stays visible, in milliseconds. */
 const SPLASH_DELAY_MS = 1500;
@@ -23,6 +24,9 @@ export default class EntryAbility extends UIAbility {
   }
 
   onWindowStageCreate(windowStage: window.WindowStage): void {
+    // Initialize device-side logging first, so any subsequent
+    // failures during startup are captured.
+    AppLogger.init(this.context);
     // Initialize preferences and load persisted values BEFORE the UI
     // loads, so the app opens with the right theme, language, and
     // Hijri offset — no flash of the wrong state.

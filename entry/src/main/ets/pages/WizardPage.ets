@@ -1,23 +1,20 @@
 // entry/src/main/ets/pages/WizardPage.ets
 
-import { router } from '@kit.ArkUI';
-import { mediaquery } from '@kit.ArkUI';
+import { mediaquery, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
-import {
-  STORAGE_KEY_THEME_MODE,
-  STORAGE_KEY_LANGUAGE
-} from '../common/StorageKeys';
-import { CalculationMethod, AsrShadowRule } from '../utils/PrayerTimeCalculator';
+import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../common/StorageKeys';
+import { AsrShadowRule, CalculationMethod } from '../utils/PrayerTimeCalculator';
 import { SettingsHelper } from '../helper/SettingsHelper';
-import { LocationHelper, LocationData } from '../utils/LocationUtils';
+import { LocationData, LocationHelper } from '../utils/LocationUtils';
 import { LocationCache } from '../utils/LocationCache';
 import { CalculationSource, LocationMode, PickerItem } from '../models/SettingsModels';
-import { L, AppLanguage } from '../helper/LocalizationHelper';
+import { AppLanguage, L } from '../helper/LocalizationHelper';
 import { NavHelper } from '../helper/NavHelper';
+import { PrivacyPolicyProvider } from '../data/PrivacyPolicy';
 
-const TOTAL_STEPS = 3;
+const TOTAL_STEPS = 4;
 
 interface LanguageOption {
   id: string;
@@ -53,17 +50,17 @@ struct WizardPage {
 
   // ---- Step 0: language ----
   @State selectedLanguage: string = AppLanguage.ENGLISH;
-
-  // ---- Step 1: location ----
+  // ---- Step 1: privacy policy ----
+  @State privacyAccepted: boolean = false;
+  // ---- Step 2: location ----
   @State locationMode: LocationMode = LocationMode.GPS;
   @State manualLat: string = '';
   @State manualLng: string = '';
   @State manualCity: string = '';
   @State isGettingLocation: boolean = false;
-  @State locationStatus: string = 'idle';   // 'idle' | 'ready' | 'failed'
+  @State locationStatus: string = 'idle';
   @State detectedCity: string = '';
-
-  // ---- Step 2: calculation ----
+  // ---- Step 3: calculation ----
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
   @State asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
   @State calcSource: CalculationSource = CalculationSource.LOCAL;
@@ -107,8 +104,6 @@ struct WizardPage {
       this.colors = c;
     });
 
-    // Pre-fill defaults from any previously-saved preferences so the
-    // wizard is a quick confirmation on re-runs (e.g. dev resets).
     this.reloadDefaults();
   }
 
@@ -150,7 +145,19 @@ struct WizardPage {
   // STEP NAVIGATION
   // ============================================================
 
+  private canProceed(): boolean {
+    // Step 1 (privacy) requires acceptance.
+    if (this.step === 1 && !this.privacyAccepted) {
+      return false;
+    }
+    return true;
+  }
+
   private goNext(): void {
+    if (!this.canProceed()) {
+      return;
+    }
+
     if (this.step < TOTAL_STEPS - 1) {
       this.step = this.step + 1;
       return;
@@ -164,7 +171,6 @@ struct WizardPage {
   }
 
   private finish(): void {
-    // Persist the wizard-completed flag and transition to the app.
     SettingsHelper.markWizardCompleted();
     NavHelper.prepareForward();
     router.replaceUrl({ url: 'pages/Index' })
@@ -195,7 +201,15 @@ struct WizardPage {
   }
 
   // ============================================================
-  // STEP 1 — LOCATION
+  // STEP 1 — PRIVACY POLICY
+  // ============================================================
+
+  private getPrivacyPolicyText(): string {
+    return PrivacyPolicyProvider.get(this.currentLanguage);
+  }
+
+  // ============================================================
+  // STEP 2 — LOCATION
   // ============================================================
 
   private async requestGpsLocation(): Promise<void> {
@@ -241,6 +255,8 @@ struct WizardPage {
       return;
     }
 
+    this.isGettingLocation = true;
+
     let cityName = this.manualCity.trim();
     if (cityName.length === 0) {
       try { cityName = await LocationHelper.reverseGeocode(lat, lng); } catch (e) { }
@@ -249,7 +265,6 @@ struct WizardPage {
       }
     }
 
-    this.isGettingLocation = true;
     await SettingsHelper.saveManualCoords(lat, lng, cityName);
     await SettingsHelper.saveLocationMode(LocationMode.MANUAL);
     this.isGettingLocation = false;
@@ -268,15 +283,13 @@ struct WizardPage {
     this.detectedCity = '';
 
     if (mode === LocationMode.GPS) {
-      // Do not auto-fetch here — the user explicitly taps the button.
       return;
     }
-    // Switching to manual: save the mode now, coords come when the user confirms.
     SettingsHelper.saveLocationMode(mode);
   }
 
   // ============================================================
-  // STEP 2 — CALCULATION
+  // STEP 3 — CALCULATION
   // ============================================================
 
   private pickMethod(id: string): void {
@@ -296,7 +309,6 @@ struct WizardPage {
   private pickSource(id: string): void {
     const source = id as CalculationSource;
     if (source === CalculationSource.API) {
-      // API source is not available yet; keep the picker open briefly.
       this.getUIContext().getPromptAction().showToast({
         message: this.tr('coming_soon'), duration: 1500
       });
@@ -308,18 +320,28 @@ struct WizardPage {
   }
 
   // ============================================================
-  // HEADER TITLE / DESCRIPTION
+  // HEADER TEXT
   // ============================================================
 
   private stepTitle(): string {
     if (this.step === 0) return this.tr('wizard_language_title');
-    if (this.step === 1) return this.tr('wizard_location_title');
+    if (this.step === 1) {
+      return this.tr('wizard_privacy_title');
+    }
+    if (this.step === 2) {
+      return this.tr('wizard_location_title');
+    }
     return this.tr('wizard_convention_title');
   }
 
   private stepDescription(): string {
     if (this.step === 0) return this.tr('wizard_language_desc');
-    if (this.step === 1) return this.tr('wizard_location_desc');
+    if (this.step === 1) {
+      return this.tr('wizard_privacy_desc');
+    }
+    if (this.step === 2) {
+      return this.tr('wizard_location_desc');
+    }
     return this.tr('wizard_convention_desc');
   }
 
@@ -346,34 +368,32 @@ struct WizardPage {
             .fontSize(13).fontColor(this.colors.textMuted)
             .width('100%').margin({ top: 6 }).lineHeight(20)
         }
-        .width('100%').padding({ left: 24, right: 24, top: 8, bottom: 20 })
+        .width('100%')
+        .padding({
+          left: 24,
+          right: 24,
+          top: 8,
+          bottom: 16
+        })
         .alignItems(HorizontalAlign.Start)
 
         // ---- Step content ----
-        Scroll() {
-          Column() {
-            if (this.step === 0) {
-              this.LanguageStep()
-            } else if (this.step === 1) {
-              this.LocationStep()
-            } else {
-              this.ConventionStep()
-            }
-          }
-          .width('100%')
-          .padding({ left: 24, right: 24, bottom: 24 })
+        if (this.step === 0) {
+          this.LanguageStep()
+        } else if (this.step === 1) {
+          this.PrivacyStep()
+        } else if (this.step === 2) {
+          this.LocationStep()
+        } else {
+          this.ConventionStep()
         }
-        .layoutWeight(1)
-        .width('100%')
-        .scrollBar(BarState.Auto)
-        .edgeEffect(EdgeEffect.Spring)
 
         // ---- Footer ----
         this.Footer()
       }
       .width('100%').height('100%')
 
-      // ---- Pickers for step 2 ----
+      // ---- Pickers for step 3 ----
       if (this.showMethodPicker) {
         this.PickerOverlay(
           this.tr('convention'), '🕌',
@@ -448,254 +468,415 @@ struct WizardPage {
 
   @Builder
   LanguageStep() {
-    Column() {
-      // Welcome message shown only on the first step
+    Scroll() {
       Column() {
-        Text(this.tr('wizard_welcome_title'))
-          .fontSize(15).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
-          .width('100%')
-        Text(this.tr('wizard_welcome_desc'))
-          .fontSize(12).fontColor(this.colors.textMuted)
-          .width('100%').margin({ top: 4 }).lineHeight(18)
-      }
-      .width('100%')
-      .padding(14)
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .border({ width: 1, color: this.colors.borderSoft })
-      .margin({ bottom: 16 })
-      .alignItems(HorizontalAlign.Start)
-
-      // Language cards
-      ForEach(this.getLanguageOptions(), (opt: LanguageOption) => {
-        Row() {
-          Column() {
-            Text(opt.nativeName)
-              .fontSize(18).fontWeight(FontWeight.Bold)
-              .fontColor(this.colors.textWhite)
-              .width('100%')
-            Text(opt.englishName)
-              .fontSize(11).fontColor(this.colors.textMuted)
-              .margin({ top: 2 }).width('100%')
-          }
-          .alignItems(HorizontalAlign.Start)
-          .layoutWeight(1)
-
-          // Selection marker
-          // Selection marker
-          Stack() {
-            if (opt.id === this.selectedLanguage) {
-              Row().width(12).height(12).borderRadius(6)
-                .backgroundColor(this.colors.accentGold)
-            }
-          }
-          .width(24).height(24).borderRadius(12)
-          .border({
-            width: opt.id === this.selectedLanguage ? 2 : 1.5,
-            color: opt.id === this.selectedLanguage
-              ? this.colors.accentGold
-              : this.colors.borderStrong
-          })
-          .alignContent(Alignment.Center)
+        Column() {
+          Text(this.tr('wizard_welcome_title'))
+            .fontSize(15).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
+            .width('100%')
+          Text(this.tr('wizard_welcome_desc'))
+            .fontSize(12)
+            .fontColor(this.colors.textMuted)
+            .width('100%')
+            .margin({ top: 4 })
+            .lineHeight(18)
         }
         .width('100%')
-        .padding({ top: 16, bottom: 16, left: 16, right: 16 })
-        .backgroundColor(this.colors.cardDark)
-        .borderRadius(14)
-        .border({
-          width: opt.id === this.selectedLanguage ? 2 : 1,
-          color: opt.id === this.selectedLanguage
-            ? this.colors.accentGold
-            : this.colors.borderSoft
-        })
-        .margin({ bottom: 10 })
-        .onClick(() => { this.pickLanguage(opt.id); })
-      }, (opt: LanguageOption) => `lang-${opt.id}-${opt.id === this.selectedLanguage ? 'sel' : 'un'}`)
+        .padding(14)
+        .backgroundColor(this.colors.tintSubtle)
+        .borderRadius(12)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .margin({ bottom: 16 })
+        .alignItems(HorizontalAlign.Start)
+
+        ForEach(this.getLanguageOptions(), (opt: LanguageOption) => {
+          Row() {
+            Column() {
+              Text(opt.nativeName)
+                .fontSize(18).fontWeight(FontWeight.Bold)
+                .fontColor(this.colors.textWhite)
+                .width('100%')
+              Text(opt.englishName)
+                .fontSize(11).fontColor(this.colors.textMuted)
+                .margin({ top: 2 }).width('100%')
+            }
+            .alignItems(HorizontalAlign.Start)
+            .layoutWeight(1)
+
+            Stack() {
+              if (opt.id === this.selectedLanguage) {
+                Row().width(12).height(12).borderRadius(6)
+                  .backgroundColor(this.colors.accentGold)
+              }
+            }
+            .width(24)
+            .height(24)
+            .borderRadius(12)
+            .border({
+              width: opt.id === this.selectedLanguage ? 2 : 1.5,
+              color: opt.id === this.selectedLanguage
+                ? this.colors.accentGold
+                : this.colors.borderStrong
+            })
+            .alignContent(Alignment.Center)
+          }
+          .width('100%')
+          .padding({
+            top: 16,
+            bottom: 16,
+            left: 16,
+            right: 16
+          })
+          .backgroundColor(this.colors.cardDark)
+          .borderRadius(14)
+          .border({
+            width: opt.id === this.selectedLanguage ? 2 : 1,
+            color: opt.id === this.selectedLanguage
+              ? this.colors.accentGold
+              : this.colors.borderSoft
+          })
+          .margin({ bottom: 10 })
+          .onClick(() => {
+            this.pickLanguage(opt.id);
+          })
+        }, (opt: LanguageOption) => `lang-${opt.id}-${opt.id === this.selectedLanguage ? 'sel' : 'un'}`)
+      }
+      .width('100%')
+      .padding({ left: 24, right: 24, bottom: 24 })
     }
+    .layoutWeight(1)
     .width('100%')
+    .scrollBar(BarState.Auto)
+    .edgeEffect(EdgeEffect.Spring)
   }
 
   // ============================================================
-  // STEP 1 — LOCATION
+  // STEP 1 — PRIVACY POLICY
+  // ============================================================
+
+  @Builder
+  PrivacyStep() {
+    Column() {
+      // Policy text in a scrollable card
+      Scroll() {
+        Column() {
+          Text(this.getPrivacyPolicyText())
+            .fontSize(13)
+            .fontColor(this.colors.textWhite)
+            .lineHeight(20)
+            .width('100%')
+            .textAlign(TextAlign.Start)
+        }
+        .width('100%')
+        .padding(16)
+      }
+      .layoutWeight(1)
+      .width('100%')
+      .backgroundColor(this.colors.cardDark)
+      .borderRadius(14)
+      .border({ width: 1, color: this.colors.borderSoft })
+      .scrollBar(BarState.Auto)
+      .edgeEffect(EdgeEffect.Spring)
+
+      // Agreement row
+      Row() {
+        Stack() {
+          if (this.privacyAccepted) {
+            Text('✓')
+              .fontSize(14)
+              .fontColor(this.colors.textOnAccent)
+              .fontWeight(FontWeight.Bold)
+          }
+        }
+        .width(24)
+        .height(24)
+        .borderRadius(6)
+        .backgroundColor(this.privacyAccepted
+          ? this.colors.accentGold
+          : 'transparent')
+        .border({
+          width: this.privacyAccepted ? 0 : 1.5,
+          color: this.colors.borderStrong
+        })
+        .alignContent(Alignment.Center)
+        .onClick(() => {
+          this.privacyAccepted = !this.privacyAccepted;
+        })
+
+        Text(this.tr('privacy_agree_label'))
+          .fontSize(13)
+          .fontColor(this.colors.textWhite)
+          .margin({ left: 12 })
+          .layoutWeight(1)
+          .onClick(() => {
+            this.privacyAccepted = !this.privacyAccepted;
+          })
+      }
+      .width('100%')
+      .padding({ top: 16, bottom: 8 })
+      .alignItems(VerticalAlign.Center)
+
+      // Link to full policy
+      Row() {
+        Text(this.tr('privacy_view_full'))
+          .fontSize(11)
+          .fontColor(this.colors.accentGold)
+          .decoration({ type: TextDecorationType.Underline })
+      }
+      .width('100%')
+      .padding({ bottom: 4 })
+      .justifyContent(FlexAlign.Start)
+      .onClick(() => {
+        this.getUIContext().getPromptAction().showToast({
+          message: PrivacyPolicyProvider.FULL_URL, duration: 3000
+        });
+      })
+    }
+    .width('100%')
+    .layoutWeight(1)
+    .padding({ left: 24, right: 24, bottom: 12 })
+  }
+
+  // ============================================================
+  // STEP 2 — LOCATION
   // ============================================================
 
   @Builder
   LocationStep() {
-    Column() {
-      // Mode toggle
-      Row() {
-        this.LocationModeButton(this.tr('gps'), LocationMode.GPS)
-        this.LocationModeButton(this.tr('manual_location'), LocationMode.MANUAL)
-      }
-      .width('100%')
-      .padding({ bottom: 16 })
+    Scroll() {
+      Column() {
+        Row() {
+          this.LocationModeButton(this.tr('gps'), LocationMode.GPS)
+          this.LocationModeButton(this.tr('manual_location'), LocationMode.MANUAL)
+        }
+        .width('100%')
+        .padding({ bottom: 16 })
 
-      if (this.locationMode === LocationMode.GPS) {
-        // ---- GPS sub-flow ----
-        Column() {
-          if (this.locationStatus === 'ready' && this.detectedCity.length > 0) {
-            // Success state
-            Row() {
-              Text('✅').fontSize(20)
-              Column() {
-                Text(this.tr('wizard_location_ready'))
-                  .fontSize(12).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
-                  .width('100%')
-                Text(this.detectedCity)
-                  .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Bold)
-                  .margin({ top: 2 }).width('100%')
-                  .maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis })
+        if (this.locationMode === LocationMode.GPS) {
+          Column() {
+            if (this.locationStatus === 'ready' && this.detectedCity.length > 0) {
+              Row() {
+                Text('✅').fontSize(20)
+                Column() {
+                  Text(this.tr('wizard_location_ready'))
+                    .fontSize(12).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
+                    .width('100%')
+                  Text(this.detectedCity)
+                    .fontSize(15)
+                    .fontColor(this.colors.textWhite)
+                    .fontWeight(FontWeight.Bold)
+                    .margin({ top: 2 })
+                    .width('100%')
+                    .maxLines(1)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+                }
+                .alignItems(HorizontalAlign.Start)
+                .layoutWeight(1).margin({ left: 12 })
               }
-              .alignItems(HorizontalAlign.Start)
-              .layoutWeight(1).margin({ left: 12 })
+              .width('100%')
+              .padding(16)
+              .backgroundColor(this.colors.cardDark)
+              .borderRadius(14)
+              .border({ width: 1, color: this.colors.borderSoft })
+
+              Button(this.tr('wizard_retry'))
+                .width('100%')
+                .height(44)
+                .fontSize(14)
+                .fontColor(this.colors.accentGold)
+                .backgroundColor(this.colors.tintSoft)
+                .borderRadius(10)
+                .margin({ top: 12 })
+                .onClick(() => {
+                  this.requestGpsLocation();
+                })
+            } else if (this.locationStatus === 'failed') {
+              Column() {
+                Text('⚠️').fontSize(40).margin({ bottom: 10 })
+                Text(this.tr('wizard_location_failed'))
+                  .fontSize(14).fontColor(this.colors.textWhite)
+                  .textAlign(TextAlign.Center)
+                Button(this.tr('wizard_retry'))
+                  .width('100%')
+                  .height(44)
+                  .fontSize(14)
+                  .fontWeight(FontWeight.Medium)
+                  .fontColor(this.colors.textOnAccent)
+                  .backgroundColor(this.colors.accentGold)
+                  .borderRadius(10)
+                  .margin({ top: 16 })
+                  .onClick(() => {
+                    this.requestGpsLocation();
+                  })
+              }
+              .width('100%')
+              .padding(20)
+              .backgroundColor(this.colors.cardDark)
+              .borderRadius(14)
+              .border({ width: 1, color: this.colors.borderSoft })
+              .alignItems(HorizontalAlign.Center)
+            } else {
+              Column() {
+                Text('📍').fontSize(48).margin({ bottom: 12 })
+                Text(this.isGettingLocation
+                  ? this.tr('wizard_getting_location')
+                  : this.tr('wizard_location_desc'))
+                  .fontSize(12).fontColor(this.colors.textMuted)
+                  .textAlign(TextAlign.Center).lineHeight(18)
+
+                Button() {
+                  if (this.isGettingLocation) {
+                    Row() {
+                      LoadingProgress().width(18).height(18).color(this.colors.textOnAccent)
+                      Text(this.tr('wizard_getting_location'))
+                        .fontSize(14).fontColor(this.colors.textOnAccent).margin({ left: 8 })
+                    }
+                  } else {
+                    Text(this.tr('wizard_grant_permission'))
+                      .fontSize(14).fontWeight(FontWeight.Medium)
+                      .fontColor(this.colors.textOnAccent)
+                  }
+                }
+                .width('100%')
+                .height(46)
+                .backgroundColor(this.colors.accentGold)
+                .borderRadius(10)
+                .margin({ top: 20 })
+                .enabled(!this.isGettingLocation)
+                .onClick(() => {
+                  this.requestGpsLocation();
+                })
+              }
+              .width('100%')
+              .padding(20)
+              .backgroundColor(this.colors.cardDark)
+              .borderRadius(14)
+              .border({ width: 1, color: this.colors.borderSoft })
+              .alignItems(HorizontalAlign.Center)
+            }
+          }
+          .width('100%')
+        } else {
+          Column() {
+            Column() {
+              Text(this.tr('latitude_hint')).fontSize(11).fontColor(this.colors.textMuted)
+                .width('100%').margin({ bottom: 4 })
+              TextInput({ text: this.manualLat, placeholder: 'e.g. 33.6844' })
+                .type(InputType.Normal)
+                .inputFilter('[\\-0-9\\.]')
+                .direction(Direction.Ltr)
+                .onChange((value: string) => {
+                  this.manualLat = value;
+                })
+                .fontSize(14)
+                .fontColor(this.colors.textWhite)
+                .placeholderColor(this.colors.placeholder)
+                .caretColor(this.colors.accentGold)
+                .backgroundColor(this.colors.tintSoft)
+                .borderRadius(8)
+                .padding({
+                  left: 12,
+                  right: 12,
+                  top: 8,
+                  bottom: 8
+                })
+            }
+            .width('100%').margin({ bottom: 10 })
+
+            Column() {
+              Text(this.tr('longitude_hint')).fontSize(11).fontColor(this.colors.textMuted)
+                .width('100%').margin({ bottom: 4 })
+              TextInput({ text: this.manualLng, placeholder: 'e.g. 73.0479' })
+                .type(InputType.Normal)
+                .inputFilter('[\\-0-9\\.]')
+                .direction(Direction.Ltr)
+                .onChange((value: string) => {
+                  this.manualLng = value;
+                })
+                .fontSize(14)
+                .fontColor(this.colors.textWhite)
+                .placeholderColor(this.colors.placeholder)
+                .caretColor(this.colors.accentGold)
+                .backgroundColor(this.colors.tintSoft)
+                .borderRadius(8)
+                .padding({
+                  left: 12,
+                  right: 12,
+                  top: 8,
+                  bottom: 8
+                })
+            }
+            .width('100%').margin({ bottom: 10 })
+
+            Column() {
+              Text(this.tr('city_name_optional')).fontSize(11).fontColor(this.colors.textMuted)
+                .width('100%').margin({ bottom: 4 })
+              TextInput({ text: this.manualCity, placeholder: this.tr('city_name_placeholder') })
+                .type(InputType.Normal)
+                .onChange((value: string) => {
+                  this.manualCity = value;
+                })
+                .fontSize(14)
+                .fontColor(this.colors.textWhite)
+                .placeholderColor(this.colors.placeholder)
+                .caretColor(this.colors.accentGold)
+                .backgroundColor(this.colors.tintSoft)
+                .borderRadius(8)
+                .padding({
+                  left: 12,
+                  right: 12,
+                  top: 8,
+                  bottom: 8
+                })
+            }
+            .width('100%').margin({ bottom: 14 })
+
+            Button() {
+              if (this.isGettingLocation) {
+                LoadingProgress().width(18).height(18).color(this.colors.textOnAccent)
+              } else {
+                Text(this.tr('save_coordinates'))
+                  .fontSize(14).fontWeight(FontWeight.Medium)
+                  .fontColor(this.colors.textOnAccent)
+              }
             }
             .width('100%')
-            .padding(16)
-            .backgroundColor(this.colors.cardDark)
-            .borderRadius(14)
-            .border({ width: 1, color: this.colors.borderSoft })
+            .height(46)
+            .backgroundColor(this.colors.accentGold)
+            .borderRadius(10)
+            .enabled(!this.isGettingLocation)
+            .onClick(() => {
+              this.saveManualCoords();
+            })
 
-            Button(this.tr('wizard_retry'))
-              .width('100%').height(44).fontSize(14)
-              .fontColor(this.colors.accentGold).backgroundColor(this.colors.tintSoft)
-              .borderRadius(10).margin({ top: 12 })
-              .onClick(() => { this.requestGpsLocation(); })
-          } else if (this.locationStatus === 'failed') {
-            // Failure state
-            Column() {
-              Text('⚠️').fontSize(40).margin({ bottom: 10 })
-              Text(this.tr('wizard_location_failed'))
-                .fontSize(14).fontColor(this.colors.textWhite)
-                .textAlign(TextAlign.Center)
-              Button(this.tr('wizard_retry'))
-                .width('100%').height(44).fontSize(14).fontWeight(FontWeight.Medium)
-                .fontColor(this.colors.textOnAccent).backgroundColor(this.colors.accentGold)
-                .borderRadius(10).margin({ top: 16 })
-                .onClick(() => { this.requestGpsLocation(); })
-            }
-            .width('100%').padding(20)
-            .backgroundColor(this.colors.cardDark)
-            .borderRadius(14)
-            .border({ width: 1, color: this.colors.borderSoft })
-            .alignItems(HorizontalAlign.Center)
-          } else {
-            // Idle / fetching state
-            Column() {
-              Text('📍').fontSize(48).margin({ bottom: 12 })
-              Text(this.isGettingLocation
-                ? this.tr('wizard_getting_location')
-                : this.tr('wizard_location_desc'))
-                .fontSize(12).fontColor(this.colors.textMuted)
-                .textAlign(TextAlign.Center).lineHeight(18)
-
-              Button() {
-                if (this.isGettingLocation) {
-                  Row() {
-                    LoadingProgress().width(18).height(18).color(this.colors.textOnAccent)
-                    Text(this.tr('wizard_getting_location'))
-                      .fontSize(14).fontColor(this.colors.textOnAccent).margin({ left: 8 })
-                  }
-                } else {
-                  Text(this.tr('wizard_grant_permission'))
-                    .fontSize(14).fontWeight(FontWeight.Medium)
-                    .fontColor(this.colors.textOnAccent)
-                }
+            if (this.locationStatus === 'ready' && this.detectedCity.length > 0) {
+              Row() {
+                Text('✅').fontSize(16)
+                Text(this.detectedCity)
+                  .fontSize(13)
+                  .fontColor(this.colors.accentGold)
+                  .fontWeight(FontWeight.Medium)
+                  .margin({ left: 8 })
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
               }
-              .width('100%').height(46)
-              .backgroundColor(this.colors.accentGold)
-              .borderRadius(10).margin({ top: 20 })
-              .enabled(!this.isGettingLocation)
-              .onClick(() => { this.requestGpsLocation(); })
+              .width('100%').margin({ top: 12 })
             }
-            .width('100%').padding(20)
-            .backgroundColor(this.colors.cardDark)
-            .borderRadius(14)
-            .border({ width: 1, color: this.colors.borderSoft })
-            .alignItems(HorizontalAlign.Center)
           }
+          .width('100%')
+          .padding(16)
+          .backgroundColor(this.colors.cardDark)
+          .borderRadius(14)
+          .border({ width: 1, color: this.colors.borderSoft })
         }
-        .width('100%')
-      } else {
-        // ---- Manual sub-flow ----
-        Column() {
-          Column() {
-            Text(this.tr('latitude_hint')).fontSize(11).fontColor(this.colors.textMuted)
-              .width('100%').margin({ bottom: 4 })
-            TextInput({ text: this.manualLat, placeholder: 'e.g. 33.6844' })
-              .type(InputType.Normal).inputFilter('[\\-0-9\\.]')
-              .direction(Direction.Ltr)
-              .onChange((value: string) => { this.manualLat = value; })
-              .fontSize(14).fontColor(this.colors.textWhite)
-              .placeholderColor(this.colors.placeholder)
-              .caretColor(this.colors.accentGold)
-              .backgroundColor(this.colors.tintSoft).borderRadius(8)
-              .padding({ left: 12, right: 12, top: 8, bottom: 8 })
-          }
-          .width('100%').margin({ bottom: 10 })
-
-          Column() {
-            Text(this.tr('longitude_hint')).fontSize(11).fontColor(this.colors.textMuted)
-              .width('100%').margin({ bottom: 4 })
-            TextInput({ text: this.manualLng, placeholder: 'e.g. 73.0479' })
-              .type(InputType.Normal).inputFilter('[\\-0-9\\.]')
-              .direction(Direction.Ltr)
-              .onChange((value: string) => { this.manualLng = value; })
-              .fontSize(14).fontColor(this.colors.textWhite)
-              .placeholderColor(this.colors.placeholder)
-              .caretColor(this.colors.accentGold)
-              .backgroundColor(this.colors.tintSoft).borderRadius(8)
-              .padding({ left: 12, right: 12, top: 8, bottom: 8 })
-          }
-          .width('100%').margin({ bottom: 10 })
-
-          Column() {
-            Text(this.tr('city_name_optional')).fontSize(11).fontColor(this.colors.textMuted)
-              .width('100%').margin({ bottom: 4 })
-            TextInput({ text: this.manualCity, placeholder: this.tr('city_name_placeholder') })
-              .type(InputType.Normal)
-              .onChange((value: string) => { this.manualCity = value; })
-              .fontSize(14).fontColor(this.colors.textWhite)
-              .placeholderColor(this.colors.placeholder)
-              .caretColor(this.colors.accentGold)
-              .backgroundColor(this.colors.tintSoft).borderRadius(8)
-              .padding({ left: 12, right: 12, top: 8, bottom: 8 })
-          }
-          .width('100%').margin({ bottom: 14 })
-
-          Button() {
-            if (this.isGettingLocation) {
-              LoadingProgress().width(18).height(18).color(this.colors.textOnAccent)
-            } else {
-              Text(this.tr('save_coordinates'))
-                .fontSize(14).fontWeight(FontWeight.Medium)
-                .fontColor(this.colors.textOnAccent)
-            }
-          }
-          .width('100%').height(46)
-          .backgroundColor(this.colors.accentGold)
-          .borderRadius(10)
-          .enabled(!this.isGettingLocation)
-          .onClick(() => { this.saveManualCoords(); })
-
-          if (this.locationStatus === 'ready' && this.detectedCity.length > 0) {
-            Row() {
-              Text('✅').fontSize(16)
-              Text(this.detectedCity)
-                .fontSize(13).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
-                .margin({ left: 8 }).maxLines(1)
-                .textOverflow({ overflow: TextOverflow.Ellipsis })
-            }
-            .width('100%').margin({ top: 12 })
-          }
-        }
-        .width('100%')
-        .padding(16)
-        .backgroundColor(this.colors.cardDark)
-        .borderRadius(14)
-        .border({ width: 1, color: this.colors.borderSoft })
       }
+      .width('100%')
+      .padding({ left: 24, right: 24, bottom: 24 })
     }
+    .layoutWeight(1)
     .width('100%')
+    .scrollBar(BarState.Auto)
+    .edgeEffect(EdgeEffect.Spring)
   }
 
   @Builder
@@ -723,79 +904,104 @@ struct WizardPage {
   }
 
   // ============================================================
-  // STEP 2 — CONVENTION / MADHAB / SOURCE
+  // STEP 3 — CONVENTION / MADHAB / SOURCE
   // ============================================================
 
   @Builder
   ConventionStep() {
-    Column() {
-      // Convention
-      Row() {
-        Column() {
-          Text(this.tr('convention'))
-            .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-          Text(this.tr('convention_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-          Text(SettingsHelper.getCalcMethodLabel(this.calcMethod))
-            .fontSize(12).fontColor(this.colors.accentGold)
-            .maxLines(2).textOverflow({ overflow: TextOverflow.Ellipsis })
-            .margin({ top: 6 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
-      }
-      .width('100%').padding(16)
-      .backgroundColor(this.colors.cardDark)
-      .borderRadius(14)
-      .border({ width: 1, color: this.colors.borderSoft })
-      .margin({ bottom: 10 })
-      .onClick(() => { this.showMethodPicker = true; })
+    Scroll() {
+      Column() {
+        // Convention
+        Row() {
+          Column() {
+            Text(this.tr('convention'))
+              .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+            Text(this.tr('convention_desc'))
+              .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+            Text(SettingsHelper.getCalcMethodLabel(this.calcMethod))
+              .fontSize(12)
+              .fontColor(this.colors.accentGold)
+              .maxLines(2)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+              .margin({ top: 6 })
+          }
+          .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      // Madhab
-      Row() {
-        Column() {
-          Text(this.tr('madhab'))
-            .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-          Text(this.tr('madhab_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-          Text(SettingsHelper.getAsrRuleLabel(this.asrRule))
-            .fontSize(12).fontColor(this.colors.accentGold)
-            .maxLines(2).textOverflow({ overflow: TextOverflow.Ellipsis })
-            .margin({ top: 6 })
+          Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
         }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
-      }
-      .width('100%').padding(16)
-      .backgroundColor(this.colors.cardDark)
-      .borderRadius(14)
-      .border({ width: 1, color: this.colors.borderSoft })
-      .margin({ bottom: 10 })
-      .onClick(() => { this.showAsrPicker = true; })
+        .width('100%')
+        .padding(16)
+        .backgroundColor(this.colors.cardDark)
+        .borderRadius(14)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .margin({ bottom: 10 })
+        .onClick(() => {
+          this.showMethodPicker = true;
+        })
 
-      // Source
-      Row() {
-        Column() {
-          Text(this.tr('source'))
-            .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-          Text(this.tr('source_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-          Text(SettingsHelper.getCalcSourceLabel(this.calcSource))
-            .fontSize(12).fontColor(this.colors.accentGold)
-            .maxLines(2).textOverflow({ overflow: TextOverflow.Ellipsis })
-            .margin({ top: 6 })
+        // Madhab
+        Row() {
+          Column() {
+            Text(this.tr('madhab'))
+              .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+            Text(this.tr('madhab_desc'))
+              .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+            Text(SettingsHelper.getAsrRuleLabel(this.asrRule))
+              .fontSize(12)
+              .fontColor(this.colors.accentGold)
+              .maxLines(2)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+              .margin({ top: 6 })
+          }
+          .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+          Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
         }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+        .width('100%')
+        .padding(16)
+        .backgroundColor(this.colors.cardDark)
+        .borderRadius(14)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .margin({ bottom: 10 })
+        .onClick(() => {
+          this.showAsrPicker = true;
+        })
+
+        // Source
+        Row() {
+          Column() {
+            Text(this.tr('source'))
+              .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+            Text(this.tr('source_desc'))
+              .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+            Text(SettingsHelper.getCalcSourceLabel(this.calcSource))
+              .fontSize(12)
+              .fontColor(this.colors.accentGold)
+              .maxLines(2)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+              .margin({ top: 6 })
+          }
+          .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+          Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+        }
+        .width('100%')
+        .padding(16)
+        .backgroundColor(this.colors.cardDark)
+        .borderRadius(14)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .margin({ bottom: 10 })
+        .onClick(() => {
+          this.showSourcePicker = true;
+        })
       }
-      .width('100%').padding(16)
-      .backgroundColor(this.colors.cardDark)
-      .borderRadius(14)
-      .border({ width: 1, color: this.colors.borderSoft })
-      .margin({ bottom: 10 })
-      .onClick(() => { this.showSourcePicker = true; })
+      .width('100%')
+      .padding({ left: 24, right: 24, bottom: 24 })
     }
+    .layoutWeight(1)
     .width('100%')
+    .scrollBar(BarState.Auto)
+    .edgeEffect(EdgeEffect.Spring)
   }
 
   // ============================================================
@@ -808,9 +1014,14 @@ struct WizardPage {
       Button(this.step < TOTAL_STEPS - 1 ? this.tr('wizard_next') : this.tr('wizard_finish'))
         .width('100%').height(50)
         .fontSize(15).fontWeight(FontWeight.Medium)
-        .fontColor(this.colors.textOnAccent)
-        .backgroundColor(this.colors.accentGold)
+        .fontColor(this.canProceed()
+          ? this.colors.textOnAccent
+          : this.colors.textMuted)
+        .backgroundColor(this.canProceed()
+          ? this.colors.accentGold
+          : this.colors.tintMedium)
         .borderRadius(12)
+        .enabled(this.canProceed())
         .onClick(() => { this.goNext(); })
     }
     .width('100%')
