@@ -1,31 +1,31 @@
 // entry/src/main/ets/pages/Index.ets
 
-import { router, promptAction } from '@kit.ArkUI';
+import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { NotificationHelper } from '../helper/NotificationHelper';
 import { common } from '@kit.AbilityKit';
-import { mediaquery } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
-import { PrayerModel, ExtraTiming } from '../models/PrayerModel';
+import { ExtraTiming, PrayerModel } from '../models/PrayerModel';
 import { DateHelper } from '../utils/DateUtils';
-import { LocationHelper, LocationData } from '../utils/LocationUtils';
+import { LocationData, LocationHelper } from '../utils/LocationUtils';
 import { UpcomingImportantDate } from '../models/DateModels';
 import { PrayerManager } from '../utils/PrayerManager';
-import { SettingsHelper, PrayerOffsets } from '../helper/SettingsHelper';
+import { PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
 import { LocationCache } from '../utils/LocationCache';
 import { CalculationSource, LocationMode } from '../models/SettingsModels';
 import {
-  STORAGE_KEY_THEME_MODE,
-  STORAGE_KEY_NAV_DIRECTION,
-  STORAGE_KEY_LOCATION_VERSION,
+  STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
-  STORAGE_KEY_HIJRI_OFFSET
+  STORAGE_KEY_LOCATION_VERSION,
+  STORAGE_KEY_NAV_DIRECTION,
+  STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
 import { HomeController } from '../utils/HomeController';
-import { CalculationMethod, AsrShadowRule, HighLatitudeRule } from '../utils/PrayerTimeCalculator';
+import { AsrShadowRule, CalculationMethod, HighLatitudeRule } from '../utils/PrayerTimeCalculator';
 import { NavHelper } from '../helper/NavHelper';
 import { TimezoneResolver } from '../utils/TimezoneResolver';
 import { L } from '../helper/LocalizationHelper';
+import { NOTIFICATIONS_ENABLED } from '../common/FeatureFlags';
 
 interface DialogResult {
   index: number;
@@ -206,6 +206,9 @@ struct Index {
   }
 
   private async onLanguageChangedInHome(): Promise<void> {
+    if (!NOTIFICATIONS_ENABLED) {
+      return;
+    }
     // Notification titles/content are localized at schedule time, so
     // they need to be rebuilt when the language changes.
     await NotificationHelper.rescheduleAll();
@@ -414,10 +417,12 @@ struct Index {
       this.updateTodayHeaderData();
       this.settingsLoaded = true;
 
-      // Renew the notification queue every time settings or the app
-      // open. Safe to call repeatedly — it cancels first, then
-      // reschedules.
-      await NotificationHelper.rescheduleAll();
+      if (NOTIFICATIONS_ENABLED) {
+        // Renew the notification queue every time settings or the app
+        // open. Safe to call repeatedly — it cancels first, then
+        // reschedules.
+        await NotificationHelper.rescheduleAll();
+      }
     } finally {
       this.settingsLoading = false;
     }

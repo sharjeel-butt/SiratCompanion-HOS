@@ -117,6 +117,33 @@ export class TasbihManager {
     });
   }
 
+  static resetAll(tasbihs: Tasbih[], activeId: string): Tasbih[] {
+    return tasbihs.map((t: Tasbih): Tasbih => {
+      if (t.id !== activeId) {
+        return t;
+      }
+      const updated: Dhikr[] = t.dhikrs.map((d: Dhikr): Dhikr => {
+        const next: Dhikr = {
+          id: d.id,
+          arabic: d.arabic,
+          transliteration: d.transliteration,
+          translation: d.translation,
+          target: d.target,
+          count: 0
+        };
+        return next;
+      });
+      const result: Tasbih = {
+        id: t.id,
+        name: t.name,
+        dhikrs: updated,
+        createdAt: t.createdAt,
+        lifetimeCount: t.lifetimeCount
+      };
+      return result;
+    });
+  }
+
   // ============================================================
   // TASBIH CRUD — every rebuild preserves lifetimeCount
   // ============================================================

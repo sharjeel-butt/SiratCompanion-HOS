@@ -1,7 +1,7 @@
 # Privacy Policy — Sirat Companion
 
-**Last updated:** September 19, 2026
-**Effective date:** September 19, 2026
+**Last updated:** September 21, 2026
+**Effective date:** September 21, 2026
 
 [English](#english) · [中文](#chinese) · [العربية](#arabic)
 
@@ -48,8 +48,7 @@ information is transmitted to us, to Huawei, or to any third party by the App.
 ### Prayer Times and Settings
 
 - **What we access:** Your calculation preferences (convention, Asr rule, prayer offsets, high-latitude rule), theme
-  preference, language preference, Hijri date offset, notification settings, vibration preference, and home-screen
-  toggles.
+  preference, language preference, Hijri date offset, vibration preference, and home-screen toggles.
 - **Why we access it:** To remember your choices across app restarts.
 - **How it is stored:** All preferences are stored locally on your device using the HarmonyOS Preferences API. They
   never leave your device.
@@ -61,13 +60,12 @@ information is transmitted to us, to Huawei, or to any third party by the App.
 - **How it is stored:** Tasbih data is stored locally on your device using the HarmonyOS Preferences API. It never
   leaves your device.
 
-### Notification Permission
+### Haptic Feedback (Vibration)
 
-- **What we access:** If you enable prayer notifications, the App schedules local reminders through the HarmonyOS
-  reminder agent.
-- **Why we access it:** To deliver the prayer time reminders you requested.
-- **Transmission:** Reminders are scheduled and delivered entirely on your device. No notification content is sent to
-  any server.
+- **What we access:** The device's vibration capability.
+- **Why we access it:** To provide a short vibration each time you count a Tasbih bead, confirming your tap. This can be
+  turned off at any time from the App's **Settings → UI Customization → Vibration**.
+- **Transmission:** Vibration is controlled entirely on your device. No data is generated, stored, or transmitted.
 
 ## What We Do Not Collect
 
@@ -86,13 +84,13 @@ We do not use any third-party analytics SDKs, advertising SDKs, or tracking libr
 
 All information accessed by the App is used only on your device and only to provide the App's features:
 
-| Information   | Purpose                                      |
-|---------------|----------------------------------------------|
-| Location      | Calculate prayer times and Qibla direction   |
-| Sensors       | Determine device orientation for the compass |
-| Preferences   | Remember your settings                       |
-| Tasbih data   | Persist your dhikr progress                  |
-| Notifications | Deliver prayer time reminders you requested  |
+| Information | Purpose                                       |
+|-------------|-----------------------------------------------|
+| Location    | Calculate prayer times and Qibla direction    |
+| Sensors     | Determine device orientation for the compass  |
+| Preferences | Remember your settings                        |
+| Tasbih data | Persist your dhikr progress                   |
+| Vibration   | Provide haptic feedback while counting Tasbih |
 
 We do not use your information for advertising, profiling, or any purpose unrelated to the App's core functionality.
 
@@ -106,7 +104,6 @@ privacy policy:
 - **System geocoder** — for reverse geocoding your coordinates into a city name (only when you choose to view a city
   name).
 - **Location services** — to obtain your GPS coordinates when you grant permission.
-- **Reminder agent** — to schedule local prayer reminders.
 
 Please refer to Huawei's privacy policy for details on how the operating system handles these services.
 
@@ -126,20 +123,19 @@ the App's features.
 
 | Permission                               | Purpose                               |
 |------------------------------------------|---------------------------------------|
+| `ohos.permission.VIBRATE`                | Haptic feedback while counting Tasbih |
 | `ohos.permission.APPROXIMATELY_LOCATION` | Approximate location for prayer times |
 | `ohos.permission.LOCATION`               | Precise location for prayer times     |
 | `ohos.permission.ACCELEROMETER`          | Compass and Qibla direction           |
-| `ohos.permission.PUBLISH_AGENT_REMINDER` | Prayer time notifications             |
 
 Permissions are requested only when you first use a feature that requires them. They can be revoked at any time in your
 device's Settings.
 
-### Agent-Powered Reminder — Detailed Explanation
+### Vibration — Detailed Explanation
 
-The `PUBLISH_AGENT_REMINDER` permission allows the App to schedule local reminders using the HarmonyOS reminder agent.
-These reminders are used exclusively for prayer time notifications, which fire at the time of each prayer and optionally
-a few minutes before. The reminders are scheduled entirely on the device and carry no personal data. You can disable
-them at any time from the App's **Settings → Notifications** section.
+The `VIBRATE` permission allows the App to produce a short vibration each time you tap to count a Tasbih bead,
+confirming your tap. It is used only for this local haptic feedback and can be disabled at any time from the App's *
+*Settings → UI Customization → Vibration**. No data is generated, stored, or transmitted by this permission.
 
 ## Security
 
@@ -177,7 +173,7 @@ take effect constitutes acceptance of the revised policy.
 
 If you have questions, concerns, or requests regarding this Privacy Policy, please contact us at:
 
-**Email:** sharjeel.butt@example.com
+**Email:** sharjeel.butt@gmail.com
 **Developer:** Sharjeel Butt
 
 ---
@@ -219,7 +215,7 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 
 ### 礼拜时间与设置
 
-- **我们访问的内容：** 您的计算偏好（计算方式、晡礼规则、礼拜时间偏移、高纬度规则）、主题偏好、语言偏好、回历日期偏移、通知设置、振动偏好以及主屏幕开关。
+- **我们访问的内容：** 您的计算偏好（计算方式、晡礼规则、礼拜时间偏移、高纬度规则）、主题偏好、语言偏好、回历日期偏移、振动偏好以及主屏幕开关。
 - **我们为何访问：** 用于在应用重启后记住您的选择。
 - **存储方式：** 所有偏好设置均通过 HarmonyOS Preferences API 存储在您的设备本地。它们从不离开您的设备。
 
@@ -229,11 +225,12 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 - **我们为何访问：** 用于显示和保存您的念珠进度。
 - **存储方式：** 念珠数据通过 HarmonyOS Preferences API 存储在您的设备本地。它从不离开您的设备。
 
-### 通知权限
+### 触觉反馈（振动）
 
-- **我们访问的内容：** 如果您启用礼拜通知，本应用将通过 HarmonyOS 提醒代理安排本地提醒。
-- **我们为何访问：** 用于发送您请求的礼拜时间提醒。
-- **传输：** 提醒完全在您的设备上安排和发送。任何通知内容都不会发送到任何服务器。
+- **我们访问的内容：** 设备的振动功能。
+- **我们为何访问：** 用于在您每次点击念珠计数时提供一次短振动，以确认您的操作。您可以随时在应用的 **设置 → 界面自定义 → 振动
+  ** 中关闭此功能。
+- **传输：** 振动完全在您的设备上控制。不会产生、存储或传输任何数据。
 
 ## 我们不收集的内容
 
@@ -258,7 +255,7 @@ Sirat 伴侣**不**收集、存储或传输：
 | 传感器  | 确定设备方向以供指南针使用 |
 | 偏好设置 | 记住您的设置        |
 | 念珠数据 | 保存您的念词进度      |
-| 通知   | 发送您请求的礼拜时间提醒  |
+| 振动   | 念珠计数时提供触觉反馈   |
 
 我们不会将您的信息用于广告、画像或与本应用核心功能无关的任何目的。
 
@@ -270,7 +267,6 @@ Sirat 伴侣**不**收集、存储或传输：
 
 - **系统地理编码器** —— 用于将您的坐标反向地理编码为城市名称（仅当您选择查看城市名称时）。
 - **位置服务** —— 用于在您授予权限时获取您的 GPS 坐标。
-- **提醒代理** —— 用于安排本地礼拜提醒。
 
 有关操作系统如何处理这些服务的详细信息，请参阅华为隐私政策。
 
@@ -289,18 +285,17 @@ Sirat 伴侣**不**收集、存储或传输：
 
 | 权限                                       | 用途          |
 |------------------------------------------|-------------|
+| `ohos.permission.VIBRATE`                | 念珠计数时的触觉反馈  |
 | `ohos.permission.APPROXIMATELY_LOCATION` | 用于礼拜时间的粗略位置 |
 | `ohos.permission.LOCATION`               | 用于礼拜时间的精确位置 |
 | `ohos.permission.ACCELEROMETER`          | 指南针和天房方向    |
-| `ohos.permission.PUBLISH_AGENT_REMINDER` | 礼拜时间通知      |
 
 权限仅在您首次使用需要该权限的功能时请求。您可以随时在设备设置中撤销这些权限。
 
-### 代理提醒 —— 详细说明
+### 振动 —— 详细说明
 
-`PUBLISH_AGENT_REMINDER` 权限允许本应用使用 HarmonyOS
-提醒代理安排本地提醒。这些提醒仅用于礼拜时间通知，在每次礼拜时以及可选择地提前几分钟触发。提醒完全在设备上安排，不携带任何个人数据。您可以随时在应用的
-**设置 → 通知**部分禁用它们。
+`VIBRATE` 权限允许本应用在您每次点击念珠计数时产生一次短振动，以确认您的操作。它仅用于此本地触觉反馈，您可以随时在应用的 *
+*设置 → 界面自定义 → 振动** 中禁用。此权限不会产生、存储或传输任何数据。
 
 ## 安全
 
@@ -333,7 +328,7 @@ Sirat 伴侣**不**集成任何第三方分析、广告或追踪服务。
 
 如果您对本隐私政策有任何疑问、疑虑或请求，请通过以下方式与我们联系：
 
-**电子邮件：** sharjeel.butt@example.com
+**电子邮件：** sharjeel.butt@gmail.com
 **开发者：** Sharjeel Butt
 
 ---
@@ -380,7 +375,7 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 ### أوقات الصلاة والإعدادات
 
 - **ما نصل إليه:** تفضيلات الحساب (طريقة الحساب، وقاعدة العصر، وتعديلات أوقات الصلاة، وقاعدة خطوط العرض العليا)، وتفضيل
-  المظهر، وتفضيل اللغة، وإزاحة التقويم الهجري، وإعدادات الإشعارات، وتفضيل الاهتزاز، ومفاتيح الشاشة الرئيسية.
+  المظهر، وتفضيل اللغة، وإزاحة التقويم الهجري، وتفضيل الاهتزاز، ومفاتيح الشاشة الرئيسية.
 - **لماذا نصل إليها:** لتذكر خياراتك عبر إعادة تشغيل التطبيق.
 - **كيفية التخزين:** تُخزَّن جميع التفضيلات محلياً على جهازك باستخدام واجهة HarmonyOS Preferences. لا تغادر جهازك أبداً.
 
@@ -390,11 +385,12 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 - **لماذا نصل إليها:** لعرض تقدمك في التسبيح وحفظه.
 - **كيفية التخزين:** تُخزَّن بيانات التسبيح محلياً على جهازك باستخدام واجهة HarmonyOS Preferences. لا تغادر جهازك أبداً.
 
-### إذن الإشعارات
+### التغذية اللمسية (الاهتزاز)
 
-- **ما نصل إليه:** إذا مكّنت إشعارات الصلاة، يجدول التطبيق تذكيرات محلية عبر وكيل التذكير في HarmonyOS.
-- **لماذا نصل إليها:** لإيصال تذكيرات أوقات الصلاة التي طلبتها.
-- **النقل:** تُجدول التذكيرات وتُسلَّم بالكامل على جهازك. لا يُرسَل أي محتوى إشعار إلى أي خادم.
+- **ما نصل إليه:** وظيفة الاهتزاز في الجهاز.
+- **لماذا نصل إليها:** لتوفير اهتزاز قصير في كل مرة تضغط فيها لعدّ خرزة التسبيح، مما يؤكد لك الضغطة. يمكن إيقاف ذلك في
+  أي وقت من **الإعدادات ← تخصيص الواجهة ← الاهتزاز** في التطبيق.
+- **النقل:** يتم التحكم بالاهتزاز بالكامل على جهازك. لا يتم إنشاء أو تخزين أو نقل أي بيانات.
 
 ## ما لا نجمعه
 
@@ -413,13 +409,13 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 
 تُستخدم جميع المعلومات التي يصل إليها التطبيق على جهازك فقط، ولتقديم ميزات التطبيق حصراً:
 
-| المعلومات      | الغرض                                  |
-|----------------|----------------------------------------|
-| الموقع         | حساب أوقات الصلاة واتجاه القبلة        |
-| المستشعرات     | تحديد اتجاه الجهاز للبوصلة             |
-| التفضيلات      | تذكر إعداداتك                          |
-| بيانات التسبيح | حفظ تقدم الأذكار                       |
-| الإشعارات      | إيصال تذكيرات أوقات الصلاة التي طلبتها |
+| المعلومات      | الغرض                               |
+|----------------|-------------------------------------|
+| الموقع         | حساب أوقات الصلاة واتجاه القبلة     |
+| المستشعرات     | تحديد اتجاه الجهاز للبوصلة          |
+| التفضيلات      | تذكر إعداداتك                       |
+| بيانات التسبيح | حفظ تقدم الأذكار                    |
+| الاهتزاز       | توفير تغذية لمسية أثناء عدّ التسبيح |
 
 لا نستخدم معلوماتك للإعلانات أو التنميط أو أي غرض لا يتصل بالوظائف الأساسية للتطبيق.
 
@@ -431,7 +427,6 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 
 - **المُرمِّز الجغرافي للنظام** — للترميز الجغرافي العكسي لإحداثياتك إلى اسم مدينة (فقط عندما تختار عرض اسم المدينة).
 - **خدمات الموقع** — للحصول على إحداثيات GPS عند منحك الإذن.
-- **وكيل التذكير** — لجدولة تذكيرات الصلاة المحلية.
 
 يرجى الرجوع إلى سياسة الخصوصية الخاصة بـ Huawei للحصول على تفاصيل حول كيفية تعامل نظام التشغيل مع هذه الخدمات.
 
@@ -448,20 +443,20 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 
 يطلب التطبيق أذونات HarmonyOS التالية. يمكنك رفض أي إذن دون فقدان الوصول إلى بقية ميزات التطبيق.
 
-| الإذن                                    | الغرض                     |
-|------------------------------------------|---------------------------|
-| `ohos.permission.APPROXIMATELY_LOCATION` | موقع تقريبي لأوقات الصلاة |
-| `ohos.permission.LOCATION`               | موقع دقيق لأوقات الصلاة   |
-| `ohos.permission.ACCELEROMETER`          | البوصلة واتجاه القبلة     |
-| `ohos.permission.PUBLISH_AGENT_REMINDER` | إشعارات أوقات الصلاة      |
+| الإذن                                    | الغرض                           |
+|------------------------------------------|---------------------------------|
+| `ohos.permission.VIBRATE`                | التغذية اللمسية عند عدّ التسبيح |
+| `ohos.permission.APPROXIMATELY_LOCATION` | موقع تقريبي لأوقات الصلاة       |
+| `ohos.permission.LOCATION`               | موقع دقيق لأوقات الصلاة         |
+| `ohos.permission.ACCELEROMETER`          | البوصلة واتجاه القبلة           |
 
 تُطلب الأذونات فقط عند أول استخدامك لميزة تتطلبها. يمكن سحبها في أي وقت من إعدادات جهازك.
 
-### وكيل التذكير — شرح مفصل
+### الاهتزاز — شرح مفصل
 
-يسمح إذن `PUBLISH_AGENT_REMINDER` للتطبيق بجدولة تذكيرات محلية باستخدام وكيل التذكير في HarmonyOS. تُستخدم هذه التذكيرات
-حصرياً لإشعارات أوقات الصلاة، والتي تنطلق في وقت كل صلاة، واختياريًا قبلها بدقائق قليلة. تُجدول التذكيرات بالكامل على
-الجهاز ولا تحمل أي بيانات شخصية. يمكنك تعطيلها في أي وقت من قسم **الإعدادات ← الإشعارات** في التطبيق.
+يسمح إذن `VIBRATE` للتطبيق بإنتاج اهتزاز قصير في كل مرة تضغط فيها لعدّ خرزة التسبيح، مما يؤكد لك الضغطة. يُستخدم هذا
+الإذن فقط لهذه التغذية اللمسية المحلية، ويمكن تعطيله في أي وقت من **الإعدادات ← تخصيص الواجهة ← الاهتزاز** في التطبيق.
+لا تُنشئ هذه الصلاحية أو تخزّن أو تنقل أي بيانات.
 
 ## الأمان
 
@@ -497,7 +492,7 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 
 إذا كانت لديك أي أسئلة أو مخاوف أو طلبات بشأن سياسة الخصوصية هذه، يرجى الاتصال بنا على:
 
-**البريد الإلكتروني:** sharjeel.butt@example.com
+**البريد الإلكتروني:** sharjeel.butt@gmail.com
 **المطوّر:** Sharjeel Butt
 
 ---

@@ -1,25 +1,26 @@
 // entry/src/main/ets/pages/SettingsPage.ets
 
-import { router } from '@kit.ArkUI';
-import { bundleManager } from '@kit.AbilityKit';
+import { mediaquery, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
-import { mediaquery } from '@kit.ArkUI';
+import { pasteboard } from '@kit.BasicServicesKit';
 import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
-import { CalculationMethod, AsrShadowRule, HighLatitudeRule } from '../utils/PrayerTimeCalculator';
-import { SettingsHelper, PrayerOffsets } from '../helper/SettingsHelper';
-import { LocationHelper, LocationData } from '../utils/LocationUtils';
+import { AsrShadowRule, CalculationMethod, HighLatitudeRule } from '../utils/PrayerTimeCalculator';
+import { NotificationsSettings, PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
+import { LocationData, LocationHelper } from '../utils/LocationUtils';
 import { LocationCache } from '../utils/LocationCache';
-import { PickerItem, CalculationSource, LocationMode } from '../models/SettingsModels';
+import { CalculationSource, LocationMode, PickerItem } from '../models/SettingsModels';
+import { STORAGE_KEY_HIJRI_OFFSET, STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../common/StorageKeys';
+import { OffsetKey, PrayerOffsetsHelper } from '../helper/PrayerOffsetsHelper';
 import {
-  STORAGE_KEY_THEME_MODE,
-  STORAGE_KEY_HIJRI_OFFSET,
-  STORAGE_KEY_LANGUAGE
-} from '../common/StorageKeys';
-import { PrayerOffsetsHelper, OffsetKey } from '../helper/PrayerOffsetsHelper';
+  MAX_BEFORE_MINUTES,
+  MIN_BEFORE_MINUTES,
+  NotificationHelper,
+  STEP_BEFORE_MINUTES
+} from '../helper/NotificationHelper';
+import { AppLogger } from '../helper/AppLogger';
 import { L } from '../helper/LocalizationHelper';
-import { NotificationHelper, MIN_BEFORE_MINUTES, MAX_BEFORE_MINUTES, STEP_BEFORE_MINUTES } from '../helper/NotificationHelper';
-import { NotificationsSettings } from '../helper/SettingsHelper';
+import { NOTIFICATIONS_ENABLED } from '../common/FeatureFlags';
 
 const MAX_HIJRI_OFFSET = 3;
 
@@ -42,9 +43,7 @@ struct SettingsPage {
   @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
   hijriOffset: number = 0;
 
-  /** Plain @State mirror — guarantees a re-render on language change. */
   @State private currentLanguage: string = 'en';
-
 
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
@@ -55,8 +54,8 @@ struct SettingsPage {
 
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
   @State asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
-  @State highLatRule: HighLatitudeRule = HighLatitudeRule.NONE;
   @State calcSource: CalculationSource = CalculationSource.LOCAL;
+  @State highLatRule: HighLatitudeRule = HighLatitudeRule.NONE;
 
   @State showOffsets: boolean = false;
   @State offsets: PrayerOffsets = { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 };
@@ -71,8 +70,10 @@ struct SettingsPage {
   @State effectiveCity: string = '';
   @State lastRefreshTime: number = 0;
   @State isRefreshing: boolean = false;
+  // ============================================================
+  // NOTIFICATIONS (kept in place; UI hidden while disabled)
+  // ============================================================
 
-  @State expandedCategory: string | null = 'Prayer Times';
   @State notifMaster: boolean = false;
   @State notifBefore: number = 10;
   @State notifFajr: boolean = true;
@@ -80,14 +81,25 @@ struct SettingsPage {
   @State notifAsr: boolean = true;
   @State notifMaghrib: boolean = true;
   @State notifIsha: boolean = true;
-  @State notifRefreshing: boolean = false;
+  @State notifDiagnostic: string = '';
+  // ============================================================
+  // LOG VIEWER
+  // ============================================================
+
+  @State showLogViewer: boolean = false;
+  @State logContents: string = '';
+  // ============================================================
+  // UI STATE
+  // ============================================================
+
+  @State expandedCategory: string | null = 'Prayer Times';
   @State showMethodPicker: boolean = false;
   @State showAsrPicker: boolean = false;
-  @State showHighLatPicker: boolean = false;
   @State showSourcePicker: boolean = false;
+  @State showHighLatPicker: boolean = false;
 
   // ============================================================
-  // LOCALIZATION + DIRECTION HELPERS
+  // LOCALIZATION
   // ============================================================
 
   private tr(key: string): string {
@@ -137,25 +149,30 @@ struct SettingsPage {
   private async reload(): Promise<void> {
     const data = await SettingsHelper.loadAll();
     this.calcMethod = data.method;
-    this.asrRule    = data.asr;
+    this.asrRule = data.asr;
     this.calcSource = data.source;
     this.highLatRule = await SettingsHelper.getHighLatRule();
 
     this.offsets = await SettingsHelper.getPrayerOffsets();
 
+    // Notification settings are only loaded when the feature is enabled.
+    // When NOTIFICATIONS_ENABLED is false, the Notifications category
+    // is hidden in build(), so there is nothing to reflect in the UI.
+    if (NOTIFICATIONS_ENABLED) {
+      const ns = await SettingsHelper.getNotificationSettings();
+      this.notifMaster = ns.masterEnabled;
+      this.notifBefore = ns.beforeMinutes;
+      this.notifFajr = ns.fajrEnabled;
+      this.notifDhuhr = ns.dhuhrEnabled;
+      this.notifAsr = ns.asrEnabled;
+      this.notifMaghrib = ns.maghribEnabled;
+      this.notifIsha = ns.ishaEnabled;
+    }
+
     const mode = await SettingsHelper.getLocationMode();
     this.locationMode = mode;
 
     const manual = await SettingsHelper.getManualCoords();
-    const ns = await SettingsHelper.getNotificationSettings();
-    this.notifMaster = ns.masterEnabled;
-    this.notifBefore = ns.beforeMinutes;
-    this.notifFajr = ns.fajrEnabled;
-    this.notifDhuhr = ns.dhuhrEnabled;
-    this.notifAsr = ns.asrEnabled;
-    this.notifMaghrib = ns.maghribEnabled;
-    this.notifIsha = ns.ishaEnabled;
-
     this.manualLatInput  = manual.lat !== 0 ? manual.lat.toString() : '';
     this.manualLngInput  = manual.lng !== 0 ? manual.lng.toString() : '';
     this.manualCityInput = manual.cityName;
@@ -204,13 +221,6 @@ struct SettingsPage {
     this.showAsrPicker = false;
   }
 
-  private pickHighLatRule(id: string): void {
-    const rule = id as HighLatitudeRule;
-    this.highLatRule = rule;
-    SettingsHelper.saveHighLatRule(rule);
-    this.showHighLatPicker = false;
-  }
-
   private pickSource(id: string): void {
     const source = id as CalculationSource;
     if (source === CalculationSource.API) {
@@ -222,85 +232,20 @@ struct SettingsPage {
     this.showSourcePicker = false;
   }
 
+  private pickHighLatRule(id: string): void {
+    const rule = id as HighLatitudeRule;
+    this.highLatRule = rule;
+    SettingsHelper.saveHighLatRule(rule);
+    this.showHighLatPicker = false;
+  }
+
   private async pickLocationMode(mode: LocationMode): Promise<void> {
     this.locationMode = mode;
     SettingsHelper.saveLocationMode(mode);
     await this.reload();
   }
 
-  // ---- Notifications ----
-
-  private async toggleNotifMaster(value: boolean): Promise<void> {
-    if (value) {
-      const ctx = getContext(this) as common.UIAbilityContext;
-      const granted = await NotificationHelper.requestPermission(ctx);
-      if (!granted) {
-        this.notifMaster = false;
-        this.getUIContext().getPromptAction().showToast({
-          message: this.tr('notification_permission_denied'), duration: 2500
-        });
-        return;
-      }
-    }
-
-    this.notifMaster = value;
-    SettingsHelper.saveNotifMaster(value);
-    await NotificationHelper.rescheduleAll();
-  }
-
-  private async changeNotifBefore(delta: number): Promise<void> {
-    let next = this.notifBefore + delta;
-    if (next < MIN_BEFORE_MINUTES) next = MIN_BEFORE_MINUTES;
-    if (next > MAX_BEFORE_MINUTES) next = MAX_BEFORE_MINUTES;
-    if (next === this.notifBefore) return;
-
-    this.notifBefore = next;
-    SettingsHelper.saveNotifBeforeMinutes(next);
-    await NotificationHelper.rescheduleAll();
-  }
-
-  private async toggleNotifPrayer(prayerId: string, value: boolean): Promise<void> {
-    switch (prayerId) {
-      case 'fajr':    this.notifFajr = value; break;
-      case 'dhuhr':   this.notifDhuhr = value; break;
-      case 'asr':     this.notifAsr = value; break;
-      case 'maghrib': this.notifMaghrib = value; break;
-      case 'isha':    this.notifIsha = value; break;
-    }
-    SettingsHelper.saveNotifPrayer(prayerId, value);
-    await NotificationHelper.rescheduleAll();
-  }
-
-  private getNotifPrayerValue(prayerId: string): boolean {
-    switch (prayerId) {
-      case 'fajr':    return this.notifFajr;
-      case 'dhuhr':   return this.notifDhuhr;
-      case 'asr':     return this.notifAsr;
-      case 'maghrib': return this.notifMaghrib;
-      case 'isha':    return this.notifIsha;
-      default:        return false;
-    }
-  }
-
-  private formatNotifBefore(): string {
-    if (this.notifBefore === 0) return '0';
-    return `${this.notifBefore}`;
-  }
-
-  private getAppVersionName(): string {
-    try {
-      const info = bundleManager.getBundleInfoForSelfSync(
-        bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION
-      );
-      return info.versionName;
-    } catch (err) {
-      const error = err as BusinessError;
-      console.warn(`[SettingsPage] getBundleInfoForSelfSync failed: ${error.code} ${error.message}`);
-      return '—';
-    }
-  }
-
-  // ---- PrayerModel offsets ----
+  // ---- Prayer offsets ----
 
   private getStorageKeyForOffset(key: OffsetKey): string {
     switch (key) {
@@ -474,6 +419,180 @@ struct SettingsPage {
   }
 
   // ============================================================
+  // NOTIFICATION HANDLERS
+  //
+  // These remain in place so that re-enabling notifications
+  // (by flipping NOTIFICATIONS_ENABLED in FeatureFlags.ets) does
+  // not require any code changes here. They are currently
+  // unreachable because the Notifications category is hidden
+  // in build().
+  // ============================================================
+
+  private async sendTestNotification(): Promise<void> {
+    if (!NOTIFICATIONS_ENABLED) {
+      return;
+    }
+    const ctx = getContext(this) as common.UIAbilityContext;
+
+    const granted = await NotificationHelper.isPermissionGranted();
+    if (!granted) {
+      const requested = await NotificationHelper.requestPermission(ctx);
+      if (!requested) {
+        this.getUIContext().getPromptAction().showToast({
+          message: this.tr('notification_permission_denied'), duration: 2500
+        });
+        return;
+      }
+    }
+
+    this.getUIContext().getPromptAction().showToast({
+      message: this.tr('notif_test_sending'), duration: 1500
+    });
+
+    const result = await NotificationHelper.publishTestNotification();
+
+    if (result.ok) {
+      this.notifDiagnostic = '';
+      this.getUIContext().getPromptAction().showToast({
+        message: this.tr('notif_test_ok'), duration: 3000
+      });
+    } else {
+      this.notifDiagnostic = result.errorMessage;
+      this.getUIContext().getPromptAction().showToast({
+        message: `${this.tr('notif_test_failed')} (code ${result.errorCode})`,
+        duration: 4000
+      });
+    }
+  }
+
+  private async toggleNotifMaster(value: boolean): Promise<void> {
+    if (!NOTIFICATIONS_ENABLED) {
+      return;
+    }
+    if (value) {
+      const ctx = getContext(this) as common.UIAbilityContext;
+      const granted = await NotificationHelper.requestPermission(ctx);
+      if (!granted) {
+        this.notifMaster = false;
+        this.getUIContext().getPromptAction().showToast({
+          message: this.tr('notification_permission_denied'), duration: 2500
+        });
+        return;
+      }
+    }
+
+    this.notifMaster = value;
+    SettingsHelper.saveNotifMaster(value);
+    await NotificationHelper.rescheduleAll();
+  }
+
+  private async changeNotifBefore(delta: number): Promise<void> {
+    if (!NOTIFICATIONS_ENABLED) {
+      return;
+    }
+    let next = this.notifBefore + delta;
+    if (next < MIN_BEFORE_MINUTES) {
+      next = MIN_BEFORE_MINUTES;
+    }
+    if (next > MAX_BEFORE_MINUTES) {
+      next = MAX_BEFORE_MINUTES;
+    }
+    if (next === this.notifBefore) {
+      return;
+    }
+
+    this.notifBefore = next;
+    SettingsHelper.saveNotifBeforeMinutes(next);
+    await NotificationHelper.rescheduleAll();
+  }
+
+  private async toggleNotifPrayer(prayerId: string, value: boolean): Promise<void> {
+    if (!NOTIFICATIONS_ENABLED) {
+      return;
+    }
+    switch (prayerId) {
+      case 'fajr':
+        this.notifFajr = value;
+        break;
+      case 'dhuhr':
+        this.notifDhuhr = value;
+        break;
+      case 'asr':
+        this.notifAsr = value;
+        break;
+      case 'maghrib':
+        this.notifMaghrib = value;
+        break;
+      case 'isha':
+        this.notifIsha = value;
+        break;
+    }
+    SettingsHelper.saveNotifPrayer(prayerId, value);
+    await NotificationHelper.rescheduleAll();
+  }
+
+  private getNotifPrayerValue(prayerId: string): boolean {
+    switch (prayerId) {
+      case 'fajr':
+        return this.notifFajr;
+      case 'dhuhr':
+        return this.notifDhuhr;
+      case 'asr':
+        return this.notifAsr;
+      case 'maghrib':
+        return this.notifMaghrib;
+      case 'isha':
+        return this.notifIsha;
+      default:
+        return false;
+    }
+  }
+
+  private formatNotifBefore(): string {
+    if (this.notifBefore === 0) {
+      return '0';
+    }
+    return `${this.notifBefore}`;
+  }
+
+  // ============================================================
+  // LOG VIEWER
+  // ============================================================
+
+  private openLogViewer(): void {
+    this.logContents = AppLogger.readAll();
+    this.showLogViewer = true;
+  }
+
+  private copyLogsToClipboard(): void {
+    try {
+      const data = pasteboard.createData(
+        pasteboard.MIMETYPE_TEXT_PLAIN,
+        this.logContents
+      );
+      pasteboard.getSystemPasteboard().setData(data)
+        .then(() => {
+          this.getUIContext().getPromptAction().showToast({
+            message: this.tr('log_copied'), duration: 1500
+          });
+        })
+        .catch((err: Error) => {
+          console.error('[SettingsPage] clipboard failed:', JSON.stringify(err));
+        });
+    } catch (err) {
+      console.error('[SettingsPage] clipboard threw:', JSON.stringify(err));
+    }
+  }
+
+  private clearLogs(): void {
+    AppLogger.clear();
+    this.logContents = AppLogger.readAll();
+    this.getUIContext().getPromptAction().showToast({
+      message: this.tr('log_cleared'), duration: 1500
+    });
+  }
+
+  // ============================================================
   // BUILD
   // ============================================================
 
@@ -484,26 +603,32 @@ struct SettingsPage {
 
         Scroll() {
           Column() {
-            // ---- PrayerModel Times ----
+            // ---- Prayer Times ----
             this.CategoryHeader(
               this.tr('category_prayer_times'),
               '🕌',
               this.colors.categoryPrayerTimes,
-              'PrayerModel Times'
+              'Prayer Times'
             )
-            if (this.expandedCategory === 'PrayerModel Times') {
+            if (this.expandedCategory === 'Prayer Times') {
               this.PrayerTimesContent()
             }
 
             // ---- Notifications ----
-            this.CategoryHeader(
-              this.tr('category_notifications'),
-              '🔔',
-              this.colors.categoryNotifications,
-              'Notifications'
-            )
-            if (this.expandedCategory === 'Notifications') {
-              this.NotificationsContent()
+            // Hidden while the Agent-Powered Reminder capability is
+            // pending approval in AppGallery Connect. Flip
+            // NOTIFICATIONS_ENABLED in common/FeatureFlags.ets to
+            // restore this entire section.
+            if (NOTIFICATIONS_ENABLED) {
+              this.CategoryHeader(
+                this.tr('category_notifications'),
+                '🔔',
+                this.colors.categoryNotifications,
+                'Notifications'
+              )
+              if (this.expandedCategory === 'Notifications') {
+                this.NotificationsContent()
+              }
             }
 
             // ---- Hijri Calendar ----
@@ -559,12 +684,32 @@ struct SettingsPage {
           () => { this.showAsrPicker = false; })
       }
 
+      if (this.showSourcePicker) {
+        this.PickerOverlay(
+          this.tr('source'), '🌐',
+          SettingsHelper.buildSourcePickerItems(this.calcSource),
+          (id: string) => {
+            this.pickSource(id);
+          },
+          () => {
+            this.showSourcePicker = false;
+          })
+      }
+
       if (this.showHighLatPicker) {
         this.PickerOverlay(
           this.tr('high_latitude'), '🌐',
           SettingsHelper.buildHighLatPickerItems(this.highLatRule),
           (id: string) => { this.pickHighLatRule(id); },
           () => { this.showHighLatPicker = false; })
+      }
+
+      // ---- Log viewer overlay ----
+      // The log viewer remains accessible even when notifications are
+      // disabled, because AppLogger is still initialized at app start
+      // and other diagnostics may still write to it.
+      if (this.showLogViewer) {
+        this.LogViewerSheet()
       }
     }
     .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
@@ -672,9 +817,6 @@ struct SettingsPage {
       .backgroundColor(this.colors.tintSubtle).borderRadius(12).margin({ bottom: 8 })
       .onClick(() => { this.showSourcePicker = true; })
 
-      // Prayer Offsets
-      this.PrayerOffsetsCard()
-
       // High Latitude
       Row() {
         Column() {
@@ -690,6 +832,9 @@ struct SettingsPage {
       .padding({ top: 14, bottom: 14, left: 16, right: 16 })
       .backgroundColor(this.colors.tintSubtle).borderRadius(12).margin({ bottom: 8 })
       .onClick(() => { this.showHighLatPicker = true; })
+
+      // Prayer Offsets
+      this.PrayerOffsetsCard()
 
       Divider().color(this.colors.borderSoft).margin({ top: 8, bottom: 8 })
       this.LocationBlock()
@@ -735,138 +880,6 @@ struct SettingsPage {
     }
     .width('100%').padding({ top: 4, bottom: 4 })
     .backgroundColor(this.colors.tintSubtle).borderRadius(12)
-  }
-
-  // ============================================================
-  // NOTIFICATIONS
-  // ============================================================
-
-  @Builder
-  NotificationsContent() {
-    Column() {
-      // ---- Master toggle ----
-      Row() {
-        Column() {
-          Text(this.tr('notifications_master'))
-            .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-          Text(this.tr('notifications_master_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
-        Toggle({ type: ToggleType.Switch, isOn: this.notifMaster })
-          .selectedColor(this.colors.accentGold)
-          .onChange((isOn: boolean) => { this.toggleNotifMaster(isOn); })
-      }
-      .width('100%')
-      .padding({ top: 14, bottom: 14, left: 16, right: 16 })
-      .backgroundColor(this.colors.tintSubtle).borderRadius(12).margin({ bottom: 8 })
-
-      if (this.notifMaster) {
-        // ---- Notify Before stepper ----
-        Column() {
-          Row() {
-            Column() {
-              Text(this.tr('notify_before'))
-                .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-              Text(this.tr('notify_before_desc'))
-                .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-            }
-            .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
-            Button() {
-              Text('\u2212').fontSize(20).fontWeight(FontWeight.Bold)
-                .fontColor(this.notifBefore <= MIN_BEFORE_MINUTES
-                  ? this.colors.textMuted : this.colors.textWhite)
-            }
-            .width(38).height(38)
-            .backgroundColor(this.colors.tintMedium).borderRadius(10)
-            .border({ width: 1, color: this.colors.borderMedium })
-            .enabled(this.notifBefore > MIN_BEFORE_MINUTES)
-            .onClick(() => { this.changeNotifBefore(-STEP_BEFORE_MINUTES); })
-
-            Column() {
-              Text(this.formatNotifBefore())
-                .fontSize(18).fontWeight(FontWeight.Bold)
-                .fontColor(this.notifBefore === 0
-                  ? this.colors.textMuted : this.colors.accentGold)
-              Text(this.tr('notif_minutes_suffix'))
-                .fontSize(10).fontColor(this.colors.textMuted)
-            }
-            .width(64).alignItems(HorizontalAlign.Center)
-
-            Button() {
-              Text('+').fontSize(20).fontWeight(FontWeight.Bold)
-                .fontColor(this.notifBefore >= MAX_BEFORE_MINUTES
-                  ? this.colors.textMuted : this.colors.textOnAccent)
-            }
-            .width(38).height(38)
-            .backgroundColor(this.notifBefore >= MAX_BEFORE_MINUTES
-              ? this.colors.tintMedium : this.colors.accentGold)
-            .borderRadius(10)
-            .enabled(this.notifBefore < MAX_BEFORE_MINUTES)
-            .onClick(() => { this.changeNotifBefore(STEP_BEFORE_MINUTES); })
-          }
-          .width('100%').alignItems(VerticalAlign.Center)
-        }
-        .width('100%')
-        .padding({ top: 14, bottom: 14, left: 16, right: 16 })
-        .backgroundColor(this.colors.tintSubtle).borderRadius(12).margin({ bottom: 8 })
-
-        // ---- Per-prayer toggles ----
-        Column() {
-          Row() {
-            Column() {
-              Text(this.tr('notify_prayers'))
-                .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-              Text(this.tr('notify_prayers_desc'))
-                .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-            }
-            .alignItems(HorizontalAlign.Start).layoutWeight(1)
-          }
-          .width('100%').padding({ bottom: 8 })
-
-          this.NotifPrayerRow('Fajr',    'fajr')
-          this.NotifPrayerRow('Dhuhr',   'dhuhr')
-          this.NotifPrayerRow('Asr',     'asr')
-          this.NotifPrayerRow('Maghrib', 'maghrib')
-          this.NotifPrayerRow('Isha',    'isha')
-        }
-        .width('100%')
-        .padding(14)
-        .backgroundColor(this.colors.tintSubtle).borderRadius(12).margin({ bottom: 8 })
-
-        // ---- Footer note ----
-        Row() {
-          Text('ℹ️').fontSize(12).margin({ right: 6 }).opacity(0.7)
-          Text(this.tr('notifications_footer'))
-            .fontSize(10).fontColor(this.colors.textMuted).fontStyle(FontStyle.Italic)
-            .layoutWeight(1).lineHeight(15)
-        }
-        .width('100%')
-        .padding({ left: 6, right: 6, top: 4 })
-        .alignItems(VerticalAlign.Top)
-      }
-    }
-    .width('100%').padding(12)
-    .backgroundColor(this.colors.cardDark)
-    .borderRadius(16)
-    .border({ width: 1, color: this.colors.borderSoft })
-    .margin({ bottom: 12 })
-  }
-
-  @Builder
-  NotifPrayerRow(label: string, prayerId: string) {
-    Row() {
-      Text(this.tr('prayer_' + prayerId))
-        .fontSize(14).fontColor(this.colors.textWhite).layoutWeight(1)
-
-      Toggle({ type: ToggleType.Switch, isOn: this.getNotifPrayerValue(prayerId) })
-        .selectedColor(this.colors.accentGold)
-        .onChange((isOn: boolean) => { this.toggleNotifPrayer(prayerId, isOn); })
-    }
-    .width('100%')
-    .padding({ top: 6, bottom: 6, left: 2, right: 2 })
   }
 
   @Builder
@@ -1028,6 +1041,243 @@ struct SettingsPage {
   }
 
   // ============================================================
+  // NOTIFICATIONS
+  //
+  // This builder is only reachable when NOTIFICATIONS_ENABLED is
+  // true. The code is preserved verbatim so re-enabling the feature
+  // requires no changes here.
+  // ============================================================
+
+  @Builder
+  NotificationsContent() {
+    Column() {
+      // ---- Master toggle ----
+      Row() {
+        Column() {
+          Text(this.tr('notifications_master'))
+            .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+          Text(this.tr('notifications_master_desc'))
+            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+        Toggle({ type: ToggleType.Switch, isOn: this.notifMaster })
+          .selectedColor(this.colors.accentGold)
+          .onChange((isOn: boolean) => {
+            this.toggleNotifMaster(isOn);
+          })
+      }
+      .width('100%')
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .margin({ bottom: 8 })
+
+      // ---- Test notification ----
+      Button() {
+        Text(this.tr('notif_test_button'))
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor(this.colors.textOnAccent)
+      }
+      .width('100%')
+      .height(42)
+      .backgroundColor(this.colors.accentGold)
+      .borderRadius(10)
+      .margin({ bottom: 8 })
+      .enabled(this.notifMaster)
+      .opacity(this.notifMaster ? 1.0 : 0.5)
+      .onClick(() => {
+        this.sendTestNotification();
+      })
+
+      // ---- Diagnostic message ----
+      if (this.notifDiagnostic.length > 0) {
+        Row() {
+          Text('⚠️').fontSize(12).margin({ right: 6 })
+          Text(this.notifDiagnostic)
+            .fontSize(11)
+            .fontColor(this.colors.textMuted)
+            .layoutWeight(1)
+            .maxLines(4)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+        }
+        .width('100%')
+        .padding(10)
+        .backgroundColor(this.colors.tintSubtle)
+        .borderRadius(8)
+        .margin({ bottom: 8 })
+        .alignItems(VerticalAlign.Top)
+      }
+
+      if (this.notifMaster) {
+        // ---- Notify Before stepper ----
+        Column() {
+          Row() {
+            Column() {
+              Text(this.tr('notify_before'))
+                .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+              Text(this.tr('notify_before_desc'))
+                .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+            }
+            .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+            Button() {
+              Text('\u2212').fontSize(20).fontWeight(FontWeight.Bold)
+                .fontColor(this.notifBefore <= MIN_BEFORE_MINUTES
+                  ? this.colors.textMuted : this.colors.textWhite)
+            }
+            .width(38)
+            .height(38)
+            .backgroundColor(this.colors.tintMedium)
+            .borderRadius(10)
+            .border({ width: 1, color: this.colors.borderMedium })
+            .enabled(this.notifBefore > MIN_BEFORE_MINUTES)
+            .onClick(() => {
+              this.changeNotifBefore(-STEP_BEFORE_MINUTES);
+            })
+
+            Column() {
+              Text(this.formatNotifBefore())
+                .fontSize(18).fontWeight(FontWeight.Bold)
+                .fontColor(this.notifBefore === 0
+                  ? this.colors.textMuted : this.colors.accentGold)
+              Text(this.tr('notif_minutes_suffix'))
+                .fontSize(10).fontColor(this.colors.textMuted)
+            }
+            .width(64).alignItems(HorizontalAlign.Center)
+
+            Button() {
+              Text('+').fontSize(20).fontWeight(FontWeight.Bold)
+                .fontColor(this.notifBefore >= MAX_BEFORE_MINUTES
+                  ? this.colors.textMuted : this.colors.textOnAccent)
+            }
+            .width(38)
+            .height(38)
+            .backgroundColor(this.notifBefore >= MAX_BEFORE_MINUTES
+              ? this.colors.tintMedium : this.colors.accentGold)
+            .borderRadius(10)
+            .enabled(this.notifBefore < MAX_BEFORE_MINUTES)
+            .onClick(() => {
+              this.changeNotifBefore(STEP_BEFORE_MINUTES);
+            })
+          }
+          .width('100%').alignItems(VerticalAlign.Center)
+        }
+        .width('100%')
+        .padding({
+          top: 14,
+          bottom: 14,
+          left: 16,
+          right: 16
+        })
+        .backgroundColor(this.colors.tintSubtle)
+        .borderRadius(12)
+        .margin({ bottom: 8 })
+
+        // ---- Per-prayer toggles ----
+        Column() {
+          Row() {
+            Column() {
+              Text(this.tr('notify_prayers'))
+                .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+              Text(this.tr('notify_prayers_desc'))
+                .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+            }
+            .alignItems(HorizontalAlign.Start).layoutWeight(1)
+          }
+          .width('100%').padding({ bottom: 8 })
+
+          this.NotifPrayerRow('Fajr', 'fajr')
+          this.NotifPrayerRow('Dhuhr', 'dhuhr')
+          this.NotifPrayerRow('Asr', 'asr')
+          this.NotifPrayerRow('Maghrib', 'maghrib')
+          this.NotifPrayerRow('Isha', 'isha')
+        }
+        .width('100%')
+        .padding(14)
+        .backgroundColor(this.colors.tintSubtle)
+        .borderRadius(12)
+        .margin({ bottom: 8 })
+
+        // ---- Footer note ----
+        Row() {
+          Text('ℹ️').fontSize(12).margin({ right: 6 }).opacity(0.7)
+          Text(this.tr('notifications_footer'))
+            .fontSize(10)
+            .fontColor(this.colors.textMuted)
+            .fontStyle(FontStyle.Italic)
+            .layoutWeight(1)
+            .lineHeight(15)
+        }
+        .width('100%')
+        .padding({
+          left: 6,
+          right: 6,
+          top: 4,
+          bottom: 8
+        })
+        .alignItems(VerticalAlign.Top)
+      }
+
+      // ---- Diagnostic Logs entry ----
+      Row() {
+        Text('📄').fontSize(14).margin({ right: 8 })
+        Column() {
+          Text(this.tr('log_view_button'))
+            .fontSize(13).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+            .width('100%')
+          Text(this.tr('log_view_desc'))
+            .fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
+            .width('100%')
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+        Text('›').fontSize(20).fontColor(this.colors.accentGold).opacity(0.7)
+      }
+      .width('100%')
+      .padding(14)
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .onClick(() => {
+        this.openLogViewer();
+      })
+    }
+    .width('100%')
+    .padding(12)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(16)
+    .border({ width: 1, color: this.colors.borderSoft })
+    .margin({ bottom: 12 })
+  }
+
+  @Builder
+  NotifPrayerRow(label: string, prayerId: string) {
+    Row() {
+      Text(this.tr('prayer_' + prayerId))
+        .fontSize(14).fontColor(this.colors.textWhite).layoutWeight(1)
+
+      Toggle({ type: ToggleType.Switch, isOn: this.getNotifPrayerValue(prayerId) })
+        .selectedColor(this.colors.accentGold)
+        .onChange((isOn: boolean) => {
+          this.toggleNotifPrayer(prayerId, isOn);
+        })
+    }
+    .width('100%')
+    .padding({
+      top: 6,
+      bottom: 6,
+      left: 2,
+      right: 2
+    })
+  }
+
+  // ============================================================
   // HIJRI CALENDAR
   // ============================================================
 
@@ -1099,7 +1349,7 @@ struct SettingsPage {
         Text(this.tr('app_name')).fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
         Text(this.tr('app_tagline')).fontSize(12).fontColor(this.colors.accentGold).margin({ top: 4 })
         Divider().color(this.colors.borderSoft).width('80%').margin({ top: 14, bottom: 14 })
-        this.AboutRow(this.tr('about_version'), this.getAppVersionName())
+        this.AboutRow(this.tr('about_version'), '1.4.0')
         this.AboutRow(this.tr('about_platform'), 'HarmonyOS')
         this.AboutRow(this.tr('about_copyright'), this.tr('app_name'))
       }
@@ -1118,6 +1368,136 @@ struct SettingsPage {
       Text(value).fontSize(13).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
     }
     .width('100%').padding({ left: 8, right: 8 }).margin({ top: 6 })
+  }
+
+  // ============================================================
+  // LOG VIEWER SHEET
+  // ============================================================
+
+  @Builder
+  LogViewerSheet() {
+    // Dimmer
+    Column()
+      .width('100%').height('100%')
+      .backgroundColor(this.colors.overlayDim)
+      .onClick(() => {
+        this.showLogViewer = false;
+      })
+
+    // Sheet
+    Column() {
+      Row()
+        .width(44)
+        .height(4)
+        .backgroundColor(this.colors.overlayDimSoft)
+        .borderRadius(2)
+        .margin({ top: 10 })
+
+      Row() {
+        Text('📄').fontSize(20).margin({ right: 10 })
+        Text(this.tr('log_view_title'))
+          .fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+          .layoutWeight(1)
+        Text('✕')
+          .fontSize(20)
+          .fontColor(this.colors.textMuted)
+          .width(36)
+          .height(36)
+          .textAlign(TextAlign.Center)
+          .onClick(() => {
+            this.showLogViewer = false;
+          })
+      }
+      .width('100%')
+      .padding({
+        left: 20,
+        right: 12,
+        top: 16,
+        bottom: 12
+      })
+      .alignItems(VerticalAlign.Center)
+
+      // Log file path
+      Text(AppLogger.getPath())
+        .fontSize(10)
+        .fontColor(this.colors.textMuted)
+        .width('100%')
+        .padding({ left: 20, right: 20, bottom: 10 })
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .maxLines(1)
+
+      Divider().color(this.colors.borderSoft).width('90%')
+
+      // Log contents
+      Column() {
+        Scroll() {
+          Text(this.logContents.length > 0 ? this.logContents : this.tr('log_empty'))
+            .fontSize(11)
+            .fontColor(this.colors.textWhite)
+            .lineHeight(16)
+            .width('100%')
+            .padding(14)
+            .textAlign(TextAlign.Start)
+        }
+        .width('100%')
+        .height('100%')
+        .backgroundColor(this.colors.tintSubtle)
+        .borderRadius(10)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .scrollBar(BarState.Auto)
+        .edgeEffect(EdgeEffect.Spring)
+      }
+      .layoutWeight(1)
+      .width('100%')
+      .padding({ left: 20, right: 20, top: 12 })
+
+      // Action buttons
+      Row() {
+        Button(this.tr('log_copy'))
+          .layoutWeight(1)
+          .height(44)
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor(this.colors.textOnAccent)
+          .backgroundColor(this.colors.accentGold)
+          .borderRadius(10)
+          .onClick(() => {
+            this.copyLogsToClipboard();
+          })
+
+        Button(this.tr('log_clear'))
+          .layoutWeight(1)
+          .height(44)
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor(this.colors.textWhite)
+          .backgroundColor(this.colors.tintSoft)
+          .borderRadius(10)
+          .margin({ left: 8 })
+          .onClick(() => {
+            this.clearLogs();
+          })
+      }
+      .width('100%')
+      .padding({
+        left: 20,
+        right: 20,
+        top: 12,
+        bottom: 24
+      })
+    }
+    .width('100%')
+    .height('80%')
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius({ topLeft: 28, topRight: 28 })
+    .shadow({
+      radius: 24,
+      color: this.colors.shadowFloating,
+      offsetX: 0,
+      offsetY: -6
+    })
+    .border({ width: { top: 1 }, color: this.colors.borderSoft })
+    .position({ bottom: 0 })
   }
 
   // ============================================================
