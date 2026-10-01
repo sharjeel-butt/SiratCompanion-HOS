@@ -36,5 +36,8 @@ export const STORAGE_KEY_NOTIF_MAGHRIB = 'notif_maghrib';
 export const STORAGE_KEY_NOTIF_ISHA = 'notif_isha';
 export const STORAGE_KEY_HIGH_LAT_RULE = 'high_lat_rule';
 export const STORAGE_KEY_VIBRATION_ENABLED = 'vibration_enabled';
-
 export const STORAGE_KEY_TASBIH_RENDER_STYLE = 'tasbih_render_style';
+
+export const STORAGE_KEY_TASBIH_THEME_PRESET = 'tasbih_theme_preset';
+
+export const STORAGE_KEY_APP_FOREGROUND_TICK = 'app_foreground_tick';

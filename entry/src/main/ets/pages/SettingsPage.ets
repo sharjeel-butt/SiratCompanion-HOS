@@ -10,7 +10,12 @@ import { NotificationsSettings, PrayerOffsets, SettingsHelper } from '../helper/
 import { LocationData, LocationHelper } from '../utils/LocationUtils';
 import { LocationCache } from '../utils/LocationCache';
 import { CalculationSource, LocationMode, PickerItem } from '../models/SettingsModels';
-import { STORAGE_KEY_HIJRI_OFFSET, STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../common/StorageKeys';
+import {
+  STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_HIJRI_OFFSET,
+  STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_APP_FOREGROUND_TICK
+} from '../common/StorageKeys';
 import { OffsetKey, PrayerOffsetsHelper } from '../helper/PrayerOffsetsHelper';
 import {
   MAX_BEFORE_MINUTES,
@@ -20,7 +25,10 @@ import {
 } from '../helper/NotificationHelper';
 import { AppLogger } from '../helper/AppLogger';
 import { L } from '../helper/LocalizationHelper';
+import { AppInfoHelper, AppInfoSnapshot } from '../helper/AppInfoHelper';
 import { NOTIFICATIONS_ENABLED } from '../common/FeatureFlags';
+import { bundleManager } from '@kit.AbilityKit';
+import { BusinessError } from '@kit.BasicServicesKit';
 
 const MAX_HIJRI_OFFSET = 3;
 
@@ -42,6 +50,9 @@ struct SettingsPage {
 
   @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
   hijriOffset: number = 0;
+  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
+  @Watch('onAppForegrounded')
+  appForegroundTick: number = 0;
 
   @State private currentLanguage: string = 'en';
 
@@ -56,6 +67,8 @@ struct SettingsPage {
   @State asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
   @State calcSource: CalculationSource = CalculationSource.LOCAL;
   @State highLatRule: HighLatitudeRule = HighLatitudeRule.NONE;
+  @State private appVersion: string = '';
+  @State private appName: string = '';
 
   @State showOffsets: boolean = false;
   @State offsets: PrayerOffsets = { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 };
@@ -88,6 +101,16 @@ struct SettingsPage {
 
   @State showLogViewer: boolean = false;
   @State logContents: string = '';
+  // ============================================================
+  // APP INFO (from app.json5 via bundleManager)
+  // ============================================================
+
+  @State private appInfo: AppInfoSnapshot = {
+    name: '—',
+    versionName: '—',
+    versionCode: 0,
+    bundleName: '—'
+  };
   // ============================================================
   // UI STATE
   // ============================================================
@@ -132,6 +155,8 @@ struct SettingsPage {
     this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
       this.colors = c;
     });
+    const ctx = getContext(this) as common.UIAbilityContext;
+    this.appInfo = AppInfoHelper.get(ctx);
     this.reload();
   }
 
@@ -143,7 +168,14 @@ struct SettingsPage {
   onPageShow(): void {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
+    this.loadAppInfo();
     this.reload();
+  }
+
+  private async onAppForegrounded(): Promise<void> {
+    const ctx = getContext(this) as common.UIAbilityContext;
+    this.appInfo = AppInfoHelper.get(ctx);
+    await this.reload();
   }
 
   private async reload(): Promise<void> {
@@ -200,6 +232,37 @@ struct SettingsPage {
         this.effectiveCity = '—';
         this.lastRefreshTime = 0;
       }
+    }
+  }
+
+  private loadAppInfo(): void {
+    // ---- Version name from bundle info ----
+    try {
+      const info = bundleManager.getBundleInfoForSelfSync(
+        bundleManager.BundleFlag.GET_BUNDLE_INFO_DEFAULT
+      );
+      this.appVersion = info.versionName;
+    } catch (err) {
+      const error = err as BusinessError;
+      console.error(
+        `[SettingsPage] getBundleInfoForSelfSync failed: ${error.code} ${error.message}`
+      );
+      this.appVersion = '1.4.1'; // safe fallback
+    }
+
+    // ---- App name resolved from AppScope's $string:app_name ----
+    try {
+      const context = getContext(this) as common.UIAbilityContext;
+      this.appName = context.resourceManager.getStringSync(
+        $r('app.string.app_name').id
+      );
+    } catch (err) {
+      const error = err as BusinessError;
+      console.warn(
+        `[SettingsPage] Could not resolve app_name: ${error.code} ${error.message}`
+      );
+      // Fall back to the localization helper
+      this.appName = this.tr('app_name');
     }
   }
 
@@ -385,10 +448,16 @@ struct SettingsPage {
       });
     } catch (err) {
       const error = err as Error;
-      let msg = 'Failed to fetch GPS location';
-      if (error.message === 'GPS_OFF') msg = 'Please turn on location services';
-      else if (error.message === 'PERMISSION_DENIED') msg = 'Location permission denied';
-      this.getUIContext().getPromptAction().showToast({ message: msg, duration: 2500 });
+      let msgKey = 'error_gps_fetch_failed';
+      if (error.message === 'GPS_OFF') {
+        msgKey = 'error_gps_off';
+      } else if (error.message ===
+        'PERMISSION_DENIED') {
+        msgKey = 'error_location_permission_denied';
+      }
+      this.getUIContext().getPromptAction().showToast({
+        message: this.tr(msgKey), duration: 2500
+      });
     } finally {
       this.isRefreshing = false;
     }
@@ -1346,28 +1415,75 @@ struct SettingsPage {
   AboutContent() {
     Column() {
       Column() {
-        Text(this.tr('app_name')).fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
-        Text(this.tr('app_tagline')).fontSize(12).fontColor(this.colors.accentGold).margin({ top: 4 })
+        // App name + tagline
+        Text(this.appInfo.name)
+          .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+        Text(this.tr('app_tagline'))
+          .fontSize(12).fontColor(this.colors.accentGold).margin({ top: 4 })
+
         Divider().color(this.colors.borderSoft).width('80%').margin({ top: 14, bottom: 14 })
-        this.AboutRow(this.tr('about_version'), '1.4.0')
-        this.AboutRow(this.tr('about_platform'), 'HarmonyOS')
-        this.AboutRow(this.tr('about_copyright'), this.tr('app_name'))
+
+        // Version — pulled from app.json5 → versionName
+        Row() {
+          Text(this.tr('about_version'))
+            .fontSize(13).fontColor(this.colors.textMuted)
+          Blank()
+          Text(this.appInfo.versionName)
+            .fontSize(13).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+            .direction(Direction.Ltr)
+        }
+        .width('100%').padding({ left: 8, right: 8 }).margin({ top: 6 })
+
+        // Build — pulled from app.json5 → versionCode
+        Row() {
+          Text(this.tr('about_build'))
+            .fontSize(13).fontColor(this.colors.textMuted)
+          Blank()
+          Text(`${this.appInfo.versionCode}`)
+            .fontSize(13).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+            .direction(Direction.Ltr)
+        }
+        .width('100%').padding({ left: 8, right: 8 }).margin({ top: 6 })
+
+        // Bundle id
+        Row() {
+          Text(this.tr('about_bundle'))
+            .fontSize(13).fontColor(this.colors.textMuted)
+          Blank()
+          Text(this.appInfo.bundleName)
+            .fontSize(11)
+            .fontColor(this.colors.textMuted)
+            .direction(Direction.Ltr)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+        }
+        .width('100%').padding({ left: 8, right: 8 }).margin({ top: 6 })
+
+        // Platform
+        Row() {
+          Text(this.tr('about_platform'))
+            .fontSize(13).fontColor(this.colors.textMuted)
+          Blank()
+          Text(this.tr('about_platform_value'))
+            .fontSize(13).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+        }
+        .width('100%').padding({ left: 8, right: 8 }).margin({ top: 6 })
+
+        // Copyright
+        Row() {
+          Text(this.tr('about_copyright'))
+            .fontSize(13).fontColor(this.colors.textMuted)
+          Blank()
+          Text(this.appInfo.name)
+            .fontSize(13).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+        }
+        .width('100%').padding({ left: 8, right: 8 }).margin({ top: 6 })
       }
       .width('100%').padding(20).backgroundColor(this.colors.tintSubtle)
       .borderRadius(12).alignItems(HorizontalAlign.Center)
     }
     .width('100%').padding(12).backgroundColor(this.colors.cardDark)
     .borderRadius(16).border({ width: 1, color: this.colors.borderSoft }).margin({ bottom: 12 })
-  }
-
-  @Builder
-  AboutRow(label: string, value: string) {
-    Row() {
-      Text(label).fontSize(13).fontColor(this.colors.textMuted)
-      Blank()
-      Text(value).fontSize(13).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-    }
-    .width('100%').padding({ left: 8, right: 8 }).margin({ top: 6 })
   }
 
   // ============================================================

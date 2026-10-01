@@ -5,17 +5,9 @@
  *
  * The full hosted version is also available at:
  *   https://sharjeel-butt.github.io/SiratCompanion-HOS/
- *
- * The wizard shows the section below so the user can read it offline
- * before granting consent. The hosted URL is provided as a "view full
- * policy" link for reference.
- *
- * NOTE: Notification-related sections are intentionally omitted while
- * the Agent-Powered Reminder capability is pending approval in AGC.
- * When the capability is approved, re-add the notification bullets,
- * permission row, and detailed explanation to each language block.
  */
 export class PrivacyPolicyProvider {
+
   static readonly FULL_URL: string =
     'https://sharjeel-butt.github.io/SiratCompanion-HOS/';
 
@@ -35,7 +27,7 @@ export class PrivacyPolicyProvider {
 
   private static readonly EN: string = `PRIVACY POLICY — SIRAT COMPANION
 
-Last updated: September 21, 2026
+Last updated: October 1, 2026
 
 1. INTRODUCTION
 
@@ -53,9 +45,11 @@ Sirat Companion accesses the following information solely on your device to prov
 
 • SENSORS — Orientation sensor and magnetometer. Used for the Qibla compass. Readings are processed entirely on your device and are never stored or transmitted.
 
-• SETTINGS — Calculation method, Asr rule, prayer offsets, high-latitude rule, theme, language, Hijri offset, vibration preference, and home-screen toggles. Stored locally on your device using the HarmonyOS Preferences API.
+• SETTINGS — Calculation method, Asr rule, prayer offsets, high-latitude rule, theme, language, Hijri offset, vibration preference, Tasbih themes, and home-screen toggles. Stored locally on your device using the HarmonyOS Preferences API.
 
-• TASBIH DATA — Your Tasbih sessions, dhikr items, and counts. Stored locally on your device and never leave it.
+• PRAYER COMPLETION HISTORY — The prayers you mark as prayed each day, stored per calendar date. Used to power the Home dashboard: today's progress, streaks, weekly grid, monthly heatmap, and lifetime statistics. Stored locally on your device and never leaves it.
+
+• TASBIH DATA — Your Tasbih sessions, dhikr items, counts, and per-tasbih themes. Stored locally on your device and never leave it.
 
 • HAPTIC FEEDBACK (VIBRATION) — The device's vibration capability. Used only to provide a short vibration when you count a Tasbih bead, confirming your tap. Vibration can be turned off at any time from Settings → UI Customization → Vibration. No data is generated, stored, or transmitted by this feature.
 
@@ -77,7 +71,8 @@ All information accessed by the App is used only on your device and only to prov
 • Location — Calculate prayer times and Qibla direction
 • Sensors — Determine device orientation for the compass
 • Preferences — Remember your settings
-• Tasbih data — Persist your dhikr progress
+• Prayer completion history — Track your daily prayers, streaks, and progress statistics
+• Tasbih data — Persist your dhikr progress and preferences
 • Vibration — Provide haptic feedback while counting Tasbih
 
 We do not use your information for advertising, profiling, or any purpose unrelated to the App's core functionality.
@@ -117,7 +112,7 @@ Sirat Companion is suitable for users of all ages. The App does not knowingly co
 
 You have full control over your data at all times:
 • Access — All data is visible within the App.
-• Deletion — Uninstalling the App removes all stored data.
+• Deletion — Uninstalling the App removes all stored data. Prayer completion history can also be cleared by unchecking individual prayers.
 • Withdrawal of consent — Revoke permissions in your device Settings.
 
 11. THIRD-PARTY SERVICES
@@ -132,13 +127,14 @@ We may update this Privacy Policy from time to time. When we make material chang
 
 Email: sharjeel.butt@gmail.com
 Developer: Sharjeel Butt`;
+
   // ============================================================
   // CHINESE (SIMPLIFIED)
   // ============================================================
 
   private static readonly ZH: string = `隐私政策 — SIRAT 伴侣
 
-最后更新：2026 年 9 月 21 日
+最后更新：2026 年 10 月 1 日
 
 1. 引言
 
@@ -156,9 +152,11 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 
 • 传感器 — 方向传感器和磁力计。用于天房指南针。传感器读数完全在您的设备上处理，绝不存储或传输。
 
-• 设置 — 计算方式、晡礼规则、礼拜时间偏移、高纬度规则、主题、语言、回历偏移、振动偏好以及主屏幕开关。通过 HarmonyOS Preferences API 存储在您的设备本地。
+• 设置 — 计算方式、晡礼规则、礼拜时间偏移、高纬度规则、主题、语言、回历偏移、振动偏好、念珠主题以及主屏幕开关。通过 HarmonyOS Preferences API 存储在您的设备本地。
 
-• 念珠数据 — 您创建的念珠、念词项目以及计数。存储在您的设备本地，从不离开设备。
+• 礼拜完成记录 — 您每天标记为已礼的礼拜，按日历日期存储。用于驱动首页的今日进度、连续天数、每周网格、每月热力图以及累计统计。存储在您的设备本地，从不离开设备。
+
+• 念珠数据 — 您创建的念珠、念词项目、计数以及每串念珠的主题。存储在您的设备本地，从不离开设备。
 
 • 触觉反馈（振动）— 设备的振动功能。仅用于在您每次点击念珠计数时提供一次短振动，以确认您的操作。您可以随时在 设置 → 界面自定义 → 振动 中关闭。此功能不会产生、存储或传输任何数据。
 
@@ -180,7 +178,8 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 • 位置 — 计算礼拜时间和天房方向
 • 传感器 — 确定设备方向以供指南针使用
 • 偏好设置 — 记住您的设置
-• 念珠数据 — 保存您的念词进度
+• 礼拜完成记录 — 记录您的每日礼拜、连续天数以及进度统计
+• 念珠数据 — 保存您的念词进度和偏好
 • 振动 — 念珠计数时提供触觉反馈
 
 我们不会将您的信息用于广告、画像或与本应用核心功能无关的任何目的。
@@ -220,7 +219,7 @@ Sirat 伴侣适合所有年龄段的用户。本应用不会有意收集任何�
 
 您始终完全掌控自己的数据：
 • 访问 — 所有数据均可在应用内查看。
-• 删除 — 卸载应用会删除所有存储的数据。
+• 删除 — 卸载应用会删除所有存储的数据。礼拜完成记录也可以通过取消勾选单次礼拜来清除。
 • 撤回同意 — 在设备设置中撤销权限。
 
 11. 第三方服务
@@ -235,13 +234,14 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 
 电子邮件：sharjeel.butt@gmail.com
 开发者：Sharjeel Butt`;
+
   // ============================================================
   // ARABIC
   // ============================================================
 
   private static readonly AR: string = `سياسة الخصوصية — رفيق الصراط
 
-آخر تحديث: 21 سبتمبر 2026
+آخر تحديث: 1 أكتوبر 2026
 
 1. مقدمة
 
@@ -259,9 +259,11 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 
 • المستشعرات — مستشعر التوجيه والمستشعر المغناطيسي. تُستخدم لبوصلة القبلة. تُعالج القراءات بالكامل على جهازك ولا يتم تخزينها أو نقلها.
 
-• الإعدادات — طريقة الحساب، وقاعدة العصر، وتعديلات أوقات الصلاة، وقاعدة خطوط العرض العليا، والمظهر، واللغة، وإزاحة التقويم الهجري، وتفضيل الاهتزاز، ومفاتيح الشاشة الرئيسية. تُخزَّن محلياً على جهازك باستخدام واجهة HarmonyOS Preferences.
+• الإعدادات — طريقة الحساب، وقاعدة العصر، وتعديلات أوقات الصلاة، وقاعدة خطوط العرض العليا، والمظهر، واللغة، وإزاحة التقويم الهجري، وتفضيل الاهتزاز، ومظهر المسبحة، ومفاتيح الشاشة الرئيسية. تُخزَّن محلياً على جهازك باستخدام واجهة HarmonyOS Preferences.
 
-• بيانات التسبيح — جلسات التسبيح والأذكار والأعداد. تُخزَّن محلياً على جهازك ولا تغادره أبداً.
+• سجل الصلوات المكتملة — الصلوات التي تُعلّمها كمُصلَّاة كل يوم، محفوظة حسب التاريخ. تُستخدم لعرض تقدم اليوم، والأيام المتتالية، والشبكة الأسبوعية، والخريطة الشهرية، والإحصاءات الإجمالية على الشاشة الرئيسية. تُخزَّن محلياً على جهازك ولا تغادره أبداً.
+
+• بيانات التسبيح — جلسات التسبيح والأذكار والأعداد والمظهر المختار لكل مسبحة. تُخزَّن محلياً على جهازك ولا تغادره أبداً.
 
 • التغذية اللمسية (الاهتزاز) — وظيفة الاهتزاز في الجهاز. تُستخدم فقط لتوفير اهتزاز قصير عند عدّ خرزة التسبيح، مما يؤكد لك الضغطة. يمكن إيقاف الاهتزاز في أي وقت من الإعدادات ← تخصيص الواجهة ← الاهتزاز. لا تُنشئ هذه الميزة أو تخزّن أو تنقل أي بيانات.
 
@@ -283,7 +285,8 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 • الموقع — حساب أوقات الصلاة واتجاه القبلة
 • المستشعرات — تحديد اتجاه الجهاز للبوصلة
 • التفضيلات — تذكر إعداداتك
-• بيانات التسبيح — حفظ تقدم الأذكار
+• سجل الصلوات المكتملة — تتبع صلواتك اليومية والأيام المتتالية وإحصاءات التقدم
+• بيانات التسبيح — حفظ تقدم الأذكار والتفضيلات
 • الاهتزاز — توفير تغذية لمسية أثناء عدّ التسبيح
 
 لا نستخدم معلوماتك للإعلانات أو التنميط أو أي غرض لا يتصل بالوظائف الأساسية للتطبيق.
@@ -323,7 +326,7 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 
 لديك السيطرة الكاملة على بياناتك في جميع الأوقات:
 • الوصول — جميع البيانات مرئية داخل التطبيق.
-• الحذف — يؤدي إلغاء تثبيت التطبيق إلى إزالة جميع البيانات المخزنة.
+• الحذف — يؤدي إلغاء تثبيت التطبيق إلى إزالة جميع البيانات المخزنة. يمكن أيضاً مسح سجل الصلوات المكتملة بإلغاء تحديد الصلوات الفردية.
 • سحب الموافقة — اسحب الأذونات من إعدادات جهازك.
 
 11. خدمات الأطراف الثالثة

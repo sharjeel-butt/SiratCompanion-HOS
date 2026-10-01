@@ -8,7 +8,8 @@ import {
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_NAV_DIRECTION,
   STORAGE_KEY_HIJRI_OFFSET,
-  STORAGE_KEY_LANGUAGE
+  STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_APP_FOREGROUND_TICK
 } from '../common/StorageKeys';
 import { CalendarDay, HijriDate } from '../models/HijriCalendarModels';
 import { IslamicEvent } from '../models/DateModels';
@@ -16,6 +17,7 @@ import { HijriCalendarHelper } from '../helper/HijriCalendarHelper';
 import { SettingsHelper } from '../helper/SettingsHelper';
 import { NavHelper } from '../helper/NavHelper';
 import { L } from '../helper/LocalizationHelper';
+import { FloatingNavBar } from '../components/FloatingNavBar';
 
 @Entry
 @Component
@@ -39,6 +41,9 @@ struct HijriCalendarPage {
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = 'en';
+  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
+  @Watch('onAppForegrounded')
+  appForegroundTick: number = 0;
 
   /** Plain @State mirror — guarantees re-render on language change. */
   @State private currentLanguage: string = 'en';
@@ -121,6 +126,19 @@ struct HijriCalendarPage {
     this.colors = PageTheme.compute(this.themeMode);
   }
 
+  private onAppForegrounded(): void {
+    // If the calendar day rolled over while the app was in the
+    // background, snap to today.
+    const today = new Date();
+    const h: HijriDate = HijriCalendarHelper.getHijriDate(today, this.offsetDays);
+    if (h.year !== this.viewingHijriYear || h.month !== this.viewingHijriMonth) {
+      this.jumpToToday();
+    } else {
+      // Same month — just rebuild in case offset or events changed.
+      this.rebuildFromAnchor(today);
+    }
+  }
+
   onBackPress(): boolean {
     NavHelper.prepareBackward();
     return false;
@@ -134,29 +152,41 @@ struct HijriCalendarPage {
     if (tabId === 'calendar') return;
 
     if (tabId === 'home') {
-      NavHelper.prepareBackward();
-      try { router.back({ url: 'pages/Index' }); }
-      catch (err) {
-        router.clear();
-        NavHelper.prepare('home', 'calendar');
-        router.pushUrl({ url: 'pages/Index' })
-          .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
-      }
+      NavHelper.prepare('home', 'calendar');
+      router.clear();
+      router.pushUrl({ url: 'pages/HomePage' })
+        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
       return;
     }
-
+    if (tabId === 'prayers') {
+      NavHelper.prepare('prayers', 'calendar');
+      router.clear();
+      router.pushUrl({ url: 'pages/Prayer' })
+        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
+      return;
+    }
     if (tabId === 'tasbih') {
       NavHelper.prepare('tasbih', 'calendar');
       router.pushUrl({ url: 'pages/TasbihPage' })
-        .catch((err: Error) => console.error('Navigation failed:', JSON.stringify(err)));
+        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
       return;
     }
-
     if (tabId === 'compass') {
       NavHelper.prepare('compass', 'calendar');
       router.pushUrl({ url: 'pages/QiblaPage' })
-        .catch((err: Error) => console.error('Navigation failed:', JSON.stringify(err)));
+        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
     }
+  }
+
+  private navigateToAdjacentTab(delta: number): void {
+    const order: string[] = ['home', 'prayers', 'calendar', 'compass', 'tasbih'];
+    const currentTab = 'calendar';
+    const idx = order.indexOf(currentTab);
+    const targetIdx = idx + delta;
+    if (targetIdx < 0 || targetIdx >= order.length) {
+      return;
+    }
+    this.onFloatingBarTap(order[targetIdx]);
   }
 
   // ============================================================
@@ -271,12 +301,31 @@ struct HijriCalendarPage {
       }
       .width('100%').height('100%')
 
-      this.FloatingBar()
+      FloatingNavBar({
+        activeTab: 'calendar', // ← use 'tasbih' | 'compass' | 'calendar' as appropriate
+        colors: this.colors,
+        currentLanguage: this.currentLanguage,
+        onTabTap: (id: string) => {
+          this.onFloatingBarTap(id);
+        }
+      })
     }
     .width('100%').height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
+    .gesture(
+      PanGesture({ direction: PanDirection.Horizontal, distance: 30 })
+        .onActionEnd((event: GestureEvent) => {
+          const dx = event.offsetX;
+          const THRESHOLD = 50;
+          if (dx <= -THRESHOLD) {
+            this.navigateToAdjacentTab(1);
+          } else if (dx >= THRESHOLD) {
+            this.navigateToAdjacentTab(-1);
+          }
+        })
+    )
   }
 
   // ============================================================
@@ -508,98 +557,5 @@ struct HijriCalendarPage {
     .border({ width: 1, color: this.colors.borderSoft })
     .margin({ top: 16 })
     .alignItems(HorizontalAlign.Start)
-  }
-
-  // ============================================================
-  // FLOATING BAR — 4 tabs, Calendar active
-  // ============================================================
-
-  @Builder
-  FloatingBar() {
-    Row() {
-      Row() {
-        // ---- Home ----
-        Column() {
-          Text('🏠').fontSize(22).opacity(0.7)
-          Text(this.tr('tab_home'))
-            .fontSize(10).fontWeight(FontWeight.Normal)
-            .fontColor(PageTheme.isSystemDark()
-              ? 'rgba(241,245,249,0.65)'
-              : 'rgba(26,26,26,0.55)')
-            .margin({ top: 2 })
-        }
-        .layoutWeight(1).height('100%').justifyContent(FlexAlign.Center)
-        .onClick(() => { this.onFloatingBarTap('home'); })
-
-        Divider().vertical(true).height(28)
-          .color(PageTheme.isSystemDark() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
-
-        // ---- Tasbih ----
-        Column() {
-          Text('📿').fontSize(22).opacity(0.7)
-          Text(this.tr('tab_tasbih'))
-            .fontSize(10).fontWeight(FontWeight.Normal)
-            .fontColor(PageTheme.isSystemDark()
-              ? 'rgba(241,245,249,0.65)'
-              : 'rgba(26,26,26,0.55)')
-            .margin({ top: 2 })
-        }
-        .layoutWeight(1).height('100%').justifyContent(FlexAlign.Center)
-        .onClick(() => { this.onFloatingBarTap('tasbih'); })
-
-        Divider().vertical(true).height(28)
-          .color(PageTheme.isSystemDark() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
-
-        // ---- Compass ----
-        Column() {
-          Text('🧭').fontSize(22).opacity(0.7)
-          Text(this.tr('tab_compass'))
-            .fontSize(10).fontWeight(FontWeight.Normal)
-            .fontColor(PageTheme.isSystemDark()
-              ? 'rgba(241,245,249,0.65)'
-              : 'rgba(26,26,26,0.55)')
-            .margin({ top: 2 })
-        }
-        .layoutWeight(1).height('100%').justifyContent(FlexAlign.Center)
-        .onClick(() => { this.onFloatingBarTap('compass'); })
-
-        Divider().vertical(true).height(28)
-          .color(PageTheme.isSystemDark() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
-
-        // ---- Calendar (active) ----
-        Column() {
-          Text('📅').fontSize(22).opacity(1.0)
-          Text(this.tr('tab_calendar'))
-            .fontSize(10).fontWeight(FontWeight.Bold)
-            .fontColor(PageTheme.isSystemDark() ? '#4ADE80' : '#0F5132')
-            .margin({ top: 2 })
-        }
-        .layoutWeight(1).height('100%').justifyContent(FlexAlign.Center)
-        .onClick(() => { this.onFloatingBarTap('calendar'); })
-      }
-      .width('92%').height(68)
-      .backgroundBlurStyle(BlurStyle.Thin, {
-        colorMode: PageTheme.isSystemDark() ? ThemeColorMode.DARK : ThemeColorMode.LIGHT,
-        adaptiveColor: AdaptiveColor.DEFAULT,
-        scale: 1.0
-      })
-      .backgroundColor(PageTheme.isSystemDark()
-        ? 'rgba(20, 27, 46, 0.50)'
-        : 'rgba(255, 255, 255, 0.35)')
-      .borderRadius(34)
-      .border({
-        width: 1,
-        color: PageTheme.isSystemDark()
-          ? 'rgba(74, 222, 128, 0.35)'
-          : 'rgba(255, 255, 255, 0.65)'
-      })
-      .shadow({
-        radius: 28,
-        color: PageTheme.isSystemDark() ? 'rgba(0, 0, 0, 0.50)' : 'rgba(0, 0, 0, 0.14)',
-        offsetX: 0, offsetY: 10
-      })
-    }
-    .width('100%').justifyContent(FlexAlign.Center)
-    .position({ bottom: 24 })
   }
 }

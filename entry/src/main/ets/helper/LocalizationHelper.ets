@@ -131,6 +131,9 @@ export class L {
     m.set('category_about', 'About');
     m.set('category_notifications', 'Notifications');
 
+    m.set('brand_primary', 'Sirat');
+    m.set('brand_accent', 'Companion');
+
     // ---- Settings: Prayer Times ----
     m.set('convention', 'Convention');
     m.set('convention_desc', 'Used for calculation of Fajr and Isha');
@@ -316,7 +319,7 @@ export class L {
     m.set('event_mawlid', 'Mawlid al-Nabi');
     m.set('event_isra_miraj', "Isra and Mi'raj");
     m.set('event_mid_shaban', "Mid-Sha'ban");
-    m.set('event_ramadan_start', 'Ramadan Start');
+    m.set('event_ramadan_start', 'Ramadan');
     m.set('event_eid_fitr', 'Eid al-Fitr');
     m.set('event_arafah', 'Day of Arafah');
     m.set('event_eid_adha', 'Eid al-Adha');
@@ -353,6 +356,134 @@ export class L {
     m.set('wizard_next', 'Next');
     m.set('wizard_finish', 'Get Started');
     m.set('notif_dismiss', 'Dismiss'); // EN
+    // ---- Tasbih theme presets ----
+    m.set('theme_amber', 'Amber');
+    m.set('theme_charcoal', 'Charcoal');
+    m.set('theme_emerald', 'Emerald');
+    m.set('theme_pearl', 'Pearl');
+    m.set('theme_gold', 'Gold (Metallic)');
+    m.set('tab_prayers', 'Prayers');
+    // ---- Home dashboard ----
+    m.set('home_today_progress', "TODAY'S PROGRESS");
+    m.set('home_prayers_completed', 'prayers completed');
+    m.set('home_keep_going', 'Keep it up!');
+    m.set('home_streak', 'Day Streak');
+    m.set('home_best_streak', 'Best');
+    m.set('home_days', 'days');
+    m.set('home_this_week', 'THIS WEEK');
+    m.set('home_week_summary', 'prayers this week');
+    m.set('home_this_month', 'THIS MONTH');
+    m.set('home_month_summary', 'prayers this month');
+    m.set('home_tasbih', 'TASBIH');
+    m.set('home_tasbih_lifetime', 'Lifetime count');
+    m.set('home_tasbih_summary', 'tasbihs');
+    m.set('home_dhikrs', 'dhikrs');
+
+    // ---- Tabs ----
+    m.set('tab_prayers', 'Prayers');
+
+    // ---- Home dashboard ----
+    m.set('home_today_progress', "TODAY'S PROGRESS");
+    m.set('home_prayers_completed', 'prayers completed');
+    m.set('home_keep_going', 'Keep it up!');
+    m.set('home_streak', 'Day Streak');
+    m.set('home_best_streak', 'Best');
+    m.set('home_days', 'days');
+    m.set('home_this_week', 'THIS WEEK');
+    m.set('home_week_summary', 'prayers this week');
+    m.set('home_month_summary', 'prayers this month');
+    m.set('home_tasbih', 'TASBIH');
+    m.set('home_tasbih_lifetime', 'Lifetime count');
+    m.set('home_tasbih_summary', 'tasbihs');
+    m.set('home_dhikrs', 'dhikrs');
+
+    // ---- Monthly view ----
+    m.set('home_monthly_view', 'MONTHLY VIEW');
+    m.set('home_perfect_days', 'Perfect days');
+    m.set('home_days_elapsed', 'Days elapsed');
+    m.set('home_lifetime_1y', 'prayers in the last year');
+
+    // ---- Event countdown ----
+    m.set('home_next_event', 'NEXT EVENT');
+    m.set('home_event_today', 'Today!');
+    m.set('home_event_tomorrow', 'Tomorrow');
+
+    // ---- Ramadan card ----
+    m.set('ramadan_card_title', 'RAMADAN');
+    m.set('ramadan_day_of', 'Day');
+    m.set('ramadan_day_of_suffix', 'of Ramadan');
+    m.set('ramadan_days_until', 'Ramadan starts in');
+    m.set('ramadan_fast_start', 'Fasting Start (Imsak)');
+    m.set('ramadan_fast_end', 'Fasting End (Maghrib)');
+    m.set('ramadan_today_fast', "Today's fasting window");
+    m.set('ramadan_first_day_fast', 'First day of Ramadan');
+    m.set('ramadan_calendar_start', 'Ramadan Begins');
+    m.set('ramadan_calendar_end', 'Ramadan Ends');
+    m.set('ramadan_ashras', 'ASHRAS');
+    m.set('ramadan_first_ashra', 'First Ashra');
+    m.set('ramadan_second_ashra', 'Second Ashra');
+    m.set('ramadan_third_ashra', 'Third Ashra');
+    m.set('ramadan_first_ashra_significance', 'Days of Mercy');
+    m.set('ramadan_second_ashra_significance', 'Days of Forgiveness');
+    m.set('ramadan_third_ashra_significance', 'Freedom from Hellfire');
+    m.set('ramadan_laylat_al_qadr', 'LAYLAT AL-QADR');
+    m.set('ramadan_laylat_al_qadr_desc',
+      'The Night of Power — better than a thousand months. Seek it on the odd nights of the last ten days.');
+    m.set('ramadan_jummah_tul_widah', 'JUMMAH TUL WIDAH');
+    m.set('ramadan_jummah_tul_widah_desc',
+      'The Farewell Friday — the last Friday of Ramadan.');
+    m.set('ramadan_today', 'Tonight!');
+
+    // ---- Live countdown (last 15 min before Imsak / Maghrib) ----
+    m.set('countdown_fast_ends', 'Breaking fast in');
+    m.set('countdown_fast_starts', 'Fasting begins in');
+    m.set('countdown_fast_ends_desc', 'Prepare to break your fast');
+    m.set('countdown_fast_starts_desc', 'Finish suhoor before Imsak');
+
+    // ---- Duas ----
+    m.set('dua_iftar_name', 'Dua for Breaking the Fast');
+    m.set('dua_iftar_translation',
+      'The thirst is gone, the veins are moistened, and the reward is certain, if Allah wills.');
+    m.set('dua_suhoor_name', 'Intention for Fasting');
+    m.set('dua_suhoor_translation',
+      'I intend to keep the fast for tomorrow in the month of Ramadan.');
+
+    // ---- Generic UI ----
+    m.set('ok', 'OK');
+    m.set('gps', 'GPS');
+
+    // ---- About ----
+    m.set('about_build', 'Build');
+    m.set('about_bundle', 'Bundle ID');
+    m.set('about_platform_value', 'HarmonyOS 5+');
+
+    // ---- Short labels (home screen pills) ----
+    m.set('method_short_karachi', 'Karachi');
+    m.set('method_short_jafari', 'Jafari');
+    m.set('method_short_isna', 'ISNA');
+    m.set('method_short_mwl', 'MWL');
+    m.set('asr_short_standard', 'Standard');
+    m.set('asr_short_hanafi', 'Hanafi');
+    m.set('source_short_local', 'Local');
+    m.set('source_short_online', 'Online');
+    m.set('mark_all', 'Mark all');
+
+    // ---- Fallbacks ----
+    m.set('default_location', 'Default Location');
+    m.set('unknown_location', 'Unknown location');
+
+    // ---- Dialogs ----
+    m.set('dialog_gps_off_title', 'Location is disabled');
+    m.set('dialog_gps_off_message',
+      'Please enable location services to get accurate prayer times for your city.');
+    m.set('dialog_permission_title', 'Permission required');
+    m.set('dialog_permission_message',
+      'Location permission is required to show prayer times for your city.\nPlease grant it in system settings.');
+
+    // ---- Errors ----
+    m.set('error_gps_fetch_failed', 'Failed to fetch GPS location');
+    m.set('error_gps_off', 'Please turn on location services');
+    m.set('error_location_permission_denied', 'Location permission denied');
 
     return m;
   }
@@ -572,7 +703,7 @@ export class L {
     m.set('event_mawlid', '圣纪节');
     m.set('event_isra_miraj', '登霄夜');
     m.set('event_mid_shaban', '舍尔邦月中');
-    m.set('event_ramadan_start', '斋月开始');
+    m.set('event_ramadan_start', '斋月');
     m.set('event_eid_fitr', '开斋节');
     m.set('event_arafah', '阿拉法日');
     m.set('event_eid_adha', '宰牲节');
@@ -607,6 +738,135 @@ export class L {
     m.set('wizard_next', '下一步');
     m.set('wizard_finish', '开始使用');
     m.set('notif_dismiss', '关闭');
+    // ---- Tasbih theme presets ----
+    m.set('theme_amber', '琥珀');
+    m.set('theme_charcoal', '炭黑');
+    m.set('theme_emerald', '翡翠');
+    m.set('theme_pearl', '珍珠');
+    m.set('theme_gold', '金色（金属）');
+    m.set('tab_prayers', '礼拜');
+
+    // ---- Home dashboard ----
+    m.set('home_today_progress', '今日进度');
+    m.set('home_prayers_completed', '次礼拜已完成');
+    m.set('home_keep_going', '继续保持！');
+    m.set('home_streak', '天连续');
+    m.set('home_best_streak', '最佳');
+    m.set('home_days', '天');
+    m.set('home_this_week', '本周');
+    m.set('home_week_summary', '次礼拜本周');
+    m.set('home_this_month', '本月');
+    m.set('home_month_summary', '次礼拜本月');
+    m.set('home_tasbih', '念珠');
+    m.set('home_tasbih_lifetime', '累计计数');
+    m.set('home_tasbih_summary', '串念珠');
+    m.set('home_dhikrs', '个念词');
+
+    // ---- Tabs ----
+    m.set('tab_prayers', '礼拜');
+
+    // ---- Home dashboard ----
+    m.set('home_today_progress', '今日进度');
+    m.set('home_prayers_completed', '次礼拜已完成');
+    m.set('home_keep_going', '继续保持！');
+    m.set('home_streak', '天连续');
+    m.set('home_best_streak', '最佳');
+    m.set('home_days', '天');
+    m.set('home_this_week', '本周');
+    m.set('home_week_summary', '次礼拜本周');
+    m.set('home_month_summary', '次礼拜本月');
+    m.set('home_tasbih', '念珠');
+    m.set('home_tasbih_lifetime', '累计计数');
+    m.set('home_tasbih_summary', '串念珠');
+    m.set('home_dhikrs', '个念词');
+
+    // ---- Monthly view ----
+    m.set('home_monthly_view', '月度视图');
+    m.set('home_perfect_days', '完美日');
+    m.set('home_days_elapsed', '已过天数');
+    m.set('home_lifetime_1y', '次礼拜（近一年）');
+
+    // ---- Event countdown ----
+    m.set('home_next_event', '下一个事件');
+    m.set('home_event_today', '就是今天！');
+    m.set('home_event_tomorrow', '明天');
+
+    // ---- Ramadan card ----
+    m.set('ramadan_card_title', '斋月');
+    m.set('ramadan_day_of', '第');
+    m.set('ramadan_day_of_suffix', '天');
+    m.set('ramadan_days_until', '距斋月开始还有');
+    m.set('ramadan_fast_start', '封斋开始（Imsak）');
+    m.set('ramadan_fast_end', '开斋时间（Maghrib）');
+    m.set('ramadan_today_fast', '今日斋戒时段');
+    m.set('ramadan_first_day_fast', '斋月第一天');
+    m.set('ramadan_calendar_start', '斋月开始');
+    m.set('ramadan_calendar_end', '斋月结束');
+    m.set('ramadan_ashras', '三个十日');
+    m.set('ramadan_first_ashra', '第一个十日');
+    m.set('ramadan_second_ashra', '第二个十日');
+    m.set('ramadan_third_ashra', '第三个十日');
+    m.set('ramadan_first_ashra_significance', '慈悯之旬');
+    m.set('ramadan_second_ashra_significance', '宽恕之旬');
+    m.set('ramadan_third_ashra_significance', '免于火狱之旬');
+    m.set('ramadan_laylat_al_qadr', '高贵之夜');
+    m.set('ramadan_laylat_al_qadr_desc',
+      '高贵之夜贵过千月。请在斋月最后十天的奇数夜中寻找它。');
+    m.set('ramadan_jummah_tul_widah', '辞别主麻');
+    m.set('ramadan_jummah_tul_widah_desc', '斋月的最后一个主麻日。');
+    m.set('ramadan_today', '今晚！');
+
+    // ---- Live countdown (last 15 min before Imsak / Maghrib) ----
+    m.set('countdown_fast_ends', '距开斋还有');
+    m.set('countdown_fast_starts', '距封斋还有');
+    m.set('countdown_fast_ends_desc', '准备开斋');
+    m.set('countdown_fast_starts_desc', '请在封斋前完成封斋饭');
+
+    // ---- Duas ----
+    m.set('dua_iftar_name', '开斋祈祷词');
+    m.set('dua_iftar_translation',
+      '干渴已消，血管已润，若真主意欲，报酬已定。');
+    m.set('dua_suhoor_name', '封斋举意');
+    m.set('dua_suhoor_translation',
+      '我举意为明天在莱麦丹月封斋。');
+
+    // ---- Generic UI ----
+    m.set('ok', '确定');
+    m.set('gps', 'GPS');
+    m.set('mark_all', '全部标记');
+
+    // ---- About ----
+    m.set('about_build', '构建号');
+    m.set('about_bundle', '应用包名');
+    m.set('about_platform_value', 'HarmonyOS 5+');
+
+    // ---- Short labels ----
+    m.set('method_short_karachi', '卡拉奇');
+    m.set('method_short_jafari', '贾法里');
+    m.set('method_short_isna', 'ISNA');
+    m.set('method_short_mwl', 'MWL');
+    m.set('asr_short_standard', '标准');
+    m.set('asr_short_hanafi', '哈乃斐');
+    m.set('source_short_local', '本地');
+    m.set('source_short_online', '在线');
+
+    // ---- Fallbacks ----
+    m.set('default_location', '默认位置');
+    m.set('unknown_location', '未知位置');
+
+    m.set('brand_primary', 'Sirat');
+    m.set('brand_accent', '伴侣');
+
+    // ---- Dialogs ----
+    m.set('dialog_gps_off_title', '定位服务已关闭');
+    m.set('dialog_gps_off_message', '请开启定位服务，以便为您所在城市准确计算礼拜时间。');
+    m.set('dialog_permission_title', '需要权限');
+    m.set('dialog_permission_message', '需要位置权限才能显示您所在城市的礼拜时间。\n请在系统设置中授予。');
+
+    // ---- Errors ----
+    m.set('error_gps_fetch_failed', '无法获取 GPS 位置');
+    m.set('error_gps_off', '请开启定位服务');
+    m.set('error_location_permission_denied', '位置权限被拒绝');
 
     return m;
   }
@@ -826,7 +1086,7 @@ export class L {
     m.set('event_mawlid', 'المولد النبوي');
     m.set('event_isra_miraj', 'الإسراء والمعراج');
     m.set('event_mid_shaban', 'ليلة النصف من شعبان');
-    m.set('event_ramadan_start', 'بداية رمضان');
+    m.set('event_ramadan_start', 'رمضان');
     m.set('event_eid_fitr', 'عيد الفطر');
     m.set('event_arafah', 'يوم عرفة');
     m.set('event_eid_adha', 'عيد الأضحى');
@@ -839,6 +1099,7 @@ export class L {
     m.set('asr_hanafi', 'الحنفي');
     m.set('source_local', 'الحساب المحلي (دون اتصال)');
     m.set('source_api', 'واجهة برمجية (عبر الإنترنت)');
+    m.set('mark_all', 'تحديد الكل');
 
     m.set('wizard_step', 'خطوة');
     m.set('wizard_welcome_title', 'مرحباً بك في رفيق الصراط');
@@ -861,6 +1122,136 @@ export class L {
     m.set('wizard_next', 'التالي');
     m.set('wizard_finish', 'ابدأ الآن');
     m.set('notif_dismiss', 'إغلاق');
+    // ---- Tasbih theme presets ----
+    m.set('theme_amber', 'كهرماني');
+    m.set('theme_charcoal', 'فحمي');
+    m.set('theme_emerald', 'زمردي');
+    m.set('theme_pearl', 'لؤلؤي');
+    m.set('theme_gold', 'ذهبي (معدني)');
+    m.set('tab_prayers', 'الصلاة');
+
+    // ---- Home dashboard ----
+    m.set('home_today_progress', 'تقدم اليوم');
+    m.set('home_prayers_completed', 'صلوات مكتملة');
+    m.set('home_keep_going', 'واصل!');
+    m.set('home_streak', 'يوم متتالي');
+    m.set('home_best_streak', 'الأفضل');
+    m.set('home_days', 'أيام');
+    m.set('home_this_week', 'هذا الأسبوع');
+    m.set('home_week_summary', 'صلاة هذا الأسبوع');
+    m.set('home_this_month', 'هذا الشهر');
+    m.set('home_month_summary', 'صلاة هذا الشهر');
+    m.set('home_tasbih', 'التسبيح');
+    m.set('home_tasbih_lifetime', 'العدد الإجمالي');
+    m.set('home_tasbih_summary', 'مسبحات');
+    m.set('home_dhikrs', 'أذكار');
+
+    // ---- Tabs ----
+    m.set('tab_prayers', 'الصلاة');
+
+    // ---- Home dashboard ----
+    m.set('home_today_progress', 'تقدم اليوم');
+    m.set('home_prayers_completed', 'صلوات مكتملة');
+    m.set('home_keep_going', 'واصل!');
+    m.set('home_streak', 'يوم متتالي');
+    m.set('home_best_streak', 'الأفضل');
+    m.set('home_days', 'أيام');
+    m.set('home_this_week', 'هذا الأسبوع');
+    m.set('home_week_summary', 'صلاة هذا الأسبوع');
+    m.set('home_month_summary', 'صلاة هذا الشهر');
+    m.set('home_tasbih', 'التسبيح');
+    m.set('home_tasbih_lifetime', 'العدد الإجمالي');
+    m.set('home_tasbih_summary', 'مسبحات');
+    m.set('home_dhikrs', 'أذكار');
+
+    // ---- Monthly view ----
+    m.set('home_monthly_view', 'عرض شهري');
+    m.set('home_perfect_days', 'أيام كاملة');
+    m.set('home_days_elapsed', 'أيام مضت');
+    m.set('home_lifetime_1y', 'صلاة خلال العام الماضي');
+
+    // ---- Event countdown ----
+    m.set('home_next_event', 'المناسبة القادمة');
+    m.set('home_event_today', 'اليوم!');
+    m.set('home_event_tomorrow', 'غداً');
+
+    /// ---- Ramadan card ----
+    m.set('ramadan_card_title', 'رمضان');
+    m.set('ramadan_day_of', 'اليوم');
+    m.set('ramadan_day_of_suffix', 'من رمضان');
+    m.set('ramadan_days_until', 'يبدأ رمضان بعد');
+    m.set('ramadan_fast_start', 'بداية الصيام (الإمساك)');
+    m.set('ramadan_fast_end', 'نهاية الصيام (المغرب)');
+    m.set('ramadan_today_fast', 'نافذة الصيام اليوم');
+    m.set('ramadan_first_day_fast', 'أول يوم من رمضان');
+    m.set('ramadan_calendar_start', 'بداية رمضان');
+    m.set('ramadan_calendar_end', 'نهاية رمضان');
+    m.set('ramadan_ashras', 'العشرات');
+    m.set('ramadan_first_ashra', 'العشر الأولى');
+    m.set('ramadan_second_ashra', 'العشر الثانية');
+    m.set('ramadan_third_ashra', 'العشر الثالثة');
+    m.set('ramadan_first_ashra_significance', 'أيام الرحمة');
+    m.set('ramadan_second_ashra_significance', 'أيام المغفرة');
+    m.set('ramadan_third_ashra_significance', 'العتق من النار');
+    m.set('ramadan_laylat_al_qadr', 'ليلة القدر');
+    m.set('ramadan_laylat_al_qadr_desc',
+      'ليلة القدر خير من ألف شهر. التمسوها في الليالي الوترية من العشر الأواخر.');
+    m.set('ramadan_jummah_tul_widah', 'جمعة الوداع');
+    m.set('ramadan_jummah_tul_widah_desc', 'آخر جمعة من رمضان.');
+    m.set('ramadan_today', 'الليلة!');
+
+    // ---- Live countdown (last 15 min before Imsak / Maghrib) ----
+    m.set('countdown_fast_ends', 'الإفطار بعد');
+    m.set('countdown_fast_starts', 'يبدأ الصيام بعد');
+    m.set('countdown_fast_ends_desc', 'استعد للإفطار');
+    m.set('countdown_fast_starts_desc', 'أنهِ السحور قبل الإمساك');
+
+    // ---- Duas ----
+    m.set('dua_iftar_name', 'دعاء الإفطار');
+    m.set('dua_iftar_translation',
+      'ذهب الظمأ وابتلت العروق وثبت الأجر إن شاء الله.');
+    m.set('dua_suhoor_name', 'نية الصيام');
+    m.set('dua_suhoor_translation',
+      'وبصوم غدٍ نويت من شهر رمضان.');
+
+    // ---- Generic UI ----
+    m.set('ok', 'موافق');
+    m.set('gps', 'GPS');
+
+    // ---- About ----
+    m.set('about_build', 'رقم البناء');
+    m.set('about_bundle', 'معرّف الحزمة');
+    m.set('about_platform_value', 'HarmonyOS 5+');
+
+    // ---- Short labels ----
+    m.set('method_short_karachi', 'كراتشي');
+    m.set('method_short_jafari', 'الجعفري');
+    m.set('method_short_isna', 'ISNA');
+    m.set('method_short_mwl', 'MWL');
+    m.set('asr_short_standard', 'القياسي');
+    m.set('asr_short_hanafi', 'الحنفي');
+    m.set('source_short_local', 'محلي');
+    m.set('source_short_online', 'عبر الإنترنت');
+
+    // ---- Fallbacks ----
+    m.set('default_location', 'الموقع الافتراضي');
+    m.set('unknown_location', 'موقع غير معروف');
+
+    m.set('brand_primary', 'رفيق');
+    m.set('brand_accent', 'الصراط');
+
+    // ---- Dialogs ----
+    m.set('dialog_gps_off_title', 'خدمة الموقع معطّلة');
+    m.set('dialog_gps_off_message',
+      'يرجى تمكين خدمة الموقع للحصول على أوقات صلاة دقيقة لمدينتك.');
+    m.set('dialog_permission_title', 'الإذن مطلوب');
+    m.set('dialog_permission_message',
+      'إذن الموقع مطلوب لعرض أوقات الصلاة لمدينتك.\nيرجى منحه من إعدادات النظام.');
+
+    // ---- Errors ----
+    m.set('error_gps_fetch_failed', 'تعذّر الحصول على موقع GPS');
+    m.set('error_gps_off', 'يرجى تشغيل خدمة الموقع');
+    m.set('error_location_permission_denied', 'تم رفض إذن الموقع');
 
     return m;
   }

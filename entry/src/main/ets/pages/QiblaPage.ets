@@ -7,7 +7,8 @@ import { PageTheme } from '../common/PageTheme';
 import {
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_NAV_DIRECTION,
-  STORAGE_KEY_LANGUAGE
+  STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_APP_FOREGROUND_TICK
 } from '../common/StorageKeys';
 import { QiblaCalculator } from '../utils/QiblaCalculator';
 import { QiblaSensorHelper, OrientationReading } from '../helper/QiblaSensorHelper';
@@ -16,29 +17,16 @@ import { LocationCache } from '../utils/LocationCache';
 import { LocationMode } from '../models/SettingsModels';
 import { NavHelper } from '../helper/NavHelper';
 import { L } from '../helper/LocalizationHelper';
-import { OfflineCityLookup } from '../utils/OfflineCityLookup'
+import { OfflineCityLookup } from '../utils/OfflineCityLookup';
+import { FloatingNavBar } from '../components/FloatingNavBar';
 
-
-/** Sensor interval (must match QiblaSensorHelper). */
 const SENSOR_INTERVAL_MS = 100;
-
-/** Animation duration for each angle update. Keep <= sensor interval. */
 const ROTATION_ANIM_MS = 90;
-
-/**
- * Low-pass filter coefficient. 0 = frozen, 1 = raw sensor.
- * 0.35 gives a good balance: responsive enough to feel live,
- * smooth enough to hide magnetometer noise.
- */
 const HEADING_SMOOTHING = 0.35;
 
 @Entry
 @Component
 struct QiblaPage {
-
-  // ============================================================
-  // THEME + NAV + LANGUAGE
-  // ============================================================
 
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
@@ -50,29 +38,18 @@ struct QiblaPage {
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = 'en';
+  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
+  @Watch('onAppForegrounded')
+  appForegroundTick: number = 0;
 
-  /** Magnetic declination (degrees East) for the current location. */
   @State declinationDeg: number = 0;
-
   @State private currentLanguage: string = 'en';
-
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
 
-  // ============================================================
-  // COMPASS STATE
-  // ============================================================
-
-  /** Raw heading from the sensor, degrees 0–360. */
   @State private rawHeading: number = 0;
-
-  /** Smoothed heading, degrees 0–360. */
   @State private smoothedHeading: number = 0;
-
-  /** Unwrapped rose rotation — can go beyond ±360 as the user spins. */
   @State private roseAngle: number = 0;
-
-  /** Unwrapped needle rotation — same idea for the Qibla needle. */
   @State private needleAngle: number = 0;
 
   @State qiblaBearing: number = 0;
@@ -85,10 +62,6 @@ struct QiblaPage {
 
   private firstReading: boolean = true;
 
-  // ============================================================
-  // LOCALIZATION + DIRECTION
-  // ============================================================
-
   private tr(key: string): string {
     return L.get(key, this.currentLanguage);
   }
@@ -96,10 +69,6 @@ struct QiblaPage {
   private isRtl(): boolean {
     return L.isRtlLang(this.currentLanguage);
   }
-
-  // ============================================================
-  // WATCHERS
-  // ============================================================
 
   private onThemeModeChanged(): void {
     this.colors = PageTheme.compute(this.themeMode);
@@ -109,9 +78,20 @@ struct QiblaPage {
     this.currentLanguage = this.appLanguage;
   }
 
-  // ============================================================
-  // PAGE TRANSITION
-  // ============================================================
+  private async onAppForegrounded(): Promise<void> {
+    await this.loadLocation();
+    if (!this.sensorReady) {
+      const ok = QiblaSensorHelper.register((r: OrientationReading) => {
+        this.rawHeading = r.heading;
+        this.isFlat = r.isFlat;
+        this.sensorReady = true;
+        this.updateAngles(r.heading);
+      });
+      if (!ok) {
+        this.sensorReady = false;
+      }
+    }
+  }
 
   pageTransition() {
     PageTransitionEnter({ type: RouteType.Push, duration: 300, curve: Curve.Friction })
@@ -124,10 +104,6 @@ struct QiblaPage {
     PageTransitionExit({ type: RouteType.Pop, duration: 300, curve: Curve.Friction })
       .slide(SlideEffect.Right)
   }
-
-  // ============================================================
-  // LIFECYCLE
-  // ============================================================
 
   aboutToAppear(): void {
     this.currentLanguage = this.appLanguage;
@@ -164,14 +140,6 @@ struct QiblaPage {
     return false;
   }
 
-  // ============================================================
-  // ANGLE SMOOTHING + UNWRAPPING
-  // ============================================================
-
-  /**
-   * Shortest-path delta between two angles, in [-180, 180).
-   * Prevents the "spin the long way" jump when crossing 0/360.
-   */
   private shortestDelta(from: number, to: number): number {
     let d = to - from;
     while (d > 180)  d -= 360;
@@ -179,22 +147,11 @@ struct QiblaPage {
     return d;
   }
 
-  /**
-   * Move `current` by the shortest path toward `target`, and return
-   * the result. The result is NOT wrapped to 0–360 — it can drift
-   * arbitrarily high or low, which is exactly what we want for
-   * smooth rotation animations.
-   */
   private unwrap(current: number, target: number): number {
     return current + this.shortestDelta(current, target);
   }
 
-  /**
-   * Called on every sensor reading (10 Hz). Applies a low-pass filter
-   * to the heading, then updates the two unwrapped rotation angles.
-   */
   private updateAngles(rawHeading: number): void {
-    // ---- First reading: seed the state ----
     if (this.firstReading) {
       this.smoothedHeading = rawHeading;
       const trueHeading = rawHeading + this.declinationDeg;
@@ -204,28 +161,17 @@ struct QiblaPage {
       return;
     }
 
-    // ---- Low-pass filter with shortest-path delta ----
-    // The filter operates on the *delta* between readings, so we
-    // never have to unwrap the heading itself.
     const hDelta = this.shortestDelta(this.smoothedHeading, rawHeading);
     this.smoothedHeading = (this.smoothedHeading + hDelta * HEADING_SMOOTHING + 360) % 360;
 
-    // Magnetic heading -> true heading by adding declination
-    // (East positive, West negative).
     const trueHeading = this.smoothedHeading + this.declinationDeg;
 
-    // ---- Rose rotates opposite to true heading ----
     const targetRose = -trueHeading;
     this.roseAngle = this.unwrap(this.roseAngle, targetRose);
 
-    // ---- Needle points at Qibla relative to true north ----
     const targetNeedle = this.qiblaBearing - trueHeading;
     this.needleAngle = this.unwrap(this.needleAngle, targetNeedle);
   }
-
-  // ============================================================
-  // LOCATION
-  // ============================================================
 
   private async loadLocation(): Promise<void> {
     const mode = await SettingsHelper.getLocationMode();
@@ -259,45 +205,40 @@ struct QiblaPage {
     this.qiblaBearing = QiblaCalculator.calculateBearing(this.latitude, this.longitude);
     this.distanceKm = QiblaCalculator.calculateDistance(this.latitude, this.longitude);
 
-    // Correct the magnetic sensor heading to true north.
     this.declinationDeg = OfflineCityLookup.declinationFor(this.latitude, this.longitude);
 
-    // Recompute the needle target now that the bearing may have changed.
     const trueHeading = this.smoothedHeading + this.declinationDeg;
     const targetNeedle = this.qiblaBearing - trueHeading;
     this.needleAngle = this.unwrap(this.needleAngle, targetNeedle);
   }
-
-  // ============================================================
-  // NAVIGATION
-  // ============================================================
 
   private onFloatingBarTap(tabId: string): void {
     if (tabId === 'compass') return;
 
     if (tabId === 'home') {
       NavHelper.prepareBackward();
-      try { router.back({ url: 'pages/Index' }); }
-      catch (err) {
-        router.clear();
-        NavHelper.prepare('home', 'compass');
-        router.pushUrl({ url: 'pages/Index' })
-          .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
-      }
+      router.clear();
+      router.replaceUrl({ url: 'pages/HomePage' })
+        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
       return;
     }
-
-    if (tabId === 'tasbih') {
-      NavHelper.prepare('tasbih', 'compass');
-      router.pushUrl({ url: 'pages/TasbihPage' })
-        .catch((err: Error) => console.error('Navigation failed:', JSON.stringify(err)));
+    if (tabId === 'prayers') {
+      NavHelper.prepareBackward();
+      router.clear();
+      router.replaceUrl({ url: 'pages/Prayer' })
+        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
       return;
     }
-
     if (tabId === 'calendar') {
       NavHelper.prepare('calendar', 'compass');
       router.pushUrl({ url: 'pages/HijriCalendarPage' })
-        .catch((err: Error) => console.error('Navigation failed:', JSON.stringify(err)));
+        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
+      return;
+    }
+    if (tabId === 'tasbih') {
+      NavHelper.prepare('tasbih', 'compass');
+      router.pushUrl({ url: 'pages/TasbihPage' })
+        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
     }
   }
 
@@ -307,12 +248,7 @@ struct QiblaPage {
       .catch((err: Error) => console.error('Navigation failed:', JSON.stringify(err)));
   }
 
-  // ============================================================
-  // FORMATTERS
-  // ============================================================
-
   private formatDegree(deg: number): string {
-    // Wrap to 0–360 for display.
     const d = ((deg % 360) + 360) % 360;
     return `${Math.round(d)}°`;
   }
@@ -321,10 +257,6 @@ struct QiblaPage {
     if (km < 1) return `${Math.round(km * 1000)} m`;
     return `${Math.round(km).toLocaleString()} km`;
   }
-
-  // ============================================================
-  // BUILD
-  // ============================================================
 
   build() {
     Stack() {
@@ -339,7 +271,6 @@ struct QiblaPage {
 
         Scroll() {
           Column() {
-            // ---- Location pill ----
             Row() {
               Text('📍').fontSize(14).flexShrink(0)
               Text(this.cityName.length > 0 ? this.cityName : this.tr('loading_location'))
@@ -359,7 +290,6 @@ struct QiblaPage {
 
             this.CompassView()
 
-            // ---- Info card ----
             Column() {
               Row() {
                 Text(this.tr('qibla_direction'))
@@ -419,7 +349,14 @@ struct QiblaPage {
       .width('100%').height('100%')
       .backgroundColor(this.colors.primaryGreen)
 
-      this.FloatingBar()
+      FloatingNavBar({
+        activeTab: 'compass',
+        colors: this.colors,
+        currentLanguage: this.currentLanguage,
+        onTabTap: (id: string) => {
+          this.onFloatingBarTap(id);
+        }
+      })
     }
     .width('100%').height('100%')
     .backgroundColor(this.colors.primaryGreen)
@@ -427,14 +364,9 @@ struct QiblaPage {
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 
-  // ============================================================
-  // COMPASS VIEW
-  // ============================================================
-
   @Builder
   CompassView() {
     Stack() {
-      // Rotating compass rose — bound to the UNWRAPPED rose angle
       Column() {
         this.CompassLabels()
       }
@@ -442,7 +374,6 @@ struct QiblaPage {
       .rotate({ angle: this.roseAngle })
       .animation({ duration: ROTATION_ANIM_MS, curve: Curve.Linear })
 
-      // Qibla needle — bound to the UNWRAPPED needle angle
       Column() {
         Column() {
           Text('🕋').fontSize(36).margin({ bottom: -8 })
@@ -457,7 +388,6 @@ struct QiblaPage {
       .rotate({ angle: this.needleAngle })
       .animation({ duration: ROTATION_ANIM_MS, curve: Curve.Linear })
 
-      // Center dot
       Column()
         .width(20).height(20)
         .backgroundColor(this.colors.accentGold)
@@ -501,10 +431,6 @@ struct QiblaPage {
     .direction(Direction.Ltr)
   }
 
-  // ============================================================
-  // STATUS CARD
-  // ============================================================
-
   @Builder
   StatusCard() {
     Column() {
@@ -536,98 +462,5 @@ struct QiblaPage {
     .borderRadius(12)
     .border({ width: 1, color: this.colors.borderSoft })
     .margin({ top: 16 })
-  }
-
-  // ============================================================
-  // FLOATING BAR — 4 tabs, Compass active
-  // ============================================================
-
-  @Builder
-  FloatingBar() {
-    Row() {
-      Row() {
-        // ---- Home ----
-        Column() {
-          Text('🏠').fontSize(22).opacity(0.7)
-          Text(this.tr('tab_home'))
-            .fontSize(10).fontWeight(FontWeight.Normal)
-            .fontColor(PageTheme.isSystemDark()
-              ? 'rgba(241,245,249,0.65)'
-              : 'rgba(26,26,26,0.55)')
-            .margin({ top: 2 })
-        }
-        .layoutWeight(1).height('100%').justifyContent(FlexAlign.Center)
-        .onClick(() => { this.onFloatingBarTap('home'); })
-
-        Divider().vertical(true).height(28)
-          .color(PageTheme.isSystemDark() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
-
-        // ---- Tasbih ----
-        Column() {
-          Text('📿').fontSize(22).opacity(0.7)
-          Text(this.tr('tab_tasbih'))
-            .fontSize(10).fontWeight(FontWeight.Normal)
-            .fontColor(PageTheme.isSystemDark()
-              ? 'rgba(241,245,249,0.65)'
-              : 'rgba(26,26,26,0.55)')
-            .margin({ top: 2 })
-        }
-        .layoutWeight(1).height('100%').justifyContent(FlexAlign.Center)
-        .onClick(() => { this.onFloatingBarTap('tasbih'); })
-
-        Divider().vertical(true).height(28)
-          .color(PageTheme.isSystemDark() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
-
-        // ---- Compass (active) ----
-        Column() {
-          Text('🧭').fontSize(22).opacity(1.0)
-          Text(this.tr('tab_compass'))
-            .fontSize(10).fontWeight(FontWeight.Bold)
-            .fontColor(PageTheme.isSystemDark() ? '#4ADE80' : '#0F5132')
-            .margin({ top: 2 })
-        }
-        .layoutWeight(1).height('100%').justifyContent(FlexAlign.Center)
-        .onClick(() => { this.onFloatingBarTap('compass'); })
-
-        Divider().vertical(true).height(28)
-          .color(PageTheme.isSystemDark() ? 'rgba(74,222,128,0.20)' : 'rgba(15,81,50,0.12)')
-
-        // ---- Calendar ----
-        Column() {
-          Text('📅').fontSize(22).opacity(0.7)
-          Text(this.tr('tab_calendar'))
-            .fontSize(10).fontWeight(FontWeight.Normal)
-            .fontColor(PageTheme.isSystemDark()
-              ? 'rgba(241,245,249,0.65)'
-              : 'rgba(26,26,26,0.55)')
-            .margin({ top: 2 })
-        }
-        .layoutWeight(1).height('100%').justifyContent(FlexAlign.Center)
-        .onClick(() => { this.onFloatingBarTap('calendar'); })
-      }
-      .width('92%').height(68)
-      .backgroundBlurStyle(BlurStyle.Thin, {
-        colorMode: PageTheme.isSystemDark() ? ThemeColorMode.DARK : ThemeColorMode.LIGHT,
-        adaptiveColor: AdaptiveColor.DEFAULT,
-        scale: 1.0
-      })
-      .backgroundColor(PageTheme.isSystemDark()
-        ? 'rgba(20, 27, 46, 0.50)'
-        : 'rgba(255, 255, 255, 0.35)')
-      .borderRadius(34)
-      .border({
-        width: 1,
-        color: PageTheme.isSystemDark()
-          ? 'rgba(74, 222, 128, 0.35)'
-          : 'rgba(255, 255, 255, 0.65)'
-      })
-      .shadow({
-        radius: 28,
-        color: PageTheme.isSystemDark() ? 'rgba(0, 0, 0, 0.50)' : 'rgba(0, 0, 0, 0.14)',
-        offsetX: 0, offsetY: 10
-      })
-    }
-    .width('100%').justifyContent(FlexAlign.Center)
-    .position({ bottom: 24 })
   }
 }

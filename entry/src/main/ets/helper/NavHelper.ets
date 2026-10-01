@@ -1,4 +1,4 @@
-// entry/src/main/ets/utils/NavHelper.ets
+// entry/src/main/ets/helper/NavHelper.ets
 
 import { STORAGE_KEY_NAV_DIRECTION } from '../common/StorageKeys';
 
@@ -9,22 +9,27 @@ import { STORAGE_KEY_NAV_DIRECTION } from '../common/StorageKeys';
  *   Tapping a tab to the LEFT  of the current one → 'backward'
  *   router.back() is always 'backward'
  *
- * The chosen direction is written to AppStorage before navigation so
- * every page's pageTransition() can read it.
+ * Tab order (left to right):
+ *   Home → Prayers → Tasbih → Compass → Calendar
  */
 export class NavHelper {
 
   static readonly HOME     = 0;
-  static readonly TASBIH   = 1;
-  static readonly COMPASS  = 2;
-  static readonly CALENDAR = 3;
+  static readonly PRAYERS = 1;
+  static readonly CALENDAR = 2;
+  static readonly COMPASS = 3;
+  static readonly TASBIH = 4;
 
   static indexOf(tabId: string): number {
     switch (tabId) {
       case 'home':     return NavHelper.HOME;
-      case 'tasbih':   return NavHelper.TASBIH;
-      case 'compass':  return NavHelper.COMPASS;
+      case 'prayers':
+        return NavHelper.PRAYERS;
       case 'calendar': return NavHelper.CALENDAR;
+      case 'compass':
+        return NavHelper.COMPASS;
+      case 'tasbih':
+        return NavHelper.TASBIH;
       default:         return NavHelper.HOME;
     }
   }
