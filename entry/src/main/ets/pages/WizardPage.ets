@@ -1,7 +1,7 @@
 // entry/src/main/ets/pages/WizardPage.ets
 
 import { mediaquery, router } from '@kit.ArkUI';
-import { common } from '@kit.AbilityKit';
+import { common, Want } from '@kit.AbilityKit';
 import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../common/StorageKeys';
@@ -13,6 +13,7 @@ import { CalculationSource, LocationMode, PickerItem } from '../models/SettingsM
 import { AppLanguage, L } from '../helper/LocalizationHelper';
 import { NavHelper } from '../helper/NavHelper';
 import { PrivacyPolicyProvider } from '../data/PrivacyPolicy';
+import { BusinessError } from '@kit.BasicServicesKit';
 
 const TOTAL_STEPS = 4;
 
@@ -173,8 +174,34 @@ struct WizardPage {
   private finish(): void {
     SettingsHelper.markWizardCompleted();
     NavHelper.prepareForward();
-    router.replaceUrl({ url: 'pages/Index' })
+    router.replaceUrl({ url: 'pages/HomePage' })
       .catch((err: Error) => console.error('Wizard finish failed:', JSON.stringify(err)));
+  }
+
+  private openPrivacyPolicy(): void {
+    const context = getContext(this) as common.UIAbilityContext;
+    const url = PrivacyPolicyProvider.FULL_URL;
+
+    const want: Want = {
+      action: 'ohos.want.action.viewData',
+      entities: ['entity.system.browsable'],
+      uri: url
+    };
+
+    context.startAbility(want)
+      .then(() => {
+        console.info('[WizardPage] Privacy policy opened in browser');
+      })
+      .catch((err: BusinessError) => {
+        console.error(
+          `[WizardPage] Failed to open browser. code=${err.code}, msg=${err.message}`
+        );
+        // Fallback: show the URL so the user can copy it manually.
+        this.getUIContext().getPromptAction().showToast({
+          message: url,
+          duration: 5000
+        });
+      });
   }
 
   // ============================================================
@@ -626,10 +653,11 @@ struct WizardPage {
       .width('100%')
       .padding({ bottom: 4 })
       .justifyContent(FlexAlign.Start)
+      .width('100%')
+      .padding({ bottom: 4 })
+      .justifyContent(FlexAlign.Start)
       .onClick(() => {
-        this.getUIContext().getPromptAction().showToast({
-          message: PrivacyPolicyProvider.FULL_URL, duration: 3000
-        });
+        this.openPrivacyPolicy();
       })
     }
     .width('100%')

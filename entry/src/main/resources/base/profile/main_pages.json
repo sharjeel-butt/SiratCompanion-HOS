@@ -1,7 +1,8 @@
 {
   "src": [
     "pages/WizardPage",
-    "pages/Index",
+    "pages/HomePage",
+    "pages/Prayer",
     "pages/CustomizePage",
     "pages/QiblaPage",
     "pages/TasbihPage",

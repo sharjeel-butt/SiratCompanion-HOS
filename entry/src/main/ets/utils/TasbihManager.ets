@@ -1,6 +1,7 @@
 // entry/src/main/ets/utils/TasbihManager.ets
 
 import { AddTasbihResult, BeadView, Dhikr, DhikrFields, Tasbih } from '../models/TasbihModels';
+import { TasbihThemes } from '../common/TasbihThemes';
 
 export const MAX_TOP_BEADS    = 3;
 export const MAX_BOTTOM_BEADS = 5;
@@ -32,9 +33,30 @@ export class TasbihManager {
     ];
 
     const out: Tasbih[] = [
-      { id: TasbihManager.generateId(), name: 'Classic 33', createdAt: Date.now(),     dhikrs: classic,    lifetimeCount: 0 },
-      { id: TasbihManager.generateId(), name: 'Tahlil 100', createdAt: Date.now() + 1, dhikrs: tahlil,     lifetimeCount: 0 },
-      { id: TasbihManager.generateId(), name: 'Istighfar',  createdAt: Date.now() + 2, dhikrs: istighfar,  lifetimeCount: 0 }
+      {
+        id: TasbihManager.generateId(),
+        name: 'Classic 33',
+        createdAt: Date.now(),
+        dhikrs: classic,
+        lifetimeCount: 0,
+        themePresetId: 'amber'
+      },
+      {
+        id: TasbihManager.generateId(),
+        name: 'Tahlil 100',
+        createdAt: Date.now() + 1,
+        dhikrs: tahlil,
+        lifetimeCount: 0,
+        themePresetId: 'emerald'
+      },
+      {
+        id: TasbihManager.generateId(),
+        name: 'Istighfar',
+        createdAt: Date.now() + 2,
+        dhikrs: istighfar,
+        lifetimeCount: 0,
+        themePresetId: 'pearl'
+      }
     ];
     return out;
   }
@@ -83,7 +105,7 @@ export class TasbihManager {
   }
 
   // ============================================================
-  // COUNTING — increment bumps lifetimeCount by 1
+  // COUNTING
   // ============================================================
 
   static increment(tasbihs: Tasbih[], activeId: string, dhikrId: string): Tasbih[] {
@@ -138,23 +160,30 @@ export class TasbihManager {
         name: t.name,
         dhikrs: updated,
         createdAt: t.createdAt,
-        lifetimeCount: t.lifetimeCount
+        lifetimeCount: t.lifetimeCount,
+        theme: t.theme,
+        themePresetId: t.themePresetId
       };
       return result;
     });
   }
 
   // ============================================================
-  // TASBIH CRUD — every rebuild preserves lifetimeCount
+  // TASBIH CRUD
   // ============================================================
 
-  static addTasbih(tasbihs: Tasbih[], name: string): AddTasbihResult {
+  static addTasbih(tasbihs: Tasbih[], name: string, themePresetId: string): AddTasbihResult {
+    const presetId = themePresetId.length > 0
+      ? themePresetId
+      : TasbihThemes.DEFAULT_PRESET_ID;
     const newTasbih: Tasbih = {
       id: TasbihManager.generateId(),
       name: name,
       dhikrs: [],
       createdAt: Date.now(),
-      lifetimeCount: 0
+      lifetimeCount: 0,
+      theme: TasbihThemes.themeForPreset(presetId),
+      themePresetId: presetId
     };
     const result: AddTasbihResult = {
       tasbihs: [...tasbihs, newTasbih], newId: newTasbih.id
@@ -162,12 +191,41 @@ export class TasbihManager {
     return result;
   }
 
-  static renameTasbih(tasbihs: Tasbih[], id: string, name: string): Tasbih[] {
+  static renameTasbih(
+    tasbihs: Tasbih[],
+    id: string,
+    name: string,
+    themePresetId: string
+  ): Tasbih[] {
     return tasbihs.map((t: Tasbih): Tasbih => {
       if (t.id !== id) return t;
+      const presetId = themePresetId.length > 0
+        ? themePresetId
+        : (t.themePresetId ?? TasbihThemes.DEFAULT_PRESET_ID);
       const updated: Tasbih = {
         id: t.id, name: name, dhikrs: t.dhikrs,
-        createdAt: t.createdAt, lifetimeCount: t.lifetimeCount
+        createdAt: t.createdAt,
+        lifetimeCount: t.lifetimeCount,
+        theme: TasbihThemes.themeForPreset(presetId),
+        themePresetId: presetId
+      };
+      return updated;
+    });
+  }
+
+  static setTheme(tasbihs: Tasbih[], id: string, themePresetId: string): Tasbih[] {
+    return tasbihs.map((t: Tasbih): Tasbih => {
+      if (t.id !== id) {
+        return t;
+      }
+      const updated: Tasbih = {
+        id: t.id,
+        name: t.name,
+        dhikrs: t.dhikrs,
+        createdAt: t.createdAt,
+        lifetimeCount: t.lifetimeCount,
+        theme: TasbihThemes.themeForPreset(themePresetId),
+        themePresetId: themePresetId
       };
       return updated;
     });
@@ -192,7 +250,10 @@ export class TasbihManager {
       if (t.id !== activeId) return t;
       const updated: Tasbih = {
         id: t.id, name: t.name, dhikrs: [...t.dhikrs, newDhikr],
-        createdAt: t.createdAt, lifetimeCount: t.lifetimeCount
+        createdAt: t.createdAt,
+        lifetimeCount: t.lifetimeCount,
+        theme: t.theme,
+        themePresetId: t.themePresetId
       };
       return updated;
     });
@@ -211,7 +272,10 @@ export class TasbihManager {
       });
       const result: Tasbih = {
         id: t.id, name: t.name, dhikrs: updated,
-        createdAt: t.createdAt, lifetimeCount: t.lifetimeCount
+        createdAt: t.createdAt,
+        lifetimeCount: t.lifetimeCount,
+        theme: t.theme,
+        themePresetId: t.themePresetId
       };
       return result;
     });
@@ -223,7 +287,10 @@ export class TasbihManager {
       const filtered: Dhikr[] = t.dhikrs.filter((d: Dhikr): boolean => d.id !== dhikrId);
       const result: Tasbih = {
         id: t.id, name: t.name, dhikrs: filtered,
-        createdAt: t.createdAt, lifetimeCount: t.lifetimeCount
+        createdAt: t.createdAt,
+        lifetimeCount: t.lifetimeCount,
+        theme: t.theme,
+        themePresetId: t.themePresetId
       };
       return result;
     });
@@ -249,7 +316,9 @@ export class TasbihManager {
       const result: Tasbih = {
         id: t.id, name: t.name, dhikrs: updated,
         createdAt: t.createdAt,
-        lifetimeCount: (t.lifetimeCount || 0) + lifetimeDelta
+        lifetimeCount: (t.lifetimeCount || 0) + lifetimeDelta,
+        theme: t.theme,
+        themePresetId: t.themePresetId
       };
       return result;
     });
