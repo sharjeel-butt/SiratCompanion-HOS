@@ -3,6 +3,7 @@
 import { ExtraTiming, PrayerModel } from '../models/PrayerModel';
 import { DailyPrayerTimes } from './PrayerTimeCalculator';
 import { PrayerOffsets } from '../helper/SettingsHelper';
+import { PreferencesHelper } from '../helper/PreferencesHelper';
 
 export interface PrayerCheckState {
   fajr: boolean;
@@ -98,36 +99,25 @@ export class PrayerManager {
   // CHECKBOX ENABLING (date-aware)
   // ============================================================
 
-  /**
-   * - Today: enabled only for prayers whose time has passed
-   * - Past dates: all enabled
-   * - Future dates: all disabled
-   * - Already checked: always enabled (so user can uncheck)
-   */
   static isPrayerCheckable(prayer: PrayerModel, viewingDate?: Date): boolean {
-    // Normalize today and viewing date to midnight
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
     const view = viewingDate ? new Date(viewingDate) : new Date();
     view.setHours(0, 0, 0, 0);
 
-    // ---- FUTURE: always disabled, even if somehow already checked ----
     if (view.getTime() > today.getTime()) {
       return false;
     }
 
-    // ---- Already checked: allow unchecking ----
     if (prayer.checked) {
       return true;
     }
 
-    // ---- PAST: always enabled ----
     if (view.getTime() < today.getTime()) {
       return true;
     }
 
-    // ---- TODAY: only enabled if the prayer's time has passed ----
     const now = new Date();
     const currentMinutes = now.getHours() * 60 + now.getMinutes();
     const prayerMinutes = PrayerManager.timeToMinutes(prayer.time);
@@ -140,7 +130,7 @@ export class PrayerManager {
 
   static applyDayNames(prayers: PrayerModel[], date?: Date): PrayerModel[] {
     const ref = date ? new Date(date) : new Date();
-    const isFriday = ref.getDay() === 5;   // 0=Sun, 5=Fri
+    const isFriday = ref.getDay() === 5;
 
     return prayers.map((p): PrayerModel => {
       if (p.id === 'dhuhr') {
@@ -226,26 +216,14 @@ export class PrayerManager {
   }
 
   // ============================================================
-  // STATUS RECALCULATION (date-aware)
+  // STATUS RECALCULATION (date-aware, time-only)
   // ============================================================
 
-  /**
-   * Recompute prayer statuses.
-   *
-   * @param prayers               PrayerModel list (already carries times + checked flags)
-   * @param viewingDate           The date being viewed. If omitted, assumes today.
-   * @param locationOffsetHours   Effective offset of the *location* being shown
-   *                              (hours east of UTC). When provided, "current time"
-   *                              is computed in the location's local time, so
-   *                              statuses stay correct even when the user is
-   *                              viewing a distant city.
-   */
   static updateStatuses(
     prayers: PrayerModel[],
     viewingDate?: Date,
     locationOffsetHours?: number
   ): PrayerModel[] {
-    // Non-today dates: no NEXT/Pray highlighting, but keep the "Prayed" badge
     if (viewingDate) {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -266,7 +244,6 @@ export class PrayerManager {
 
     const now = new Date();
 
-    // Compute "current minutes" in the location's local time.
     let currentMinutes: number;
     if (locationOffsetHours !== undefined) {
       const deviceOffset = -now.getTimezoneOffset() / 60;
@@ -297,17 +274,13 @@ export class PrayerManager {
     }
 
     // ---- Post-Isha window ----
-    // Past the last prayer of the day (Isha) but before midnight.
-    // Isha stays "current" if unchecked; otherwise no current prayer.
-    // The header computes tomorrow's Fajr as "next" when there is
-    // no next prayer in today's array.
     const ishaMinutes = times[n - 1];
     if (ishaMinutes > 0 && currentMinutes > ishaMinutes) {
       return prayers.map((p, i): PrayerModel => {
         let status: string;
-        if (p.checked) status = 'prayed';
-        else if (i === n - 1) status = 'pray';  // Isha still current
-        else status = 'abbreviation';
+        if (p.checked) status = 'prayed'; else if (i === n - 1) {
+          status = 'pray';
+        } else status = 'abbreviation';
         return {
           id: p.id, name: p.name, arabicName: p.arabicName,
           time: p.time, status: status, checked: p.checked
@@ -315,8 +288,7 @@ export class PrayerManager {
       });
     }
 
-    // ---- Normal window (between Fajr and Isha inclusive) ----
-
+    // ---- Normal window ----
     let timePrayIndex = -1;
     for (let i = 0; i < n; i++) {
       if (times[i] > 0 && times[i] <= currentMinutes) timePrayIndex = i;
@@ -327,12 +299,7 @@ export class PrayerManager {
     for (let i = 0; i < n; i++) {
       if (times[i] > currentMinutes) { timeNextIndex = i; break; }
     }
-    // No fallback — the post-Isha window already returned above, so
-    // timeNextIndex will always be found here.
 
-    // Current and next are decided by time ONLY — not by which
-    // prayers are already checked. A prayer remains "current" for
-    // its whole window even after the user marks it as prayed.
     const actualPrayIndex = timePrayIndex;
     const actualNextIndex = timeNextIndex;
 
@@ -352,12 +319,49 @@ export class PrayerManager {
   }
 
   // ============================================================
-  // DATE-WISE PERSISTENCE (per-date storage)
+  // PERSISTENCE — module static map + AppStorage mirror + disk
   // ============================================================
+  //
+  // A single source of truth keyed by date:
+  //   { "2026-10-01": "{\"fajr\":true,\"dhuhr\":false,...}", ... }
+  //
+  // Lives as a module-level static, so it survives page destruction
+  // and recreation. Mirrored to AppStorage for @StorageLink watchers.
+  // Persisted to disk via PreferencesHelper so it survives restarts.
+
+  private static stateMap: Record<string, string> = {};
+  private static readonly STATE_MAP_PREF_KEY = 'prayer_state_map';
+
+  /** Call once at app startup, after PreferencesHelper.init(). */
+  static async primeStateMap(): Promise<void> {
+    const raw = await PreferencesHelper.getString(
+      PrayerManager.STATE_MAP_PREF_KEY, ''
+    );
+
+    if (raw && raw.length > 0) {
+      try {
+        PrayerManager.stateMap = JSON.parse(raw) as Record<string, string>;
+        console.info(
+          '[PrayerStore] primed with ' +
+            Object.keys(PrayerManager.stateMap).length + ' days'
+        );
+      } catch (err) {
+        console.error('[PrayerStore] prime parse failed');
+        PrayerManager.stateMap = {};
+      }
+    } else {
+      PrayerManager.stateMap = {};
+      console.info('[PrayerStore] primed empty');
+    }
+
+    // Mirror into AppStorage.
+    AppStorage.setOrCreate(
+      PrayerManager.STATE_MAP_PREF_KEY,
+      JSON.stringify(PrayerManager.stateMap)
+    );
+  }
 
   static saveStateForDate(dateKey: string, prayers: PrayerModel[]): void {
-    const storageKey = `prayer_state_${dateKey}`;
-
     const state: PrayerCheckState = {
       fajr: false, dhuhr: false, asr: false, maghrib: false, isha: false
     };
@@ -373,15 +377,25 @@ export class PrayerManager {
       }
     }
 
-    PersistentStorage.persistProp(storageKey, '');
-    AppStorage.setOrCreate(storageKey, JSON.stringify(state));
+    const json = JSON.stringify(state);
+    PrayerManager.stateMap[dateKey] = json;
+
+    // Mirror to AppStorage.
+    const mapJson = JSON.stringify(PrayerManager.stateMap);
+    AppStorage.setOrCreate(PrayerManager.STATE_MAP_PREF_KEY, mapJson);
+
+    // Disk write — fire-and-forget.
+    PreferencesHelper.setString(PrayerManager.STATE_MAP_PREF_KEY, mapJson)
+      .catch((e: Error) =>
+      console.error('[PrayerStore] disk write failed: ' + e.message)
+      );
   }
 
-  static loadStateForDate(dateKey: string, prayers: PrayerModel[], date?: Date): PrayerModel[] {
-    const storageKey = `prayer_state_${dateKey}`;
-    PersistentStorage.persistProp(storageKey, '');
-
-    // ✅ Reset all checkboxes to false FIRST
+  static loadStateForDate(
+    dateKey: string,
+    prayers: PrayerModel[],
+    date?: Date
+  ): PrayerModel[] {
     const resetPrayers = prayers.map((p): PrayerModel => ({
       id: p.id,
       name: p.name,
@@ -391,16 +405,13 @@ export class PrayerManager {
       checked: false
     } as PrayerModel));
 
-    const json = AppStorage.get<string>(storageKey);
-
-    // No saved state → everything stays unchecked
+    const json = PrayerManager.stateMap[dateKey];
     if (!json || json === '') {
       return PrayerManager.applyDayNames(resetPrayers, date);
     }
 
     try {
       const state = JSON.parse(json) as PrayerCheckState;
-
       const mapped = resetPrayers.map((p): PrayerModel => {
         let checked = false;
         switch (p.id) {
@@ -419,23 +430,43 @@ export class PrayerManager {
           checked: checked
         } as PrayerModel;
       });
-
       return PrayerManager.applyDayNames(mapped, date);
     } catch (err) {
-      console.error(`Failed to parse state for ${dateKey}: ${JSON.stringify(err)}`);
+      console.error('[PrayerStore] parse failed: ' + JSON.stringify(err));
       return PrayerManager.applyDayNames(resetPrayers, date);
     }
+  }
+
+  /** Synchronous read of a single date's check state. */
+  static getCheckState(dateKey: string): PrayerCheckState {
+    const json = PrayerManager.stateMap[dateKey];
+    const empty: PrayerCheckState = {
+      fajr: false,
+      dhuhr: false,
+      asr: false,
+      maghrib: false,
+      isha: false
+    };
+    if (!json || json === '') {
+      return empty;
+    }
+    try {
+      return JSON.parse(json) as PrayerCheckState;
+    } catch (err) {
+      console.error('[PrayerStore] getCheckState parse failed');
+      return empty;
+    }
+  }
+
+  /** Diagnostic: JSON dump of the entire in-memory state map. */
+  static debugDump(): string {
+    return JSON.stringify(PrayerManager.stateMap);
   }
 
   // ============================================================
   // HEADER HELPERS
   // ============================================================
 
-  /**
-   * The current prayer is the last prayer whose time has already
-   * passed — regardless of whether it has been marked as prayed.
-   * Returns null in the pre-Fajr window (nothing today has passed).
-   */
   static getCurrentPrayer(
     prayers: PrayerModel[],
     locationOffsetHours?: number
@@ -452,11 +483,6 @@ export class PrayerManager {
     return prayers[currentIdx];
   }
 
-  /**
-   * The next prayer is the first prayer whose time has NOT yet
-   * passed. Returns null when all prayers today have passed
-   * (caller falls back to the extended timeline for night extras).
-   */
   static getNextPrayer(
     prayers: PrayerModel[],
     locationOffsetHours?: number
@@ -471,10 +497,6 @@ export class PrayerManager {
     return null;
   }
 
-  /**
-   * "Now" in the location's local time, expressed as minutes from
-   * midnight. Falls back to the device clock when no offset is given.
-   */
   private static getCurrentMinutesInLocation(locationOffsetHours?: number): number {
     const now = new Date();
     if (locationOffsetHours === undefined) {

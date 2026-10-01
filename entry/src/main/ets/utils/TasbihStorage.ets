@@ -43,16 +43,20 @@ export class TasbihStorage {
         : [];
       if (tasbihs.length === 0) tasbihs = defaults;
 
-      // Migration: older stored tasbihs have no lifetimeCount field.
-      // Default it to 0 so downstream code never has to guard against
-      // undefined.
+      // Migration: older stored tasbihs may be missing lifetimeCount
+      // and/or themePresetId. Fill in safe defaults so downstream code
+      // never has to guard against undefined.
       tasbihs = tasbihs.map((t: Tasbih): Tasbih => {
         const fixed: Tasbih = {
           id: t.id,
           name: t.name,
           dhikrs: t.dhikrs,
           createdAt: t.createdAt,
-          lifetimeCount: typeof t.lifetimeCount === 'number' ? t.lifetimeCount : 0
+          lifetimeCount: typeof t.lifetimeCount === 'number' ? t.lifetimeCount : 0,
+          theme: t.theme,
+          themePresetId: (typeof t.themePresetId === 'string' && t.themePresetId.length > 0)
+            ? t.themePresetId
+            : undefined
         };
         return fixed;
       });
@@ -61,8 +65,6 @@ export class TasbihStorage {
       const found = tasbihs.find((t): boolean => t.id === activeId);
       const activeTasbihId = found ? activeId : tasbihs[0].id;
 
-      // Restore the dhikr index, clamped to whatever the current
-      // tasbih actually contains.
       const rawIdx = await TasbihStorage.store.get(KEY_ACTIVE_DHK, 0) as number;
       const tasbih = tasbihs.find((t): boolean => t.id === activeTasbihId);
       const maxIdx = tasbih && tasbih.dhikrs.length > 0

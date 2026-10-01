@@ -13,6 +13,7 @@ import { PrayerOffsets } from '../helper/SettingsHelper';
 import { LocationMode } from '../models/SettingsModels';
 import { LocationCache, CachedLocation, FALLBACK_LOCATION } from './LocationCache';
 import { SettingsHelper } from '../helper/SettingsHelper';
+import { L } from '../helper/LocalizationHelper';
 import { TimezoneResolver } from './TimezoneResolver';
 
 export interface HomePrayerSnapshot {
@@ -373,14 +374,16 @@ export class HomeController {
   // ============================================================
 
   static async loadLocationForMode(mode: LocationMode): Promise<HomeLocationSnapshot> {
+    const manualLabel = L.get('manual_location');
+
     if (mode === LocationMode.MANUAL) {
       const coords = await SettingsHelper.getManualCoords();
       if (coords.lat !== 0 || coords.lng !== 0) {
-        const city: string = coords.cityName.length > 0 ? coords.cityName : 'Manual Location';
+        const city: string = coords.cityName.length > 0 ? coords.cityName : manualLabel;
         const snapshot: HomeLocationSnapshot = {
           latitude: coords.lat,
           longitude: coords.lng,
-          displayName: `${city} (Manual)`,
+          displayName: `${city} (${manualLabel})`,
           isManual: true
         };
         return snapshot;
@@ -388,7 +391,7 @@ export class HomeController {
       const snapshot: HomeLocationSnapshot = {
         latitude: 0,
         longitude: 0,
-        displayName: 'Set Manual Location in Settings',
+        displayName: L.get('set_manual_location'),
         isManual: true
       };
       return snapshot;
@@ -407,7 +410,7 @@ export class HomeController {
     const fallback: HomeLocationSnapshot = {
       latitude: FALLBACK_LOCATION.latitude,
       longitude: FALLBACK_LOCATION.longitude,
-      displayName: FALLBACK_LOCATION.cityName,
+      displayName: L.get('default_location'),
       isManual: false
     };
     return fallback;

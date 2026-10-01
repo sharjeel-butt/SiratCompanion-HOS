@@ -2,25 +2,30 @@
 
 import { ThemeMode } from '../common/Theme';
 import {
-  STORAGE_KEY_HIGH_LAT_RULE,
-  STORAGE_KEY_HIJRI_OFFSET,
-  STORAGE_KEY_LANGUAGE,
-  STORAGE_KEY_NOTIF_ASR,
-  STORAGE_KEY_NOTIF_BEFORE_MINUTES,
-  STORAGE_KEY_NOTIF_DHUHR,
-  STORAGE_KEY_NOTIF_FAJR,
-  STORAGE_KEY_NOTIF_ISHA,
-  STORAGE_KEY_NOTIF_MAGHRIB,
   STORAGE_KEY_NOTIF_MASTER,
-  STORAGE_KEY_TASBIH_RENDER_STYLE,
-  STORAGE_KEY_THEME_MODE,
-  STORAGE_KEY_VIBRATION_ENABLED,
-  STORAGE_KEY_WIZARD_COMPLETED
+  STORAGE_KEY_NOTIF_BEFORE_MINUTES,
+  STORAGE_KEY_NOTIF_FAJR,
+  STORAGE_KEY_NOTIF_DHUHR,
+  STORAGE_KEY_NOTIF_ASR,
+  STORAGE_KEY_NOTIF_MAGHRIB,
+  STORAGE_KEY_NOTIF_ISHA
 } from '../common/StorageKeys';
-import { AsrShadowRule, CalculationMethod, HighLatitudeRule } from '../utils/PrayerTimeCalculator';
+import {
+  STORAGE_KEY_THEME_MODE, STORAGE_KEY_HIJRI_OFFSET, STORAGE_KEY_LANGUAGE
+} from '../common/StorageKeys';
+import { CalculationMethod, AsrShadowRule } from '../utils/PrayerTimeCalculator';
 import { PreferencesHelper } from './PreferencesHelper';
-import { CalculationSource, LocationMode, ManualCoords, PickerItem } from '../models/SettingsModels';
+import {
+  PickerItem, CalculationSource, LocationMode, ManualCoords
+} from '../models/SettingsModels';
 import { L } from './LocalizationHelper';
+import { STORAGE_KEY_WIZARD_COMPLETED } from '../common/StorageKeys';
+import { HighLatitudeRule } from '../utils/PrayerTimeCalculator';
+import { STORAGE_KEY_HIGH_LAT_RULE } from '../common/StorageKeys';
+import { STORAGE_KEY_VIBRATION_ENABLED } from '../common/StorageKeys';
+import { STORAGE_KEY_TASBIH_RENDER_STYLE } from '../common/StorageKeys';
+import { STORAGE_KEY_TASBIH_THEME_PRESET } from '../common/StorageKeys';
+import { TasbihThemes } from '../common/TasbihThemes';
 
 const KEY_METHOD  = 'calc_method';
 const KEY_ASR     = 'asr_rule';
@@ -316,30 +321,43 @@ export class SettingsHelper {
       default:               return L.get('theme_system');
     }
   }
+
   static getLocationModeLabel(mode: LocationMode): string {
     switch (mode) {
-      case LocationMode.GPS:    return 'GPS';
-      case LocationMode.MANUAL: return 'Manual Location';
-      default: return 'GPS';
+      case LocationMode.GPS:
+        return L.get('gps');
+      case LocationMode.MANUAL:
+        return L.get('manual_location');
+      default:
+        return L.get('gps');
     }
   }
 
   static getCalcMethodShortLabel(method: CalculationMethod): string {
     switch (method) {
-      case CalculationMethod.KARACHI: return 'Karachi';
-      case CalculationMethod.JAFARI:  return 'Jafari';
-      case CalculationMethod.ISNA:    return 'ISNA';
-      case CalculationMethod.MWL:     return 'MWL';
-      default: return 'Karachi';
+      case CalculationMethod.KARACHI:
+        return L.get('method_short_karachi');
+      case CalculationMethod.JAFARI:
+        return L.get('method_short_jafari');
+      case CalculationMethod.ISNA:
+        return L.get('method_short_isna');
+      case CalculationMethod.MWL:
+        return L.get('method_short_mwl');
+      default:
+        return L.get('method_short_karachi');
     }
   }
 
   static getAsrRuleShortLabel(rule: AsrShadowRule): string {
-    return rule === AsrShadowRule.HANAFI ? 'Hanafi' : 'Standard';
+    return rule === AsrShadowRule.HANAFI
+      ? L.get('asr_short_hanafi')
+      : L.get('asr_short_standard');
   }
 
   static getCalcSourceShortLabel(source: CalculationSource): string {
-    return source === CalculationSource.API ? 'Online' : 'Local';
+    return source === CalculationSource.API
+      ? L.get('source_short_online')
+      : L.get('source_short_local');
   }
 
   // ============================================================
@@ -459,7 +477,7 @@ export class SettingsHelper {
   }
 
   // ============================================================
-  // TASBIH RENDER STYLE
+  // TASBIH RENDER STYLE (premium / classic)
   // ============================================================
 
   static async getTasbihRenderStyle(): Promise<string> {
@@ -468,5 +486,20 @@ export class SettingsHelper {
 
   static saveTasbihRenderStyle(style: string): void {
     PreferencesHelper.setString(STORAGE_KEY_TASBIH_RENDER_STYLE, style);
+  }
+
+  // ============================================================
+  // TASBIH THEME PRESET (global default)
+  // ============================================================
+
+  static async getTasbihThemePreset(): Promise<string> {
+    return PreferencesHelper.getString(
+      STORAGE_KEY_TASBIH_THEME_PRESET,
+      TasbihThemes.DEFAULT_PRESET_ID
+    );
+  }
+
+  static saveTasbihThemePreset(presetId: string): void {
+    PreferencesHelper.setString(STORAGE_KEY_TASBIH_THEME_PRESET, presetId);
   }
 }

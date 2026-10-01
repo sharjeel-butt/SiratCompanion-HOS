@@ -1,7 +1,7 @@
 # Privacy Policy — Sirat Companion
 
-**Last updated:** September 21, 2026
-**Effective date:** September 21, 2026
+**Last updated:** October 1, 2026
+**Effective date:** October 1, 2026
 
 [English](#english) · [中文](#chinese) · [العربية](#arabic)
 
@@ -45,18 +45,28 @@ information is transmitted to us, to Huawei, or to any third party by the App.
   relative to your device.
 - **Transmission:** Sensor readings are processed entirely on your device and are never stored or transmitted.
 
+### Prayer Completion History
+
+- **What we access:** The prayers you mark as prayed each day (Fajr, Dhuhr, Asr, Maghrib, Isha), stored per calendar
+  date.
+- **Why we access it:** To power the Home dashboard — today's progress, streaks, weekly grid, monthly heatmap, and
+  lifetime statistics.
+- **How it is stored:** Stored locally on your device using the HarmonyOS Preferences API. It never leaves your device.
+
 ### Prayer Times and Settings
 
 - **What we access:** Your calculation preferences (convention, Asr rule, prayer offsets, high-latitude rule), theme
-  preference, language preference, Hijri date offset, vibration preference, and home-screen toggles.
+  preference, language preference, Hijri date offset, vibration preference, Tasbih theme preferences, and home-screen
+  toggles.
 - **Why we access it:** To remember your choices across app restarts.
 - **How it is stored:** All preferences are stored locally on your device using the HarmonyOS Preferences API. They
   never leave your device.
 
 ### Tasbih Data
 
-- **What we access:** The Tasbih sessions you create, the dhikr items within them, and your counts.
-- **Why we access it:** To display and persist your Tasbih progress.
+- **What we access:** The Tasbih sessions you create, the dhikr items within them, your counts, and the theme chosen for
+  each Tasbih.
+- **Why we access it:** To display and persist your Tasbih progress and preferences.
 - **How it is stored:** Tasbih data is stored locally on your device using the HarmonyOS Preferences API. It never
   leaves your device.
 
@@ -84,13 +94,14 @@ We do not use any third-party analytics SDKs, advertising SDKs, or tracking libr
 
 All information accessed by the App is used only on your device and only to provide the App's features:
 
-| Information | Purpose                                       |
-|-------------|-----------------------------------------------|
-| Location    | Calculate prayer times and Qibla direction    |
-| Sensors     | Determine device orientation for the compass  |
-| Preferences | Remember your settings                        |
-| Tasbih data | Persist your dhikr progress                   |
-| Vibration   | Provide haptic feedback while counting Tasbih |
+| Information    | Purpose                                       |
+|----------------|-----------------------------------------------|
+| Location       | Calculate prayer times and Qibla direction    |
+| Sensors        | Determine device orientation for the compass  |
+| Prayer history | Track daily prayers, streaks, and progress    |
+| Preferences    | Remember your settings                        |
+| Tasbih data    | Persist your dhikr progress and preferences   |
+| Vibration      | Provide haptic feedback while counting Tasbih |
 
 We do not use your information for advertising, profiling, or any purpose unrelated to the App's core functionality.
 
@@ -111,7 +122,8 @@ Please refer to Huawei's privacy policy for details on how the operating system 
 
 All App data is stored locally on your device and is retained until you:
 
-- Clear it from within the App (e.g. by resetting Tasbih counts or switching to a different location)
+- Clear it from within the App (e.g. by resetting Tasbih counts, unchecking individual prayers, or switching to a
+  different location)
 - Uninstall the App
 
 Uninstalling Sirat Companion permanently removes all data the App has stored on your device.
@@ -155,7 +167,8 @@ Because the App does not collect or transmit your data, there is no data for us 
 side. You have full control over your data at all times:
 
 - **Access:** All data is visible within the App.
-- **Deletion:** Uninstalling the App removes all stored data.
+- **Deletion:** Uninstalling the App removes all stored data. Prayer completion history can also be cleared by
+  unchecking individual prayers.
 - **Portability:** Data can be viewed and re-entered at any time.
 - **Withdrawal of consent:** Revoke permissions in your device Settings.
 
@@ -213,16 +226,22 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 - **我们为何访问：** 天房指南针需要这些信息来确定真北方向以及麦加相对于您设备的位置。
 - **传输：** 传感器读数完全在您的设备上处理，绝不存储或传输。
 
+### 礼拜完成记录
+
+- **我们访问的内容：** 您每天标记为已礼的礼拜（晨礼、晌礼、晡礼、昏礼、宵礼），按日历日期存储。
+- **我们为何访问：** 用于驱动首页的今日进度、连续天数、每周网格、每月热力图以及累计统计。
+- **存储方式：** 通过 HarmonyOS Preferences API 存储在您的设备本地。它从不离开您的设备。
+
 ### 礼拜时间与设置
 
-- **我们访问的内容：** 您的计算偏好（计算方式、晡礼规则、礼拜时间偏移、高纬度规则）、主题偏好、语言偏好、回历日期偏移、振动偏好以及主屏幕开关。
+- **我们访问的内容：** 您的计算偏好（计算方式、晡礼规则、礼拜时间偏移、高纬度规则）、主题偏好、语言偏好、回历日期偏移、振动偏好、念珠主题偏好以及主屏幕开关。
 - **我们为何访问：** 用于在应用重启后记住您的选择。
 - **存储方式：** 所有偏好设置均通过 HarmonyOS Preferences API 存储在您的设备本地。它们从不离开您的设备。
 
 ### 念珠数据
 
-- **我们访问的内容：** 您创建的念珠、其中的念词项目以及您的计数。
-- **我们为何访问：** 用于显示和保存您的念珠进度。
+- **我们访问的内容：** 您创建的念珠、其中的念词项目、您的计数以及每串念珠所选择的主题。
+- **我们为何访问：** 用于显示和保存您的念珠进度和偏好。
 - **存储方式：** 念珠数据通过 HarmonyOS Preferences API 存储在您的设备本地。它从不离开您的设备。
 
 ### 触觉反馈（振动）
@@ -249,13 +268,14 @@ Sirat 伴侣**不**收集、存储或传输：
 
 本应用访问的所有信息仅在您的设备上使用，且仅用于提供本应用的功能：
 
-| 信息   | 用途            |
-|------|---------------|
-| 位置   | 计算礼拜时间和天房方向   |
-| 传感器  | 确定设备方向以供指南针使用 |
-| 偏好设置 | 记住您的设置        |
-| 念珠数据 | 保存您的念词进度      |
-| 振动   | 念珠计数时提供触觉反馈   |
+| 信息     | 用途              |
+|--------|-----------------|
+| 位置     | 计算礼拜时间和天房方向     |
+| 传感器    | 确定设备方向以供指南针使用   |
+| 礼拜完成记录 | 记录每日礼拜、连续天数以及进度 |
+| 偏好设置   | 记住您的设置          |
+| 念珠数据   | 保存您的念词进度和偏好     |
+| 振动     | 念珠计数时提供触觉反馈     |
 
 我们不会将您的信息用于广告、画像或与本应用核心功能无关的任何目的。
 
@@ -274,7 +294,7 @@ Sirat 伴侣**不**收集、存储或传输：
 
 所有应用数据都存储在您的设备本地，并保留至您：
 
-- 在应用内清除（例如重置念珠计数或切换到其他位置）
+- 在应用内清除（例如重置念珠计数、取消勾选单次礼拜或切换到其他位置）
 - 卸载本应用
 
 卸载 Sirat 伴侣会永久删除本应用在您设备上存储的所有数据。
@@ -311,7 +331,7 @@ Sirat 伴侣面向普通受众，适合所有年龄段的用户。本应用不�
 由于本应用不收集或传输您的数据，我们这边没有可供披露、更正或删除的数据。您始终完全掌控自己的数据：
 
 - **访问：** 所有数据均可在应用内查看。
-- **删除：** 卸载应用会删除所有存储的数据。
+- **删除：** 卸载应用会删除所有存储的数据。礼拜完成记录也可以通过取消勾选单次礼拜来清除。
 - **可移植性：** 数据可随时查看和重新输入。
 - **撤回同意：** 在设备设置中撤销权限。
 
@@ -372,17 +392,24 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 - **لماذا نصل إليها:** مطلوبة لبوصلة القبلة لتحديد اتجاه الشمال الحقيقي وموقع الكعبة بالنسبة لجهازك.
 - **النقل:** تُعالج قراءات المستشعرات بالكامل على جهازك ولا يتم تخزينها أو نقلها أبداً.
 
+### سجل الصلوات المكتملة
+
+- **ما نصل إليه:** الصلوات التي تُعلّمها كمُصلَّاة كل يوم (الفجر، الظهر، العصر، المغرب، العشاء)، محفوظة حسب التاريخ.
+- **لماذا نصل إليها:** لعرض تقدم اليوم والأيام المتتالية والشبكة الأسبوعية والخريطة الشهرية والإحصاءات الإجمالية على
+  الشاشة الرئيسية.
+- **كيفية التخزين:** تُخزَّن محلياً على جهازك باستخدام واجهة HarmonyOS Preferences. لا تغادر جهازك أبداً.
+
 ### أوقات الصلاة والإعدادات
 
 - **ما نصل إليه:** تفضيلات الحساب (طريقة الحساب، وقاعدة العصر، وتعديلات أوقات الصلاة، وقاعدة خطوط العرض العليا)، وتفضيل
-  المظهر، وتفضيل اللغة، وإزاحة التقويم الهجري، وتفضيل الاهتزاز، ومفاتيح الشاشة الرئيسية.
+  المظهر، وتفضيل اللغة، وإزاحة التقويم الهجري، وتفضيل الاهتزاز، وتفضيلات مظهر المسبحة، ومفاتيح الشاشة الرئيسية.
 - **لماذا نصل إليها:** لتذكر خياراتك عبر إعادة تشغيل التطبيق.
 - **كيفية التخزين:** تُخزَّن جميع التفضيلات محلياً على جهازك باستخدام واجهة HarmonyOS Preferences. لا تغادر جهازك أبداً.
 
 ### بيانات التسبيح
 
-- **ما نصل إليه:** جلسات التسبيح التي تنشئها، وعناصر الأذكار داخلها، وأعدادها.
-- **لماذا نصل إليها:** لعرض تقدمك في التسبيح وحفظه.
+- **ما نصل إليه:** جلسات التسبيح التي تنشئها، وعناصر الأذكار داخلها، وأعدادها، والمظهر المختار لكل مسبحة.
+- **لماذا نصل إليها:** لعرض تقدمك في التسبيح وتفضيلاتك وحفظها.
 - **كيفية التخزين:** تُخزَّن بيانات التسبيح محلياً على جهازك باستخدام واجهة HarmonyOS Preferences. لا تغادر جهازك أبداً.
 
 ### التغذية اللمسية (الاهتزاز)
@@ -409,13 +436,14 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 
 تُستخدم جميع المعلومات التي يصل إليها التطبيق على جهازك فقط، ولتقديم ميزات التطبيق حصراً:
 
-| المعلومات      | الغرض                               |
-|----------------|-------------------------------------|
-| الموقع         | حساب أوقات الصلاة واتجاه القبلة     |
-| المستشعرات     | تحديد اتجاه الجهاز للبوصلة          |
-| التفضيلات      | تذكر إعداداتك                       |
-| بيانات التسبيح | حفظ تقدم الأذكار                    |
-| الاهتزاز       | توفير تغذية لمسية أثناء عدّ التسبيح |
+| المعلومات      | الغرض                                          |
+|----------------|------------------------------------------------|
+| الموقع         | حساب أوقات الصلاة واتجاه القبلة                |
+| المستشعرات     | تحديد اتجاه الجهاز للبوصلة                     |
+| سجل الصلوات    | تتبع الصلوات اليومية والأيام المتتالية والتقدم |
+| التفضيلات      | تذكر إعداداتك                                  |
+| بيانات التسبيح | حفظ تقدم الأذكار والتفضيلات                    |
+| الاهتزاز       | توفير تغذية لمسية أثناء عدّ التسبيح            |
 
 لا نستخدم معلوماتك للإعلانات أو التنميط أو أي غرض لا يتصل بالوظائف الأساسية للتطبيق.
 
@@ -434,7 +462,7 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 
 تُخزَّن جميع بيانات التطبيق محلياً على جهازك وتُحفظ حتى:
 
-- تمسحها من داخل التطبيق (مثلاً، بإعادة تعيين أعداد التسبيح أو التبديل إلى موقع آخر)
+- تمسحها من داخل التطبيق (مثلاً، بإعادة تعيين أعداد التسبيح، أو إلغاء تحديد صلوات فردية، أو التبديل إلى موقع آخر)
 - تلغي تثبيت التطبيق
 
 يؤدي إلغاء تثبيت رفيق الصراط إلى حذف جميع البيانات التي خزّنها التطبيق على جهازك نهائياً.
@@ -474,7 +502,8 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 السيطرة الكاملة على بياناتك في جميع الأوقات:
 
 - **الوصول:** جميع البيانات مرئية داخل التطبيق.
-- **الحذف:** يؤدي إلغاء تثبيت التطبيق إلى إزالة جميع البيانات المخزنة.
+- **الحذف:** يؤدي إلغاء تثبيت التطبيق إلى إزالة جميع البيانات المخزنة. يمكن أيضاً مسح سجل الصلوات المكتملة بإلغاء تحديد
+  الصلوات الفردية.
 - **القابلية للنقل:** يمكن عرض البيانات وإعادة إدخالها في أي وقت.
 - **سحب الموافقة:** اسحب الأذونات من إعدادات جهازك.
 

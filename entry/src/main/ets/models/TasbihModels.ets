@@ -1,5 +1,7 @@
 // entry/src/main/ets/models/TasbihModels.ets
 
+import { TasbihTheme } from '../common/TasbihThemes';
+
 export interface Dhikr {
   id: string;
   arabic: string;
@@ -14,9 +16,14 @@ export interface Tasbih {
   name: string;
   dhikrs: Dhikr[];
   createdAt: number;
-  /** Total increment actions ever performed on any dhikr in this
-   *  tasbih. Never decremented by the user. Persisted with the tasbih. */
   lifetimeCount: number;
+
+  /** Optional per-tasbih theme. When absent, the global default is used. */
+  theme?: TasbihTheme;
+
+  /** Preset id ('amber' | 'charcoal' | ...) — kept alongside the theme so the
+   *  preset can be restored verbatim (including its swatch). */
+  themePresetId?: string;
 }
 
 export interface DhikrFields {

@@ -1,12 +1,10 @@
 // entry/src/main/ets/helper/TasbihCanvasRenderer.ets
 
-export type BeadRenderStyle = 'classic' | 'premium';
+import {
+  BeadColors, TasbihFinish, TasbihTheme, TasbihThemes
+} from '../common/TasbihThemes';
 
-export interface BeadColors {
-  hi: string;
-  base: string;
-  lo: string;
-}
+export type BeadRenderStyle = 'classic' | 'premium';
 
 export interface BeadCanvasConfig {
   topCount: number;
@@ -19,22 +17,31 @@ export interface BeadCanvasConfig {
   renderStyle: BeadRenderStyle;
   isDark: boolean;
   stringColor: string;
-
   /** 0 → 1 during the rolling-window enter animation. 0 when idle. */
   topShiftProgress: number;
+
+  /** Active theme (colour + finish). */
+  theme: TasbihTheme;
+
+  /**
+   * Bottom-cluster count from BEFORE the current shift started.
+   * -1 means no cross-fade is in progress.
+   */
+  bottomPrevCount: number;
+
+  /**
+   * 0 → old cluster fully visible; 1 → new cluster fully visible.
+   * Only meaningful when bottomPrevCount >= 0.
+   */
+  bottomFadeProgress: number;
 }
 
-export const HEAD_COLORS: BeadColors = { hi: '#F5C57A', base: '#D18F35', lo: '#7A4A10' };
-
-export const GOLD_COLORS: BeadColors = { hi: '#FFE0A0', base: '#E8A44C', lo: '#8B5A1A' };
-
 export const DONE_COLORS: BeadColors = { hi: '#A7F3C0', base: '#4ADE80', lo: '#1E7A4E' };
-
 export const PEND_COLORS_LIGHT: BeadColors = { hi: '#EFEAE0', base: '#C9C2B8', lo: '#8E8878' };
-
 export const PEND_COLORS_DARK: BeadColors = { hi: '#5A5A5A', base: '#3A3A3A', lo: '#1A1A1A' };
 
 export class TasbihCanvasRenderer {
+
   private static readonly FISHEYE_PEAK_SCALE = 1.65;
   private static readonly FISHEYE_SIGMA_MULT = 3.5;
   private static readonly FISHEYE_GAP_STRETCH = 0.55;
@@ -77,8 +84,11 @@ export class TasbihCanvasRenderer {
       return 1 + TasbihCanvasRenderer.FISHEYE_GAP_STRETCH * ((sa + sb) / 2 - 1);
     };
 
+    // Palette for the current theme
+    const palette: BeadColors = TasbihThemes.palette(cfg.theme.color);
+
     // ---- TOP STACK ----
-    const topColors = cfg.isComplete ? DONE_COLORS : GOLD_COLORS;
+    const topColors: BeadColors = cfg.isComplete ? DONE_COLORS : palette;
     const topCount = cfg.topCount;
     if (topCount > 0) {
       const topScales: number[] = [];
@@ -106,7 +116,8 @@ export class TasbihCanvasRenderer {
           ctx.save();
           ctx.globalAlpha = alpha;
           TasbihCanvasRenderer.drawBead(
-            ctx, cx, finalY, r * topScales[i], topColors, cfg.renderStyle
+            ctx, cx, finalY, r * topScales[i],
+            topColors, cfg.renderStyle, cfg.theme.finish
           );
           ctx.restore();
         }
@@ -119,7 +130,8 @@ export class TasbihCanvasRenderer {
         ctx.save();
         ctx.globalAlpha = shift;
         TasbihCanvasRenderer.drawBead(
-          ctx, cx, extraY, r * topScales[topCount - 1], topColors, cfg.renderStyle
+          ctx, cx, extraY, r * topScales[topCount - 1],
+          topColors, cfg.renderStyle, cfg.theme.finish
         );
         ctx.restore();
       }
@@ -128,30 +140,69 @@ export class TasbihCanvasRenderer {
     // ---- BOTTOM STACK ----
     const botColors = cfg.isDark ? PEND_COLORS_DARK : PEND_COLORS_LIGHT;
     const botCount = cfg.bottomCount;
-    if (botCount > 0) {
-      const botScales: number[] = [];
-      const botNaturalYs: number[] = [];
-      for (let i = 0; i < botCount; i++) {
-        const ny = H - r - (botCount - 1 - i) * step;
-        botNaturalYs.push(ny);
-        botScales.push(scaleFor(ny));
+    const prevBotCount = cfg.bottomPrevCount;
+    const fade = cfg.bottomFadeProgress;
+
+    // Draws a bottom cluster of `count` beads, bottom-anchored, at the
+    // given alpha.
+    const drawBottomCluster = (count: number, alpha: number): void => {
+      if (count <= 0 || alpha <= 0.01) {
+        return;
       }
-      const botCenters: number[] = new Array(botCount).fill(0);
-      botCenters[botCount - 1] = H - r * botScales[botCount - 1];
-      for (let i = botCount - 2; i >= 0; i--) {
-        botCenters[i] =
-          botCenters[i + 1] -
-            r * botScales[i + 1] -
-            g * gapMult(botScales[i], botScales[i + 1]) -
-            r * botScales[i];
+      const scales: number[] = [];
+      for (let i = 0; i < count; i++) {
+        const ny = H - r - (count - 1 - i) * step;
+        scales.push(scaleFor(ny));
       }
-      for (let i = 0; i < botCount; i++) {
+      const centers: number[] = new Array(count).fill(0);
+      centers[count - 1] = H - r * scales[count - 1];
+      for (let i = count - 2; i >= 0; i--) {
+        centers[i] =
+          centers[i + 1] -
+            r * scales[i + 1] -
+            g * gapMult(scales[i], scales[i + 1]) -
+            r * scales[i];
+      }
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      for (let i = 0; i < count; i++) {
         TasbihCanvasRenderer.drawBead(
-          ctx, cx, botCenters[i], r * botScales[i], botColors, cfg.renderStyle
+          ctx, cx, centers[i], r * scales[i],
+          botColors, cfg.renderStyle, cfg.theme.finish
         );
       }
+      ctx.restore();
+    };
+
+    if (prevBotCount > 0 && fade > 0 && fade < 1) {
+      // Cross-fade in progress: draw the new cluster at full alpha,
+      // and fade out the extra beads that existed only in the old cluster.
+      drawBottomCluster(botCount, 1);
+
+      if (prevBotCount > botCount) {
+        const extraAlpha = 1 - fade;
+        for (let i = 0; i < prevBotCount - botCount; i++) {
+          // Position of the extra bead inside the OLD cluster.
+          const y = H - r - (prevBotCount - 1 - i) * step;
+          const sc = scaleFor(y);
+          ctx.save();
+          ctx.globalAlpha = extraAlpha;
+          TasbihCanvasRenderer.drawBead(
+            ctx, cx, y, r * sc, botColors,
+            cfg.renderStyle, cfg.theme.finish
+          );
+          ctx.restore();
+        }
+      }
+    } else {
+      // Idle: just draw the current cluster.
+      drawBottomCluster(botCount, 1);
     }
   }
+
+  // ============================================================
+  // DISPATCH
+  // ============================================================
 
   private static drawBead(
     ctx: CanvasRenderingContext2D,
@@ -159,14 +210,23 @@ export class TasbihCanvasRenderer {
     cy: number,
     r: number,
     colors: BeadColors,
-    style: BeadRenderStyle
+    style: BeadRenderStyle,
+    finish: TasbihFinish
   ): void {
     if (style === 'classic') {
       TasbihCanvasRenderer.drawClassic(ctx, cx, cy, r, colors);
+      return;
+    }
+    if (finish === TasbihFinish.METALLIC) {
+      TasbihCanvasRenderer.drawMetallic(ctx, cx, cy, r, colors);
     } else {
-      TasbihCanvasRenderer.drawPremium(ctx, cx, cy, r, colors);
+      TasbihCanvasRenderer.drawMatte(ctx, cx, cy, r, colors);
     }
   }
+
+  // ============================================================
+  // CLASSIC
+  // ============================================================
 
   private static drawClassic(
     ctx: CanvasRenderingContext2D,
@@ -191,23 +251,27 @@ export class TasbihCanvasRenderer {
     ctx.fill();
   }
 
-  private static drawPremium(
+  // ============================================================
+  // MATTE — soft sphere, no visible rays
+  // ============================================================
+
+  private static drawMatte(
     ctx: CanvasRenderingContext2D,
     cx: number, cy: number, r: number, colors: BeadColors
   ): void {
-    // 1. Extrusion shadow
+    // Extrusion shadow
     ctx.beginPath();
     ctx.arc(cx + 1.5, cy + 3, r, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.38)';
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.32)';
     ctx.fill();
 
-    // 2. Base sphere
+    // Base sphere
     const baseGrad = ctx.createRadialGradient(
       cx - r * 0.30, cy - r * 0.30, r * 0.05,
       cx, cy, r
     );
     baseGrad.addColorStop(0, colors.hi);
-    baseGrad.addColorStop(0.5, colors.base);
+    baseGrad.addColorStop(0.55, colors.base);
     baseGrad.addColorStop(1, colors.lo);
 
     ctx.beginPath();
@@ -215,42 +279,7 @@ export class TasbihCanvasRenderer {
     ctx.fillStyle = baseGrad;
     ctx.fill();
 
-    // 3. Chromatic aberration
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.clip();
-    ctx.globalCompositeOperation = 'screen';
-    ctx.beginPath();
-    ctx.arc(cx - r * 0.07, cy, r * 0.97, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(0, 200, 255, 0.10)';
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(cx + r * 0.07, cy, r * 0.97, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255, 0, 200, 0.10)';
-    ctx.fill();
-    ctx.restore();
-
-    // 4. Metallic sheen
-    try {
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx.clip();
-      const sheen = ctx.createConicGradient(0, cx, cy);
-      sheen.addColorStop(0, 'rgba(0,0,0,0.22)');
-      sheen.addColorStop(0.25, 'rgba(255,255,255,0.30)');
-      sheen.addColorStop(0.5, 'rgba(0,0,0,0.22)');
-      sheen.addColorStop(0.75, 'rgba(255,255,255,0.30)');
-      sheen.addColorStop(1, 'rgba(0,0,0,0.22)');
-      ctx.globalCompositeOperation = 'overlay';
-      ctx.fillStyle = sheen;
-      ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
-      ctx.restore();
-    } catch (e) { /* conic gradient unsupported — skip */
-    }
-
-    // 5. Specular highlight
+    // Soft specular highlight
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
@@ -259,14 +288,14 @@ export class TasbihCanvasRenderer {
       cx - r * 0.35, cy - r * 0.35, 0,
       cx - r * 0.35, cy - r * 0.35, r * 0.65
     );
-    spec.addColorStop(0, 'rgba(255, 255, 255, 0.85)');
-    spec.addColorStop(0.35, 'rgba(255, 255, 255, 0.15)');
+    spec.addColorStop(0, 'rgba(255, 255, 255, 0.70)');
+    spec.addColorStop(0.4, 'rgba(255, 255, 255, 0.12)');
     spec.addColorStop(1, 'rgba(255, 255, 255, 0)');
     ctx.fillStyle = spec;
     ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
     ctx.restore();
 
-    // 6. Bounce light
+    // Bounce light
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
@@ -275,9 +304,95 @@ export class TasbihCanvasRenderer {
       cx + r * 0.20, cy + r * 0.40, 0,
       cx + r * 0.20, cy + r * 0.40, r * 0.60
     );
-    bounce.addColorStop(0, 'rgba(255, 255, 255, 0.14)');
+    bounce.addColorStop(0, 'rgba(255, 255, 255, 0.18)');
     bounce.addColorStop(1, 'rgba(255, 255, 255, 0)');
     ctx.fillStyle = bounce;
+    ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+    ctx.restore();
+  }
+
+  // ============================================================
+  // METALLIC — brushed finish with conic rays
+  // ============================================================
+
+  private static drawMetallic(
+    ctx: CanvasRenderingContext2D,
+    cx: number, cy: number, r: number, colors: BeadColors
+  ): void {
+    // Extrusion shadow
+    ctx.beginPath();
+    ctx.arc(cx + 1.5, cy + 3, r, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.42)';
+    ctx.fill();
+
+    // Conic gradient with alternating hi/base/lo stops creates the
+    // distinctive "brushed metal" rays seen in the swatch.
+    let usedConic = false;
+    try {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.clip();
+
+      const conic = ctx.createConicGradient(0, cx, cy);
+      conic.addColorStop(0.000, colors.lo);
+      conic.addColorStop(0.125, colors.hi);
+      conic.addColorStop(0.250, colors.base);
+      conic.addColorStop(0.375, colors.hi);
+      conic.addColorStop(0.500, colors.lo);
+      conic.addColorStop(0.625, colors.hi);
+      conic.addColorStop(0.750, colors.base);
+      conic.addColorStop(0.875, colors.hi);
+      conic.addColorStop(1.000, colors.lo);
+
+      ctx.fillStyle = conic;
+      ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+      ctx.restore();
+      usedConic = true;
+    } catch (e) {
+      usedConic = false;
+    }
+
+    if (!usedConic) {
+      // Fallback: plain radial if conic is unsupported.
+      const grad = ctx.createRadialGradient(
+        cx - r * 0.3, cy - r * 0.3, r * 0.05, cx, cy, r
+      );
+      grad.addColorStop(0, colors.hi);
+      grad.addColorStop(0.5, colors.base);
+      grad.addColorStop(1, colors.lo);
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+
+    // Radial darkening toward the edge → sphere feel
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.clip();
+    const radial = ctx.createRadialGradient(cx, cy, r * 0.2, cx, cy, r);
+    radial.addColorStop(0, 'rgba(255, 255, 255, 0.20)');
+    radial.addColorStop(0.70, 'rgba(0, 0, 0, 0)');
+    radial.addColorStop(1, 'rgba(0, 0, 0, 0.38)');
+    ctx.fillStyle = radial;
+    ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+    ctx.restore();
+
+    // Strong specular highlight
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.clip();
+    const spec = ctx.createRadialGradient(
+      cx - r * 0.40, cy - r * 0.40, 0,
+      cx - r * 0.40, cy - r * 0.40, r * 0.60
+    );
+    spec.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+    spec.addColorStop(0.35, 'rgba(255, 255, 255, 0.22)');
+    spec.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    ctx.fillStyle = spec;
     ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
     ctx.restore();
   }
