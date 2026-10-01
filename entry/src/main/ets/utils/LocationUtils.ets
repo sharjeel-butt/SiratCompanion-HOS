@@ -6,6 +6,8 @@ import { BusinessError } from '@kit.BasicServicesKit';
 import { promptAction } from '@kit.ArkUI';
 import { i18n } from '@kit.LocalizationKit';
 import { OfflineCityLookup } from './OfflineCityLookup';
+import { L } from '../helper/LocalizationHelper';
+import { STORAGE_KEY_LANGUAGE } from '../common/StorageKeys';
 
 // ----- Interface for location result -----
 export interface LocationData {
@@ -20,10 +22,12 @@ interface ReverseResult {
 }
 
 export class LocationHelper {
+  /** Current app language, read directly from AppStorage. */
+  private static currentLang(): string {
+    const v = AppStorage.get<string>(STORAGE_KEY_LANGUAGE);
+    return v ? v : 'en';
+  }
 
-  /**
-   * Request location permissions from the user.
-   */
   static async requestLocationPermission(context: Context): Promise<boolean> {
     const atManager = abilityAccessCtrl.createAtManager();
     const permissions: Array<Permissions> = [
@@ -40,24 +44,13 @@ export class LocationHelper {
     }
   }
 
-  /**
-   * Reverse-geocode coordinates into a city name.
-   *
-   * Order of resolution:
-   *   1. Offline city table (instant, no network, top ~60 cities)
-   *   2. System geocoder — tries the device locale then fallbacks
-   *   3. countryName as a last resort
-   *   4. 'Unknown location'
-   */
   static async reverseGeocode(latitude: number, longitude: number): Promise<string> {
-    // 1. Offline nearest-city match
     const offline = OfflineCityLookup.nearest(latitude, longitude);
     if (offline !== null) {
       console.info(`[LocationHelper] reverseGeocode offline match: ${offline}`);
       return offline;
     }
 
-    // 2. System geocoder, several locales
     const locales = LocationHelper.buildLocaleCandidates();
     let lastCountry: string | null = null;
 
@@ -69,48 +62,32 @@ export class LocationHelper {
       }
     }
 
-    // 3. Country as a fallback when no city was found
     if (lastCountry !== null) {
       console.info(`[LocationHelper] reverseGeocode country-only fallback: ${lastCountry}`);
       return lastCountry;
     }
 
     console.warn('[LocationHelper] reverseGeocode: no data at all');
-    return 'Unknown location';
+    return L.get('unknown_location', LocationHelper.currentLang());
   }
 
-  /**
-   * Build a de-duplicated list of locale strings to try, in order.
-   * The device's system language goes first.
-   */
   private static buildLocaleCandidates(): string[] {
     const out: string[] = [];
 
-    // Device language (e.g. "zh", "ur", "ar")
     try {
-      const sysLocale = i18n.System.getSystemLocale();      // "zh-Hans-CN"
+      const sysLocale = i18n.System.getSystemLocale();
       const lang = sysLocale.split('-')[0];
       if (lang.length > 0) out.push(lang);
-    } catch (err) {
-      // ignore — fall through to defaults
+    } catch (err) { /* ignore */
     }
 
-    // Common fallbacks. Order matters: 'en' first because most
-    // geocoding services return Latin script by default, then the
-    // languages most likely to unlock region-restricted data.
     const fallbacks = ['en', 'zh', 'ur', 'ar'];
     for (const f of fallbacks) {
       if (out.indexOf(f) === -1) out.push(f);
     }
-
     return out;
   }
 
-  /**
-   * Single-locale reverse geocode attempt.
-   * Returns null if nothing usable was found, otherwise an object
-   * describing whether we got a city-level or country-level result.
-   */
   private static async tryReverseGeocode(
     latitude: number,
     longitude: number,
@@ -126,23 +103,11 @@ export class LocationHelper {
 
       const results = await geoLocationManager.getAddressesFromLocation(request);
       if (!results || results.length === 0) {
-        console.info(`[LocationHelper] reverseGeocode locale='${locale}': no results`);
         return null;
       }
 
       const addr = results[0];
 
-      console.info(
-        `[LocationHelper] reverseGeocode locale='${locale}' raw: ` +
-          `placeName="${addr.placeName}", ` +
-          `locality="${addr.locality}", ` +
-          `subLocality="${addr.subLocality}", ` +
-          `adminArea="${addr.administrativeArea}", ` +
-          `subAdminArea="${addr.subAdministrativeArea}", ` +
-          `countryName="${addr.countryName}"`
-      );
-
-      // City-level fields, most specific first
       const cityCandidates: Array<string | undefined> = [
         addr.locality,
         addr.subAdministrativeArea,
@@ -158,8 +123,6 @@ export class LocationHelper {
         }
       }
 
-      // Nothing city-level — remember the country for a possible
-      // later fallback.
       if (typeof addr.countryName === 'string' && addr.countryName.length > 0) {
         const r: ReverseResult = { kind: 'country', value: addr.countryName.toUpperCase() };
         return r;
@@ -176,9 +139,6 @@ export class LocationHelper {
     }
   }
 
-  /**
-   * Check if the system location master switch is ON.
-   */
   static async isLocationEnabled(): Promise<boolean> {
     try {
       return await geoLocationManager.isLocationEnabled();
@@ -188,10 +148,6 @@ export class LocationHelper {
     }
   }
 
-  /**
-   * Fetch the user's current location: coordinates AND city name.
-   * Throws errors: 'GPS_OFF', 'PERMISSION_DENIED', or generic.
-   */
   static async fetchLocationData(context: Context): Promise<LocationData> {
     const enabled = await LocationHelper.isLocationEnabled();
     if (!enabled) throw new Error('GPS_OFF');
@@ -206,7 +162,6 @@ export class LocationHelper {
     };
     const location = await geoLocationManager.getCurrentLocation(request);
 
-    // Reuse the new method
     const cityName = await LocationHelper.reverseGeocode(location.latitude, location.longitude);
 
     return {
@@ -216,15 +171,13 @@ export class LocationHelper {
     };
   }
 
-  /**
-   * Show a dialog informing the user that GPS is off.
-   */
   static async showLocationDisabledDialog(): Promise<void> {
+    const lang = LocationHelper.currentLang();
     try {
       await promptAction.showDialog({
-        title: 'Location is disabled',
-        message: 'Please enable location services to get accurate prayer times for your city.',
-        buttons: [{ text: 'OK', color: '#C9A96E' }]
+        title: L.get('dialog_gps_off_title', lang),
+        message: L.get('dialog_gps_off_message', lang),
+        buttons: [{ text: L.get('ok', lang), color: '#C9A96E' }]
       });
     } catch (err) {
       const error = err as BusinessError;
@@ -232,15 +185,13 @@ export class LocationHelper {
     }
   }
 
-  /**
-   * Show a dialog informing the user that permission was denied.
-   */
   static async showPermissionDeniedDialog(): Promise<void> {
+    const lang = LocationHelper.currentLang();
     try {
       await promptAction.showDialog({
-        title: 'Permission required',
-        message: 'Location permission is required to show prayer times for your city.\nPlease grant it in system settings.',
-        buttons: [{ text: 'OK', color: '#C9A96E' }]
+        title: L.get('dialog_permission_title', lang),
+        message: L.get('dialog_permission_message', lang),
+        buttons: [{ text: L.get('ok', lang), color: '#C9A96E' }]
       });
     } catch (err) {
       const error = err as BusinessError;

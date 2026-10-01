@@ -1,16 +1,22 @@
 // entry/src/main/ets/pages/CustomizePage.ets
 
-import { mediaquery, router } from '@kit.ArkUI';
+import { router } from '@kit.ArkUI';
+import { mediaquery } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import { SettingsHelper } from '../helper/SettingsHelper';
 import { PickerItem } from '../models/SettingsModels';
-import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../common/StorageKeys';
-import { AppLanguage, L } from '../helper/LocalizationHelper';
+import {
+  STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_APP_FOREGROUND_TICK
+} from '../common/StorageKeys';
+import { L, AppLanguage } from '../helper/LocalizationHelper';
 
 @Entry
 @Component
 struct CustomizePage {
+
   // ============================================================
   // THEME + LANGUAGE
   // ============================================================
@@ -22,11 +28,15 @@ struct CustomizePage {
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = AppLanguage.ENGLISH;
+  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
+  @Watch('onAppForegrounded')
+  appForegroundTick: number = 0;
 
   @State private currentLanguage: string = AppLanguage.ENGLISH;
 
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
+
   // ============================================================
   // UI CUSTOMIZATION STATE
   // ============================================================
@@ -34,11 +44,7 @@ struct CustomizePage {
   @State showExtraTimings: boolean = true;
   @State showIslamicEvents: boolean = true;
   @State vibrationEnabled: boolean = true;
-  // ============================================================
-  // APPEARANCE STATE
-  // ============================================================
 
-  @State private tasbihPremium: boolean = true;
   // ============================================================
   // UI STATE
   // ============================================================
@@ -81,13 +87,19 @@ struct CustomizePage {
 
   private pickThemeMode(id: string): void {
     this.themeMode = id;
-    SettingsHelper.saveThemeMode(id);
     this.colors = PageTheme.compute(id);
+    SettingsHelper.saveThemeMode(id);
     this.showThemePicker = false;
   }
 
+  /**
+   * Explicitly update BOTH appLanguage and currentLanguage so the
+   * page re-renders immediately, without relying on the @Watch
+   * callback to fire for a self-assigned @StorageLink.
+   */
   private pickLanguage(id: string): void {
     this.appLanguage = id;
+    this.currentLanguage = id; // ← critical
     SettingsHelper.saveLanguage(id);
     this.showLanguagePicker = false;
   }
@@ -118,14 +130,17 @@ struct CustomizePage {
     this.reload();
   }
 
+  private async onAppForegrounded(): Promise<void> {
+    this.currentLanguage = this.appLanguage;
+    this.applyTheme();
+    await this.reload();
+  }
+
   private async reload(): Promise<void> {
     const data = await SettingsHelper.loadAll();
     this.showExtraTimings  = data.showExtraTimings;
     this.showIslamicEvents = data.showIslamicEvents;
     this.vibrationEnabled = SettingsHelper.getVibrationEnabled();
-
-    const style = await SettingsHelper.getTasbihRenderStyle();
-    this.tasbihPremium = style !== 'classic';
   }
 
   // ============================================================
@@ -145,11 +160,6 @@ struct CustomizePage {
   private toggleVibration(value: boolean): void {
     this.vibrationEnabled = value;
     SettingsHelper.saveVibrationEnabled(value);
-  }
-
-  private async toggleTasbihPremium(value: boolean): Promise<void> {
-    this.tasbihPremium = value;
-    SettingsHelper.saveTasbihRenderStyle(value ? 'premium' : 'classic');
   }
 
   // ============================================================
@@ -199,6 +209,10 @@ struct CustomizePage {
     }
   }
 
+  private isRtl(): boolean {
+    return L.isRtlLang(this.currentLanguage);
+  }
+
   // ============================================================
   // BUILD
   // ============================================================
@@ -210,24 +224,89 @@ struct CustomizePage {
 
         Scroll() {
           Column() {
-            // ---- UI Customization ----
-            this.CategoryHeader(
-              this.tr('category_ui_customization'),
-              '🎛️',
-              this.colors.categoryUICustomization,
-              'UI Customization'
-            )
+            // ==================================================
+            // UI Customization — header inlined so it re-renders
+            // immediately when currentLanguage changes.
+            // ==================================================
+            Row() {
+              Text('🎛️')
+                .fontSize(18)
+                .width(40)
+                .height(40)
+                .textAlign(TextAlign.Center)
+                .backgroundColor(this.colors.tintSoft)
+                .borderRadius(12)
+                .border({ width: 1, color: this.colors.borderSoft })
+
+              Text(this.tr('category_ui_customization'))
+                .fontSize(17)
+                .fontWeight(FontWeight.Bold)
+                .fontColor(this.colors.textWhite)
+                .margin({ left: 14 })
+                .layoutWeight(1)
+
+              Text(this.expandedCategory === 'UI Customization' ? '▲' : '▼')
+                .fontSize(12).fontColor(this.colors.accentGold).opacity(0.8)
+            }
+            .width('100%')
+            .padding({
+              top: 12,
+              bottom: 12,
+              left: 12,
+              right: 16
+            })
+            .backgroundColor(this.colors.cardDark)
+            .borderRadius(16)
+            .border({ width: 1, color: this.colors.borderSoft })
+            .margin({ bottom: 8 })
+            .onClick(() => {
+              this.expandedCategory = this.expandedCategory === 'UI Customization'
+                ? null : 'UI Customization';
+            })
+
             if (this.expandedCategory === 'UI Customization') {
               this.UICustomizationContent()
             }
 
-            // ---- Appearance ----
-            this.CategoryHeader(
-              this.tr('category_appearance'),
-              '🎨',
-              this.colors.categoryAppearance,
-              'Appearance'
-            )
+            // ==================================================
+            // Appearance — header inlined
+            // ==================================================
+            Row() {
+              Text('🎨')
+                .fontSize(18)
+                .width(40)
+                .height(40)
+                .textAlign(TextAlign.Center)
+                .backgroundColor(this.colors.tintSoft)
+                .borderRadius(12)
+                .border({ width: 1, color: this.colors.borderSoft })
+
+              Text(this.tr('category_appearance'))
+                .fontSize(17)
+                .fontWeight(FontWeight.Bold)
+                .fontColor(this.colors.textWhite)
+                .margin({ left: 14 })
+                .layoutWeight(1)
+
+              Text(this.expandedCategory === 'Appearance' ? '▲' : '▼')
+                .fontSize(12).fontColor(this.colors.accentGold).opacity(0.8)
+            }
+            .width('100%')
+            .padding({
+              top: 12,
+              bottom: 12,
+              left: 12,
+              right: 16
+            })
+            .backgroundColor(this.colors.cardDark)
+            .borderRadius(16)
+            .border({ width: 1, color: this.colors.borderSoft })
+            .margin({ bottom: 8 })
+            .onClick(() => {
+              this.expandedCategory = this.expandedCategory === 'Appearance'
+                ? null : 'Appearance';
+            })
+
             if (this.expandedCategory === 'Appearance') {
               this.AppearanceContent()
             }
@@ -246,7 +325,6 @@ struct CustomizePage {
       }
       .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
 
-      // ---- Theme picker overlay ----
       if (this.showThemePicker) {
         this.PickerOverlay(
           this.tr('dark_mode'),
@@ -257,7 +335,6 @@ struct CustomizePage {
         )
       }
 
-      // ---- Language picker overlay ----
       if (this.showLanguagePicker) {
         this.PickerOverlay(
           this.tr('language'),
@@ -270,11 +347,12 @@ struct CustomizePage {
     }
     .width('100%').height('100%')
     .backgroundColor(this.colors.primaryGreen)
+    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 
   // ============================================================
-  // BUILDERS
+  // TOP BAR
   // ============================================================
 
   @Builder
@@ -295,46 +373,8 @@ struct CustomizePage {
     .alignItems(VerticalAlign.Center)
   }
 
-  @Builder
-  CategoryHeader(title: string, icon: string, iconColor: string, categoryKey: string) {
-    Row() {
-      Text(icon)
-        .fontSize(18)
-        .width(40)
-        .height(40)
-        .textAlign(TextAlign.Center)
-        .backgroundColor(this.colors.tintSoft)
-        .borderRadius(12)
-        .border({ width: 1, color: this.colors.borderSoft })
-
-      Text(title)
-        .fontSize(17)
-        .fontWeight(FontWeight.Bold)
-        .fontColor(this.colors.textWhite)
-        .margin({ left: 14 })
-        .layoutWeight(1)
-
-      Text(this.expandedCategory === categoryKey ? '▲' : '▼')
-        .fontSize(12).fontColor(this.colors.accentGold).opacity(0.8)
-    }
-    .width('100%')
-    .padding({
-      top: 12,
-      bottom: 12,
-      left: 12,
-      right: 16
-    })
-    .backgroundColor(this.colors.cardDark)
-    .borderRadius(16)
-    .border({ width: 1, color: this.colors.borderSoft })
-    .margin({ bottom: 8 })
-    .onClick(() => {
-      this.expandedCategory = this.expandedCategory === categoryKey ? null : categoryKey;
-    })
-  }
-
   // ============================================================
-  // UI CUSTOMIZATION
+  // UI CUSTOMIZATION CONTENT
   // ============================================================
 
   @Builder
@@ -433,7 +473,7 @@ struct CustomizePage {
   }
 
   // ============================================================
-  // APPEARANCE
+  // APPEARANCE CONTENT
   // ============================================================
 
   @Builder
@@ -457,43 +497,10 @@ struct CustomizePage {
       }
       .width('100%')
       .padding({ top: 14, bottom: 14, left: 16, right: 16 })
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .margin({ bottom: 8 })
-      .onClick(() => { this.showThemePicker = true; })
-
-      // ---- Tasbih Theme ----
-      Row() {
-        Column() {
-          Text(this.tr('tasbih_render_style'))
-            .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-          Text(this.tr('tasbih_render_style_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-          Text(this.tasbihPremium
-            ? this.tr('bead_style_premium')
-            : this.tr('bead_style_classic'))
-            .fontSize(12)
-            .fontColor(this.colors.accentGold)
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .margin({ top: 6 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
-        Toggle({ type: ToggleType.Switch, isOn: this.tasbihPremium })
-          .selectedColor(this.colors.accentGold)
-          .onChange((isOn: boolean) => {
-            this.toggleTasbihPremium(isOn);
-          })
-      }
-      .width('100%')
-      .padding({
-        top: 14,
-        bottom: 14,
-        left: 16,
-        right: 16
-      })
       .backgroundColor(this.colors.tintSubtle).borderRadius(12)
+      .onClick(() => {
+        this.showThemePicker = true;
+      })
     }
     .width('100%').padding(12)
     .backgroundColor(this.colors.cardDark).borderRadius(16)
@@ -513,13 +520,11 @@ struct CustomizePage {
     onSelect: (id: string) => void,
     onCancel: () => void
   ) {
-    // Dimmer
     Column()
       .width('100%').height('100%')
       .backgroundColor(this.colors.overlayDim)
       .onClick(() => { onCancel(); })
 
-    // Bottom sheet
     Column() {
       Row().width(44).height(4)
         .backgroundColor(this.colors.overlayDimSoft)
