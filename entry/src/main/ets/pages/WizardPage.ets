@@ -1,21 +1,24 @@
 // entry/src/main/ets/pages/WizardPage.ets
 
-import { router } from '@kit.ArkUI';
-import { mediaquery } from '@kit.ArkUI';
-import { common } from '@kit.AbilityKit';
+import { mediaquery, router } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import {
-  STORAGE_KEY_THEME_MODE, STORAGE_KEY_LANGUAGE, STORAGE_KEY_APP_THEME
+  STORAGE_KEY_APP_FOREGROUND_TICK,
+  STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
-import { CalculationMethod, AsrShadowRule } from '../utils/PrayerTimeCalculator';
+import { AsrShadowRule, CalculationMethod } from '../utils/PrayerTimeCalculator';
 import { SettingsHelper } from '../helper/SettingsHelper';
-import { LocationHelper, LocationData } from '../utils/LocationUtils';
+import { LocationData, LocationHelper } from '../utils/LocationUtils';
 import { LocationCache } from '../utils/LocationCache';
 import { CalculationSource, LocationMode, PickerItem } from '../models/SettingsModels';
-import { L, AppLanguage } from '../helper/LocalizationHelper';
+import { AppLanguage, L } from '../helper/LocalizationHelper';
 import { NavHelper } from '../helper/NavHelper';
 import { PrivacyPolicyProvider } from '../data/PrivacyPolicy';
+import { Breakpoints } from '../common/Breakpoints';
 
 const TOTAL_STEPS = 5;
 
@@ -36,7 +39,7 @@ interface ThemeOption {
 struct WizardPage {
 
   // ============================================================
-  // THEME + LANGUAGE + APP THEME
+  // STORAGE LINKS
   // ============================================================
 
   @StorageLink(STORAGE_KEY_THEME_MODE)
@@ -46,9 +49,15 @@ struct WizardPage {
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = AppLanguage.ENGLISH;
+
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemeChanged')
   appTheme: string = ThemePreset.CURRENT;
+  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
+  @Watch('onAppForegrounded')
+  appForegroundTick: number = 0;
+  @StorageLink(STORAGE_KEY_BREAKPOINT)
+  breakpoint: string = 'sm';
 
   @State private currentLanguage: string = AppLanguage.ENGLISH;
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
@@ -65,8 +74,10 @@ struct WizardPage {
 
   // ---- Step 1: privacy policy ----
   @State privacyAccepted: boolean = false;
+
   // ---- Step 2: theme ----
   @State selectedTheme: string = ThemePreset.CURRENT;
+
   // ---- Step 3: location ----
   @State locationMode: LocationMode = LocationMode.GPS;
   @State manualLat: string = '';
@@ -75,6 +86,7 @@ struct WizardPage {
   @State isGettingLocation: boolean = false;
   @State locationStatus: string = 'idle';
   @State detectedCity: string = '';
+
   // ---- Step 4: calculation ----
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
   @State asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
@@ -84,7 +96,7 @@ struct WizardPage {
   @State showSourcePicker: boolean = false;
 
   // ============================================================
-  // LOCALIZATION + DIRECTION
+  // LOCALIZATION + DIRECTION + BREAKPOINT HELPERS
   // ============================================================
 
   private tr(key: string): string {
@@ -93,6 +105,10 @@ struct WizardPage {
 
   private isRtl(): boolean {
     return L.isRtlLang(this.currentLanguage);
+  }
+
+  private isTablet(): boolean {
+    return Breakpoints.isTablet(this.breakpoint);
   }
 
   // ============================================================
@@ -108,10 +124,15 @@ struct WizardPage {
   }
 
   private onAppThemeChanged(): void {
-    // Recompute immediately so the wizard re-renders in the
-    // newly selected theme.
+    // Recompute the wizard's palette the instant a new theme is picked.
     this.colors = PageTheme.compute(this.themeMode);
     this.selectedTheme = this.appTheme;
+  }
+
+  private async onAppForegrounded(): Promise<void> {
+    this.currentLanguage = this.appLanguage;
+    this.colors = PageTheme.compute(this.themeMode);
+    this.selectedTheme = await SettingsHelper.getAppTheme();
   }
 
   // ============================================================
@@ -221,6 +242,7 @@ struct WizardPage {
   private pickLanguage(id: string): void {
     this.selectedLanguage = id;
     this.appLanguage = id;
+    this.currentLanguage = id;
     SettingsHelper.saveLanguage(id);
   }
 
@@ -262,9 +284,7 @@ struct WizardPage {
 
   /**
    * Applies the theme immediately — both to the persisted setting
-   * and to the wizard's own colours. The @StorageLink + @Watch
-   * combination handles the recompute, but we also call
-   * PageTheme.compute() synchronously for an instant visual swap.
+   * and to the wizard's own colours.
    */
   private pickAppTheme(id: string): void {
     this.selectedTheme = id;
@@ -273,7 +293,7 @@ struct WizardPage {
     this.colors = PageTheme.compute(this.themeMode);
   }
 
-  /** Preview swatch — the accent colour that this preset uses right now. */
+  /** Preview swatch — accent colour for the current mode. */
   private themePreviewSwatch(preset: string): string {
     const preview = Theme.getColors(
       this.themeMode,
@@ -283,7 +303,7 @@ struct WizardPage {
     return preview.accentGold;
   }
 
-  /** Background preview — the page background this preset uses right now. */
+  /** Preview background — page background for the current mode. */
   private themePreviewBackground(preset: string): string {
     const preview = Theme.getColors(
       this.themeMode,
@@ -449,36 +469,61 @@ struct WizardPage {
       Column() {
         this.ProgressHeader()
 
-        Column() {
-          Text(this.stepTitle())
-            .fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+        // Constrained content wrapper for tablet.
+        Row() {
+          Column() {
+            // ---- Title + description ----
+            Column() {
+              Text(this.stepTitle())
+                .fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+                .width('100%')
+              Text(this.stepDescription())
+                .fontSize(13)
+                .fontColor(this.colors.textMuted)
+                .width('100%')
+                .margin({ top: 6 })
+                .lineHeight(20)
+            }
             .width('100%')
-          Text(this.stepDescription())
-            .fontSize(13).fontColor(this.colors.textMuted)
-            .width('100%').margin({ top: 6 }).lineHeight(20)
+            .padding({
+              left: this.isTablet() ? 32 : 24,
+              right: this.isTablet() ? 32 : 24,
+              top: 8,
+              bottom: 16
+            })
+            .alignItems(HorizontalAlign.Start)
+
+            // ---- Step content ----
+            if (this.step === 0) {
+              this.LanguageStep()
+            } else if (this.step === 1) {
+              this.PrivacyStep()
+            } else if (this.step === 2) {
+              this.ThemeStep()
+            } else if (this.step === 3) {
+              this.LocationStep()
+            } else {
+              this.ConventionStep()
+            }
+          }
+          .width('100%')
+          .constraintSize({ maxWidth: this.isTablet() ? 720 : 100000 })
+          .layoutWeight(1)
         }
         .width('100%')
-        .padding({
-          left: 24,
-          right: 24,
-          top: 8,
-          bottom: 16
-        })
-        .alignItems(HorizontalAlign.Start)
+        .justifyContent(FlexAlign.Center)
+        .layoutWeight(1)
 
-        if (this.step === 0) {
-          this.LanguageStep()
-        } else if (this.step === 1) {
-          this.PrivacyStep()
-        } else if (this.step === 2) {
-          this.ThemeStep()
-        } else if (this.step === 3) {
-          this.LocationStep()
-        } else {
-          this.ConventionStep()
+        // Constrained footer for tablet.
+        Row() {
+          Column() {
+            this.Footer()
+          }
+          .width('100%')
+          .constraintSize({ maxWidth: this.isTablet() ? 720 : 100000 })
         }
-
-        this.Footer()
+        .width('100%')
+        .justifyContent(FlexAlign.Center)
       }
       .width('100%').height('100%')
 
@@ -625,10 +670,15 @@ struct WizardPage {
           .onClick(() => {
             this.pickLanguage(opt.id);
           })
-        }, (opt: LanguageOption) => `lang-${opt.id}-${opt.id === this.selectedLanguage ? 'sel' : 'un'}`)
+        }, (opt: LanguageOption) =>
+        `lang-${opt.id}-${opt.id === this.selectedLanguage ? 'sel' : 'un'}`)
       }
       .width('100%')
-      .padding({ left: 24, right: 24, bottom: 24 })
+      .padding({
+        left: this.isTablet() ? 32 : 24,
+        right: this.isTablet() ? 32 : 24,
+        bottom: 24
+      })
     }
     .layoutWeight(1)
     .width('100%')
@@ -717,7 +767,11 @@ struct WizardPage {
     }
     .width('100%')
     .layoutWeight(1)
-    .padding({ left: 24, right: 24, bottom: 12 })
+    .padding({
+      left: this.isTablet() ? 32 : 24,
+      right: this.isTablet() ? 32 : 24,
+      bottom: 12
+    })
   }
 
   // ============================================================
@@ -732,13 +786,11 @@ struct WizardPage {
           Row() {
             // ---- Preview swatch: mini card in the theme's colours ----
             Stack() {
-              // Background block
               Column()
                 .width('100%').height('100%')
                 .backgroundColor(this.themePreviewBackground(opt.id))
                 .borderRadius(10)
 
-              // Accent dot in the middle
               Row()
                 .width(18).height(18).borderRadius(9)
                 .backgroundColor(this.themePreviewSwatch(opt.id))
@@ -811,10 +863,15 @@ struct WizardPage {
           .onClick(() => {
             this.pickAppTheme(opt.id);
           })
-        }, (opt: ThemeOption) => `theme-${opt.id}-${opt.id === this.selectedTheme ? 'sel' : 'un'}`)
+        }, (opt: ThemeOption) =>
+        `theme-${opt.id}-${opt.id === this.selectedTheme ? 'sel' : 'un'}`)
       }
       .width('100%')
-      .padding({ left: 24, right: 24, bottom: 24 })
+      .padding({
+        left: this.isTablet() ? 32 : 24,
+        right: this.isTablet() ? 32 : 24,
+        bottom: 24
+      })
     }
     .layoutWeight(1)
     .width('100%')
@@ -1056,7 +1113,11 @@ struct WizardPage {
         }
       }
       .width('100%')
-      .padding({ left: 24, right: 24, bottom: 24 })
+      .padding({
+        left: this.isTablet() ? 32 : 24,
+        right: this.isTablet() ? 32 : 24,
+        bottom: 24
+      })
     }
     .layoutWeight(1)
     .width('100%')
@@ -1175,7 +1236,11 @@ struct WizardPage {
         })
       }
       .width('100%')
-      .padding({ left: 24, right: 24, bottom: 24 })
+      .padding({
+        left: this.isTablet() ? 32 : 24,
+        right: this.isTablet() ? 32 : 24,
+        bottom: 24
+      })
     }
     .layoutWeight(1)
     .width('100%')
@@ -1204,7 +1269,12 @@ struct WizardPage {
         .onClick(() => { this.goNext(); })
     }
     .width('100%')
-    .padding({ left: 24, right: 24, top: 12, bottom: 24 })
+    .padding({
+      left: this.isTablet() ? 32 : 24,
+      right: this.isTablet() ? 32 : 24,
+      top: 12,
+      bottom: 24
+    })
     .backgroundColor(this.colors.primaryGreen)
   }
 

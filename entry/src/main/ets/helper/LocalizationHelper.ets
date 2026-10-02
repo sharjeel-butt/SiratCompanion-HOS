@@ -520,6 +520,13 @@ export class L {
     m.set('sound_style_desc', 'Choose the click sound');
     m.set('controlled_by_system', 'Controlled by system settings');
 
+    // ---- Qibla calibration ----
+    m.set('qibla_calibrate_title', 'Calibrate Compass');
+    m.set('qibla_calibrate_desc',
+      'Move your phone in a figure-8 pattern to improve compass accuracy.');
+    m.set('qibla_calibrate_skip', 'Skip for now');
+    m.set('qibla_calibrate_hint', 'Calibration improves accuracy');
+
     return m;
   }
 
@@ -937,6 +944,12 @@ export class L {
     m.set('sound_style', '音效');
     m.set('sound_style_desc', '选择点击音效');
     m.set('controlled_by_system', '受系统设置控制');
+
+    // ---- Qibla calibration ----
+    m.set('qibla_calibrate_title', '校准指南针');
+    m.set('qibla_calibrate_desc', '请以 8 字形摆动手机，以提高指南针精度。');
+    m.set('qibla_calibrate_skip', '暂时跳过');
+    m.set('qibla_calibrate_hint', '校准可提高精度');
 
     return m;
   }
@@ -1357,6 +1370,12 @@ export class L {
     m.set('sound_style', 'نمط الصوت');
     m.set('sound_style_desc', 'اختر صوت النقرة');
     m.set('controlled_by_system', 'يُتحكَّم به من إعدادات النظام');
+
+    // ---- Qibla calibration ----
+    m.set('qibla_calibrate_title', 'معايرة البوصلة');
+    m.set('qibla_calibrate_desc', 'حرّك هاتفك بحركة الرقم 8 لتحسين دقة البوصلة.');
+    m.set('qibla_calibrate_skip', 'تخطَّ الآن');
+    m.set('qibla_calibrate_hint', 'المعايرة تحسّن الدقة');
 
     return m;
   }

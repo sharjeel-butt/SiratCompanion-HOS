@@ -4,7 +4,7 @@
 
 Prayer times, Qibla compass, Tasbih, and Hijri calendar — all in one calm, modern app that respects your settings and your battery.
 
-**Version 2.1.0** &nbsp;·&nbsp; **HarmonyOS 5+ (API 22+)** &nbsp;·&nbsp; **English · 中文 · العربية**
+**Version 2.2.0** &nbsp;·&nbsp; **HarmonyOS 5+ (API 22+)** &nbsp;·&nbsp; **English · 中文 · العربية**
 
 ---
 
@@ -26,7 +26,7 @@ Prayer times, Qibla compass, Tasbih, and Hijri calendar — all in one calm, mod
 
 ---
 
-## Features
+## Features (Supports Phone and Tablets)
 
 ### Prayer Times
 
@@ -339,10 +339,8 @@ This means viewing NYC prayer times from Pakistan shows NYC local times, with co
 
 - [ ] Online (API) prayer times provider
 - [ ] Home screen widgets
-- [ ] Qibla calibration UX (figure-8 flow)
 - [ ] Adhan audio playback
 - [ ] Additional languages — Turkish, Urdu, Indonesian
-- [ ] Tablet and foldable layouts
 
 ---
 
@@ -397,7 +395,7 @@ chore: bump target API to 22
 
 ## License
 
-This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License**.
 
 You are free to use, modify, and distribute this software, including for commercial purposes, provided the original copyright notice is retained.
 
