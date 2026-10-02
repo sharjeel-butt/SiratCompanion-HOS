@@ -8,8 +8,10 @@ import {
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_NAV_DIRECTION,
   STORAGE_KEY_LANGUAGE,
-  STORAGE_KEY_APP_FOREGROUND_TICK
+  STORAGE_KEY_APP_FOREGROUND_TICK,
+  STORAGE_KEY_APP_THEME
 } from '../common/StorageKeys';
+import { ThemePreset } from '../common/Theme';
 import { QiblaCalculator } from '../utils/QiblaCalculator';
 import { QiblaSensorHelper, OrientationReading } from '../helper/QiblaSensorHelper';
 import { SettingsHelper } from '../helper/SettingsHelper';
@@ -31,6 +33,9 @@ struct QiblaPage {
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_APP_THEME)
+  @Watch('onAppThemePresetChanged')
+  appThemePreset: string = ThemePreset.CURRENT;
 
   @StorageLink(STORAGE_KEY_NAV_DIRECTION)
   navDirection: string = 'forward';
@@ -76,6 +81,10 @@ struct QiblaPage {
 
   private onLanguageChanged(): void {
     this.currentLanguage = this.appLanguage;
+  }
+
+  private onAppThemePresetChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
   }
 
   private async onAppForegrounded(): Promise<void> {

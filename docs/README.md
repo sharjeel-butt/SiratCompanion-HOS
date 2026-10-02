@@ -298,9 +298,9 @@ The first-launch wizard requires explicit consent before proceeding
 
 Versioning
 Field	Value
-versionName	2.0.0
-versionCode	2000000
-buildVersion	200
+versionName	2.1.0
+versionCode	2001000
+buildVersion	210
 Version is read from AppScope/app.json5 at build time. The Settings → About screen pulls it at runtime via bundleManager, so there is never a mismatch between the manifest and what the user sees.
 
 History
@@ -310,14 +310,43 @@ Version	Highlights
 1.4.0	Premium Tasbih beads, fisheye loupe, LIFO rolling window, diagnostic logger
 1.4.1	Bug fixes, log viewer improvements
 2.0.0	Home dashboard, Ramadan card, monthly heatmap, progress streaks, per-tasbih themes, live Duas countdown, foreground refresh, glass floating bar
-Roadmap
-□ Re-enable prayer notifications once the Agent-Powered Reminder capability is approved in AppGallery Connect
-□ Dedicated Duas tab (the registry in data/Duas.ets is already extensible)
-□ Additional languages — Urdu is a natural next step
-□ Adhan audio playback at prayer times
-□ Home screen widgets
-□ HarmonyOS 7 glass-effect styling (requires API 26 SDK)
-□ Cloud sync (opt-in, with explicit consent)
+2.1.0  Four app-wide themes (Sirat Classic, Noor, Sahar, Bahar), theme step in the wizard, Tasbih click sounds with five selectable styles, system sound & haptics integration, sun-path canvas redesign with moving time ticker, Tasbih fly-and-pop animation, heavier glass floating bar
+
+## Roadmap
+
+### In progress
+
+- [ ] **Re-enable prayer notifications** — code is complete in `NotificationHelper.ets` and gated behind `FeatureFlags.NOTIFICATIONS_ENABLED`. Blocked on **Agent-Powered Reminder** capability approval in AppGallery Connect (~8 working days from submission). Re-enabling is a four-line change once approved: flip the flag, uncomment the `PUBLISH_AGENT_REMINDER` permission in `module.json5`, restore the notification disclosures in the privacy policy, and regenerate the signing profile.
+
+### Next up
+
+- [ ] **Dedicated Duas tab** — the infrastructure is ready. `data/Duas.ets` holds the registry (`DUA_REGISTRY`, `Duas.byKey()`) and `components/DuaCard.ets` renders any entry with Arabic, transliteration, and translation. Needs a new `pages/DuasPage.ets` (~30 lines), a `main_pages.json` entry, and a slot in the floating nav bar. Adding new Duas afterwards requires just one registry entry and two localization keys per language.
+
+- [ ] **Qibla calibration UX (figure-8 flow)** — surface the sensor's `accuracy` field from `QiblaSensorHelper`, and present an animated figure-8 overlay in `QiblaPage` whenever accuracy drops below a threshold. Clears once the user traces the pattern and the compass stabilises.
+
+- [ ] **Additional languages — Urdu first** — the localization structure is ready. `LocalizationHelper` needs a new `Map<string, string>` builder (~150 keys), and the language pickers in `CustomizePage` and `WizardPage` need their option lists expanded. Urdu is the natural first addition — closest cousin to Arabic and the largest unserved Muslim-language audience.
+
+### Later
+
+- [ ] **Online (API) prayer times provider** — currently a stub. The `CalculationSource.API` enum value exists, and both the Settings and Wizard pickers block selection with a "coming soon" toast. Implementation requires a network client, a provider contract (e.g. AlAdhan), response caching, error handling, and an `INTERNET` permission. Also requires a privacy-policy update since the app would begin making network requests for the first time.
+
+- [ ] **Adhan audio playback** — plays the full call to prayer at each prayer time. Needs `AVPlayer` (not `SoundPool`), a bundled or streamed Adhan file, and — ideally — the same Agent-Powered Reminder capability that notifications are pending on, so playback can fire independently of the app being open.
+
+- [ ] **Tablet and foldable layouts** — `module.json5` currently declares `"deviceTypes": ["phone"]`. Tablet support starts with expanding that list and then adding responsive layouts using `GridRow`/`GridCol` or `mediaquery` breakpoints. Every page has fixed-width elements (floating bar at 92%, hardcoded pill sizes) that would need to adapt.
+
+- [ ] **Home screen widgets** — no widget service exists. Needs a `form_config` extension ability, a `FormAbility`, and a separate widget UI. The data sources (`CalculationSource`, `LocationCache`, `ProgressHelper`) already expose everything a widget needs.
+
+- [ ] **Full HarmonyOS 7 glass-effect styling** — the frosted-glass floating bar now delivers most of the visual language on API 22+. What still requires **API 26 SDK** is the animated-blur transition between tabs, depth-based shadow scaling, and adaptive colour extraction from background content.
+
+- [ ] **Cloud sync (opt-in)** — no account system, no network code, no cloud storage SDK. Would require an explicit consent flow and a privacy-policy revision before any work begins. Deliberately deferred to protect the current "everything is local" guarantee.
+
+### Completed
+
+- [x] **Hijri date manual override** — shipped with a ±3 day offset (exceeds the original ±1 day target), applied globally across the Home header, Prayer page, Hijri calendar, and Next Event countdown.
+- [x] **Prayer streak statistics** — Home dashboard delivers today's progress ring, current and best streaks, a 7-day grid, a monthly heatmap, perfect-day count, and a lifetime total over the last 365 days.
+- [x] **Multiple app themes** — Sirat Classic, Noor, Sahar, and Bahar, each with matched light and dark palettes, selectable in Customize → Appearance and in the first-launch wizard.
+- [x] **Tasbih sound system** — five selectable click styles with SoundPool playback, respecting the system ringer mode and haptics toggle.
+
 Contributing
 Issues and pull requests are welcome.
 

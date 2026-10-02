@@ -456,6 +456,7 @@ export class L {
     m.set('about_build', 'Build');
     m.set('about_bundle', 'Bundle ID');
     m.set('about_platform_value', 'HarmonyOS 5+');
+    m.set('sun_path_we_are_here', 'We are here');
 
     // ---- Short labels (home screen pills) ----
     m.set('method_short_karachi', 'Karachi');
@@ -467,6 +468,18 @@ export class L {
     m.set('source_short_local', 'Local');
     m.set('source_short_online', 'Online');
     m.set('mark_all', 'Mark all');
+
+    m.set('theme_preset_current_desc', 'Warm cream and deep green — the original');
+    m.set('theme_preset_harmony7_desc', 'Radiant violet — serene and modern');
+    m.set('theme_preset_harmony6_desc', 'Golden amber — the calm of first light');
+    m.set('theme_preset_harmony5_desc', 'Cool teal — vast, fresh, and clear');
+
+    m.set('theme_preset', 'App Theme');
+    m.set('theme_preset_desc', 'Choose the visual style of the app');
+    m.set('theme_preset_current', 'Sirat Classic');
+    m.set('theme_preset_harmony7', 'Noor');
+    m.set('theme_preset_harmony6', 'Sahar');
+    m.set('theme_preset_harmony5', 'Bahar');
 
     // ---- Fallbacks ----
     m.set('default_location', 'Default Location');
@@ -484,6 +497,28 @@ export class L {
     m.set('error_gps_fetch_failed', 'Failed to fetch GPS location');
     m.set('error_gps_off', 'Please turn on location services');
     m.set('error_location_permission_denied', 'Location permission denied');
+
+    m.set('wizard_theme_title', 'Choose your theme');
+    m.set('wizard_theme_desc', 'Pick a visual style. You can change this anytime in Settings.');
+
+    m.set('sound_feedback', 'Sound');
+    m.set('sound_feedback_desc', 'Play a click when counting Tasbih');
+
+    // ---- Tasbih sound names ----
+    m.set('sound_glass_tap_name', 'Glass Tap');
+    m.set('sound_glass_tap_desc', 'Glass tap sound');
+    m.set('sound_light_chime_name', 'Light Chime');
+    m.set('sound_light_chime_desc', 'Light chime sound');
+    m.set('sound_muted_bead_name', 'Muted Bead');
+    m.set('sound_muted_bead_desc', 'Muted bead sound');
+    m.set('sound_soft_click_name', 'Soft Click');
+    m.set('sound_soft_click_desc', 'Soft click sound');
+    m.set('sound_warm_knock_name', 'Warm Knock');
+    m.set('sound_warm_knock_desc', 'Warm knock sound');
+
+    m.set('sound_style', 'Sound Style');
+    m.set('sound_style_desc', 'Choose the click sound');
+    m.set('controlled_by_system', 'Controlled by system settings');
 
     return m;
   }
@@ -535,6 +570,11 @@ export class L {
     m.set('category_appearance', '外观');
     m.set('category_about', '关于');
     m.set('category_notifications', '通知');
+
+    m.set('theme_preset_current_desc', '暖米色与深绿 — 经典原版');
+    m.set('theme_preset_harmony7_desc', '光辉紫罗兰 — 宁静现代');
+    m.set('theme_preset_harmony6_desc', '晨曦琥珀 — 初光之静');
+    m.set('theme_preset_harmony5_desc', '海韵青绿 — 辽阔清爽');
 
     m.set('convention', '计算方式');
     m.set('convention_desc', '用于计算晨礼和宵礼');
@@ -603,6 +643,7 @@ export class L {
     m.set('log_copy', '复制');
     m.set('log_clear', '清除');
     m.set('log_empty', '日志为空。');
+    m.set('sun_path_we_are_here', '我们在这里');
     m.set('log_copied', '日志已复制到剪贴板');
     m.set('log_cleared', '日志已清除');
 
@@ -746,6 +787,13 @@ export class L {
     m.set('theme_gold', '金色（金属）');
     m.set('tab_prayers', '礼拜');
 
+    m.set('theme_preset', '应用主题');
+    m.set('theme_preset_desc', '选择应用的视觉风格');
+    m.set('theme_preset_current', 'Sirat 经典');
+    m.set('theme_preset_harmony7', 'Noor · 光辉');
+    m.set('theme_preset_harmony6', 'Sahar · 晨曦');
+    m.set('theme_preset_harmony5', 'Bahar · 海韵');
+
     // ---- Home dashboard ----
     m.set('home_today_progress', '今日进度');
     m.set('home_prayers_completed', '次礼拜已完成');
@@ -822,6 +870,9 @@ export class L {
     m.set('countdown_fast_ends_desc', '准备开斋');
     m.set('countdown_fast_starts_desc', '请在封斋前完成封斋饭');
 
+    m.set('wizard_theme_title', '选择主题');
+    m.set('wizard_theme_desc', '选择一种视觉风格。您可以随时在设置中更改。');
+
     // ---- Duas ----
     m.set('dua_iftar_name', '开斋祈祷词');
     m.set('dua_iftar_translation',
@@ -868,6 +919,25 @@ export class L {
     m.set('error_gps_off', '请开启定位服务');
     m.set('error_location_permission_denied', '位置权限被拒绝');
 
+    m.set('sound_feedback', '声音');
+    m.set('sound_feedback_desc', '念珠计数时播放提示音');
+
+    // ---- Tasbih sound names ----
+    m.set('sound_glass_tap_name', '玻璃轻敲');
+    m.set('sound_glass_tap_desc', '玻璃轻敲音效');
+    m.set('sound_light_chime_name', '轻铃');
+    m.set('sound_light_chime_desc', '轻铃音效');
+    m.set('sound_muted_bead_name', '闷珠');
+    m.set('sound_muted_bead_desc', '闷珠音效');
+    m.set('sound_soft_click_name', '轻点');
+    m.set('sound_soft_click_desc', '轻点音效');
+    m.set('sound_warm_knock_name', '暖扣');
+    m.set('sound_warm_knock_desc', '暖扣音效');
+
+    m.set('sound_style', '音效');
+    m.set('sound_style_desc', '选择点击音效');
+    m.set('controlled_by_system', '受系统设置控制');
+
     return m;
   }
 
@@ -886,6 +956,17 @@ export class L {
     m.set('tab_tasbih', 'التسبيح');
     m.set('tab_compass', 'القبلة');
     m.set('tab_calendar', 'التقويم');
+
+    m.set('theme_preset_current_desc', 'كريمي دافئ وأخضر غامق — الأصلي');
+    m.set('theme_preset_harmony7_desc', 'بنفسجي مشرق — هدوء وحداثة');
+    m.set('theme_preset_harmony6_desc', 'كهرماني ذهبي — سكون الفجر');
+    m.set('theme_preset_harmony5_desc', 'أزرق مخضرّ بارد — رحب ونقي');
+
+    m.set('wizard_theme_title', 'اختر مظهرك');
+    m.set('wizard_theme_desc', 'اختر النمط البصري. يمكنك تغييره لاحقاً من الإعدادات.');
+
+    m.set('sound_feedback', 'الصوت');
+    m.set('sound_feedback_desc', 'تشغيل نقرة عند عدّ التسبيح');
 
     m.set('current_prayer', 'الحالي');
     m.set('next_prayer', 'التالي');
@@ -1211,8 +1292,16 @@ export class L {
     m.set('dua_iftar_translation',
       'ذهب الظمأ وابتلت العروق وثبت الأجر إن شاء الله.');
     m.set('dua_suhoor_name', 'نية الصيام');
+    m.set('sun_path_we_are_here', 'نحن هنا');
     m.set('dua_suhoor_translation',
       'وبصوم غدٍ نويت من شهر رمضان.');
+
+    m.set('theme_preset', 'مظهر التطبيق');
+    m.set('theme_preset_desc', 'اختر النمط البصري للتطبيق');
+    m.set('theme_preset_current', 'Sirat الكلاسيكي');
+    m.set('theme_preset_harmony7', 'نور');
+    m.set('theme_preset_harmony6', 'سَحَر');
+    m.set('theme_preset_harmony5', 'بَحْر');
 
     // ---- Generic UI ----
     m.set('ok', 'موافق');
@@ -1252,6 +1341,22 @@ export class L {
     m.set('error_gps_fetch_failed', 'تعذّر الحصول على موقع GPS');
     m.set('error_gps_off', 'يرجى تشغيل خدمة الموقع');
     m.set('error_location_permission_denied', 'تم رفض إذن الموقع');
+
+    // ---- Tasbih sound names ----
+    m.set('sound_glass_tap_name', 'نقرة زجاجية');
+    m.set('sound_glass_tap_desc', 'صوت نقرة زجاجية');
+    m.set('sound_light_chime_name', 'جرس خفيف');
+    m.set('sound_light_chime_desc', 'صوت جرس خفيف');
+    m.set('sound_muted_bead_name', 'خرزة مكتومة');
+    m.set('sound_muted_bead_desc', 'صوت خرزة مكتومة');
+    m.set('sound_soft_click_name', 'نقرة ناعمة');
+    m.set('sound_soft_click_desc', 'صوت نقرة ناعمة');
+    m.set('sound_warm_knock_name', 'طرقة دافئة');
+    m.set('sound_warm_knock_desc', 'صوت طرقة دافئة');
+
+    m.set('sound_style', 'نمط الصوت');
+    m.set('sound_style_desc', 'اختر صوت النقرة');
+    m.set('controlled_by_system', 'يُتحكَّم به من إعدادات النظام');
 
     return m;
   }

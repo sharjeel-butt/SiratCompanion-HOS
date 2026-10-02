@@ -1,18 +1,17 @@
 // entry/src/main/ets/utils/HomeController.ets
 
-import { PrayerModel, ExtraTiming } from '../models/PrayerModel';
+import { ExtraTiming, PrayerModel } from '../models/PrayerModel';
 import {
-  DailyPrayerTimes,
-  PrayerTimeCalculator,
-  CalculationMethod,
   AsrShadowRule,
-  HighLatitudeRule
+  CalculationMethod,
+  DailyPrayerTimes,
+  HighLatitudeRule,
+  PrayerTimeCalculator
 } from './PrayerTimeCalculator';
 import { PrayerManager } from './PrayerManager';
-import { PrayerOffsets } from '../helper/SettingsHelper';
+import { PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
 import { LocationMode } from '../models/SettingsModels';
-import { LocationCache, CachedLocation, FALLBACK_LOCATION } from './LocationCache';
-import { SettingsHelper } from '../helper/SettingsHelper';
+import { CachedLocation, FALLBACK_LOCATION, LocationCache } from './LocationCache';
 import { L } from '../helper/LocalizationHelper';
 import { TimezoneResolver } from './TimezoneResolver';
 
@@ -227,6 +226,12 @@ export class HomeController {
     times: DailyPrayerTimes,
     offsets: PrayerOffsets
   ): void {
+    // Friday replaces Dhuhr with Jummah — mirrors the rename that
+    // PrayerManager.applyDayNames applies to the main prayer array,
+    // so the Next Prayer header matches the timeline list below.
+    const isFriday = prayerDay.getDay() === 5;
+    const dhuhrName = isFriday ? 'Jummah' : 'Dhuhr';
+
     // ---- 5 prayers ----
     const fajrEv: TimelineEvent = {
       name: 'Fajr',
@@ -236,7 +241,7 @@ export class HomeController {
     events.push(fajrEv);
 
     const dhuhrEv: TimelineEvent = {
-      name: 'Dhuhr',
+      name: dhuhrName,
       time: HomeController.parseToDate(
         PrayerManager.offsetTime(times.dhuhr, offsets.dhuhr), prayerDay, false)
     };

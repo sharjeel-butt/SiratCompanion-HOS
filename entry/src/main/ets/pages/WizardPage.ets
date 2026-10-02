@@ -1,21 +1,23 @@
 // entry/src/main/ets/pages/WizardPage.ets
 
-import { mediaquery, router } from '@kit.ArkUI';
-import { common, Want } from '@kit.AbilityKit';
-import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
+import { router } from '@kit.ArkUI';
+import { mediaquery } from '@kit.ArkUI';
+import { common } from '@kit.AbilityKit';
+import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
-import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../common/StorageKeys';
-import { AsrShadowRule, CalculationMethod } from '../utils/PrayerTimeCalculator';
+import {
+  STORAGE_KEY_THEME_MODE, STORAGE_KEY_LANGUAGE, STORAGE_KEY_APP_THEME
+} from '../common/StorageKeys';
+import { CalculationMethod, AsrShadowRule } from '../utils/PrayerTimeCalculator';
 import { SettingsHelper } from '../helper/SettingsHelper';
-import { LocationData, LocationHelper } from '../utils/LocationUtils';
+import { LocationHelper, LocationData } from '../utils/LocationUtils';
 import { LocationCache } from '../utils/LocationCache';
 import { CalculationSource, LocationMode, PickerItem } from '../models/SettingsModels';
-import { AppLanguage, L } from '../helper/LocalizationHelper';
+import { L, AppLanguage } from '../helper/LocalizationHelper';
 import { NavHelper } from '../helper/NavHelper';
 import { PrivacyPolicyProvider } from '../data/PrivacyPolicy';
-import { BusinessError } from '@kit.BasicServicesKit';
 
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 5;
 
 interface LanguageOption {
   id: string;
@@ -23,12 +25,18 @@ interface LanguageOption {
   englishName: string;
 }
 
+interface ThemeOption {
+  id: string;
+  nameKey: string;
+  descKey: string;
+}
+
 @Entry
 @Component
 struct WizardPage {
 
   // ============================================================
-  // THEME + LANGUAGE
+  // THEME + LANGUAGE + APP THEME
   // ============================================================
 
   @StorageLink(STORAGE_KEY_THEME_MODE)
@@ -38,6 +46,9 @@ struct WizardPage {
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = AppLanguage.ENGLISH;
+  @StorageLink(STORAGE_KEY_APP_THEME)
+  @Watch('onAppThemeChanged')
+  appTheme: string = ThemePreset.CURRENT;
 
   @State private currentLanguage: string = AppLanguage.ENGLISH;
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
@@ -51,9 +62,12 @@ struct WizardPage {
 
   // ---- Step 0: language ----
   @State selectedLanguage: string = AppLanguage.ENGLISH;
+
   // ---- Step 1: privacy policy ----
   @State privacyAccepted: boolean = false;
-  // ---- Step 2: location ----
+  // ---- Step 2: theme ----
+  @State selectedTheme: string = ThemePreset.CURRENT;
+  // ---- Step 3: location ----
   @State locationMode: LocationMode = LocationMode.GPS;
   @State manualLat: string = '';
   @State manualLng: string = '';
@@ -61,7 +75,7 @@ struct WizardPage {
   @State isGettingLocation: boolean = false;
   @State locationStatus: string = 'idle';
   @State detectedCity: string = '';
-  // ---- Step 3: calculation ----
+  // ---- Step 4: calculation ----
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
   @State asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
   @State calcSource: CalculationSource = CalculationSource.LOCAL;
@@ -93,6 +107,13 @@ struct WizardPage {
     this.currentLanguage = this.appLanguage;
   }
 
+  private onAppThemeChanged(): void {
+    // Recompute immediately so the wizard re-renders in the
+    // newly selected theme.
+    this.colors = PageTheme.compute(this.themeMode);
+    this.selectedTheme = this.appTheme;
+  }
+
   // ============================================================
   // LIFECYCLE
   // ============================================================
@@ -100,6 +121,7 @@ struct WizardPage {
   aboutToAppear(): void {
     this.currentLanguage = this.appLanguage;
     this.selectedLanguage = this.appLanguage;
+    this.selectedTheme = this.appTheme;
     this.colors = PageTheme.compute(this.themeMode);
     this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
       this.colors = c;
@@ -124,6 +146,7 @@ struct WizardPage {
     this.asrRule = data.asr;
     this.calcSource = data.source;
     this.locationMode = await SettingsHelper.getLocationMode();
+    this.selectedTheme = await SettingsHelper.getAppTheme();
   }
 
   // ============================================================
@@ -178,32 +201,6 @@ struct WizardPage {
       .catch((err: Error) => console.error('Wizard finish failed:', JSON.stringify(err)));
   }
 
-  private openPrivacyPolicy(): void {
-    const context = getContext(this) as common.UIAbilityContext;
-    const url = PrivacyPolicyProvider.FULL_URL;
-
-    const want: Want = {
-      action: 'ohos.want.action.viewData',
-      entities: ['entity.system.browsable'],
-      uri: url
-    };
-
-    context.startAbility(want)
-      .then(() => {
-        console.info('[WizardPage] Privacy policy opened in browser');
-      })
-      .catch((err: BusinessError) => {
-        console.error(
-          `[WizardPage] Failed to open browser. code=${err.code}, msg=${err.message}`
-        );
-        // Fallback: show the URL so the user can copy it manually.
-        this.getUIContext().getPromptAction().showToast({
-          message: url,
-          duration: 5000
-        });
-      });
-  }
-
   // ============================================================
   // STEP 0 — LANGUAGE
   // ============================================================
@@ -236,7 +233,68 @@ struct WizardPage {
   }
 
   // ============================================================
-  // STEP 2 — LOCATION
+  // STEP 2 — THEME
+  // ============================================================
+
+  private getThemeOptions(): ThemeOption[] {
+    const current: ThemeOption = {
+      id: ThemePreset.CURRENT,
+      nameKey: 'theme_preset_current',
+      descKey: 'theme_preset_current_desc'
+    };
+    const h7: ThemeOption = {
+      id: ThemePreset.HARMONY_7,
+      nameKey: 'theme_preset_harmony7',
+      descKey: 'theme_preset_harmony7_desc'
+    };
+    const h6: ThemeOption = {
+      id: ThemePreset.HARMONY_6,
+      nameKey: 'theme_preset_harmony6',
+      descKey: 'theme_preset_harmony6_desc'
+    };
+    const h5: ThemeOption = {
+      id: ThemePreset.HARMONY_5,
+      nameKey: 'theme_preset_harmony5',
+      descKey: 'theme_preset_harmony5_desc'
+    };
+    return [current, h7, h6, h5];
+  }
+
+  /**
+   * Applies the theme immediately — both to the persisted setting
+   * and to the wizard's own colours. The @StorageLink + @Watch
+   * combination handles the recompute, but we also call
+   * PageTheme.compute() synchronously for an instant visual swap.
+   */
+  private pickAppTheme(id: string): void {
+    this.selectedTheme = id;
+    this.appTheme = id;
+    SettingsHelper.saveAppTheme(id);
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  /** Preview swatch — the accent colour that this preset uses right now. */
+  private themePreviewSwatch(preset: string): string {
+    const preview = Theme.getColors(
+      this.themeMode,
+      PageTheme.isSystemDark(),
+      preset
+    );
+    return preview.accentGold;
+  }
+
+  /** Background preview — the page background this preset uses right now. */
+  private themePreviewBackground(preset: string): string {
+    const preview = Theme.getColors(
+      this.themeMode,
+      PageTheme.isSystemDark(),
+      preset
+    );
+    return preview.primaryGreen;
+  }
+
+  // ============================================================
+  // STEP 3 — LOCATION
   // ============================================================
 
   private async requestGpsLocation(): Promise<void> {
@@ -316,7 +374,7 @@ struct WizardPage {
   }
 
   // ============================================================
-  // STEP 3 — CALCULATION
+  // STEP 4 — CALCULATION
   // ============================================================
 
   private pickMethod(id: string): void {
@@ -356,6 +414,9 @@ struct WizardPage {
       return this.tr('wizard_privacy_title');
     }
     if (this.step === 2) {
+      return this.tr('wizard_theme_title');
+    }
+    if (this.step === 3) {
       return this.tr('wizard_location_title');
     }
     return this.tr('wizard_convention_title');
@@ -367,6 +428,9 @@ struct WizardPage {
       return this.tr('wizard_privacy_desc');
     }
     if (this.step === 2) {
+      return this.tr('wizard_theme_desc');
+    }
+    if (this.step === 3) {
       return this.tr('wizard_location_desc');
     }
     return this.tr('wizard_convention_desc');
@@ -383,10 +447,8 @@ struct WizardPage {
         .backgroundColor(this.colors.primaryGreen)
 
       Column() {
-        // ---- Progress header ----
         this.ProgressHeader()
 
-        // ---- Title + description ----
         Column() {
           Text(this.stepTitle())
             .fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
@@ -404,23 +466,22 @@ struct WizardPage {
         })
         .alignItems(HorizontalAlign.Start)
 
-        // ---- Step content ----
         if (this.step === 0) {
           this.LanguageStep()
         } else if (this.step === 1) {
           this.PrivacyStep()
         } else if (this.step === 2) {
+          this.ThemeStep()
+        } else if (this.step === 3) {
           this.LocationStep()
         } else {
           this.ConventionStep()
         }
 
-        // ---- Footer ----
         this.Footer()
       }
       .width('100%').height('100%')
 
-      // ---- Pickers for step 3 ----
       if (this.showMethodPicker) {
         this.PickerOverlay(
           this.tr('convention'), '🕌',
@@ -459,7 +520,6 @@ struct WizardPage {
   @Builder
   ProgressHeader() {
     Row() {
-      // Back button
       Text('←')
         .fontSize(22)
         .fontColor(this.step === 0 ? this.colors.textMuted : this.colors.textWhite)
@@ -475,7 +535,6 @@ struct WizardPage {
 
       Blank()
 
-      // Step indicator
       Row({ space: 6 }) {
         Text(this.tr('wizard_step'))
           .fontSize(12).fontColor(this.colors.textMuted).letterSpacing(1)
@@ -584,7 +643,6 @@ struct WizardPage {
   @Builder
   PrivacyStep() {
     Column() {
-      // Policy text in a scrollable card
       Scroll() {
         Column() {
           Text(this.getPrivacyPolicyText())
@@ -605,7 +663,6 @@ struct WizardPage {
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)
 
-      // Agreement row
       Row() {
         Stack() {
           if (this.privacyAccepted) {
@@ -643,7 +700,6 @@ struct WizardPage {
       .padding({ top: 16, bottom: 8 })
       .alignItems(VerticalAlign.Center)
 
-      // Link to full policy
       Row() {
         Text(this.tr('privacy_view_full'))
           .fontSize(11)
@@ -653,11 +709,10 @@ struct WizardPage {
       .width('100%')
       .padding({ bottom: 4 })
       .justifyContent(FlexAlign.Start)
-      .width('100%')
-      .padding({ bottom: 4 })
-      .justifyContent(FlexAlign.Start)
       .onClick(() => {
-        this.openPrivacyPolicy();
+        this.getUIContext().getPromptAction().showToast({
+          message: PrivacyPolicyProvider.FULL_URL, duration: 3000
+        });
       })
     }
     .width('100%')
@@ -666,7 +721,109 @@ struct WizardPage {
   }
 
   // ============================================================
-  // STEP 2 — LOCATION
+  // STEP 2 — THEME
+  // ============================================================
+
+  @Builder
+  ThemeStep() {
+    Scroll() {
+      Column() {
+        ForEach(this.getThemeOptions(), (opt: ThemeOption) => {
+          Row() {
+            // ---- Preview swatch: mini card in the theme's colours ----
+            Stack() {
+              // Background block
+              Column()
+                .width('100%').height('100%')
+                .backgroundColor(this.themePreviewBackground(opt.id))
+                .borderRadius(10)
+
+              // Accent dot in the middle
+              Row()
+                .width(18).height(18).borderRadius(9)
+                .backgroundColor(this.themePreviewSwatch(opt.id))
+            }
+            .width(56).height(56)
+            .borderRadius(10)
+            .border({
+              width: opt.id === this.selectedTheme ? 2 : 1,
+              color: opt.id === this.selectedTheme
+                ? this.colors.accentGold
+                : this.colors.borderSoft
+            })
+
+            Column() {
+              Text(this.tr(opt.nameKey))
+                .fontSize(16).fontWeight(FontWeight.Bold)
+                .fontColor(opt.id === this.selectedTheme
+                  ? this.colors.accentGold
+                  : this.colors.textWhite)
+                .width('100%')
+              Text(this.tr(opt.descKey))
+                .fontSize(11)
+                .fontColor(this.colors.textMuted)
+                .margin({ top: 4 })
+                .width('100%')
+                .maxLines(2)
+                .textOverflow({ overflow: TextOverflow.Ellipsis })
+            }
+            .alignItems(HorizontalAlign.Start)
+            .layoutWeight(1).margin({ left: 14 })
+
+            // ---- Selection indicator ----
+            Stack() {
+              if (opt.id === this.selectedTheme) {
+                Text('✓')
+                  .fontSize(14)
+                  .fontColor(this.colors.textOnAccent)
+                  .fontWeight(FontWeight.Bold)
+              }
+            }
+            .width(24)
+            .height(24)
+            .borderRadius(12)
+            .backgroundColor(opt.id === this.selectedTheme
+              ? this.colors.accentGold
+              : 'transparent')
+            .border({
+              width: opt.id === this.selectedTheme ? 0 : 1.5,
+              color: this.colors.borderStrong
+            })
+            .alignContent(Alignment.Center)
+          }
+          .width('100%')
+          .padding({
+            top: 14,
+            bottom: 14,
+            left: 14,
+            right: 14
+          })
+          .backgroundColor(this.colors.cardDark)
+          .borderRadius(14)
+          .border({
+            width: opt.id === this.selectedTheme ? 2 : 1,
+            color: opt.id === this.selectedTheme
+              ? this.colors.accentGold
+              : this.colors.borderSoft
+          })
+          .margin({ bottom: 10 })
+          .alignItems(VerticalAlign.Center)
+          .onClick(() => {
+            this.pickAppTheme(opt.id);
+          })
+        }, (opt: ThemeOption) => `theme-${opt.id}-${opt.id === this.selectedTheme ? 'sel' : 'un'}`)
+      }
+      .width('100%')
+      .padding({ left: 24, right: 24, bottom: 24 })
+    }
+    .layoutWeight(1)
+    .width('100%')
+    .scrollBar(BarState.Auto)
+    .edgeEffect(EdgeEffect.Spring)
+  }
+
+  // ============================================================
+  // STEP 3 — LOCATION
   // ============================================================
 
   @Builder
@@ -932,14 +1089,13 @@ struct WizardPage {
   }
 
   // ============================================================
-  // STEP 3 — CONVENTION / MADHAB / SOURCE
+  // STEP 4 — CONVENTION / MADHAB / SOURCE
   // ============================================================
 
   @Builder
   ConventionStep() {
     Scroll() {
       Column() {
-        // Convention
         Row() {
           Column() {
             Text(this.tr('convention'))
@@ -954,7 +1110,6 @@ struct WizardPage {
               .margin({ top: 6 })
           }
           .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
           Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
         }
         .width('100%')
@@ -967,7 +1122,6 @@ struct WizardPage {
           this.showMethodPicker = true;
         })
 
-        // Madhab
         Row() {
           Column() {
             Text(this.tr('madhab'))
@@ -982,7 +1136,6 @@ struct WizardPage {
               .margin({ top: 6 })
           }
           .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
           Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
         }
         .width('100%')
@@ -995,7 +1148,6 @@ struct WizardPage {
           this.showAsrPicker = true;
         })
 
-        // Source
         Row() {
           Column() {
             Text(this.tr('source'))
@@ -1010,7 +1162,6 @@ struct WizardPage {
               .margin({ top: 6 })
           }
           .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
           Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
         }
         .width('100%')
