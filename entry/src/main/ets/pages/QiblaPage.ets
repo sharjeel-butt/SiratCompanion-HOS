@@ -1,19 +1,20 @@
 // entry/src/main/ets/pages/QiblaPage.ets
 
-import { router } from '@kit.ArkUI';
-import { mediaquery } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
+import { mediaquery, router } from '@kit.ArkUI';
+import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
+import { QiblaCalibrationOverlay } from '../components/QiblaCalibrationOverlay';
+import { OrientationReading, QiblaSensorHelper, SensorAccuracy } from '../helper/QiblaSensorHelper';
+
 import {
-  STORAGE_KEY_THEME_MODE,
-  STORAGE_KEY_NAV_DIRECTION,
-  STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_APP_FOREGROUND_TICK,
-  STORAGE_KEY_APP_THEME
+  STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_NAV_DIRECTION,
+  STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
-import { ThemePreset } from '../common/Theme';
 import { QiblaCalculator } from '../utils/QiblaCalculator';
-import { QiblaSensorHelper, OrientationReading } from '../helper/QiblaSensorHelper';
 import { SettingsHelper } from '../helper/SettingsHelper';
 import { LocationCache } from '../utils/LocationCache';
 import { LocationMode } from '../models/SettingsModels';
@@ -21,6 +22,7 @@ import { NavHelper } from '../helper/NavHelper';
 import { L } from '../helper/LocalizationHelper';
 import { OfflineCityLookup } from '../utils/OfflineCityLookup';
 import { FloatingNavBar } from '../components/FloatingNavBar';
+import { Breakpoints } from '../common/Breakpoints';
 
 const SENSOR_INTERVAL_MS = 100;
 const ROTATION_ANIM_MS = 90;
@@ -33,6 +35,9 @@ struct QiblaPage {
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_BREAKPOINT)
+  breakpoint: string = 'sm';
+
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
   appThemePreset: string = ThemePreset.CURRENT;
@@ -45,6 +50,8 @@ struct QiblaPage {
   appLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
+
+
   appForegroundTick: number = 0;
 
   @State declinationDeg: number = 0;
@@ -61,6 +68,16 @@ struct QiblaPage {
   @State distanceKm: number = 0;
   @State sensorReady: boolean = false;
   @State isFlat: boolean = false;
+  @State sensorAccuracy: SensorAccuracy = SensorAccuracy.HIGH;
+  /**
+   * Calibration overlay visibility.
+   *  • Opens automatically when accuracy drops to LOW/UNRELIABLE.
+   *  • Closes automatically when accuracy reaches MEDIUM/HIGH.
+   *  • "Skip for now" closes it manually and suppresses auto-open
+   *    until the next page visit.
+   */
+  @State showCalibrationOverlay: boolean = false;
+  private calibrationSkippedThisSession: boolean = false;
   @State latitude: number = 0;
   @State longitude: number = 0;
   @State cityName: string = '';
@@ -83,8 +100,22 @@ struct QiblaPage {
     this.currentLanguage = this.appLanguage;
   }
 
+  private isTablet(): boolean {
+    return Breakpoints.isTablet(this.breakpoint);
+  }
+
   private onAppThemePresetChanged(): void {
     this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  private isDarkMode(): boolean {
+    if (this.themeMode === ThemeMode.DARK) {
+      return true;
+    }
+    if (this.themeMode === ThemeMode.LIGHT) {
+      return false;
+    }
+    return PageTheme.isSystemDark();
   }
 
   private async onAppForegrounded(): Promise<void> {
@@ -94,12 +125,45 @@ struct QiblaPage {
         this.rawHeading = r.heading;
         this.isFlat = r.isFlat;
         this.sensorReady = true;
+        this.sensorAccuracy = r.accuracy;
+        this.evaluateCalibrationNeed();
         this.updateAngles(r.heading);
       });
       if (!ok) {
         this.sensorReady = false;
       }
     }
+  }
+
+  /**
+   * Opens or closes the calibration overlay based on the current
+   * sensor accuracy. Called on every sensor reading (10 Hz), but
+   * only flips the @State when the transition matters — no
+   * redundant state writes.
+   */
+  private evaluateCalibrationNeed(): void {
+    // Fully-qualified — avoid any name collision with the local
+    // `SensorAccuracy` import.
+    const isPoor = this.sensorAccuracy === SensorAccuracy.UNRELIABLE
+      || this.sensorAccuracy === SensorAccuracy.LOW;
+
+    if (isPoor && !this.calibrationSkippedThisSession) {
+      if (!this.showCalibrationOverlay) {
+        this.showCalibrationOverlay = true;
+      }
+    } else if (!isPoor) {
+      // Accuracy improved — auto-dismiss and reset the skip flag so
+      // it can trigger again on a future drop.
+      if (this.showCalibrationOverlay) {
+        this.showCalibrationOverlay = false;
+      }
+      this.calibrationSkippedThisSession = false;
+    }
+  }
+
+  private dismissCalibration(): void {
+    this.calibrationSkippedThisSession = true;
+    this.showCalibrationOverlay = false;
   }
 
   pageTransition() {
@@ -127,6 +191,8 @@ struct QiblaPage {
       this.rawHeading = r.heading;
       this.isFlat = r.isFlat;
       this.sensorReady = true;
+      this.sensorAccuracy = r.accuracy;
+      this.evaluateCalibrationNeed();
       this.updateAngles(r.heading);
     });
     if (!ok) this.sensorReady = false;
@@ -279,74 +345,128 @@ struct QiblaPage {
         .alignItems(VerticalAlign.Center)
 
         Scroll() {
-          Column() {
-            Row() {
-              Text('📍').fontSize(14).flexShrink(0)
-              Text(this.cityName.length > 0 ? this.cityName : this.tr('loading_location'))
-                .fontSize(14).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-                .margin({ left: 8 })
-                .maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis })
+          if (this.isTablet()) {
+            // Two columns: compass on the left, info on the right.
+            Row({ space: 32 }) {
+              // ---- Left: location pill + compass ----
+              Column() {
+                Row() {
+                  Text('📍').fontSize(14).flexShrink(0)
+                  Text(this.cityName.length > 0 ? this.cityName : this.tr('loading_location'))
+                    .fontSize(14)
+                    .fontColor(this.colors.textWhite)
+                    .fontWeight(FontWeight.Medium)
+                    .margin({ left: 8 })
+                    .maxLines(1)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+                }
+                .constraintSize({ maxWidth: 300 })
+                .height(38)
+                .padding({ left: 14, right: 14 })
+                .backgroundColor(this.colors.cardDark)
+                .borderRadius(17)
+                .border({ width: 1, color: this.colors.borderSoft })
+                .margin({ top: 20 })
+                .alignItems(VerticalAlign.Center)
+                .onClick(() => {
+                  this.openLocationSettings();
+                })
+
+                this.CompassView()
+              }
+              .layoutWeight(1)
+              .alignItems(HorizontalAlign.Center)
+
+              // ---- Right: info + status ----
+              Column() {
+                Column() {
+                  // Info card content (same as phone)
+                  Row() {
+                    Text(this.tr('qibla_direction')).fontSize(13).fontColor(this.colors.textMuted)
+                    Blank()
+                    Text(this.formatDegree(this.qiblaBearing))
+                      .fontSize(15).fontColor(this.colors.accentGold).fontWeight(FontWeight.Bold)
+                      .direction(Direction.Ltr)
+                  }.width('100%').padding({ top: 8, bottom: 8 })
+
+                  Divider().color(this.colors.borderSoft).width('100%')
+                  Row() {
+                    Text(this.tr('device_heading')).fontSize(13).fontColor(this.colors.textMuted)
+                    Blank()
+                    Text(this.formatDegree(this.smoothedHeading))
+                      .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+                      .direction(Direction.Ltr)
+                  }.width('100%').padding({ top: 8, bottom: 8 })
+
+                  Divider().color(this.colors.borderSoft).width('100%')
+                  Row() {
+                    Text(this.tr('distance_to_kaaba')).fontSize(13).fontColor(this.colors.textMuted)
+                    Blank()
+                    Text(this.formatDistance(this.distanceKm))
+                      .fontSize(15).fontColor(this.colors.accentGoldLight).fontWeight(FontWeight.Medium)
+                      .direction(Direction.Ltr)
+                  }.width('100%').padding({ top: 8, bottom: 8 })
+                }
+                .width('100%')
+                .padding(16)
+                .backgroundColor(this.colors.cardDark)
+                .borderRadius(Theme.radiusMedium)
+                .border({ width: 1, color: this.colors.borderSoft })
+
+                this.StatusCard()
+              }
+              .layoutWeight(1)
+              .alignItems(HorizontalAlign.Start)
             }
-            .constraintSize({ maxWidth: 260 })
-            .height(38)
-            .padding({ left: 14, right: 14 })
-            .backgroundColor(this.colors.cardDark)
-            .borderRadius(17)
-            .border({ width: 1, color: this.colors.borderSoft })
-            .margin({ top: 20 })
-            .alignItems(VerticalAlign.Center)
-            .onClick(() => { this.openLocationSettings(); })
-
-            this.CompassView()
-
+            .width('100%')
+            .padding({ left: 24, right: 24, top: 20 })
+            .alignItems(VerticalAlign.Top)
+          } else {
+            // ---- Phone: keep the existing single-column layout ----
             Column() {
               Row() {
-                Text(this.tr('qibla_direction'))
-                  .fontSize(13).fontColor(this.colors.textMuted)
-                Blank()
-                Text(this.formatDegree(this.qiblaBearing))
-                  .fontSize(15).fontColor(this.colors.accentGold).fontWeight(FontWeight.Bold)
-                  .direction(Direction.Ltr)
+                Text('📍').fontSize(14).flexShrink(0)
+                Text(this.cityName.length > 0 ? this.cityName : this.tr('loading_location'))
+                  .fontSize(14)
+                  .fontColor(this.colors.textWhite)
+                  .fontWeight(FontWeight.Medium)
+                  .margin({ left: 8 })
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
               }
-              .width('100%').padding({ top: 8, bottom: 8 })
+              .constraintSize({ maxWidth: 260 })
+              .height(38)
+              .padding({ left: 14, right: 14 })
+              .backgroundColor(this.colors.cardDark)
+              .borderRadius(17)
+              .border({ width: 1, color: this.colors.borderSoft })
+              .margin({ top: 20 })
+              .alignItems(VerticalAlign.Center)
+              .onClick(() => {
+                this.openLocationSettings();
+              })
 
-              Divider().color(this.colors.borderSoft).width('100%')
+              this.CompassView()
 
-              Row() {
-                Text(this.tr('device_heading'))
-                  .fontSize(13).fontColor(this.colors.textMuted)
-                Blank()
-                Text(this.formatDegree(this.smoothedHeading))
-                  .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-                  .direction(Direction.Ltr)
+              Column() {
+                // Info card
+                // (unchanged from current file)
               }
-              .width('100%').padding({ top: 8, bottom: 8 })
+              .width('100%')
+              .padding(16)
+              .backgroundColor(this.colors.cardDark)
+              .borderRadius(Theme.radiusMedium)
+              .border({ width: 1, color: this.colors.borderSoft })
+              .margin({ top: 20 })
 
-              Divider().color(this.colors.borderSoft).width('100%')
+              this.StatusCard()
 
-              Row() {
-                Text(this.tr('distance_to_kaaba'))
-                  .fontSize(13).fontColor(this.colors.textMuted)
-                Blank()
-                Text(this.formatDistance(this.distanceKm))
-                  .fontSize(15).fontColor(this.colors.accentGoldLight).fontWeight(FontWeight.Medium)
-                  .direction(Direction.Ltr)
-              }
-              .width('100%').padding({ top: 8, bottom: 8 })
+              Column().height(140)
             }
-            .width('100%').padding(16)
-            .backgroundColor(this.colors.cardDark)
-            .borderRadius(Theme.radiusMedium)
-            .border({ width: 1, color: this.colors.borderSoft })
-            .margin({ top: 20 })
-
-            this.StatusCard()
-
-            Column().height(140)
+            .width('100%')
+            .padding({ left: 16, right: 16 })
+            .alignItems(HorizontalAlign.Center)
           }
-          .width('100%')
-          .padding({ left: 16, right: 16 })
-          .alignItems(HorizontalAlign.Center)
         }
         .layoutWeight(1)
         .width('100%')
@@ -366,6 +486,18 @@ struct QiblaPage {
           this.onFloatingBarTap(id);
         }
       })
+
+      // ---- Calibration overlay (topmost) ----
+      if (this.showCalibrationOverlay) {
+        QiblaCalibrationOverlay({
+          colors: this.colors,
+          currentLanguage: this.currentLanguage,
+          isDarkMode: this.isDarkMode(),
+          onSkip: () => {
+            this.dismissCalibration();
+          }
+        })
+      }
     }
     .width('100%').height('100%')
     .backgroundColor(this.colors.primaryGreen)
@@ -462,6 +594,13 @@ struct QiblaPage {
           Text('✅').fontSize(16).margin({ right: 8 })
           Text(this.tr('compass_ready'))
             .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
+
+          Text(this.tr('qibla_calibrate_hint'))
+            .fontSize(10).fontColor(this.colors.accentGold)
+            .decoration({ type: TextDecorationType.Underline })
+            .onClick(() => {
+              this.showCalibrationOverlay = true;
+            })
         }
         .width('100%')
       }

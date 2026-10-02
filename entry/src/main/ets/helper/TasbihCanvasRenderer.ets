@@ -174,9 +174,8 @@ export class TasbihCanvasRenderer {
 
       if (alpha > 0.01) {
         // Halo — wide, warm amber glow that peaks mid-flight and
-        // fades as the bead lands. The "arrival" feel of the reference.
+        // fades as the bead lands.
         const haloRadius = r * 3.8;
-        // Bloom peaks at ~55 % of the flight.
         const bloom = Math.sin(Math.PI * fly);
         const haloAlpha = (0.35 + 0.45 * bloom) * alpha;
 
@@ -209,12 +208,6 @@ export class TasbihCanvasRenderer {
   // GLOSSY STRING
   // ============================================================
 
-  /**
-   * Draws the string as a rounded, glossy line:
-   *   • Wide dark base line
-   *   • Narrow lighter strip in the center (highlight)
-   * Produces the "cylinder" look seen in the reference.
-   */
   private static drawString(
     ctx: CanvasRenderingContext2D,
     cx: number,
@@ -295,7 +288,6 @@ export class TasbihCanvasRenderer {
     ctx.fillStyle = grad;
     ctx.fill();
 
-    // Bright specular hotspot, upper-left.
     ctx.beginPath();
     ctx.arc(cx - r * 0.28, cy - r * 0.28, r * 0.22, 0, Math.PI * 2);
     ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
@@ -303,7 +295,7 @@ export class TasbihCanvasRenderer {
   }
 
   // ============================================================
-  // MATTE — soft amber bead with strong specular
+  // MATTE — full three-pass premium bead
   // ============================================================
 
   private static drawMatte(
@@ -345,8 +337,7 @@ export class TasbihCanvasRenderer {
     ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
     ctx.restore();
 
-    // Sharp specular hotspot — upper-left. This is what gives the
-    // bead its "polished" look, matching the reference.
+    // Soft specular hotspot — upper-left.
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
@@ -363,7 +354,7 @@ export class TasbihCanvasRenderer {
     ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
     ctx.restore();
 
-    // Tight inner specular dot — the very bright pinpoint.
+    // Tight inner specular dot.
     ctx.beginPath();
     ctx.arc(cx - r * 0.35, cy - r * 0.40, r * 0.14, 0, Math.PI * 2);
     ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
@@ -422,7 +413,6 @@ export class TasbihCanvasRenderer {
       ctx.fill();
     }
 
-    // Radial darkening toward the edge.
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
@@ -435,7 +425,6 @@ export class TasbihCanvasRenderer {
     ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
     ctx.restore();
 
-    // Strong specular.
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);

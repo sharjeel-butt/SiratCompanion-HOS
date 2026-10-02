@@ -1,32 +1,30 @@
 // entry/src/main/ets/pages/Prayer.ets
 
-import { router, promptAction } from '@kit.ArkUI';
+import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
-import { mediaquery } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
+import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
-import { PrayerModel, ExtraTiming } from '../models/PrayerModel';
+import { ExtraTiming, PrayerModel } from '../models/PrayerModel';
 import { DateHelper } from '../utils/DateUtils';
-import { LocationHelper, LocationData } from '../utils/LocationUtils';
+import { LocationData, LocationHelper } from '../utils/LocationUtils';
 import { LocationCache } from '../utils/LocationCache';
 import { UpcomingImportantDate } from '../models/DateModels';
 import { PrayerManager } from '../utils/PrayerManager';
-import { SettingsHelper, PrayerOffsets } from '../helper/SettingsHelper';
+import { PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
 import { CalculationSource, LocationMode } from '../models/SettingsModels';
+import { Breakpoints } from '../common/Breakpoints';
 import {
-  STORAGE_KEY_THEME_MODE,
-  STORAGE_KEY_NAV_DIRECTION,
-  STORAGE_KEY_LOCATION_VERSION,
-  STORAGE_KEY_LANGUAGE,
-  STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_APP_FOREGROUND_TICK,
-  STORAGE_KEY_APP_THEME
+  STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_HIJRI_OFFSET,
+  STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_LOCATION_VERSION,
+  STORAGE_KEY_NAV_DIRECTION,
+  STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
-import { ThemePreset } from '../common/Theme';
 import { HomeController } from '../utils/HomeController';
-import {
-  CalculationMethod, AsrShadowRule, HighLatitudeRule
-} from '../utils/PrayerTimeCalculator';
+import { AsrShadowRule, CalculationMethod, HighLatitudeRule } from '../utils/PrayerTimeCalculator';
 import { NavHelper } from '../helper/NavHelper';
 import { TimezoneResolver } from '../utils/TimezoneResolver';
 import { L } from '../helper/LocalizationHelper';
@@ -81,6 +79,8 @@ struct Prayer {
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
+  @StorageLink(STORAGE_KEY_BREAKPOINT)
+  breakpoint: string = 'sm';
 
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
@@ -165,6 +165,10 @@ struct Prayer {
       case 'Jummah':  return this.tr('prayer_jummah');
       default:        return raw;
     }
+  }
+
+  private isTablet(): boolean {
+    return Breakpoints.isTablet(this.breakpoint);
   }
 
   private translateTimingName(raw: string): string {
@@ -881,29 +885,69 @@ struct Prayer {
         Refresh({ refreshing: $$this.isRefreshingHome }) {
           Scroll() {
             Column() {
+              if (this.isTablet()) {
+                // ============================================
+                // TABLET — two-column layout
+                // ============================================
+                Row({ space: 16 }) {
+                  Column() {
+                    this.NextPrayerSection()
 
-              // ---- Next Prayer Section (top of the page) ----
-              this.NextPrayerSection()
+                    if (this.calcSource === CalculationSource.LOCAL) {
+                      this.TimelineSection()
+                    } else {
+                      this.ComingSoonCard()
+                    }
+                  }
+                  .layoutWeight(1)
+                  .alignItems(HorizontalAlign.Start)
 
-              // ---- Sun path ----
-              Column() {
-                PrayerSunPath({
-                  colors: this.colors,
-                  prayers: this.prayers,
-                  sunriseTime: this.getSunriseTime(),
-                  sunsetTime: this.getSunsetTime(),
-                  currentLanguage: this.appLanguage
-                })
-              }
-              .width('100%')
-              .padding({ left: 16, right: 16 })
-
-              if (this.calcSource === CalculationSource.LOCAL) {
-                this.TimelineSection()
+                  Column() {
+                    PrayerSunPath({
+                      colors: this.colors,
+                      prayers: this.prayers,
+                      sunriseTime: this.getSunriseTime(),
+                      sunsetTime: this.getSunsetTime(),
+                      currentLanguage: this.appLanguage,
+                      isDarkMode: this.isDarkMode()
+                    })
+                  }
+                  .layoutWeight(1)
+                  .alignItems(HorizontalAlign.Start)
+                }
+                .width('100%')
+                .alignItems(VerticalAlign.Top)
+                .padding({ left: 24, right: 24 })
               } else {
-                this.ComingSoonCard()
+                // ============================================
+                // PHONE — single-column layout
+                // ============================================
+                Column() {
+                  this.NextPrayerSection()
+
+                  Column() {
+                    PrayerSunPath({
+                      colors: this.colors,
+                      prayers: this.prayers,
+                      sunriseTime: this.getSunriseTime(),
+                      sunsetTime: this.getSunsetTime(),
+                      currentLanguage: this.appLanguage,
+                      isDarkMode: this.isDarkMode()
+                    })
+                  }
+                  .width('100%')
+                  .padding({ left: 16, right: 16 })
+
+                  if (this.calcSource === CalculationSource.LOCAL) {
+                    this.TimelineSection()
+                  } else {
+                    this.ComingSoonCard()
+                  }
+                }
+                .width('100%')
               }
 
+              // Bottom spacer — shared
               Column().height(140)
             }
             .width('100%')
