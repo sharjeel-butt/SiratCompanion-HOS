@@ -19,8 +19,10 @@ import {
   STORAGE_KEY_LOCATION_VERSION,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_HIJRI_OFFSET,
-  STORAGE_KEY_APP_FOREGROUND_TICK
+  STORAGE_KEY_APP_FOREGROUND_TICK,
+  STORAGE_KEY_APP_THEME
 } from '../common/StorageKeys';
+import { ThemePreset } from '../common/Theme';
 import { HomeController } from '../utils/HomeController';
 import {
   CalculationMethod, AsrShadowRule, HighLatitudeRule
@@ -30,6 +32,7 @@ import { TimezoneResolver } from '../utils/TimezoneResolver';
 import { L } from '../helper/LocalizationHelper';
 import { FloatingNavBar } from '../components/FloatingNavBar';
 import { PageHeader } from '../components/PageHeader';
+import { PrayerSunPath } from '../components/PrayerSunPath';
 
 interface DialogResult {
   index: number;
@@ -68,6 +71,9 @@ struct Prayer {
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChangedInHome')
   appLanguage: string = 'en';
+  @StorageLink(STORAGE_KEY_APP_THEME)
+  @Watch('onAppThemePresetChanged')
+  appThemePreset: string = ThemePreset.CURRENT;
 
   @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
   @Watch('onHijriOffsetChangedInHome')
@@ -125,7 +131,6 @@ struct Prayer {
   @State offsets: PrayerOffsets = { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 };
 
   @State showExtraTimings: boolean = true;
-  @State showIslamicEvents: boolean = true;
   @State showBottomSheet: boolean = false;
   @State private isRefreshingHome: boolean = false;
   @State highLatRule: HighLatitudeRule = HighLatitudeRule.NONE;
@@ -140,6 +145,10 @@ struct Prayer {
 
   private tr(key: string): string {
     return L.get(key, this.appLanguage);
+  }
+
+  private onAppThemePresetChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
   }
 
   private isRtl(): boolean {
@@ -174,14 +183,6 @@ struct Prayer {
     const asPrayer = this.translatePrayerName(raw);
     if (asPrayer !== raw) return asPrayer;
     return this.translateTimingName(raw);
-  }
-
-  private translateUpcomingEventName(e: UpcomingImportantDate): string {
-    if (e.key && e.key.length > 0) {
-      const translated = this.tr('event_' + e.key);
-      if (translated !== 'event_' + e.key) return translated;
-    }
-    return e.name;
   }
 
   // ============================================================
@@ -219,12 +220,10 @@ struct Prayer {
 
   private onHijriOffsetChangedInHome(): void {
     this.refreshHijriDates();
-    this.upcomingImportantDates = DateHelper.getUpcomingImportantDates(this.hijriOffset);
   }
 
   private async onAppForegrounded(): Promise<void> {
     this.refreshHijriDates();
-    this.upcomingImportantDates = DateHelper.getUpcomingImportantDates(this.hijriOffset);
 
     if (this.dateOffset === 0) {
       const now = new Date();
@@ -272,7 +271,6 @@ struct Prayer {
     });
 
     this.refreshHijriDates();
-    this.upcomingImportantDates = DateHelper.getUpcomingImportantDates(this.hijriOffset);
 
     this.refreshViewingDate(true);
     this.initialize();
@@ -411,7 +409,6 @@ struct Prayer {
       this.calcSource = data.source;
       this.locationMode = mode;
       this.showExtraTimings  = data.showExtraTimings;
-      this.showIslamicEvents = data.showIslamicEvents;
       this.offsets = await SettingsHelper.getPrayerOffsets();
       this.highLatRule = await SettingsHelper.getHighLatRule();
 
@@ -520,10 +517,36 @@ struct Prayer {
       }
     }
 
-    rows.sort((a: TimelineRow, b: TimelineRow): number =>
-    a.sortMinutes - b.sortMinutes
-    );
+    // Sort by time; on a tie, put extras before prayers.
+    // This guarantees "Sunset" appears above "Maghrib" when their
+    // times coincide (they usually do — Maghrib == Sunset).
+    rows.sort((a: TimelineRow, b: TimelineRow): number => {
+      if (a.sortMinutes !== b.sortMinutes) {
+        return a.sortMinutes - b.sortMinutes;
+      }
+      const aT: number = a.kind === 'extra' ? 0 : 1;
+      const bT: number = b.kind === 'extra' ? 0 : 1;
+      return aT - bT;
+    });
     return rows;
+  }
+
+  private getSunriseTime(): string {
+    for (const t of this.extraTimings) {
+      if (t.id === 'sunrise') {
+        return t.time;
+      }
+    }
+    return '--:--';
+  }
+
+  private getSunsetTime(): string {
+    for (const t of this.extraTimings) {
+      if (t.id === 'sunset') {
+        return t.time;
+      }
+    }
+    return '--:--';
   }
 
   // ============================================================
@@ -858,15 +881,28 @@ struct Prayer {
         Refresh({ refreshing: $$this.isRefreshingHome }) {
           Scroll() {
             Column() {
+
+              // ---- Next Prayer Section (top of the page) ----
               this.NextPrayerSection()
+
+              // ---- Sun path ----
+              Column() {
+                PrayerSunPath({
+                  colors: this.colors,
+                  prayers: this.prayers,
+                  sunriseTime: this.getSunriseTime(),
+                  sunsetTime: this.getSunsetTime(),
+                  currentLanguage: this.appLanguage
+                })
+              }
+              .width('100%')
+              .padding({ left: 16, right: 16 })
 
               if (this.calcSource === CalculationSource.LOCAL) {
                 this.TimelineSection()
               } else {
                 this.ComingSoonCard()
               }
-
-              if (this.showIslamicEvents) this.ImportantDatesCard()
 
               Column().height(140)
             }
@@ -1159,44 +1195,6 @@ struct Prayer {
   // ============================================================
   // EVENTS CARD
   // ============================================================
-
-  @Builder
-  ImportantDatesCard() {
-    Column() {
-      Row() {
-        Text('📅').fontSize(16)
-          .margin({ left: this.isRtl() ? 8 : 0, right: this.isRtl() ? 0 : 8 })
-        Text(this.tr('upcoming_islamic_events'))
-          .fontSize(14).fontColor(this.colors.accentGold).fontWeight(FontWeight.Bold).letterSpacing(1.5)
-      }
-      .width('100%').justifyContent(FlexAlign.Start).padding({ left: 4, bottom: 14 })
-
-      Column() {
-        if (this.upcomingImportantDates.length === 0) {
-          Text(this.tr('loading_location')).fontSize(14).fontColor(this.colors.textMuted)
-        } else {
-          Text(this.translateUpcomingEventName(this.upcomingImportantDates[0]).toUpperCase())
-            .fontSize(14).fontColor(this.colors.accentGoldLight).fontWeight(FontWeight.Medium).textAlign(TextAlign.Center)
-          Text(this.upcomingImportantDates[0].hijriDate)
-            .fontSize(12).fontColor(this.colors.textMuted).margin({ top: 4 }).textAlign(TextAlign.Center)
-
-          if (this.upcomingImportantDates.length > 1) {
-            Divider().width('80%').color(this.colors.borderSoft).margin({ top: 14, bottom: 14 })
-            Text(this.translateUpcomingEventName(this.upcomingImportantDates[1]).toUpperCase())
-              .fontSize(14).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium).textAlign(TextAlign.Center)
-            Text(this.upcomingImportantDates[1].hijriDate)
-              .fontSize(12).fontColor(this.colors.textMuted).margin({ top: 4 }).textAlign(TextAlign.Center)
-          }
-        }
-      }
-      .width('100%').padding(20).backgroundColor(this.colors.cardDark)
-      .borderRadius(Theme.radiusLarge).border({ width: 1, color: this.colors.borderSoft })
-      .shadow({ radius: 12, color: this.colors.shadowCard, offsetX: 0, offsetY: 4 })
-      .alignItems(HorizontalAlign.Center)
-    }
-    .width('92%').padding({ left: 4, right: 4 }).margin({ top: 4, bottom: 16 })
-    .alignItems(HorizontalAlign.Start)
-  }
 
   @Builder
   ComingSoonCard() {

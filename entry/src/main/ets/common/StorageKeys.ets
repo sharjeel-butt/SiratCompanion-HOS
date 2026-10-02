@@ -40,4 +40,13 @@ export const STORAGE_KEY_TASBIH_RENDER_STYLE = 'tasbih_render_style';
 
 export const STORAGE_KEY_TASBIH_THEME_PRESET = 'tasbih_theme_preset';
 
+export const STORAGE_KEY_APP_THEME = 'app_theme_preset';
 export const STORAGE_KEY_APP_FOREGROUND_TICK = 'app_foreground_tick';
+
+export const STORAGE_KEY_SOUND_ENABLED = 'sound_enabled';
+
+export const STORAGE_KEY_TASBIH_SOUND = 'tasbih_sound';
+
+export const STORAGE_KEY_SYSTEM_SOUND_ENABLED = 'system_sound_enabled';
+
+export const STORAGE_KEY_SYSTEM_HAPTICS_ENABLED = 'system_haptics_enabled';

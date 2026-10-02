@@ -1,24 +1,27 @@
 // entry/src/main/ets/pages/CustomizePage.ets
 
-import { router } from '@kit.ArkUI';
-import { mediaquery } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
+import { mediaquery, router } from '@kit.ArkUI';
+import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import { SettingsHelper } from '../helper/SettingsHelper';
 import { PickerItem } from '../models/SettingsModels';
 import {
-  STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_APP_THEME,
   STORAGE_KEY_LANGUAGE,
-  STORAGE_KEY_APP_FOREGROUND_TICK
+  STORAGE_KEY_SYSTEM_HAPTICS_ENABLED,
+  STORAGE_KEY_SYSTEM_SOUND_ENABLED,
+  STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
-import { L, AppLanguage } from '../helper/LocalizationHelper';
+import { AppLanguage, L } from '../helper/LocalizationHelper';
+import { SoundHelper } from '../helper/SoundHelper';
+import { SoundOptions, TASBIH_SOUND_OPTIONS, TasbihSoundOption } from '../common/SoundOptions';
 
 @Entry
 @Component
 struct CustomizePage {
 
   // ============================================================
-  // THEME + LANGUAGE
+  // STORAGE LINKS
   // ============================================================
 
   @StorageLink(STORAGE_KEY_THEME_MODE)
@@ -28,9 +31,15 @@ struct CustomizePage {
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = AppLanguage.ENGLISH;
-  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
-  @Watch('onAppForegrounded')
-  appForegroundTick: number = 0;
+  @StorageLink(STORAGE_KEY_APP_THEME)
+  @Watch('onAppThemePresetChanged')
+  appTheme: string = ThemePreset.CURRENT;
+  @StorageLink(STORAGE_KEY_SYSTEM_SOUND_ENABLED)
+  @Watch('onSystemFeedbackChanged')
+  systemSoundEnabled: boolean = true;
+  @StorageLink(STORAGE_KEY_SYSTEM_HAPTICS_ENABLED)
+  @Watch('onSystemFeedbackChanged')
+  systemHapticsEnabled: boolean = true;
 
   @State private currentLanguage: string = AppLanguage.ENGLISH;
 
@@ -44,6 +53,9 @@ struct CustomizePage {
   @State showExtraTimings: boolean = true;
   @State showIslamicEvents: boolean = true;
   @State vibrationEnabled: boolean = true;
+  @State soundEnabled: boolean = true;
+  @State selectedSound: string = SoundOptions.DEFAULT_ID;
+  @State showSoundPicker: boolean = false;
 
   // ============================================================
   // UI STATE
@@ -52,6 +64,7 @@ struct CustomizePage {
   @State expandedCategory: string | null = 'UI Customization';
   @State showThemePicker: boolean = false;
   @State showLanguagePicker: boolean = false;
+  @State showAppThemePicker: boolean = false;
 
   // ============================================================
   // LOCALIZATION HELPER
@@ -73,6 +86,18 @@ struct CustomizePage {
     this.currentLanguage = this.appLanguage;
   }
 
+  private onAppThemePresetChanged(): void {
+    // Recompute colours immediately — this is what makes theme
+    // switching feel instant.
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  private onSystemFeedbackChanged(): void {
+    // No state to recompute — the binding itself re-renders the UI.
+    // This watcher exists so the page refreshes in real time when
+    // the user toggles the system setting while the app is open.
+  }
+
   // ============================================================
   // THEME
   // ============================================================
@@ -92,16 +117,22 @@ struct CustomizePage {
     this.showThemePicker = false;
   }
 
-  /**
-   * Explicitly update BOTH appLanguage and currentLanguage so the
-   * page re-renders immediately, without relying on the @Watch
-   * callback to fire for a self-assigned @StorageLink.
-   */
   private pickLanguage(id: string): void {
     this.appLanguage = id;
-    this.currentLanguage = id; // ← critical
+    this.currentLanguage = id;
     SettingsHelper.saveLanguage(id);
     this.showLanguagePicker = false;
+  }
+
+  private pickAppTheme(id: string): void {
+    // Update the local link first so the watcher fires synchronously.
+    this.appTheme = id;
+    // Then persist.
+    SettingsHelper.saveAppTheme(id);
+    // Then recompute colours explicitly — the watcher will also
+    // fire, but this guarantees an immediate visual update.
+    this.colors = PageTheme.compute(this.themeMode);
+    this.showAppThemePicker = false;
   }
 
   // ============================================================
@@ -130,17 +161,16 @@ struct CustomizePage {
     this.reload();
   }
 
-  private async onAppForegrounded(): Promise<void> {
-    this.currentLanguage = this.appLanguage;
-    this.applyTheme();
-    await this.reload();
-  }
-
   private async reload(): Promise<void> {
     const data = await SettingsHelper.loadAll();
     this.showExtraTimings  = data.showExtraTimings;
     this.showIslamicEvents = data.showIslamicEvents;
     this.vibrationEnabled = SettingsHelper.getVibrationEnabled();
+    this.soundEnabled = SettingsHelper.getSoundEnabled();
+    this.selectedSound = SettingsHelper.getTasbihSound();
+
+    const preset = await SettingsHelper.getAppTheme();
+    this.appTheme = preset;
   }
 
   // ============================================================
@@ -160,6 +190,58 @@ struct CustomizePage {
   private toggleVibration(value: boolean): void {
     this.vibrationEnabled = value;
     SettingsHelper.saveVibrationEnabled(value);
+  }
+
+  private toggleSound(value: boolean): void {
+    this.soundEnabled = value;
+    SettingsHelper.saveSoundEnabled(value);
+  }
+
+  /**
+   * Display name for a sound option.
+   * Prefers a localization entry, falls back to the filename-derived name.
+   */
+  private soundDisplayName(id: string): string {
+    const opt = SoundOptions.byId(id);
+    if (!opt) {
+      return id;
+    }
+
+    const base = opt.file.replace(/^tasbih_/, '').replace(/\.ogg$/, '');
+    const key = `sound_${base}_name`;
+    const localized = this.tr(key);
+    if (localized !== key) {
+      return localized;
+    }
+
+    return SoundOptions.deriveDisplayName(opt.file);
+  }
+
+  private soundDescription(id: string): string {
+    const opt = SoundOptions.byId(id);
+    if (!opt) {
+      return '';
+    }
+
+    const base = opt.file.replace(/^tasbih_/, '').replace(/\.ogg$/, '');
+    const key = `sound_${base}_desc`;
+    const localized = this.tr(key);
+    if (localized !== key) {
+      return localized;
+    }
+
+    return SoundOptions.deriveDescription(opt.file);
+  }
+
+  private pickSound(id: string): void {
+    this.selectedSound = id;
+    SettingsHelper.saveTasbihSound(id);
+    this.showSoundPicker = false;
+    // Play after the sheet has closed — the sound then comes from
+    // the underlying page rather than mid-dismissal.
+    setTimeout(() => {
+      SoundHelper.preview(id);
+    }, 150);
   }
 
   // ============================================================
@@ -209,6 +291,27 @@ struct CustomizePage {
     }
   }
 
+  private appThemeLabel(): string {
+    return SettingsHelper.getAppThemeLabel(this.appTheme);
+  }
+
+  private buildAppThemeItems(): PickerItem[] {
+    return SettingsHelper.buildAppThemePickerItems(this.appTheme);
+  }
+
+  /**
+   * Preview swatch for a preset — returns the accent colour that
+   * would be used in the current mode.
+   */
+  private appThemeSwatch(preset: string): string {
+    const preview = Theme.getColors(
+      this.themeMode,
+      PageTheme.isSystemDark(),
+      preset
+    );
+    return preview.accentGold;
+  }
+
   private isRtl(): boolean {
     return L.isRtlLang(this.currentLanguage);
   }
@@ -225,8 +328,7 @@ struct CustomizePage {
         Scroll() {
           Column() {
             // ==================================================
-            // UI Customization — header inlined so it re-renders
-            // immediately when currentLanguage changes.
+            // UI Customization — header inlined
             // ==================================================
             Row() {
               Text('🎛️')
@@ -344,6 +446,14 @@ struct CustomizePage {
           () => { this.showLanguagePicker = false; }
         )
       }
+
+      if (this.showAppThemePicker) {
+        this.AppThemePicker()
+      }
+
+      if (this.showSoundPicker) {
+        this.SoundPicker()
+      }
     }
     .width('100%').height('100%')
     .backgroundColor(this.colors.primaryGreen)
@@ -423,16 +533,96 @@ struct CustomizePage {
             .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
           Text(this.tr('haptic_feedback_desc'))
             .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+          if (!this.systemHapticsEnabled) {
+            Text(this.tr('controlled_by_system'))
+              .fontSize(10)
+              .fontColor(this.colors.accentGold)
+              .fontStyle(FontStyle.Italic)
+              .margin({ top: 4 })
+          }
         }
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
         Toggle({ type: ToggleType.Switch, isOn: this.vibrationEnabled })
           .selectedColor(this.colors.accentGold)
+          .enabled(this.systemHapticsEnabled)
+          .opacity(this.systemHapticsEnabled ? 1.0 : 0.5)
           .onChange((isOn: boolean) => { this.toggleVibration(isOn); })
       }
       .width('100%')
       .padding({ top: 14, bottom: 14, left: 16, right: 16 })
       .backgroundColor(this.colors.tintSubtle).borderRadius(12).margin({ bottom: 8 })
+
+      // ---- Sound ----
+      Row() {
+        Column() {
+          Text(this.tr('sound_feedback'))
+            .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+          Text(this.tr('sound_feedback_desc'))
+            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+          if (!this.systemSoundEnabled) {
+            Text(this.tr('controlled_by_system'))
+              .fontSize(10)
+              .fontColor(this.colors.accentGold)
+              .fontStyle(FontStyle.Italic)
+              .margin({ top: 4 })
+          }
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+        Toggle({ type: ToggleType.Switch, isOn: this.soundEnabled })
+          .selectedColor(this.colors.accentGold)
+          .enabled(this.systemSoundEnabled)
+          .opacity(this.systemSoundEnabled ? 1.0 : 0.5)
+          .onChange((isOn: boolean) => {
+            this.toggleSound(isOn);
+          })
+      }
+      .width('100%')
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .margin({ bottom: 8 })
+
+      // ---- Sound Style (only shown when Sound is enabled and the
+      //      system allows sound) ----
+      if (this.soundEnabled && this.systemSoundEnabled) {
+        Row() {
+          Column() {
+            Text(this.tr('sound_style'))
+              .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+            Text(this.tr('sound_style_desc'))
+              .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+            Text(this.soundDisplayName(this.selectedSound))
+              .fontSize(12)
+              .fontColor(this.colors.accentGold)
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+              .margin({ top: 6 })
+          }
+          .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+          Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+        }
+        .width('100%')
+        .padding({
+          top: 14,
+          bottom: 14,
+          left: 16,
+          right: 16
+        })
+        .backgroundColor(this.colors.tintSubtle)
+        .borderRadius(12)
+        .margin({ bottom: 8 })
+        .onClick(() => {
+          this.showSoundPicker = true;
+        })
+      }
 
       // ---- Language ----
       Row() {
@@ -479,6 +669,49 @@ struct CustomizePage {
   @Builder
   AppearanceContent() {
     Column() {
+      // ---- App Theme preset ----
+      Row() {
+        Column() {
+          Text(this.tr('theme_preset'))
+            .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+          Text(this.tr('theme_preset_desc'))
+            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+          Row() {
+            // Live preview swatch of the current theme.
+            Row()
+              .width(14)
+              .height(14)
+              .borderRadius(7)
+              .backgroundColor(this.appThemeSwatch(this.appTheme))
+              .border({ width: 1, color: this.colors.borderSoft })
+            Text(this.appThemeLabel())
+              .fontSize(12)
+              .fontColor(this.colors.accentGold)
+              .margin({ left: 8 })
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+          }
+          .margin({ top: 6 })
+          .alignItems(VerticalAlign.Center)
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+      }
+      .width('100%')
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .margin({ bottom: 8 })
+      .onClick(() => {
+        this.showAppThemePicker = true;
+      })
+
       // ---- Dark Mode ----
       Row() {
         Column() {
@@ -509,7 +742,304 @@ struct CustomizePage {
   }
 
   // ============================================================
-  // PICKER OVERLAY
+  // APP THEME PICKER — swatch strip + labels
+  // ============================================================
+
+  @Builder
+  AppThemePicker() {
+    // Dimmer
+    Column()
+      .width('100%').height('100%')
+      .backgroundColor(this.colors.overlayDim)
+      .onClick(() => {
+        this.showAppThemePicker = false;
+      })
+
+    // Bottom sheet
+    Column() {
+      Row()
+        .width(44)
+        .height(4)
+        .backgroundColor(this.colors.overlayDimSoft)
+        .borderRadius(2)
+        .margin({ top: 10 })
+
+      Row() {
+        Text('🎨')
+          .fontSize(22)
+          .width(44)
+          .height(44)
+          .textAlign(TextAlign.Center)
+          .backgroundColor(this.colors.tintSoft)
+          .borderRadius(12)
+          .border({ width: 1, color: this.colors.borderSoft })
+
+        Text(this.tr('theme_preset'))
+          .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+          .margin({ left: 14 })
+      }
+      .width('100%').padding({ left: 20, top: 20, bottom: 20 })
+
+      Divider().color(this.colors.borderSoft).width('90%')
+
+      Column() {
+        ForEach(
+          [ThemePreset.CURRENT, ThemePreset.HARMONY_7,
+            ThemePreset.HARMONY_6, ThemePreset.HARMONY_5],
+          (preset: string) => {
+            Row() {
+              // Preview swatch
+              Row()
+                .width(34)
+                .height(34)
+                .borderRadius(17)
+                .backgroundColor(this.appThemeSwatch(preset))
+                .border({
+                  width: 2,
+                  color: preset === this.appTheme
+                    ? this.colors.accentGold
+                    : this.colors.borderSoft
+                })
+
+              Column() {
+                Text(SettingsHelper.getAppThemeLabel(preset))
+                  .fontSize(15)
+                  .fontColor(preset === this.appTheme
+                    ? this.colors.accentGold
+                    : this.colors.textWhite)
+                  .fontWeight(preset === this.appTheme
+                    ? FontWeight.Bold
+                    : FontWeight.Normal)
+                  .width('100%')
+
+                Text(this.appThemeSubtitle(preset))
+                  .fontSize(11)
+                  .fontColor(this.colors.textMuted)
+                  .margin({ top: 2 })
+                  .width('100%')
+                  .maxLines(2)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+              }
+              .alignItems(HorizontalAlign.Start)
+              .layoutWeight(1).margin({ left: 14 })
+
+              if (preset === this.appTheme) {
+                Text('✓')
+                  .fontSize(18)
+                  .fontColor(this.colors.accentGold)
+                  .fontWeight(FontWeight.Bold)
+              }
+            }
+            .width('100%')
+            .padding({
+              top: 14,
+              bottom: 14,
+              left: 20,
+              right: 20
+            })
+            .backgroundColor(preset === this.appTheme
+              ? this.colors.tintSoft
+              : 'transparent')
+            .borderRadius(12)
+            .margin({ bottom: 4 })
+            .alignItems(VerticalAlign.Center)
+            .onClick(() => {
+              this.pickAppTheme(preset);
+            })
+          },
+          (preset: string) => `preset-${preset}`
+        )
+      }
+      .width('100%')
+      .padding({
+        left: 8,
+        right: 8,
+        top: 12,
+        bottom: 12
+      })
+
+      Button(this.tr('cancel'))
+        .width('90%')
+        .height(48)
+        .fontSize(15)
+        .fontWeight(FontWeight.Medium)
+        .fontColor(this.colors.textWhite)
+        .backgroundColor(this.colors.tintSoft)
+        .borderRadius(12)
+        .margin({ top: 8, bottom: 24 })
+        .onClick(() => {
+          this.showAppThemePicker = false;
+        })
+    }
+    .width('100%')
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius({ topLeft: 28, topRight: 28 })
+    .shadow({
+      radius: 24,
+      color: this.colors.shadowFloating,
+      offsetX: 0,
+      offsetY: -6
+    })
+    .border({ width: { top: 1 }, color: this.colors.borderSoft })
+    .position({ bottom: 0 })
+  }
+
+  // ============================================================
+  // SOUND PICKER
+  // ============================================================
+
+  @Builder
+  SoundPicker() {
+    // Dimmer
+    Column()
+      .width('100%').height('100%')
+      .backgroundColor(this.colors.overlayDim)
+      .onClick(() => {
+        this.showSoundPicker = false;
+      })
+
+    Column() {
+      Row()
+        .width(44)
+        .height(4)
+        .backgroundColor(this.colors.overlayDimSoft)
+        .borderRadius(2)
+        .margin({ top: 10 })
+
+      Row() {
+        Text('🔊')
+          .fontSize(22)
+          .width(44)
+          .height(44)
+          .textAlign(TextAlign.Center)
+          .backgroundColor(this.colors.tintSoft)
+          .borderRadius(12)
+          .border({ width: 1, color: this.colors.borderSoft })
+
+        Text(this.tr('sound_style'))
+          .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+          .margin({ left: 14 })
+      }
+      .width('100%').padding({ left: 20, top: 20, bottom: 20 })
+
+      Divider().color(this.colors.borderSoft).width('90%')
+
+      Column() {
+        ForEach(TASBIH_SOUND_OPTIONS, (opt: TasbihSoundOption) => {
+          Row() {
+            // ---- Play preview icon ----
+            Stack() {
+              Text('▶')
+                .fontSize(14)
+                .fontColor(this.colors.accentGold)
+            }
+            .width(38)
+            .height(38)
+            .borderRadius(19)
+            .backgroundColor(this.colors.tintSoft)
+            .border({ width: 1, color: this.colors.borderSoft })
+            .alignContent(Alignment.Center)
+            .onClick(() => {
+              SoundHelper.preview(opt.id);
+            })
+
+            Column() {
+              Text(this.soundDisplayName(opt.id))
+                .fontSize(15)
+                .fontColor(opt.id === this.selectedSound
+                  ? this.colors.accentGold
+                  : this.colors.textWhite)
+                .fontWeight(opt.id === this.selectedSound
+                  ? FontWeight.Bold
+                  : FontWeight.Normal)
+                .width('100%')
+
+              Text(this.soundDescription(opt.id))
+                .fontSize(11)
+                .fontColor(this.colors.textMuted)
+                .margin({ top: 2 })
+                .width('100%')
+                .maxLines(2)
+                .textOverflow({ overflow: TextOverflow.Ellipsis })
+            }
+            .alignItems(HorizontalAlign.Start)
+            .layoutWeight(1).margin({ left: 14 })
+
+            if (opt.id === this.selectedSound) {
+              Text('✓')
+                .fontSize(18)
+                .fontColor(this.colors.accentGold)
+                .fontWeight(FontWeight.Bold)
+            }
+          }
+          .width('100%')
+          .padding({
+            top: 12,
+            bottom: 12,
+            left: 20,
+            right: 20
+          })
+          .backgroundColor(opt.id === this.selectedSound
+            ? this.colors.tintSoft
+            : 'transparent')
+          .borderRadius(12)
+          .margin({ bottom: 4 })
+          .alignItems(VerticalAlign.Center)
+          .onClick(() => {
+            this.pickSound(opt.id);
+          })
+        }, (opt: TasbihSoundOption) => `sound-${opt.id}`)
+      }
+      .width('100%')
+      .padding({
+        left: 8,
+        right: 8,
+        top: 12,
+        bottom: 12
+      })
+
+      Button(this.tr('cancel'))
+        .width('90%')
+        .height(48)
+        .fontSize(15)
+        .fontWeight(FontWeight.Medium)
+        .fontColor(this.colors.textWhite)
+        .backgroundColor(this.colors.tintSoft)
+        .borderRadius(12)
+        .margin({ top: 8, bottom: 24 })
+        .onClick(() => {
+          this.showSoundPicker = false;
+        })
+    }
+    .width('100%')
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius({ topLeft: 28, topRight: 28 })
+    .shadow({
+      radius: 24,
+      color: this.colors.shadowFloating,
+      offsetX: 0,
+      offsetY: -6
+    })
+    .border({ width: { top: 1 }, color: this.colors.borderSoft })
+    .position({ bottom: 0 })
+  }
+
+  private appThemeSubtitle(preset: string): string {
+    switch (preset) {
+      case ThemePreset.HARMONY_7:
+        return this.tr('theme_preset_harmony7_desc');
+      case ThemePreset.HARMONY_6:
+        return this.tr('theme_preset_harmony6_desc');
+      case ThemePreset.HARMONY_5:
+        return this.tr('theme_preset_harmony5_desc');
+      case ThemePreset.CURRENT:
+      default:
+        return this.tr('theme_preset_current_desc');
+    }
+  }
+
+  // ============================================================
+  // GENERIC PICKER OVERLAY (used for Dark Mode and Language)
   // ============================================================
 
   @Builder

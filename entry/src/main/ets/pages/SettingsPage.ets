@@ -14,8 +14,10 @@ import {
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
-  STORAGE_KEY_APP_FOREGROUND_TICK
+  STORAGE_KEY_APP_FOREGROUND_TICK,
+  STORAGE_KEY_APP_THEME
 } from '../common/StorageKeys';
+import { ThemePreset } from '../common/Theme';
 import { OffsetKey, PrayerOffsetsHelper } from '../helper/PrayerOffsetsHelper';
 import {
   MAX_BEFORE_MINUTES,
@@ -43,6 +45,9 @@ struct SettingsPage {
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_APP_THEME)
+  @Watch('onAppThemePresetChanged')
+  appThemePreset: string = ThemePreset.CURRENT;
 
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
@@ -121,6 +126,9 @@ struct SettingsPage {
   @State showSourcePicker: boolean = false;
   @State showHighLatPicker: boolean = false;
 
+  private onAppThemePresetChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+  }
   // ============================================================
   // LOCALIZATION
   // ============================================================

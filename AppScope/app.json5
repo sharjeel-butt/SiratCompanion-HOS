@@ -2,10 +2,10 @@
   "app": {
     "bundleName": "com.siratcompanion.hos.app",
     "vendor": "Sharjeel Butt",
-    "versionCode": 2000000,
-    "versionName": "2.0.0",
+    "versionCode": 2001000,
+    "versionName": "2.1.0",
     "icon": "$media:app_icon",
-    "buildVersion": "200",
+    "buildVersion": "210",
     "label":  "$string:app_name"
   }
 }
