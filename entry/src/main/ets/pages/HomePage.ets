@@ -2,10 +2,11 @@
 
 import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
-import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
+import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
+  STORAGE_KEY_APP_THEME,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
@@ -49,6 +50,9 @@ struct HomePage {
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_APP_THEME)
+  @Watch('onAppThemePresetChanged')
+  appThemePreset: string = ThemePreset.CURRENT;
   @StorageLink(STORAGE_KEY_NAV_DIRECTION)
   navDirection: string = 'forward';
   @StorageLink(STORAGE_KEY_LOCATION_VERSION)
@@ -186,6 +190,10 @@ struct HomePage {
       default:
         return raw;
     }
+  }
+
+  private onAppThemePresetChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
   }
 
   private translateEventName(raw: string): string {
@@ -918,6 +926,7 @@ struct HomePage {
               Column().height(140)
             }
             .width('100%')
+            .padding({ left: 16, right: 16 })
           }
           .width('100%')
           .backgroundColor(this.colors.primaryGreen)

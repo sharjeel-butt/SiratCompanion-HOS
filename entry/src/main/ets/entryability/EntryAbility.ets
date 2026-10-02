@@ -1,18 +1,24 @@
 // entry/src/main/ets/entryability/EntryAbility.ets
 
-import { UIAbility, AbilityConstant, Want } from '@kit.AbilityKit';
+import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { window } from '@kit.ArkUI';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { PreferencesHelper } from '../helper/PreferencesHelper';
 import {
-  STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_APP_FOREGROUND_TICK,
+  STORAGE_KEY_APP_THEME,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
-  STORAGE_KEY_WIZARD_COMPLETED,
+  STORAGE_KEY_SOUND_ENABLED,
+  STORAGE_KEY_TASBIH_SOUND,
+  STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_VIBRATION_ENABLED,
-  STORAGE_KEY_APP_FOREGROUND_TICK
+  STORAGE_KEY_WIZARD_COMPLETED
 } from '../common/StorageKeys';
-import { ThemeMode } from '../common/Theme';
+import { SoundHelper } from '../helper/SoundHelper';
+import { SoundOptions } from '../common/SoundOptions';
+import { SystemFeedbackHelper } from '../helper/SystemFeedbackHelper';
+import { ThemeMode, ThemePreset } from '../common/Theme';
 import { AppLogger } from '../helper/AppLogger';
 import { PrayerManager } from '../utils/PrayerManager';
 
@@ -38,6 +44,21 @@ export default class EntryAbility extends UIAbility {
       );
       AppStorage.setOrCreate(STORAGE_KEY_THEME_MODE, savedMode);
 
+      const tasbihSound = await PreferencesHelper.getString(
+        STORAGE_KEY_TASBIH_SOUND, SoundOptions.DEFAULT_ID
+      );
+      AppStorage.setOrCreate(STORAGE_KEY_TASBIH_SOUND, tasbihSound);
+
+      const soundEnabled = await PreferencesHelper.getBoolean(
+        STORAGE_KEY_SOUND_ENABLED, true
+      );
+      AppStorage.setOrCreate(STORAGE_KEY_SOUND_ENABLED, soundEnabled);
+
+      const savedAppTheme = await PreferencesHelper.getString(
+        STORAGE_KEY_APP_THEME, ThemePreset.CURRENT
+      );
+      AppStorage.setOrCreate(STORAGE_KEY_APP_THEME, savedAppTheme);
+
       const savedHijriOffset = await PreferencesHelper.getNumber(
         STORAGE_KEY_HIJRI_OFFSET, 0
       );
@@ -56,11 +77,18 @@ export default class EntryAbility extends UIAbility {
       // Load the persisted prayer-state map into memory so every
       // subsequent read/write is synchronous.
       await PrayerManager.primeStateMap();
-
+      // Read the system's sound & haptics state, and start
+      // listening for changes.
+      SystemFeedbackHelper.init(this.context);
       const wizardDone = await PreferencesHelper.getBoolean(
         STORAGE_KEY_WIZARD_COMPLETED, false
       );
       const startPage = wizardDone ? 'pages/HomePage' : 'pages/WizardPage';
+
+      // Initialize the Tasbih sound player (non-blocking).
+      SoundHelper.init(this.context).catch((e: Error) => {
+        AppLogger.warn('EntryAbility', `SoundHelper init failed: ${e.message}`);
+      });
 
       setTimeout(() => {
         windowStage.loadContent(startPage, (err) => {
@@ -79,9 +107,15 @@ export default class EntryAbility extends UIAbility {
   }
 
   onForeground(): void {
+    // Bump the foreground tick so pages refresh.
     const prev = AppStorage.get<number>(STORAGE_KEY_APP_FOREGROUND_TICK);
     const next = (prev === undefined ? 0 : prev) + 1;
     AppStorage.set(STORAGE_KEY_APP_FOREGROUND_TICK, next);
+
+    // Re-read system sound & haptics state — the user may have
+    // changed it in Settings while the app was backgrounded.
+    SystemFeedbackHelper.refresh();
+
     hilog.info(0x0000, 'Sirat', 'onForeground tick=%{public}d', next);
   }
 }
