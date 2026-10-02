@@ -13,9 +13,7 @@ const PREF_STORE_NAME = 'sirat_settings';
  * EntryAbility's loadContent callback has fired.
  */
 export class PreferencesHelper {
-
   private static store: preferences.Preferences | null = null;
-
   // Promise machinery to await init completion
   private static initResolve: (() => void) | null = null;
   private static initPromise: Promise<void> = new Promise<void>((resolve) => {
@@ -51,22 +49,11 @@ export class PreferencesHelper {
     }
   }
 
-  /**
-   * Ensures the store is ready before any operation.
-   * If init() hasn't finished yet, wait for it.
-   */
-  private static async ensureReady(): Promise<void> {
-    if (PreferencesHelper.store) return;
-    await PreferencesHelper.initPromise;
-  }
-
-  // ============================================================
-  // READS
-  // ============================================================
-
   static async getString(key: string, def: string): Promise<string> {
     await PreferencesHelper.ensureReady();
-    if (!PreferencesHelper.store) return def;
+    if (!PreferencesHelper.store) {
+      return def;
+    }
 
     try {
       return (await PreferencesHelper.store.get(key, def)) as string;
@@ -76,9 +63,15 @@ export class PreferencesHelper {
     }
   }
 
+  // ============================================================
+  // READS
+  // ============================================================
+
   static async getNumber(key: string, def: number): Promise<number> {
     await PreferencesHelper.ensureReady();
-    if (!PreferencesHelper.store) return def;
+    if (!PreferencesHelper.store) {
+      return def;
+    }
 
     try {
       return (await PreferencesHelper.store.get(key, def)) as number;
@@ -90,7 +83,9 @@ export class PreferencesHelper {
 
   static async getBoolean(key: string, def: boolean): Promise<boolean> {
     await PreferencesHelper.ensureReady();
-    if (!PreferencesHelper.store) return def;
+    if (!PreferencesHelper.store) {
+      return def;
+    }
 
     try {
       return (await PreferencesHelper.store.get(key, def)) as boolean;
@@ -99,10 +94,6 @@ export class PreferencesHelper {
       return def;
     }
   }
-
-  // ============================================================
-  // WRITES (immediately flushed to disk)
-  // ============================================================
 
   static async setString(key: string, value: string): Promise<void> {
     await PreferencesHelper.ensureReady();
@@ -119,6 +110,10 @@ export class PreferencesHelper {
       console.error(`[PreferencesHelper] setString(${key}) failed: ${JSON.stringify(err)}`);
     }
   }
+
+  // ============================================================
+  // WRITES (immediately flushed to disk)
+  // ============================================================
 
   static async setNumber(key: string, value: number): Promise<void> {
     await PreferencesHelper.ensureReady();
@@ -152,22 +147,35 @@ export class PreferencesHelper {
     }
   }
 
-  // ============================================================
-  // UTILITY
-  // ============================================================
-
   /**
    * Explicitly flush any pending writes to disk.
    * All setters already flush, so this is provided for completeness.
    */
   static async flush(): Promise<void> {
     await PreferencesHelper.ensureReady();
-    if (!PreferencesHelper.store) return;
+    if (!PreferencesHelper.store) {
+      return;
+    }
 
     try {
       await PreferencesHelper.store.flush();
     } catch (err) {
       console.error(`[PreferencesHelper] flush failed: ${JSON.stringify(err)}`);
     }
+  }
+
+  // ============================================================
+  // UTILITY
+  // ============================================================
+
+  /**
+   * Ensures the store is ready before any operation.
+   * If init() hasn't finished yet, wait for it.
+   */
+  private static async ensureReady(): Promise<void> {
+    if (PreferencesHelper.store) {
+      return;
+    }
+    await PreferencesHelper.initPromise;
   }
 }

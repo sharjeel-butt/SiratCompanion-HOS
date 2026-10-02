@@ -26,20 +26,8 @@ export const DAYS_OF_WEEK_SHORT: string[] = [
 const MS_PER_DAY = 86400000;
 
 export class HijriCalendarHelper {
-
   // Formatter is expensive to construct — cache once.
   private static formatter: Intl.DateTimeFormat | null = null;
-
-  private static getFormatter(): Intl.DateTimeFormat {
-    if (HijriCalendarHelper.formatter === null) {
-      HijriCalendarHelper.formatter = new Intl.DateTimeFormat('en-u-ca-islamic', {
-        day: 'numeric',
-        month: 'numeric',
-        year: 'numeric'
-      });
-    }
-    return HijriCalendarHelper.formatter;
-  }
 
   /**
    * Return the Hijri date for a given Gregorian date, after applying
@@ -56,9 +44,14 @@ export class HijriCalendarHelper {
     let m = 0;
     let d = 0;
     for (const p of parts) {
-      if (p.type === 'year')       y = parseInt(p.value, 10);
-      else if (p.type === 'month') m = parseInt(p.value, 10);
-      else if (p.type === 'day')   d = parseInt(p.value, 10);
+      if (p.type === 'year') {
+        y = parseInt(p.value, 10);
+      } else if (p.type === 'month') {
+        m =
+          parseInt(p.value, 10);
+      } else if (p.type === 'day') {
+        d = parseInt(p.value, 10);
+      }
     }
 
     const result: HijriDate = { year: y, month: m, day: d };
@@ -73,8 +66,14 @@ export class HijriCalendarHelper {
   static shiftMonth(year: number, month: number, delta: number): HijriDate {
     let m = month + delta;
     let y = year;
-    while (m < 1)  { m += 12; y -= 1; }
-    while (m > 12) { m -= 12; y += 1; }
+    while (m < 1) {
+      m += 12;
+      y -= 1;
+    }
+    while (m > 12) {
+      m -= 12;
+      y += 1;
+    }
     const result: HijriDate = { year: y, month: m, day: 1 };
     return result;
   }
@@ -115,7 +114,9 @@ export class HijriCalendarHelper {
     const firstGreg = HijriCalendarHelper.findGregorianForHijri(
       year, month, 1, offsetDays, anchor
     );
-    if (firstGreg === null) return [];
+    if (firstGreg === null) {
+      return [];
+    }
 
     const todayMidnight = new Date();
     todayMidnight.setHours(0, 0, 0, 0);
@@ -124,7 +125,9 @@ export class HijriCalendarHelper {
     for (let i = 0; i < 31; i++) {
       const g = new Date(firstGreg.getTime() + i * MS_PER_DAY);
       const h = HijriCalendarHelper.getHijriDate(g, offsetDays);
-      if (h.year !== year || h.month !== month) break;
+      if (h.year !== year || h.month !== month) {
+        break;
+      }
 
       const gm = new Date(g.getTime());
       gm.setHours(0, 0, 0, 0);
@@ -157,7 +160,9 @@ export class HijriCalendarHelper {
   static eventsInMonth(hijriMonth: number): IslamicEvent[] {
     const out: IslamicEvent[] = [];
     for (const e of IMPORTANT_ISLAMIC_EVENTS) {
-      if (e.month === hijriMonth) out.push(e);
+      if (e.month === hijriMonth) {
+        out.push(e);
+      }
     }
     out.sort((a: IslamicEvent, b: IslamicEvent): number => a.day - b.day);
     return out;
@@ -165,7 +170,9 @@ export class HijriCalendarHelper {
 
   /** "Sep 15 – Oct 14, 2025" style string for the Gregorian span. */
   static formatGregorianSpan(days: CalendarDay[]): string {
-    if (days.length === 0) return '';
+    if (days.length === 0) {
+      return '';
+    }
     const first = days[0].gregorianDate;
     const last = days[days.length - 1].gregorianDate;
     const monthShort = (d: Date): string =>
@@ -178,5 +185,16 @@ export class HijriCalendarHelper {
     }
     return `${monthShort(first)} ${first.getDate()} – ` +
       `${monthShort(last)} ${last.getDate()}, ${year}`;
+  }
+
+  private static getFormatter(): Intl.DateTimeFormat {
+    if (HijriCalendarHelper.formatter === null) {
+      HijriCalendarHelper.formatter = new Intl.DateTimeFormat('en-u-ca-islamic', {
+        day: 'numeric',
+        month: 'numeric',
+        year: 'numeric'
+      });
+    }
+    return HijriCalendarHelper.formatter;
   }
 }

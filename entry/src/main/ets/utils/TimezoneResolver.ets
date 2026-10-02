@@ -17,7 +17,6 @@ import { City, DstRule, OfflineCityLookup } from './OfflineCityLookup';
  *      we do.
  */
 export class TimezoneResolver {
-
   /**
    * Effective offset for a location, preferring the device's offset
    * when the two are within 30 minutes of each other.
@@ -29,7 +28,9 @@ export class TimezoneResolver {
     longitude: number,
     date: Date
   ): number {
-    if (latitude === 0 && longitude === 0) return 0;
+    if (latitude === 0 && longitude === 0) {
+      return 0;
+    }
 
     const deviceOffset = -date.getTimezoneOffset() / 60;
     const locationOffset = TimezoneResolver.tableOffset(latitude, longitude, date);
@@ -57,10 +58,14 @@ export class TimezoneResolver {
   private static isDst(rule: DstRule, date: Date): boolean {
     const year = date.getUTCFullYear();
     switch (rule) {
-      case DstRule.US: return TimezoneResolver.isUsDst(date, year);
-      case DstRule.EU: return TimezoneResolver.isEuDst(date, year);
-      case DstRule.AU: return TimezoneResolver.isAuDst(date, year);
-      default:         return false;
+      case DstRule.US:
+        return TimezoneResolver.isUsDst(date, year);
+      case DstRule.EU:
+        return TimezoneResolver.isEuDst(date, year);
+      case DstRule.AU:
+        return TimezoneResolver.isAuDst(date, year);
+      default:
+        return false;
     }
   }
 
@@ -69,8 +74,8 @@ export class TimezoneResolver {
    * both in the same calendar year.
    */
   private static isUsDst(date: Date, year: number): boolean {
-    const start = TimezoneResolver.nthSunday(year, 3, 2);   // 2nd Sun Mar
-    const end   = TimezoneResolver.nthSunday(year, 11, 1);  // 1st Sun Nov
+    const start = TimezoneResolver.nthSunday(year, 3, 2); // 2nd Sun Mar
+    const end = TimezoneResolver.nthSunday(year, 11, 1); // 1st Sun Nov
     const t = date.getTime();
     return t >= start.getTime() && t < end.getTime();
   }
@@ -80,8 +85,8 @@ export class TimezoneResolver {
    * both in the same calendar year.
    */
   private static isEuDst(date: Date, year: number): boolean {
-    const start = TimezoneResolver.lastSunday(year, 3);    // last Sun Mar
-    const end   = TimezoneResolver.lastSunday(year, 10);   // last Sun Oct
+    const start = TimezoneResolver.lastSunday(year, 3); // last Sun Mar
+    const end = TimezoneResolver.lastSunday(year, 10); // last Sun Oct
     const t = date.getTime();
     return t >= start.getTime() && t < end.getTime();
   }
@@ -92,7 +97,7 @@ export class TimezoneResolver {
    * The window spans the new-year boundary.
    */
   private static isAuDst(date: Date, year: number): boolean {
-    const m = date.getUTCMonth();   // 0 = Jan, 3 = Apr, 9 = Oct
+    const m = date.getUTCMonth(); // 0 = Jan, 3 = Apr, 9 = Oct
     const t = date.getTime();
 
     if (m >= 9) {
@@ -120,7 +125,7 @@ export class TimezoneResolver {
   /** nth Sunday (1-based) of a 1-based month, at 00:00 UTC. */
   private static nthSunday(year: number, month: number, n: number): Date {
     const first = new Date(Date.UTC(year, month - 1, 1));
-    const dow = first.getUTCDay();             // 0 = Sun
+    const dow = first.getUTCDay(); // 0 = Sun
     const day = 1 + ((7 - dow) % 7) + (n - 1) * 7;
     return new Date(Date.UTC(year, month - 1, day));
   }

@@ -58,6 +58,45 @@ export class AppLogger {
   // INTERNAL WRITE
   // ============================================================
 
+  static readAll(): string {
+    if (!AppLogger.initialized || AppLogger.logPath.length === 0) {
+      return '(logger not initialized)';
+    }
+
+    try {
+      const stat = fs.statSync(AppLogger.logPath);
+      if (stat.size === 0) {
+        return '(log is empty)';
+      }
+
+      const file = fs.openSync(AppLogger.logPath, fs.OpenMode.READ_ONLY);
+      const buf = new ArrayBuffer(stat.size);
+      const bytesRead = fs.readSync(file.fd, buf);
+      fs.closeSync(file);
+
+      const u8 = new Uint8Array(buf, 0, bytesRead);
+      return buffer.from(u8).toString('utf8');
+    } catch (err) {
+      return `(failed to read log: ${JSON.stringify(err)})`;
+    }
+  }
+
+  static clear(): void {
+    if (!AppLogger.initialized || AppLogger.logPath.length === 0) {
+      return;
+    }
+    try {
+      const file = fs.openSync(
+        AppLogger.logPath,
+        fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE | fs.OpenMode.TRUNC
+      );
+      fs.closeSync(file);
+      AppLogger.info('AppLogger', 'Log file cleared');
+    } catch (err) {
+      console.warn(`[AppLogger] clear failed: ${JSON.stringify(err)}`);
+    }
+  }
+
   private static write(level: string, tag: string, message: string): void {
     // Always mirror to console for DevEco logs.
     const line = `[${AppLogger.timestamp()}] [${level}] [${tag}] ${message}`;
@@ -83,6 +122,10 @@ export class AppLogger {
       console.warn(`[AppLogger] write failed: ${JSON.stringify(err)}`);
     }
   }
+
+  // ============================================================
+  // READ / CLEAR
+  // ============================================================
 
   private static trimIfNeeded(): void {
     try {
@@ -121,48 +164,5 @@ export class AppLogger {
     const pad = (n: number): string => n.toString().padStart(2, '0');
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ` +
       `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-  }
-
-  // ============================================================
-  // READ / CLEAR
-  // ============================================================
-
-  static readAll(): string {
-    if (!AppLogger.initialized || AppLogger.logPath.length === 0) {
-      return '(logger not initialized)';
-    }
-
-    try {
-      const stat = fs.statSync(AppLogger.logPath);
-      if (stat.size === 0) {
-        return '(log is empty)';
-      }
-
-      const file = fs.openSync(AppLogger.logPath, fs.OpenMode.READ_ONLY);
-      const buf = new ArrayBuffer(stat.size);
-      const bytesRead = fs.readSync(file.fd, buf);
-      fs.closeSync(file);
-
-      const u8 = new Uint8Array(buf, 0, bytesRead);
-      return buffer.from(u8).toString('utf8');
-    } catch (err) {
-      return `(failed to read log: ${JSON.stringify(err)})`;
-    }
-  }
-
-  static clear(): void {
-    if (!AppLogger.initialized || AppLogger.logPath.length === 0) {
-      return;
-    }
-    try {
-      const file = fs.openSync(
-        AppLogger.logPath,
-        fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE | fs.OpenMode.TRUNC
-      );
-      fs.closeSync(file);
-      AppLogger.info('AppLogger', 'Log file cleared');
-    } catch (err) {
-      console.warn(`[AppLogger] clear failed: ${JSON.stringify(err)}`);
-    }
   }
 }

@@ -4,6 +4,7 @@ import { ExtraTiming, PrayerModel } from '../models/PrayerModel';
 import { DailyPrayerTimes } from './PrayerTimeCalculator';
 import { PrayerOffsets } from '../helper/SettingsHelper';
 import { PreferencesHelper } from '../helper/PreferencesHelper';
+import { STORAGE_KEY_PRAYER_STATE_VERSION } from '../common/StorageKeys';
 
 export interface PrayerCheckState {
   fajr: boolean;
@@ -14,59 +15,94 @@ export interface PrayerCheckState {
 }
 
 const DEFAULT_OFFSETS: PrayerOffsets = {
-  fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0
+  fajr: 0,
+  dhuhr: 0,
+  asr: 0,
+  maghrib: 0,
+  isha: 0
 };
 
 export class PrayerManager {
-
   // ============================================================
   // TIME PARSING
   // ============================================================
 
+  private static stateMap: Record<string, string> = {};
+  // ============================================================
+  // OFFSET
+  // ============================================================
+  private static readonly STATE_MAP_PREF_KEY = 'prayer_state_map';
+
+  // ============================================================
+  // DATE HELPERS
+  // ============================================================
+
   static timeToMinutes(timeStr: string): number {
     const trimmed = timeStr.trim();
-    if (trimmed === '' || trimmed === '--:--') return 0;
+    if (trimmed === '' || trimmed === '--:--') {
+      return 0;
+    }
 
     const parts = trimmed.split(' ');
-    if (parts.length !== 2) return 0;
+    if (parts.length !== 2) {
+      return 0;
+    }
 
     const timeParts = parts[0].split(':');
-    if (timeParts.length !== 2) return 0;
+    if (timeParts.length !== 2) {
+      return 0;
+    }
 
     let hours = parseInt(timeParts[0], 10);
     const minutes = parseInt(timeParts[1], 10);
     const period = parts[1].toUpperCase();
 
-    if (isNaN(hours) || isNaN(minutes)) return 0;
+    if (isNaN(hours) || isNaN(minutes)) {
+      return 0;
+    }
 
-    if (period === 'PM' && hours !== 12) hours += 12;
-    if (period === 'AM' && hours === 12) hours = 0;
+    if (period === 'PM' && hours !== 12) {
+      hours += 12;
+    }
+    if (period === 'AM' && hours === 12) {
+      hours = 0;
+    }
 
     return hours * 60 + minutes;
   }
 
-  // ============================================================
-  // OFFSET
-  // ============================================================
-
   static offsetTime(timeStr: string, offsetMinutes: number): string {
-    if (offsetMinutes === 0) return timeStr;
-    if (timeStr === '--:--' || timeStr.trim() === '') return timeStr;
+    if (offsetMinutes === 0) {
+      return timeStr;
+    }
+    if (timeStr === '--:--' || timeStr.trim() === '') {
+      return timeStr;
+    }
 
     const parts = timeStr.trim().split(' ');
-    if (parts.length !== 2) return timeStr;
+    if (parts.length !== 2) {
+      return timeStr;
+    }
 
     const timeParts = parts[0].split(':');
-    if (timeParts.length !== 2) return timeStr;
+    if (timeParts.length !== 2) {
+      return timeStr;
+    }
 
     let hours = parseInt(timeParts[0], 10);
     const minutes = parseInt(timeParts[1], 10);
     const period = parts[1].toUpperCase();
 
-    if (isNaN(hours) || isNaN(minutes)) return timeStr;
+    if (isNaN(hours) || isNaN(minutes)) {
+      return timeStr;
+    }
 
-    if (period === 'PM' && hours !== 12) hours += 12;
-    if (period === 'AM' && hours === 12) hours = 0;
+    if (period === 'PM' && hours !== 12) {
+      hours += 12;
+    }
+    if (period === 'AM' && hours === 12) {
+      hours = 0;
+    }
 
     let total = hours * 60 + minutes + offsetMinutes;
     total = ((total % 1440) + 1440) % 1440;
@@ -75,13 +111,15 @@ export class PrayerManager {
     const newMinutes = total % 60;
     const newPeriod = newHours24 >= 12 ? 'PM' : 'AM';
     let displayHours = newHours24 % 12;
-    if (displayHours === 0) displayHours = 12;
+    if (displayHours === 0) {
+      displayHours = 12;
+    }
 
     return `${displayHours}:${newMinutes.toString().padStart(2, '0')} ${newPeriod}`;
   }
 
   // ============================================================
-  // DATE HELPERS
+  // CHECKBOX ENABLING (date-aware)
   // ============================================================
 
   static getDateKeyForDate(date: Date): string {
@@ -91,12 +129,16 @@ export class PrayerManager {
     return `${y}-${m}-${day}`;
   }
 
+  // ============================================================
+  // FRIDAY NAMING
+  // ============================================================
+
   static getDateKey(): string {
     return PrayerManager.getDateKeyForDate(new Date());
   }
 
   // ============================================================
-  // CHECKBOX ENABLING (date-aware)
+  // APPLY TIMES + OFFSETS
   // ============================================================
 
   static isPrayerCheckable(prayer: PrayerModel, viewingDate?: Date): boolean {
@@ -124,10 +166,6 @@ export class PrayerManager {
     return prayerMinutes > 0 && prayerMinutes <= currentMinutes;
   }
 
-  // ============================================================
-  // FRIDAY NAMING
-  // ============================================================
-
   static applyDayNames(prayers: PrayerModel[], date?: Date): PrayerModel[] {
     const ref = date ? new Date(date) : new Date();
     const isFriday = ref.getDay() === 5;
@@ -148,7 +186,7 @@ export class PrayerManager {
   }
 
   // ============================================================
-  // APPLY TIMES + OFFSETS
+  // STATUS RECALCULATION (date-aware, time-only)
   // ============================================================
 
   static applyTimesToPrayers(
@@ -162,11 +200,26 @@ export class PrayerManager {
       let offset = 0;
 
       switch (prayer.id) {
-        case 'fajr':    rawTime = times.fajr;    offset = offsets.fajr;    break;
-        case 'dhuhr':   rawTime = times.dhuhr;   offset = offsets.dhuhr;   break;
-        case 'asr':     rawTime = times.asr;     offset = offsets.asr;     break;
-        case 'maghrib': rawTime = times.maghrib; offset = offsets.maghrib; break;
-        case 'isha':    rawTime = times.isha;    offset = offsets.isha;    break;
+        case 'fajr':
+          rawTime = times.fajr;
+          offset = offsets.fajr;
+          break;
+        case 'dhuhr':
+          rawTime = times.dhuhr;
+          offset = offsets.dhuhr;
+          break;
+        case 'asr':
+          rawTime = times.asr;
+          offset = offsets.asr;
+          break;
+        case 'maghrib':
+          rawTime = times.maghrib;
+          offset = offsets.maghrib;
+          break;
+        case 'isha':
+          rawTime = times.isha;
+          offset = offsets.isha;
+          break;
       }
 
       const finalTime = PrayerManager.offsetTime(rawTime, offset);
@@ -184,6 +237,17 @@ export class PrayerManager {
     return PrayerManager.applyDayNames(mapped, date);
   }
 
+  // ============================================================
+  // PERSISTENCE — module static map + AppStorage mirror + disk
+  // ============================================================
+  //
+  // A single source of truth keyed by date:
+  //   { "2026-10-01": "{\"fajr\":true,\"dhuhr\":false,...}", ... }
+  //
+  // Lives as a module-level static, so it survives page destruction
+  // and recreation. Mirrored to AppStorage for @StorageLink watchers.
+  // Persisted to disk via PreferencesHelper so it survives restarts.
+
   static applyTimesToExtraTimings(
     timings: ExtraTiming[],
     times: DailyPrayerTimes,
@@ -194,12 +258,30 @@ export class PrayerManager {
       let offset = 0;
 
       switch (timing.id) {
-        case 'imsak':      rawTime = times.imsak;      offset = offsets.fajr; break;
-        case 'sunrise':    rawTime = times.sunrise;    offset = 0; break;
-        case 'sunset':     rawTime = times.sunset;     offset = 0; break;
-        case 'firstThird': rawTime = times.firstThird; offset = 0; break;
-        case 'midnight':   rawTime = times.midnight;   offset = 0; break;
-        case 'lastThird':  rawTime = times.lastThird;  offset = 0; break;
+        case 'imsak':
+          rawTime = times.imsak;
+          offset = offsets.fajr;
+          break;
+        case 'sunrise':
+          rawTime = times.sunrise;
+          offset = 0;
+          break;
+        case 'sunset':
+          rawTime = times.sunset;
+          offset = 0;
+          break;
+        case 'firstThird':
+          rawTime = times.firstThird;
+          offset = 0;
+          break;
+        case 'midnight':
+          rawTime = times.midnight;
+          offset = 0;
+          break;
+        case 'lastThird':
+          rawTime = times.lastThird;
+          offset = 0;
+          break;
       }
 
       const finalTime = PrayerManager.offsetTime(rawTime, offset);
@@ -214,10 +296,6 @@ export class PrayerManager {
       } as ExtraTiming;
     });
   }
-
-  // ============================================================
-  // STATUS RECALCULATION (date-aware, time-only)
-  // ============================================================
 
   static updateStatuses(
     prayers: PrayerModel[],
@@ -256,19 +334,29 @@ export class PrayerManager {
 
     const times = prayers.map(p => PrayerManager.timeToMinutes(p.time));
     const n = times.length;
-    if (n === 0) return prayers;
+    if (n === 0) {
+      return prayers;
+    }
 
     // ---- Pre-Fajr window ----
     const fajrMinutes = times[0];
     if (fajrMinutes > 0 && currentMinutes < fajrMinutes) {
       return prayers.map((p, i): PrayerModel => {
         let status: string;
-        if (p.checked) status = 'prayed';
-        else if (i === 0) status = 'next';
-        else status = 'abbreviation';
+        if (p.checked) {
+          status = 'prayed';
+        } else if (i === 0) {
+          status = 'next';
+        } else {
+          status = 'abbreviation';
+        }
         return {
-          id: p.id, name: p.name, arabicName: p.arabicName,
-          time: p.time, status: status, checked: p.checked
+          id: p.id,
+          name: p.name,
+          arabicName: p.arabicName,
+          time: p.time,
+          status: status,
+          checked: p.checked
         } as PrayerModel;
       });
     }
@@ -278,12 +366,20 @@ export class PrayerManager {
     if (ishaMinutes > 0 && currentMinutes > ishaMinutes) {
       return prayers.map((p, i): PrayerModel => {
         let status: string;
-        if (p.checked) status = 'prayed'; else if (i === n - 1) {
+        if (p.checked) {
+          status = 'prayed';
+        } else if (i === n - 1) {
           status = 'pray';
-        } else status = 'abbreviation';
+        } else {
+          status = 'abbreviation';
+        }
         return {
-          id: p.id, name: p.name, arabicName: p.arabicName,
-          time: p.time, status: status, checked: p.checked
+          id: p.id,
+          name: p.name,
+          arabicName: p.arabicName,
+          time: p.time,
+          status: status,
+          checked: p.checked
         } as PrayerModel;
       });
     }
@@ -291,13 +387,20 @@ export class PrayerManager {
     // ---- Normal window ----
     let timePrayIndex = -1;
     for (let i = 0; i < n; i++) {
-      if (times[i] > 0 && times[i] <= currentMinutes) timePrayIndex = i;
+      if (times[i] > 0 && times[i] <= currentMinutes) {
+        timePrayIndex = i;
+      }
     }
-    if (timePrayIndex === -1) timePrayIndex = n - 1;
+    if (timePrayIndex === -1) {
+      timePrayIndex = n - 1;
+    }
 
     let timeNextIndex = -1;
     for (let i = 0; i < n; i++) {
-      if (times[i] > currentMinutes) { timeNextIndex = i; break; }
+      if (times[i] > currentMinutes) {
+        timeNextIndex = i;
+        break;
+      }
     }
 
     const actualPrayIndex = timePrayIndex;
@@ -305,32 +408,30 @@ export class PrayerManager {
 
     return prayers.map((p, i): PrayerModel => {
       let status: string;
-      if (p.checked) status = 'prayed';
-      else if (i === actualPrayIndex && i === actualNextIndex) status = 'both';
-      else if (i === actualPrayIndex) status = 'pray';
-      else if (i === actualNextIndex) status = 'next';
-      else status = 'abbreviation';
+      if (p.checked) {
+        status = 'prayed';
+      } else if (i === actualPrayIndex && i === actualNextIndex) {
+        status =
+          'both';
+      } else if (i === actualPrayIndex) {
+        status = 'pray';
+      } else if (i === actualNextIndex) {
+        status =
+          'next';
+      } else {
+        status = 'abbreviation';
+      }
 
       return {
-        id: p.id, name: p.name, arabicName: p.arabicName,
-        time: p.time, status: status, checked: p.checked
+        id: p.id,
+        name: p.name,
+        arabicName: p.arabicName,
+        time: p.time,
+        status: status,
+        checked: p.checked
       } as PrayerModel;
     });
   }
-
-  // ============================================================
-  // PERSISTENCE — module static map + AppStorage mirror + disk
-  // ============================================================
-  //
-  // A single source of truth keyed by date:
-  //   { "2026-10-01": "{\"fajr\":true,\"dhuhr\":false,...}", ... }
-  //
-  // Lives as a module-level static, so it survives page destruction
-  // and recreation. Mirrored to AppStorage for @StorageLink watchers.
-  // Persisted to disk via PreferencesHelper so it survives restarts.
-
-  private static stateMap: Record<string, string> = {};
-  private static readonly STATE_MAP_PREF_KEY = 'prayer_state_map';
 
   /** Call once at app startup, after PreferencesHelper.init(). */
   static async primeStateMap(): Promise<void> {
@@ -363,17 +464,31 @@ export class PrayerManager {
 
   static saveStateForDate(dateKey: string, prayers: PrayerModel[]): void {
     const state: PrayerCheckState = {
-      fajr: false, dhuhr: false, asr: false, maghrib: false, isha: false
+      fajr: false,
+      dhuhr: false,
+      asr: false,
+      maghrib: false,
+      isha: false
     };
 
     for (const p of prayers) {
       const checked = p.checked === true;
       switch (p.id) {
-        case 'fajr':     state.fajr = checked; break;
-        case 'dhuhr':    state.dhuhr = checked; break;
-        case 'asr':      state.asr = checked; break;
-        case 'maghrib':  state.maghrib = checked; break;
-        case 'isha':     state.isha = checked; break;
+        case 'fajr':
+          state.fajr = checked;
+          break;
+        case 'dhuhr':
+          state.dhuhr = checked;
+          break;
+        case 'asr':
+          state.asr = checked;
+          break;
+        case 'maghrib':
+          state.maghrib = checked;
+          break;
+        case 'isha':
+          state.isha = checked;
+          break;
       }
     }
 
@@ -389,6 +504,13 @@ export class PrayerManager {
       .catch((e: Error) =>
       console.error('[PrayerStore] disk write failed: ' + e.message)
       );
+
+    // Bump the version counter so any page observing it re-reads state.
+    // Pages inside a Tabs host do not receive onPageShow() on tab
+    // switches, so this is the only reliable cross-tab refresh signal.
+    const prev = AppStorage.get<number>(STORAGE_KEY_PRAYER_STATE_VERSION);
+    const next = (prev === undefined ? 0 : prev) + 1;
+    AppStorage.setOrCreate(STORAGE_KEY_PRAYER_STATE_VERSION, next);
   }
 
   static loadStateForDate(
@@ -415,11 +537,21 @@ export class PrayerManager {
       const mapped = resetPrayers.map((p): PrayerModel => {
         let checked = false;
         switch (p.id) {
-          case 'fajr':     checked = state.fajr === true; break;
-          case 'dhuhr':    checked = state.dhuhr === true; break;
-          case 'asr':      checked = state.asr === true; break;
-          case 'maghrib':  checked = state.maghrib === true; break;
-          case 'isha':     checked = state.isha === true; break;
+          case 'fajr':
+            checked = state.fajr === true;
+            break;
+          case 'dhuhr':
+            checked = state.dhuhr === true;
+            break;
+          case 'asr':
+            checked = state.asr === true;
+            break;
+          case 'maghrib':
+            checked = state.maghrib === true;
+            break;
+          case 'isha':
+            checked = state.isha === true;
+            break;
         }
         return {
           id: p.id,
@@ -471,15 +603,21 @@ export class PrayerManager {
     prayers: PrayerModel[],
     locationOffsetHours?: number
   ): PrayerModel | null {
-    if (prayers.length === 0) return null;
+    if (prayers.length === 0) {
+      return null;
+    }
     const currentMinutes = PrayerManager.getCurrentMinutesInLocation(locationOffsetHours);
 
     let currentIdx = -1;
     for (let i = 0; i < prayers.length; i++) {
       const t = PrayerManager.timeToMinutes(prayers[i].time);
-      if (t > 0 && t <= currentMinutes) currentIdx = i;
+      if (t > 0 && t <= currentMinutes) {
+        currentIdx = i;
+      }
     }
-    if (currentIdx === -1) return null;
+    if (currentIdx === -1) {
+      return null;
+    }
     return prayers[currentIdx];
   }
 
@@ -487,12 +625,16 @@ export class PrayerManager {
     prayers: PrayerModel[],
     locationOffsetHours?: number
   ): PrayerModel | null {
-    if (prayers.length === 0) return null;
+    if (prayers.length === 0) {
+      return null;
+    }
     const currentMinutes = PrayerManager.getCurrentMinutesInLocation(locationOffsetHours);
 
     for (let i = 0; i < prayers.length; i++) {
       const t = PrayerManager.timeToMinutes(prayers[i].time);
-      if (t > currentMinutes) return prayers[i];
+      if (t > currentMinutes) {
+        return prayers[i];
+      }
     }
     return null;
   }

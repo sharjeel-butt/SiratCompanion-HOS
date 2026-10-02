@@ -4,9 +4,9 @@ import { preferences } from '@kit.ArkData';
 import { common } from '@kit.AbilityKit';
 import { Tasbih } from '../models/TasbihModels';
 
-const PREF_STORE     = 'tasbih_prefs';
-const KEY_TASBIHS    = 'tasbihs_data';
-const KEY_ACTIVE     = 'tasbih_active_id';
+const PREF_STORE = 'tasbih_prefs';
+const KEY_TASBIHS = 'tasbihs_data';
+const KEY_ACTIVE = 'tasbih_active_id';
 const KEY_ACTIVE_DHK = 'tasbih_active_dhikr';
 
 export interface TasbihLoadResult {
@@ -16,11 +16,12 @@ export interface TasbihLoadResult {
 }
 
 export class TasbihStorage {
-
   private static store: preferences.Preferences | null = null;
 
   static async init(context: common.UIAbilityContext): Promise<void> {
-    if (TasbihStorage.store) return;
+    if (TasbihStorage.store) {
+      return;
+    }
     try {
       TasbihStorage.store = await preferences.getPreferences(context, PREF_STORE);
     } catch (err) {
@@ -41,7 +42,9 @@ export class TasbihStorage {
       let tasbihs: Tasbih[] = json && json.length > 0
         ? JSON.parse(json) as Tasbih[]
         : [];
-      if (tasbihs.length === 0) tasbihs = defaults;
+      if (tasbihs.length === 0) {
+        tasbihs = defaults;
+      }
 
       // Migration: older stored tasbihs may be missing lifetimeCount
       // and/or themePresetId. Fill in safe defaults so downstream code
@@ -87,7 +90,9 @@ export class TasbihStorage {
     activeTasbihId: string,
     activeDhikrIndex: number
   ): Promise<void> {
-    if (!TasbihStorage.store) return;
+    if (!TasbihStorage.store) {
+      return;
+    }
     try {
       await TasbihStorage.store.put(KEY_TASBIHS, JSON.stringify(tasbihs));
       await TasbihStorage.store.put(KEY_ACTIVE, activeTasbihId);

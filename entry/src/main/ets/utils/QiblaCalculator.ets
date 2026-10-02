@@ -6,7 +6,6 @@
  * from any point on Earth to the Kaaba in Makkah.
  */
 export class QiblaCalculator {
-
   // Kaaba coordinates (Makkah)
   private static readonly KAABA_LAT = 21.4225;
   private static readonly KAABA_LNG = 39.8262;

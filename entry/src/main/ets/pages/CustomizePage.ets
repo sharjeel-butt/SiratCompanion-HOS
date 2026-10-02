@@ -22,7 +22,6 @@ import { Breakpoints } from '../common/Breakpoints';
 @Entry
 @Component
 struct CustomizePage {
-
   // ============================================================
   // STORAGE LINKS
   // ============================================================
@@ -30,19 +29,15 @@ struct CustomizePage {
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
-
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = AppLanguage.ENGLISH;
-
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
   appTheme: string = ThemePreset.CURRENT;
-
   @StorageLink(STORAGE_KEY_SYSTEM_SOUND_ENABLED)
   @Watch('onSystemFeedbackChanged')
   systemSoundEnabled: boolean = true;
-
   @StorageLink(STORAGE_KEY_SYSTEM_HAPTICS_ENABLED)
   @Watch('onSystemFeedbackChanged')
   systemHapticsEnabled: boolean = true;
@@ -51,118 +46,28 @@ struct CustomizePage {
   appForegroundTick: number = 0;
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
-
-  @State private currentLanguage: string = AppLanguage.ENGLISH;
-
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
-  private systemDarkListener: mediaquery.MediaQueryListener | null = null;
-
+  @State showExtraTimings: boolean = true;
+  @State showIslamicEvents: boolean = true;
   // ============================================================
   // UI CUSTOMIZATION STATE
   // ============================================================
-
-  @State showExtraTimings: boolean = true;
-  @State showIslamicEvents: boolean = true;
   @State vibrationEnabled: boolean = true;
   @State soundEnabled: boolean = true;
   @State selectedSound: string = SoundOptions.DEFAULT_ID;
-
+  @State expandedCategory: string | null = 'UI Customization';
+  @State showThemePicker: boolean = false;
   // ============================================================
   // UI STATE
   // ============================================================
-
-  @State expandedCategory: string | null = 'UI Customization';
-  @State showThemePicker: boolean = false;
   @State showLanguagePicker: boolean = false;
   @State showAppThemePicker: boolean = false;
   @State showSoundPicker: boolean = false;
+  @State private currentLanguage: string = AppLanguage.ENGLISH;
+  private systemDarkListener: mediaquery.MediaQueryListener | null = null;
 
   // ============================================================
   // LOCALIZATION + BREAKPOINT HELPERS
-  // ============================================================
-
-  private tr(key: string): string {
-    return L.get(key, this.currentLanguage);
-  }
-
-  private isRtl(): boolean {
-    return L.isRtlLang(this.currentLanguage);
-  }
-
-  private isTablet(): boolean {
-    return Breakpoints.isTablet(this.breakpoint);
-  }
-
-  // ============================================================
-  // WATCHERS
-  // ============================================================
-
-  private onThemeModeChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-  }
-
-  private onLanguageChanged(): void {
-    this.currentLanguage = this.appLanguage;
-  }
-
-  private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-  }
-
-  private onSystemFeedbackChanged(): void {
-    // UI reacts via the @StorageLink binding itself.
-  }
-
-  private async onAppForegrounded(): Promise<void> {
-    this.currentLanguage = this.appLanguage;
-    this.applyTheme();
-    await this.reload();
-  }
-
-  // ============================================================
-  // THEME
-  // ============================================================
-
-  private applyTheme(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-  }
-
-  // ============================================================
-  // PICK HANDLERS
-  // ============================================================
-
-  private pickThemeMode(id: string): void {
-    this.themeMode = id;
-    this.colors = PageTheme.compute(id);
-    SettingsHelper.saveThemeMode(id);
-    this.showThemePicker = false;
-  }
-
-  private pickLanguage(id: string): void {
-    this.appLanguage = id;
-    this.currentLanguage = id;
-    SettingsHelper.saveLanguage(id);
-    this.showLanguagePicker = false;
-  }
-
-  private pickAppTheme(id: string): void {
-    this.appTheme = id;
-    SettingsHelper.saveAppTheme(id);
-    this.colors = PageTheme.compute(this.themeMode);
-    this.showAppThemePicker = false;
-  }
-
-  private pickSound(id: string): void {
-    this.selectedSound = id;
-    SettingsHelper.saveTasbihSound(id);
-    this.showSoundPicker = false;
-    setTimeout(() => {
-      SoundHelper.preview(id);
-    }, 150);
-  }
-
-  // ============================================================
-  // LIFECYCLE
   // ============================================================
 
   aboutToAppear(): void {
@@ -187,154 +92,8 @@ struct CustomizePage {
     this.reload();
   }
 
-  private async reload(): Promise<void> {
-    const data = await SettingsHelper.loadAll();
-    this.showExtraTimings  = data.showExtraTimings;
-    this.showIslamicEvents = data.showIslamicEvents;
-    this.vibrationEnabled = SettingsHelper.getVibrationEnabled();
-    this.soundEnabled = SettingsHelper.getSoundEnabled();
-    this.selectedSound = SettingsHelper.getTasbihSound();
-
-    const preset = await SettingsHelper.getAppTheme();
-    this.appTheme = preset;
-  }
-
   // ============================================================
-  // TOGGLES
-  // ============================================================
-
-  private toggleShowExtraTimings(value: boolean): void {
-    this.showExtraTimings = value;
-    SettingsHelper.saveShowExtraTimings(value);
-  }
-
-  private toggleShowIslamicEvents(value: boolean): void {
-    this.showIslamicEvents = value;
-    SettingsHelper.saveShowIslamicEvents(value);
-  }
-
-  private toggleVibration(value: boolean): void {
-    this.vibrationEnabled = value;
-    SettingsHelper.saveVibrationEnabled(value);
-  }
-
-  private toggleSound(value: boolean): void {
-    this.soundEnabled = value;
-    SettingsHelper.saveSoundEnabled(value);
-  }
-
-  // ============================================================
-  // SOUND DISPLAY HELPERS
-  // ============================================================
-
-  private soundDisplayName(id: string): string {
-    const opt = SoundOptions.byId(id);
-    if (!opt) {
-      return id;
-    }
-
-    const base = opt.file.replace(/^tasbih_/, '').replace(/\.ogg$/, '');
-    const key = `sound_${base}_name`;
-    const localized = this.tr(key);
-    if (localized !== key) {
-      return localized;
-    }
-
-    return SoundOptions.deriveDisplayName(opt.file);
-  }
-
-  private soundDescription(id: string): string {
-    const opt = SoundOptions.byId(id);
-    if (!opt) {
-      return '';
-    }
-
-    const base = opt.file.replace(/^tasbih_/, '').replace(/\.ogg$/, '');
-    const key = `sound_${base}_desc`;
-    const localized = this.tr(key);
-    if (localized !== key) {
-      return localized;
-    }
-
-    return SoundOptions.deriveDescription(opt.file);
-  }
-
-  // ============================================================
-  // PICKER ITEMS
-  // ============================================================
-
-  private buildLanguageItems(): PickerItem[] {
-    const langs = [AppLanguage.ENGLISH, AppLanguage.CHINESE, AppLanguage.ARABIC];
-    return langs.map((l): PickerItem => {
-      const item: PickerItem = {
-        id: l,
-        label: L.get(`lang_${l}`, this.currentLanguage),
-        selected: l === this.appLanguage
-      };
-      return item;
-    });
-  }
-
-  private currentLanguageLabel(): string {
-    return L.get(`lang_${this.appLanguage}`, this.currentLanguage);
-  }
-
-  private buildThemeItems(): PickerItem[] {
-    const modes = [ThemeMode.LIGHT, ThemeMode.DARK, ThemeMode.SYSTEM];
-    return modes.map((m): PickerItem => {
-      const item: PickerItem = {
-        id: m,
-        label: m === ThemeMode.LIGHT ? this.tr('theme_light')
-          : m === ThemeMode.DARK  ? this.tr('theme_dark')
-            :                         this.tr('theme_system'),
-        selected: m === this.themeMode
-      };
-      return item;
-    });
-  }
-
-  private themeModeLabel(): string {
-    switch (this.themeMode) {
-      case ThemeMode.LIGHT:
-        return this.tr('theme_light');
-      case ThemeMode.DARK:
-        return this.tr('theme_dark');
-      case ThemeMode.SYSTEM:
-        return this.tr('theme_system');
-      default:
-        return this.tr('theme_system');
-    }
-  }
-
-  private appThemeLabel(): string {
-    return SettingsHelper.getAppThemeLabel(this.appTheme);
-  }
-
-  private appThemeSwatch(preset: string): string {
-    const preview = Theme.getColors(
-      this.themeMode,
-      PageTheme.isSystemDark(),
-      preset
-    );
-    return preview.accentGold;
-  }
-
-  private appThemeSubtitle(preset: string): string {
-    switch (preset) {
-      case ThemePreset.HARMONY_7:
-        return this.tr('theme_preset_harmony7_desc');
-      case ThemePreset.HARMONY_6:
-        return this.tr('theme_preset_harmony6_desc');
-      case ThemePreset.HARMONY_5:
-        return this.tr('theme_preset_harmony5_desc');
-      case ThemePreset.CURRENT:
-      default:
-        return this.tr('theme_preset_current_desc');
-    }
-  }
-
-  // ============================================================
-  // BUILD
+  // WATCHERS
   // ============================================================
 
   build() {
@@ -454,8 +213,12 @@ struct CustomizePage {
           this.tr('dark_mode'),
           '🎨',
           this.buildThemeItems(),
-          (id: string) => { this.pickThemeMode(id); },
-          () => { this.showThemePicker = false; }
+          (id: string) => {
+            this.pickThemeMode(id);
+          },
+          () => {
+            this.showThemePicker = false;
+          }
         )
       }
 
@@ -464,8 +227,12 @@ struct CustomizePage {
           this.tr('language'),
           '🌐',
           this.buildLanguageItems(),
-          (id: string) => { this.pickLanguage(id); },
-          () => { this.showLanguagePicker = false; }
+          (id: string) => {
+            this.pickLanguage(id);
+          },
+          () => {
+            this.showLanguagePicker = false;
+          }
         )
       }
 
@@ -477,23 +244,24 @@ struct CustomizePage {
         this.SoundPicker()
       }
     }
-    .width('100%').height('100%')
+    .width('100%')
+    .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 
-  // ============================================================
-  // TOP BAR
-  // ============================================================
-
   @Builder
   TopBar() {
     Row() {
       Text('←')
-        .fontSize(26).fontColor(this.colors.textWhite)
-        .width(40).height(40).textAlign(TextAlign.Center)
-        .borderRadius(20).backgroundColor(this.colors.tintSoft)
+        .fontSize(26)
+        .fontColor(this.colors.textWhite)
+        .width(40)
+        .height(40)
+        .textAlign(TextAlign.Center)
+        .borderRadius(20)
+        .backgroundColor(this.colors.tintSoft)
         .margin({ left: 16 })
         .onClick(() => router.back())
 
@@ -504,10 +272,6 @@ struct CustomizePage {
     .width('100%').height(72).backgroundColor(this.colors.cardDark)
     .alignItems(VerticalAlign.Center)
   }
-
-  // ============================================================
-  // UI CUSTOMIZATION CONTENT
-  // ============================================================
 
   @Builder
   UICustomizationContent() {
@@ -524,11 +288,20 @@ struct CustomizePage {
 
         Toggle({ type: ToggleType.Switch, isOn: this.showExtraTimings })
           .selectedColor(this.colors.accentGold)
-          .onChange((isOn: boolean) => { this.toggleShowExtraTimings(isOn); })
+          .onChange((isOn: boolean) => {
+            this.toggleShowExtraTimings(isOn);
+          })
       }
       .width('100%')
-      .padding({ top: 14, bottom: 14, left: 16, right: 16 })
-      .backgroundColor(this.colors.tintSubtle).borderRadius(12).margin({ bottom: 8 })
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .margin({ bottom: 8 })
 
       // ---- Show Islamic Events ----
       Row() {
@@ -542,11 +315,20 @@ struct CustomizePage {
 
         Toggle({ type: ToggleType.Switch, isOn: this.showIslamicEvents })
           .selectedColor(this.colors.accentGold)
-          .onChange((isOn: boolean) => { this.toggleShowIslamicEvents(isOn); })
+          .onChange((isOn: boolean) => {
+            this.toggleShowIslamicEvents(isOn);
+          })
       }
       .width('100%')
-      .padding({ top: 14, bottom: 14, left: 16, right: 16 })
-      .backgroundColor(this.colors.tintSubtle).borderRadius(12).margin({ bottom: 8 })
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .margin({ bottom: 8 })
 
       // ---- Vibration ----
       Row() {
@@ -569,11 +351,20 @@ struct CustomizePage {
           .selectedColor(this.colors.accentGold)
           .enabled(this.systemHapticsEnabled)
           .opacity(this.systemHapticsEnabled ? 1.0 : 0.5)
-          .onChange((isOn: boolean) => { this.toggleVibration(isOn); })
+          .onChange((isOn: boolean) => {
+            this.toggleVibration(isOn);
+          })
       }
       .width('100%')
-      .padding({ top: 14, bottom: 14, left: 16, right: 16 })
-      .backgroundColor(this.colors.tintSubtle).borderRadius(12).margin({ bottom: 8 })
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .margin({ bottom: 8 })
 
       // ---- Sound ----
       Row() {
@@ -653,8 +444,10 @@ struct CustomizePage {
           Text(this.tr('language_desc'))
             .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
           Text(this.currentLanguageLabel())
-            .fontSize(12).fontColor(this.colors.accentGold)
-            .maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis })
+            .fontSize(12)
+            .fontColor(this.colors.accentGold)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
             .margin({ top: 6 })
         }
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
@@ -662,9 +455,18 @@ struct CustomizePage {
         Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
       }
       .width('100%')
-      .padding({ top: 14, bottom: 14, left: 16, right: 16 })
-      .backgroundColor(this.colors.tintSubtle).borderRadius(12).margin({ bottom: 8 })
-      .onClick(() => { this.showLanguagePicker = true; })
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .margin({ bottom: 8 })
+      .onClick(() => {
+        this.showLanguagePicker = true;
+      })
 
       // ---- "More languages coming soon" note ----
       Row() {
@@ -674,18 +476,21 @@ struct CustomizePage {
           .layoutWeight(1)
       }
       .width('100%')
-      .padding({ top: 8, bottom: 8, left: 16, right: 16 })
+      .padding({
+        top: 8,
+        bottom: 8,
+        left: 16,
+        right: 16
+      })
       .margin({ bottom: 0 })
     }
-    .width('100%').padding(12)
-    .backgroundColor(this.colors.cardDark).borderRadius(16)
+    .width('100%')
+    .padding(12)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(16)
     .border({ width: 1, color: this.colors.borderSoft })
     .margin({ bottom: 12 })
   }
-
-  // ============================================================
-  // APPEARANCE CONTENT
-  // ============================================================
 
   @Builder
   AppearanceContent() {
@@ -740,8 +545,10 @@ struct CustomizePage {
           Text(this.tr('dark_mode_desc'))
             .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
           Text(this.themeModeLabel())
-            .fontSize(12).fontColor(this.colors.accentGold)
-            .maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis })
+            .fontSize(12)
+            .fontColor(this.colors.accentGold)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
             .margin({ top: 6 })
         }
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
@@ -749,21 +556,25 @@ struct CustomizePage {
         Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
       }
       .width('100%')
-      .padding({ top: 14, bottom: 14, left: 16, right: 16 })
-      .backgroundColor(this.colors.tintSubtle).borderRadius(12)
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
       .onClick(() => {
         this.showThemePicker = true;
       })
     }
-    .width('100%').padding(12)
-    .backgroundColor(this.colors.cardDark).borderRadius(16)
+    .width('100%')
+    .padding(12)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(16)
     .border({ width: 1, color: this.colors.borderSoft })
     .margin({ bottom: 12 })
   }
-
-  // ============================================================
-  // APP THEME PICKER
-  // ============================================================
 
   @Builder
   AppThemePicker() {
@@ -902,7 +713,7 @@ struct CustomizePage {
   }
 
   // ============================================================
-  // SOUND PICKER
+  // THEME
   // ============================================================
 
   @Builder
@@ -1040,7 +851,7 @@ struct CustomizePage {
   }
 
   // ============================================================
-  // GENERIC PICKER OVERLAY
+  // PICK HANDLERS
   // ============================================================
 
   @Builder
@@ -1054,18 +865,26 @@ struct CustomizePage {
     Column()
       .width('100%').height('100%')
       .backgroundColor(this.colors.overlayDim)
-      .onClick(() => { onCancel(); })
+      .onClick(() => {
+        onCancel();
+      })
 
     Column() {
-      Row().width(44).height(4)
+      Row()
+        .width(44)
+        .height(4)
         .backgroundColor(this.colors.overlayDimSoft)
         .borderRadius(2)
         .margin({ top: 10 })
 
       Row() {
         Text(icon)
-          .fontSize(22).width(44).height(44).textAlign(TextAlign.Center)
-          .backgroundColor(this.colors.tintSoft).borderRadius(12)
+          .fontSize(22)
+          .width(44)
+          .height(44)
+          .textAlign(TextAlign.Center)
+          .backgroundColor(this.colors.tintSoft)
+          .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
 
         Text(title)
@@ -1086,12 +905,15 @@ struct CustomizePage {
                   .backgroundColor(this.colors.accentGold)
               }
             }
-            .width(22).height(22).borderRadius(11)
+            .width(22)
+            .height(22)
+            .borderRadius(11)
             .border({
               width: item.selected ? 2 : 1.5,
               color: item.selected ? this.colors.accentGold : this.colors.borderStrong
             })
-            .justifyContent(FlexAlign.Center).alignItems(VerticalAlign.Center)
+            .justifyContent(FlexAlign.Center)
+            .alignItems(VerticalAlign.Center)
 
             Text(item.label)
               .fontSize(15)
@@ -1103,11 +925,18 @@ struct CustomizePage {
               .margin({ left: 14 })
           }
           .width('100%')
-          .padding({ top: 16, bottom: 16, left: 20, right: 20 })
+          .padding({
+            top: 16,
+            bottom: 16,
+            left: 20,
+            right: 20
+          })
           .backgroundColor(item.selected ? this.colors.tintSoft : 'transparent')
           .borderRadius(12)
           .margin({ bottom: 4 })
-          .onClick(() => { onSelect(item.id); })
+          .onClick(() => {
+            onSelect(item.id);
+          })
         }, (item: PickerItem) => item.id)
       }
       .width('100%')
@@ -1119,16 +948,274 @@ struct CustomizePage {
       })
 
       Button(this.tr('cancel'))
-        .width('90%').height(48).fontSize(15).fontWeight(FontWeight.Medium)
-        .fontColor(this.colors.textWhite).backgroundColor(this.colors.tintSoft)
+        .width('90%')
+        .height(48)
+        .fontSize(15)
+        .fontWeight(FontWeight.Medium)
+        .fontColor(this.colors.textWhite)
+        .backgroundColor(this.colors.tintSoft)
         .borderRadius(12)
         .margin({ top: 8, bottom: 24 })
-        .onClick(() => { onCancel(); })
+        .onClick(() => {
+          onCancel();
+        })
     }
-    .width('100%').backgroundColor(this.colors.cardDark)
+    .width('100%')
+    .backgroundColor(this.colors.cardDark)
     .borderRadius({ topLeft: 28, topRight: 28 })
-    .shadow({ radius: 24, color: this.colors.shadowFloating, offsetX: 0, offsetY: -6 })
+    .shadow({
+      radius: 24,
+      color: this.colors.shadowFloating,
+      offsetX: 0,
+      offsetY: -6
+    })
     .border({ width: { top: 1 }, color: this.colors.borderSoft })
     .position({ bottom: 0 })
+  }
+
+  private tr(key: string): string {
+    return L.get(key, this.currentLanguage);
+  }
+
+  private isRtl(): boolean {
+    return L.isRtlLang(this.currentLanguage);
+  }
+
+  private isTablet(): boolean {
+    return Breakpoints.isTablet(this.breakpoint);
+  }
+
+  // ============================================================
+  // LIFECYCLE
+  // ============================================================
+
+  private onThemeModeChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  private onLanguageChanged(): void {
+    this.currentLanguage = this.appLanguage;
+  }
+
+  private onAppThemePresetChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  private onSystemFeedbackChanged(): void {
+    // UI reacts via the @StorageLink binding itself.
+  }
+
+  // ============================================================
+  // TOGGLES
+  // ============================================================
+
+  private async onAppForegrounded(): Promise<void> {
+    this.currentLanguage = this.appLanguage;
+    this.applyTheme();
+    await this.reload();
+  }
+
+  private applyTheme(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  private pickThemeMode(id: string): void {
+    this.themeMode = id;
+    this.colors = PageTheme.compute(id);
+    SettingsHelper.saveThemeMode(id);
+    this.showThemePicker = false;
+  }
+
+  private pickLanguage(id: string): void {
+    this.appLanguage = id;
+    this.currentLanguage = id;
+    SettingsHelper.saveLanguage(id);
+    this.showLanguagePicker = false;
+  }
+
+  // ============================================================
+  // SOUND DISPLAY HELPERS
+  // ============================================================
+
+  private pickAppTheme(id: string): void {
+    this.appTheme = id;
+    SettingsHelper.saveAppTheme(id);
+    this.colors = PageTheme.compute(this.themeMode);
+    this.showAppThemePicker = false;
+  }
+
+  private pickSound(id: string): void {
+    this.selectedSound = id;
+    SettingsHelper.saveTasbihSound(id);
+    this.showSoundPicker = false;
+    setTimeout(() => {
+      SoundHelper.preview(id);
+    }, 150);
+  }
+
+  // ============================================================
+  // PICKER ITEMS
+  // ============================================================
+
+  private async reload(): Promise<void> {
+    const data = await SettingsHelper.loadAll();
+    this.showExtraTimings = data.showExtraTimings;
+    this.showIslamicEvents = data.showIslamicEvents;
+    this.vibrationEnabled = SettingsHelper.getVibrationEnabled();
+    this.soundEnabled = SettingsHelper.getSoundEnabled();
+    this.selectedSound = SettingsHelper.getTasbihSound();
+
+    const preset = await SettingsHelper.getAppTheme();
+    this.appTheme = preset;
+  }
+
+  private toggleShowExtraTimings(value: boolean): void {
+    this.showExtraTimings = value;
+    SettingsHelper.saveShowExtraTimings(value);
+  }
+
+  private toggleShowIslamicEvents(value: boolean): void {
+    this.showIslamicEvents = value;
+    SettingsHelper.saveShowIslamicEvents(value);
+  }
+
+  private toggleVibration(value: boolean): void {
+    this.vibrationEnabled = value;
+    SettingsHelper.saveVibrationEnabled(value);
+  }
+
+  private toggleSound(value: boolean): void {
+    this.soundEnabled = value;
+    SettingsHelper.saveSoundEnabled(value);
+  }
+
+  private soundDisplayName(id: string): string {
+    const opt = SoundOptions.byId(id);
+    if (!opt) {
+      return id;
+    }
+
+    const base = opt.file.replace(/^tasbih_/, '').replace(/\.ogg$/, '');
+    const key = `sound_${base}_name`;
+    const localized = this.tr(key);
+    if (localized !== key) {
+      return localized;
+    }
+
+    return SoundOptions.deriveDisplayName(opt.file);
+  }
+
+  private soundDescription(id: string): string {
+    const opt = SoundOptions.byId(id);
+    if (!opt) {
+      return '';
+    }
+
+    const base = opt.file.replace(/^tasbih_/, '').replace(/\.ogg$/, '');
+    const key = `sound_${base}_desc`;
+    const localized = this.tr(key);
+    if (localized !== key) {
+      return localized;
+    }
+
+    return SoundOptions.deriveDescription(opt.file);
+  }
+
+  // ============================================================
+  // BUILD
+  // ============================================================
+
+  private buildLanguageItems(): PickerItem[] {
+    const langs = [AppLanguage.ENGLISH, AppLanguage.CHINESE, AppLanguage.ARABIC];
+    return langs.map((l): PickerItem => {
+      const item: PickerItem = {
+        id: l,
+        label: L.get(`lang_${l}`, this.currentLanguage),
+        selected: l === this.appLanguage
+      };
+      return item;
+    });
+  }
+
+  // ============================================================
+  // TOP BAR
+  // ============================================================
+
+  private currentLanguageLabel(): string {
+    return L.get(`lang_${this.appLanguage}`, this.currentLanguage);
+  }
+
+  // ============================================================
+  // UI CUSTOMIZATION CONTENT
+  // ============================================================
+
+  private buildThemeItems(): PickerItem[] {
+    const modes = [ThemeMode.LIGHT, ThemeMode.DARK, ThemeMode.SYSTEM];
+    return modes.map((m): PickerItem => {
+      const item: PickerItem = {
+        id: m,
+        label: m === ThemeMode.LIGHT ? this.tr('theme_light')
+          : m === ThemeMode.DARK ? this.tr('theme_dark')
+            : this.tr('theme_system'),
+        selected: m === this.themeMode
+      };
+      return item;
+    });
+  }
+
+  // ============================================================
+  // APPEARANCE CONTENT
+  // ============================================================
+
+  private themeModeLabel(): string {
+    switch (this.themeMode) {
+      case ThemeMode.LIGHT:
+        return this.tr('theme_light');
+      case ThemeMode.DARK:
+        return this.tr('theme_dark');
+      case ThemeMode.SYSTEM:
+        return this.tr('theme_system');
+      default:
+        return this.tr('theme_system');
+    }
+  }
+
+  // ============================================================
+  // APP THEME PICKER
+  // ============================================================
+
+  private appThemeLabel(): string {
+    return SettingsHelper.getAppThemeLabel(this.appTheme);
+  }
+
+  // ============================================================
+  // SOUND PICKER
+  // ============================================================
+
+  private appThemeSwatch(preset: string): string {
+    const preview = Theme.getColors(
+      this.themeMode,
+      PageTheme.isSystemDark(),
+      preset
+    );
+    return preview.accentGold;
+  }
+
+  // ============================================================
+  // GENERIC PICKER OVERLAY
+  // ============================================================
+
+  private appThemeSubtitle(preset: string): string {
+    switch (preset) {
+      case ThemePreset.HARMONY_7:
+        return this.tr('theme_preset_harmony7_desc');
+      case ThemePreset.HARMONY_6:
+        return this.tr('theme_preset_harmony6_desc');
+      case ThemePreset.HARMONY_5:
+        return this.tr('theme_preset_harmony5_desc');
+      case ThemePreset.CURRENT:
+      default:
+        return this.tr('theme_preset_current_desc');
+    }
   }
 }

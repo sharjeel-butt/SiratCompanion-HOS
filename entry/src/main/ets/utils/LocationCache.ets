@@ -22,17 +22,16 @@ export const FALLBACK_LOCATION: FallbackLocation = {
   cityName: 'DEFAULT LOCATION'
 };
 
-const KEY_LAT     = 'gps_lat';
-const KEY_LNG     = 'gps_lng';
-const KEY_CITY    = 'gps_city';
+const KEY_LAT = 'gps_lat';
+const KEY_LNG = 'gps_lng';
+const KEY_CITY = 'gps_city';
 const KEY_REFRESH = 'gps_refresh';
 
 export class LocationCache {
-
   static async load(): Promise<CachedLocation | null> {
-    const lat     = await PreferencesHelper.getNumber(KEY_LAT, NaN);
-    const lng     = await PreferencesHelper.getNumber(KEY_LNG, NaN);
-    const city    = await PreferencesHelper.getString(KEY_CITY, '');
+    const lat = await PreferencesHelper.getNumber(KEY_LAT, NaN);
+    const lng = await PreferencesHelper.getNumber(KEY_LNG, NaN);
+    const city = await PreferencesHelper.getString(KEY_CITY, '');
     const refresh = await PreferencesHelper.getNumber(KEY_REFRESH, 0);
 
     if (!isNaN(lat) && !isNaN(lng) && city.length > 0) {
