@@ -50,3 +50,5 @@ export const STORAGE_KEY_TASBIH_SOUND = 'tasbih_sound';
 export const STORAGE_KEY_SYSTEM_SOUND_ENABLED = 'system_sound_enabled';
 
 export const STORAGE_KEY_SYSTEM_HAPTICS_ENABLED = 'system_haptics_enabled';
+
+export const STORAGE_KEY_BREAKPOINT = 'layout_breakpoint';

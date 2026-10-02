@@ -6,6 +6,7 @@ import { PageTheme } from '../common/PageTheme';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_NAV_DIRECTION,
@@ -17,6 +18,7 @@ import { HijriCalendarHelper } from '../helper/HijriCalendarHelper';
 import { NavHelper } from '../helper/NavHelper';
 import { L } from '../helper/LocalizationHelper';
 import { FloatingNavBar } from '../components/FloatingNavBar';
+import { Breakpoints } from '../common/Breakpoints';
 
 @Entry
 @Component
@@ -46,6 +48,8 @@ struct HijriCalendarPage {
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
+  @StorageLink(STORAGE_KEY_BREAKPOINT)
+  breakpoint: string = 'sm';
 
   /** Plain @State mirror — guarantees re-render on language change. */
   @State private currentLanguage: string = 'en';
@@ -91,6 +95,10 @@ struct HijriCalendarPage {
 
   private onLanguageChanged(): void {
     this.currentLanguage = this.appLanguage;
+  }
+
+  private isTablet(): boolean {
+    return Breakpoints.isTablet(this.breakpoint);
   }
 
   // ============================================================
@@ -288,15 +296,20 @@ struct HijriCalendarPage {
         this.TopBar()
 
         Scroll() {
-          Column() {
-            this.MonthHeader()
-            this.WeekdayRow()
-            this.Grid()
-            this.EventsList()
-            Column().height(130)
+          Row() {
+            Column() {
+              this.MonthHeader()
+              this.WeekdayRow()
+              this.Grid()
+              this.EventsList()
+              Column().height(130)
+            }
+            .width('100%')
+            .constraintSize({ maxWidth: this.isTablet() ? 720 : 100000 })
+            .padding({ left: 16, right: 16, top: 16 })
           }
           .width('100%')
-          .padding({ left: 16, right: 16, top: 16 })
+          .justifyContent(FlexAlign.Center)
         }
         .layoutWeight(1)
         .width('100%')

@@ -1,38 +1,38 @@
 // entry/src/main/ets/pages/TasbihPage.ets
 
-import { router, promptAction, AnimatorResult, AnimatorOptions } from '@kit.ArkUI';
-import { mediaquery } from '@kit.ArkUI';
+import { AnimatorOptions, AnimatorResult, mediaquery, promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { ThemeColors, ThemeMode } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
-import { SoundHelper } from '../helper/SoundHelper';
 import {
-  STORAGE_KEY_THEME_MODE,
-  STORAGE_KEY_NAV_DIRECTION,
-  STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_APP_FOREGROUND_TICK,
-  STORAGE_KEY_APP_THEME
+  STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_NAV_DIRECTION,
+  STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
-import { ThemePreset } from '../common/Theme';
-import { Tasbih, Dhikr, DhikrFields, BeadView } from '../models/TasbihModels';
+import { BeadView, Dhikr, DhikrFields, Tasbih } from '../models/TasbihModels';
 import { MAX_BOTTOM_BEADS, TasbihManager } from '../utils/TasbihManager';
 import { TasbihStorage } from '../utils/TasbihStorage';
 import { NavHelper } from '../helper/NavHelper';
 import { HapticHelper } from '../helper/HapticHelper';
+import { SoundHelper } from '../helper/SoundHelper';
 import { SettingsHelper } from '../helper/SettingsHelper';
 import { L } from '../helper/LocalizationHelper';
+import { BeadCanvasConfig, BeadRenderStyle, TasbihCanvasRenderer } from '../helper/TasbihCanvasRenderer';
 import {
-  TasbihThemes,
+  TASBIH_THEME_PRESETS,
+  TasbihColor,
   TasbihTheme,
   TasbihThemePreset,
-  TasbihColor,
-  BeadColors,
-  TASBIH_THEME_PRESETS
+  TasbihThemes
 } from '../common/TasbihThemes';
-import {
-  TasbihCanvasRenderer, BeadRenderStyle, BeadCanvasConfig
-} from '../helper/TasbihCanvasRenderer';
+import { Breakpoints } from '../common/Breakpoints';
 import { FloatingNavBar } from '../components/FloatingNavBar';
+
+// ============================================================
+// BEAD VISUAL CONSTANTS
+// ============================================================
 
 const BEAD_SIZE = 28;
 const BEAD_GAP = 7;
@@ -42,7 +42,7 @@ const STRING_WIDTH    = 2;
 const STRING_LINE_COLOR = 'rgba(232, 164, 76, 0.35)';
 const FISHEYE_ANIM_MS = 180;
 const TOP_SHIFT_MS = 250;
-const BOTTOM_FLY_MS = 650;
+const BOTTOM_FLY_MS = 500;
 
 const SHADE_DONE_HI    = '#A7F3C0';
 const SHADE_DONE_BASE  = '#4ADE80';
@@ -59,13 +59,13 @@ const SHADE_PEND_LO_D  = '#1A1A1A';
 @Entry
 @Component
 struct TasbihPage {
+  // ============================================================
+  // THEME + NAV + LANGUAGE + BREAKPOINT
+  // ============================================================
 
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
-  @StorageLink(STORAGE_KEY_APP_THEME)
-  @Watch('onAppThemePresetChanged')
-  appThemePreset: string = ThemePreset.CURRENT;
 
   @StorageLink(STORAGE_KEY_NAV_DIRECTION)
   navDirection: string = 'forward';
@@ -73,13 +73,20 @@ struct TasbihPage {
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = 'en';
+
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
 
+  @StorageLink(STORAGE_KEY_BREAKPOINT)
+  breakpoint: string = 'sm';
+
   @State private currentLanguage: string = 'en';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
+  // ============================================================
+  // DATA
+  // ============================================================
 
   @State tasbihs: Tasbih[] = [];
   @State activeTasbihId: string = '';
@@ -89,6 +96,9 @@ struct TasbihPage {
     topIds: [], bottomIds: [], isComplete: false, topAtCap: false, bottomAtCap: false
   };
   @State private topPulseTick: number = 0;
+  // ============================================================
+  // OVERLAYS
+  // ============================================================
 
   @State showTasbihPicker: boolean = false;
   @State showDhikrPicker: boolean = false;
@@ -104,32 +114,53 @@ struct TasbihPage {
   @State formDhikrTranslit: string = '';
   @State formDhikrTranslation: string = '';
   @State formDhikrTarget: string = '33';
+  // ============================================================
+  // SWIPE + ADVANCE LOCK
+  // ============================================================
 
   private swipeStartY: number = 0;
   private swipeLastY: number = 0;
   private advanceLock: boolean = false;
+  // ============================================================
+  // CANVAS RENDERING
+  // ============================================================
 
   @State private renderStyle: BeadRenderStyle = 'premium';
   @State private canvasWidth: number = 72;
   @State private canvasHeight: number = 0;
   private ctx: CanvasRenderingContext2D = new CanvasRenderingContext2D(new RenderingContextSettings(true));
   private canvasReady: boolean = false;
+  // ============================================================
+  // THEME
+  // ============================================================
+
   @State private activeThemePresetId: string = TasbihThemes.DEFAULT_PRESET_ID;
   @State private activeTheme: TasbihTheme =
     TasbihThemes.themeForPreset(TasbihThemes.DEFAULT_PRESET_ID);
+  // ============================================================
+  // FISHEYE
+  // ============================================================
 
   @State private fingerY: number = -1;
   @State private fisheyeStrength: number = 0;
   private fisheyeAnimId: number = -1;
-  // Classic renderer reads these declaratively, so keep them as @State.
+  // ============================================================
+  // ANIMATORS
+  // ============================================================
+
+  // Classic renderer reads these declaratively.
   @State private topShiftActive: boolean = false;
   @State private topShiftProgress: number = 0;
   private topShiftAnimator: AnimatorResult | null = null;
-  // Plain private fields — the canvas draws directly, no re-render needed.
+  // Canvas renderer reads these directly — no @State needed.
   private shiftPrevBottomCount: number = -1;
   private shiftFadeProgress: number = 0;
   private bottomPopProgress: number = 0;
   private bottomFlyAnimator: AnimatorResult | null = null;
+
+  // ============================================================
+  // LOCALIZATION + DIRECTION + BREAKPOINT
+  // ============================================================
 
   private tr(key: string): string {
     return L.get(key, this.currentLanguage);
@@ -139,16 +170,20 @@ struct TasbihPage {
     return L.isRtlLang(this.currentLanguage);
   }
 
+  private isTablet(): boolean {
+    return Breakpoints.isTablet(this.breakpoint);
+  }
+
+  // ============================================================
+  // WATCHERS
+  // ============================================================
+
   private onThemeModeChanged(): void {
     this.colors = PageTheme.compute(this.themeMode);
   }
 
   private onLanguageChanged(): void {
     this.currentLanguage = this.appLanguage;
-  }
-
-  private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
   }
 
   private async onAppForegrounded(): Promise<void> {
@@ -159,6 +194,10 @@ struct TasbihPage {
     this.resolveActiveTheme();
     this.refreshBeadView();
   }
+
+  // ============================================================
+  // PAGE TRANSITION
+  // ============================================================
 
   pageTransition() {
     PageTransitionEnter({ type: RouteType.Push, duration: 300, curve: Curve.Friction })
@@ -171,6 +210,10 @@ struct TasbihPage {
     PageTransitionExit({ type: RouteType.Pop, duration: 300, curve: Curve.Friction })
       .slide(SlideEffect.Right)
   }
+
+  // ============================================================
+  // LIFECYCLE
+  // ============================================================
 
   async aboutToAppear(): Promise<void> {
     this.currentLanguage = this.appLanguage;
@@ -222,6 +265,10 @@ struct TasbihPage {
     return false;
   }
 
+  // ============================================================
+  // LOOKUP / DERIVED STATE
+  // ============================================================
+
   private getActiveTasbih(): Tasbih | null {
     return TasbihManager.findTasbih(this.tasbihs, this.activeTasbihId);
   }
@@ -235,38 +282,6 @@ struct TasbihPage {
     return t ? (t.lifetimeCount || 0) : 0;
   }
 
-  /**
-   * Read the current theme directly from the active tasbih's data,
-   * bypassing the cached `activeTheme` state.
-   *
-   * This guarantees the canvas and the classic renderer use the
-   * latest theme even if @State has not propagated yet — which is
-   * exactly what happens when the theme is changed mid-count.
-   */
-  private currentTheme(): TasbihTheme {
-    const t = this.getActiveTasbih();
-    if (!t) {
-      return TasbihThemes.themeForPreset(TasbihThemes.DEFAULT_PRESET_ID);
-    }
-
-    // Prefer the preset id (simplest, string-compare safe).
-    if (t.themePresetId !== undefined && t.themePresetId.length > 0) {
-      return TasbihThemes.themeForPreset(t.themePresetId);
-    }
-
-    // Fall back to the embedded theme object if the preset id is missing.
-    if (t.theme !== undefined) {
-      return t.theme;
-    }
-
-    // Last resort.
-    return TasbihThemes.themeForPreset(TasbihThemes.DEFAULT_PRESET_ID);
-  }
-
-  private currentThemeColor(): TasbihColor {
-    return this.currentTheme().color;
-  }
-
   private resolveActiveTheme(): void {
     const t = this.getActiveTasbih();
     const presetId = (t && t.themePresetId !== undefined && t.themePresetId.length > 0)
@@ -274,6 +289,25 @@ struct TasbihPage {
       : TasbihThemes.DEFAULT_PRESET_ID;
     this.activeThemePresetId = presetId;
     this.activeTheme = TasbihThemes.themeForPreset(presetId);
+  }
+
+  private currentTheme(): TasbihTheme {
+    const t = this.getActiveTasbih();
+    if (!t) {
+      return TasbihThemes.themeForPreset(TasbihThemes.DEFAULT_PRESET_ID);
+    }
+
+    if (t.themePresetId !== undefined && t.themePresetId.length > 0) {
+      return TasbihThemes.themeForPreset(t.themePresetId);
+    }
+    if (t.theme !== undefined) {
+      return t.theme;
+    }
+    return TasbihThemes.themeForPreset(TasbihThemes.DEFAULT_PRESET_ID);
+  }
+
+  private currentThemeColor(): TasbihColor {
+    return this.currentTheme().color;
   }
 
   private refreshBeadView(): void {
@@ -287,17 +321,16 @@ struct TasbihPage {
     }
 
     this.beadView = next;
-
-    // Force an immediate canvas redraw. Because drawCanvasBeads() reads
-    // the theme directly from `this.tasbihs` (via currentTheme()), the
-    // canvas always reflects the latest theme even before ArkUI has
-    // finished its re-render cycle.
     this.drawCanvasBeads();
   }
 
   private persist(): void {
     TasbihStorage.save(this.tasbihs, this.activeTasbihId, this.activeDhikrIndex);
   }
+
+  // ============================================================
+  // CANVAS DRAWING
+  // ============================================================
 
   private drawCanvasBeads(): void {
     if (!this.canvasReady || this.canvasHeight <= 0) {
@@ -307,9 +340,6 @@ struct TasbihPage {
       return;
     }
 
-    // Read the theme fresh from the data source, not from cached
-    // state. This ensures a mid-count theme change takes effect
-    // on the very next draw.
     const liveTheme: TasbihTheme = this.currentTheme();
 
     const cfg: BeadCanvasConfig = {
@@ -324,7 +354,7 @@ struct TasbihPage {
       isDark: PageTheme.isSystemDark(),
       stringColor: STRING_LINE_COLOR,
       topShiftProgress: this.topShiftProgress,
-      theme: this.activeTheme,
+      theme: liveTheme,
       bottomPrevCount: this.shiftPrevBottomCount,
       bottomFadeProgress: this.shiftFadeProgress,
       bottomPopProgress: this.bottomPopProgress
@@ -337,6 +367,10 @@ struct TasbihPage {
       cfg
     );
   }
+
+  // ============================================================
+  // FISHEYE
+  // ============================================================
 
   private startFisheye(): void {
     this.animateFisheyeTo(1);
@@ -371,60 +405,9 @@ struct TasbihPage {
     }, 16);
   }
 
-  /**
-   * Plays the bottom-cluster "fly away + pop" animation.
-   *
-   *   • The topmost bead of the previous bottom cluster flies
-   *     upward toward the top stack, fading out as it travels.
-   *   • The current bottom-most bead does a quick scale bump —
-   *     the "pop up" of a freshly arrived pending bead.
-   *
-   * Both effects are driven by two state values consumed in the
-   * canvas renderer: `shiftFadeProgress` and `bottomPopProgress`.
-   */
-  private startBottomFlyPop(oldBottomCount: number): void {
-    if (this.bottomFlyAnimator !== null) {
-      this.bottomFlyAnimator.cancel();
-      this.bottomFlyAnimator = null;
-    }
-
-    this.shiftPrevBottomCount = oldBottomCount;
-    this.shiftFadeProgress = 0;
-    this.bottomPopProgress = 0;
-
-    const options: AnimatorOptions = {
-      duration: BOTTOM_FLY_MS,
-      easing: 'ease-in-out',
-      delay: 0,
-      fill: 'forwards',
-      direction: 'normal',
-      iterations: 1,
-      begin: 0,
-      end: 1
-    };
-
-    const animator: AnimatorResult = this.getUIContext().createAnimator(options);
-
-    animator.onFrame = (value: number) => {
-      this.shiftFadeProgress = value;
-      // Pop peaks at ~50 % of the flight and settles well before
-      // the ghost finishes — otherwise the pop lingers after the
-      // bead has already left.
-      this.bottomPopProgress = Math.min(value / 0.5, 1);
-      this.drawCanvasBeads();
-    };
-
-    animator.onFinish = () => {
-      this.shiftPrevBottomCount = -1;
-      this.shiftFadeProgress = 0;
-      this.bottomPopProgress = 0;
-      this.bottomFlyAnimator = null;
-      this.drawCanvasBeads();
-    };
-
-    this.bottomFlyAnimator = animator;
-    animator.play();
-  }
+  // ============================================================
+  // ROLLING TOP-STACK SHIFT
+  // ============================================================
 
   private startTopShift(): void {
     if (this.topShiftAnimator !== null) {
@@ -467,6 +450,56 @@ struct TasbihPage {
     animator.play();
   }
 
+  // ============================================================
+  // BOTTOM FLY + POP
+  // ============================================================
+
+  private startBottomFlyPop(oldBottomCount: number): void {
+    if (this.bottomFlyAnimator !== null) {
+      this.bottomFlyAnimator.cancel();
+      this.bottomFlyAnimator = null;
+    }
+
+    this.shiftPrevBottomCount = oldBottomCount;
+    this.shiftFadeProgress = 0;
+    this.bottomPopProgress = 0;
+
+    const options: AnimatorOptions = {
+      duration: BOTTOM_FLY_MS,
+      easing: 'ease-in-out',
+      delay: 0,
+      fill: 'forwards',
+      direction: 'normal',
+      iterations: 1,
+      begin: 0,
+      end: 1
+    };
+
+    const animator: AnimatorResult = this.getUIContext().createAnimator(options);
+
+    animator.onFrame = (value: number) => {
+      this.shiftFadeProgress = value;
+      // Pop peaks at ~50 % of the flight.
+      this.bottomPopProgress = Math.min(value / 0.5, 1);
+      this.drawCanvasBeads();
+    };
+
+    animator.onFinish = () => {
+      this.shiftPrevBottomCount = -1;
+      this.shiftFadeProgress = 0;
+      this.bottomPopProgress = 0;
+      this.bottomFlyAnimator = null;
+      this.drawCanvasBeads();
+    };
+
+    this.bottomFlyAnimator = animator;
+    animator.play();
+  }
+
+  // ============================================================
+  // COUNTING
+  // ============================================================
+
   private increment(): void {
     if (this.advanceLock) return;
 
@@ -487,7 +520,7 @@ struct TasbihPage {
       this.startTopShift();
     }
 
-    // Fly-away + pop for the bottom cluster whenever it was at cap.
+    // Fly-away + pop for the bottom cluster.
     if (oldBottomCount === MAX_BOTTOM_BEADS) {
       this.startBottomFlyPop(oldBottomCount);
     }
@@ -508,10 +541,8 @@ struct TasbihPage {
       HapticHelper.confirm();
 
       setTimeout(() => {
-        animateTo({ duration: 260, curve: Curve.EaseOut }, () => {
-          this.activeDhikrIndex = this.activeDhikrIndex + 1;
-          this.refreshBeadView();
-        });
+        this.activeDhikrIndex = this.activeDhikrIndex + 1;
+        this.refreshBeadView();
         this.advanceLock = false;
         this.persist();
       }, 400);
@@ -548,10 +579,8 @@ struct TasbihPage {
     const dhikr = this.getActiveDhikr();
     if (!dhikr) return;
 
-    animateTo({ duration: 260, curve: Curve.EaseOut }, () => {
-      this.tasbihs = TasbihManager.reset(this.tasbihs, this.activeTasbihId, dhikr.id);
-      this.refreshBeadView();
-    });
+    this.tasbihs = TasbihManager.reset(this.tasbihs, this.activeTasbihId, dhikr.id);
+    this.refreshBeadView();
     this.persist();
     this.getUIContext().getPromptAction().showToast({
       message: this.tr('counter_reset_toast'), duration: 1200
@@ -576,11 +605,9 @@ struct TasbihPage {
       ]
     }).then((result: promptAction.ShowDialogSuccessResponse) => {
       if (result.index === 1) {
-        animateTo({ duration: 260, curve: Curve.EaseOut }, () => {
-          this.tasbihs = TasbihManager.resetAll(this.tasbihs, this.activeTasbihId);
-          this.activeDhikrIndex = 0;
-          this.refreshBeadView();
-        });
+        this.tasbihs = TasbihManager.resetAll(this.tasbihs, this.activeTasbihId);
+        this.activeDhikrIndex = 0;
+        this.refreshBeadView();
         this.persist();
         this.getUIContext().getPromptAction().showToast({
           message: this.tr('reset_all_done'), duration: 1200
@@ -590,6 +617,10 @@ struct TasbihPage {
       console.error('[TasbihPage] reset dialog failed:', JSON.stringify(err));
     });
   }
+
+  // ============================================================
+  // SWIPE
+  // ============================================================
 
   private handleSwipe(event: TouchEvent): void {
     if (event.touches && event.touches.length > 0) {
@@ -617,6 +648,10 @@ struct TasbihPage {
     }
   }
 
+  // ============================================================
+  // TASBIH CRUD
+  // ============================================================
+
   private openNewTasbihEditor(): void {
     this.editingTasbihId = '';
     this.formTasbihName = '';
@@ -628,7 +663,6 @@ struct TasbihPage {
   private openEditTasbihEditor(t: Tasbih): void {
     this.editingTasbihId = t.id;
     this.formTasbihName = t.name;
-    // Fall back to the theme's own preset id, then to the global default.
     const presetId = (t.themePresetId !== undefined && t.themePresetId.length > 0)
       ? t.themePresetId
       : (t.theme !== undefined ? t.theme.color : TasbihThemes.DEFAULT_PRESET_ID);
@@ -639,13 +673,9 @@ struct TasbihPage {
 
   private saveTasbih(): void {
     const name = this.formTasbihName.trim();
-    // Use a sensible fallback instead of bailing out on empty names —
-    // otherwise a theme-only change would be discarded.
     const finalName = name.length > 0 ? name : 'Tasbih';
 
     if (this.editingTasbihId.length > 0) {
-      // Explicit two-step: rename, then set theme. This guarantees the
-      // theme lands even if the rename path somehow misses it.
       this.tasbihs = TasbihManager.renameTasbih(
         this.tasbihs, this.editingTasbihId, finalName, this.formThemePresetId
       );
@@ -659,16 +689,9 @@ struct TasbihPage {
       this.activeDhikrIndex = 0;
     }
 
-    // Resolve & cache the new theme state.
     this.resolveActiveTheme();
-
-    // Persist to disk BEFORE closing the editor, so a background save
-    // never races with the canvas redraw.
     this.persist();
-
-    // Force the canvas / classic renderer to redraw with the new theme.
     this.refreshBeadView();
-
     this.showTasbihEditor = false;
   }
 
@@ -704,6 +727,10 @@ struct TasbihPage {
     this.persist();
     this.showDhikrPicker = false;
   }
+
+  // ============================================================
+  // DHIKR CRUD
+  // ============================================================
 
   private openNewDhikrEditor(): void {
     this.editingDhikrId = '';
@@ -759,6 +786,10 @@ struct TasbihPage {
     this.persist();
   }
 
+  // ============================================================
+  // NAVIGATION
+  // ============================================================
+
   private onFloatingBarTap(tabId: string): void {
     if (tabId === 'tasbih') return;
 
@@ -788,6 +819,10 @@ struct TasbihPage {
         .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
     }
   }
+
+  // ============================================================
+  // BUILD
+  // ============================================================
 
   build() {
     Stack() {
@@ -884,7 +919,12 @@ struct TasbihPage {
           .layoutWeight(1)
           .height('100%')
           .alignItems(HorizontalAlign.Start)
-          .padding({ left: 24, right: 8, top: 16, bottom: 110 })
+          .padding({
+            left: this.isTablet() ? 48 : 24,
+            right: 8,
+            top: 16,
+            bottom: 110
+          })
 
           if (this.renderStyle === 'classic') {
             this.BeadStringColumnClassic()
@@ -899,7 +939,14 @@ struct TasbihPage {
       }
       .width('100%').height('100%')
 
-      this.FloatingBar()
+      FloatingNavBar({
+        activeTab: 'tasbih',
+        colors: this.colors,
+        currentLanguage: this.currentLanguage,
+        onTabTap: (id: string) => {
+          this.onFloatingBarTap(id);
+        }
+      })
 
       if (this.showTasbihPicker) { this.TasbihPicker() }
       if (this.showDhikrPicker)  { this.DhikrPicker() }
@@ -912,15 +959,19 @@ struct TasbihPage {
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 
+  // ============================================================
+  // CLASSIC BEAD
+  // ============================================================
+
   @Builder
-  BeadColored(colors: BeadColors) {
+  Bead(hi: string, base: string, lo: string) {
     Stack() {
       Column()
         .width(BEAD_SIZE).height(BEAD_SIZE)
         .borderRadius(BEAD_SIZE / 2)
         .linearGradient({
           angle: 135,
-          colors: [[colors.hi, 0], [colors.base, 0.55], [colors.lo, 1]]
+          colors: [[hi, 0], [base, 0.55], [lo, 1]]
         })
         .shadow({ radius: 3, color: 'rgba(0,0,0,0.35)', offsetX: 0, offsetY: 2 })
 
@@ -935,6 +986,10 @@ struct TasbihPage {
     .height(BEAD_SIZE)
   }
 
+  // ============================================================
+  // CLASSIC VERTICAL BEAD STRING
+  // ============================================================
+
   @Builder
   BeadStringColumnClassic() {
     Stack() {
@@ -945,15 +1000,16 @@ struct TasbihPage {
         .borderRadius(STRING_WIDTH / 2)
 
       Column() {
-        // ---- TOP: counted beads ----
         ForEach(this.beadView.topIds, (i: number) => {
           Column() {
             if (this.beadView.isComplete) {
-              this.BeadColored({
-                hi: SHADE_DONE_HI, base: SHADE_DONE_BASE, lo: SHADE_DONE_LO
-              })
+              this.Bead(SHADE_DONE_HI, SHADE_DONE_BASE, SHADE_DONE_LO)
             } else {
-              this.BeadColored(TasbihThemes.palette(this.currentThemeColor()))
+              this.Bead(
+                TasbihThemes.palette(this.currentThemeColor()).hi,
+                TasbihThemes.palette(this.currentThemeColor()).base,
+                TasbihThemes.palette(this.currentThemeColor()).lo
+              )
             }
           }
           .margin({ top: i === 0 ? 0 : BEAD_GAP })
@@ -966,11 +1022,13 @@ struct TasbihPage {
         if (this.topShiftActive) {
           Column() {
             if (this.beadView.isComplete) {
-              this.BeadColored({
-                hi: SHADE_DONE_HI, base: SHADE_DONE_BASE, lo: SHADE_DONE_LO
-              })
+              this.Bead(SHADE_DONE_HI, SHADE_DONE_BASE, SHADE_DONE_LO)
             } else {
-              this.BeadColored(TasbihThemes.palette(this.currentThemeColor()))
+              this.Bead(
+                TasbihThemes.palette(this.currentThemeColor()).hi,
+                TasbihThemes.palette(this.currentThemeColor()).base,
+                TasbihThemes.palette(this.currentThemeColor()).lo
+              )
             }
           }
           .margin({ top: BEAD_GAP })
@@ -980,17 +1038,12 @@ struct TasbihPage {
 
         Blank().layoutWeight(1)
 
-        // ---- BOTTOM: pending beads ----
         ForEach(this.beadView.bottomIds, (i: number) => {
           Column() {
             if (PageTheme.isSystemDark()) {
-              this.BeadColored({
-                hi: SHADE_PEND_HI_D, base: SHADE_PEND_BASE_D, lo: SHADE_PEND_LO_D
-              })
+              this.Bead(SHADE_PEND_HI_D, SHADE_PEND_BASE_D, SHADE_PEND_LO_D)
             } else {
-              this.BeadColored({
-                hi: SHADE_PEND_HI_L, base: SHADE_PEND_BASE_L, lo: SHADE_PEND_LO_L
-              })
+              this.Bead(SHADE_PEND_HI_L, SHADE_PEND_BASE_L, SHADE_PEND_LO_L)
             }
           }
           .margin({ top: i === 0 ? 0 : BEAD_GAP })
@@ -1000,11 +1053,15 @@ struct TasbihPage {
       .height('100%')
       .alignItems(HorizontalAlign.Center)
     }
-    .width(72)
+    .width(this.isTablet() ? 120 : 72)
     .height('100%')
-    .padding({ top: 16, bottom: 110, right: 40 })
+    .padding({ top: 16, bottom: 110, right: this.isTablet() ? 60 : 40 })
     .direction(Direction.Ltr)
   }
+
+  // ============================================================
+  // PREMIUM CANVAS BEAD STRING
+  // ============================================================
 
   @Builder
   BeadStringColumnCanvas() {
@@ -1017,20 +1074,24 @@ struct TasbihPage {
           this.drawCanvasBeads();
         })
         .onAreaChange((oldArea: Area, newArea: Area) => {
-          const w = Number(newArea.width);
-          const h = Number(newArea.height);
-          if (w > 0 && h > 0) {
+          const w = parseFloat(String(newArea.width));
+          const h = parseFloat(String(newArea.height));
+          if (!isNaN(w) && w > 0 && h > 0) {
             this.canvasWidth = w;
             this.canvasHeight = h;
             this.drawCanvasBeads();
           }
         })
     }
-    .width(72)
+    .width(this.isTablet() ? 120 : 72)
     .height('100%')
-    .padding({ top: 16, bottom: 110, right: 40 })
+    .padding({ top: 16, bottom: 110, right: this.isTablet() ? 60 : 40 })
     .direction(Direction.Ltr)
   }
+
+  // ============================================================
+  // EMPTY STATE
+  // ============================================================
 
   @Builder
   EmptyState() {
@@ -1044,6 +1105,10 @@ struct TasbihPage {
     .width('100%')
     .justifyContent(FlexAlign.Center)
   }
+
+  // ============================================================
+  // TOP BAR
+  // ============================================================
 
   @Builder
   TopBar() {
@@ -1086,17 +1151,9 @@ struct TasbihPage {
     .alignItems(VerticalAlign.Center)
   }
 
-  @Builder
-  FloatingBar() {
-    FloatingNavBar({
-      activeTab: 'tasbih',
-      colors: this.colors,
-      currentLanguage: this.currentLanguage,
-      onTabTap: (id: string) => {
-        this.onFloatingBarTap(id);
-      }
-    })
-  }
+  // ============================================================
+  // TASBIH PICKER
+  // ============================================================
 
   @Builder
   TasbihPicker() {
@@ -1196,6 +1253,10 @@ struct TasbihPage {
     .position({ bottom: 0 })
   }
 
+  // ============================================================
+  // DHIKR PICKER
+  // ============================================================
+
   @Builder
   DhikrPicker() {
     Column()
@@ -1287,6 +1348,10 @@ struct TasbihPage {
     .border({ width: { top: 1 }, color: this.colors.borderSoft })
     .position({ bottom: 0 })
   }
+
+  // ============================================================
+  // TASBIH EDITOR
+  // ============================================================
 
   @Builder
   TasbihEditor() {
@@ -1388,6 +1453,10 @@ struct TasbihPage {
     .border({ width: { top: 1 }, color: this.colors.borderSoft })
     .position({ bottom: 0 })
   }
+
+  // ============================================================
+  // DHIKR EDITOR
+  // ============================================================
 
   @Builder
   DhikrEditor() {

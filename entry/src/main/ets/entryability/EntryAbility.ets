@@ -21,6 +21,7 @@ import { SystemFeedbackHelper } from '../helper/SystemFeedbackHelper';
 import { ThemeMode, ThemePreset } from '../common/Theme';
 import { AppLogger } from '../helper/AppLogger';
 import { PrayerManager } from '../utils/PrayerManager';
+import { LayoutHelper } from '../helper/LayoutHelper';
 
 /** How long the splash stays visible, in milliseconds. */
 const SPLASH_DELAY_MS = 1500;
@@ -37,6 +38,7 @@ export default class EntryAbility extends UIAbility {
 
   onWindowStageCreate(windowStage: window.WindowStage): void {
     AppLogger.init(this.context);
+    LayoutHelper.install();
 
     PreferencesHelper.init(this.context).then(async () => {
       const savedMode = await PreferencesHelper.getString(
@@ -107,14 +109,12 @@ export default class EntryAbility extends UIAbility {
   }
 
   onForeground(): void {
-    // Bump the foreground tick so pages refresh.
     const prev = AppStorage.get<number>(STORAGE_KEY_APP_FOREGROUND_TICK);
     const next = (prev === undefined ? 0 : prev) + 1;
     AppStorage.set(STORAGE_KEY_APP_FOREGROUND_TICK, next);
 
-    // Re-read system sound & haptics state — the user may have
-    // changed it in Settings while the app was backgrounded.
     SystemFeedbackHelper.refresh();
+    LayoutHelper.install(); // re-install if needed (idempotent)
 
     hilog.info(0x0000, 'Sirat', 'onForeground tick=%{public}d', next);
   }

@@ -7,12 +7,14 @@ import { PageTheme } from '../common/PageTheme';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
   STORAGE_KEY_NAV_DIRECTION,
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
+import { Breakpoints } from '../common/Breakpoints';
 import { DateHelper } from '../utils/DateUtils';
 import { PrayerModel } from '../models/PrayerModel';
 import { UpcomingImportantDate } from '../models/DateModels';
@@ -67,6 +69,8 @@ struct HomePage {
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
+  @StorageLink(STORAGE_KEY_BREAKPOINT)
+  breakpoint: string = 'sm';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
   // ============================================================
@@ -217,6 +221,10 @@ struct HomePage {
       default:
         return raw;
     }
+  }
+
+  private isTablet(): boolean {
+    return Breakpoints.isTablet(this.breakpoint);
   }
 
   private translateUpcomingEventName(e: UpcomingImportantDate): string {
@@ -915,18 +923,54 @@ struct HomePage {
         Refresh({ refreshing: $$this.isRefreshing }) {
           Scroll() {
             Column() {
-              this.CountdownCard()
-              this.LiveCountdownBanner()
-              this.RamadanCard()
-              this.TodayProgressCard()
-              this.StreakCard()
-              this.WeekGridCard()
-              this.MonthCard()
-              this.TasbihCard()
+              if (this.isTablet()) {
+                // ============================================
+                // TABLET — two-column layout
+                // ============================================
+                Row({ space: 16 }) {
+                  Column() {
+                    this.CountdownCard()
+                    this.LiveCountdownBanner()
+                    this.RamadanCard()
+                  }
+                  .layoutWeight(1)
+                  .alignItems(HorizontalAlign.Start)
+
+                  Column() {
+                    this.TodayProgressCard()
+                    this.StreakCard()
+                    this.WeekGridCard()
+                    this.MonthCard()
+                    this.TasbihCard()
+                  }
+                  .layoutWeight(1)
+                  .alignItems(HorizontalAlign.Start)
+                }
+                .width('100%')
+                .alignItems(VerticalAlign.Top)
+                .padding({ left: 24, right: 24 })
+              } else {
+                // ============================================
+                // PHONE — single-column layout
+                // ============================================
+                Column() {
+                  this.CountdownCard()
+                  this.LiveCountdownBanner()
+                  this.RamadanCard()
+                  this.TodayProgressCard()
+                  this.StreakCard()
+                  this.WeekGridCard()
+                  this.MonthCard()
+                  this.TasbihCard()
+                }
+                .width('100%')
+                .padding({ left: 16, right: 16 })
+              }
+
+              // Bottom spacer — shared
               Column().height(140)
             }
             .width('100%')
-            .padding({ left: 16, right: 16 })
           }
           .width('100%')
           .backgroundColor(this.colors.primaryGreen)

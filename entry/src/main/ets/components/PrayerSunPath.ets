@@ -15,26 +15,16 @@ interface PathPoint {
 // UNIVERSAL FONT / LAYOUT CONSTANTS
 // ============================================================
 
-/** Font size for every prayer name and Sunrise / Sunset label. */
 const LABEL_FONT_SIZE = 35;
-
-/** Font size for every timing value (prayers, sunrise, sunset, ticker). */
 const TIME_FONT_SIZE = 25;
-
-/** Baseline-to-baseline gap between a label and its timing. */
 const LABEL_TIME_GAP = 14;
 
-// ---- Arc geometry (compressed vs previous version) ----
 const ARC_EDGE_PAD = 4;
 const DOTS_INSET = 62;
-const CANVAS_HEIGHT = 360; // was 440
-const ARC_BASE_Y = 232; // was 285
-const ARCH_HEIGHT = 60; // was 72
+const CANVAS_HEIGHT = 360;
+const ARC_BASE_Y = 232;
+const ARCH_HEIGHT = 60;
 
-// ---- Per-prayer leader lengths (dot → label) ----
-// Shorter across the board to fit the compressed canvas.
-// The "wedge" shape is preserved: Dhuhr tallest, then Asr,
-// Maghrib, and finally Fajr / Isha at the bottom row.
 const LEADER_FAJR = 34;
 const LEADER_DHUHR = 90;
 const LEADER_ASR = 70;
@@ -44,8 +34,7 @@ const LEADER_ISHA = 34;
 const LEADER_TIME_GAP = 15;
 const LEADER_DOT_GAP = 12;
 
-// ---- Moving ticker ("We are here") ----
-const TICKER_LABEL_Y = 275; // was 340
+const TICKER_LABEL_Y = 275;
 const TICKER_TIME_Y = TICKER_LABEL_Y + LABEL_TIME_GAP;
 const TICKER_DOT_R = 5;
 const TICKER_LINE_W = 2.5;
@@ -54,22 +43,24 @@ const TICKER_DASH_OFF = 4;
 
 const TICKER_REFRESH_MS = 3 * 60 * 1000;
 
-// ---- Sunrise / Sunset row (below the ticker) ----
-const BOTTOM_LABEL_Y = 322; // was 395
+const BOTTOM_LABEL_Y = 322;
 
 @Component
 export struct PrayerSunPath {
+
   @Prop @Watch('onVisualChanged') colors: ThemeColors;
   @Prop @Watch('onPrayersChanged') prayers: PrayerModel[] = [];
   @Prop sunriseTime: string = '--:--';
   @Prop sunsetTime: string = '--:--';
   @Prop @Watch('onVisualChanged') currentLanguage: string = 'en';
   @Prop @Watch('onVisualChanged') isDarkMode: boolean = false;
+
   private ctx: CanvasRenderingContext2D =
     new CanvasRenderingContext2D(new RenderingContextSettings(true));
   private canvasWidth: number = 340;
   private canvasHeight: number = CANVAS_HEIGHT;
   private canvasReady: boolean = false;
+
   private tickerTimerId: number = -1;
 
   // ============================================================
