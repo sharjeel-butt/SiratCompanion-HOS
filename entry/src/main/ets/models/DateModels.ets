@@ -5,7 +5,7 @@ export interface IslamicEvent {
   key: string;
   name: string;
   month: number; // Hijri month (1 = Muharram, 12 = Dhul-Hijjah)
-  day: number;   // Hijri day (1–30)
+  day: number; // Hijri day (1–30)
 }
 
 export interface UpcomingImportantDate {

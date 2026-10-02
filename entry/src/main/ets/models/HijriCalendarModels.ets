@@ -2,8 +2,8 @@
 
 export interface HijriDate {
   year: number;
-  month: number;   // 1–12
-  day: number;     // 1–30
+  month: number; // 1–12
+  day: number; // 1–30
 }
 
 /** One cell of the calendar grid. */
@@ -12,5 +12,5 @@ export interface CalendarDay {
   hijri: HijriDate;
   isToday: boolean;
   isFriday: boolean;
-  events: string[];        // names of events on this Hijri day
+  events: string[]; // names of events on this Hijri day
 }

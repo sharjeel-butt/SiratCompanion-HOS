@@ -5,7 +5,13 @@ import { Theme, ThemeColors, ThemeMode, ThemePreset } from './Theme';
 import { STORAGE_KEY_APP_THEME } from './StorageKeys';
 
 export class PageTheme {
-
+  /**
+   * True when the operating system itself is in dark mode.
+   *
+   * NOTE: This reports the OS setting only. It does NOT account for
+   * the user's Light / Dark / System choice. Use isDarkFor(themeMode)
+   * anywhere the UI needs to know which palette is actually in effect.
+   */
   static isSystemDark(): boolean {
     try {
       return mediaquery.matchMediaSync('(dark-mode: true)').matches;
@@ -14,10 +20,22 @@ export class PageTheme {
     }
   }
 
-  /** Reads the current preset from AppStorage on every call. */
-  private static currentPreset(): string {
-    const v = AppStorage.get<string>(STORAGE_KEY_APP_THEME);
-    return (v !== undefined && v.length > 0) ? v : ThemePreset.CURRENT;
+  /**
+   * Resolve whether the effective theme is dark, honouring the user's
+   * Light / Dark / System choice.
+   *
+   * Use this instead of isSystemDark() anywhere the UI needs to pick
+   * a palette. A user who picked Light while the OS is Dark must
+   * still see the light palette.
+   */
+  static isDarkFor(themeMode: string): boolean {
+    if (themeMode === ThemeMode.DARK) {
+      return true;
+    }
+    if (themeMode === ThemeMode.LIGHT) {
+      return false;
+    }
+    return PageTheme.isSystemDark();
   }
 
   static compute(themeMode: string): ThemeColors {
@@ -50,7 +68,18 @@ export class PageTheme {
   }
 
   static uninstallSystemListener(listener: mediaquery.MediaQueryListener | null): void {
-    if (!listener) return;
-    try { listener.off('change'); } catch (err) { /* ignore */ }
+    if (!listener) {
+      return;
+    }
+    try {
+      listener.off('change');
+    } catch (err) { /* ignore */
+    }
+  }
+
+  /** Reads the current preset from AppStorage on every call. */
+  private static currentPreset(): string {
+    const v = AppStorage.get<string>(STORAGE_KEY_APP_THEME);
+    return (v !== undefined && v.length > 0) ? v : ThemePreset.CURRENT;
   }
 }

@@ -119,6 +119,15 @@ export class SoundHelper {
   // STATE
   // ============================================================
 
+  static release(): void {
+    if (SoundHelper.pool !== null) {
+      SoundHelper.pool.release();
+      SoundHelper.pool = null;
+    }
+    SoundHelper.soundIds.clear();
+    SoundHelper.ready = false;
+  }
+
   private static isEnabled(): boolean {
     const v = AppStorage.get<boolean>(STORAGE_KEY_SOUND_ENABLED);
     return v === undefined ? true : v;
@@ -130,14 +139,5 @@ export class SoundHelper {
       return SoundOptions.DEFAULT_ID;
     }
     return v;
-  }
-
-  static release(): void {
-    if (SoundHelper.pool !== null) {
-      SoundHelper.pool.release();
-      SoundHelper.pool = null;
-    }
-    SoundHelper.soundIds.clear();
-    SoundHelper.ready = false;
   }
 }

@@ -22,7 +22,9 @@ import { NOTIFICATIONS_ENABLED } from '../common/FeatureFlags';
 const DAYS_AHEAD = 3;
 
 export const MIN_BEFORE_MINUTES = 0;
+
 export const MAX_BEFORE_MINUTES = 60;
+
 export const STEP_BEFORE_MINUTES = 5;
 
 /** A single prayer entry used when scheduling reminders. */
@@ -68,7 +70,6 @@ export interface ScheduleResult {
  * approved in AppGallery Connect.
  */
 export class NotificationHelper {
-
   // ============================================================
   // PERMISSION
   // ============================================================
@@ -307,10 +308,14 @@ export class NotificationHelper {
     let lastMsg = '';
 
     for (const p of prayers) {
-      if (!NotificationHelper.isPrayerEnabled(settings, p.id)) continue;
+      if (!NotificationHelper.isPrayerEnabled(settings, p.id)) {
+        continue;
+      }
 
       const prayerDate = NotificationHelper.parseToDate(p.time, day);
-      if (prayerDate.getTime() <= nowMs) continue;
+      if (prayerDate.getTime() <= nowMs) {
+        continue;
+      }
 
       const exactOk = await NotificationHelper.publishReminder(p.name, prayerDate, -1);
       if (exactOk) {
@@ -494,30 +499,48 @@ export class NotificationHelper {
 
   private static offsetForPrayer(id: string, offsets: PrayerOffsets): number {
     switch (id) {
-      case 'fajr':    return offsets.fajr;
-      case 'dhuhr':   return offsets.dhuhr;
-      case 'asr':     return offsets.asr;
-      case 'maghrib': return offsets.maghrib;
-      case 'isha':    return offsets.isha;
-      default:        return 0;
+      case 'fajr':
+        return offsets.fajr;
+      case 'dhuhr':
+        return offsets.dhuhr;
+      case 'asr':
+        return offsets.asr;
+      case 'maghrib':
+        return offsets.maghrib;
+      case 'isha':
+        return offsets.isha;
+      default:
+        return 0;
     }
   }
 
   /** Replicates PrayerManager.offsetTime without importing it (avoids a cycle). */
   private static offsetTimeString(timeStr: string, offsetMinutes: number): string {
-    if (offsetMinutes === 0) return timeStr;
+    if (offsetMinutes === 0) {
+      return timeStr;
+    }
     const parts = timeStr.trim().split(' ');
-    if (parts.length !== 2) return timeStr;
+    if (parts.length !== 2) {
+      return timeStr;
+    }
     const tp = parts[0].split(':');
-    if (tp.length !== 2) return timeStr;
+    if (tp.length !== 2) {
+      return timeStr;
+    }
 
     let hours = parseInt(tp[0], 10);
     const minutes = parseInt(tp[1], 10);
     const period = parts[1].toUpperCase();
-    if (isNaN(hours) || isNaN(minutes)) return timeStr;
+    if (isNaN(hours) || isNaN(minutes)) {
+      return timeStr;
+    }
 
-    if (period === 'PM' && hours !== 12) hours += 12;
-    if (period === 'AM' && hours === 12) hours = 0;
+    if (period === 'PM' && hours !== 12) {
+      hours += 12;
+    }
+    if (period === 'AM' && hours === 12) {
+      hours = 0;
+    }
 
     let total = hours * 60 + minutes + offsetMinutes;
     total = ((total % 1440) + 1440) % 1440;
@@ -526,7 +549,9 @@ export class NotificationHelper {
     const nm = total % 60;
     const np = nh >= 12 ? 'PM' : 'AM';
     let dh = nh % 12;
-    if (dh === 0) dh = 12;
+    if (dh === 0) {
+      dh = 12;
+    }
     return `${dh}:${nm.toString().padStart(2, '0')} ${np}`;
   }
 
@@ -536,21 +561,33 @@ export class NotificationHelper {
     result.setHours(0, 0, 0, 0);
 
     const trimmed = timeStr.trim();
-    if (trimmed === '' || trimmed === '--:--') return result;
+    if (trimmed === '' || trimmed === '--:--') {
+      return result;
+    }
 
     const parts = trimmed.split(' ');
-    if (parts.length !== 2) return result;
+    if (parts.length !== 2) {
+      return result;
+    }
 
     const tp = parts[0].split(':');
-    if (tp.length !== 2) return result;
+    if (tp.length !== 2) {
+      return result;
+    }
 
     let hours = parseInt(tp[0], 10);
     const minutes = parseInt(tp[1], 10);
     const period = parts[1].toUpperCase();
-    if (isNaN(hours) || isNaN(minutes)) return result;
+    if (isNaN(hours) || isNaN(minutes)) {
+      return result;
+    }
 
-    if (period === 'PM' && hours !== 12) hours += 12;
-    if (period === 'AM' && hours === 12) hours = 0;
+    if (period === 'PM' && hours !== 12) {
+      hours += 12;
+    }
+    if (period === 'AM' && hours === 12) {
+      hours = 0;
+    }
 
     result.setHours(hours, minutes, 0, 0);
     return result;
@@ -558,23 +595,35 @@ export class NotificationHelper {
 
   private static isPrayerEnabled(settings: NotificationsSettings, prayerId: string): boolean {
     switch (prayerId) {
-      case 'fajr':    return settings.fajrEnabled;
-      case 'dhuhr':   return settings.dhuhrEnabled;
-      case 'asr':     return settings.asrEnabled;
-      case 'maghrib': return settings.maghribEnabled;
-      case 'isha':    return settings.ishaEnabled;
-      default:        return false;
+      case 'fajr':
+        return settings.fajrEnabled;
+      case 'dhuhr':
+        return settings.dhuhrEnabled;
+      case 'asr':
+        return settings.asrEnabled;
+      case 'maghrib':
+        return settings.maghribEnabled;
+      case 'isha':
+        return settings.ishaEnabled;
+      default:
+        return false;
     }
   }
 
   private static localizedPrayerName(raw: string): string {
     switch (raw) {
-      case 'Fajr':    return L.get('prayer_fajr');
-      case 'Dhuhr':   return L.get('prayer_dhuhr');
-      case 'Asr':     return L.get('prayer_asr');
-      case 'Maghrib': return L.get('prayer_maghrib');
-      case 'Isha':    return L.get('prayer_isha');
-      default:        return raw;
+      case 'Fajr':
+        return L.get('prayer_fajr');
+      case 'Dhuhr':
+        return L.get('prayer_dhuhr');
+      case 'Asr':
+        return L.get('prayer_asr');
+      case 'Maghrib':
+        return L.get('prayer_maghrib');
+      case 'Isha':
+        return L.get('prayer_isha');
+      default:
+        return raw;
     }
   }
 

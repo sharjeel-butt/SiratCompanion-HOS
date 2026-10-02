@@ -19,6 +19,6 @@ export enum LocationMode {
 export interface ManualCoords {
   lat: number;
   lng: number;
-  refresh: number;   // timestamp (0 = never)
+  refresh: number; // timestamp (0 = never)
   cityName: string;
 }

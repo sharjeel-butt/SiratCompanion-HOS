@@ -1,9 +1,9 @@
 // entry/src/main/ets/components/PageHeader.ets
 
-import { ThemeColors, Theme } from '../common/Theme';
+import { Theme, ThemeColors } from '../common/Theme';
 import { L } from '../helper/LocalizationHelper';
 import { SettingsHelper } from '../helper/SettingsHelper';
-import { CalculationMethod, AsrShadowRule } from '../utils/PrayerTimeCalculator';
+import { AsrShadowRule, CalculationMethod } from '../utils/PrayerTimeCalculator';
 import { CalculationSource } from '../models/SettingsModels';
 
 /**
@@ -39,45 +39,6 @@ export struct PageHeader {
 
   // ============================================================
   // HELPERS
-  // ============================================================
-
-  private tr(key: string): string {
-    return L.get(key, this.currentLanguage);
-  }
-
-  private translateEventName(raw: string): string {
-    switch (raw) {
-      case 'Fajr':
-        return this.tr('prayer_fajr');
-      case 'Dhuhr':
-        return this.tr('prayer_dhuhr');
-      case 'Asr':
-        return this.tr('prayer_asr');
-      case 'Maghrib':
-        return this.tr('prayer_maghrib');
-      case 'Isha':
-        return this.tr('prayer_isha');
-      case 'Jummah':
-        return this.tr('prayer_jummah');
-      case 'Imsak':
-        return this.tr('timing_imsak');
-      case 'Sunrise':
-        return this.tr('timing_sunrise');
-      case 'Sunset':
-        return this.tr('timing_sunset');
-      case 'First Third':
-        return this.tr('timing_first_third');
-      case 'Midnight':
-        return this.tr('timing_midnight');
-      case 'Last Third':
-        return this.tr('timing_last_third');
-      default:
-        return raw;
-    }
-  }
-
-  // ============================================================
-  // BUILD
   // ============================================================
 
   build() {
@@ -258,5 +219,44 @@ export struct PageHeader {
     .width('100%')
     .padding({ left: 16, right: 16 })
     .backgroundColor(this.colors.primaryGreen)
+  }
+
+  private tr(key: string): string {
+    return L.get(key, this.currentLanguage);
+  }
+
+  // ============================================================
+  // BUILD
+  // ============================================================
+
+  private translateEventName(raw: string): string {
+    switch (raw) {
+      case 'Fajr':
+        return this.tr('prayer_fajr');
+      case 'Dhuhr':
+        return this.tr('prayer_dhuhr');
+      case 'Asr':
+        return this.tr('prayer_asr');
+      case 'Maghrib':
+        return this.tr('prayer_maghrib');
+      case 'Isha':
+        return this.tr('prayer_isha');
+      case 'Jummah':
+        return this.tr('prayer_jummah');
+      case 'Imsak':
+        return this.tr('timing_imsak');
+      case 'Sunrise':
+        return this.tr('timing_sunrise');
+      case 'Sunset':
+        return this.tr('timing_sunset');
+      case 'First Third':
+        return this.tr('timing_first_third');
+      case 'Midnight':
+        return this.tr('timing_midnight');
+      case 'Last Third':
+        return this.tr('timing_last_third');
+      default:
+        return raw;
+    }
   }
 }

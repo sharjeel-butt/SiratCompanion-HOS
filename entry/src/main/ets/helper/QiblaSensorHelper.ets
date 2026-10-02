@@ -24,7 +24,6 @@ export interface OrientationReading {
 }
 
 export class QiblaSensorHelper {
-
   /**
    * Registers the orientation sensor. Falls back to the raw
    * magnetometer if orientation isn't available.
@@ -46,6 +45,17 @@ export class QiblaSensorHelper {
     }
   }
 
+  static unregister(): void {
+    try {
+      sensor.off(sensor.SensorId.ORIENTATION);
+    } catch (err) { /* ignore */
+    }
+    try {
+      sensor.off(sensor.SensorId.MAGNETIC_FIELD);
+    } catch (err) { /* ignore */
+    }
+  }
+
   /**
    * Read the sensor's accuracy field. HarmonyOS exposes `accuracy`
    * on OrientationResponse since API 11, so on our API 22+ target
@@ -61,11 +71,6 @@ export class QiblaSensorHelper {
       return SensorAccuracy.HIGH;
     }
     return raw as SensorAccuracy;
-  }
-
-  static unregister(): void {
-    try { sensor.off(sensor.SensorId.ORIENTATION); } catch (err) { /* ignore */ }
-    try { sensor.off(sensor.SensorId.MAGNETIC_FIELD); } catch (err) { /* ignore */ }
   }
 
   private static registerMagnetometerFallback(onReading: (r: OrientationReading) => void): boolean {

@@ -47,7 +47,6 @@ interface TimelineEvent {
 }
 
 export class HomeController {
-
   // ============================================================
   // PRAYER TIME COMPUTATION
   // ============================================================
@@ -62,7 +61,9 @@ export class HomeController {
     offsets: PrayerOffsets,
     template: PrayerModel[]
   ): HomePrayerSnapshot | null {
-    if (latitude === 0 && longitude === 0) return null;
+    if (latitude === 0 && longitude === 0) {
+      return null;
+    }
 
     try {
       const times: DailyPrayerTimes = PrayerTimeCalculator.calculateWithDeviceTimezone(
@@ -100,7 +101,9 @@ export class HomeController {
     offsets: PrayerOffsets,
     template: ExtraTiming[]
   ): ExtraTiming[] {
-    if (latitude === 0 && longitude === 0) return template;
+    if (latitude === 0 && longitude === 0) {
+      return template;
+    }
     try {
       const times: DailyPrayerTimes = PrayerTimeCalculator.calculateWithDeviceTimezone(
         date, latitude, longitude, method, asrRule, highLatRule
@@ -124,7 +127,9 @@ export class HomeController {
     offsets: PrayerOffsets,
     template: PrayerModel[]
   ): HomeHeaderSnapshot | null {
-    if (latitude === 0 && longitude === 0) return null;
+    if (latitude === 0 && longitude === 0) {
+      return null;
+    }
     const today = new Date();
     const anchor = HomeController.getLocationAnchor(latitude, longitude, today);
     try {
@@ -220,6 +225,49 @@ export class HomeController {
     return null;
   }
 
+  static async loadLocationForMode(mode: LocationMode): Promise<HomeLocationSnapshot> {
+    const manualLabel = L.get('manual_location');
+
+    if (mode === LocationMode.MANUAL) {
+      const coords = await SettingsHelper.getManualCoords();
+      if (coords.lat !== 0 || coords.lng !== 0) {
+        const city: string = coords.cityName.length > 0 ? coords.cityName : manualLabel;
+        const snapshot: HomeLocationSnapshot = {
+          latitude: coords.lat,
+          longitude: coords.lng,
+          displayName: `${city} (${manualLabel})`,
+          isManual: true
+        };
+        return snapshot;
+      }
+      const snapshot: HomeLocationSnapshot = {
+        latitude: 0,
+        longitude: 0,
+        displayName: L.get('set_manual_location'),
+        isManual: true
+      };
+      return snapshot;
+    }
+
+    const cached: CachedLocation | null = await LocationCache.load();
+    if (cached) {
+      const snapshot: HomeLocationSnapshot = {
+        latitude: cached.latitude,
+        longitude: cached.longitude,
+        displayName: cached.cityName,
+        isManual: false
+      };
+      return snapshot;
+    }
+    const fallback: HomeLocationSnapshot = {
+      latitude: FALLBACK_LOCATION.latitude,
+      longitude: FALLBACK_LOCATION.longitude,
+      displayName: L.get('default_location'),
+      isManual: false
+    };
+    return fallback;
+  }
+
   private static appendDayEvents(
     events: TimelineEvent[],
     prayerDay: Date,
@@ -313,22 +361,34 @@ export class HomeController {
     result.setHours(0, 0, 0, 0);
 
     const trimmed: string = timeStr.trim();
-    if (trimmed === '' || trimmed === '--:--') return result;
+    if (trimmed === '' || trimmed === '--:--') {
+      return result;
+    }
 
     const parts: string[] = trimmed.split(' ');
-    if (parts.length !== 2) return result;
+    if (parts.length !== 2) {
+      return result;
+    }
 
     const timeParts: string[] = parts[0].split(':');
-    if (timeParts.length !== 2) return result;
+    if (timeParts.length !== 2) {
+      return result;
+    }
 
     let hours: number = parseInt(timeParts[0], 10);
     const minutes: number = parseInt(timeParts[1], 10);
     const period: string = parts[1].toUpperCase();
 
-    if (isNaN(hours) || isNaN(minutes)) return result;
+    if (isNaN(hours) || isNaN(minutes)) {
+      return result;
+    }
 
-    if (period === 'PM' && hours !== 12) hours += 12;
-    if (period === 'AM' && hours === 12) hours = 0;
+    if (period === 'PM' && hours !== 12) {
+      hours += 12;
+    }
+    if (period === 'AM' && hours === 12) {
+      hours = 0;
+    }
 
     result.setHours(hours, minutes, 0, 0);
 
@@ -364,60 +424,19 @@ export class HomeController {
     return new Date(now.getTime() + deltaMs);
   }
 
+  // ============================================================
+  // LOCATION ORCHESTRATION
+  // ============================================================
+
   private static formatEventTime(date: Date): string {
     let hours: number = date.getHours();
     const minutes: number = date.getMinutes();
     const ampm: string = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12;
-    if (hours === 0) hours = 12;
+    if (hours === 0) {
+      hours = 12;
+    }
     const minutesStr: string = minutes.toString().padStart(2, '0');
     return `${hours}:${minutesStr} ${ampm}`;
-  }
-
-  // ============================================================
-  // LOCATION ORCHESTRATION
-  // ============================================================
-
-  static async loadLocationForMode(mode: LocationMode): Promise<HomeLocationSnapshot> {
-    const manualLabel = L.get('manual_location');
-
-    if (mode === LocationMode.MANUAL) {
-      const coords = await SettingsHelper.getManualCoords();
-      if (coords.lat !== 0 || coords.lng !== 0) {
-        const city: string = coords.cityName.length > 0 ? coords.cityName : manualLabel;
-        const snapshot: HomeLocationSnapshot = {
-          latitude: coords.lat,
-          longitude: coords.lng,
-          displayName: `${city} (${manualLabel})`,
-          isManual: true
-        };
-        return snapshot;
-      }
-      const snapshot: HomeLocationSnapshot = {
-        latitude: 0,
-        longitude: 0,
-        displayName: L.get('set_manual_location'),
-        isManual: true
-      };
-      return snapshot;
-    }
-
-    const cached: CachedLocation | null = await LocationCache.load();
-    if (cached) {
-      const snapshot: HomeLocationSnapshot = {
-        latitude: cached.latitude,
-        longitude: cached.longitude,
-        displayName: cached.cityName,
-        isManual: false
-      };
-      return snapshot;
-    }
-    const fallback: HomeLocationSnapshot = {
-      latitude: FALLBACK_LOCATION.latitude,
-      longitude: FALLBACK_LOCATION.longitude,
-      displayName: L.get('default_location'),
-      isManual: false
-    };
-    return fallback;
   }
 }

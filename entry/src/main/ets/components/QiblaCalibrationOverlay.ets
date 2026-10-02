@@ -13,22 +13,6 @@ import { L } from '../helper/LocalizationHelper';
  */
 @Component
 export struct QiblaCalibrationOverlay {
-  @Prop colors: ThemeColors;
-  @Prop currentLanguage: string = 'en';
-  @Prop isDarkMode: boolean = false;
-  /** Fires when the user taps "Skip for now". */
-  onSkip: () => void = () => {
-  };
-  // Figure-8 animation state
-  @State private tracerX: number = 0;
-  @State private tracerY: number = 0;
-  @State private tracerOpacity: number = 1.0;
-  @State private pathProgress: number = 0;
-  // Whether the skip button should be visible (after grace period).
-  @State showSkip: boolean = false;
-  private animTimerId: number = -1;
-  private graceTimerId: number = -1;
-  private startTime: number = 0;
   /** How long the figure-8 trace takes, in ms. */
   private static readonly LOOP_MS = 2400;
   /** How long before "Skip for now" appears, in ms. */
@@ -36,10 +20,28 @@ export struct QiblaCalibrationOverlay {
   /** Visual dimensions — matched to the overlay layout. */
   private static readonly TRACE_W = 240;
   private static readonly TRACE_H = 140;
+  private static cachedGhost: GhostPoint[] | null = null;
+  @Prop colors: ThemeColors;
+  @Prop currentLanguage: string = 'en';
+  @Prop isDarkMode: boolean = false;
+  // Whether the skip button should be visible (after grace period).
+  @State showSkip: boolean = false;
+  // Figure-8 animation state
+  @State private tracerX: number = 0;
+  @State private tracerY: number = 0;
+  @State private tracerOpacity: number = 1.0;
+  @State private pathProgress: number = 0;
+  private animTimerId: number = -1;
+  private graceTimerId: number = -1;
+  private startTime: number = 0;
 
   // ============================================================
   // LIFECYCLE
   // ============================================================
+
+  /** Fires when the user taps "Skip for now". */
+  onSkip: () => void = () => {
+  };
 
   aboutToAppear(): void {
     this.startTime = Date.now();
@@ -55,6 +57,10 @@ export struct QiblaCalibrationOverlay {
     }, 500);
   }
 
+  // ============================================================
+  // FIGURE-8 TRACER
+  // ============================================================
+
   aboutToDisappear(): void {
     if (this.animTimerId !== -1) {
       clearInterval(this.animTimerId);
@@ -64,30 +70,6 @@ export struct QiblaCalibrationOverlay {
       clearInterval(this.graceTimerId);
       this.graceTimerId = -1;
     }
-  }
-
-  // ============================================================
-  // FIGURE-8 TRACER
-  // ============================================================
-
-  private animateTracer(): void {
-    this.animTimerId = setInterval(() => {
-      const elapsed = Date.now() - this.startTime;
-      const t = (elapsed % QiblaCalibrationOverlay.LOOP_MS)
-        / QiblaCalibrationOverlay.LOOP_MS;
-
-      // Parametric figure-8:
-      //   x = A · sin(2πt)
-      //   y = B · sin(4πt)
-      // This traces a lemniscate of Gerono — the classic ∞ shape.
-      const angle = t * 2 * Math.PI;
-      const x = Math.sin(angle) * (QiblaCalibrationOverlay.TRACE_W / 2 - 30);
-      const y = Math.sin(2 * angle) * (QiblaCalibrationOverlay.TRACE_H / 2 - 20);
-
-      this.tracerX = x;
-      this.tracerY = y;
-      this.pathProgress = t;
-    }, 16);
   }
 
   // ============================================================
@@ -230,6 +212,26 @@ export struct QiblaCalibrationOverlay {
     .direction(Direction.Ltr)
   }
 
+  private animateTracer(): void {
+    this.animTimerId = setInterval(() => {
+      const elapsed = Date.now() - this.startTime;
+      const t = (elapsed % QiblaCalibrationOverlay.LOOP_MS)
+        / QiblaCalibrationOverlay.LOOP_MS;
+
+      // Parametric figure-8:
+      //   x = A · sin(2πt)
+      //   y = B · sin(4πt)
+      // This traces a lemniscate of Gerono — the classic ∞ shape.
+      const angle = t * 2 * Math.PI;
+      const x = Math.sin(angle) * (QiblaCalibrationOverlay.TRACE_W / 2 - 30);
+      const y = Math.sin(2 * angle) * (QiblaCalibrationOverlay.TRACE_H / 2 - 20);
+
+      this.tracerX = x;
+      this.tracerY = y;
+      this.pathProgress = t;
+    }, 16);
+  }
+
   /**
    * Compute the 48 sample points along the lemniscate once and
    * reuse them across renders. The array is stable — same x/y for
@@ -257,8 +259,6 @@ export struct QiblaCalibrationOverlay {
     QiblaCalibrationOverlay.cachedGhost = out;
     return out;
   }
-
-  private static cachedGhost: GhostPoint[] | null = null;
 }
 
 interface GhostPoint {

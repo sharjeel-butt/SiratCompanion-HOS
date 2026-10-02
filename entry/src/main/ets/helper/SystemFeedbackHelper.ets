@@ -1,12 +1,9 @@
 // entry/src/main/ets/helper/SystemFeedbackHelper.ets
 
 import { audio } from '@kit.AudioKit';
-import { settings } from '@kit.BasicServicesKit';
+import { BusinessError, settings } from '@kit.BasicServicesKit';
 import { common } from '@kit.AbilityKit';
-import { BusinessError } from '@kit.BasicServicesKit';
-import {
-  STORAGE_KEY_SYSTEM_SOUND_ENABLED, STORAGE_KEY_SYSTEM_HAPTICS_ENABLED
-} from '../common/StorageKeys';
+import { STORAGE_KEY_SYSTEM_HAPTICS_ENABLED, STORAGE_KEY_SYSTEM_SOUND_ENABLED } from '../common/StorageKeys';
 import { AppLogger } from './AppLogger';
 
 /**
@@ -61,6 +58,26 @@ export class SystemFeedbackHelper {
   // HAPTICS TOGGLE
   // ============================================================
 
+  /** True when the system allows our app to play sound. */
+  static isSystemSoundEnabled(): boolean {
+    const v = AppStorage.get<boolean>(STORAGE_KEY_SYSTEM_SOUND_ENABLED);
+    return v === undefined ? true : v;
+  }
+
+  // ============================================================
+  // RINGER MODE
+  // ============================================================
+
+  /** True when the system's haptics toggle is on. */
+  static isSystemHapticsEnabled(): boolean {
+    const v = AppStorage.get<boolean>(STORAGE_KEY_SYSTEM_HAPTICS_ENABLED);
+    return v === undefined ? true : v;
+  }
+
+  // ============================================================
+  // LIVE OBSERVERS
+  // ============================================================
+
   private static refreshHaptics(): void {
     if (SystemFeedbackHelper.context === null) {
       return;
@@ -83,10 +100,6 @@ export class SystemFeedbackHelper {
       AppStorage.setOrCreate(STORAGE_KEY_SYSTEM_HAPTICS_ENABLED, true);
     }
   }
-
-  // ============================================================
-  // RINGER MODE
-  // ============================================================
 
   /**
    * Read the current ringer mode synchronously.
@@ -131,14 +144,14 @@ export class SystemFeedbackHelper {
     }
   }
 
-  // ============================================================
-  // LIVE OBSERVERS
-  // ============================================================
-
   private static registerObservers(): void {
     SystemFeedbackHelper.registerHapticsObserver();
     SystemFeedbackHelper.registerRingerModeObserver();
   }
+
+  // ============================================================
+  // PUBLIC READERS (synchronous)
+  // ============================================================
 
   private static registerHapticsObserver(): void {
     if (SystemFeedbackHelper.observerRegistered) {
@@ -199,21 +212,5 @@ export class SystemFeedbackHelper {
         `ringer observer registration failed: ${e.code} ${e.message}`
       );
     }
-  }
-
-  // ============================================================
-  // PUBLIC READERS (synchronous)
-  // ============================================================
-
-  /** True when the system allows our app to play sound. */
-  static isSystemSoundEnabled(): boolean {
-    const v = AppStorage.get<boolean>(STORAGE_KEY_SYSTEM_SOUND_ENABLED);
-    return v === undefined ? true : v;
-  }
-
-  /** True when the system's haptics toggle is on. */
-  static isSystemHapticsEnabled(): boolean {
-    const v = AppStorage.get<boolean>(STORAGE_KEY_SYSTEM_HAPTICS_ENABLED);
-    return v === undefined ? true : v;
   }
 }

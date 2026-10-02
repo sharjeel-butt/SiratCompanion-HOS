@@ -1,7 +1,8 @@
 # Privacy Policy — Sirat Companion
 
-**Last updated:** October 2, 2026
-**Effective date:** October 2, 2026
+**Last updated:** October 5, 2026
+**Effective date:** October 5, 2026
+**Applies to:** Sirat Companion version 2.3.0 and later
 
 [English](#english) · [中文](#chinese) · [العربية](#arabic)
 
@@ -93,6 +94,19 @@ information is transmitted to us, to Huawei, or to any third party by the App.
   mode — if the phone is on silent, the App stays silent regardless of the in-app setting.
 - **Transmission:** All click sounds are bundled with the App and played locally. No audio is recorded, no audio is
   streamed, and no data is transmitted.
+
+### Notification Features (Not Currently Active)
+
+The App includes a user interface for prayer-time notifications, and the code to schedule them is fully implemented.
+However, **notification features are currently disabled** while the Agent-Powered Reminder capability is pending
+approval by AppGallery Connect. While disabled:
+
+- The App does **not** request the `PUBLISH_AGENT_REMINDER` permission.
+- The App does **not** schedule, publish, or display any notifications.
+- No notification-related data is created, stored, or transmitted.
+
+When the capability is approved and notifications are enabled in a future release, this Privacy Policy will be updated
+to disclose the notification feature, and the `PUBLISH_AGENT_REMINDER` permission will be requested at that time.
 
 ## What We Do Not Collect
 
@@ -285,6 +299,17 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
   中关闭。本应用也会遵循您的系统铃声模式——当手机处于静音时，无论应用内设置如何，应用都会保持静音。
 - **传输：** 所有提示音均随应用打包并在本地播放。不录制音频，不传输音频流，也不传输任何数据。
 
+### 通知功能（当前未启用）
+
+本应用包含礼拜时间通知的用户界面，且通知调度代码已完整实现。但是，**通知功能目前处于停用状态**，因为 Agent-Powered Reminder
+能力正在等待 AppGallery Connect 审批。停用期间：
+
+- 本应用**不会**请求 `PUBLISH_AGENT_REMINDER` 权限。
+- 本应用**不会**安排、发布或显示任何通知。
+- 不会创建、存储或传输任何与通知相关的数据。
+
+待该能力获批并在未来版本中启用通知后，本隐私政策将更新以披露通知功能，届时将请求 `PUBLISH_AGENT_REMINDER` 权限。
+
 ## 我们不收集的内容
 
 Sirat 伴侣**不**收集、存储或传输：
@@ -474,6 +499,18 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
   يبقى التطبيق صامتاً بغض النظر عن الإعداد داخل التطبيق.
 - **النقل:** جميع أصوات النقر مُضمَّنة مع التطبيق وتُشغَّل محلياً. لا يُسجَّل صوت، ولا يُبثّ صوت، ولا تُنقل أي بيانات.
 
+### ميزات الإشعارات (غير مُفعَّلة حالياً)
+
+يتضمن التطبيق واجهة مستخدم لإشعارات أوقات الصلاة، وكود جدولة الإشعارات مُنفَّذ بالكامل. ومع ذلك، **ميزات الإشعارات
+معطّلة حالياً** في انتظار موافقة AppGallery Connect على قدرة Agent-Powered Reminder. أثناء التعطيل:
+
+- التطبيق **لا** يطلب إذن `PUBLISH_AGENT_REMINDER`.
+- التطبيق **لا** يجدول أو ينشر أو يعرض أي إشعارات.
+- لا تُنشأ أو تُخزَّن أو تُنقل أي بيانات متعلقة بالإشعارات.
+
+عند الموافقة على هذه القدرة وتمكين الإشعارات في إصدار مستقبلي، سيتم تحديث سياسة الخصوصية هذه للكشف عن ميزة الإشعارات،
+وسيُطلب إذن `PUBLISH_AGENT_REMINDER` في ذلك الوقت.
+
 ## ما لا نجمعه
 
 رفيق الصراط **لا** يجمع أو يخزّن أو ينقل:
@@ -586,3 +623,21 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 ---
 
 [العودة إلى الأعلى](#privacy-policy--sirat-companion)
+
+---
+
+## Summary of changes
+
+| Change                                                                                                                                                                                                                                                     | Where                       |
+|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|
+| **Date bump** — October 2 → October 5, 2026                                                                                                                                                                                                                | Header, all three languages |
+| **"Applies to" line added** — "Sirat Companion version 2.3.0 and later"                                                                                                                                                                                    | Header                      |
+| **New section: Notification Features (Not Currently Active)** — explains that the notification UI exists but the feature is disabled pending AGC approval, and that no `PUBLISH_AGENT_REMINDER` permission is requested. Translated to Chinese and Arabic. | English / 中文 / العربية      |
+| **Permission table** — unchanged, still lists only the four active permissions. The `PUBLISH_AGENT_REMINDER` entry is intentionally absent since it is not requested at runtime.                                                                           | All three languages         |
+| **Consistency** — the notification disclosure matches the current state of `module.json5` (permission commented out) and `FeatureFlags.ets` (`NOTIFICATIONS_ENABLED = false`).                                                                             | All three languages         |
+
+Everything else in the policy already matched the current app behaviour and was left unchanged: Location, Sensors,
+Prayer Completion History, Prayer Times and Settings, Tasbih Data, System Feedback State, Haptic Feedback, and Sound
+disclosures, plus the "What We Do Not Collect" and "Sharing of Information" sections.
+
+---
