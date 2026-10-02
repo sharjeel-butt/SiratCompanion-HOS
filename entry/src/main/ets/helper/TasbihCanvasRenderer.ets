@@ -17,29 +17,10 @@ export interface BeadCanvasConfig {
   renderStyle: BeadRenderStyle;
   isDark: boolean;
   stringColor: string;
-  /** 0 → 1 during the rolling-window enter animation. 0 when idle. */
   topShiftProgress: number;
-
-  /** Active theme (colour + finish). */
   theme: TasbihTheme;
-
-  /**
-   * Bottom-cluster count from BEFORE the current shift started.
-   * -1 means no cross-fade is in progress.
-   */
   bottomPrevCount: number;
-
-  /**
-   * 0 → ghost bead at its starting position, fully opaque;
-   * 1 → ghost has flown to the top cluster and fully faded.
-   * Only meaningful when bottomPrevCount >= 0.
-   */
   bottomFadeProgress: number;
-
-  /**
-   * 0 → no pop. Sweeps 0 → 1 during the fly animation, driving a
-   * scale bump on the current bottom-most bead.
-   */
   bottomPopProgress: number;
 }
 
@@ -68,13 +49,8 @@ export class TasbihCanvasRenderer {
     const step = 2 * r + g;
     const shift = cfg.topShiftProgress;
 
-    // ---- String line ----
-    ctx.beginPath();
-    ctx.moveTo(cx, 0);
-    ctx.lineTo(cx, H);
-    ctx.strokeStyle = cfg.stringColor;
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    // ---- Glossy string line ----
+    TasbihCanvasRenderer.drawString(ctx, cx, H, cfg);
 
     // ---- Fisheye helpers ----
     const scaleFor = (naturalY: number): number => {
@@ -91,7 +67,6 @@ export class TasbihCanvasRenderer {
       return 1 + TasbihCanvasRenderer.FISHEYE_GAP_STRETCH * ((sa + sb) / 2 - 1);
     };
 
-    // Palette for the current theme
     const palette: BeadColors = TasbihThemes.palette(cfg.theme.color);
 
     // ---- TOP STACK ----
@@ -99,11 +74,8 @@ export class TasbihCanvasRenderer {
     const topCount = cfg.topCount;
     if (topCount > 0) {
       const topScales: number[] = [];
-      const topNaturalYs: number[] = [];
       for (let i = 0; i < topCount; i++) {
-        const ny = r + i * step;
-        topNaturalYs.push(ny);
-        topScales.push(scaleFor(ny));
+        topScales.push(scaleFor(r + i * step));
       }
       const topCenters: number[] = [];
       topCenters.push(r * topScales[0]);
@@ -130,7 +102,6 @@ export class TasbihCanvasRenderer {
         }
       }
 
-      // Extra bead entering from below the tail position
       if (shift > 0) {
         const tailY = topCenters[topCount - 1];
         const extraY = tailY + step - shift * step;
@@ -148,12 +119,6 @@ export class TasbihCanvasRenderer {
     const botColors = cfg.isDark ? PEND_COLORS_DARK : PEND_COLORS_LIGHT;
     const botCount = cfg.bottomCount;
 
-    /**
-     * Draws `count` beads, bottom-anchored. The bottom-most bead
-     * (index count-1) gets a scale bump when bottomPopProgress
-     * sweeps through (0, 1) — the "pop up" of a freshly arrived
-     * pending bead.
-     */
     const drawBottomCluster = (count: number, alpha: number): void => {
       if (count <= 0 || alpha <= 0.01) {
         return;
@@ -163,7 +128,6 @@ export class TasbihCanvasRenderer {
       for (let i = 0; i < count; i++) {
         const ny = H - r - (count - 1 - i) * step;
         let s = scaleFor(ny);
-        // Pop bump on the bottom-most bead.
         if (i === count - 1
           && cfg.bottomPopProgress > 0
           && cfg.bottomPopProgress < 1) {
@@ -194,19 +158,14 @@ export class TasbihCanvasRenderer {
       ctx.restore();
     };
 
-    // Always render the current bottom cluster (with its pop).
     drawBottomCluster(botCount, 1);
 
-    // Ghost bead: the topmost bead of the previous bottom cluster
-    // flying upward toward the top stack, fading as it goes.
+    // ---- Flying ghost bead (bottom → top) ----
     const prevBotCount = cfg.bottomPrevCount;
     const fly = cfg.bottomFadeProgress;
     if (prevBotCount > 0 && fly > 0 && fly < 1) {
       const startY = H - r - (prevBotCount - 1) * step;
-      const targetY = r + 2 * step; // bottom of the top cluster
-      // Smoother curve for the longer flight — accelerates gently,
-      // coasts, decelerates into the target. Feels less like a
-      // snap on high-refresh displays.
+      const targetY = r + 2 * step;
       const eased = fly < 0.5
         ? 2 * fly * fly
         : 1 - Math.pow(-2 * fly + 2, 2) / 2;
@@ -214,6 +173,27 @@ export class TasbihCanvasRenderer {
       const alpha = 1 - eased;
 
       if (alpha > 0.01) {
+        // Halo — wide, warm amber glow that peaks mid-flight and
+        // fades as the bead lands. The "arrival" feel of the reference.
+        const haloRadius = r * 3.8;
+        // Bloom peaks at ~55 % of the flight.
+        const bloom = Math.sin(Math.PI * fly);
+        const haloAlpha = (0.35 + 0.45 * bloom) * alpha;
+
+        const halo = ctx.createRadialGradient(
+          cx, currentY, r * 0.4,
+          cx, currentY, haloRadius
+        );
+        halo.addColorStop(0, `rgba(255, 200, 110, ${0.85 * haloAlpha})`);
+        halo.addColorStop(0.35, `rgba(245, 175, 80,  ${0.45 * haloAlpha})`);
+        halo.addColorStop(0.70, `rgba(232, 150, 60,  ${0.15 * haloAlpha})`);
+        halo.addColorStop(1, 'rgba(232, 150, 60, 0)');
+        ctx.beginPath();
+        ctx.arc(cx, currentY, haloRadius, 0, Math.PI * 2);
+        ctx.fillStyle = halo;
+        ctx.fill();
+
+        // Bead itself.
         ctx.save();
         ctx.globalAlpha = alpha;
         TasbihCanvasRenderer.drawBead(
@@ -223,6 +203,51 @@ export class TasbihCanvasRenderer {
         ctx.restore();
       }
     }
+  }
+
+  // ============================================================
+  // GLOSSY STRING
+  // ============================================================
+
+  /**
+   * Draws the string as a rounded, glossy line:
+   *   • Wide dark base line
+   *   • Narrow lighter strip in the center (highlight)
+   * Produces the "cylinder" look seen in the reference.
+   */
+  private static drawString(
+    ctx: CanvasRenderingContext2D,
+    cx: number,
+    H: number,
+    cfg: BeadCanvasConfig
+  ): void {
+    const isDark = cfg.isDark;
+
+    // Base — thin dark line, matching the reference.
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(cx, 0);
+    ctx.lineTo(cx, H);
+    ctx.strokeStyle = isDark
+      ? 'rgba(70, 70, 70, 0.70)'
+      : 'rgba(130, 130, 130, 0.45)';
+    ctx.lineWidth = 1.5;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+    ctx.restore();
+
+    // Highlight — 1 px lighter strip, offset 1 px to the left.
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(cx - 0.5, 0);
+    ctx.lineTo(cx - 0.5, H);
+    ctx.strokeStyle = isDark
+      ? 'rgba(180, 180, 180, 0.28)'
+      : 'rgba(255, 255, 255, 0.55)';
+    ctx.lineWidth = 1;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+    ctx.restore();
   }
 
   // ============================================================
@@ -270,33 +295,34 @@ export class TasbihCanvasRenderer {
     ctx.fillStyle = grad;
     ctx.fill();
 
+    // Bright specular hotspot, upper-left.
     ctx.beginPath();
-    ctx.arc(cx - r * 0.22, cy - r * 0.22, r * 0.22, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+    ctx.arc(cx - r * 0.28, cy - r * 0.28, r * 0.22, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
     ctx.fill();
   }
 
   // ============================================================
-  // MATTE — soft sphere, no visible rays
+  // MATTE — soft amber bead with strong specular
   // ============================================================
 
   private static drawMatte(
     ctx: CanvasRenderingContext2D,
     cx: number, cy: number, r: number, colors: BeadColors
   ): void {
-    // Extrusion shadow
+    // Extrusion shadow.
     ctx.beginPath();
-    ctx.arc(cx + 1.5, cy + 3, r, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.32)';
+    ctx.arc(cx + 1.5, cy + 2.5, r, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.42)';
     ctx.fill();
 
-    // Base sphere
+    // Base sphere — three-stop gradient, strong in the upper-left.
     const baseGrad = ctx.createRadialGradient(
-      cx - r * 0.30, cy - r * 0.30, r * 0.05,
+      cx - r * 0.30, cy - r * 0.32, r * 0.05,
       cx, cy, r
     );
     baseGrad.addColorStop(0, colors.hi);
-    baseGrad.addColorStop(0.55, colors.base);
+    baseGrad.addColorStop(0.5, colors.base);
     baseGrad.addColorStop(1, colors.lo);
 
     ctx.beginPath();
@@ -304,36 +330,44 @@ export class TasbihCanvasRenderer {
     ctx.fillStyle = baseGrad;
     ctx.fill();
 
-    // Soft specular highlight
+    // Bottom-right ambient occlusion for depth.
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.clip();
+    const ao = ctx.createRadialGradient(
+      cx + r * 0.35, cy + r * 0.40, 0,
+      cx + r * 0.35, cy + r * 0.40, r * 1.1
+    );
+    ao.addColorStop(0, 'rgba(0, 0, 0, 0.15)');
+    ao.addColorStop(0.7, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = ao;
+    ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+    ctx.restore();
+
+    // Sharp specular hotspot — upper-left. This is what gives the
+    // bead its "polished" look, matching the reference.
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.clip();
     const spec = ctx.createRadialGradient(
-      cx - r * 0.35, cy - r * 0.35, 0,
-      cx - r * 0.35, cy - r * 0.35, r * 0.65
+      cx - r * 0.35, cy - r * 0.40, 0,
+      cx - r * 0.35, cy - r * 0.40, r * 0.55
     );
-    spec.addColorStop(0, 'rgba(255, 255, 255, 0.70)');
-    spec.addColorStop(0.4, 'rgba(255, 255, 255, 0.12)');
+    spec.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+    spec.addColorStop(0.25, 'rgba(255, 255, 255, 0.35)');
+    spec.addColorStop(0.6, 'rgba(255, 255, 255, 0.05)');
     spec.addColorStop(1, 'rgba(255, 255, 255, 0)');
     ctx.fillStyle = spec;
     ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
     ctx.restore();
 
-    // Bounce light
-    ctx.save();
+    // Tight inner specular dot — the very bright pinpoint.
     ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.clip();
-    const bounce = ctx.createRadialGradient(
-      cx + r * 0.20, cy + r * 0.40, 0,
-      cx + r * 0.20, cy + r * 0.40, r * 0.60
-    );
-    bounce.addColorStop(0, 'rgba(255, 255, 255, 0.18)');
-    bounce.addColorStop(1, 'rgba(255, 255, 255, 0)');
-    ctx.fillStyle = bounce;
-    ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
-    ctx.restore();
+    ctx.arc(cx - r * 0.35, cy - r * 0.40, r * 0.14, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+    ctx.fill();
   }
 
   // ============================================================
@@ -344,14 +378,11 @@ export class TasbihCanvasRenderer {
     ctx: CanvasRenderingContext2D,
     cx: number, cy: number, r: number, colors: BeadColors
   ): void {
-    // Extrusion shadow
     ctx.beginPath();
     ctx.arc(cx + 1.5, cy + 3, r, 0, Math.PI * 2);
     ctx.fillStyle = 'rgba(0, 0, 0, 0.42)';
     ctx.fill();
 
-    // Conic gradient with alternating hi/base/lo stops creates the
-    // distinctive "brushed metal" rays seen in the swatch.
     let usedConic = false;
     try {
       ctx.save();
@@ -379,7 +410,6 @@ export class TasbihCanvasRenderer {
     }
 
     if (!usedConic) {
-      // Fallback: plain radial if conic is unsupported.
       const grad = ctx.createRadialGradient(
         cx - r * 0.3, cy - r * 0.3, r * 0.05, cx, cy, r
       );
@@ -392,7 +422,7 @@ export class TasbihCanvasRenderer {
       ctx.fill();
     }
 
-    // Radial darkening toward the edge → sphere feel
+    // Radial darkening toward the edge.
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
@@ -405,7 +435,7 @@ export class TasbihCanvasRenderer {
     ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
     ctx.restore();
 
-    // Strong specular highlight
+    // Strong specular.
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);

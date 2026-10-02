@@ -3,7 +3,7 @@
 import { AddTasbihResult, BeadView, Dhikr, DhikrFields, Tasbih } from '../models/TasbihModels';
 import { TasbihThemes } from '../common/TasbihThemes';
 
-export const MAX_TOP_BEADS    = 3;
+export const MAX_TOP_BEADS = 5;
 export const MAX_BOTTOM_BEADS = 5;
 
 export class TasbihManager {
