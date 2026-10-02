@@ -4,7 +4,7 @@
 
 Prayer times, Qibla compass, Tasbih, and Hijri calendar — all in one calm, modern app that respects your settings and your battery.
 
-**Version 1.3.0** &nbsp;·&nbsp; **HarmonyOS 5+ (API 22+)** &nbsp;·&nbsp; **English · 中文 · العربية**
+**Version 2.1.0** &nbsp;·&nbsp; **HarmonyOS 5+ (API 22+)** &nbsp;·&nbsp; **English · 中文 · العربية**
 
 ---
 
@@ -341,10 +341,8 @@ This means viewing NYC prayer times from Pakistan shows NYC local times, with co
 - [ ] Home screen widgets
 - [ ] Qibla calibration UX (figure-8 flow)
 - [ ] Adhan audio playback
-- [ ] Hijri date manual override (± 1 day globally)
 - [ ] Additional languages — Turkish, Urdu, Indonesian
 - [ ] Tablet and foldable layouts
-- [ ] Prayer streak statistics
 
 ---
 
