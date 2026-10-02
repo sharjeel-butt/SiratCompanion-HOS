@@ -47,20 +47,17 @@ const BOTTOM_LABEL_Y = 322;
 
 @Component
 export struct PrayerSunPath {
-
   @Prop @Watch('onVisualChanged') colors: ThemeColors;
   @Prop @Watch('onPrayersChanged') prayers: PrayerModel[] = [];
   @Prop sunriseTime: string = '--:--';
   @Prop sunsetTime: string = '--:--';
   @Prop @Watch('onVisualChanged') currentLanguage: string = 'en';
   @Prop @Watch('onVisualChanged') isDarkMode: boolean = false;
-
   private ctx: CanvasRenderingContext2D =
     new CanvasRenderingContext2D(new RenderingContextSettings(true));
   private canvasWidth: number = 340;
   private canvasHeight: number = CANVAS_HEIGHT;
   private canvasReady: boolean = false;
-
   private tickerTimerId: number = -1;
 
   // ============================================================
@@ -86,53 +83,6 @@ export struct PrayerSunPath {
 
   // ============================================================
   // WATCHERS
-  // ============================================================
-
-  private onPrayersChanged(_propName: string): void {
-    this.redraw();
-  }
-
-  private onVisualChanged(_propName: string): void {
-    this.redraw();
-  }
-
-  // ============================================================
-  // HELPERS
-  // ============================================================
-
-  private translatePrayerName(raw: string): string {
-    switch (raw) {
-      case 'Fajr':
-        return L.get('prayer_fajr', this.currentLanguage);
-      case 'Dhuhr':
-        return L.get('prayer_dhuhr', this.currentLanguage);
-      case 'Jummah':
-        return L.get('prayer_jummah', this.currentLanguage);
-      case 'Asr':
-        return L.get('prayer_asr', this.currentLanguage);
-      case 'Maghrib':
-        return L.get('prayer_maghrib', this.currentLanguage);
-      case 'Isha':
-        return L.get('prayer_isha', this.currentLanguage);
-      default:
-        return raw;
-    }
-  }
-
-  private formatNow(now: Date): string {
-    let hours: number = now.getHours();
-    const minutes: number = now.getMinutes();
-    const ampm: string = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    if (hours === 0) {
-      hours = 12;
-    }
-    const mm: string = minutes.toString().padStart(2, '0');
-    return `${hours}:${mm} ${ampm}`;
-  }
-
-  // ============================================================
-  // BUILD
   // ============================================================
 
   build() {
@@ -176,6 +126,53 @@ export struct PrayerSunPath {
       offsetY: 4
     })
     .margin({ bottom: 14 })
+  }
+
+  private onPrayersChanged(_propName: string): void {
+    this.redraw();
+  }
+
+  // ============================================================
+  // HELPERS
+  // ============================================================
+
+  private onVisualChanged(_propName: string): void {
+    this.redraw();
+  }
+
+  private translatePrayerName(raw: string): string {
+    switch (raw) {
+      case 'Fajr':
+        return L.get('prayer_fajr', this.currentLanguage);
+      case 'Dhuhr':
+        return L.get('prayer_dhuhr', this.currentLanguage);
+      case 'Jummah':
+        return L.get('prayer_jummah', this.currentLanguage);
+      case 'Asr':
+        return L.get('prayer_asr', this.currentLanguage);
+      case 'Maghrib':
+        return L.get('prayer_maghrib', this.currentLanguage);
+      case 'Isha':
+        return L.get('prayer_isha', this.currentLanguage);
+      default:
+        return raw;
+    }
+  }
+
+  // ============================================================
+  // BUILD
+  // ============================================================
+
+  private formatNow(now: Date): string {
+    let hours: number = now.getHours();
+    const minutes: number = now.getMinutes();
+    const ampm: string = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    if (hours === 0) {
+      hours = 12;
+    }
+    const mm: string = minutes.toString().padStart(2, '0');
+    return `${hours}:${mm} ${ampm}`;
   }
 
   // ============================================================

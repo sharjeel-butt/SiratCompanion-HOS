@@ -1,42 +1,27 @@
 // entry/src/main/ets/pages/HijriCalendarPage.ets
 
-import { mediaquery, router } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
+import { mediaquery } from '@kit.ArkUI';
+import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
-  STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
-  STORAGE_KEY_NAV_DIRECTION,
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
 import { CalendarDay, HijriDate } from '../models/HijriCalendarModels';
 import { IslamicEvent } from '../models/DateModels';
 import { HijriCalendarHelper } from '../helper/HijriCalendarHelper';
-import { NavHelper } from '../helper/NavHelper';
 import { L } from '../helper/LocalizationHelper';
-import { FloatingNavBar } from '../components/FloatingNavBar';
 import { Breakpoints } from '../common/Breakpoints';
 
-@Entry
 @Component
-struct HijriCalendarPage {
-
-  // ============================================================
-  // THEME + NAV + LANGUAGE
-  // ============================================================
+export struct HijriCalendarPage {
 
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
-  @StorageLink(STORAGE_KEY_APP_THEME)
-  @Watch('onAppThemePresetChanged')
-  appThemePreset: string = ThemePreset.CURRENT;
-
-  @StorageLink(STORAGE_KEY_NAV_DIRECTION)
-  navDirection: string = 'forward';
 
   @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
   @Watch('onHijriOffsetChanged')
@@ -45,25 +30,21 @@ struct HijriCalendarPage {
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = 'en';
+
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
+
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
 
-  /** Plain @State mirror — guarantees re-render on language change. */
   @State private currentLanguage: string = 'en';
-
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
 
   @State viewingHijriYear: number = 1447;
   @State viewingHijriMonth: number = 1;
   @State monthDays: CalendarDay[] = [];
-
-  // ============================================================
-  // LOCALIZATION + DIRECTION HELPERS
-  // ============================================================
 
   private tr(key: string): string {
     return L.get(key, this.currentLanguage);
@@ -73,17 +54,13 @@ struct HijriCalendarPage {
     return L.getArray(key, this.currentLanguage);
   }
 
-  private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-  }
-
   private isRtl(): boolean {
     return L.isRtlLang(this.currentLanguage);
   }
 
-  // ============================================================
-  // WATCHERS
-  // ============================================================
+  private isTablet(): boolean {
+    return Breakpoints.isTablet(this.breakpoint);
+  }
 
   private onThemeModeChanged(): void {
     this.colors = PageTheme.compute(this.themeMode);
@@ -97,29 +74,15 @@ struct HijriCalendarPage {
     this.currentLanguage = this.appLanguage;
   }
 
-  private isTablet(): boolean {
-    return Breakpoints.isTablet(this.breakpoint);
+  private onAppForegrounded(): void {
+    const today = new Date();
+    const h: HijriDate = HijriCalendarHelper.getHijriDate(today, this.offsetDays);
+    if (h.year !== this.viewingHijriYear || h.month !== this.viewingHijriMonth) {
+      this.jumpToToday();
+    } else {
+      this.rebuildFromAnchor(today);
+    }
   }
-
-  // ============================================================
-  // PAGE TRANSITION
-  // ============================================================
-
-  pageTransition() {
-    PageTransitionEnter({ type: RouteType.Push, duration: 300, curve: Curve.Friction })
-      .slide(this.navDirection === 'forward' ? SlideEffect.Right : SlideEffect.Left)
-    PageTransitionExit({ type: RouteType.Push, duration: 300, curve: Curve.Friction })
-      .slide(this.navDirection === 'forward' ? SlideEffect.Left : SlideEffect.Right)
-
-    PageTransitionEnter({ type: RouteType.Pop, duration: 300, curve: Curve.Friction })
-      .slide(SlideEffect.Left)
-    PageTransitionExit({ type: RouteType.Pop, duration: 300, curve: Curve.Friction })
-      .slide(SlideEffect.Right)
-  }
-
-  // ============================================================
-  // LIFECYCLE
-  // ============================================================
 
   aboutToAppear(): void {
     this.currentLanguage = this.appLanguage;
@@ -140,73 +103,6 @@ struct HijriCalendarPage {
     this.colors = PageTheme.compute(this.themeMode);
   }
 
-  private onAppForegrounded(): void {
-    // If the calendar day rolled over while the app was in the
-    // background, snap to today.
-    const today = new Date();
-    const h: HijriDate = HijriCalendarHelper.getHijriDate(today, this.offsetDays);
-    if (h.year !== this.viewingHijriYear || h.month !== this.viewingHijriMonth) {
-      this.jumpToToday();
-    } else {
-      // Same month — just rebuild in case offset or events changed.
-      this.rebuildFromAnchor(today);
-    }
-  }
-
-  onBackPress(): boolean {
-    NavHelper.prepareBackward();
-    return false;
-  }
-
-  // ============================================================
-  // NAVIGATION
-  // ============================================================
-
-  private onFloatingBarTap(tabId: string): void {
-    if (tabId === 'calendar') return;
-
-    if (tabId === 'home') {
-      NavHelper.prepare('home', 'calendar');
-      router.clear();
-      router.pushUrl({ url: 'pages/HomePage' })
-        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
-      return;
-    }
-    if (tabId === 'prayers') {
-      NavHelper.prepare('prayers', 'calendar');
-      router.clear();
-      router.pushUrl({ url: 'pages/Prayer' })
-        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
-      return;
-    }
-    if (tabId === 'tasbih') {
-      NavHelper.prepare('tasbih', 'calendar');
-      router.pushUrl({ url: 'pages/TasbihPage' })
-        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
-      return;
-    }
-    if (tabId === 'compass') {
-      NavHelper.prepare('compass', 'calendar');
-      router.pushUrl({ url: 'pages/QiblaPage' })
-        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
-    }
-  }
-
-  private navigateToAdjacentTab(delta: number): void {
-    const order: string[] = ['home', 'prayers', 'calendar', 'compass', 'tasbih'];
-    const currentTab = 'calendar';
-    const idx = order.indexOf(currentTab);
-    const targetIdx = idx + delta;
-    if (targetIdx < 0 || targetIdx >= order.length) {
-      return;
-    }
-    this.onFloatingBarTap(order[targetIdx]);
-  }
-
-  // ============================================================
-  // CALENDAR LOGIC
-  // ============================================================
-
   private jumpToToday(): void {
     const today = new Date();
     const h: HijriDate = HijriCalendarHelper.getHijriDate(today, this.offsetDays);
@@ -217,10 +113,7 @@ struct HijriCalendarPage {
 
   private rebuildFromAnchor(anchor: Date): void {
     this.monthDays = HijriCalendarHelper.buildMonthDays(
-      this.viewingHijriYear,
-      this.viewingHijriMonth,
-      this.offsetDays,
-      anchor
+      this.viewingHijriYear, this.viewingHijriMonth, this.offsetDays, anchor
     );
   }
 
@@ -228,18 +121,11 @@ struct HijriCalendarPage {
     const shifted = HijriCalendarHelper.shiftMonth(
       this.viewingHijriYear, this.viewingHijriMonth, delta
     );
-    const anchor = this.monthDays.length > 0
-      ? this.monthDays[0].gregorianDate
-      : new Date();
-
+    const anchor = this.monthDays.length > 0 ? this.monthDays[0].gregorianDate : new Date();
     this.viewingHijriYear = shifted.year;
     this.viewingHijriMonth = shifted.month;
     this.rebuildFromAnchor(anchor);
   }
-
-  // ============================================================
-  // DERIVED VALUES
-  // ============================================================
 
   private getMonthEvents(): IslamicEvent[] {
     return HijriCalendarHelper.eventsInMonth(this.viewingHijriMonth);
@@ -286,10 +172,6 @@ struct HijriCalendarPage {
     return weeks;
   }
 
-  // ============================================================
-  // BUILD
-  // ============================================================
-
   build() {
     Stack() {
       Column() {
@@ -308,8 +190,7 @@ struct HijriCalendarPage {
             .constraintSize({ maxWidth: this.isTablet() ? 720 : 100000 })
             .padding({ left: 16, right: 16, top: 16 })
           }
-          .width('100%')
-          .justifyContent(FlexAlign.Center)
+          .width('100%').justifyContent(FlexAlign.Center)
         }
         .layoutWeight(1)
         .width('100%')
@@ -319,37 +200,11 @@ struct HijriCalendarPage {
         .edgeEffect(EdgeEffect.Spring)
       }
       .width('100%').height('100%')
-
-      FloatingNavBar({
-        activeTab: 'calendar', // ← use 'tasbih' | 'compass' | 'calendar' as appropriate
-        colors: this.colors,
-        currentLanguage: this.currentLanguage,
-        onTabTap: (id: string) => {
-          this.onFloatingBarTap(id);
-        }
-      })
     }
     .width('100%').height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
-    .gesture(
-      PanGesture({ direction: PanDirection.Horizontal, distance: 30 })
-        .onActionEnd((event: GestureEvent) => {
-          const dx = event.offsetX;
-          const THRESHOLD = 50;
-          if (dx <= -THRESHOLD) {
-            this.navigateToAdjacentTab(1);
-          } else if (dx >= THRESHOLD) {
-            this.navigateToAdjacentTab(-1);
-          }
-        })
-    )
   }
-
-  // ============================================================
-  // TOP BAR
-  // ============================================================
 
   @Builder
   TopBar() {
@@ -371,18 +226,13 @@ struct HijriCalendarPage {
     .alignItems(VerticalAlign.Center)
   }
 
-  // ============================================================
-  // MONTH HEADER
-  // ============================================================
-
   @Builder
   MonthHeader() {
     Column() {
       Row() {
-        // Previous month — glyph swapped in RTL so it stays visually
-        // on the "left" from the user's perspective.
         Text('◀')
-          .fontSize(16).fontColor(this.colors.accentGold)
+          .fontSize(16)
+          .fontColor(this.colors.accentGold)
           .width(40).height(40).textAlign(TextAlign.Center)
           .borderRadius(20).backgroundColor(this.colors.tintSoft)
           .border({ width: 1, color: this.colors.borderSoft })
@@ -392,7 +242,8 @@ struct HijriCalendarPage {
           Text(this.getLocalizedMonthName())
             .fontSize(22).fontWeight(FontWeight.Bold)
             .fontColor(this.colors.textWhite)
-            .textAlign(TextAlign.Center).width('100%')
+            .textAlign(TextAlign.Center)
+            .width('100%')
           Text(`${this.viewingHijriYear} AH`)
             .fontSize(13).fontColor(this.colors.accentGold)
             .textAlign(TextAlign.Center).width('100%').margin({ top: 2 })
@@ -402,9 +253,9 @@ struct HijriCalendarPage {
         }
         .layoutWeight(1).alignItems(HorizontalAlign.Center)
 
-        // Next month — glyph swapped in RTL.
         Text('▶')
-          .fontSize(16).fontColor(this.colors.accentGold)
+          .fontSize(16)
+          .fontColor(this.colors.accentGold)
           .width(40).height(40).textAlign(TextAlign.Center)
           .borderRadius(20).backgroundColor(this.colors.tintSoft)
           .border({ width: 1, color: this.colors.borderSoft })
@@ -415,14 +266,6 @@ struct HijriCalendarPage {
     }
     .width('100%').padding({ top: 8, bottom: 16 })
   }
-
-  // ============================================================
-  // WEEKDAY HEADER
-  // ============================================================
-  //
-  // Kept LTR regardless of language so the week always reads
-  // Sunday → Saturday left-to-right. Matching the Gregorian
-  // convention most users are familiar with.
 
   @Builder
   WeekdayRow() {
@@ -436,16 +279,8 @@ struct HijriCalendarPage {
           .layoutWeight(1)
       }, (d: string) => `dow-${d}`)
     }
-    .width('100%')
-    .padding({ bottom: 6 })
-    .direction(Direction.Ltr)
+    .width('100%').padding({ bottom: 6 }).direction(Direction.Ltr)
   }
-
-  // ============================================================
-  // GRID
-  // ============================================================
-  //
-  // Also kept LTR so Sunday stays in the first column.
 
   @Builder
   Grid() {
@@ -456,10 +291,7 @@ struct HijriCalendarPage {
             if (cell !== null) {
               this.DayCell(cell)
             } else {
-              Column()
-                .layoutWeight(1)
-                .height(56)
-                .margin({ left: 2, right: 2 })
+              Column().layoutWeight(1).height(56).margin({ left: 2, right: 2 })
             }
           }, (cell: CalendarDay | null, di: number) => {
             const key = cell !== null
@@ -468,11 +300,9 @@ struct HijriCalendarPage {
             return `cell-${key}`;
           })
         }
-        .width('100%')
-        .margin({ bottom: 4 })
+        .width('100%').margin({ bottom: 4 })
       }, (week: Array<CalendarDay | null>, wi: number) =>
-      `week-${wi}-${this.viewingHijriYear}-${this.viewingHijriMonth}-${this.offsetDays}`
-      )
+      `week-${wi}-${this.viewingHijriYear}-${this.viewingHijriMonth}-${this.offsetDays}`)
     }
     .width('100%')
     .padding(8)
@@ -482,34 +312,32 @@ struct HijriCalendarPage {
     .direction(Direction.Ltr)
   }
 
-  // ============================================================
-  // DAY CELL
-  // ============================================================
-
   @Builder
   DayCell(cell: CalendarDay) {
     Column() {
       Text(`${cell.hijri.day}`)
         .fontSize(17)
         .fontWeight(cell.isToday ? FontWeight.Bold : FontWeight.Medium)
-        .fontColor(cell.isToday
-          ? this.colors.textOnAccent
+        .fontColor(cell.isToday ? this.colors.textOnAccent
           : (cell.events.length > 0 ? this.colors.accentGold : this.colors.textWhite))
 
       Text(`${cell.gregorianDate.getDate()}`)
         .fontSize(10)
         .fontColor(cell.isToday ? this.colors.textOnAccent : this.colors.textMuted)
-        .opacity(cell.isToday ? 0.85 : 0.7)
-        .margin({ top: -2 })
+        .opacity(cell.isToday ? 0.85 : 0.7).margin({ top: -2 })
 
       if (cell.events.length > 0 && !cell.isToday) {
         Row()
-          .width(5).height(5).borderRadius(3)
+          .width(5)
+          .height(5)
+          .borderRadius(3)
           .backgroundColor(this.colors.accentGold)
           .margin({ top: 3 })
       } else if (cell.events.length > 0 && cell.isToday) {
         Row()
-          .width(5).height(5).borderRadius(3)
+          .width(5)
+          .height(5)
+          .borderRadius(3)
           .backgroundColor(this.colors.textOnAccent)
           .margin({ top: 3 })
       } else {
@@ -520,19 +348,13 @@ struct HijriCalendarPage {
     .height(56)
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
-    .backgroundColor(cell.isToday
-      ? this.colors.accentGold
+    .backgroundColor(cell.isToday ? this.colors.accentGold
       : (cell.isFriday ? this.colors.tintSubtle : Color.Transparent))
     .borderRadius(10)
     .border(cell.isFriday && !cell.isToday
-      ? { width: 1, color: this.colors.borderSoft }
-      : { width: 0 })
+      ? { width: 1, color: this.colors.borderSoft } : { width: 0 })
     .margin({ left: 2, right: 2 })
   }
-
-  // ============================================================
-  // EVENTS LIST
-  // ============================================================
 
   @Builder
   EventsList() {
@@ -556,13 +378,18 @@ struct HijriCalendarPage {
             Text(`${e.day}`)
               .fontSize(16).fontWeight(FontWeight.Bold)
               .fontColor(this.colors.accentGold)
-              .width(36).textAlign(TextAlign.Center)
+              .width(36)
+              .textAlign(TextAlign.Center)
             Text(this.translateEventName(e))
-              .fontSize(14).fontColor(this.colors.textWhite)
-              .layoutWeight(1)
+              .fontSize(14).fontColor(this.colors.textWhite).layoutWeight(1)
           }
           .width('100%')
-          .padding({ top: 10, bottom: 10, left: 4, right: 8 })
+          .padding({
+            top: 10,
+            bottom: 10,
+            left: 4,
+            right: 8
+          })
           .borderRadius(8)
           .margin({ bottom: 4 })
           .backgroundColor(this.colors.tintSubtle)

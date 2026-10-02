@@ -5,14 +5,41 @@ import { STORAGE_KEY_LANGUAGE } from '../common/StorageKeys';
 export enum AppLanguage {
   ENGLISH = 'en',
   CHINESE = 'zh',
-  ARABIC  = 'ar'
+  ARABIC = 'ar'
 }
 
 export class L {
-
   // ============================================================
   // LANGUAGE STATE
   // ============================================================
+
+  private static readonly EN: Map<string, string> = L.buildEn();
+  private static readonly ZH: Map<string, string> = L.buildZh();
+  private static readonly AR: Map<string, string> = L.buildAr();
+  private static readonly MONTHS_EN: string[] = [
+    'Muharram', 'Safar', 'Rabi al-Awwal', 'Rabi al-Thani',
+    'Jumada al-Awwal', 'Jumada al-Thani', 'Rajab', "Sha'ban",
+    'Ramadan', 'Shawwal', "Dhu al-Qi'dah", 'Dhu al-Hijjah'
+  ];
+  private static readonly MONTHS_ZH: string[] = [
+    '穆哈兰姆', '萨法尔', '赖比尔·敖外鲁', '赖比尔·阿色尼',
+    '主马达·敖外鲁', '主马达·阿色尼', '赖哲卜', '舍尔邦',
+    '赖买丹', '闪瓦鲁', '都尔·盖尔达', '都尔·希哲'
+  ];
+  // ============================================================
+  // LOOKUPS
+  // ============================================================
+  private static readonly MONTHS_AR: string[] = [
+    'مُحَرَّم', 'صَفَر', 'رَبيع الأوّل', 'رَبيع الثاني',
+    'جُمادى الأولى', 'جُمادى الآخرة', 'رَجَب', 'شَعْبان',
+    'رَمَضان', 'شَوّال', 'ذو القَعْدة', 'ذو الحِجّة'
+  ];
+  private static readonly DAYS_EN: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  private static readonly DAYS_ZH: string[] = ['日', '一', '二', '三', '四', '五', '六'];
+  // ============================================================
+  // STRING TABLES
+  // ============================================================
+  private static readonly DAYS_AR: string[] = ['أحد', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'];
 
   static current(): string {
     const v = AppStorage.get<string>(STORAGE_KEY_LANGUAGE);
@@ -23,27 +50,41 @@ export class L {
     AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, lang);
   }
 
+  // ============================================================
+  // ENGLISH
+  // ============================================================
+
   static isRtl(): boolean {
     return L.current() === AppLanguage.ARABIC;
   }
 
+  // ============================================================
+  // CHINESE
+  // ============================================================
+
   static isRtlLang(lang: string): boolean {
     return lang === AppLanguage.ARABIC;
   }
+
+  // ============================================================
+  // ARABIC
+  // ============================================================
 
   static getLanguageLabel(lang: string): string {
     return L.get(`lang_${lang}`);
   }
 
   // ============================================================
-  // LOOKUPS
+  // ARRAY TABLES
   // ============================================================
 
   static get(key: string, lang?: string): string {
     const l = (lang !== undefined && lang.length > 0) ? lang : L.current();
     const table = L.tableFor(l);
     const v = table.get(key);
-    if (v !== undefined) return v;
+    if (v !== undefined) {
+      return v;
+    }
     const en = L.EN.get(key);
     return en !== undefined ? en : key;
   }
@@ -51,35 +92,35 @@ export class L {
   static getArray(key: string, lang?: string): string[] {
     const l = (lang !== undefined && lang.length > 0) ? lang : L.current();
     if (key === 'hijri_months') {
-      if (l === AppLanguage.CHINESE) return L.MONTHS_ZH;
-      if (l === AppLanguage.ARABIC)  return L.MONTHS_AR;
+      if (l === AppLanguage.CHINESE) {
+        return L.MONTHS_ZH;
+      }
+      if (l === AppLanguage.ARABIC) {
+        return L.MONTHS_AR;
+      }
       return L.MONTHS_EN;
     }
     if (key === 'days_of_week') {
-      if (l === AppLanguage.CHINESE) return L.DAYS_ZH;
-      if (l === AppLanguage.ARABIC)  return L.DAYS_AR;
+      if (l === AppLanguage.CHINESE) {
+        return L.DAYS_ZH;
+      }
+      if (l === AppLanguage.ARABIC) {
+        return L.DAYS_AR;
+      }
       return L.DAYS_EN;
     }
     return [];
   }
 
   private static tableFor(lang: string): Map<string, string> {
-    if (lang === AppLanguage.CHINESE) return L.ZH;
-    if (lang === AppLanguage.ARABIC)  return L.AR;
+    if (lang === AppLanguage.CHINESE) {
+      return L.ZH;
+    }
+    if (lang === AppLanguage.ARABIC) {
+      return L.AR;
+    }
     return L.EN;
   }
-
-  // ============================================================
-  // STRING TABLES
-  // ============================================================
-
-  private static readonly EN: Map<string, string> = L.buildEn();
-  private static readonly ZH: Map<string, string> = L.buildZh();
-  private static readonly AR: Map<string, string> = L.buildAr();
-
-  // ============================================================
-  // ENGLISH
-  // ============================================================
 
   private static buildEn(): Map<string, string> {
     const m = new Map<string, string>();
@@ -527,12 +568,13 @@ export class L {
     m.set('qibla_calibrate_skip', 'Skip for now');
     m.set('qibla_calibrate_hint', 'Calibration improves accuracy');
 
+    m.set('theme_white', 'White');
+    m.set('theme_sapphire', 'Sapphire');
+    m.set('theme_rose', 'Rose');
+    m.set('theme_silver', 'Silver');
+
     return m;
   }
-
-  // ============================================================
-  // CHINESE
-  // ============================================================
 
   private static buildZh(): Map<string, string> {
     const m = new Map<string, string>();
@@ -951,12 +993,13 @@ export class L {
     m.set('qibla_calibrate_skip', '暂时跳过');
     m.set('qibla_calibrate_hint', '校准可提高精度');
 
+    m.set('theme_white', '白色');
+    m.set('theme_sapphire', '蓝宝石');
+    m.set('theme_rose', '玫瑰');
+    m.set('theme_silver', '银色');
+
     return m;
   }
-
-  // ============================================================
-  // ARABIC
-  // ============================================================
 
   private static buildAr(): Map<string, string> {
     const m = new Map<string, string>();
@@ -1377,32 +1420,11 @@ export class L {
     m.set('qibla_calibrate_skip', 'تخطَّ الآن');
     m.set('qibla_calibrate_hint', 'المعايرة تحسّن الدقة');
 
+    m.set('theme_white', 'أبيض');
+    m.set('theme_sapphire', 'ياقوت أزرق');
+    m.set('theme_rose', 'وردي');
+    m.set('theme_silver', 'فضي');
+
     return m;
   }
-
-  // ============================================================
-  // ARRAY TABLES
-  // ============================================================
-
-  private static readonly MONTHS_EN: string[] = [
-    'Muharram', 'Safar', 'Rabi al-Awwal', 'Rabi al-Thani',
-    'Jumada al-Awwal', 'Jumada al-Thani', 'Rajab', "Sha'ban",
-    'Ramadan', 'Shawwal', "Dhu al-Qi'dah", 'Dhu al-Hijjah'
-  ];
-
-  private static readonly MONTHS_ZH: string[] = [
-    '穆哈兰姆', '萨法尔', '赖比尔·敖外鲁', '赖比尔·阿色尼',
-    '主马达·敖外鲁', '主马达·阿色尼', '赖哲卜', '舍尔邦',
-    '赖买丹', '闪瓦鲁', '都尔·盖尔达', '都尔·希哲'
-  ];
-
-  private static readonly MONTHS_AR: string[] = [
-    'مُحَرَّم', 'صَفَر', 'رَبيع الأوّل', 'رَبيع الثاني',
-    'جُمادى الأولى', 'جُمادى الآخرة', 'رَجَب', 'شَعْبان',
-    'رَمَضان', 'شَوّال', 'ذو القَعْدة', 'ذو الحِجّة'
-  ];
-
-  private static readonly DAYS_EN: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  private static readonly DAYS_ZH: string[] = ['日', '一', '二', '三', '四', '五', '六'];
-  private static readonly DAYS_AR: string[] = ['أحد', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'];
 }

@@ -18,7 +18,7 @@ export interface PrayerProgress {
   weeklyLabels: string[];
   weekCompleted: number;
   monthCompleted: number;
-  lifetimeCompleted: number;
+  yearCompleted: number;
 }
 
 export interface TasbihProgress {
@@ -179,13 +179,13 @@ export class ProgressHelper {
       best = streak;
     }
 
-    // ---- Lifetime (last 365 days) ----
-    let lifetime = 0;
+    // ---- Rolling 365-day total ----
+    let yearTotal = 0;
     for (let i = 0; i < 365; i++) {
       const d = new Date(today);
       d.setDate(d.getDate() - i);
       const st = ProgressHelper.readState(ProgressHelper.getDateKey(d));
-      lifetime += ProgressHelper.countCompleted(st);
+      yearTotal += ProgressHelper.countCompleted(st);
     }
 
     const progress: PrayerProgress = {
@@ -202,7 +202,7 @@ export class ProgressHelper {
       weeklyLabels,
       weekCompleted,
       monthCompleted,
-      lifetimeCompleted: lifetime
+      yearCompleted: yearTotal
     };
     return progress;
   }

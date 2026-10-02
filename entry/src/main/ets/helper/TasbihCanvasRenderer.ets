@@ -25,11 +25,12 @@ export interface BeadCanvasConfig {
 }
 
 export const DONE_COLORS: BeadColors = { hi: '#A7F3C0', base: '#4ADE80', lo: '#1E7A4E' };
+
 export const PEND_COLORS_LIGHT: BeadColors = { hi: '#EFEAE0', base: '#C9C2B8', lo: '#8E8878' };
+
 export const PEND_COLORS_DARK: BeadColors = { hi: '#5A5A5A', base: '#3A3A3A', lo: '#1A1A1A' };
 
 export class TasbihCanvasRenderer {
-
   private static readonly FISHEYE_PEAK_SCALE = 1.65;
   private static readonly FISHEYE_SIGMA_MULT = 3.5;
   private static readonly FISHEYE_GAP_STRETCH = 0.55;

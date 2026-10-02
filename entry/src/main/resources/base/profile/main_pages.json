@@ -1,12 +1,8 @@
 {
   "src": [
     "pages/WizardPage",
-    "pages/HomePage",
-    "pages/Prayer",
+    "pages/MainTabs",
     "pages/CustomizePage",
-    "pages/QiblaPage",
-    "pages/TasbihPage",
-    "pages/SettingsPage",
-    "pages/HijriCalendarPage"
+    "pages/SettingsPage"
   ]
 }

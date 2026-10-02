@@ -1,55 +1,51 @@
 // entry/src/main/ets/helper/SettingsHelper.ets
 
-import { ThemeMode } from '../common/Theme';
-import { ThemePreset } from '../common/Theme';
-import { STORAGE_KEY_APP_THEME } from '../common/StorageKeys';
-import { STORAGE_KEY_SOUND_ENABLED } from '../common/StorageKeys';
-import { STORAGE_KEY_TASBIH_SOUND } from '../common/StorageKeys';
-import { SoundOptions } from '../common/SoundOptions';
-import {
-  STORAGE_KEY_NOTIF_MASTER,
-  STORAGE_KEY_NOTIF_BEFORE_MINUTES,
-  STORAGE_KEY_NOTIF_FAJR,
-  STORAGE_KEY_NOTIF_DHUHR,
-  STORAGE_KEY_NOTIF_ASR,
-  STORAGE_KEY_NOTIF_MAGHRIB,
-  STORAGE_KEY_NOTIF_ISHA
-} from '../common/StorageKeys';
-import {
-  STORAGE_KEY_THEME_MODE, STORAGE_KEY_HIJRI_OFFSET, STORAGE_KEY_LANGUAGE
-} from '../common/StorageKeys';
-import { CalculationMethod, AsrShadowRule } from '../utils/PrayerTimeCalculator';
+import { AsrShadowRule, CalculationMethod, HighLatitudeRule } from '../utils/PrayerTimeCalculator';
+import { CalculationSource, LocationMode, ManualCoords, PickerItem } from '../models/SettingsModels';
 import { PreferencesHelper } from './PreferencesHelper';
 import {
-  PickerItem, CalculationSource, LocationMode, ManualCoords
-} from '../models/SettingsModels';
+  STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_HIGH_LAT_RULE,
+  STORAGE_KEY_HIJRI_OFFSET,
+  STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_NOTIF_ASR,
+  STORAGE_KEY_NOTIF_BEFORE_MINUTES,
+  STORAGE_KEY_NOTIF_DHUHR,
+  STORAGE_KEY_NOTIF_FAJR,
+  STORAGE_KEY_NOTIF_ISHA,
+  STORAGE_KEY_NOTIF_MAGHRIB,
+  STORAGE_KEY_NOTIF_MASTER,
+  STORAGE_KEY_SOUND_ENABLED,
+  STORAGE_KEY_TASBIH_RENDER_STYLE,
+  STORAGE_KEY_TASBIH_SOUND,
+  STORAGE_KEY_TASBIH_THEME_PRESET,
+  STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_VIBRATION_ENABLED,
+  STORAGE_KEY_WIZARD_COMPLETED
+} from '../common/StorageKeys';
+import { ThemeMode, ThemePreset } from '../common/Theme';
 import { L } from './LocalizationHelper';
-import { STORAGE_KEY_WIZARD_COMPLETED } from '../common/StorageKeys';
-import { HighLatitudeRule } from '../utils/PrayerTimeCalculator';
-import { STORAGE_KEY_HIGH_LAT_RULE } from '../common/StorageKeys';
-import { STORAGE_KEY_VIBRATION_ENABLED } from '../common/StorageKeys';
-import { STORAGE_KEY_TASBIH_RENDER_STYLE } from '../common/StorageKeys';
-import { STORAGE_KEY_TASBIH_THEME_PRESET } from '../common/StorageKeys';
+import { SoundOptions } from '../common/SoundOptions';
 import { TasbihThemes } from '../common/TasbihThemes';
 
-const KEY_METHOD  = 'calc_method';
-const KEY_ASR     = 'asr_rule';
-const KEY_SOURCE  = 'calc_source';
+const KEY_METHOD = 'calc_method';
+const KEY_ASR = 'asr_rule';
+const KEY_SOURCE = 'calc_source';
 
-const KEY_LOCATION_MODE  = 'location_mode';
-const KEY_MANUAL_LAT     = 'manual_lat';
-const KEY_MANUAL_LNG     = 'manual_lng';
+const KEY_LOCATION_MODE = 'location_mode';
+const KEY_MANUAL_LAT = 'manual_lat';
+const KEY_MANUAL_LNG = 'manual_lng';
 const KEY_MANUAL_REFRESH = 'manual_refresh';
-const KEY_MANUAL_CITY    = 'manual_city';
+const KEY_MANUAL_CITY = 'manual_city';
 
-const KEY_SHOW_EXTRA_TIMINGS  = 'show_extra_timings';
+const KEY_SHOW_EXTRA_TIMINGS = 'show_extra_timings';
 const KEY_SHOW_ISLAMIC_EVENTS = 'show_islamic_events';
 
-const KEY_OFFSET_FAJR    = 'offset_fajr';
-const KEY_OFFSET_DHUHR   = 'offset_dhuhr';
-const KEY_OFFSET_ASR     = 'offset_asr';
+const KEY_OFFSET_FAJR = 'offset_fajr';
+const KEY_OFFSET_DHUHR = 'offset_dhuhr';
+const KEY_OFFSET_ASR = 'offset_asr';
 const KEY_OFFSET_MAGHRIB = 'offset_maghrib';
-const KEY_OFFSET_ISHA    = 'offset_isha';
+const KEY_OFFSET_ISHA = 'offset_isha';
 
 export interface PrayerOffsets {
   fajr: number;
@@ -86,12 +82,23 @@ export interface LoadedSettings {
 }
 
 export class SettingsHelper {
+  static readonly OFFSET_KEYS: OffsetKeys = {
+    fajr: KEY_OFFSET_FAJR,
+    dhuhr: KEY_OFFSET_DHUHR,
+    asr: KEY_OFFSET_ASR,
+    maghrib: KEY_OFFSET_MAGHRIB,
+    isha: KEY_OFFSET_ISHA
+  };
+
+  // ============================================================
+  // HIGH-LATITUDE RULE
+  // ============================================================
 
   static async loadAll(): Promise<LoadedSettings> {
     const methodStr = await PreferencesHelper.getString(KEY_METHOD, CalculationMethod.KARACHI);
-    const asrNum    = await PreferencesHelper.getNumber(KEY_ASR, AsrShadowRule.STANDARD as number);
+    const asrNum = await PreferencesHelper.getNumber(KEY_ASR, AsrShadowRule.STANDARD as number);
     const sourceStr = await PreferencesHelper.getString(KEY_SOURCE, CalculationSource.LOCAL);
-    const showExtraTimings  = await PreferencesHelper.getBoolean(KEY_SHOW_EXTRA_TIMINGS, true);
+    const showExtraTimings = await PreferencesHelper.getBoolean(KEY_SHOW_EXTRA_TIMINGS, true);
     const showIslamicEvents = await PreferencesHelper.getBoolean(KEY_SHOW_ISLAMIC_EVENTS, true);
 
     return {
@@ -103,19 +110,19 @@ export class SettingsHelper {
     };
   }
 
-  // ============================================================
-  // HIGH-LATITUDE RULE
-  // ============================================================
-
   static async getHighLatRule(): Promise<HighLatitudeRule> {
     const stored = await PreferencesHelper.getString(
       STORAGE_KEY_HIGH_LAT_RULE, HighLatitudeRule.NONE
     );
     switch (stored) {
-      case HighLatitudeRule.MIDDLE_OF_NIGHT: return HighLatitudeRule.MIDDLE_OF_NIGHT;
-      case HighLatitudeRule.ONE_SEVENTH:     return HighLatitudeRule.ONE_SEVENTH;
-      case HighLatitudeRule.ANGLE_BASED:     return HighLatitudeRule.ANGLE_BASED;
-      default:                                return HighLatitudeRule.NONE;
+      case HighLatitudeRule.MIDDLE_OF_NIGHT:
+        return HighLatitudeRule.MIDDLE_OF_NIGHT;
+      case HighLatitudeRule.ONE_SEVENTH:
+        return HighLatitudeRule.ONE_SEVENTH;
+      case HighLatitudeRule.ANGLE_BASED:
+        return HighLatitudeRule.ANGLE_BASED;
+      default:
+        return HighLatitudeRule.NONE;
     }
   }
 
@@ -123,19 +130,24 @@ export class SettingsHelper {
     PreferencesHelper.setString(STORAGE_KEY_HIGH_LAT_RULE, rule);
   }
 
-  static getHighLatRuleLabel(rule: HighLatitudeRule): string {
-    switch (rule) {
-      case HighLatitudeRule.NONE:            return L.get('highlat_none');
-      case HighLatitudeRule.MIDDLE_OF_NIGHT: return L.get('highlat_middle');
-      case HighLatitudeRule.ONE_SEVENTH:     return L.get('highlat_one_seventh');
-      case HighLatitudeRule.ANGLE_BASED:     return L.get('highlat_angle');
-      default:                                return L.get('highlat_none');
-    }
-  }
-
   // ============================================================
   // APP THEME PRESET
   // ============================================================
+
+  static getHighLatRuleLabel(rule: HighLatitudeRule): string {
+    switch (rule) {
+      case HighLatitudeRule.NONE:
+        return L.get('highlat_none');
+      case HighLatitudeRule.MIDDLE_OF_NIGHT:
+        return L.get('highlat_middle');
+      case HighLatitudeRule.ONE_SEVENTH:
+        return L.get('highlat_one_seventh');
+      case HighLatitudeRule.ANGLE_BASED:
+        return L.get('highlat_angle');
+      default:
+        return L.get('highlat_none');
+    }
+  }
 
   static async getAppTheme(): Promise<string> {
     const cached = AppStorage.get<string>(STORAGE_KEY_APP_THEME);
@@ -185,6 +197,10 @@ export class SettingsHelper {
     });
   }
 
+  // ============================================================
+  // NOTIFICATIONS
+  // ============================================================
+
   static buildHighLatPickerItems(current: HighLatitudeRule): PickerItem[] {
     const rules = [
       HighLatitudeRule.NONE,
@@ -201,10 +217,6 @@ export class SettingsHelper {
       return item;
     });
   }
-
-  // ============================================================
-  // NOTIFICATIONS
-  // ============================================================
 
   static async getNotificationSettings(): Promise<NotificationsSettings> {
     const master = await PreferencesHelper.getBoolean(STORAGE_KEY_NOTIF_MASTER, false);
@@ -237,11 +249,21 @@ export class SettingsHelper {
 
   static saveNotifPrayer(prayerId: string, value: boolean): void {
     switch (prayerId) {
-      case 'fajr':    PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_FAJR, value); break;
-      case 'dhuhr':   PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_DHUHR, value); break;
-      case 'asr':     PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_ASR, value); break;
-      case 'maghrib': PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_MAGHRIB, value); break;
-      case 'isha':    PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_ISHA, value); break;
+      case 'fajr':
+        PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_FAJR, value);
+        break;
+      case 'dhuhr':
+        PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_DHUHR, value);
+        break;
+      case 'asr':
+        PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_ASR, value);
+        break;
+      case 'maghrib':
+        PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_MAGHRIB, value);
+        break;
+      case 'isha':
+        PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_ISHA, value);
+        break;
     }
   }
 
@@ -261,22 +283,28 @@ export class SettingsHelper {
     PreferencesHelper.setBoolean(KEY_SHOW_EXTRA_TIMINGS, value);
   }
 
-  static saveShowIslamicEvents(value: boolean): void {
-    PreferencesHelper.setBoolean(KEY_SHOW_ISLAMIC_EVENTS, value);
-  }
-
   // ============================================================
   // PRAYER OFFSETS
   // ============================================================
 
-  static async getPrayerOffsets(): Promise<PrayerOffsets> {
-    const fajr    = await PreferencesHelper.getNumber(KEY_OFFSET_FAJR, 0);
-    const dhuhr   = await PreferencesHelper.getNumber(KEY_OFFSET_DHUHR, 0);
-    const asr     = await PreferencesHelper.getNumber(KEY_OFFSET_ASR, 0);
-    const maghrib = await PreferencesHelper.getNumber(KEY_OFFSET_MAGHRIB, 0);
-    const isha    = await PreferencesHelper.getNumber(KEY_OFFSET_ISHA, 0);
+  static saveShowIslamicEvents(value: boolean): void {
+    PreferencesHelper.setBoolean(KEY_SHOW_ISLAMIC_EVENTS, value);
+  }
 
-    return { fajr, dhuhr, asr, maghrib, isha };
+  static async getPrayerOffsets(): Promise<PrayerOffsets> {
+    const fajr = await PreferencesHelper.getNumber(KEY_OFFSET_FAJR, 0);
+    const dhuhr = await PreferencesHelper.getNumber(KEY_OFFSET_DHUHR, 0);
+    const asr = await PreferencesHelper.getNumber(KEY_OFFSET_ASR, 0);
+    const maghrib = await PreferencesHelper.getNumber(KEY_OFFSET_MAGHRIB, 0);
+    const isha = await PreferencesHelper.getNumber(KEY_OFFSET_ISHA, 0);
+
+    return {
+      fajr,
+      dhuhr,
+      asr,
+      maghrib,
+      isha
+    };
   }
 
   static saveOffset(key: string, minutes: number): void {
@@ -291,21 +319,15 @@ export class SettingsHelper {
     await PreferencesHelper.setNumber(KEY_OFFSET_ISHA, offsets.isha);
   }
 
-  static readonly OFFSET_KEYS: OffsetKeys = {
-    fajr: KEY_OFFSET_FAJR,
-    dhuhr: KEY_OFFSET_DHUHR,
-    asr: KEY_OFFSET_ASR,
-    maghrib: KEY_OFFSET_MAGHRIB,
-    isha: KEY_OFFSET_ISHA
-  };
-
   // ============================================================
   // LOCATION SETTINGS
   // ============================================================
 
   static async getLocationMode(): Promise<LocationMode> {
     const stored = await PreferencesHelper.getString(KEY_LOCATION_MODE, LocationMode.GPS);
-    if (stored === LocationMode.MANUAL) return LocationMode.MANUAL;
+    if (stored === LocationMode.MANUAL) {
+      return LocationMode.MANUAL;
+    }
     return LocationMode.GPS;
   }
 
@@ -315,11 +337,16 @@ export class SettingsHelper {
   }
 
   static async getManualCoords(): Promise<ManualCoords> {
-    const lat      = await PreferencesHelper.getNumber(KEY_MANUAL_LAT, 0);
-    const lng      = await PreferencesHelper.getNumber(KEY_MANUAL_LNG, 0);
-    const refresh  = await PreferencesHelper.getNumber(KEY_MANUAL_REFRESH, 0);
+    const lat = await PreferencesHelper.getNumber(KEY_MANUAL_LAT, 0);
+    const lng = await PreferencesHelper.getNumber(KEY_MANUAL_LNG, 0);
+    const refresh = await PreferencesHelper.getNumber(KEY_MANUAL_REFRESH, 0);
     const cityName = await PreferencesHelper.getString(KEY_MANUAL_CITY, '');
-    return { lat, lng, refresh, cityName };
+    return {
+      lat,
+      lng,
+      refresh,
+      cityName
+    };
   }
 
   static async saveManualCoords(lat: number, lng: number, cityName: string): Promise<ManualCoords> {
@@ -331,51 +358,65 @@ export class SettingsHelper {
     await PreferencesHelper.setString(KEY_MANUAL_CITY, cityName);
 
     SettingsHelper.bumpLocationVersion();
-    return { lat, lng, refresh, cityName };
+    return {
+      lat,
+      lng,
+      refresh,
+      cityName
+    };
   }
 
-  private static bumpLocationVersion(): void {
-    const prev = AppStorage.get<number>('location_version');
-    const next = (prev === undefined ? 0 : prev) + 1;
-    AppStorage.setOrCreate('location_version', next);
+  static getCalcMethodLabel(method: CalculationMethod): string {
+    switch (method) {
+      case CalculationMethod.KARACHI:
+        return L.get('method_karachi');
+      case CalculationMethod.JAFARI:
+        return L.get('method_jafari');
+      case CalculationMethod.ISNA:
+        return L.get('method_isna');
+      case CalculationMethod.MWL:
+        return L.get('method_mwl');
+      default:
+        return L.get('method_karachi');
+    }
   }
 
   // ============================================================
   // LABELS
   // ============================================================
 
-  static getCalcMethodLabel(method: CalculationMethod): string {
-    switch (method) {
-      case CalculationMethod.KARACHI: return L.get('method_karachi');
-      case CalculationMethod.JAFARI:  return L.get('method_jafari');
-      case CalculationMethod.ISNA:    return L.get('method_isna');
-      case CalculationMethod.MWL:     return L.get('method_mwl');
-      default:                        return L.get('method_karachi');
-    }
-  }
-
   static getAsrRuleLabel(rule: AsrShadowRule): string {
     switch (rule) {
-      case AsrShadowRule.STANDARD: return L.get('asr_standard');
-      case AsrShadowRule.HANAFI:   return L.get('asr_hanafi');
-      default:                     return L.get('asr_standard');
+      case AsrShadowRule.STANDARD:
+        return L.get('asr_standard');
+      case AsrShadowRule.HANAFI:
+        return L.get('asr_hanafi');
+      default:
+        return L.get('asr_standard');
     }
   }
 
   static getCalcSourceLabel(source: CalculationSource): string {
     switch (source) {
-      case CalculationSource.LOCAL: return L.get('source_local');
-      case CalculationSource.API:   return L.get('source_api');
-      default:                      return L.get('source_local');
+      case CalculationSource.LOCAL:
+        return L.get('source_local');
+      case CalculationSource.API:
+        return L.get('source_api');
+      default:
+        return L.get('source_local');
     }
   }
 
   static getThemeModeLabel(mode: string): string {
     switch (mode) {
-      case ThemeMode.LIGHT:  return L.get('theme_light');
-      case ThemeMode.DARK:   return L.get('theme_dark');
-      case ThemeMode.SYSTEM: return L.get('theme_system');
-      default:               return L.get('theme_system');
+      case ThemeMode.LIGHT:
+        return L.get('theme_light');
+      case ThemeMode.DARK:
+        return L.get('theme_dark');
+      case ThemeMode.SYSTEM:
+        return L.get('theme_system');
+      default:
+        return L.get('theme_system');
     }
   }
 
@@ -417,10 +458,6 @@ export class SettingsHelper {
       : L.get('source_short_local');
   }
 
-  // ============================================================
-  // PICKER ITEM BUILDERS
-  // ============================================================
-
   static buildMethodPickerItems(current: CalculationMethod): PickerItem[] {
     return [CalculationMethod.KARACHI, CalculationMethod.JAFARI, CalculationMethod.ISNA, CalculationMethod.MWL]
       .map((m): PickerItem => ({
@@ -429,6 +466,10 @@ export class SettingsHelper {
         selected: m === current
       }));
   }
+
+  // ============================================================
+  // PICKER ITEM BUILDERS
+  // ============================================================
 
   static buildAsrPickerItems(current: AsrShadowRule): PickerItem[] {
     return [AsrShadowRule.STANDARD, AsrShadowRule.HANAFI]
@@ -448,14 +489,14 @@ export class SettingsHelper {
       }));
   }
 
-  // ============================================================
-  // THEME MODE
-  // ============================================================
-
   static saveThemeMode(mode: string): void {
     AppStorage.setOrCreate(STORAGE_KEY_THEME_MODE, mode);
     PreferencesHelper.setString(STORAGE_KEY_THEME_MODE, mode);
   }
+
+  // ============================================================
+  // THEME MODE
+  // ============================================================
 
   static buildThemePickerItems(current: string): PickerItem[] {
     return [ThemeMode.LIGHT, ThemeMode.DARK, ThemeMode.SYSTEM]
@@ -466,49 +507,53 @@ export class SettingsHelper {
       }));
   }
 
-  // ============================================================
-  // HIJRI OFFSET
-  // ============================================================
-
   static async getHijriOffset(): Promise<number> {
     const cached = AppStorage.get<number>(STORAGE_KEY_HIJRI_OFFSET);
-    if (cached !== undefined) return cached;
+    if (cached !== undefined) {
+      return cached;
+    }
 
     const loaded = await PreferencesHelper.getNumber(STORAGE_KEY_HIJRI_OFFSET, 0);
     AppStorage.setOrCreate(STORAGE_KEY_HIJRI_OFFSET, loaded);
     return loaded;
   }
 
+  // ============================================================
+  // HIJRI OFFSET
+  // ============================================================
+
   static saveHijriOffset(days: number): void {
     AppStorage.setOrCreate(STORAGE_KEY_HIJRI_OFFSET, days);
     PreferencesHelper.setNumber(STORAGE_KEY_HIJRI_OFFSET, days);
   }
 
-  // ============================================================
-  // LANGUAGE
-  // ============================================================
-
   static async getLanguage(): Promise<string> {
     const cached = AppStorage.get<string>(STORAGE_KEY_LANGUAGE);
-    if (cached !== undefined) return cached;
+    if (cached !== undefined) {
+      return cached;
+    }
 
     const loaded = await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE, 'en');
     AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, loaded);
     return loaded;
   }
 
+  // ============================================================
+  // LANGUAGE
+  // ============================================================
+
   static saveLanguage(lang: string): void {
     AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, lang);
     PreferencesHelper.setString(STORAGE_KEY_LANGUAGE, lang);
   }
 
-  // ============================================================
-  // WIZARD
-  // ============================================================
-
   static async isWizardCompleted(): Promise<boolean> {
     return PreferencesHelper.getBoolean(STORAGE_KEY_WIZARD_COMPLETED, false);
   }
+
+  // ============================================================
+  // WIZARD
+  // ============================================================
 
   static markWizardCompleted(): void {
     PreferencesHelper.setBoolean(STORAGE_KEY_WIZARD_COMPLETED, true);
@@ -519,23 +564,19 @@ export class SettingsHelper {
     PreferencesHelper.setBoolean(STORAGE_KEY_WIZARD_COMPLETED, false);
   }
 
-  // ============================================================
-  // SOUND
-  // ============================================================
-
   static getSoundEnabled(): boolean {
     const cached = AppStorage.get<boolean>(STORAGE_KEY_SOUND_ENABLED);
     return cached === undefined ? true : cached;
   }
 
+  // ============================================================
+  // SOUND
+  // ============================================================
+
   static saveSoundEnabled(value: boolean): void {
     AppStorage.setOrCreate(STORAGE_KEY_SOUND_ENABLED, value);
     PreferencesHelper.setBoolean(STORAGE_KEY_SOUND_ENABLED, value);
   }
-
-  // ============================================================
-  // TASBIH SOUND SELECTION
-  // ============================================================
 
   static getTasbihSound(): string {
     const cached = AppStorage.get<string>(STORAGE_KEY_TASBIH_SOUND);
@@ -545,40 +586,40 @@ export class SettingsHelper {
     return SoundOptions.DEFAULT_ID;
   }
 
+  // ============================================================
+  // TASBIH SOUND SELECTION
+  // ============================================================
+
   static saveTasbihSound(id: string): void {
     AppStorage.setOrCreate(STORAGE_KEY_TASBIH_SOUND, id);
     PreferencesHelper.setString(STORAGE_KEY_TASBIH_SOUND, id);
   }
-
-  // ============================================================
-  // VIBRATION
-  // ============================================================
 
   static getVibrationEnabled(): boolean {
     const cached = AppStorage.get<boolean>(STORAGE_KEY_VIBRATION_ENABLED);
     return cached === undefined ? true : cached;
   }
 
+  // ============================================================
+  // VIBRATION
+  // ============================================================
+
   static saveVibrationEnabled(value: boolean): void {
     AppStorage.setOrCreate(STORAGE_KEY_VIBRATION_ENABLED, value);
     PreferencesHelper.setBoolean(STORAGE_KEY_VIBRATION_ENABLED, value);
+  }
+
+  static async getTasbihRenderStyle(): Promise<string> {
+    return PreferencesHelper.getString(STORAGE_KEY_TASBIH_RENDER_STYLE, 'premium');
   }
 
   // ============================================================
   // TASBIH RENDER STYLE (premium / classic)
   // ============================================================
 
-  static async getTasbihRenderStyle(): Promise<string> {
-    return PreferencesHelper.getString(STORAGE_KEY_TASBIH_RENDER_STYLE, 'premium');
-  }
-
   static saveTasbihRenderStyle(style: string): void {
     PreferencesHelper.setString(STORAGE_KEY_TASBIH_RENDER_STYLE, style);
   }
-
-  // ============================================================
-  // TASBIH THEME PRESET (global default)
-  // ============================================================
 
   static async getTasbihThemePreset(): Promise<string> {
     return PreferencesHelper.getString(
@@ -587,7 +628,17 @@ export class SettingsHelper {
     );
   }
 
+  // ============================================================
+  // TASBIH THEME PRESET (global default)
+  // ============================================================
+
   static saveTasbihThemePreset(presetId: string): void {
     PreferencesHelper.setString(STORAGE_KEY_TASBIH_THEME_PRESET, presetId);
+  }
+
+  private static bumpLocationVersion(): void {
+    const prev = AppStorage.get<number>('location_version');
+    const next = (prev === undefined ? 0 : prev) + 1;
+    AppStorage.setOrCreate('location_version', next);
   }
 }

@@ -4,32 +4,60 @@ import { AddTasbihResult, BeadView, Dhikr, DhikrFields, Tasbih } from '../models
 import { TasbihThemes } from '../common/TasbihThemes';
 
 export const MAX_TOP_BEADS = 5;
+
 export const MAX_BOTTOM_BEADS = 5;
 
 export class TasbihManager {
-
   static generateId(): string {
     return `id_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
   }
 
   static createDefaults(): Tasbih[] {
     const classic: Dhikr[] = [
-      { id: TasbihManager.generateId(), arabic: 'سُبْحَانَ ٱللَّٰهِ', transliteration: 'SubhanAllah',
-        translation: 'Glory be to Allah', target: 33, count: 0 },
-      { id: TasbihManager.generateId(), arabic: 'ٱلْحَمْدُ لِلَّٰهِ', transliteration: 'Alhamdulillah',
-        translation: 'All praise is for Allah', target: 33, count: 0 },
-      { id: TasbihManager.generateId(), arabic: 'ٱللَّٰهُ أَكْبَرُ', transliteration: 'Allahu Akbar',
-        translation: 'Allah is the Greatest', target: 34, count: 0 }
+      {
+        id: TasbihManager.generateId(),
+        arabic: 'سُبْحَانَ ٱللَّٰهِ',
+        transliteration: 'SubhanAllah',
+        translation: 'Glory be to Allah',
+        target: 33,
+        count: 0
+      },
+      {
+        id: TasbihManager.generateId(),
+        arabic: 'ٱلْحَمْدُ لِلَّٰهِ',
+        transliteration: 'Alhamdulillah',
+        translation: 'All praise is for Allah',
+        target: 33,
+        count: 0
+      },
+      {
+        id: TasbihManager.generateId(),
+        arabic: 'ٱللَّٰهُ أَكْبَرُ',
+        transliteration: 'Allahu Akbar',
+        translation: 'Allah is the Greatest',
+        target: 34,
+        count: 0
+      }
     ];
     const tahlil: Dhikr[] = [
-      { id: TasbihManager.generateId(),
+      {
+        id: TasbihManager.generateId(),
         arabic: 'لَا إِلَٰهَ إِلَّا ٱللَّٰهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ ٱلْمُلْكُ وَلَهُ ٱلْحَمْدُ',
         transliteration: 'La ilaha illallahu wahdahu la sharika lah',
-        translation: 'There is no god but Allah, alone, without partner', target: 100, count: 0 }
+        translation: 'There is no god but Allah, alone, without partner',
+        target: 100,
+        count: 0
+      }
     ];
     const istighfar: Dhikr[] = [
-      { id: TasbihManager.generateId(), arabic: 'أَسْتَغْفِرُ ٱللَّٰهَ', transliteration: 'Astaghfirullah',
-        translation: 'I seek forgiveness from Allah', target: 100, count: 0 }
+      {
+        id: TasbihManager.generateId(),
+        arabic: 'أَسْتَغْفِرُ ٱللَّٰهَ',
+        transliteration: 'Astaghfirullah',
+        translation: 'I seek forgiveness from Allah',
+        target: 100,
+        count: 0
+      }
     ];
 
     const out: Tasbih[] = [
@@ -68,7 +96,9 @@ export class TasbihManager {
 
   static getActiveDhikr(tasbihs: Tasbih[], activeTasbihId: string, index: number): Dhikr | null {
     const t = TasbihManager.findTasbih(tasbihs, activeTasbihId);
-    if (!t || t.dhikrs.length === 0) return null;
+    if (!t || t.dhikrs.length === 0) {
+      return null;
+    }
     const safeIdx = Math.min(index, t.dhikrs.length - 1);
     return t.dhikrs[safeIdx];
   }
@@ -76,8 +106,11 @@ export class TasbihManager {
   static computeBeadView(dhikr: Dhikr | null): BeadView {
     if (!dhikr) {
       const empty: BeadView = {
-        topIds: [], bottomIds: [],
-        isComplete: false, topAtCap: false, bottomAtCap: false
+        topIds: [],
+        bottomIds: [],
+        isComplete: false,
+        topAtCap: false,
+        bottomAtCap: false
       };
       return empty;
     }
@@ -89,10 +122,14 @@ export class TasbihManager {
     );
 
     const topIds: number[] = [];
-    for (let i = 0; i < topCount; i++) topIds.push(i);
+    for (let i = 0; i < topCount; i++) {
+      topIds.push(i);
+    }
 
     const bottomIds: number[] = [];
-    for (let i = 0; i < bottomCount; i++) bottomIds.push(i);
+    for (let i = 0; i < bottomCount; i++) {
+      bottomIds.push(i);
+    }
 
     const view: BeadView = {
       topIds: topIds,
@@ -111,8 +148,12 @@ export class TasbihManager {
   static increment(tasbihs: Tasbih[], activeId: string, dhikrId: string): Tasbih[] {
     return TasbihManager.mutateDhikr(tasbihs, activeId, dhikrId, 1, (d: Dhikr): Dhikr => {
       const next: Dhikr = {
-        id: d.id, arabic: d.arabic, transliteration: d.transliteration,
-        translation: d.translation, target: d.target, count: d.count + 1
+        id: d.id,
+        arabic: d.arabic,
+        transliteration: d.transliteration,
+        translation: d.translation,
+        target: d.target,
+        count: d.count + 1
       };
       return next;
     });
@@ -121,8 +162,11 @@ export class TasbihManager {
   static decrement(tasbihs: Tasbih[], activeId: string, dhikrId: string): Tasbih[] {
     return TasbihManager.mutateDhikr(tasbihs, activeId, dhikrId, 0, (d: Dhikr): Dhikr => {
       const next: Dhikr = {
-        id: d.id, arabic: d.arabic, transliteration: d.transliteration,
-        translation: d.translation, target: d.target,
+        id: d.id,
+        arabic: d.arabic,
+        transliteration: d.transliteration,
+        translation: d.translation,
+        target: d.target,
         count: d.count > 0 ? d.count - 1 : 0
       };
       return next;
@@ -132,8 +176,12 @@ export class TasbihManager {
   static reset(tasbihs: Tasbih[], activeId: string, dhikrId: string): Tasbih[] {
     return TasbihManager.mutateDhikr(tasbihs, activeId, dhikrId, 0, (d: Dhikr): Dhikr => {
       const next: Dhikr = {
-        id: d.id, arabic: d.arabic, transliteration: d.transliteration,
-        translation: d.translation, target: d.target, count: 0
+        id: d.id,
+        arabic: d.arabic,
+        transliteration: d.transliteration,
+        translation: d.translation,
+        target: d.target,
+        count: 0
       };
       return next;
     });
@@ -198,12 +246,16 @@ export class TasbihManager {
     themePresetId: string
   ): Tasbih[] {
     return tasbihs.map((t: Tasbih): Tasbih => {
-      if (t.id !== id) return t;
+      if (t.id !== id) {
+        return t;
+      }
       const presetId = themePresetId.length > 0
         ? themePresetId
         : (t.themePresetId ?? TasbihThemes.DEFAULT_PRESET_ID);
       const updated: Tasbih = {
-        id: t.id, name: name, dhikrs: t.dhikrs,
+        id: t.id,
+        name: name,
+        dhikrs: t.dhikrs,
         createdAt: t.createdAt,
         lifetimeCount: t.lifetimeCount,
         theme: TasbihThemes.themeForPreset(presetId),
@@ -232,7 +284,9 @@ export class TasbihManager {
   }
 
   static removeTasbih(tasbihs: Tasbih[], id: string): Tasbih[] {
-    if (tasbihs.length <= 1) return tasbihs;
+    if (tasbihs.length <= 1) {
+      return tasbihs;
+    }
     return tasbihs.filter((t: Tasbih): boolean => t.id !== id);
   }
 
@@ -243,13 +297,20 @@ export class TasbihManager {
   static addDhikr(tasbihs: Tasbih[], activeId: string, fields: DhikrFields): Tasbih[] {
     const newDhikr: Dhikr = {
       id: TasbihManager.generateId(),
-      arabic: fields.arabic, transliteration: fields.transliteration,
-      translation: fields.translation, target: fields.target, count: 0
+      arabic: fields.arabic,
+      transliteration: fields.transliteration,
+      translation: fields.translation,
+      target: fields.target,
+      count: 0
     };
     return tasbihs.map((t: Tasbih): Tasbih => {
-      if (t.id !== activeId) return t;
+      if (t.id !== activeId) {
+        return t;
+      }
       const updated: Tasbih = {
-        id: t.id, name: t.name, dhikrs: [...t.dhikrs, newDhikr],
+        id: t.id,
+        name: t.name,
+        dhikrs: [...t.dhikrs, newDhikr],
         createdAt: t.createdAt,
         lifetimeCount: t.lifetimeCount,
         theme: t.theme,
@@ -261,17 +322,27 @@ export class TasbihManager {
 
   static updateDhikr(tasbihs: Tasbih[], activeId: string, dhikrId: string, fields: DhikrFields): Tasbih[] {
     return tasbihs.map((t: Tasbih): Tasbih => {
-      if (t.id !== activeId) return t;
+      if (t.id !== activeId) {
+        return t;
+      }
       const updated: Dhikr[] = t.dhikrs.map((d: Dhikr): Dhikr => {
-        if (d.id !== dhikrId) return d;
+        if (d.id !== dhikrId) {
+          return d;
+        }
         const next: Dhikr = {
-          id: d.id, arabic: fields.arabic, transliteration: fields.transliteration,
-          translation: fields.translation, target: fields.target, count: d.count
+          id: d.id,
+          arabic: fields.arabic,
+          transliteration: fields.transliteration,
+          translation: fields.translation,
+          target: fields.target,
+          count: d.count
         };
         return next;
       });
       const result: Tasbih = {
-        id: t.id, name: t.name, dhikrs: updated,
+        id: t.id,
+        name: t.name,
+        dhikrs: updated,
         createdAt: t.createdAt,
         lifetimeCount: t.lifetimeCount,
         theme: t.theme,
@@ -283,10 +354,14 @@ export class TasbihManager {
 
   static removeDhikr(tasbihs: Tasbih[], activeId: string, dhikrId: string): Tasbih[] {
     return tasbihs.map((t: Tasbih): Tasbih => {
-      if (t.id !== activeId) return t;
+      if (t.id !== activeId) {
+        return t;
+      }
       const filtered: Dhikr[] = t.dhikrs.filter((d: Dhikr): boolean => d.id !== dhikrId);
       const result: Tasbih = {
-        id: t.id, name: t.name, dhikrs: filtered,
+        id: t.id,
+        name: t.name,
+        dhikrs: filtered,
         createdAt: t.createdAt,
         lifetimeCount: t.lifetimeCount,
         theme: t.theme,
@@ -308,13 +383,19 @@ export class TasbihManager {
     fn: (d: Dhikr) => Dhikr
   ): Tasbih[] {
     return tasbihs.map((t: Tasbih): Tasbih => {
-      if (t.id !== activeId) return t;
+      if (t.id !== activeId) {
+        return t;
+      }
       const updated: Dhikr[] = t.dhikrs.map((d: Dhikr): Dhikr => {
-        if (d.id !== dhikrId) return d;
+        if (d.id !== dhikrId) {
+          return d;
+        }
         return fn(d);
       });
       const result: Tasbih = {
-        id: t.id, name: t.name, dhikrs: updated,
+        id: t.id,
+        name: t.name,
+        dhikrs: updated,
         createdAt: t.createdAt,
         lifetimeCount: (t.lifetimeCount || 0) + lifetimeDelta,
         theme: t.theme,

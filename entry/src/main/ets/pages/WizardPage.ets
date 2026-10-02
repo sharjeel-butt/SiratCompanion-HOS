@@ -37,7 +37,6 @@ interface ThemeOption {
 @Entry
 @Component
 struct WizardPage {
-
   // ============================================================
   // STORAGE LINKS
   // ============================================================
@@ -45,11 +44,9 @@ struct WizardPage {
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
-
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = AppLanguage.ENGLISH;
-
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemeChanged')
   appTheme: string = ThemePreset.CURRENT;
@@ -58,26 +55,17 @@ struct WizardPage {
   appForegroundTick: number = 0;
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
-
-  @State private currentLanguage: string = AppLanguage.ENGLISH;
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
-  private systemDarkListener: mediaquery.MediaQueryListener | null = null;
-
+  @State step: number = 0;
+  // ---- Step 0: language ----
+  @State selectedLanguage: string = AppLanguage.ENGLISH;
   // ============================================================
   // WIZARD STATE
   // ============================================================
-
-  @State step: number = 0;
-
-  // ---- Step 0: language ----
-  @State selectedLanguage: string = AppLanguage.ENGLISH;
-
   // ---- Step 1: privacy policy ----
   @State privacyAccepted: boolean = false;
-
   // ---- Step 2: theme ----
   @State selectedTheme: string = ThemePreset.CURRENT;
-
   // ---- Step 3: location ----
   @State locationMode: LocationMode = LocationMode.GPS;
   @State manualLat: string = '';
@@ -86,7 +74,6 @@ struct WizardPage {
   @State isGettingLocation: boolean = false;
   @State locationStatus: string = 'idle';
   @State detectedCity: string = '';
-
   // ---- Step 4: calculation ----
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
   @State asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
@@ -94,49 +81,11 @@ struct WizardPage {
   @State showMethodPicker: boolean = false;
   @State showAsrPicker: boolean = false;
   @State showSourcePicker: boolean = false;
+  @State private currentLanguage: string = AppLanguage.ENGLISH;
+  private systemDarkListener: mediaquery.MediaQueryListener | null = null;
 
   // ============================================================
   // LOCALIZATION + DIRECTION + BREAKPOINT HELPERS
-  // ============================================================
-
-  private tr(key: string): string {
-    return L.get(key, this.currentLanguage);
-  }
-
-  private isRtl(): boolean {
-    return L.isRtlLang(this.currentLanguage);
-  }
-
-  private isTablet(): boolean {
-    return Breakpoints.isTablet(this.breakpoint);
-  }
-
-  // ============================================================
-  // WATCHERS
-  // ============================================================
-
-  private onThemeModeChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-  }
-
-  private onLanguageChanged(): void {
-    this.currentLanguage = this.appLanguage;
-  }
-
-  private onAppThemeChanged(): void {
-    // Recompute the wizard's palette the instant a new theme is picked.
-    this.colors = PageTheme.compute(this.themeMode);
-    this.selectedTheme = this.appTheme;
-  }
-
-  private async onAppForegrounded(): Promise<void> {
-    this.currentLanguage = this.appLanguage;
-    this.colors = PageTheme.compute(this.themeMode);
-    this.selectedTheme = await SettingsHelper.getAppTheme();
-  }
-
-  // ============================================================
-  // LIFECYCLE
   // ============================================================
 
   aboutToAppear(): void {
@@ -161,17 +110,8 @@ struct WizardPage {
     this.colors = PageTheme.compute(this.themeMode);
   }
 
-  private async reloadDefaults(): Promise<void> {
-    const data = await SettingsHelper.loadAll();
-    this.calcMethod = data.method;
-    this.asrRule = data.asr;
-    this.calcSource = data.source;
-    this.locationMode = await SettingsHelper.getLocationMode();
-    this.selectedTheme = await SettingsHelper.getAppTheme();
-  }
-
   // ============================================================
-  // PAGE TRANSITION
+  // WATCHERS
   // ============================================================
 
   pageTransition() {
@@ -185,280 +125,6 @@ struct WizardPage {
     PageTransitionExit({ type: RouteType.Pop, duration: 300, curve: Curve.Friction })
       .opacity(0)
   }
-
-  // ============================================================
-  // STEP NAVIGATION
-  // ============================================================
-
-  private canProceed(): boolean {
-    // Step 1 (privacy) requires acceptance.
-    if (this.step === 1 && !this.privacyAccepted) {
-      return false;
-    }
-    return true;
-  }
-
-  private goNext(): void {
-    if (!this.canProceed()) {
-      return;
-    }
-
-    if (this.step < TOTAL_STEPS - 1) {
-      this.step = this.step + 1;
-      return;
-    }
-    this.finish();
-  }
-
-  private goBack(): void {
-    if (this.step <= 0) return;
-    this.step = this.step - 1;
-  }
-
-  private finish(): void {
-    SettingsHelper.markWizardCompleted();
-    NavHelper.prepareForward();
-    router.replaceUrl({ url: 'pages/HomePage' })
-      .catch((err: Error) => console.error('Wizard finish failed:', JSON.stringify(err)));
-  }
-
-  // ============================================================
-  // STEP 0 — LANGUAGE
-  // ============================================================
-
-  private getLanguageOptions(): LanguageOption[] {
-    const en: LanguageOption = {
-      id: AppLanguage.ENGLISH, nativeName: 'English', englishName: 'English'
-    };
-    const zh: LanguageOption = {
-      id: AppLanguage.CHINESE, nativeName: '中文', englishName: 'Chinese'
-    };
-    const ar: LanguageOption = {
-      id: AppLanguage.ARABIC, nativeName: 'العربية', englishName: 'Arabic'
-    };
-    return [en, zh, ar];
-  }
-
-  private pickLanguage(id: string): void {
-    this.selectedLanguage = id;
-    this.appLanguage = id;
-    this.currentLanguage = id;
-    SettingsHelper.saveLanguage(id);
-  }
-
-  // ============================================================
-  // STEP 1 — PRIVACY POLICY
-  // ============================================================
-
-  private getPrivacyPolicyText(): string {
-    return PrivacyPolicyProvider.get(this.currentLanguage);
-  }
-
-  // ============================================================
-  // STEP 2 — THEME
-  // ============================================================
-
-  private getThemeOptions(): ThemeOption[] {
-    const current: ThemeOption = {
-      id: ThemePreset.CURRENT,
-      nameKey: 'theme_preset_current',
-      descKey: 'theme_preset_current_desc'
-    };
-    const h7: ThemeOption = {
-      id: ThemePreset.HARMONY_7,
-      nameKey: 'theme_preset_harmony7',
-      descKey: 'theme_preset_harmony7_desc'
-    };
-    const h6: ThemeOption = {
-      id: ThemePreset.HARMONY_6,
-      nameKey: 'theme_preset_harmony6',
-      descKey: 'theme_preset_harmony6_desc'
-    };
-    const h5: ThemeOption = {
-      id: ThemePreset.HARMONY_5,
-      nameKey: 'theme_preset_harmony5',
-      descKey: 'theme_preset_harmony5_desc'
-    };
-    return [current, h7, h6, h5];
-  }
-
-  /**
-   * Applies the theme immediately — both to the persisted setting
-   * and to the wizard's own colours.
-   */
-  private pickAppTheme(id: string): void {
-    this.selectedTheme = id;
-    this.appTheme = id;
-    SettingsHelper.saveAppTheme(id);
-    this.colors = PageTheme.compute(this.themeMode);
-  }
-
-  /** Preview swatch — accent colour for the current mode. */
-  private themePreviewSwatch(preset: string): string {
-    const preview = Theme.getColors(
-      this.themeMode,
-      PageTheme.isSystemDark(),
-      preset
-    );
-    return preview.accentGold;
-  }
-
-  /** Preview background — page background for the current mode. */
-  private themePreviewBackground(preset: string): string {
-    const preview = Theme.getColors(
-      this.themeMode,
-      PageTheme.isSystemDark(),
-      preset
-    );
-    return preview.primaryGreen;
-  }
-
-  // ============================================================
-  // STEP 3 — LOCATION
-  // ============================================================
-
-  private async requestGpsLocation(): Promise<void> {
-    if (this.isGettingLocation) return;
-    this.isGettingLocation = true;
-    this.locationStatus = 'idle';
-    this.detectedCity = '';
-
-    try {
-      const data: LocationData = await LocationHelper.fetchLocationData(getContext(this));
-      await LocationCache.save(data.latitude, data.longitude, data.cityName);
-      await SettingsHelper.saveLocationMode(LocationMode.GPS);
-
-      this.detectedCity = data.cityName;
-      this.locationStatus = 'ready';
-    } catch (err) {
-      const error = err as Error;
-      this.locationStatus = 'failed';
-      if (error.message === 'GPS_OFF') {
-        await LocationHelper.showLocationDisabledDialog();
-      } else if (error.message === 'PERMISSION_DENIED') {
-        await LocationHelper.showPermissionDeniedDialog();
-      }
-    } finally {
-      this.isGettingLocation = false;
-    }
-  }
-
-  private async saveManualCoords(): Promise<void> {
-    const lat = parseFloat(this.manualLat.trim());
-    const lng = parseFloat(this.manualLng.trim());
-
-    if (isNaN(lat) || lat < -90 || lat > 90) {
-      this.getUIContext().getPromptAction().showToast({
-        message: this.tr('latitude_hint'), duration: 2500
-      });
-      return;
-    }
-    if (isNaN(lng) || lng < -180 || lng > 180) {
-      this.getUIContext().getPromptAction().showToast({
-        message: this.tr('longitude_hint'), duration: 2500
-      });
-      return;
-    }
-
-    this.isGettingLocation = true;
-
-    let cityName = this.manualCity.trim();
-    if (cityName.length === 0) {
-      try { cityName = await LocationHelper.reverseGeocode(lat, lng); } catch (e) { }
-      if (cityName === 'Unknown location' || cityName.length === 0) {
-        cityName = `${lat.toFixed(2)}, ${lng.toFixed(2)}`;
-      }
-    }
-
-    await SettingsHelper.saveManualCoords(lat, lng, cityName);
-    await SettingsHelper.saveLocationMode(LocationMode.MANUAL);
-    this.isGettingLocation = false;
-
-    this.detectedCity = cityName;
-    this.locationStatus = 'ready';
-
-    this.getUIContext().getPromptAction().showToast({
-      message: `${this.tr('save')}: ${cityName}`, duration: 2000
-    });
-  }
-
-  private async selectLocationMode(mode: LocationMode): Promise<void> {
-    this.locationMode = mode;
-    this.locationStatus = 'idle';
-    this.detectedCity = '';
-
-    if (mode === LocationMode.GPS) {
-      return;
-    }
-    SettingsHelper.saveLocationMode(mode);
-  }
-
-  // ============================================================
-  // STEP 4 — CALCULATION
-  // ============================================================
-
-  private pickMethod(id: string): void {
-    const method = id as CalculationMethod;
-    this.calcMethod = method;
-    SettingsHelper.saveMethod(method);
-    this.showMethodPicker = false;
-  }
-
-  private pickAsrRule(id: string): void {
-    const rule = Number(id) as AsrShadowRule;
-    this.asrRule = rule;
-    SettingsHelper.saveAsrRule(rule);
-    this.showAsrPicker = false;
-  }
-
-  private pickSource(id: string): void {
-    const source = id as CalculationSource;
-    if (source === CalculationSource.API) {
-      this.getUIContext().getPromptAction().showToast({
-        message: this.tr('coming_soon'), duration: 1500
-      });
-      return;
-    }
-    this.calcSource = source;
-    SettingsHelper.saveSource(source);
-    this.showSourcePicker = false;
-  }
-
-  // ============================================================
-  // HEADER TEXT
-  // ============================================================
-
-  private stepTitle(): string {
-    if (this.step === 0) return this.tr('wizard_language_title');
-    if (this.step === 1) {
-      return this.tr('wizard_privacy_title');
-    }
-    if (this.step === 2) {
-      return this.tr('wizard_theme_title');
-    }
-    if (this.step === 3) {
-      return this.tr('wizard_location_title');
-    }
-    return this.tr('wizard_convention_title');
-  }
-
-  private stepDescription(): string {
-    if (this.step === 0) return this.tr('wizard_language_desc');
-    if (this.step === 1) {
-      return this.tr('wizard_privacy_desc');
-    }
-    if (this.step === 2) {
-      return this.tr('wizard_theme_desc');
-    }
-    if (this.step === 3) {
-      return this.tr('wizard_location_desc');
-    }
-    return this.tr('wizard_convention_desc');
-  }
-
-  // ============================================================
-  // BUILD
-  // ============================================================
 
   build() {
     Stack() {
@@ -531,36 +197,45 @@ struct WizardPage {
         this.PickerOverlay(
           this.tr('convention'), '🕌',
           SettingsHelper.buildMethodPickerItems(this.calcMethod),
-          (id: string) => { this.pickMethod(id); },
-          () => { this.showMethodPicker = false; }
+          (id: string) => {
+            this.pickMethod(id);
+          },
+          () => {
+            this.showMethodPicker = false;
+          }
         )
       }
       if (this.showAsrPicker) {
         this.PickerOverlay(
           this.tr('madhab'), '🌅',
           SettingsHelper.buildAsrPickerItems(this.asrRule),
-          (id: string) => { this.pickAsrRule(id); },
-          () => { this.showAsrPicker = false; }
+          (id: string) => {
+            this.pickAsrRule(id);
+          },
+          () => {
+            this.showAsrPicker = false;
+          }
         )
       }
       if (this.showSourcePicker) {
         this.PickerOverlay(
           this.tr('source'), '🌐',
           SettingsHelper.buildSourcePickerItems(this.calcSource),
-          (id: string) => { this.pickSource(id); },
-          () => { this.showSourcePicker = false; }
+          (id: string) => {
+            this.pickSource(id);
+          },
+          () => {
+            this.showSourcePicker = false;
+          }
         )
       }
     }
-    .width('100%').height('100%')
+    .width('100%')
+    .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
-
-  // ============================================================
-  // PROGRESS HEADER
-  // ============================================================
 
   @Builder
   ProgressHeader() {
@@ -568,7 +243,9 @@ struct WizardPage {
       Text('←')
         .fontSize(22)
         .fontColor(this.step === 0 ? this.colors.textMuted : this.colors.textWhite)
-        .width(40).height(40).textAlign(TextAlign.Center)
+        .width(40)
+        .height(40)
+        .textAlign(TextAlign.Center)
         .borderRadius(20)
         .backgroundColor(this.step === 0 ? 'transparent' : this.colors.tintSoft)
         .border(this.step === 0
@@ -576,7 +253,9 @@ struct WizardPage {
           : { width: 1, color: this.colors.borderSoft })
         .margin({ left: 16 })
         .enabled(this.step > 0)
-        .onClick(() => { this.goBack(); })
+        .onClick(() => {
+          this.goBack();
+        })
 
       Blank()
 
@@ -592,10 +271,6 @@ struct WizardPage {
     .width('100%').height(72)
     .alignItems(VerticalAlign.Center)
   }
-
-  // ============================================================
-  // STEP 0 — LANGUAGE
-  // ============================================================
 
   @Builder
   LanguageStep() {
@@ -687,7 +362,7 @@ struct WizardPage {
   }
 
   // ============================================================
-  // STEP 1 — PRIVACY POLICY
+  // LIFECYCLE
   // ============================================================
 
   @Builder
@@ -773,10 +448,6 @@ struct WizardPage {
       bottom: 12
     })
   }
-
-  // ============================================================
-  // STEP 2 — THEME
-  // ============================================================
 
   @Builder
   ThemeStep() {
@@ -878,10 +549,6 @@ struct WizardPage {
     .scrollBar(BarState.Auto)
     .edgeEffect(EdgeEffect.Spring)
   }
-
-  // ============================================================
-  // STEP 3 — LOCATION
-  // ============================================================
 
   @Builder
   LocationStep() {
@@ -1137,8 +804,11 @@ struct WizardPage {
         ? this.colors.accentGold
         : this.colors.tintSoft)
       .textAlign(TextAlign.Center)
-      .maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis })
-      .height(42).layoutWeight(1).borderRadius(10)
+      .maxLines(1)
+      .textOverflow({ overflow: TextOverflow.Ellipsis })
+      .height(42)
+      .layoutWeight(1)
+      .borderRadius(10)
       .border(this.locationMode === mode
         ? { width: 0 }
         : { width: 1, color: this.colors.borderSoft })
@@ -1146,11 +816,13 @@ struct WizardPage {
         right: mode === LocationMode.GPS ? 6 : 0,
         left: mode === LocationMode.MANUAL ? 6 : 0
       })
-      .onClick(() => { this.selectLocationMode(mode); })
+      .onClick(() => {
+        this.selectLocationMode(mode);
+      })
   }
 
   // ============================================================
-  // STEP 4 — CONVENTION / MADHAB / SOURCE
+  // PAGE TRANSITION
   // ============================================================
 
   @Builder
@@ -1171,6 +843,7 @@ struct WizardPage {
               .margin({ top: 6 })
           }
           .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
           Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
         }
         .width('100%')
@@ -1197,6 +870,7 @@ struct WizardPage {
               .margin({ top: 6 })
           }
           .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
           Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
         }
         .width('100%')
@@ -1223,6 +897,7 @@ struct WizardPage {
               .margin({ top: 6 })
           }
           .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
           Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
         }
         .width('100%')
@@ -1249,15 +924,17 @@ struct WizardPage {
   }
 
   // ============================================================
-  // FOOTER
+  // STEP NAVIGATION
   // ============================================================
 
   @Builder
   Footer() {
     Row() {
       Button(this.step < TOTAL_STEPS - 1 ? this.tr('wizard_next') : this.tr('wizard_finish'))
-        .width('100%').height(50)
-        .fontSize(15).fontWeight(FontWeight.Medium)
+        .width('100%')
+        .height(50)
+        .fontSize(15)
+        .fontWeight(FontWeight.Medium)
         .fontColor(this.canProceed()
           ? this.colors.textOnAccent
           : this.colors.textMuted)
@@ -1266,7 +943,9 @@ struct WizardPage {
           : this.colors.tintMedium)
         .borderRadius(12)
         .enabled(this.canProceed())
-        .onClick(() => { this.goNext(); })
+        .onClick(() => {
+          this.goNext();
+        })
     }
     .width('100%')
     .padding({
@@ -1277,10 +956,6 @@ struct WizardPage {
     })
     .backgroundColor(this.colors.primaryGreen)
   }
-
-  // ============================================================
-  // PICKER OVERLAY
-  // ============================================================
 
   @Builder
   PickerOverlay(
@@ -1293,17 +968,26 @@ struct WizardPage {
     Column()
       .width('100%').height('100%')
       .backgroundColor(this.colors.overlayDim)
-      .onClick(() => { onCancel(); })
+      .onClick(() => {
+        onCancel();
+      })
 
     Column() {
-      Row().width(44).height(4)
+      Row()
+        .width(44)
+        .height(4)
         .backgroundColor(this.colors.overlayDimSoft)
-        .borderRadius(2).margin({ top: 10 })
+        .borderRadius(2)
+        .margin({ top: 10 })
 
       Row() {
         Text(icon)
-          .fontSize(22).width(44).height(44).textAlign(TextAlign.Center)
-          .backgroundColor(this.colors.tintSoft).borderRadius(12)
+          .fontSize(22)
+          .width(44)
+          .height(44)
+          .textAlign(TextAlign.Center)
+          .backgroundColor(this.colors.tintSoft)
+          .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
         Text(title)
           .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
@@ -1322,40 +1006,425 @@ struct WizardPage {
                   .backgroundColor(this.colors.accentGold)
               }
             }
-            .width(22).height(22).borderRadius(11)
+            .width(22)
+            .height(22)
+            .borderRadius(11)
             .border({
               width: item.selected ? 2 : 1.5,
               color: item.selected ? this.colors.accentGold : this.colors.borderStrong
             })
-            .justifyContent(FlexAlign.Center).alignItems(VerticalAlign.Center)
+            .justifyContent(FlexAlign.Center)
+            .alignItems(VerticalAlign.Center)
 
             Text(item.label)
               .fontSize(15)
               .fontColor(item.selected ? this.colors.accentGold : this.colors.textWhite)
               .fontWeight(item.selected ? FontWeight.Bold : FontWeight.Normal)
-              .layoutWeight(1).maxLines(2)
+              .layoutWeight(1)
+              .maxLines(2)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
               .margin({ left: 14 })
           }
           .width('100%')
-          .padding({ top: 16, bottom: 16, left: 20, right: 20 })
+          .padding({
+            top: 16,
+            bottom: 16,
+            left: 20,
+            right: 20
+          })
           .backgroundColor(item.selected ? this.colors.tintSoft : 'transparent')
-          .borderRadius(12).margin({ bottom: 4 })
-          .onClick(() => { onSelect(item.id); })
+          .borderRadius(12)
+          .margin({ bottom: 4 })
+          .onClick(() => {
+            onSelect(item.id);
+          })
         }, (item: PickerItem) => item.id)
       }
-      .width('100%').padding({ left: 8, right: 8, top: 12, bottom: 12 })
+      .width('100%')
+      .padding({
+        left: 8,
+        right: 8,
+        top: 12,
+        bottom: 12
+      })
 
       Button(this.tr('cancel'))
-        .width('90%').height(48).fontSize(15).fontWeight(FontWeight.Medium)
-        .fontColor(this.colors.textWhite).backgroundColor(this.colors.tintSoft)
-        .borderRadius(12).margin({ top: 8, bottom: 24 })
-        .onClick(() => { onCancel(); })
+        .width('90%')
+        .height(48)
+        .fontSize(15)
+        .fontWeight(FontWeight.Medium)
+        .fontColor(this.colors.textWhite)
+        .backgroundColor(this.colors.tintSoft)
+        .borderRadius(12)
+        .margin({ top: 8, bottom: 24 })
+        .onClick(() => {
+          onCancel();
+        })
     }
-    .width('100%').backgroundColor(this.colors.cardDark)
+    .width('100%')
+    .backgroundColor(this.colors.cardDark)
     .borderRadius({ topLeft: 28, topRight: 28 })
-    .shadow({ radius: 24, color: this.colors.shadowFloating, offsetX: 0, offsetY: -6 })
+    .shadow({
+      radius: 24,
+      color: this.colors.shadowFloating,
+      offsetX: 0,
+      offsetY: -6
+    })
     .border({ width: { top: 1 }, color: this.colors.borderSoft })
     .position({ bottom: 0 })
+  }
+
+  private tr(key: string): string {
+    return L.get(key, this.currentLanguage);
+  }
+
+  private isRtl(): boolean {
+    return L.isRtlLang(this.currentLanguage);
+  }
+
+  // ============================================================
+  // STEP 0 — LANGUAGE
+  // ============================================================
+
+  private isTablet(): boolean {
+    return Breakpoints.isTablet(this.breakpoint);
+  }
+
+  private onThemeModeChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  // ============================================================
+  // STEP 1 — PRIVACY POLICY
+  // ============================================================
+
+  private onLanguageChanged(): void {
+    this.currentLanguage = this.appLanguage;
+  }
+
+  // ============================================================
+  // STEP 2 — THEME
+  // ============================================================
+
+  private onAppThemeChanged(): void {
+    // Recompute the wizard's palette the instant a new theme is picked.
+    this.colors = PageTheme.compute(this.themeMode);
+    this.selectedTheme = this.appTheme;
+  }
+
+  private async onAppForegrounded(): Promise<void> {
+    this.currentLanguage = this.appLanguage;
+    this.colors = PageTheme.compute(this.themeMode);
+    this.selectedTheme = await SettingsHelper.getAppTheme();
+  }
+
+  private async reloadDefaults(): Promise<void> {
+    const data = await SettingsHelper.loadAll();
+    this.calcMethod = data.method;
+    this.asrRule = data.asr;
+    this.calcSource = data.source;
+    this.locationMode = await SettingsHelper.getLocationMode();
+    this.selectedTheme = await SettingsHelper.getAppTheme();
+  }
+
+  private canProceed(): boolean {
+    // Step 1 (privacy) requires acceptance.
+    if (this.step === 1 && !this.privacyAccepted) {
+      return false;
+    }
+    return true;
+  }
+
+  // ============================================================
+  // STEP 3 — LOCATION
+  // ============================================================
+
+  private goNext(): void {
+    if (!this.canProceed()) {
+      return;
+    }
+
+    if (this.step < TOTAL_STEPS - 1) {
+      this.step = this.step + 1;
+      return;
+    }
+    this.finish();
+  }
+
+  private goBack(): void {
+    if (this.step <= 0) {
+      return;
+    }
+    this.step = this.step - 1;
+  }
+
+  private finish(): void {
+    SettingsHelper.markWizardCompleted();
+    NavHelper.prepareForward();
+    router.replaceUrl({ url: 'pages/MainTabs' })
+      .catch((err: Error) => console.error('Wizard finish failed:', JSON.stringify(err)));
+  }
+
+  // ============================================================
+  // STEP 4 — CALCULATION
+  // ============================================================
+
+  private getLanguageOptions(): LanguageOption[] {
+    const en: LanguageOption = {
+      id: AppLanguage.ENGLISH, nativeName: 'English', englishName: 'English'
+    };
+    const zh: LanguageOption = {
+      id: AppLanguage.CHINESE, nativeName: '中文', englishName: 'Chinese'
+    };
+    const ar: LanguageOption = {
+      id: AppLanguage.ARABIC, nativeName: 'العربية', englishName: 'Arabic'
+    };
+    return [en, zh, ar];
+  }
+
+  private pickLanguage(id: string): void {
+    this.selectedLanguage = id;
+    this.appLanguage = id;
+    this.currentLanguage = id;
+    SettingsHelper.saveLanguage(id);
+  }
+
+  private getPrivacyPolicyText(): string {
+    return PrivacyPolicyProvider.get(this.currentLanguage);
+  }
+
+  // ============================================================
+  // HEADER TEXT
+  // ============================================================
+
+  private getThemeOptions(): ThemeOption[] {
+    const current: ThemeOption = {
+      id: ThemePreset.CURRENT,
+      nameKey: 'theme_preset_current',
+      descKey: 'theme_preset_current_desc'
+    };
+    const h7: ThemeOption = {
+      id: ThemePreset.HARMONY_7,
+      nameKey: 'theme_preset_harmony7',
+      descKey: 'theme_preset_harmony7_desc'
+    };
+    const h6: ThemeOption = {
+      id: ThemePreset.HARMONY_6,
+      nameKey: 'theme_preset_harmony6',
+      descKey: 'theme_preset_harmony6_desc'
+    };
+    const h5: ThemeOption = {
+      id: ThemePreset.HARMONY_5,
+      nameKey: 'theme_preset_harmony5',
+      descKey: 'theme_preset_harmony5_desc'
+    };
+    return [current, h7, h6, h5];
+  }
+
+  /**
+   * Applies the theme immediately — both to the persisted setting
+   * and to the wizard's own colours.
+   */
+  private pickAppTheme(id: string): void {
+    this.selectedTheme = id;
+    this.appTheme = id;
+    SettingsHelper.saveAppTheme(id);
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  // ============================================================
+  // BUILD
+  // ============================================================
+
+  /** Preview swatch — accent colour for the current mode. */
+  private themePreviewSwatch(preset: string): string {
+    const preview = Theme.getColors(
+      this.themeMode,
+      PageTheme.isSystemDark(),
+      preset
+    );
+    return preview.accentGold;
+  }
+
+  // ============================================================
+  // PROGRESS HEADER
+  // ============================================================
+
+  /** Preview background — page background for the current mode. */
+  private themePreviewBackground(preset: string): string {
+    const preview = Theme.getColors(
+      this.themeMode,
+      PageTheme.isSystemDark(),
+      preset
+    );
+    return preview.primaryGreen;
+  }
+
+  // ============================================================
+  // STEP 0 — LANGUAGE
+  // ============================================================
+
+  private async requestGpsLocation(): Promise<void> {
+    if (this.isGettingLocation) {
+      return;
+    }
+    this.isGettingLocation = true;
+    this.locationStatus = 'idle';
+    this.detectedCity = '';
+
+    try {
+      const data: LocationData = await LocationHelper.fetchLocationData(getContext(this));
+      await LocationCache.save(data.latitude, data.longitude, data.cityName);
+      SettingsHelper.saveLocationMode(LocationMode.GPS);
+
+      this.detectedCity = data.cityName;
+      this.locationStatus = 'ready';
+    } catch (err) {
+      const error = err as Error;
+      this.locationStatus = 'failed';
+      if (error.message === 'GPS_OFF') {
+        await LocationHelper.showLocationDisabledDialog();
+      } else if (error.message === 'PERMISSION_DENIED') {
+        await LocationHelper.showPermissionDeniedDialog();
+      }
+    } finally {
+      this.isGettingLocation = false;
+    }
+  }
+
+  // ============================================================
+  // STEP 1 — PRIVACY POLICY
+  // ============================================================
+
+  private async saveManualCoords(): Promise<void> {
+    const lat = parseFloat(this.manualLat.trim());
+    const lng = parseFloat(this.manualLng.trim());
+
+    if (isNaN(lat) || lat < -90 || lat > 90) {
+      this.getUIContext().getPromptAction().showToast({
+        message: this.tr('latitude_hint'), duration: 2500
+      });
+      return;
+    }
+    if (isNaN(lng) || lng < -180 || lng > 180) {
+      this.getUIContext().getPromptAction().showToast({
+        message: this.tr('longitude_hint'), duration: 2500
+      });
+      return;
+    }
+
+    this.isGettingLocation = true;
+
+    let cityName = this.manualCity.trim();
+    if (cityName.length === 0) {
+      try {
+        cityName = await LocationHelper.reverseGeocode(lat, lng);
+      } catch (e) {
+      }
+      if (cityName === 'Unknown location' || cityName.length === 0) {
+        cityName = `${lat.toFixed(2)}, ${lng.toFixed(2)}`;
+      }
+    }
+
+    await SettingsHelper.saveManualCoords(lat, lng, cityName);
+    SettingsHelper.saveLocationMode(LocationMode.MANUAL);
+    this.isGettingLocation = false;
+
+    this.detectedCity = cityName;
+    this.locationStatus = 'ready';
+
+    this.getUIContext().getPromptAction().showToast({
+      message: `${this.tr('save')}: ${cityName}`, duration: 2000
+    });
+  }
+
+  // ============================================================
+  // STEP 2 — THEME
+  // ============================================================
+
+  private async selectLocationMode(mode: LocationMode): Promise<void> {
+    this.locationMode = mode;
+    this.locationStatus = 'idle';
+    this.detectedCity = '';
+
+    if (mode === LocationMode.GPS) {
+      return;
+    }
+    SettingsHelper.saveLocationMode(mode);
+  }
+
+  // ============================================================
+  // STEP 3 — LOCATION
+  // ============================================================
+
+  private pickMethod(id: string): void {
+    const method = id as CalculationMethod;
+    this.calcMethod = method;
+    SettingsHelper.saveMethod(method);
+    this.showMethodPicker = false;
+  }
+
+  private pickAsrRule(id: string): void {
+    const rule = Number(id) as AsrShadowRule;
+    this.asrRule = rule;
+    SettingsHelper.saveAsrRule(rule);
+    this.showAsrPicker = false;
+  }
+
+  // ============================================================
+  // STEP 4 — CONVENTION / MADHAB / SOURCE
+  // ============================================================
+
+  private pickSource(id: string): void {
+    const source = id as CalculationSource;
+    if (source === CalculationSource.API) {
+      this.getUIContext().getPromptAction().showToast({
+        message: this.tr('coming_soon'), duration: 1500
+      });
+      return;
+    }
+    this.calcSource = source;
+    SettingsHelper.saveSource(source);
+    this.showSourcePicker = false;
+  }
+
+  // ============================================================
+  // FOOTER
+  // ============================================================
+
+  private stepTitle(): string {
+    if (this.step === 0) {
+      return this.tr('wizard_language_title');
+    }
+    if (this.step === 1) {
+      return this.tr('wizard_privacy_title');
+    }
+    if (this.step === 2) {
+      return this.tr('wizard_theme_title');
+    }
+    if (this.step === 3) {
+      return this.tr('wizard_location_title');
+    }
+    return this.tr('wizard_convention_title');
+  }
+
+  // ============================================================
+  // PICKER OVERLAY
+  // ============================================================
+
+  private stepDescription(): string {
+    if (this.step === 0) {
+      return this.tr('wizard_language_desc');
+    }
+    if (this.step === 1) {
+      return this.tr('wizard_privacy_desc');
+    }
+    if (this.step === 2) {
+      return this.tr('wizard_theme_desc');
+    }
+    if (this.step === 3) {
+      return this.tr('wizard_location_desc');
+    }
+    return this.tr('wizard_convention_desc');
   }
 }

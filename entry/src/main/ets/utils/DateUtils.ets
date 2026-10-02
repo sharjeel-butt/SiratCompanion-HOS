@@ -1,12 +1,10 @@
 // entry/src/main/ets/utils/DateUtils.ets
 
 import { UpcomingImportantDate } from '../models/DateModels';
-import { IMPORTANT_ISLAMIC_EVENTS } from '../data/IslamicEvents';
 
 const MS_PER_DAY = 86400000;
 
 export class DateHelper {
-
   /**
    * Find the next Gregorian date whose app-visible Hijri date matches
    * `targetMonth / targetDay`.
@@ -40,8 +38,12 @@ export class DateHelper {
       let month = 0;
       let day = 0;
       for (const part of parts) {
-        if (part.type === 'month') month = parseInt(part.value, 10);
-        else if (part.type === 'day') day = parseInt(part.value, 10);
+        if (part.type === 'month') {
+          month = parseInt(part.value, 10);
+        } else if (part.type === 'day') {
+          day =
+            parseInt(part.value, 10);
+        }
       }
       if (month === targetMonth && day === targetDay) {
         return testDate;
