@@ -99,6 +99,7 @@ export struct FloatingNavBar {
         .width('100%').height('100%')
       }
       .width('92%')
+      .constraintSize({ maxWidth: 560 })
       .height(68)
       // ---- 1. Ultra-heavy blur ----
       .backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THICK, {

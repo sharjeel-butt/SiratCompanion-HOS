@@ -1,20 +1,19 @@
 // entry/src/main/ets/pages/TasbihPage.ets
 
-import { router, promptAction, AnimatorResult, AnimatorOptions } from '@kit.ArkUI';
-import { mediaquery } from '@kit.ArkUI';
+import { AnimatorOptions, AnimatorResult, mediaquery, promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
-import { ThemeColors, ThemeMode } from '../common/Theme';
+import { ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import { SoundHelper } from '../helper/SoundHelper';
 import {
-  STORAGE_KEY_THEME_MODE,
-  STORAGE_KEY_NAV_DIRECTION,
-  STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_APP_FOREGROUND_TICK,
-  STORAGE_KEY_APP_THEME
+  STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_NAV_DIRECTION,
+  STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
-import { ThemePreset } from '../common/Theme';
-import { Tasbih, Dhikr, DhikrFields, BeadView } from '../models/TasbihModels';
+import { BeadView, Dhikr, DhikrFields, Tasbih } from '../models/TasbihModels';
 import { MAX_BOTTOM_BEADS, TasbihManager } from '../utils/TasbihManager';
 import { TasbihStorage } from '../utils/TasbihStorage';
 import { NavHelper } from '../helper/NavHelper';
@@ -22,17 +21,16 @@ import { HapticHelper } from '../helper/HapticHelper';
 import { SettingsHelper } from '../helper/SettingsHelper';
 import { L } from '../helper/LocalizationHelper';
 import {
-  TasbihThemes,
+  BeadColors,
+  TASBIH_THEME_PRESETS,
+  TasbihColor,
   TasbihTheme,
   TasbihThemePreset,
-  TasbihColor,
-  BeadColors,
-  TASBIH_THEME_PRESETS
+  TasbihThemes
 } from '../common/TasbihThemes';
-import {
-  TasbihCanvasRenderer, BeadRenderStyle, BeadCanvasConfig
-} from '../helper/TasbihCanvasRenderer';
+import { BeadCanvasConfig, BeadRenderStyle, TasbihCanvasRenderer } from '../helper/TasbihCanvasRenderer';
 import { FloatingNavBar } from '../components/FloatingNavBar';
+import { Breakpoints } from '../common/Breakpoints';
 
 const BEAD_SIZE = 28;
 const BEAD_GAP = 7;
@@ -76,6 +74,9 @@ struct TasbihPage {
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
+  @StorageLink(STORAGE_KEY_BREAKPOINT)
+  breakpoint: string = 'sm';
+
 
   @State private currentLanguage: string = 'en';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
@@ -215,6 +216,10 @@ struct TasbihPage {
     this.colors = PageTheme.compute(this.themeMode);
     this.resolveActiveTheme();
     this.refreshBeadView();
+  }
+
+  private isTablet(): boolean {
+    return Breakpoints.isTablet(this.breakpoint);
   }
 
   onBackPress(): boolean {
@@ -884,7 +889,12 @@ struct TasbihPage {
           .layoutWeight(1)
           .height('100%')
           .alignItems(HorizontalAlign.Start)
-          .padding({ left: 24, right: 8, top: 16, bottom: 110 })
+          .padding({
+            left: this.isTablet() ? 48 : 24,
+            right: 8,
+            top: 16,
+            bottom: 110
+          })
 
           if (this.renderStyle === 'classic') {
             this.BeadStringColumnClassic()
@@ -1017,18 +1027,18 @@ struct TasbihPage {
           this.drawCanvasBeads();
         })
         .onAreaChange((oldArea: Area, newArea: Area) => {
-          const w = Number(newArea.width);
-          const h = Number(newArea.height);
-          if (w > 0 && h > 0) {
+          const w = parseFloat(String(newArea.width));
+          const h = parseFloat(String(newArea.height));
+          if (!isNaN(w) && w > 0 && h > 0) {
             this.canvasWidth = w;
             this.canvasHeight = h;
             this.drawCanvasBeads();
           }
         })
     }
-    .width(72)
+    .width(this.isTablet() ? 120 : 72)
     .height('100%')
-    .padding({ top: 16, bottom: 110, right: 40 })
+    .padding({ top: 16, bottom: 110, right: this.isTablet() ? 60 : 40 })
     .direction(Direction.Ltr)
   }
 

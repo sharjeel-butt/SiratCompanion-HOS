@@ -3,21 +3,20 @@
 import { mediaquery, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { pasteboard } from '@kit.BasicServicesKit';
-import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
+import { ThemeColors, ThemeMode } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import { AsrShadowRule, CalculationMethod, HighLatitudeRule } from '../utils/PrayerTimeCalculator';
-import { NotificationsSettings, PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
+import { PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
 import { LocationData, LocationHelper } from '../utils/LocationUtils';
 import { LocationCache } from '../utils/LocationCache';
 import { CalculationSource, LocationMode, PickerItem } from '../models/SettingsModels';
 import {
-  STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_APP_FOREGROUND_TICK,
+  STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
-  STORAGE_KEY_APP_FOREGROUND_TICK,
-  STORAGE_KEY_APP_THEME
+  STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
-import { ThemePreset } from '../common/Theme';
 import { OffsetKey, PrayerOffsetsHelper } from '../helper/PrayerOffsetsHelper';
 import {
   MAX_BEFORE_MINUTES,
@@ -26,11 +25,9 @@ import {
   STEP_BEFORE_MINUTES
 } from '../helper/NotificationHelper';
 import { AppLogger } from '../helper/AppLogger';
-import { L } from '../helper/LocalizationHelper';
 import { AppInfoHelper, AppInfoSnapshot } from '../helper/AppInfoHelper';
-import { NOTIFICATIONS_ENABLED } from '../common/FeatureFlags';
-import { bundleManager } from '@kit.AbilityKit';
-import { BusinessError } from '@kit.BasicServicesKit';
+import { L } from '../helper/LocalizationHelper';
+import { Breakpoints } from '../common/Breakpoints';
 
 const MAX_HIJRI_OFFSET = 3;
 
@@ -39,15 +36,12 @@ const MAX_HIJRI_OFFSET = 3;
 struct SettingsPage {
 
   // ============================================================
-  // THEME + LANGUAGE
+  // THEME + LANGUAGE + FOREGROUND + BREAKPOINT
   // ============================================================
 
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
-  @StorageLink(STORAGE_KEY_APP_THEME)
-  @Watch('onAppThemePresetChanged')
-  appThemePreset: string = ThemePreset.CURRENT;
 
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
@@ -55,9 +49,12 @@ struct SettingsPage {
 
   @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
   hijriOffset: number = 0;
+
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
+  @StorageLink(STORAGE_KEY_BREAKPOINT)
+  breakpoint: string = 'sm';
 
   @State private currentLanguage: string = 'en';
 
@@ -72,8 +69,6 @@ struct SettingsPage {
   @State asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
   @State calcSource: CalculationSource = CalculationSource.LOCAL;
   @State highLatRule: HighLatitudeRule = HighLatitudeRule.NONE;
-  @State private appVersion: string = '';
-  @State private appName: string = '';
 
   @State showOffsets: boolean = false;
   @State offsets: PrayerOffsets = { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 };
@@ -88,8 +83,9 @@ struct SettingsPage {
   @State effectiveCity: string = '';
   @State lastRefreshTime: number = 0;
   @State isRefreshing: boolean = false;
+
   // ============================================================
-  // NOTIFICATIONS (kept in place; UI hidden while disabled)
+  // NOTIFICATIONS
   // ============================================================
 
   @State notifMaster: boolean = false;
@@ -100,14 +96,9 @@ struct SettingsPage {
   @State notifMaghrib: boolean = true;
   @State notifIsha: boolean = true;
   @State notifDiagnostic: string = '';
-  // ============================================================
-  // LOG VIEWER
-  // ============================================================
 
-  @State showLogViewer: boolean = false;
-  @State logContents: string = '';
   // ============================================================
-  // APP INFO (from app.json5 via bundleManager)
+  // APP INFO
   // ============================================================
 
   @State private appInfo: AppInfoSnapshot = {
@@ -116,6 +107,13 @@ struct SettingsPage {
     versionCode: 0,
     bundleName: '—'
   };
+  // ============================================================
+  // LOG VIEWER
+  // ============================================================
+
+  @State showLogViewer: boolean = false;
+  @State logContents: string = '';
+
   // ============================================================
   // UI STATE
   // ============================================================
@@ -126,11 +124,8 @@ struct SettingsPage {
   @State showSourcePicker: boolean = false;
   @State showHighLatPicker: boolean = false;
 
-  private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-  }
   // ============================================================
-  // LOCALIZATION
+  // LOCALIZATION + BREAKPOINT HELPERS
   // ============================================================
 
   private tr(key: string): string {
@@ -139,6 +134,10 @@ struct SettingsPage {
 
   private isRtl(): boolean {
     return L.isRtlLang(this.currentLanguage);
+  }
+
+  private isTablet(): boolean {
+    return Breakpoints.isTablet(this.breakpoint);
   }
 
   // ============================================================
@@ -151,6 +150,12 @@ struct SettingsPage {
 
   private onLanguageChanged(): void {
     this.currentLanguage = this.appLanguage;
+  }
+
+  private async onAppForegrounded(): Promise<void> {
+    const ctx = getContext(this) as common.UIAbilityContext;
+    this.appInfo = AppInfoHelper.get(ctx);
+    await this.reload();
   }
 
   // ============================================================
@@ -176,14 +181,7 @@ struct SettingsPage {
   onPageShow(): void {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
-    this.loadAppInfo();
     this.reload();
-  }
-
-  private async onAppForegrounded(): Promise<void> {
-    const ctx = getContext(this) as common.UIAbilityContext;
-    this.appInfo = AppInfoHelper.get(ctx);
-    await this.reload();
   }
 
   private async reload(): Promise<void> {
@@ -195,19 +193,14 @@ struct SettingsPage {
 
     this.offsets = await SettingsHelper.getPrayerOffsets();
 
-    // Notification settings are only loaded when the feature is enabled.
-    // When NOTIFICATIONS_ENABLED is false, the Notifications category
-    // is hidden in build(), so there is nothing to reflect in the UI.
-    if (NOTIFICATIONS_ENABLED) {
-      const ns = await SettingsHelper.getNotificationSettings();
-      this.notifMaster = ns.masterEnabled;
-      this.notifBefore = ns.beforeMinutes;
-      this.notifFajr = ns.fajrEnabled;
-      this.notifDhuhr = ns.dhuhrEnabled;
-      this.notifAsr = ns.asrEnabled;
-      this.notifMaghrib = ns.maghribEnabled;
-      this.notifIsha = ns.ishaEnabled;
-    }
+    const ns = await SettingsHelper.getNotificationSettings();
+    this.notifMaster = ns.masterEnabled;
+    this.notifBefore = ns.beforeMinutes;
+    this.notifFajr = ns.fajrEnabled;
+    this.notifDhuhr = ns.dhuhrEnabled;
+    this.notifAsr = ns.asrEnabled;
+    this.notifMaghrib = ns.maghribEnabled;
+    this.notifIsha = ns.ishaEnabled;
 
     const mode = await SettingsHelper.getLocationMode();
     this.locationMode = mode;
@@ -240,37 +233,6 @@ struct SettingsPage {
         this.effectiveCity = '—';
         this.lastRefreshTime = 0;
       }
-    }
-  }
-
-  private loadAppInfo(): void {
-    // ---- Version name from bundle info ----
-    try {
-      const info = bundleManager.getBundleInfoForSelfSync(
-        bundleManager.BundleFlag.GET_BUNDLE_INFO_DEFAULT
-      );
-      this.appVersion = info.versionName;
-    } catch (err) {
-      const error = err as BusinessError;
-      console.error(
-        `[SettingsPage] getBundleInfoForSelfSync failed: ${error.code} ${error.message}`
-      );
-      this.appVersion = '1.4.1'; // safe fallback
-    }
-
-    // ---- App name resolved from AppScope's $string:app_name ----
-    try {
-      const context = getContext(this) as common.UIAbilityContext;
-      this.appName = context.resourceManager.getStringSync(
-        $r('app.string.app_name').id
-      );
-    } catch (err) {
-      const error = err as BusinessError;
-      console.warn(
-        `[SettingsPage] Could not resolve app_name: ${error.code} ${error.message}`
-      );
-      // Fall back to the localization helper
-      this.appName = this.tr('app_name');
     }
   }
 
@@ -430,7 +392,7 @@ struct SettingsPage {
         this.isRefreshing = false;
         return;
       }
-      let cityName = 'Manual Location';
+      let cityName = this.tr('manual_location');
       try { cityName = await LocationHelper.reverseGeocode(manual.lat, manual.lng); } catch (e) { }
       const saved = await SettingsHelper.saveManualCoords(manual.lat, manual.lng, cityName);
       this.effectiveLat = saved.lat;
@@ -497,18 +459,9 @@ struct SettingsPage {
 
   // ============================================================
   // NOTIFICATION HANDLERS
-  //
-  // These remain in place so that re-enabling notifications
-  // (by flipping NOTIFICATIONS_ENABLED in FeatureFlags.ets) does
-  // not require any code changes here. They are currently
-  // unreachable because the Notifications category is hidden
-  // in build().
   // ============================================================
 
   private async sendTestNotification(): Promise<void> {
-    if (!NOTIFICATIONS_ENABLED) {
-      return;
-    }
     const ctx = getContext(this) as common.UIAbilityContext;
 
     const granted = await NotificationHelper.isPermissionGranted();
@@ -543,9 +496,6 @@ struct SettingsPage {
   }
 
   private async toggleNotifMaster(value: boolean): Promise<void> {
-    if (!NOTIFICATIONS_ENABLED) {
-      return;
-    }
     if (value) {
       const ctx = getContext(this) as common.UIAbilityContext;
       const granted = await NotificationHelper.requestPermission(ctx);
@@ -564,9 +514,6 @@ struct SettingsPage {
   }
 
   private async changeNotifBefore(delta: number): Promise<void> {
-    if (!NOTIFICATIONS_ENABLED) {
-      return;
-    }
     let next = this.notifBefore + delta;
     if (next < MIN_BEFORE_MINUTES) {
       next = MIN_BEFORE_MINUTES;
@@ -584,9 +531,6 @@ struct SettingsPage {
   }
 
   private async toggleNotifPrayer(prayerId: string, value: boolean): Promise<void> {
-    if (!NOTIFICATIONS_ENABLED) {
-      return;
-    }
     switch (prayerId) {
       case 'fajr':
         this.notifFajr = value;
@@ -679,24 +623,20 @@ struct SettingsPage {
         this.TopBar()
 
         Scroll() {
-          Column() {
-            // ---- Prayer Times ----
-            this.CategoryHeader(
-              this.tr('category_prayer_times'),
-              '🕌',
-              this.colors.categoryPrayerTimes,
-              'Prayer Times'
-            )
-            if (this.expandedCategory === 'Prayer Times') {
-              this.PrayerTimesContent()
-            }
+          Row() {
+            Column() {
+              // ---- Prayer Times ----
+              this.CategoryHeader(
+                this.tr('category_prayer_times'),
+                '🕌',
+                this.colors.categoryPrayerTimes,
+                'Prayer Times'
+              )
+              if (this.expandedCategory === 'Prayer Times') {
+                this.PrayerTimesContent()
+              }
 
-            // ---- Notifications ----
-            // Hidden while the Agent-Powered Reminder capability is
-            // pending approval in AppGallery Connect. Flip
-            // NOTIFICATIONS_ENABLED in common/FeatureFlags.ets to
-            // restore this entire section.
-            if (NOTIFICATIONS_ENABLED) {
+              // ---- Notifications ----
               this.CategoryHeader(
                 this.tr('category_notifications'),
                 '🔔',
@@ -706,34 +646,37 @@ struct SettingsPage {
               if (this.expandedCategory === 'Notifications') {
                 this.NotificationsContent()
               }
-            }
 
-            // ---- Hijri Calendar ----
-            this.CategoryHeader(
-              this.tr('category_hijri_calendar'),
-              '📅',
-              this.colors.categoryHijriCalendar,
-              'Hijri Calendar'
-            )
-            if (this.expandedCategory === 'Hijri Calendar') {
-              this.HijriCalendarContent()
-            }
+              // ---- Hijri Calendar ----
+              this.CategoryHeader(
+                this.tr('category_hijri_calendar'),
+                '📅',
+                this.colors.categoryHijriCalendar,
+                'Hijri Calendar'
+              )
+              if (this.expandedCategory === 'Hijri Calendar') {
+                this.HijriCalendarContent()
+              }
 
-            // ---- About ----
-            this.CategoryHeader(
-              this.tr('category_about'),
-              'ℹ️',
-              this.colors.categoryAbout,
-              'About'
-            )
-            if (this.expandedCategory === 'About') {
-              this.AboutContent()
-            }
+              // ---- About ----
+              this.CategoryHeader(
+                this.tr('category_about'),
+                'ℹ️',
+                this.colors.categoryAbout,
+                'About'
+              )
+              if (this.expandedCategory === 'About') {
+                this.AboutContent()
+              }
 
-            Column().height(40)
+              Column().height(40)
+            }
+            .width('100%')
+            .constraintSize({ maxWidth: this.isTablet() ? 720 : 100000 })
+            .padding({ left: 16, right: 16, top: 20 })
           }
           .width('100%')
-          .padding({ left: 16, right: 16, top: 20 })
+          .justifyContent(FlexAlign.Center)
         }
         .layoutWeight(1)
         .width('100%')
@@ -782,9 +725,6 @@ struct SettingsPage {
       }
 
       // ---- Log viewer overlay ----
-      // The log viewer remains accessible even when notifications are
-      // disabled, because AppLogger is still initialized at app start
-      // and other diagnostics may still write to it.
       if (this.showLogViewer) {
         this.LogViewerSheet()
       }
@@ -1119,10 +1059,6 @@ struct SettingsPage {
 
   // ============================================================
   // NOTIFICATIONS
-  //
-  // This builder is only reachable when NOTIFICATIONS_ENABLED is
-  // true. The code is preserved verbatim so re-enabling the feature
-  // requires no changes here.
   // ============================================================
 
   @Builder
@@ -1423,7 +1359,6 @@ struct SettingsPage {
   AboutContent() {
     Column() {
       Column() {
-        // App name + tagline
         Text(this.appInfo.name)
           .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
         Text(this.tr('app_tagline'))
@@ -1431,7 +1366,6 @@ struct SettingsPage {
 
         Divider().color(this.colors.borderSoft).width('80%').margin({ top: 14, bottom: 14 })
 
-        // Version — pulled from app.json5 → versionName
         Row() {
           Text(this.tr('about_version'))
             .fontSize(13).fontColor(this.colors.textMuted)
@@ -1442,7 +1376,6 @@ struct SettingsPage {
         }
         .width('100%').padding({ left: 8, right: 8 }).margin({ top: 6 })
 
-        // Build — pulled from app.json5 → versionCode
         Row() {
           Text(this.tr('about_build'))
             .fontSize(13).fontColor(this.colors.textMuted)
@@ -1453,7 +1386,6 @@ struct SettingsPage {
         }
         .width('100%').padding({ left: 8, right: 8 }).margin({ top: 6 })
 
-        // Bundle id
         Row() {
           Text(this.tr('about_bundle'))
             .fontSize(13).fontColor(this.colors.textMuted)
@@ -1467,7 +1399,6 @@ struct SettingsPage {
         }
         .width('100%').padding({ left: 8, right: 8 }).margin({ top: 6 })
 
-        // Platform
         Row() {
           Text(this.tr('about_platform'))
             .fontSize(13).fontColor(this.colors.textMuted)
@@ -1477,7 +1408,6 @@ struct SettingsPage {
         }
         .width('100%').padding({ left: 8, right: 8 }).margin({ top: 6 })
 
-        // Copyright
         Row() {
           Text(this.tr('about_copyright'))
             .fontSize(13).fontColor(this.colors.textMuted)
@@ -1541,7 +1471,6 @@ struct SettingsPage {
       })
       .alignItems(VerticalAlign.Center)
 
-      // Log file path
       Text(AppLogger.getPath())
         .fontSize(10)
         .fontColor(this.colors.textMuted)
@@ -1552,7 +1481,6 @@ struct SettingsPage {
 
       Divider().color(this.colors.borderSoft).width('90%')
 
-      // Log contents
       Column() {
         Scroll() {
           Text(this.logContents.length > 0 ? this.logContents : this.tr('log_empty'))
@@ -1575,7 +1503,6 @@ struct SettingsPage {
       .width('100%')
       .padding({ left: 20, right: 20, top: 12 })
 
-      // Action buttons
       Row() {
         Button(this.tr('log_copy'))
           .layoutWeight(1)
