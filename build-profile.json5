@@ -32,12 +32,14 @@
       {
         "name": "default",
         "signingConfig": "debug",
+        "compileSdkVersion": "26.0.0",
         "compatibleSdkVersion": "6.0.0(20)",
-        "targetSdkVersion": "6.0.2(22)",
+        "targetSdkVersion": "26.0.0",
         "runtimeOS": "HarmonyOS",
         "buildOption": {
           "strictMode": {
             "caseSensitiveCheck": true,
+            "apiCompatibilityCheck": "warn",
             "useNormalizedOHMUrl": true
           }
         }
@@ -45,12 +47,14 @@
       {
         "name": "release-app",
         "signingConfig": "release",
+        "compileSdkVersion": "26.0.0",
         "compatibleSdkVersion": "6.0.0(20)",
-        "targetSdkVersion": "6.0.2(22)",
+        "targetSdkVersion": "26.0.0",
         "runtimeOS": "HarmonyOS",
         "buildOption": {
           "strictMode": {
             "caseSensitiveCheck": true,
+            "apiCompatibilityCheck": "warn",
             "useNormalizedOHMUrl": true
           }
         }

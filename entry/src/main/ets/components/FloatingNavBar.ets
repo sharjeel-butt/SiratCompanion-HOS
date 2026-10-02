@@ -19,7 +19,6 @@ import { L } from '../helper/LocalizationHelper';
  */
 @Component
 export struct FloatingNavBar {
-
   @Prop activeTab: string = 'home';
   @Prop colors: ThemeColors;
   @Prop currentLanguage: string = 'en';
@@ -28,49 +27,6 @@ export struct FloatingNavBar {
 
   // ============================================================
   // THEME HELPERS
-  // ============================================================
-
-  private isDark(): boolean {
-    return PageTheme.isSystemDark();
-  }
-
-  /** Outer 1.5 px border colour — the sharp glass edge. */
-  private outerBorder(): string {
-    return this.isDark()
-      ? 'rgba(255, 255, 255, 0.30)'
-      : 'rgba(255, 255, 255, 0.92)';
-  }
-
-  /** Inner 1 px border colour — the softer highlight ring. */
-  private innerBorder(): string {
-    return this.isDark()
-      ? 'rgba(255, 255, 255, 0.12)'
-      : 'rgba(255, 255, 255, 0.50)';
-  }
-
-  /** Fill colour behind the blur. */
-  private fillColor(): string {
-    return this.isDark()
-      ? 'rgba(20, 27, 46, 0.24)'
-      : 'rgba(255, 255, 255, 0.20)';
-  }
-
-  private inactiveColor(): string {
-    return this.isDark() ? 'rgba(241,245,249,0.78)' : 'rgba(26,26,26,0.70)';
-  }
-
-  private activeColor(): string {
-    return this.isDark() ? '#4ADE80' : '#0F5132';
-  }
-
-  private dividerColor(): string {
-    return this.isDark()
-      ? 'rgba(255,255,255,0.10)'
-      : 'rgba(0,0,0,0.08)';
-  }
-
-  // ============================================================
-  // BUILD
   // ============================================================
 
   build() {
@@ -126,10 +82,6 @@ export struct FloatingNavBar {
     .position({ bottom: 24 })
   }
 
-  // ============================================================
-  // NAV ITEM
-  // ============================================================
-
   @Builder
   NavItem(id: string, icon: string, label: string) {
     Column() {
@@ -149,5 +101,52 @@ export struct FloatingNavBar {
     .onClick(() => {
       this.onTabTap(id);
     })
+  }
+
+  private isDark(): boolean {
+    return PageTheme.isSystemDark();
+  }
+
+  /** Outer 1.5 px border colour — the sharp glass edge. */
+  private outerBorder(): string {
+    return this.isDark()
+      ? 'rgba(255, 255, 255, 0.30)'
+      : 'rgba(255, 255, 255, 0.92)';
+  }
+
+  /** Inner 1 px border colour — the softer highlight ring. */
+  private innerBorder(): string {
+    return this.isDark()
+      ? 'rgba(255, 255, 255, 0.12)'
+      : 'rgba(255, 255, 255, 0.50)';
+  }
+
+  /** Fill colour behind the blur. */
+  private fillColor(): string {
+    return this.isDark()
+      ? 'rgba(20, 27, 46, 0.24)'
+      : 'rgba(255, 255, 255, 0.20)';
+  }
+
+  private inactiveColor(): string {
+    return this.isDark() ? 'rgba(241,245,249,0.78)' : 'rgba(26,26,26,0.70)';
+  }
+
+  // ============================================================
+  // BUILD
+  // ============================================================
+
+  private activeColor(): string {
+    return this.isDark() ? '#4ADE80' : '#0F5132';
+  }
+
+  // ============================================================
+  // NAV ITEM
+  // ============================================================
+
+  private dividerColor(): string {
+    return this.isDark()
+      ? 'rgba(255,255,255,0.10)'
+      : 'rgba(0,0,0,0.08)';
   }
 }

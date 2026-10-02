@@ -22,12 +22,12 @@ import { ThemeMode, ThemePreset } from '../common/Theme';
 import { AppLogger } from '../helper/AppLogger';
 import { PrayerManager } from '../utils/PrayerManager';
 import { LayoutHelper } from '../helper/LayoutHelper';
+import { MaterialHelper } from '../helper/MaterialHelper';
 
 /** How long the splash stays visible, in milliseconds. */
 const SPLASH_DELAY_MS = 1500;
 
 export default class EntryAbility extends UIAbility {
-
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     hilog.info(0x0000, 'Sirat', '%{public}s', 'EntryAbility onCreate');
 
@@ -75,7 +75,7 @@ export default class EntryAbility extends UIAbility {
         STORAGE_KEY_VIBRATION_ENABLED, true
       );
       AppStorage.setOrCreate(STORAGE_KEY_VIBRATION_ENABLED, vibrationEnabled);
-
+      MaterialHelper.logCapability();
       // Load the persisted prayer-state map into memory so every
       // subsequent read/write is synchronous.
       await PrayerManager.primeStateMap();
@@ -85,7 +85,7 @@ export default class EntryAbility extends UIAbility {
       const wizardDone = await PreferencesHelper.getBoolean(
         STORAGE_KEY_WIZARD_COMPLETED, false
       );
-      const startPage = wizardDone ? 'pages/HomePage' : 'pages/WizardPage';
+      const startPage = wizardDone ? 'pages/MainTabs' : 'pages/WizardPage';
 
       // Initialize the Tasbih sound player (non-blocking).
       SoundHelper.init(this.context).catch((e: Error) => {

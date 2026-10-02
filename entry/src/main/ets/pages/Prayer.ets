@@ -2,7 +2,7 @@
 
 import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
+import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import { ExtraTiming, PrayerModel } from '../models/PrayerModel';
 import { DateHelper } from '../utils/DateUtils';
@@ -12,15 +12,13 @@ import { UpcomingImportantDate } from '../models/DateModels';
 import { PrayerManager } from '../utils/PrayerManager';
 import { PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
 import { CalculationSource, LocationMode } from '../models/SettingsModels';
-import { Breakpoints } from '../common/Breakpoints';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
-  STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
-  STORAGE_KEY_NAV_DIRECTION,
+  STORAGE_KEY_PRAYER_STATE_VERSION,
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
 import { HomeController } from '../utils/HomeController';
@@ -28,9 +26,9 @@ import { AsrShadowRule, CalculationMethod, HighLatitudeRule } from '../utils/Pra
 import { NavHelper } from '../helper/NavHelper';
 import { TimezoneResolver } from '../utils/TimezoneResolver';
 import { L } from '../helper/LocalizationHelper';
-import { FloatingNavBar } from '../components/FloatingNavBar';
 import { PageHeader } from '../components/PageHeader';
 import { PrayerSunPath } from '../components/PrayerSunPath';
+import { Breakpoints } from '../common/Breakpoints';
 
 interface DialogResult {
   index: number;
@@ -47,20 +45,12 @@ interface TimelineRow {
 
 const NIGHT_EXTRA_IDS: string[] = ['firstThird', 'midnight', 'lastThird'];
 
-@Entry
 @Component
-struct Prayer {
-
-  // ============================================================
-  // STORAGE LINKS
-  // ============================================================
+export struct Prayer {
 
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
-
-  @StorageLink(STORAGE_KEY_NAV_DIRECTION)
-  navDirection: string = 'forward';
 
   @StorageLink(STORAGE_KEY_LOCATION_VERSION)
   @Watch('onLocationVersionChanged')
@@ -69,25 +59,22 @@ struct Prayer {
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChangedInHome')
   appLanguage: string = 'en';
-  @StorageLink(STORAGE_KEY_APP_THEME)
-  @Watch('onAppThemePresetChanged')
-  appThemePreset: string = ThemePreset.CURRENT;
+  @StorageLink(STORAGE_KEY_PRAYER_STATE_VERSION)
+  prayerStateVersion: number = 0;
 
   @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
   @Watch('onHijriOffsetChangedInHome')
   hijriOffset: number = 0;
+
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
+
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
 
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
-
-  // ============================================================
-  // STATE
-  // ============================================================
 
   @State currentLocation: string = 'Loading...';
   @State isLoadingLocation: boolean = true;
@@ -131,6 +118,7 @@ struct Prayer {
   @State offsets: PrayerOffsets = { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 };
 
   @State showExtraTimings: boolean = true;
+  @State showIslamicEvents: boolean = true;
   @State showBottomSheet: boolean = false;
   @State private isRefreshingHome: boolean = false;
   @State highLatRule: HighLatitudeRule = HighLatitudeRule.NONE;
@@ -139,20 +127,20 @@ struct Prayer {
   private settingsLoaded: boolean = false;
   private settingsLoading: boolean = false;
 
-  // ============================================================
-  // LOCALIZATION HELPERS
-  // ============================================================
-
   private tr(key: string): string {
     return L.get(key, this.appLanguage);
   }
 
-  private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-  }
-
   private isRtl(): boolean {
     return L.isRtlLang(this.appLanguage);
+  }
+
+  private isTablet(): boolean {
+    return Breakpoints.isTablet(this.breakpoint);
+  }
+
+  private isDarkMode(): boolean {
+    return PageTheme.isDarkFor(this.themeMode);
   }
 
   private translatePrayerName(raw: string): string {
@@ -165,10 +153,6 @@ struct Prayer {
       case 'Jummah':  return this.tr('prayer_jummah');
       default:        return raw;
     }
-  }
-
-  private isTablet(): boolean {
-    return Breakpoints.isTablet(this.breakpoint);
   }
 
   private translateTimingName(raw: string): string {
@@ -189,14 +173,14 @@ struct Prayer {
     return this.translateTimingName(raw);
   }
 
-  // ============================================================
-  // THEME HANDLERS
-  // ============================================================
-
-  private isDarkMode(): boolean {
-    if (this.themeMode === ThemeMode.DARK) return true;
-    if (this.themeMode === ThemeMode.LIGHT) return false;
-    return PageTheme.isSystemDark();
+  private translateUpcomingEventName(e: UpcomingImportantDate): string {
+    if (e.key && e.key.length > 0) {
+      const translated = this.tr('event_' + e.key);
+      if (translated !== 'event_' + e.key) {
+        return translated;
+      }
+    }
+    return e.name;
   }
 
   private onThemeModeChanged(): void {
@@ -219,15 +203,19 @@ struct Prayer {
   }
 
   private async onLanguageChangedInHome(): Promise<void> {
-    // Notifications disabled pending AGC capability approval.
+    // Notifications disabled pending AGC approval.
   }
 
   private onHijriOffsetChangedInHome(): void {
     this.refreshHijriDates();
+    this.upcomingImportantDates =
+      DateHelper.getUpcomingImportantDates(this.hijriOffset);
   }
 
   private async onAppForegrounded(): Promise<void> {
     this.refreshHijriDates();
+    this.upcomingImportantDates =
+      DateHelper.getUpcomingImportantDates(this.hijriOffset);
 
     if (this.dateOffset === 0) {
       const now = new Date();
@@ -248,33 +236,17 @@ struct Prayer {
     this.refreshPrayerTimes();
   }
 
-  // ============================================================
-  // PAGE TRANSITION
-  // ============================================================
-
-  pageTransition() {
-    PageTransitionEnter({ type: RouteType.Push, duration: 300, curve: Curve.Friction })
-      .slide(this.navDirection === 'forward' ? SlideEffect.Right : SlideEffect.Left)
-    PageTransitionExit({ type: RouteType.Push, duration: 300, curve: Curve.Friction })
-      .slide(this.navDirection === 'forward' ? SlideEffect.Left : SlideEffect.Right)
-
-    PageTransitionEnter({ type: RouteType.Pop, duration: 300, curve: Curve.Friction })
-      .slide(SlideEffect.Left)
-    PageTransitionExit({ type: RouteType.Pop, duration: 300, curve: Curve.Friction })
-      .slide(SlideEffect.Right)
-  }
-
-  // ============================================================
-  // LIFECYCLE
-  // ============================================================
-
   aboutToAppear(): void {
     this.colors = PageTheme.compute(this.themeMode);
-    this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
+    this.systemDarkListener = PageTheme.installSystemListener(
+      this.themeMode, (c) => {
       this.colors = c;
-    });
+    }
+    );
 
     this.refreshHijriDates();
+    this.upcomingImportantDates =
+      DateHelper.getUpcomingImportantDates(this.hijriOffset);
 
     this.refreshViewingDate(true);
     this.initialize();
@@ -316,11 +288,6 @@ struct Prayer {
     this.refreshHijriDates();
   }
 
-  onBackPress(): boolean {
-    NavHelper.prepareBackward();
-    return false;
-  }
-
   private async initialize(): Promise<void> {
     await this.loadSettingsAndLocation();
   }
@@ -330,7 +297,6 @@ struct Prayer {
       clearInterval(this.statusTimerId);
       this.statusTimerId = -1;
     }
-
     this.statusTimerId = setInterval(() => {
       if (this.dateOffset === 0) {
         this.prayers = PrayerManager.updateStatuses(
@@ -340,10 +306,6 @@ struct Prayer {
       this.updateTodayHeaderData();
     }, 60000);
   }
-
-  // ============================================================
-  // HIJRI DATE HELPERS
-  // ============================================================
 
   private refreshHijriDates(): void {
     const today = new Date();
@@ -357,20 +319,12 @@ struct Prayer {
     this.viewingHijriDate = DateHelper.getFormattedHijriDateFor(shiftedViewed);
   }
 
-  // ============================================================
-  // OFFSET LOOKUP
-  // ============================================================
-
   private getLocationOffsetHours(): number {
     if (this.latitude === 0 && this.longitude === 0) return 0;
     return TimezoneResolver.effectiveOffsetForLocation(
       this.latitude, this.longitude, new Date()
     );
   }
-
-  // ============================================================
-  // DATE NAVIGATION
-  // ============================================================
 
   private refreshViewingDate(skipReload: boolean = false): void {
     const d = new Date();
@@ -393,12 +347,28 @@ struct Prayer {
     }
   }
 
-  private goToNextDay(): void { this.dateOffset += 1; this.refreshViewingDate(); }
-  private goToPreviousDay(): void { this.dateOffset -= 1; this.refreshViewingDate(); }
+  private goToNextDay(): void {
+    this.dateOffset += 1;
+    this.refreshViewingDate();
+  }
 
-  // ============================================================
-  // SETTINGS + LOCATION
-  // ============================================================
+  private goToPreviousDay(): void {
+    this.dateOffset -= 1;
+    this.refreshViewingDate();
+  }
+
+  /**
+   * Snap the view back to today. Only meaningful when viewing a past
+   * or future day; guarded so a redundant tap does not trigger an
+   * unnecessary reload.
+   */
+  private goToToday(): void {
+    if (this.dateOffset === 0) {
+      return;
+    }
+    this.dateOffset = 0;
+    this.refreshViewingDate();
+  }
 
   private async loadSettingsAndLocation(): Promise<void> {
     if (this.settingsLoading) return;
@@ -413,6 +383,7 @@ struct Prayer {
       this.calcSource = data.source;
       this.locationMode = mode;
       this.showExtraTimings  = data.showExtraTimings;
+      this.showIslamicEvents = data.showIslamicEvents;
       this.offsets = await SettingsHelper.getPrayerOffsets();
       this.highLatRule = await SettingsHelper.getHighLatRule();
 
@@ -437,10 +408,6 @@ struct Prayer {
       this.settingsLoading = false;
     }
   }
-
-  // ============================================================
-  // PRAYER CALCULATION
-  // ============================================================
 
   private refreshPrayerTimes(): void {
     if (this.calcSource !== CalculationSource.LOCAL) return;
@@ -471,10 +438,6 @@ struct Prayer {
     this.todayNextPrayerName = hdr.nextName;
     this.todayNextPrayerTime = hdr.nextTime;
   }
-
-  // ============================================================
-  // COMBINED TIMELINE
-  // ============================================================
 
   private buildCombinedTimeline(): TimelineRow[] {
     const rows: TimelineRow[] = [];
@@ -521,9 +484,6 @@ struct Prayer {
       }
     }
 
-    // Sort by time; on a tie, put extras before prayers.
-    // This guarantees "Sunset" appears above "Maghrib" when their
-    // times coincide (they usually do — Maghrib == Sunset).
     rows.sort((a: TimelineRow, b: TimelineRow): number => {
       if (a.sortMinutes !== b.sortMinutes) {
         return a.sortMinutes - b.sortMinutes;
@@ -535,32 +495,11 @@ struct Prayer {
     return rows;
   }
 
-  private getSunriseTime(): string {
-    for (const t of this.extraTimings) {
-      if (t.id === 'sunrise') {
-        return t.time;
-      }
-    }
-    return '--:--';
-  }
-
-  private getSunsetTime(): string {
-    for (const t of this.extraTimings) {
-      if (t.id === 'sunset') {
-        return t.time;
-      }
-    }
-    return '--:--';
-  }
-
-  // ============================================================
-  // GPS
-  // ============================================================
-
   private async fetchLocationInBackground(): Promise<void> {
     if (this.locationMode === LocationMode.MANUAL) return;
     try {
-      const data: LocationData = await LocationHelper.fetchLocationData(getContext(this));
+      const data: LocationData =
+        await LocationHelper.fetchLocationData(getContext(this));
       this.latitude = data.latitude;
       this.longitude = data.longitude;
       this.currentLocation = data.cityName;
@@ -591,7 +530,10 @@ struct Prayer {
           return;
         }
         let cityName = this.tr('manual_location');
-        try { cityName = await LocationHelper.reverseGeocode(manual.lat, manual.lng); } catch (e) { }
+        try {
+          cityName = await LocationHelper.reverseGeocode(manual.lat, manual.lng);
+        } catch (e) { /* fall through */
+        }
         await SettingsHelper.saveManualCoords(manual.lat, manual.lng, cityName);
         this.latitude = manual.lat;
         this.longitude = manual.lng;
@@ -607,7 +549,8 @@ struct Prayer {
     }
 
     try {
-      const data: LocationData = await LocationHelper.fetchLocationData(getContext(this));
+      const data: LocationData =
+        await LocationHelper.fetchLocationData(getContext(this));
       this.latitude = data.latitude;
       this.longitude = data.longitude;
       this.currentLocation = data.cityName;
@@ -626,18 +569,12 @@ struct Prayer {
     }
   }
 
-  // ============================================================
-  // SWIPE-TO-REFRESH
-  // ============================================================
-
   private async handleHomeRefresh(): Promise<void> {
     try {
       await this.loadSettingsAndLocation();
-
       if (this.locationMode === LocationMode.GPS) {
         await this.refreshLocation();
       }
-
       this.prayers = PrayerManager.updateStatuses(
         this.prayers, this.viewingDate, this.getLocationOffsetHours()
       );
@@ -649,27 +586,14 @@ struct Prayer {
     }
   }
 
-  // ============================================================
-  // EVENT HANDLERS
-  // ============================================================
-
-  /**
-   * Set the checked state of a prayer to an explicit value.
-   *
-   * Do NOT flip. The Checkbox fires onChange both for user taps and
-   * for programmatic .select() updates caused by re-renders — flipping
-   * would undo the user's tap on the second (spurious) call.
-   */
   private setPrayerChecked(id: string, checked: boolean): void {
     const target = this.prayers.find(p => p.id === id);
     if (!target) {
       return;
     }
-
     if (target.checked === checked) {
       return;
     }
-
     if (checked && !PrayerManager.isPrayerCheckable(target, this.viewingDate)) {
       return;
     }
@@ -687,41 +611,26 @@ struct Prayer {
     });
 
     PrayerManager.saveStateForDate(this.viewingDateKey, this.prayers);
-
     this.prayers = PrayerManager.updateStatuses(
       this.prayers, this.viewingDate, this.getLocationOffsetHours()
     );
-
     if (this.dateOffset === 0) {
       this.updateTodayHeaderData();
     }
   }
 
-  /**
-   * True if at least one prayer on the currently-viewed date is
-   * eligible to be newly marked.
-   */
   private hasUncheckedCheckablePrayers(): boolean {
     for (const p of this.prayers) {
-      if (!p.checked && PrayerManager.isPrayerCheckable(p, this.viewingDate)) {
+      if (!p.checked
+        && PrayerManager.isPrayerCheckable(p, this.viewingDate)) {
         return true;
       }
     }
     return false;
   }
 
-  /**
-   * Mark every eligible prayer on the viewed date as prayed.
-   *
-   * Uses isPrayerCheckable() as the gate, which already handles:
-   *   • Past dates    → all 5 eligible
-   *   • Today         → only prayers whose time has passed
-   *   • Future dates  → none eligible (no-op)
-   *   • Already-checked → left alone
-   */
   private markAllPrayed(): void {
     let changed = false;
-
     this.prayers = this.prayers.map((p): PrayerModel => {
       if (p.checked) {
         return p;
@@ -743,40 +652,31 @@ struct Prayer {
     if (!changed) {
       return;
     }
-
     PrayerManager.saveStateForDate(this.viewingDateKey, this.prayers);
-
     this.prayers = PrayerManager.updateStatuses(
       this.prayers, this.viewingDate, this.getLocationOffsetHours()
     );
-
     if (this.dateOffset === 0) {
       this.updateTodayHeaderData();
     }
   }
 
   private closeBottomSheet(): void {
-    animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
-      this.showBottomSheet = false;
-    });
+    this.showBottomSheet = false;
   }
 
-  private navigateToCustomize(): void {
-    this.closeBottomSheet();
+  private closeBottomSheetAndNavigate(url: string): void {
+    this.showBottomSheet = false;
     setTimeout(() => {
       NavHelper.prepareForward();
-      router.pushUrl({ url: 'pages/CustomizePage' })
-        .catch((err: Error) => console.error('Navigation failed:', JSON.stringify(err)));
-    }, 320);
+      router.pushUrl({ url })
+        .catch((err: Error) =>
+        console.error('Navigation failed:', JSON.stringify(err)));
+    }, 350);
   }
 
   private navigateToSettings(): void {
-    this.closeBottomSheet();
-    setTimeout(() => {
-      NavHelper.prepareForward();
-      router.pushUrl({ url: 'pages/SettingsPage' })
-        .catch((err: Error) => console.error('Navigation failed:', JSON.stringify(err)));
-    }, 320);
+    this.closeBottomSheetAndNavigate('pages/SettingsPage');
   }
 
   private exitApp(): void {
@@ -791,43 +691,11 @@ struct Prayer {
       if (result.index === 1) {
         const context = getContext(this) as common.UIAbilityContext;
         context.terminateSelf().catch((err: Error) =>
-        console.error('Terminate failed:', JSON.stringify(err))
-        );
+        console.error('Terminate failed:', JSON.stringify(err)));
       }
     }).catch((err: Error) => {
       console.error('Dialog error:', JSON.stringify(err));
     });
-  }
-
-  private onFloatingBarTap(tabId: string): void {
-    if (tabId === 'prayers') {
-      return;
-    }
-
-    if (tabId === 'home') {
-      NavHelper.prepareBackward();
-      router.clear();
-      router.replaceUrl({ url: 'pages/HomePage' })
-        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
-      return;
-    }
-    if (tabId === 'calendar') {
-      NavHelper.prepare('calendar', 'prayers');
-      router.pushUrl({ url: 'pages/HijriCalendarPage' })
-        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
-      return;
-    }
-    if (tabId === 'compass') {
-      NavHelper.prepare('compass', 'prayers');
-      router.pushUrl({ url: 'pages/QiblaPage' })
-        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
-      return;
-    }
-    if (tabId === 'tasbih') {
-      NavHelper.prepare('tasbih', 'prayers');
-      router.pushUrl({ url: 'pages/TasbihPage' })
-        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
-    }
   }
 
   private getStatusColor(status: string): string {
@@ -852,9 +720,23 @@ struct Prayer {
     }
   }
 
-  // ============================================================
-  // BUILD
-  // ============================================================
+  private getSunriseTime(): string {
+    for (const t of this.extraTimings) {
+      if (t.id === 'sunrise') {
+        return t.time;
+      }
+    }
+    return '--:--';
+  }
+
+  private getSunsetTime(): string {
+    for (const t of this.extraTimings) {
+      if (t.id === 'sunset') {
+        return t.time;
+      }
+    }
+    return '--:--';
+  }
 
   build() {
     Stack() {
@@ -886,13 +768,9 @@ struct Prayer {
           Scroll() {
             Column() {
               if (this.isTablet()) {
-                // ============================================
-                // TABLET — two-column layout
-                // ============================================
                 Row({ space: 16 }) {
                   Column() {
                     this.NextPrayerSection()
-
                     if (this.calcSource === CalculationSource.LOCAL) {
                       this.TimelineSection()
                     } else {
@@ -919,9 +797,6 @@ struct Prayer {
                 .alignItems(VerticalAlign.Top)
                 .padding({ left: 24, right: 24 })
               } else {
-                // ============================================
-                // PHONE — single-column layout
-                // ============================================
                 Column() {
                   this.NextPrayerSection()
 
@@ -947,7 +822,6 @@ struct Prayer {
                 .width('100%')
               }
 
-              // Bottom spacer — shared
               Column().height(140)
             }
             .width('100%')
@@ -964,117 +838,136 @@ struct Prayer {
         .onRefreshing(() => { this.handleHomeRefresh(); })
       }
       .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
-
-      FloatingNavBar({
-        activeTab: 'prayers',
-        colors: this.colors,
-        currentLanguage: this.appLanguage,
-        onTabTap: (id: string) => {
-          this.onFloatingBarTap(id);
-        }
-      })
-
-      if (this.showBottomSheet) {
-        Column()
-          .width('100%').height('100%')
-          .backgroundColor(this.colors.overlayDim)
-          .onClick(() => { this.closeBottomSheet(); })
-      }
-
-      if (this.showBottomSheet) {
-        Column() {
-          Row().width(40).height(4).backgroundColor(this.colors.overlayDimSoft)
-            .borderRadius(2).margin({ top: 8 })
-
-          Row() {
-            Text('Sirat').fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
-            Text('Companion').fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.accentGold)
-              .margin({ left: 8 })
-          }
-          .width('100%').padding({ top: 16, bottom: 16 }).justifyContent(FlexAlign.Center)
-
-          Divider().color(this.colors.borderSoft).width('80%').margin({ bottom: 16 })
-
-          Column() {
-            this.BottomSheetItem('✏️', this.tr('title_customize'), () => { this.navigateToCustomize(); })
-            this.BottomSheetItem('⚙️', this.tr('title_settings'), () => { this.navigateToSettings(); })
-            this.BottomSheetItem('🚪', this.tr('exit'), () => {
-              this.closeBottomSheet();
-              setTimeout(() => { this.exitApp(); }, 320);
-            })
-          }
-          .width('100%').padding({ left: 16, right: 16 })
-
-          Blank()
-        }
-        .width('100%').height(280)
-        .backgroundColor(this.colors.cardDark)
-        .borderRadius({ topLeft: Theme.radiusLarge, topRight: Theme.radiusLarge })
-        .shadow({ radius: 16, color: this.colors.shadowFloating, offsetX: 0, offsetY: -4 })
-        .position({ bottom: 0 })
-      }
     }
-    .width('100%').height('100%')
+    .width('100%')
+    .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
+    // bindSheet renders in the system modal layer, above the native
+    // Tabs chrome. This is the only reliable way to cover the floating
+    // tab bar from inside a TabContent page.
+    .bindSheet($$this.showBottomSheet, this.HamburgerMenu(), {
+      height: 300,
+      dragBar: true,
+      showClose: false,
+      backgroundColor: this.colors.cardDark,
+      blurStyle: BlurStyle.Thick,
+      maskColor: this.colors.overlayDim
+    })
   }
 
   // ============================================================
-  // NEXT PRAYER
+  // HAMBURGER MENU (rendered by bindSheet)
   // ============================================================
+
+  @Builder
+  HamburgerMenu() {
+    Column() {
+      // ---- Brand header — forced LTR, explicitly centred ----
+      Row() {
+        Text('Sirat')
+          .fontSize(24)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.colors.textWhite)
+        Text('Companion')
+          .fontSize(24)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.colors.accentGold)
+          .margin({ left: 8 })
+      }
+      .width('100%')
+      .height(48)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Center)
+      .direction(Direction.Ltr)
+      .margin({ top: 12, bottom: 12 })
+
+      // ---- Divider — full width, clearly visible ----
+      Divider()
+        .strokeWidth(1)
+        .color(this.colors.borderMedium)
+        .width('100%')
+
+      // ---- Menu items ----
+      Column() {
+        this.BottomSheetItem('✏️', this.tr('title_customize'), () => {
+          this.closeBottomSheetAndNavigate('pages/CustomizePage');
+        })
+        this.BottomSheetItem('⚙️', this.tr('title_settings'), () => {
+          this.closeBottomSheetAndNavigate('pages/SettingsPage');
+        })
+        this.BottomSheetItem('🚪', this.tr('exit'), () => {
+          this.showBottomSheet = false;
+          setTimeout(() => {
+            this.exitApp();
+          }, 350);
+        })
+      }
+      .width('100%')
+      .padding({ left: 16, right: 16, top: 8 })
+    }
+    .width('100%')
+    .height('100%')
+    .alignItems(HorizontalAlign.Center)
+  }
 
   @Builder
   NextPrayerSection() {
     Column() {
       Row() {
         Text(this.tr('next_prayer'))
-          .fontSize(12).fontColor(this.colors.textMuted).letterSpacing(1).fontWeight(FontWeight.Medium)
+          .fontSize(12).fontColor(this.colors.textMuted)
+          .letterSpacing(1).fontWeight(FontWeight.Medium)
         Blank()
         Row() {
           Text(this.translateEventName(this.todayNextPrayerName))
-            .fontSize(16).fontColor(this.colors.accentGold).fontWeight(FontWeight.Bold)
+            .fontSize(16).fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Bold)
           Text('   ')
           Text(this.todayNextPrayerTime)
-            .fontSize(16).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+            .fontSize(16).fontColor(this.colors.textWhite)
+            .fontWeight(FontWeight.Medium)
         }
       }
-      .width('100%').padding({ top: 12, bottom: 12, left: 16, right: 16 })
+      .width('100%')
+      .padding({
+        top: 12,
+        bottom: 12,
+        left: 16,
+        right: 16
+      })
       .backgroundColor(this.colors.cardDark).borderRadius(Theme.radiusMedium)
       .border({ width: 1, color: this.colors.borderSoft })
     }
-    .width('100%').padding({ left: 16, right: 16 }).margin({ top: 4, bottom: 12 })
+    .width('100%')
+    .padding({ left: 16, right: 16 })
+    .margin({ top: 4, bottom: 12 })
   }
-
-  // ============================================================
-  // TIMELINE
-  // ============================================================
 
   @Builder
   TimelineSection() {
     Column() {
       Row() {
         Text(this.tr('todays_prayers'))
-          .fontSize(14).fontColor(this.colors.textWhite).fontWeight(FontWeight.Bold)
+          .fontSize(14)
+          .fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Bold)
           .maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis })
         Text(`${this.prayers.filter(p => p.checked).length} / ${this.prayers.length}`)
-          .fontSize(14).fontColor(this.colors.textWhite).fontWeight(FontWeight.Bold)
+          .fontSize(14)
+          .fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Bold)
           .direction(Direction.Ltr)
           .margin({ left: 8 })
 
         Blank()
 
         Row() {
-          Text('✓')
-            .fontSize(12)
-            .fontColor(this.colors.accentGold)
-            .fontWeight(FontWeight.Bold)
-            .margin({ right: 4 })
+          Text('✓').fontSize(12).fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Bold).margin({ right: 4 })
           Text(this.tr('mark_all'))
-            .fontSize(11)
-            .fontColor(this.colors.accentGold)
-            .fontWeight(FontWeight.Medium)
-            .maxLines(1)
+            .fontSize(11).fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Medium).maxLines(1)
         }
         .padding({
           left: 10,
@@ -1095,23 +988,53 @@ struct Prayer {
 
       Row() {
         Text('◀')
-          .fontSize(14).fontColor(this.colors.accentGold)
+          .fontSize(14)
+          .fontColor(this.colors.accentGold)
           .width(36).height(36).textAlign(TextAlign.Center).borderRadius(18)
-          .backgroundColor(this.colors.cardDark).border({ width: 1, color: this.colors.borderSoft })
+          .backgroundColor(this.colors.cardDark)
+          .border({ width: 1, color: this.colors.borderSoft })
           .onClick(() => { this.goToPreviousDay(); })
 
         Text(this.viewingHijriDate)
-          .fontSize(13).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
+          .fontSize(13)
+          .fontColor(this.colors.accentGold)
+          .fontWeight(FontWeight.Medium)
           .layoutWeight(1).textAlign(TextAlign.Center).maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
 
         Text('▶')
-          .fontSize(14).fontColor(this.colors.accentGold)
+          .fontSize(14)
+          .fontColor(this.colors.accentGold)
           .width(36).height(36).textAlign(TextAlign.Center).borderRadius(18)
-          .backgroundColor(this.colors.cardDark).border({ width: 1, color: this.colors.borderSoft })
+          .backgroundColor(this.colors.cardDark)
+          .border({ width: 1, color: this.colors.borderSoft })
           .onClick(() => { this.goToNextDay(); })
+
+        // "Today" shortcut — only shown when viewing a non-current day.
+        // Tapping it snaps the view back to today's date and re-reads
+        // the current day's prayer state.
+        if (this.dateOffset !== 0) {
+          Text(this.tr('today'))
+            .fontSize(11)
+            .fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Medium)
+            .padding({
+              left: 12,
+              right: 12,
+              top: 9,
+              bottom: 9
+            })
+            .backgroundColor(this.colors.cardDark)
+            .borderRadius(18)
+            .border({ width: 1, color: this.colors.borderSoft })
+            .margin({ left: 8 })
+            .onClick(() => {
+              this.goToToday();
+            })
+        }
       }
-      .width('100%').padding({ bottom: 12 }).alignItems(VerticalAlign.Center)
+      .width('100%').padding({ bottom: 12 })
+      .alignItems(VerticalAlign.Center)
       .direction(Direction.Ltr)
 
       Column() {
@@ -1123,23 +1046,24 @@ struct Prayer {
           }
         }, (row: TimelineRow) => {
           const checkedPart = row.prayerRef !== null
-            ? (row.prayerRef.checked ? 'c' : 'u')
-            : 'x';
+            ? (row.prayerRef.checked ? 'c' : 'u') : 'x';
           return `${this.viewingDateKey}-${row.kind}-${row.id}-${row.time}-${row.sortMinutes}-${checkedPart}`;
         })
       }
-      .width('100%').backgroundColor(this.colors.cardDark).borderRadius(Theme.radiusMedium)
+      .width('100%')
+      .backgroundColor(this.colors.cardDark)
+      .borderRadius(Theme.radiusMedium)
       .border({ width: 1, color: this.colors.borderSoft })
       .padding({ left: 4, right: 4, top: 4, bottom: 4 })
     }
-    .width('100%').padding({ left: 16, right: 16 }).alignItems(HorizontalAlign.Start)
+    .width('100%').padding({ left: 16, right: 16 })
+    .alignItems(HorizontalAlign.Start)
     .margin({ bottom: 12 })
   }
 
   @Builder
   PrayerItem(prayer: PrayerModel) {
     Row() {
-      // Custom checkbox — fully state-driven, no internal component state.
       Stack() {
         if (prayer.checked) {
           Text('✓')
@@ -1154,12 +1078,15 @@ struct Prayer {
       .width(22)
       .height(22)
       .borderRadius(5)
-      .backgroundColor(prayer.checked ? this.colors.accentGold : 'transparent')
+      .backgroundColor(prayer.checked
+        ? this.colors.accentGold : 'transparent')
       .border({
         width: 1.5,
-        color: prayer.checked ? this.colors.accentGold : this.colors.borderStrong
+        color: prayer.checked
+          ? this.colors.accentGold : this.colors.borderStrong
       })
-      .opacity(PrayerManager.isPrayerCheckable(prayer, this.viewingDate) ? 1.0 : 0.4)
+      .opacity(PrayerManager.isPrayerCheckable(prayer, this.viewingDate)
+        ? 1.0 : 0.4)
       .margin({ right: 12 })
       .onClick(() => {
         if (PrayerManager.isPrayerCheckable(prayer, this.viewingDate)) {
@@ -1171,10 +1098,12 @@ struct Prayer {
         Row() {
           Text(this.translatePrayerName(prayer.name))
             .fontSize(16).fontColor(this.colors.textWhite)
-            .fontWeight(prayer.checked ? FontWeight.Normal : FontWeight.Medium)
+            .fontWeight(prayer.checked
+              ? FontWeight.Normal : FontWeight.Medium)
             .opacity(prayer.checked ? 0.5 : 1.0)
           Text('  ')
-          Text(prayer.arabicName).fontSize(14).fontColor(this.colors.textMuted)
+          Text(prayer.arabicName)
+            .fontSize(14).fontColor(this.colors.textMuted)
         }
         Text(this.getStatusLabel(prayer.status))
           .fontSize(11).fontColor(this.getStatusColor(prayer.status))
@@ -1182,7 +1111,8 @@ struct Prayer {
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text(prayer.time).fontSize(16).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+      Text(prayer.time).fontSize(16)
+        .fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
     }
     .width('100%')
     .padding({
@@ -1193,7 +1123,8 @@ struct Prayer {
     })
     .alignItems(VerticalAlign.Center)
     .borderRadius(Theme.radiusSmall)
-    .backgroundColor(prayer.checked ? this.colors.tintSoft : 'transparent')
+    .backgroundColor(prayer.checked
+      ? this.colors.tintSoft : 'transparent')
     .margin({ bottom: 4 })
   }
 
@@ -1219,9 +1150,8 @@ struct Prayer {
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text(timing.time)
-        .fontSize(14).fontColor(this.colors.textMuted)
-        .fontStyle(FontStyle.Italic)
+      Text(timing.time).fontSize(14)
+        .fontColor(this.colors.textMuted).fontStyle(FontStyle.Italic)
     }
     .width('100%')
     .padding({
@@ -1236,24 +1166,31 @@ struct Prayer {
     .margin({ bottom: 4 })
   }
 
-  // ============================================================
-  // EVENTS CARD
-  // ============================================================
-
   @Builder
   ComingSoonCard() {
     Column() {
       Text('🌐').fontSize(56).margin({ bottom: 12 })
-      Text(this.tr('online_prayer_times')).fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
-      Text(this.tr('coming_soon')).fontSize(13).fontColor(this.colors.accentGold).letterSpacing(1).margin({ top: 4 })
-      Divider().width('60%').color(this.colors.borderSoft).margin({ top: 16, bottom: 16 })
+      Text(this.tr('online_prayer_times'))
+        .fontSize(18).fontWeight(FontWeight.Bold)
+        .fontColor(this.colors.textWhite)
+      Text(this.tr('coming_soon'))
+        .fontSize(13).fontColor(this.colors.accentGold)
+        .letterSpacing(1).margin({ top: 4 })
+      Divider().width('60%').color(this.colors.borderSoft)
+        .margin({ top: 16, bottom: 16 })
       Text(this.tr('online_switch_hint'))
-        .fontSize(12).fontColor(this.colors.textMuted).textAlign(TextAlign.Center).lineHeight(18).maxLines(4)
+        .fontSize(12)
+        .fontColor(this.colors.textMuted)
+        .textAlign(TextAlign.Center)
+        .lineHeight(18)
+        .maxLines(4)
     }
     .width('92%').padding(28).backgroundColor(this.colors.cardDark)
-    .borderRadius(Theme.radiusLarge).border({ width: 1, color: this.colors.borderSoft })
+    .borderRadius(Theme.radiusLarge)
+    .border({ width: 1, color: this.colors.borderSoft })
     .shadow({ radius: 12, color: this.colors.shadowCard, offsetX: 0, offsetY: 4 })
-    .margin({ top: 4, bottom: 24 }).alignItems(HorizontalAlign.Center)
+    .margin({ top: 4, bottom: 24 })
+    .alignItems(HorizontalAlign.Center)
   }
 
   @Builder
@@ -1262,7 +1199,11 @@ struct Prayer {
       Text(icon).fontSize(22).margin({ right: 16 })
       Text(label).fontSize(16).fontColor(this.colors.textWhite)
     }
-    .width('100%').padding({ top: 12, bottom: 12, left: 16 })
-    .borderRadius(Theme.radiusSmall).onClick(() => { onClick(); })
+    .width('100%')
+    .padding({ top: 12, bottom: 12, left: 16 })
+    .borderRadius(Theme.radiusSmall)
+    .onClick(() => {
+      onClick();
+    })
   }
 }

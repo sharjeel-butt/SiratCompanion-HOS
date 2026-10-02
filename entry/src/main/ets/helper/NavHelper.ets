@@ -13,8 +13,7 @@ import { STORAGE_KEY_NAV_DIRECTION } from '../common/StorageKeys';
  *   Home → Prayers → Tasbih → Compass → Calendar
  */
 export class NavHelper {
-
-  static readonly HOME     = 0;
+  static readonly HOME = 0;
   static readonly PRAYERS = 1;
   static readonly CALENDAR = 2;
   static readonly COMPASS = 3;
@@ -22,15 +21,18 @@ export class NavHelper {
 
   static indexOf(tabId: string): number {
     switch (tabId) {
-      case 'home':     return NavHelper.HOME;
+      case 'home':
+        return NavHelper.HOME;
       case 'prayers':
         return NavHelper.PRAYERS;
-      case 'calendar': return NavHelper.CALENDAR;
+      case 'calendar':
+        return NavHelper.CALENDAR;
       case 'compass':
         return NavHelper.COMPASS;
       case 'tasbih':
         return NavHelper.TASBIH;
-      default:         return NavHelper.HOME;
+      default:
+        return NavHelper.HOME;
     }
   }
 

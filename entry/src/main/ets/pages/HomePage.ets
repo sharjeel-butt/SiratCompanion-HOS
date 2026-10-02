@@ -2,19 +2,17 @@
 
 import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
+import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
-  STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
-  STORAGE_KEY_NAV_DIRECTION,
+  STORAGE_KEY_PRAYER_STATE_VERSION,
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
-import { Breakpoints } from '../common/Breakpoints';
 import { DateHelper } from '../utils/DateUtils';
 import { PrayerModel } from '../models/PrayerModel';
 import { UpcomingImportantDate } from '../models/DateModels';
@@ -36,43 +34,48 @@ import { MonthDayCell, MonthProgress, PrayerProgress, ProgressHelper, TasbihProg
 import { TasbihStorage } from '../utils/TasbihStorage';
 import { TasbihManager } from '../utils/TasbihManager';
 import { Tasbih } from '../models/TasbihModels';
-import { FloatingNavBar } from '../components/FloatingNavBar';
 import { PageHeader } from '../components/PageHeader';
 import { DuaCard } from '../components/DuaCard';
 import { DUA_IFTAR, DUA_SUHOOR, DuaEntry } from '../data/Duas';
 import { LaylatAlQadrNight, RamadanAshra, RamadanHelper, RamadanInfo } from '../helper/RamadanHelper';
+import { Breakpoints } from '../common/Breakpoints';
 
-@Entry
 @Component
-struct HomePage {
+export struct HomePage {
+
   // ============================================================
-  // THEME + NAV + LANGUAGE + HIJRI + FOREGROUND
+  // STORAGE LINKS
   // ============================================================
 
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
-  @StorageLink(STORAGE_KEY_APP_THEME)
-  @Watch('onAppThemePresetChanged')
-  appThemePreset: string = ThemePreset.CURRENT;
-  @StorageLink(STORAGE_KEY_NAV_DIRECTION)
-  navDirection: string = 'forward';
+  @StorageLink(STORAGE_KEY_PRAYER_STATE_VERSION)
+  @Watch('onPrayerStateChanged')
+  prayerStateVersion: number = 0;
+
   @StorageLink(STORAGE_KEY_LOCATION_VERSION)
   @Watch('onLocationVersionChanged')
   locationVersion: number = 0;
+
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = 'en';
+
   @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
   @Watch('onHijriOffsetChanged')
   hijriOffset: number = 0;
+
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
+
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
+
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
+
   // ============================================================
   // HEADER STATE
   // ============================================================
@@ -86,7 +89,9 @@ struct HomePage {
   @State todayCurrentPrayerTime: string = '--:--';
   @State todayNextPrayerName: string = '—';
   @State todayNextPrayerTime: string = '--:--';
+
   @State locationMode: LocationMode = LocationMode.GPS;
+
   // ============================================================
   // DASHBOARD STATE
   // ============================================================
@@ -105,14 +110,16 @@ struct HomePage {
     weeklyLabels: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
     weekCompleted: 0,
     monthCompleted: 0,
-    lifetimeCompleted: 0
+    yearCompleted: 0
   };
+
   @State private tasbihProgress: TasbihProgress = {
     totalTasbihs: 0,
     totalDhikrs: 0,
     lifetimeCount: 0,
     completedDhikrs: 0
   };
+
   @State private monthProgress: MonthProgress = {
     year: 2026,
     monthIndex: 0,
@@ -123,8 +130,10 @@ struct HomePage {
     daysElapsed: 0,
     daysInMonth: 0
   };
+
   @State private upcomingEvents: UpcomingImportantDate[] = [];
   @State private ramadanInfo: RamadanInfo | null = null;
+
   // ============================================================
   // FASTING WINDOW
   // ============================================================
@@ -132,21 +141,24 @@ struct HomePage {
   @State private todayImsakTime: string = '--:--';
   @State private todayMaghribTime: string = '--:--';
   @State private fastingWindowIsPreview: boolean = false;
-  // ---- Live countdown (15 min before Imsak / Maghrib) ----
+  // ---- Live countdown ----
   @State private countdownTarget: string = '';
   @State private countdownDisplay: string = '';
   @State private countdownHeld: boolean = false;
   private countdownTimerId: number = -1;
+
   // ============================================================
   // PULL-TO-REFRESH
   // ============================================================
 
   @State private isRefreshing: boolean = false;
+
   // ============================================================
   // HAMBURGER SHEET
   // ============================================================
 
   @State showBottomSheet: boolean = false;
+
   // ============================================================
   // LOCATION + CALC PARAMS
   // ============================================================
@@ -162,9 +174,11 @@ struct HomePage {
     maghrib: 0,
     isha: 0
   };
+
   private settingsLoading: boolean = false;
+
   // ============================================================
-  // LOCALIZATION + DIRECTION
+  // LOCALIZATION + DIRECTION + BREAKPOINT
   // ============================================================
 
   @State private currentLanguage: string = 'en';
@@ -175,6 +189,24 @@ struct HomePage {
 
   private isRtl(): boolean {
     return L.isRtlLang(this.currentLanguage);
+  }
+
+  private isTablet(): boolean {
+    return Breakpoints.isTablet(this.breakpoint);
+  }
+
+  private isDarkMode(): boolean {
+    return PageTheme.isDarkFor(this.themeMode);
+  }
+
+  /**
+   * Fires the moment any page writes prayer check state. Because
+   * HomePage is hosted inside MainTabs as a TabContent, it does not
+   * receive onPageShow on tab switches — this watcher is how it learns
+   * that the Prayers tab checked a prayer.
+   */
+  private onPrayerStateChanged(): void {
+    this.refreshDashboard();
   }
 
   private translatePrayerName(raw: string): string {
@@ -194,10 +226,6 @@ struct HomePage {
       default:
         return raw;
     }
-  }
-
-  private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
   }
 
   private translateEventName(raw: string): string {
@@ -221,10 +249,6 @@ struct HomePage {
       default:
         return raw;
     }
-  }
-
-  private isTablet(): boolean {
-    return Breakpoints.isTablet(this.breakpoint);
   }
 
   private translateUpcomingEventName(e: UpcomingImportantDate): string {
@@ -271,22 +295,6 @@ struct HomePage {
   }
 
   // ============================================================
-  // PAGE TRANSITION
-  // ============================================================
-
-  pageTransition() {
-    PageTransitionEnter({ type: RouteType.Push, duration: 300, curve: Curve.Friction })
-      .slide(this.navDirection === 'forward' ? SlideEffect.Right : SlideEffect.Left)
-    PageTransitionExit({ type: RouteType.Push, duration: 300, curve: Curve.Friction })
-      .slide(this.navDirection === 'forward' ? SlideEffect.Left : SlideEffect.Right)
-
-    PageTransitionEnter({ type: RouteType.Pop, duration: 300, curve: Curve.Friction })
-      .slide(SlideEffect.Left)
-    PageTransitionExit({ type: RouteType.Pop, duration: 300, curve: Curve.Friction })
-      .slide(SlideEffect.Right)
-  }
-
-  // ============================================================
   // LIFECYCLE
   // ============================================================
 
@@ -327,11 +335,6 @@ struct HomePage {
 
   onPageHide(): void {
     this.stopCountdownTimer();
-  }
-
-  onBackPress(): boolean {
-    NavHelper.prepareBackward();
-    return false;
   }
 
   // ============================================================
@@ -466,12 +469,8 @@ struct HomePage {
 
     try {
       const times = PrayerTimeCalculator.calculateWithDeviceTimezone(
-        targetDate,
-        this.latitude,
-        this.longitude,
-        this.calcMethod,
-        this.asrRule,
-        this.highLatRule
+        targetDate, this.latitude, this.longitude,
+        this.calcMethod, this.asrRule, this.highLatRule
       );
 
       const imsak = PrayerManager.offsetTime(times.imsak, this.offsets.fajr);
@@ -587,7 +586,6 @@ struct HomePage {
     const imsak = this.parseTimeToDateToday(this.todayImsakTime);
     const maghrib = this.parseTimeToDateToday(this.todayMaghribTime);
 
-    // Hold phase: T → T+5:00
     let holdTarget = '';
     let holdRemainingMs = Number.MAX_VALUE;
 
@@ -625,7 +623,6 @@ struct HomePage {
       return;
     }
 
-    // Countdown phase: T−15:00 → T
     let target = '';
     let diffMs = Number.MAX_VALUE;
 
@@ -652,8 +649,7 @@ struct HomePage {
     const totalSec = Math.max(0, Math.floor(diffMs / 1000));
     const mm = Math.floor(totalSec / 60);
     const ss = totalSec % 60;
-    const display =
-      `${mm.toString().padStart(2, '0')}:${ss.toString().padStart(2, '0')}`;
+    const display = `${mm.toString().padStart(2, '0')}:${ss.toString().padStart(2, '0')}`;
 
     if (this.countdownTarget !== target) {
       this.countdownTarget = target;
@@ -715,58 +711,28 @@ struct HomePage {
   // NAVIGATION
   // ============================================================
 
-  private onFloatingBarTap(tabId: string): void {
-    if (tabId === 'home') {
-      return;
-    }
-
-    if (tabId === 'prayers') {
-      NavHelper.prepare('prayers', 'home');
-      router.pushUrl({ url: 'pages/Prayer' })
-        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
-      return;
-    }
-    if (tabId === 'calendar') {
-      NavHelper.prepare('calendar', 'home');
-      router.pushUrl({ url: 'pages/HijriCalendarPage' })
-        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
-      return;
-    }
-    if (tabId === 'compass') {
-      NavHelper.prepare('compass', 'home');
-      router.pushUrl({ url: 'pages/QiblaPage' })
-        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
-      return;
-    }
-    if (tabId === 'tasbih') {
-      NavHelper.prepare('tasbih', 'home');
-      router.pushUrl({ url: 'pages/TasbihPage' })
-        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
-    }
-  }
-
   private navigateToSettings(): void {
     this.closeBottomSheet();
     setTimeout(() => {
       NavHelper.prepareForward();
       router.pushUrl({ url: 'pages/SettingsPage' })
-        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
-    }, 320);
+        .catch((e: Error) =>
+        console.error('Navigation failed:', JSON.stringify(e)));
+    }, 350);
   }
 
-  private navigateToCustomize(): void {
-    this.closeBottomSheet();
+  private closeBottomSheetAndNavigate(url: string): void {
+    this.showBottomSheet = false;
     setTimeout(() => {
       NavHelper.prepareForward();
-      router.pushUrl({ url: 'pages/CustomizePage' })
-        .catch((e: Error) => console.error('Navigation failed:', JSON.stringify(e)));
-    }, 320);
+      router.pushUrl({ url })
+        .catch((e: Error) =>
+        console.error('Navigation failed:', JSON.stringify(e)));
+    }, 350);
   }
 
   private closeBottomSheet(): void {
-    animateTo({ duration: 300, curve: Curve.EaseOut }, () => {
-      this.showBottomSheet = false;
-    });
+    this.showBottomSheet = false;
   }
 
   private exitApp(): void {
@@ -781,10 +747,10 @@ struct HomePage {
       if (result.index === 1) {
         const ctx = getContext(this) as common.UIAbilityContext;
         ctx.terminateSelf().catch((err: Error) =>
-        console.error('Terminate failed:', JSON.stringify(err))
-        );
+        console.error('Terminate failed:', JSON.stringify(err)));
       }
-    }).catch((err: Error) => console.error('Dialog error:', JSON.stringify(err)));
+    }).catch((err: Error) =>
+    console.error('Dialog error:', JSON.stringify(err)));
   }
 
   // ============================================================
@@ -924,9 +890,6 @@ struct HomePage {
           Scroll() {
             Column() {
               if (this.isTablet()) {
-                // ============================================
-                // TABLET — two-column layout
-                // ============================================
                 Row({ space: 16 }) {
                   Column() {
                     this.CountdownCard()
@@ -950,9 +913,6 @@ struct HomePage {
                 .alignItems(VerticalAlign.Top)
                 .padding({ left: 24, right: 24 })
               } else {
-                // ============================================
-                // PHONE — single-column layout
-                // ============================================
                 Column() {
                   this.CountdownCard()
                   this.LiveCountdownBanner()
@@ -967,7 +927,6 @@ struct HomePage {
                 .padding({ left: 16, right: 16 })
               }
 
-              // Bottom spacer — shared
               Column().height(140)
             }
             .width('100%')
@@ -986,79 +945,77 @@ struct HomePage {
         })
       }
       .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
-
-      FloatingNavBar({
-        activeTab: 'home',
-        colors: this.colors,
-        currentLanguage: this.currentLanguage,
-        onTabTap: (id: string) => {
-          this.onFloatingBarTap(id);
-        }
-      })
-
-      if (this.showBottomSheet) {
-        Column()
-          .width('100%').height('100%')
-          .backgroundColor(this.colors.overlayDim)
-          .onClick(() => {
-            this.closeBottomSheet();
-          })
-      }
-
-      if (this.showBottomSheet) {
-        Column() {
-          Row()
-            .width(40)
-            .height(4)
-            .backgroundColor(this.colors.overlayDimSoft)
-            .borderRadius(2)
-            .margin({ top: 8 })
-
-          Row() {
-            Text('Sirat').fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
-            Text('Companion').fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.accentGold)
-              .margin({ left: 8 })
-          }
-          .width('100%').padding({ top: 16, bottom: 16 }).justifyContent(FlexAlign.Center)
-
-          Divider().color(this.colors.borderSoft).width('80%').margin({ bottom: 16 })
-
-          Column() {
-            this.BottomSheetItem('✏️', this.tr('title_customize'), () => {
-              this.navigateToCustomize();
-            })
-            this.BottomSheetItem('⚙️', this.tr('title_settings'), () => {
-              this.navigateToSettings();
-            })
-            this.BottomSheetItem('🚪', this.tr('exit'), () => {
-              this.closeBottomSheet();
-              setTimeout(() => {
-                this.exitApp();
-              }, 320);
-            })
-          }
-          .width('100%').padding({ left: 16, right: 16 })
-
-          Blank()
-        }
-        .width('100%')
-        .height(280)
-        .backgroundColor(this.colors.cardDark)
-        .borderRadius({ topLeft: Theme.radiusLarge, topRight: Theme.radiusLarge })
-        .shadow({
-          radius: 16,
-          color: this.colors.shadowFloating,
-          offsetX: 0,
-          offsetY: -4
-        })
-        .position({ bottom: 0 })
-      }
     }
     .width('100%')
     .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
+    // bindSheet renders in the system modal layer, above the native
+    // Tabs chrome. This is the only reliable way to cover the floating
+    // tab bar from inside a TabContent page.
+    .bindSheet($$this.showBottomSheet, this.HamburgerMenu(), {
+      height: 300,
+      dragBar: true,
+      showClose: false,
+      backgroundColor: this.colors.cardDark,
+      blurStyle: BlurStyle.Thick,
+      maskColor: this.colors.overlayDim
+    })
+  }
+
+  // ============================================================
+  // HAMBURGER MENU (rendered by bindSheet)
+  // ============================================================
+
+  @Builder
+  HamburgerMenu() {
+    Column() {
+      // ---- Brand header — forced LTR, explicitly centred ----
+      Row() {
+        Text('Sirat')
+          .fontSize(24)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.colors.textWhite)
+        Text('Companion')
+          .fontSize(24)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.colors.accentGold)
+          .margin({ left: 8 })
+      }
+      .width('100%')
+      .height(48)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Center)
+      .direction(Direction.Ltr)
+      .margin({ top: 12, bottom: 12 })
+
+      // ---- Divider — full width, clearly visible ----
+      Divider()
+        .strokeWidth(1)
+        .color(this.colors.borderMedium)
+        .width('100%')
+
+      // ---- Menu items ----
+      Column() {
+        this.BottomSheetItem('✏️', this.tr('title_customize'), () => {
+          this.closeBottomSheetAndNavigate('pages/CustomizePage');
+        })
+        this.BottomSheetItem('⚙️', this.tr('title_settings'), () => {
+          this.closeBottomSheetAndNavigate('pages/SettingsPage');
+        })
+        this.BottomSheetItem('🚪', this.tr('exit'), () => {
+          this.showBottomSheet = false;
+          setTimeout(() => {
+            this.exitApp();
+          }, 350);
+        })
+      }
+      .width('100%')
+      .padding({ left: 16, right: 16, top: 8 })
+    }
+    .width('100%')
+    .height('100%')
+    .alignItems(HorizontalAlign.Center)
   }
 
   // ============================================================
@@ -1217,8 +1174,7 @@ struct HomePage {
                 : this.tr('countdown_fast_starts')))
               .fontSize(12)
               .fontColor(this.countdownHeld
-                ? this.colors.accentGold
-                : this.colors.textMuted)
+                ? this.colors.accentGold : this.colors.textMuted)
               .fontWeight(FontWeight.Medium)
               .letterSpacing(0.5)
 
@@ -1248,9 +1204,7 @@ struct HomePage {
         .alignItems(VerticalAlign.Center)
 
         if (this.countdownHeld && this.currentDuaEntry() !== null) {
-          Divider()
-            .color(this.colors.borderSoft)
-            .margin({ top: 14, bottom: 14 })
+          Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 14 })
 
           DuaCard({
             dua: this.currentDuaEntry()!,
@@ -1303,7 +1257,6 @@ struct HomePage {
           this.RamadanCountdown()
         }
 
-        // ---- Fasting window ----
         Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 12 })
         Row() {
           Text('⏳').fontSize(12).margin({ right: 6 }).opacity(0.75)
@@ -1319,53 +1272,45 @@ struct HomePage {
         Row() {
           Text('🌅').fontSize(14).margin({ right: 8 }).width(20).textAlign(TextAlign.Center)
           Text(this.tr('ramadan_fast_start'))
-            .fontSize(12).fontColor(this.colors.textMuted)
-            .layoutWeight(1)
+            .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
           Text(this.todayImsakTime)
             .fontSize(16).fontColor(this.colors.accentGold).fontWeight(FontWeight.Bold)
             .direction(Direction.Ltr)
         }
-        .width('100%').padding({ top: 6, bottom: 6 })
-        .alignItems(VerticalAlign.Center)
+        .width('100%').padding({ top: 6, bottom: 6 }).alignItems(VerticalAlign.Center)
 
         Row() {
           Text('🌇').fontSize(14).margin({ right: 8 }).width(20).textAlign(TextAlign.Center)
           Text(this.tr('ramadan_fast_end'))
-            .fontSize(12).fontColor(this.colors.textMuted)
-            .layoutWeight(1)
+            .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
           Text(this.todayMaghribTime)
             .fontSize(16).fontColor(this.colors.accentGoldLight).fontWeight(FontWeight.Bold)
             .direction(Direction.Ltr)
         }
-        .width('100%').padding({ top: 6, bottom: 6 })
-        .alignItems(VerticalAlign.Center)
+        .width('100%').padding({ top: 6, bottom: 6 }).alignItems(VerticalAlign.Center)
 
-        // ---- Ramadan calendar dates ----
         Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 12 })
 
         Row() {
           Text('📅').fontSize(14).margin({ right: 8 }).width(20).textAlign(TextAlign.Center)
           Text(this.tr('ramadan_calendar_start'))
-            .fontSize(12).fontColor(this.colors.textMuted)
-            .layoutWeight(1)
-          Text(RamadanHelper.formatLong(this.ramadanInfo!.fastingStart, this.currentLanguage))
+            .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
+          Text(RamadanHelper.formatLong(
+            this.ramadanInfo!.fastingStart, this.currentLanguage))
             .fontSize(12).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
         }
-        .width('100%').padding({ top: 4, bottom: 4 })
-        .alignItems(VerticalAlign.Center)
+        .width('100%').padding({ top: 4, bottom: 4 }).alignItems(VerticalAlign.Center)
 
         Row() {
           Text('🌙').fontSize(14).margin({ right: 8 }).width(20).textAlign(TextAlign.Center)
           Text(this.tr('ramadan_calendar_end'))
-            .fontSize(12).fontColor(this.colors.textMuted)
-            .layoutWeight(1)
-          Text(RamadanHelper.formatLong(this.ramadanInfo!.fastingEnd, this.currentLanguage))
+            .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
+          Text(RamadanHelper.formatLong(
+            this.ramadanInfo!.fastingEnd, this.currentLanguage))
             .fontSize(12).fontColor(this.colors.accentGoldLight).fontWeight(FontWeight.Medium)
         }
-        .width('100%').padding({ top: 4, bottom: 4 })
-        .alignItems(VerticalAlign.Center)
+        .width('100%').padding({ top: 4, bottom: 4 }).alignItems(VerticalAlign.Center)
 
-        // ---- Ashras ----
         Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 12 })
         Text(this.tr('ramadan_ashras'))
           .fontSize(11)
@@ -1380,22 +1325,26 @@ struct HomePage {
             Text(`${a.number}`)
               .fontSize(12)
               .fontWeight(FontWeight.Bold)
-              .fontColor(this.isCurrentAshra(a) ? this.colors.textOnAccent : this.colors.accentGold)
+              .fontColor(this.isCurrentAshra(a)
+                ? this.colors.textOnAccent : this.colors.accentGold)
               .width(24)
               .height(24)
               .textAlign(TextAlign.Center)
-              .backgroundColor(this.isCurrentAshra(a) ? this.colors.accentGold : this.colors.tintSoft)
+              .backgroundColor(this.isCurrentAshra(a)
+                ? this.colors.accentGold : this.colors.tintSoft)
               .borderRadius(12)
               .border({
                 width: 1,
-                color: this.isCurrentAshra(a) ? this.colors.accentGold : this.colors.borderSoft
+                color: this.isCurrentAshra(a)
+                  ? this.colors.accentGold : this.colors.borderSoft
               })
 
             Column() {
               Row() {
                 Text(this.tr(a.nameKey))
                   .fontSize(13).fontColor(this.colors.textWhite)
-                  .fontWeight(this.isCurrentAshra(a) ? FontWeight.Bold : FontWeight.Medium)
+                  .fontWeight(this.isCurrentAshra(a)
+                    ? FontWeight.Bold : FontWeight.Medium)
                 Text('  ·  ').fontSize(11).fontColor(this.colors.textMuted)
                 Text(this.tr(a.significanceKey))
                   .fontSize(11)
@@ -1421,13 +1370,14 @@ struct HomePage {
             left: 8,
             right: 8
           })
-          .backgroundColor(this.isCurrentAshra(a) ? this.colors.tintSubtle : 'transparent')
+          .backgroundColor(this.isCurrentAshra(a)
+            ? this.colors.tintSubtle : 'transparent')
           .borderRadius(10)
           .margin({ bottom: 4 })
           .alignItems(VerticalAlign.Center)
-        }, (a: RamadanAshra) => `ashra-${a.number}-${a.startHijriDay}-${a.endHijriDay}`)
+        }, (a: RamadanAshra) =>
+        `ashra-${a.number}-${a.startHijriDay}-${a.endHijriDay}`)
 
-        // ---- Laylat al-Qadr ----
         Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 12 })
         Row() {
           Text('✨').fontSize(13).margin({ right: 6 })
@@ -1445,48 +1395,41 @@ struct HomePage {
           .padding({ bottom: 12 })
 
         Row({ space: 6 }) {
-          ForEach(this.ramadanInfo!.laylatAlQadrNights, (n: LaylatAlQadrNight) => {
-            Column() {
-              Text(`${n.hijriDay}`)
-                .fontSize(14)
-                .fontWeight(n.isToday ? FontWeight.Bold : FontWeight.Medium)
-                .fontColor(n.isToday
-                  ? this.colors.textOnAccent
-                  : n.isPast
-                    ? this.colors.textMuted
-                    : this.colors.accentGold)
-              if (n.isToday) {
-                Text(this.tr('ramadan_today'))
-                  .fontSize(8).fontColor(this.colors.textOnAccent)
-                  .margin({ top: 1 })
-              } else {
-                Text(RamadanHelper.formatShort(n.gregorianDate, this.currentLanguage))
-                  .fontSize(8).fontColor(this.colors.textMuted)
-                  .margin({ top: 1 })
+          ForEach(this.ramadanInfo!.laylatAlQadrNights,
+            (n: LaylatAlQadrNight) => {
+              Column() {
+                Text(`${n.hijriDay}`)
+                  .fontSize(14)
+                  .fontWeight(n.isToday ? FontWeight.Bold : FontWeight.Medium)
+                  .fontColor(n.isToday ? this.colors.textOnAccent
+                    : n.isPast ? this.colors.textMuted : this.colors.accentGold)
+                if (n.isToday) {
+                  Text(this.tr('ramadan_today'))
+                    .fontSize(8).fontColor(this.colors.textOnAccent)
+                    .margin({ top: 1 })
+                } else {
+                  Text(RamadanHelper.formatShort(
+                    n.gregorianDate, this.currentLanguage))
+                    .fontSize(8).fontColor(this.colors.textMuted)
+                    .margin({ top: 1 })
+                }
               }
-            }
-            .layoutWeight(1)
-            .padding({ top: 8, bottom: 8 })
-            .backgroundColor(n.isToday
-              ? this.colors.accentGold
-              : n.isPast
-                ? 'transparent'
-                : this.colors.tintSubtle)
-            .borderRadius(10)
-            .border({
-              width: n.isToday ? 0 : 1,
-              color: n.isPast ? this.colors.borderSoft : this.colors.borderMedium
-            })
-            .opacity(n.isPast && !n.isToday ? 0.55 : 1.0)
-            .alignItems(HorizontalAlign.Center)
-          }, (n: LaylatAlQadrNight) =>
-          `laq-${n.hijriDay}-${n.isPast ? 'p' : n.isToday ? 't' : 'f'}`
-          )
+              .layoutWeight(1)
+              .padding({ top: 8, bottom: 8 })
+              .backgroundColor(n.isToday ? this.colors.accentGold
+                : n.isPast ? 'transparent' : this.colors.tintSubtle)
+              .borderRadius(10)
+              .border({
+                width: n.isToday ? 0 : 1,
+                color: n.isPast ? this.colors.borderSoft : this.colors.borderMedium
+              })
+              .opacity(n.isPast && !n.isToday ? 0.55 : 1.0)
+              .alignItems(HorizontalAlign.Center)
+            }, (n: LaylatAlQadrNight) =>
+            `laq-${n.hijriDay}-${n.isPast ? 'p' : n.isToday ? 't' : 'f'}`)
         }
-        .width('100%')
-        .justifyContent(FlexAlign.SpaceBetween)
+        .width('100%').justifyContent(FlexAlign.SpaceBetween)
 
-        // ---- Jummah tul Widah ----
         if (this.ramadanInfo!.jummahTulWidah !== null) {
           Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 12 })
           Row() {
@@ -1497,16 +1440,15 @@ struct HomePage {
               .fontWeight(FontWeight.Bold)
               .letterSpacing(1.2)
               .layoutWeight(1)
-            Text(RamadanHelper.formatShort(this.ramadanInfo!.jummahTulWidah!, this.currentLanguage))
+            Text(RamadanHelper.formatShort(
+              this.ramadanInfo!.jummahTulWidah!, this.currentLanguage))
               .fontSize(11).fontColor(this.colors.accentGoldLight)
               .fontWeight(FontWeight.Medium)
           }
           .width('100%').padding({ bottom: 4 })
-
           Text(this.tr('ramadan_jummah_tul_widah_desc'))
             .fontSize(11).fontColor(this.colors.textMuted)
-            .lineHeight(16)
-            .width('100%')
+            .lineHeight(16).width('100%')
         }
       }
       .width('100%')
@@ -1529,8 +1471,7 @@ struct HomePage {
     Column() {
       Row() {
         Text(this.tr('ramadan_day_of'))
-          .fontSize(12).fontColor(this.colors.textMuted)
-          .margin({ right: 4 })
+          .fontSize(12).fontColor(this.colors.textMuted).margin({ right: 4 })
         Text(`${this.ramadanInfo!.currentDayNumber}`)
           .fontSize(32).fontWeight(FontWeight.Bold)
           .fontColor(this.colors.accentGold)
@@ -1544,9 +1485,7 @@ struct HomePage {
       Row() {
         Row()
           .width(`${(this.ramadanInfo!.currentDayNumber / this.ramadanInfo!.totalDays) * 100}%`)
-          .height(6)
-          .backgroundColor(this.colors.accentGold)
-          .borderRadius(3)
+          .height(6).backgroundColor(this.colors.accentGold).borderRadius(3)
       }
       .width('100%')
       .height(6)
@@ -1556,8 +1495,7 @@ struct HomePage {
 
       Row() {
         Text(`${this.ramadanInfo!.currentDayNumber} / ${this.ramadanInfo!.totalDays}`)
-          .fontSize(10).fontColor(this.colors.textMuted)
-          .layoutWeight(1)
+          .fontSize(10).fontColor(this.colors.textMuted).layoutWeight(1)
         if (this.currentAshra() !== null) {
           Text(this.tr(this.currentAshra()!.nameKey))
             .fontSize(10).fontColor(this.colors.accentGold)
@@ -1590,18 +1528,15 @@ struct HomePage {
       Column() {
         Text(this.tr('ramadan_days_until'))
           .fontSize(14).fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium)
-          .width('100%')
-        Text(RamadanHelper.formatLong(this.ramadanInfo!.fastingStart, this.currentLanguage))
+          .fontWeight(FontWeight.Medium).width('100%')
+        Text(RamadanHelper.formatLong(
+          this.ramadanInfo!.fastingStart, this.currentLanguage))
           .fontSize(12).fontColor(this.colors.accentGold)
-          .margin({ top: 6 })
-          .width('100%')
+          .margin({ top: 6 }).width('100%')
       }
-      .layoutWeight(1).margin({ left: 16 })
-      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1).margin({ left: 16 }).alignItems(HorizontalAlign.Start)
     }
-    .width('100%')
-    .alignItems(VerticalAlign.Center)
+    .width('100%').alignItems(VerticalAlign.Center)
   }
 
   // ============================================================
@@ -1629,8 +1564,7 @@ struct HomePage {
             Text(`${this.prayerProgress.todayCompleted}`)
               .fontSize(52).fontWeight(FontWeight.Bold)
               .fontColor(this.prayerProgress.todayCompleted === 5
-                ? this.colors.accentGoldLight
-                : this.colors.textWhite)
+                ? this.colors.accentGoldLight : this.colors.textWhite)
             Text(` / ${this.prayerProgress.todayTotal}`)
               .fontSize(22).fontColor(this.colors.textMuted)
               .margin({ left: 4, bottom: 8 })
@@ -1638,8 +1572,7 @@ struct HomePage {
           .alignItems(VerticalAlign.Bottom)
 
           Text(this.tr('home_prayers_completed'))
-            .fontSize(12).fontColor(this.colors.textMuted)
-            .margin({ top: -2 })
+            .fontSize(12).fontColor(this.colors.textMuted).margin({ top: -2 })
         }
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
@@ -1666,123 +1599,12 @@ struct HomePage {
       }
       .width('100%')
 
-      // ---- Per-prayer dots — fully inlined ----
       Row({ space: 8 }) {
-
-        // Fajr
-        Column() {
-          Row()
-            .width(20)
-            .height(20)
-            .borderRadius(10)
-            .backgroundColor(this.prayerProgress.todayFajr
-              ? this.colors.accentGold : 'transparent')
-            .border({
-              width: 2,
-              color: this.prayerProgress.todayFajr
-                ? this.colors.accentGold : this.colors.borderStrong
-            })
-          Text(this.tr('prayer_fajr'))
-            .fontSize(9)
-            .fontColor(this.prayerProgress.todayFajr
-              ? this.colors.accentGold : this.colors.textMuted)
-            .margin({ top: 6 })
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-        }
-        .layoutWeight(1).alignItems(HorizontalAlign.Center)
-
-        // Dhuhr
-        Column() {
-          Row()
-            .width(20)
-            .height(20)
-            .borderRadius(10)
-            .backgroundColor(this.prayerProgress.todayDhuhr
-              ? this.colors.accentGold : 'transparent')
-            .border({
-              width: 2,
-              color: this.prayerProgress.todayDhuhr
-                ? this.colors.accentGold : this.colors.borderStrong
-            })
-          Text(this.tr('prayer_dhuhr'))
-            .fontSize(9)
-            .fontColor(this.prayerProgress.todayDhuhr
-              ? this.colors.accentGold : this.colors.textMuted)
-            .margin({ top: 6 })
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-        }
-        .layoutWeight(1).alignItems(HorizontalAlign.Center)
-
-        // Asr
-        Column() {
-          Row()
-            .width(20)
-            .height(20)
-            .borderRadius(10)
-            .backgroundColor(this.prayerProgress.todayAsr
-              ? this.colors.accentGold : 'transparent')
-            .border({
-              width: 2,
-              color: this.prayerProgress.todayAsr
-                ? this.colors.accentGold : this.colors.borderStrong
-            })
-          Text(this.tr('prayer_asr'))
-            .fontSize(9)
-            .fontColor(this.prayerProgress.todayAsr
-              ? this.colors.accentGold : this.colors.textMuted)
-            .margin({ top: 6 })
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-        }
-        .layoutWeight(1).alignItems(HorizontalAlign.Center)
-
-        // Maghrib
-        Column() {
-          Row()
-            .width(20)
-            .height(20)
-            .borderRadius(10)
-            .backgroundColor(this.prayerProgress.todayMaghrib
-              ? this.colors.accentGold : 'transparent')
-            .border({
-              width: 2,
-              color: this.prayerProgress.todayMaghrib
-                ? this.colors.accentGold : this.colors.borderStrong
-            })
-          Text(this.tr('prayer_maghrib'))
-            .fontSize(9)
-            .fontColor(this.prayerProgress.todayMaghrib
-              ? this.colors.accentGold : this.colors.textMuted)
-            .margin({ top: 6 })
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-        }
-        .layoutWeight(1).alignItems(HorizontalAlign.Center)
-
-        // Isha
-        Column() {
-          Row()
-            .width(20)
-            .height(20)
-            .borderRadius(10)
-            .backgroundColor(this.prayerProgress.todayIsha
-              ? this.colors.accentGold : 'transparent')
-            .border({
-              width: 2,
-              color: this.prayerProgress.todayIsha
-                ? this.colors.accentGold : this.colors.borderStrong
-            })
-          Text(this.tr('prayer_isha'))
-            .fontSize(9)
-            .fontColor(this.prayerProgress.todayIsha
-              ? this.colors.accentGold : this.colors.textMuted)
-            .margin({ top: 6 })
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-        }
-        .layoutWeight(1).alignItems(HorizontalAlign.Center)
+        this.PrayerDot(this.tr('prayer_fajr'), this.prayerProgress.todayFajr)
+        this.PrayerDot(this.tr('prayer_dhuhr'), this.prayerProgress.todayDhuhr)
+        this.PrayerDot(this.tr('prayer_asr'), this.prayerProgress.todayAsr)
+        this.PrayerDot(this.tr('prayer_maghrib'), this.prayerProgress.todayMaghrib)
+        this.PrayerDot(this.tr('prayer_isha'), this.prayerProgress.todayIsha)
       }
       .width('100%').margin({ top: 18 })
     }
@@ -1815,13 +1637,13 @@ struct HomePage {
 
       Text(label)
         .fontSize(9)
-        .fontColor(done ? this.colors.accentGold : this.colors.textMuted)
+        .fontColor(done
+          ? this.colors.accentGold : this.colors.textMuted)
         .margin({ top: 6 })
         .maxLines(1)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
     }
-    .layoutWeight(1)
-    .alignItems(HorizontalAlign.Center)
+    .layoutWeight(1).alignItems(HorizontalAlign.Center)
   }
 
   // ============================================================
@@ -1845,19 +1667,17 @@ struct HomePage {
         Column() {
           Row() {
             Text(`${this.prayerProgress.currentStreak}`)
-              .fontSize(28).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+              .fontSize(28).fontWeight(FontWeight.Bold)
+              .fontColor(this.colors.textWhite)
             Text(` ${this.tr('home_days')}`)
               .fontSize(12).fontColor(this.colors.textMuted)
               .margin({ left: 2, bottom: 4 })
-          }
-          .alignItems(VerticalAlign.Bottom)
-
+          }.alignItems(VerticalAlign.Bottom)
           Text(this.tr('home_streak'))
             .fontSize(11).fontColor(this.colors.textMuted)
         }
         .alignItems(HorizontalAlign.Start).margin({ left: 12 }).layoutWeight(1)
-      }
-      .layoutWeight(1)
+      }.layoutWeight(1)
 
       Divider().vertical(true).height(48).color(this.colors.borderSoft)
 
@@ -1865,14 +1685,13 @@ struct HomePage {
         Text('🏆').fontSize(20).margin({ bottom: 4 })
         Row() {
           Text(`${this.prayerProgress.bestStreak}`)
-            .fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.colors.accentGold)
+            .fontSize(18).fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.accentGold)
           Text(` ${this.tr('home_best_streak')}`)
             .fontSize(10).fontColor(this.colors.textMuted).margin({ left: 4 })
         }
       }
-      .layoutWeight(1)
-      .padding({ left: 12 })
-      .alignItems(HorizontalAlign.Center)
+      .layoutWeight(1).padding({ left: 12 }).alignItems(HorizontalAlign.Center)
     }
     .width('100%')
     .padding(18)
@@ -1904,7 +1723,8 @@ struct HomePage {
           .letterSpacing(1.2)
           .layoutWeight(1)
         Text(`${this.prayerProgress.weekCompleted} / 35`)
-          .fontSize(12).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
+          .fontSize(12).fontColor(this.colors.accentGold)
+          .fontWeight(FontWeight.Medium)
       }
       .width('100%').padding({ bottom: 14 })
 
@@ -1918,23 +1738,22 @@ struct HomePage {
               .height(36)
               .borderRadius(8)
               .backgroundColor(done ? this.colors.accentGold : this.colors.tintSoft)
-              .border({ width: 1, color: done ? this.colors.accentGold : this.colors.borderSoft })
+              .border({
+                width: 1,
+                color: done ? this.colors.accentGold : this.colors.borderSoft
+              })
             if (done) {
-              Text('✓')
-                .fontSize(14).fontColor(this.colors.textOnAccent)
-                .position({ x: '50%', y: 32 })
-                .translate({ x: -8 })
+              Text('✓').fontSize(14).fontColor(this.colors.textOnAccent)
+                .position({ x: '50%', y: 32 }).translate({ x: -8 })
             }
           }
-          .layoutWeight(1)
-          .alignItems(HorizontalAlign.Center)
+          .layoutWeight(1).alignItems(HorizontalAlign.Center)
         }, (done: boolean, i: number) => `w-${i}-${done ? 'd' : 'u'}`)
       }
       .width('100%')
 
       Text(`${this.prayerProgress.weekCompleted} ${this.tr('home_week_summary')}`)
-        .fontSize(11).fontColor(this.colors.textMuted)
-        .margin({ top: 12 })
+        .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 12 })
     }
     .width('100%')
     .padding(18)
@@ -1970,7 +1789,8 @@ struct HomePage {
           this.monthProgress.monthIndex,
           this.currentLanguage
         ))
-          .fontSize(12).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
+          .fontSize(12).fontColor(this.colors.accentGold)
+          .fontWeight(FontWeight.Medium)
       }
       .width('100%').padding({ bottom: 14 })
 
@@ -1984,36 +1804,31 @@ struct HomePage {
             .layoutWeight(1)
         }, (d: string, i: number) => `mh-${i}-${d}`)
       }
-      .width('100%').padding({ bottom: 6 })
-      .direction(Direction.Ltr)
+      .width('100%').padding({ bottom: 6 }).direction(Direction.Ltr)
 
       Column() {
         ForEach(this.monthProgress.weeks, (week: MonthDayCell[], wi: number) => {
           Row() {
             ForEach(week, (cell: MonthDayCell, di: number) => {
               if (cell.isPadding) {
-                Column()
-                  .layoutWeight(1)
-                  .height(32)
-                  .margin({ left: 2, right: 2 })
+                Column().layoutWeight(1).height(32).margin({ left: 2, right: 2 })
               } else {
                 this.MonthDayCellView(cell)
               }
             }, (cell: MonthDayCell, di: number) =>
-            `mc-${wi}-${di}-${cell.dayOfMonth}-${cell.completed}-${cell.isToday ? 'T' : ''}`
-            )
+            `mc-${wi}-${di}-${cell.dayOfMonth}-${cell.completed}-${cell.isToday ? 'T' : ''}`)
           }
-          .width('100%')
-          .margin({ bottom: 4 })
-        }, (week: MonthDayCell[], wi: number) => `mw-${wi}-${this.monthProgress.year}-${this.monthProgress.monthIndex}`)
+          .width('100%').margin({ bottom: 4 })
+        }, (week: MonthDayCell[], wi: number) =>
+        `mw-${wi}-${this.monthProgress.year}-${this.monthProgress.monthIndex}`)
       }
-      .width('100%')
-      .direction(Direction.Ltr)
+      .width('100%').direction(Direction.Ltr)
 
       Row() {
         Column() {
           Text(`${this.monthProgress.totalCompleted}`)
-            .fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.colors.accentGold)
+            .fontSize(18).fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.accentGold)
           Text(this.tr('home_month_summary'))
             .fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
         }
@@ -2023,7 +1838,8 @@ struct HomePage {
 
         Column() {
           Text(`${this.monthProgress.perfectDays}`)
-            .fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.colors.accentGoldLight)
+            .fontSize(18).fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.accentGoldLight)
           Text(this.tr('home_perfect_days'))
             .fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
         }
@@ -2033,22 +1849,14 @@ struct HomePage {
 
         Column() {
           Text(`${this.monthProgress.daysElapsed}`)
-            .fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+            .fontSize(18).fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.textWhite)
           Text(this.tr('home_days_elapsed'))
             .fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
         }
         .layoutWeight(1).alignItems(HorizontalAlign.Center)
       }
-      .width('100%').margin({ top: 14 })
-      .alignItems(VerticalAlign.Center)
-
-      Row() {
-        Text('✨').fontSize(11).margin({ right: 6 }).opacity(0.75)
-        Text(`${this.prayerProgress.lifetimeCompleted} ${this.tr('home_lifetime_1y')}`)
-          .fontSize(10).fontColor(this.colors.textMuted).fontStyle(FontStyle.Italic)
-      }
-      .width('100%').margin({ top: 12 })
-      .justifyContent(FlexAlign.Center)
+      .width('100%').margin({ top: 14 }).alignItems(VerticalAlign.Center)
     }
     .width('100%')
     .padding(18)
@@ -2107,7 +1915,8 @@ struct HomePage {
       Row() {
         Column() {
           Text(`${this.tasbihProgress.lifetimeCount}`)
-            .fontSize(32).fontWeight(FontWeight.Bold).fontColor(this.colors.accentGold)
+            .fontSize(32).fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.accentGold)
           Text(this.tr('home_tasbih_lifetime'))
             .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
         }
@@ -2117,25 +1926,36 @@ struct HomePage {
 
         Column() {
           Text(`${this.tasbihProgress.totalTasbihs}`)
-            .fontSize(22).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+            .fontSize(22).fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.textWhite)
           Text(this.tr('home_tasbih_summary'))
             .fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
         }
-        .padding({ left: 16 }).layoutWeight(1)
-        .alignItems(HorizontalAlign.Start)
+        .padding({ left: 16 }).layoutWeight(1).alignItems(HorizontalAlign.Start)
 
         Divider().vertical(true).height(50).color(this.colors.borderSoft)
 
         Column() {
           Text(`${this.tasbihProgress.totalDhikrs}`)
-            .fontSize(22).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+            .fontSize(22).fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.textWhite)
           Text(this.tr('home_dhikrs'))
             .fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
         }
-        .padding({ left: 16 }).layoutWeight(1)
-        .alignItems(HorizontalAlign.Start)
+        .padding({ left: 16 }).layoutWeight(1).alignItems(HorizontalAlign.Start)
       }
       .width('100%')
+
+      Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 12 })
+
+      Row() {
+        Text('✨').fontSize(11).margin({ right: 6 }).opacity(0.75)
+        Text(`${this.prayerProgress.yearCompleted} ${this.tr('home_lifetime_1y')}`)
+          .fontSize(10).fontColor(this.colors.textMuted)
+          .fontStyle(FontStyle.Italic).layoutWeight(1)
+      }
+      .width('100%').justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Center)
     }
     .width('100%')
     .padding(18)
@@ -2161,8 +1981,10 @@ struct HomePage {
       Text(icon).fontSize(22).margin({ right: 16 })
       Text(label).fontSize(16).fontColor(this.colors.textWhite)
     }
-    .width('100%').padding({ top: 12, bottom: 12, left: 16 })
-    .borderRadius(Theme.radiusSmall).onClick(() => {
+    .width('100%')
+    .padding({ top: 12, bottom: 12, left: 16 })
+    .borderRadius(Theme.radiusSmall)
+    .onClick(() => {
       onClick();
     })
   }
