@@ -1,464 +1,376 @@
 # Sirat Companion
 
-**Your Daily Islamic Companion** — a lightweight, offline-first Islamic app for HarmonyOS.
+> Your daily Islamic companion for HarmonyOS — prayer times, Qibla, Tasbih, and Hijri calendar, all in one offline-first
+> app.
 
-Prayer times, Qibla compass, Tasbih, and Hijri calendar — all in one calm, modern app that respects your settings and
-your battery.
-
-**Version 2.1.0** &nbsp;·&nbsp; **HarmonyOS 5+ (API 22+)** &nbsp;·&nbsp; **English · 中文 · العربية**
+Sirat Companion is a HarmonyOS application written in ArkTS / ArkUI. It runs entirely on-device: no accounts, no
+servers, no analytics, no ads.
 
 ---
 
 ## Table of Contents
 
-1. [Features](#features)
-2. [Getting Started](#getting-started)
-3. [Configuration](#configuration)
-4. [Permissions](#permissions)
-5. [Localization](#localization)
-6. [Project Structure](#project-structure)
-7. [Notification Setup](#notification-setup)
-8. [Testing Notifications](#testing-notifications)
-9. [Timezone Handling](#timezone-handling)
-10. [Roadmap](#roadmap)
-11. [Contributing](#contributing)
-12. [Known Limitations](#known-limitations)
-13. [License](#license)
+- [Features](#features)
+- [Screens](#screens)
+- [Requirements](#requirements)
+- [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [Architecture](#architecture)
+- [Localization](#localization)
+- [Data & Storage](#data--storage)
+- [Permissions](#permissions)
+- [Privacy](#privacy)
+- [Versioning](#versioning)
+- [Roadmap](#roadmap)
+- [License](#license)
+- [Contact](#contact)
 
 ---
 
 ## Features
 
-### Prayer Times
+### 🕌 Prayer Times
 
-- Five daily prayers: Fajr, Dhuhr, Asr, Maghrib, Isha
-- Four calculation conventions
-- Two Asr shadow rules: Standard and Hanafi
-- Extra timings: Imsak, Sunrise, Sunset, First Third, Midnight, Last Third
-- Per-prayer minute offsets
-- Timeline-aware **Next** — after Isha shows First Third, Midnight, Last Third, Imsak, then tomorrow's Fajr
-- Time-based **Current / Next** header that never lies about the active prayer
+- All five daily prayers — Fajr, Dhuhr, Asr, Maghrib, Isha — calculated with the Meeus sun-position algorithm
+- Four calculation conventions: **Karachi**, **Jafari**, **ISNA**, **MWL**
+- Two Asr shadow rules: **Standard** (Shafi'i / Maliki / Hanbali) and **Hanafi**
+- Four high-latitude fallback rules for Fajr/Isha when the sun doesn't reach the required angle
+- Per-prayer manual offsets (−60 to +60 minutes) with a reset option
+- Extra timings combined into the same timeline: Imsak, Sunrise, Sunset, First Third, Midnight, Last Third
+- Offline timezone resolution via a 60+ city lookup with DST rules for US, EU, and AU
 
-#### Calculation Conventions
+### 🧭 Qibla Compass
 
-| Convention                          | Fajr angle | Isha angle |
-|-------------------------------------|------------|------------|
-| Karachi (Univ. of Islamic Sciences) | 18°        | 18°        |
-| ISNA (North America)                | 15°        | 15°        |
-| MWL (Muslim World League)           | 18°        | 17°        |
-| Jafari (Leva Institute, Qum)        | 16°        | 14°        |
+- Great-circle bearing to the Kaaba from your location
+- Orientation sensor with magnetometer fallback
+- Magnetic declination correction from an offline per-city table
+- Low-pass filtered heading and unwrapped rotation for smooth animation
+- Distance to the Kaaba
 
-### Prayer Notifications
+### 📿 Tasbih
 
-- Two reminders per prayer: one at a configurable lead time (5–60 min), one at exact time
-- Per-prayer toggles — enable or silence Fajr, Dhuhr, Asr, Maghrib, Isha individually
-- Master toggle for all reminders
-- System-level scheduling — reminders fire even when the app is closed
-- Localized content in all three languages
+- Custom tasbihs with multiple dhikr items each
+- Vertical bead-string animation with LIFO rolling-window entry
+- Fisheye loupe that magnifies beads under your finger while counting
+- Two render styles — **Premium (3D canvas)** and **Classic (declarative)**
+- Five theme presets (Amber, Charcoal, Emerald, Pearl, Gold), each with two finishes (Matte / Metallic)
+- Per-tasbih themes — each tasbih remembers its own colour
+- Lifetime counter per tasbih, and two reset levels (current dhikr / whole tasbih)
+- Adjustable haptic feedback on each count
 
-### Qibla Compass
+### 📅 Hijri Calendar
 
-- Live direction to the Kaaba using the device's orientation sensor
-- Low-pass filter for smooth, jitter-free readings
-- Unwrapped angle math — no more 360° spins at north
-- Distance to Makkah displayed live
-- Magnetometer fallback when the orientation sensor is unavailable
+- Month grid with today, Friday, and Islamic event highlighting
+- ±3 day Hijri offset that shifts every Hijri date in the app
+- Nine built-in Islamic events — Islamic New Year, Ashura, Mawlid, Isra & Mi'raj, Mid-Sha'ban, Ramadan, Eid al-Fitr,
+  Arafah, Eid al-Adha
+- Localized month and event names
 
-### Tasbih
+### 🏠 Home Dashboard
 
-- Vertical bead string with visible string line and 3D gradient beads
-- Swipe up to count, swipe down to undo
-- LIFO animation — new beads drop in from above on increment
-- Pulse-on-cap — visual feedback even when the string is saturated
-- Auto-advance to the next dhikr when one completes
-- Lifetime counter per tasbih — persisted forever
-- Multiple Tasbihs, unlimited Dhikr items
-- Haptic feedback on every flick
+- **Upcoming event countdown** — days until the next Islamic event, honouring the Hijri offset
+- **Ramadan card** (visible within 60 days of Ramadan) with:
+    - Today's fasting window (Imsak → Maghrib) during Ramadan, or a first-day preview during countdown
+    - Three Ashras with their significance (Mercy / Forgiveness / Freedom from Hellfire)
+    - Laylat al-Qadr candidate nights (odd nights of the last ten days)
+    - Jummah tul Widah (last Friday of Ramadan)
+- **Live countdown** to Imsak and Maghrib — starts 15 minutes before the event, holds for 5 minutes after, with the
+  corresponding Dua displayed at zero
+- **Today's prayer progress** — 0–5 counter, ring, and per-prayer dots
+- **Streaks** — current and best consecutive all-five days
+- **Weekly grid** — last 7 days at a glance
+- **Monthly heatmap** — every day of the current Gregorian month, colour-coded by completion
+- **Tasbih statistics** — lifetime count, tasbih count, total dhikr
 
-### Hijri Calendar
+### ⚙️ Settings & Customization
 
-- Gregorian and Hijri dates side by side
-- Upcoming Islamic events highlighted in the grid
-- ±3 day offset for local moon-sighting differences
-- Offset applies everywhere — top pill, prayer-list header, and calendar
-- Localized month names in all three languages
+- Theme: Light / Dark / Follow System, applied instantly across every screen
+- Language: English / 中文 / العربية, with full RTL support for Arabic
+- Location: GPS with reverse geocoding fallback chain, or manual coordinates with optional city override
+- Vibration toggle
+- Diagnostic log viewer (view, copy, clear) for troubleshooting on-device
 
-### Design
+### ✨ Polish
 
-- Dark mode with Light / Dark / Use System Settings
-- Three languages: English, 中文, العربية
-- Full RTL support for Arabic
-- First-launch wizard for quick setup
-- Swipe to refresh on the home screen
-- Everything works offline
+- Frobenius-glass floating navigation bar
+- Tap-to-navigate between Home / Prayers / Calendar / Compass / Tasbih
+- Full localization with an on-demand language picker
+- First-launch wizard with explicit privacy consent
+- Pull-to-refresh on Home and Prayers
+- Auto-refresh of every screen when the app returns from the background
+
+---
+
+## Screens
+
+| Home                               | Prayers                        | Tasbih                    | Compass         | Calendar         |
+|------------------------------------|--------------------------------|---------------------------|-----------------|------------------|
+| Dashboard, streak, monthly heatmap | Timeline of prayers and extras | Bead counting with themes | Qibla direction | Hijri month view |
+
+*(Add screenshots here once available.)*
+
+---
+
+## Requirements
+
+- **DevEco Studio** 5.0 or later
+- **HarmonyOS SDK** API 12 (5.0.0) or later — target API 22+
+- A device or emulator running **HarmonyOS 5.0+**
 
 ---
 
 ## Getting Started
 
-### Prerequisites
-
-- DevEco Studio 5.0 or later
-- HarmonyOS SDK API 22+
-- A HarmonyOS device or emulator (see [Known Limitations](#known-limitations))
-- Node.js 18+ and `ohpm` (installed with DevEco Studio)
-
-### Install and Run
-
-**1. Clone the repository**
+### Clone
 
 ```bash
-git clone https://github.com/your-org/sirat-companion.git
-cd sirat-companion
-```
+git clone https://github.com/<your-username>/SiratCompanion-HOS.git
+cd SiratCompanion-HOS
 
-**2. Open in DevEco Studio**
+Build
+Open the project in DevEco Studio and let it sync oh-package.json5. Then:
 
-File → Open → select the `sirat-companion` folder.
+Build → Clean Project
 
-**3. Sync dependencies**
+Build → Build Hap(s) / App(s)
 
-File → Sync and Refresh Project.
+Run on a connected device or emulator
 
-**4. Select a device**
+Run from CLI
+bash
+hvigorw assembleHap --mode module -p product=default
+hdc install entry/build/default/outputs/default/entry-default-signed.hap
+Signing
+The project uses manual signing with a release keystore and a .p7b profile generated in AppGallery Connect. Update File → Project Structure → Signing Configs with your own credentials before building a release HAP.
 
-- Physical device: connect via USB, enable Developer Options and USB Debugging
-- Emulator: Device Manager → Create Emulator → API 22+ → Start
+SiratCompanion-HOS/
+├── AppScope/
+│   ├── app.json5                        # bundle name, version, icon, label
+│   └── resources/
+│       └── base/element/string.json     # app_name (source of truth for the brand name)
+│
+└── entry/src/main/
+    ├── module.json5                     # permissions, abilities, extension abilities
+    ├── resources/
+    │   ├── base/profile/main_pages.json # every page must be listed here
+    │   └── base/element/                # strings, colours, floats
+    │
+    └── ets/
+        ├── common/
+        │   ├── FeatureFlags.ets         # compile-time toggles
+        │   ├── PageTheme.ets            # system dark-mode listener + compute()
+        │   ├── StorageKeys.ets          # every AppStorage / Preferences key
+        │   ├── TasbihThemes.ets         # tasbih colour presets + finishes
+        │   └── Theme.ets                # ThemeColors tokens, radii, padding
+        │
+        ├── components/
+        │   ├── DuaCard.ets              # reusable Dua renderer (Arabic + transliteration + translation)
+        │   ├── FloatingNavBar.ets       # glass-effect bottom navigation
+        │   └── PageHeader.ets           # shared header for Home + Prayers
+        │
+        ├── data/
+        │   ├── Duas.ets                 # Dua registry (Iftar, Suhoor, extensible)
+        │   ├── IslamicEvents.ets        # the nine important events
+        │   └── PrivacyPolicy.ets        # full policy text in EN / ZH / AR
+        │
+        ├── entryability/
+        │   └── EntryAbility.ets         # app entry point + foreground tick
+        ├── entrybackupability/
+        │   └── EntryBackupAbility.ets   # backup extension stub
+        │
+        ├── helper/
+        │   ├── AppInfoHelper.ets        # version + app name from the bundle
+        │   ├── AppLogger.ets            # rotating file logger
+        │   ├── HapticHelper.ets         # vibrator wrapper
+        │   ├── HijriCalendarHelper.ets  # Gregorian ↔ Hijri conversion
+        │   ├── LocalizationHelper.ets   # all strings for EN / ZH / AR
+        │   ├── NavHelper.ets            # tab order + slide-direction
+        │   ├── NotificationHelper.ets   # (disabled pending AGC approval)
+        │   ├── PreferencesHelper.ets    # async Preferences wrapper
+        │   ├── QiblaSensorHelper.ets    # orientation + magnetometer
+        │   ├── RamadanHelper.ets        # Ramadan timeline, ashras, Laylat al-Qadr
+        │   └── SettingsHelper.ets       # typed settings access
+        │
+        ├── models/
+        │   ├── DateModels.ets
+        │   ├── HijriCalendarModels.ets
+        │   ├── PrayerModel.ets
+        │   ├── SettingsModels.ets
+        │   └── TasbihModels.ets
+        │
+        ├── pages/
+        │   ├── WizardPage.ets           # first-launch wizard
+        │   ├── HomePage.ets             # dashboard
+        │   ├── Prayer.ets               # prayers timeline
+        │   ├── HijriCalendarPage.ets
+        │   ├── QiblaPage.ets
+        │   ├── TasbihPage.ets
+        │   ├── SettingsPage.ets
+        │   └── CustomizePage.ets
+        │
+        └── utils/
+            ├── DateUtils.ets            # Gregorian ↔ Hijri helpers
+            ├── HomeController.ets       # timeline + header snapshots
+            ├── LocationCache.ets        # last known GPS fix
+            ├── LocationUtils.ets        # permissions + reverse geocoding
+            ├── OfflineCityLookup.ets    # 60+ cities with timezone + declination
+            ├── PrayerManager.ets        # state, offsets, status computation, storage
+            ├── PrayerTimeCalculator.ets # Meeus algorithm + high-latitude rules
+            ├── ProgressHelper.ets       # streaks, weekly grid, monthly heatmap
+            ├── QiblaCalculator.ets      # great-circle bearing + distance
+            ├── TasbihManager.ets        # pure data operations
+            ├── TasbihStorage.ets        # preferences-backed persistence
+            └── TimezoneResolver.ets     # DST rules + device-vs-location offset
 
-**5. Build and run**
+Architecture
+Data flow
 
-Press `Shift + F10` or use Build → Build Hap(s).
+User interaction → Page (@State) → Helper / Manager → PreferencesHelper → Disk
+                                          │
+                                          ├→ AppStorage (for watchers)
+                                          └→ Indexed maps (for instant reads)
 
-### Building a Release HAP
+AppStorage carries reactive state across pages: theme mode, language, Hijri offset, foreground tick.
 
-1. Sign the app in DevEco Studio: Build → Generate Key and CSR
-2. Build: Build → Build Hap(s) / App(s) → Build Hap(s)
+PreferencesHelper is the single async persistence layer — everything ultimately lands here.
 
-The signed HAP appears under `entry/build/default/outputs/default/`.
+Module statics (like PrayerManager.stateMap) hold hot state in memory so reads are synchronous. Persistence happens in the background.
+
+Reactivity rules followed throughout the project
+Every page mirrors appLanguage into a local @State currentLanguage and passes it explicitly — never relies on @Watch firing for a self-assigned @StorageLink.
+
+Parameterized @Builder methods are avoided for anything that must re-render when a value changes. Values are read directly from @State inside the render tree instead.
+
+ForEach keys always include every field whose change should force a rebuild — including checked on prayer rows and the theme colour on bead rows.
+
+Storage keys
+All AppStorage and Preferences keys are declared in common/StorageKeys.ets. Do not hard-code key strings anywhere else.
+
+Feature flags
+common/FeatureFlags.ets holds NOTIFICATIONS_ENABLED. When false, notification UI, permissions, and scheduling paths are all skipped at runtime.
+
+Localization
+Three languages are supported out of the box: English (en), Chinese (zh), and Arabic (ar).
+
+All UI strings live in helper/LocalizationHelper.ets
+
+L.get(key, lang) returns the string for the given language, falling back to English and then to the key itself
+
+L.isRtlLang(lang) drives .direction(Direction.Rtl : Direction.Ltr) on each page root
+
+Arabic layouts mirror the whole page except for compass rose, coordinate inputs, and the calendar grid (kept LTR for correctness)
+
+A future language can be added by appending a new Map<string, string> builder to LocalizationHelper
+
+Adding a new string
+Add m.set('my_key', 'My String') in buildEn(), buildZh(), and buildAr()
+
+Reference it in code as this.tr('my_key')
+
+Data & Storage
+Everything is stored on-device. No accounts, no servers, no telemetry.
+
+Data	Where	Survives uninstall?
+Settings (theme, language, offsets…)	Preferences (sirat_settings)	❌
+Tasbihs + dhikrs + counts + themes	Preferences (tasbih_prefs)	❌
+Prayer completion history	Preferences (prayer_state_map)	❌
+Last known GPS location	Preferences (gps_*)	❌
+Diagnostic log file	<filesDir>/sirat_log.txt (200 KB rotating)	❌
+Uninstalling the app deletes everything. There is no cloud backup enabled by the app itself (system-level backup is a user opt-in governed by Huawei's policy).
+
+Permissions
+Permission	When requested	Purpose
+ohos.permission.VIBRATE	On Tasbih use	Haptic feedback per count
+ohos.permission.APPROXIMATELY_LOCATION	First location use	Coarse prayer time calculation
+ohos.permission.LOCATION	First location use	Precise prayer time calculation
+ohos.permission.ACCELEROMETER	First Qibla use	Compass heading
+ohos.permission.PUBLISH_AGENT_REMINDER	Currently disabled	Prayer time notifications (pending AGC capability approval)
+Every permission is optional — the app degrades gracefully if the user denies it.
+
+Privacy
+Sirat Companion does not collect, transmit, or share any personal data. All data is local.
+
+Full privacy policy: sharjeel-butt.github.io/SiratCompanion-HOS
+
+In-app policy: data/PrivacyPolicy.ets (available in EN / ZH / AR)
+
+The first-launch wizard requires explicit consent before proceeding
+
+Versioning
+Field	Value
+versionName	2.0.0
+versionCode	2000000
+buildVersion	200
+Version is read from AppScope/app.json5 at build time. The Settings → About screen pulls it at runtime via bundleManager, so there is never a mismatch between the manifest and what the user sees.
+
+History
+Version	Highlights
+1.2.0	i18n, RTL, first-launch wizard, Hijri calendar, high-latitude rules, prayer accuracy fixes
+1.3.0	Notifications, timeline-aware next prayer
+1.4.0	Premium Tasbih beads, fisheye loupe, LIFO rolling window, diagnostic logger
+1.4.1	Bug fixes, log viewer improvements
+2.0.0	Home dashboard, Ramadan card, monthly heatmap, progress streaks, per-tasbih themes, live Duas countdown, foreground refresh, glass floating bar
+Roadmap
+□ Re-enable prayer notifications once the Agent-Powered Reminder capability is approved in AppGallery Connect
+□ Dedicated Duas tab (the registry in data/Duas.ets is already extensible)
+□ Additional languages — Urdu is a natural next step
+□ Adhan audio playback at prayer times
+□ Home screen widgets
+□ HarmonyOS 7 glass-effect styling (requires API 26 SDK)
+□ Cloud sync (opt-in, with explicit consent)
+Contributing
+Issues and pull requests are welcome.
+
+Before opening a PR
+Follow the existing reactivity rules — in particular, do not rely on @Watch firing for self-assigned @StorageLink values
+
+Add localization keys to all three languages
+
+Test on a real device, not just the emulator
+
+Keep the codebase free of third-party analytics, ads, or tracking libraries
+
+License
+This project is licensed under the MIT License. See LICENSE for the full text.
+
+Contact
+Developer: Sharjeel Butt
+Email: sharjeel.butt@gmail.com
+Issues: GitHub Issues
+
+Built with 🤲 for the Ummah.
+
 
 ---
 
-## Configuration
-
-### Calculation Method
-
-**Default:** Karachi
-
-**Location:** Settings → Prayer Times → Convention
-
-### Asr Rule
-
-**Default:** Standard
-
-**Location:** Settings → Prayer Times → Madhab
-
-### Location Mode
-
-- **GPS** — fetches location on launch and when the 📡 button is tapped
-- **Manual** — enter coordinates; reverse-geocoded to a city name
-
-### Hijri Offset
-
-**Location:** Settings → Hijri Calendar → Hijri Date & Calendar Offset
-
-Shifts all Islamic dates by ±3 days.
-
-### Theme Mode
-
-**Location:** Settings → Customize → Appearance → Dark Mode
-
-**Options:** Light, Dark, Use System Settings
-
-### Language
-
-**Location:** Settings → Customize → UI Customization → Language
-
-Instantly switches between English, 中文, and العربية.
-
-### Notifications
-
-**Location:** Settings → Notifications
-
-Master toggle, lead-time stepper, and per-prayer switches.
-
----
-
-## Permissions
-
-Declared in `entry/src/main/module.json5`.
-
-| Permission                               | Purpose                               | Requested                    |
-|------------------------------------------|---------------------------------------|------------------------------|
-| `ohos.permission.APPROXIMATELY_LOCATION` | Approximate location for prayer times | On first GPS request         |
-| `ohos.permission.LOCATION`               | Precise location for prayer times     | On first GPS request         |
-| `ohos.permission.ACCELEROMETER`          | Compass and Qibla direction           | On Compass open              |
-| `ohos.permission.PUBLISH_AGENT_REMINDER` | Prayer notifications                  | On first notification enable |
-
-All permissions can be denied without affecting other features.
-
----
-
-## Localization
-
-The app is fully localized in three languages.
-
-| Language                 | Code | RTL |
-|--------------------------|------|-----|
-| English                  | `en` | No  |
-| 中文 (Chinese, Simplified) | `zh` | No  |
-| العربية (Arabic)         | `ar` | Yes |
-
-Localization strings live in `helper/LocalizationHelper.ets` as `Map<string, string>` tables built once at class init.
-
-### Adding a New Language
-
-1. Add the language code to the `AppLanguage` enum
-2. Add a new `buildXx()` method returning a `Map<string, string>`
-3. Register it in `tableFor()`, `get()`, and `getArray()`
-4. Add the `Xx` static table reference
-5. Add the language to `LanguageOption` in `WizardPage.ets`
-
----
-
-## Project Structure
-
-```
-entry/src/main/ets/
-├── common/
-│   ├── PageTheme.ets              # Shared theme orchestration
-│   ├── StorageKeys.ets            # All preference keys
-│   └── Theme.ets                  # ThemeColors + Theme.getColors
-├── models/
-│   ├── DateModels.ets             # IslamicEvent, UpcomingImportantDate
-│   ├── HijriCalendarModels.ets    # CalendarDay, HijriDate
-│   ├── PrayerModel.ets            # Prayer, ExtraTiming
-│   ├── SettingsModels.ets         # PickerItem, CalculationSource, LocationMode
-│   └── TasbihModels.ets           # Tasbih, Dhikr, BeadView
-├── data/
-│   └── IslamicEvents.ets          # Static event table
-├── helper/
-│   ├── HapticHelper.ets
-│   ├── HijriCalendarHelper.ets
-│   ├── LocalizationHelper.ets
-│   ├── NavHelper.ets
-│   ├── NotificationHelper.ets
-│   ├── PrayerOffsetsHelper.ets
-│   ├── PreferencesHelper.ets
-│   ├── QiblaSensorHelper.ets
-│   └── SettingsHelper.ets
-├── utils/
-│   ├── DateUtils.ets
-│   ├── HomeController.ets
-│   ├── LocationCache.ets
-│   ├── LocationUtils.ets
-│   ├── OfflineCityLookup.ets
-│   ├── PrayerManager.ets
-│   ├── PrayerTimeCalculator.ets
-│   ├── QiblaCalculator.ets
-│   ├── TasbihManager.ets
-│   ├── TasbihStorage.ets
-│   └── TimezoneResolver.ets
-├── pages/
-│   ├── CustomizePage.ets
-│   ├── HijriCalendarPage.ets
-│   ├── Index.ets
-│   ├── QiblaPage.ets
-│   ├── SettingsPage.ets
-│   ├── TasbihPage.ets
-│   └── WizardPage.ets
-└── entryability/
-    └── EntryAbility.ets
-```
-
-### Layering
-
-The codebase follows a three-layer architecture.
-
-**Pages** are `@Entry` components holding `@State`, `@Builder`, and event handlers. They render and delegate — no
-business logic.
-
-**Helpers** are stateless façades: `SettingsHelper`, `NotificationHelper`, `HomeController`, `PrayerManager`,
-`LocalizationHelper`, `NavHelper`. They orchestrate and contain pure logic where possible.
-
-**Core** is the bottom layer: `PrayerTimeCalculator`, `PreferencesHelper`, `TimezoneResolver`, `QiblaCalculator`.
-Astronomy math, persistence, and DST rules.
-
-> **Rule of thumb:** pages never touch `@ohos.data.preferences` directly. All persistence goes through
-`PreferencesHelper` via `SettingsHelper`.
-
----
-
-## Notification Setup
-
-Notifications use `reminderAgentManager` from `@kit.BackgroundTasksKit`.
-
-### How It Works
-
-1. User enables notifications in Settings → Notifications
-2. App requests `PUBLISH_AGENT_REMINDER` permission
-3. On every app open, `NotificationHelper.rescheduleAll()` runs:
-
-- Cancels all existing reminders (clean slate)
-- Reads location, method, Asr rule, offsets, and notification settings
-- Calculates prayer times for the next 3 days
-- Publishes two reminders per enabled prayer (before + exact)
-
-### Reliability
-
-- Reminders fire even when the app is closed
-- Reminders survive device restarts
-- Reminders renew every time the user opens the app
-- Language changes reschedule all reminders with new localized content
-
----
-
-## Testing Notifications
-
-| Emulator API | `reminderAgentManager` support |
-|--------------|--------------------------------|
-| API 9 – 19   | Not supported                  |
-| API 20+      | Supported                      |
-
-**On API 20+ emulator** you can verify the permission dialog, `publishReminder()` return values, notification display in
-the shade, and localization.
-
-**On any emulator** use `notificationManager.publish()` directly to verify content without waiting for the scheduler.
-
-**On a real device** you get full validation including the exact timed trigger. Cloud debugging via AppGallery Connect
-is a good alternative.
-
----
-
-## Timezone Handling
-
-Prayer times are calculated for the location's timezone, not the device's.
-
-`TimezoneResolver.effectiveOffsetForLocation()` does the following:
-
-1. Checks `OfflineCityLookup` for the nearest known city (60+ cities with standard offset and DST rule)
-2. Applies US / EU / AU DST rules based on the date
-3. If the device's own offset is within 30 minutes of the location estimate, prefers the device's offset (the OS knows
-   DST transitions more precisely)
-
-This means viewing NYC prayer times from Pakistan shows NYC local times, with correct EDT / EST transitions.
-
----
-
-## Roadmap
-
-### In progress
-
-- [ ] **Re-enable prayer notifications** — code is complete in `NotificationHelper.ets` and gated behind `FeatureFlags.NOTIFICATIONS_ENABLED`. Blocked on **Agent-Powered Reminder** capability approval in AppGallery Connect (~8 working days from submission). Re-enabling is a four-line change once approved: flip the flag, uncomment the `PUBLISH_AGENT_REMINDER` permission in `module.json5`, restore the notification disclosures in the privacy policy, and regenerate the signing profile.
-
-### Next up
-
-- [ ] **Dedicated Duas tab** — the infrastructure is ready. `data/Duas.ets` holds the registry (`DUA_REGISTRY`, `Duas.byKey()`) and `components/DuaCard.ets` renders any entry with Arabic, transliteration, and translation. Needs a new `pages/DuasPage.ets` (~30 lines), a `main_pages.json` entry, and a slot in the floating nav bar. Adding new Duas afterwards requires just one registry entry and two localization keys per language.
-
-- [ ] **Qibla calibration UX (figure-8 flow)** — surface the sensor's `accuracy` field from `QiblaSensorHelper`, and present an animated figure-8 overlay in `QiblaPage` whenever accuracy drops below a threshold. Clears once the user traces the pattern and the compass stabilises.
-
-- [ ] **Additional languages — Urdu first** — the localization structure is ready. `LocalizationHelper` needs a new `Map<string, string>` builder (~150 keys), and the language pickers in `CustomizePage` and `WizardPage` need their option lists expanded. Urdu is the natural first addition — closest cousin to Arabic and the largest unserved Muslim-language audience.
-
-### Later
-
-- [ ] **Online (API) prayer times provider** — currently a stub. The `CalculationSource.API` enum value exists, and both the Settings and Wizard pickers block selection with a "coming soon" toast. Implementation requires a network client, a provider contract (e.g. AlAdhan), response caching, error handling, and an `INTERNET` permission. Also requires a privacy-policy update since the app would begin making network requests for the first time.
-
-- [ ] **Adhan audio playback** — plays the full call to prayer at each prayer time. Needs `AVPlayer` (not `SoundPool`), a bundled or streamed Adhan file, and — ideally — the same Agent-Powered Reminder capability that notifications are pending on, so playback can fire independently of the app being open.
-
-- [ ] **Tablet and foldable layouts** — `module.json5` currently declares `"deviceTypes": ["phone"]`. Tablet support starts with expanding that list and then adding responsive layouts using `GridRow`/`GridCol` or `mediaquery` breakpoints. Every page has fixed-width elements (floating bar at 92%, hardcoded pill sizes) that would need to adapt.
-
-- [ ] **Home screen widgets** — no widget service exists. Needs a `form_config` extension ability, a `FormAbility`, and a separate widget UI. The data sources (`CalculationSource`, `LocationCache`, `ProgressHelper`) already expose everything a widget needs.
-
-- [ ] **Full HarmonyOS 7 glass-effect styling** — the frosted-glass floating bar now delivers most of the visual language on API 22+. What still requires **API 26 SDK** is the animated-blur transition between tabs, depth-based shadow scaling, and adaptive colour extraction from background content.
-
-- [ ] **Cloud sync (opt-in)** — no account system, no network code, no cloud storage SDK. Would require an explicit consent flow and a privacy-policy revision before any work begins. Deliberately deferred to protect the current "everything is local" guarantee.
-
-### Completed
-
-- [x] **Hijri date manual override** — shipped with a ±3 day offset (exceeds the original ±1 day target), applied globally across the Home header, Prayer page, Hijri calendar, and Next Event countdown.
-- [x] **Prayer streak statistics** — Home dashboard delivers today's progress ring, current and best streaks, a 7-day grid, a monthly heatmap, perfect-day count, and a lifetime total over the last 365 days.
-- [x] **Multiple app themes** — Sirat Classic, Noor, Sahar, and Bahar, each with matched light and dark palettes, selectable in Customize → Appearance and in the first-launch wizard.
-- [x] **Tasbih sound system** — five selectable click styles with SoundPool playback, respecting the system ringer mode and haptics toggle.
-
----
-
-## Contributing
-
-Contributions are welcome.
-
-**1. Fork the repository**
-
-**2. Create a feature branch**
+## What's included and why
+
+| Section | Purpose |
+|---|---|
+| **Features** | Grouped by user-facing area so a newcomer immediately sees what the app does |
+| **Screens** | Placeholder table — drop in screenshots later |
+| **Requirements** | API 22+ target matching `build-profile.json5` |
+| **Getting Started** | Both DevEco GUI and CLI paths, plus a signing note |
+| **Project Structure** | Annotated tree — every file has a one-line purpose |
+| **Architecture** | The three reactivity rules that keep the app stable; new contributors need these |
+| **Localization** | How to add a string and a language |
+| **Data & Storage** | Explicit table so users and reviewers can see nothing leaves the device |
+| **Permissions** | Honest about the currently-disabled reminder permission |
+| **Privacy** | Links to the hosted policy |
+| **Versioning** | Ties to `app.json5` and shows the release history |
+| **Roadmap** | Communicates intent without over-promising |
+| **Contributing** | Reiterates the rules that matter most |
+
+## Placeholders to fill in
+
+Only two things need your attention before committing:
+
+1. **Repository URL** — replace `<your-username>` in the clone command and the Issues link
+2. **Screenshots** — once you have them, replace the `*(Add screenshots here…)*` line with real images
+
+## Commit
 
 ```bash
-git checkout -b feature/your-feature-name
-```
-
-**3. Commit your changes** following the convention below
-
-**4. Push and open a Pull Request**
-
-### Commit Convention
-
-This project uses [Conventional Commits](https://www.conventionalcommits.org/).
-
-```
-feat: add Hanafi Asr shadow rule
-fix: correct equation-of-time wrap in PrayerTimeCalculator
-docs: add architecture guide
-refactor: split Tasbih logic into TasbihManager
-chore: bump target API to 22
-```
-
-### Code Style
-
-- ArkTS strict mode is required — no `any`, no untyped object literals
-- Object literals must be assigned to named interfaces
-- Do not use `Record<K, V>` in types — use `Map<K, V>` instead
-- Keep pages free of business logic — delegate to helpers
-- Every page follows the `tr()` pattern for localization
-
----
-
-## Known Limitations
-
-- **Online (API) prayer times** are stubbed. Selecting it shows a "Coming Soon" card.
-- **Compass** requires a real device. Emulators without a magnetometer show "sensor unavailable".
-- **Reverse geocoding** returns `"Unknown location"` for some regions. The offline city lookup and manual city name
-  field are fallbacks.
-- **Timed notifications** may drift on emulators with API < 20.
-- **High-latitude prayer times** clamp the hour angle to `[-1, 1]`. Proper one-seventh-of-the-night rules are out of
-  scope.
-- **Multiple persistence backends** coexist: `PreferencesHelper`, `AppStorage`, `PersistentStorage`, and Tasbih's
-  private store. Consolidation is on the roadmap.
-
----
-
-## License
-
-This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
-
-You are free to use, modify, and distribute this software, including for commercial purposes, provided the original
-copyright notice is retained.
-
----
-
-## Acknowledgements
-
-- **Jean Meeus** — *Astronomical Algorithms* — source of the solar position math
-- **PrayTimes.org** — reference for the four calculation conventions
-- **HarmonyOS Developer Docs** — for `@kit.ArkUI`, `@kit.ArkData`, and `@kit.BackgroundTasksKit`
-- **Every beta tester** who reported bugs and suggested features
-
----
-
-## Contact
-
-- **Issues
-  ** — [github.com/sharjeel-butt/SiratCompanion-HOS/issues](https://github.com/sharjeel-butt/SiratCompanion-HOS/issues).
-- **Telegram** — [t.me/siratcompanionhos](https://t.me/siratcompanionhos)
-
----
-
-**May it be of benefit.** 🤲
-
-*If Sirat Companion helps you with your daily worship, consider starring the repository.*
+git add README.md
+git commit -m "docs: add README covering features, architecture, and setup"
+git push origin main
