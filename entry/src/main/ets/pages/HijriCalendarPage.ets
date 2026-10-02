@@ -1,20 +1,19 @@
 // entry/src/main/ets/pages/HijriCalendarPage.ets
 
-import { router } from '@kit.ArkUI';
-import { mediaquery } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
+import { mediaquery, router } from '@kit.ArkUI';
+import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import {
-  STORAGE_KEY_THEME_MODE,
-  STORAGE_KEY_NAV_DIRECTION,
+  STORAGE_KEY_APP_FOREGROUND_TICK,
+  STORAGE_KEY_APP_THEME,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
-  STORAGE_KEY_APP_FOREGROUND_TICK
+  STORAGE_KEY_NAV_DIRECTION,
+  STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
 import { CalendarDay, HijriDate } from '../models/HijriCalendarModels';
 import { IslamicEvent } from '../models/DateModels';
 import { HijriCalendarHelper } from '../helper/HijriCalendarHelper';
-import { SettingsHelper } from '../helper/SettingsHelper';
 import { NavHelper } from '../helper/NavHelper';
 import { L } from '../helper/LocalizationHelper';
 import { FloatingNavBar } from '../components/FloatingNavBar';
@@ -30,6 +29,9 @@ struct HijriCalendarPage {
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_APP_THEME)
+  @Watch('onAppThemePresetChanged')
+  appThemePreset: string = ThemePreset.CURRENT;
 
   @StorageLink(STORAGE_KEY_NAV_DIRECTION)
   navDirection: string = 'forward';
@@ -65,6 +67,10 @@ struct HijriCalendarPage {
 
   private trArray(key: string): string[] {
     return L.getArray(key, this.currentLanguage);
+  }
+
+  private onAppThemePresetChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
   }
 
   private isRtl(): boolean {

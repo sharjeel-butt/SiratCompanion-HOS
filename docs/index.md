@@ -1,7 +1,7 @@
 # Privacy Policy — Sirat Companion
 
-**Last updated:** October 1, 2026
-**Effective date:** October 1, 2026
+**Last updated:** October 2, 2026
+**Effective date:** October 2, 2026
 
 [English](#english) · [中文](#chinese) · [العربية](#arabic)
 
@@ -55,9 +55,9 @@ information is transmitted to us, to Huawei, or to any third party by the App.
 
 ### Prayer Times and Settings
 
-- **What we access:** Your calculation preferences (convention, Asr rule, prayer offsets, high-latitude rule), theme
-  preference, language preference, Hijri date offset, vibration preference, Tasbih theme preferences, and home-screen
-  toggles.
+- **What we access:** Your calculation preferences (convention, Asr rule, prayer offsets, high-latitude rule), app
+  theme, dark mode, language preference, Hijri date offset, vibration preference, Tasbih theme preferences, Tasbih sound
+  preference, and home-screen toggles.
 - **Why we access it:** To remember your choices across app restarts.
 - **How it is stored:** All preferences are stored locally on your device using the HarmonyOS Preferences API. They
   never leave your device.
@@ -70,12 +70,29 @@ information is transmitted to us, to Huawei, or to any third party by the App.
 - **How it is stored:** Tasbih data is stored locally on your device using the HarmonyOS Preferences API. It never
   leaves your device.
 
+### System Feedback State
+
+- **What we access:** The device's current ringer mode (ring / vibrate / silent) and the system haptics toggle.
+- **Why we access it:** So that the App's own sound and vibration respect your system-level settings. When the phone is
+  on silent, the App stays silent. When system haptics are off, the App does not attempt to vibrate.
+- **How it is stored:** These values are read from the operating system on demand and immediately discarded. They are
+  never stored and never transmitted. No personal data is involved.
+
 ### Haptic Feedback (Vibration)
 
 - **What we access:** The device's vibration capability.
 - **Why we access it:** To provide a short vibration each time you count a Tasbih bead, confirming your tap. This can be
   turned off at any time from the App's **Settings → UI Customization → Vibration**.
 - **Transmission:** Vibration is controlled entirely on your device. No data is generated, stored, or transmitted.
+
+### Sound
+
+- **What we access:** The device's audio playback capability.
+- **Why we access it:** To play a short click when you count a Tasbih bead, if you have enabled it. This can be turned
+  off at any time from the App's **Settings → UI Customization → Sound**. The App also respects your system ringer
+  mode — if the phone is on silent, the App stays silent regardless of the in-app setting.
+- **Transmission:** All click sounds are bundled with the App and played locally. No audio is recorded, no audio is
+  streamed, and no data is transmitted.
 
 ## What We Do Not Collect
 
@@ -94,14 +111,16 @@ We do not use any third-party analytics SDKs, advertising SDKs, or tracking libr
 
 All information accessed by the App is used only on your device and only to provide the App's features:
 
-| Information    | Purpose                                       |
-|----------------|-----------------------------------------------|
-| Location       | Calculate prayer times and Qibla direction    |
-| Sensors        | Determine device orientation for the compass  |
-| Prayer history | Track daily prayers, streaks, and progress    |
-| Preferences    | Remember your settings                        |
-| Tasbih data    | Persist your dhikr progress and preferences   |
-| Vibration      | Provide haptic feedback while counting Tasbih |
+| Information     | Purpose                                       |
+|-----------------|-----------------------------------------------|
+| Location        | Calculate prayer times and Qibla direction    |
+| Sensors         | Determine device orientation for the compass  |
+| Prayer history  | Track daily prayers, streaks, and progress    |
+| Preferences     | Remember your settings                        |
+| Tasbih data     | Persist your dhikr progress and preferences   |
+| System feedback | Respect system sound and haptics settings     |
+| Vibration       | Provide haptic feedback while counting Tasbih |
+| Sound           | Play a click when counting Tasbih             |
 
 We do not use your information for advertising, profiling, or any purpose unrelated to the App's core functionality.
 
@@ -115,6 +134,8 @@ privacy policy:
 - **System geocoder** — for reverse geocoding your coordinates into a city name (only when you choose to view a city
   name).
 - **Location services** — to obtain your GPS coordinates when you grant permission.
+- **Audio service** — to read the system ringer mode and play local sounds.
+- **Vibration service** — to produce tactile feedback when counting Tasbih.
 
 Please refer to Huawei's privacy policy for details on how the operating system handles these services.
 
@@ -234,7 +255,7 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 
 ### 礼拜时间与设置
 
-- **我们访问的内容：** 您的计算偏好（计算方式、晡礼规则、礼拜时间偏移、高纬度规则）、主题偏好、语言偏好、回历日期偏移、振动偏好、念珠主题偏好以及主屏幕开关。
+- **我们访问的内容：** 您的计算偏好（计算方式、晡礼规则、礼拜时间偏移、高纬度规则）、应用主题、深色模式、语言偏好、回历日期偏移、振动偏好、念珠主题偏好、念珠音效偏好以及主屏幕开关。
 - **我们为何访问：** 用于在应用重启后记住您的选择。
 - **存储方式：** 所有偏好设置均通过 HarmonyOS Preferences API 存储在您的设备本地。它们从不离开您的设备。
 
@@ -244,12 +265,25 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 - **我们为何访问：** 用于显示和保存您的念珠进度和偏好。
 - **存储方式：** 念珠数据通过 HarmonyOS Preferences API 存储在您的设备本地。它从不离开您的设备。
 
+### 系统反馈状态
+
+- **我们访问的内容：** 设备当前的铃声模式（响铃 / 振动 / 静音）和系统触感反馈开关。
+- **我们为何访问：** 使本应用自身的声音和振动遵循您的系统级设置。当手机处于静音时，应用保持静音；当系统触感反馈关闭时，应用不会尝试振动。
+- **存储方式：** 这些值按需从操作系统读取并立即丢弃。它们从不存储，也从不传输。不涉及任何个人数据。
+
 ### 触觉反馈（振动）
 
 - **我们访问的内容：** 设备的振动功能。
 - **我们为何访问：** 用于在您每次点击念珠计数时提供一次短振动，以确认您的操作。您可以随时在应用的 **设置 → 界面自定义 → 振动
   ** 中关闭此功能。
 - **传输：** 振动完全在您的设备上控制。不会产生、存储或传输任何数据。
+
+### 声音
+
+- **我们访问的内容：** 设备的音频播放功能。
+- **我们为何访问：** 在您启用时，播放念珠计数的短提示音。您可以随时在应用的 **设置 → 界面自定义 → 声音**
+  中关闭。本应用也会遵循您的系统铃声模式——当手机处于静音时，无论应用内设置如何，应用都会保持静音。
+- **传输：** 所有提示音均随应用打包并在本地播放。不录制音频，不传输音频流，也不传输任何数据。
 
 ## 我们不收集的内容
 
@@ -275,7 +309,9 @@ Sirat 伴侣**不**收集、存储或传输：
 | 礼拜完成记录 | 记录每日礼拜、连续天数以及进度 |
 | 偏好设置   | 记住您的设置          |
 | 念珠数据   | 保存您的念词进度和偏好     |
+| 系统反馈   | 遵循系统声音和触感设置     |
 | 振动     | 念珠计数时提供触觉反馈     |
+| 声音     | 念珠计数时播放提示音      |
 
 我们不会将您的信息用于广告、画像或与本应用核心功能无关的任何目的。
 
@@ -287,6 +323,8 @@ Sirat 伴侣**不**收集、存储或传输：
 
 - **系统地理编码器** —— 用于将您的坐标反向地理编码为城市名称（仅当您选择查看城市名称时）。
 - **位置服务** —— 用于在您授予权限时获取您的 GPS 坐标。
+- **音频服务** —— 用于读取系统铃声模式并播放本地音效。
+- **振动服务** —— 用于念珠计数时产生触觉反馈。
 
 有关操作系统如何处理这些服务的详细信息，请参阅华为隐私政策。
 
@@ -401,8 +439,9 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 
 ### أوقات الصلاة والإعدادات
 
-- **ما نصل إليه:** تفضيلات الحساب (طريقة الحساب، وقاعدة العصر، وتعديلات أوقات الصلاة، وقاعدة خطوط العرض العليا)، وتفضيل
-  المظهر، وتفضيل اللغة، وإزاحة التقويم الهجري، وتفضيل الاهتزاز، وتفضيلات مظهر المسبحة، ومفاتيح الشاشة الرئيسية.
+- **ما نصل إليه:** تفضيلات الحساب (طريقة الحساب، وقاعدة العصر، وتعديلات أوقات الصلاة، وقاعدة خطوط العرض العليا)، ومظهر
+  التطبيق، والوضع الداكن، وتفضيل اللغة، وإزاحة التقويم الهجري، وتفضيل الاهتزاز، وتفضيلات مظهر المسبحة، وتفضيل صوت
+  المسبحة، ومفاتيح الشاشة الرئيسية.
 - **لماذا نصل إليها:** لتذكر خياراتك عبر إعادة تشغيل التطبيق.
 - **كيفية التخزين:** تُخزَّن جميع التفضيلات محلياً على جهازك باستخدام واجهة HarmonyOS Preferences. لا تغادر جهازك أبداً.
 
@@ -412,12 +451,28 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 - **لماذا نصل إليها:** لعرض تقدمك في التسبيح وتفضيلاتك وحفظها.
 - **كيفية التخزين:** تُخزَّن بيانات التسبيح محلياً على جهازك باستخدام واجهة HarmonyOS Preferences. لا تغادر جهازك أبداً.
 
+### حالة التغذية الراجعة للنظام
+
+- **ما نصل إليه:** وضع الرنين الحالي للجهاز (رنين / اهتزاز / صامت) ومفتاح التغذية اللمسية في النظام.
+- **لماذا نصل إليها:** ليتوافق صوت التطبيق واهتزازه مع إعداداتك على مستوى النظام. عندما يكون الهاتف صامتاً، يبقى التطبيق
+  صامتاً؛ وعندما تكون التغذية اللمسية معطّلة، لا يحاول التطبيق الاهتزاز.
+- **كيفية التخزين:** تُقرأ هذه القيم من نظام التشغيل عند الطلب وتُهمل فوراً. لا تُخزَّن أبداً ولا تُنقل. لا تتضمن أي
+  بيانات شخصية.
+
 ### التغذية اللمسية (الاهتزاز)
 
 - **ما نصل إليه:** وظيفة الاهتزاز في الجهاز.
 - **لماذا نصل إليها:** لتوفير اهتزاز قصير في كل مرة تضغط فيها لعدّ خرزة التسبيح، مما يؤكد لك الضغطة. يمكن إيقاف ذلك في
   أي وقت من **الإعدادات ← تخصيص الواجهة ← الاهتزاز** في التطبيق.
 - **النقل:** يتم التحكم بالاهتزاز بالكامل على جهازك. لا يتم إنشاء أو تخزين أو نقل أي بيانات.
+
+### الصوت
+
+- **ما نصل إليه:** وظيفة تشغيل الصوت في الجهاز.
+- **لماذا نصل إليها:** لتشغيل نقرة قصيرة عند عدّ خرزة التسبيح، إذا كنت قد مكّنتها. يمكن إيقاف ذلك في أي وقت من *
+  *الإعدادات ← تخصيص الواجهة ← الصوت** في التطبيق. يحترم التطبيق أيضاً وضع الرنين في النظام — إذا كان الهاتف صامتاً،
+  يبقى التطبيق صامتاً بغض النظر عن الإعداد داخل التطبيق.
+- **النقل:** جميع أصوات النقر مُضمَّنة مع التطبيق وتُشغَّل محلياً. لا يُسجَّل صوت، ولا يُبثّ صوت، ولا تُنقل أي بيانات.
 
 ## ما لا نجمعه
 
@@ -443,7 +498,9 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 | سجل الصلوات    | تتبع الصلوات اليومية والأيام المتتالية والتقدم |
 | التفضيلات      | تذكر إعداداتك                                  |
 | بيانات التسبيح | حفظ تقدم الأذكار والتفضيلات                    |
+| حالة النظام    | احترام إعدادات الصوت والاهتزاز في النظام       |
 | الاهتزاز       | توفير تغذية لمسية أثناء عدّ التسبيح            |
+| الصوت          | تشغيل نقرة عند عدّ التسبيح                     |
 
 لا نستخدم معلوماتك للإعلانات أو التنميط أو أي غرض لا يتصل بالوظائف الأساسية للتطبيق.
 
@@ -455,6 +512,8 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 
 - **المُرمِّز الجغرافي للنظام** — للترميز الجغرافي العكسي لإحداثياتك إلى اسم مدينة (فقط عندما تختار عرض اسم المدينة).
 - **خدمات الموقع** — للحصول على إحداثيات GPS عند منحك الإذن.
+- **خدمة الصوت** — لقراءة وضع الرنين في النظام وتشغيل الأصوات المحلية.
+- **خدمة الاهتزاز** — لإنتاج تغذية لمسية عند عدّ التسبيح.
 
 يرجى الرجوع إلى سياسة الخصوصية الخاصة بـ Huawei للحصول على تفاصيل حول كيفية تعامل نظام التشغيل مع هذه الخدمات.
 

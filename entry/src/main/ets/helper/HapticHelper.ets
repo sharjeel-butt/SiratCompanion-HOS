@@ -3,73 +3,87 @@
 import { vibrator } from '@kit.SensorServiceKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { STORAGE_KEY_VIBRATION_ENABLED } from '../common/StorageKeys';
+import { SystemFeedbackHelper } from './SystemFeedbackHelper';
 
 /**
  * Thin wrapper around the vibrator API.
  *
- * All methods are fire-and-forget and never throw. If the device has
- * no vibrator, or the user disabled vibration in Settings, the call
- * is silently skipped.
+ * Two gates before any vibration fires:
+ *   1. The user's in-app preference (Settings → UI Customization)
+ *   2. The system's haptics toggle — mirrors the OS rule that
+ *      usage types 'unknown'/'touch'/'media' are governed by the
+ *      系统触感反馈 switch
+ *
+ * Additionally, we suppress vibration when the phone is in a
+ * fully silent state, matching the user's intuitive expectation
+ * that silent mode means "nothing at all".
+ *
+ * All methods are fire-and-forget and never throw.
  *
  * Requires `ohos.permission.VIBRATE` in module.json5.
- *
- * The enabled/disabled flag is stored in AppStorage under
- * STORAGE_KEY_VIBRATION_ENABLED so this helper can read it
- * synchronously. SettingsHelper writes it; EntryAbility primes it at
- * cold start.
  */
 export class HapticHelper {
-
-  // ---- Durations (ms) ----
-  private static readonly TICK_MS = 15;      // light — for each count
-  private static readonly CONFIRM_MS = 80;   // strong — for dhikr completion
+  private static readonly TICK_MS = 15; // light — per count
+  private static readonly CONFIRM_MS = 80; // strong — dhikr completion
 
   /** Short, crisp tick — for a single count. ~15 ms. */
   static tick(): void {
-    if (!HapticHelper.isEnabled()) return;
+    if (!HapticHelper.allowed()) {
+      return;
+    }
     HapticHelper.vibrate(HapticHelper.TICK_MS);
   }
 
-  /**
-   * Strong, unmistakable pulse — for completion of a dhikr target.
-   * ~80 ms so it clearly reads as "you're done" rather than another tick.
-   */
+  /** Strong, unmistakable pulse — for completion of a dhikr target. */
   static confirm(): void {
-    if (!HapticHelper.isEnabled()) return;
+    if (!HapticHelper.allowed()) {
+      return;
+    }
     HapticHelper.vibrate(HapticHelper.CONFIRM_MS);
   }
 
-  /**
-   * Double pulse — for the very last dhikr in a Tasbih (all done).
-   * Two 60 ms pulses with a 60 ms gap reads as a distinct "finished"
-   * pattern separate from the single confirm pulse.
-   */
+  /** Double pulse — for the very last dhikr in a Tasbih. */
   static complete(): void {
-    if (!HapticHelper.isEnabled()) return;
-    // Fire two pulses back to back. The second one is scheduled
-    // 120 ms after the first — enough separation to feel like two
-    // distinct beats rather than one long buzz.
+    if (!HapticHelper.allowed()) {
+      return;
+    }
     HapticHelper.vibrate(60);
-    setTimeout(() => { HapticHelper.vibrate(60); }, 120);
+    setTimeout(() => {
+      if (HapticHelper.allowed()) {
+        HapticHelper.vibrate(60);
+      }
+    }, 120);
   }
 
-  private static isEnabled(): boolean {
-    const v = AppStorage.get<boolean>(STORAGE_KEY_VIBRATION_ENABLED);
-    // Default to true when the flag hasn't been primed yet.
-    return v === undefined ? true : v;
+  // ============================================================
+  // GATE
+  // ============================================================
+
+  private static allowed(): boolean {
+    // Gate 1 — the user's in-app preference.
+    const userPref = AppStorage.get<boolean>(STORAGE_KEY_VIBRATION_ENABLED);
+    const inAppEnabled = userPref === undefined ? true : userPref;
+    if (!inAppEnabled) {
+      return false;
+    }
+
+    // Gate 2 — the system's haptics toggle.
+    if (!SystemFeedbackHelper.isSystemHapticsEnabled()) {
+      return false;
+    }
+
+    return true;
   }
+
+  // ============================================================
+  // LOW-LEVEL
+  // ============================================================
 
   private static vibrate(durationMs: number): void {
     try {
       vibrator.startVibration(
-        {
-          type: 'time',
-          duration: durationMs
-        },
-        {
-          id: 0,
-          usage: 'unknown'
-        }
+        { type: 'time', duration: durationMs },
+        { id: 0, usage: 'unknown' }
       ).catch((err: BusinessError) => {
         console.warn(`[HapticHelper] vibrate(${durationMs}ms) failed: ${err.code}, ${err.message}`);
       });

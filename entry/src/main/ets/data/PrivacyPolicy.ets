@@ -45,7 +45,9 @@ Sirat Companion accesses the following information solely on your device to prov
 
 • SENSORS — Orientation sensor and magnetometer. Used for the Qibla compass. Readings are processed entirely on your device and are never stored or transmitted.
 
-• SETTINGS — Calculation method, Asr rule, prayer offsets, high-latitude rule, theme, language, Hijri offset, vibration preference, Tasbih themes, and home-screen toggles. Stored locally on your device using the HarmonyOS Preferences API.
+• SETTINGS — Calculation method, Asr rule, prayer offsets, high-latitude rule, app theme, dark mode, language, Hijri offset, vibration preference, Tasbih themes, Tasbih sound preference, and home-screen toggles. Stored locally on your device using the HarmonyOS Preferences API.
+
+• SYSTEM FEEDBACK STATE — The app reads the device's ringer mode and system haptics toggle so that its own sound and vibration respect the user's system-level settings. These values are read from the operating system, never stored, and never transmitted. No personal data is involved.
 
 • PRAYER COMPLETION HISTORY — The prayers you mark as prayed each day, stored per calendar date. Used to power the Home dashboard: today's progress, streaks, weekly grid, monthly heatmap, and lifetime statistics. Stored locally on your device and never leaves it.
 
@@ -152,7 +154,9 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 
 • 传感器 — 方向传感器和磁力计。用于天房指南针。传感器读数完全在您的设备上处理，绝不存储或传输。
 
-• 设置 — 计算方式、晡礼规则、礼拜时间偏移、高纬度规则、主题、语言、回历偏移、振动偏好、念珠主题以及主屏幕开关。通过 HarmonyOS Preferences API 存储在您的设备本地。
+• 设置 — 计算方式、晡礼规则、礼拜时间偏移、高纬度规则、应用主题、深色模式、语言、回历偏移、振动偏好、念珠主题、念珠音效偏好以及主屏幕开关。通过 HarmonyOS Preferences API 存储在您的设备本地。
+
+• 系统反馈状态 — 本应用会读取设备的铃声模式和系统触感反馈开关，使其声音和振动遵循用户的系统级设置。这些值仅从操作系统读取，不会存储，也不会传输。不涉及任何个人数据。
 
 • 礼拜完成记录 — 您每天标记为已礼的礼拜，按日历日期存储。用于驱动首页的今日进度、连续天数、每周网格、每月热力图以及累计统计。存储在您的设备本地，从不离开设备。
 
@@ -259,7 +263,9 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 
 • المستشعرات — مستشعر التوجيه والمستشعر المغناطيسي. تُستخدم لبوصلة القبلة. تُعالج القراءات بالكامل على جهازك ولا يتم تخزينها أو نقلها.
 
-• الإعدادات — طريقة الحساب، وقاعدة العصر، وتعديلات أوقات الصلاة، وقاعدة خطوط العرض العليا، والمظهر، واللغة، وإزاحة التقويم الهجري، وتفضيل الاهتزاز، ومظهر المسبحة، ومفاتيح الشاشة الرئيسية. تُخزَّن محلياً على جهازك باستخدام واجهة HarmonyOS Preferences.
+• الإعدادات — طريقة الحساب، وقاعدة العصر، وتعديلات أوقات الصلاة، وقاعدة خطوط العرض العليا، ومظهر التطبيق، والوضع الداكن، واللغة، وإزاحة التقويم الهجري، وتفضيل الاهتزاز، ومظهر المسبحة، وتفضيل صوت المسبحة، ومفاتيح الشاشة الرئيسية. تُخزَّن محلياً على جهازك باستخدام واجهة HarmonyOS Preferences.
+
+• حالة التغذية الراجعة للنظام — يقرأ التطبيق وضع الرنين ومفتاح التغذية اللمسية في النظام ليتوافق صوته واهتزازه مع إعدادات المستخدم على مستوى النظام. تُقرأ هذه القيم من نظام التشغيل فقط، ولا تُخزَّن ولا تُنقل. لا تتضمن أي بيانات شخصية.
 
 • سجل الصلوات المكتملة — الصلوات التي تُعلّمها كمُصلَّاة كل يوم، محفوظة حسب التاريخ. تُستخدم لعرض تقدم اليوم، والأيام المتتالية، والشبكة الأسبوعية، والخريطة الشهرية، والإحصاءات الإجمالية على الشاشة الرئيسية. تُخزَّن محلياً على جهازك ولا تغادره أبداً.
 

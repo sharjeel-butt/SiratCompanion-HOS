@@ -1,18 +1,21 @@
 // entry/src/main/ets/pages/TasbihPage.ets
 
-import { router, promptAction } from '@kit.ArkUI';
+import { router, promptAction, AnimatorResult, AnimatorOptions } from '@kit.ArkUI';
 import { mediaquery } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { ThemeColors, ThemeMode } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
+import { SoundHelper } from '../helper/SoundHelper';
 import {
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_NAV_DIRECTION,
   STORAGE_KEY_LANGUAGE,
-  STORAGE_KEY_APP_FOREGROUND_TICK
+  STORAGE_KEY_APP_FOREGROUND_TICK,
+  STORAGE_KEY_APP_THEME
 } from '../common/StorageKeys';
+import { ThemePreset } from '../common/Theme';
 import { Tasbih, Dhikr, DhikrFields, BeadView } from '../models/TasbihModels';
-import { TasbihManager } from '../utils/TasbihManager';
+import { MAX_BOTTOM_BEADS, TasbihManager } from '../utils/TasbihManager';
 import { TasbihStorage } from '../utils/TasbihStorage';
 import { NavHelper } from '../helper/NavHelper';
 import { HapticHelper } from '../helper/HapticHelper';
@@ -39,6 +42,7 @@ const STRING_WIDTH    = 2;
 const STRING_LINE_COLOR = 'rgba(232, 164, 76, 0.35)';
 const FISHEYE_ANIM_MS = 180;
 const TOP_SHIFT_MS = 250;
+const BOTTOM_FLY_MS = 650;
 
 const SHADE_DONE_HI    = '#A7F3C0';
 const SHADE_DONE_BASE  = '#4ADE80';
@@ -59,6 +63,9 @@ struct TasbihPage {
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_APP_THEME)
+  @Watch('onAppThemePresetChanged')
+  appThemePreset: string = ThemePreset.CURRENT;
 
   @StorageLink(STORAGE_KEY_NAV_DIRECTION)
   navDirection: string = 'forward';
@@ -114,12 +121,15 @@ struct TasbihPage {
   @State private fingerY: number = -1;
   @State private fisheyeStrength: number = 0;
   private fisheyeAnimId: number = -1;
-
+  // Classic renderer reads these declaratively, so keep them as @State.
   @State private topShiftActive: boolean = false;
   @State private topShiftProgress: number = 0;
-  private topShiftTimerId: number = -1;
-  @State private shiftPrevBottomCount: number = -1;
-  @State private shiftFadeProgress: number = 0;
+  private topShiftAnimator: AnimatorResult | null = null;
+  // Plain private fields — the canvas draws directly, no re-render needed.
+  private shiftPrevBottomCount: number = -1;
+  private shiftFadeProgress: number = 0;
+  private bottomPopProgress: number = 0;
+  private bottomFlyAnimator: AnimatorResult | null = null;
 
   private tr(key: string): string {
     return L.get(key, this.currentLanguage);
@@ -135,6 +145,10 @@ struct TasbihPage {
 
   private onLanguageChanged(): void {
     this.currentLanguage = this.appLanguage;
+  }
+
+  private onAppThemePresetChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
   }
 
   private async onAppForegrounded(): Promise<void> {
@@ -186,9 +200,13 @@ struct TasbihPage {
       clearInterval(this.fisheyeAnimId);
       this.fisheyeAnimId = -1;
     }
-    if (this.topShiftTimerId !== -1) {
-      clearInterval(this.topShiftTimerId);
-      this.topShiftTimerId = -1;
+    if (this.topShiftAnimator !== null) {
+      this.topShiftAnimator.cancel();
+      this.topShiftAnimator = null;
+    }
+    if (this.bottomFlyAnimator !== null) {
+      this.bottomFlyAnimator.cancel();
+      this.bottomFlyAnimator = null;
     }
   }
 
@@ -306,9 +324,10 @@ struct TasbihPage {
       isDark: PageTheme.isSystemDark(),
       stringColor: STRING_LINE_COLOR,
       topShiftProgress: this.topShiftProgress,
-      theme: liveTheme,
+      theme: this.activeTheme,
       bottomPrevCount: this.shiftPrevBottomCount,
-      bottomFadeProgress: this.shiftFadeProgress
+      bottomFadeProgress: this.shiftFadeProgress,
+      bottomPopProgress: this.bottomPopProgress
     };
 
     TasbihCanvasRenderer.drawCanvas(
@@ -352,33 +371,100 @@ struct TasbihPage {
     }, 16);
   }
 
-  private startTopShift(): void {
-    if (this.topShiftTimerId !== -1) {
-      clearInterval(this.topShiftTimerId);
-      this.topShiftTimerId = -1;
+  /**
+   * Plays the bottom-cluster "fly away + pop" animation.
+   *
+   *   • The topmost bead of the previous bottom cluster flies
+   *     upward toward the top stack, fading out as it travels.
+   *   • The current bottom-most bead does a quick scale bump —
+   *     the "pop up" of a freshly arrived pending bead.
+   *
+   * Both effects are driven by two state values consumed in the
+   * canvas renderer: `shiftFadeProgress` and `bottomPopProgress`.
+   */
+  private startBottomFlyPop(oldBottomCount: number): void {
+    if (this.bottomFlyAnimator !== null) {
+      this.bottomFlyAnimator.cancel();
+      this.bottomFlyAnimator = null;
     }
+
+    this.shiftPrevBottomCount = oldBottomCount;
+    this.shiftFadeProgress = 0;
+    this.bottomPopProgress = 0;
+
+    const options: AnimatorOptions = {
+      duration: BOTTOM_FLY_MS,
+      easing: 'ease-in-out',
+      delay: 0,
+      fill: 'forwards',
+      direction: 'normal',
+      iterations: 1,
+      begin: 0,
+      end: 1
+    };
+
+    const animator: AnimatorResult = this.getUIContext().createAnimator(options);
+
+    animator.onFrame = (value: number) => {
+      this.shiftFadeProgress = value;
+      // Pop peaks at ~50 % of the flight and settles well before
+      // the ghost finishes — otherwise the pop lingers after the
+      // bead has already left.
+      this.bottomPopProgress = Math.min(value / 0.5, 1);
+      this.drawCanvasBeads();
+    };
+
+    animator.onFinish = () => {
+      this.shiftPrevBottomCount = -1;
+      this.shiftFadeProgress = 0;
+      this.bottomPopProgress = 0;
+      this.bottomFlyAnimator = null;
+      this.drawCanvasBeads();
+    };
+
+    this.bottomFlyAnimator = animator;
+    animator.play();
+  }
+
+  private startTopShift(): void {
+    if (this.topShiftAnimator !== null) {
+      this.topShiftAnimator.cancel();
+      this.topShiftAnimator = null;
+    }
+
     this.topShiftActive = true;
     this.topShiftProgress = 0;
-    this.shiftFadeProgress = 0;
-    const startTime = Date.now();
 
-    this.topShiftTimerId = setInterval(() => {
-      const t = Math.min((Date.now() - startTime) / TOP_SHIFT_MS, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
-      this.topShiftProgress = eased;
-      this.shiftFadeProgress = eased;
+    const options: AnimatorOptions = {
+      duration: TOP_SHIFT_MS,
+      easing: 'ease-out',
+      delay: 0,
+      fill: 'forwards',
+      direction: 'normal',
+      iterations: 1,
+      begin: 0,
+      end: 1
+    };
+
+    const animator: AnimatorResult = this.getUIContext().createAnimator(options);
+
+    animator.onFrame = (value: number) => {
+      this.topShiftProgress = value;
+      this.shiftFadeProgress = value;
       this.drawCanvasBeads();
+    };
 
-      if (t >= 1) {
-        clearInterval(this.topShiftTimerId);
-        this.topShiftTimerId = -1;
-        this.topShiftActive = false;
-        this.topShiftProgress = 0;
-        this.shiftFadeProgress = 0;
-        this.shiftPrevBottomCount = -1;
-        this.drawCanvasBeads();
-      }
-    }, 16);
+    animator.onFinish = () => {
+      this.topShiftActive = false;
+      this.topShiftProgress = 0;
+      this.shiftFadeProgress = 0;
+      this.shiftPrevBottomCount = -1;
+      this.drawCanvasBeads();
+      this.topShiftAnimator = null;
+    };
+
+    this.topShiftAnimator = animator;
+    animator.play();
   }
 
   private increment(): void {
@@ -388,22 +474,22 @@ struct TasbihPage {
     if (!dhikr) return;
 
     HapticHelper.tick();
+    SoundHelper.tick();
 
     const wasAtCap = this.beadView.topAtCap;
     const oldBottomCount = this.beadView.bottomIds.length;
 
-    animateTo({ duration: 260, curve: Curve.EaseOut }, () => {
-      this.tasbihs = TasbihManager.increment(this.tasbihs, this.activeTasbihId, dhikr.id);
-      this.refreshBeadView();
-    });
+    this.tasbihs = TasbihManager.increment(this.tasbihs, this.activeTasbihId, dhikr.id);
+    this.refreshBeadView();
 
+    // Rolling window for the top stack.
     if (wasAtCap && this.beadView.topAtCap) {
-      this.shiftPrevBottomCount = oldBottomCount;
-      this.shiftFadeProgress = 0;
       this.startTopShift();
-    } else {
-      this.shiftPrevBottomCount = -1;
-      this.shiftFadeProgress = 0;
+    }
+
+    // Fly-away + pop for the bottom cluster whenever it was at cap.
+    if (oldBottomCount === MAX_BOTTOM_BEADS) {
+      this.startBottomFlyPop(oldBottomCount);
     }
 
     const updatedDhikr = this.getActiveDhikr();
@@ -449,11 +535,10 @@ struct TasbihPage {
     if (!dhikr || dhikr.count === 0) return;
 
     HapticHelper.tick();
+    SoundHelper.tick();
 
-    animateTo({ duration: 260, curve: Curve.EaseOut }, () => {
-      this.tasbihs = TasbihManager.decrement(this.tasbihs, this.activeTasbihId, dhikr.id);
-      this.refreshBeadView();
-    });
+    this.tasbihs = TasbihManager.decrement(this.tasbihs, this.activeTasbihId, dhikr.id);
+    this.refreshBeadView();
     this.persist();
   }
 

@@ -1,6 +1,11 @@
 // entry/src/main/ets/helper/SettingsHelper.ets
 
 import { ThemeMode } from '../common/Theme';
+import { ThemePreset } from '../common/Theme';
+import { STORAGE_KEY_APP_THEME } from '../common/StorageKeys';
+import { STORAGE_KEY_SOUND_ENABLED } from '../common/StorageKeys';
+import { STORAGE_KEY_TASBIH_SOUND } from '../common/StorageKeys';
+import { SoundOptions } from '../common/SoundOptions';
 import {
   STORAGE_KEY_NOTIF_MASTER,
   STORAGE_KEY_NOTIF_BEFORE_MINUTES,
@@ -126,6 +131,58 @@ export class SettingsHelper {
       case HighLatitudeRule.ANGLE_BASED:     return L.get('highlat_angle');
       default:                                return L.get('highlat_none');
     }
+  }
+
+  // ============================================================
+  // APP THEME PRESET
+  // ============================================================
+
+  static async getAppTheme(): Promise<string> {
+    const cached = AppStorage.get<string>(STORAGE_KEY_APP_THEME);
+    if (cached !== undefined && cached.length > 0) {
+      return cached;
+    }
+
+    const stored = await PreferencesHelper.getString(
+      STORAGE_KEY_APP_THEME, ThemePreset.CURRENT
+    );
+    AppStorage.setOrCreate(STORAGE_KEY_APP_THEME, stored);
+    return stored;
+  }
+
+  static saveAppTheme(preset: string): void {
+    AppStorage.setOrCreate(STORAGE_KEY_APP_THEME, preset);
+    PreferencesHelper.setString(STORAGE_KEY_APP_THEME, preset);
+  }
+
+  static getAppThemeLabel(preset: string): string {
+    switch (preset) {
+      case ThemePreset.HARMONY_7:
+        return L.get('theme_preset_harmony7');
+      case ThemePreset.HARMONY_6:
+        return L.get('theme_preset_harmony6');
+      case ThemePreset.HARMONY_5:
+        return L.get('theme_preset_harmony5');
+      case ThemePreset.CURRENT:
+      default:
+        return L.get('theme_preset_current');
+    }
+  }
+
+  static buildAppThemePickerItems(current: string): PickerItem[] {
+    return [
+      ThemePreset.CURRENT,
+      ThemePreset.HARMONY_7,
+      ThemePreset.HARMONY_6,
+      ThemePreset.HARMONY_5
+    ].map((p): PickerItem => {
+      const item: PickerItem = {
+        id: p,
+        label: SettingsHelper.getAppThemeLabel(p),
+        selected: p === current
+      };
+      return item;
+    });
   }
 
   static buildHighLatPickerItems(current: HighLatitudeRule): PickerItem[] {
@@ -460,6 +517,37 @@ export class SettingsHelper {
   /** Reset for testing — clears the flag so the wizard runs again. */
   static resetWizard(): void {
     PreferencesHelper.setBoolean(STORAGE_KEY_WIZARD_COMPLETED, false);
+  }
+
+  // ============================================================
+  // SOUND
+  // ============================================================
+
+  static getSoundEnabled(): boolean {
+    const cached = AppStorage.get<boolean>(STORAGE_KEY_SOUND_ENABLED);
+    return cached === undefined ? true : cached;
+  }
+
+  static saveSoundEnabled(value: boolean): void {
+    AppStorage.setOrCreate(STORAGE_KEY_SOUND_ENABLED, value);
+    PreferencesHelper.setBoolean(STORAGE_KEY_SOUND_ENABLED, value);
+  }
+
+  // ============================================================
+  // TASBIH SOUND SELECTION
+  // ============================================================
+
+  static getTasbihSound(): string {
+    const cached = AppStorage.get<string>(STORAGE_KEY_TASBIH_SOUND);
+    if (cached !== undefined && cached.length > 0) {
+      return cached;
+    }
+    return SoundOptions.DEFAULT_ID;
+  }
+
+  static saveTasbihSound(id: string): void {
+    AppStorage.setOrCreate(STORAGE_KEY_TASBIH_SOUND, id);
+    PreferencesHelper.setString(STORAGE_KEY_TASBIH_SOUND, id);
   }
 
   // ============================================================

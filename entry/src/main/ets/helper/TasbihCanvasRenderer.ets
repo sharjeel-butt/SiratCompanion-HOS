@@ -30,10 +30,17 @@ export interface BeadCanvasConfig {
   bottomPrevCount: number;
 
   /**
-   * 0 → old cluster fully visible; 1 → new cluster fully visible.
+   * 0 → ghost bead at its starting position, fully opaque;
+   * 1 → ghost has flown to the top cluster and fully faded.
    * Only meaningful when bottomPrevCount >= 0.
    */
   bottomFadeProgress: number;
+
+  /**
+   * 0 → no pop. Sweeps 0 → 1 during the fly animation, driving a
+   * scale bump on the current bottom-most bead.
+   */
+  bottomPopProgress: number;
 }
 
 export const DONE_COLORS: BeadColors = { hi: '#A7F3C0', base: '#4ADE80', lo: '#1E7A4E' };
@@ -140,20 +147,32 @@ export class TasbihCanvasRenderer {
     // ---- BOTTOM STACK ----
     const botColors = cfg.isDark ? PEND_COLORS_DARK : PEND_COLORS_LIGHT;
     const botCount = cfg.bottomCount;
-    const prevBotCount = cfg.bottomPrevCount;
-    const fade = cfg.bottomFadeProgress;
 
-    // Draws a bottom cluster of `count` beads, bottom-anchored, at the
-    // given alpha.
+    /**
+     * Draws `count` beads, bottom-anchored. The bottom-most bead
+     * (index count-1) gets a scale bump when bottomPopProgress
+     * sweeps through (0, 1) — the "pop up" of a freshly arrived
+     * pending bead.
+     */
     const drawBottomCluster = (count: number, alpha: number): void => {
       if (count <= 0 || alpha <= 0.01) {
         return;
       }
+
       const scales: number[] = [];
       for (let i = 0; i < count; i++) {
         const ny = H - r - (count - 1 - i) * step;
-        scales.push(scaleFor(ny));
+        let s = scaleFor(ny);
+        // Pop bump on the bottom-most bead.
+        if (i === count - 1
+          && cfg.bottomPopProgress > 0
+          && cfg.bottomPopProgress < 1) {
+          const bump = Math.sin(Math.PI * cfg.bottomPopProgress);
+          s *= 1 + 0.28 * bump;
+        }
+        scales.push(s);
       }
+
       const centers: number[] = new Array(count).fill(0);
       centers[count - 1] = H - r * scales[count - 1];
       for (let i = count - 2; i >= 0; i--) {
@@ -163,6 +182,7 @@ export class TasbihCanvasRenderer {
             g * gapMult(scales[i], scales[i + 1]) -
             r * scales[i];
       }
+
       ctx.save();
       ctx.globalAlpha = alpha;
       for (let i = 0; i < count; i++) {
@@ -174,29 +194,34 @@ export class TasbihCanvasRenderer {
       ctx.restore();
     };
 
-    if (prevBotCount > 0 && fade > 0 && fade < 1) {
-      // Cross-fade in progress: draw the new cluster at full alpha,
-      // and fade out the extra beads that existed only in the old cluster.
-      drawBottomCluster(botCount, 1);
+    // Always render the current bottom cluster (with its pop).
+    drawBottomCluster(botCount, 1);
 
-      if (prevBotCount > botCount) {
-        const extraAlpha = 1 - fade;
-        for (let i = 0; i < prevBotCount - botCount; i++) {
-          // Position of the extra bead inside the OLD cluster.
-          const y = H - r - (prevBotCount - 1 - i) * step;
-          const sc = scaleFor(y);
-          ctx.save();
-          ctx.globalAlpha = extraAlpha;
-          TasbihCanvasRenderer.drawBead(
-            ctx, cx, y, r * sc, botColors,
-            cfg.renderStyle, cfg.theme.finish
-          );
-          ctx.restore();
-        }
+    // Ghost bead: the topmost bead of the previous bottom cluster
+    // flying upward toward the top stack, fading as it goes.
+    const prevBotCount = cfg.bottomPrevCount;
+    const fly = cfg.bottomFadeProgress;
+    if (prevBotCount > 0 && fly > 0 && fly < 1) {
+      const startY = H - r - (prevBotCount - 1) * step;
+      const targetY = r + 2 * step; // bottom of the top cluster
+      // Smoother curve for the longer flight — accelerates gently,
+      // coasts, decelerates into the target. Feels less like a
+      // snap on high-refresh displays.
+      const eased = fly < 0.5
+        ? 2 * fly * fly
+        : 1 - Math.pow(-2 * fly + 2, 2) / 2;
+      const currentY = startY + (targetY - startY) * eased;
+      const alpha = 1 - eased;
+
+      if (alpha > 0.01) {
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        TasbihCanvasRenderer.drawBead(
+          ctx, cx, currentY, r * scaleFor(currentY),
+          botColors, cfg.renderStyle, cfg.theme.finish
+        );
+        ctx.restore();
       }
-    } else {
-      // Idle: just draw the current cluster.
-      drawBottomCluster(botCount, 1);
     }
   }
 
