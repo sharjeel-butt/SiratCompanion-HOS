@@ -341,10 +341,8 @@ This means viewing NYC prayer times from Pakistan shows NYC local times, with co
 - [ ] Home screen widgets
 - [ ] Qibla calibration UX (figure-8 flow)
 - [ ] Adhan audio playback
-- [ ] Hijri date manual override (± 1 day globally)
 - [ ] Additional languages — Turkish, Urdu, Indonesian
 - [ ] Tablet and foldable layouts
-- [ ] Prayer streak statistics
 
 ---
 
