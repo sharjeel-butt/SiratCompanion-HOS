@@ -5,7 +5,7 @@
 Prayer times, Qibla compass, Tasbih, and Hijri calendar — all in one calm, modern app that respects your settings and
 your battery.
 
-**Version 2.3.0** &nbsp;·&nbsp; **HarmonyOS 5+ (API 20+)** &nbsp;·&nbsp; **English · 中文 · العربية**
+**Version 2.3.0** &nbsp;·&nbsp; **HarmonyOS 6+ (API 20+)** &nbsp;·&nbsp; **English · 中文 · العربية**
 
 > On HarmonyOS 7 (API 26+) the bottom navigation bar uses the native immersive system material. On earlier releases it
 > falls back to a translucent blurred bar with identical behaviour.
