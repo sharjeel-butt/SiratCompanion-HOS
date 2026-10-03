@@ -24,6 +24,16 @@
  *   11. THIRD-PARTY SERVICES
  *   12. CHANGES
  *   13. CONTACT
+ *
+ * ## Reminder backend note (October 2026)
+ *
+ * As of this version, prayer-time reminders are delivered through the
+ * Calendar Kit backend (calendar events with system reminders). The
+ * Agent-Powered Reminder backend is implemented but disabled while
+ * its capability is pending AppGallery Connect approval. When that
+ * approval arrives, the notification sections below will be updated
+ * to describe the notification backend instead of the calendar
+ * backend.
  */
 export class PrivacyPolicyProvider {
   static readonly FULL_URL: string =
@@ -34,7 +44,7 @@ export class PrivacyPolicyProvider {
   // ============================================================
   private static readonly EN: string = `PRIVACY POLICY — SIRAT COMPANION
 
-Last updated: October 5, 2026
+Last updated: October 7, 2026
 
 Applies to Sirat Companion version 2.3.0 and later.
 
@@ -56,7 +66,7 @@ Sirat Companion accesses the following information solely on your device to prov
 
 • PRAYER COMPLETION HISTORY — The prayers you mark as prayed each day (Fajr, Dhuhr, Asr, Maghrib, Isha), stored per calendar date. Used to power the Home dashboard: today's progress, streaks, weekly grid, monthly heatmap, and lifetime statistics. Stored locally on your device and never leaves it.
 
-• SETTINGS — Calculation method, Asr rule, prayer offsets, high-latitude rule, app theme, dark mode, language, Hijri offset, vibration preference, Tasbih themes, Tasbih sound preference, and home-screen toggles. Stored locally on your device using the HarmonyOS Preferences API.
+• SETTINGS — Calculation method, Asr rule, prayer offsets, high-latitude rule, app theme, dark mode, language, Hijri offset, vibration preference, Tasbih themes, Tasbih sound preference, notification preferences, and home-screen toggles. Stored locally on your device using the HarmonyOS Preferences API.
 
 • TASBIH DATA — Your Tasbih sessions, dhikr items, counts, and per-tasbih themes. Stored locally on your device and never leaves it.
 
@@ -66,7 +76,9 @@ Sirat Companion accesses the following information solely on your device to prov
 
 • SOUND — The device's audio playback capability. Used only to play a short click when you count a Tasbih bead, if you have enabled it. Can be turned off at any time from Settings → UI Customization → Sound. The App also respects your system ringer mode. All click sounds are bundled with the App and played locally. No audio is recorded, no audio is streamed, and no data is transmitted.
 
-• NOTIFICATION FEATURES (NOT CURRENTLY ACTIVE) — The App includes a user interface for prayer-time notifications, and the code to schedule them is fully implemented. However, notification features are currently disabled while the Agent-Powered Reminder capability is pending approval by AppGallery Connect. While disabled, the App does NOT request the PUBLISH_AGENT_REMINDER permission, does NOT schedule, publish, or display any notifications, and does NOT create, store, or transmit any notification-related data. When the capability is approved and notifications are enabled in a future release, this Privacy Policy will be updated to disclose the notification feature, and the PUBLISH_AGENT_REMINDER permission will be requested at that time.
+• CALENDAR (PRAYER REMINDERS) — When you enable prayer reminders in Settings → Notifications, the App creates a dedicated calendar account named "Sirat Companion" in your device's system calendar. For each enabled prayer over the next three days, one calendar event is created with a system reminder set to fire at the prayer time and, optionally, at your configured lead time. The App reads calendar events only from its own account, and only to remove stale events before rescheduling. No other calendar data is read, and no calendar data is transmitted anywhere. You can remove all of these events at any time by turning off the master reminder toggle, or by deleting the "Sirat Companion" calendar account from the system Calendar app.
+
+• NOTIFICATION FEATURES (NOT CURRENTLY ACTIVE) — The App includes a native notification backend for prayer reminders. This backend is currently disabled while the Agent-Powered Reminder capability is pending approval by AppGallery Connect. While disabled, the App does NOT request the PUBLISH_AGENT_REMINDER permission, does NOT publish any notifications, and does NOT create, store, or transmit any notification-related data. The active reminder mechanism is the Calendar backend described above.
 
 3. WHAT WE DO NOT COLLECT
 
@@ -91,6 +103,7 @@ All information accessed by the App is used only on your device and only to prov
 • System feedback — Respect system sound and haptics settings
 • Vibration — Provide haptic feedback while counting Tasbih
 • Sound — Play a click when counting Tasbih
+• Calendar — Add prayer-time reminders to a dedicated calendar account
 
 We do not use your information for advertising, profiling, or any purpose unrelated to the App's core functionality.
 
@@ -101,10 +114,11 @@ We do not share your information with anyone because we never receive it in the 
 • Location services — to obtain GPS coordinates when you grant permission
 • Audio service — to read the system ringer mode and play local sounds
 • Vibration service — to produce tactile feedback when counting Tasbih
+• Calendar service — to write prayer reminder events into the App's own calendar account
 
 6. DATA STORAGE AND RETENTION
 
-All App data is stored locally on your device. It is retained until you clear it from within the App or uninstall the App. Uninstalling Sirat Companion permanently removes all data the App has stored on your device.
+All App data is stored locally on your device. It is retained until you clear it from within the App or uninstall the App. Calendar events created for prayer reminders are stored by the system Calendar app and can be deleted at any time by turning off the reminder master toggle, by deleting the "Sirat Companion" calendar account, or by uninstalling the App. Uninstalling Sirat Companion permanently removes all data the App has stored on your device.
 
 7. PERMISSIONS
 
@@ -112,6 +126,8 @@ All App data is stored locally on your device. It is retained until you clear it
 • ohos.permission.APPROXIMATELY_LOCATION — Approximate location for prayer times
 • ohos.permission.LOCATION — Precise location for prayer times
 • ohos.permission.ACCELEROMETER — Compass and Qibla direction
+• ohos.permission.READ_CALENDAR — Read the App's own calendar events to remove stale reminders before rescheduling
+• ohos.permission.WRITE_CALENDAR — Create prayer reminder events in the App's dedicated calendar account
 
 Permissions are requested only when you first use a feature that requires them. They can be revoked at any time in your device's Settings.
 
@@ -120,6 +136,10 @@ The PUBLISH_AGENT_REMINDER permission is NOT currently requested. See Section 2 
 VIBRATION — DETAILED EXPLANATION
 
 The VIBRATE permission allows the App to produce a short vibration each time you tap to count a Tasbih bead, confirming your tap. It is used only for this local haptic feedback and can be disabled at any time from Settings → UI Customization → Vibration. No data is generated, stored, or transmitted by this permission.
+
+CALENDAR — DETAILED EXPLANATION
+
+The READ_CALENDAR and WRITE_CALENDAR permissions allow the App to create a dedicated "Sirat Companion" calendar account and to write prayer reminder events into it. The App only reads events from its own account, and only to remove stale ones before writing new ones. The App does not read any other calendar on your device. No calendar data is transmitted off your device. You can disable the feature at any time from Settings → Notifications, which removes all events the App has created.
 
 8. SECURITY
 
@@ -133,7 +153,7 @@ Sirat Companion is intended for general audiences and is suitable for users of a
 
 You have full control over your data at all times:
 • Access — All data is visible within the App.
-• Deletion — Uninstalling the App removes all stored data. Prayer completion history can also be cleared by unchecking individual prayers.
+• Deletion — Uninstalling the App removes all stored data. Prayer completion history can also be cleared by unchecking individual prayers. Calendar reminder events can be removed by turning off the reminder master toggle.
 • Portability — Data can be viewed and re-entered at any time.
 • Withdrawal of consent — Revoke permissions in your device Settings.
 
@@ -155,7 +175,7 @@ Developer: Sharjeel Butt`;
   // ============================================================
   private static readonly ZH: string = `隐私政策 — SIRAT 伴侣
 
-最后更新：2026 年 10 月 5 日
+最后更新：2026 年 10 月 7 日
 
 适用于 Sirat 伴侣 2.3.0 及更高版本。
 
@@ -177,7 +197,7 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 
 • 礼拜完成记录 — 您每天标记为已礼的礼拜（晨礼、晌礼、晡礼、昏礼、宵礼），按日历日期存储。用于驱动首页的今日进度、连续天数、每周网格、每月热力图以及累计统计。存储在您的设备本地，从不离开设备。
 
-• 设置 — 计算方式、晡礼规则、礼拜时间偏移、高纬度规则、应用主题、深色模式、语言、回历偏移、振动偏好、念珠主题、念珠音效偏好以及主屏幕开关。通过 HarmonyOS Preferences API 存储在您的设备本地。
+• 设置 — 计算方式、晡礼规则、礼拜时间偏移、高纬度规则、应用主题、深色模式、语言、回历偏移、振动偏好、念珠主题、念珠音效偏好、通知偏好以及主屏幕开关。通过 HarmonyOS Preferences API 存储在您的设备本地。
 
 • 念珠数据 — 您创建的念珠、念词项目、计数以及每串念珠的主题。存储在您的设备本地，从不离开设备。
 
@@ -187,7 +207,9 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 
 • 声音 — 设备的音频播放功能。仅用于在您启用时，播放念珠计数的短提示音。您可以随时在 设置 → 界面自定义 → 声音 中关闭。本应用也会遵循您的系统铃声模式。所有提示音均随应用打包并在本地播放。不录制音频，不传输音频流，也不传输任何数据。
 
-• 通知功能（当前未启用）— 本应用包含礼拜时间通知的用户界面，且通知调度代码已完整实现。但是，通知功能目前处于停用状态，因为 Agent-Powered Reminder 能力正在等待 AppGallery Connect 审批。停用期间，本应用不会请求 PUBLISH_AGENT_REMINDER 权限，不会安排、发布或显示任何通知，也不会创建、存储或传输任何与通知相关的数据。待该能力获批并在未来版本中启用通知后，本隐私政策将更新以披露通知功能，届时将请求 PUBLISH_AGENT_REMINDER 权限。
+• 日历（礼拜提醒）— 当您在 设置 → 通知 中启用礼拜提醒后，本应用会在您设备的系统日历中创建一个名为"Sirat 伴侣"的专用日历账户。对于未来三天内每个已启用的礼拜，应用会创建一个日历事件，并设置系统提醒在礼拜时间触发，以及（可选）在您配置的提前时间触发。本应用仅读取自己账户中的日历事件，并且仅用于在重新排程前清除过期事件。不会读取其他日历数据，也不会向任何地方传输日历数据。您可以随时关闭提醒总开关，或在系统日历应用中删除"Sirat 伴侣"日历账户，从而移除所有相关事件。
+
+• 通知功能（当前未启用）— 本应用包含用于礼拜提醒的原生通知后端。该后端目前处于停用状态，因为 Agent-Powered Reminder 能力正在等待 AppGallery Connect 审批。停用期间，本应用不会请求 PUBLISH_AGENT_REMINDER 权限，不会发布任何通知，也不会创建、存储或传输任何与通知相关的数据。当前生效的提醒机制为上述日历后端。
 
 3. 我们不收集的内容
 
@@ -212,6 +234,7 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 • 系统反馈 — 遵循系统声音和触感设置
 • 振动 — 念珠计数时提供触觉反馈
 • 声音 — 念珠计数时播放提示音
+• 日历 — 将礼拜提醒添加到专用日历账户
 
 我们不会将您的信息用于广告、画像或与本应用核心功能无关的任何目的。
 
@@ -222,10 +245,11 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 • 位置服务 — 用于在您授予权限时获取 GPS 坐标
 • 音频服务 — 用于读取系统铃声模式并播放本地音效
 • 振动服务 — 用于念珠计数时产生触觉反馈
+• 日历服务 — 用于将礼拜提醒事件写入本应用自己的日历账户
 
 6. 数据存储与保留
 
-所有应用数据都存储在您的设备本地。数据保留至您在应用内清除或卸载本应用。卸载 Sirat 伴侣会永久删除本应用在您设备上存储的所有数据。
+所有应用数据都存储在您的设备本地。数据保留至您在应用内清除或卸载本应用。为礼拜提醒创建的日历事件由系统日历应用保存，您可以随时关闭提醒总开关、删除"Sirat 伴侣"日历账户或卸载本应用以移除这些事件。卸载 Sirat 伴侣会永久删除本应用在您设备上存储的所有数据。
 
 7. 权限
 
@@ -233,6 +257,8 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 • ohos.permission.APPROXIMATELY_LOCATION — 用于礼拜时间的粗略位置
 • ohos.permission.LOCATION — 用于礼拜时间的精确位置
 • ohos.permission.ACCELEROMETER — 指南针和天房方向
+• ohos.permission.READ_CALENDAR — 读取本应用自己的日历事件，在重新排程前清除过期提醒
+• ohos.permission.WRITE_CALENDAR — 在专用日历账户中创建礼拜提醒事件
 
 权限仅在您首次使用需要该权限的功能时请求。您可以随时在设备设置中撤销这些权限。
 
@@ -241,6 +267,10 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 振动 — 详细说明
 
 VIBRATE 权限允许本应用在您每次点击念珠计数时产生一次短振动，以确认您的操作。它仅用于此本地触觉反馈，您可以随时在 设置 → 界面自定义 → 振动 中禁用。此权限不会产生、存储或传输任何数据。
+
+日历 — 详细说明
+
+READ_CALENDAR 和 WRITE_CALENDAR 权限允许本应用创建专用的"Sirat 伴侣"日历账户，并将礼拜提醒事件写入其中。本应用仅读取自己账户中的事件，并且仅用于在写入新事件前清除过期事件。本应用不会读取您设备上的其他日历。日历数据不会被传输到您的设备之外。您可以随时在 设置 → 通知 中关闭此功能，这将移除本应用创建的所有事件。
 
 8. 安全
 
@@ -254,7 +284,7 @@ Sirat 伴侣面向普通受众，适合所有年龄段的用户。本应用不�
 
 您始终完全掌控自己的数据：
 • 访问 — 所有数据均可在应用内查看。
-• 删除 — 卸载应用会删除所有存储的数据。礼拜完成记录也可以通过取消勾选单次礼拜来清除。
+• 删除 — 卸载应用会删除所有存储的数据。礼拜完成记录也可以通过取消勾选单次礼拜来清除。日历提醒事件可以通过关闭提醒总开关来移除。
 • 可移植性 — 数据可随时查看和重新输入。
 • 撤回同意 — 在设备设置中撤销权限。
 
@@ -276,7 +306,7 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
   // ============================================================
   private static readonly AR: string = `سياسة الخصوصية — رفيق الصراط
 
-آخر تحديث: 5 أكتوبر 2026
+آخر تحديث: 7 أكتوبر 2026
 
 ينطبق على رفيق الصراط الإصدار 2.3.0 وما بعده.
 
@@ -298,7 +328,7 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 
 • سجل الصلوات المكتملة — الصلوات التي تُعلّمها كمُصلَّاة كل يوم (الفجر، الظهر، العصر، المغرب، العشاء)، محفوظة حسب التاريخ. تُستخدم لعرض تقدم اليوم، والأيام المتتالية، والشبكة الأسبوعية، والخريطة الشهرية، والإحصاءات الإجمالية على الشاشة الرئيسية. تُخزَّن محلياً على جهازك ولا تغادره أبداً.
 
-• الإعدادات — طريقة الحساب، وقاعدة العصر، وتعديلات أوقات الصلاة، وقاعدة خطوط العرض العليا، ومظهر التطبيق، والوضع الداكن، واللغة، وإزاحة التقويم الهجري، وتفضيل الاهتزاز، ومظهر المسبحة، وتفضيل صوت المسبحة، ومفاتيح الشاشة الرئيسية. تُخزَّن محلياً على جهازك باستخدام واجهة HarmonyOS Preferences.
+• الإعدادات — طريقة الحساب، وقاعدة العصر، وتعديلات أوقات الصلاة، وقاعدة خطوط العرض العليا، ومظهر التطبيق، والوضع الداكن، واللغة، وإزاحة التقويم الهجري، وتفضيل الاهتزاز، ومظهر المسبحة، وتفضيل صوت المسبحة، وتفضيلات الإشعارات، ومفاتيح الشاشة الرئيسية. تُخزَّن محلياً على جهازك باستخدام واجهة HarmonyOS Preferences.
 
 • بيانات التسبيح — جلسات التسبيح والأذكار والأعداد والمظهر المختار لكل مسبحة. تُخزَّن محلياً على جهازك ولا تغادره أبداً.
 
@@ -308,7 +338,9 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 
 • الصوت — وظيفة تشغيل الصوت في الجهاز. تُستخدم فقط لتشغيل نقرة قصيرة عند عدّ خرزة التسبيح، إذا كنت قد مكّنتها. يمكن إيقاف ذلك في أي وقت من الإعدادات ← تخصيص الواجهة ← الصوت. يحترم التطبيق أيضاً وضع الرنين في النظام. جميع أصوات النقر مُضمَّنة مع التطبيق وتُشغَّل محلياً. لا يُسجَّل صوت، ولا يُبثّ صوت، ولا تُنقل أي بيانات.
 
-• ميزات الإشعارات (غير مُفعَّلة حالياً) — يتضمن التطبيق واجهة مستخدم لإشعارات أوقات الصلاة، وكود جدولة الإشعارات مُنفَّذ بالكامل. ومع ذلك، ميزات الإشعارات معطّلة حالياً في انتظار موافقة AppGallery Connect على قدرة Agent-Powered Reminder. أثناء التعطيل، لا يطلب التطبيق إذن PUBLISH_AGENT_REMINDER، ولا يجدول أو ينشر أو يعرض أي إشعارات، ولا يُنشئ أو يخزّن أو ينقل أي بيانات متعلقة بالإشعارات. عند الموافقة على هذه القدرة وتمكين الإشعارات في إصدار مستقبلي، سيتم تحديث سياسة الخصوصية هذه للكشف عن ميزة الإشعارات، وسيُطلب إذن PUBLISH_AGENT_REMINDER في ذلك الوقت.
+• التقويم (تذكيرات الصلاة) — عند تمكين تذكيرات الصلاة من الإعدادات ← الإشعارات، يُنشئ التطبيق حساب تقويم مخصّصاً باسم "رفيق الصراط" في تقويم النظام على جهازك. لكل صلاة مُفعَّلة خلال الأيام الثلاثة القادمة، يُنشأ حدث تقويم واحد مع تذكير نظام مضبوط للتشغيل في وقت الصلاة، واختيارياً في الوقت المسبق الذي قمت بتكوينه. يقرأ التطبيق أحداث التقويم من حسابه الخاص فقط، وذلك فقط لإزالة الأحداث القديمة قبل إعادة الجدولة. لا يُقرأ أي بيانات تقويم أخرى، ولا تُنقل أي بيانات تقويم إلى أي مكان. يمكنك إزالة كل هذه الأحداث في أي وقت عن طريق إيقاف المفتاح الرئيسي للتذكيرات، أو حذف حساب تقويم "رفيق الصراط" من تطبيق التقويم في النظام.
+
+• ميزات الإشعارات (غير مُفعَّلة حالياً) — يتضمن التطبيق خلفية إشعارات أصلية لتذكيرات الصلاة. هذه الخلفية معطّلة حالياً في انتظار موافقة AppGallery Connect على قدرة Agent-Powered Reminder. أثناء التعطيل، لا يطلب التطبيق إذن PUBLISH_AGENT_REMINDER، ولا ينشر أي إشعارات، ولا يُنشئ أو يخزّن أو ينقل أي بيانات متعلقة بالإشعارات. آلية التذكير الفعّالة حالياً هي خلفية التقويم الموصوفة أعلاه.
 
 3. ما لا نجمعه
 
@@ -333,6 +365,7 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 • حالة النظام — احترام إعدادات الصوت والاهتزاز في النظام
 • الاهتزاز — توفير تغذية لمسية أثناء عدّ التسبيح
 • الصوت — تشغيل نقرة عند عدّ التسبيح
+• التقويم — إضافة تذكيرات الصلاة إلى حساب تقويم مخصّص
 
 لا نستخدم معلوماتك للإعلانات أو التنميط أو أي غرض لا يتصل بالوظائف الأساسية للتطبيق.
 
@@ -343,10 +376,11 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 • خدمات الموقع — للحصول على إحداثيات GPS عند منحك الإذن
 • خدمة الصوت — لقراءة وضع الرنين في النظام وتشغيل الأصوات المحلية
 • خدمة الاهتزاز — لإنتاج تغذية لمسية عند عدّ التسبيح
+• خدمة التقويم — لكتابة أحداث تذكير الصلاة في حساب التقويم الخاص بالتطبيق
 
 6. تخزين البيانات والاحتفاظ بها
 
-تُخزَّن جميع بيانات التطبيق محلياً على جهازك. تُحفظ حتى تمسحها من داخل التطبيق أو تلغي تثبيت التطبيق. يؤدي إلغاء تثبيت رفيق الصراط إلى حذف جميع البيانات نهائياً.
+تُخزَّن جميع بيانات التطبيق محلياً على جهازك. تُحفظ حتى تمسحها من داخل التطبيق أو تلغي تثبيت التطبيق. تُخزَّن أحداث التقويم المنشأة لتذكيرات الصلاة بواسطة تطبيق التقويم في النظام، ويمكن حذفها في أي وقت عن طريق إيقاف المفتاح الرئيسي للتذكيرات، أو حذف حساب تقويم "رفيق الصراط"، أو إلغاء تثبيت التطبيق. يؤدي إلغاء تثبيت رفيق الصراط إلى حذف جميع البيانات نهائياً.
 
 7. الأذونات
 
@@ -354,6 +388,8 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 • ohos.permission.APPROXIMATELY_LOCATION — موقع تقريبي لأوقات الصلاة
 • ohos.permission.LOCATION — موقع دقيق لأوقات الصلاة
 • ohos.permission.ACCELEROMETER — البوصلة واتجاه القبلة
+• ohos.permission.READ_CALENDAR — قراءة أحداث التقويم الخاصة بالتطبيق لإزالة التذكيرات القديمة قبل إعادة الجدولة
+• ohos.permission.WRITE_CALENDAR — إنشاء أحداث تذكير الصلاة في حساب التقويم المخصّص للتطبيق
 
 تُطلب الأذونات فقط عند أول استخدامك لميزة تتطلبها. يمكن سحبها في أي وقت من إعدادات جهازك.
 
@@ -362,6 +398,10 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 الاهتزاز — شرح مفصل
 
 يسمح إذن VIBRATE للتطبيق بإنتاج اهتزاز قصير في كل مرة تضغط فيها لعدّ خرزة التسبيح، مما يؤكد لك الضغطة. يُستخدم هذا الإذن فقط لهذه التغذية اللمسية المحلية، ويمكن تعطيله في أي وقت من الإعدادات ← تخصيص الواجهة ← الاهتزاز. لا تُنشئ هذه الصلاحية أو تخزّن أو تنقل أي بيانات.
+
+التقويم — شرح مفصل
+
+تسمح أذونات READ_CALENDAR و WRITE_CALENDAR للتطبيق بإنشاء حساب تقويم مخصّص باسم "رفيق الصراط" وكتابة أحداث تذكير الصلاة فيه. يقرأ التطبيق الأحداث من حسابه الخاص فقط، وذلك فقط لإزالة الأحداث القديمة قبل كتابة أحداث جديدة. لا يقرأ التطبيق أي تقويم آخر على جهازك. لا تُنقل أي بيانات تقويم خارج جهازك. يمكنك تعطيل الميزة في أي وقت من الإعدادات ← الإشعارات، مما يؤدي إلى إزالة جميع الأحداث التي أنشأها التطبيق.
 
 8. الأمان
 
@@ -375,7 +415,7 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 
 لديك السيطرة الكاملة على بياناتك في جميع الأوقات:
 • الوصول — جميع البيانات مرئية داخل التطبيق.
-• الحذف — يؤدي إلغاء تثبيت التطبيق إلى إزالة جميع البيانات المخزنة. يمكن أيضاً مسح سجل الصلوات المكتملة بإلغاء تحديد الصلوات الفردية.
+• الحذف — يؤدي إلغاء تثبيت التطبيق إلى إزالة جميع البيانات المخزنة. يمكن أيضاً مسح سجل الصلوات المكتملة بإلغاء تحديد الصلوات الفردية. يمكن إزالة أحداث تذكير التقويم عن طريق إيقاف المفتاح الرئيسي للتذكيرات.
 • القابلية للنقل — يمكن عرض البيانات وإعادة إدخالها في أي وقت.
 • سحب الموافقة — اسحب الأذونات من إعدادات جهازك.
 
