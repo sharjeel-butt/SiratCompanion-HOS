@@ -496,7 +496,7 @@ export class L {
     // ---- About ----
     m.set('about_build', 'Build');
     m.set('about_bundle', 'Bundle ID');
-    m.set('about_platform_value', 'HarmonyOS 5+');
+    m.set('about_platform_value', 'HarmonyOS 6+');
     m.set('sun_path_we_are_here', 'We are here');
 
     // ---- Short labels (home screen pills) ----
@@ -572,6 +572,30 @@ export class L {
     m.set('theme_sapphire', 'Sapphire');
     m.set('theme_rose', 'Rose');
     m.set('theme_silver', 'Silver');
+    m.set('notifications_footer_calendar',
+      'Reminders are added to your system calendar for the next 3 days and renew each time you open the app');
+    m.set('calendar_permission_denied',
+      'Calendar permission is required to enable reminders');
+    m.set('notif_test_ok_calendar',
+      'Test event added to your calendar — check the Calendar app');
+    // ---- Prayer-time notification titles ----
+    m.set('notif_pray_fajr', 'Pray Fajr');
+    m.set('notif_pray_dhuhr', 'Pray Dhuhr');
+    m.set('notif_pray_asr', 'Pray Asr');
+    m.set('notif_pray_maghrib', 'Pray Maghrib');
+    m.set('notif_pray_isha', 'Pray Isha');
+
+    // ---- Per-prayer Hadith (text + source) ----
+    m.set('hadith_fajr',
+      'He who prayed the morning prayer (in congregation) he is in fact under the protection of Allah. — Sahih Muslim 657a');
+    m.set('hadith_dhuhr',
+      'This is an hour in which the gates of the heavens are opened, and I love that a righteous deed of mine should ascend during it. — Jami\u2019 at-Tirmidhi 478');
+    m.set('hadith_asr',
+      'Whoever misses the \u2018Asr prayer (intentionally) then it is as if he lost his family and property. — Sahih al-Bukhari 552');
+    m.set('hadith_maghrib',
+      'The five daily prayers... are an expiation for whatever sins are committed between them, so long as major sins are avoided. — Sahih Muslim 233');
+    m.set('hadith_isha',
+      'He who observed the \u2018Isha\u2019 prayer in congregation, it was as if he prayed up to midnight. — Sahih Muslim 656a');
 
     return m;
   }
@@ -938,7 +962,7 @@ export class L {
     // ---- About ----
     m.set('about_build', '构建号');
     m.set('about_bundle', '应用包名');
-    m.set('about_platform_value', 'HarmonyOS 5+');
+    m.set('about_platform_value', 'HarmonyOS 6+');
 
     // ---- Short labels ----
     m.set('method_short_karachi', '卡拉奇');
@@ -997,6 +1021,30 @@ export class L {
     m.set('theme_sapphire', '蓝宝石');
     m.set('theme_rose', '玫瑰');
     m.set('theme_silver', '银色');
+    m.set('notifications_footer_calendar',
+      '提醒已添加到您的系统日历中，为期 3 天，每次打开应用都会续排');
+    m.set('calendar_permission_denied',
+      '需要日历权限才能启用提醒');
+    m.set('notif_test_ok_calendar',
+      '测试事件已添加到您的日历 — 请查看日历应用');
+    // ---- Prayer-time notification titles ----
+    m.set('notif_pray_fajr', '礼晨礼');
+    m.set('notif_pray_dhuhr', '礼晌礼');
+    m.set('notif_pray_asr', '礼晡礼');
+    m.set('notif_pray_maghrib', '礼昏礼');
+    m.set('notif_pray_isha', '礼宵礼');
+
+    // ---- Per-prayer Hadith (text + source) ----
+    m.set('hadith_fajr',
+      '谁在集体中礼了晨礼，他就在真主的保护之下。 ——《穆斯林圣训实录》657a');
+    m.set('hadith_dhuhr',
+      '这是天之门开启的时刻，我喜欢我的善行在这时升上。 ——《提尔密济圣训实录》478');
+    m.set('hadith_asr',
+      '谁（故意）撇弃晡礼，就如同失去了家人和财产。 ——《布哈里圣训实录》552');
+    m.set('hadith_maghrib',
+      '五番拜功……是它们之间所犯之罪的赎罪，只要远离大罪。 ——《穆斯林圣训实录》233');
+    m.set('hadith_isha',
+      '谁在集体中礼了宵礼，就如他礼了半夜的拜。 ——《穆斯林圣训实录》656a');
 
     return m;
   }
@@ -1366,7 +1414,7 @@ export class L {
     // ---- About ----
     m.set('about_build', 'رقم البناء');
     m.set('about_bundle', 'معرّف الحزمة');
-    m.set('about_platform_value', 'HarmonyOS 5+');
+    m.set('about_platform_value', 'HarmonyOS 6+');
 
     // ---- Short labels ----
     m.set('method_short_karachi', 'كراتشي');
@@ -1424,6 +1472,30 @@ export class L {
     m.set('theme_sapphire', 'ياقوت أزرق');
     m.set('theme_rose', 'وردي');
     m.set('theme_silver', 'فضي');
+    m.set('notifications_footer_calendar',
+      'تُضاف التذكيرات إلى تقويم النظام للأيام الثلاثة القادمة وتتجدد في كل مرة تفتح فيها التطبيق');
+    m.set('calendar_permission_denied',
+      'إذن التقويم مطلوب لتفعيل التذكيرات');
+    m.set('notif_test_ok_calendar',
+      'تمت إضافة حدث تجريبي إلى تقويمك — تحقق من تطبيق التقويم');
+    // ---- Prayer-time notification titles ----
+    m.set('notif_pray_fajr', 'صلِّ الفجر');
+    m.set('notif_pray_dhuhr', 'صلِّ الظهر');
+    m.set('notif_pray_asr', 'صلِّ العصر');
+    m.set('notif_pray_maghrib', 'صلِّ المغرب');
+    m.set('notif_pray_isha', 'صلِّ العشاء');
+
+    // ---- Per-prayer Hadith (text + source) ----
+    m.set('hadith_fajr',
+      'مَنْ صَلَّى الصُّبْحَ فَهُوَ فِي ذِمَّةِ اللَّهِِ — صحيح مسلم ٦٥٧');
+    m.set('hadith_dhuhr',
+      'إِنَّهَا سَاعَةٌ تُفْتَحُ فِيهَا أَبْوَابُ السَّمَاءِ فَأُحِبُّ أَنْ يَصْعَدَ لِي فِيهَا عَمَلٌ صَالِحٌ — جامع الترمذي ٤٧٨');
+    m.set('hadith_asr',
+      'الَّذِي تَفُوتُهُ صَلاَةُ الْعَصْرِ كَأَنَّمَا وُتِرَ أَهْلَهُ وَمَالَهُ — صحيح البخاري ٥٥٢');
+    m.set('hadith_maghrib',
+      'الصَّلَوَاتُ الْخَمْسُ وَالْجُمُعَةُ إِلَى الْجُمُعَةِ وَرَمَضَانُ إِلَى رَمَضَانَ مُكَفِّرَاتٌ مَا بَيْنَهُنَّ إِذَا اجْتَنَبَ الْكَبَائِرَ  — صحيح مسلم ٢٣٣');
+    m.set('hadith_isha',
+      'مَنْ صَلَّى الْعِشَاءَ فِي جَمَاعَةٍ فَكَأَنَّمَا قَامَ نِصْفَ اللَّيْلِ — صحيح مسلم ٦٥٦');
 
     return m;
   }
