@@ -239,30 +239,52 @@ export class SettingsHelper {
     return out;
   }
 
-  static saveNotifMaster(value: boolean): void {
-    PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_MASTER, value);
+  /**
+   * Persist the master notification toggle.
+   *
+   * Async so callers can await the write before triggering a
+   * reschedule — rescheduleAll() reads the settings back to decide
+   * what to schedule, so the write must be flushed first.
+   */
+  static async saveNotifMaster(value: boolean): Promise<void> {
+    await PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_MASTER, value);
   }
 
-  static saveNotifBeforeMinutes(minutes: number): void {
-    PreferencesHelper.setNumber(STORAGE_KEY_NOTIF_BEFORE_MINUTES, minutes);
+  /**
+   * Persist the lead-time stepper value.
+   *
+   * Async for the same reason as saveNotifMaster — a race here causes
+   * the reschedule to use the previous value.
+   */
+  static async saveNotifBeforeMinutes(minutes: number): Promise<void> {
+    await PreferencesHelper.setNumber(
+      STORAGE_KEY_NOTIF_BEFORE_MINUTES, minutes
+    );
   }
 
-  static saveNotifPrayer(prayerId: string, value: boolean): void {
+  /**
+   * Persist a per-prayer enable toggle. Async for the same reason.
+   */
+  static async saveNotifPrayer(
+    prayerId: string, value: boolean
+  ): Promise<void> {
     switch (prayerId) {
       case 'fajr':
-        PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_FAJR, value);
+        await PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_FAJR, value);
         break;
       case 'dhuhr':
-        PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_DHUHR, value);
+        await PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_DHUHR, value);
         break;
       case 'asr':
-        PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_ASR, value);
+        await PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_ASR, value);
         break;
       case 'maghrib':
-        PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_MAGHRIB, value);
+        await PreferencesHelper.setBoolean(
+          STORAGE_KEY_NOTIF_MAGHRIB, value
+        );
         break;
       case 'isha':
-        PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_ISHA, value);
+        await PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_ISHA, value);
         break;
     }
   }

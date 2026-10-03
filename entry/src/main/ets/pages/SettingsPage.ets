@@ -5,15 +5,11 @@ import { common } from '@kit.AbilityKit';
 import { pasteboard } from '@kit.BasicServicesKit';
 import { ThemeColors, ThemeMode } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
-import {
-  AsrShadowRule, CalculationMethod, HighLatitudeRule
-} from '../utils/PrayerTimeCalculator';
+import { AsrShadowRule, CalculationMethod, HighLatitudeRule } from '../utils/PrayerTimeCalculator';
 import { PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
 import { LocationData, LocationHelper } from '../utils/LocationUtils';
 import { LocationCache } from '../utils/LocationCache';
-import {
-  CalculationSource, LocationMode, PickerItem
-} from '../models/SettingsModels';
+import { CalculationSource, LocationMode, PickerItem } from '../models/SettingsModels';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_BREAKPOINT,
@@ -32,7 +28,7 @@ import { AppLogger } from '../helper/AppLogger';
 import { AppInfoHelper, AppInfoSnapshot } from '../helper/AppInfoHelper';
 import { L } from '../helper/LocalizationHelper';
 import { Breakpoints } from '../common/Breakpoints';
-import { NOTIFICATIONS_ENABLED } from '../common/FeatureFlags';
+import { CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED } from '../common/FeatureFlags';
 
 const MAX_HIJRI_OFFSET = 3;
 
@@ -79,7 +75,7 @@ struct SettingsPage {
   @State effectiveCity: string = '';
   @State lastRefreshTime: number = 0;
   @State isRefreshing: boolean = false;
-  // Notifications (values loaded regardless; UI hidden when flag is off)
+  // Notifications (loaded regardless; UI shown when any backend is on)
   @State notifMaster: boolean = false;
   @State notifBefore: number = 10;
   @State notifFajr: boolean = true;
@@ -159,8 +155,8 @@ struct SettingsPage {
                 this.PrayerTimesContent()
               }
 
-              // ---- Notifications — hidden while the feature flag is off ----
-              if (NOTIFICATIONS_ENABLED) {
+              // ---- Notifications — shown when any reminder backend is on ----
+              if (NOTIFICATIONS_ENABLED || CALENDAR_REMINDERS_ENABLED) {
                 this.CategoryHeader(
                   this.tr('category_notifications'),
                   '🔔',
@@ -191,8 +187,8 @@ struct SettingsPage {
                 this.AboutContent()
               }
 
-              // ---- Diagnostic logs (still reachable) ----
-              if (!NOTIFICATIONS_ENABLED) {
+              // ---- Diagnostic logs — always reachable ----
+              if (!NOTIFICATIONS_ENABLED && !CALENDAR_REMINDERS_ENABLED) {
                 this.LogAccessRow()
               }
 
@@ -402,7 +398,7 @@ struct SettingsPage {
         this.showAsrPicker = true;
       })
 
-      // Source (API option is disabled — show toast on tap)
+      // Source
       Row() {
         Column() {
           Text(this.tr('source'))
@@ -491,7 +487,6 @@ struct SettingsPage {
             .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
         }
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
         Text(this.showOffsets ? '▲' : '▼')
           .fontSize(12).fontColor(this.colors.accentGold).opacity(0.8)
       }
@@ -817,7 +812,7 @@ struct SettingsPage {
   }
 
   // ============================================================
-  // NOTIFICATIONS (only shown when NOTIFICATIONS_ENABLED)
+  // NOTIFICATIONS
   // ============================================================
 
   @Builder
@@ -978,7 +973,9 @@ struct SettingsPage {
 
         Row() {
           Text('ℹ️').fontSize(12).margin({ right: 6 }).opacity(0.7)
-          Text(this.tr('notifications_footer'))
+          Text(CALENDAR_REMINDERS_ENABLED
+            ? this.tr('notifications_footer_calendar')
+            : this.tr('notifications_footer'))
             .fontSize(10)
             .fontColor(this.colors.textMuted)
             .fontStyle(FontStyle.Italic)
@@ -1048,10 +1045,6 @@ struct SettingsPage {
     })
   }
 
-  /**
-   * Standalone row that opens the log viewer even when the
-   * Notifications category is hidden.
-   */
   @Builder
   LogAccessRow() {
     Row() {
@@ -1065,7 +1058,6 @@ struct SettingsPage {
           .margin({ top: 2 }).width('100%')
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
       Text('›').fontSize(20).fontColor(this.colors.accentGold).opacity(0.7)
     }
     .width('100%')
@@ -1586,7 +1578,6 @@ struct SettingsPage {
   private pickSource(id: string): void {
     const source = id as CalculationSource;
     if (source === CalculationSource.API) {
-      // API is stubbed. Show a toast instead of silently doing nothing.
       this.getUIContext().getPromptAction().showToast({
         message: this.tr('coming_soon'),
         duration: 1800
@@ -1818,12 +1809,17 @@ struct SettingsPage {
   private async sendTestNotification(): Promise<void> {
     const ctx = getContext(this) as common.UIAbilityContext;
 
-    const granted = await NotificationHelper.isPermissionGranted();
+    // The new NotificationHelper signature requires the context.
+    const granted = await NotificationHelper.isPermissionGranted(ctx);
     if (!granted) {
       const requested = await NotificationHelper.requestPermission(ctx);
       if (!requested) {
+        // Pick the right denial message for the active backend.
+        const msgKey = CALENDAR_REMINDERS_ENABLED
+          ? 'calendar_permission_denied'
+          : 'notification_permission_denied';
         this.getUIContext().getPromptAction().showToast({
-          message: this.tr('notification_permission_denied'),
+          message: this.tr(msgKey),
           duration: 2500
         });
         return;
@@ -1838,8 +1834,11 @@ struct SettingsPage {
 
     if (result.ok) {
       this.notifDiagnostic = '';
+      const okMsg = CALENDAR_REMINDERS_ENABLED
+        ? 'notif_test_ok_calendar'
+        : 'notif_test_ok';
       this.getUIContext().getPromptAction().showToast({
-        message: this.tr('notif_test_ok'), duration: 3000
+        message: this.tr(okMsg), duration: 3000
       });
     } else {
       this.notifDiagnostic = result.errorMessage;
@@ -1856,15 +1855,21 @@ struct SettingsPage {
       const granted = await NotificationHelper.requestPermission(ctx);
       if (!granted) {
         this.notifMaster = false;
+        const msgKey = CALENDAR_REMINDERS_ENABLED
+          ? 'calendar_permission_denied'
+          : 'notification_permission_denied';
         this.getUIContext().getPromptAction().showToast({
-          message: this.tr('notification_permission_denied'),
+          message: this.tr(msgKey),
           duration: 2500
         });
         return;
       }
     }
     this.notifMaster = value;
-    SettingsHelper.saveNotifMaster(value);
+    // Await the write before rescheduling — rescheduleAll reads the
+    // settings back, so the store must be flushed first or the old
+    // value will be re-used.
+    await SettingsHelper.saveNotifMaster(value);
     await NotificationHelper.rescheduleAll();
   }
 
@@ -1881,7 +1886,9 @@ struct SettingsPage {
     }
 
     this.notifBefore = next;
-    SettingsHelper.saveNotifBeforeMinutes(next);
+    // Await the write before rescheduling — otherwise the reschedule
+    // reads the previous lead time and schedules the wrong offsets.
+    await SettingsHelper.saveNotifBeforeMinutes(next);
     await NotificationHelper.rescheduleAll();
   }
 
@@ -1906,7 +1913,9 @@ struct SettingsPage {
         this.notifIsha = value;
         break;
     }
-    SettingsHelper.saveNotifPrayer(prayerId, value);
+    // Await the write before rescheduling — the prayer toggle is part
+    // of the settings that rescheduleAll reads.
+    await SettingsHelper.saveNotifPrayer(prayerId, value);
     await NotificationHelper.rescheduleAll();
   }
 

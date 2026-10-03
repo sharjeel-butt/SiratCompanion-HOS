@@ -12,6 +12,7 @@ import { UpcomingImportantDate } from '../models/DateModels';
 import { PrayerManager } from '../utils/PrayerManager';
 import { PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
 import { CalculationSource, LocationMode } from '../models/SettingsModels';
+import { NotificationHelper } from '../helper/NotificationHelper';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_BREAKPOINT,
@@ -611,6 +612,10 @@ export struct Prayer {
     });
 
     PrayerManager.saveStateForDate(this.viewingDateKey, this.prayers);
+    // Remove the reminder for a prayer that has just been marked as
+    // prayed, and reinstate it when the check is undone. Debounced so
+    // rapid toggles coalesce into one reschedule.
+    NotificationHelper.scheduleReschedule();
     this.prayers = PrayerManager.updateStatuses(
       this.prayers, this.viewingDate, this.getLocationOffsetHours()
     );
@@ -653,6 +658,9 @@ export struct Prayer {
       return;
     }
     PrayerManager.saveStateForDate(this.viewingDateKey, this.prayers);
+    // Remove all reminders for prayers that were just marked as
+    // prayed. Debounced so a single reschedule covers the batch.
+    NotificationHelper.scheduleReschedule();
     this.prayers = PrayerManager.updateStatuses(
       this.prayers, this.viewingDate, this.getLocationOffsetHours()
     );
