@@ -23,6 +23,10 @@
     {
       "name": "notification_permission_reason",
       "value": "To send you prayer time reminders"
+    },
+    {
+      "name": "calendar_permission_reason",
+      "value": "Used to add prayer-time reminders to your calendar"
     }
   ]
 }

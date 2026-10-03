@@ -86,11 +86,34 @@
           ],
           "when": "inuse"
         }
+      },
+      // ---- Calendar Kit backend ----
+      // Used while CALENDAR_REMINDERS_ENABLED = true in FeatureFlags.ets.
+      // Comment these out when the Agent-Powered Reminder capability
+      // is approved and NOTIFICATIONS_ENABLED is set to true.
+      {
+        "name": "ohos.permission.READ_CALENDAR",
+        "reason": "$string:calendar_permission_reason",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility"
+          ],
+          "when": "inuse"
+        }
+      },
+      {
+        "name": "ohos.permission.WRITE_CALENDAR",
+        "reason": "$string:calendar_permission_reason",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility"
+          ],
+          "when": "inuse"
+        }
       }
-      // NOTE: PUBLISH_AGENT_REMINDER is intentionally omitted while the
-      // Agent-Powered Reminder capability is pending approval in AGC.
-      // Re-enable this block AND set NOTIFICATIONS_ENABLED = true
-      // in common/FeatureFlags.ets once approved.
+      // ---- Agent-Powered Reminder backend ----
+      // Un-comment when the capability is approved in AGC and
+      // NOTIFICATIONS_ENABLED is set to true in FeatureFlags.ets.
       // {
       //   "name": "ohos.permission.PUBLISH_AGENT_REMINDER",
       //   "reason": "$string:notification_permission_reason",

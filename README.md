@@ -10,6 +10,9 @@ your battery.
 > On HarmonyOS 7 (API 26+) the bottom navigation bar uses the native immersive system material. On earlier releases it
 > falls back to a translucent blurred bar with identical behaviour.
 
+> Prayer reminders currently ship via the **Calendar Kit** backend (calendar events with system reminders) while the
+> Agent-Powered Reminder capability is pending AGC approval. The two backends are switchable at compile time.
+
 ---
 
 ## Table of Contents
@@ -23,8 +26,8 @@ your battery.
 7. [Navigation Architecture](#navigation-architecture)
 8. [Theming](#theming)
 9. [Immersive Material (HarmonyOS 7)](#immersive-material-harmonyos-7)
-10. [Notifications](#notifications)
-11. [Testing Notifications](#testing-notifications)
+10. [Prayer Reminders](#prayer-reminders)
+11. [Testing Reminders](#testing-reminders)
 12. [Timezone Handling](#timezone-handling)
 13. [Roadmap](#roadmap)
 14. [Contributing](#contributing)
@@ -46,7 +49,9 @@ your battery.
 - Timeline-aware **Next** — after Isha shows First Third, Midnight, Last Third, Imsak, then tomorrow's Fajr
 - Time-based **Current / Next** header that never lies about the active prayer
 - Custom sun-path visualization with per-prayer dotted leaders, sunrise/sunset markers, and a live "We are here" ticker
+  that continues cycling through the night
 - Jummah rename on Fridays, applied consistently to the header and the timeline
+- "Today" shortcut in the day navigator to return to the current date
 
 #### Calculation Conventions
 
@@ -67,18 +72,23 @@ your battery.
 - Ramadan card with fasting window, three Ashras, Laylat al-Qadr nights, and Jummah tul Widah
 - Live countdown to Imsak and Maghrib (opens 15 min before, holds 5 min after with the appropriate Dua displayed)
 - Pull-to-refresh
+- Cross-tab state sync — checking a prayer on the Prayers tab immediately updates the Home dashboard
 
-### Prayer Notifications
+### Prayer Reminders
 
-> **Currently disabled.** The Agent-Powered Reminder capability is pending approval in AppGallery Connect. The
-> scheduling code is fully implemented and gated behind `NOTIFICATIONS_ENABLED` in `common/FeatureFlags.ets`. See
-> [Notifications](#notifications) for the re-enable procedure.
+Prayer reminders are delivered through one of two interchangeable backends. Both fire even when the app is closed.
+
+| Backend                    | Status               | Mechanism                                                                           | Requires                                           |
+|----------------------------|----------------------|-------------------------------------------------------------------------------------|----------------------------------------------------|
+| **Calendar Kit**           | **Active**           | Writes prayer events into a dedicated system calendar account with reminder offsets | `READ_CALENDAR` + `WRITE_CALENDAR` (user-granted)  |
+| **Agent-Powered Reminder** | Pending AGC approval | Uses `reminderAgentManager.publishReminder()`                                       | `PUBLISH_AGENT_REMINDER` (AGC capability approval) |
 
 - Two reminders per prayer: one at a configurable lead time (5–60 min), one at exact time
 - Per-prayer toggles
 - Master toggle
-- System-level scheduling — reminders fire even when the app is closed
-- Localized content in all three languages
+- Fully localized content in all three languages
+- Scheduled for the next 3 days, renewed on every app open
+- Switchable at compile time — see [Prayer Reminders](#prayer-reminders) for the re-enable procedure
 
 ### Qibla Compass
 
@@ -225,10 +235,11 @@ Per-tasbih colour preset, from nine options.
 **Location:** Customize → UI Customization
 Respects the system's ringer mode and haptics toggle. Both toggles grey out when the system overrides them.
 
-### Notifications
+### Prayer Reminders
 
 **Location:** Settings → Notifications
-Currently gated behind `NOTIFICATIONS_ENABLED` — see [Notifications](#notifications).
+Master toggle, lead-time stepper, and per-prayer switches. The active backend (Calendar or Agent) is selected at
+compile time — see [Prayer Reminders](#prayer-reminders).
 
 ---
 
@@ -236,15 +247,18 @@ Currently gated behind `NOTIFICATIONS_ENABLED` — see [Notifications](#notifica
 
 Declared in `entry/src/main/module.json5`.
 
-| Permission                               | Purpose                               | Requested                                |
-|------------------------------------------|---------------------------------------|------------------------------------------|
-| `ohos.permission.APPROXIMATELY_LOCATION` | Approximate location for prayer times | On first GPS request                     |
-| `ohos.permission.LOCATION`               | Precise location for prayer times     | On first GPS request                     |
-| `ohos.permission.ACCELEROMETER`          | Compass and Qibla direction           | On Compass open                          |
-| `ohos.permission.VIBRATE`                | Haptic feedback on Tasbih counts      | Declared only, no runtime request        |
-| `ohos.permission.PUBLISH_AGENT_REMINDER` | Prayer notifications                  | **Commented out — pending AGC approval** |
+| Permission                               | Purpose                                          | Requested                                   |
+|------------------------------------------|--------------------------------------------------|---------------------------------------------|
+| `ohos.permission.APPROXIMATELY_LOCATION` | Approximate location for prayer times            | On first GPS request                        |
+| `ohos.permission.LOCATION`               | Precise location for prayer times                | On first GPS request                        |
+| `ohos.permission.ACCELEROMETER`          | Compass and Qibla direction                      | On Compass open                             |
+| `ohos.permission.VIBRATE`                | Haptic feedback on Tasbih counts                 | Declared only, no runtime request           |
+| `ohos.permission.READ_CALENDAR`          | Read the app's own calendar events for cleanup   | On first reminder enable (Calendar backend) |
+| `ohos.permission.WRITE_CALENDAR`         | Write prayer reminder events to the app calendar | On first reminder enable (Calendar backend) |
+| `ohos.permission.PUBLISH_AGENT_REMINDER` | Prayer notifications                             | **Commented out — pending AGC approval**    |
 
-All permissions can be denied without affecting other features.
+All permissions can be denied without affecting other features. The `PUBLISH_AGENT_REMINDER` declaration is present in
+`module.json5` but commented out; it will be un-commented when the AGC capability is approved.
 
 ---
 
@@ -301,13 +315,14 @@ entry/src/main/ets/
 ├── helper/
 │   ├── AppInfoHelper.ets            # Version + bundle identity
 │   ├── AppLogger.ets                # Sandboxed file logger
+│   ├── CalendarReminderHelper.ets   # Calendar Kit reminder backend
 │   ├── HapticHelper.ets             # Vibration wrapper with two gates
 │   ├── HijriCalendarHelper.ets      # Hijri month math
 │   ├── LayoutHelper.ets             # Responsive breakpoint tracking
 │   ├── LocalizationHelper.ets       # All translations
 │   ├── MaterialHelper.ets           # HOS7 immersive material capability
 │   ├── NavHelper.ets                # Route direction hints
-│   ├── NotificationHelper.ets       # Reminder scheduling (disabled)
+│   ├── NotificationHelper.ets       # Reminder scheduler (backend dispatcher)
 │   ├── PrayerOffsetsHelper.ets      # Offset get / set / clamp / format
 │   ├── PreferencesHelper.ets        # @ohos.data.preferences wrapper
 │   ├── QiblaSensorHelper.ets        # Orientation sensor with fallback
@@ -351,8 +366,9 @@ The codebase follows a three-layer architecture.
 **Pages** are `@Entry` components holding `@State`, `@Builder`, and event handlers. They render and delegate — no
 business logic.
 
-**Helpers** are stateless façades: `SettingsHelper`, `NotificationHelper`, `HomeController`, `PrayerManager`,
-`LocalizationHelper`, `NavHelper`, `MaterialHelper`. They orchestrate and contain pure logic where possible.
+**Helpers** are stateless façades: `SettingsHelper`, `NotificationHelper`, `CalendarReminderHelper`, `HomeController`,
+`PrayerManager`, `LocalizationHelper`, `NavHelper`, `MaterialHelper`. They orchestrate and contain pure logic where
+possible.
 
 **Core** is the bottom layer: `PrayerTimeCalculator`, `PreferencesHelper`, `TimezoneResolver`, `QiblaCalculator`.
 Astronomy math, persistence, and DST rules.
@@ -409,9 +425,8 @@ Selected from **Customize → Appearance → App Theme** or during the wizard.
 Orthogonal to the preset. Selected from **Customize → Appearance → Dark Mode**.
 
 When resolving which palette is in effect, always use `PageTheme.isDarkFor(themeMode)` — never
-`PageTheme.isSystemDark()`
-alone. `isSystemDark()` reports the OS setting; `isDarkFor()` honours the user's choice, falling back to the OS only
-when the mode is `System`.
+`PageTheme.isSystemDark()` alone. `isSystemDark()` reports the OS setting; `isDarkFor()` honours the user's choice,
+falling back to the OS only when the mode is `System`.
 
 ---
 
@@ -450,7 +465,7 @@ If any is missing, `systemMaterial` is silently ignored and the bar renders norm
                         globalMaterialLevel=EXQUISITE, materialPath=barFloatingStyle
 ```
 
-View it from **Settings → Notifications → Diagnostic Logs**.
+View it from **Settings → Diagnostic Logs**.
 
 ### Safe-area note
 
@@ -462,58 +477,105 @@ In a page that hosts `Tabs(barPosition.End)` with `barFloatingStyle`, call `expa
 
 ---
 
-## Notifications
+## Prayer Reminders
 
-Notifications use `reminderAgentManager` from `@kit.BackgroundTasksKit`.
+The app supports two reminder backends, selected at compile time by flags in `common/FeatureFlags.ets`. Only one is
+active at a time; if both flags are true, the Calendar backend wins because it requires no external approval.
 
-> **Status: disabled pending AppGallery Connect approval.** The Agent-Powered Reminder capability has not yet been
-> approved. The scheduling code is complete; it is gated behind `NOTIFICATIONS_ENABLED = false` in
-> `common/FeatureFlags.ets`. The Settings UI hides the Notifications category while this flag is off.
+### Backend 1 — Calendar Kit (active)
 
-### How It Works (when enabled)
+Prayer reminders are written as events into a dedicated "Sirat Companion" calendar account in the system calendar.
+Each event carries a system reminder set to fire at the prayer time and, optionally, at the configured lead time.
 
-1. User enables notifications in Settings → Notifications
-2. App requests `PUBLISH_AGENT_REMINDER` permission
-3. On every app open, `NotificationHelper.rescheduleAll()` runs:
-    - Cancels all existing reminders
-    - Reads location, method, Asr rule, offsets, and notification settings
+**Advantages**
+
+- No AppGallery Connect capability approval required
+- The user grants two standard permissions (`READ_CALENDAR`, `WRITE_CALENDAR`)
+- Precise timing — the system calendar fires reminders exactly on time
+- Works when the app is closed or killed
+
+**Trade-offs**
+
+- Reminders appear as calendar events, not app-branded notifications
+- The user can see, edit, or delete the events from the system Calendar app
+- Requires calendar permissions to be granted
+
+**How it works**
+
+1. User enables reminders in Settings → Notifications
+2. App requests `READ_CALENDAR` and `WRITE_CALENDAR`
+3. On grant, `CalendarReminderHelper.init()` creates (or re-uses) the app's calendar account
+4. On every app open, `NotificationHelper.rescheduleAll()` runs:
+    - Cancels all existing Sirat events
+    - Reads location, method, Asr rule, offsets, and reminder settings
     - Calculates prayer times for the next 3 days
-    - Publishes two reminders per enabled prayer (before + exact)
+    - Writes one calendar event per enabled prayer, with `reminderTime: [0, leadMinutes]`
 
-### Reliability
+### Backend 2 — Agent-Powered Reminder (pending AGC approval)
 
-- Reminders fire even when the app is closed
-- Reminders survive device restarts
-- Reminders renew every time the user opens the app
-- Language changes reschedule all reminders with new localized content
+Uses `reminderAgentManager.publishReminder()` from `@kit.BackgroundTasksKit`. Produces standard app notifications
+rather than calendar events.
 
-### Re-enabling after AGC approval
+**Requires**
 
-Seven places change in lockstep:
+- The `PUBLISH_AGENT_REMINDER` capability approved in AppGallery Connect
+- The permission un-commented in `module.json5`
+- A signing profile regenerated after approval
+- `NOTIFICATIONS_ENABLED = true` in `FeatureFlags.ets`
 
-1. `common/FeatureFlags.ets` → `NOTIFICATIONS_ENABLED = true`
-2. `module.json5` → uncomment the `PUBLISH_AGENT_REMINDER` permission block
-3. `data/PrivacyPolicy.ets` → re-add notification disclosure (EN / ZH / AR)
-4. `pages/SettingsPage.ets` → remove the `NOTIFICATIONS_ENABLED` gate hiding the section
-5. `main_pages.json` → no change
-6. Signing profile → regenerate and re-sign
-7. AppGallery Connect → capability approval confirmed
+### Switching between backends
 
-Steps 1–4 are code changes. Steps 5–7 are release-process steps. Verify each before re-uploading.
+The switch is entirely compile-time. No runtime logic differs between the two.
+
+**To activate the Calendar backend** (current state):
+
+```ts
+// FeatureFlags.ets
+export const NOTIFICATIONS_ENABLED = false;
+export const CALENDAR_REMINDERS_ENABLED = true;
+```
+
+**To switch to the Agent-Powered Reminder backend** after AGC approval:
+
+1. `FeatureFlags.ets` → `NOTIFICATIONS_ENABLED = true`; `CALENDAR_REMINDERS_ENABLED = false`
+2. `module.json5` → un-comment `PUBLISH_AGENT_REMINDER`; comment out `READ_CALENDAR` / `WRITE_CALENDAR`
+3. `data/PrivacyPolicy.ets` + hosted `index.md` → swap the calendar disclosure for a notification disclosure
+4. Regenerate the signing Profile and re-sign the app
+5. (Optional) Call `CalendarReminderHelper.cancelAll()` once on the first launch after the switch to clear leftover
+   calendar events
+
+No other source file changes. `NotificationHelper.resolveBackend()` picks the correct backend automatically based on
+the flags.
 
 ---
 
-## Testing Notifications
+## Testing Reminders
+
+### Calendar backend
+
+| Check                                       | Expected                                                                                    |
+|---------------------------------------------|---------------------------------------------------------------------------------------------|
+| Settings → Notifications → toggle master on | Calendar permission dialog appears                                                          |
+| Grant both permissions                      | Toggle stays on; test button becomes enabled                                                |
+| Tap Test Notification                       | A "Sirat · Test Reminder" event appears in the system Calendar app with a 5-second reminder |
+| Open the system Calendar app                | A "Sirat Companion" calendar account is visible                                             |
+| Enable per-prayer toggles                   | Calendar events appear for the next 3 days, one per enabled prayer                          |
+| Disable master toggle                       | All Sirat events are removed from the calendar                                              |
+
+The Calendar backend can be tested on **any** HarmonyOS 6+ device or emulator. No AGC approval is needed.
+
+### Agent-Powered Reminder backend
 
 | Emulator API | `reminderAgentManager` support |
 |--------------|--------------------------------|
 | API 9 – 19   | Not supported                  |
 | API 20+      | Supported                      |
 
-**On API 20+ emulator** you can verify the permission dialog, `publishReminder()` return values, notification display in
-the shade, and localization — once notifications are re-enabled.
+**On API 20+ emulator** you can verify the permission dialog, `publishReminder()` return values, notification display
+in the shade, and localization — once the AGC capability is approved and the flag is flipped.
 
-**On any emulator** use `notificationManager.publish()` directly to verify content without waiting for the scheduler.
+**On any emulator** use `notificationManager.publish()` directly to verify notification content without waiting for
+the scheduler.
 
 **On a real device** you get full validation including the exact timed trigger. Cloud debugging via AppGallery Connect
 is a good alternative.
@@ -548,6 +610,8 @@ This means viewing NYC prayer times from Pakistan shows NYC local times, with co
 - [x] Tablet / foldable / 2-in-1 responsive layouts
 - [x] System feedback integration — respects ringer mode and haptics toggle
 - [x] HarmonyOS 7 immersive material with API 20 fallback
+- [x] Calendar Kit reminder backend (workaround for AGC-pending capability)
+- [x] Switchable reminder backend architecture
 
 ### In Progress
 
@@ -607,12 +671,16 @@ chore: bump target API to 26
 - Every page follows the `tr()` pattern for localization
 - Resolve dark-mode state via `PageTheme.isDarkFor(themeMode)`, not `PageTheme.isSystemDark()`
 - Tab-hosted pages must be `@Component export struct` with no `@Entry`, no `pageTransition()`, and no `FloatingNavBar`
+- Reminder backends are selected by feature flags only — never branch on `NOTIFICATIONS_ENABLED` or
+  `CALENDAR_REMINDERS_ENABLED` outside `NotificationHelper.resolveBackend()`
 
 ---
 
 ## Known Limitations
 
-- **Notifications are disabled** pending AppGallery Connect approval of the Agent-Powered Reminder capability.
+- **Prayer reminders use the Calendar backend.** This is a workaround pending Agent-Powered Reminder capability
+  approval. Reminders appear as calendar events rather than app notifications. The two backends are switchable at
+  compile time.
 - **Online (API) prayer times** are stubbed. Selecting it shows a "Coming Soon" card.
 - **Compass** requires a real device. Emulators without a magnetometer show "sensor unavailable".
 - **Reverse geocoding** returns `"Unknown location"` for some regions. The offline city lookup and manual city name
@@ -624,6 +692,8 @@ chore: bump target API to 26
 - **Tasbih canvas animation** may stutter on a small number of high-refresh-rate devices. Under investigation.
 - **Immersive material** requires HarmonyOS 7 (API 26+) and a supporting device. On older releases, the bar falls back
   to a translucent blur.
+- **Calendar reminders are user-visible and user-editable.** Users can delete the app's calendar events at any time
+  from the system Calendar app; the app will recreate them on next open if the master toggle is still on.
 
 ---
 
@@ -640,8 +710,8 @@ copyright notice is retained.
 
 - **Jean Meeus** — *Astronomical Algorithms* — source of the solar position math
 - **PrayTimes.org** — reference for the four calculation conventions
-- **HarmonyOS Developer Docs** — for `@kit.ArkUI`, `@kit.ArkData`, `@kit.BackgroundTasksKit`, and the immersive
-  material API
+- **HarmonyOS Developer Docs** — for `@kit.ArkUI`, `@kit.ArkData`, `@kit.BackgroundTasksKit`, `@kit.CalendarKit`, and
+  the immersive material API
 - **Every beta tester** who reported bugs and suggested features
 
 ---
@@ -649,7 +719,7 @@ copyright notice is retained.
 ## Contact
 
 - **Issues
-  ** — [github.com/sharjeel-butt/SiratCompanion-HOS/issues](https://github.com/sharjeel-butt/SiratCompanion-HOS/issues).
+  ** — [github.com/sharjeel-butt/SiratCompanion-HOS/issues](https://github.com/sharjeel-butt/SiratCompanion-HOS/issues)
 - **Telegram** — [t.me/siratcompanionhos](https://t.me/siratcompanionhos)
 
 ---
@@ -662,17 +732,20 @@ copyright notice is retained.
 
 ## Summary of changes from the previous README
 
-| Section                 | Change                                                                                                                                                                                                                                                                                                                                             |
-|-------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Header                  | Version `2.2.0` → `2.3.0`; API `22+` → `20+`; added a note about HarmonyOS 7 material                                                                                                                                                                                                                                                              |
-| Features                | Added Home Dashboard section; expanded Tasbih, Qibla, and Design sections with new capabilities                                                                                                                                                                                                                                                    |
-| Config                  | Added App Theme, High-Latitude Rule, Tasbih Theme, Sound and Haptics sections                                                                                                                                                                                                                                                                      |
-| Permissions             | Added `VIBRATE`; marked `PUBLISH_AGENT_REMINDER` as commented out                                                                                                                                                                                                                                                                                  |
-| Project Structure       | Added `components/`, `MaterialHelper`, `RamadanHelper`, `ProgressHelper`, `SoundHelper`, `SystemFeedbackHelper`, `AppInfoHelper`, `AppLogger`, `LayoutHelper`, `Breakpoints`, `FeatureFlags`, `SoundOptions`, `TasbihThemes`, `TasbihCanvasRenderer`, `Duas`, `PrivacyPolicy`, `EntryBackupAbility`; removed `Index.ets` (renamed to `Prayer.ets`) |
-| Navigation Architecture | New section documenting `MainTabs` and the migration rule                                                                                                                                                                                                                                                                                          |
-| Theming                 | New section documenting the four presets and `isDarkFor()`                                                                                                                                                                                                                                                                                         |
-| Immersive Material      | New section with the API 20/26 branch, diagnostics, and safe-area rule                                                                                                                                                                                                                                                                             |
-| Notifications           | Rewritten to reflect the disabled state and the seven-step re-enable procedure                                                                                                                                                                                                                                                                     |
-| Roadmap                 | Split into Completed / In Progress / Next Up / Later                                                                                                                                                                                                                                                                                               |
-| Code Style              | Added ArkTS namespace rule, dark-mode resolution rule, and tab-hosted page rule                                                                                                                                                                                                                                                                    |
-| Known Limitations       | Added notification-disabled note, Tasbih animation note, material fallback note                                                                                                                                                                                                                                                                    |
+| Section                          | Change                                                                                                                                                        |
+|----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Header                           | Added note that reminders currently ship via Calendar Kit                                                                                                     |
+| Features → Prayer Reminders      | Renamed from "Prayer Notifications"; added backend comparison table; removed the "Currently disabled" warning                                                 |
+| Features → Prayer Times          | Added the "Today" shortcut and the ticker continuity note                                                                                                     |
+| Features → Home Dashboard        | Added cross-tab state sync note                                                                                                                               |
+| Configuration → Notifications    | Renamed to "Prayer Reminders"; points at the new Reminders section                                                                                            |
+| Permissions                      | Added `READ_CALENDAR` and `WRITE_CALENDAR`; reworded `PUBLISH_AGENT_REMINDER` row                                                                             |
+| Project Structure                | Added `CalendarReminderHelper.ets`; updated `NotificationHelper.ets` description to "backend dispatcher"                                                      |
+| Layering                         | Added `CalendarReminderHelper` to the helpers list                                                                                                            |
+| Immersive Material → Diagnostics | Path updated to Settings → Diagnostic Logs (Notifications section may be hidden)                                                                              |
+| **Prayer Reminders**             | Completely rewritten — replaced the old "Notifications" section with a two-backend overview, per-backend how-it-works, and a step-by-step switch procedure    |
+| **Testing Reminders**            | Rewritten — split into Calendar backend tests (testable on any device) and Agent backend tests (requires AGC approval)                                        |
+| Roadmap                          | Moved "Calendar Kit reminder backend" and "Switchable reminder backend architecture" to Completed; removed the "Notifications disabled" note from In Progress |
+| Code Style                       | Added the rule that reminder backends are selected by feature flags only, never by direct flag checks outside `NotificationHelper.resolveBackend()`           |
+| Known Limitations                | Replaced the "notifications disabled" bullet with a Calendar-backend workaround bullet; added a note that calendar events are user-visible and user-editable  |
+| Acknowledgements                 | Added `@kit.CalendarKit` to the HarmonyOS docs citation                                                                                                       |
