@@ -9,8 +9,13 @@ export enum ThemeMode {
 /**
  * App-level theme preset. Controls the overall colour identity
  * of the app, independent of light/dark mode.
+ *
+ * SIRAT is the default — a clean, minimal palette designed to sit
+ * comfortably alongside the HarmonyOS 7 system aesthetic. The other
+ * four presets remain available for users who prefer them.
  */
 export enum ThemePreset {
+  SIRAT = 'Sirat',
   CURRENT = 'Current',
   HARMONY_7 = 'Harmony7',
   HARMONY_6 = 'Harmony6',
@@ -18,37 +23,37 @@ export enum ThemePreset {
 }
 
 export class ThemeColors {
-  primaryGreen: string = '#F5F2EC';
+  primaryGreen: string = '#F0F4FA';
   cardDark: string = '#FFFFFF';
-  cardMuted: string = '#EAE6DE';
-  accentGold: string = '#0F5132';
-  accentGoldLight: string = '#1E7A4E';
-  textWhite: string = '#1A1A1A';
-  textLight: string = '#3F3F3F';
-  textMuted: string = '#7A7A7A';
+  cardMuted: string = '#EDF2F9';
+  accentGold: string = '#3D7BF7';
+  accentGoldLight: string = '#6B9BFF';
+  textWhite: string = '#16181D';
+  textLight: string = '#4A4F58';
+  textMuted: string = '#7A8089';
   textOnAccent: string = '#FFFFFF';
-  statusPray: string = '#4CAF50';
-  statusExpress: string = '#FF9800';
-  tintSubtle: string = 'rgba(15,81,50,0.04)';
-  tintSoft: string = 'rgba(15,81,50,0.06)';
-  tintMedium: string = 'rgba(15,81,50,0.08)';
-  tintStrong: string = 'rgba(15,81,50,0.10)';
-  borderSoft: string = 'rgba(15,81,50,0.10)';
-  borderMedium: string = 'rgba(15,81,50,0.12)';
-  borderStrong: string = 'rgba(15,81,50,0.18)';
-  overlayDim: string = 'rgba(0,0,0,0.35)';
-  overlayDimSoft: string = 'rgba(0,0,0,0.15)';
-  shadowCard: string = 'rgba(0,0,0,0.06)';
-  shadowFloating: string = 'rgba(0,0,0,0.15)';
-  placeholder: string = 'rgba(0,0,0,0.35)';
-  dialogCancel: string = '#666666';
-  categoryPrayerTimes: string = '#0F5132';
-  categoryUICustomization: string = '#4CAF50';
-  categoryAppearance: string = '#9C88FF';
-  categoryCounter: string = '#4CC9F0';
-  categoryAbout: string = '#F4A261';
+  statusPray: string = '#3D7BF7';
+  statusExpress: string = '#F5A623';
+  tintSubtle: string = 'rgba(61,123,247,0.04)';
+  tintSoft: string = 'rgba(61,123,247,0.07)';
+  tintMedium: string = 'rgba(61,123,247,0.10)';
+  tintStrong: string = 'rgba(61,123,247,0.14)';
+  borderSoft: string = 'rgba(61,123,247,0.08)';
+  borderMedium: string = 'rgba(61,123,247,0.12)';
+  borderStrong: string = 'rgba(61,123,247,0.18)';
+  overlayDim: string = 'rgba(22,24,29,0.38)';
+  overlayDimSoft: string = 'rgba(0,0,0,0.10)';
+  shadowCard: string = 'rgba(22,24,29,0.05)';
+  shadowFloating: string = 'rgba(22,24,29,0.14)';
+  placeholder: string = 'rgba(22,24,29,0.30)';
+  dialogCancel: string = '#7A8089';
+  categoryPrayerTimes: string = '#3D7BF7';
+  categoryUICustomization: string = '#00A0C6';
+  categoryAppearance: string = '#7C3AED';
+  categoryCounter: string = '#3D7BF7';
+  categoryAbout: string = '#F5A623';
   categoryHijriCalendar: string = '#06B6D4';
-  categoryNotifications: string = '#F59E0B';
+  categoryNotifications: string = '#F97316';
 }
 
 // ============================================================
@@ -57,7 +62,86 @@ export class ThemeColors {
 
 class Palettes {
   // ----------------------------------------------------------
-  // SIRAT CLASSIC (default) — warm cream + deep green
+  // SIRAT — default. HarmonyOS 7 aesthetic.
+  // Bright blue accent, near-black text, soft light-blue tinted
+  // surfaces, minimal borders. Modelled on the system Data Clone
+  // and Manage Storage screens.
+  // ----------------------------------------------------------
+
+  static siratLight(): ThemeColors {
+    const c = new ThemeColors();
+    c.primaryGreen = '#F0F4FA';
+    c.cardDark = '#FFFFFF';
+    c.cardMuted = '#EDF2F9';
+    c.accentGold = '#3D7BF7';
+    c.accentGoldLight = '#6B9BFF';
+    c.textWhite = '#16181D';
+    c.textLight = '#4A4F58';
+    c.textMuted = '#7A8089';
+    c.textOnAccent = '#FFFFFF';
+    c.statusPray = '#3D7BF7';
+    c.statusExpress = '#F5A623';
+    c.tintSubtle = 'rgba(61,123,247,0.04)';
+    c.tintSoft = 'rgba(61,123,247,0.07)';
+    c.tintMedium = 'rgba(61,123,247,0.10)';
+    c.tintStrong = 'rgba(61,123,247,0.14)';
+    c.borderSoft = 'rgba(61,123,247,0.08)';
+    c.borderMedium = 'rgba(61,123,247,0.12)';
+    c.borderStrong = 'rgba(61,123,247,0.18)';
+    c.overlayDim = 'rgba(22,24,29,0.38)';
+    c.overlayDimSoft = 'rgba(0,0,0,0.10)';
+    c.shadowCard = 'rgba(22,24,29,0.05)';
+    c.shadowFloating = 'rgba(22,24,29,0.14)';
+    c.placeholder = 'rgba(22,24,29,0.30)';
+    c.dialogCancel = '#7A8089';
+    c.categoryPrayerTimes = '#3D7BF7';
+    c.categoryUICustomization = '#00A0C6';
+    c.categoryAppearance = '#7C3AED';
+    c.categoryCounter = '#3D7BF7';
+    c.categoryAbout = '#F5A623';
+    c.categoryHijriCalendar = '#06B6D4';
+    c.categoryNotifications = '#F97316';
+    return c;
+  }
+
+  static siratDark(): ThemeColors {
+    const c = new ThemeColors();
+    c.primaryGreen = '#0A0D14';
+    c.cardDark = '#171D26';
+    c.cardMuted = '#212A36';
+    c.accentGold = '#6B9BFF';
+    c.accentGoldLight = '#8FB6FF';
+    c.textWhite = '#F5F7FA';
+    c.textLight = '#B5BDC9';
+    c.textMuted = '#7A8290';
+    c.textOnAccent = '#0A0D14';
+    c.statusPray = '#6B9BFF';
+    c.statusExpress = '#FBBF24';
+    c.tintSubtle = 'rgba(107,155,255,0.06)';
+    c.tintSoft = 'rgba(107,155,255,0.10)';
+    c.tintMedium = 'rgba(107,155,255,0.15)';
+    c.tintStrong = 'rgba(107,155,255,0.20)';
+    c.borderSoft = 'rgba(107,155,255,0.15)';
+    c.borderMedium = 'rgba(107,155,255,0.22)';
+    c.borderStrong = 'rgba(107,155,255,0.30)';
+    c.overlayDim = 'rgba(0,0,0,0.68)';
+    c.overlayDimSoft = 'rgba(255,255,255,0.14)';
+    c.shadowCard = 'rgba(0,0,0,0.45)';
+    c.shadowFloating = 'rgba(0,0,0,0.58)';
+    c.placeholder = 'rgba(245,247,250,0.36)';
+    c.dialogCancel = '#7A8290';
+    c.categoryPrayerTimes = '#6B9BFF';
+    c.categoryUICustomization = '#22D3EE';
+    c.categoryAppearance = '#A78BFA';
+    c.categoryCounter = '#38BDF8';
+    c.categoryAbout = '#FBBF24';
+    c.categoryHijriCalendar = '#22D3EE';
+    c.categoryNotifications = '#FB923C';
+    return c;
+  }
+
+  // ----------------------------------------------------------
+  // SIRAT CLASSIC — warm cream + deep green
   // ----------------------------------------------------------
 
   static currentLight(): ThemeColors {
@@ -133,7 +217,7 @@ class Palettes {
   }
 
   // ----------------------------------------------------------
-  // HARMONYOS 7 — vibrant violet, modern, glassy
+  // NOOR — vibrant violet
   // ----------------------------------------------------------
 
   static harmony7Light(): ThemeColors {
@@ -209,7 +293,7 @@ class Palettes {
   }
 
   // ----------------------------------------------------------
-  // HARMONYOS 6 — warm amber, mature, refined
+  // SAHAR — golden amber
   // ----------------------------------------------------------
 
   static harmony6Light(): ThemeColors {
@@ -285,7 +369,7 @@ class Palettes {
   }
 
   // ----------------------------------------------------------
-  // HARMONYOS 5 — fresh teal, clean, cool
+  // BAHAR — cool teal
   // ----------------------------------------------------------
 
   static harmony5Light(): ThemeColors {
@@ -392,15 +476,17 @@ export class Theme {
     const isDark = effective === ThemeMode.DARK;
 
     switch (preset) {
+      case ThemePreset.CURRENT:
+        return isDark ? Palettes.currentDark() : Palettes.currentLight();
       case ThemePreset.HARMONY_7:
         return isDark ? Palettes.harmony7Dark() : Palettes.harmony7Light();
       case ThemePreset.HARMONY_6:
         return isDark ? Palettes.harmony6Dark() : Palettes.harmony6Light();
       case ThemePreset.HARMONY_5:
         return isDark ? Palettes.harmony5Dark() : Palettes.harmony5Light();
-      case ThemePreset.CURRENT:
+      case ThemePreset.SIRAT:
       default:
-        return isDark ? Palettes.currentDark() : Palettes.currentLight();
+        return isDark ? Palettes.siratDark() : Palettes.siratLight();
     }
   }
 }

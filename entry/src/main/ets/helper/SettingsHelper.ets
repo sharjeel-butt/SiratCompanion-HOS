@@ -156,7 +156,7 @@ export class SettingsHelper {
     }
 
     const stored = await PreferencesHelper.getString(
-      STORAGE_KEY_APP_THEME, ThemePreset.CURRENT
+      STORAGE_KEY_APP_THEME, ThemePreset.SIRAT
     );
     AppStorage.setOrCreate(STORAGE_KEY_APP_THEME, stored);
     return stored;
@@ -176,13 +176,16 @@ export class SettingsHelper {
       case ThemePreset.HARMONY_5:
         return L.get('theme_preset_harmony5');
       case ThemePreset.CURRENT:
-      default:
         return L.get('theme_preset_current');
+      case ThemePreset.SIRAT:
+      default:
+        return L.get('theme_preset_sirat');
     }
   }
 
   static buildAppThemePickerItems(current: string): PickerItem[] {
     return [
+      ThemePreset.SIRAT,
       ThemePreset.CURRENT,
       ThemePreset.HARMONY_7,
       ThemePreset.HARMONY_6,

@@ -613,7 +613,7 @@ struct CustomizePage {
 
       Column() {
         ForEach(
-          [ThemePreset.CURRENT, ThemePreset.HARMONY_7,
+          [ThemePreset.SIRAT, ThemePreset.CURRENT, ThemePreset.HARMONY_7,
             ThemePreset.HARMONY_6, ThemePreset.HARMONY_5],
           (preset: string) => {
             Row() {
@@ -1207,6 +1207,8 @@ struct CustomizePage {
 
   private appThemeSubtitle(preset: string): string {
     switch (preset) {
+      case ThemePreset.SIRAT:
+        return this.tr('theme_preset_sirat_desc');
       case ThemePreset.HARMONY_7:
         return this.tr('theme_preset_harmony7_desc');
       case ThemePreset.HARMONY_6:
