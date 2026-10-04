@@ -263,6 +263,29 @@ export class NotificationHelper {
     }, delayMs);
   }
 
+  /**
+   * Run a reschedule immediately, bypassing the debounce.
+   *
+   * Used when a state change carries a semantic meaning that should
+   * be reflected right away — for example, when the last prayer of
+   * the day is marked as prayed, and the rolling window should
+   * advance to include the next day's reminders before the user
+   * closes the app.
+   *
+   * Any pending debounced reschedule is cancelled first, so this
+   * call's reschedule runs alone.
+   */
+  static scheduleRescheduleNow(): void {
+    if (NotificationHelper.rescheduleDebounceId !== -1) {
+      clearTimeout(NotificationHelper.rescheduleDebounceId);
+      NotificationHelper.rescheduleDebounceId = -1;
+    }
+    NotificationHelper.rescheduleAll().catch((e: Error) => {
+      AppLogger.warn('NotificationHelper',
+        `Immediate reschedule failed: ${e.message}`);
+    });
+  }
+
   // ============================================================
   // RESCHEDULE (main entry point)
   // ============================================================
@@ -396,8 +419,20 @@ export class NotificationHelper {
     const offsets: PrayerOffsets = await SettingsHelper.getPrayerOffsets();
 
     // ---- Step 5: schedule fresh ----
+    // If today's prayers are all marked as prayed, shift the anchor
+    // to tomorrow so the rolling window still yields DAYS_AHEAD days
+    // of pending reminders. Without this, a completed day would
+    // shrink the effective coverage to (DAYS_AHEAD - 1) future days.
     const anchor = new Date();
     anchor.setHours(0, 0, 0, 0);
+
+    const todayKey = PrayerManager.getDateKeyForDate(anchor);
+    if (PrayerManager.isDayFullyPrayed(todayKey)) {
+      anchor.setDate(anchor.getDate() + 1);
+      AppLogger.info('NotificationHelper',
+        'Today fully prayed — anchor shifted to tomorrow');
+    }
+
     const nowMs = Date.now();
 
     if (backend === 'calendar') {
@@ -427,6 +462,9 @@ export class NotificationHelper {
     offsets: PrayerOffsets,
     settings: NotificationsSettings
   ): Promise<ScheduleResult> {
+    AppLogger.info('NotificationHelper',
+      `Scheduling calendar reminders from ` +
+        `${PrayerManager.getDateKeyForDate(anchor)} for ${DAYS_AHEAD} day(s)`);
     const entries: CalendarReminderEntry[] = [];
     const leadMinutes = settings.beforeMinutes;
     const reminderMinutes: number[] = leadMinutes > 0
@@ -518,6 +556,9 @@ export class NotificationHelper {
     offsets: PrayerOffsets,
     settings: NotificationsSettings
   ): Promise<ScheduleResult> {
+    AppLogger.info('NotificationHelper',
+      `Scheduling agent reminders from ` +
+        `${PrayerManager.getDateKeyForDate(anchor)} for ${DAYS_AHEAD} day(s)`);
     let scheduledCount = 0;
     let lastErrorCode = 0;
     let lastErrorMessage = '';

@@ -5,7 +5,7 @@
 Prayer times, Qibla compass, Tasbih, and Hijri calendar — all in one calm, modern app that respects your settings and
 your battery.
 
-**Version 2.3.0** &nbsp;·&nbsp; **HarmonyOS 6+ (API 20+)** &nbsp;·&nbsp; **English · 中文 · العربية**
+**Version 2.5.0** &nbsp;·&nbsp; **HarmonyOS 6+ (API 20+)** &nbsp;·&nbsp; **English · 中文 · العربية**
 
 > On HarmonyOS 7 (API 26+) the bottom navigation bar uses the native immersive system material. On earlier releases it
 > falls back to a translucent blurred bar with identical behaviour.
@@ -48,8 +48,10 @@ your battery.
 - High-latitude rules: None, Middle of Night, One Seventh, Angle Based
 - Timeline-aware **Next** — after Isha shows First Third, Midnight, Last Third, Imsak, then tomorrow's Fajr
 - Time-based **Current / Next** header that never lies about the active prayer
-- Custom sun-path visualization with per-prayer dotted leaders, sunrise/sunset markers, and a live "We are here" ticker
-  that continues cycling through the night
+- Custom sun-path visualization
+    - Full 24-hour arc — the ticker travels continuously from 12:00 AM to 11:59 PM without reversing
+    - Smooth slide-back animation at midnight
+    - Per-prayer dotted leaders, sunrise/sunset markers, live "We are here" ticker
 - Jummah rename on Fridays, applied consistently to the header and the timeline
 - "Today" shortcut in the day navigator to return to the current date
 
@@ -86,8 +88,11 @@ Prayer reminders are delivered through one of two interchangeable backends. Both
 - Two reminders per prayer: one at a configurable lead time (5–60 min), one at exact time
 - Per-prayer toggles
 - Master toggle
-- Fully localized content in all three languages
-- Scheduled for the next 3 days, renewed on every app open
+- Each reminder carries a **Hadith** tied to that prayer, with its source citation — in English, Chinese, and Arabic
+- **Prayed prayers are skipped** — marking a prayer as prayed removes its reminder for that date
+- **Rolling 3-day window** — the anchor automatically advances to tomorrow when today's prayers are complete, keeping
+  three full days of pending reminders queued
+- Fully localized content
 - Switchable at compile time — see [Prayer Reminders](#prayer-reminders) for the re-enable procedure
 
 ### Qibla Compass
@@ -125,7 +130,7 @@ Prayer reminders are delivered through one of two interchangeable backends. Both
 
 ### Design
 
-- Four app-wide themes: **Sirat Classic**, **Noor**, **Sahar**, **Bahar**
+- **Five app-wide themes**: **Sirat** (default), Sirat Classic, Noor, Sahar, Bahar
 - Each theme with matched light and dark palettes
 - Dark mode with Light / Dark / Use System Settings
 - Three languages: English, 中文, العربية
@@ -133,6 +138,9 @@ Prayer reminders are delivered through one of two interchangeable backends. Both
 - Responsive layout for phones, tablets, foldables, and 2-in-1 devices
 - First-launch wizard for quick setup
 - HarmonyOS 7 immersive material for the bottom navigation bar (with a translucent fallback for older releases)
+- SVG tab bar icons that tint to the current theme's accent colour
+- Theme changes propagate live across all pages — no reload required
+- Splash screen background follows the OS light / dark setting
 - Respects the system's ringer mode and haptics toggle
 - Everything works offline
 
@@ -218,7 +226,7 @@ Shifts all Islamic dates by ±3 days.
 ### App Theme
 
 **Location:** Customize → Appearance → App Theme
-**Options:** Sirat Classic, Noor, Sahar, Bahar
+**Options:** Sirat (default), Sirat Classic, Noor, Sahar, Bahar
 
 ### Language
 
@@ -238,8 +246,8 @@ Respects the system's ringer mode and haptics toggle. Both toggles grey out when
 ### Prayer Reminders
 
 **Location:** Settings → Notifications
-Master toggle, lead-time stepper, and per-prayer switches. The active backend (Calendar or Agent) is selected at
-compile time — see [Prayer Reminders](#prayer-reminders).
+Master toggle, lead-time stepper, and per-prayer switches. The active backend (Calendar or Agent) is selected at compile
+time — see [Prayer Reminders](#prayer-reminders).
 
 ---
 
@@ -300,7 +308,7 @@ entry/src/main/ets/
 │   ├── DuaCard.ets                  # Reusable Dua renderer
 │   ├── FloatingNavBar.ets           # Legacy — superseded by MainTabs
 │   ├── PageHeader.ets               # Shared Hijri / location / prayer header
-│   ├── PrayerSunPath.ets            # Canvas sun-path visualization
+│   ├── PrayerSunPath.ets            # Full 24-hour arc + ticker
 │   └── QiblaCalibrationOverlay.ets  # Figure-8 compass calibration
 ├── data/
 │   ├── Duas.ets                     # Iftar / Suhoor Dua registry
@@ -363,8 +371,8 @@ entry/src/main/ets/
 
 The codebase follows a three-layer architecture.
 
-**Pages** are `@Entry` components holding `@State`, `@Builder`, and event handlers. They render and delegate — no
-business logic.
+**Pages** are `@Entry` or `@Component` components holding `@State`, `@Builder`, and event handlers. They render and
+delegate — no business logic.
 
 **Helpers** are stateless façades: `SettingsHelper`, `NotificationHelper`, `CalendarReminderHelper`, `HomeController`,
 `PrayerManager`, `LocalizationHelper`, `NavHelper`, `MaterialHelper`. They orchestrate and contain pure logic where
@@ -403,22 +411,24 @@ HarmonyOS 7 grants the immersive system material only to specific host component
 1. Create the screen as `@Component export struct MyNewPage` (no `@Entry`)
 2. Import it in `MainTabs.ets`
 3. Add a `TabContent() { MyNewPage() }` block inside `TabContents()` with a `.tabBar(...)`
-4. Add its label key to `LocalizationHelper.ets`
+4. Add an SVG icon under `resources/base/media/`
+5. Add its label key to `LocalizationHelper.ets`
 
 ---
 
 ## Theming
 
-Four app-wide theme presets, each with a matched light and dark palette:
+Five app-wide theme presets, each with a matched light and dark palette:
 
-| Preset        | Palette                                |
-|---------------|----------------------------------------|
-| Sirat Classic | Warm cream + deep green                |
-| Noor          | Radiant violet — serene and modern     |
-| Sahar         | Golden amber — the calm of first light |
-| Bahar         | Cool teal — vast, fresh, and clear     |
+| Preset        | Palette                                                     |
+|---------------|-------------------------------------------------------------|
+| **Sirat**     | HarmonyOS 7 blue — bright accent, minimal, modern (default) |
+| Sirat Classic | Warm cream + deep green                                     |
+| Noor          | Radiant violet — serene and modern                          |
+| Sahar         | Golden amber — the calm of first light                      |
+| Bahar         | Cool teal — vast, fresh, and clear                          |
 
-Selected from **Customize → Appearance → App Theme** or during the wizard.
+Selected from **Customize → Appearance → App Theme** or during the wizard. Sirat is the default for new installs.
 
 ### Light / Dark / System
 
@@ -428,12 +438,62 @@ When resolving which palette is in effect, always use `PageTheme.isDarkFor(theme
 `PageTheme.isSystemDark()` alone. `isSystemDark()` reports the OS setting; `isDarkFor()` honours the user's choice,
 falling back to the OS only when the mode is `System`.
 
+### Live propagation
+
+Every page observes both `STORAGE_KEY_THEME_MODE` and `STORAGE_KEY_APP_THEME` via `@StorageLink` and recomputes its
+`colors` on change. When the user switches preset or mode, every visible page — plus the tab bar — updates immediately
+without a reload.
+
+The general rule for any new page:
+
+```ts
+@StorageLink(STORAGE_KEY_THEME_MODE)
+@Watch('onThemeModeChanged')
+themeMode: string = ThemeMode.SYSTEM;
+
+@StorageLink(STORAGE_KEY_APP_THEME)
+@Watch('onAppThemePresetChanged')
+appThemePreset: string = ThemePreset.SIRAT;
+
+private onThemeModeChanged(): void {
+  this.colors = PageTheme.compute(this.themeMode);
+}
+
+private onAppThemePresetChanged(): void {
+  this.colors = PageTheme.compute(this.themeMode);
+}
+```
+
+Miss either link, and the page will lag behind until cold start.
+
+### Tab bar
+
+The tab bar's active and inactive colours read from the current theme:
+
+```ts
+private activeColor(): string {
+  return this.colors.accentGold;
+}
+
+private inactiveColor(): string {
+  return this.colors.textMuted;
+}
+```
+
+Icons are SVG glyphs that tint via `.fillColor()` to the same values, so the icon and its label always match.
+
+### Splash
+
+The launch splash background follows the OS light / dark setting via `entry/src/main/resources/base/element/color.json`
+and `entry/src/main/resources/dark/element/color.json`. Both carry the Sirat palette's `primaryGreen` for their
+respective modes, so the transition from splash to the Home screen is seamless.
+
 ---
 
 ## Immersive Material (HarmonyOS 7)
 
-On HarmonyOS 7 (API 26+) the bottom navigation bar uses the native system immersive material. On API 20–25 it falls
-back to a translucent blurred bar with identical interaction.
+On HarmonyOS 7 (API 26+) the bottom navigation bar uses the native system immersive material. On API 20–25 it falls back
+to a translucent blurred bar with identical interaction.
 
 ### How it works
 
@@ -484,8 +544,8 @@ active at a time; if both flags are true, the Calendar backend wins because it r
 
 ### Backend 1 — Calendar Kit (active)
 
-Prayer reminders are written as events into a dedicated "Sirat Companion" calendar account in the system calendar.
-Each event carries a system reminder set to fire at the prayer time and, optionally, at the configured lead time.
+Prayer reminders are written as events into a dedicated "Sirat Companion" calendar account in the system calendar. Each
+event carries a system reminder set to fire at the prayer time and, optionally, at the configured lead time.
 
 **Advantages**
 
@@ -505,16 +565,37 @@ Each event carries a system reminder set to fire at the prayer time and, optiona
 1. User enables reminders in Settings → Notifications
 2. App requests `READ_CALENDAR` and `WRITE_CALENDAR`
 3. On grant, `CalendarReminderHelper.init()` creates (or re-uses) the app's calendar account
-4. On every app open, `NotificationHelper.rescheduleAll()` runs:
+4. On every app open — and on every change to settings, prayer state, or location — `NotificationHelper.rescheduleAll()`
+   runs:
     - Cancels all existing Sirat events
     - Reads location, method, Asr rule, offsets, and reminder settings
     - Calculates prayer times for the next 3 days
-    - Writes one calendar event per enabled prayer, with `reminderTime: [0, leadMinutes]`
+   - Skips any prayer already marked as prayed on that date
+   - Writes one calendar event per remaining prayer, with `reminderTime: [0, leadMinutes]`
+5. Every event carries the associated Hadith in its description, localized to the app's current language
+
+**Skip-if-prayed**
+
+When a prayer is marked as prayed in the app, its reminder for that date is removed on the next reschedule. Marking the
+last prayer of the day triggers an immediate reschedule (bypassing the debounce) so tomorrow's reminders are queued
+before the user closes the app. The 3-day scheduling anchor also shifts forward when today is complete, keeping a full
+three days of pending reminders at all times.
+
+**Cleanup safety**
+
+`CalendarReminderHelper.cancelAll()` applies three independent layers of scoping:
+
+1. **Account scoping** — the calendar object is the app's own account, so events in other calendars are unreachable
+2. **Title filter** — `EventFilter.filterByTitle('Sirat · ')` restricts the result set to the app's events
+3. **Per-event re-check** — each event is verified to carry the prefix before its delete call
+
+A user who adds their own event to the "Sirat Companion" calendar account from the system Calendar app will find it
+untouched by the app's cleanup.
 
 ### Backend 2 — Agent-Powered Reminder (pending AGC approval)
 
-Uses `reminderAgentManager.publishReminder()` from `@kit.BackgroundTasksKit`. Produces standard app notifications
-rather than calendar events.
+Uses `reminderAgentManager.publishReminder()` from `@kit.BackgroundTasksKit`. Produces standard app notifications rather
+than calendar events.
 
 **Requires**
 
@@ -544,8 +625,8 @@ export const CALENDAR_REMINDERS_ENABLED = true;
 5. (Optional) Call `CalendarReminderHelper.cancelAll()` once on the first launch after the switch to clear leftover
    calendar events
 
-No other source file changes. `NotificationHelper.resolveBackend()` picks the correct backend automatically based on
-the flags.
+No other source file changes. `NotificationHelper.resolveBackend()` picks the correct backend automatically based on the
+flags.
 
 ---
 
@@ -553,14 +634,17 @@ the flags.
 
 ### Calendar backend
 
-| Check                                       | Expected                                                                                    |
-|---------------------------------------------|---------------------------------------------------------------------------------------------|
-| Settings → Notifications → toggle master on | Calendar permission dialog appears                                                          |
-| Grant both permissions                      | Toggle stays on; test button becomes enabled                                                |
-| Tap Test Notification                       | A "Sirat · Test Reminder" event appears in the system Calendar app with a 5-second reminder |
-| Open the system Calendar app                | A "Sirat Companion" calendar account is visible                                             |
-| Enable per-prayer toggles                   | Calendar events appear for the next 3 days, one per enabled prayer                          |
-| Disable master toggle                       | All Sirat events are removed from the calendar                                              |
+| Check                                       | Expected                                                                                |
+|---------------------------------------------|-----------------------------------------------------------------------------------------|
+| Settings → Notifications → toggle master on | Calendar permission dialog appears                                                      |
+| Grant both permissions                      | Toggle stays on; test button becomes enabled                                            |
+| Tap Test Notification                       | A "Sirat · Pray Fajr" event appears in the system Calendar app with a 5-second reminder |
+| Open the system Calendar app                | A "Sirat Companion" calendar account is visible                                         |
+| Enable per-prayer toggles                   | Calendar events appear for the next 3 days, one per pending prayer                      |
+| Mark a prayer as prayed                     | That prayer's reminder is removed on the next reschedule                                |
+| Mark all five prayers                       | Immediate reschedule runs; anchor shifts to tomorrow                                    |
+| Change the lead time                        | Old events are deleted; new events carry the new offsets                                |
+| Disable master toggle                       | All Sirat events are removed from the calendar                                          |
 
 The Calendar backend can be tested on **any** HarmonyOS 6+ device or emulator. No AGC approval is needed.
 
@@ -571,11 +655,8 @@ The Calendar backend can be tested on **any** HarmonyOS 6+ device or emulator. N
 | API 9 – 19   | Not supported                  |
 | API 20+      | Supported                      |
 
-**On API 20+ emulator** you can verify the permission dialog, `publishReminder()` return values, notification display
-in the shade, and localization — once the AGC capability is approved and the flag is flipped.
-
-**On any emulator** use `notificationManager.publish()` directly to verify notification content without waiting for
-the scheduler.
+**On API 20+ emulator** you can verify the permission dialog, `publishReminder()` return values, notification display in
+the shade, and localization — once the AGC capability is approved and the flag is flipped.
 
 **On a real device** you get full validation including the exact timed trigger. Cloud debugging via AppGallery Connect
 is a good alternative.
@@ -603,7 +684,7 @@ This means viewing NYC prayer times from Pakistan shows NYC local times, with co
 
 - [x] Home dashboard — progress, streaks, weekly grid, monthly heatmap
 - [x] Ramadan card — Ashras, Laylat al-Qadr, Jummah tul Widah
-- [x] Four app-wide themes with matched light/dark palettes
+- [x] Five app-wide themes with matched light/dark palettes; Sirat as default
 - [x] Tasbih sounds — five selectable click styles
 - [x] Per-tasbih bead themes — nine presets
 - [x] Qibla calibration overlay
@@ -612,6 +693,10 @@ This means viewing NYC prayer times from Pakistan shows NYC local times, with co
 - [x] HarmonyOS 7 immersive material with API 20 fallback
 - [x] Calendar Kit reminder backend (workaround for AGC-pending capability)
 - [x] Switchable reminder backend architecture
+- [x] Full 24-hour sun-path arc with continuous ticker and midnight slide
+- [x] Skip-if-prayed reminder behaviour with rolling 3-day window
+- [x] Live theme propagation across all pages
+- [x] SVG tab bar icons tinted to the current theme
 
 ### In Progress
 
@@ -673,6 +758,8 @@ chore: bump target API to 26
 - Tab-hosted pages must be `@Component export struct` with no `@Entry`, no `pageTransition()`, and no `FloatingNavBar`
 - Reminder backends are selected by feature flags only — never branch on `NOTIFICATIONS_ENABLED` or
   `CALENDAR_REMINDERS_ENABLED` outside `NotificationHelper.resolveBackend()`
+- Every page that computes `PageTheme.compute(...)` must observe both `STORAGE_KEY_THEME_MODE` and
+  `STORAGE_KEY_APP_THEME` with `@StorageLink` and `@Watch`, and recompute colours in both watchers
 
 ---
 
@@ -692,8 +779,10 @@ chore: bump target API to 26
 - **Tasbih canvas animation** may stutter on a small number of high-refresh-rate devices. Under investigation.
 - **Immersive material** requires HarmonyOS 7 (API 26+) and a supporting device. On older releases, the bar falls back
   to a translucent blur.
-- **Calendar reminders are user-visible and user-editable.** Users can delete the app's calendar events at any time
-  from the system Calendar app; the app will recreate them on next open if the master toggle is still on.
+- **Calendar reminders are user-visible and user-editable.** Users can delete the app's calendar events at any time from
+  the system Calendar app; the app will recreate them on next open if the master toggle is still on.
+- **Midnight slide-back** is visible only when the app is in the foreground at the crossing. If the app is backgrounded
+  across midnight, the ticker simply appears at its new position on return.
 
 ---
 
@@ -727,25 +816,3 @@ copyright notice is retained.
 **May it be of benefit.** 🤲
 
 *If Sirat Companion helps you with your daily worship, consider starring the repository.*
-
----
-
-## Summary of changes from the previous README
-
-| Section                          | Change                                                                                                                                                        |
-|----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Header                           | Added note that reminders currently ship via Calendar Kit                                                                                                     |
-| Features → Prayer Reminders      | Renamed from "Prayer Notifications"; added backend comparison table; removed the "Currently disabled" warning                                                 |
-| Features → Prayer Times          | Added the "Today" shortcut and the ticker continuity note                                                                                                     |
-| Features → Home Dashboard        | Added cross-tab state sync note                                                                                                                               |
-| Configuration → Notifications    | Renamed to "Prayer Reminders"; points at the new Reminders section                                                                                            |
-| Permissions                      | Added `READ_CALENDAR` and `WRITE_CALENDAR`; reworded `PUBLISH_AGENT_REMINDER` row                                                                             |
-| Project Structure                | Added `CalendarReminderHelper.ets`; updated `NotificationHelper.ets` description to "backend dispatcher"                                                      |
-| Layering                         | Added `CalendarReminderHelper` to the helpers list                                                                                                            |
-| Immersive Material → Diagnostics | Path updated to Settings → Diagnostic Logs (Notifications section may be hidden)                                                                              |
-| **Prayer Reminders**             | Completely rewritten — replaced the old "Notifications" section with a two-backend overview, per-backend how-it-works, and a step-by-step switch procedure    |
-| **Testing Reminders**            | Rewritten — split into Calendar backend tests (testable on any device) and Agent backend tests (requires AGC approval)                                        |
-| Roadmap                          | Moved "Calendar Kit reminder backend" and "Switchable reminder backend architecture" to Completed; removed the "Notifications disabled" note from In Progress |
-| Code Style                       | Added the rule that reminder backends are selected by feature flags only, never by direct flag checks outside `NotificationHelper.resolveBackend()`           |
-| Known Limitations                | Replaced the "notifications disabled" bullet with a Calendar-backend workaround bullet; added a note that calendar events are user-visible and user-editable  |
-| Acknowledgements                 | Added `@kit.CalendarKit` to the HarmonyOS docs citation                                                                                                       |

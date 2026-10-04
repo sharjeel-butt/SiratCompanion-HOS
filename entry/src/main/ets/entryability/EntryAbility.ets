@@ -70,7 +70,7 @@ export default class EntryAbility extends UIAbility {
       AppStorage.setOrCreate(STORAGE_KEY_SOUND_ENABLED, soundEnabled);
 
       const savedAppTheme = await PreferencesHelper.getString(
-        STORAGE_KEY_APP_THEME, ThemePreset.CURRENT
+        STORAGE_KEY_APP_THEME, ThemePreset.SIRAT
       );
       AppStorage.setOrCreate(STORAGE_KEY_APP_THEME, savedAppTheme);
 

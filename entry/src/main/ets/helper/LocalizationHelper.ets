@@ -596,6 +596,8 @@ export class L {
       'The five daily prayers... are an expiation for whatever sins are committed between them, so long as major sins are avoided. — Sahih Muslim 233');
     m.set('hadith_isha',
       'He who observed the \u2018Isha\u2019 prayer in congregation, it was as if he prayed up to midnight. — Sahih Muslim 656a');
+    m.set('theme_preset_sirat', 'Sirat');
+    m.set('theme_preset_sirat_desc', 'Modern and minimal — a HarmonyOS 7 aesthetic');
 
     return m;
   }
@@ -1045,6 +1047,8 @@ export class L {
       '五番拜功……是它们之间所犯之罪的赎罪，只要远离大罪。 ——《穆斯林圣训实录》233');
     m.set('hadith_isha',
       '谁在集体中礼了宵礼，就如他礼了半夜的拜。 ——《穆斯林圣训实录》656a');
+    m.set('theme_preset_sirat', 'Sirat · 现代');
+    m.set('theme_preset_sirat_desc', '现代简约 — HarmonyOS 7 风格');
 
     return m;
   }
@@ -1496,6 +1500,8 @@ export class L {
       'الصَّلَوَاتُ الْخَمْسُ وَالْجُمُعَةُ إِلَى الْجُمُعَةِ وَرَمَضَانُ إِلَى رَمَضَانَ مُكَفِّرَاتٌ مَا بَيْنَهُنَّ إِذَا اجْتَنَبَ الْكَبَائِرَ  — صحيح مسلم ٢٣٣');
     m.set('hadith_isha',
       'مَنْ صَلَّى الْعِشَاءَ فِي جَمَاعَةٍ فَكَأَنَّمَا قَامَ نِصْفَ اللَّيْلِ — صحيح مسلم ٦٥٦');
+    m.set('theme_preset_sirat', 'Sirat — عصري');
+    m.set('theme_preset_sirat_desc', 'عصري وبسيط — بأسلوب HarmonyOS 7');
 
     return m;
   }

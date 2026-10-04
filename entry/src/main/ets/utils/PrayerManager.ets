@@ -590,6 +590,21 @@ export class PrayerManager {
     }
   }
 
+  /**
+   * True when all five prayers for the given date are marked as prayed.
+   *
+   * Used by the reminder system to detect the completion of a day's
+   * prayers and shift the rolling scheduling window forward.
+   */
+  static isDayFullyPrayed(dateKey: string): boolean {
+    const state = PrayerManager.getCheckState(dateKey);
+    return state.fajr === true
+      && state.dhuhr === true
+      && state.asr === true
+      && state.maghrib === true
+      && state.isha === true;
+  }
+
   /** Diagnostic: JSON dump of the entire in-memory state map. */
   static debugDump(): string {
     return JSON.stringify(PrayerManager.stateMap);

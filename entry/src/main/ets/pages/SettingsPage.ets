@@ -3,7 +3,7 @@
 import { mediaquery, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { pasteboard } from '@kit.BasicServicesKit';
-import { ThemeColors, ThemeMode } from '../common/Theme';
+import { ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import { AsrShadowRule, CalculationMethod, HighLatitudeRule } from '../utils/PrayerTimeCalculator';
 import { PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
@@ -12,6 +12,7 @@ import { LocationCache } from '../utils/LocationCache';
 import { CalculationSource, LocationMode, PickerItem } from '../models/SettingsModels';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
+  STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
@@ -52,6 +53,9 @@ struct SettingsPage {
   appForegroundTick: number = 0;
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
+  @StorageLink(STORAGE_KEY_APP_THEME)
+  @Watch('onAppThemePresetChanged')
+  appThemePreset: string = ThemePreset.SIRAT;
 
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
@@ -1496,6 +1500,10 @@ struct SettingsPage {
   }
 
   private onThemeModeChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  private onAppThemePresetChanged(): void {
     this.colors = PageTheme.compute(this.themeMode);
   }
 

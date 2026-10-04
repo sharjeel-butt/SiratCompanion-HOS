@@ -1,8 +1,8 @@
 // entry/src/main/ets/pages/Prayer.ets
-
+import { AppLogger } from '../helper/AppLogger';
 import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
-import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
+import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import { ExtraTiming, PrayerModel } from '../models/PrayerModel';
 import { DateHelper } from '../utils/DateUtils';
@@ -15,6 +15,7 @@ import { CalculationSource, LocationMode } from '../models/SettingsModels';
 import { NotificationHelper } from '../helper/NotificationHelper';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
+  STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
@@ -56,6 +57,9 @@ export struct Prayer {
   @StorageLink(STORAGE_KEY_LOCATION_VERSION)
   @Watch('onLocationVersionChanged')
   locationVersion: number = 0;
+  @StorageLink(STORAGE_KEY_APP_THEME)
+  @Watch('onAppThemePresetChanged')
+  appThemePreset: string = ThemePreset.SIRAT;
 
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChangedInHome')
@@ -185,6 +189,10 @@ export struct Prayer {
   }
 
   private onThemeModeChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  private onAppThemePresetChanged(): void {
     this.colors = PageTheme.compute(this.themeMode);
   }
 
@@ -612,10 +620,21 @@ export struct Prayer {
     });
 
     PrayerManager.saveStateForDate(this.viewingDateKey, this.prayers);
-    // Remove the reminder for a prayer that has just been marked as
-    // prayed, and reinstate it when the check is undone. Debounced so
-    // rapid toggles coalesce into one reschedule.
-    NotificationHelper.scheduleReschedule();
+
+    // If the last remaining prayer for today was just marked, run an
+    // immediate reschedule so tomorrow's reminders are queued before
+    // the user closes the app. Otherwise use the debounced version
+    // to coalesce rapid toggles.
+    if (checked
+      && this.dateOffset === 0
+      && this.allPrayersForViewingDateAreChecked()) {
+      AppLogger.info('Prayer',
+        'Last prayer of the day marked — immediate reschedule');
+      NotificationHelper.scheduleRescheduleNow();
+    } else {
+      NotificationHelper.scheduleReschedule();
+    }
+
     this.prayers = PrayerManager.updateStatuses(
       this.prayers, this.viewingDate, this.getLocationOffsetHours()
     );
@@ -632,6 +651,24 @@ export struct Prayer {
       }
     }
     return false;
+  }
+
+  /**
+   * True when every prayer in the current viewing date is checked.
+   * Used to detect the moment the last prayer of the day is marked,
+   * which triggers an immediate reschedule instead of the debounced
+   * one.
+   */
+  private allPrayersForViewingDateAreChecked(): boolean {
+    if (this.prayers.length === 0) {
+      return false;
+    }
+    for (const p of this.prayers) {
+      if (!p.checked) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private markAllPrayed(): void {
@@ -658,9 +695,17 @@ export struct Prayer {
       return;
     }
     PrayerManager.saveStateForDate(this.viewingDateKey, this.prayers);
-    // Remove all reminders for prayers that were just marked as
-    // prayed. Debounced so a single reschedule covers the batch.
-    NotificationHelper.scheduleReschedule();
+
+    // "Mark all as prayed" always completes the day. Run the
+    // reschedule immediately so tomorrow's reminders are queued.
+    if (this.dateOffset === 0 && this.allPrayersForViewingDateAreChecked()) {
+      AppLogger.info('Prayer',
+        'Mark all — day complete, immediate reschedule');
+      NotificationHelper.scheduleRescheduleNow();
+    } else {
+      NotificationHelper.scheduleReschedule();
+    }
+
     this.prayers = PrayerManager.updateStatuses(
       this.prayers, this.viewingDate, this.getLocationOffsetHours()
     );

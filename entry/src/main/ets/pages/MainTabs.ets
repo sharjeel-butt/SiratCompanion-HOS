@@ -2,10 +2,11 @@
 
 import { display, mediaquery } from '@kit.ArkUI';
 import { deviceInfo } from '@kit.BasicServicesKit';
-import { ThemeColors, ThemeMode } from '../common/Theme';
+import { ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
+  STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
@@ -50,6 +51,9 @@ struct MainTabs {
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_APP_THEME)
+  @Watch('onAppThemePresetChanged')
+  appThemePreset: string = ThemePreset.SIRAT;
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = 'en';
@@ -121,6 +125,10 @@ struct MainTabs {
     this.colors = PageTheme.compute(this.themeMode);
   }
 
+  private onAppThemePresetChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
   private onLanguageChanged(): void {
     this.currentLanguage = this.appLanguage;
   }
@@ -134,14 +142,24 @@ struct MainTabs {
     return PageTheme.isDarkFor(this.themeMode);
   }
 
+  /**
+   * Active tab colour, taken from the current theme's accent.
+   *
+   * `this.colors` is recomputed by `onThemeModeChanged` whenever the
+   * user switches preset or mode, so the tab bar follows the theme
+   * automatically. There is no per-theme hard-coding here.
+   */
   private activeColor(): string {
-    return this.isDark() ? '#4ADE80' : '#0F5132';
+    return this.colors.accentGold;
   }
 
+  /**
+   * Inactive tab colour. Uses the theme's muted text tone so that the
+   * tab bar reads as part of the same visual system as the rest of the
+   * UI, rather than a separate grey.
+   */
   private inactiveColor(): string {
-    return this.isDark()
-      ? 'rgba(241,245,249,0.78)'
-      : 'rgba(26,26,26,0.70)';
+    return this.colors.textMuted;
   }
 
   /** Fallback bar fill — translucent, colour-matched to the theme. */
@@ -172,27 +190,32 @@ struct MainTabs {
     TabContent() {
       HomePage()
     }
-    .tabBar(this.TabBarItem(0, '🏠', L.get('tab_home', this.currentLanguage)))
+    .tabBar(this.TabBarItem(0, $r('app.media.tab_home'),
+      L.get('tab_home', this.currentLanguage)))
 
     TabContent() {
       Prayer()
     }
-    .tabBar(this.TabBarItem(1, '🕌', L.get('tab_prayers', this.currentLanguage)))
+    .tabBar(this.TabBarItem(1, $r('app.media.tab_prayers'),
+      L.get('tab_prayers', this.currentLanguage)))
 
     TabContent() {
       HijriCalendarPage()
     }
-    .tabBar(this.TabBarItem(2, '📅', L.get('tab_calendar', this.currentLanguage)))
+    .tabBar(this.TabBarItem(2, $r('app.media.tab_calendar'),
+      L.get('tab_calendar', this.currentLanguage)))
 
     TabContent() {
       QiblaPage()
     }
-    .tabBar(this.TabBarItem(3, '🧭', L.get('tab_compass', this.currentLanguage)))
+    .tabBar(this.TabBarItem(3, $r('app.media.tab_compass'),
+      L.get('tab_compass', this.currentLanguage)))
 
     TabContent() {
       TasbihPage()
     }
-    .tabBar(this.TabBarItem(4, '📿', L.get('tab_tasbih', this.currentLanguage)))
+    .tabBar(this.TabBarItem(4, $r('app.media.tab_tasbih'),
+      L.get('tab_tasbih', this.currentLanguage)))
   }
 
   // ============================================================
@@ -211,7 +234,7 @@ struct MainTabs {
     .barOverlap(true)
     .vertical(false)
     .barPosition(BarPosition.End)
-    .barHeight(68)
+    .barHeight(80)
     // systemMaterial supplies the HOS7 immersive glass.
     // Do NOT also set barBackgroundColor or barBackgroundBlurStyle —
     // the docs say those fight the material.
@@ -252,8 +275,8 @@ struct MainTabs {
     .barOverlap(true)
     .vertical(false)
     .barPosition(BarPosition.End)
-    .barHeight(68)
-    // Blur + semi-transparent fill emulate the material without
+    .barHeight(80)
+    // Blur + semi-transparent fill emulate the material wisthout
     // requiring API 26. barBackgroundBlurStyle is available on the
     // API levels this branch targets.
     .barBackgroundBlurStyle(BlurStyle.Thin)
@@ -273,26 +296,34 @@ struct MainTabs {
   // ============================================================
 
   @Builder
-  TabBarItem(index: number, icon: string, label: string) {
+  TabBarItem(
+    index: number,
+    icon: Resource,
+    label: string
+  ) {
     Column() {
-      Text(icon)
-        .fontSize(20)
-        .opacity(this.currentIndex === index ? 1.0 : 0.78)
+      Image(icon)
+        .width(26)
+        .height(26)
+        .fillColor(this.currentIndex === index
+          ? this.activeColor()
+          : this.inactiveColor())
+        .objectFit(ImageFit.Contain)
 
       Text(label)
-        .fontSize(9)
+        .fontSize(11)
         .fontWeight(this.currentIndex === index
           ? FontWeight.Bold
           : FontWeight.Medium)
         .fontColor(this.currentIndex === index
           ? this.activeColor()
           : this.inactiveColor())
-        .margin({ top: 2 })
+        .margin({ top: 4 })
         .maxLines(1)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
     }
     .width('100%')
-    .height(56)
+    .height(68)
     .justifyContent(FlexAlign.Center)
   }
 }
