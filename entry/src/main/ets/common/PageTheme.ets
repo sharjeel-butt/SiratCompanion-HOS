@@ -80,6 +80,6 @@ export class PageTheme {
   /** Reads the current preset from AppStorage on every call. */
   private static currentPreset(): string {
     const v = AppStorage.get<string>(STORAGE_KEY_APP_THEME);
-    return (v !== undefined && v.length > 0) ? v : ThemePreset.CURRENT;
+    return (v !== undefined && v.length > 0) ? v : ThemePreset.SIRAT;
   }
 }

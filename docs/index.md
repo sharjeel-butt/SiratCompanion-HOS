@@ -1,8 +1,8 @@
 # Privacy Policy — Sirat Companion
 
-**Last updated:** October 7, 2026
-**Effective date:** October 7, 2026
-**Applies to:** Sirat Companion version 2.3.0 and later
+**Last updated:** October 8, 2026
+**Effective date:** October 8, 2026
+**Applies to:** Sirat Companion version 2.5.0 and later
 
 [English](#english) · [中文](#chinese) · [العربية](#arabic)
 
@@ -51,7 +51,7 @@ information is transmitted to us, to Huawei, or to any third party by the App.
 - **What we access:** The prayers you mark as prayed each day (Fajr, Dhuhr, Asr, Maghrib, Isha), stored per calendar
   date.
 - **Why we access it:** To power the Home dashboard — today's progress, streaks, weekly grid, monthly heatmap, and
-  lifetime statistics.
+  lifetime statistics — and to skip creating reminders for prayers you have already performed.
 - **How it is stored:** Stored locally on your device using the HarmonyOS Preferences API. It never leaves your device.
 
 ### Prayer Times and Settings
@@ -98,14 +98,17 @@ information is transmitted to us, to Huawei, or to any third party by the App.
 ### Calendar (Prayer Reminders)
 
 - **What we access:** A dedicated calendar account named "Sirat Companion" in your device's system calendar. When you
-  enable prayer reminders in Settings → Notifications, the App writes one calendar event per enabled prayer for the next
+  enable prayer reminders in Settings → Notifications, the App writes one calendar event per pending prayer for the next
   three days. Each event carries a system reminder set to fire at the prayer time and, optionally, at your configured
-  lead time.
+  lead time. The event description carries a short Hadith associated with that prayer, along with its source citation.
 - **Why we access it:** To deliver prayer-time reminders through the system calendar, which fires reliably even when the
   App is not running.
 - **How it is stored:** The events are stored by the system Calendar app under the App's own calendar account. The App
   reads events only from its own account, and only to remove stale events before rescheduling. No other calendar data is
   read, and no calendar data is transmitted anywhere.
+- **Prayers already performed:** When you mark a prayer as prayed for a given date, the App removes that prayer's
+  reminder for that date on the next reschedule. Marking the last prayer of the day triggers an immediate reschedule so
+  the next day's reminders are queued before you leave the App.
 - **Removal:** You can remove all of these events at any time by turning off the master reminder toggle in Settings →
   Notifications, or by deleting the "Sirat Companion" calendar account from the system Calendar app.
 
@@ -139,17 +142,17 @@ We do not use any third-party analytics SDKs, advertising SDKs, or tracking libr
 
 All information accessed by the App is used only on your device and only to provide the App's features:
 
-| Information     | Purpose                                                   |
-|-----------------|-----------------------------------------------------------|
-| Location        | Calculate prayer times and Qibla direction                |
-| Sensors         | Determine device orientation for the compass              |
-| Prayer history  | Track daily prayers, streaks, and progress                |
-| Preferences     | Remember your settings                                    |
-| Tasbih data     | Persist your dhikr progress and preferences               |
-| System feedback | Respect system sound and haptics settings                 |
-| Vibration       | Provide haptic feedback while counting Tasbih             |
-| Sound           | Play a click when counting Tasbih                         |
-| Calendar        | Add prayer-time reminders to a dedicated calendar account |
+| Information     | Purpose                                                                              |
+|-----------------|--------------------------------------------------------------------------------------|
+| Location        | Calculate prayer times and Qibla direction                                           |
+| Sensors         | Determine device orientation for the compass                                         |
+| Prayer history  | Track daily prayers, streaks, progress; skip reminders for prayers already performed |
+| Preferences     | Remember your settings                                                               |
+| Tasbih data     | Persist your dhikr progress and preferences                                          |
+| System feedback | Respect system sound and haptics settings                                            |
+| Vibration       | Provide haptic feedback while counting Tasbih                                        |
+| Sound           | Play a click when counting Tasbih                                                    |
+| Calendar        | Add prayer-time reminders to a dedicated calendar account                            |
 
 We do not use your information for advertising, profiling, or any purpose unrelated to the App's core functionality.
 
@@ -295,7 +298,7 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 ### 礼拜完成记录
 
 - **我们访问的内容：** 您每天标记为已礼的礼拜（晨礼、晌礼、晡礼、昏礼、宵礼），按日历日期存储。
-- **我们为何访问：** 用于驱动首页的今日进度、连续天数、每周网格、每月热力图以及累计统计。
+- **我们为何访问：** 用于驱动首页的今日进度、连续天数、每周网格、每月热力图以及累计统计，并用于跳过为已完成礼拜创建的提醒。
 - **存储方式：** 通过 HarmonyOS Preferences API 存储在您的设备本地。它从不离开您的设备。
 
 ### 礼拜时间与设置
@@ -333,9 +336,10 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 ### 日历（礼拜提醒）
 
 - **我们访问的内容：** 您设备系统日历中一个名为"Sirat 伴侣"的专用日历账户。当您在 设置 → 通知
-  中启用礼拜提醒后，本应用会为未来三天内每个已启用的礼拜写入一个日历事件。每个事件都带有一个系统提醒，设置在礼拜时间触发，以及（可选）在您配置的提前时间触发。
+  中启用礼拜提醒后，本应用会为未来三天内每个尚未完成的礼拜写入一个日历事件。每个事件都带有一个系统提醒，设置在礼拜时间触发，以及（可选）在您配置的提前时间触发。事件描述中附带与该礼拜相关的简短圣训及其出处。
 - **我们为何访问：** 通过系统日历传递礼拜提醒，即使本应用未运行也能可靠触发。
 - **存储方式：** 这些事件由系统日历应用保存在本应用自己的日历账户中。本应用仅从自己的账户读取事件，且仅用于在重新排程前清除过期事件。不会读取其他日历数据，也不会向任何地方传输日历数据。
+- **已完成的礼拜：** 当您将某一天的某个礼拜标记为已礼后，本应用会在下次重新排程时移除该日期该礼拜的提醒。将当天最后一个礼拜标记为已礼会立即触发重新排程，从而在您离开应用前为第二天排好提醒。
 - **删除：** 您可以随时在 设置 → 通知 中关闭提醒总开关，或在系统日历应用中删除"Sirat 伴侣"日历账户，从而移除所有相关事件。
 
 ### 通知功能（当前未启用）
@@ -367,17 +371,17 @@ Sirat 伴侣**不**收集、存储或传输：
 
 本应用访问的所有信息仅在您的设备上使用，且仅用于提供本应用的功能：
 
-| 信息     | 用途              |
-|--------|-----------------|
-| 位置     | 计算礼拜时间和天房方向     |
-| 传感器    | 确定设备方向以供指南针使用   |
-| 礼拜完成记录 | 记录每日礼拜、连续天数以及进度 |
-| 偏好设置   | 记住您的设置          |
-| 念珠数据   | 保存您的念词进度和偏好     |
-| 系统反馈   | 遵循系统声音和触感设置     |
-| 振动     | 念珠计数时提供触觉反馈     |
-| 声音     | 念珠计数时播放提示音      |
-| 日历     | 将礼拜提醒添加到专用日历账户  |
+| 信息     | 用途                           |
+|--------|------------------------------|
+| 位置     | 计算礼拜时间和天房方向                  |
+| 传感器    | 确定设备方向以供指南针使用                |
+| 礼拜完成记录 | 记录每日礼拜、连续天数以及进度，并为已完成的礼拜跳过提醒 |
+| 偏好设置   | 记住您的设置                       |
+| 念珠数据   | 保存您的念词进度和偏好                  |
+| 系统反馈   | 遵循系统声音和触感设置                  |
+| 振动     | 念珠计数时提供触觉反馈                  |
+| 声音     | 念珠计数时播放提示音                   |
+| 日历     | 将礼拜提醒添加到专用日历账户               |
 
 我们不会将您的信息用于广告、画像或与本应用核心功能无关的任何目的。
 
@@ -512,7 +516,7 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 
 - **ما نصل إليه:** الصلوات التي تُعلّمها كمُصلَّاة كل يوم (الفجر، الظهر، العصر، المغرب، العشاء)، محفوظة حسب التاريخ.
 - **لماذا نصل إليها:** لعرض تقدم اليوم والأيام المتتالية والشبكة الأسبوعية والخريطة الشهرية والإحصاءات الإجمالية على
-  الشاشة الرئيسية.
+  الشاشة الرئيسية، ولتخطي إنشاء التذكيرات للصلوات التي أدّيتها بالفعل.
 - **كيفية التخزين:** تُخزَّن محلياً على جهازك باستخدام واجهة HarmonyOS Preferences. لا تغادر جهازك أبداً.
 
 ### أوقات الصلاة والإعدادات
@@ -555,13 +559,17 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 ### التقويم (تذكيرات الصلاة)
 
 - **ما نصل إليه:** حساب تقويم مخصّص باسم "رفيق الصراط" في تقويم النظام على جهازك. عند تمكين تذكيرات الصلاة من
-  الإعدادات ← الإشعارات، يكتب التطبيق حدث تقويم واحداً لكل صلاة مُفعَّلة خلال الأيام الثلاثة القادمة. كل حدث يحمل تذكير
-  نظام مضبوطاً للتشغيل في وقت الصلاة، واختيارياً في الوقت المسبق الذي قمت بتكوينه.
+  الإعدادات ← الإشعارات، يكتب التطبيق حدث تقويم واحداً لكل صلاة مُعلَّقة خلال الأيام الثلاثة القادمة. كل حدث يحمل تذكير
+  نظام مضبوطاً للتشغيل في وقت الصلاة، واختيارياً في الوقت المسبق الذي قمت بتكوينه. يحمل وصف الحدث حديثاً قصيراً مرتبطاً
+  بتلك الصلاة مع ذكر مصدره.
 - **لماذا نصل إليها:** لتسليم تذكيرات الصلاة عبر تقويم النظام، الذي يعمل بشكل موثوق حتى عندما لا يكون التطبيق قيد
   التشغيل.
 - **كيفية التخزين:** تُخزَّن الأحداث بواسطة تطبيق التقويم في النظام تحت حساب التقويم الخاص بالتطبيق. يقرأ التطبيق
   الأحداث من حسابه الخاص فقط، وذلك فقط لإزالة الأحداث القديمة قبل إعادة الجدولة. لا يُقرأ أي بيانات تقويم أخرى، ولا
   تُنقل أي بيانات تقويم إلى أي مكان.
+- **الصلوات المؤدّاة:** عند تعليم صلاة كمُصلَّاة في تاريخ معيّن، يزيل التطبيق تذكير تلك الصلاة لذلك التاريخ في إعادة
+  الجدولة التالية. تعليم آخر صلاة في اليوم كمُصلَّاة يؤدي إلى إعادة جدولة فورية، بحيث تكون تذكيرات اليوم التالي جاهزة
+  قبل مغادرتك التطبيق.
 - **الإزالة:** يمكنك إزالة كل هذه الأحداث في أي وقت عن طريق إيقاف المفتاح الرئيسي للتذكيرات من الإعدادات ← الإشعارات، أو
   حذف حساب تقويم "رفيق الصراط" من تطبيق التقويم في النظام.
 
@@ -594,17 +602,17 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 
 تُستخدم جميع المعلومات التي يصل إليها التطبيق على جهازك فقط، ولتقديم ميزات التطبيق حصراً:
 
-| المعلومات      | الغرض                                          |
-|----------------|------------------------------------------------|
-| الموقع         | حساب أوقات الصلاة واتجاه القبلة                |
-| المستشعرات     | تحديد اتجاه الجهاز للبوصلة                     |
-| سجل الصلوات    | تتبع الصلوات اليومية والأيام المتتالية والتقدم |
-| التفضيلات      | تذكر إعداداتك                                  |
-| بيانات التسبيح | حفظ تقدم الأذكار والتفضيلات                    |
-| حالة النظام    | احترام إعدادات الصوت والاهتزاز في النظام       |
-| الاهتزاز       | توفير تغذية لمسية أثناء عدّ التسبيح            |
-| الصوت          | تشغيل نقرة عند عدّ التسبيح                     |
-| التقويم        | إضافة تذكيرات الصلاة إلى حساب تقويم مخصّص      |
+| المعلومات      | الغرض                                                                            |
+|----------------|----------------------------------------------------------------------------------|
+| الموقع         | حساب أوقات الصلاة واتجاه القبلة                                                  |
+| المستشعرات     | تحديد اتجاه الجهاز للبوصلة                                                       |
+| سجل الصلوات    | تتبع الصلوات اليومية والأيام المتتالية والتقدم، وتخطي التذكيرات للصلوات المؤدّاة |
+| التفضيلات      | تذكر إعداداتك                                                                    |
+| بيانات التسبيح | حفظ تقدم الأذكار والتفضيلات                                                      |
+| حالة النظام    | احترام إعدادات الصوت والاهتزاز في النظام                                         |
+| الاهتزاز       | توفير تغذية لمسية أثناء عدّ التسبيح                                              |
+| الصوت          | تشغيل نقرة عند عدّ التسبيح                                                       |
+| التقويم        | إضافة تذكيرات الصلاة إلى حساب تقويم مخصّص                                        |
 
 لا نستخدم معلوماتك للإعلانات أو التنميط أو أي غرض لا يتصل بالوظائف الأساسية للتطبيق.
 
@@ -709,32 +717,17 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 
 ## Summary of changes
 
-| Change                                                                                                                                                          | Where                       |
-|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|
-| **Date bump** — October 5 → October 7, 2026                                                                                                                     | Header, all three languages |
-| **New subsection: Calendar (Prayer Reminders)** — full disclosure of the calendar account, event creation, and cleanup semantics                                | English / 中文 / العربية      |
-| **Reworded Notification Features subsection** — clarifies that the notification backend exists but is disabled, and that the calendar backend is the active one | All three languages         |
-| **How We Use the Information table** — added "Calendar" row                                                                                                     | All three languages         |
-| **Sharing of Information list** — added "Calendar service"                                                                                                      | All three languages         |
-| **Data Storage and Retention** — added note that calendar events can be deleted via the master toggle, account deletion, or uninstall                           | All three languages         |
-| **Permissions Requested table** — added `READ_CALENDAR` and `WRITE_CALENDAR`; reworded `PUBLISH_AGENT_REMINDER` reference                                       | All three languages         |
-| **New subsection: Calendar — Detailed Explanation** — parallel to the existing Vibration explanation                                                            | All three languages         |
-| **Your Rights list** — added note that calendar events can be removed by toggling off reminders                                                                 | All three languages         |
-| **Prayer Times and Settings bullet** — added "notification preferences" to the list of stored settings                                                          | All three languages         |
+| Change                                                                                                                                                                                                                               | Where                       |
+|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|
+| **Date bump** — October 7 → October 8, 2026                                                                                                                                                                                          | Header, all three languages |
+| **Version bump** — "2.3.0 and later" → "2.5.0 and later"                                                                                                                                                                             | Header                      |
+| **Prayer Completion History** — added note that the history is also used to skip reminders for prayers already performed                                                                                                             | EN / ZH / AR                |
+| **Calendar section** — added that event descriptions carry a Hadith with source citation; added a "Prayers already performed" bullet explaining skip-if-prayed behaviour and the immediate reschedule when the last prayer is marked | EN / ZH / AR                |
+| **How We Use table** — updated "Prayer history" row to mention skipping reminders                                                                                                                                                    | EN / ZH / AR                |
 
-This in-app version and the hosted `index.md` are now in sync — both carry the same "Last updated" date, the same
-section structure, and the same content across all three languages.
+Everything else is unchanged. The privacy disclosures for Location, Sensors, Settings, Tasbih, System Feedback,
+Vibration, Sound, and the Notification Features section remain accurate — no permissions were added or removed in 2.5.0,
+and the Calendar backend continues to be the active reminder mechanism.
 
-When the Agent-Powered Reminder capability is approved and you flip the flags:
-
-1. Replace the "Calendar (Prayer Reminders)" subsection with a "Notifications (Prayer Reminders)" subsection describing
-   the notification backend
-2. Update the "Notification Features (Not Currently Active)" subsection to describe the notification backend as active
-3. Remove `READ_CALENDAR` and `WRITE_CALENDAR` from the permissions table
-4. Add `PUBLISH_AGENT_REMINDER` to the permissions table
-5. Replace the "Calendar — Detailed Explanation" block with a "Notifications — Detailed Explanation" block
-6. Remove the "Calendar" row from the How We Use table and the "Calendar service" line from Sharing
-7. Remove the calendar retention note from Data Storage and the calendar note from Your Rights
-8. Apply the same changes to `data/PrivacyPolicy.ets` (EN / ZH / AR)
-
-The hosted and in-app versions must always move together — that's the invariant the file headers document.
+The in-app `data/PrivacyPolicy.ets` needs the same three edits (date, version, and the two Calendar additions) applied
+to its EN / ZH / AR strings so the two files stay in sync.

@@ -4,10 +4,11 @@ import {
   AnimatorOptions, AnimatorResult, mediaquery, promptAction
 } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
-import { ThemeColors, ThemeMode } from '../common/Theme';
+import { ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
+  STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
@@ -71,6 +72,9 @@ export struct TasbihPage {
   appForegroundTick: number = 0;
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
+  @StorageLink(STORAGE_KEY_APP_THEME)
+  @Watch('onAppThemePresetChanged')
+  appThemePreset: string = ThemePreset.SIRAT;
 
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State tasbihs: Tasbih[] = [];
@@ -1177,6 +1181,10 @@ export struct TasbihPage {
   }
 
   private onThemeModeChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  private onAppThemePresetChanged(): void {
     this.colors = PageTheme.compute(this.themeMode);
   }
 

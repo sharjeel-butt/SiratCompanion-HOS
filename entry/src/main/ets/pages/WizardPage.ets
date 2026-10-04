@@ -65,7 +65,7 @@ struct WizardPage {
   // ---- Step 1: privacy policy ----
   @State privacyAccepted: boolean = false;
   // ---- Step 2: theme ----
-  @State selectedTheme: string = ThemePreset.CURRENT;
+  @State selectedTheme: string = ThemePreset.SIRAT;
   // ---- Step 3: location ----
   @State locationMode: LocationMode = LocationMode.GPS;
   @State manualLat: string = '';
@@ -1198,6 +1198,11 @@ struct WizardPage {
   // ============================================================
 
   private getThemeOptions(): ThemeOption[] {
+    const sirat: ThemeOption = {
+      id: ThemePreset.SIRAT,
+      nameKey: 'theme_preset_sirat',
+      descKey: 'theme_preset_sirat_desc'
+    };
     const current: ThemeOption = {
       id: ThemePreset.CURRENT,
       nameKey: 'theme_preset_current',
@@ -1218,7 +1223,7 @@ struct WizardPage {
       nameKey: 'theme_preset_harmony5',
       descKey: 'theme_preset_harmony5_desc'
     };
-    return [current, h7, h6, h5];
+    return [sirat, current, h7, h6, h5];
   }
 
   /**
