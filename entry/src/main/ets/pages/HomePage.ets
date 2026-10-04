@@ -4,6 +4,7 @@ import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
+import { AppLogger } from '../helper/AppLogger';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -300,6 +301,9 @@ export struct HomePage {
     await this.refreshDashboard();
     this.updateCountdown();
     this.startCountdownTimer();
+
+    // Silently refresh GPS on foreground. Non-blocking.
+    this.refreshLocationSilently();
   }
 
   // ============================================================
@@ -323,6 +327,9 @@ export struct HomePage {
     await this.loadSettingsAndLocation();
     await this.refreshDashboard();
     this.startCountdownTimer();
+
+    // Silently refresh GPS on first load. Non-blocking.
+    this.refreshLocationSilently();
   }
 
   aboutToDisappear(): void {
@@ -814,6 +821,57 @@ export struct HomePage {
       }
     } finally {
       this.isLoadingLocation = false;
+    }
+  }
+
+  /**
+   * Silently refresh the device location from GPS. Called on page
+   * load and on every background-to-foreground transition.
+   *
+   * Non-blocking, non-interactive: if the fetch fails for any reason
+   * (GPS off, permission denied, timeout), the cached location is
+   * kept and prayer times are not recalculated. The user can always
+   * trigger an interactive refresh by tapping the 📡 button.
+   *
+   * When the fetch succeeds and the coordinates differ from the
+   * cached values, the header, prayer times, and fasting window are
+   * all refreshed.
+   */
+  private async refreshLocationSilently(): Promise<void> {
+    if (this.locationMode !== LocationMode.GPS) {
+      return;
+    }
+
+    try {
+      const data: LocationData = await LocationHelper.fetchLocationData(
+        getContext(this), 'silent'
+      );
+
+      // Skip UI work if the location is effectively the same.
+      const sameLat = Math.abs(data.latitude - this.latitude) < 0.0001;
+      const sameLng = Math.abs(data.longitude - this.longitude) < 0.0001;
+      if (sameLat && sameLng) {
+        return;
+      }
+
+      AppLogger.info('HomePage',
+        `Silent location refresh: ${data.latitude.toFixed(4)}, ` +
+          `${data.longitude.toFixed(4)} (${data.cityName})`);
+
+      this.latitude = data.latitude;
+      this.longitude = data.longitude;
+      this.currentLocation = data.cityName;
+
+      await LocationCache.save(data.latitude, data.longitude, data.cityName);
+
+      this.refreshHeader();
+      this.refreshFastingWindow();
+    } catch (err) {
+      // Silent — keep cached location.
+      const e = err as Error;
+      console.info(
+        `[HomePage] silent location refresh skipped: ${e.message}`
+      );
     }
   }
 

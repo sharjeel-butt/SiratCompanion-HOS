@@ -1,6 +1,6 @@
 // entry/src/main/ets/utils/LocationUtils.ets
 
-import { abilityAccessCtrl, Context, PermissionRequestResult, Permissions } from '@kit.AbilityKit';
+import { abilityAccessCtrl, bundleManager, Context, PermissionRequestResult, Permissions } from '@kit.AbilityKit';
 import { L } from '../helper/LocalizationHelper';
 import { OfflineCityLookup } from './OfflineCityLookup';
 import { geoLocationManager } from '@kit.LocationKit';
@@ -33,6 +33,39 @@ export class LocationHelper {
     } catch (err) {
       const error = err as BusinessError;
       console.error(`Permission request failed: ${error.code}, ${error.message}`);
+      return false;
+    }
+  }
+
+  /**
+   * Check the location permission state without prompting the user.
+   * Returns true only when both APPROXIMATELY_LOCATION and LOCATION
+   * are currently granted. Used by silent refreshes so background
+   * fetches never trigger a permission dialog.
+   */
+  private static async checkLocationPermission(): Promise<boolean> {
+    try {
+      const bundleInfo = bundleManager.getBundleInfoForSelfSync(
+        bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION
+      );
+      const tokenId = bundleInfo.appInfo.accessTokenId;
+
+      const atManager = abilityAccessCtrl.createAtManager();
+      const status1 = await atManager.checkAccessToken(
+        tokenId, 'ohos.permission.APPROXIMATELY_LOCATION'
+      );
+      const status2 = await atManager.checkAccessToken(
+        tokenId, 'ohos.permission.LOCATION'
+      );
+
+      return status1 === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED
+        && status2 === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED;
+    } catch (err) {
+      const error = err as BusinessError;
+      console.warn(
+        `[LocationHelper] checkLocationPermission failed: ` +
+          `${error.code} ${error.message}`
+      );
       return false;
     }
   }
@@ -77,13 +110,30 @@ export class LocationHelper {
     }
   }
 
-  static async fetchLocationData(context: Context): Promise<LocationData> {
+  /**
+   * Fetch the current device location.
+   *
+   * @param context  UIAbilityContext
+   * @param mode     'interactive' — prompts for permissions if not granted
+   *                 'silent'      — checks permission state only, never
+   *                                 prompts. Used for background refreshes
+   *                                 on page load and foreground.
+   */
+  static async fetchLocationData(
+    context: Context,
+    mode: 'interactive' | 'silent' = 'interactive'
+  ): Promise<LocationData> {
     const enabled = await LocationHelper.isLocationEnabled();
     if (!enabled) {
       throw new Error('GPS_OFF');
     }
 
-    const hasPermission = await LocationHelper.requestLocationPermission(context);
+    let hasPermission: boolean;
+    if (mode === 'interactive') {
+      hasPermission = await LocationHelper.requestLocationPermission(context);
+    } else {
+      hasPermission = await LocationHelper.checkLocationPermission();
+    }
     if (!hasPermission) {
       throw new Error('PERMISSION_DENIED');
     }
