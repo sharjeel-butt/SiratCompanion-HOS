@@ -11,6 +11,10 @@ interface PathPoint {
   y: number;
 }
 
+// ============================================================
+// UNIVERSAL FONT / LAYOUT CONSTANTS
+// ============================================================
+
 const LABEL_FONT_SIZE = 35;
 const TIME_FONT_SIZE = 25;
 const LABEL_TIME_GAP = 14;
@@ -36,10 +40,14 @@ const TICKER_DOT_R = 5;
 const TICKER_LINE_W = 2.5;
 const TICKER_DASH_ON = 5;
 const TICKER_DASH_OFF = 4;
+const MIDNIGHT_SLIDE_MS = 900;
 
 const TICKER_REFRESH_MS = 3 * 60 * 1000;
 
 const BOTTOM_LABEL_Y = 322;
+
+/** A full day, in minutes. 12:00 AM = 0, 11:59 PM = 1439. */
+const MINUTES_PER_DAY = 1440;
 
 @Component
 export struct PrayerSunPath {
@@ -56,6 +64,12 @@ export struct PrayerSunPath {
   private canvasHeight: number = CANVAS_HEIGHT;
   private canvasReady: boolean = false;
   private tickerTimerId: number = -1;
+  /** Timestamp when the midnight slide-back began. 0 when idle. */
+  private midnightSlideStart: number = 0;
+  /** Interval handle for the slide-back animation. */
+  private midnightSlideTimerId: number = -1;
+  /** Minute-of-day value from the previous redraw. -1 before first. */
+  private lastTickerMinute: number = -1;
 
   // ============================================================
   // LIFECYCLE
@@ -75,6 +89,10 @@ export struct PrayerSunPath {
     if (this.tickerTimerId !== -1) {
       clearInterval(this.tickerTimerId);
       this.tickerTimerId = -1;
+    }
+    if (this.midnightSlideTimerId !== -1) {
+      clearInterval(this.midnightSlideTimerId);
+      this.midnightSlideTimerId = -1;
     }
   }
 
@@ -125,6 +143,10 @@ export struct PrayerSunPath {
     .margin({ bottom: 14 })
   }
 
+  // ============================================================
+  // HELPERS
+  // ============================================================
+
   private onPrayersChanged(_propName: string): void {
     this.redraw();
   }
@@ -132,10 +154,6 @@ export struct PrayerSunPath {
   private onVisualChanged(_propName: string): void {
     this.redraw();
   }
-
-  // ============================================================
-  // HELPERS
-  // ============================================================
 
   private translatePrayerName(raw: string): string {
     switch (raw) {
@@ -188,6 +206,7 @@ export struct PrayerSunPath {
     const H = this.canvasHeight;
     ctx.clearRect(0, 0, W, H);
 
+    // ---- Prayer times in minutes since midnight ----
     const fajrM = PrayerManager.timeToMinutes(this.prayers[0].time);
     const dhuhrM = PrayerManager.timeToMinutes(this.prayers[1].time);
     const asrM = PrayerManager.timeToMinutes(this.prayers[2].time);
@@ -195,11 +214,6 @@ export struct PrayerSunPath {
     const ishaM = PrayerManager.timeToMinutes(this.prayers[4].time);
 
     if (fajrM <= 0 || dhuhrM <= 0 || ishaM <= 0) {
-      return;
-    }
-
-    const range = ishaM - fajrM;
-    if (range <= 0) {
       return;
     }
 
@@ -215,58 +229,70 @@ export struct PrayerSunPath {
     const arcBaseY = ARC_BASE_Y;
     const archH = ARCH_HEIGHT;
 
-    const xFor = (m: number): number =>
-    dotsStartX + (m - fajrM) / range * dotsW;
+    /**
+     * Map a minute-of-day (0..1439) to a horizontal position on the
+     * arc. 12:00 AM is the leftmost point; 11:59 PM is the rightmost.
+     *
+     * Because this mapping is monotonic, every mark placed via this
+     * function — prayer dots, sunrise/sunset markers, and the ticker —
+     * moves strictly left-to-right as time advances. There is no
+     * clamping and no reversal.
+     */
+    const xFor = (m: number): number => {
+      const clamped = Math.max(0, Math.min(MINUTES_PER_DAY, m));
+      return dotsStartX + (clamped / MINUTES_PER_DAY) * dotsW;
+    };
 
+    /**
+     * The arc curve itself: a semicircle whose apex is at solar noon
+     * (the middle of the day). The base is flat at midnight and 11:59 PM.
+     */
     const yFor = (x: number): number => {
       const p = Math.max(0, Math.min(1, (x - arcStartX) / arcW));
       return arcBaseY - archH * Math.sin(Math.PI * p);
     };
 
-    // ---- Sunrise / Sunset arc positions ----
+    // ---- Sunrise / Sunset positions ----
     const sunriseM = PrayerManager.timeToMinutes(this.sunriseTime);
     const sunsetM = PrayerManager.timeToMinutes(this.sunsetTime);
     const hasSunrise = sunriseM > 0;
     const hasSunset = sunsetM > 0;
 
-    const sunriseX = hasSunrise
-      ? Math.max(dotsStartX, Math.min(dotsEndX, xFor(sunriseM)))
-      : 0;
+    const sunriseX = hasSunrise ? xFor(sunriseM) : 0;
     const sunriseY = hasSunrise ? yFor(sunriseX) : 0;
-    const sunsetX = hasSunset
-      ? Math.max(dotsStartX, Math.min(dotsEndX, xFor(sunsetM)))
-      : 0;
+    const sunsetX = hasSunset ? xFor(sunsetM) : 0;
     const sunsetY = hasSunset ? yFor(sunsetX) : 0;
 
-    // ---- Current time position (ticker) ----
-    //
-    // The ticker keeps moving continuously through the whole 24-hour
-    // cycle:
-    //   • Before Fajr — waiting at the left edge of the arc.
-    //   • Fajr → Isha — tracks the current time across the arc.
-    //   • Isha → next Fajr — slides smoothly from the right edge back
-    //     to the left edge. This shows the timeline moving past Isha
-    //     and then rewinding to the start, so the sun path never sits
-    //     frozen after Isha.
-    //
-    // The clock label under the ticker always shows the real current
-    // time, regardless of where the ticker is on the arc.
+    // ---- Ticker position ----
     const now = new Date();
     const nowM = now.getHours() * 60 + now.getMinutes();
 
-    let tickerX: number;
-    if (nowM < fajrM) {
-      tickerX = dotsStartX;
-    } else if (nowM <= ishaM) {
-      tickerX = Math.max(dotsStartX, Math.min(dotsEndX, xFor(nowM)));
-    } else {
-      // Night window: Isha → next day's Fajr.
-      const nightStart = ishaM;
-      const nightEnd = 1440 + fajrM;
-      const nightLen = Math.max(1, nightEnd - nightStart);
-      const intoNight = nowM - nightStart;
-      const t = Math.min(1, Math.max(0, intoNight / nightLen));
-      tickerX = dotsEndX - t * dotsW;
+    // Detect midnight crossing. If the minute-of-day decreased by
+    // more than an hour since the last redraw, we have rolled past
+    // midnight and should slide the ticker from the right edge back
+    // to the left.
+    if (this.lastTickerMinute >= 0
+      && nowM < this.lastTickerMinute - 60
+      && this.midnightSlideStart === 0) {
+      this.startMidnightSlide();
+    }
+    this.lastTickerMinute = nowM;
+
+    // Nominal position for the current time.
+    let tickerX = xFor(nowM);
+
+    // If a slide-back is in progress, interpolate between the
+    // right-edge position and the current-time position.
+    if (this.midnightSlideStart > 0) {
+      const elapsed = Date.now() - this.midnightSlideStart;
+      if (elapsed >= MIDNIGHT_SLIDE_MS) {
+        this.midnightSlideStart = 0;
+      } else {
+        const t = elapsed / MIDNIGHT_SLIDE_MS;
+        const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
+        const fromX = xFor(1439);
+        tickerX = fromX + (tickerX - fromX) * eased;
+      }
     }
 
     const tickerY = yFor(tickerX);
@@ -542,5 +568,24 @@ export struct PrayerSunPath {
     // Reset defaults.
     ctx.textAlign = 'center';
     ctx.textBaseline = 'alphabetic';
+  }
+
+  /**
+   * Begin a slide-back animation from the right edge of the arc
+   * to the ticker's current position. Called only when a midnight
+   * crossing is detected in redraw().
+   */
+  private startMidnightSlide(): void {
+    this.midnightSlideStart = Date.now();
+    if (this.midnightSlideTimerId !== -1) {
+      clearInterval(this.midnightSlideTimerId);
+    }
+    this.midnightSlideTimerId = setInterval(() => {
+      this.redraw();
+      if (this.midnightSlideStart === 0) {
+        clearInterval(this.midnightSlideTimerId);
+        this.midnightSlideTimerId = -1;
+      }
+    }, 16);
   }
 }

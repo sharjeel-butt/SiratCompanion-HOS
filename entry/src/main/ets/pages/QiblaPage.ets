@@ -37,7 +37,7 @@ export struct QiblaPage {
   breakpoint: string = 'sm';
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
-  appThemePreset: string = ThemePreset.CURRENT;
+  appThemePreset: string = ThemePreset.SIRAT;
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = 'en';
