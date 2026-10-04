@@ -53,8 +53,8 @@ const MINUTES_PER_DAY = 1440;
 export struct PrayerSunPath {
   @Prop @Watch('onVisualChanged') colors: ThemeColors;
   @Prop @Watch('onPrayersChanged') prayers: PrayerModel[] = [];
-  @Prop sunriseTime: string = '--:--';
-  @Prop sunsetTime: string = '--:--';
+  @Prop @Watch('onVisualChanged') sunriseTime: string = '--:--';
+  @Prop @Watch('onVisualChanged') sunsetTime: string = '--:--';
   @Prop @Watch('onVisualChanged') currentLanguage: string = 'en';
   @Prop @Watch('onVisualChanged') isDarkMode: boolean = false;
 
