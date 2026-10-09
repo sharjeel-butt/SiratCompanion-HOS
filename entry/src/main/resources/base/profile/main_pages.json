@@ -3,6 +3,7 @@
     "pages/WizardPage",
     "pages/MainTabs",
     "pages/CustomizePage",
-    "pages/SettingsPage"
+    "pages/SettingsPage",
+    "pages/AdvancedCalcPage"
   ]
 }

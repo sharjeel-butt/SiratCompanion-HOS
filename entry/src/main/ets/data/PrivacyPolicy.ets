@@ -50,7 +50,7 @@ Applies to Sirat Companion version 2.5.0 and later.
 
 1. INTRODUCTION
 
-Sirat Companion ("the App") is an Islamic companion application for HarmonyOS, developed by Sharjeel Butt. This Privacy Policy explains what information the App accesses, how that information is used, and your rights regarding that information.
+Sirat Companion ("the App") is an Islamic companion application for HarmonyOS, developed by Sharjeel Idris. This Privacy Policy explains what information the App accesses, how that information is used, and your rights regarding that information.
 
 We have designed Sirat Companion to work entirely on your device. The App does not require an account, does not connect to any server we operate, and does not transmit your personal data to us or to any third party.
 
@@ -168,7 +168,7 @@ We may update this Privacy Policy from time to time to reflect changes in the Ap
 13. CONTACT
 
 Email: sharjeel.butt@gmail.com
-Developer: Sharjeel Butt`;
+Developer: Sharjeel Idris`;
 
   // ============================================================
   // CHINESE (SIMPLIFIED)
@@ -181,7 +181,7 @@ Developer: Sharjeel Butt`;
 
 1. 引言
 
-Sirat 伴侣（以下简称"本应用"）是由 Sharjeel Butt 开发的 HarmonyOS 伊斯兰伴侣应用。本隐私政策说明了本应用访问哪些信息、如何使用这些信息，以及您对这些信息享有的权利。
+Sirat 伴侣（以下简称"本应用"）是由 Sharjeel Idris 开发的 HarmonyOS 伊斯兰伴侣应用。本隐私政策说明了本应用访问哪些信息、如何使用这些信息，以及您对这些信息享有的权利。
 
 我们设计的 Sirat 伴侣完全在您的设备上运行。本应用无需创建账户，不连接我们运营的任何服务器，也不会将您的个人数据传输给我们或任何第三方。
 
@@ -299,7 +299,7 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 13. 联系我们
 
 电子邮件：sharjeel.butt@gmail.com
-开发者：Sharjeel Butt`;
+开发者：Sharjeel Idris`;
 
   // ============================================================
   // ARABIC
@@ -312,7 +312,7 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 
 1. مقدمة
 
-رفيق الصراط ("التطبيق") هو تطبيق إسلامي مرافق لمنصة HarmonyOS، طوّره Sharjeel Butt. توضح سياسة الخصوصية هذه المعلومات التي يصل إليها التطبيق، وكيفية استخدامها، وحقوقك فيما يتعلق بها.
+رفيق الصراط ("التطبيق") هو تطبيق إسلامي مرافق لمنصة HarmonyOS، طوّره Sharjeel Idris. توضح سياسة الخصوصية هذه المعلومات التي يصل إليها التطبيق، وكيفية استخدامها، وحقوقك فيما يتعلق بها.
 
 لقد صممنا رفيق الصراط ليعمل بالكامل على جهازك. لا يتطلب التطبيق إنشاء حساب، ولا يتصل بأي خادم نشغّله، ولا ينقل بياناتك الشخصية إلينا أو إلى أي طرف ثالث.
 
@@ -430,7 +430,7 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 13. اتصل بنا
 
 البريد الإلكتروني: sharjeel.butt@gmail.com
-المطوّر: Sharjeel Butt`;
+المطوّر: Sharjeel Idris`;
 
   // ============================================================
   // LOOKUP

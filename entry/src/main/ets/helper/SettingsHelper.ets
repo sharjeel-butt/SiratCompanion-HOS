@@ -5,9 +5,13 @@ import { CalculationSource, LocationMode, ManualCoords, PickerItem } from '../mo
 import { PreferencesHelper } from './PreferencesHelper';
 import {
   STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_CUSTOM_FAJR_ANGLE,
+  STORAGE_KEY_CUSTOM_ISHA_ANGLE,
+  STORAGE_KEY_CUSTOM_ISHA_INTERVAL,
   STORAGE_KEY_HIGH_LAT_RULE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_MIDNIGHT_METHOD,
   STORAGE_KEY_NOTIF_ASR,
   STORAGE_KEY_NOTIF_BEFORE_MINUTES,
   STORAGE_KEY_NOTIF_DHUHR,
@@ -15,6 +19,9 @@ import {
   STORAGE_KEY_NOTIF_ISHA,
   STORAGE_KEY_NOTIF_MAGHRIB,
   STORAGE_KEY_NOTIF_MASTER,
+  STORAGE_KEY_POLAR_RESOLUTION,
+  STORAGE_KEY_ROUNDING_METHOD,
+  STORAGE_KEY_SHAFAQ,
   STORAGE_KEY_SOUND_ENABLED,
   STORAGE_KEY_TASBIH_RENDER_STYLE,
   STORAGE_KEY_TASBIH_SOUND,
@@ -27,6 +34,15 @@ import { ThemeMode, ThemePreset } from '../common/Theme';
 import { L } from './LocalizationHelper';
 import { SoundOptions } from '../common/SoundOptions';
 import { TasbihThemes } from '../common/TasbihThemes';
+import {
+  AdvancedCalcSettings,
+  CustomAngles,
+  DEFAULT_CUSTOM_ANGLES,
+  MidnightMethod,
+  PolarResolution,
+  RoundingMethod,
+  Shafaq
+} from '../models/AdvancedCalcModels';
 
 const KEY_METHOD = 'calc_method';
 const KEY_ASR = 'asr_rule';
@@ -401,6 +417,24 @@ export class SettingsHelper {
         return L.get('method_isna');
       case CalculationMethod.MWL:
         return L.get('method_mwl');
+      case CalculationMethod.UMM_AL_QURA:
+        return L.get('method_umm_al_qura');
+      case CalculationMethod.EGYPTIAN:
+        return L.get('method_egyptian');
+      case CalculationMethod.SUNNI_IRAQ:
+        return L.get('method_sunni_iraq');
+      case CalculationMethod.QATAR:
+        return L.get('method_qatar');
+      case CalculationMethod.SINGAPORE:
+        return L.get('method_singapore');
+      case CalculationMethod.FRANCE:
+        return L.get('method_france');
+      case CalculationMethod.TURKEY:
+        return L.get('method_turkey');
+      case CalculationMethod.RUSSIA:
+        return L.get('method_russia');
+      case CalculationMethod.UAE:
+        return L.get('method_uae');
       default:
         return L.get('method_karachi');
     }
@@ -466,6 +500,24 @@ export class SettingsHelper {
         return L.get('method_short_isna');
       case CalculationMethod.MWL:
         return L.get('method_short_mwl');
+      case CalculationMethod.UMM_AL_QURA:
+        return L.get('method_short_umm_al_qura');
+      case CalculationMethod.EGYPTIAN:
+        return L.get('method_short_egyptian');
+      case CalculationMethod.SUNNI_IRAQ:
+        return L.get('method_short_sunni_iraq');
+      case CalculationMethod.QATAR:
+        return L.get('method_short_qatar');
+      case CalculationMethod.SINGAPORE:
+        return L.get('method_short_singapore');
+      case CalculationMethod.FRANCE:
+        return L.get('method_short_france');
+      case CalculationMethod.TURKEY:
+        return L.get('method_short_turkey');
+      case CalculationMethod.RUSSIA:
+        return L.get('method_short_russia');
+      case CalculationMethod.UAE:
+        return L.get('method_short_uae');
       default:
         return L.get('method_short_karachi');
     }
@@ -484,12 +536,25 @@ export class SettingsHelper {
   }
 
   static buildMethodPickerItems(current: CalculationMethod): PickerItem[] {
-    return [CalculationMethod.KARACHI, CalculationMethod.JAFARI, CalculationMethod.ISNA, CalculationMethod.MWL]
-      .map((m): PickerItem => ({
-        id: m,
-        label: SettingsHelper.getCalcMethodLabel(m),
-        selected: m === current
-      }));
+    return [
+      CalculationMethod.KARACHI,
+      CalculationMethod.JAFARI,
+      CalculationMethod.ISNA,
+      CalculationMethod.MWL,
+      CalculationMethod.UMM_AL_QURA,
+      CalculationMethod.EGYPTIAN,
+      CalculationMethod.SUNNI_IRAQ,
+      CalculationMethod.QATAR,
+      CalculationMethod.SINGAPORE,
+      CalculationMethod.FRANCE,
+      CalculationMethod.TURKEY,
+      CalculationMethod.RUSSIA,
+      CalculationMethod.UAE
+    ].map((m): PickerItem => ({
+      id: m,
+      label: SettingsHelper.getCalcMethodLabel(m),
+      selected: m === current
+    }));
   }
 
   // ============================================================
@@ -665,5 +730,73 @@ export class SettingsHelper {
     const prev = AppStorage.get<number>('location_version');
     const next = (prev === undefined ? 0 : prev) + 1;
     AppStorage.setOrCreate('location_version', next);
+  }
+
+  // ============================================================
+  // ADVANCED CALCULATION SETTINGS
+  // ============================================================
+
+  static async getAdvancedCalcSettings(): Promise<AdvancedCalcSettings> {
+    const rounding = await PreferencesHelper.getString(
+      STORAGE_KEY_ROUNDING_METHOD, RoundingMethod.NEAREST
+    ) as RoundingMethod;
+    const midnight = await PreferencesHelper.getString(
+      STORAGE_KEY_MIDNIGHT_METHOD, MidnightMethod.STANDARD
+    ) as MidnightMethod;
+    const polar = await PreferencesHelper.getString(
+      STORAGE_KEY_POLAR_RESOLUTION, PolarResolution.UNRESOLVED
+    ) as PolarResolution;
+    const shafaq = await PreferencesHelper.getString(
+      STORAGE_KEY_SHAFAQ, Shafaq.GENERAL
+    ) as Shafaq;
+
+    const fajr = await PreferencesHelper.getNumber(
+      STORAGE_KEY_CUSTOM_FAJR_ANGLE, DEFAULT_CUSTOM_ANGLES.fajr
+    );
+    const isha = await PreferencesHelper.getNumber(
+      STORAGE_KEY_CUSTOM_ISHA_ANGLE, DEFAULT_CUSTOM_ANGLES.isha
+    );
+    const interval = await PreferencesHelper.getNumber(
+      STORAGE_KEY_CUSTOM_ISHA_INTERVAL, DEFAULT_CUSTOM_ANGLES.ishaInterval
+    );
+
+    const angles: CustomAngles = {
+      fajr: fajr,
+      isha: isha,
+      ishaInterval: interval
+    };
+
+    const result: AdvancedCalcSettings = {
+      rounding: rounding,
+      midnight: midnight,
+      polarResolution: polar,
+      shafaq: shafaq,
+      customAngles: angles
+    };
+    return result;
+  }
+
+  static saveRounding(r: RoundingMethod): void {
+    PreferencesHelper.setString(STORAGE_KEY_ROUNDING_METHOD, r);
+  }
+
+  static saveMidnight(m: MidnightMethod): void {
+    PreferencesHelper.setString(STORAGE_KEY_MIDNIGHT_METHOD, m);
+  }
+
+  static savePolarResolution(p: PolarResolution): void {
+    PreferencesHelper.setString(STORAGE_KEY_POLAR_RESOLUTION, p);
+  }
+
+  static saveShafaq(s: Shafaq): void {
+    PreferencesHelper.setString(STORAGE_KEY_SHAFAQ, s);
+  }
+
+  static async saveCustomAngles(a: CustomAngles): Promise<void> {
+    await PreferencesHelper.setNumber(STORAGE_KEY_CUSTOM_FAJR_ANGLE, a.fajr);
+    await PreferencesHelper.setNumber(STORAGE_KEY_CUSTOM_ISHA_ANGLE, a.isha);
+    await PreferencesHelper.setNumber(
+      STORAGE_KEY_CUSTOM_ISHA_INTERVAL, a.ishaInterval
+    );
   }
 }
