@@ -30,6 +30,7 @@ import { AppInfoHelper, AppInfoSnapshot } from '../helper/AppInfoHelper';
 import { L } from '../helper/LocalizationHelper';
 import { Breakpoints } from '../common/Breakpoints';
 import { CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED } from '../common/FeatureFlags';
+import { NavHelper } from '../helper/NavHelper';
 
 const MAX_HIJRI_OFFSET = 3;
 
@@ -467,6 +468,42 @@ struct SettingsPage {
       })
 
       this.PrayerOffsetsCard()
+
+      // ---- Advanced Calculation ----
+      Row() {
+        Column() {
+          Text(this.tr('advanced_calc_title'))
+            .fontSize(15).fontColor(this.colors.textWhite)
+            .fontWeight(FontWeight.Medium)
+          Text(this.tr('rounding_method') + ' · '
+            + this.tr('midnight_method') + ' · '
+            + this.tr('high_latitude'))
+            .fontSize(11)
+            .fontColor(this.colors.textMuted)
+            .margin({ top: 2 })
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+      }
+      .width('100%')
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .margin({ top: 8, bottom: 8 })
+      .onClick(() => {
+        NavHelper.prepareForward();
+        router.pushUrl({ url: 'pages/AdvancedCalcPage' })
+          .catch((err: Error) =>
+          console.error('Navigation failed:', JSON.stringify(err)));
+      })
 
       Divider().color(this.colors.borderSoft).margin({ top: 8, bottom: 8 })
       this.LocationBlock()
@@ -1706,7 +1743,8 @@ struct SettingsPage {
         cityName = await LocationHelper.reverseGeocode(lat, lng);
       } catch (e) { /* fall through */
       }
-      if (cityName === 'Unknown location' || cityName.length === 0) {
+      const unknownLabel = L.get('unknown_location', this.currentLanguage);
+      if (cityName === unknownLabel || cityName.length === 0) {
         cityName = `${lat.toFixed(2)}, ${lng.toFixed(2)}`;
       }
     }
@@ -1817,12 +1855,10 @@ struct SettingsPage {
   private async sendTestNotification(): Promise<void> {
     const ctx = getContext(this) as common.UIAbilityContext;
 
-    // The new NotificationHelper signature requires the context.
     const granted = await NotificationHelper.isPermissionGranted(ctx);
     if (!granted) {
       const requested = await NotificationHelper.requestPermission(ctx);
       if (!requested) {
-        // Pick the right denial message for the active backend.
         const msgKey = CALENDAR_REMINDERS_ENABLED
           ? 'calendar_permission_denied'
           : 'notification_permission_denied';
@@ -1874,9 +1910,6 @@ struct SettingsPage {
       }
     }
     this.notifMaster = value;
-    // Await the write before rescheduling — rescheduleAll reads the
-    // settings back, so the store must be flushed first or the old
-    // value will be re-used.
     await SettingsHelper.saveNotifMaster(value);
     await NotificationHelper.rescheduleAll();
   }
@@ -1894,8 +1927,6 @@ struct SettingsPage {
     }
 
     this.notifBefore = next;
-    // Await the write before rescheduling — otherwise the reschedule
-    // reads the previous lead time and schedules the wrong offsets.
     await SettingsHelper.saveNotifBeforeMinutes(next);
     await NotificationHelper.rescheduleAll();
   }
@@ -1921,8 +1952,6 @@ struct SettingsPage {
         this.notifIsha = value;
         break;
     }
-    // Await the write before rescheduling — the prayer toggle is part
-    // of the settings that rescheduleAll reads.
     await SettingsHelper.saveNotifPrayer(prayerId, value);
     await NotificationHelper.rescheduleAll();
   }
