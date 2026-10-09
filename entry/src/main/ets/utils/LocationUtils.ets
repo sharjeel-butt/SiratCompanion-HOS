@@ -7,6 +7,7 @@ import { geoLocationManager } from '@kit.LocationKit';
 import { promptAction } from '@kit.ArkUI';
 import { STORAGE_KEY_LANGUAGE } from '../common/StorageKeys';
 import { i18n } from '@kit.LocalizationKit';
+import { BusinessError } from '@kit.BasicServicesKit';
 
 // ----- Interface for location result -----
 export interface LocationData {

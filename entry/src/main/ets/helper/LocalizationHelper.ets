@@ -509,6 +509,24 @@ export class L {
     m.set('source_short_local', 'Local');
     m.set('source_short_online', 'Online');
     m.set('mark_all', 'Mark all as prayed');
+    m.set('method_umm_al_qura', 'Umm al-Qura (Makkah)');
+    m.set('method_egyptian', 'Egyptian Survey');
+    m.set('method_sunni_iraq', 'Sunni Endowment (Iraq)');
+    m.set('method_qatar', 'Qatar Awqaf');
+    m.set('method_singapore', 'Singapore (MUIS)');
+    m.set('method_france', 'France (UOIF)');
+    m.set('method_turkey', 'Turkey (Diyanet)');
+    m.set('method_russia', 'Russia (SAMR)');
+    m.set('method_uae', 'UAE (GIAE)');
+    m.set('method_short_umm_al_qura', 'Makkah');
+    m.set('method_short_egyptian', 'Egyptian');
+    m.set('method_short_sunni_iraq', 'Iraq');
+    m.set('method_short_qatar', 'Qatar');
+    m.set('method_short_singapore', 'Singapore');
+    m.set('method_short_france', 'France');
+    m.set('method_short_turkey', 'Turkey');
+    m.set('method_short_russia', 'Russia');
+    m.set('method_short_uae', 'UAE');
 
     m.set('theme_preset_current_desc', 'Warm cream and deep green — the original');
     m.set('theme_preset_harmony7_desc', 'Radiant violet — serene and modern');
@@ -598,6 +616,65 @@ export class L {
       'He who observed the \u2018Isha\u2019 prayer in congregation, it was as if he prayed up to midnight. — Sahih Muslim 656a');
     m.set('theme_preset_sirat', 'Sirat');
     m.set('theme_preset_sirat_desc', 'Modern and minimal — a HarmonyOS 7 aesthetic');
+
+    // ---- Advanced Calculation Settings ----
+    m.set('advanced_calc_title', 'Advanced Calculation Settings');
+    m.set('rounding_method', 'Rounding Method');
+    m.set('midnight_method', 'Midnight Method');
+    m.set('polar_resolution', 'Polar Resolution');
+    m.set('shafaq', 'Shafaq');
+    m.set('shafaq_desc',
+      'Shafaq is used by the Moonsighting Committee method to determine which twilight determines Isha.');
+    m.set('custom_angles', 'Custom Angles');
+    m.set('custom_fajr_angle', 'Fajr angle');
+    m.set('custom_isha_angle', 'Isha angle');
+    m.set('custom_isha_interval', 'Isha interval (min)');
+    m.set('custom_isha_interval_hint', '0 = use angle. >0 = minutes after Maghrib.');
+
+    m.set('rounding_nearest', 'Nearest');
+    m.set('rounding_up', 'Up');
+    m.set('rounding_none', 'None');
+
+    m.set('midnight_standard', 'Sunset to Sunrise');
+    m.set('midnight_standard_desc', 'Default');
+    m.set('midnight_jafari', 'Sunset to Fajr');
+
+    m.set('polar_unresolved', 'Unresolved');
+    m.set('polar_unresolved_desc', 'Default');
+    m.set('polar_aqrab_balad', 'Aqrab Balad');
+    m.set('polar_aqrab_yaum', 'Aqrab Yaum');
+
+    m.set('shafaq_general', 'General');
+    m.set('shafaq_general_desc', 'Default');
+    m.set('shafaq_ahmer', 'Ahmer');
+    m.set('shafaq_abyad', 'Abyad');
+
+    m.set('highlat_proportional', 'Proportional Depression (Diyanet Takdir)');
+
+    m.set('method_moonsighting', 'Moonsighting Committee Worldwide');
+    m.set('method_dubai', 'The Gulf Region (Dubai)');
+    m.set('method_kuwait', 'Kuwait');
+    m.set('method_france_15', 'France angle 15');
+    m.set('method_france_18', 'France angle 18');
+    m.set('method_turkey_europe', 'Diyanet İşleri Başkanlığı, Europe');
+    m.set('method_tehran',
+      'Shia, Institute of Geophysics, University of Tehran, Iran');
+    m.set('method_indonesia', 'Kementrian Agama Republik Indonesia (KEMENAG)');
+    m.set('method_algeria', 'Ministry of Religious Affairs and Wakfs, Algeria');
+    m.set('method_brunei', 'Kementrian Hal Ehwal Ugama (Brunei Darussalam)');
+    m.set('method_custom', 'Custom');
+
+    m.set('method_short_moonsighting', 'Moonsighting');
+    m.set('method_short_dubai', 'Dubai');
+    m.set('method_short_kuwait', 'Kuwait');
+    m.set('method_short_france_15', 'France 15°');
+    m.set('method_short_france_18', 'France 18°');
+    m.set('method_short_turkey_europe', 'Turkey EU');
+    m.set('method_short_tehran', 'Tehran');
+    m.set('method_short_indonesia', 'KEMENAG');
+    m.set('method_short_algeria', 'Algeria');
+    m.set('method_short_brunei', 'Brunei');
+    m.set('method_short_custom', 'Custom');
 
     return m;
   }
@@ -832,6 +909,25 @@ export class L {
     m.set('asr_hanafi', '哈乃斐');
     m.set('source_local', '本地公式（离线）');
     m.set('source_api', '在线 API');
+    // ---- Additional calculation methods ----
+    m.set('method_umm_al_qura', '乌姆·库拉（麦加）');
+    m.set('method_egyptian', '埃及测绘局');
+    m.set('method_sunni_iraq', '逊尼派基金会（伊拉克）');
+    m.set('method_qatar', '卡塔尔宗教基金');
+    m.set('method_singapore', '新加坡（MUIS）');
+    m.set('method_france', '法国（UOIF）');
+    m.set('method_turkey', '土耳其（宗教事务局）');
+    m.set('method_russia', '俄罗斯（SAMR）');
+    m.set('method_uae', '阿联酋（GIAE）');
+    m.set('method_short_umm_al_qura', '麦加');
+    m.set('method_short_egyptian', '埃及');
+    m.set('method_short_sunni_iraq', '伊拉克');
+    m.set('method_short_qatar', '卡塔尔');
+    m.set('method_short_singapore', '新加坡');
+    m.set('method_short_france', '法国');
+    m.set('method_short_turkey', '土耳其');
+    m.set('method_short_russia', '俄罗斯');
+    m.set('method_short_uae', '阿联酋');
 
     m.set('wizard_step', '步骤');
     m.set('wizard_welcome_title', '欢迎使用 Sirat 伴侣');
@@ -975,6 +1071,26 @@ export class L {
     m.set('asr_short_hanafi', '哈乃斐');
     m.set('source_short_local', '本地');
     m.set('source_short_online', '在线');
+    // ---- Additional calculation methods ----
+    m.set('method_umm_al_qura', 'أم القرى (مكة المكرمة)');
+    m.set('method_egyptian', 'الهيئة المصرية العامة للمساحة');
+    m.set('method_sunni_iraq', 'ديوان الوقف السني (العراق)');
+    m.set('method_qatar', 'الأوقاف القطرية');
+    m.set('method_singapore', 'سنغافورة (MUIS)');
+    m.set('method_france', 'فرنسا (UOIF)');
+    m.set('method_turkey', 'تركيا (رئاسة الشؤون الدينية)');
+    m.set('method_russia', 'روسيا (SAMR)');
+    m.set('method_uae', 'الإمارات (GIAE)');
+
+    m.set('method_short_umm_al_qura', 'مكة');
+    m.set('method_short_egyptian', 'مصر');
+    m.set('method_short_sunni_iraq', 'العراق');
+    m.set('method_short_qatar', 'قطر');
+    m.set('method_short_singapore', 'سنغافورة');
+    m.set('method_short_france', 'فرنسا');
+    m.set('method_short_turkey', 'تركيا');
+    m.set('method_short_russia', 'روسيا');
+    m.set('method_short_uae', 'الإمارات');
 
     // ---- Fallbacks ----
     m.set('default_location', '默认位置');
@@ -1049,6 +1165,62 @@ export class L {
       '谁在集体中礼了宵礼，就如他礼了半夜的拜。 ——《穆斯林圣训实录》656a');
     m.set('theme_preset_sirat', 'Sirat · 现代');
     m.set('theme_preset_sirat_desc', '现代简约 — HarmonyOS 7 风格');
+    // ---- 高级计算设置 ----
+    m.set('advanced_calc_title', '高级计算设置');
+    m.set('rounding_method', '舍入方式');
+    m.set('midnight_method', '午夜方式');
+    m.set('polar_resolution', '极地处理');
+    m.set('shafaq', '霞光');
+    m.set('shafaq_desc', '霞光由 Moonsighting Committee 方法用于确定宵礼使用哪一种暮光。');
+    m.set('custom_angles', '自定义角度');
+    m.set('custom_fajr_angle', '晨礼角度');
+    m.set('custom_isha_angle', '宵礼角度');
+    m.set('custom_isha_interval', '宵礼间隔（分钟）');
+    m.set('custom_isha_interval_hint', '0 = 使用角度。>0 = 昏礼后分钟数。');
+
+    m.set('rounding_nearest', '最近');
+    m.set('rounding_up', '进位');
+    m.set('rounding_none', '不舍入');
+
+    m.set('midnight_standard', '日落至日出');
+    m.set('midnight_standard_desc', '默认');
+    m.set('midnight_jafari', '日落至晨礼');
+
+    m.set('polar_unresolved', '不处理');
+    m.set('polar_unresolved_desc', '默认');
+    m.set('polar_aqrab_balad', '最近城市');
+    m.set('polar_aqrab_yaum', '最近日期');
+
+    m.set('shafaq_general', '一般');
+    m.set('shafaq_general_desc', '默认');
+    m.set('shafaq_ahmer', '红色');
+    m.set('shafaq_abyad', '白色');
+
+    m.set('highlat_proportional', '比例衰减（Diyanet Takdir）');
+
+    m.set('method_moonsighting', '观月委员会');
+    m.set('method_dubai', '海湾地区（迪拜）');
+    m.set('method_kuwait', '科威特');
+    m.set('method_france_15', '法国 15°');
+    m.set('method_france_18', '法国 18°');
+    m.set('method_turkey_europe', '土耳其宗教事务局（欧洲）');
+    m.set('method_tehran', '什叶派，德黑兰大学地球物理研究所');
+    m.set('method_indonesia', '印度尼西亚宗教部（KEMENAG）');
+    m.set('method_algeria', '阿尔及利亚宗教事务部');
+    m.set('method_brunei', '文莱宗教事务部');
+    m.set('method_custom', '自定义');
+
+    m.set('method_short_moonsighting', '观月会');
+    m.set('method_short_dubai', '迪拜');
+    m.set('method_short_kuwait', '科威特');
+    m.set('method_short_france_15', '法国 15°');
+    m.set('method_short_france_18', '法国 18°');
+    m.set('method_short_turkey_europe', '土耳其欧');
+    m.set('method_short_tehran', '德黑兰');
+    m.set('method_short_indonesia', '印尼');
+    m.set('method_short_algeria', '阿尔及利亚');
+    m.set('method_short_brunei', '文莱');
+    m.set('method_short_custom', '自定义');
 
     return m;
   }
@@ -1502,6 +1674,64 @@ export class L {
       'مَنْ صَلَّى الْعِشَاءَ فِي جَمَاعَةٍ فَكَأَنَّمَا قَامَ نِصْفَ اللَّيْلِ — صحيح مسلم ٦٥٦');
     m.set('theme_preset_sirat', 'Sirat — عصري');
     m.set('theme_preset_sirat_desc', 'عصري وبسيط — بأسلوب HarmonyOS 7');
+
+    // ---- إعدادات الحساب المتقدمة ----
+    m.set('advanced_calc_title', 'إعدادات الحساب المتقدمة');
+    m.set('rounding_method', 'طريقة التقريب');
+    m.set('midnight_method', 'طريقة منتصف الليل');
+    m.set('polar_resolution', 'حلّ المناطق القطبية');
+    m.set('shafaq', 'الشفق');
+    m.set('shafaq_desc', 'يُستخدم الشفق في طريقة لجنة رؤية الهلال لتحديد نوع الشفق الذي يحدد وقت العشاء.');
+    m.set('custom_angles', 'زوايا مخصصة');
+    m.set('custom_fajr_angle', 'زاوية الفجر');
+    m.set('custom_isha_angle', 'زاوية العشاء');
+    m.set('custom_isha_interval', 'فاصل العشاء (دقيقة)');
+    m.set('custom_isha_interval_hint', '0 = استخدام الزاوية. >0 = دقائق بعد المغرب.');
+
+    m.set('rounding_nearest', 'الأقرب');
+    m.set('rounding_up', 'للأعلى');
+    m.set('rounding_none', 'بدون');
+
+    m.set('midnight_standard', 'الغروب إلى الشروق');
+    m.set('midnight_standard_desc', 'افتراضي');
+    m.set('midnight_jafari', 'الغروب إلى الفجر');
+
+    m.set('polar_unresolved', 'غير محلول');
+    m.set('polar_unresolved_desc', 'افتراضي');
+    m.set('polar_aqrab_balad', 'أقرب بلد');
+    m.set('polar_aqrab_yaum', 'أقرب يوم');
+
+    m.set('shafaq_general', 'عام');
+    m.set('shafaq_general_desc', 'افتراضي');
+    m.set('shafaq_ahmer', 'الأحمر');
+    m.set('shafaq_abyad', 'الأبيض');
+
+    m.set('highlat_proportional', 'الانخفاض النسبي (تقدير ديانت)');
+
+    m.set('method_moonsighting', 'لجنة رؤية الهلال العالمية');
+    m.set('method_dubai', 'منطقة الخليج (دبي)');
+    m.set('method_kuwait', 'الكويت');
+    m.set('method_france_15', 'فرنسا زاوية 15°');
+    m.set('method_france_18', 'فرنسا زاوية 18°');
+    m.set('method_turkey_europe', 'رئاسة الشؤون الدينية التركية - أوروبا');
+    m.set('method_tehran', 'الشيعة، معهد الجيوفيزياء، جامعة طهران');
+    m.set('method_indonesia', 'وزارة الشؤون الدينية الإندونيسية');
+    m.set('method_algeria', 'وزارة الشؤون الدينية والأوقاف، الجزائر');
+    m.set('method_brunei', 'وزارة الشؤون الدينية، بروناي');
+    m.set('method_custom', 'مخصص');
+
+    m.set('method_short_moonsighting', 'رؤية الهلال');
+    m.set('method_short_dubai', 'دبي');
+    m.set('method_short_kuwait', 'الكويت');
+    m.set('method_short_france_15', 'فرنسا 15°');
+    m.set('method_short_france_18', 'فرنسا 18°');
+    m.set('method_short_turkey_europe', 'تركيا أوروبا');
+    m.set('method_short_tehran', 'طهران');
+    m.set('method_short_indonesia', 'إندونيسيا');
+    m.set('method_short_algeria', 'الجزائر');
+    m.set('method_short_brunei', 'بروناي');
+    m.set('method_short_custom', 'مخصص');
+
 
     return m;
   }

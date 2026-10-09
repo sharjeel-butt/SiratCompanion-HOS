@@ -42,6 +42,8 @@ const FISHEYE_ANIM_MS = 180;
 const TOP_SHIFT_MS = 250;
 const BOTTOM_FLY_MS = 500;
 
+const BEAD_COLUMN_TOP_PADDING = 16;
+
 const SHADE_DONE_HI = '#A7F3C0';
 const SHADE_DONE_BASE = '#4ADE80';
 const SHADE_DONE_LO = '#1E7A4E';
@@ -464,7 +466,7 @@ export struct TasbihPage {
     }
     .width(this.isTablet() ? 120 : 72)
     .height('100%')
-    .padding({ top: 16, bottom: 110, right: this.isTablet() ? 60 : 40 })
+    .padding({ top: BEAD_COLUMN_TOP_PADDING, bottom: 110, right: this.isTablet() ? 60 : 40 })
     .direction(Direction.Ltr)
   }
 
@@ -489,7 +491,7 @@ export struct TasbihPage {
     }
     .width(this.isTablet() ? 120 : 72)
     .height('100%')
-    .padding({ top: 16, bottom: 110, right: this.isTablet() ? 60 : 40 })
+    .padding({ top: BEAD_COLUMN_TOP_PADDING, bottom: 110, right: this.isTablet() ? 60 : 40 })
     .direction(Direction.Ltr)
   }
 
@@ -858,7 +860,6 @@ export struct TasbihPage {
   // ============================================================
 
   @Builder
-  @Builder
   TasbihEditorContent() {
     Column() {
       // Header band — title vertically and horizontally centred.
@@ -989,7 +990,6 @@ export struct TasbihPage {
   // DHIKR EDITOR SHEET
   // ============================================================
 
-  @Builder
   @Builder
   DhikrEditorContent() {
     Column() {
@@ -1555,17 +1555,26 @@ export struct TasbihPage {
   }
 
   private handleSwipe(event: TouchEvent): void {
+    // Guard: while a modal sheet is presented, do not treat drags as
+    // Tasbih swipes. The sheet is in the system modal layer, but on
+    // some HOS builds the initial drag can still land on this Row.
+    if (this.activeSheet !== 'none') {
+      return;
+    }
+
     if (event.touches && event.touches.length > 0) {
-      const y = event.touches[0].y;
+      const rowY = event.touches[0].y;
+      const canvasY = rowY - BEAD_COLUMN_TOP_PADDING;
+
       if (event.type === TouchType.Down) {
-        this.swipeStartY = y;
-        this.swipeLastY = y;
-        this.fingerY = y;
+        this.swipeStartY = rowY;
+        this.swipeLastY = rowY;
+        this.fingerY = canvasY;
         this.startFisheye();
         this.drawCanvasBeads();
       } else if (event.type === TouchType.Move) {
-        this.swipeLastY = y;
-        this.fingerY = y;
+        this.swipeLastY = rowY;
+        this.fingerY = canvasY;
         this.drawCanvasBeads();
       }
     }

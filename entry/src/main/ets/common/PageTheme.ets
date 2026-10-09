@@ -2,7 +2,7 @@
 
 import { mediaquery } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode, ThemePreset } from './Theme';
-import { STORAGE_KEY_APP_THEME } from './StorageKeys';
+import { STORAGE_KEY_APP_THEME, STORAGE_KEY_THEME_MODE } from './StorageKeys';
 
 export class PageTheme {
   /**
@@ -53,9 +53,15 @@ export class PageTheme {
     try {
       const listener = mediaquery.matchMediaSync('(dark-mode: true)');
       listener.on('change', (result: mediaquery.MediaQueryResult) => {
-        if (themeMode === ThemeMode.SYSTEM) {
+
+        const live = AppStorage.get<string>(STORAGE_KEY_THEME_MODE);
+        const effective = (live !== undefined && live.length > 0)
+          ? live
+          : themeMode;
+
+        if (effective === ThemeMode.SYSTEM) {
           onChange(Theme.getColors(
-            themeMode,
+            effective,
             result.matches,
             PageTheme.currentPreset()
           ));

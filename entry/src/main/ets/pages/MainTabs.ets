@@ -59,14 +59,17 @@ struct MainTabs {
   appLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   appForegroundTick: number = 0;
-  @StorageLink(STORAGE_KEY_BREAKPOINT)
-  breakpoint: string = 'sm';
   @State private currentLanguage: string = 'en';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   /** Active tab index. Mirrors the Tabs controller. */
   @State private currentIndex: number = 0;
   /** Computed bar width, matched to all three breakpoints. */
   @State private barWidth: number = 340;
+  @StorageLink(STORAGE_KEY_BREAKPOINT)
+  @Watch('onBreakpointChanged')
+  breakpoint: string = 'sm';
+
+
   /**
    * True when the device supports native barFloatingStyle.
    * Resolved once at first build; the SDK version cannot change
@@ -92,13 +95,7 @@ struct MainTabs {
       }
     );
 
-    try {
-      const info = display.getDefaultDisplaySync();
-      const screenW = px2vp(info.width);
-      this.barWidth = Math.min(screenW - 32, 560);
-    } catch (err) {
-      this.barWidth = 340;
-    }
+    this.recomputeBarWidth();
 
     // One-line diagnostic: confirms which bar path is active on this device.
     console.info(
@@ -120,6 +117,33 @@ struct MainTabs {
   // ============================================================
   // WATCHERS
   // ============================================================
+
+  /**
+   * Recompute the floating tab bar width from the current display.
+   *
+   * Called at startup and whenever the breakpoint changes — which
+   * covers rotation, fold/unfold, and desktop resize. The Tabs
+   * component reads barWidth from barFloatingStyle each build, so
+   * writing to the @State is enough to trigger a re-layout.
+   */
+  private recomputeBarWidth(): void {
+    try {
+      const info = display.getDefaultDisplaySync();
+      const screenW = px2vp(info.width);
+      this.barWidth = Math.min(screenW - 32, 560);
+    } catch (err) {
+      this.barWidth = 340;
+    }
+  }
+
+  /**
+   * @Watch handler for STORAGE_KEY_BREAKPOINT. The LayoutHelper already
+   * pushes a new value into AppStorage on every width threshold
+   * crossing, so this fires exactly when the viewport class changes.
+   */
+  private onBreakpointChanged(): void {
+    this.recomputeBarWidth();
+  }
 
   private onThemeModeChanged(): void {
     this.colors = PageTheme.compute(this.themeMode);
