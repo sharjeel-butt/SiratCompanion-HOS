@@ -15,7 +15,8 @@
 ## Introduction
 
 Sirat Companion ("the App", "we", "us", or "our") is an Islamic companion application for HarmonyOS, developed by *
-*Sharjeel Butt** ("the Developer"). This Privacy Policy explains what information the App accesses, how that information
+*Sharjeel Idris** ("the Developer"). This Privacy Policy explains what information the App accesses, how that
+information
 is used, and your rights regarding that information.
 
 We have designed Sirat Companion to work entirely on your device. The App does not require an account, does not connect
@@ -256,7 +257,7 @@ take effect constitutes acceptance of the revised policy.
 If you have questions, concerns, or requests regarding this Privacy Policy, please contact us at:
 
 **Email:** sharjeel.butt@gmail.com
-**Developer:** Sharjeel Butt
+**Developer:** Sharjeel Idris
 
 ---
 
@@ -270,7 +271,7 @@ If you have questions, concerns, or requests regarding this Privacy Policy, plea
 
 ## 引言
 
-Sirat 伴侣（以下简称"本应用"、"我们"）是由 **Sharjeel Butt** 开发的 HarmonyOS
+Sirat 伴侣（以下简称"本应用"、"我们"）是由 **Sharjeel Idris** 开发的 HarmonyOS
 伊斯兰伴侣应用。本隐私政策说明了本应用访问哪些信息、如何使用这些信息，以及您对这些信息享有的权利。
 
 我们设计的 Sirat 伴侣完全在您的设备上运行。本应用无需创建账户，不连接我们运营的任何服务器，也不会将您的个人数据传输给我们或任何第三方。
@@ -469,7 +470,7 @@ Sirat 伴侣**不**集成任何第三方分析、广告或追踪服务。
 如果您对本隐私政策有任何疑问、疑虑或请求，请通过以下方式与我们联系：
 
 **电子邮件：** sharjeel.butt@gmail.com
-**开发者：** Sharjeel Butt
+**开发者：** Sharjeel Idris
 
 ---
 
@@ -483,7 +484,7 @@ Sirat 伴侣**不**集成任何第三方分析、广告或追踪服务。
 
 ## مقدمة
 
-رفيق الصراط (يُشار إليه فيما يلي بـ"التطبيق" أو "نحن") هو تطبيق إسلامي مرافق لمنصة HarmonyOS، طوّره **Sharjeel Butt**.
+رفيق الصراط (يُشار إليه فيما يلي بـ"التطبيق" أو "نحن") هو تطبيق إسلامي مرافق لمنصة HarmonyOS، طوّره **Sharjeel Idris**.
 توضح سياسة الخصوصية هذه المعلومات التي يصل إليها التطبيق، وكيفية استخدام هذه المعلومات، وحقوقك فيما يتعلق بها.
 
 لقد صممنا رفيق الصراط ليعمل بالكامل على جهازك. لا يتطلب التطبيق إنشاء حساب، ولا يتصل بأي خادم نشغّله، ولا ينقل بياناتك
@@ -707,7 +708,7 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 إذا كانت لديك أي أسئلة أو مخاوف أو طلبات بشأن سياسة الخصوصية هذه، يرجى الاتصال بنا على:
 
 **البريد الإلكتروني:** sharjeel.butt@gmail.com
-**المطوّر:** Sharjeel Butt
+**المطوّر:** Sharjeel Idris
 
 ---
 

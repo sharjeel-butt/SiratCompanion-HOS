@@ -1324,9 +1324,11 @@ struct WizardPage {
     if (cityName.length === 0) {
       try {
         cityName = await LocationHelper.reverseGeocode(lat, lng);
-      } catch (e) {
+      } catch (e) { /* fall through */
       }
-      if (cityName === 'Unknown location' || cityName.length === 0) {
+
+      const unknownLabel = L.get('unknown_location', this.currentLanguage);
+      if (cityName === unknownLabel || cityName.length === 0) {
         cityName = `${lat.toFixed(2)}, ${lng.toFixed(2)}`;
       }
     }
@@ -1386,6 +1388,7 @@ struct WizardPage {
       this.getUIContext().getPromptAction().showToast({
         message: this.tr('coming_soon'), duration: 1500
       });
+      this.showSourcePicker = false;
       return;
     }
     this.calcSource = source;
