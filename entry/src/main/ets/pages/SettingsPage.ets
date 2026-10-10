@@ -5,7 +5,7 @@ import { common } from '@kit.AbilityKit';
 import { pasteboard } from '@kit.BasicServicesKit';
 import { ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
-import { AsrShadowRule, CalculationMethod, HighLatitudeRule } from '../utils/PrayerTimeCalculator';
+import { AsrShadowRule, CalculationMethod } from '../utils/PrayerTimeCalculator';
 import { PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
 import { LocationData, LocationHelper } from '../utils/LocationUtils';
 import { LocationCache } from '../utils/LocationCache';
@@ -37,10 +37,6 @@ const MAX_HIJRI_OFFSET = 3;
 @Entry
 @Component
 struct SettingsPage {
-  // ============================================================
-  // THEME + LANGUAGE + FOREGROUND + BREAKPOINT
-  // ============================================================
-
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
@@ -62,7 +58,6 @@ struct SettingsPage {
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
   @State asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
   @State calcSource: CalculationSource = CalculationSource.LOCAL;
-  @State highLatRule: HighLatitudeRule = HighLatitudeRule.NONE;
   @State showOffsets: boolean = false;
   @State offsets: PrayerOffsets = {
     fajr: 0,
@@ -80,7 +75,7 @@ struct SettingsPage {
   @State effectiveCity: string = '';
   @State lastRefreshTime: number = 0;
   @State isRefreshing: boolean = false;
-  // Notifications (loaded regardless; UI shown when any backend is on)
+
   @State notifMaster: boolean = false;
   @State notifBefore: number = 10;
   @State notifFajr: boolean = true;
@@ -92,13 +87,13 @@ struct SettingsPage {
 
   @State showLogViewer: boolean = false;
   @State logContents: string = '';
-
-  @State expandedCategory: string | null = 'Prayer Times';
+  // Top-level expanded category. Location is expanded by default so
+  // first-time users see the primary setting immediately.
+  @State expandedCategory: string | null = 'Location';
 
   @State showMethodPicker: boolean = false;
   @State showAsrPicker: boolean = false;
   @State showSourcePicker: boolean = false;
-  @State showHighLatPicker: boolean = false;
 
   @State private currentLanguage: string = 'en';
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
@@ -150,6 +145,16 @@ struct SettingsPage {
         Scroll() {
           Row() {
             Column() {
+              // ---- Location (top-level) ----
+              this.CategoryHeader(
+                this.tr('category_location'),
+                '📍',
+                'Location'
+              )
+              if (this.expandedCategory === 'Location') {
+                this.LocationContent()
+              }
+
               // ---- Prayer Times ----
               this.CategoryHeader(
                 this.tr('category_prayer_times'),
@@ -160,7 +165,7 @@ struct SettingsPage {
                 this.PrayerTimesContent()
               }
 
-              // ---- Notifications — shown when any reminder backend is on ----
+              // ---- Notifications ----
               if (NOTIFICATIONS_ENABLED || CALENDAR_REMINDERS_ENABLED) {
                 this.CategoryHeader(
                   this.tr('category_notifications'),
@@ -192,7 +197,6 @@ struct SettingsPage {
                 this.AboutContent()
               }
 
-              // ---- Diagnostic logs — always reachable ----
               if (!NOTIFICATIONS_ENABLED && !CALENDAR_REMINDERS_ENABLED) {
                 this.LogAccessRow()
               }
@@ -248,17 +252,6 @@ struct SettingsPage {
           },
           () => {
             this.showSourcePicker = false;
-          })
-      }
-      if (this.showHighLatPicker) {
-        this.PickerOverlay(
-          this.tr('high_latitude'), '🌐',
-          SettingsHelper.buildHighLatPickerItems(this.highLatRule),
-          (id: string) => {
-            this.pickHighLatRule(id);
-          },
-          () => {
-            this.showHighLatPicker = false;
           })
       }
       if (this.showLogViewer) {
@@ -333,311 +326,17 @@ struct SettingsPage {
   }
 
   // ============================================================
-  // PRAYER TIMES CONTENT
+  // LOCATION CONTENT
   // ============================================================
 
   @Builder
-  PrayerTimesContent() {
-    Column() {
-      // Convention
-      Row() {
-        Column() {
-          Text(this.tr('convention'))
-            .fontSize(15).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
-          Text(this.tr('convention_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-          Text(SettingsHelper.getCalcMethodLabel(this.calcMethod))
-            .fontSize(12)
-            .fontColor(this.colors.accentGold)
-            .maxLines(2)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .margin({ top: 6 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
-      }
-      .width('100%')
-      .padding({
-        top: 14,
-        bottom: 14,
-        left: 16,
-        right: 16
-      })
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .margin({ bottom: 8 })
-      .onClick(() => {
-        this.showMethodPicker = true;
-      })
-
-      // Madhab
-      Row() {
-        Column() {
-          Text(this.tr('madhab'))
-            .fontSize(15).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
-          Text(this.tr('madhab_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-          Text(SettingsHelper.getAsrRuleLabel(this.asrRule))
-            .fontSize(12)
-            .fontColor(this.colors.accentGold)
-            .maxLines(2)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .margin({ top: 6 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
-      }
-      .width('100%')
-      .padding({
-        top: 14,
-        bottom: 14,
-        left: 16,
-        right: 16
-      })
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .margin({ bottom: 8 })
-      .onClick(() => {
-        this.showAsrPicker = true;
-      })
-
-      // Source
-      Row() {
-        Column() {
-          Text(this.tr('source'))
-            .fontSize(15).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
-          Text(this.tr('source_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-          Text(SettingsHelper.getCalcSourceLabel(this.calcSource))
-            .fontSize(12)
-            .fontColor(this.colors.accentGold)
-            .maxLines(2)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .margin({ top: 6 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
-      }
-      .width('100%')
-      .padding({
-        top: 14,
-        bottom: 14,
-        left: 16,
-        right: 16
-      })
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .margin({ bottom: 8 })
-      .onClick(() => {
-        this.showSourcePicker = true;
-      })
-
-      // High Latitude
-      Row() {
-        Column() {
-          Text(this.tr('high_latitude'))
-            .fontSize(15).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
-          Text(this.tr('high_latitude_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-          Text(SettingsHelper.getHighLatRuleLabel(this.highLatRule))
-            .fontSize(12)
-            .fontColor(this.colors.accentGold)
-            .maxLines(2)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .margin({ top: 6 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
-      }
-      .width('100%')
-      .padding({
-        top: 14,
-        bottom: 14,
-        left: 16,
-        right: 16
-      })
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .margin({ bottom: 8 })
-      .onClick(() => {
-        this.showHighLatPicker = true;
-      })
-
-      this.PrayerOffsetsCard()
-
-      // ---- Advanced Calculation ----
-      Row() {
-        Column() {
-          Text(this.tr('advanced_calc_title'))
-            .fontSize(15).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
-          Text(this.tr('rounding_method') + ' · '
-            + this.tr('midnight_method') + ' · '
-            + this.tr('high_latitude'))
-            .fontSize(11)
-            .fontColor(this.colors.textMuted)
-            .margin({ top: 2 })
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
-        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
-      }
-      .width('100%')
-      .padding({
-        top: 14,
-        bottom: 14,
-        left: 16,
-        right: 16
-      })
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .margin({ top: 8, bottom: 8 })
-      .onClick(() => {
-        NavHelper.prepareForward();
-        router.pushUrl({ url: 'pages/AdvancedCalcPage' })
-          .catch((err: Error) =>
-          console.error('Navigation failed:', JSON.stringify(err)));
-      })
-
-      Divider().color(this.colors.borderSoft).margin({ top: 8, bottom: 8 })
-      this.LocationBlock()
-    }
-    .width('100%')
-    .padding(12)
-    .backgroundColor(this.colors.cardDark)
-    .borderRadius(16)
-    .border({ width: 1, color: this.colors.borderSoft })
-    .margin({ bottom: 12 })
-  }
-
-  @Builder
-  PrayerOffsetsCard() {
+  LocationContent() {
     Column() {
       Row() {
-        Column() {
-          Text(this.tr('prayer_offsets'))
-            .fontSize(15).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
-          Text(this.tr('prayer_offsets_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-        Text(this.showOffsets ? '▲' : '▼')
-          .fontSize(12).fontColor(this.colors.accentGold).opacity(0.8)
-      }
-      .width('100%')
-      .padding({
-        top: 14,
-        bottom: 14,
-        left: 16,
-        right: 16
-      })
-      .onClick(() => {
-        this.showOffsets = !this.showOffsets;
-      })
-
-      if (this.showOffsets) {
-        Divider().color(this.colors.borderSoft).width('90%')
-        Column() {
-          Text(this.tr('offsets_hint'))
-            .fontSize(11)
-            .fontColor(this.colors.textMuted)
-            .width('100%')
-            .textAlign(TextAlign.Center)
-            .padding({ top: 10, bottom: 8 })
-
-          this.OffsetRow(this.tr('prayer_fajr'), 'fajr')
-          this.OffsetRow(this.tr('prayer_dhuhr'), 'dhuhr')
-          this.OffsetRow(this.tr('prayer_asr'), 'asr')
-          this.OffsetRow(this.tr('prayer_maghrib'), 'maghrib')
-          this.OffsetRow(this.tr('prayer_isha'), 'isha')
-
-          Button(this.tr('reset_all_offsets'))
-            .width('100%')
-            .height(38)
-            .fontSize(13)
-            .fontWeight(FontWeight.Medium)
-            .fontColor(this.colors.textWhite)
-            .backgroundColor(this.colors.tintSoft)
-            .borderRadius(10)
-            .margin({ top: 10, bottom: 4 })
-            .onClick(() => {
-              this.resetOffsets();
-            })
-        }
-        .width('100%').padding({ left: 8, right: 8, bottom: 12 })
-      }
-    }
-    .width('100%').padding({ top: 4, bottom: 4 })
-    .backgroundColor(this.colors.tintSubtle).borderRadius(12)
-  }
-
-  @Builder
-  OffsetRow(label: string, key: OffsetKey) {
-    Row() {
-      Text(label).fontSize(14).fontColor(this.colors.textWhite)
-        .layoutWeight(1)
-
-      Button() {
-        Text('\u2212').fontSize(24).fontWeight(FontWeight.Bold)
-          .fontColor(this.colors.textWhite)
-      }
-      .width(38)
-      .height(38)
-      .backgroundColor(this.colors.tintMedium)
-      .borderRadius(10)
-      .border({ width: 1, color: this.colors.borderMedium })
-      .onClick(() => {
-        this.changeOffset(key, -1);
-      })
-
-      Text(PrayerOffsetsHelper.format(
-        PrayerOffsetsHelper.get(this.offsets, key)))
-        .fontSize(15)
-        .fontWeight(FontWeight.Bold)
-        .fontColor(PrayerOffsetsHelper.get(this.offsets, key) === 0
-          ? this.colors.textMuted : this.colors.accentGold)
-        .width(56)
-        .textAlign(TextAlign.Center)
-
-      Button() {
-        Text('+').fontSize(24).fontWeight(FontWeight.Bold)
-          .fontColor(this.colors.textOnAccent)
-      }
-      .width(38)
-      .height(38)
-      .backgroundColor(this.colors.accentGold)
-      .borderRadius(10)
-      .onClick(() => {
-        this.changeOffset(key, 1);
-      })
-    }
-    .width('100%')
-    .padding({
-      top: 8,
-      bottom: 8,
-      left: 8,
-      right: 8
-    })
-  }
-
-  @Builder
-  LocationBlock() {
-    Column() {
-      Row() {
-        Text('📍').fontSize(14)
-        Text(this.tr('location'))
-          .fontSize(15)
-          .fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium)
-          .margin({ left: 8 })
+        Text(this.tr('location_desc'))
+          .fontSize(11).fontColor(this.colors.textMuted)
           .layoutWeight(1)
+
         Button() {
           if (this.isRefreshing) {
             LoadingProgress().width(18).height(18)
@@ -655,11 +354,8 @@ struct SettingsPage {
           this.refreshLocation();
         })
       }
-      .width('100%').padding({ bottom: 10 })
-
-      Text(this.tr('location_desc'))
-        .fontSize(11).fontColor(this.colors.textMuted)
-        .width('100%').padding({ bottom: 12 })
+      .width('100%').padding({ bottom: 14 })
+      .alignItems(VerticalAlign.Center)
 
       Row() {
         this.ModeButton(this.tr('gps'), LocationMode.GPS)
@@ -819,12 +515,16 @@ struct SettingsPage {
       }
       .width('100%')
       .padding(12)
-      .backgroundColor(this.colors.tintSoft)
+      .backgroundColor(this.colors.tintSubtle)
       .borderRadius(10)
       .border({ width: 1, color: this.colors.borderSoft })
     }
-    .width('100%').padding(14)
-    .backgroundColor(this.colors.tintSubtle).borderRadius(12)
+    .width('100%')
+    .padding(12)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(16)
+    .border({ width: 1, color: this.colors.borderSoft })
+    .margin({ bottom: 12 })
   }
 
   @Builder
@@ -850,6 +550,263 @@ struct SettingsPage {
       .onClick(() => {
         this.pickLocationMode(mode);
       })
+  }
+
+  // ============================================================
+  // PRAYER TIMES CONTENT
+  // ============================================================
+
+  @Builder
+  PrayerTimesContent() {
+    Column() {
+      Row() {
+        Column() {
+          Text(this.tr('convention'))
+            .fontSize(15).fontColor(this.colors.textWhite)
+            .fontWeight(FontWeight.Medium)
+          Text(this.tr('convention_desc'))
+            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+          Text(SettingsHelper.getCalcMethodLabel(this.calcMethod))
+            .fontSize(12)
+            .fontColor(this.colors.accentGold)
+            .maxLines(2)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .margin({ top: 6 })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+      }
+      .width('100%')
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .margin({ bottom: 8 })
+      .onClick(() => {
+        this.showMethodPicker = true;
+      })
+
+      Row() {
+        Column() {
+          Text(this.tr('madhab'))
+            .fontSize(15).fontColor(this.colors.textWhite)
+            .fontWeight(FontWeight.Medium)
+          Text(this.tr('madhab_desc'))
+            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+          Text(SettingsHelper.getAsrRuleLabel(this.asrRule))
+            .fontSize(12)
+            .fontColor(this.colors.accentGold)
+            .maxLines(2)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .margin({ top: 6 })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+      }
+      .width('100%')
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .margin({ bottom: 8 })
+      .onClick(() => {
+        this.showAsrPicker = true;
+      })
+
+      Row() {
+        Column() {
+          Text(this.tr('source'))
+            .fontSize(15).fontColor(this.colors.textWhite)
+            .fontWeight(FontWeight.Medium)
+          Text(this.tr('source_desc'))
+            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+          Text(SettingsHelper.getCalcSourceLabel(this.calcSource))
+            .fontSize(12)
+            .fontColor(this.colors.accentGold)
+            .maxLines(2)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .margin({ top: 6 })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+      }
+      .width('100%')
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .margin({ bottom: 8 })
+      .onClick(() => {
+        this.showSourcePicker = true;
+      })
+
+      this.PrayerOffsetsCard()
+
+      // ---- Advanced Calculation ----
+      Row() {
+        Column() {
+          Text(this.tr('advanced_calc_title'))
+            .fontSize(15).fontColor(this.colors.textWhite)
+            .fontWeight(FontWeight.Medium)
+          Text(this.tr('rounding_method') + ' · '
+            + this.tr('midnight_method') + ' · '
+            + this.tr('high_latitude'))
+            .fontSize(11)
+            .fontColor(this.colors.textMuted)
+            .margin({ top: 2 })
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+      }
+      .width('100%')
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .margin({ top: 8, bottom: 0 })
+      .onClick(() => {
+        NavHelper.prepareForward();
+        router.pushUrl({ url: 'pages/AdvancedCalcPage' })
+          .catch((err: Error) =>
+          console.error('Navigation failed:', JSON.stringify(err)));
+      })
+    }
+    .width('100%')
+    .padding(12)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(16)
+    .border({ width: 1, color: this.colors.borderSoft })
+    .margin({ bottom: 12 })
+  }
+
+  @Builder
+  PrayerOffsetsCard() {
+    Column() {
+      Row() {
+        Column() {
+          Text(this.tr('prayer_offsets'))
+            .fontSize(15).fontColor(this.colors.textWhite)
+            .fontWeight(FontWeight.Medium)
+          Text(this.tr('prayer_offsets_desc'))
+            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+        Text(this.showOffsets ? '▲' : '▼')
+          .fontSize(12).fontColor(this.colors.accentGold).opacity(0.8)
+      }
+      .width('100%')
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .onClick(() => {
+        this.showOffsets = !this.showOffsets;
+      })
+
+      if (this.showOffsets) {
+        Divider().color(this.colors.borderSoft).width('90%')
+        Column() {
+          Text(this.tr('offsets_hint'))
+            .fontSize(11)
+            .fontColor(this.colors.textMuted)
+            .width('100%')
+            .textAlign(TextAlign.Center)
+            .padding({ top: 10, bottom: 8 })
+
+          this.OffsetRow(this.tr('prayer_fajr'), 'fajr')
+          this.OffsetRow(this.tr('prayer_dhuhr'), 'dhuhr')
+          this.OffsetRow(this.tr('prayer_asr'), 'asr')
+          this.OffsetRow(this.tr('prayer_maghrib'), 'maghrib')
+          this.OffsetRow(this.tr('prayer_isha'), 'isha')
+
+          Button(this.tr('reset_all_offsets'))
+            .width('100%')
+            .height(38)
+            .fontSize(13)
+            .fontWeight(FontWeight.Medium)
+            .fontColor(this.colors.textWhite)
+            .backgroundColor(this.colors.tintSoft)
+            .borderRadius(10)
+            .margin({ top: 10, bottom: 4 })
+            .onClick(() => {
+              this.resetOffsets();
+            })
+        }
+        .width('100%').padding({ left: 8, right: 8, bottom: 12 })
+      }
+    }
+    .width('100%').padding({ top: 4, bottom: 4 })
+    .backgroundColor(this.colors.tintSubtle).borderRadius(12)
+    .margin({ top: 8 })
+  }
+
+  @Builder
+  OffsetRow(label: string, key: OffsetKey) {
+    Row() {
+      Text(label).fontSize(14).fontColor(this.colors.textWhite)
+        .layoutWeight(1)
+
+      Button() {
+        Text('\u2212').fontSize(24).fontWeight(FontWeight.Bold)
+          .fontColor(this.colors.textWhite)
+      }
+      .width(38)
+      .height(38)
+      .backgroundColor(this.colors.tintMedium)
+      .borderRadius(10)
+      .border({ width: 1, color: this.colors.borderMedium })
+      .onClick(() => {
+        this.changeOffset(key, -1);
+      })
+
+      Text(PrayerOffsetsHelper.format(
+        PrayerOffsetsHelper.get(this.offsets, key)))
+        .fontSize(15)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(PrayerOffsetsHelper.get(this.offsets, key) === 0
+          ? this.colors.textMuted : this.colors.accentGold)
+        .width(56)
+        .textAlign(TextAlign.Center)
+
+      Button() {
+        Text('+').fontSize(24).fontWeight(FontWeight.Bold)
+          .fontColor(this.colors.textOnAccent)
+      }
+      .width(38)
+      .height(38)
+      .backgroundColor(this.colors.accentGold)
+      .borderRadius(10)
+      .onClick(() => {
+        this.changeOffset(key, 1);
+      })
+    }
+    .width('100%')
+    .padding({
+      top: 8,
+      bottom: 8,
+      left: 8,
+      right: 8
+    })
   }
 
   // ============================================================
@@ -1559,7 +1516,6 @@ struct SettingsPage {
     this.calcMethod = data.method;
     this.asrRule = data.asr;
     this.calcSource = data.source;
-    this.highLatRule = await SettingsHelper.getHighLatRule();
     this.offsets = await SettingsHelper.getPrayerOffsets();
 
     const ns = await SettingsHelper.getNotificationSettings();
@@ -1633,13 +1589,6 @@ struct SettingsPage {
     this.calcSource = source;
     SettingsHelper.saveSource(source);
     this.showSourcePicker = false;
-  }
-
-  private pickHighLatRule(id: string): void {
-    const rule = id as HighLatitudeRule;
-    this.highLatRule = rule;
-    SettingsHelper.saveHighLatRule(rule);
-    this.showHighLatPicker = false;
   }
 
   private async pickLocationMode(mode: LocationMode): Promise<void> {
@@ -1854,7 +1803,6 @@ struct SettingsPage {
 
   private async sendTestNotification(): Promise<void> {
     const ctx = getContext(this) as common.UIAbilityContext;
-
     const granted = await NotificationHelper.isPermissionGranted(ctx);
     if (!granted) {
       const requested = await NotificationHelper.requestPermission(ctx);
@@ -1863,8 +1811,7 @@ struct SettingsPage {
           ? 'calendar_permission_denied'
           : 'notification_permission_denied';
         this.getUIContext().getPromptAction().showToast({
-          message: this.tr(msgKey),
-          duration: 2500
+          message: this.tr(msgKey), duration: 2500
         });
         return;
       }
@@ -1903,8 +1850,7 @@ struct SettingsPage {
           ? 'calendar_permission_denied'
           : 'notification_permission_denied';
         this.getUIContext().getPromptAction().showToast({
-          message: this.tr(msgKey),
-          duration: 2500
+          message: this.tr(msgKey), duration: 2500
         });
         return;
       }
@@ -1932,8 +1878,7 @@ struct SettingsPage {
   }
 
   private async toggleNotifPrayer(
-    prayerId: string,
-    value: boolean
+    prayerId: string, value: boolean
   ): Promise<void> {
     switch (prayerId) {
       case 'fajr':

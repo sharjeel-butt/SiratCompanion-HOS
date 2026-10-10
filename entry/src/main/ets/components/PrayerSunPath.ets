@@ -5,53 +5,74 @@ import { L } from '../helper/LocalizationHelper';
 import { PrayerModel } from '../models/PrayerModel';
 import { PrayerManager } from '../utils/PrayerManager';
 
-/** A single sampled point on the sun-path arc. */
 interface PathPoint {
   x: number;
   y: number;
 }
 
 // ============================================================
-// UNIVERSAL FONT / LAYOUT CONSTANTS
+// LAYOUT CONSTANTS
 // ============================================================
 
-const LABEL_FONT_SIZE = 35;
-const TIME_FONT_SIZE = 25;
-const LABEL_TIME_GAP = 14;
-
-const ARC_EDGE_PAD = 4;
-const DOTS_INSET = 62;
-const CANVAS_HEIGHT = 360;
-const ARC_BASE_Y = 232;
-const ARCH_HEIGHT = 60;
+/**
+ * Single pair of text sizes for every label in the canvas.
+ * Prayer names, sunrise/sunset names, and extra-timing names all
+ * use LABEL_FONT_SIZE. Prayer times, sunrise/sunset times, and
+ * extra-timing times all use TIME_FONT_SIZE.
+ */
+const LABEL_FONT_SIZE = 30;
+const TIME_FONT_SIZE = 22;
+const LABEL_TIME_GAP = 12;
 
 /**
- * Per-prayer leader lengths.
- *
- * The wedge shape runs from tallest in the middle (Dhuhr) down to the
- * shortest at the ends (Fajr and Isha). Fajr and Isha are deliberately
- * short so their labels sit close to their dots on the arc, giving
- * the layout a clear "rise and fall" silhouette.
+ * Ticker ("We are here") uses its own font sizes so it stays visually
+ * subordinate to the prayer and sunrise/sunset labels.
  */
-const LEADER_FAJR = 20;
-const LEADER_DHUHR = 90;
-const LEADER_ASR = 70;
-const LEADER_MAGHRIB = 52;
-const LEADER_ISHA = 20;
+const TICKER_LABEL_FONT_SIZE = 30;
+const TICKER_TIME_FONT_SIZE = 22;
 
-const LEADER_TIME_GAP = 15;
-const LEADER_DOT_GAP = 12;
+/**
+ * Extra timings (First Third, Midnight, Last Third) revert to the
+ * smaller font so their labels do not crowd the arc horizontally.
+ */
+const EXTRA_LABEL_FONT_SIZE = 22;
+const EXTRA_TIME_FONT_SIZE = 18;
 
-const TICKER_LABEL_Y = 275;
-const TICKER_TIME_Y = TICKER_LABEL_Y + LABEL_TIME_GAP;
-const TICKER_DOT_R = 5;
-const TICKER_LINE_W = 2.5;
-const TICKER_DASH_ON = 5;
-const TICKER_DASH_OFF = 4;
+/**
+ * Padding on both sides of the arc. Kept small so the arc stretches
+ * nearly edge-to-edge while still leaving a few vp of breathing room
+ * for the hour-0 and hour-24 tick marks.
+ */
+const ARC_EDGE_PAD = 12;
+const CANVAS_HEIGHT = 384;
 
-const TICKER_REFRESH_MS = 3 * 60 * 1000;
+/**
+ * The arc is a single hump spanning the 24-hour day:
+ *   hour 0   -> arc base, far left
+ *   hour 12  -> arc peak (roughly Dhuhr)
+ *   hour 24  -> arc base, far right
+ */
+const ARC_BASE_Y = 220;
+const ARCH_HEIGHT = 90;
 
-const BOTTOM_LABEL_Y = 322;
+/** Small tick marks under the arc, one per hour. */
+const HOUR_TICK_TOP = ARC_BASE_Y + 6;
+const HOUR_TICK_LEN = 6;
+
+/** Below-arc text rows. */
+const SUN_LABEL_Y = 274;
+const SUN_TIME_Y = 286;
+const EXTRA_LABEL_Y = 318;
+const EXTRA_TIME_Y = 330;
+const TICKER_LABEL_Y = 356;
+const TICKER_TIME_Y = 376;
+const EXTRA_LINE_END_Y = 300;
+const SUN_LEADER_GAP = 28;
+
+/** Ticker update interval. 500 ms is smooth enough for a slow dot. */
+const TICKER_TICK_MS = 500;
+/** How long the midnight wrap sweeps across the arc. */
+const TICKER_WRAP_MS = 2400;
 
 @Component
 export struct PrayerSunPath {
@@ -60,6 +81,9 @@ export struct PrayerSunPath {
   @Prop @Watch('onPrayersChanged') prayers: PrayerModel[] = [];
   @Prop @Watch('onVisualChanged') sunriseTime: string = '--:--';
   @Prop @Watch('onVisualChanged') sunsetTime: string = '--:--';
+  @Prop @Watch('onVisualChanged') firstThirdTime: string = '--:--';
+  @Prop @Watch('onVisualChanged') midnightTime: string = '--:--';
+  @Prop @Watch('onVisualChanged') lastThirdTime: string = '--:--';
   @Prop @Watch('onVisualChanged') currentLanguage: string = 'en';
   @Prop @Watch('onVisualChanged') isDarkMode: boolean = false;
 
@@ -70,10 +94,16 @@ export struct PrayerSunPath {
   private canvasReady: boolean = false;
 
   private tickerTimerId: number = -1;
-
-  // ============================================================
-  // LIFECYCLE
-  // ============================================================
+  /**
+   * Monotonic minute counter. Grows without wrapping, so the visual
+   * position `monotonic % 1440` never jumps except at midnight — and
+   * that single jump is smoothed by the wrap animation below.
+   */
+  private tickerMonotonicMinute: number = -1;
+  /** Set to Date.now() when a midnight wrap begins. */
+  private tickerWrapStartMs: number = -1;
+  /** Minute value (0–1439) just before the wrap. */
+  private tickerWrapFromMinute: number = -1;
 
   aboutToAppear(): void {
     if (this.tickerTimerId !== -1) {
@@ -81,8 +111,9 @@ export struct PrayerSunPath {
       this.tickerTimerId = -1;
     }
     this.tickerTimerId = setInterval(() => {
-      this.redraw();
-    }, TICKER_REFRESH_MS);
+      this.tick();
+    }, TICKER_TICK_MS);
+    this.tick();
   }
 
   aboutToDisappear(): void {
@@ -92,10 +123,6 @@ export struct PrayerSunPath {
     }
   }
 
-  // ============================================================
-  // WATCHERS
-  // ============================================================
-
   private onPrayersChanged(_propName: string): void {
     this.redraw();
   }
@@ -104,11 +131,6 @@ export struct PrayerSunPath {
     this.redraw();
   }
 
-  // ============================================================
-  // HELPERS
-  // ============================================================
-
-  /** True when the active language reads right-to-left (Arabic). */
   private isRtl(): boolean {
     return L.isRtlLang(this.currentLanguage);
   }
@@ -142,6 +164,46 @@ export struct PrayerSunPath {
     }
     const mm: string = minutes.toString().padStart(2, '0');
     return `${hours}:${mm} ${ampm}`;
+  }
+
+  // ============================================================
+  // TICKER — smooth movement, midnight wrap animation
+  // ============================================================
+
+  private tick(): void {
+    const now = new Date();
+    const rawMinute = now.getHours() * 60
+      + now.getMinutes() + now.getSeconds() / 60;
+
+    if (this.tickerMonotonicMinute < 0) {
+      this.tickerMonotonicMinute = rawMinute;
+      this.redraw();
+      return;
+    }
+
+    const prevRaw = this.tickerMonotonicMinute % 1440;
+    let delta = rawMinute - prevRaw;
+
+    if (delta < -720) {
+      // Midnight wrap: raw dropped from ~1439 to ~0
+      delta += 1440;
+
+      // Only animate if the gap is small (a real-time tick, not a
+      // resume-from-background jump of several hours).
+      if (delta < 60) {
+        this.tickerWrapStartMs = Date.now();
+        this.tickerWrapFromMinute = prevRaw;
+      }
+    } else if (delta > 720) {
+      // Clock moved backward (unusual); normalise.
+      delta -= 1440;
+    } else if (delta < 0) {
+      // Sub-minute backward jitter; ignore.
+      delta = 0;
+    }
+
+    this.tickerMonotonicMinute += delta;
+    this.redraw();
   }
 
   // ============================================================
@@ -192,7 +254,7 @@ export struct PrayerSunPath {
   }
 
   // ============================================================
-  // CANVAS DRAW
+  // DRAW
   // ============================================================
 
   private redraw(): void {
@@ -212,128 +274,89 @@ export struct PrayerSunPath {
     ctx.clearRect(0, 0, W, H);
 
     const rtl: boolean = this.isRtl();
-
-    /**
-     * Physical x after RTL mirror.
-     * Everything below is computed in LTR "logical" coordinates
-     * and then projected through this function so the whole canvas
-     * mirrors cleanly when the language is Arabic.
-     */
     const px = (logicalX: number): number => rtl ? W - logicalX : logicalX;
 
-    const fajrM = PrayerManager.timeToMinutes(this.prayers[0].time);
-    const dhuhrM = PrayerManager.timeToMinutes(this.prayers[1].time);
-    const asrM = PrayerManager.timeToMinutes(this.prayers[2].time);
-    const maghribM = PrayerManager.timeToMinutes(this.prayers[3].time);
-    const ishaM = PrayerManager.timeToMinutes(this.prayers[4].time);
+    // ---- Time conversion ----
+    const isValidTime = (s: string): boolean => {
+      const t = s.trim();
+      return t.length > 0 && t !== '--:--';
+    };
 
-    if (fajrM <= 0 || dhuhrM <= 0 || ishaM <= 0) {
+    /** Convert "5:23 AM" to a decimal hour (5.3833). */
+    const timeToHour = (s: string): number => {
+      return PrayerManager.timeToMinutes(s) / 60;
+    };
+
+    // ---- Prayer hours ----
+    const fajrHour = timeToHour(this.prayers[0].time);
+    const dhuhrHour = timeToHour(this.prayers[1].time);
+    const asrHour = timeToHour(this.prayers[2].time);
+    const maghribHour = timeToHour(this.prayers[3].time);
+    const ishaHour = timeToHour(this.prayers[4].time);
+
+    if (fajrHour <= 0 || dhuhrHour <= 0 || ishaHour <= 0) {
       return;
     }
 
-    const range = ishaM - fajrM;
-    if (range <= 0) {
-      return;
-    }
-
-    // ---- Arc geometry (logical, LTR) ----
+    // ---- Arc geometry (logical LTR) ----
     const arcStartX = ARC_EDGE_PAD;
     const arcEndX = W - ARC_EDGE_PAD;
     const arcW = arcEndX - arcStartX;
 
-    const dotsStartX = DOTS_INSET;
-    const dotsEndX = W - DOTS_INSET;
-    const dotsW = dotsEndX - dotsStartX;
-
     const arcBaseY = ARC_BASE_Y;
     const archH = ARCH_HEIGHT;
 
-    // Logical x for a prayer minute.
-    const lxFor = (m: number): number =>
-    dotsStartX + (m - fajrM) / range * dotsW;
+    /**
+     * Decimal hour (0..24) -> logical x. Hour 0 is at `arcStartX`,
+     * hour 24 at `arcEndX`. Values outside [0,24) wrap, so a Last
+     * Third at 02:00 plots on the left side just like it does on a
+     * wall clock.
+     */
+    const xForHour = (h: number): number => {
+      const normalized = ((h % 24) + 24) % 24;
+      return arcStartX + (normalized / 24) * arcW;
+    };
 
-    // Arc y for a logical x. The arc is horizontally symmetric, so
-    // the same y is produced whether we sample at x or at W - x.
-    const lyFor = (lx: number): number => {
+    /** Logical x -> y on the sine arc. */
+    const yForX = (lx: number): number => {
       const p = Math.max(0, Math.min(1, (lx - arcStartX) / arcW));
       return arcBaseY - archH * Math.sin(Math.PI * p);
     };
 
-    // ---- Sunrise / Sunset (logical positions) ----
-    const sunriseM = PrayerManager.timeToMinutes(this.sunriseTime);
-    const sunsetM = PrayerManager.timeToMinutes(this.sunsetTime);
-    const hasSunrise = sunriseM > 0;
-    const hasSunset = sunsetM > 0;
-
-    const sunriseLx = hasSunrise
-      ? Math.max(dotsStartX, Math.min(dotsEndX, lxFor(sunriseM)))
-      : 0;
-    const sunriseLy = hasSunrise ? lyFor(sunriseLx) : 0;
-    const sunsetLx = hasSunset
-      ? Math.max(dotsStartX, Math.min(dotsEndX, lxFor(sunsetM)))
-      : 0;
-    const sunsetLy = hasSunset ? lyFor(sunsetLx) : 0;
-
-    // ---- Ticker (logical position) ----
-    const now = new Date();
-    const nowM = now.getHours() * 60 + now.getMinutes();
-    let tickerM = nowM;
-    if (tickerM < fajrM) {
-      tickerM = fajrM;
-    }
-    if (tickerM > ishaM) {
-      tickerM = ishaM;
-    }
-    const tickerLx = Math.max(dotsStartX, Math.min(dotsEndX, lxFor(tickerM)));
-    const tickerLy = lyFor(tickerLx);
-
-    // ---- Colours ----
+    // ---- Colors ----
     const isDark: boolean = this.isDarkMode;
     const solidColor = isDark ? '#A5B8CC' : '#7B8FA3';
     const dotColor = isDark ? '#8892A6' : '#B0B8C0';
     const labelColor = isDark ? '#E8EDF4' : '#3F4754';
     const timeColor = isDark ? '#B4C0D0' : '#5A6270';
-    const leaderColor = isDark
-      ? 'rgba(180,192,208,0.55)'
-      : 'rgba(138,143,152,0.50)';
+    const leaderColor = this.colors.textMuted;
+    const activeLeader = this.colors.accentGold;
+    const leaderAlpha = isDark ? 0.60 : 0.65;
+    const activeAlpha = isDark ? 0.85 : 0.75;
     const activeDot = isDark ? '#FBBF24' : '#0F5132';
     const activeLabel = isDark ? '#FCD34D' : '#0F5132';
-    const activeLeader = isDark
-      ? 'rgba(251,191,36,0.80)'
-      : 'rgba(15,81,50,0.65)';
     const activeRing = isDark
       ? 'rgba(251,191,36,0.30)'
       : 'rgba(15,81,50,0.22)';
     const horizonColor = isDark ? '#FBBF24' : '#F59E0B';
-    const horizonLeader = isDark
-      ? 'rgba(251,191,36,0.60)'
-      : 'rgba(245,158,11,0.70)';
     const tickerColor = isDark ? '#C4B5FD' : '#7C3AED';
+    const hourTickColor = isDark
+      ? 'rgba(180,192,208,0.40)'
+      : 'rgba(120,128,140,0.50)';
 
-    // ---- Sample the arc (logical coordinates) ----
-    const SAMPLES = 80;
-    const pts: PathPoint[] = [];
-    for (let i = 0; i <= SAMPLES; i++) {
-      const lx = arcStartX + (arcW * i / SAMPLES);
-      const pt: PathPoint = { x: lx, y: lyFor(lx) };
-      pts.push(pt);
-    }
-
-    // ---- Current prayer index ----
-    const prayerMinutes: number[] = [fajrM, dhuhrM, asrM, maghribM, ishaM];
-    let activeIdx: number = -1;
-    for (let i = 0; i < prayerMinutes.length; i++) {
-      if (prayerMinutes[i] > 0 && prayerMinutes[i] <= nowM) {
-        activeIdx = i;
-      }
-    }
-
-    // ---- Arc line (mirrored when RTL) ----
+    // ---- Draw the arc line ----
+    const SAMPLES = 96;
     ctx.save();
     ctx.beginPath();
-    ctx.moveTo(px(pts[0].x), pts[0].y);
-    for (let i = 1; i < pts.length; i++) {
-      ctx.lineTo(px(pts[i].x), pts[i].y);
+    for (let i = 0; i <= SAMPLES; i++) {
+      const lx = arcStartX + (arcW * i / SAMPLES);
+      const ly = yForX(lx);
+      const x = px(lx);
+      if (i === 0) {
+        ctx.moveTo(x, ly);
+      } else {
+        ctx.lineTo(x, ly);
+      }
     }
     ctx.strokeStyle = solidColor;
     ctx.lineWidth = 3;
@@ -341,8 +364,124 @@ export struct PrayerSunPath {
     ctx.stroke();
     ctx.restore();
 
+    // ---- Hour tick marks (one per hour, 0..24) ----
+    ctx.save();
+    ctx.strokeStyle = hourTickColor;
+    ctx.lineWidth = 1;
+    for (let h = 0; h <= 24; h++) {
+      const lx = xForHour(h % 24);
+      const x = px(lx);
+      const isMajor = (h % 3 === 0);
+      const len = isMajor ? HOUR_TICK_LEN : HOUR_TICK_LEN - 2;
+      ctx.beginPath();
+      ctx.moveTo(x, HOUR_TICK_TOP);
+      ctx.lineTo(x, HOUR_TICK_TOP + len);
+      ctx.stroke();
+    }
+    ctx.restore();
+
     // ============================================================
-    // PRAYER LABELS + TIMES + LEADERS + DOTS
+    // EXTRA TIMINGS — dotted vertical lines from top to bottom
+    // ============================================================
+
+    const hasFirstThird = isValidTime(this.firstThirdTime);
+    const hasMidnight = isValidTime(this.midnightTime);
+    const hasLastThird = isValidTime(this.lastThirdTime);
+
+    const firstThirdX = hasFirstThird
+      ? px(xForHour(timeToHour(this.firstThirdTime)))
+      : -1;
+    const midnightX = hasMidnight
+      ? px(xForHour(timeToHour(this.midnightTime)))
+      : -1;
+    const lastThirdX = hasLastThird
+      ? px(xForHour(timeToHour(this.lastThirdTime)))
+      : -1;
+
+    const drawExtraLine = (x: number): void => {
+      ctx.save();
+      ctx.globalAlpha = leaderAlpha;
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, EXTRA_LINE_END_Y);
+      ctx.strokeStyle = leaderColor;
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([5, 5]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.globalAlpha = 1.0;
+      ctx.restore();
+    };
+
+    if (firstThirdX >= 0) {
+      drawExtraLine(firstThirdX);
+    }
+    if (midnightX >= 0) {
+      drawExtraLine(midnightX);
+    }
+    if (lastThirdX >= 0) {
+      drawExtraLine(lastThirdX);
+    }
+
+    const drawExtraLabel = (
+      x: number, label: string, time: string
+    ): void => {
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'alphabetic';
+
+      ctx.font = `bold ${EXTRA_LABEL_FONT_SIZE}px sans-serif`;
+      ctx.fillStyle = this.colors.accentGold;
+      ctx.fillText(label, x, EXTRA_LABEL_Y);
+
+      ctx.font = `${EXTRA_TIME_FONT_SIZE}px sans-serif`;
+      ctx.fillStyle = this.colors.accentGoldLight;
+      ctx.fillText(time, x, EXTRA_TIME_Y);
+    };
+
+    if (firstThirdX >= 0) {
+      drawExtraLabel(
+        firstThirdX,
+        L.get('timing_first_third', this.currentLanguage),
+        this.firstThirdTime
+      );
+    }
+    if (midnightX >= 0) {
+      drawExtraLabel(
+        midnightX,
+        L.get('timing_midnight', this.currentLanguage),
+        this.midnightTime
+      );
+    }
+    if (lastThirdX >= 0) {
+      drawExtraLabel(
+        lastThirdX,
+        L.get('timing_last_third', this.currentLanguage),
+        this.lastThirdTime
+      );
+    }
+
+    // ============================================================
+    // CURRENT PRAYER INDEX
+    // ============================================================
+
+    const now = new Date();
+    const nowMinute = now.getHours() * 60 + now.getMinutes();
+    const prayerMinutes: number[] = [
+      PrayerManager.timeToMinutes(this.prayers[0].time),
+      PrayerManager.timeToMinutes(this.prayers[1].time),
+      PrayerManager.timeToMinutes(this.prayers[2].time),
+      PrayerManager.timeToMinutes(this.prayers[3].time),
+      PrayerManager.timeToMinutes(this.prayers[4].time)
+    ];
+    let activeIdx: number = -1;
+    for (let i = 0; i < prayerMinutes.length; i++) {
+      if (prayerMinutes[i] > 0 && prayerMinutes[i] <= nowMinute) {
+        activeIdx = i;
+      }
+    }
+
+    // ============================================================
+    // PRAYER DOTS + LABELS (above the arc)
     // ============================================================
 
     const names: string[] = [
@@ -352,7 +491,6 @@ export struct PrayerSunPath {
       this.translatePrayerName(this.prayers[3].name),
       this.translatePrayerName(this.prayers[4].name)
     ];
-
     const times: string[] = [
       this.prayers[0].time,
       this.prayers[1].time,
@@ -360,49 +498,39 @@ export struct PrayerSunPath {
       this.prayers[3].time,
       this.prayers[4].time
     ];
-
-    const leaderLengths: number[] = [
-      LEADER_FAJR,
-      LEADER_DHUHR,
-      LEADER_ASR,
-      LEADER_MAGHRIB,
-      LEADER_ISHA
+    const hours: number[] = [
+      fajrHour, dhuhrHour, asrHour, maghribHour, ishaHour
     ];
+    const leaderLengths: number[] = [30, 70, 55, 40, 30];
 
-    // Precompute logical and physical dot positions.
-    const dotLxs: number[] = [];
-    const dotLys: number[] = [];
-    for (let i = 0; i < prayerMinutes.length; i++) {
-      const lx = lxFor(prayerMinutes[i]);
-      dotLxs.push(lx);
-      dotLys.push(lyFor(lx));
-    }
+    for (let i = 0; i < hours.length; i++) {
+      const lx = xForHour(hours[i]);
+      const ly = yForX(lx);
+      const x = px(lx);
+      const y = ly;
 
-    for (let i = 0; i < prayerMinutes.length; i++) {
-      const lx = dotLxs[i];
-      const ly = dotLys[i];
-      const x = px(lx); // physical x after mirroring
-      const y = ly; // y is unaffected by mirroring
       const isActive: boolean = (i === activeIdx);
-      const L = leaderLengths[i];
+      const leaderLen = leaderLengths[i];
 
-      const leaderStartY = y - LEADER_DOT_GAP - L;
-      const timeY = leaderStartY - LEADER_TIME_GAP;
+      const leaderStartY = y - 12 - leaderLen;
+      const timeY = leaderStartY - 10;
       const labelY = timeY - LABEL_TIME_GAP;
 
-      // ---- Dotted leader ----
+      // Dotted leader
       ctx.save();
+      ctx.globalAlpha = isActive ? activeAlpha : leaderAlpha;
       ctx.beginPath();
       ctx.moveTo(x, leaderStartY);
-      ctx.lineTo(x, y - LEADER_DOT_GAP);
+      ctx.lineTo(x, y - 12);
       ctx.strokeStyle = isActive ? activeLeader : leaderColor;
       ctx.lineWidth = 1.5;
       ctx.setLineDash([2, 3]);
       ctx.stroke();
       ctx.setLineDash([]);
+      ctx.globalAlpha = 1.0;
       ctx.restore();
 
-      // ---- Prayer name ----
+      // Prayer name
       ctx.font = isActive
         ? `bold ${LABEL_FONT_SIZE}px sans-serif`
         : `${LABEL_FONT_SIZE}px sans-serif`;
@@ -411,14 +539,12 @@ export struct PrayerSunPath {
       ctx.textBaseline = 'alphabetic';
       ctx.fillText(names[i], x, labelY);
 
-      // ---- Prayer time ----
+      // Prayer time
       ctx.font = `${TIME_FONT_SIZE}px sans-serif`;
       ctx.fillStyle = isActive ? activeLabel : timeColor;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'alphabetic';
       ctx.fillText(times[i], x, timeY);
 
-      // ---- Active glow ring ----
+      // Active glow ring
       if (isActive) {
         ctx.beginPath();
         ctx.arc(x, y, 14, 0, Math.PI * 2);
@@ -426,13 +552,13 @@ export struct PrayerSunPath {
         ctx.fill();
       }
 
-      // ---- Filled dot ----
+      // Filled dot
       ctx.beginPath();
       ctx.arc(x, y, isActive ? 7 : 6, 0, Math.PI * 2);
       ctx.fillStyle = isActive ? activeDot : dotColor;
       ctx.fill();
 
-      // ---- Specular highlight on the active dot ----
+      // Specular highlight on the active dot
       if (isActive) {
         ctx.beginPath();
         ctx.arc(x - 2, y - 2, 2.5, 0, Math.PI * 2);
@@ -444,131 +570,161 @@ export struct PrayerSunPath {
     }
 
     // ============================================================
-    // MOVING TICKER — "We are here" + current time
+    // SUNRISE / SUNSET ring markers + labels below
     // ============================================================
 
+    const hasSunrise = isValidTime(this.sunriseTime);
+    const hasSunset = isValidTime(this.sunsetTime);
+
+    const drawHorizonMarker = (
+      hourVal: number, label: string, time: string
+    ): void => {
+      const lx = xForHour(hourVal);
+      const ly = yForX(lx);
+      const sx = px(lx);
+      const sy = ly;
+
+      // Ring + inner dot
+      ctx.beginPath();
+      ctx.arc(sx, sy, 7, 0, Math.PI * 2);
+      ctx.strokeStyle = horizonColor;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(sx, sy, 3, 0, Math.PI * 2);
+      ctx.fillStyle = horizonColor;
+      ctx.fill();
+
+      // Dotted leader down to the label. Now descends the full
+      // distance from the ring to just above the label baseline,
+      // matching the visual weight of the extra-timing guides.
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(sx, sy + 10);
+      ctx.lineTo(sx, SUN_LABEL_Y - SUN_LEADER_GAP);
+      ctx.strokeStyle = horizonColor;
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([2, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.restore();
+
+      ctx.font = `bold ${LABEL_FONT_SIZE}px sans-serif`;
+      ctx.fillStyle = horizonColor;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'alphabetic';
+      ctx.fillText(label, sx, SUN_LABEL_Y);
+
+      ctx.font = `${TIME_FONT_SIZE}px sans-serif`;
+      ctx.fillStyle = horizonColor;
+      ctx.fillText(time, sx, SUN_TIME_Y);
+    };
+
+    if (hasSunrise) {
+      drawHorizonMarker(
+        timeToHour(this.sunriseTime),
+        L.get('timing_sunrise', this.currentLanguage),
+        this.sunriseTime
+      );
+    }
+    if (hasSunset) {
+      drawHorizonMarker(
+        timeToHour(this.sunsetTime),
+        L.get('timing_sunset', this.currentLanguage),
+        this.sunsetTime
+      );
+    }
+
+    // ============================================================
+    // "WE ARE HERE" — moving ticker across the full 24h arc
+    // ============================================================
+
+    this.drawTicker(
+      ctx, W, arcStartX, arcW, arcBaseY, archH, rtl, tickerColor
+    );
+  }
+
+  private drawTicker(
+    ctx: CanvasRenderingContext2D,
+    W: number,
+    arcStartX: number,
+    arcW: number,
+    arcBaseY: number,
+    archH: number,
+    rtl: boolean,
+    tickerColor: string
+  ): void {
+    if (this.tickerMonotonicMinute < 0) {
+      return;
+    }
+
+    const px = (logicalX: number): number => rtl ? W - logicalX : logicalX;
+
+    const yForX = (lx: number): number => {
+      const p = Math.max(0, Math.min(1, (lx - arcStartX) / arcW));
+      return arcBaseY - archH * Math.sin(Math.PI * p);
+    };
+
+    const wrapActive = this.tickerWrapStartMs > 0
+      && (Date.now() - this.tickerWrapStartMs) < TICKER_WRAP_MS;
+
+    let tickerFraction: number;
+
+    if (wrapActive) {
+      // Sweep from the pre-wrap position (near hour 23.99) to the
+      // start of the arc (hour 0), over TICKER_WRAP_MS milliseconds.
+      const t = (Date.now() - this.tickerWrapStartMs) / TICKER_WRAP_MS;
+      const fromFrac = this.tickerWrapFromMinute / 1440;
+      const toFrac = 0;
+      tickerFraction = fromFrac + (toFrac - fromFrac) * t;
+    } else {
+      const currentMinute = this.tickerMonotonicMinute % 1440;
+      tickerFraction = currentMinute / 1440;
+    }
+
+    const tickerLx = arcStartX + tickerFraction * arcW;
+    const tickerLy = yForX(tickerLx);
     const tickerX = px(tickerLx);
     const tickerY = tickerLy;
 
+    // Dotted leader from the ticker down to its label position
     ctx.save();
     ctx.beginPath();
-    ctx.moveTo(tickerX, tickerY + TICKER_DOT_R + 1);
+    ctx.moveTo(tickerX, tickerY + 7);
     ctx.lineTo(tickerX, TICKER_LABEL_Y - 12);
     ctx.strokeStyle = tickerColor;
-    ctx.lineWidth = TICKER_LINE_W;
+    ctx.lineWidth = 2.5;
     ctx.lineCap = 'round';
-    ctx.setLineDash([TICKER_DASH_ON, TICKER_DASH_OFF]);
+    ctx.setLineDash([5, 4]);
     ctx.stroke();
     ctx.setLineDash([]);
     ctx.restore();
 
+    // Dot + outer ring
     ctx.beginPath();
-    ctx.arc(tickerX, tickerY, TICKER_DOT_R, 0, Math.PI * 2);
+    ctx.arc(tickerX, tickerY, 5, 0, Math.PI * 2);
     ctx.fillStyle = tickerColor;
     ctx.fill();
     ctx.beginPath();
-    ctx.arc(tickerX, tickerY, TICKER_DOT_R + 3, 0, Math.PI * 2);
+    ctx.arc(tickerX, tickerY, 8, 0, Math.PI * 2);
     ctx.strokeStyle = tickerColor;
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    ctx.font = `bold ${TIME_FONT_SIZE}px sans-serif`;
+    // Label
+    ctx.font = `bold ${TICKER_LABEL_FONT_SIZE}px sans-serif`;
     ctx.fillStyle = tickerColor;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'alphabetic';
     ctx.fillText(
       L.get('sun_path_we_are_here', this.currentLanguage),
-      tickerX,
-      TICKER_LABEL_Y
+      tickerX, TICKER_LABEL_Y
     );
 
-    ctx.font = `${TIME_FONT_SIZE}px sans-serif`;
+    // Time
+    const now = new Date();
+    ctx.font = `${TICKER_TIME_FONT_SIZE}px sans-serif`;
     ctx.fillStyle = tickerColor;
     ctx.fillText(this.formatNow(now), tickerX, TICKER_TIME_Y);
-
-    // ============================================================
-    // SUNRISE / SUNSET — LABEL + TIME + LEADER + RING
-    // ============================================================
-
-    const sunriseLabel = L.get('timing_sunrise', this.currentLanguage);
-    const sunsetLabel = L.get('timing_sunset', this.currentLanguage);
-    const botLabelY = BOTTOM_LABEL_Y;
-    const botTimeY = botLabelY + LABEL_TIME_GAP;
-
-    if (hasSunrise) {
-      const sx = px(sunriseLx);
-      const sy = sunriseLy;
-
-      ctx.save();
-      ctx.beginPath();
-      ctx.moveTo(sx, sy + 12);
-      ctx.lineTo(sx, botLabelY - 20);
-      ctx.strokeStyle = horizonLeader;
-      ctx.lineWidth = 1.5;
-      ctx.setLineDash([2, 3]);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.restore();
-
-      ctx.beginPath();
-      ctx.arc(sx, sy, 7, 0, Math.PI * 2);
-      ctx.strokeStyle = horizonColor;
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(sx, sy, 3, 0, Math.PI * 2);
-      ctx.fillStyle = horizonColor;
-      ctx.fill();
-
-      ctx.font = `bold ${LABEL_FONT_SIZE}px sans-serif`;
-      ctx.fillStyle = horizonColor;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'alphabetic';
-      ctx.fillText(sunriseLabel, sx, botLabelY);
-
-      ctx.font = `${TIME_FONT_SIZE}px sans-serif`;
-      ctx.fillStyle = horizonColor;
-      ctx.fillText(this.sunriseTime, sx, botTimeY);
-    }
-
-    if (hasSunset) {
-      const sx = px(sunsetLx);
-      const sy = sunsetLy;
-
-      ctx.save();
-      ctx.beginPath();
-      ctx.moveTo(sx, sy + 12);
-      ctx.lineTo(sx, botLabelY - 20);
-      ctx.strokeStyle = horizonLeader;
-      ctx.lineWidth = 1.5;
-      ctx.setLineDash([2, 3]);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.restore();
-
-      ctx.beginPath();
-      ctx.arc(sx, sy, 7, 0, Math.PI * 2);
-      ctx.strokeStyle = horizonColor;
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(sx, sy, 3, 0, Math.PI * 2);
-      ctx.fillStyle = horizonColor;
-      ctx.fill();
-
-      ctx.font = `bold ${LABEL_FONT_SIZE}px sans-serif`;
-      ctx.fillStyle = horizonColor;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'alphabetic';
-      ctx.fillText(sunsetLabel, sx, botLabelY);
-
-      ctx.font = `${TIME_FONT_SIZE}px sans-serif`;
-      ctx.fillStyle = horizonColor;
-      ctx.fillText(this.sunsetTime, sx, botTimeY);
-    }
-
-    // Reset defaults.
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'alphabetic';
   }
 }
