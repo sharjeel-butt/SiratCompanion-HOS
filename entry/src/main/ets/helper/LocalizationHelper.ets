@@ -637,6 +637,21 @@ export class L {
     m.set('error_gps_off', 'Please turn on location services');
     m.set('error_location_permission_denied', 'Location permission denied');
 
+    // ---- Time format ----
+    m.set('time_format', 'Time Format');
+    m.set('time_format_desc', 'How prayer times are displayed');
+    m.set('time_format_system', 'Use System Settings');
+    m.set('time_format_system_desc', 'Follow the device preference');
+    m.set('time_format_12h', '12-hour (AM/PM)');
+    m.set('time_format_24h', '24-hour');
+
+    m.set('hijri_calendar_type', 'Calendar Type');
+    m.set('hijri_calendar_type_desc', 'Which Hijri calendar to use for conversion');
+    m.set('hijri_calendar_umm_al_qura', 'Umm al-Qura');
+    m.set('hijri_calendar_umm_al_qura_desc', 'Official calendar of Saudi Arabia (1318–1500 AH)');
+    m.set('hijri_calendar_tabular', 'Tabular (Arithmetical)');
+    m.set('hijri_calendar_tabular_desc', 'Kuwaiti algorithm — deterministic for all years');
+
     return m;
   }
 
@@ -1125,6 +1140,21 @@ export class L {
     m.set('error_gps_fetch_failed', '无法获取 GPS 位置');
     m.set('error_gps_off', '请开启定位服务');
     m.set('error_location_permission_denied', '位置权限被拒绝');
+
+    // ---- 时间格式 ----
+    m.set('time_format', '时间格式');
+    m.set('time_format_desc', '礼拜时间的显示方式');
+    m.set('time_format_system', '跟随系统');
+    m.set('time_format_system_desc', '使用设备的偏好设置');
+    m.set('time_format_12h', '12 小时制（上午/下午）');
+    m.set('time_format_24h', '24 小时制');
+
+    m.set('hijri_calendar_type', '日历类型');
+    m.set('hijri_calendar_type_desc', '选择用于转换的回历');
+    m.set('hijri_calendar_umm_al_qura', '乌姆·库拉');
+    m.set('hijri_calendar_umm_al_qura_desc', '沙特阿拉伯官方日历（1318–1500 AH）');
+    m.set('hijri_calendar_tabular', '表格历（算术）');
+    m.set('hijri_calendar_tabular_desc', '科威特算法 — 所有年份均可计算');
 
     return m;
   }
@@ -1617,6 +1647,21 @@ export class L {
     m.set('error_gps_fetch_failed', 'تعذّر الحصول على موقع GPS');
     m.set('error_gps_off', 'يرجى تشغيل خدمة الموقع');
     m.set('error_location_permission_denied', 'تم رفض إذن الموقع');
+
+    // ---- تنسيق الوقت ----
+    m.set('time_format', 'تنسيق الوقت');
+    m.set('time_format_desc', 'طريقة عرض أوقات الصلاة');
+    m.set('time_format_system', 'حسب إعدادات النظام');
+    m.set('time_format_system_desc', 'اتّباع تفضيل الجهاز');
+    m.set('time_format_12h', '12 ساعة (ص/م)');
+    m.set('time_format_24h', '24 ساعة');
+
+    m.set('hijri_calendar_type', 'نوع التقويم');
+    m.set('hijri_calendar_type_desc', 'أي تقويم هجري يُستخدم للتحويل');
+    m.set('hijri_calendar_umm_al_qura', 'أم القرى');
+    m.set('hijri_calendar_umm_al_qura_desc', 'التقويم الرسمي للسعودية (1318–1500 هـ)');
+    m.set('hijri_calendar_tabular', 'جدولي (حسابي)');
+    m.set('hijri_calendar_tabular_desc', 'خوارزمية الكويت — محدد لجميع السنوات');
 
     return m;
   }

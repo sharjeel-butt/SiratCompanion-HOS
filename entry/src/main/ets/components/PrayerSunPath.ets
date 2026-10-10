@@ -4,6 +4,8 @@ import { ThemeColors } from '../common/Theme';
 import { L } from '../helper/LocalizationHelper';
 import { PrayerModel } from '../models/PrayerModel';
 import { PrayerManager } from '../utils/PrayerManager';
+import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
+import { STORAGE_KEY_TIME_FORMAT } from '../common/StorageKeys';
 
 interface PathPoint {
   x: number;
@@ -86,6 +88,9 @@ export struct PrayerSunPath {
   @Prop @Watch('onVisualChanged') lastThirdTime: string = '--:--';
   @Prop @Watch('onVisualChanged') currentLanguage: string = 'en';
   @Prop @Watch('onVisualChanged') isDarkMode: boolean = false;
+  @StorageLink(STORAGE_KEY_TIME_FORMAT)
+  @Watch('onVisualChanged')
+  ClockFormat: string = ClockFormat.SYSTEM;
 
   private ctx: CanvasRenderingContext2D =
     new CanvasRenderingContext2D(new RenderingContextSettings(true));
@@ -155,17 +160,9 @@ export struct PrayerSunPath {
   }
 
   private formatNow(now: Date): string {
-    let hours: number = now.getHours();
-    const minutes: number = now.getMinutes();
-    const ampm: string = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    if (hours === 0) {
-      hours = 12;
-    }
-    const mm: string = minutes.toString().padStart(2, '0');
-    return `${hours}:${mm} ${ampm}`;
+    const totalMinutes = now.getHours() * 60 + now.getMinutes();
+    return ClockFormatHelper.formatMinutes(totalMinutes);
   }
-
   // ============================================================
   // TICKER — smooth movement, midnight wrap animation
   // ============================================================
@@ -435,7 +432,7 @@ export struct PrayerSunPath {
 
       ctx.font = `${EXTRA_TIME_FONT_SIZE}px sans-serif`;
       ctx.fillStyle = this.colors.accentGoldLight;
-      ctx.fillText(time, x, EXTRA_TIME_Y);
+      ctx.fillText(ClockFormatHelper.reformat(time), x, EXTRA_TIME_Y);
     };
 
     if (firstThirdX >= 0) {
@@ -542,7 +539,7 @@ export struct PrayerSunPath {
       // Prayer time
       ctx.font = `${TIME_FONT_SIZE}px sans-serif`;
       ctx.fillStyle = isActive ? activeLabel : timeColor;
-      ctx.fillText(times[i], x, timeY);
+      ctx.fillText(ClockFormatHelper.reformat(times[i]), x, timeY);
 
       // Active glow ring
       if (isActive) {
@@ -617,7 +614,7 @@ export struct PrayerSunPath {
 
       ctx.font = `${TIME_FONT_SIZE}px sans-serif`;
       ctx.fillStyle = horizonColor;
-      ctx.fillText(time, sx, SUN_TIME_Y);
+      ctx.fillText(ClockFormatHelper.reformat(time), sx, SUN_TIME_Y);
     };
 
     if (hasSunrise) {

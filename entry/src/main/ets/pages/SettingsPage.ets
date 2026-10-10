@@ -14,6 +14,7 @@ import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
@@ -31,6 +32,7 @@ import { L } from '../helper/LocalizationHelper';
 import { Breakpoints } from '../common/Breakpoints';
 import { CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED } from '../common/FeatureFlags';
 import { NavHelper } from '../helper/NavHelper';
+import { HijriCalendarType } from '../common/HijriCalendarType';
 
 const MAX_HIJRI_OFFSET = 3;
 
@@ -53,7 +55,10 @@ struct SettingsPage {
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
   appThemePreset: string = ThemePreset.SIRAT;
-
+  @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_TYPE)
+  @Watch('onHijriCalendarTypeChanged')
+  hijriCalendarType: string = HijriCalendarType.UMM_AL_QURA;
+  @State showHijriCalendarTypePicker: boolean = false;
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
   @State asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
@@ -232,6 +237,20 @@ struct SettingsPage {
             this.showMethodPicker = false;
           })
       }
+
+      if (this.showHijriCalendarTypePicker) {
+        this.PickerOverlay(
+          this.tr('hijri_calendar_type'), '📅',
+          SettingsHelper.buildHijriCalendarTypePickerItems(this.hijriCalendarType),
+          (id: string) => {
+            this.pickHijriCalendarType(id);
+          },
+          () => {
+            this.showHijriCalendarTypePicker = false;
+          }
+        )
+      }
+
       if (this.showAsrPicker) {
         this.PickerOverlay(
           this.tr('madhab'), '🌅',
@@ -1076,20 +1095,61 @@ struct SettingsPage {
   @Builder
   HijriCalendarContent() {
     Column() {
-      Column() {
-        Row() {
-          Column() {
-            Text(this.tr('hijri_offset'))
-              .fontSize(15).fontColor(this.colors.textWhite)
-              .fontWeight(FontWeight.Medium)
-            Text(this.tr('hijri_offset_desc'))
-              .fontSize(11).fontColor(this.colors.textMuted)
-              .margin({ top: 2 })
-          }
-          .alignItems(HorizontalAlign.Start).layoutWeight(1)
+      // ---- Calendar Type (above the offset) ----
+      Row() {
+        Column() {
+          Text(this.tr('hijri_calendar_type'))
+            .fontSize(15).fontColor(this.colors.textWhite)
+            .fontWeight(FontWeight.Medium)
+          Text(this.tr('hijri_calendar_type_desc'))
+            .fontSize(11)
+            .fontColor(this.colors.textMuted)
+            .margin({ top: 2 })
+            .maxLines(2)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+          Text(SettingsHelper.getHijriCalendarTypeLabel(this.hijriCalendarType))
+            .fontSize(12)
+            .fontColor(this.colors.accentGold)
+            .maxLines(2)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .margin({ top: 6 })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
+        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+      }
+      .width('100%')
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .margin({ bottom: 8 })
+      .onClick(() => {
+        this.showHijriCalendarTypePicker = true;
+      })
+
+      // ---- Hijri Offset ----
+      Row() {
+        Column() {
+          Text(this.tr('hijri_offset'))
+            .fontSize(15).fontColor(this.colors.textWhite)
+            .fontWeight(FontWeight.Medium)
+          Text(this.tr('hijri_offset_desc'))
+            .fontSize(11)
+            .fontColor(this.colors.textMuted)
+            .margin({ top: 2 })
+            .maxLines(2)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+        Row() {
           Button() {
-            Text('\u2212').fontSize(22).fontWeight(FontWeight.Bold)
+            Text('\u2212').fontSize(20).fontWeight(FontWeight.Bold)
               .fontColor(this.hijriOffset <= -MAX_HIJRI_OFFSET
                 ? this.colors.textMuted : this.colors.textWhite)
           }
@@ -1104,15 +1164,15 @@ struct SettingsPage {
           })
 
           Text(this.formatHijriOffset())
-            .fontSize(16)
+            .fontSize(15)
             .fontWeight(FontWeight.Bold)
             .fontColor(this.hijriOffset === 0
               ? this.colors.textMuted : this.colors.accentGold)
-            .width(56)
+            .width(48)
             .textAlign(TextAlign.Center)
 
           Button() {
-            Text('+').fontSize(22).fontWeight(FontWeight.Bold)
+            Text('+').fontSize(20).fontWeight(FontWeight.Bold)
               .fontColor(this.hijriOffset >= MAX_HIJRI_OFFSET
                 ? this.colors.textMuted : this.colors.textOnAccent)
           }
@@ -1126,14 +1186,28 @@ struct SettingsPage {
             this.changeHijriOffset(1);
           })
         }
-        .width('100%').alignItems(VerticalAlign.Center)
-
-        Text(this.hijriOffsetDescription())
-          .fontSize(11).fontColor(this.colors.textMuted)
-          .width('100%').margin({ top: 10 })
+        .alignItems(VerticalAlign.Center)
       }
-      .width('100%').padding(14)
-      .backgroundColor(this.colors.tintSubtle).borderRadius(12)
+      .width('100%')
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .margin({ bottom: 8 })
+      .alignItems(VerticalAlign.Center)
+
+      // ---- Offset caption ----
+      Text(this.hijriOffsetDescription())
+        .fontSize(11)
+        .fontColor(this.colors.textMuted)
+        .width('100%')
+        .padding({ left: 16, right: 16, bottom: 12 })
+        .backgroundColor(this.colors.tintSubtle)
+        .borderRadius({ bottomLeft: 12, bottomRight: 12 })
     }
     .width('100%')
     .padding(12)
@@ -1952,5 +2026,15 @@ struct SettingsPage {
     this.getUIContext().getPromptAction().showToast({
       message: this.tr('log_cleared'), duration: 1500
     });
+  }
+
+  private onHijriCalendarTypeChanged(): void {
+    // Re-render is handled by the @StorageLink.
+  }
+
+  private pickHijriCalendarType(id: string): void {
+    this.hijriCalendarType = id;
+    SettingsHelper.saveHijriCalendarType(id);
+    this.showHijriCalendarTypePicker = false;
   }
 }

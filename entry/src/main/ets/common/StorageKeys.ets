@@ -53,15 +53,13 @@ export const STORAGE_KEY_BREAKPOINT = 'layout_breakpoint';
 
 // ---- Advanced Calculation Settings ----
 export const STORAGE_KEY_ROUNDING_METHOD = 'calc_rounding_method';
-
 export const STORAGE_KEY_MIDNIGHT_METHOD = 'calc_midnight_method';
-
 export const STORAGE_KEY_POLAR_RESOLUTION = 'calc_polar_resolution';
-
 export const STORAGE_KEY_SHAFAQ = 'calc_shafaq';
-
 export const STORAGE_KEY_CUSTOM_FAJR_ANGLE = 'calc_custom_fajr';
-
 export const STORAGE_KEY_CUSTOM_ISHA_ANGLE = 'calc_custom_isha';
-
 export const STORAGE_KEY_CUSTOM_ISHA_INTERVAL = 'calc_custom_isha_interval';
+
+export const STORAGE_KEY_TIME_FORMAT = 'time_format';
+
+export const STORAGE_KEY_HIJRI_CALENDAR_TYPE = 'hijri_calendar_type';

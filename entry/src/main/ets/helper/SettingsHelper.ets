@@ -9,6 +9,7 @@ import {
   STORAGE_KEY_CUSTOM_ISHA_ANGLE,
   STORAGE_KEY_CUSTOM_ISHA_INTERVAL,
   STORAGE_KEY_HIGH_LAT_RULE,
+  STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_MIDNIGHT_METHOD,
@@ -27,6 +28,7 @@ import {
   STORAGE_KEY_TASBIH_SOUND,
   STORAGE_KEY_TASBIH_THEME_PRESET,
   STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_TIME_FORMAT,
   STORAGE_KEY_VIBRATION_ENABLED,
   STORAGE_KEY_WIZARD_COMPLETED
 } from '../common/StorageKeys';
@@ -43,6 +45,8 @@ import {
   RoundingMethod,
   Shafaq
 } from '../models/AdvancedCalcModels';
+import { ClockFormat } from '../common/ClockFormat';
+import { HijriCalendarType } from '../common/HijriCalendarType';
 
 const KEY_METHOD = 'calc_method';
 const KEY_ASR = 'asr_rule';
@@ -144,6 +148,50 @@ export class SettingsHelper {
 
   static saveHighLatRule(rule: HighLatitudeRule): void {
     PreferencesHelper.setString(STORAGE_KEY_HIGH_LAT_RULE, rule);
+  }
+
+  // ============================================================
+  // TIME FORMAT
+  // ============================================================
+
+  static getClockFormat(): string {
+    const cached = AppStorage.get<string>(STORAGE_KEY_TIME_FORMAT);
+    if (cached !== undefined && cached.length > 0) {
+      return cached;
+    }
+    return ClockFormat.SYSTEM;
+  }
+
+  static saveClockFormat(format: string): void {
+    AppStorage.setOrCreate(STORAGE_KEY_TIME_FORMAT, format);
+    PreferencesHelper.setString(STORAGE_KEY_TIME_FORMAT, format);
+  }
+
+  static buildClockFormatPickerItems(current: string): PickerItem[] {
+    const out: PickerItem[] = [];
+
+    const system: PickerItem = {
+      id: ClockFormat.SYSTEM,
+      label: L.get('time_format_system'),
+      selected: current === ClockFormat.SYSTEM
+    };
+    out.push(system);
+
+    const twelve: PickerItem = {
+      id: ClockFormat.TWELVE_HOUR,
+      label: L.get('time_format_12h'),
+      selected: current === ClockFormat.TWELVE_HOUR
+    };
+    out.push(twelve);
+
+    const twentyFour: PickerItem = {
+      id: ClockFormat.TWENTY_FOUR_HOUR,
+      label: L.get('time_format_24h'),
+      selected: current === ClockFormat.TWENTY_FOUR_HOUR
+    };
+    out.push(twentyFour);
+
+    return out;
   }
 
   // ============================================================
@@ -798,5 +846,49 @@ export class SettingsHelper {
     await PreferencesHelper.setNumber(
       STORAGE_KEY_CUSTOM_ISHA_INTERVAL, a.ishaInterval
     );
+  }
+
+  // ============================================================
+  // HIJRI CALENDAR TYPE
+  // ============================================================
+
+  static getHijriCalendarType(): string {
+    const cached = AppStorage.get<string>(STORAGE_KEY_HIJRI_CALENDAR_TYPE);
+    if (cached !== undefined && cached.length > 0) {
+      return cached;
+    }
+    return HijriCalendarType.UMM_AL_QURA;
+  }
+
+  static saveHijriCalendarType(type: string): void {
+    AppStorage.setOrCreate(STORAGE_KEY_HIJRI_CALENDAR_TYPE, type);
+    PreferencesHelper.setString(STORAGE_KEY_HIJRI_CALENDAR_TYPE, type);
+  }
+
+  static getHijriCalendarTypeLabel(type: string): string {
+    if (type === HijriCalendarType.TABULAR) {
+      return L.get('hijri_calendar_tabular');
+    }
+    return L.get('hijri_calendar_umm_al_qura');
+  }
+
+  static buildHijriCalendarTypePickerItems(current: string): PickerItem[] {
+    const out: PickerItem[] = [];
+
+    const uaq: PickerItem = {
+      id: HijriCalendarType.UMM_AL_QURA,
+      label: L.get('hijri_calendar_umm_al_qura'),
+      selected: current === HijriCalendarType.UMM_AL_QURA
+    };
+    out.push(uaq);
+
+    const tab: PickerItem = {
+      id: HijriCalendarType.TABULAR,
+      label: L.get('hijri_calendar_tabular'),
+      selected: current === HijriCalendarType.TABULAR
+    };
+    out.push(tab);
+
+    return out;
   }
 }
