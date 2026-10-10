@@ -1,6 +1,6 @@
 // entry/src/main/ets/models/TasbihModels.ets
 
-import { TasbihTheme } from '../common/TasbihThemes';
+import { TasbihTheme } from './TasbihThemes';
 
 export interface Dhikr {
   id: string;

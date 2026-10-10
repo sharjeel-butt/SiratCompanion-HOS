@@ -23,14 +23,14 @@ import { SoundOptions } from '../common/SoundOptions';
 import { SystemFeedbackHelper } from '../helper/SystemFeedbackHelper';
 import { ThemeMode, ThemePreset } from '../common/Theme';
 import { AppLogger } from '../helper/AppLogger';
-import { PrayerManager } from '../utils/PrayerManager';
+import { PrayerManager } from '../prayer/PrayerManager';
 import { LayoutHelper } from '../helper/LayoutHelper';
 import { MaterialHelper } from '../helper/MaterialHelper';
 import { SettingsHelper } from '../helper/SettingsHelper';
 import { NotificationHelper } from '../helper/NotificationHelper';
-import { CalendarReminderHelper } from '../helper/CalendarReminderHelper';
+import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
 import { CALENDAR_REMINDERS_ENABLED } from '../common/FeatureFlags';
-import { HijriCalendarType } from '../common/HijriCalendarType';
+import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 
 /** How long the splash stays visible, in milliseconds. */
 const SPLASH_DELAY_MS = 1500;

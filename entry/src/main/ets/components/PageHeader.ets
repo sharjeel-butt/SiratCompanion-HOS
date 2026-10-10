@@ -3,7 +3,7 @@
 import { Theme, ThemeColors } from '../common/Theme';
 import { L } from '../helper/LocalizationHelper';
 import { SettingsHelper } from '../helper/SettingsHelper';
-import { AsrShadowRule, CalculationMethod } from '../utils/PrayerTimeCalculator';
+import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator';
 import { CalculationSource } from '../models/SettingsModels';
 import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
 import { STORAGE_KEY_TIME_FORMAT } from '../common/StorageKeys';

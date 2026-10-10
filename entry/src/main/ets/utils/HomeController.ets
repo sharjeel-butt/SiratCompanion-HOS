@@ -1,14 +1,14 @@
 // entry/src/main/ets/utils/HomeController.ets
 
-import { ExtraTiming, PrayerModel } from '../models/PrayerModel';
+import { ExtraTiming, PrayerModel } from '../prayer/PrayerModel';
 import {
   AsrShadowRule,
   CalculationMethod,
   DailyPrayerTimes,
   HighLatitudeRule,
   PrayerTimeCalculator
-} from './PrayerTimeCalculator';
-import { PrayerManager } from './PrayerManager';
+} from '../prayer/PrayerTimeCalculator';
+import { PrayerManager } from '../prayer/PrayerManager';
 import { PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
 import { LocationMode } from '../models/SettingsModels';
 import { CachedLocation, FALLBACK_LOCATION, LocationCache } from './LocationCache';

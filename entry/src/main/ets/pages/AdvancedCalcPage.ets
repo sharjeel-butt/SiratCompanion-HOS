@@ -20,7 +20,7 @@ import {
 } from '../models/AdvancedCalcModels';
 import {
   CalculationMethod, HighLatitudeRule
-} from '../utils/PrayerTimeCalculator';
+} from '../prayer/PrayerTimeCalculator';
 import { L } from '../helper/LocalizationHelper';
 import { Breakpoints } from '../common/Breakpoints';
 

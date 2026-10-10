@@ -13,23 +13,23 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
-import { BeadView, Dhikr, DhikrFields, Tasbih } from '../models/TasbihModels';
-import { MAX_BOTTOM_BEADS, TasbihManager } from '../utils/TasbihManager';
-import { TasbihStorage } from '../utils/TasbihStorage';
+import { BeadView, Dhikr, DhikrFields, Tasbih } from '../tasbih/TasbihModels';
+import { MAX_BOTTOM_BEADS, TasbihManager } from '../tasbih/TasbihManager';
+import { TasbihStorage } from '../tasbih/TasbihStorage';
 import { HapticHelper } from '../helper/HapticHelper';
 import { SoundHelper } from '../helper/SoundHelper';
 import { SettingsHelper } from '../helper/SettingsHelper';
 import { L } from '../helper/LocalizationHelper';
 import {
   BeadCanvasConfig, BeadRenderStyle, TasbihCanvasRenderer
-} from '../helper/TasbihCanvasRenderer';
+} from '../tasbih/TasbihCanvasRenderer';
 import {
   TASBIH_THEME_PRESETS,
   TasbihColor,
   TasbihTheme,
   TasbihThemePreset,
   TasbihThemes
-} from '../common/TasbihThemes';
+} from '../tasbih/TasbihThemes';
 import { Breakpoints } from '../common/Breakpoints';
 
 const BEAD_SIZE = 28;

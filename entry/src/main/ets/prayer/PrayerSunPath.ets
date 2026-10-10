@@ -2,8 +2,8 @@
 
 import { ThemeColors } from '../common/Theme';
 import { L } from '../helper/LocalizationHelper';
-import { PrayerModel } from '../models/PrayerModel';
-import { PrayerManager } from '../utils/PrayerManager';
+import { PrayerModel } from './PrayerModel';
+import { PrayerManager } from './PrayerManager';
 import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
 import { STORAGE_KEY_TIME_FORMAT } from '../common/StorageKeys';
 
@@ -73,6 +73,8 @@ const SUN_LEADER_GAP = 28;
 
 /** Ticker update interval. 500 ms is smooth enough for a slow dot. */
 const TICKER_TICK_MS = 500;
+/** Update interval during the midnight wrap — 60 fps equivalent. */
+const TICKER_WRAP_TICK_MS = 16;
 /** How long the midnight wrap sweeps across the arc. */
 const TICKER_WRAP_MS = 2400;
 
@@ -109,15 +111,11 @@ export struct PrayerSunPath {
   private tickerWrapStartMs: number = -1;
   /** Minute value (0–1439) just before the wrap. */
   private tickerWrapFromMinute: number = -1;
+  /** Tracks whether we were mid-wrap on the previous tick. */
+  private tickerWasWrapping: boolean = false;
 
   aboutToAppear(): void {
-    if (this.tickerTimerId !== -1) {
-      clearInterval(this.tickerTimerId);
-      this.tickerTimerId = -1;
-    }
-    this.tickerTimerId = setInterval(() => {
-      this.tick();
-    }, TICKER_TICK_MS);
+    this.restartTickerTimer(TICKER_TICK_MS);
     this.tick();
   }
 
@@ -172,6 +170,20 @@ export struct PrayerSunPath {
     const rawMinute = now.getHours() * 60
       + now.getMinutes() + now.getSeconds() / 60;
 
+    // Detect wrap end before touching the timer.
+    const wrappingNow = this.tickerWrapStartMs > 0
+      && (Date.now() - this.tickerWrapStartMs) < TICKER_WRAP_MS;
+
+    if (this.tickerWasWrapping && !wrappingNow) {
+      // The wrap just finished — restore the slow cadence and clear
+      // the wrap markers so `drawTicker` falls back to normal
+      // positioning on the next frame.
+      this.restartTickerTimer(TICKER_TICK_MS);
+      this.tickerWrapStartMs = -1;
+      this.tickerWrapFromMinute = -1;
+    }
+    this.tickerWasWrapping = wrappingNow;
+
     if (this.tickerMonotonicMinute < 0) {
       this.tickerMonotonicMinute = rawMinute;
       this.redraw();
@@ -182,25 +194,33 @@ export struct PrayerSunPath {
     let delta = rawMinute - prevRaw;
 
     if (delta < -720) {
-      // Midnight wrap: raw dropped from ~1439 to ~0
       delta += 1440;
 
-      // Only animate if the gap is small (a real-time tick, not a
-      // resume-from-background jump of several hours).
       if (delta < 60) {
+        // Genuine midnight crossing during a live session. Kick off
+        // the wrap animation and switch to the fast tick rate.
         this.tickerWrapStartMs = Date.now();
         this.tickerWrapFromMinute = prevRaw;
+        this.tickerWasWrapping = true;
+        this.restartTickerTimer(TICKER_WRAP_TICK_MS);
       }
     } else if (delta > 720) {
-      // Clock moved backward (unusual); normalise.
       delta -= 1440;
     } else if (delta < 0) {
-      // Sub-minute backward jitter; ignore.
       delta = 0;
     }
 
     this.tickerMonotonicMinute += delta;
     this.redraw();
+  }
+
+  private restartTickerTimer(intervalMs: number): void {
+    if (this.tickerTimerId !== -1) {
+      clearInterval(this.tickerTimerId);
+    }
+    this.tickerTimerId = setInterval(() => {
+      this.tick();
+    }, intervalMs);
   }
 
   // ============================================================

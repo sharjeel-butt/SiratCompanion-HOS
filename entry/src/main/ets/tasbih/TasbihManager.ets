@@ -1,7 +1,7 @@
 // entry/src/main/ets/utils/TasbihManager.ets
 
-import { AddTasbihResult, BeadView, Dhikr, DhikrFields, Tasbih } from '../models/TasbihModels';
-import { TasbihThemes } from '../common/TasbihThemes';
+import { AddTasbihResult, BeadView, Dhikr, DhikrFields, Tasbih } from './TasbihModels';
+import { TasbihThemes } from './TasbihThemes';
 
 export const MAX_TOP_BEADS = 5;
 

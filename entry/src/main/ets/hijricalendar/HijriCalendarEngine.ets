@@ -1,7 +1,7 @@
 // entry/src/main/ets/utils/HijriCalendarEngine.ets
 
-import { HijriDate } from '../models/HijriCalendarModels';
-import { HijriCalendarType } from '../common/HijriCalendarType';
+import { HijriDate } from './HijriCalendarModels';
+import { HijriCalendarType } from './HijriCalendarType';
 
 /**
  * A Hijri calendar engine converts between Gregorian dates and

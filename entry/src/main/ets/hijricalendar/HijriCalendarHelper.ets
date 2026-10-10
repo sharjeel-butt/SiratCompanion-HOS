@@ -1,12 +1,12 @@
 // entry/src/main/ets/utils/HijriCalendarHelper.ets
 
-import { CalendarDay, HijriDate } from '../models/HijriCalendarModels';
+import { CalendarDay, HijriDate } from './HijriCalendarModels';
 import { IslamicEvent } from '../models/DateModels';
 import { IMPORTANT_ISLAMIC_EVENTS } from '../data/IslamicEvents';
-import { HijriCalendarType } from '../common/HijriCalendarType';
-import { HijriCalendarEngine } from '../utils/HijriCalendarEngine';
-import { TabularHijriEngine } from '../utils/TabularHijriEngine';
-import { UmmAlQuraEngine } from '../utils/UmmAlQuraEngine';
+import { HijriCalendarType } from './HijriCalendarType';
+import { HijriCalendarEngine } from './HijriCalendarEngine';
+import { TabularHijriEngine } from './TabularHijriEngine';
+import { UmmAlQuraEngine } from './UmmAlQuraEngine';
 import { STORAGE_KEY_HIJRI_CALENDAR_TYPE } from '../common/StorageKeys';
 
 export const HIJRI_MONTH_NAMES: string[] = [

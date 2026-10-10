@@ -1,6 +1,6 @@
 // entry/src/main/ets/utils/PrayerTimeCalculator.ets
 
-import { TimezoneResolver } from './TimezoneResolver';
+import { TimezoneResolver } from '../utils/TimezoneResolver';
 import {
   AdvancedCalcSettings,
   CustomAngles,

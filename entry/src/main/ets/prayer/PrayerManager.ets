@@ -1,6 +1,6 @@
 // entry/src/main/ets/utils/PrayerManager.ets
 
-import { ExtraTiming, PrayerModel } from '../models/PrayerModel';
+import { ExtraTiming, PrayerModel } from './PrayerModel';
 import { DailyPrayerTimes } from './PrayerTimeCalculator';
 import { PrayerOffsets } from '../helper/SettingsHelper';
 import { PreferencesHelper } from '../helper/PreferencesHelper';

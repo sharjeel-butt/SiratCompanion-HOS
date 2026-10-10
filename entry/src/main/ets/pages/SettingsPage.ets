@@ -5,7 +5,7 @@ import { common } from '@kit.AbilityKit';
 import { pasteboard } from '@kit.BasicServicesKit';
 import { ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
-import { AsrShadowRule, CalculationMethod } from '../utils/PrayerTimeCalculator';
+import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator';
 import { PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
 import { LocationData, LocationHelper } from '../utils/LocationUtils';
 import { LocationCache } from '../utils/LocationCache';
@@ -19,7 +19,7 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
-import { OffsetKey, PrayerOffsetsHelper } from '../helper/PrayerOffsetsHelper';
+import { OffsetKey, PrayerOffsetsHelper } from '../prayer/PrayerOffsetsHelper';
 import {
   MAX_BEFORE_MINUTES,
   MIN_BEFORE_MINUTES,
@@ -32,7 +32,7 @@ import { L } from '../helper/LocalizationHelper';
 import { Breakpoints } from '../common/Breakpoints';
 import { CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED } from '../common/FeatureFlags';
 import { NavHelper } from '../helper/NavHelper';
-import { HijriCalendarType } from '../common/HijriCalendarType';
+import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 
 const MAX_HIJRI_OFFSET = 3;
 
