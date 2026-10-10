@@ -1,0 +1,12 @@
+{
+  "common": {
+    "displayModeOptions": {
+      "wideWindowMode": "routerSplit",
+      "squareWindowMode": "routerSplit",
+      "routerSplitOptions": {
+        "homePage": "pages/MainTabs",
+        "relatedPage": "pages/SettingsPage,pages/CustomizePage,pages/AdvancedCalcPage"
+      }
+    }
+  }
+}

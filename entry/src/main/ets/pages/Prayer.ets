@@ -1,6 +1,6 @@
 // entry/src/main/ets/pages/Prayer.ets
-import { mediaquery, promptAction, router } from '@kit.ArkUI';
-import { common } from '@kit.AbilityKit';
+
+import { mediaquery, router } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import { ExtraTiming, PrayerModel } from '../prayer/PrayerModel';
@@ -23,20 +23,21 @@ import {
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
 } from '../common/StorageKeys';
+import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
 import { AppLogger } from '../helper/AppLogger';
 import { HomeController } from '../utils/HomeController';
-import { AsrShadowRule, CalculationMethod, HighLatitudeRule } from '../prayer/PrayerTimeCalculator';
+import {
+  AsrShadowRule, CalculationMethod, HighLatitudeRule
+} from '../prayer/PrayerTimeCalculator';
 import { NavHelper } from '../helper/NavHelper';
 import { TimezoneResolver } from '../utils/TimezoneResolver';
 import { L } from '../helper/LocalizationHelper';
 import { PageHeader } from '../components/PageHeader';
 import { PrayerSunPath } from '../prayer/PrayerSunPath';
 import { Breakpoints } from '../common/Breakpoints';
-import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
-
-interface DialogResult {
-  index: number;
-}
+import {
+  AdvancedCalcSettings, DEFAULT_ADVANCED_CALC
+} from '../models/AdvancedCalcModels';
 
 interface TimelineRow {
   kind: 'prayer' | 'extra';
@@ -79,6 +80,7 @@ export struct Prayer {
 
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
+
   @StorageLink(STORAGE_KEY_TIME_FORMAT)
   @Watch('onClockFormatChanged')
   clockFormat: string = ClockFormat.SYSTEM;
@@ -126,10 +128,10 @@ export struct Prayer {
   @State calcSource: CalculationSource = CalculationSource.LOCAL;
   @State locationMode: LocationMode = LocationMode.GPS;
   @State offsets: PrayerOffsets = { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 };
+  private advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC;
 
   @State showExtraTimings: boolean = true;
   @State showIslamicEvents: boolean = true;
-  @State showBottomSheet: boolean = false;
   @State private isRefreshingHome: boolean = false;
   @State highLatRule: HighLatitudeRule = HighLatitudeRule.NONE;
 
@@ -141,20 +143,11 @@ export struct Prayer {
     return L.get(key, this.appLanguage);
   }
 
-  /**
-   * Reformat an internal 12-hour time string for display. Reads
-   * this.ClockFormat to establish a reactive dependency so that
-   * changing the format re-renders every time call site.
-   */
   private dt(t: string): string {
     if (this.clockFormat.length === 0) {
       return t;
     }
     return ClockFormatHelper.reformat(t);
-  }
-
-  private onClockFormatChanged(): void {
-    // Re-render is handled by the @StorageLink.
   }
 
   private isRtl(): boolean {
@@ -217,6 +210,10 @@ export struct Prayer {
     this.colors = PageTheme.compute(this.themeMode);
   }
 
+  private onClockFormatChanged(): void {
+    // Re-render is handled by the @StorageLink.
+  }
+
   private async onLocationVersionChanged(): Promise<void> {
     const mode = await SettingsHelper.getLocationMode();
     const loc = await HomeController.loadLocationForMode(mode);
@@ -233,7 +230,7 @@ export struct Prayer {
   }
 
   private async onLanguageChangedInHome(): Promise<void> {
-    // Notifications disabled pending AGC approval.
+    // Re-render is handled by the @StorageLink.
   }
 
   private onHijriOffsetChangedInHome(): void {
@@ -243,12 +240,11 @@ export struct Prayer {
   }
 
   private async onAppForegrounded(): Promise<void> {
-    this.refreshHijriDates();
-    this.upcomingImportantDates = DateHelper.getUpcomingImportantDates(this.hijriOffset);
+    this.syncViewingDateIfStale();
 
-    if (this.dateOffset === 0) {
-      // ... (viewing date check unchanged)
-    }
+    this.refreshHijriDates();
+    this.upcomingImportantDates =
+      DateHelper.getUpcomingImportantDates(this.hijriOffset);
 
     await this.loadSettingsAndLocation();
     this.prayers = PrayerManager.updateStatuses(
@@ -257,7 +253,6 @@ export struct Prayer {
     this.updateTodayHeaderData();
     this.refreshPrayerTimes();
 
-    // Silently refresh GPS on foreground. Non-blocking.
     this.refreshLocationSilently();
   }
 
@@ -274,7 +269,6 @@ export struct Prayer {
     this.initialize();
     this.startStatusTimer();
 
-    // Silently refresh GPS on first load. Non-blocking.
     this.refreshLocationSilently();
   }
 
@@ -289,17 +283,7 @@ export struct Prayer {
 
   onPageShow(): void {
     this.colors = PageTheme.compute(this.themeMode);
-
-    if (this.dateOffset === 0) {
-      const now = new Date();
-      const viewDay = new Date(this.viewingDate);
-      viewDay.setHours(0, 0, 0, 0);
-      const todayMidnight = new Date(now);
-      todayMidnight.setHours(0, 0, 0, 0);
-      if (viewDay.getTime() !== todayMidnight.getTime()) {
-        this.refreshViewingDate(true);
-      }
-    }
+    this.syncViewingDateIfStale();
 
     this.prayers = PrayerManager.loadStateForDate(
       this.viewingDateKey, this.prayers, this.viewingDate
@@ -311,6 +295,19 @@ export struct Prayer {
     this.loadSettingsAndLocation();
     this.updateTodayHeaderData();
     this.refreshHijriDates();
+  }
+
+  private syncViewingDateIfStale(): void {
+    if (this.dateOffset !== 0) {
+      return;
+    }
+    const viewDay = new Date(this.viewingDate);
+    viewDay.setHours(0, 0, 0, 0);
+    const todayMidnight = new Date();
+    todayMidnight.setHours(0, 0, 0, 0);
+    if (viewDay.getTime() !== todayMidnight.getTime()) {
+      this.refreshViewingDate(true);
+    }
   }
 
   private async initialize(): Promise<void> {
@@ -382,11 +379,6 @@ export struct Prayer {
     this.refreshViewingDate();
   }
 
-  /**
-   * Snap the view back to today. Only meaningful when viewing a past
-   * or future day; guarded so a redundant tap does not trigger an
-   * unnecessary reload.
-   */
   private goToToday(): void {
     if (this.dateOffset === 0) {
       return;
@@ -411,6 +403,7 @@ export struct Prayer {
       this.showIslamicEvents = data.showIslamicEvents;
       this.offsets = await SettingsHelper.getPrayerOffsets();
       this.highLatRule = await SettingsHelper.getHighLatRule();
+      this.advanced = await SettingsHelper.getAdvancedCalcSettings();
 
       const loc = await HomeController.loadLocationForMode(mode);
       this.latitude = loc.latitude;
@@ -436,7 +429,7 @@ export struct Prayer {
     const snap = HomeController.buildPrayersForDate(
       this.viewingDate, this.latitude, this.longitude,
       this.calcMethod, this.asrRule, this.highLatRule,
-      this.offsets, this.prayers
+      this.offsets, this.prayers, this.advanced
     );
     if (snap) this.prayers = snap.prayers;
 
@@ -451,7 +444,7 @@ export struct Prayer {
     if (this.calcSource !== CalculationSource.LOCAL) return;
     const hdr = HomeController.buildTodayHeader(
       this.latitude, this.longitude, this.calcMethod, this.asrRule,
-      this.highLatRule, this.offsets, this.prayers
+      this.highLatRule, this.offsets, this.prayers, this.advanced
     );
     if (!hdr) return;
     this.todayCurrentPrayerName = hdr.currentName;
@@ -516,20 +509,6 @@ export struct Prayer {
     return rows;
   }
 
-  /**
-   * Silently refresh the device location from GPS. Called on page
-   * load and on every background-to-foreground transition.
-   *
-   * Non-blocking, non-interactive: if the fetch fails for any reason
-   * (GPS off, permission denied, timeout), the cached location is
-   * kept and prayer times are not recalculated. The user can always
-   * trigger an interactive refresh by tapping the 📡 button or
-   * pulling to refresh.
-   *
-   * When the fetch succeeds and the coordinates differ from the
-   * cached values, the prayer list, timeline, header, and sun path
-   * are all refreshed.
-   */
   private async refreshLocationSilently(): Promise<void> {
     if (this.locationMode !== LocationMode.GPS) {
       return;
@@ -565,7 +544,6 @@ export struct Prayer {
       );
       this.updateTodayHeaderData();
     } catch (err) {
-      // Silent — keep cached location.
       const e = err as Error;
       console.info(
         `[Prayer] silent location refresh skipped: ${e.message}`
@@ -655,22 +633,21 @@ export struct Prayer {
 
     this.prayers = this.prayers.map((p): PrayerModel => {
       if (p.id === id) {
-        return {
-          id: p.id, name: p.name, arabicName: p.arabicName,
+        const updated: PrayerModel = {
+          id: p.id,
+          name: p.name,
+          arabicName: p.arabicName,
           time: p.time,
           status: p.status,
           checked: checked
-        } as PrayerModel;
+        };
+        return updated;
       }
       return p;
     });
 
     PrayerManager.saveStateForDate(this.viewingDateKey, this.prayers);
 
-    // If the last remaining prayer for today was just marked, run an
-    // immediate reschedule so tomorrow's reminders are queued before
-    // the user closes the app. Otherwise use the debounced version
-    // to coalesce rapid toggles.
     if (checked
       && this.dateOffset === 0
       && this.allPrayersForViewingDateAreChecked()) {
@@ -699,12 +676,6 @@ export struct Prayer {
     return false;
   }
 
-  /**
-   * True when every prayer in the current viewing date is checked.
-   * Used to detect the moment the last prayer of the day is marked,
-   * which triggers an immediate reschedule instead of the debounced
-   * one.
-   */
   private allPrayersForViewingDateAreChecked(): boolean {
     if (this.prayers.length === 0) {
       return false;
@@ -727,14 +698,15 @@ export struct Prayer {
         return p;
       }
       changed = true;
-      return {
+      const updated: PrayerModel = {
         id: p.id,
         name: p.name,
         arabicName: p.arabicName,
         time: p.time,
         status: p.status,
         checked: true
-      } as PrayerModel;
+      };
+      return updated;
     });
 
     if (!changed) {
@@ -742,8 +714,6 @@ export struct Prayer {
     }
     PrayerManager.saveStateForDate(this.viewingDateKey, this.prayers);
 
-    // "Mark all as prayed" always completes the day. Run the
-    // reschedule immediately so tomorrow's reminders are queued.
     if (this.dateOffset === 0 && this.allPrayersForViewingDateAreChecked()) {
       AppLogger.info('Prayer',
         'Mark all — day complete, immediate reschedule');
@@ -760,41 +730,11 @@ export struct Prayer {
     }
   }
 
-  private closeBottomSheet(): void {
-    this.showBottomSheet = false;
-  }
-
-  private closeBottomSheetAndNavigate(url: string): void {
-    this.showBottomSheet = false;
-    setTimeout(() => {
-      NavHelper.prepareForward();
-      router.pushUrl({ url })
-        .catch((err: Error) =>
-        console.error('Navigation failed:', JSON.stringify(err)));
-    }, 350);
-  }
-
   private navigateToSettings(): void {
-    this.closeBottomSheetAndNavigate('pages/SettingsPage');
-  }
-
-  private exitApp(): void {
-    promptAction.showDialog({
-      title: this.tr('exit'),
-      message: this.tr('exit_confirm_message'),
-      buttons: [
-        { text: this.tr('cancel'), color: this.colors.dialogCancel },
-        { text: this.tr('exit'), color: this.colors.accentGold }
-      ]
-    }).then((result: DialogResult) => {
-      if (result.index === 1) {
-        const context = getContext(this) as common.UIAbilityContext;
-        context.terminateSelf().catch((err: Error) =>
-        console.error('Terminate failed:', JSON.stringify(err)));
-      }
-    }).catch((err: Error) => {
-      console.error('Dialog error:', JSON.stringify(err));
-    });
+    NavHelper.prepareForward();
+    router.pushUrl({ url: 'pages/SettingsPage' })
+      .catch((err: Error) =>
+      console.error('Navigation failed:', JSON.stringify(err)));
   }
 
   private getStatusColor(status: string): string {
@@ -817,6 +757,24 @@ export struct Prayer {
       case 'express': return this.tr('status_express');
       default:        return '';
     }
+  }
+
+  private getSunriseTime(): string {
+    for (const t of this.extraTimings) {
+      if (t.id === 'sunrise') {
+        return t.time;
+      }
+    }
+    return '--:--';
+  }
+
+  private getSunsetTime(): string {
+    for (const t of this.extraTimings) {
+      if (t.id === 'sunset') {
+        return t.time;
+      }
+    }
+    return '--:--';
   }
 
   private getFirstThirdTime(): string {
@@ -846,27 +804,14 @@ export struct Prayer {
     return '--:--';
   }
 
-  private getSunriseTime(): string {
-    for (const t of this.extraTimings) {
-      if (t.id === 'sunrise') {
-        return t.time;
-      }
-    }
-    return '--:--';
-  }
-
-  private getSunsetTime(): string {
-    for (const t of this.extraTimings) {
-      if (t.id === 'sunset') {
-        return t.time;
-      }
-    }
-    return '--:--';
-  }
-
   build() {
     Stack() {
       Column() {
+        // inside the Column, before PageHeader:
+        //   if (deviceInfo.sdkApiVersion < 23) {
+        //     Column().height(72)
+        //   }
+        // Fixed page header.
         PageHeader({
           colors: this.colors,
           currentLanguage: this.appLanguage,
@@ -879,9 +824,6 @@ export struct Prayer {
           asrRule: this.asrRule,
           calcSource: this.calcSource,
           showCalcPills: true,
-          onHamburger: () => {
-            this.showBottomSheet = !this.showBottomSheet;
-          },
           onRefreshLocation: () => {
             this.refreshLocation();
           },
@@ -975,72 +917,6 @@ export struct Prayer {
     .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
-    // bindSheet renders in the system modal layer, above the native
-    // Tabs chrome. This is the only reliable way to cover the floating
-    // tab bar from inside a TabContent page.
-    .bindSheet($$this.showBottomSheet, this.HamburgerMenu(), {
-      height: 300,
-      dragBar: true,
-      showClose: false,
-      backgroundColor: this.colors.cardDark,
-      blurStyle: BlurStyle.Thick,
-      maskColor: this.colors.overlayDim
-    })
-  }
-
-  // ============================================================
-  // HAMBURGER MENU (rendered by bindSheet)
-  // ============================================================
-
-  @Builder
-  HamburgerMenu() {
-    Column() {
-      // ---- Brand header — forced LTR, explicitly centred ----
-      Row() {
-        Text('Sirat')
-          .fontSize(24)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(this.colors.textWhite)
-        Text('Companion')
-          .fontSize(24)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(this.colors.accentGold)
-          .margin({ left: 8 })
-      }
-      .width('100%')
-      .height(48)
-      .justifyContent(FlexAlign.Center)
-      .alignItems(VerticalAlign.Center)
-      .direction(Direction.Ltr)
-      .margin({ top: 12, bottom: 12 })
-
-      // ---- Divider — full width, clearly visible ----
-      Divider()
-        .strokeWidth(1)
-        .color(this.colors.borderMedium)
-        .width('100%')
-
-      // ---- Menu items ----
-      Column() {
-        this.BottomSheetItem('✏️', this.tr('title_customize'), () => {
-          this.closeBottomSheetAndNavigate('pages/CustomizePage');
-        })
-        this.BottomSheetItem('⚙️', this.tr('title_settings'), () => {
-          this.closeBottomSheetAndNavigate('pages/SettingsPage');
-        })
-        this.BottomSheetItem('🚪', this.tr('exit'), () => {
-          this.showBottomSheet = false;
-          setTimeout(() => {
-            this.exitApp();
-          }, 350);
-        })
-      }
-      .width('100%')
-      .padding({ left: 16, right: 16, top: 8 })
-    }
-    .width('100%')
-    .height('100%')
-    .alignItems(HorizontalAlign.Center)
   }
 
   @Builder
@@ -1142,9 +1018,6 @@ export struct Prayer {
           .border({ width: 1, color: this.colors.borderSoft })
           .onClick(() => { this.goToNextDay(); })
 
-        // "Today" shortcut — only shown when viewing a non-current day.
-        // Tapping it snaps the view back to today's date and re-reads
-        // the current day's prayer state.
         if (this.dateOffset !== 0) {
           Text(this.tr('today'))
             .fontSize(11)
@@ -1323,19 +1196,5 @@ export struct Prayer {
     .shadow({ radius: 12, color: this.colors.shadowCard, offsetX: 0, offsetY: 4 })
     .margin({ top: 4, bottom: 24 })
     .alignItems(HorizontalAlign.Center)
-  }
-
-  @Builder
-  BottomSheetItem(icon: string, label: string, onClick: () => void) {
-    Row() {
-      Text(icon).fontSize(22).margin({ right: 16 })
-      Text(label).fontSize(16).fontColor(this.colors.textWhite)
-    }
-    .width('100%')
-    .padding({ top: 12, bottom: 12, left: 16 })
-    .borderRadius(Theme.radiusSmall)
-    .onClick(() => {
-      onClick();
-    })
   }
 }

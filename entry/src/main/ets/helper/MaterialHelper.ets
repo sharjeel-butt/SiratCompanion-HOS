@@ -1,177 +1,107 @@
 // entry/src/main/ets/helper/MaterialHelper.ets
 
-import { uiMaterial } from '@kit.ArkUI';
 import { deviceInfo } from '@kit.BasicServicesKit';
 import { AppLogger } from './AppLogger';
 
 /**
- * HarmonyOS immersive-material capability probe and material factory.
+ * Material capability probe and factory.
  *
- * ## API compatibility
+ * ## Status in this build
  *
- *   API 26.0.0+  — uiMaterial and native Tabs.barFloatingStyle exist.
- *   API 20–25    — neither exists. Callers must use the fallback path
- *                  in MainTabs (barOverlap + barBackgroundBlurStyle).
+ * The ArkUI `uiMaterial` namespace is a native module that ships only
+ * on devices whose system image includes the immersive-material
+ * runtime (API 26+, and even then only on some SKUs). Importing it at
+ * module scope causes the loader to fail on older devices and leaves
+ * the export in an undefined state — any later reference then throws
+ * "undefined is not callable" during a render pass.
  *
- * IMPORTANT: deviceInfo.apiAvailable() is itself @since 26.0.0 and is
- * NOT available on API 20. Use deviceInfo.sdkApiVersion, which exists
- * on every API level, for the runtime guard.
+ * To avoid that class of failure, this file does not import
+ * `uiMaterial` at all. Where material would have been constructed,
+ * the app instead relies on:
  *
- * ## ArkTS namespace rule (arkts-no-ns-as-obj)
+ *   • module.json5's "ohos.arkui.UIMaterial.state": "enable"
+ *     — framework-applied material on Dialog, Toast, bindSheet,
+ *       and other popup-class components on API 26+.
  *
- * A namespace imported with `import { uiMaterial } from '@kit.ArkUI'`
- * can be used as:
- *   • a type qualifier        — uiMaterial.MaterialLevel
- *   • a constructor qualifier — new uiMaterial.ImmersiveMaterial(...)
- *   • a function call target  — uiMaterial.isImmersiveMaterialSupported()
- *   • an enum member access   — uiMaterial.ImmersiveStyle.THIN
+ *   • hdsMaterial from @kit.UIDesignKit on HdsTabs and HdsNavigation
+ *     — the HDS immersive light tier, available from API 23+.
  *
- * It must NOT be used as a value:
- *   ✗ uiMaterial !== undefined
- *   ✗ const x = uiMaterial;
- *   ✗ typeof uiMaterial === 'object'
+ *   • BlurStyle.COMPONENT_THICK on any bindSheet that needs a
+ *     translucent fallback on pre-API-26 devices.
  *
- * The version check below replaces the illegal `!== undefined` guard:
- * on API < 26 we never reach the namespace call at all.
- *
- * ## Host eligibility for immersive material
- *
- * The material only renders inside a supported host:
- *   • Navigation / NavDestination title bar
- *   • Bottom TabBar of a horizontal Tabs with barPosition.End
- *   • Dialog, popup, menu, sheet, Select
- *
- * If the host does not qualify, systemMaterial is silently ignored.
+ * When the app raises its minimum supported API to 26, `uiMaterial`
+ * construction can be reintroduced here safely.
  */
 export class MaterialHelper {
-  /** Lowest SDK API level that provides uiMaterial and barFloatingStyle. */
+  /** Lowest SDK API level that provides uiMaterial. */
   static readonly MIN_API_FOR_MATERIAL = 26;
-  private static probed: boolean = false;
-  private static supported: boolean = false;
-  private static globalLevel: uiMaterial.MaterialLevel | null = null;
-  private static levelProbed: boolean = false;
-
-  // ============================================================
-  // CAPABILITY PROBE
-  // ============================================================
 
   /**
-   * True when the OS can render immersive system material.
-   *
-   * Uses deviceInfo.sdkApiVersion (available on all API levels) rather
-   * than apiAvailable() (API 26+ only), so this method is safe to call
-   * on API 20 devices.
+   * Always false in this build. The app-level UIMaterial.state flag
+   * handles popup material instead, and hdsMaterial handles HDS
+   * surfaces. No code path in the app constructs a uiMaterial.
    */
   static isImmersiveSupported(): boolean {
-    if (MaterialHelper.probed) {
-      return MaterialHelper.supported;
-    }
-    MaterialHelper.probed = true;
+    return false;
+  }
 
-    // Version guard — the namespace function is only reached on API 26+.
-    // This replaces the illegal `uiMaterial !== undefined` check.
-    if (deviceInfo.sdkApiVersion < MaterialHelper.MIN_API_FOR_MATERIAL) {
-      MaterialHelper.supported = false;
-      return MaterialHelper.supported;
-    }
+  /** Always null in this build. */
+  static getGlobalLevel(): null {
+    return null;
+  }
 
-    try {
-      MaterialHelper.supported = uiMaterial.isImmersiveMaterialSupported();
-    } catch (err) {
-      // Defensive: on a stripped system image the namespace may resolve
-      // to undefined even when sdkApiVersion reports 26.
-      MaterialHelper.supported = false;
-    }
-    return MaterialHelper.supported;
+  /** True when the current device could use explicit uiMaterial. */
+  static shouldUseSystemMaterial(): boolean {
+    return false;
+  }
+
+  /** Fallback blur for bindSheet on pre-API-26 devices. */
+  static fallbackBlurStyle(): BlurStyle {
+    return BlurStyle.COMPONENT_THICK;
   }
 
   /**
-   * The device's global material level — EXQUISITE / GENTLE / SMOOTH.
-   * Returns null when the device does not support immersive material.
-   */
-  static getGlobalLevel(): uiMaterial.MaterialLevel | null {
-    if (MaterialHelper.levelProbed) {
-      return MaterialHelper.globalLevel;
-    }
-    MaterialHelper.levelProbed = true;
-
-    if (!MaterialHelper.isImmersiveSupported()) {
-      return null;
-    }
-
-    try {
-      MaterialHelper.globalLevel = uiMaterial.getGlobalMaterialLevel();
-    } catch (err) {
-      MaterialHelper.globalLevel = null;
-    }
-    return MaterialHelper.globalLevel;
-  }
-
-  // ============================================================
-  // MATERIAL FACTORY
-  // ============================================================
-
-  /**
-   * The material for Tabs.barFloatingStyle().systemMaterial.
+   * Build SheetOptions for a bindSheet call.
    *
-   * MUST NOT be called on API < 26 — the constructor dereferences the
-   * uiMaterial namespace, which is undefined on API 20. MainTabs guards
-   * every call site with sdkApiVersion >= MIN_API_FOR_MATERIAL.
+   * Always returns the translucent-blur form. On API 26+ the
+   * framework still applies material to the sheet surface because
+   * the app declares UIMaterial.state = enable in module.json5.
    */
-  static tabBarMaterial(): uiMaterial.ImmersiveMaterial {
-    return new uiMaterial.ImmersiveMaterial({
-      style: uiMaterial.ImmersiveStyle.THIN
-    });
+  static buildSheetOptions(
+    height: number,
+    dragBar: boolean,
+    fallbackBackground: string,
+    maskColor: string,
+    onDisappear?: () => void
+  ): SheetOptions {
+    const opts: SheetOptions = {
+      height: height,
+      dragBar: dragBar,
+      showClose: false,
+      backgroundColor: fallbackBackground,
+      blurStyle: MaterialHelper.fallbackBlurStyle(),
+      maskColor: maskColor,
+      onDisappear: onDisappear
+    };
+    return opts;
   }
 
-  // ============================================================
-  // DIAGNOSTICS
-  // ============================================================
-
   /**
-   * Logs the capability once per session. Called from EntryAbility so
-   * the diagnostic log records which bar path is active on this device.
-   *
-   * Wrapped in try/catch so a missing diagnostic property can never
-   * break startup.
+   * One-line diagnostic for the app log, called once per session
+   * from EntryAbility. Wrapped in try/catch so a missing property
+   * can never affect startup.
    */
   static logCapability(): void {
     try {
-      const sdk: number = deviceInfo.sdkApiVersion;
-      const dist: number = deviceInfo.distributionOSApiVersion;
-      const immersive: boolean = MaterialHelper.isImmersiveSupported();
-      const level: string = MaterialHelper.levelToString(
-        MaterialHelper.getGlobalLevel()
-      );
-
       AppLogger.info(
         'MaterialHelper',
-        `SDK=${sdk}, distOS=${dist}, ` +
-          `immersiveMaterialSupported=${immersive}, ` +
-          `globalMaterialLevel=${level}, ` +
-          `materialPath=${sdk >= MaterialHelper.MIN_API_FOR_MATERIAL
-            ? 'barFloatingStyle' : 'fallback-blur'}`
+        `SDK=${deviceInfo.sdkApiVersion}, ` +
+          `distOS=${deviceInfo.distributionOSApiVersion}, ` +
+          `uiMaterial=disabled-in-this-build, ` +
+          `hdsMaterial=${deviceInfo.sdkApiVersion >= 23 ? 'available' : 'unavailable'}`
       );
     } catch (err) {
       // Never let diagnostics break startup.
-    }
-  }
-
-  private static levelToString(
-    level: uiMaterial.MaterialLevel | null
-  ): string {
-    if (level === null) {
-      return 'unsupported';
-    }
-    switch (level) {
-      case uiMaterial.MaterialLevel.EXQUISITE:
-        return 'EXQUISITE';
-      case uiMaterial.MaterialLevel.GENTLE:
-        return 'GENTLE';
-      case uiMaterial.MaterialLevel.SMOOTH:
-        return 'SMOOTH';
-      default:
-        return `unknown(${level})`;
     }
   }
 }

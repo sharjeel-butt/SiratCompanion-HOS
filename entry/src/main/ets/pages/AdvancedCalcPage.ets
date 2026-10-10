@@ -121,7 +121,7 @@ struct AdvancedCalcPage {
               Column().height(40)
             }
             .width('100%')
-            .constraintSize({ maxWidth: this.isTablet() ? 720 : 100000 })
+            .constraintSize({ maxWidth: Breakpoints.maxContentWidth(this.breakpoint) })
             .padding({ left: 16, right: 16, top: 20 })
           }
           .width('100%').justifyContent(FlexAlign.Center)

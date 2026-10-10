@@ -173,7 +173,7 @@ struct WizardPage {
             }
           }
           .width('100%')
-          .constraintSize({ maxWidth: this.isTablet() ? 720 : 100000 })
+          .constraintSize({ maxWidth: Breakpoints.maxContentWidth(this.breakpoint) })
           .layoutWeight(1)
         }
         .width('100%')
@@ -186,7 +186,7 @@ struct WizardPage {
             this.Footer()
           }
           .width('100%')
-          .constraintSize({ maxWidth: this.isTablet() ? 720 : 100000 })
+          .constraintSize({ maxWidth: Breakpoints.maxContentWidth(this.breakpoint) })
         }
         .width('100%')
         .justifyContent(FlexAlign.Center)

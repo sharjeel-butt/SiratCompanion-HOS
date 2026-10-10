@@ -31,4 +31,23 @@ export class Breakpoints {
   static isPhone(bp: string): boolean {
     return bp === Breakpoints.XS || bp === Breakpoints.SM;
   }
+
+  /**
+   * Recommended maximum content width for the current breakpoint.
+   *
+   * Phone:    no constraint — the page fills the width.
+   * Tablet:   720 vp — comfortable reading measure for cards and
+   *           forms without stretching edge-to-edge.
+   * 2-in-1:   1000 vp — wider measure for desktop windows, still
+   *           leaves margins on 1440+ vp displays.
+   */
+  static maxContentWidth(bp: string): number {
+    if (bp === Breakpoints.LG) {
+      return 1000;
+    }
+    if (bp === Breakpoints.MD) {
+      return 720;
+    }
+    return 100000;
+  }
 }

@@ -1,6 +1,6 @@
 // entry/src/main/ets/pages/HomePage.ets
 
-import { mediaquery, promptAction, router } from '@kit.ArkUI';
+import { mediaquery, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
@@ -16,6 +16,7 @@ import {
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
 } from '../common/StorageKeys';
+import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
 import { DateHelper } from '../utils/DateUtils';
 import { PrayerModel } from '../prayer/PrayerModel';
 import { UpcomingImportantDate } from '../models/DateModels';
@@ -33,23 +34,29 @@ import {
 import { PrayerManager } from '../prayer/PrayerManager';
 import { NavHelper } from '../helper/NavHelper';
 import { L } from '../helper/LocalizationHelper';
-import { MonthDayCell, MonthProgress, PrayerProgress, ProgressHelper, TasbihProgress } from '../utils/ProgressHelper';
+import {
+  MonthDayCell,
+  MonthProgress,
+  PrayerProgress,
+  ProgressHelper,
+  TasbihProgress
+} from '../utils/ProgressHelper';
 import { TasbihStorage } from '../tasbih/TasbihStorage';
 import { TasbihManager } from '../tasbih/TasbihManager';
 import { Tasbih } from '../tasbih/TasbihModels';
 import { PageHeader } from '../components/PageHeader';
 import { DuaCard } from '../components/DuaCard';
 import { DUA_IFTAR, DUA_SUHOOR, DuaEntry } from '../data/Duas';
-import { LaylatAlQadrNight, RamadanAshra, RamadanHelper, RamadanInfo } from '../helper/RamadanHelper';
+import {
+  LaylatAlQadrNight, RamadanAshra, RamadanHelper, RamadanInfo
+} from '../helper/RamadanHelper';
 import { Breakpoints } from '../common/Breakpoints';
-import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
+import {
+  AdvancedCalcSettings, DEFAULT_ADVANCED_CALC
+} from '../models/AdvancedCalcModels';
 
 @Component
 export struct HomePage {
-
-  // ============================================================
-  // STORAGE LINKS
-  // ============================================================
 
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
@@ -79,16 +86,13 @@ export struct HomePage {
 
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
+
   @StorageLink(STORAGE_KEY_TIME_FORMAT)
   @Watch('onClockFormatChanged')
-  ClockFormat: string = ClockFormat.SYSTEM;
+  clockFormat: string = ClockFormat.SYSTEM;
 
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
-
-  // ============================================================
-  // HEADER STATE
-  // ============================================================
 
   @State currentLocation: string = 'Loading...';
   @State isLoadingLocation: boolean = true;
@@ -101,10 +105,6 @@ export struct HomePage {
   @State todayNextPrayerTime: string = '--:--';
 
   @State locationMode: LocationMode = LocationMode.GPS;
-
-  // ============================================================
-  // DASHBOARD STATE
-  // ============================================================
 
   @State private prayerProgress: PrayerProgress = {
     todayCompleted: 0,
@@ -144,34 +144,15 @@ export struct HomePage {
   @State private upcomingEvents: UpcomingImportantDate[] = [];
   @State private ramadanInfo: RamadanInfo | null = null;
 
-  // ============================================================
-  // FASTING WINDOW
-  // ============================================================
-
   @State private todayImsakTime: string = '--:--';
   @State private todayMaghribTime: string = '--:--';
   @State private fastingWindowIsPreview: boolean = false;
-  // ---- Live countdown ----
   @State private countdownTarget: string = '';
   @State private countdownDisplay: string = '';
   @State private countdownHeld: boolean = false;
   private countdownTimerId: number = -1;
 
-  // ============================================================
-  // PULL-TO-REFRESH
-  // ============================================================
-
   @State private isRefreshing: boolean = false;
-
-  // ============================================================
-  // HAMBURGER SHEET
-  // ============================================================
-
-  @State showBottomSheet: boolean = false;
-
-  // ============================================================
-  // LOCATION + CALC PARAMS
-  // ============================================================
 
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
   @State asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
@@ -184,12 +165,9 @@ export struct HomePage {
     maghrib: 0,
     isha: 0
   };
+  private advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC;
 
   private settingsLoading: boolean = false;
-
-  // ============================================================
-  // LOCALIZATION + DIRECTION + BREAKPOINT
-  // ============================================================
 
   @State private currentLanguage: string = 'en';
 
@@ -198,14 +176,10 @@ export struct HomePage {
   }
 
   private dt(t: string): string {
-    if (this.ClockFormat.length === 0) {
+    if (this.clockFormat.length === 0) {
       return t;
     }
     return ClockFormatHelper.reformat(t);
-  }
-
-  private onClockFormatChanged(): void {
-    // Re-render is handled by the @StorageLink.
   }
 
   private isRtl(): boolean {
@@ -224,12 +198,10 @@ export struct HomePage {
     this.colors = PageTheme.compute(this.themeMode);
   }
 
-  /**
-   * Fires the moment any page writes prayer check state. Because
-   * HomePage is hosted inside MainTabs as a TabContent, it does not
-   * receive onPageShow on tab switches — this watcher is how it learns
-   * that the Prayers tab checked a prayer.
-   */
+  private onClockFormatChanged(): void {
+    // Re-render is handled by the @StorageLink.
+  }
+
   private onPrayerStateChanged(): void {
     this.refreshDashboard();
   }
@@ -286,10 +258,6 @@ export struct HomePage {
     return e.name;
   }
 
-  // ============================================================
-  // WATCHERS
-  // ============================================================
-
   private onThemeModeChanged(): void {
     this.colors = PageTheme.compute(this.themeMode);
   }
@@ -317,14 +285,8 @@ export struct HomePage {
     await this.refreshDashboard();
     this.updateCountdown();
     this.startCountdownTimer();
-
-    // Silently refresh GPS on foreground. Non-blocking.
     this.refreshLocationSilently();
   }
-
-  // ============================================================
-  // LIFECYCLE
-  // ============================================================
 
   async aboutToAppear(): Promise<void> {
     this.currentLanguage = this.appLanguage;
@@ -343,8 +305,6 @@ export struct HomePage {
     await this.loadSettingsAndLocation();
     await this.refreshDashboard();
     this.startCountdownTimer();
-
-    // Silently refresh GPS on first load. Non-blocking.
     this.refreshLocationSilently();
   }
 
@@ -368,10 +328,6 @@ export struct HomePage {
     this.stopCountdownTimer();
   }
 
-  // ============================================================
-  // DATA LOADING
-  // ============================================================
-
   private async loadSettingsAndLocation(): Promise<void> {
     if (this.settingsLoading) {
       return;
@@ -384,6 +340,7 @@ export struct HomePage {
       this.calcSource = data.source;
       this.highLatRule = await SettingsHelper.getHighLatRule();
       this.offsets = await SettingsHelper.getPrayerOffsets();
+      this.advanced = await SettingsHelper.getAdvancedCalcSettings();
       this.locationMode = await SettingsHelper.getLocationMode();
 
       const loc = await HomeController.loadLocationForMode(this.locationMode);
@@ -467,7 +424,7 @@ export struct HomePage {
 
     const hdr = HomeController.buildTodayHeader(
       this.latitude, this.longitude, this.calcMethod, this.asrRule,
-      this.highLatRule, this.offsets, prayers
+      this.highLatRule, this.offsets, prayers, this.advanced
     );
     if (!hdr) {
       return;
@@ -501,7 +458,7 @@ export struct HomePage {
     try {
       const times = PrayerTimeCalculator.calculateWithDeviceTimezone(
         targetDate, this.latitude, this.longitude,
-        this.calcMethod, this.asrRule, this.highLatRule
+        this.calcMethod, this.asrRule, this.highLatRule, this.advanced
       );
 
       const imsak = PrayerManager.offsetTime(times.imsak, this.offsets.fajr);
@@ -564,10 +521,6 @@ export struct HomePage {
     }
     return null;
   }
-
-  // ============================================================
-  // LIVE COUNTDOWN
-  // ============================================================
 
   private parseTimeToDateToday(timeStr: string): Date | null {
     const trimmed = timeStr.trim();
@@ -722,10 +675,6 @@ export struct HomePage {
     }
   }
 
-  // ============================================================
-  // PULL-TO-REFRESH
-  // ============================================================
-
   private async handleRefresh(): Promise<void> {
     try {
       this.refreshHijriDate();
@@ -738,55 +687,12 @@ export struct HomePage {
     }
   }
 
-  // ============================================================
-  // NAVIGATION
-  // ============================================================
-
   private navigateToSettings(): void {
-    this.closeBottomSheet();
-    setTimeout(() => {
-      NavHelper.prepareForward();
-      router.pushUrl({ url: 'pages/SettingsPage' })
-        .catch((e: Error) =>
-        console.error('Navigation failed:', JSON.stringify(e)));
-    }, 350);
+    NavHelper.prepareForward();
+    router.pushUrl({ url: 'pages/SettingsPage' })
+      .catch((e: Error) =>
+      console.error('Navigation failed:', JSON.stringify(e)));
   }
-
-  private closeBottomSheetAndNavigate(url: string): void {
-    this.showBottomSheet = false;
-    setTimeout(() => {
-      NavHelper.prepareForward();
-      router.pushUrl({ url })
-        .catch((e: Error) =>
-        console.error('Navigation failed:', JSON.stringify(e)));
-    }, 350);
-  }
-
-  private closeBottomSheet(): void {
-    this.showBottomSheet = false;
-  }
-
-  private exitApp(): void {
-    promptAction.showDialog({
-      title: this.tr('exit'),
-      message: this.tr('exit_confirm_message'),
-      buttons: [
-        { text: this.tr('cancel'), color: this.colors.dialogCancel },
-        { text: this.tr('exit'), color: this.colors.accentGold }
-      ]
-    }).then((result: promptAction.ShowDialogSuccessResponse) => {
-      if (result.index === 1) {
-        const ctx = getContext(this) as common.UIAbilityContext;
-        ctx.terminateSelf().catch((err: Error) =>
-        console.error('Terminate failed:', JSON.stringify(err)));
-      }
-    }).catch((err: Error) =>
-    console.error('Dialog error:', JSON.stringify(err)));
-  }
-
-  // ============================================================
-  // LOCATION
-  // ============================================================
 
   private async refreshLocation(): Promise<void> {
     if (this.isLoadingLocation) {
@@ -840,19 +746,6 @@ export struct HomePage {
     }
   }
 
-  /**
-   * Silently refresh the device location from GPS. Called on page
-   * load and on every background-to-foreground transition.
-   *
-   * Non-blocking, non-interactive: if the fetch fails for any reason
-   * (GPS off, permission denied, timeout), the cached location is
-   * kept and prayer times are not recalculated. The user can always
-   * trigger an interactive refresh by tapping the 📡 button.
-   *
-   * When the fetch succeeds and the coordinates differ from the
-   * cached values, the header, prayer times, and fasting window are
-   * all refreshed.
-   */
   private async refreshLocationSilently(): Promise<void> {
     if (this.locationMode !== LocationMode.GPS) {
       return;
@@ -863,7 +756,6 @@ export struct HomePage {
         getContext(this), 'silent'
       );
 
-      // Skip UI work if the location is effectively the same.
       const sameLat = Math.abs(data.latitude - this.latitude) < 0.0001;
       const sameLng = Math.abs(data.longitude - this.longitude) < 0.0001;
       if (sameLat && sameLng) {
@@ -883,17 +775,12 @@ export struct HomePage {
       this.refreshHeader();
       this.refreshFastingWindow();
     } catch (err) {
-      // Silent — keep cached location.
       const e = err as Error;
       console.info(
         `[HomePage] silent location refresh skipped: ${e.message}`
       );
     }
   }
-
-  // ============================================================
-  // MONTH CELL HELPERS
-  // ============================================================
 
   private cellBg(cell: MonthDayCell): string {
     if (cell.isPadding || cell.isFuture) {
@@ -938,13 +825,16 @@ export struct HomePage {
     return cell.isToday ? 2 : 0;
   }
 
-  // ============================================================
-  // BUILD
-  // ============================================================
-
   build() {
     Stack() {
       Column() {
+        // inside the Column, before PageHeader:
+        //   if (deviceInfo.sdkApiVersion < 23) {
+        //     Column().height(72)
+        //   }
+        // Fixed page header — Hijri pill, location, current prayer,
+        // and calc pills. HdsNavigation provides the top offset, so
+        // no spacer is needed.
         PageHeader({
           colors: this.colors,
           currentLanguage: this.currentLanguage,
@@ -957,9 +847,6 @@ export struct HomePage {
           asrRule: this.asrRule,
           calcSource: this.calcSource,
           showCalcPills: true,
-          onHamburger: () => {
-            this.showBottomSheet = !this.showBottomSheet;
-          },
           onRefreshLocation: () => {
             this.refreshLocation();
           },
@@ -1032,77 +919,7 @@ export struct HomePage {
     .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
-    // bindSheet renders in the system modal layer, above the native
-    // Tabs chrome. This is the only reliable way to cover the floating
-    // tab bar from inside a TabContent page.
-    .bindSheet($$this.showBottomSheet, this.HamburgerMenu(), {
-      height: 300,
-      dragBar: true,
-      showClose: false,
-      backgroundColor: this.colors.cardDark,
-      blurStyle: BlurStyle.Thick,
-      maskColor: this.colors.overlayDim
-    })
   }
-
-  // ============================================================
-  // HAMBURGER MENU (rendered by bindSheet)
-  // ============================================================
-
-  @Builder
-  HamburgerMenu() {
-    Column() {
-      // ---- Brand header — forced LTR, explicitly centred ----
-      Row() {
-        Text('Sirat')
-          .fontSize(24)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(this.colors.textWhite)
-        Text('Companion')
-          .fontSize(24)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(this.colors.accentGold)
-          .margin({ left: 8 })
-      }
-      .width('100%')
-      .height(48)
-      .justifyContent(FlexAlign.Center)
-      .alignItems(VerticalAlign.Center)
-      .direction(Direction.Ltr)
-      .margin({ top: 12, bottom: 12 })
-
-      // ---- Divider — full width, clearly visible ----
-      Divider()
-        .strokeWidth(1)
-        .color(this.colors.borderMedium)
-        .width('100%')
-
-      // ---- Menu items ----
-      Column() {
-        this.BottomSheetItem('✏️', this.tr('title_customize'), () => {
-          this.closeBottomSheetAndNavigate('pages/CustomizePage');
-        })
-        this.BottomSheetItem('⚙️', this.tr('title_settings'), () => {
-          this.closeBottomSheetAndNavigate('pages/SettingsPage');
-        })
-        this.BottomSheetItem('🚪', this.tr('exit'), () => {
-          this.showBottomSheet = false;
-          setTimeout(() => {
-            this.exitApp();
-          }, 350);
-        })
-      }
-      .width('100%')
-      .padding({ left: 16, right: 16, top: 8 })
-    }
-    .width('100%')
-    .height('100%')
-    .alignItems(HorizontalAlign.Center)
-  }
-
-  // ============================================================
-  // COUNTDOWN CARD
-  // ============================================================
 
   @Builder
   CountdownCard() {
@@ -1233,10 +1050,6 @@ export struct HomePage {
     return `${days} ${this.tr('home_days')}`;
   }
 
-  // ============================================================
-  // LIVE COUNTDOWN BANNER
-  // ============================================================
-
   @Builder
   LiveCountdownBanner() {
     if (this.countdownTarget !== '') {
@@ -1310,10 +1123,6 @@ export struct HomePage {
       .margin({ bottom: 14 })
     }
   }
-
-  // ============================================================
-  // RAMADAN CARD
-  // ============================================================
 
   @Builder
   RamadanCard() {
@@ -1621,10 +1430,6 @@ export struct HomePage {
     .width('100%').alignItems(VerticalAlign.Center)
   }
 
-  // ============================================================
-  // TODAY'S PROGRESS CARD
-  // ============================================================
-
   @Builder
   TodayProgressCard() {
     Column() {
@@ -1728,10 +1533,6 @@ export struct HomePage {
     .layoutWeight(1).alignItems(HorizontalAlign.Center)
   }
 
-  // ============================================================
-  // STREAK CARD
-  // ============================================================
-
   @Builder
   StreakCard() {
     Row() {
@@ -1790,10 +1591,6 @@ export struct HomePage {
     .alignItems(VerticalAlign.Center)
   }
 
-  // ============================================================
-  // WEEK GRID CARD
-  // ============================================================
-
   @Builder
   WeekGridCard() {
     Column() {
@@ -1815,19 +1612,21 @@ export struct HomePage {
           Column() {
             Text(this.prayerProgress.weeklyLabels[i])
               .fontSize(11).fontColor(this.colors.textMuted).margin({ bottom: 8 })
-            Row()
-              .width('100%')
-              .height(36)
-              .borderRadius(8)
-              .backgroundColor(done ? this.colors.accentGold : this.colors.tintSoft)
-              .border({
-                width: 1,
-                color: done ? this.colors.accentGold : this.colors.borderSoft
-              })
-            if (done) {
-              Text('✓').fontSize(14).fontColor(this.colors.textOnAccent)
-                .position({ x: '50%', y: 32 }).translate({ x: -8 })
+            Stack() {
+              Row()
+                .width('100%')
+                .height(36)
+                .borderRadius(8)
+                .backgroundColor(done ? this.colors.accentGold : this.colors.tintSoft)
+                .border({
+                  width: 1,
+                  color: done ? this.colors.accentGold : this.colors.borderSoft
+                })
+              if (done) {
+                Text('✓').fontSize(14).fontColor(this.colors.textOnAccent)
+              }
             }
+            .width('100%').height(36)
           }
           .layoutWeight(1).alignItems(HorizontalAlign.Center)
         }, (done: boolean, i: number) => `w-${i}-${done ? 'd' : 'u'}`)
@@ -1850,10 +1649,6 @@ export struct HomePage {
     })
     .margin({ bottom: 14 })
   }
-
-  // ============================================================
-  // MONTHLY VIEW CARD
-  // ============================================================
 
   @Builder
   MonthCard() {
@@ -1976,10 +1771,6 @@ export struct HomePage {
     .margin({ left: 2, right: 2 })
   }
 
-  // ============================================================
-  // TASBIH CARD
-  // ============================================================
-
   @Builder
   TasbihCard() {
     Column() {
@@ -2051,23 +1842,5 @@ export struct HomePage {
       offsetY: 4
     })
     .margin({ bottom: 14 })
-  }
-
-  // ============================================================
-  // BOTTOM SHEET ITEM
-  // ============================================================
-
-  @Builder
-  BottomSheetItem(icon: string, label: string, onClick: () => void) {
-    Row() {
-      Text(icon).fontSize(22).margin({ right: 16 })
-      Text(label).fontSize(16).fontColor(this.colors.textWhite)
-    }
-    .width('100%')
-    .padding({ top: 12, bottom: 12, left: 16 })
-    .borderRadius(Theme.radiusSmall)
-    .onClick(() => {
-      onClick();
-    })
   }
 }

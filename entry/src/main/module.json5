@@ -18,6 +18,7 @@
         "value": "enable"
       }
     ],
+    "easyGo": "$profile:easy_go",
     "abilities": [
       {
         "name": "EntryAbility",
@@ -27,6 +28,13 @@
         "startWindowIcon": "$media:splash_logo",
         "startWindowBackground": "$color:start_window_background",
         "exported": true,
+        "supportWindowMode": [
+          "fullscreen",
+          "split",
+          "floating"
+        ],
+        "minWindowWidth": 320,
+        "minWindowHeight": 480,
         "skills": [
           {
             "entities": [

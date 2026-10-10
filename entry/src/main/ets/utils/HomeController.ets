@@ -14,6 +14,9 @@ import { LocationMode } from '../models/SettingsModels';
 import { CachedLocation, FALLBACK_LOCATION, LocationCache } from './LocationCache';
 import { L } from '../helper/LocalizationHelper';
 import { TimezoneResolver } from './TimezoneResolver';
+import {
+  AdvancedCalcSettings, DEFAULT_ADVANCED_CALC
+} from '../models/AdvancedCalcModels';
 
 export interface HomePrayerSnapshot {
   prayers: PrayerModel[];
@@ -34,19 +37,20 @@ export interface HomeLocationSnapshot {
   isManual: boolean;
 }
 
-/** What the header will show in the "Next" slot. */
 export interface NextEventInfo {
   name: string;
   time: string;
 }
 
-/** Internal — a single entry in the timeline. */
 interface TimelineEvent {
   name: string;
   time: Date;
 }
 
+const MS_PER_DAY = 86400000;
+
 export class HomeController {
+
   // ============================================================
   // PRAYER TIME COMPUTATION
   // ============================================================
@@ -59,22 +63,20 @@ export class HomeController {
     asrRule: AsrShadowRule,
     highLatRule: HighLatitudeRule,
     offsets: PrayerOffsets,
-    template: PrayerModel[]
+    template: PrayerModel[],
+    advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC
   ): HomePrayerSnapshot | null {
     if (latitude === 0 && longitude === 0) {
       return null;
     }
 
     try {
-      // Anchor the date to the location's calendar day, exactly the way
-      // buildTodayHeader does. Without this, the sun-path, timeline, and
-      // header can diverge by a full day's worth of solar motion when
-      // the device timezone differs from the location timezone.
       const anchor = HomeController.getLocationAnchor(latitude, longitude, date);
 
       const times: DailyPrayerTimes =
         PrayerTimeCalculator.calculateWithDeviceTimezone(
-          anchor, latitude, longitude, method, asrRule, highLatRule
+          anchor, latitude, longitude, method, asrRule, highLatRule,
+          advanced
         );
       const withOffsets: PrayerModel[] = PrayerManager.applyTimesToPrayers(
         template, times, offsets, date
@@ -106,7 +108,8 @@ export class HomeController {
     asrRule: AsrShadowRule,
     highLatRule: HighLatitudeRule,
     offsets: PrayerOffsets,
-    template: ExtraTiming[]
+    template: ExtraTiming[],
+    advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC
   ): ExtraTiming[] {
     if (latitude === 0 && longitude === 0) {
       return template;
@@ -115,7 +118,8 @@ export class HomeController {
       const anchor = HomeController.getLocationAnchor(latitude, longitude, date);
       const times: DailyPrayerTimes =
         PrayerTimeCalculator.calculateWithDeviceTimezone(
-          anchor, latitude, longitude, method, asrRule, highLatRule
+          anchor, latitude, longitude, method, asrRule, highLatRule,
+          advanced
         );
       return PrayerManager.applyTimesToExtraTimings(template, times, offsets);
     } catch (err) {
@@ -134,7 +138,8 @@ export class HomeController {
     asrRule: AsrShadowRule,
     highLatRule: HighLatitudeRule,
     offsets: PrayerOffsets,
-    template: PrayerModel[]
+    template: PrayerModel[],
+    advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC
   ): HomeHeaderSnapshot | null {
     if (latitude === 0 && longitude === 0) {
       return null;
@@ -142,9 +147,11 @@ export class HomeController {
     const today = new Date();
     const anchor = HomeController.getLocationAnchor(latitude, longitude, today);
     try {
-      const times: DailyPrayerTimes = PrayerTimeCalculator.calculateWithDeviceTimezone(
-        anchor, latitude, longitude, method, asrRule, highLatRule
-      );
+      const times: DailyPrayerTimes =
+        PrayerTimeCalculator.calculateWithDeviceTimezone(
+          anchor, latitude, longitude, method, asrRule, highLatRule,
+          advanced
+        );
       const withOffsets: PrayerModel[] = PrayerManager.applyTimesToPrayers(
         template, times, offsets, today
       );
@@ -155,11 +162,23 @@ export class HomeController {
         withOffsets, today, offsetHours
       );
 
-      const current: PrayerModel | null = PrayerManager.getCurrentPrayer(
+      let current: PrayerModel | null = PrayerManager.getCurrentPrayer(
         withStatus, offsetHours
       );
+
+      // Before Fajr, no prayer has occurred yet today. The logical
+      // "current" prayer is the previous day's Isha, whose window
+      // runs from Maghrib through to the next Fajr.
+      if (current === null) {
+        current = HomeController.buildPreviousIsha(
+          today, latitude, longitude, method, asrRule, highLatRule,
+          offsets, advanced
+        );
+      }
+
       const nextEvent: NextEventInfo | null = HomeController.computeNextEvent(
-        today, latitude, longitude, method, asrRule, highLatRule, offsets
+        today, latitude, longitude, method, asrRule, highLatRule, offsets,
+        advanced
       );
 
       const snapshot: HomeHeaderSnapshot = {
@@ -174,19 +193,54 @@ export class HomeController {
     }
   }
 
+  /**
+   * Before Fajr, the app has no current prayer for today. The
+   * correct display is the previous day's Isha — its window runs
+   * from Maghrib through the next Fajr.
+   *
+   * Returns a minimal PrayerModel carrying only the fields the
+   * header needs. The result is not added to any persistent state.
+   */
+  private static buildPreviousIsha(
+    today: Date,
+    latitude: number,
+    longitude: number,
+    method: CalculationMethod,
+    asrRule: AsrShadowRule,
+    highLatRule: HighLatitudeRule,
+    offsets: PrayerOffsets,
+    advanced: AdvancedCalcSettings
+  ): PrayerModel | null {
+    const yesterday = new Date(today.getTime() - MS_PER_DAY);
+    const anchor = HomeController.getLocationAnchor(
+      latitude, longitude, yesterday
+    );
+
+    try {
+      const yTimes: DailyPrayerTimes =
+        PrayerTimeCalculator.calculateWithDeviceTimezone(
+          anchor, latitude, longitude, method, asrRule, highLatRule,
+          advanced
+        );
+      const yIsha = PrayerManager.offsetTime(yTimes.isha, offsets.isha);
+
+      const result: PrayerModel = {
+        id: 'isha',
+        name: 'Isha',
+        arabicName: 'العشاء',
+        time: yIsha,
+        status: 'pray',
+        checked: false
+      };
+      return result;
+    } catch (err) {
+      return null;
+    }
+  }
+
   // ============================================================
   // TIMELINE — next event including extras after Isha
   // ============================================================
-  //
-  // The event sequence is:
-  //   Fajr -> Dhuhr -> Asr -> Maghrib -> Isha
-  //        -> First Third -> Midnight -> Last Third -> Imsak
-  //        -> (next day) Fajr -> ...
-  //
-  // We build events for yesterday, today, and tomorrow, then pick
-  // the first one strictly after `now`. Including yesterday covers
-  // the "just past midnight" window where yesterday's Last Third is
-  // still ahead.
 
   static computeNextEvent(
     now: Date,
@@ -195,7 +249,8 @@ export class HomeController {
     method: CalculationMethod,
     asrRule: AsrShadowRule,
     highLatRule: HighLatitudeRule,
-    offsets: PrayerOffsets
+    offsets: PrayerOffsets,
+    advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC
   ): NextEventInfo | null {
     const events: TimelineEvent[] = [];
 
@@ -207,12 +262,14 @@ export class HomeController {
       day.setDate(day.getDate() + delta);
 
       try {
-        const times: DailyPrayerTimes = PrayerTimeCalculator.calculateWithDeviceTimezone(
-          day, latitude, longitude, method, asrRule, highLatRule
-        );
+        const times: DailyPrayerTimes =
+          PrayerTimeCalculator.calculateWithDeviceTimezone(
+            day, latitude, longitude, method, asrRule, highLatRule,
+            advanced
+          );
         HomeController.appendDayEvents(events, day, times, offsets);
       } catch (err) {
-        // Skip this day silently; the other two days will cover "next".
+        // Skip this day silently; the other two days cover "next".
       }
     }
 
@@ -283,13 +340,9 @@ export class HomeController {
     times: DailyPrayerTimes,
     offsets: PrayerOffsets
   ): void {
-    // Friday replaces Dhuhr with Jummah — mirrors the rename that
-    // PrayerManager.applyDayNames applies to the main prayer array,
-    // so the Next Prayer header matches the timeline list below.
     const isFriday = prayerDay.getDay() === 5;
     const dhuhrName = isFriday ? 'Jummah' : 'Dhuhr';
 
-    // ---- 5 prayers ----
     const fajrEv: TimelineEvent = {
       name: 'Fajr',
       time: HomeController.parseToDate(
@@ -325,7 +378,6 @@ export class HomeController {
     };
     events.push(ishaEv);
 
-    // ---- 3 night events — no user offset applied ----
     const firstThirdEv: TimelineEvent = {
       name: 'First Third',
       time: HomeController.parseToDate(times.firstThird, prayerDay, true)
@@ -344,7 +396,6 @@ export class HomeController {
     };
     events.push(lastThirdEv);
 
-    // ---- Imsak — inherits the Fajr offset ----
     const imsakEv: TimelineEvent = {
       name: 'Imsak',
       time: HomeController.parseToDate(
@@ -353,14 +404,6 @@ export class HomeController {
     events.push(imsakEv);
   }
 
-  /**
-   * Parse "5:24 AM" into an absolute Date.
-   *
-   * @param isEveningEvent When true, an early-morning (0-5 AM) result
-   *        means the event actually happens on the following calendar
-   *        day. Needed for First Third / Midnight / Last Third, which
-   *        can spill past midnight of the prayer day.
-   */
   private static parseToDate(
     timeStr: string,
     prayerDay: Date,
@@ -407,15 +450,6 @@ export class HomeController {
     return result;
   }
 
-  /**
-   * Returns a Date whose local Y/M/D matches the calendar day at the
-   * given coordinates. Used as the anchor for prayer time calculation
-   * so the app always works with the location's "today", not the
-   * device's "today".
-   *
-   * The returned Date is offset such that its UTC fields equal the
-   * location's local Y/M/D — matching what calculateJulianDay() reads.
-   */
   private static getLocationAnchor(
     latitude: number,
     longitude: number,
@@ -432,10 +466,6 @@ export class HomeController {
     const deltaMs = (locationOffset - deviceOffset) * 3600 * 1000;
     return new Date(now.getTime() + deltaMs);
   }
-
-  // ============================================================
-  // LOCATION ORCHESTRATION
-  // ============================================================
 
   private static formatEventTime(date: Date): string {
     let hours: number = date.getHours();

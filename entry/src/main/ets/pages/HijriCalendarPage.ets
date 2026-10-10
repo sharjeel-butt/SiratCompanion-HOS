@@ -194,8 +194,9 @@ export struct HijriCalendarPage {
   build() {
     Stack() {
       Column() {
-        this.TopBar()
-
+        // if (deviceInfo.sdkApiVersion < 23) {
+        //   Column().height(72)
+        // }
         Scroll() {
           Row() {
             Column() {
@@ -206,7 +207,7 @@ export struct HijriCalendarPage {
               Column().height(130)
             }
             .width('100%')
-            .constraintSize({ maxWidth: this.isTablet() ? 720 : 100000 })
+            .constraintSize({ maxWidth: Breakpoints.maxContentWidth(this.breakpoint) })
             .padding({ left: 16, right: 16, top: 16 })
           }
           .width('100%').justifyContent(FlexAlign.Center)
@@ -223,26 +224,6 @@ export struct HijriCalendarPage {
     .width('100%').height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
-  }
-
-  @Builder
-  TopBar() {
-    Row() {
-      Text(this.tr('title_hijri_calendar'))
-        .fontSize(22).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
-        .margin({ left: 20 }).layoutWeight(1)
-
-      Text(this.tr('today'))
-        .fontSize(12).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
-        .padding({ left: 14, right: 14, top: 6, bottom: 6 })
-        .backgroundColor(this.colors.tintSoft)
-        .borderRadius(14)
-        .border({ width: 1, color: this.colors.borderSoft })
-        .margin({ right: 16 })
-        .onClick(() => { this.jumpToToday(); })
-    }
-    .width('100%').height(72).backgroundColor(this.colors.cardDark)
-    .alignItems(VerticalAlign.Center)
   }
 
   @Builder
