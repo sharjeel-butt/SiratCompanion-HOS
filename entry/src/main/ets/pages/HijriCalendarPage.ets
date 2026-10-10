@@ -7,6 +7,7 @@ import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
@@ -16,6 +17,8 @@ import { IslamicEvent } from '../models/DateModels';
 import { HijriCalendarHelper } from '../helper/HijriCalendarHelper';
 import { L } from '../helper/LocalizationHelper';
 import { Breakpoints } from '../common/Breakpoints';
+import { HijriCalendarType } from '../common/HijriCalendarType';
+import { SettingsHelper } from '../helper/SettingsHelper';
 
 @Component
 export struct HijriCalendarPage {
@@ -41,14 +44,18 @@ export struct HijriCalendarPage {
 
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
+  @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_TYPE)
+  @Watch('onCalendarTypeChanged')
+  hijriCalendarType: string = HijriCalendarType.UMM_AL_QURA;
 
   @State private currentLanguage: string = 'en';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
-  private systemDarkListener: mediaquery.MediaQueryListener | null = null;
+
 
   @State viewingHijriYear: number = 1447;
   @State viewingHijriMonth: number = 1;
   @State monthDays: CalendarDay[] = [];
+  private systemDarkListener: mediaquery.MediaQueryListener | null = null;
 
   private tr(key: string): string {
     return L.get(key, this.currentLanguage);
@@ -80,6 +87,10 @@ export struct HijriCalendarPage {
 
   private onLanguageChanged(): void {
     this.currentLanguage = this.appLanguage;
+  }
+
+  private onCalendarTypeChanged(): void {
+    this.jumpToToday();
   }
 
   private onAppForegrounded(): void {
@@ -252,9 +263,22 @@ export struct HijriCalendarPage {
             .fontColor(this.colors.textWhite)
             .textAlign(TextAlign.Center)
             .width('100%')
-          Text(`${this.viewingHijriYear} AH`)
-            .fontSize(13).fontColor(this.colors.accentGold)
-            .textAlign(TextAlign.Center).width('100%').margin({ top: 2 })
+          Row() {
+            Text(`${this.viewingHijriYear} AH`)
+              .fontSize(13).fontColor(this.colors.accentGold)
+
+            Text('·')
+              .fontSize(11).fontColor(this.colors.textMuted)
+              .margin({ left: 6, right: 6 })
+
+            Text(SettingsHelper.getHijriCalendarTypeLabel(this.hijriCalendarType))
+              .fontSize(11)
+              .fontColor(this.colors.accentGold)
+              .fontWeight(FontWeight.Medium)
+          }
+          .justifyContent(FlexAlign.Center)
+          .width('100%')
+          .margin({ top: 2 })
           Text(HijriCalendarHelper.formatGregorianSpan(this.monthDays))
             .fontSize(11).fontColor(this.colors.textMuted)
             .textAlign(TextAlign.Center).width('100%').margin({ top: 4 })

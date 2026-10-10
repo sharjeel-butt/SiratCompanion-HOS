@@ -13,7 +13,8 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
   STORAGE_KEY_PRAYER_STATE_VERSION,
-  STORAGE_KEY_THEME_MODE
+  STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_TIME_FORMAT
 } from '../common/StorageKeys';
 import { DateHelper } from '../utils/DateUtils';
 import { PrayerModel } from '../models/PrayerModel';
@@ -41,6 +42,7 @@ import { DuaCard } from '../components/DuaCard';
 import { DUA_IFTAR, DUA_SUHOOR, DuaEntry } from '../data/Duas';
 import { LaylatAlQadrNight, RamadanAshra, RamadanHelper, RamadanInfo } from '../helper/RamadanHelper';
 import { Breakpoints } from '../common/Breakpoints';
+import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
 
 @Component
 export struct HomePage {
@@ -77,6 +79,9 @@ export struct HomePage {
 
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
+  @StorageLink(STORAGE_KEY_TIME_FORMAT)
+  @Watch('onClockFormatChanged')
+  ClockFormat: string = ClockFormat.SYSTEM;
 
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
@@ -190,6 +195,17 @@ export struct HomePage {
 
   private tr(key: string): string {
     return L.get(key, this.currentLanguage);
+  }
+
+  private dt(t: string): string {
+    if (this.ClockFormat.length === 0) {
+      return t;
+    }
+    return ClockFormatHelper.reformat(t);
+  }
+
+  private onClockFormatChanged(): void {
+    // Re-render is handled by the @StorageLink.
   }
 
   private isRtl(): boolean {
@@ -1339,7 +1355,7 @@ export struct HomePage {
           Text('🌅').fontSize(14).margin({ right: 8 }).width(20).textAlign(TextAlign.Center)
           Text(this.tr('ramadan_fast_start'))
             .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
-          Text(this.todayImsakTime)
+          Text(this.dt(this.todayImsakTime))
             .fontSize(16).fontColor(this.colors.accentGold).fontWeight(FontWeight.Bold)
             .direction(Direction.Ltr)
         }
@@ -1349,7 +1365,7 @@ export struct HomePage {
           Text('🌇').fontSize(14).margin({ right: 8 }).width(20).textAlign(TextAlign.Center)
           Text(this.tr('ramadan_fast_end'))
             .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
-          Text(this.todayMaghribTime)
+          Text(this.dt(this.todayMaghribTime))
             .fontSize(16).fontColor(this.colors.accentGoldLight).fontWeight(FontWeight.Bold)
             .direction(Direction.Ltr)
         }

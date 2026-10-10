@@ -5,6 +5,8 @@ import { L } from '../helper/LocalizationHelper';
 import { SettingsHelper } from '../helper/SettingsHelper';
 import { AsrShadowRule, CalculationMethod } from '../utils/PrayerTimeCalculator';
 import { CalculationSource } from '../models/SettingsModels';
+import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
+import { STORAGE_KEY_TIME_FORMAT } from '../common/StorageKeys';
 
 /**
  * Shared page header used by HomePage and Prayer.
@@ -30,6 +32,8 @@ export struct PageHeader {
   @Prop calcSource: CalculationSource = CalculationSource.LOCAL;
   /** Show the calculation-pill row. Both pages currently show it. */
   @Prop showCalcPills: boolean = true;
+  @StorageLink(STORAGE_KEY_TIME_FORMAT)
+  ClockFormat: string = ClockFormat.SYSTEM;
   onHamburger: () => void = () => {
   };
   onRefreshLocation: () => void = () => {
@@ -123,7 +127,7 @@ export struct PageHeader {
               .fontColor(this.colors.accentGold)
               .fontWeight(FontWeight.Bold)
             Text('   ')
-            Text(this.todayCurrentPrayerTime)
+            Text(ClockFormatHelper.reformat(this.todayCurrentPrayerTime))
               .fontSize(16)
               .fontColor(this.colors.textWhite)
               .fontWeight(FontWeight.Medium)

@@ -12,12 +12,14 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_SYSTEM_HAPTICS_ENABLED,
   STORAGE_KEY_SYSTEM_SOUND_ENABLED,
-  STORAGE_KEY_THEME_MODE
+  STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_TIME_FORMAT
 } from '../common/StorageKeys';
 import { AppLanguage, L } from '../helper/LocalizationHelper';
 import { SoundHelper } from '../helper/SoundHelper';
 import { SoundOptions, TASBIH_SOUND_OPTIONS, TasbihSoundOption } from '../common/SoundOptions';
 import { Breakpoints } from '../common/Breakpoints';
+import { ClockFormat } from '../common/ClockFormat';
 
 @Entry
 @Component
@@ -49,9 +51,14 @@ struct CustomizePage {
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State showExtraTimings: boolean = true;
   @State showIslamicEvents: boolean = true;
+  @StorageLink(STORAGE_KEY_TIME_FORMAT)
+  @Watch('onClockFormatChanged')
+  ClockFormat: string = ClockFormat.SYSTEM;
+
   // ============================================================
   // UI CUSTOMIZATION STATE
   // ============================================================
+  @State showClockFormatPicker: boolean = false;
   @State vibrationEnabled: boolean = true;
   @State soundEnabled: boolean = true;
   @State selectedSound: string = SoundOptions.DEFAULT_ID;
@@ -95,6 +102,29 @@ struct CustomizePage {
   // ============================================================
   // WATCHERS
   // ============================================================
+  private onClockFormatChanged(): void {
+    // No state to update — the @StorageLink re-render is enough.
+    // Pages call ClockFormatHelper.reformat() during build, and the
+    // helper reads the freshly-written value from AppStorage.
+  }
+
+  private pickClockFormat(id: string): void {
+    this.ClockFormat = id;
+    SettingsHelper.saveClockFormat(id);
+    this.showClockFormatPicker = false;
+  }
+
+  private ClockFormatLabel(): string {
+    switch (this.ClockFormat) {
+      case ClockFormat.TWELVE_HOUR:
+        return this.tr('time_format_12h');
+      case ClockFormat.TWENTY_FOUR_HOUR:
+        return this.tr('time_format_24h');
+      default:
+        return this.tr('time_format_system');
+    }
+  }
+
 
   build() {
     Stack() {
@@ -242,6 +272,20 @@ struct CustomizePage {
 
       if (this.showSoundPicker) {
         this.SoundPicker()
+      }
+
+      if (this.showClockFormatPicker) {
+        this.PickerOverlay(
+          this.tr('time_format'),
+          '🕐',
+          SettingsHelper.buildClockFormatPickerItems(this.ClockFormat),
+          (id: string) => {
+            this.pickClockFormat(id);
+          },
+          () => {
+            this.showClockFormatPicker = false;
+          }
+        )
       }
     }
     .width('100%')
@@ -483,6 +527,38 @@ struct CustomizePage {
         right: 16
       })
       .margin({ bottom: 0 })
+
+      // ---- Time Format ----
+      Row() {
+        Column() {
+          Text(this.tr('time_format'))
+            .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+          Text(this.tr('time_format_desc'))
+            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+          Text(this.ClockFormatLabel())
+            .fontSize(12)
+            .fontColor(this.colors.accentGold)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .margin({ top: 6 })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+      }
+      .width('100%')
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .margin({ bottom: 8 })
+      .onClick(() => {
+        this.showClockFormatPicker = true;
+      })
     }
     .width('100%')
     .padding(12)

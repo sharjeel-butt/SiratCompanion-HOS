@@ -4,14 +4,17 @@ import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { window } from '@kit.ArkUI';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { PreferencesHelper } from '../helper/PreferencesHelper';
+import { ClockFormat } from '../common/ClockFormat';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_SOUND_ENABLED,
   STORAGE_KEY_TASBIH_SOUND,
   STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_TIME_FORMAT,
   STORAGE_KEY_VIBRATION_ENABLED,
   STORAGE_KEY_WIZARD_COMPLETED
 } from '../common/StorageKeys';
@@ -27,6 +30,7 @@ import { SettingsHelper } from '../helper/SettingsHelper';
 import { NotificationHelper } from '../helper/NotificationHelper';
 import { CalendarReminderHelper } from '../helper/CalendarReminderHelper';
 import { CALENDAR_REMINDERS_ENABLED } from '../common/FeatureFlags';
+import { HijriCalendarType } from '../common/HijriCalendarType';
 
 /** How long the splash stays visible, in milliseconds. */
 const SPLASH_DELAY_MS = 1500;
@@ -79,6 +83,13 @@ export default class EntryAbility extends UIAbility {
       );
       AppStorage.setOrCreate(STORAGE_KEY_HIJRI_OFFSET, savedHijriOffset);
 
+      const savedHijriCalendarType = await PreferencesHelper.getString(
+        STORAGE_KEY_HIJRI_CALENDAR_TYPE, HijriCalendarType.UMM_AL_QURA
+      );
+      AppStorage.setOrCreate(
+        STORAGE_KEY_HIJRI_CALENDAR_TYPE, savedHijriCalendarType
+      );
+
       const savedLanguage = await PreferencesHelper.getString(
         STORAGE_KEY_LANGUAGE, 'en'
       );
@@ -88,6 +99,12 @@ export default class EntryAbility extends UIAbility {
         STORAGE_KEY_VIBRATION_ENABLED, true
       );
       AppStorage.setOrCreate(STORAGE_KEY_VIBRATION_ENABLED, vibrationEnabled);
+
+      // ---- Time format ----
+      const savedTimeFormat = await PreferencesHelper.getString(
+        STORAGE_KEY_TIME_FORMAT, ClockFormat.SYSTEM
+      );
+      AppStorage.setOrCreate(STORAGE_KEY_TIME_FORMAT, savedTimeFormat);
 
       // ---- Log material capability once per session ----
       MaterialHelper.logCapability();

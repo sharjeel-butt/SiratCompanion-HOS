@@ -20,7 +20,8 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
   STORAGE_KEY_PRAYER_STATE_VERSION,
-  STORAGE_KEY_THEME_MODE
+  STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_TIME_FORMAT
 } from '../common/StorageKeys';
 import { AppLogger } from '../helper/AppLogger';
 import { HomeController } from '../utils/HomeController';
@@ -31,6 +32,7 @@ import { L } from '../helper/LocalizationHelper';
 import { PageHeader } from '../components/PageHeader';
 import { PrayerSunPath } from '../components/PrayerSunPath';
 import { Breakpoints } from '../common/Breakpoints';
+import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
 
 interface DialogResult {
   index: number;
@@ -77,6 +79,9 @@ export struct Prayer {
 
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
+  @StorageLink(STORAGE_KEY_TIME_FORMAT)
+  @Watch('onClockFormatChanged')
+  clockFormat: string = ClockFormat.SYSTEM;
 
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
@@ -134,6 +139,22 @@ export struct Prayer {
 
   private tr(key: string): string {
     return L.get(key, this.appLanguage);
+  }
+
+  /**
+   * Reformat an internal 12-hour time string for display. Reads
+   * this.ClockFormat to establish a reactive dependency so that
+   * changing the format re-renders every time call site.
+   */
+  private dt(t: string): string {
+    if (this.clockFormat.length === 0) {
+      return t;
+    }
+    return ClockFormatHelper.reformat(t);
+  }
+
+  private onClockFormatChanged(): void {
+    // Re-render is handled by the @StorageLink.
   }
 
   private isRtl(): boolean {
@@ -1035,7 +1056,7 @@ export struct Prayer {
             .fontSize(16).fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Bold)
           Text('   ')
-          Text(this.todayNextPrayerTime)
+          Text(this.dt(this.todayNextPrayerTime))
             .fontSize(16).fontColor(this.colors.textWhite)
             .fontWeight(FontWeight.Medium)
         }
@@ -1158,7 +1179,7 @@ export struct Prayer {
         }, (row: TimelineRow) => {
           const checkedPart = row.prayerRef !== null
             ? (row.prayerRef.checked ? 'c' : 'u') : 'x';
-          return `${this.viewingDateKey}-${row.kind}-${row.id}-${row.time}-${row.sortMinutes}-${checkedPart}`;
+          return `${this.viewingDateKey}-${row.kind}-${row.id}-${row.time}-${row.sortMinutes}-${checkedPart}-${this.clockFormat}`;
         })
       }
       .width('100%')
@@ -1222,7 +1243,7 @@ export struct Prayer {
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text(prayer.time).fontSize(16)
+      Text(this.dt(prayer.time)).fontSize(16)
         .fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
     }
     .width('100%')
@@ -1261,7 +1282,7 @@ export struct Prayer {
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text(timing.time).fontSize(14)
+      Text(this.dt(timing.time)).fontSize(14)
         .fontColor(this.colors.textMuted).fontStyle(FontStyle.Italic)
     }
     .width('100%')
