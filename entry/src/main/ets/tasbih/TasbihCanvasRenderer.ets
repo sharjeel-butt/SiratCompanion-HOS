@@ -2,7 +2,7 @@
 
 import {
   BeadColors, TasbihFinish, TasbihTheme, TasbihThemes
-} from '../common/TasbihThemes';
+} from './TasbihThemes';
 
 export type BeadRenderStyle = 'classic' | 'premium';
 

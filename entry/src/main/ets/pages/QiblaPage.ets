@@ -3,10 +3,10 @@
 import { mediaquery, router } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
-import { QiblaCalibrationOverlay } from '../components/QiblaCalibrationOverlay';
+import { QiblaCalibrationOverlay } from '../qibla/QiblaCalibrationOverlay';
 import {
   OrientationReading, QiblaSensorHelper, SensorAccuracy
-} from '../helper/QiblaSensorHelper';
+} from '../qibla/QiblaSensorHelper';
 
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
@@ -15,7 +15,7 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
-import { QiblaCalculator } from '../utils/QiblaCalculator';
+import { QiblaCalculator } from '../qibla/QiblaCalculator';
 import { SettingsHelper } from '../helper/SettingsHelper';
 import { LocationCache } from '../utils/LocationCache';
 import { LocationMode } from '../models/SettingsModels';

@@ -1,6 +1,6 @@
 // entry/src/main/ets/helper/SettingsHelper.ets
 
-import { AsrShadowRule, CalculationMethod, HighLatitudeRule } from '../utils/PrayerTimeCalculator';
+import { AsrShadowRule, CalculationMethod, HighLatitudeRule } from '../prayer/PrayerTimeCalculator';
 import { CalculationSource, LocationMode, ManualCoords, PickerItem } from '../models/SettingsModels';
 import { PreferencesHelper } from './PreferencesHelper';
 import {
@@ -35,7 +35,7 @@ import {
 import { ThemeMode, ThemePreset } from '../common/Theme';
 import { L } from './LocalizationHelper';
 import { SoundOptions } from '../common/SoundOptions';
-import { TasbihThemes } from '../common/TasbihThemes';
+import { TasbihThemes } from '../tasbih/TasbihThemes';
 import {
   AdvancedCalcSettings,
   CustomAngles,
@@ -46,7 +46,7 @@ import {
   Shafaq
 } from '../models/AdvancedCalcModels';
 import { ClockFormat } from '../common/ClockFormat';
-import { HijriCalendarType } from '../common/HijriCalendarType';
+import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 
 const KEY_METHOD = 'calc_method';
 const KEY_ASR = 'asr_rule';

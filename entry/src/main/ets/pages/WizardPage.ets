@@ -10,7 +10,7 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
-import { AsrShadowRule, CalculationMethod } from '../utils/PrayerTimeCalculator';
+import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator';
 import { SettingsHelper } from '../helper/SettingsHelper';
 import { LocationData, LocationHelper } from '../utils/LocationUtils';
 import { LocationCache } from '../utils/LocationCache';

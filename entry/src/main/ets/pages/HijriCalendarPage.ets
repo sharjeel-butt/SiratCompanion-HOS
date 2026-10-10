@@ -12,12 +12,12 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
-import { CalendarDay, HijriDate } from '../models/HijriCalendarModels';
+import { CalendarDay, HijriDate } from '../hijricalendar/HijriCalendarModels';
 import { IslamicEvent } from '../models/DateModels';
-import { HijriCalendarHelper } from '../helper/HijriCalendarHelper';
+import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
 import { L } from '../helper/LocalizationHelper';
 import { Breakpoints } from '../common/Breakpoints';
-import { HijriCalendarType } from '../common/HijriCalendarType';
+import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 import { SettingsHelper } from '../helper/SettingsHelper';
 
 @Component

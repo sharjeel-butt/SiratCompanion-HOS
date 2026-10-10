@@ -11,14 +11,14 @@ import {
   DailyPrayerTimes,
   HighLatitudeRule,
   PrayerTimeCalculator
-} from '../utils/PrayerTimeCalculator';
-import { PrayerCheckState, PrayerManager } from '../utils/PrayerManager';
+} from '../prayer/PrayerTimeCalculator';
+import { PrayerCheckState, PrayerManager } from '../prayer/PrayerManager';
 import { LocationCache } from '../utils/LocationCache';
 import { LocationMode } from '../models/SettingsModels';
 import { L } from './LocalizationHelper';
 import { AppLogger } from './AppLogger';
 import { CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED } from '../common/FeatureFlags';
-import { CalendarReminderEntry, CalendarReminderHelper } from './CalendarReminderHelper';
+import { CalendarReminderEntry, CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
 
 /** How many days ahead to schedule. Older reminders renew on app open. */
 const DAYS_AHEAD = 3;

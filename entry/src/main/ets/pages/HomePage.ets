@@ -17,7 +17,7 @@ import {
   STORAGE_KEY_TIME_FORMAT
 } from '../common/StorageKeys';
 import { DateHelper } from '../utils/DateUtils';
-import { PrayerModel } from '../models/PrayerModel';
+import { PrayerModel } from '../prayer/PrayerModel';
 import { UpcomingImportantDate } from '../models/DateModels';
 import { LocationData, LocationHelper } from '../utils/LocationUtils';
 import { LocationCache } from '../utils/LocationCache';
@@ -29,14 +29,14 @@ import {
   CalculationMethod,
   HighLatitudeRule,
   PrayerTimeCalculator
-} from '../utils/PrayerTimeCalculator';
-import { PrayerManager } from '../utils/PrayerManager';
+} from '../prayer/PrayerTimeCalculator';
+import { PrayerManager } from '../prayer/PrayerManager';
 import { NavHelper } from '../helper/NavHelper';
 import { L } from '../helper/LocalizationHelper';
 import { MonthDayCell, MonthProgress, PrayerProgress, ProgressHelper, TasbihProgress } from '../utils/ProgressHelper';
-import { TasbihStorage } from '../utils/TasbihStorage';
-import { TasbihManager } from '../utils/TasbihManager';
-import { Tasbih } from '../models/TasbihModels';
+import { TasbihStorage } from '../tasbih/TasbihStorage';
+import { TasbihManager } from '../tasbih/TasbihManager';
+import { Tasbih } from '../tasbih/TasbihModels';
 import { PageHeader } from '../components/PageHeader';
 import { DuaCard } from '../components/DuaCard';
 import { DUA_IFTAR, DUA_SUHOOR, DuaEntry } from '../data/Duas';

@@ -1,7 +1,7 @@
 // entry/src/main/ets/utils/ProgressHelper.ets
 
-import { Tasbih } from '../models/TasbihModels';
-import { PrayerCheckState, PrayerManager } from './PrayerManager';
+import { Tasbih } from '../tasbih/TasbihModels';
+import { PrayerCheckState, PrayerManager } from '../prayer/PrayerManager';
 
 export interface PrayerProgress {
   todayCompleted: number; // 0–5

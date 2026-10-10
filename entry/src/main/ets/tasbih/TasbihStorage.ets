@@ -2,7 +2,7 @@
 
 import { preferences } from '@kit.ArkData';
 import { common } from '@kit.AbilityKit';
-import { Tasbih } from '../models/TasbihModels';
+import { Tasbih } from './TasbihModels';
 
 const PREF_STORE = 'tasbih_prefs';
 const KEY_TASBIHS = 'tasbihs_data';

@@ -1,8 +1,8 @@
 // entry/src/main/ets/utils/RamadanHelper.ets
 
-import { HijriCalendarHelper } from './HijriCalendarHelper';
+import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
 import { DateHelper } from '../utils/DateUtils';
-import { HijriDate } from '../models/HijriCalendarModels';
+import { HijriDate } from '../hijricalendar/HijriCalendarModels';
 
 /** One of the three ten-day periods of Ramadan. */
 export interface RamadanAshra {
