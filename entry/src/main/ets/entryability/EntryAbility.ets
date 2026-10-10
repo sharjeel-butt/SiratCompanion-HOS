@@ -5,6 +5,7 @@ import { window } from '@kit.ArkUI';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { PreferencesHelper } from '../helper/PreferencesHelper';
 import { ClockFormat } from '../common/ClockFormat';
+import { deviceInfo } from '@kit.BasicServicesKit';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -35,6 +36,13 @@ import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 /** How long the splash stays visible, in milliseconds. */
 const SPLASH_DELAY_MS = 1500;
 
+/** Shorter splash on 2-in-1 — desktop users expect near-instant launch. */
+const SPLASH_DELAY_2IN1_MS = 400;
+
+/** Preferred starting window size on 2-in-1 devices, in vp. */
+const PREFERRED_WINDOW_WIDTH_2IN1 = 800;
+const PREFERRED_WINDOW_HEIGHT_2IN1 = 1100;
+
 export default class EntryAbility extends UIAbility {
   // ============================================================
   // LIFECYCLE — onCreate
@@ -54,6 +62,24 @@ export default class EntryAbility extends UIAbility {
 
   onWindowStageCreate(windowStage: window.WindowStage): void {
     AppLogger.init(this.context);
+    // On 2-in-1 devices, request a preferred starting window size.
+    // Failures are non-fatal — the system default applies.
+    if (deviceInfo.deviceType === '2in1') {
+      windowStage.getMainWindow()
+        .then((win: window.Window) => {
+          win.resize(
+            PREFERRED_WINDOW_WIDTH_2IN1,
+            PREFERRED_WINDOW_HEIGHT_2IN1
+          ).catch((err: Error) => {
+            AppLogger.info('EntryAbility',
+              `Window resize skipped: ${err.message}`);
+          });
+        })
+        .catch((err: Error) => {
+          AppLogger.info('EntryAbility',
+            `getMainWindow failed: ${err.message}`);
+        });
+    }
     LayoutHelper.install();
 
     PreferencesHelper.init(this.context).then(async () => {
@@ -151,6 +177,10 @@ export default class EntryAbility extends UIAbility {
       });
 
       // ---- Show splash, then load the start page ----
+      const splashMs = deviceInfo.deviceType === '2in1'
+        ? SPLASH_DELAY_2IN1_MS
+        : SPLASH_DELAY_MS;
+
       setTimeout(() => {
         windowStage.loadContent(startPage, (err) => {
           if (err.code) {

@@ -3,6 +3,7 @@
 import {
   AnimatorOptions, AnimatorResult, mediaquery, promptAction
 } from '@kit.ArkUI';
+import { MaterialHelper } from '../helper/MaterialHelper';
 import { common } from '@kit.AbilityKit';
 import { ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
@@ -201,6 +202,10 @@ export struct TasbihPage {
         .backgroundColor(this.colors.primaryGreen)
 
       Column() {
+        // if (deviceInfo.sdkApiVersion < 23) {
+        //   Column().height(72)
+        // }
+
         this.TopBar()
 
         Row() {
@@ -321,18 +326,97 @@ export struct TasbihPage {
     .bindSheet(
       this.activeSheet !== 'none',
       this.ActiveSheetContent(),
-      {
-        height: this.sheetHeight(),
-        dragBar: true,
-        showClose: false,
-        backgroundColor: this.colors.cardDark,
-        blurStyle: BlurStyle.Thick,
-        maskColor: this.colors.overlayDim,
-        onDisappear: () => {
+      MaterialHelper.buildSheetOptions(
+        this.sheetHeight(),
+        true,
+        this.colors.cardDark,
+        this.colors.overlayDim,
+        () => {
           this.activeSheet = 'none';
         }
-      }
+      )
     )
+  }
+
+  @Builder
+  TopBar() {
+    Row() {
+      // Tasbih picker
+      Row() {
+        Text('📿').fontSize(14).margin({ right: 6 }).flexShrink(0)
+        Text(this.getActiveTasbih()
+          ? this.getActiveTasbih()!.name
+          : this.tr('tab_tasbih'))
+          .fontSize(15)
+          .fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Medium)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+          .layoutWeight(1)
+        Text('▼')
+          .fontSize(10)
+          .fontColor(this.colors.accentGold)
+          .margin({ left: 6 })
+          .opacity(0.7)
+          .flexShrink(0)
+      }
+      .constraintSize({ maxWidth: 160 })
+      .padding({
+        left: 14,
+        right: 14,
+        top: 8,
+        bottom: 8
+      })
+      .backgroundColor(this.colors.cardDark)
+      .borderRadius(18)
+      .border({ width: 1, color: this.colors.borderSoft })
+      .onClick(() => {
+        this.activeSheet = 'tasbihPicker';
+      })
+
+      Blank()
+
+      // Dhikr picker
+      Row() {
+        Text(this.getActiveDhikr()
+          && this.getActiveDhikr()!.transliteration.length > 0
+          ? this.getActiveDhikr()!.transliteration
+          : this.tr('select_dhikr'))
+          .fontSize(13)
+          .fontColor(this.colors.accentGold)
+          .fontWeight(FontWeight.Medium)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+          .layoutWeight(1)
+        Text('▼')
+          .fontSize(10)
+          .fontColor(this.colors.accentGold)
+          .margin({ left: 6 })
+          .opacity(0.7)
+          .flexShrink(0)
+      }
+      .constraintSize({ maxWidth: 160 })
+      .padding({
+        left: 14,
+        right: 14,
+        top: 8,
+        bottom: 8
+      })
+      .backgroundColor(this.colors.cardDark)
+      .borderRadius(18)
+      .border({ width: 1, color: this.colors.borderSoft })
+      .onClick(() => {
+        this.activeSheet = 'dhikrPicker';
+      })
+    }
+    .width('100%')
+    .padding({
+      left: 16,
+      right: 16,
+      top: 8,
+      bottom: 8
+    })
+    .alignItems(VerticalAlign.Center)
   }
 
   // ============================================================
@@ -505,70 +589,6 @@ export struct TasbihPage {
         .fontSize(13).fontColor(this.colors.textMuted).margin({ top: 6 })
     }
     .width('100%').justifyContent(FlexAlign.Center)
-  }
-
-  @Builder
-  TopBar() {
-    Row() {
-      Row() {
-        Text('📿').fontSize(14).margin({ right: 6 }).flexShrink(0)
-        Text(this.getActiveTasbih()
-          ? this.getActiveTasbih()!.name
-          : this.tr('tab_tasbih'))
-          .fontSize(15)
-          .fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium)
-          .maxLines(1)
-          .textOverflow({ overflow: TextOverflow.Ellipsis })
-          .layoutWeight(1)
-        Text('▼')
-          .fontSize(10)
-          .fontColor(this.colors.accentGold)
-          .margin({ left: 6 })
-          .opacity(0.7)
-          .flexShrink(0)
-      }
-      .constraintSize({ maxWidth: 160 })
-      .padding({ left: 14, right: 14, top: 8, bottom: 8 })
-      .backgroundColor(this.colors.cardDark)
-      .borderRadius(18)
-      .border({ width: 1, color: this.colors.borderSoft })
-      .onClick(() => {
-        this.activeSheet = 'tasbihPicker';
-      })
-
-      Blank()
-
-      Row() {
-        Text(this.getActiveDhikr()
-          && this.getActiveDhikr()!.transliteration.length > 0
-          ? this.getActiveDhikr()!.transliteration
-          : this.tr('select_dhikr'))
-          .fontSize(13)
-          .fontColor(this.colors.accentGold)
-          .fontWeight(FontWeight.Medium)
-          .maxLines(1)
-          .textOverflow({ overflow: TextOverflow.Ellipsis })
-          .layoutWeight(1)
-        Text('▼')
-          .fontSize(10)
-          .fontColor(this.colors.accentGold)
-          .margin({ left: 6 })
-          .opacity(0.7)
-          .flexShrink(0)
-      }
-      .constraintSize({ maxWidth: 160 })
-      .padding({ left: 14, right: 14, top: 8, bottom: 8 })
-      .backgroundColor(this.colors.cardDark)
-      .borderRadius(18)
-      .border({ width: 1, color: this.colors.borderSoft })
-      .onClick(() => {
-        this.activeSheet = 'dhikrPicker';
-      })
-    }
-    .width('100%')
-    .padding({ left: 16, right: 16, top: 32, bottom: 8 })
-    .alignItems(VerticalAlign.Center)
   }
 
   // ============================================================

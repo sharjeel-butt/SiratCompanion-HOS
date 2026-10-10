@@ -1,7 +1,19 @@
 // entry/src/main/ets/pages/MainTabs.ets
 
-import { display, mediaquery } from '@kit.ArkUI';
+import { display, mediaquery, promptAction, router } from '@kit.ArkUI';
+import { common } from '@kit.AbilityKit';
 import { deviceInfo } from '@kit.BasicServicesKit';
+import {
+  HdsBarWidthRangeOptions,
+  hdsMaterial,
+  HdsNavigation,
+  HdsNavigationTitleMode,
+  HdsTabs,
+  HdsTabsController,
+  HdsTabsFloatingStyle,
+  ScrollEffectType,
+  SystemMaterialParams
+} from '@kit.UIDesignKit';
 import { ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import {
@@ -12,7 +24,7 @@ import {
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
 import { L } from '../helper/LocalizationHelper';
-import { MaterialHelper } from '../helper/MaterialHelper';
+import { NavHelper } from '../helper/NavHelper';
 
 import { HomePage } from './HomePage';
 import { Prayer } from './Prayer';
@@ -20,34 +32,11 @@ import { HijriCalendarPage } from './HijriCalendarPage';
 import { QiblaPage } from './QiblaPage';
 import { TasbihPage } from './TasbihPage';
 
-/**
- * MainTabs — the application's root page.
- *
- * Hosts the five primary screens inside a single Tabs container.
- *
- * ## API compatibility
- *
- *   API 26.0.0+  → native Tabs.barFloatingStyle + systemMaterial
- *                  (HOS7 immersive glass)
- *   API 20–25    → Tabs with barOverlap + barBackgroundBlurStyle
- *                  (translucent fallback, no system material)
- *
- * Both branches share the same TabContents() builder, so the tab set
- * stays in sync. Only the bar styling differs.
- *
- * ## Why not use deviceInfo.apiAvailable()?
- *
- * apiAvailable() is itself @since 26.0.0 and would throw on API 20.
- * deviceInfo.sdkApiVersion exists on every API level and is the correct
- * guard here.
- */
+const HDS_MIN_API = 23;
+
 @Entry
 @Component
 struct MainTabs {
-  // ============================================================
-  // STORAGE LINKS
-  // ============================================================
-
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
@@ -59,48 +48,34 @@ struct MainTabs {
   appLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   appForegroundTick: number = 0;
-  @State private currentLanguage: string = 'en';
-  @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
-  /** Active tab index. Mirrors the Tabs controller. */
-  @State private currentIndex: number = 0;
-  /** Computed bar width, matched to all three breakpoints. */
-  @State private barWidth: number = 340;
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   @Watch('onBreakpointChanged')
   breakpoint: string = 'sm';
+  @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
+  @State private currentLanguage: string = 'en';
+  @State private currentIndex: number = 0;
+  @State private barWidth: number = 340;
+  @State private isMenuVisible: boolean = false;
+  private readonly useHds: boolean =
+    deviceInfo.sdkApiVersion >= HDS_MIN_API;
 
-
-  /**
-   * True when the device supports native barFloatingStyle.
-   * Resolved once at first build; the SDK version cannot change
-   * while the app is running.
-   */
-  private readonly useFloatingStyle: boolean =
-    deviceInfo.sdkApiVersion >= MaterialHelper.MIN_API_FOR_MATERIAL;
   private tabsController: TabsController = new TabsController();
+  private hdsController: HdsTabsController = new HdsTabsController();
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
-
-  // ============================================================
-  // LIFECYCLE
-  // ============================================================
 
   aboutToAppear(): void {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
-
     this.systemDarkListener = PageTheme.installSystemListener(
       this.themeMode,
       (c) => {
         this.colors = c;
       }
     );
-
     this.recomputeBarWidth();
-
-    // One-line diagnostic: confirms which bar path is active on this device.
     console.info(
       `[MainTabs] sdkApiVersion=${deviceInfo.sdkApiVersion}, ` +
-        `useFloatingStyle=${this.useFloatingStyle}`
+        `hds=${this.useHds}`
     );
   }
 
@@ -112,37 +87,6 @@ struct MainTabs {
   onPageShow(): void {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
-  }
-
-  // ============================================================
-  // WATCHERS
-  // ============================================================
-
-  /**
-   * Recompute the floating tab bar width from the current display.
-   *
-   * Called at startup and whenever the breakpoint changes — which
-   * covers rotation, fold/unfold, and desktop resize. The Tabs
-   * component reads barWidth from barFloatingStyle each build, so
-   * writing to the @State is enough to trigger a re-layout.
-   */
-  private recomputeBarWidth(): void {
-    try {
-      const info = display.getDefaultDisplaySync();
-      const screenW = px2vp(info.width);
-      this.barWidth = Math.min(screenW - 32, 560);
-    } catch (err) {
-      this.barWidth = 340;
-    }
-  }
-
-  /**
-   * @Watch handler for STORAGE_KEY_BREAKPOINT. The LayoutHelper already
-   * pushes a new value into AppStorage on every width threshold
-   * crossing, so this fires exactly when the viewport class changes.
-   */
-  private onBreakpointChanged(): void {
-    this.recomputeBarWidth();
   }
 
   private onThemeModeChanged(): void {
@@ -157,40 +101,39 @@ struct MainTabs {
     this.currentLanguage = this.appLanguage;
   }
 
-  // ============================================================
-  // TAB BAR COLOURS
-  // ============================================================
-
-  /** Resolve dark from the user's theme choice, not the OS alone. */
-  private isDark(): boolean {
-    return PageTheme.isDarkFor(this.themeMode);
+  private onBreakpointChanged(): void {
+    this.recomputeBarWidth();
   }
 
-  /**
-   * Active tab colour, taken from the current theme's accent.
-   *
-   * `this.colors` is recomputed by `onThemeModeChanged` whenever the
-   * user switches preset or mode, so the tab bar follows the theme
-   * automatically. There is no per-theme hard-coding here.
-   */
-  private activeColor(): string {
-    return this.colors.accentGold;
+  private recomputeBarWidth(): void {
+    try {
+      const info = display.getDefaultDisplaySync();
+      const screenW = px2vp(info.width);
+      this.barWidth = Math.min(screenW - 32, 560);
+    } catch (err) {
+      this.barWidth = 340;
+    }
   }
 
-  /**
-   * Inactive tab colour. Uses the theme's muted text tone so that the
-   * tab bar reads as part of the same visual system as the rest of the
-   * UI, rather than a separate grey.
-   */
-  private inactiveColor(): string {
-    return this.colors.textMuted;
+  private currentTabTitle(): string {
+    switch (this.currentIndex) {
+      case 0:
+        return L.get('tab_home', this.currentLanguage);
+      case 1:
+        return L.get('tab_prayers', this.currentLanguage);
+      case 2:
+        return L.get('tab_calendar', this.currentLanguage);
+      case 3:
+        return L.get('tab_compass', this.currentLanguage);
+      case 4:
+        return L.get('tab_tasbih', this.currentLanguage);
+      default:
+        return L.get('app_name', this.currentLanguage);
+    }
   }
 
-  /** Fallback bar fill — translucent, colour-matched to the theme. */
-  private fallbackBarColor(): string {
-    return this.isDark()
-      ? 'rgba(20, 27, 46, 0.55)'
-      : 'rgba(255, 255, 255, 0.55)';
+  private toggleMenu(): void {
+    this.isMenuVisible = !this.isMenuVisible;
   }
 
   // ============================================================
@@ -198,11 +141,245 @@ struct MainTabs {
   // ============================================================
 
   build() {
-    if (this.useFloatingStyle) {
-      this.TabsWithFloatingStyle()
+    if (this.useHds) {
+      this.HdsNavigationHost()
     } else {
-      this.TabsWithFallbackBar()
+      this.TabsFallbackHost()
     }
+  }
+
+  // ============================================================
+  // HDS HOST
+  // ============================================================
+
+  @Builder
+  HdsNavigationHost() {
+    Stack() {
+      HdsNavigation() {
+        HdsTabs({
+          barPosition: BarPosition.End,
+          controller: this.hdsController
+        }) {
+          this.TabContents()
+        }
+        .barOverlap(true)
+        .vertical(false)
+        .barHeight(80)
+        .barFloatingStyle(this.buildHdsFloatingStyle())
+        .scrollable(false)
+        .onChange((index: number) => {
+          this.currentIndex = index;
+        })
+        .width('100%')
+        .height('100%')
+      }
+      .mode(NavigationMode.Stack)
+      .titleBar({
+        content: {
+          title: {
+            mainTitle: this.currentTabTitle()
+          }
+        },
+        style: {
+          scrollEffectOpts: {
+            enableScrollEffect: false,
+            scrollEffectType: ScrollEffectType.GRADIENT_BLUR
+          },
+          systemMaterialEffect: {
+            materialType: hdsMaterial.MaterialType.ADAPTIVE,
+            materialLevel: hdsMaterial.MaterialLevel.ADAPTIVE
+          }
+        },
+        avoidLayoutSafeArea: false,
+        enableComponentSafeArea: true
+      })
+      .hideBackButton(true)
+      .titleMode(HdsNavigationTitleMode.MINI)
+      .width('100%')
+      .height('100%')
+
+      // Custom hamburger button positioned over the title bar area.
+      Row() {
+        Blank()
+        this.HamburgerButton()
+      }
+      .width('100%')
+      .height('100%')
+      .alignItems(VerticalAlign.Top)
+      .padding({ top: 8, right: 8 })
+      .hitTestBehavior(HitTestMode.Transparent)
+    }
+    .width('100%')
+    .height('100%')
+    .backgroundColor(this.colors.primaryGreen)
+  }
+
+  // ============================================================
+  // FALLBACK HOST (API 20–22)
+  // ============================================================
+
+  @Builder
+  TabsFallbackHost() {
+    Column() {
+      // Fallback title bar — mirrors the HdsNavigation MINI bar.
+      Row() {
+        Text(this.currentTabTitle())
+          .fontSize(20)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.colors.textWhite)
+          .layoutWeight(1)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+
+        this.HamburgerButton()
+      }
+      .width('100%')
+      .height(56)
+      .padding({ left: 16, right: 12 })
+      .alignItems(VerticalAlign.Center)
+      .backgroundColor(this.colors.primaryGreen)
+
+      Tabs({
+        barPosition: BarPosition.End,
+        controller: this.tabsController
+      }) {
+        this.TabContents()
+      }
+      .barOverlap(true)
+      .vertical(false)
+      .barHeight(80)
+      .barBackgroundBlurStyle(BlurStyle.Thin)
+      .barBackgroundColor(this.fallbackBarColor())
+      .scrollable(false)
+      .onChange((index: number) => {
+        this.currentIndex = index;
+      })
+      .layoutWeight(1)
+      .width('100%')
+    }
+    .width('100%')
+    .height('100%')
+    .backgroundColor(this.colors.primaryGreen)
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
+  }
+
+  private fallbackBarColor(): string {
+    const dark = PageTheme.isDarkFor(this.themeMode);
+    return dark
+      ? 'rgba(20, 27, 46, 0.55)'
+      : 'rgba(255, 255, 255, 0.55)';
+  }
+
+  // ============================================================
+  // HAMBURGER BUTTON + MENU
+  // ============================================================
+
+  @Builder
+  HamburgerButton() {
+    Button({ type: ButtonType.Circle, stateEffect: true }) {
+      Text('☰')
+        .fontSize(22)
+        .fontColor(this.colors.textWhite)
+    }
+    .width(44)
+    .height(44)
+    .backgroundColor(this.colors.tintSoft)
+    .border({ width: 1, color: this.colors.borderSoft })
+    .onClick(() => {
+      this.toggleMenu();
+    })
+    .bindMenu(
+      this.isMenuVisible,
+      this.HamburgerMenuContent(),
+      this.buildMenuOptions()
+    )
+  }
+
+  /**
+   * Menu options for the hamburger popup.
+   *
+   * The app declares "ohos.arkui.UIMaterial.state": "enable" in
+   * module.json5, so on API 26+ the framework applies immersive
+   * material to the menu automatically. On pre-API-26 devices the
+   * material is not available and the menu falls back to the
+   * plain cardDark background.
+   *
+   * Placement is BottomRight so the menu opens below the button,
+   * aligning its right edge with the button's right edge.
+   */
+  private buildMenuOptions(): MenuOptions {
+    const opts: MenuOptions = {
+      placement: Placement.BottomRight,
+      enableArrow: false,
+      backgroundColor: this.colors.cardDark,
+      onDisappear: () => {
+        this.isMenuVisible = false;
+      }
+    };
+    return opts;
+  }
+
+  @Builder
+  HamburgerMenuContent() {
+    Menu() {
+      this.HamburgerMenuItem(
+        $r('app.media.ic_menu_customize'),
+        L.get('title_customize', this.currentLanguage),
+        () => {
+          this.isMenuVisible = false;
+          this.closeMenuAndNavigate('pages/CustomizePage');
+        }
+      )
+
+      this.HamburgerMenuItem(
+        $r('app.media.ic_menu_settings'),
+        L.get('title_settings', this.currentLanguage),
+        () => {
+          this.isMenuVisible = false;
+          this.closeMenuAndNavigate('pages/SettingsPage');
+        }
+      )
+
+      this.HamburgerMenuItem(
+        $r('app.media.ic_menu_exit'),
+        L.get('exit', this.currentLanguage),
+        () => {
+          this.isMenuVisible = false;
+          this.exitApp();
+        }
+      )
+    }
+  }
+
+  @Builder
+  HamburgerMenuItem(
+    icon: Resource, label: string, onTap: () => void
+  ) {
+    Row() {
+      Image(icon)
+        .width(20)
+        .height(20)
+        .fillColor(this.colors.textWhite)
+        .objectFit(ImageFit.Contain)
+
+      Text(label)
+        .fontSize(15)
+        .fontColor(this.colors.textWhite)
+        .fontWeight(FontWeight.Medium)
+        .margin({ left: 12 })
+        .layoutWeight(1)
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+    }
+    .width('100%')
+    .padding({
+      top: 10,
+      bottom: 10,
+      left: 14,
+      right: 20
+    })
+    .hoverEffect(HoverEffect.Highlight)
+    .onClick(onTap)
   }
 
   // ============================================================
@@ -242,112 +419,90 @@ struct MainTabs {
       L.get('tab_tasbih', this.currentLanguage)))
   }
 
-  // ============================================================
-  // API 26.0.0+ — NATIVE FLOATING STYLE + IMMERSIVE MATERIAL
-  // ============================================================
-
   @Builder
-  TabsWithFloatingStyle() {
-    Tabs({
-      barPosition: BarPosition.End,
-      controller: this.tabsController
-    }) {
-      this.TabContents()
-    }
-    // The three structural preconditions for barFloatingStyle:
-    .barOverlap(true)
-    .vertical(false)
-    .barPosition(BarPosition.End)
-    .barHeight(80)
-    // systemMaterial supplies the HOS7 immersive glass.
-    // Do NOT also set barBackgroundColor or barBackgroundBlurStyle —
-    // the docs say those fight the material.
-    .barFloatingStyle({
-      barBottomMargin: 24,
-      barWidth: {
-        smallBarWidth: this.barWidth,
-        mediumBarWidth: this.barWidth,
-        largeBarWidth: this.barWidth
-      },
-      maskColor: Color.Transparent,
-      maskHeight: 0,
-      systemMaterial: MaterialHelper.tabBarMaterial()
-    })
-    .scrollable(false)
-    .onChange((index: number) => {
-      this.currentIndex = index;
-    })
-    .width('100%')
-    .height('100%')
-    .backgroundColor(this.colors.primaryGreen)
-
-    // Do NOT expand BOTTOM — the floating bar needs the gesture area.
-  }
-
-  // ============================================================
-  // API 20–25 — TRANSLUCENT FALLBACK BAR
-  // ============================================================
-
-  @Builder
-  TabsWithFallbackBar() {
-    Tabs({
-      barPosition: BarPosition.End,
-      controller: this.tabsController
-    }) {
-      this.TabContents()
-    }
-    .barOverlap(true)
-    .vertical(false)
-    .barPosition(BarPosition.End)
-    .barHeight(80)
-    // Blur + semi-transparent fill emulate the material wisthout
-    // requiring API 26. barBackgroundBlurStyle is available on the
-    // API levels this branch targets.
-    .barBackgroundBlurStyle(BlurStyle.Thin)
-    .barBackgroundColor(this.fallbackBarColor())
-    .scrollable(false)
-    .onChange((index: number) => {
-      this.currentIndex = index;
-    })
-    .width('100%')
-    .height('100%')
-    .backgroundColor(this.colors.primaryGreen)
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
-  }
-
-  // ============================================================
-  // TAB BAR ITEM
-  // ============================================================
-
-  @Builder
-  TabBarItem(
-    index: number,
-    icon: Resource,
-    label: string
-  ) {
+  TabBarItem(index: number, icon: Resource, label: string) {
     Column() {
       Image(icon)
         .width(26)
         .height(26)
         .fillColor(this.currentIndex === index
-          ? this.activeColor()
-          : this.inactiveColor())
+          ? this.colors.accentGold
+          : this.colors.textMuted)
         .objectFit(ImageFit.Contain)
 
       Text(label)
-        .fontSize(11)
+        .fontSize(10)
         .fontWeight(this.currentIndex === index
           ? FontWeight.Bold
           : FontWeight.Medium)
         .fontColor(this.currentIndex === index
-          ? this.activeColor()
-          : this.inactiveColor())
+          ? this.colors.accentGold
+          : this.colors.textMuted)
         .margin({ top: 4 })
-        .maxLines(1)
+        .maxLines(2)
+        .textAlign(TextAlign.Center)
+        .lineHeight(11)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
     }
     .width('100%')
     .height(68)
     .justifyContent(FlexAlign.Center)
+  }
+
+  private buildHdsFloatingStyle(): HdsTabsFloatingStyle {
+    const widths: HdsBarWidthRangeOptions = {
+      smallWidth: this.barWidth,
+      mediumWidth: this.barWidth,
+      largeWidth: this.barWidth
+    };
+
+    const material: SystemMaterialParams = {
+      materialType: hdsMaterial.MaterialType.ADAPTIVE,
+      materialLevel: hdsMaterial.MaterialLevel.ADAPTIVE
+    };
+
+    const style: HdsTabsFloatingStyle = {
+      barBottomMargin: 24,
+      barWidth: widths,
+      systemMaterialEffect: material
+    };
+    return style;
+  }
+
+  // ============================================================
+  // NAVIGATION HELPERS
+  // ============================================================
+
+  private closeMenuAndNavigate(url: string): void {
+    setTimeout(() => {
+      NavHelper.prepareForward();
+      router.pushUrl({ url })
+        .catch((err: Error) =>
+        console.error('Navigation failed:', JSON.stringify(err)));
+    }, 120);
+  }
+
+  private exitApp(): void {
+    promptAction.showDialog({
+      title: L.get('exit', this.currentLanguage),
+      message: L.get('exit_confirm_message', this.currentLanguage),
+      buttons: [
+        {
+          text: L.get('cancel', this.currentLanguage),
+          color: this.colors.dialogCancel
+        },
+        {
+          text: L.get('exit', this.currentLanguage),
+          color: this.colors.accentGold
+        }
+      ]
+    }).then((result: promptAction.ShowDialogSuccessResponse) => {
+      if (result.index === 1) {
+        const ctx = getContext(this) as common.UIAbilityContext;
+        ctx.terminateSelf().catch((err: Error) =>
+        console.error('Terminate failed:', JSON.stringify(err)));
+      }
+    }).catch((err: Error) =>
+    console.error('Dialog error:', JSON.stringify(err)));
   }
 }

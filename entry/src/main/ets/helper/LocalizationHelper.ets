@@ -121,8 +121,8 @@ export class L {
     // ---- Tabs ----
     m.set('tab_home', 'Home');
     m.set('tab_prayers', 'Prayers');
-    m.set('tab_calendar', 'Calendar');
-    m.set('tab_compass', 'Compass');
+    m.set('tab_calendar', 'Hijri Calendar');
+    m.set('tab_compass', 'Qibla Compass');
     m.set('tab_tasbih', 'Tasbih');
 
     // ---- Home ----
@@ -668,8 +668,8 @@ export class L {
 
     m.set('tab_home', '首页');
     m.set('tab_prayers', '礼拜');
-    m.set('tab_calendar', '日历');
-    m.set('tab_compass', '指南针');
+    m.set('tab_calendar', '回历');
+    m.set('tab_compass', '天房指南针');
     m.set('tab_tasbih', '念珠');
 
     m.set('current_prayer', '当前');
@@ -1172,8 +1172,8 @@ export class L {
 
     m.set('tab_home', 'الرئيسية');
     m.set('tab_prayers', 'الصلاة');
-    m.set('tab_calendar', 'التقويم');
-    m.set('tab_compass', 'القبلة');
+    m.set('tab_calendar', 'التقويم الهجري');
+    m.set('tab_compass', 'بوصلة القبلة');
     m.set('tab_tasbih', 'التسبيح');
 
     m.set('current_prayer', 'الحالي');

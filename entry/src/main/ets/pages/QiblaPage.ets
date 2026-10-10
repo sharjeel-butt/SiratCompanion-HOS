@@ -121,16 +121,9 @@ export struct QiblaPage {
   build() {
     Stack() {
       Column() {
-        Row() {
-          Text(this.tr('title_qibla'))
-            .fontSize(22)
-            .fontWeight(FontWeight.Bold)
-            .fontColor(this.colors.textWhite)
-            .margin({ left: 20 })
-        }
-        .width('100%').height(72)
-        .backgroundColor(this.colors.cardDark)
-        .alignItems(VerticalAlign.Center)
+        // if (deviceInfo.sdkApiVersion < 23) {
+        //   Column().height(72)
+        // }
 
         Scroll() {
           if (this.isTablet()) {
@@ -217,8 +210,11 @@ export struct QiblaPage {
               .alignItems(HorizontalAlign.Start)
             }
             .width('100%')
-            .padding({ left: 24, right: 24, top: 20 })
             .alignItems(VerticalAlign.Top)
+            .padding({
+              left: this.breakpoint === 'lg' ? 48 : 24,
+              right: this.breakpoint === 'lg' ? 48 : 24
+            })
           } else {
             // Phone: single-column layout.
             Column() {

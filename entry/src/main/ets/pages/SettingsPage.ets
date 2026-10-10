@@ -1,15 +1,19 @@
 // entry/src/main/ets/pages/SettingsPage.ets
 
-import { mediaquery, router } from '@kit.ArkUI';
+import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { pasteboard } from '@kit.BasicServicesKit';
 import { ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
-import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator';
+import {
+  AsrShadowRule, CalculationMethod
+} from '../prayer/PrayerTimeCalculator';
 import { PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
 import { LocationData, LocationHelper } from '../utils/LocationUtils';
 import { LocationCache } from '../utils/LocationCache';
-import { CalculationSource, LocationMode, PickerItem } from '../models/SettingsModels';
+import {
+  CalculationSource, LocationMode, PickerItem
+} from '../models/SettingsModels';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -19,7 +23,10 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
-import { OffsetKey, PrayerOffsetsHelper } from '../prayer/PrayerOffsetsHelper';
+import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
+import {
+  OffsetKey, PrayerOffsetsHelper
+} from '../prayer/PrayerOffsetsHelper';
 import {
   MAX_BEFORE_MINUTES,
   MIN_BEFORE_MINUTES,
@@ -30,15 +37,19 @@ import { AppLogger } from '../helper/AppLogger';
 import { AppInfoHelper, AppInfoSnapshot } from '../helper/AppInfoHelper';
 import { L } from '../helper/LocalizationHelper';
 import { Breakpoints } from '../common/Breakpoints';
-import { CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED } from '../common/FeatureFlags';
+import {
+  CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED
+} from '../common/FeatureFlags';
 import { NavHelper } from '../helper/NavHelper';
-import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 
 const MAX_HIJRI_OFFSET = 3;
+
+type PickerKind = 'none' | 'method' | 'asr' | 'source' | 'hijriType';
 
 @Entry
 @Component
 struct SettingsPage {
+  // ---- storage links ----
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
@@ -47,6 +58,8 @@ struct SettingsPage {
   appLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
   hijriOffset: number = 0;
+  @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_TYPE)
+  hijriCalendarType: string = HijriCalendarType.UMM_AL_QURA;
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
@@ -55,10 +68,7 @@ struct SettingsPage {
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
   appThemePreset: string = ThemePreset.SIRAT;
-  @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_TYPE)
-  @Watch('onHijriCalendarTypeChanged')
-  hijriCalendarType: string = HijriCalendarType.UMM_AL_QURA;
-  @State showHijriCalendarTypePicker: boolean = false;
+  // ---- state ----
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
   @State asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
@@ -91,14 +101,11 @@ struct SettingsPage {
   @State notifDiagnostic: string = '';
 
   @State showLogViewer: boolean = false;
+  @State showPickerSheet: boolean = false;
   @State logContents: string = '';
-  // Top-level expanded category. Location is expanded by default so
-  // first-time users see the primary setting immediately.
-  @State expandedCategory: string | null = 'Location';
 
-  @State showMethodPicker: boolean = false;
-  @State showAsrPicker: boolean = false;
-  @State showSourcePicker: boolean = false;
+  @State expandedCategory: string | null = 'Location';
+  @State activePicker: PickerKind = 'none';
 
   @State private currentLanguage: string = 'en';
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
@@ -118,9 +125,10 @@ struct SettingsPage {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
     this.systemDarkListener = PageTheme.installSystemListener(
-      this.themeMode, (c) => {
-      this.colors = c;
-    }
+      this.themeMode,
+      (c) => {
+        this.colors = c;
+      }
     );
     const ctx = getContext(this) as common.UIAbilityContext;
     this.appInfo = AppInfoHelper.get(ctx);
@@ -143,144 +151,103 @@ struct SettingsPage {
   // ============================================================
 
   build() {
-    Stack() {
-      Column() {
-        this.TopBar()
+    Column() {
+      this.TopBar()
 
-        Scroll() {
-          Row() {
-            Column() {
-              // ---- Location (top-level) ----
-              this.CategoryHeader(
-                this.tr('category_location'),
-                '📍',
-                'Location'
-              )
-              if (this.expandedCategory === 'Location') {
-                this.LocationContent()
-              }
-
-              // ---- Prayer Times ----
-              this.CategoryHeader(
-                this.tr('category_prayer_times'),
-                '🕌',
-                'Prayer Times'
-              )
-              if (this.expandedCategory === 'Prayer Times') {
-                this.PrayerTimesContent()
-              }
-
-              // ---- Notifications ----
-              if (NOTIFICATIONS_ENABLED || CALENDAR_REMINDERS_ENABLED) {
-                this.CategoryHeader(
-                  this.tr('category_notifications'),
-                  '🔔',
-                  'Notifications'
-                )
-                if (this.expandedCategory === 'Notifications') {
-                  this.NotificationsContent()
-                }
-              }
-
-              // ---- Hijri Calendar ----
-              this.CategoryHeader(
-                this.tr('category_hijri_calendar'),
-                '📅',
-                'Hijri Calendar'
-              )
-              if (this.expandedCategory === 'Hijri Calendar') {
-                this.HijriCalendarContent()
-              }
-
-              // ---- About ----
-              this.CategoryHeader(
-                this.tr('category_about'),
-                'ℹ️',
-                'About'
-              )
-              if (this.expandedCategory === 'About') {
-                this.AboutContent()
-              }
-
-              if (!NOTIFICATIONS_ENABLED && !CALENDAR_REMINDERS_ENABLED) {
-                this.LogAccessRow()
-              }
-
-              Column().height(40)
+      Scroll() {
+        Row() {
+          Column() {
+            this.CategoryHeader(
+              this.tr('category_location'), '📍', 'Location'
+            )
+            if (this.expandedCategory === 'Location') {
+              this.LocationContent()
             }
-            .width('100%')
-            .constraintSize({
-              maxWidth: this.isTablet() ? 720 : 100000
-            })
-            .padding({ left: 16, right: 16, top: 20 })
+
+            this.CategoryHeader(
+              this.tr('category_prayer_times'), '🕌', 'Prayer Times'
+            )
+            if (this.expandedCategory === 'Prayer Times') {
+              this.PrayerTimesContent()
+            }
+
+            if (NOTIFICATIONS_ENABLED || CALENDAR_REMINDERS_ENABLED) {
+              this.CategoryHeader(
+                this.tr('category_notifications'), '🔔', 'Notifications'
+              )
+              if (this.expandedCategory === 'Notifications') {
+                this.NotificationsContent()
+              }
+            }
+
+            this.CategoryHeader(
+              this.tr('category_hijri_calendar'), '📅', 'Hijri Calendar'
+            )
+            if (this.expandedCategory === 'Hijri Calendar') {
+              this.HijriCalendarContent()
+            }
+
+            this.CategoryHeader(
+              this.tr('category_about'), 'ℹ️', 'About'
+            )
+            if (this.expandedCategory === 'About') {
+              this.AboutContent()
+            }
+
+            if (!NOTIFICATIONS_ENABLED && !CALENDAR_REMINDERS_ENABLED) {
+              this.LogAccessRow()
+            }
+
+            Column().height(40)
           }
           .width('100%')
-          .justifyContent(FlexAlign.Center)
+          .constraintSize({
+            maxWidth: Breakpoints.maxContentWidth(this.breakpoint)
+          })
+          .padding({ left: 16, right: 16, top: 20 })
         }
-        .layoutWeight(1)
         .width('100%')
-        .backgroundColor(this.colors.primaryGreen)
-        .scrollable(ScrollDirection.Vertical)
-        .scrollBar(BarState.Auto)
-        .edgeEffect(EdgeEffect.Spring)
+        .justifyContent(FlexAlign.Center)
       }
-      .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
-
-      if (this.showMethodPicker) {
-        this.PickerOverlay(
-          this.tr('convention'), '🕌',
-          SettingsHelper.buildMethodPickerItems(this.calcMethod),
-          (id: string) => {
-            this.pickMethod(id);
-          },
-          () => {
-            this.showMethodPicker = false;
-          })
-      }
-
-      if (this.showHijriCalendarTypePicker) {
-        this.PickerOverlay(
-          this.tr('hijri_calendar_type'), '📅',
-          SettingsHelper.buildHijriCalendarTypePickerItems(this.hijriCalendarType),
-          (id: string) => {
-            this.pickHijriCalendarType(id);
-          },
-          () => {
-            this.showHijriCalendarTypePicker = false;
-          }
-        )
-      }
-
-      if (this.showAsrPicker) {
-        this.PickerOverlay(
-          this.tr('madhab'), '🌅',
-          SettingsHelper.buildAsrPickerItems(this.asrRule),
-          (id: string) => {
-            this.pickAsrRule(id);
-          },
-          () => {
-            this.showAsrPicker = false;
-          })
-      }
-      if (this.showSourcePicker) {
-        this.PickerOverlay(
-          this.tr('source'), '🌐',
-          SettingsHelper.buildSourcePickerItems(this.calcSource),
-          (id: string) => {
-            this.pickSource(id);
-          },
-          () => {
-            this.showSourcePicker = false;
-          })
-      }
-      if (this.showLogViewer) {
-        this.LogViewerSheet()
-      }
+      .layoutWeight(1)
+      .width('100%')
+      .backgroundColor(this.colors.primaryGreen)
+      .scrollable(ScrollDirection.Vertical)
+      .scrollBar(BarState.Auto)
+      .edgeEffect(EdgeEffect.Spring)
     }
-    .width('100%').height('100%')
+    .width('100%')
+    .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+    .bindSheet($$this.showPickerSheet, this.PickerSheet(), {
+      height: 520,
+      dragBar: true,
+      showClose: false,
+      backgroundColor: this.colors.cardDark,
+      blurStyle: BlurStyle.Thick,
+      maskColor: this.colors.overlayDim,
+      onDisappear: () => {
+        this.showPickerSheet = false;
+        this.activePicker = 'none';
+      }
+    })
+    .bindSheet($$this.showLogViewer, this.LogViewerSheet(), {
+      height: 640,
+      dragBar: true,
+      showClose: false,
+      backgroundColor: this.colors.cardDark,
+      blurStyle: BlurStyle.Thick,
+      maskColor: this.colors.overlayDim,
+      onDisappear: () => {
+        this.showLogViewer = false;
+      }
+    })
   }
+
+  // ============================================================
+  // TOP BAR
+  // ============================================================
 
   @Builder
   TopBar() {
@@ -297,11 +264,14 @@ struct SettingsPage {
         .onClick(() => router.back())
 
       Text(this.tr('title_settings'))
-        .fontSize(22).fontWeight(FontWeight.Bold)
+        .fontSize(22)
+        .fontWeight(FontWeight.Bold)
         .fontColor(this.colors.textWhite)
         .margin({ left: 16 })
     }
-    .width('100%').height(72).backgroundColor(this.colors.cardDark)
+    .width('100%')
+    .height(72)
+    .backgroundColor(this.colors.cardDark)
     .alignItems(VerticalAlign.Center)
   }
 
@@ -325,7 +295,9 @@ struct SettingsPage {
         .layoutWeight(1)
 
       Text(this.expandedCategory === categoryKey ? '▲' : '▼')
-        .fontSize(12).fontColor(this.colors.accentGold).opacity(0.8)
+        .fontSize(12)
+        .fontColor(this.colors.accentGold)
+        .opacity(0.8)
     }
     .width('100%')
     .padding({
@@ -345,7 +317,7 @@ struct SettingsPage {
   }
 
   // ============================================================
-  // LOCATION CONTENT
+  // LOCATION
   // ============================================================
 
   @Builder
@@ -358,7 +330,8 @@ struct SettingsPage {
 
         Button() {
           if (this.isRefreshing) {
-            LoadingProgress().width(18).height(18)
+            LoadingProgress()
+              .width(18).height(18)
               .color(this.colors.accentGold)
           } else {
             Text('📡').fontSize(18).fontColor(this.colors.accentGold)
@@ -373,14 +346,16 @@ struct SettingsPage {
           this.refreshLocation();
         })
       }
-      .width('100%').padding({ bottom: 14 })
+      .width('100%')
+      .padding({ bottom: 14 })
       .alignItems(VerticalAlign.Center)
 
       Row() {
         this.ModeButton(this.tr('gps'), LocationMode.GPS)
         this.ModeButton(this.tr('manual_location'), LocationMode.MANUAL)
       }
-      .width('100%').padding({ bottom: 14 })
+      .width('100%')
+      .padding({ bottom: 14 })
 
       if (this.locationMode === LocationMode.MANUAL) {
         Column() {
@@ -395,8 +370,8 @@ struct SettingsPage {
               .type(InputType.Normal)
               .inputFilter('[\\-0-9\\.]')
               .direction(Direction.Ltr)
-              .onChange((value: string) => {
-                this.manualLatInput = value;
+              .onChange((v: string) => {
+                this.manualLatInput = v;
               })
               .fontSize(14)
               .fontColor(this.colors.textWhite)
@@ -424,8 +399,8 @@ struct SettingsPage {
               .type(InputType.Normal)
               .inputFilter('[\\-0-9\\.]')
               .direction(Direction.Ltr)
-              .onChange((value: string) => {
-                this.manualLngInput = value;
+              .onChange((v: string) => {
+                this.manualLngInput = v;
               })
               .fontSize(14)
               .fontColor(this.colors.textWhite)
@@ -451,8 +426,8 @@ struct SettingsPage {
               placeholder: this.tr('city_name_placeholder')
             })
               .type(InputType.Normal)
-              .onChange((value: string) => {
-                this.manualCityInput = value;
+              .onChange((v: string) => {
+                this.manualCityInput = v;
               })
               .fontSize(14)
               .fontColor(this.colors.textWhite)
@@ -469,17 +444,18 @@ struct SettingsPage {
           }
           .width('100%').margin({ bottom: 12 })
 
-          Button(this.tr('save_coordinates'))
-            .width('100%')
-            .height(44)
-            .fontSize(14)
-            .fontWeight(FontWeight.Medium)
-            .fontColor(this.colors.textOnAccent)
-            .backgroundColor(this.colors.accentGold)
-            .borderRadius(10)
-            .onClick(() => {
-              this.saveManualCoords();
-            })
+          Button() {
+            Text(this.tr('save_coordinates'))
+              .fontSize(14).fontWeight(FontWeight.Medium)
+              .fontColor(this.colors.textOnAccent)
+          }
+          .width('100%')
+          .height(44)
+          .backgroundColor(this.colors.accentGold)
+          .borderRadius(10)
+          .onClick(() => {
+            this.saveManualCoords();
+          })
         }
         .width('100%').padding({ bottom: 14 })
       }
@@ -572,141 +548,57 @@ struct SettingsPage {
   }
 
   // ============================================================
-  // PRAYER TIMES CONTENT
+  // PRAYER TIMES
   // ============================================================
 
   @Builder
   PrayerTimesContent() {
     Column() {
-      Row() {
-        Column() {
-          Text(this.tr('convention'))
-            .fontSize(15).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
-          Text(this.tr('convention_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-          Text(SettingsHelper.getCalcMethodLabel(this.calcMethod))
-            .fontSize(12)
-            .fontColor(this.colors.accentGold)
-            .maxLines(2)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .margin({ top: 6 })
+      this.SettingsRow(
+        this.tr('convention'),
+        this.tr('convention_desc'),
+        SettingsHelper.getCalcMethodLabel(this.calcMethod),
+        () => {
+          this.activePicker = 'method';
+          this.showPickerSheet = true;
         }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
-      }
-      .width('100%')
-      .padding({
-        top: 14,
-        bottom: 14,
-        left: 16,
-        right: 16
-      })
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .margin({ bottom: 8 })
-      .onClick(() => {
-        this.showMethodPicker = true;
-      })
+      )
 
-      Row() {
-        Column() {
-          Text(this.tr('madhab'))
-            .fontSize(15).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
-          Text(this.tr('madhab_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-          Text(SettingsHelper.getAsrRuleLabel(this.asrRule))
-            .fontSize(12)
-            .fontColor(this.colors.accentGold)
-            .maxLines(2)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .margin({ top: 6 })
+      this.SettingsRow(
+        this.tr('madhab'),
+        this.tr('madhab_desc'),
+        SettingsHelper.getAsrRuleLabel(this.asrRule),
+        () => {
+          this.activePicker = 'asr';
+          this.showPickerSheet = true;
         }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
-      }
-      .width('100%')
-      .padding({
-        top: 14,
-        bottom: 14,
-        left: 16,
-        right: 16
-      })
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .margin({ bottom: 8 })
-      .onClick(() => {
-        this.showAsrPicker = true;
-      })
+      )
 
-      Row() {
-        Column() {
-          Text(this.tr('source'))
-            .fontSize(15).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
-          Text(this.tr('source_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-          Text(SettingsHelper.getCalcSourceLabel(this.calcSource))
-            .fontSize(12)
-            .fontColor(this.colors.accentGold)
-            .maxLines(2)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .margin({ top: 6 })
+      this.SettingsRow(
+        this.tr('source'),
+        this.tr('source_desc'),
+        SettingsHelper.getCalcSourceLabel(this.calcSource),
+        () => {
+          this.activePicker = 'source';
+          this.showPickerSheet = true;
         }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
-      }
-      .width('100%')
-      .padding({
-        top: 14,
-        bottom: 14,
-        left: 16,
-        right: 16
-      })
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .margin({ bottom: 8 })
-      .onClick(() => {
-        this.showSourcePicker = true;
-      })
+      )
 
       this.PrayerOffsetsCard()
 
-      // ---- Advanced Calculation ----
-      Row() {
-        Column() {
-          Text(this.tr('advanced_calc_title'))
-            .fontSize(15).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
-          Text(this.tr('rounding_method') + ' · '
-            + this.tr('midnight_method') + ' · '
-            + this.tr('high_latitude'))
-            .fontSize(11)
-            .fontColor(this.colors.textMuted)
-            .margin({ top: 2 })
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
+      this.SettingsRow(
+        this.tr('advanced_calc_title'),
+        '',
+        this.tr('rounding_method') + ' · '
+          + this.tr('midnight_method') + ' · '
+          + this.tr('high_latitude'),
+        () => {
+          NavHelper.prepareForward();
+          router.pushUrl({ url: 'pages/AdvancedCalcPage' })
+            .catch((err: Error) =>
+            console.error('Navigation failed: ' + err.message));
         }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
-      }
-      .width('100%')
-      .padding({
-        top: 14,
-        bottom: 14,
-        left: 16,
-        right: 16
-      })
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .margin({ top: 8, bottom: 0 })
-      .onClick(() => {
-        NavHelper.prepareForward();
-        router.pushUrl({ url: 'pages/AdvancedCalcPage' })
-          .catch((err: Error) =>
-          console.error('Navigation failed:', JSON.stringify(err)));
-      })
+      )
     }
     .width('100%')
     .padding(12)
@@ -714,6 +606,49 @@ struct SettingsPage {
     .borderRadius(16)
     .border({ width: 1, color: this.colors.borderSoft })
     .margin({ bottom: 12 })
+  }
+
+  @Builder
+  SettingsRow(
+    title: string, description: string, value: string,
+    onTap: () => void
+  ) {
+    Row() {
+      Column() {
+        Text(title)
+          .fontSize(15).fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Medium)
+        if (description.length > 0) {
+          Text(description)
+            .fontSize(11)
+            .fontColor(this.colors.textMuted)
+            .margin({ top: 2 })
+            .maxLines(2)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+        }
+        Text(value)
+          .fontSize(12)
+          .fontColor(this.colors.accentGold)
+          .maxLines(2)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+          .margin({ top: 6 })
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+      Text('›').fontSize(22)
+        .fontColor(this.colors.accentGold).opacity(0.7)
+    }
+    .width('100%')
+    .padding({
+      top: 14,
+      bottom: 14,
+      left: 16,
+      right: 16
+    })
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(12)
+    .margin({ bottom: 8 })
+    .onClick(onTap)
   }
 
   @Builder
@@ -725,9 +660,11 @@ struct SettingsPage {
             .fontSize(15).fontColor(this.colors.textWhite)
             .fontWeight(FontWeight.Medium)
           Text(this.tr('prayer_offsets_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+            .fontSize(11).fontColor(this.colors.textMuted)
+            .margin({ top: 2 })
         }
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
         Text(this.showOffsets ? '▲' : '▼')
           .fontSize(12).fontColor(this.colors.accentGold).opacity(0.8)
       }
@@ -758,25 +695,28 @@ struct SettingsPage {
           this.OffsetRow(this.tr('prayer_maghrib'), 'maghrib')
           this.OffsetRow(this.tr('prayer_isha'), 'isha')
 
-          Button(this.tr('reset_all_offsets'))
-            .width('100%')
-            .height(38)
-            .fontSize(13)
-            .fontWeight(FontWeight.Medium)
-            .fontColor(this.colors.textWhite)
-            .backgroundColor(this.colors.tintSoft)
-            .borderRadius(10)
-            .margin({ top: 10, bottom: 4 })
-            .onClick(() => {
-              this.resetOffsets();
-            })
+          Button() {
+            Text(this.tr('reset_all_offsets'))
+              .fontSize(13).fontWeight(FontWeight.Medium)
+              .fontColor(this.colors.textWhite)
+          }
+          .width('100%')
+          .height(38)
+          .backgroundColor(this.colors.tintSoft)
+          .borderRadius(10)
+          .margin({ top: 10, bottom: 4 })
+          .onClick(() => {
+            this.resetOffsets();
+          })
         }
         .width('100%').padding({ left: 8, right: 8, bottom: 12 })
       }
     }
-    .width('100%').padding({ top: 4, bottom: 4 })
-    .backgroundColor(this.colors.tintSubtle).borderRadius(12)
-    .margin({ top: 8 })
+    .width('100%')
+    .padding({ top: 4, bottom: 4 })
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(12)
+    .margin({ top: 8, bottom: 8 })
   }
 
   @Builder
@@ -841,7 +781,8 @@ struct SettingsPage {
             .fontSize(15).fontColor(this.colors.textWhite)
             .fontWeight(FontWeight.Medium)
           Text(this.tr('notifications_master_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+            .fontSize(11).fontColor(this.colors.textMuted)
+            .margin({ top: 2 })
         }
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
@@ -1009,26 +950,7 @@ struct SettingsPage {
         .alignItems(VerticalAlign.Top)
       }
 
-      Row() {
-        Text('📄').fontSize(14).margin({ right: 8 })
-        Column() {
-          Text(this.tr('log_view_button'))
-            .fontSize(13).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium).width('100%')
-          Text(this.tr('log_view_desc'))
-            .fontSize(10).fontColor(this.colors.textMuted)
-            .margin({ top: 2 }).width('100%')
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-        Text('›').fontSize(20).fontColor(this.colors.accentGold).opacity(0.7)
-      }
-      .width('100%')
-      .padding(14)
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .onClick(() => {
-        this.openLogViewer();
-      })
+      this.LogAccessRowInternal()
     }
     .width('100%')
     .padding(12)
@@ -1042,16 +964,16 @@ struct SettingsPage {
   NotifPrayerRow(prayerId: string) {
     Row() {
       Text(this.tr('prayer_' + prayerId))
-        .fontSize(14).fontColor(this.colors.textWhite).layoutWeight(1)
+        .fontSize(14).fontColor(this.colors.textWhite)
+        .layoutWeight(1)
 
       Toggle({
         type: ToggleType.Switch,
         isOn: this.getNotifPrayerValue(prayerId)
       })
         .selectedColor(this.colors.accentGold)
-        .onChange((isOn: boolean) => {
-          this.toggleNotifPrayer(prayerId, isOn);
-        })
+        .onChange((isOn: boolean) =>
+        this.toggleNotifPrayer(prayerId, isOn))
     }
     .width('100%')
     .padding({
@@ -1059,6 +981,32 @@ struct SettingsPage {
       bottom: 6,
       left: 2,
       right: 2
+    })
+  }
+
+  @Builder
+  LogAccessRowInternal() {
+    Row() {
+      Text('📄').fontSize(14).margin({ right: 8 })
+      Column() {
+        Text(this.tr('log_view_button'))
+          .fontSize(13).fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Medium).width('100%')
+        Text(this.tr('log_view_desc'))
+          .fontSize(10).fontColor(this.colors.textMuted)
+          .margin({ top: 2 }).width('100%')
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+      Text('›').fontSize(20)
+        .fontColor(this.colors.accentGold).opacity(0.7)
+    }
+    .width('100%')
+    .padding(14)
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(12)
+    .onClick(() => {
+      this.openLogViewer();
     })
   }
 
@@ -1075,7 +1023,9 @@ struct SettingsPage {
           .margin({ top: 2 }).width('100%')
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
-      Text('›').fontSize(20).fontColor(this.colors.accentGold).opacity(0.7)
+
+      Text('›').fontSize(20)
+        .fontColor(this.colors.accentGold).opacity(0.7)
     }
     .width('100%')
     .padding(14)
@@ -1089,50 +1039,22 @@ struct SettingsPage {
   }
 
   // ============================================================
-  // HIJRI
+  // HIJRI CALENDAR
   // ============================================================
 
   @Builder
   HijriCalendarContent() {
     Column() {
-      // ---- Calendar Type (above the offset) ----
-      Row() {
-        Column() {
-          Text(this.tr('hijri_calendar_type'))
-            .fontSize(15).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
-          Text(this.tr('hijri_calendar_type_desc'))
-            .fontSize(11)
-            .fontColor(this.colors.textMuted)
-            .margin({ top: 2 })
-            .maxLines(2)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-          Text(SettingsHelper.getHijriCalendarTypeLabel(this.hijriCalendarType))
-            .fontSize(12)
-            .fontColor(this.colors.accentGold)
-            .maxLines(2)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .margin({ top: 6 })
+      this.SettingsRow(
+        this.tr('hijri_calendar_type'),
+        this.tr('hijri_calendar_type_desc'),
+        SettingsHelper.getHijriCalendarTypeLabel(this.hijriCalendarType),
+        () => {
+          this.activePicker = 'hijriType';
+          this.showPickerSheet = true;
         }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+      )
 
-        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
-      }
-      .width('100%')
-      .padding({
-        top: 14,
-        bottom: 14,
-        left: 16,
-        right: 16
-      })
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .margin({ bottom: 8 })
-      .onClick(() => {
-        this.showHijriCalendarTypePicker = true;
-      })
-
-      // ---- Hijri Offset ----
       Row() {
         Column() {
           Text(this.tr('hijri_offset'))
@@ -1200,7 +1122,6 @@ struct SettingsPage {
       .margin({ bottom: 8 })
       .alignItems(VerticalAlign.Center)
 
-      // ---- Offset caption ----
       Text(this.hijriOffsetDescription())
         .fontSize(11)
         .fontColor(this.colors.textMuted)
@@ -1229,63 +1150,18 @@ struct SettingsPage {
           .fontSize(20).fontWeight(FontWeight.Bold)
           .fontColor(this.colors.textWhite)
         Text(this.tr('app_tagline'))
-          .fontSize(12).fontColor(this.colors.accentGold).margin({ top: 4 })
+          .fontSize(12).fontColor(this.colors.accentGold)
+          .margin({ top: 4 })
 
         Divider().color(this.colors.borderSoft).width('80%')
           .margin({ top: 14, bottom: 14 })
 
-        Row() {
-          Text(this.tr('about_version'))
-            .fontSize(13).fontColor(this.colors.textMuted)
-          Blank()
-          Text(this.appInfo.versionName)
-            .fontSize(13).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium).direction(Direction.Ltr)
-        }
-        .width('100%').padding({ left: 8, right: 8 }).margin({ top: 6 })
-
-        Row() {
-          Text(this.tr('about_build'))
-            .fontSize(13).fontColor(this.colors.textMuted)
-          Blank()
-          Text(`${this.appInfo.versionCode}`)
-            .fontSize(13).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium).direction(Direction.Ltr)
-        }
-        .width('100%').padding({ left: 8, right: 8 }).margin({ top: 6 })
-
-        Row() {
-          Text(this.tr('about_bundle'))
-            .fontSize(13).fontColor(this.colors.textMuted)
-          Blank()
-          Text(this.appInfo.bundleName)
-            .fontSize(11)
-            .fontColor(this.colors.textMuted)
-            .direction(Direction.Ltr)
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-        }
-        .width('100%').padding({ left: 8, right: 8 }).margin({ top: 6 })
-
-        Row() {
-          Text(this.tr('about_platform'))
-            .fontSize(13).fontColor(this.colors.textMuted)
-          Blank()
-          Text(this.tr('about_platform_value'))
-            .fontSize(13).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
-        }
-        .width('100%').padding({ left: 8, right: 8 }).margin({ top: 6 })
-
-        Row() {
-          Text(this.tr('about_copyright'))
-            .fontSize(13).fontColor(this.colors.textMuted)
-          Blank()
-          Text(this.appInfo.name)
-            .fontSize(13).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
-        }
-        .width('100%').padding({ left: 8, right: 8 }).margin({ top: 6 })
+        this.AboutRow(this.tr('about_version'), this.appInfo.versionName)
+        this.AboutRow(this.tr('about_build'), `${this.appInfo.versionCode}`)
+        this.AboutRow(this.tr('about_bundle'), this.appInfo.bundleName)
+        this.AboutRow(this.tr('about_platform'),
+          this.tr('about_platform_value'))
+        this.AboutRow(this.tr('about_copyright'), this.appInfo.name)
       }
       .width('100%')
       .padding(20)
@@ -1301,19 +1177,215 @@ struct SettingsPage {
     .margin({ bottom: 12 })
   }
 
+  @Builder
+  AboutRow(label: string, value: string) {
+    Row() {
+      Text(label).fontSize(13).fontColor(this.colors.textMuted)
+      Blank()
+      Text(value)
+        .fontSize(12)
+        .fontColor(this.colors.textWhite)
+        .fontWeight(FontWeight.Medium)
+        .direction(Direction.Ltr)
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .layoutWeight(1)
+        .textAlign(TextAlign.End)
+    }
+    .width('100%')
+    .padding({ left: 8, right: 8 })
+    .margin({ top: 6 })
+  }
+
+  // ============================================================
+  // PICKER SHEET
+  // ============================================================
+
+  @Builder
+  PickerSheet() {
+    Column() {
+      Row()
+        .width(44)
+        .height(4)
+        .backgroundColor(this.colors.overlayDimSoft)
+        .borderRadius(2)
+        .margin({ top: 10 })
+
+      Row() {
+        Text(this.pickerIcon())
+          .fontSize(22)
+          .width(44)
+          .height(44)
+          .textAlign(TextAlign.Center)
+          .backgroundColor(this.colors.tintSoft)
+          .borderRadius(12)
+          .border({ width: 1, color: this.colors.borderSoft })
+
+        Text(this.pickerTitle())
+          .fontSize(20).fontWeight(FontWeight.Bold)
+          .fontColor(this.colors.textWhite)
+          .margin({ left: 14 })
+      }
+      .width('100%')
+      .padding({ left: 20, top: 20, bottom: 20 })
+
+      Divider().color(this.colors.borderSoft).width('90%')
+
+      Scroll() {
+        Column() {
+          ForEach(this.pickerItems(), (item: PickerItem) => {
+            Row() {
+              Row() {
+                if (item.selected) {
+                  Row().width(10).height(10).borderRadius(5)
+                    .backgroundColor(this.colors.accentGold)
+                }
+              }
+              .width(22)
+              .height(22)
+              .borderRadius(11)
+              .border({
+                width: item.selected ? 2 : 1.5,
+                color: item.selected
+                  ? this.colors.accentGold : this.colors.borderStrong
+              })
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Center)
+
+              Text(item.label)
+                .fontSize(15)
+                .fontColor(item.selected
+                  ? this.colors.accentGold : this.colors.textWhite)
+                .fontWeight(item.selected
+                  ? FontWeight.Bold : FontWeight.Normal)
+                .layoutWeight(1)
+                .maxLines(2)
+                .textOverflow({ overflow: TextOverflow.Ellipsis })
+                .margin({ left: 14 })
+            }
+            .width('100%')
+            .padding({
+              top: 16,
+              bottom: 16,
+              left: 20,
+              right: 20
+            })
+            .backgroundColor(item.selected
+              ? this.colors.tintSoft : 'transparent')
+            .borderRadius(12)
+            .margin({ bottom: 4 })
+            .onClick(() => {
+              this.pickItem(item.id);
+            })
+          }, (item: PickerItem) =>
+          `${this.activePicker}-${item.id}-${item.selected ? 's' : 'u'}`)
+        }
+        .width('100%')
+        .padding({
+          left: 8,
+          right: 8,
+          top: 8,
+          bottom: 8
+        })
+      }
+      .layoutWeight(1)
+      .width('100%')
+      .scrollBar(BarState.Auto)
+      .edgeEffect(EdgeEffect.Spring)
+
+      Button() {
+        Text(this.tr('cancel'))
+          .fontSize(15).fontWeight(FontWeight.Medium)
+          .fontColor(this.colors.textWhite)
+      }
+      .width('90%')
+      .height(48)
+      .backgroundColor(this.colors.tintSoft)
+      .borderRadius(12)
+      .margin({ top: 8, bottom: 24 })
+      .onClick(() => {
+        this.showPickerSheet = false;
+        this.activePicker = 'none';
+      })
+    }
+    .width('100%').height('100%')
+    .backgroundColor(this.colors.cardDark)
+  }
+
+  private pickerTitle(): string {
+    switch (this.activePicker) {
+      case 'method':
+        return this.tr('convention');
+      case 'asr':
+        return this.tr('madhab');
+      case 'source':
+        return this.tr('source');
+      case 'hijriType':
+        return this.tr('hijri_calendar_type');
+      default:
+        return '';
+    }
+  }
+
+  private pickerIcon(): string {
+    switch (this.activePicker) {
+      case 'method':
+        return '🕌';
+      case 'asr':
+        return '🌅';
+      case 'source':
+        return '🌐';
+      case 'hijriType':
+        return '📅';
+      default:
+        return '⚙️';
+    }
+  }
+
+  private pickerItems(): PickerItem[] {
+    switch (this.activePicker) {
+      case 'method':
+        return SettingsHelper.buildMethodPickerItems(this.calcMethod);
+      case 'asr':
+        return SettingsHelper.buildAsrPickerItems(this.asrRule);
+      case 'source':
+        return SettingsHelper.buildSourcePickerItems(this.calcSource);
+      case 'hijriType':
+        return SettingsHelper.buildHijriCalendarTypePickerItems(
+          this.hijriCalendarType
+        );
+      default:
+        return [];
+    }
+  }
+
+  private pickItem(id: string): void {
+    switch (this.activePicker) {
+      case 'method':
+        this.pickMethod(id);
+        break;
+      case 'asr':
+        this.pickAsrRule(id);
+        break;
+      case 'source':
+        this.pickSource(id);
+        break;
+      case 'hijriType':
+        this.pickHijriCalendarType(id);
+        break;
+      default:
+        break;
+    }
+    this.showPickerSheet = false;
+    this.activePicker = 'none';
+  }
+
   // ============================================================
   // LOG VIEWER
   // ============================================================
 
   @Builder
   LogViewerSheet() {
-    Column()
-      .width('100%').height('100%')
-      .backgroundColor(this.colors.overlayDim)
-      .onClick(() => {
-        this.showLogViewer = false;
-      })
-
     Column() {
       Row()
         .width(44)
@@ -1326,7 +1398,8 @@ struct SettingsPage {
         Text('📄').fontSize(20).margin({ right: 10 })
         Text(this.tr('log_view_title'))
           .fontSize(18).fontWeight(FontWeight.Bold)
-          .fontColor(this.colors.textWhite).layoutWeight(1)
+          .fontColor(this.colors.textWhite)
+          .layoutWeight(1)
         Text('✕')
           .fontSize(20)
           .fontColor(this.colors.textMuted)
@@ -1356,53 +1429,52 @@ struct SettingsPage {
 
       Divider().color(this.colors.borderSoft).width('90%')
 
-      Column() {
-        Scroll() {
-          Text(this.logContents.length > 0
-            ? this.logContents : this.tr('log_empty'))
-            .fontSize(11)
-            .fontColor(this.colors.textWhite)
-            .lineHeight(16)
-            .width('100%')
-            .padding(14)
-            .textAlign(TextAlign.Start)
-        }
-        .width('100%')
-        .height('100%')
-        .backgroundColor(this.colors.tintSubtle)
-        .borderRadius(10)
-        .border({ width: 1, color: this.colors.borderSoft })
-        .scrollBar(BarState.Auto)
-        .edgeEffect(EdgeEffect.Spring)
+      Scroll() {
+        Text(this.logContents.length > 0
+          ? this.logContents : this.tr('log_empty'))
+          .fontSize(11)
+          .fontColor(this.colors.textWhite)
+          .lineHeight(16)
+          .width('100%')
+          .padding(14)
+          .textAlign(TextAlign.Start)
       }
-      .layoutWeight(1).width('100%')
-      .padding({ left: 20, right: 20, top: 12 })
+      .layoutWeight(1)
+      .width('100%')
+      .margin({ left: 20, right: 20, top: 12 })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(10)
+      .border({ width: 1, color: this.colors.borderSoft })
+      .scrollBar(BarState.Auto)
+      .edgeEffect(EdgeEffect.Spring)
 
       Row() {
-        Button(this.tr('log_copy'))
-          .layoutWeight(1)
-          .height(44)
-          .fontSize(14)
-          .fontWeight(FontWeight.Medium)
-          .fontColor(this.colors.textOnAccent)
-          .backgroundColor(this.colors.accentGold)
-          .borderRadius(10)
-          .onClick(() => {
-            this.copyLogsToClipboard();
-          })
+        Button() {
+          Text(this.tr('log_copy'))
+            .fontSize(14).fontWeight(FontWeight.Medium)
+            .fontColor(this.colors.textOnAccent)
+        }
+        .layoutWeight(1)
+        .height(44)
+        .backgroundColor(this.colors.accentGold)
+        .borderRadius(10)
+        .onClick(() => {
+          this.copyLogsToClipboard();
+        })
 
-        Button(this.tr('log_clear'))
-          .layoutWeight(1)
-          .height(44)
-          .fontSize(14)
-          .fontWeight(FontWeight.Medium)
-          .fontColor(this.colors.textWhite)
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(10)
-          .margin({ left: 8 })
-          .onClick(() => {
-            this.clearLogs();
-          })
+        Button() {
+          Text(this.tr('log_clear'))
+            .fontSize(14).fontWeight(FontWeight.Medium)
+            .fontColor(this.colors.textWhite)
+        }
+        .layoutWeight(1)
+        .height(44)
+        .backgroundColor(this.colors.tintSoft)
+        .borderRadius(10)
+        .margin({ left: 8 })
+        .onClick(() => {
+          this.clearLogs();
+        })
       }
       .width('100%')
       .padding({
@@ -1412,143 +1484,8 @@ struct SettingsPage {
         bottom: 24
       })
     }
-    .width('100%')
-    .height('80%')
+    .width('100%').height('100%')
     .backgroundColor(this.colors.cardDark)
-    .borderRadius({ topLeft: 28, topRight: 28 })
-    .shadow({
-      radius: 24,
-      color: this.colors.shadowFloating,
-      offsetX: 0,
-      offsetY: -6
-    })
-    .border({ width: { top: 1 }, color: this.colors.borderSoft })
-    .position({ bottom: 0 })
-  }
-
-  // ============================================================
-  // PICKER OVERLAY
-  // ============================================================
-
-  @Builder
-  PickerOverlay(
-    title: string,
-    icon: string,
-    items: PickerItem[],
-    onSelect: (id: string) => void,
-    onCancel: () => void
-  ) {
-    Column()
-      .width('100%').height('100%')
-      .backgroundColor(this.colors.overlayDim)
-      .onClick(() => {
-        onCancel();
-      })
-
-    Column() {
-      Row()
-        .width(44)
-        .height(4)
-        .backgroundColor(this.colors.overlayDimSoft)
-        .borderRadius(2)
-        .margin({ top: 10 })
-
-      Row() {
-        Text(icon)
-          .fontSize(22)
-          .width(44)
-          .height(44)
-          .textAlign(TextAlign.Center)
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(12)
-          .border({ width: 1, color: this.colors.borderSoft })
-        Text(title)
-          .fontSize(20).fontWeight(FontWeight.Bold)
-          .fontColor(this.colors.textWhite).margin({ left: 14 })
-      }
-      .width('100%').padding({ left: 20, top: 20, bottom: 20 })
-
-      Divider().color(this.colors.borderSoft).width('90%')
-
-      Column() {
-        ForEach(items, (item: PickerItem) => {
-          Row() {
-            Row() {
-              if (item.selected) {
-                Row().width(10).height(10).borderRadius(5)
-                  .backgroundColor(this.colors.accentGold)
-              }
-            }
-            .width(22)
-            .height(22)
-            .borderRadius(11)
-            .border({
-              width: item.selected ? 2 : 1.5,
-              color: item.selected
-                ? this.colors.accentGold : this.colors.borderStrong
-            })
-            .justifyContent(FlexAlign.Center)
-            .alignItems(VerticalAlign.Center)
-
-            Text(item.label)
-              .fontSize(15)
-              .fontColor(item.selected
-                ? this.colors.accentGold : this.colors.textWhite)
-              .fontWeight(item.selected
-                ? FontWeight.Bold : FontWeight.Normal)
-              .layoutWeight(1)
-              .maxLines(2)
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-              .margin({ left: 14 })
-          }
-          .width('100%')
-          .padding({
-            top: 16,
-            bottom: 16,
-            left: 20,
-            right: 20
-          })
-          .backgroundColor(item.selected
-            ? this.colors.tintSoft : 'transparent')
-          .borderRadius(12)
-          .margin({ bottom: 4 })
-          .onClick(() => {
-            onSelect(item.id);
-          })
-        }, (item: PickerItem) => item.id)
-      }
-      .width('100%')
-      .padding({
-        left: 8,
-        right: 8,
-        top: 12,
-        bottom: 12
-      })
-
-      Button(this.tr('cancel'))
-        .width('90%')
-        .height(48)
-        .fontSize(15)
-        .fontWeight(FontWeight.Medium)
-        .fontColor(this.colors.textWhite)
-        .backgroundColor(this.colors.tintSoft)
-        .borderRadius(12)
-        .margin({ top: 8, bottom: 24 })
-        .onClick(() => {
-          onCancel();
-        })
-    }
-    .width('100%')
-    .backgroundColor(this.colors.cardDark)
-    .borderRadius({ topLeft: 28, topRight: 28 })
-    .shadow({
-      radius: 24,
-      color: this.colors.shadowFloating,
-      offsetX: 0,
-      offsetY: -6
-    })
-    .border({ width: { top: 1 }, color: this.colors.borderSoft })
-    .position({ bottom: 0 })
   }
 
   // ============================================================
@@ -1561,10 +1498,6 @@ struct SettingsPage {
 
   private isRtl(): boolean {
     return L.isRtlLang(this.currentLanguage);
-  }
-
-  private isTablet(): boolean {
-    return Breakpoints.isTablet(this.breakpoint);
   }
 
   private onThemeModeChanged(): void {
@@ -1640,29 +1573,29 @@ struct SettingsPage {
     const method = id as CalculationMethod;
     this.calcMethod = method;
     SettingsHelper.saveMethod(method);
-    this.showMethodPicker = false;
   }
 
   private pickAsrRule(id: string): void {
     const rule = Number(id) as AsrShadowRule;
     this.asrRule = rule;
     SettingsHelper.saveAsrRule(rule);
-    this.showAsrPicker = false;
   }
 
   private pickSource(id: string): void {
     const source = id as CalculationSource;
     if (source === CalculationSource.API) {
-      this.getUIContext().getPromptAction().showToast({
-        message: this.tr('coming_soon'),
-        duration: 1800
+      promptAction.showToast({
+        message: this.tr('coming_soon'), duration: 1800
       });
-      this.showSourcePicker = false;
       return;
     }
     this.calcSource = source;
     SettingsHelper.saveSource(source);
-    this.showSourcePicker = false;
+  }
+
+  private pickHijriCalendarType(id: string): void {
+    this.hijriCalendarType = id;
+    SettingsHelper.saveHijriCalendarType(id);
   }
 
   private async pickLocationMode(mode: LocationMode): Promise<void> {
@@ -1703,7 +1636,7 @@ struct SettingsPage {
     const zero = PrayerOffsetsHelper.ZERO;
     this.offsets = zero;
     await SettingsHelper.saveAllOffsets(zero);
-    this.getUIContext().getPromptAction().showToast({
+    promptAction.showToast({
       message: this.tr('reset_all_offsets'), duration: 1800
     });
   }
@@ -1746,13 +1679,13 @@ struct SettingsPage {
     const lng = parseFloat(this.manualLngInput.trim());
 
     if (isNaN(lat) || lat < -90 || lat > 90) {
-      this.getUIContext().getPromptAction().showToast({
+      promptAction.showToast({
         message: this.tr('latitude_hint'), duration: 2500
       });
       return;
     }
     if (isNaN(lng) || lng < -180 || lng > 180) {
-      this.getUIContext().getPromptAction().showToast({
+      promptAction.showToast({
         message: this.tr('longitude_hint'), duration: 2500
       });
       return;
@@ -1781,7 +1714,7 @@ struct SettingsPage {
     this.manualCityInput = saved.cityName;
     this.isRefreshing = false;
 
-    this.getUIContext().getPromptAction().showToast({
+    promptAction.showToast({
       message: `${this.tr('save')}: ${saved.cityName}`, duration: 2000
     });
   }
@@ -1795,7 +1728,7 @@ struct SettingsPage {
     if (this.locationMode === LocationMode.MANUAL) {
       const manual = await SettingsHelper.getManualCoords();
       if (manual.lat === 0 && manual.lng === 0) {
-        this.getUIContext().getPromptAction().showToast({
+        promptAction.showToast({
           message: this.tr('location_desc'), duration: 2000
         });
         this.isRefreshing = false;
@@ -1803,7 +1736,9 @@ struct SettingsPage {
       }
       let cityName = this.tr('manual_location');
       try {
-        cityName = await LocationHelper.reverseGeocode(manual.lat, manual.lng);
+        cityName = await LocationHelper.reverseGeocode(
+          manual.lat, manual.lng
+        );
       } catch (e) { /* fall through */
       }
       const saved = await SettingsHelper.saveManualCoords(
@@ -1813,7 +1748,7 @@ struct SettingsPage {
       this.effectiveLng = saved.lng;
       this.effectiveCity = `${saved.cityName} (${this.tr('manual_location')})`;
       this.lastRefreshTime = saved.refresh;
-      this.getUIContext().getPromptAction().showToast({
+      promptAction.showToast({
         message: `${this.tr('save')}: ${saved.cityName}`, duration: 2000
       });
       this.isRefreshing = false;
@@ -1828,7 +1763,7 @@ struct SettingsPage {
       this.effectiveLng = data.longitude;
       this.effectiveCity = data.cityName;
       this.lastRefreshTime = Date.now();
-      this.getUIContext().getPromptAction().showToast({
+      promptAction.showToast({
         message: `GPS: ${data.cityName}`, duration: 2000
       });
     } catch (err) {
@@ -1839,7 +1774,7 @@ struct SettingsPage {
       } else if (error.message === 'PERMISSION_DENIED') {
         msgKey = 'error_location_permission_denied';
       }
-      this.getUIContext().getPromptAction().showToast({
+      promptAction.showToast({
         message: this.tr(msgKey), duration: 2500
       });
     } finally {
@@ -1884,14 +1819,14 @@ struct SettingsPage {
         const msgKey = CALENDAR_REMINDERS_ENABLED
           ? 'calendar_permission_denied'
           : 'notification_permission_denied';
-        this.getUIContext().getPromptAction().showToast({
+        promptAction.showToast({
           message: this.tr(msgKey), duration: 2500
         });
         return;
       }
     }
 
-    this.getUIContext().getPromptAction().showToast({
+    promptAction.showToast({
       message: this.tr('notif_test_sending'), duration: 1500
     });
 
@@ -1902,12 +1837,12 @@ struct SettingsPage {
       const okMsg = CALENDAR_REMINDERS_ENABLED
         ? 'notif_test_ok_calendar'
         : 'notif_test_ok';
-      this.getUIContext().getPromptAction().showToast({
+      promptAction.showToast({
         message: this.tr(okMsg), duration: 3000
       });
     } else {
       this.notifDiagnostic = result.errorMessage;
-      this.getUIContext().getPromptAction().showToast({
+      promptAction.showToast({
         message: `${this.tr('notif_test_failed')} (code ${result.errorCode})`,
         duration: 4000
       });
@@ -1923,7 +1858,7 @@ struct SettingsPage {
         const msgKey = CALENDAR_REMINDERS_ENABLED
           ? 'calendar_permission_denied'
           : 'notification_permission_denied';
-        this.getUIContext().getPromptAction().showToast({
+        promptAction.showToast({
           message: this.tr(msgKey), duration: 2500
         });
         return;
@@ -1997,8 +1932,21 @@ struct SettingsPage {
   }
 
   private openLogViewer(): void {
-    this.logContents = AppLogger.readAll();
-    this.showLogViewer = true;
+    try {
+      const content = AppLogger.readAll();
+      this.logContents = (typeof content === 'string')
+        ? content
+        : '(log read returned an unexpected type)';
+      this.showLogViewer = true;
+    } catch (err) {
+      const e = err as Error;
+      promptAction.showToast({
+        message: `Log read failed: ${e.message}`,
+        duration: 3000
+      });
+      this.logContents = '';
+      this.showLogViewer = true;
+    }
   }
 
   private copyLogsToClipboard(): void {
@@ -2008,33 +1956,33 @@ struct SettingsPage {
       );
       pasteboard.getSystemPasteboard().setData(data)
         .then(() => {
-          this.getUIContext().getPromptAction().showToast({
+          promptAction.showToast({
             message: this.tr('log_copied'), duration: 1500
           });
         })
         .catch((err: Error) => {
-          console.error('[SettingsPage] clipboard failed:', JSON.stringify(err));
+          console.error('[SettingsPage] clipboard failed: ' + err.message);
         });
     } catch (err) {
-      console.error('[SettingsPage] clipboard threw:', JSON.stringify(err));
+      const e = err as Error;
+      console.error('[SettingsPage] clipboard threw: ' + e.message);
     }
   }
 
   private clearLogs(): void {
-    AppLogger.clear();
-    this.logContents = AppLogger.readAll();
-    this.getUIContext().getPromptAction().showToast({
-      message: this.tr('log_cleared'), duration: 1500
-    });
-  }
-
-  private onHijriCalendarTypeChanged(): void {
-    // Re-render is handled by the @StorageLink.
-  }
-
-  private pickHijriCalendarType(id: string): void {
-    this.hijriCalendarType = id;
-    SettingsHelper.saveHijriCalendarType(id);
-    this.showHijriCalendarTypePicker = false;
+    try {
+      AppLogger.clear();
+      const content = AppLogger.readAll();
+      this.logContents = (typeof content === 'string') ? content : '';
+      promptAction.showToast({
+        message: this.tr('log_cleared'), duration: 1500
+      });
+    } catch (err) {
+      const e = err as Error;
+      promptAction.showToast({
+        message: `Log clear failed: ${e.message}`,
+        duration: 3000
+      });
+    }
   }
 }
