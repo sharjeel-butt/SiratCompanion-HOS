@@ -16,6 +16,7 @@ export class L {
   private static readonly EN: Map<string, string> = L.buildEn();
   private static readonly ZH: Map<string, string> = L.buildZh();
   private static readonly AR: Map<string, string> = L.buildAr();
+
   private static readonly MONTHS_EN: string[] = [
     'Muharram', 'Safar', 'Rabi al-Awwal', 'Rabi al-Thani',
     'Jumada al-Awwal', 'Jumada al-Thani', 'Rajab', "Sha'ban",
@@ -26,20 +27,19 @@ export class L {
     '主马达·敖外鲁', '主马达·阿色尼', '赖哲卜', '舍尔邦',
     '赖买丹', '闪瓦鲁', '都尔·盖尔达', '都尔·希哲'
   ];
-  // ============================================================
-  // LOOKUPS
-  // ============================================================
   private static readonly MONTHS_AR: string[] = [
     'مُحَرَّم', 'صَفَر', 'رَبيع الأوّل', 'رَبيع الثاني',
     'جُمادى الأولى', 'جُمادى الآخرة', 'رَجَب', 'شَعْبان',
     'رَمَضان', 'شَوّال', 'ذو القَعْدة', 'ذو الحِجّة'
   ];
+
   private static readonly DAYS_EN: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   private static readonly DAYS_ZH: string[] = ['日', '一', '二', '三', '四', '五', '六'];
-  // ============================================================
-  // STRING TABLES
-  // ============================================================
   private static readonly DAYS_AR: string[] = ['أحد', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'];
+
+  // ============================================================
+  // LOOKUPS
+  // ============================================================
 
   static current(): string {
     const v = AppStorage.get<string>(STORAGE_KEY_LANGUAGE);
@@ -50,33 +50,17 @@ export class L {
     AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, lang);
   }
 
-  // ============================================================
-  // ENGLISH
-  // ============================================================
-
   static isRtl(): boolean {
     return L.current() === AppLanguage.ARABIC;
   }
-
-  // ============================================================
-  // CHINESE
-  // ============================================================
 
   static isRtlLang(lang: string): boolean {
     return lang === AppLanguage.ARABIC;
   }
 
-  // ============================================================
-  // ARABIC
-  // ============================================================
-
   static getLanguageLabel(lang: string): string {
     return L.get(`lang_${lang}`);
   }
-
-  // ============================================================
-  // ARRAY TABLES
-  // ============================================================
 
   static get(key: string, lang?: string): string {
     const l = (lang !== undefined && lang.length > 0) ? lang : L.current();
@@ -122,6 +106,10 @@ export class L {
     return L.EN;
   }
 
+  // ============================================================
+  // ENGLISH
+  // ============================================================
+
   private static buildEn(): Map<string, string> {
     const m = new Map<string, string>();
 
@@ -132,9 +120,10 @@ export class L {
 
     // ---- Tabs ----
     m.set('tab_home', 'Home');
-    m.set('tab_tasbih', 'Tasbih');
-    m.set('tab_compass', 'Compass');
+    m.set('tab_prayers', 'Prayers');
     m.set('tab_calendar', 'Calendar');
+    m.set('tab_compass', 'Compass');
+    m.set('tab_tasbih', 'Tasbih');
 
     // ---- Home ----
     m.set('current_prayer', 'Current');
@@ -158,6 +147,7 @@ export class L {
     m.set('back', 'Back');
     m.set('today', 'Today');
     m.set('exit', 'Exit');
+    m.set('ok', 'OK');
     m.set('exit_confirm_message', 'Are you sure you want to exit Sirat Companion?');
 
     // ---- Titles ----
@@ -165,6 +155,7 @@ export class L {
     m.set('title_customize', 'Customize');
 
     // ---- Categories ----
+    m.set('category_location', 'Location');
     m.set('category_prayer_times', 'Prayer Times');
     m.set('category_hijri_calendar', 'Hijri Calendar');
     m.set('category_ui_customization', 'UI Customization');
@@ -194,6 +185,7 @@ export class L {
     m.set('highlat_middle', 'Middle of Night');
     m.set('highlat_one_seventh', 'One Seventh of Night');
     m.set('highlat_angle', 'Angle Based');
+    m.set('highlat_proportional', 'Proportional Depression (Diyanet Takdir)');
 
     // ---- Settings: Location ----
     m.set('location', 'Location');
@@ -221,6 +213,9 @@ export class L {
     // ---- Settings: About ----
     m.set('about_version', 'Version');
     m.set('about_platform', 'Platform');
+    m.set('about_platform_value', 'HarmonyOS 6+');
+    m.set('about_build', 'Build');
+    m.set('about_bundle', 'Bundle ID');
     m.set('about_copyright', '© 2026');
 
     // ---- Settings: Notifications ----
@@ -231,7 +226,10 @@ export class L {
     m.set('notify_prayers', 'Prayer Reminders');
     m.set('notify_prayers_desc', 'Choose which prayers send reminders');
     m.set('notifications_footer', 'Reminders are scheduled for the next 3 days and renew each time you open the app');
+    m.set('notifications_footer_calendar',
+      'Reminders are added to your system calendar for the next 3 days and renew each time you open the app');
     m.set('notification_permission_denied', 'Notification permission is required to enable reminders');
+    m.set('calendar_permission_denied', 'Calendar permission is required to enable reminders');
     m.set('notif_before_title', 'Prayer Reminder');
     m.set('notif_before_content', 'is in');
     m.set('notif_exact_title', 'Prayer Time');
@@ -240,7 +238,26 @@ export class L {
     m.set('notif_test_button', 'Send Test Notification');
     m.set('notif_test_sending', 'Sending test notification...');
     m.set('notif_test_ok', 'Test notification scheduled — you should see it in ~5 seconds');
+    m.set('notif_test_ok_calendar', 'Test event added to your calendar — check the Calendar app');
     m.set('notif_test_failed', 'Test notification failed');
+    m.set('notif_dismiss', 'Dismiss');
+    m.set('notif_pray_fajr', 'Pray Fajr');
+    m.set('notif_pray_dhuhr', 'Pray Dhuhr');
+    m.set('notif_pray_asr', 'Pray Asr');
+    m.set('notif_pray_maghrib', 'Pray Maghrib');
+    m.set('notif_pray_isha', 'Pray Isha');
+
+    // ---- Per-prayer Hadith ----
+    m.set('hadith_fajr',
+      'He who prayed the morning prayer (in congregation) he is in fact under the protection of Allah. — Sahih Muslim 657a');
+    m.set('hadith_dhuhr',
+      'This is an hour in which the gates of the heavens are opened, and I love that a righteous deed of mine should ascend during it. — Jami\u2019 at-Tirmidhi 478');
+    m.set('hadith_asr',
+      'Whoever misses the \u2018Asr prayer (intentionally) then it is as if he lost his family and property. — Sahih al-Bukhari 552');
+    m.set('hadith_maghrib',
+      'The five daily prayers... are an expiation for whatever sins are committed between them, so long as major sins are avoided. — Sahih Muslim 233');
+    m.set('hadith_isha',
+      'He who observed the \u2018Isha\u2019 prayer in congregation, it was as if he prayed up to midnight. — Sahih Muslim 656a');
 
     // ---- Settings: Logs ----
     m.set('log_view_button', 'Diagnostic Logs');
@@ -251,6 +268,41 @@ export class L {
     m.set('log_empty', 'The log is empty.');
     m.set('log_copied', 'Log copied to clipboard');
     m.set('log_cleared', 'Log cleared');
+
+    // ---- Advanced Calculation Settings ----
+    m.set('advanced_calc_title', 'Advanced Calculation');
+    m.set('rounding_method', 'Rounding Method');
+    m.set('rounding_method_desc', 'Controls how displayed times are rounded');
+    m.set('midnight_method', 'Midnight Method');
+    m.set('midnight_method_desc', 'Which night boundary defines Islamic midnight');
+    m.set('polar_resolution', 'Polar Resolution');
+    m.set('polar_resolution_desc', 'Fallback when the sun does not reach an angle');
+    m.set('shafaq', 'Shafaq');
+    m.set('shafaq_desc',
+      'Shafaq is used by the Moonsighting Committee method to determine which twilight determines Isha.');
+    m.set('custom_angles', 'Custom Angles');
+    m.set('custom_fajr_angle', 'Fajr angle');
+    m.set('custom_isha_angle', 'Isha angle');
+    m.set('custom_isha_interval', 'Isha interval (min)');
+    m.set('custom_isha_interval_hint', '0 = use angle. >0 = minutes after Maghrib.');
+
+    m.set('rounding_nearest', 'Nearest');
+    m.set('rounding_up', 'Up');
+    m.set('rounding_none', 'None');
+
+    m.set('midnight_standard', 'Sunset to Sunrise');
+    m.set('midnight_standard_desc', 'Default');
+    m.set('midnight_jafari', 'Sunset to Fajr');
+
+    m.set('polar_unresolved', 'Unresolved');
+    m.set('polar_unresolved_desc', 'Default');
+    m.set('polar_aqrab_balad', 'Aqrab Balad');
+    m.set('polar_aqrab_yaum', 'Aqrab Yaum');
+
+    m.set('shafaq_general', 'General');
+    m.set('shafaq_general_desc', 'Default');
+    m.set('shafaq_ahmer', 'Ahmer');
+    m.set('shafaq_abyad', 'Abyad');
 
     // ---- Customize: UI Customization ----
     m.set('show_extra_timings', 'Show Extra Timings');
@@ -279,6 +331,25 @@ export class L {
     // ---- Customize: Haptics ----
     m.set('haptic_feedback', 'Vibration');
     m.set('haptic_feedback_desc', 'Vibrate when counting Tasbih');
+
+    // ---- Sound ----
+    m.set('sound_feedback', 'Sound');
+    m.set('sound_feedback_desc', 'Play a click when counting Tasbih');
+    m.set('sound_style', 'Sound Style');
+    m.set('sound_style_desc', 'Choose the click sound');
+    m.set('controlled_by_system', 'Controlled by system settings');
+
+    // ---- Tasbih sound names ----
+    m.set('sound_glass_tap_name', 'Glass Tap');
+    m.set('sound_glass_tap_desc', 'Glass tap sound');
+    m.set('sound_light_chime_name', 'Light Chime');
+    m.set('sound_light_chime_desc', 'Light chime sound');
+    m.set('sound_muted_bead_name', 'Muted Bead');
+    m.set('sound_muted_bead_desc', 'Muted bead sound');
+    m.set('sound_soft_click_name', 'Soft Click');
+    m.set('sound_soft_click_desc', 'Soft click sound');
+    m.set('sound_warm_knock_name', 'Warm Knock');
+    m.set('sound_warm_knock_desc', 'Warm knock sound');
 
     // ---- Tasbih ----
     m.set('title_tasbih', 'Tasbih');
@@ -326,6 +397,12 @@ export class L {
     m.set('sensor_unavailable', 'Compass sensor not available. Please test on a real device.');
     m.set('location_unavailable', 'Location unavailable');
 
+    // ---- Qibla calibration ----
+    m.set('qibla_calibrate_title', 'Calibrate Compass');
+    m.set('qibla_calibrate_desc', 'Move your phone in a figure-8 pattern to improve compass accuracy.');
+    m.set('qibla_calibrate_skip', 'Skip for now');
+    m.set('qibla_calibrate_hint', 'Calibration improves accuracy');
+
     // ---- Hijri Calendar ----
     m.set('title_hijri_calendar', 'Hijri Calendar');
     m.set('important_dates', 'IMPORTANT DATES');
@@ -365,15 +442,92 @@ export class L {
     m.set('event_arafah', 'Day of Arafah');
     m.set('event_eid_adha', 'Eid al-Adha');
 
-    // ---- Method labels ----
+    // ---- Method labels (long) ----
     m.set('method_karachi', 'University of Islamic Sciences, Karachi');
     m.set('method_jafari', 'Shia Ithna Ashari (Leva Institute, Qum)');
     m.set('method_isna', 'Islamic Society of North America');
     m.set('method_mwl', 'Muslim World League');
+    m.set('method_umm_al_qura', 'Umm al-Qura (Makkah)');
+    m.set('method_egyptian', 'Egyptian Survey');
+    m.set('method_sunni_iraq', 'Sunni Endowment (Iraq)');
+    m.set('method_qatar', 'Qatar Awqaf');
+    m.set('method_singapore', 'Singapore (MUIS)');
+    m.set('method_france', 'France (UOIF)');
+    m.set('method_turkey', 'Turkey (Diyanet)');
+    m.set('method_russia', 'Russia (SAMR)');
+    m.set('method_uae', 'UAE (GIAE)');
+    m.set('method_moonsighting', 'Moonsighting Committee Worldwide');
+    m.set('method_dubai', 'The Gulf Region (Dubai)');
+    m.set('method_kuwait', 'Kuwait');
+    m.set('method_france_15', 'France angle 15');
+    m.set('method_france_18', 'France angle 18');
+    m.set('method_turkey_europe', 'Diyanet İşleri Başkanlığı, Europe');
+    m.set('method_tehran', 'Shia, Institute of Geophysics, University of Tehran, Iran');
+    m.set('method_indonesia', 'Kementrian Agama Republik Indonesia (KEMENAG)');
+    m.set('method_algeria', 'Ministry of Religious Affairs and Wakfs, Algeria');
+    m.set('method_brunei', 'Kementrian Hal Ehwal Ugama (Brunei Darussalam)');
+    m.set('method_custom', 'Custom');
+
+    // ---- Method labels (short) ----
+    m.set('method_short_karachi', 'Karachi');
+    m.set('method_short_jafari', 'Jafari');
+    m.set('method_short_isna', 'ISNA');
+    m.set('method_short_mwl', 'MWL');
+    m.set('method_short_umm_al_qura', 'Makkah');
+    m.set('method_short_egyptian', 'Egyptian');
+    m.set('method_short_sunni_iraq', 'Iraq');
+    m.set('method_short_qatar', 'Qatar');
+    m.set('method_short_singapore', 'Singapore');
+    m.set('method_short_france', 'France');
+    m.set('method_short_turkey', 'Turkey');
+    m.set('method_short_russia', 'Russia');
+    m.set('method_short_uae', 'UAE');
+    m.set('method_short_moonsighting', 'Moonsighting');
+    m.set('method_short_dubai', 'Dubai');
+    m.set('method_short_kuwait', 'Kuwait');
+    m.set('method_short_france_15', 'France 15°');
+    m.set('method_short_france_18', 'France 18°');
+    m.set('method_short_turkey_europe', 'Turkey EU');
+    m.set('method_short_tehran', 'Tehran');
+    m.set('method_short_indonesia', 'KEMENAG');
+    m.set('method_short_algeria', 'Algeria');
+    m.set('method_short_brunei', 'Brunei');
+    m.set('method_short_custom', 'Custom');
+
+    // ---- Asr / Source short labels ----
     m.set('asr_standard', "Standard (Shafi'i / Maliki / Hanbali)");
     m.set('asr_hanafi', 'Hanafi');
+    m.set('asr_short_standard', 'Standard');
+    m.set('asr_short_hanafi', 'Hanafi');
     m.set('source_local', 'Local Formula (Offline)');
     m.set('source_api', 'API (Online)');
+    m.set('source_short_local', 'Local');
+    m.set('source_short_online', 'Online');
+
+    // ---- Theme presets ----
+    m.set('theme_preset', 'App Theme');
+    m.set('theme_preset_desc', 'Choose the visual style of the app');
+    m.set('theme_preset_sirat', 'Sirat');
+    m.set('theme_preset_sirat_desc', 'Modern and minimal — a HarmonyOS 7 aesthetic');
+    m.set('theme_preset_current', 'Sirat Classic');
+    m.set('theme_preset_current_desc', 'Warm cream and deep green — the original');
+    m.set('theme_preset_harmony7', 'Noor');
+    m.set('theme_preset_harmony7_desc', 'Radiant violet — serene and modern');
+    m.set('theme_preset_harmony6', 'Sahar');
+    m.set('theme_preset_harmony6_desc', 'Golden amber — the calm of first light');
+    m.set('theme_preset_harmony5', 'Bahar');
+    m.set('theme_preset_harmony5_desc', 'Cool teal — vast, fresh, and clear');
+
+    // ---- Tasbih theme presets ----
+    m.set('theme_amber', 'Amber');
+    m.set('theme_charcoal', 'Charcoal');
+    m.set('theme_emerald', 'Emerald');
+    m.set('theme_pearl', 'Pearl');
+    m.set('theme_gold', 'Gold (Metallic)');
+    m.set('theme_white', 'White');
+    m.set('theme_sapphire', 'Sapphire');
+    m.set('theme_rose', 'Rose');
+    m.set('theme_silver', 'Silver');
 
     // ---- Wizard ----
     m.set('wizard_step', 'Step');
@@ -385,6 +539,8 @@ export class L {
     m.set('wizard_privacy_desc', 'Please read and accept before continuing');
     m.set('privacy_agree_label', 'I have read and agree to the Privacy Policy');
     m.set('privacy_view_full', 'View the full privacy policy online');
+    m.set('wizard_theme_title', 'Choose your theme');
+    m.set('wizard_theme_desc', 'Pick a visual style. You can change this anytime in Settings.');
     m.set('wizard_location_title', 'Set your location');
     m.set('wizard_location_desc', 'Used for prayer times and Qibla direction');
     m.set('wizard_convention_title', 'Calculation preferences');
@@ -396,14 +552,7 @@ export class L {
     m.set('wizard_retry', 'Retry');
     m.set('wizard_next', 'Next');
     m.set('wizard_finish', 'Get Started');
-    m.set('notif_dismiss', 'Dismiss'); // EN
-    // ---- Tasbih theme presets ----
-    m.set('theme_amber', 'Amber');
-    m.set('theme_charcoal', 'Charcoal');
-    m.set('theme_emerald', 'Emerald');
-    m.set('theme_pearl', 'Pearl');
-    m.set('theme_gold', 'Gold (Metallic)');
-    m.set('tab_prayers', 'Prayers');
+
     // ---- Home dashboard ----
     m.set('home_today_progress', "TODAY'S PROGRESS");
     m.set('home_prayers_completed', 'prayers completed');
@@ -419,32 +568,10 @@ export class L {
     m.set('home_tasbih_lifetime', 'Lifetime count');
     m.set('home_tasbih_summary', 'tasbihs');
     m.set('home_dhikrs', 'dhikrs');
-
-    // ---- Tabs ----
-    m.set('tab_prayers', 'Prayers');
-
-    // ---- Home dashboard ----
-    m.set('home_today_progress', "TODAY'S PROGRESS");
-    m.set('home_prayers_completed', 'prayers completed');
-    m.set('home_keep_going', 'Keep it up!');
-    m.set('home_streak', 'Day Streak');
-    m.set('home_best_streak', 'Best');
-    m.set('home_days', 'days');
-    m.set('home_this_week', 'THIS WEEK');
-    m.set('home_week_summary', 'prayers this week');
-    m.set('home_month_summary', 'prayers this month');
-    m.set('home_tasbih', 'TASBIH');
-    m.set('home_tasbih_lifetime', 'Lifetime count');
-    m.set('home_tasbih_summary', 'tasbihs');
-    m.set('home_dhikrs', 'dhikrs');
-
-    // ---- Monthly view ----
     m.set('home_monthly_view', 'MONTHLY VIEW');
     m.set('home_perfect_days', 'Perfect days');
     m.set('home_days_elapsed', 'Days elapsed');
     m.set('home_lifetime_1y', 'prayers in the last year');
-
-    // ---- Event countdown ----
     m.set('home_next_event', 'NEXT EVENT');
     m.set('home_event_today', 'Today!');
     m.set('home_event_tomorrow', 'Tomorrow');
@@ -475,7 +602,7 @@ export class L {
       'The Farewell Friday — the last Friday of Ramadan.');
     m.set('ramadan_today', 'Tonight!');
 
-    // ---- Live countdown (last 15 min before Imsak / Maghrib) ----
+    // ---- Live countdown ----
     m.set('countdown_fast_ends', 'Breaking fast in');
     m.set('countdown_fast_starts', 'Fasting begins in');
     m.set('countdown_fast_ends_desc', 'Prepare to break your fast');
@@ -489,58 +616,11 @@ export class L {
     m.set('dua_suhoor_translation',
       'I intend to keep the fast for tomorrow in the month of Ramadan.');
 
-    // ---- Generic UI ----
-    m.set('ok', 'OK');
-    m.set('gps', 'GPS');
-
-    // ---- About ----
-    m.set('about_build', 'Build');
-    m.set('about_bundle', 'Bundle ID');
-    m.set('about_platform_value', 'HarmonyOS 6+');
+    // ---- Sun path ----
     m.set('sun_path_we_are_here', 'We are here');
 
-    // ---- Short labels (home screen pills) ----
-    m.set('method_short_karachi', 'Karachi');
-    m.set('method_short_jafari', 'Jafari');
-    m.set('method_short_isna', 'ISNA');
-    m.set('method_short_mwl', 'MWL');
-    m.set('asr_short_standard', 'Standard');
-    m.set('asr_short_hanafi', 'Hanafi');
-    m.set('source_short_local', 'Local');
-    m.set('source_short_online', 'Online');
+    // ---- Other ----
     m.set('mark_all', 'Mark all as prayed');
-    m.set('method_umm_al_qura', 'Umm al-Qura (Makkah)');
-    m.set('method_egyptian', 'Egyptian Survey');
-    m.set('method_sunni_iraq', 'Sunni Endowment (Iraq)');
-    m.set('method_qatar', 'Qatar Awqaf');
-    m.set('method_singapore', 'Singapore (MUIS)');
-    m.set('method_france', 'France (UOIF)');
-    m.set('method_turkey', 'Turkey (Diyanet)');
-    m.set('method_russia', 'Russia (SAMR)');
-    m.set('method_uae', 'UAE (GIAE)');
-    m.set('method_short_umm_al_qura', 'Makkah');
-    m.set('method_short_egyptian', 'Egyptian');
-    m.set('method_short_sunni_iraq', 'Iraq');
-    m.set('method_short_qatar', 'Qatar');
-    m.set('method_short_singapore', 'Singapore');
-    m.set('method_short_france', 'France');
-    m.set('method_short_turkey', 'Turkey');
-    m.set('method_short_russia', 'Russia');
-    m.set('method_short_uae', 'UAE');
-
-    m.set('theme_preset_current_desc', 'Warm cream and deep green — the original');
-    m.set('theme_preset_harmony7_desc', 'Radiant violet — serene and modern');
-    m.set('theme_preset_harmony6_desc', 'Golden amber — the calm of first light');
-    m.set('theme_preset_harmony5_desc', 'Cool teal — vast, fresh, and clear');
-
-    m.set('theme_preset', 'App Theme');
-    m.set('theme_preset_desc', 'Choose the visual style of the app');
-    m.set('theme_preset_current', 'Sirat Classic');
-    m.set('theme_preset_harmony7', 'Noor');
-    m.set('theme_preset_harmony6', 'Sahar');
-    m.set('theme_preset_harmony5', 'Bahar');
-
-    // ---- Fallbacks ----
     m.set('default_location', 'Default Location');
     m.set('unknown_location', 'Unknown location');
 
@@ -557,127 +637,12 @@ export class L {
     m.set('error_gps_off', 'Please turn on location services');
     m.set('error_location_permission_denied', 'Location permission denied');
 
-    m.set('wizard_theme_title', 'Choose your theme');
-    m.set('wizard_theme_desc', 'Pick a visual style. You can change this anytime in Settings.');
-
-    m.set('sound_feedback', 'Sound');
-    m.set('sound_feedback_desc', 'Play a click when counting Tasbih');
-
-    // ---- Tasbih sound names ----
-    m.set('sound_glass_tap_name', 'Glass Tap');
-    m.set('sound_glass_tap_desc', 'Glass tap sound');
-    m.set('sound_light_chime_name', 'Light Chime');
-    m.set('sound_light_chime_desc', 'Light chime sound');
-    m.set('sound_muted_bead_name', 'Muted Bead');
-    m.set('sound_muted_bead_desc', 'Muted bead sound');
-    m.set('sound_soft_click_name', 'Soft Click');
-    m.set('sound_soft_click_desc', 'Soft click sound');
-    m.set('sound_warm_knock_name', 'Warm Knock');
-    m.set('sound_warm_knock_desc', 'Warm knock sound');
-
-    m.set('sound_style', 'Sound Style');
-    m.set('sound_style_desc', 'Choose the click sound');
-    m.set('controlled_by_system', 'Controlled by system settings');
-
-    // ---- Qibla calibration ----
-    m.set('qibla_calibrate_title', 'Calibrate Compass');
-    m.set('qibla_calibrate_desc',
-      'Move your phone in a figure-8 pattern to improve compass accuracy.');
-    m.set('qibla_calibrate_skip', 'Skip for now');
-    m.set('qibla_calibrate_hint', 'Calibration improves accuracy');
-
-    m.set('theme_white', 'White');
-    m.set('theme_sapphire', 'Sapphire');
-    m.set('theme_rose', 'Rose');
-    m.set('theme_silver', 'Silver');
-    m.set('notifications_footer_calendar',
-      'Reminders are added to your system calendar for the next 3 days and renew each time you open the app');
-    m.set('calendar_permission_denied',
-      'Calendar permission is required to enable reminders');
-    m.set('notif_test_ok_calendar',
-      'Test event added to your calendar — check the Calendar app');
-    // ---- Prayer-time notification titles ----
-    m.set('notif_pray_fajr', 'Pray Fajr');
-    m.set('notif_pray_dhuhr', 'Pray Dhuhr');
-    m.set('notif_pray_asr', 'Pray Asr');
-    m.set('notif_pray_maghrib', 'Pray Maghrib');
-    m.set('notif_pray_isha', 'Pray Isha');
-
-    // ---- Per-prayer Hadith (text + source) ----
-    m.set('hadith_fajr',
-      'He who prayed the morning prayer (in congregation) he is in fact under the protection of Allah. — Sahih Muslim 657a');
-    m.set('hadith_dhuhr',
-      'This is an hour in which the gates of the heavens are opened, and I love that a righteous deed of mine should ascend during it. — Jami\u2019 at-Tirmidhi 478');
-    m.set('hadith_asr',
-      'Whoever misses the \u2018Asr prayer (intentionally) then it is as if he lost his family and property. — Sahih al-Bukhari 552');
-    m.set('hadith_maghrib',
-      'The five daily prayers... are an expiation for whatever sins are committed between them, so long as major sins are avoided. — Sahih Muslim 233');
-    m.set('hadith_isha',
-      'He who observed the \u2018Isha\u2019 prayer in congregation, it was as if he prayed up to midnight. — Sahih Muslim 656a');
-    m.set('theme_preset_sirat', 'Sirat');
-    m.set('theme_preset_sirat_desc', 'Modern and minimal — a HarmonyOS 7 aesthetic');
-
-    // ---- Advanced Calculation Settings ----
-    m.set('advanced_calc_title', 'Advanced Calculation Settings');
-    m.set('rounding_method', 'Rounding Method');
-    m.set('midnight_method', 'Midnight Method');
-    m.set('polar_resolution', 'Polar Resolution');
-    m.set('shafaq', 'Shafaq');
-    m.set('shafaq_desc',
-      'Shafaq is used by the Moonsighting Committee method to determine which twilight determines Isha.');
-    m.set('custom_angles', 'Custom Angles');
-    m.set('custom_fajr_angle', 'Fajr angle');
-    m.set('custom_isha_angle', 'Isha angle');
-    m.set('custom_isha_interval', 'Isha interval (min)');
-    m.set('custom_isha_interval_hint', '0 = use angle. >0 = minutes after Maghrib.');
-
-    m.set('rounding_nearest', 'Nearest');
-    m.set('rounding_up', 'Up');
-    m.set('rounding_none', 'None');
-
-    m.set('midnight_standard', 'Sunset to Sunrise');
-    m.set('midnight_standard_desc', 'Default');
-    m.set('midnight_jafari', 'Sunset to Fajr');
-
-    m.set('polar_unresolved', 'Unresolved');
-    m.set('polar_unresolved_desc', 'Default');
-    m.set('polar_aqrab_balad', 'Aqrab Balad');
-    m.set('polar_aqrab_yaum', 'Aqrab Yaum');
-
-    m.set('shafaq_general', 'General');
-    m.set('shafaq_general_desc', 'Default');
-    m.set('shafaq_ahmer', 'Ahmer');
-    m.set('shafaq_abyad', 'Abyad');
-
-    m.set('highlat_proportional', 'Proportional Depression (Diyanet Takdir)');
-
-    m.set('method_moonsighting', 'Moonsighting Committee Worldwide');
-    m.set('method_dubai', 'The Gulf Region (Dubai)');
-    m.set('method_kuwait', 'Kuwait');
-    m.set('method_france_15', 'France angle 15');
-    m.set('method_france_18', 'France angle 18');
-    m.set('method_turkey_europe', 'Diyanet İşleri Başkanlığı, Europe');
-    m.set('method_tehran',
-      'Shia, Institute of Geophysics, University of Tehran, Iran');
-    m.set('method_indonesia', 'Kementrian Agama Republik Indonesia (KEMENAG)');
-    m.set('method_algeria', 'Ministry of Religious Affairs and Wakfs, Algeria');
-    m.set('method_brunei', 'Kementrian Hal Ehwal Ugama (Brunei Darussalam)');
-    m.set('method_custom', 'Custom');
-
-    m.set('method_short_moonsighting', 'Moonsighting');
-    m.set('method_short_dubai', 'Dubai');
-    m.set('method_short_kuwait', 'Kuwait');
-    m.set('method_short_france_15', 'France 15°');
-    m.set('method_short_france_18', 'France 18°');
-    m.set('method_short_turkey_europe', 'Turkey EU');
-    m.set('method_short_tehran', 'Tehran');
-    m.set('method_short_indonesia', 'KEMENAG');
-    m.set('method_short_algeria', 'Algeria');
-    m.set('method_short_brunei', 'Brunei');
-    m.set('method_short_custom', 'Custom');
-
     return m;
   }
+
+  // ============================================================
+  // CHINESE
+  // ============================================================
 
   private static buildZh(): Map<string, string> {
     const m = new Map<string, string>();
@@ -687,9 +652,10 @@ export class L {
     m.set('more_languages_coming', '更多语言即将推出');
 
     m.set('tab_home', '首页');
-    m.set('tab_tasbih', '念珠');
-    m.set('tab_compass', '指南针');
+    m.set('tab_prayers', '礼拜');
     m.set('tab_calendar', '日历');
+    m.set('tab_compass', '指南针');
+    m.set('tab_tasbih', '念珠');
 
     m.set('current_prayer', '当前');
     m.set('next_prayer', '下一个');
@@ -711,11 +677,13 @@ export class L {
     m.set('back', '返回');
     m.set('today', '今天');
     m.set('exit', '退出');
+    m.set('ok', '确定');
     m.set('exit_confirm_message', '您确定要退出 Sirat 伴侣吗？');
 
     m.set('title_settings', '设置');
     m.set('title_customize', '自定义');
 
+    m.set('category_location', '位置');
     m.set('category_prayer_times', '礼拜时间');
     m.set('category_hijri_calendar', '回历');
     m.set('category_ui_customization', '界面自定义');
@@ -723,10 +691,8 @@ export class L {
     m.set('category_about', '关于');
     m.set('category_notifications', '通知');
 
-    m.set('theme_preset_current_desc', '暖米色与深绿 — 经典原版');
-    m.set('theme_preset_harmony7_desc', '光辉紫罗兰 — 宁静现代');
-    m.set('theme_preset_harmony6_desc', '晨曦琥珀 — 初光之静');
-    m.set('theme_preset_harmony5_desc', '海韵青绿 — 辽阔清爽');
+    m.set('brand_primary', 'Sirat');
+    m.set('brand_accent', '伴侣');
 
     m.set('convention', '计算方式');
     m.set('convention_desc', '用于计算晨礼和宵礼');
@@ -745,6 +711,7 @@ export class L {
     m.set('highlat_middle', '夜半');
     m.set('highlat_one_seventh', '七分之一夜');
     m.set('highlat_angle', '基于角度');
+    m.set('highlat_proportional', '比例衰减（Diyanet Takdir）');
 
     m.set('location', '位置');
     m.set('location_desc', '选择应用如何确定您的位置');
@@ -769,6 +736,9 @@ export class L {
 
     m.set('about_version', '版本');
     m.set('about_platform', '平台');
+    m.set('about_platform_value', 'HarmonyOS 6+');
+    m.set('about_build', '构建号');
+    m.set('about_bundle', '应用包名');
     m.set('about_copyright', '© 2026');
 
     m.set('notifications_master', '启用通知');
@@ -778,7 +748,9 @@ export class L {
     m.set('notify_prayers', '礼拜提醒');
     m.set('notify_prayers_desc', '选择哪些礼拜发送提醒');
     m.set('notifications_footer', '提醒已安排在未来 3 天内，每次打开应用都会重新安排');
+    m.set('notifications_footer_calendar', '提醒已添加到您的系统日历中，为期 3 天，每次打开应用都会续排');
     m.set('notification_permission_denied', '需要通知权限才能启用提醒');
+    m.set('calendar_permission_denied', '需要日历权限才能启用提醒');
     m.set('notif_before_title', '礼拜提醒');
     m.set('notif_before_content', '距离');
     m.set('notif_exact_title', '礼拜时间');
@@ -787,7 +759,25 @@ export class L {
     m.set('notif_test_button', '发送测试通知');
     m.set('notif_test_sending', '正在发送测试通知...');
     m.set('notif_test_ok', '测试通知已安排 — 约 5 秒后您将看到它');
+    m.set('notif_test_ok_calendar', '测试事件已添加到您的日历 — 请查看日历应用');
     m.set('notif_test_failed', '测试通知失败');
+    m.set('notif_dismiss', '关闭');
+    m.set('notif_pray_fajr', '礼晨礼');
+    m.set('notif_pray_dhuhr', '礼晌礼');
+    m.set('notif_pray_asr', '礼晡礼');
+    m.set('notif_pray_maghrib', '礼昏礼');
+    m.set('notif_pray_isha', '礼宵礼');
+
+    m.set('hadith_fajr',
+      '谁在集体中礼了晨礼，他就在真主的保护之下。 ——《穆斯林圣训实录》657a');
+    m.set('hadith_dhuhr',
+      '这是天之门开启的时刻，我喜欢我的善行在这时升上。 ——《提尔密济圣训实录》478');
+    m.set('hadith_asr',
+      '谁（故意）撇弃晡礼，就如同失去了家人和财产。 ——《布哈里圣训实录》552');
+    m.set('hadith_maghrib',
+      '五番拜功……是它们之间所犯之罪的赎罪，只要远离大罪。 ——《穆斯林圣训实录》233');
+    m.set('hadith_isha',
+      '谁在集体中礼了宵礼，就如他礼了半夜的拜。 ——《穆斯林圣训实录》656a');
 
     m.set('log_view_button', '诊断日志');
     m.set('log_view_desc', '查看、复制或清除应用日志文件');
@@ -795,9 +785,42 @@ export class L {
     m.set('log_copy', '复制');
     m.set('log_clear', '清除');
     m.set('log_empty', '日志为空。');
-    m.set('sun_path_we_are_here', '我们在这里');
     m.set('log_copied', '日志已复制到剪贴板');
     m.set('log_cleared', '日志已清除');
+
+    // ---- Advanced Calculation ----
+    m.set('advanced_calc_title', '高级计算');
+    m.set('rounding_method', '舍入方式');
+    m.set('rounding_method_desc', '控制显示时间的舍入方式');
+    m.set('midnight_method', '午夜方式');
+    m.set('midnight_method_desc', '定义伊斯兰午夜使用哪个夜晚边界');
+    m.set('polar_resolution', '极地处理');
+    m.set('polar_resolution_desc', '当太阳未到达所需角度时的回退方式');
+    m.set('shafaq', '霞光');
+    m.set('shafaq_desc', '霞光由 Moonsighting Committee 方法用于确定宵礼使用哪一种暮光。');
+    m.set('custom_angles', '自定义角度');
+    m.set('custom_fajr_angle', '晨礼角度');
+    m.set('custom_isha_angle', '宵礼角度');
+    m.set('custom_isha_interval', '宵礼间隔（分钟）');
+    m.set('custom_isha_interval_hint', '0 = 使用角度。>0 = 昏礼后分钟数。');
+
+    m.set('rounding_nearest', '最近');
+    m.set('rounding_up', '进位');
+    m.set('rounding_none', '不舍入');
+
+    m.set('midnight_standard', '日落至日出');
+    m.set('midnight_standard_desc', '默认');
+    m.set('midnight_jafari', '日落至晨礼');
+
+    m.set('polar_unresolved', '不处理');
+    m.set('polar_unresolved_desc', '默认');
+    m.set('polar_aqrab_balad', '最近城市');
+    m.set('polar_aqrab_yaum', '最近日期');
+
+    m.set('shafaq_general', '一般');
+    m.set('shafaq_general_desc', '默认');
+    m.set('shafaq_ahmer', '红色');
+    m.set('shafaq_abyad', '白色');
 
     m.set('show_extra_timings', '显示额外时间');
     m.set('show_extra_timings_desc', '封斋、日出、日落和夜间时间');
@@ -822,6 +845,23 @@ export class L {
 
     m.set('haptic_feedback', '振动');
     m.set('haptic_feedback_desc', '念珠计数时振动');
+
+    m.set('sound_feedback', '声音');
+    m.set('sound_feedback_desc', '念珠计数时播放提示音');
+    m.set('sound_style', '音效');
+    m.set('sound_style_desc', '选择点击音效');
+    m.set('controlled_by_system', '受系统设置控制');
+
+    m.set('sound_glass_tap_name', '玻璃轻敲');
+    m.set('sound_glass_tap_desc', '玻璃轻敲音效');
+    m.set('sound_light_chime_name', '轻铃');
+    m.set('sound_light_chime_desc', '轻铃音效');
+    m.set('sound_muted_bead_name', '闷珠');
+    m.set('sound_muted_bead_desc', '闷珠音效');
+    m.set('sound_soft_click_name', '轻点');
+    m.set('sound_soft_click_desc', '轻点音效');
+    m.set('sound_warm_knock_name', '暖扣');
+    m.set('sound_warm_knock_desc', '暖扣音效');
 
     m.set('title_tasbih', '念珠');
     m.set('my_tasbihs', '我的念珠');
@@ -867,6 +907,11 @@ export class L {
     m.set('sensor_unavailable', '指南针传感器不可用。请在真机上测试。');
     m.set('location_unavailable', '位置不可用');
 
+    m.set('qibla_calibrate_title', '校准指南针');
+    m.set('qibla_calibrate_desc', '请以 8 字形摆动手机，以提高指南针精度。');
+    m.set('qibla_calibrate_skip', '暂时跳过');
+    m.set('qibla_calibrate_hint', '校准可提高精度');
+
     m.set('title_hijri_calendar', '回历');
     m.set('important_dates', '重要日期');
     m.set('no_events_this_month', '本月没有重大伊斯兰节日');
@@ -901,15 +946,11 @@ export class L {
     m.set('event_arafah', '阿拉法日');
     m.set('event_eid_adha', '宰牲节');
 
+    // ---- Method labels (long) ----
     m.set('method_karachi', '卡拉奇伊斯兰科学大学');
     m.set('method_jafari', '什叶派十二伊玛目派（库姆列瓦研究所）');
     m.set('method_isna', '北美伊斯兰协会');
     m.set('method_mwl', '穆斯林世界联盟');
-    m.set('asr_standard', '标准（沙斐仪 / 马立克 / 罕百里）');
-    m.set('asr_hanafi', '哈乃斐');
-    m.set('source_local', '本地公式（离线）');
-    m.set('source_api', '在线 API');
-    // ---- Additional calculation methods ----
     m.set('method_umm_al_qura', '乌姆·库拉（麦加）');
     m.set('method_egyptian', '埃及测绘局');
     m.set('method_sunni_iraq', '逊尼派基金会（伊拉克）');
@@ -919,6 +960,23 @@ export class L {
     m.set('method_turkey', '土耳其（宗教事务局）');
     m.set('method_russia', '俄罗斯（SAMR）');
     m.set('method_uae', '阿联酋（GIAE）');
+    m.set('method_moonsighting', '观月委员会');
+    m.set('method_dubai', '海湾地区（迪拜）');
+    m.set('method_kuwait', '科威特');
+    m.set('method_france_15', '法国 15°');
+    m.set('method_france_18', '法国 18°');
+    m.set('method_turkey_europe', '土耳其宗教事务局（欧洲）');
+    m.set('method_tehran', '什叶派，德黑兰大学地球物理研究所');
+    m.set('method_indonesia', '印度尼西亚宗教部（KEMENAG）');
+    m.set('method_algeria', '阿尔及利亚宗教事务部');
+    m.set('method_brunei', '文莱宗教事务部');
+    m.set('method_custom', '自定义');
+
+    // ---- Method labels (short) ----
+    m.set('method_short_karachi', '卡拉奇');
+    m.set('method_short_jafari', '贾法里');
+    m.set('method_short_isna', 'ISNA');
+    m.set('method_short_mwl', 'MWL');
     m.set('method_short_umm_al_qura', '麦加');
     m.set('method_short_egyptian', '埃及');
     m.set('method_short_sunni_iraq', '伊拉克');
@@ -928,6 +986,49 @@ export class L {
     m.set('method_short_turkey', '土耳其');
     m.set('method_short_russia', '俄罗斯');
     m.set('method_short_uae', '阿联酋');
+    m.set('method_short_moonsighting', '观月会');
+    m.set('method_short_dubai', '迪拜');
+    m.set('method_short_kuwait', '科威特');
+    m.set('method_short_france_15', '法国 15°');
+    m.set('method_short_france_18', '法国 18°');
+    m.set('method_short_turkey_europe', '土耳其欧');
+    m.set('method_short_tehran', '德黑兰');
+    m.set('method_short_indonesia', '印尼');
+    m.set('method_short_algeria', '阿尔及利亚');
+    m.set('method_short_brunei', '文莱');
+    m.set('method_short_custom', '自定义');
+
+    m.set('asr_standard', '标准（沙斐仪 / 马立克 / 罕百里）');
+    m.set('asr_hanafi', '哈乃斐');
+    m.set('asr_short_standard', '标准');
+    m.set('asr_short_hanafi', '哈乃斐');
+    m.set('source_local', '本地公式（离线）');
+    m.set('source_api', '在线 API');
+    m.set('source_short_local', '本地');
+    m.set('source_short_online', '在线');
+
+    m.set('theme_preset', '应用主题');
+    m.set('theme_preset_desc', '选择应用的视觉风格');
+    m.set('theme_preset_sirat', 'Sirat · 现代');
+    m.set('theme_preset_sirat_desc', '现代简约 — HarmonyOS 7 风格');
+    m.set('theme_preset_current', 'Sirat 经典');
+    m.set('theme_preset_current_desc', '暖米色与深绿 — 经典原版');
+    m.set('theme_preset_harmony7', 'Noor · 光辉');
+    m.set('theme_preset_harmony7_desc', '光辉紫罗兰 — 宁静现代');
+    m.set('theme_preset_harmony6', 'Sahar · 晨曦');
+    m.set('theme_preset_harmony6_desc', '晨曦琥珀 — 初光之静');
+    m.set('theme_preset_harmony5', 'Bahar · 海韵');
+    m.set('theme_preset_harmony5_desc', '海韵青绿 — 辽阔清爽');
+
+    m.set('theme_amber', '琥珀');
+    m.set('theme_charcoal', '炭黑');
+    m.set('theme_emerald', '翡翠');
+    m.set('theme_pearl', '珍珠');
+    m.set('theme_gold', '金色（金属）');
+    m.set('theme_white', '白色');
+    m.set('theme_sapphire', '蓝宝石');
+    m.set('theme_rose', '玫瑰');
+    m.set('theme_silver', '银色');
 
     m.set('wizard_step', '步骤');
     m.set('wizard_welcome_title', '欢迎使用 Sirat 伴侣');
@@ -938,6 +1039,8 @@ export class L {
     m.set('wizard_privacy_desc', '请在继续之前阅读并接受');
     m.set('privacy_agree_label', '我已阅读并同意隐私政策');
     m.set('privacy_view_full', '在线查看完整隐私政策');
+    m.set('wizard_theme_title', '选择主题');
+    m.set('wizard_theme_desc', '选择一种视觉风格。您可以随时在设置中更改。');
     m.set('wizard_location_title', '设置位置');
     m.set('wizard_location_desc', '用于礼拜时间和天房方向');
     m.set('wizard_convention_title', '计算偏好');
@@ -949,23 +1052,7 @@ export class L {
     m.set('wizard_retry', '重试');
     m.set('wizard_next', '下一步');
     m.set('wizard_finish', '开始使用');
-    m.set('notif_dismiss', '关闭');
-    // ---- Tasbih theme presets ----
-    m.set('theme_amber', '琥珀');
-    m.set('theme_charcoal', '炭黑');
-    m.set('theme_emerald', '翡翠');
-    m.set('theme_pearl', '珍珠');
-    m.set('theme_gold', '金色（金属）');
-    m.set('tab_prayers', '礼拜');
 
-    m.set('theme_preset', '应用主题');
-    m.set('theme_preset_desc', '选择应用的视觉风格');
-    m.set('theme_preset_current', 'Sirat 经典');
-    m.set('theme_preset_harmony7', 'Noor · 光辉');
-    m.set('theme_preset_harmony6', 'Sahar · 晨曦');
-    m.set('theme_preset_harmony5', 'Bahar · 海韵');
-
-    // ---- Home dashboard ----
     m.set('home_today_progress', '今日进度');
     m.set('home_prayers_completed', '次礼拜已完成');
     m.set('home_keep_going', '继续保持！');
@@ -980,37 +1067,14 @@ export class L {
     m.set('home_tasbih_lifetime', '累计计数');
     m.set('home_tasbih_summary', '串念珠');
     m.set('home_dhikrs', '个念词');
-
-    // ---- Tabs ----
-    m.set('tab_prayers', '礼拜');
-
-    // ---- Home dashboard ----
-    m.set('home_today_progress', '今日进度');
-    m.set('home_prayers_completed', '次礼拜已完成');
-    m.set('home_keep_going', '继续保持！');
-    m.set('home_streak', '天连续');
-    m.set('home_best_streak', '最佳');
-    m.set('home_days', '天');
-    m.set('home_this_week', '本周');
-    m.set('home_week_summary', '次礼拜本周');
-    m.set('home_month_summary', '次礼拜本月');
-    m.set('home_tasbih', '念珠');
-    m.set('home_tasbih_lifetime', '累计计数');
-    m.set('home_tasbih_summary', '串念珠');
-    m.set('home_dhikrs', '个念词');
-
-    // ---- Monthly view ----
     m.set('home_monthly_view', '月度视图');
     m.set('home_perfect_days', '完美日');
     m.set('home_days_elapsed', '已过天数');
     m.set('home_lifetime_1y', '次礼拜（近一年）');
-
-    // ---- Event countdown ----
     m.set('home_next_event', '下一个事件');
     m.set('home_event_today', '就是今天！');
     m.set('home_event_tomorrow', '明天');
 
-    // ---- Ramadan card ----
     m.set('ramadan_card_title', '斋月');
     m.set('ramadan_day_of', '第');
     m.set('ramadan_day_of_suffix', '天');
@@ -1035,16 +1099,11 @@ export class L {
     m.set('ramadan_jummah_tul_widah_desc', '斋月的最后一个主麻日。');
     m.set('ramadan_today', '今晚！');
 
-    // ---- Live countdown (last 15 min before Imsak / Maghrib) ----
     m.set('countdown_fast_ends', '距开斋还有');
     m.set('countdown_fast_starts', '距封斋还有');
     m.set('countdown_fast_ends_desc', '准备开斋');
     m.set('countdown_fast_starts_desc', '请在封斋前完成封斋饭');
 
-    m.set('wizard_theme_title', '选择主题');
-    m.set('wizard_theme_desc', '选择一种视觉风格。您可以随时在设置中更改。');
-
-    // ---- Duas ----
     m.set('dua_iftar_name', '开斋祈祷词');
     m.set('dua_iftar_translation',
       '干渴已消，血管已润，若真主意欲，报酬已定。');
@@ -1052,178 +1111,27 @@ export class L {
     m.set('dua_suhoor_translation',
       '我举意为明天在莱麦丹月封斋。');
 
-    // ---- Generic UI ----
-    m.set('ok', '确定');
-    m.set('gps', 'GPS');
+    m.set('sun_path_we_are_here', '我们在这里');
+
     m.set('mark_all', '全部标记为已礼');
-
-    // ---- About ----
-    m.set('about_build', '构建号');
-    m.set('about_bundle', '应用包名');
-    m.set('about_platform_value', 'HarmonyOS 6+');
-
-    // ---- Short labels ----
-    m.set('method_short_karachi', '卡拉奇');
-    m.set('method_short_jafari', '贾法里');
-    m.set('method_short_isna', 'ISNA');
-    m.set('method_short_mwl', 'MWL');
-    m.set('asr_short_standard', '标准');
-    m.set('asr_short_hanafi', '哈乃斐');
-    m.set('source_short_local', '本地');
-    m.set('source_short_online', '在线');
-    // ---- Additional calculation methods ----
-    m.set('method_umm_al_qura', 'أم القرى (مكة المكرمة)');
-    m.set('method_egyptian', 'الهيئة المصرية العامة للمساحة');
-    m.set('method_sunni_iraq', 'ديوان الوقف السني (العراق)');
-    m.set('method_qatar', 'الأوقاف القطرية');
-    m.set('method_singapore', 'سنغافورة (MUIS)');
-    m.set('method_france', 'فرنسا (UOIF)');
-    m.set('method_turkey', 'تركيا (رئاسة الشؤون الدينية)');
-    m.set('method_russia', 'روسيا (SAMR)');
-    m.set('method_uae', 'الإمارات (GIAE)');
-
-    m.set('method_short_umm_al_qura', 'مكة');
-    m.set('method_short_egyptian', 'مصر');
-    m.set('method_short_sunni_iraq', 'العراق');
-    m.set('method_short_qatar', 'قطر');
-    m.set('method_short_singapore', 'سنغافورة');
-    m.set('method_short_france', 'فرنسا');
-    m.set('method_short_turkey', 'تركيا');
-    m.set('method_short_russia', 'روسيا');
-    m.set('method_short_uae', 'الإمارات');
-
-    // ---- Fallbacks ----
     m.set('default_location', '默认位置');
     m.set('unknown_location', '未知位置');
 
-    m.set('brand_primary', 'Sirat');
-    m.set('brand_accent', '伴侣');
-
-    // ---- Dialogs ----
     m.set('dialog_gps_off_title', '定位服务已关闭');
     m.set('dialog_gps_off_message', '请开启定位服务，以便为您所在城市准确计算礼拜时间。');
     m.set('dialog_permission_title', '需要权限');
     m.set('dialog_permission_message', '需要位置权限才能显示您所在城市的礼拜时间。\n请在系统设置中授予。');
 
-    // ---- Errors ----
     m.set('error_gps_fetch_failed', '无法获取 GPS 位置');
     m.set('error_gps_off', '请开启定位服务');
     m.set('error_location_permission_denied', '位置权限被拒绝');
 
-    m.set('sound_feedback', '声音');
-    m.set('sound_feedback_desc', '念珠计数时播放提示音');
-
-    // ---- Tasbih sound names ----
-    m.set('sound_glass_tap_name', '玻璃轻敲');
-    m.set('sound_glass_tap_desc', '玻璃轻敲音效');
-    m.set('sound_light_chime_name', '轻铃');
-    m.set('sound_light_chime_desc', '轻铃音效');
-    m.set('sound_muted_bead_name', '闷珠');
-    m.set('sound_muted_bead_desc', '闷珠音效');
-    m.set('sound_soft_click_name', '轻点');
-    m.set('sound_soft_click_desc', '轻点音效');
-    m.set('sound_warm_knock_name', '暖扣');
-    m.set('sound_warm_knock_desc', '暖扣音效');
-
-    m.set('sound_style', '音效');
-    m.set('sound_style_desc', '选择点击音效');
-    m.set('controlled_by_system', '受系统设置控制');
-
-    // ---- Qibla calibration ----
-    m.set('qibla_calibrate_title', '校准指南针');
-    m.set('qibla_calibrate_desc', '请以 8 字形摆动手机，以提高指南针精度。');
-    m.set('qibla_calibrate_skip', '暂时跳过');
-    m.set('qibla_calibrate_hint', '校准可提高精度');
-
-    m.set('theme_white', '白色');
-    m.set('theme_sapphire', '蓝宝石');
-    m.set('theme_rose', '玫瑰');
-    m.set('theme_silver', '银色');
-    m.set('notifications_footer_calendar',
-      '提醒已添加到您的系统日历中，为期 3 天，每次打开应用都会续排');
-    m.set('calendar_permission_denied',
-      '需要日历权限才能启用提醒');
-    m.set('notif_test_ok_calendar',
-      '测试事件已添加到您的日历 — 请查看日历应用');
-    // ---- Prayer-time notification titles ----
-    m.set('notif_pray_fajr', '礼晨礼');
-    m.set('notif_pray_dhuhr', '礼晌礼');
-    m.set('notif_pray_asr', '礼晡礼');
-    m.set('notif_pray_maghrib', '礼昏礼');
-    m.set('notif_pray_isha', '礼宵礼');
-
-    // ---- Per-prayer Hadith (text + source) ----
-    m.set('hadith_fajr',
-      '谁在集体中礼了晨礼，他就在真主的保护之下。 ——《穆斯林圣训实录》657a');
-    m.set('hadith_dhuhr',
-      '这是天之门开启的时刻，我喜欢我的善行在这时升上。 ——《提尔密济圣训实录》478');
-    m.set('hadith_asr',
-      '谁（故意）撇弃晡礼，就如同失去了家人和财产。 ——《布哈里圣训实录》552');
-    m.set('hadith_maghrib',
-      '五番拜功……是它们之间所犯之罪的赎罪，只要远离大罪。 ——《穆斯林圣训实录》233');
-    m.set('hadith_isha',
-      '谁在集体中礼了宵礼，就如他礼了半夜的拜。 ——《穆斯林圣训实录》656a');
-    m.set('theme_preset_sirat', 'Sirat · 现代');
-    m.set('theme_preset_sirat_desc', '现代简约 — HarmonyOS 7 风格');
-    // ---- 高级计算设置 ----
-    m.set('advanced_calc_title', '高级计算设置');
-    m.set('rounding_method', '舍入方式');
-    m.set('midnight_method', '午夜方式');
-    m.set('polar_resolution', '极地处理');
-    m.set('shafaq', '霞光');
-    m.set('shafaq_desc', '霞光由 Moonsighting Committee 方法用于确定宵礼使用哪一种暮光。');
-    m.set('custom_angles', '自定义角度');
-    m.set('custom_fajr_angle', '晨礼角度');
-    m.set('custom_isha_angle', '宵礼角度');
-    m.set('custom_isha_interval', '宵礼间隔（分钟）');
-    m.set('custom_isha_interval_hint', '0 = 使用角度。>0 = 昏礼后分钟数。');
-
-    m.set('rounding_nearest', '最近');
-    m.set('rounding_up', '进位');
-    m.set('rounding_none', '不舍入');
-
-    m.set('midnight_standard', '日落至日出');
-    m.set('midnight_standard_desc', '默认');
-    m.set('midnight_jafari', '日落至晨礼');
-
-    m.set('polar_unresolved', '不处理');
-    m.set('polar_unresolved_desc', '默认');
-    m.set('polar_aqrab_balad', '最近城市');
-    m.set('polar_aqrab_yaum', '最近日期');
-
-    m.set('shafaq_general', '一般');
-    m.set('shafaq_general_desc', '默认');
-    m.set('shafaq_ahmer', '红色');
-    m.set('shafaq_abyad', '白色');
-
-    m.set('highlat_proportional', '比例衰减（Diyanet Takdir）');
-
-    m.set('method_moonsighting', '观月委员会');
-    m.set('method_dubai', '海湾地区（迪拜）');
-    m.set('method_kuwait', '科威特');
-    m.set('method_france_15', '法国 15°');
-    m.set('method_france_18', '法国 18°');
-    m.set('method_turkey_europe', '土耳其宗教事务局（欧洲）');
-    m.set('method_tehran', '什叶派，德黑兰大学地球物理研究所');
-    m.set('method_indonesia', '印度尼西亚宗教部（KEMENAG）');
-    m.set('method_algeria', '阿尔及利亚宗教事务部');
-    m.set('method_brunei', '文莱宗教事务部');
-    m.set('method_custom', '自定义');
-
-    m.set('method_short_moonsighting', '观月会');
-    m.set('method_short_dubai', '迪拜');
-    m.set('method_short_kuwait', '科威特');
-    m.set('method_short_france_15', '法国 15°');
-    m.set('method_short_france_18', '法国 18°');
-    m.set('method_short_turkey_europe', '土耳其欧');
-    m.set('method_short_tehran', '德黑兰');
-    m.set('method_short_indonesia', '印尼');
-    m.set('method_short_algeria', '阿尔及利亚');
-    m.set('method_short_brunei', '文莱');
-    m.set('method_short_custom', '自定义');
-
     return m;
   }
+
+  // ============================================================
+  // ARABIC
+  // ============================================================
 
   private static buildAr(): Map<string, string> {
     const m = new Map<string, string>();
@@ -1233,20 +1141,10 @@ export class L {
     m.set('more_languages_coming', 'المزيد من اللغات قريباً');
 
     m.set('tab_home', 'الرئيسية');
-    m.set('tab_tasbih', 'التسبيح');
-    m.set('tab_compass', 'القبلة');
+    m.set('tab_prayers', 'الصلاة');
     m.set('tab_calendar', 'التقويم');
-
-    m.set('theme_preset_current_desc', 'كريمي دافئ وأخضر غامق — الأصلي');
-    m.set('theme_preset_harmony7_desc', 'بنفسجي مشرق — هدوء وحداثة');
-    m.set('theme_preset_harmony6_desc', 'كهرماني ذهبي — سكون الفجر');
-    m.set('theme_preset_harmony5_desc', 'أزرق مخضرّ بارد — رحب ونقي');
-
-    m.set('wizard_theme_title', 'اختر مظهرك');
-    m.set('wizard_theme_desc', 'اختر النمط البصري. يمكنك تغييره لاحقاً من الإعدادات.');
-
-    m.set('sound_feedback', 'الصوت');
-    m.set('sound_feedback_desc', 'تشغيل نقرة عند عدّ التسبيح');
+    m.set('tab_compass', 'القبلة');
+    m.set('tab_tasbih', 'التسبيح');
 
     m.set('current_prayer', 'الحالي');
     m.set('next_prayer', 'التالي');
@@ -1268,17 +1166,22 @@ export class L {
     m.set('back', 'رجوع');
     m.set('today', 'اليوم');
     m.set('exit', 'خروج');
+    m.set('ok', 'موافق');
     m.set('exit_confirm_message', 'هل أنت متأكد من الخروج من رفيق الصراط؟');
 
     m.set('title_settings', 'الإعدادات');
     m.set('title_customize', 'التخصيص');
 
+    m.set('category_location', 'الموقع');
     m.set('category_prayer_times', 'أوقات الصلاة');
     m.set('category_hijri_calendar', 'التقويم الهجري');
     m.set('category_ui_customization', 'تخصيص الواجهة');
     m.set('category_appearance', 'المظهر');
     m.set('category_about', 'حول التطبيق');
     m.set('category_notifications', 'الإشعارات');
+
+    m.set('brand_primary', 'رفيق');
+    m.set('brand_accent', 'الصراط');
 
     m.set('convention', 'طريقة الحساب');
     m.set('convention_desc', 'تُستخدم لحساب الفجر والعشاء');
@@ -1297,6 +1200,7 @@ export class L {
     m.set('highlat_middle', 'منتصف الليل');
     m.set('highlat_one_seventh', 'سُبع الليل');
     m.set('highlat_angle', 'حسب الزاوية');
+    m.set('highlat_proportional', 'الانخفاض النسبي (تقدير ديانت)');
 
     m.set('location', 'الموقع');
     m.set('location_desc', 'اختر كيف يحدد التطبيق موقعك');
@@ -1321,6 +1225,9 @@ export class L {
 
     m.set('about_version', 'الإصدار');
     m.set('about_platform', 'المنصة');
+    m.set('about_platform_value', 'HarmonyOS 6+');
+    m.set('about_build', 'رقم البناء');
+    m.set('about_bundle', 'معرّف الحزمة');
     m.set('about_copyright', '© 2026');
 
     m.set('notifications_master', 'تفعيل الإشعارات');
@@ -1330,7 +1237,10 @@ export class L {
     m.set('notify_prayers', 'تذكيرات الصلاة');
     m.set('notify_prayers_desc', 'اختر الصلوات التي تُرسل تذكيرات');
     m.set('notifications_footer', 'التذكيرات مُجدولة للأيام الثلاثة القادمة وتتجدد في كل مرة تفتح فيها التطبيق');
+    m.set('notifications_footer_calendar',
+      'تُضاف التذكيرات إلى تقويم النظام للأيام الثلاثة القادمة وتتجدد في كل مرة تفتح فيها التطبيق');
     m.set('notification_permission_denied', 'إذن الإشعارات مطلوب لتفعيل التذكيرات');
+    m.set('calendar_permission_denied', 'إذن التقويم مطلوب لتفعيل التذكيرات');
     m.set('notif_before_title', 'تذكير بالصلاة');
     m.set('notif_before_content', 'بعد');
     m.set('notif_exact_title', 'وقت الصلاة');
@@ -1339,7 +1249,25 @@ export class L {
     m.set('notif_test_button', 'إرسال إشعار تجريبي');
     m.set('notif_test_sending', 'جارٍ إرسال الإشعار التجريبي...');
     m.set('notif_test_ok', 'تم جدولة الإشعار التجريبي — سيظهر خلال 5 ثوانٍ');
+    m.set('notif_test_ok_calendar', 'تمت إضافة حدث تجريبي إلى تقويمك — تحقق من تطبيق التقويم');
     m.set('notif_test_failed', 'فشل الإشعار التجريبي');
+    m.set('notif_dismiss', 'إغلاق');
+    m.set('notif_pray_fajr', 'صلِّ الفجر');
+    m.set('notif_pray_dhuhr', 'صلِّ الظهر');
+    m.set('notif_pray_asr', 'صلِّ العصر');
+    m.set('notif_pray_maghrib', 'صلِّ المغرب');
+    m.set('notif_pray_isha', 'صلِّ العشاء');
+
+    m.set('hadith_fajr',
+      'مَنْ صَلَّى الصُّبْحَ فَهُوَ فِي ذِمَّةِ اللَّهِِ — صحيح مسلم ٦٥٧');
+    m.set('hadith_dhuhr',
+      'إِنَّهَا سَاعَةٌ تُفْتَحُ فِيهَا أَبْوَابُ السَّمَاءِ فَأُحِبُّ أَنْ يَصْعَدَ لِي فِيهَا عَمَلٌ صَالِحٌ — جامع الترمذي ٤٧٨');
+    m.set('hadith_asr',
+      'الَّذِي تَفُوتُهُ صَلاَةُ الْعَصْرِ كَأَنَّمَا وُتِرَ أَهْلَهُ وَمَالَهُ — صحيح البخاري ٥٥٢');
+    m.set('hadith_maghrib',
+      'الصَّلَوَاتُ الْخَمْسُ وَالْجُمُعَةُ إِلَى الْجُمُعَةِ وَرَمَضَانُ إِلَى رَمَضَانَ مُكَفِّرَاتٌ مَا بَيْنَهُنَّ إِذَا اجْتَنَبَ الْكَبَائِرَ — صحيح مسلم ٢٣٣');
+    m.set('hadith_isha',
+      'مَنْ صَلَّى الْعِشَاءَ فِي جَمَاعَةٍ فَكَأَنَّمَا قَامَ نِصْفَ اللَّيْلِ — صحيح مسلم ٦٥٦');
 
     m.set('log_view_button', 'سجلات التشخيص');
     m.set('log_view_desc', 'عرض أو نسخ أو مسح ملف سجل التطبيق');
@@ -1349,6 +1277,40 @@ export class L {
     m.set('log_empty', 'السجل فارغ.');
     m.set('log_copied', 'تم نسخ السجل إلى الحافظة');
     m.set('log_cleared', 'تم مسح السجل');
+
+    // ---- Advanced Calculation ----
+    m.set('advanced_calc_title', 'الحساب المتقدم');
+    m.set('rounding_method', 'طريقة التقريب');
+    m.set('rounding_method_desc', 'يتحكم في كيفية تقريب الأوقات المعروضة');
+    m.set('midnight_method', 'طريقة منتصف الليل');
+    m.set('midnight_method_desc', 'أي حد ليلّي يحدد منتصف الليل الإسلامي');
+    m.set('polar_resolution', 'حلّ المناطق القطبية');
+    m.set('polar_resolution_desc', 'الاحتياطي عندما لا تصل الشمس إلى الزاوية المطلوبة');
+    m.set('shafaq', 'الشفق');
+    m.set('shafaq_desc', 'يُستخدم الشفق في طريقة لجنة رؤية الهلال لتحديد نوع الشفق الذي يحدد وقت العشاء.');
+    m.set('custom_angles', 'زوايا مخصصة');
+    m.set('custom_fajr_angle', 'زاوية الفجر');
+    m.set('custom_isha_angle', 'زاوية العشاء');
+    m.set('custom_isha_interval', 'فاصل العشاء (دقيقة)');
+    m.set('custom_isha_interval_hint', '0 = استخدام الزاوية. >0 = دقائق بعد المغرب.');
+
+    m.set('rounding_nearest', 'الأقرب');
+    m.set('rounding_up', 'للأعلى');
+    m.set('rounding_none', 'بدون');
+
+    m.set('midnight_standard', 'الغروب إلى الشروق');
+    m.set('midnight_standard_desc', 'افتراضي');
+    m.set('midnight_jafari', 'الغروب إلى الفجر');
+
+    m.set('polar_unresolved', 'غير محلول');
+    m.set('polar_unresolved_desc', 'افتراضي');
+    m.set('polar_aqrab_balad', 'أقرب بلد');
+    m.set('polar_aqrab_yaum', 'أقرب يوم');
+
+    m.set('shafaq_general', 'عام');
+    m.set('shafaq_general_desc', 'افتراضي');
+    m.set('shafaq_ahmer', 'الأحمر');
+    m.set('shafaq_abyad', 'الأبيض');
 
     m.set('show_extra_timings', 'إظهار الأوقات الإضافية');
     m.set('show_extra_timings_desc', 'الإمساك والشروق والغروب وأوقات الليل');
@@ -1373,6 +1335,23 @@ export class L {
 
     m.set('haptic_feedback', 'الاهتزاز');
     m.set('haptic_feedback_desc', 'اهتزاز عند عدّ التسبيح');
+
+    m.set('sound_feedback', 'الصوت');
+    m.set('sound_feedback_desc', 'تشغيل نقرة عند عدّ التسبيح');
+    m.set('sound_style', 'نمط الصوت');
+    m.set('sound_style_desc', 'اختر صوت النقرة');
+    m.set('controlled_by_system', 'يُتحكَّم به من إعدادات النظام');
+
+    m.set('sound_glass_tap_name', 'نقرة زجاجية');
+    m.set('sound_glass_tap_desc', 'صوت نقرة زجاجية');
+    m.set('sound_light_chime_name', 'جرس خفيف');
+    m.set('sound_light_chime_desc', 'صوت جرس خفيف');
+    m.set('sound_muted_bead_name', 'خرزة مكتومة');
+    m.set('sound_muted_bead_desc', 'صوت خرزة مكتومة');
+    m.set('sound_soft_click_name', 'نقرة ناعمة');
+    m.set('sound_soft_click_desc', 'صوت نقرة ناعمة');
+    m.set('sound_warm_knock_name', 'طرقة دافئة');
+    m.set('sound_warm_knock_desc', 'صوت طرقة دافئة');
 
     m.set('title_tasbih', 'التسبيح');
     m.set('my_tasbihs', 'مسبحاتي');
@@ -1418,6 +1397,11 @@ export class L {
     m.set('sensor_unavailable', 'مستشعر البوصلة غير متوفر. يُرجى الاختبار على جهاز حقيقي.');
     m.set('location_unavailable', 'الموقع غير متوفر');
 
+    m.set('qibla_calibrate_title', 'معايرة البوصلة');
+    m.set('qibla_calibrate_desc', 'حرّك هاتفك بحركة الرقم 8 لتحسين دقة البوصلة.');
+    m.set('qibla_calibrate_skip', 'تخطَّ الآن');
+    m.set('qibla_calibrate_hint', 'المعايرة تحسّن الدقة');
+
     m.set('title_hijri_calendar', 'التقويم الهجري');
     m.set('important_dates', 'التواريخ المهمة');
     m.set('no_events_this_month', 'لا توجد مناسبات إسلامية كبرى هذا الشهر');
@@ -1452,15 +1436,89 @@ export class L {
     m.set('event_arafah', 'يوم عرفة');
     m.set('event_eid_adha', 'عيد الأضحى');
 
+    // ---- Method labels (long) ----
     m.set('method_karachi', 'جامعة العلوم الإسلامية بكراتشي');
     m.set('method_jafari', 'الشيعة الاثنا عشرية (معهد ليفا، قم)');
     m.set('method_isna', 'الجمعية الإسلامية لأمريكا الشمالية');
     m.set('method_mwl', 'رابطة العالم الإسلامي');
+    m.set('method_umm_al_qura', 'أم القرى (مكة المكرمة)');
+    m.set('method_egyptian', 'الهيئة المصرية العامة للمساحة');
+    m.set('method_sunni_iraq', 'ديوان الوقف السني (العراق)');
+    m.set('method_qatar', 'الأوقاف القطرية');
+    m.set('method_singapore', 'سنغافورة (MUIS)');
+    m.set('method_france', 'فرنسا (UOIF)');
+    m.set('method_turkey', 'تركيا (رئاسة الشؤون الدينية)');
+    m.set('method_russia', 'روسيا (SAMR)');
+    m.set('method_uae', 'الإمارات (GIAE)');
+    m.set('method_moonsighting', 'لجنة رؤية الهلال العالمية');
+    m.set('method_dubai', 'منطقة الخليج (دبي)');
+    m.set('method_kuwait', 'الكويت');
+    m.set('method_france_15', 'فرنسا زاوية 15°');
+    m.set('method_france_18', 'فرنسا زاوية 18°');
+    m.set('method_turkey_europe', 'رئاسة الشؤون الدينية التركية - أوروبا');
+    m.set('method_tehran', 'الشيعة، معهد الجيوفيزياء، جامعة طهران');
+    m.set('method_indonesia', 'وزارة الشؤون الدينية الإندونيسية');
+    m.set('method_algeria', 'وزارة الشؤون الدينية والأوقاف، الجزائر');
+    m.set('method_brunei', 'وزارة الشؤون الدينية، بروناي');
+    m.set('method_custom', 'مخصص');
+
+    // ---- Method labels (short) ----
+    m.set('method_short_karachi', 'كراتشي');
+    m.set('method_short_jafari', 'الجعفري');
+    m.set('method_short_isna', 'ISNA');
+    m.set('method_short_mwl', 'MWL');
+    m.set('method_short_umm_al_qura', 'مكة');
+    m.set('method_short_egyptian', 'مصر');
+    m.set('method_short_sunni_iraq', 'العراق');
+    m.set('method_short_qatar', 'قطر');
+    m.set('method_short_singapore', 'سنغافورة');
+    m.set('method_short_france', 'فرنسا');
+    m.set('method_short_turkey', 'تركيا');
+    m.set('method_short_russia', 'روسيا');
+    m.set('method_short_uae', 'الإمارات');
+    m.set('method_short_moonsighting', 'رؤية الهلال');
+    m.set('method_short_dubai', 'دبي');
+    m.set('method_short_kuwait', 'الكويت');
+    m.set('method_short_france_15', 'فرنسا 15°');
+    m.set('method_short_france_18', 'فرنسا 18°');
+    m.set('method_short_turkey_europe', 'تركيا أوروبا');
+    m.set('method_short_tehran', 'طهران');
+    m.set('method_short_indonesia', 'إندونيسيا');
+    m.set('method_short_algeria', 'الجزائر');
+    m.set('method_short_brunei', 'بروناي');
+    m.set('method_short_custom', 'مخصص');
+
     m.set('asr_standard', 'القياسي (الشافعي / المالكي / الحنبلي)');
     m.set('asr_hanafi', 'الحنفي');
+    m.set('asr_short_standard', 'القياسي');
+    m.set('asr_short_hanafi', 'الحنفي');
     m.set('source_local', 'الحساب المحلي (دون اتصال)');
     m.set('source_api', 'واجهة برمجية (عبر الإنترنت)');
-    m.set('mark_all', 'تحديد الكل كمُصلَّاة');
+    m.set('source_short_local', 'محلي');
+    m.set('source_short_online', 'عبر الإنترنت');
+
+    m.set('theme_preset', 'مظهر التطبيق');
+    m.set('theme_preset_desc', 'اختر النمط البصري للتطبيق');
+    m.set('theme_preset_sirat', 'Sirat — عصري');
+    m.set('theme_preset_sirat_desc', 'عصري وبسيط — بأسلوب HarmonyOS 7');
+    m.set('theme_preset_current', 'Sirat الكلاسيكي');
+    m.set('theme_preset_current_desc', 'كريمي دافئ وأخضر غامق — الأصلي');
+    m.set('theme_preset_harmony7', 'نور');
+    m.set('theme_preset_harmony7_desc', 'بنفسجي مشرق — هدوء وحداثة');
+    m.set('theme_preset_harmony6', 'سَحَر');
+    m.set('theme_preset_harmony6_desc', 'كهرماني ذهبي — سكون الفجر');
+    m.set('theme_preset_harmony5', 'بَحْر');
+    m.set('theme_preset_harmony5_desc', 'أزرق مخضرّ بارد — رحب ونقي');
+
+    m.set('theme_amber', 'كهرماني');
+    m.set('theme_charcoal', 'فحمي');
+    m.set('theme_emerald', 'زمردي');
+    m.set('theme_pearl', 'لؤلؤي');
+    m.set('theme_gold', 'ذهبي (معدني)');
+    m.set('theme_white', 'أبيض');
+    m.set('theme_sapphire', 'ياقوت أزرق');
+    m.set('theme_rose', 'وردي');
+    m.set('theme_silver', 'فضي');
 
     m.set('wizard_step', 'خطوة');
     m.set('wizard_welcome_title', 'مرحباً بك في رفيق الصراط');
@@ -1471,6 +1529,8 @@ export class L {
     m.set('wizard_privacy_desc', 'يرجى القراءة والموافقة قبل المتابعة');
     m.set('privacy_agree_label', 'لقد قرأت وأوافق على سياسة الخصوصية');
     m.set('privacy_view_full', 'عرض سياسة الخصوصية الكاملة عبر الإنترنت');
+    m.set('wizard_theme_title', 'اختر مظهرك');
+    m.set('wizard_theme_desc', 'اختر النمط البصري. يمكنك تغييره لاحقاً من الإعدادات.');
     m.set('wizard_location_title', 'حدّد موقعك');
     m.set('wizard_location_desc', 'يُستخدم لحساب أوقات الصلاة واتجاه القبلة');
     m.set('wizard_convention_title', 'تفضيلات الحساب');
@@ -1482,16 +1542,7 @@ export class L {
     m.set('wizard_retry', 'إعادة المحاولة');
     m.set('wizard_next', 'التالي');
     m.set('wizard_finish', 'ابدأ الآن');
-    m.set('notif_dismiss', 'إغلاق');
-    // ---- Tasbih theme presets ----
-    m.set('theme_amber', 'كهرماني');
-    m.set('theme_charcoal', 'فحمي');
-    m.set('theme_emerald', 'زمردي');
-    m.set('theme_pearl', 'لؤلؤي');
-    m.set('theme_gold', 'ذهبي (معدني)');
-    m.set('tab_prayers', 'الصلاة');
 
-    // ---- Home dashboard ----
     m.set('home_today_progress', 'تقدم اليوم');
     m.set('home_prayers_completed', 'صلوات مكتملة');
     m.set('home_keep_going', 'واصل!');
@@ -1506,37 +1557,14 @@ export class L {
     m.set('home_tasbih_lifetime', 'العدد الإجمالي');
     m.set('home_tasbih_summary', 'مسبحات');
     m.set('home_dhikrs', 'أذكار');
-
-    // ---- Tabs ----
-    m.set('tab_prayers', 'الصلاة');
-
-    // ---- Home dashboard ----
-    m.set('home_today_progress', 'تقدم اليوم');
-    m.set('home_prayers_completed', 'صلوات مكتملة');
-    m.set('home_keep_going', 'واصل!');
-    m.set('home_streak', 'يوم متتالي');
-    m.set('home_best_streak', 'الأفضل');
-    m.set('home_days', 'أيام');
-    m.set('home_this_week', 'هذا الأسبوع');
-    m.set('home_week_summary', 'صلاة هذا الأسبوع');
-    m.set('home_month_summary', 'صلاة هذا الشهر');
-    m.set('home_tasbih', 'التسبيح');
-    m.set('home_tasbih_lifetime', 'العدد الإجمالي');
-    m.set('home_tasbih_summary', 'مسبحات');
-    m.set('home_dhikrs', 'أذكار');
-
-    // ---- Monthly view ----
     m.set('home_monthly_view', 'عرض شهري');
     m.set('home_perfect_days', 'أيام كاملة');
     m.set('home_days_elapsed', 'أيام مضت');
     m.set('home_lifetime_1y', 'صلاة خلال العام الماضي');
-
-    // ---- Event countdown ----
     m.set('home_next_event', 'المناسبة القادمة');
     m.set('home_event_today', 'اليوم!');
     m.set('home_event_tomorrow', 'غداً');
 
-    /// ---- Ramadan card ----
     m.set('ramadan_card_title', 'رمضان');
     m.set('ramadan_day_of', 'اليوم');
     m.set('ramadan_day_of_suffix', 'من رمضان');
@@ -1561,55 +1589,24 @@ export class L {
     m.set('ramadan_jummah_tul_widah_desc', 'آخر جمعة من رمضان.');
     m.set('ramadan_today', 'الليلة!');
 
-    // ---- Live countdown (last 15 min before Imsak / Maghrib) ----
     m.set('countdown_fast_ends', 'الإفطار بعد');
     m.set('countdown_fast_starts', 'يبدأ الصيام بعد');
     m.set('countdown_fast_ends_desc', 'استعد للإفطار');
     m.set('countdown_fast_starts_desc', 'أنهِ السحور قبل الإمساك');
 
-    // ---- Duas ----
     m.set('dua_iftar_name', 'دعاء الإفطار');
     m.set('dua_iftar_translation',
       'ذهب الظمأ وابتلت العروق وثبت الأجر إن شاء الله.');
     m.set('dua_suhoor_name', 'نية الصيام');
-    m.set('sun_path_we_are_here', 'نحن هنا');
     m.set('dua_suhoor_translation',
       'وبصوم غدٍ نويت من شهر رمضان.');
 
-    m.set('theme_preset', 'مظهر التطبيق');
-    m.set('theme_preset_desc', 'اختر النمط البصري للتطبيق');
-    m.set('theme_preset_current', 'Sirat الكلاسيكي');
-    m.set('theme_preset_harmony7', 'نور');
-    m.set('theme_preset_harmony6', 'سَحَر');
-    m.set('theme_preset_harmony5', 'بَحْر');
+    m.set('sun_path_we_are_here', 'نحن هنا');
 
-    // ---- Generic UI ----
-    m.set('ok', 'موافق');
-    m.set('gps', 'GPS');
-
-    // ---- About ----
-    m.set('about_build', 'رقم البناء');
-    m.set('about_bundle', 'معرّف الحزمة');
-    m.set('about_platform_value', 'HarmonyOS 6+');
-
-    // ---- Short labels ----
-    m.set('method_short_karachi', 'كراتشي');
-    m.set('method_short_jafari', 'الجعفري');
-    m.set('method_short_isna', 'ISNA');
-    m.set('method_short_mwl', 'MWL');
-    m.set('asr_short_standard', 'القياسي');
-    m.set('asr_short_hanafi', 'الحنفي');
-    m.set('source_short_local', 'محلي');
-    m.set('source_short_online', 'عبر الإنترنت');
-
-    // ---- Fallbacks ----
+    m.set('mark_all', 'تحديد الكل كمُصلَّاة');
     m.set('default_location', 'الموقع الافتراضي');
     m.set('unknown_location', 'موقع غير معروف');
 
-    m.set('brand_primary', 'رفيق');
-    m.set('brand_accent', 'الصراط');
-
-    // ---- Dialogs ----
     m.set('dialog_gps_off_title', 'خدمة الموقع معطّلة');
     m.set('dialog_gps_off_message',
       'يرجى تمكين خدمة الموقع للحصول على أوقات صلاة دقيقة لمدينتك.');
@@ -1617,121 +1614,9 @@ export class L {
     m.set('dialog_permission_message',
       'إذن الموقع مطلوب لعرض أوقات الصلاة لمدينتك.\nيرجى منحه من إعدادات النظام.');
 
-    // ---- Errors ----
     m.set('error_gps_fetch_failed', 'تعذّر الحصول على موقع GPS');
     m.set('error_gps_off', 'يرجى تشغيل خدمة الموقع');
     m.set('error_location_permission_denied', 'تم رفض إذن الموقع');
-
-    // ---- Tasbih sound names ----
-    m.set('sound_glass_tap_name', 'نقرة زجاجية');
-    m.set('sound_glass_tap_desc', 'صوت نقرة زجاجية');
-    m.set('sound_light_chime_name', 'جرس خفيف');
-    m.set('sound_light_chime_desc', 'صوت جرس خفيف');
-    m.set('sound_muted_bead_name', 'خرزة مكتومة');
-    m.set('sound_muted_bead_desc', 'صوت خرزة مكتومة');
-    m.set('sound_soft_click_name', 'نقرة ناعمة');
-    m.set('sound_soft_click_desc', 'صوت نقرة ناعمة');
-    m.set('sound_warm_knock_name', 'طرقة دافئة');
-    m.set('sound_warm_knock_desc', 'صوت طرقة دافئة');
-
-    m.set('sound_style', 'نمط الصوت');
-    m.set('sound_style_desc', 'اختر صوت النقرة');
-    m.set('controlled_by_system', 'يُتحكَّم به من إعدادات النظام');
-
-    // ---- Qibla calibration ----
-    m.set('qibla_calibrate_title', 'معايرة البوصلة');
-    m.set('qibla_calibrate_desc', 'حرّك هاتفك بحركة الرقم 8 لتحسين دقة البوصلة.');
-    m.set('qibla_calibrate_skip', 'تخطَّ الآن');
-    m.set('qibla_calibrate_hint', 'المعايرة تحسّن الدقة');
-
-    m.set('theme_white', 'أبيض');
-    m.set('theme_sapphire', 'ياقوت أزرق');
-    m.set('theme_rose', 'وردي');
-    m.set('theme_silver', 'فضي');
-    m.set('notifications_footer_calendar',
-      'تُضاف التذكيرات إلى تقويم النظام للأيام الثلاثة القادمة وتتجدد في كل مرة تفتح فيها التطبيق');
-    m.set('calendar_permission_denied',
-      'إذن التقويم مطلوب لتفعيل التذكيرات');
-    m.set('notif_test_ok_calendar',
-      'تمت إضافة حدث تجريبي إلى تقويمك — تحقق من تطبيق التقويم');
-    // ---- Prayer-time notification titles ----
-    m.set('notif_pray_fajr', 'صلِّ الفجر');
-    m.set('notif_pray_dhuhr', 'صلِّ الظهر');
-    m.set('notif_pray_asr', 'صلِّ العصر');
-    m.set('notif_pray_maghrib', 'صلِّ المغرب');
-    m.set('notif_pray_isha', 'صلِّ العشاء');
-
-    // ---- Per-prayer Hadith (text + source) ----
-    m.set('hadith_fajr',
-      'مَنْ صَلَّى الصُّبْحَ فَهُوَ فِي ذِمَّةِ اللَّهِِ — صحيح مسلم ٦٥٧');
-    m.set('hadith_dhuhr',
-      'إِنَّهَا سَاعَةٌ تُفْتَحُ فِيهَا أَبْوَابُ السَّمَاءِ فَأُحِبُّ أَنْ يَصْعَدَ لِي فِيهَا عَمَلٌ صَالِحٌ — جامع الترمذي ٤٧٨');
-    m.set('hadith_asr',
-      'الَّذِي تَفُوتُهُ صَلاَةُ الْعَصْرِ كَأَنَّمَا وُتِرَ أَهْلَهُ وَمَالَهُ — صحيح البخاري ٥٥٢');
-    m.set('hadith_maghrib',
-      'الصَّلَوَاتُ الْخَمْسُ وَالْجُمُعَةُ إِلَى الْجُمُعَةِ وَرَمَضَانُ إِلَى رَمَضَانَ مُكَفِّرَاتٌ مَا بَيْنَهُنَّ إِذَا اجْتَنَبَ الْكَبَائِرَ  — صحيح مسلم ٢٣٣');
-    m.set('hadith_isha',
-      'مَنْ صَلَّى الْعِشَاءَ فِي جَمَاعَةٍ فَكَأَنَّمَا قَامَ نِصْفَ اللَّيْلِ — صحيح مسلم ٦٥٦');
-    m.set('theme_preset_sirat', 'Sirat — عصري');
-    m.set('theme_preset_sirat_desc', 'عصري وبسيط — بأسلوب HarmonyOS 7');
-
-    // ---- إعدادات الحساب المتقدمة ----
-    m.set('advanced_calc_title', 'إعدادات الحساب المتقدمة');
-    m.set('rounding_method', 'طريقة التقريب');
-    m.set('midnight_method', 'طريقة منتصف الليل');
-    m.set('polar_resolution', 'حلّ المناطق القطبية');
-    m.set('shafaq', 'الشفق');
-    m.set('shafaq_desc', 'يُستخدم الشفق في طريقة لجنة رؤية الهلال لتحديد نوع الشفق الذي يحدد وقت العشاء.');
-    m.set('custom_angles', 'زوايا مخصصة');
-    m.set('custom_fajr_angle', 'زاوية الفجر');
-    m.set('custom_isha_angle', 'زاوية العشاء');
-    m.set('custom_isha_interval', 'فاصل العشاء (دقيقة)');
-    m.set('custom_isha_interval_hint', '0 = استخدام الزاوية. >0 = دقائق بعد المغرب.');
-
-    m.set('rounding_nearest', 'الأقرب');
-    m.set('rounding_up', 'للأعلى');
-    m.set('rounding_none', 'بدون');
-
-    m.set('midnight_standard', 'الغروب إلى الشروق');
-    m.set('midnight_standard_desc', 'افتراضي');
-    m.set('midnight_jafari', 'الغروب إلى الفجر');
-
-    m.set('polar_unresolved', 'غير محلول');
-    m.set('polar_unresolved_desc', 'افتراضي');
-    m.set('polar_aqrab_balad', 'أقرب بلد');
-    m.set('polar_aqrab_yaum', 'أقرب يوم');
-
-    m.set('shafaq_general', 'عام');
-    m.set('shafaq_general_desc', 'افتراضي');
-    m.set('shafaq_ahmer', 'الأحمر');
-    m.set('shafaq_abyad', 'الأبيض');
-
-    m.set('highlat_proportional', 'الانخفاض النسبي (تقدير ديانت)');
-
-    m.set('method_moonsighting', 'لجنة رؤية الهلال العالمية');
-    m.set('method_dubai', 'منطقة الخليج (دبي)');
-    m.set('method_kuwait', 'الكويت');
-    m.set('method_france_15', 'فرنسا زاوية 15°');
-    m.set('method_france_18', 'فرنسا زاوية 18°');
-    m.set('method_turkey_europe', 'رئاسة الشؤون الدينية التركية - أوروبا');
-    m.set('method_tehran', 'الشيعة، معهد الجيوفيزياء، جامعة طهران');
-    m.set('method_indonesia', 'وزارة الشؤون الدينية الإندونيسية');
-    m.set('method_algeria', 'وزارة الشؤون الدينية والأوقاف، الجزائر');
-    m.set('method_brunei', 'وزارة الشؤون الدينية، بروناي');
-    m.set('method_custom', 'مخصص');
-
-    m.set('method_short_moonsighting', 'رؤية الهلال');
-    m.set('method_short_dubai', 'دبي');
-    m.set('method_short_kuwait', 'الكويت');
-    m.set('method_short_france_15', 'فرنسا 15°');
-    m.set('method_short_france_18', 'فرنسا 18°');
-    m.set('method_short_turkey_europe', 'تركيا أوروبا');
-    m.set('method_short_tehran', 'طهران');
-    m.set('method_short_indonesia', 'إندونيسيا');
-    m.set('method_short_algeria', 'الجزائر');
-    m.set('method_short_brunei', 'بروناي');
-    m.set('method_short_custom', 'مخصص');
-
 
     return m;
   }

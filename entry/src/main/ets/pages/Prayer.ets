@@ -798,6 +798,33 @@ export struct Prayer {
     }
   }
 
+  private getFirstThirdTime(): string {
+    for (const t of this.extraTimings) {
+      if (t.id === 'firstThird') {
+        return t.time;
+      }
+    }
+    return '--:--';
+  }
+
+  private getMidnightTime(): string {
+    for (const t of this.extraTimings) {
+      if (t.id === 'midnight') {
+        return t.time;
+      }
+    }
+    return '--:--';
+  }
+
+  private getLastThirdTime(): string {
+    for (const t of this.extraTimings) {
+      if (t.id === 'lastThird') {
+        return t.time;
+      }
+    }
+    return '--:--';
+  }
+
   private getSunriseTime(): string {
     for (const t of this.extraTimings) {
       if (t.id === 'sunrise') {
@@ -864,6 +891,9 @@ export struct Prayer {
                       prayers: this.prayers,
                       sunriseTime: this.getSunriseTime(),
                       sunsetTime: this.getSunsetTime(),
+                      firstThirdTime: this.getFirstThirdTime(),
+                      midnightTime: this.getMidnightTime(),
+                      lastThirdTime: this.getLastThirdTime(),
                       currentLanguage: this.appLanguage,
                       isDarkMode: this.isDarkMode()
                     })
@@ -884,6 +914,9 @@ export struct Prayer {
                       prayers: this.prayers,
                       sunriseTime: this.getSunriseTime(),
                       sunsetTime: this.getSunsetTime(),
+                      firstThirdTime: this.getFirstThirdTime(),
+                      midnightTime: this.getMidnightTime(),
+                      lastThirdTime: this.getLastThirdTime(),
                       currentLanguage: this.appLanguage,
                       isDarkMode: this.isDarkMode()
                     })
