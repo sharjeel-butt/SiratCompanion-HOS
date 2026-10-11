@@ -1681,6 +1681,10 @@ export class L {
     m.set('default_location', 'الموقع الافتراضي');
     m.set('unknown_location', 'موقع غير معروف');
 
+    m.set('title_settings', 'الإعدادات');
+    m.set('title_customize', 'التخصيص');
+    m.set('exit', 'خروج');
+
     m.set('dialog_gps_off_title', 'خدمة الموقع معطّلة');
     m.set('dialog_gps_off_message',
       'يرجى تمكين خدمة الموقع للحصول على أوقات صلاة دقيقة لمدينتك.');
