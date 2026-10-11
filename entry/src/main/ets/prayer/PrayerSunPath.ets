@@ -2,8 +2,8 @@
 
 import { ThemeColors } from '../common/Theme';
 import { L } from '../helper/LocalizationHelper';
-import { PrayerModel } from './PrayerModel';
-import { PrayerManager } from './PrayerManager';
+import { PrayerModel } from '../prayer/PrayerModel';
+import { PrayerManager } from '../prayer/PrayerManager';
 import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
 import { STORAGE_KEY_TIME_FORMAT } from '../common/StorageKeys';
 
@@ -90,9 +90,17 @@ export struct PrayerSunPath {
   @Prop @Watch('onVisualChanged') lastThirdTime: string = '--:--';
   @Prop @Watch('onVisualChanged') currentLanguage: string = 'en';
   @Prop @Watch('onVisualChanged') isDarkMode: boolean = false;
+  @Prop @Watch('onVisualChanged') showExtraTimings: boolean = true;
+  /**
+   * Time format preference. The field value itself is never read —
+   * ClockFormatHelper reads AppStorage directly. The @Watch is what
+   * matters: it fires redraw() when the user changes the format.
+   * The field is deliberately lowercase to avoid shadowing the
+   * imported ClockFormat enum used in the initializer below.
+   */
   @StorageLink(STORAGE_KEY_TIME_FORMAT)
   @Watch('onVisualChanged')
-  ClockFormat: string = ClockFormat.SYSTEM;
+  clockFormat: string = ClockFormat.SYSTEM;
 
   private ctx: CanvasRenderingContext2D =
     new CanvasRenderingContext2D(new RenderingContextSettings(true));
@@ -101,12 +109,14 @@ export struct PrayerSunPath {
   private canvasReady: boolean = false;
 
   private tickerTimerId: number = -1;
+
   /**
    * Monotonic minute counter. Grows without wrapping, so the visual
    * position `monotonic % 1440` never jumps except at midnight — and
    * that single jump is smoothed by the wrap animation below.
    */
   private tickerMonotonicMinute: number = -1;
+
   /** Set to Date.now() when a midnight wrap begins. */
   private tickerWrapStartMs: number = -1;
   /** Minute value (0–1439) just before the wrap. */
@@ -161,6 +171,7 @@ export struct PrayerSunPath {
     const totalMinutes = now.getHours() * 60 + now.getMinutes();
     return ClockFormatHelper.formatMinutes(totalMinutes);
   }
+
   // ============================================================
   // TICKER — smooth movement, midnight wrap animation
   // ============================================================
@@ -400,81 +411,82 @@ export struct PrayerSunPath {
     // ============================================================
     // EXTRA TIMINGS — dotted vertical lines from top to bottom
     // ============================================================
+    if (this.showExtraTimings) {
+      const hasFirstThird = isValidTime(this.firstThirdTime);
+      const hasMidnight = isValidTime(this.midnightTime);
+      const hasLastThird = isValidTime(this.lastThirdTime);
 
-    const hasFirstThird = isValidTime(this.firstThirdTime);
-    const hasMidnight = isValidTime(this.midnightTime);
-    const hasLastThird = isValidTime(this.lastThirdTime);
+      const firstThirdX = hasFirstThird
+        ? px(xForHour(timeToHour(this.firstThirdTime)))
+        : -1;
+      const midnightX = hasMidnight
+        ? px(xForHour(timeToHour(this.midnightTime)))
+        : -1;
+      const lastThirdX = hasLastThird
+        ? px(xForHour(timeToHour(this.lastThirdTime)))
+        : -1;
 
-    const firstThirdX = hasFirstThird
-      ? px(xForHour(timeToHour(this.firstThirdTime)))
-      : -1;
-    const midnightX = hasMidnight
-      ? px(xForHour(timeToHour(this.midnightTime)))
-      : -1;
-    const lastThirdX = hasLastThird
-      ? px(xForHour(timeToHour(this.lastThirdTime)))
-      : -1;
+      const drawExtraLine = (x: number): void => {
+        ctx.save();
+        ctx.globalAlpha = leaderAlpha;
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, EXTRA_LINE_END_Y);
+        ctx.strokeStyle = leaderColor;
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([5, 5]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.globalAlpha = 1.0;
+        ctx.restore();
+      };
 
-    const drawExtraLine = (x: number): void => {
-      ctx.save();
-      ctx.globalAlpha = leaderAlpha;
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, EXTRA_LINE_END_Y);
-      ctx.strokeStyle = leaderColor;
-      ctx.lineWidth = 1.5;
-      ctx.setLineDash([5, 5]);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.globalAlpha = 1.0;
-      ctx.restore();
-    };
+      if (firstThirdX >= 0) {
+        drawExtraLine(firstThirdX);
+      }
+      if (midnightX >= 0) {
+        drawExtraLine(midnightX);
+      }
+      if (lastThirdX >= 0) {
+        drawExtraLine(lastThirdX);
+      }
 
-    if (firstThirdX >= 0) {
-      drawExtraLine(firstThirdX);
-    }
-    if (midnightX >= 0) {
-      drawExtraLine(midnightX);
-    }
-    if (lastThirdX >= 0) {
-      drawExtraLine(lastThirdX);
-    }
+      const drawExtraLabel = (
+        x: number, label: string, time: string
+      ): void => {
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'alphabetic';
 
-    const drawExtraLabel = (
-      x: number, label: string, time: string
-    ): void => {
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'alphabetic';
+        ctx.font = `bold ${EXTRA_LABEL_FONT_SIZE}px sans-serif`;
+        ctx.fillStyle = this.colors.accentGold;
+        ctx.fillText(label, x, EXTRA_LABEL_Y);
 
-      ctx.font = `bold ${EXTRA_LABEL_FONT_SIZE}px sans-serif`;
-      ctx.fillStyle = this.colors.accentGold;
-      ctx.fillText(label, x, EXTRA_LABEL_Y);
+        ctx.font = `${EXTRA_TIME_FONT_SIZE}px sans-serif`;
+        ctx.fillStyle = this.colors.accentGoldLight;
+        ctx.fillText(ClockFormatHelper.reformat(time), x, EXTRA_TIME_Y);
+      };
 
-      ctx.font = `${EXTRA_TIME_FONT_SIZE}px sans-serif`;
-      ctx.fillStyle = this.colors.accentGoldLight;
-      ctx.fillText(ClockFormatHelper.reformat(time), x, EXTRA_TIME_Y);
-    };
-
-    if (firstThirdX >= 0) {
-      drawExtraLabel(
-        firstThirdX,
-        L.get('timing_first_third', this.currentLanguage),
-        this.firstThirdTime
-      );
-    }
-    if (midnightX >= 0) {
-      drawExtraLabel(
-        midnightX,
-        L.get('timing_midnight', this.currentLanguage),
-        this.midnightTime
-      );
-    }
-    if (lastThirdX >= 0) {
-      drawExtraLabel(
-        lastThirdX,
-        L.get('timing_last_third', this.currentLanguage),
-        this.lastThirdTime
-      );
+      if (firstThirdX >= 0) {
+        drawExtraLabel(
+          firstThirdX,
+          L.get('timing_first_third', this.currentLanguage),
+          this.firstThirdTime
+        );
+      }
+      if (midnightX >= 0) {
+        drawExtraLabel(
+          midnightX,
+          L.get('timing_midnight', this.currentLanguage),
+          this.midnightTime
+        );
+      }
+      if (lastThirdX >= 0) {
+        drawExtraLabel(
+          lastThirdX,
+          L.get('timing_last_third', this.currentLanguage),
+          this.lastThirdTime
+        );
+      }
     }
 
     // ============================================================
@@ -612,9 +624,7 @@ export struct PrayerSunPath {
       ctx.fillStyle = horizonColor;
       ctx.fill();
 
-      // Dotted leader down to the label. Now descends the full
-      // distance from the ring to just above the label baseline,
-      // matching the visual weight of the extra-timing guides.
+      // Dotted leader down to the label
       ctx.save();
       ctx.beginPath();
       ctx.moveTo(sx, sy + 10);
@@ -688,8 +698,6 @@ export struct PrayerSunPath {
     let tickerFraction: number;
 
     if (wrapActive) {
-      // Sweep from the pre-wrap position (near hour 23.99) to the
-      // start of the arc (hour 0), over TICKER_WRAP_MS milliseconds.
       const t = (Date.now() - this.tickerWrapStartMs) / TICKER_WRAP_MS;
       const fromFrac = this.tickerWrapFromMinute / 1440;
       const toFrac = 0;

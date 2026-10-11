@@ -23,6 +23,8 @@ import {
   STORAGE_KEY_POLAR_RESOLUTION,
   STORAGE_KEY_ROUNDING_METHOD,
   STORAGE_KEY_SHAFAQ,
+  STORAGE_KEY_SHOW_EXTRA_TIMINGS,
+  STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
   STORAGE_KEY_SOUND_ENABLED,
   STORAGE_KEY_TASBIH_RENDER_STYLE,
   STORAGE_KEY_TASBIH_SOUND,
@@ -118,8 +120,15 @@ export class SettingsHelper {
     const methodStr = await PreferencesHelper.getString(KEY_METHOD, CalculationMethod.KARACHI);
     const asrNum = await PreferencesHelper.getNumber(KEY_ASR, AsrShadowRule.STANDARD as number);
     const sourceStr = await PreferencesHelper.getString(KEY_SOURCE, CalculationSource.LOCAL);
-    const showExtraTimings = await PreferencesHelper.getBoolean(KEY_SHOW_EXTRA_TIMINGS, true);
-    const showIslamicEvents = await PreferencesHelper.getBoolean(KEY_SHOW_ISLAMIC_EVENTS, true);
+    const showExtraTimings = await PreferencesHelper.getBoolean(
+      KEY_SHOW_EXTRA_TIMINGS, true
+    );
+    const showIslamicEvents = await PreferencesHelper.getBoolean(
+      KEY_SHOW_ISLAMIC_EVENTS, true
+    );
+
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_EXTRA_TIMINGS, showExtraTimings);
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_ISLAMIC_EVENTS, showIslamicEvents);
 
     return {
       method: methodStr as CalculationMethod,
@@ -369,16 +378,18 @@ export class SettingsHelper {
   }
 
   static saveShowExtraTimings(value: boolean): void {
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_EXTRA_TIMINGS, value);
     PreferencesHelper.setBoolean(KEY_SHOW_EXTRA_TIMINGS, value);
+  }
+
+  static saveShowIslamicEvents(value: boolean): void {
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_ISLAMIC_EVENTS, value);
+    PreferencesHelper.setBoolean(KEY_SHOW_ISLAMIC_EVENTS, value);
   }
 
   // ============================================================
   // PRAYER OFFSETS
   // ============================================================
-
-  static saveShowIslamicEvents(value: boolean): void {
-    PreferencesHelper.setBoolean(KEY_SHOW_ISLAMIC_EVENTS, value);
-  }
 
   static async getPrayerOffsets(): Promise<PrayerOffsets> {
     const fajr = await PreferencesHelper.getNumber(KEY_OFFSET_FAJR, 0);
