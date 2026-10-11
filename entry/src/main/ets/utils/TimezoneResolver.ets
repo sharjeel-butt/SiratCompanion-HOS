@@ -11,17 +11,28 @@ import { City, DstRule, OfflineCityLookup } from './OfflineCityLookup';
  *      city's standard offset + a DST adjustment derived from the
  *      city's DST rule.
  *   2. Otherwise, use a longitude-derived estimate with no DST.
- *   3. If the device's own offset is within 0.5 h of the location's
- *      offset, prefer the device's offset — the OS knows about local
- *      political boundaries and DST transitions more precisely than
- *      we do.
+ *   3. If the device's own offset is within 15 minutes of the
+ *      location's offset, prefer the device's offset — the OS knows
+ *      about local political boundaries and DST transitions more
+ *      precisely than we do.
+ *
+ * ## Why the 15-minute window
+ *
+ * The original threshold was 30 minutes. That let a Karachi device
+ * (UTC+5) override Kabul's UTC+4:30, since the difference is exactly
+ * 0.5 hours and passed the <= 0.5 check — the app would compute
+ * Kabul's prayers on Karachi's clock. The tighter window keeps the
+ * "prefer device" safety for cases where the two clocks agree, while
+ * refusing to override legitimate half-hour and quarter-hour offsets.
  */
 export class TimezoneResolver {
+
   /**
    * Effective offset for a location, preferring the device's offset
-   * when the two are within 30 minutes of each other.
+   * when the two are within 15 minutes of each other.
    *
-   * @returns hours east of UTC (may be fractional: 5.5 for India, 4.5 for Kabul)
+   * @returns hours east of UTC (may be fractional: 5.5 for India,
+   *          4.5 for Kabul)
    */
   static effectiveOffsetForLocation(
     latitude: number,
@@ -33,22 +44,66 @@ export class TimezoneResolver {
     }
 
     const deviceOffset = -date.getTimezoneOffset() / 60;
-    const locationOffset = TimezoneResolver.tableOffset(latitude, longitude, date);
+    const locationOffset = TimezoneResolver.tableOffset(
+      latitude, longitude, date
+    );
 
-    const useDevice = Math.abs(deviceOffset - locationOffset) <= 0.5;
+    const useDevice = Math.abs(deviceOffset - locationOffset) <= 0.25;
     return useDevice ? deviceOffset : locationOffset;
   }
 
   /**
-   * Longitude-derived offset, no DST, no device input.
-   * Useful when the caller only wants the location's own offset.
+   * Longitude-derived or table-listed offset, no device input.
    */
-  static tableOffset(latitude: number, longitude: number, date: Date): number {
-    const city: City | null = OfflineCityLookup.nearestCity(latitude, longitude);
+  static tableOffset(
+    latitude: number,
+    longitude: number,
+    date: Date
+  ): number {
+    // Morocco — permanent UTC+1 except during Ramadan, when the
+    // country shifts to UTC+0. The transition dates follow the
+    // Ramadan crescent sighting, which varies by year; the windows
+    // below cover the next three years and can be extended.
+    if (latitude >= 27 && latitude <= 36 &&
+      longitude >= -14 && longitude <= -1) {
+      const inRamadan = TimezoneResolver.isMoroccoRamadan(date);
+      return inRamadan ? 0 : 1;
+    }
+
+    const city: City | null = OfflineCityLookup.nearestCity(
+      latitude, longitude
+    );
     if (city !== null) {
-      return city.standardOffset + (TimezoneResolver.isDst(city.dstRule, date) ? 1 : 0);
+      return city.standardOffset +
+        (TimezoneResolver.isDst(city.dstRule, date) ? 1 : 0);
     }
     return Math.round(longitude / 15);
+  }
+
+  /**
+   * True when the given date falls within Morocco's Ramadan window
+   * for the years covered by the hard-coded table.
+   *
+   * Dates are approximate — the actual transition follows the local
+   * crescent sighting and can shift by a day. For a companion app
+   * showing today's times, a day of slack on the boundary is
+   * acceptable; a full month of the wrong offset is not.
+   */
+  private static isMoroccoRamadan(date: Date): boolean {
+    const year = date.getUTCFullYear();
+    switch (year) {
+      case 2025:
+        return date >= new Date(2025, 1, 28) &&
+          date < new Date(2025, 2, 30);
+      case 2026:
+        return date >= new Date(2026, 1, 17) &&
+          date < new Date(2026, 2, 19);
+      case 2027:
+        return date >= new Date(2027, 1, 7) &&
+          date < new Date(2027, 2, 9);
+      default:
+        return false;
+    }
   }
 
   // ============================================================
@@ -74,8 +129,8 @@ export class TimezoneResolver {
    * both in the same calendar year.
    */
   private static isUsDst(date: Date, year: number): boolean {
-    const start = TimezoneResolver.nthSunday(year, 3, 2); // 2nd Sun Mar
-    const end = TimezoneResolver.nthSunday(year, 11, 1); // 1st Sun Nov
+    const start = TimezoneResolver.nthSunday(year, 3, 2);
+    const end = TimezoneResolver.nthSunday(year, 11, 1);
     const t = date.getTime();
     return t >= start.getTime() && t < end.getTime();
   }
@@ -85,8 +140,8 @@ export class TimezoneResolver {
    * both in the same calendar year.
    */
   private static isEuDst(date: Date, year: number): boolean {
-    const start = TimezoneResolver.lastSunday(year, 3); // last Sun Mar
-    const end = TimezoneResolver.lastSunday(year, 10); // last Sun Oct
+    const start = TimezoneResolver.lastSunday(year, 3);
+    const end = TimezoneResolver.lastSunday(year, 10);
     const t = date.getTime();
     return t >= start.getTime() && t < end.getTime();
   }
@@ -101,20 +156,16 @@ export class TimezoneResolver {
     const t = date.getTime();
 
     if (m >= 9) {
-      // Oct, Nov, Dec — DST active once past the first Sunday of Oct
       const start = TimezoneResolver.nthSunday(year, 10, 1);
       return t >= start.getTime();
     }
     if (m <= 2) {
-      // Jan, Feb, Mar — still in the DST window that started last Oct
       return true;
     }
     if (m === 3) {
-      // April — DST until the first Sunday
       const end = TimezoneResolver.nthSunday(year, 4, 1);
       return t < end.getTime();
     }
-    // May – Sep
     return false;
   }
 
@@ -125,7 +176,7 @@ export class TimezoneResolver {
   /** nth Sunday (1-based) of a 1-based month, at 00:00 UTC. */
   private static nthSunday(year: number, month: number, n: number): Date {
     const first = new Date(Date.UTC(year, month - 1, 1));
-    const dow = first.getUTCDay(); // 0 = Sun
+    const dow = first.getUTCDay();
     const day = 1 + ((7 - dow) % 7) + (n - 1) * 7;
     return new Date(Date.UTC(year, month - 1, day));
   }

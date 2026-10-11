@@ -1,7 +1,9 @@
 // entry/src/main/ets/utils/DateUtils.ets
 
 import { IMPORTANT_ISLAMIC_EVENTS } from '../data/IslamicEvents';
-import { UpcomingImportantDate } from '../models/DateModels';
+import {
+  EventRecurrence, IslamicEvent, UpcomingImportantDate
+} from '../models/DateModels';
 
 const MS_PER_DAY = 86400000;
 
@@ -42,11 +44,66 @@ export class DateHelper {
         if (part.type === 'month') {
           month = parseInt(part.value, 10);
         } else if (part.type === 'day') {
-          day =
-            parseInt(part.value, 10);
+          day = parseInt(part.value, 10);
         }
       }
       if (month === targetMonth && day === targetDay) {
+        return testDate;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Find the next Gregorian date on which an event occurs, honouring
+   * the user's Hijri offset.
+   *
+   * FIXED events scan for a specific Hijri (month, day).
+   *
+   * FIRST_THURSDAY_NIGHT events scan for the first Gregorian
+   * Thursday whose visible Hijri date falls within the first seven
+   * days of the target Hijri month. That Thursday is the eve of the
+   * first Friday of the month.
+   */
+  private static findNextGregorianForEvent(
+    event: IslamicEvent,
+    startDate: Date,
+    offsetDays: number
+  ): Date | null {
+    if (event.recurrence === EventRecurrence.FIXED) {
+      return DateHelper.findGregorianDateForHijri(
+        event.month, event.day, startDate, offsetDays
+      );
+    }
+
+    const fmt = new Intl.DateTimeFormat('en-u-ca-islamic', {
+      month: 'numeric',
+      day: 'numeric'
+    });
+
+    for (let i = 0; i < 366; i++) {
+      const testDate = new Date(startDate.getTime() + i * MS_PER_DAY);
+
+      // Thursday = 4 (Sunday = 0).
+      if (testDate.getDay() !== 4) {
+        continue;
+      }
+
+      const shifted = new Date(testDate);
+      shifted.setDate(shifted.getDate() + offsetDays);
+
+      const parts = fmt.formatToParts(shifted);
+      let month = 0;
+      let day = 0;
+      for (const part of parts) {
+        if (part.type === 'month') {
+          month = parseInt(part.value, 10);
+        } else if (part.type === 'day') {
+          day = parseInt(part.value, 10);
+        }
+      }
+
+      if (month === event.month && day >= 1 && day <= 7) {
         return testDate;
       }
     }
@@ -74,8 +131,8 @@ export class DateHelper {
     const found: UpcomingImportantDate[] = [];
 
     for (const event of IMPORTANT_ISLAMIC_EVENTS) {
-      const gregorianDate = DateHelper.findGregorianDateForHijri(
-        event.month, event.day, now, offsetDays
+      const gregorianDate = DateHelper.findNextGregorianForEvent(
+        event, now, offsetDays
       );
       if (!gregorianDate) {
         continue;

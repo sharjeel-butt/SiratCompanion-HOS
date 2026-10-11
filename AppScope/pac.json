@@ -1,0 +1,78 @@
+{
+  "dataProcess": [
+    {
+      "dataType": "Location information",
+      "dataLabels": [
+        {
+          "label": "GPS location",
+          "purposes": [
+            "App functionality"
+          ]
+        },
+        {
+          "label": "Other approximate location information",
+          "purposes": [
+            "App functionality"
+          ]
+        },
+        {
+          "label": "Other precise location information",
+          "purposes": [
+            "App functionality"
+          ]
+        }
+      ]
+    },
+    {
+      "dataType": "Basic information",
+      "dataLabels": [
+        {
+          "label": "Calendar",
+          "purposes": [
+            "App functionality"
+          ]
+        }
+      ]
+    },
+    {
+      "dataType": "Device information",
+      "dataLabels": [
+        {
+          "label": "Magnetometer",
+          "purposes": [
+            "App functionality"
+          ]
+        },
+        {
+          "label": "Acceleration sensor",
+          "purposes": [
+            "App functionality"
+          ]
+        },
+        {
+          "label": "Screen orientation sensor",
+          "purposes": [
+            "App functionality"
+          ]
+        }
+      ]
+    },
+    {
+      "dataType": "App information",
+      "dataLabels": [
+        {
+          "label": "App settings",
+          "purposes": [
+            "App functionality"
+          ]
+        },
+        {
+          "label": "App run logs",
+          "purposes": [
+            "App functionality"
+          ]
+        }
+      ]
+    }
+  ]
+}

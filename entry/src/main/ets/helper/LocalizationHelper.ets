@@ -652,6 +652,29 @@ export class L {
     m.set('hijri_calendar_tabular', 'Tabular (Arithmetical)');
     m.set('hijri_calendar_tabular_desc', 'Kuwaiti algorithm — deterministic for all years');
 
+    // ---- Updated descriptions ----
+    m.set('show_extra_timings_desc',
+      'Show Imsak, Sunrise, Sunset and night times in the prayer list and sun path');
+    m.set('show_islamic_events_desc',
+      'Show the upcoming Islamic event countdown on the home page');
+
+    // ---- Customize subsection headers ----
+    m.set('subsection_home_ui', 'Home Page UI');
+    m.set('subsection_prayer_ui', 'Prayer UI');
+    m.set('subsection_feedback', 'Sound & Feedback');
+    m.set('subsection_language', 'Language');
+
+    m.set('event_raghaib', 'Laylat al-Raghaib');
+    m.set('event_new_year', 'Islamic New Year');
+    m.set('event_ashura', 'Day of Ashura');
+    m.set('event_mawlid', 'Mawlid al-Nabi');
+    m.set('event_isra_miraj', "Isra and Mi'raj");
+    m.set('event_mid_shaban', "Mid-Sha'ban");
+    m.set('event_ramadan_start', 'Ramadan');
+    m.set('event_eid_fitr', 'Eid al-Fitr');
+    m.set('event_arafah', 'Day of Arafah');
+    m.set('event_eid_adha', 'Eid al-Adha');
+
     return m;
   }
 
@@ -1155,6 +1178,27 @@ export class L {
     m.set('hijri_calendar_umm_al_qura_desc', '沙特阿拉伯官方日历（1318–1500 AH）');
     m.set('hijri_calendar_tabular', '表格历（算术）');
     m.set('hijri_calendar_tabular_desc', '科威特算法 — 所有年份均可计算');
+
+    m.set('show_extra_timings_desc',
+      '在礼拜列表和太阳路径中显示封斋、日出、日落和夜间时间');
+    m.set('show_islamic_events_desc',
+      '在首页显示即将到来的伊斯兰节日倒计时');
+
+    m.set('subsection_home_ui', '首页界面');
+    m.set('subsection_prayer_ui', '礼拜界面');
+    m.set('subsection_feedback', '声音与反馈');
+    m.set('subsection_language', '语言');
+
+    m.set('event_raghaib', '拉加伊卜之夜');
+    m.set('event_new_year', '伊斯兰新年');
+    m.set('event_ashura', '阿舒拉日');
+    m.set('event_mawlid', '圣纪节');
+    m.set('event_isra_miraj', '登霄夜');
+    m.set('event_mid_shaban', '舍尔邦月中');
+    m.set('event_ramadan_start', '斋月');
+    m.set('event_eid_fitr', '开斋节');
+    m.set('event_arafah', '阿拉法日');
+    m.set('event_eid_adha', '宰牲节');
 
     return m;
   }
@@ -1662,6 +1706,27 @@ export class L {
     m.set('hijri_calendar_umm_al_qura_desc', 'التقويم الرسمي للسعودية (1318–1500 هـ)');
     m.set('hijri_calendar_tabular', 'جدولي (حسابي)');
     m.set('hijri_calendar_tabular_desc', 'خوارزمية الكويت — محدد لجميع السنوات');
+
+    m.set('show_extra_timings_desc',
+      'إظهار الإمساك والشروق والغروب وأوقات الليل في قائمة الصلاة ومسار الشمس');
+    m.set('show_islamic_events_desc',
+      'إظهار العد التنازلي للمناسبة الإسلامية القادمة في الشاشة الرئيسية');
+
+    m.set('subsection_home_ui', 'واجهة الرئيسية');
+    m.set('subsection_prayer_ui', 'واجهة الصلاة');
+    m.set('subsection_feedback', 'الصوت والتغذية الراجعة');
+    m.set('subsection_language', 'اللغة');
+
+    m.set('event_raghaib', 'ليلة الرغائب');
+    m.set('event_new_year', 'رأس السنة الهجرية');
+    m.set('event_ashura', 'يوم عاشوراء');
+    m.set('event_mawlid', 'المولد النبوي');
+    m.set('event_isra_miraj', 'الإسراء والمعراج');
+    m.set('event_mid_shaban', 'ليلة النصف من شعبان');
+    m.set('event_ramadan_start', 'رمضان');
+    m.set('event_eid_fitr', 'عيد الفطر');
+    m.set('event_arafah', 'يوم عرفة');
+    m.set('event_eid_adha', 'عيد الأضحى');
 
     return m;
   }

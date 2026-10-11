@@ -13,6 +13,7 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
   STORAGE_KEY_PRAYER_STATE_VERSION,
+  STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
 } from '../common/StorageKeys';
@@ -75,6 +76,9 @@ export struct HomePage {
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
   appThemePreset: string = ThemePreset.SIRAT;
+  @StorageLink(STORAGE_KEY_SHOW_ISLAMIC_EVENTS)
+  @Watch('onShowIslamicEventsChanged')
+  showIslamicEvents: boolean = true;
 
   @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
   @Watch('onHijriOffsetChanged')
@@ -105,8 +109,7 @@ export struct HomePage {
   @State todayNextPrayerTime: string = '--:--';
 
   @State locationMode: LocationMode = LocationMode.GPS;
-
-  @State private prayerProgress: PrayerProgress = {
+  @State prayerProgress: PrayerProgress = {
     todayCompleted: 0,
     todayTotal: 5,
     todayFajr: false,
@@ -170,6 +173,10 @@ export struct HomePage {
   private settingsLoading: boolean = false;
 
   @State private currentLanguage: string = 'en';
+
+  private onShowIslamicEventsChanged(): void {
+    // Re-render is handled by the @StorageLink.
+  }
 
   private tr(key: string): string {
     return L.get(key, this.currentLanguage);
@@ -861,7 +868,9 @@ export struct HomePage {
               if (this.isTablet()) {
                 Row({ space: 16 }) {
                   Column() {
-                    this.CountdownCard()
+                    if (this.showIslamicEvents) {
+                      this.CountdownCard()
+                    }
                     this.LiveCountdownBanner()
                     this.RamadanCard()
                   }
@@ -883,7 +892,9 @@ export struct HomePage {
                 .padding({ left: 24, right: 24 })
               } else {
                 Column() {
-                  this.CountdownCard()
+                  if (this.showIslamicEvents) {
+                    this.CountdownCard()
+                  }
                   this.LiveCountdownBanner()
                   this.RamadanCard()
                   this.TodayProgressCard()
@@ -1487,11 +1498,11 @@ export struct HomePage {
       .width('100%')
 
       Row({ space: 8 }) {
-        this.PrayerDot(this.tr('prayer_fajr'), this.prayerProgress.todayFajr)
-        this.PrayerDot(this.tr('prayer_dhuhr'), this.prayerProgress.todayDhuhr)
-        this.PrayerDot(this.tr('prayer_asr'), this.prayerProgress.todayAsr)
-        this.PrayerDot(this.tr('prayer_maghrib'), this.prayerProgress.todayMaghrib)
-        this.PrayerDot(this.tr('prayer_isha'), this.prayerProgress.todayIsha)
+        this.FajrDot()
+        this.DhuhrDot()
+        this.AsrDot()
+        this.MaghribDot()
+        this.IshaDot()
       }
       .width('100%').margin({ top: 18 })
     }
@@ -1510,21 +1521,127 @@ export struct HomePage {
   }
 
   @Builder
-  PrayerDot(label: string, done: boolean) {
+  FajrDot() {
     Column() {
       Stack() {
         Circle()
           .width(20)
           .height(20)
-          .fill(done ? this.colors.accentGold : Color.Transparent)
-          .stroke(done ? this.colors.accentGold : this.colors.borderStrong)
+          .fill(this.prayerProgress.todayFajr
+            ? this.colors.accentGold : Color.Transparent)
+          .stroke(this.prayerProgress.todayFajr
+            ? this.colors.accentGold : this.colors.borderStrong)
           .strokeWidth(2)
       }
       .width(20).height(20)
 
-      Text(label)
+      Text(this.tr('prayer_fajr'))
         .fontSize(9)
-        .fontColor(done
+        .fontColor(this.prayerProgress.todayFajr
+          ? this.colors.accentGold : this.colors.textMuted)
+        .margin({ top: 6 })
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+    }
+    .layoutWeight(1).alignItems(HorizontalAlign.Center)
+  }
+
+  @Builder
+  DhuhrDot() {
+    Column() {
+      Stack() {
+        Circle()
+          .width(20)
+          .height(20)
+          .fill(this.prayerProgress.todayDhuhr
+            ? this.colors.accentGold : Color.Transparent)
+          .stroke(this.prayerProgress.todayDhuhr
+            ? this.colors.accentGold : this.colors.borderStrong)
+          .strokeWidth(2)
+      }
+      .width(20).height(20)
+
+      Text(this.tr('prayer_dhuhr'))
+        .fontSize(9)
+        .fontColor(this.prayerProgress.todayDhuhr
+          ? this.colors.accentGold : this.colors.textMuted)
+        .margin({ top: 6 })
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+    }
+    .layoutWeight(1).alignItems(HorizontalAlign.Center)
+  }
+
+  @Builder
+  AsrDot() {
+    Column() {
+      Stack() {
+        Circle()
+          .width(20)
+          .height(20)
+          .fill(this.prayerProgress.todayAsr
+            ? this.colors.accentGold : Color.Transparent)
+          .stroke(this.prayerProgress.todayAsr
+            ? this.colors.accentGold : this.colors.borderStrong)
+          .strokeWidth(2)
+      }
+      .width(20).height(20)
+
+      Text(this.tr('prayer_asr'))
+        .fontSize(9)
+        .fontColor(this.prayerProgress.todayAsr
+          ? this.colors.accentGold : this.colors.textMuted)
+        .margin({ top: 6 })
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+    }
+    .layoutWeight(1).alignItems(HorizontalAlign.Center)
+  }
+
+  @Builder
+  MaghribDot() {
+    Column() {
+      Stack() {
+        Circle()
+          .width(20)
+          .height(20)
+          .fill(this.prayerProgress.todayMaghrib
+            ? this.colors.accentGold : Color.Transparent)
+          .stroke(this.prayerProgress.todayMaghrib
+            ? this.colors.accentGold : this.colors.borderStrong)
+          .strokeWidth(2)
+      }
+      .width(20).height(20)
+
+      Text(this.tr('prayer_maghrib'))
+        .fontSize(9)
+        .fontColor(this.prayerProgress.todayMaghrib
+          ? this.colors.accentGold : this.colors.textMuted)
+        .margin({ top: 6 })
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+    }
+    .layoutWeight(1).alignItems(HorizontalAlign.Center)
+  }
+
+  @Builder
+  IshaDot() {
+    Column() {
+      Stack() {
+        Circle()
+          .width(20)
+          .height(20)
+          .fill(this.prayerProgress.todayIsha
+            ? this.colors.accentGold : Color.Transparent)
+          .stroke(this.prayerProgress.todayIsha
+            ? this.colors.accentGold : this.colors.borderStrong)
+          .strokeWidth(2)
+      }
+      .width(20).height(20)
+
+      Text(this.tr('prayer_isha'))
+        .fontSize(9)
+        .fontColor(this.prayerProgress.todayIsha
           ? this.colors.accentGold : this.colors.textMuted)
         .margin({ top: 6 })
         .maxLines(1)

@@ -17,6 +17,7 @@ import { TimezoneResolver } from './TimezoneResolver';
 import {
   AdvancedCalcSettings, DEFAULT_ADVANCED_CALC
 } from '../models/AdvancedCalcModels';
+import { AppLogger } from '../helper/AppLogger';
 
 export interface HomePrayerSnapshot {
   prayers: PrayerModel[];
@@ -158,6 +159,20 @@ export class HomeController {
       const offsetHours: number = TimezoneResolver.effectiveOffsetForLocation(
         latitude, longitude, today
       );
+
+      // Log the offsets actually used so that a "wrong times" report
+      // can be traced to a specific device/location pair without
+      // guessing.
+      try {
+        const deviceOffset = -today.getTimezoneOffset() / 60;
+        AppLogger.info('HomeController',
+          `Header offsets: device=${deviceOffset}h, ` +
+            `location=${offsetHours}h, ` +
+            `lat=${latitude.toFixed(4)}, lng=${longitude.toFixed(4)}`);
+      } catch (err) {
+        // Never let diagnostics affect the calculation path.
+      }
+
       const withStatus: PrayerModel[] = PrayerManager.updateStatuses(
         withOffsets, today, offsetHours
       );
