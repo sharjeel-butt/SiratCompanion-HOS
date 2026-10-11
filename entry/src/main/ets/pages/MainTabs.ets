@@ -73,6 +73,7 @@ struct MainTabs {
       }
     );
     this.recomputeBarWidth();
+
     console.info(
       `[MainTabs] sdkApiVersion=${deviceInfo.sdkApiVersion}, ` +
         `hds=${this.useHds}`
