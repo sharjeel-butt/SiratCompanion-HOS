@@ -140,16 +140,6 @@ export default class EntryAbility extends UIAbility {
       );
       AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, savedLanguage);
 
-      const vibrationEnabled = await PreferencesHelper.getBoolean(
-        STORAGE_KEY_VIBRATION_ENABLED, true
-      );
-      AppStorage.setOrCreate(STORAGE_KEY_VIBRATION_ENABLED, vibrationEnabled);
-
-      const savedTimeFormat = await PreferencesHelper.getString(
-        STORAGE_KEY_TIME_FORMAT, ClockFormat.SYSTEM
-      );
-      AppStorage.setOrCreate(STORAGE_KEY_TIME_FORMAT, savedTimeFormat);
-
       const savedShowExtraTimings = await PreferencesHelper.getBoolean(
         STORAGE_KEY_SHOW_EXTRA_TIMINGS, true
       );
@@ -163,6 +153,16 @@ export default class EntryAbility extends UIAbility {
       AppStorage.setOrCreate(
         STORAGE_KEY_SHOW_ISLAMIC_EVENTS, savedShowIslamicEvents
       );
+
+      const vibrationEnabled = await PreferencesHelper.getBoolean(
+        STORAGE_KEY_VIBRATION_ENABLED, true
+      );
+      AppStorage.setOrCreate(STORAGE_KEY_VIBRATION_ENABLED, vibrationEnabled);
+
+      const savedTimeFormat = await PreferencesHelper.getString(
+        STORAGE_KEY_TIME_FORMAT, ClockFormat.SYSTEM
+      );
+      AppStorage.setOrCreate(STORAGE_KEY_TIME_FORMAT, savedTimeFormat);
 
       // ---- Log material capability once per session ----
       MaterialHelper.logCapability();
