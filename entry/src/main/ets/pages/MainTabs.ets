@@ -51,11 +51,13 @@ struct MainTabs {
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   @Watch('onBreakpointChanged')
   breakpoint: string = 'sm';
+
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State private currentLanguage: string = 'en';
   @State private currentIndex: number = 0;
   @State private barWidth: number = 340;
   @State private isMenuVisible: boolean = false;
+
   private readonly useHds: boolean =
     deviceInfo.sdkApiVersion >= HDS_MIN_API;
 
@@ -73,7 +75,6 @@ struct MainTabs {
       }
     );
     this.recomputeBarWidth();
-
     console.info(
       `[MainTabs] sdkApiVersion=${deviceInfo.sdkApiVersion}, ` +
         `hds=${this.useHds}`
@@ -135,6 +136,10 @@ struct MainTabs {
 
   private toggleMenu(): void {
     this.isMenuVisible = !this.isMenuVisible;
+  }
+
+  private isRtl(): boolean {
+    return L.isRtlLang(this.currentLanguage);
   }
 
   // ============================================================
@@ -199,7 +204,6 @@ struct MainTabs {
       .width('100%')
       .height('100%')
 
-      // Custom hamburger button positioned over the title bar area.
       Row() {
         Blank()
         this.HamburgerButton()
@@ -213,6 +217,7 @@ struct MainTabs {
     .width('100%')
     .height('100%')
     .backgroundColor(this.colors.primaryGreen)
+    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
   }
 
   // ============================================================
@@ -222,7 +227,6 @@ struct MainTabs {
   @Builder
   TabsFallbackHost() {
     Column() {
-      // Fallback title bar — mirrors the HdsNavigation MINI bar.
       Row() {
         Text(this.currentTabTitle())
           .fontSize(20)
@@ -262,6 +266,7 @@ struct MainTabs {
     .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
+    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
   }
 
   private fallbackBarColor(): string {
@@ -292,66 +297,55 @@ struct MainTabs {
     .bindMenu(
       this.isMenuVisible,
       this.HamburgerMenuContent(),
-      this.buildMenuOptions()
-    )
-  }
-
-  /**
-   * Menu options for the hamburger popup.
-   *
-   * The app declares "ohos.arkui.UIMaterial.state": "enable" in
-   * module.json5, so on API 26+ the framework applies immersive
-   * material to the menu automatically. On pre-API-26 devices the
-   * material is not available and the menu falls back to the
-   * plain cardDark background.
-   *
-   * Placement is BottomRight so the menu opens below the button,
-   * aligning its right edge with the button's right edge.
-   */
-  private buildMenuOptions(): MenuOptions {
-    const opts: MenuOptions = {
-      placement: Placement.BottomRight,
-      enableArrow: false,
-      backgroundColor: this.colors.cardDark,
-      onDisappear: () => {
-        this.isMenuVisible = false;
+      {
+        placement: Placement.BottomRight,
+        enableArrow: false,
+        backgroundColor: this.colors.cardDark,
+        onDisappear: () => {
+          this.isMenuVisible = false;
+        }
       }
-    };
-    return opts;
+    )
   }
 
   @Builder
   HamburgerMenuContent() {
     Menu() {
-      this.HamburgerMenuItem(
-        $r('app.media.ic_menu_customize'),
-        L.get('title_customize', this.currentLanguage),
-        () => {
+      MenuItem({
+        startIcon: $r('app.media.ic_menu_customize'),
+        content: L.get('title_customize', this.currentLanguage)
+      })
+        .onClick(() => {
           this.isMenuVisible = false;
           this.closeMenuAndNavigate('pages/CustomizePage');
-        }
-      )
+        })
 
-      this.HamburgerMenuItem(
-        $r('app.media.ic_menu_settings'),
-        L.get('title_settings', this.currentLanguage),
-        () => {
+      MenuItem({
+        startIcon: $r('app.media.ic_menu_settings'),
+        content: L.get('title_settings', this.currentLanguage)
+      })
+        .onClick(() => {
           this.isMenuVisible = false;
           this.closeMenuAndNavigate('pages/SettingsPage');
-        }
-      )
+        })
 
-      this.HamburgerMenuItem(
-        $r('app.media.ic_menu_exit'),
-        L.get('exit', this.currentLanguage),
-        () => {
+      MenuItem({
+        startIcon: $r('app.media.ic_menu_exit'),
+        content: L.get('exit', this.currentLanguage)
+      })
+        .onClick(() => {
           this.isMenuVisible = false;
           this.exitApp();
-        }
-      )
+        })
     }
   }
 
+  /**
+   * Menu item. The Row carries an explicit direction so the layout
+   * mirrors in Arabic — icons move to the right, labels to the left.
+   * The Menu system popup does not inherit the page's direction on
+   * every SDK build, so the explicit direction is required.
+   */
   @Builder
   HamburgerMenuItem(
     icon: Resource, label: string, onTap: () => void
@@ -362,24 +356,29 @@ struct MainTabs {
         .height(20)
         .fillColor(this.colors.textWhite)
         .objectFit(ImageFit.Contain)
+        .flexShrink(0)
 
       Text(label)
         .fontSize(15)
         .fontColor(this.colors.textWhite)
         .fontWeight(FontWeight.Medium)
-        .margin({ left: 12 })
+        .margin(this.isRtl()
+          ? { right: 12 }
+          : { left: 12 })
         .layoutWeight(1)
         .maxLines(1)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
+
+      Blank()
     }
     .width('100%')
     .padding({
       top: 10,
       bottom: 10,
-      left: 14,
-      right: 20
+      left: this.isRtl() ? 20 : 14,
+      right: this.isRtl() ? 14 : 20
     })
-    .hoverEffect(HoverEffect.Highlight)
+    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
     .onClick(onTap)
   }
 
@@ -392,62 +391,149 @@ struct MainTabs {
     TabContent() {
       HomePage()
     }
-    .tabBar(this.TabBarItem(0, $r('app.media.tab_home'),
-      L.get('tab_home', this.currentLanguage)))
+    .tabBar(this.HomeTabBar())
 
     TabContent() {
       Prayer()
     }
-    .tabBar(this.TabBarItem(1, $r('app.media.tab_prayers'),
-      L.get('tab_prayers', this.currentLanguage)))
+    .tabBar(this.PrayersTabBar())
 
     TabContent() {
       HijriCalendarPage()
     }
-    .tabBar(this.TabBarItem(2, $r('app.media.tab_calendar'),
-      L.get('tab_calendar', this.currentLanguage)))
+    .tabBar(this.CalendarTabBar())
 
     TabContent() {
       QiblaPage()
     }
-    .tabBar(this.TabBarItem(3, $r('app.media.tab_compass'),
-      L.get('tab_compass', this.currentLanguage)))
+    .tabBar(this.CompassTabBar())
 
     TabContent() {
       TasbihPage()
     }
-    .tabBar(this.TabBarItem(4, $r('app.media.tab_tasbih'),
-      L.get('tab_tasbih', this.currentLanguage)))
+    .tabBar(this.TasbihTabBar())
   }
 
-  @Builder
-  TabBarItem(index: number, icon: Resource, label: string) {
-    Column() {
-      Image(icon)
-        .width(26)
-        .height(26)
-        .fillColor(this.currentIndex === index
-          ? this.colors.accentGold
-          : this.colors.textMuted)
-        .objectFit(ImageFit.Contain)
+  // ---- Five parameterless tab bar builders ----
+  // Each reads this.currentLanguage and this.currentIndex directly
+  // so the labels and the active state refresh on every parent
+  // render. Passing them as builder parameters would cache the
+  // resolved label at first render and the tab bar would stay in
+  // the language that was active when the app launched.
 
-      Text(label)
+  @Builder
+  HomeTabBar() {
+    Column() {
+      Image($r('app.media.tab_home'))
+        .width(26).height(26)
+        .fillColor(this.currentIndex === 0
+          ? this.colors.accentGold : this.colors.textMuted)
+        .objectFit(ImageFit.Contain)
+      Text(L.get('tab_home', this.currentLanguage))
         .fontSize(10)
-        .fontWeight(this.currentIndex === index
-          ? FontWeight.Bold
-          : FontWeight.Medium)
-        .fontColor(this.currentIndex === index
-          ? this.colors.accentGold
-          : this.colors.textMuted)
+        .fontWeight(this.currentIndex === 0
+          ? FontWeight.Bold : FontWeight.Medium)
+        .fontColor(this.currentIndex === 0
+          ? this.colors.accentGold : this.colors.textMuted)
         .margin({ top: 4 })
         .maxLines(2)
         .textAlign(TextAlign.Center)
         .lineHeight(11)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
     }
-    .width('100%')
-    .height(68)
-    .justifyContent(FlexAlign.Center)
+    .width('100%').height(68).justifyContent(FlexAlign.Center)
+  }
+
+  @Builder
+  PrayersTabBar() {
+    Column() {
+      Image($r('app.media.tab_prayers'))
+        .width(26).height(26)
+        .fillColor(this.currentIndex === 1
+          ? this.colors.accentGold : this.colors.textMuted)
+        .objectFit(ImageFit.Contain)
+      Text(L.get('tab_prayers', this.currentLanguage))
+        .fontSize(10)
+        .fontWeight(this.currentIndex === 1
+          ? FontWeight.Bold : FontWeight.Medium)
+        .fontColor(this.currentIndex === 1
+          ? this.colors.accentGold : this.colors.textMuted)
+        .margin({ top: 4 })
+        .maxLines(2)
+        .textAlign(TextAlign.Center)
+        .lineHeight(11)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+    }
+    .width('100%').height(68).justifyContent(FlexAlign.Center)
+  }
+
+  @Builder
+  CalendarTabBar() {
+    Column() {
+      Image($r('app.media.tab_calendar'))
+        .width(26).height(26)
+        .fillColor(this.currentIndex === 2
+          ? this.colors.accentGold : this.colors.textMuted)
+        .objectFit(ImageFit.Contain)
+      Text(L.get('tab_calendar', this.currentLanguage))
+        .fontSize(10)
+        .fontWeight(this.currentIndex === 2
+          ? FontWeight.Bold : FontWeight.Medium)
+        .fontColor(this.currentIndex === 2
+          ? this.colors.accentGold : this.colors.textMuted)
+        .margin({ top: 4 })
+        .maxLines(2)
+        .textAlign(TextAlign.Center)
+        .lineHeight(11)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+    }
+    .width('100%').height(68).justifyContent(FlexAlign.Center)
+  }
+
+  @Builder
+  CompassTabBar() {
+    Column() {
+      Image($r('app.media.tab_compass'))
+        .width(26).height(26)
+        .fillColor(this.currentIndex === 3
+          ? this.colors.accentGold : this.colors.textMuted)
+        .objectFit(ImageFit.Contain)
+      Text(L.get('tab_compass', this.currentLanguage))
+        .fontSize(10)
+        .fontWeight(this.currentIndex === 3
+          ? FontWeight.Bold : FontWeight.Medium)
+        .fontColor(this.currentIndex === 3
+          ? this.colors.accentGold : this.colors.textMuted)
+        .margin({ top: 4 })
+        .maxLines(2)
+        .textAlign(TextAlign.Center)
+        .lineHeight(11)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+    }
+    .width('100%').height(68).justifyContent(FlexAlign.Center)
+  }
+
+  @Builder
+  TasbihTabBar() {
+    Column() {
+      Image($r('app.media.tab_tasbih'))
+        .width(26).height(26)
+        .fillColor(this.currentIndex === 4
+          ? this.colors.accentGold : this.colors.textMuted)
+        .objectFit(ImageFit.Contain)
+      Text(L.get('tab_tasbih', this.currentLanguage))
+        .fontSize(10)
+        .fontWeight(this.currentIndex === 4
+          ? FontWeight.Bold : FontWeight.Medium)
+        .fontColor(this.currentIndex === 4
+          ? this.colors.accentGold : this.colors.textMuted)
+        .margin({ top: 4 })
+        .maxLines(2)
+        .textAlign(TextAlign.Center)
+        .lineHeight(11)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+    }
+    .width('100%').height(68).justifyContent(FlexAlign.Center)
   }
 
   private buildHdsFloatingStyle(): HdsTabsFloatingStyle {
