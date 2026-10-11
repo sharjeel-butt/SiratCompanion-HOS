@@ -49,17 +49,32 @@ export class LocationCache {
   /**
    * Persist the cache AND bump a global version counter so any page
    * that observes the version (currently Home) reloads its state.
-   *
-   * This method is async — callers must await it before doing
-   * anything that reads from the cache (e.g. navigating Home).
    */
-  static async save(lat: number, lng: number, city: string): Promise<void> {
+  static async save(
+    lat: number, lng: number, city: string
+  ): Promise<void> {
     await PreferencesHelper.setNumber(KEY_LAT, lat);
     await PreferencesHelper.setNumber(KEY_LNG, lng);
     await PreferencesHelper.setString(KEY_CITY, city);
     await PreferencesHelper.setNumber(KEY_REFRESH, Date.now());
 
-    // Notify any observers that the location has changed.
+    const prev = AppStorage.get<number>(STORAGE_KEY_LOCATION_VERSION);
+    const next = (prev === undefined ? 0 : prev) + 1;
+    AppStorage.setOrCreate(STORAGE_KEY_LOCATION_VERSION, next);
+  }
+
+  /**
+   * Invalidate the cached location. Called when the device's
+   * timezone changes so that stale coordinates are not reused with
+   * the wrong clock. After clearing, the next resolve falls through
+   * to the fallback or a fresh GPS fix.
+   */
+  static async clear(): Promise<void> {
+    await PreferencesHelper.setNumber(KEY_LAT, NaN);
+    await PreferencesHelper.setNumber(KEY_LNG, NaN);
+    await PreferencesHelper.setString(KEY_CITY, '');
+    await PreferencesHelper.setNumber(KEY_REFRESH, 0);
+
     const prev = AppStorage.get<number>(STORAGE_KEY_LOCATION_VERSION);
     const next = (prev === undefined ? 0 : prev) + 1;
     AppStorage.setOrCreate(STORAGE_KEY_LOCATION_VERSION, next);

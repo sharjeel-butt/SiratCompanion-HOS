@@ -3,15 +3,16 @@
 import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { window } from '@kit.ArkUI';
 import { hilog } from '@kit.PerformanceAnalysisKit';
-import { PreferencesHelper } from '../helper/PreferencesHelper';
-import { ClockFormat } from '../common/ClockFormat';
 import { deviceInfo } from '@kit.BasicServicesKit';
+import { PreferencesHelper } from '../helper/PreferencesHelper';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_SHOW_EXTRA_TIMINGS,
+  STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
   STORAGE_KEY_SOUND_ENABLED,
   STORAGE_KEY_TASBIH_SOUND,
   STORAGE_KEY_THEME_MODE,
@@ -29,9 +30,17 @@ import { LayoutHelper } from '../helper/LayoutHelper';
 import { MaterialHelper } from '../helper/MaterialHelper';
 import { SettingsHelper } from '../helper/SettingsHelper';
 import { NotificationHelper } from '../helper/NotificationHelper';
-import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
-import { CALENDAR_REMINDERS_ENABLED } from '../common/FeatureFlags';
-import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
+import {
+  CalendarReminderHelper
+} from '../hijricalendar/CalendarReminderHelper';
+import {
+  CALENDAR_REMINDERS_ENABLED
+} from '../common/FeatureFlags';
+import { ClockFormat } from '../common/ClockFormat';
+import {
+  HijriCalendarType
+} from '../hijricalendar/HijriCalendarType';
+import { LocationCache } from '../utils/LocationCache';
 
 /** How long the splash stays visible, in milliseconds. */
 const SPLASH_DELAY_MS = 1500;
@@ -43,7 +52,16 @@ const SPLASH_DELAY_2IN1_MS = 400;
 const PREFERRED_WINDOW_WIDTH_2IN1 = 800;
 const PREFERRED_WINDOW_HEIGHT_2IN1 = 1100;
 
+/**
+ * AppStorage key for the last-known device timezone offset. Not a
+ * persisted preference — it lives in memory only, so it is cleared
+ * when the process restarts. When the current offset differs from
+ * this, the location cache is invalidated.
+ */
+const APP_STORAGE_LAST_TZ_OFFSET = 'last_device_tz_offset';
+
 export default class EntryAbility extends UIAbility {
+
   // ============================================================
   // LIFECYCLE — onCreate
   // ============================================================
@@ -62,6 +80,8 @@ export default class EntryAbility extends UIAbility {
 
   onWindowStageCreate(windowStage: window.WindowStage): void {
     AppLogger.init(this.context);
+    LayoutHelper.install();
+
     // On 2-in-1 devices, request a preferred starting window size.
     // Failures are non-fatal — the system default applies.
     if (deviceInfo.deviceType === '2in1') {
@@ -80,7 +100,6 @@ export default class EntryAbility extends UIAbility {
             `getMainWindow failed: ${err.message}`);
         });
     }
-    LayoutHelper.install();
 
     PreferencesHelper.init(this.context).then(async () => {
       // ---- Load persisted preferences into AppStorage ----
@@ -126,14 +145,38 @@ export default class EntryAbility extends UIAbility {
       );
       AppStorage.setOrCreate(STORAGE_KEY_VIBRATION_ENABLED, vibrationEnabled);
 
-      // ---- Time format ----
       const savedTimeFormat = await PreferencesHelper.getString(
         STORAGE_KEY_TIME_FORMAT, ClockFormat.SYSTEM
       );
       AppStorage.setOrCreate(STORAGE_KEY_TIME_FORMAT, savedTimeFormat);
 
+      const savedShowExtraTimings = await PreferencesHelper.getBoolean(
+        STORAGE_KEY_SHOW_EXTRA_TIMINGS, true
+      );
+      AppStorage.setOrCreate(
+        STORAGE_KEY_SHOW_EXTRA_TIMINGS, savedShowExtraTimings
+      );
+
+      const savedShowIslamicEvents = await PreferencesHelper.getBoolean(
+        STORAGE_KEY_SHOW_ISLAMIC_EVENTS, true
+      );
+      AppStorage.setOrCreate(
+        STORAGE_KEY_SHOW_ISLAMIC_EVENTS, savedShowIslamicEvents
+      );
+
       // ---- Log material capability once per session ----
       MaterialHelper.logCapability();
+
+      // ---- Log the device timezone so cross-zone issues are
+      //      diagnosable from the in-app log ----
+      try {
+        const deviceOffset = -new Date().getTimezoneOffset() / 60;
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        AppLogger.info('EntryAbility',
+          `Device timezone = ${tz}, offset = ${deviceOffset} h`);
+      } catch (err) {
+        AppLogger.info('EntryAbility', 'Device timezone lookup failed');
+      }
 
       // ---- Load the persisted prayer-state map into memory so every
       //      subsequent read/write is synchronous ----
@@ -157,11 +200,6 @@ export default class EntryAbility extends UIAbility {
       });
 
       // ---- Calendar reminder backend (non-blocking) ----
-      // Only initialised when CALENDAR_REMINDERS_ENABLED is true. The
-      // helper requests its two permissions on first use and creates
-      // the app's calendar account. Failing here is non-fatal — the
-      // user will simply not have reminders until permissions are
-      // granted from Settings.
       if (CALENDAR_REMINDERS_ENABLED) {
         CalendarReminderHelper.init(this.context).catch((e: Error) => {
           AppLogger.warn('EntryAbility',
@@ -170,8 +208,6 @@ export default class EntryAbility extends UIAbility {
       }
 
       // ---- Renew the prayer-reminder window on app start ----
-      // Fire-and-forget. The method swallows its own errors, so the
-      // trailing .catch() is a safety net only.
       this.renewRemindersOnStart().catch(() => {
         // Never reached — renewRemindersOnStart never throws.
       });
@@ -190,7 +226,7 @@ export default class EntryAbility extends UIAbility {
           }
           hilog.info(0x0000, 'Sirat', 'Loaded %{public}s', startPage);
         });
-      }, SPLASH_DELAY_MS);
+      }, splashMs);
     }).catch((err: Error) => {
       AppLogger.error('EntryAbility', `init failed: ${err.message}`);
       windowStage.loadContent('pages/HomePage');
@@ -209,7 +245,44 @@ export default class EntryAbility extends UIAbility {
     SystemFeedbackHelper.refresh();
     LayoutHelper.install(); // re-install if needed (idempotent)
 
+    this.checkTimezoneChange();
+
     hilog.info(0x0000, 'Sirat', 'onForeground tick=%{public}d', next);
+  }
+
+  // ============================================================
+  // TIMEZONE CHANGE DETECTION
+  // ============================================================
+
+  /**
+   * If the device's timezone offset has changed since the last
+   * foreground, the cached location's coordinates are still valid
+   * but the clock they were computed against is not. Invalidate the
+   * cache so times are recomputed with the correct offset.
+   *
+   * The "last offset" lives in AppStorage, so it is reset on every
+   * process start — the check only fires when a running session
+   * crosses a timezone boundary (e.g., a flight, or a manual change
+   * in device settings).
+   */
+  private checkTimezoneChange(): void {
+    try {
+      const currentOffset = -new Date().getTimezoneOffset() / 60;
+      const lastOffset = AppStorage.get<number>(APP_STORAGE_LAST_TZ_OFFSET);
+
+      if (lastOffset !== undefined &&
+        Math.abs(lastOffset - currentOffset) > 0.25) {
+        AppLogger.info('EntryAbility',
+          `Timezone changed ${lastOffset}h → ${currentOffset}h; ` +
+            `clearing location cache`);
+        LocationCache.clear().catch(() => { /* non-fatal */
+        });
+      }
+
+      AppStorage.setOrCreate(APP_STORAGE_LAST_TZ_OFFSET, currentOffset);
+    } catch (err) {
+      // Never let this break foreground handling.
+    }
   }
 
   // ============================================================
@@ -218,14 +291,6 @@ export default class EntryAbility extends UIAbility {
 
   /**
    * Renew the prayer-reminder window on app start.
-   *
-   * Rescheduling cancels existing reminders and re-creates them for
-   * the next 3 days from the current settings, location, and
-   * calculation parameters. Runs only when the user has the master
-   * toggle enabled.
-   *
-   * Never throws — any failure is logged and swallowed so that a
-   * broken calendar or notification service cannot block startup.
    */
   private async renewRemindersOnStart(): Promise<void> {
     try {
