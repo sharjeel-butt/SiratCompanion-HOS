@@ -13,6 +13,7 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
   STORAGE_KEY_PRAYER_STATE_VERSION,
+  STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
 } from '../common/StorageKeys';
@@ -75,6 +76,9 @@ export struct HomePage {
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
   appThemePreset: string = ThemePreset.SIRAT;
+  @StorageLink(STORAGE_KEY_SHOW_ISLAMIC_EVENTS)
+  @Watch('onShowIslamicEventsChanged')
+  showIslamicEvents: boolean = true;
 
   @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
   @Watch('onHijriOffsetChanged')
@@ -170,6 +174,10 @@ export struct HomePage {
   private settingsLoading: boolean = false;
 
   @State private currentLanguage: string = 'en';
+
+  private onShowIslamicEventsChanged(): void {
+    // Re-render is handled by the @StorageLink.
+  }
 
   private tr(key: string): string {
     return L.get(key, this.currentLanguage);
@@ -861,7 +869,9 @@ export struct HomePage {
               if (this.isTablet()) {
                 Row({ space: 16 }) {
                   Column() {
-                    this.CountdownCard()
+                    if (this.showIslamicEvents) {
+                      this.CountdownCard()
+                    }
                     this.LiveCountdownBanner()
                     this.RamadanCard()
                   }
@@ -883,7 +893,9 @@ export struct HomePage {
                 .padding({ left: 24, right: 24 })
               } else {
                 Column() {
-                  this.CountdownCard()
+                  if (this.showIslamicEvents) {
+                    this.CountdownCard()
+                  }
                   this.LiveCountdownBanner()
                   this.RamadanCard()
                   this.TodayProgressCard()

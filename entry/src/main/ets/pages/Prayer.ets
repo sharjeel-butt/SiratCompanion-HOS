@@ -20,6 +20,7 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
   STORAGE_KEY_PRAYER_STATE_VERSION,
+  STORAGE_KEY_SHOW_EXTRA_TIMINGS,
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
 } from '../common/StorageKeys';
@@ -69,6 +70,9 @@ export struct Prayer {
   appLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_PRAYER_STATE_VERSION)
   prayerStateVersion: number = 0;
+  @StorageLink(STORAGE_KEY_SHOW_EXTRA_TIMINGS)
+  @Watch('onShowExtraTimingsChanged')
+  showExtraTimings: boolean = true;
 
   @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
   @Watch('onHijriOffsetChangedInHome')
@@ -130,7 +134,6 @@ export struct Prayer {
   @State offsets: PrayerOffsets = { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 };
   private advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC;
 
-  @State showExtraTimings: boolean = true;
   @State showIslamicEvents: boolean = true;
   @State private isRefreshingHome: boolean = false;
   @State highLatRule: HighLatitudeRule = HighLatitudeRule.NONE;
@@ -141,6 +144,13 @@ export struct Prayer {
 
   private tr(key: string): string {
     return L.get(key, this.appLanguage);
+  }
+
+  private onShowExtraTimingsChanged(): void {
+    // Re-render is handled by the @StorageLink. The timeline's
+    // buildCombinedTimeline() re-reads this.showExtraTimings on
+    // the next render pass, and the sun path receives the new
+    // value through its @Prop.
   }
 
   private dt(t: string): string {
@@ -399,8 +409,6 @@ export struct Prayer {
       this.asrRule    = data.asr;
       this.calcSource = data.source;
       this.locationMode = mode;
-      this.showExtraTimings  = data.showExtraTimings;
-      this.showIslamicEvents = data.showIslamicEvents;
       this.offsets = await SettingsHelper.getPrayerOffsets();
       this.highLatRule = await SettingsHelper.getHighLatRule();
       this.advanced = await SettingsHelper.getAdvancedCalcSettings();
@@ -857,6 +865,7 @@ export struct Prayer {
                       firstThirdTime: this.getFirstThirdTime(),
                       midnightTime: this.getMidnightTime(),
                       lastThirdTime: this.getLastThirdTime(),
+                      showExtraTimings: this.showExtraTimings,
                       currentLanguage: this.appLanguage,
                       isDarkMode: this.isDarkMode()
                     })
@@ -880,6 +889,7 @@ export struct Prayer {
                       firstThirdTime: this.getFirstThirdTime(),
                       midnightTime: this.getMidnightTime(),
                       lastThirdTime: this.getLastThirdTime(),
+                      showExtraTimings: this.showExtraTimings,
                       currentLanguage: this.appLanguage,
                       isDarkMode: this.isDarkMode()
                     })

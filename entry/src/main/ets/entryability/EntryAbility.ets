@@ -12,6 +12,8 @@ import {
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_SHOW_EXTRA_TIMINGS,
+  STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
   STORAGE_KEY_SOUND_ENABLED,
   STORAGE_KEY_TASBIH_SOUND,
   STORAGE_KEY_THEME_MODE,
@@ -120,6 +122,20 @@ export default class EntryAbility extends UIAbility {
         STORAGE_KEY_LANGUAGE, 'en'
       );
       AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, savedLanguage);
+
+      const savedShowExtraTimings = await PreferencesHelper.getBoolean(
+        STORAGE_KEY_SHOW_EXTRA_TIMINGS, true
+      );
+      AppStorage.setOrCreate(
+        STORAGE_KEY_SHOW_EXTRA_TIMINGS, savedShowExtraTimings
+      );
+
+      const savedShowIslamicEvents = await PreferencesHelper.getBoolean(
+        STORAGE_KEY_SHOW_ISLAMIC_EVENTS, true
+      );
+      AppStorage.setOrCreate(
+        STORAGE_KEY_SHOW_ISLAMIC_EVENTS, savedShowIslamicEvents
+      );
 
       const vibrationEnabled = await PreferencesHelper.getBoolean(
         STORAGE_KEY_VIBRATION_ENABLED, true

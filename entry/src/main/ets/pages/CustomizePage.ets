@@ -10,6 +10,8 @@ import {
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_SHOW_EXTRA_TIMINGS,
+  STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
   STORAGE_KEY_SYSTEM_HAPTICS_ENABLED,
   STORAGE_KEY_SYSTEM_SOUND_ENABLED,
   STORAGE_KEY_THEME_MODE,
@@ -49,11 +51,15 @@ struct CustomizePage {
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
-  @State showExtraTimings: boolean = true;
-  @State showIslamicEvents: boolean = true;
   @StorageLink(STORAGE_KEY_TIME_FORMAT)
   @Watch('onClockFormatChanged')
   ClockFormat: string = ClockFormat.SYSTEM;
+  @StorageLink(STORAGE_KEY_SHOW_EXTRA_TIMINGS)
+  @Watch('onShowExtraTimingsChanged')
+  showExtraTimings: boolean = true;
+  @StorageLink(STORAGE_KEY_SHOW_ISLAMIC_EVENTS)
+  @Watch('onShowIslamicEventsChanged')
+  showIslamicEvents: boolean = true;
 
   // ============================================================
   // UI CUSTOMIZATION STATE
@@ -106,6 +112,14 @@ struct CustomizePage {
     // No state to update — the @StorageLink re-render is enough.
     // Pages call ClockFormatHelper.reformat() during build, and the
     // helper reads the freshly-written value from AppStorage.
+  }
+
+  private onShowExtraTimingsChanged(): void {
+    // Re-render is handled by the @StorageLink.
+  }
+
+  private onShowIslamicEventsChanged(): void {
+    // Re-render is handled by the @StorageLink.
   }
 
   private pickClockFormat(id: string): void {
@@ -320,245 +334,23 @@ struct CustomizePage {
   @Builder
   UICustomizationContent() {
     Column() {
-      // ---- Show Extra Timings ----
-      Row() {
-        Column() {
-          Text(this.tr('show_extra_timings'))
-            .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-          Text(this.tr('show_extra_timings_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+      // ============ Home Page UI ============
+      this.SubsectionHeader(this.tr('subsection_home_ui'))
+      this.ShowIslamicEventsRow()
 
-        Toggle({ type: ToggleType.Switch, isOn: this.showExtraTimings })
-          .selectedColor(this.colors.accentGold)
-          .onChange((isOn: boolean) => {
-            this.toggleShowExtraTimings(isOn);
-          })
-      }
-      .width('100%')
-      .padding({
-        top: 14,
-        bottom: 14,
-        left: 16,
-        right: 16
-      })
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .margin({ bottom: 8 })
+      // ============ Prayer UI ============
+      this.SubsectionHeader(this.tr('subsection_prayer_ui'))
+      this.ShowExtraTimingsRow()
 
-      // ---- Show Islamic Events ----
-      Row() {
-        Column() {
-          Text(this.tr('show_islamic_events'))
-            .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-          Text(this.tr('show_islamic_events_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+      // ============ Sound & Feedback ============
+      this.SubsectionHeader(this.tr('subsection_feedback'))
+      this.VibrationRow()
+      this.SoundRow()
+      this.SoundStyleRow()
 
-        Toggle({ type: ToggleType.Switch, isOn: this.showIslamicEvents })
-          .selectedColor(this.colors.accentGold)
-          .onChange((isOn: boolean) => {
-            this.toggleShowIslamicEvents(isOn);
-          })
-      }
-      .width('100%')
-      .padding({
-        top: 14,
-        bottom: 14,
-        left: 16,
-        right: 16
-      })
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .margin({ bottom: 8 })
-
-      // ---- Vibration ----
-      Row() {
-        Column() {
-          Text(this.tr('haptic_feedback'))
-            .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-          Text(this.tr('haptic_feedback_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-          if (!this.systemHapticsEnabled) {
-            Text(this.tr('controlled_by_system'))
-              .fontSize(10)
-              .fontColor(this.colors.accentGold)
-              .fontStyle(FontStyle.Italic)
-              .margin({ top: 4 })
-          }
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
-        Toggle({ type: ToggleType.Switch, isOn: this.vibrationEnabled })
-          .selectedColor(this.colors.accentGold)
-          .enabled(this.systemHapticsEnabled)
-          .opacity(this.systemHapticsEnabled ? 1.0 : 0.5)
-          .onChange((isOn: boolean) => {
-            this.toggleVibration(isOn);
-          })
-      }
-      .width('100%')
-      .padding({
-        top: 14,
-        bottom: 14,
-        left: 16,
-        right: 16
-      })
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .margin({ bottom: 8 })
-
-      // ---- Sound ----
-      Row() {
-        Column() {
-          Text(this.tr('sound_feedback'))
-            .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-          Text(this.tr('sound_feedback_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-          if (!this.systemSoundEnabled) {
-            Text(this.tr('controlled_by_system'))
-              .fontSize(10)
-              .fontColor(this.colors.accentGold)
-              .fontStyle(FontStyle.Italic)
-              .margin({ top: 4 })
-          }
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
-        Toggle({ type: ToggleType.Switch, isOn: this.soundEnabled })
-          .selectedColor(this.colors.accentGold)
-          .enabled(this.systemSoundEnabled)
-          .opacity(this.systemSoundEnabled ? 1.0 : 0.5)
-          .onChange((isOn: boolean) => {
-            this.toggleSound(isOn);
-          })
-      }
-      .width('100%')
-      .padding({
-        top: 14,
-        bottom: 14,
-        left: 16,
-        right: 16
-      })
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .margin({ bottom: 8 })
-
-      // ---- Sound Style (only when Sound is enabled and system allows) ----
-      if (this.soundEnabled && this.systemSoundEnabled) {
-        Row() {
-          Column() {
-            Text(this.tr('sound_style'))
-              .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-            Text(this.tr('sound_style_desc'))
-              .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-            Text(this.soundDisplayName(this.selectedSound))
-              .fontSize(12)
-              .fontColor(this.colors.accentGold)
-              .maxLines(1)
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-              .margin({ top: 6 })
-          }
-          .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
-          Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
-        }
-        .width('100%')
-        .padding({
-          top: 14,
-          bottom: 14,
-          left: 16,
-          right: 16
-        })
-        .backgroundColor(this.colors.tintSubtle)
-        .borderRadius(12)
-        .margin({ bottom: 8 })
-        .onClick(() => {
-          this.showSoundPicker = true;
-        })
-      }
-
-      // ---- Language ----
-      Row() {
-        Column() {
-          Text(this.tr('language'))
-            .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-          Text(this.tr('language_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-          Text(this.currentLanguageLabel())
-            .fontSize(12)
-            .fontColor(this.colors.accentGold)
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .margin({ top: 6 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
-        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
-      }
-      .width('100%')
-      .padding({
-        top: 14,
-        bottom: 14,
-        left: 16,
-        right: 16
-      })
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .margin({ bottom: 8 })
-      .onClick(() => {
-        this.showLanguagePicker = true;
-      })
-
-      // ---- "More languages coming soon" note ----
-      Row() {
-        Text('🌐').fontSize(14).margin({ right: 8 }).opacity(0.7)
-        Text(this.tr('more_languages_coming'))
-          .fontSize(11).fontColor(this.colors.textMuted).fontStyle(FontStyle.Italic)
-          .layoutWeight(1)
-      }
-      .width('100%')
-      .padding({
-        top: 8,
-        bottom: 8,
-        left: 16,
-        right: 16
-      })
-      .margin({ bottom: 0 })
-
-      // ---- Time Format ----
-      Row() {
-        Column() {
-          Text(this.tr('time_format'))
-            .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-          Text(this.tr('time_format_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-          Text(this.ClockFormatLabel())
-            .fontSize(12)
-            .fontColor(this.colors.accentGold)
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .margin({ top: 6 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
-        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
-      }
-      .width('100%')
-      .padding({
-        top: 14,
-        bottom: 14,
-        left: 16,
-        right: 16
-      })
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
-      .margin({ bottom: 8 })
-      .onClick(() => {
-        this.showClockFormatPicker = true;
-      })
+      // ============ Language ============
+      this.SubsectionHeader(this.tr('subsection_language'))
+      this.LanguageRow()
     }
     .width('100%')
     .padding(12)
@@ -566,6 +358,280 @@ struct CustomizePage {
     .borderRadius(16)
     .border({ width: 1, color: this.colors.borderSoft })
     .margin({ bottom: 12 })
+  }
+
+  @Builder
+  SubsectionHeader(title: string) {
+    Text(title)
+      .fontSize(12)
+      .fontColor(this.colors.accentGold)
+      .fontWeight(FontWeight.Bold)
+      .letterSpacing(1.2)
+      .width('100%')
+      .padding({ left: 4, top: 8, bottom: 8 })
+  }
+
+  // ---- Each toggle is its own parameterless builder so it re-reads
+  // state on every parent render. Passing the value as a builder
+  // parameter would freeze it at first render.
+
+  @Builder
+  ShowIslamicEventsRow() {
+    Row() {
+      Column() {
+        Text(this.tr('show_islamic_events'))
+          .fontSize(15).fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Medium)
+        Text(this.tr('show_islamic_events_desc'))
+          .fontSize(11)
+          .fontColor(this.colors.textMuted)
+          .margin({ top: 2 })
+          .maxLines(3)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+      Toggle({ type: ToggleType.Switch, isOn: this.showIslamicEvents })
+        .selectedColor(this.colors.accentGold)
+        .onChange((isOn: boolean) => {
+          this.toggleShowIslamicEvents(isOn);
+        })
+    }
+    .width('100%')
+    .padding({
+      top: 14,
+      bottom: 14,
+      left: 16,
+      right: 16
+    })
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(12)
+    .margin({ bottom: 8 })
+  }
+
+  @Builder
+  ShowExtraTimingsRow() {
+    Row() {
+      Column() {
+        Text(this.tr('show_extra_timings'))
+          .fontSize(15).fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Medium)
+        Text(this.tr('show_extra_timings_desc'))
+          .fontSize(11)
+          .fontColor(this.colors.textMuted)
+          .margin({ top: 2 })
+          .maxLines(3)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+      Toggle({ type: ToggleType.Switch, isOn: this.showExtraTimings })
+        .selectedColor(this.colors.accentGold)
+        .onChange((isOn: boolean) => {
+          this.toggleShowExtraTimings(isOn);
+        })
+    }
+    .width('100%')
+    .padding({
+      top: 14,
+      bottom: 14,
+      left: 16,
+      right: 16
+    })
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(12)
+    .margin({ bottom: 8 })
+  }
+
+  @Builder
+  VibrationRow() {
+    Row() {
+      Column() {
+        Text(this.tr('haptic_feedback'))
+          .fontSize(15).fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Medium)
+        Text(this.tr('haptic_feedback_desc'))
+          .fontSize(11).fontColor(this.colors.textMuted)
+          .margin({ top: 2 })
+        if (!this.systemHapticsEnabled) {
+          Text(this.tr('controlled_by_system'))
+            .fontSize(10).fontColor(this.colors.accentGold)
+            .fontStyle(FontStyle.Italic).margin({ top: 4 })
+        }
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+      Toggle({ type: ToggleType.Switch, isOn: this.vibrationEnabled })
+        .selectedColor(this.colors.accentGold)
+        .enabled(this.systemHapticsEnabled)
+        .opacity(this.systemHapticsEnabled ? 1.0 : 0.5)
+        .onChange((isOn: boolean) => {
+          this.toggleVibration(isOn);
+        })
+    }
+    .width('100%')
+    .padding({
+      top: 14,
+      bottom: 14,
+      left: 16,
+      right: 16
+    })
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(12)
+    .margin({ bottom: 8 })
+  }
+
+  @Builder
+  SoundRow() {
+    Row() {
+      Column() {
+        Text(this.tr('sound_feedback'))
+          .fontSize(15).fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Medium)
+        Text(this.tr('sound_feedback_desc'))
+          .fontSize(11).fontColor(this.colors.textMuted)
+          .margin({ top: 2 })
+        if (!this.systemSoundEnabled) {
+          Text(this.tr('controlled_by_system'))
+            .fontSize(10).fontColor(this.colors.accentGold)
+            .fontStyle(FontStyle.Italic).margin({ top: 4 })
+        }
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+      Toggle({ type: ToggleType.Switch, isOn: this.soundEnabled })
+        .selectedColor(this.colors.accentGold)
+        .enabled(this.systemSoundEnabled)
+        .opacity(this.systemSoundEnabled ? 1.0 : 0.5)
+        .onChange((isOn: boolean) => {
+          this.toggleSound(isOn);
+        })
+    }
+    .width('100%')
+    .padding({
+      top: 14,
+      bottom: 14,
+      left: 16,
+      right: 16
+    })
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(12)
+    .margin({ bottom: 8 })
+  }
+
+  @Builder
+  SoundStyleRow() {
+    if (this.soundEnabled && this.systemSoundEnabled) {
+      Row() {
+        Column() {
+          Text(this.tr('sound_style'))
+            .fontSize(15).fontColor(this.colors.textWhite)
+            .fontWeight(FontWeight.Medium)
+          Text(this.tr('sound_style_desc'))
+            .fontSize(11).fontColor(this.colors.textMuted)
+            .margin({ top: 2 })
+          Text(this.soundDisplayName(this.selectedSound))
+            .fontSize(12)
+            .fontColor(this.colors.accentGold)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .margin({ top: 6 })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+        Text('›').fontSize(22)
+          .fontColor(this.colors.accentGold).opacity(0.7)
+      }
+      .width('100%')
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .margin({ bottom: 8 })
+      .onClick(() => {
+        this.showSoundPicker = true;
+      })
+    }
+  }
+
+  @Builder
+  LanguageRow() {
+    Row() {
+      Column() {
+        Text(this.tr('language'))
+          .fontSize(15).fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Medium)
+        Text(this.tr('language_desc'))
+          .fontSize(11).fontColor(this.colors.textMuted)
+          .margin({ top: 2 })
+        Text(this.currentLanguageLabel())
+          .fontSize(12)
+          .fontColor(this.colors.accentGold)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+          .margin({ top: 6 })
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+      Text('›').fontSize(22)
+        .fontColor(this.colors.accentGold).opacity(0.7)
+    }
+    .width('100%')
+    .padding({
+      top: 14,
+      bottom: 14,
+      left: 16,
+      right: 16
+    })
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(12)
+    .margin({ bottom: 8 })
+    .onClick(() => {
+      this.showLanguagePicker = true;
+    })
+  }
+
+  /**
+   * Standard toggle row: title, description, and a right-aligned
+   * switch. Used for the two straightforward toggles.
+   */
+  @Builder
+  SimpleToggleRow(
+    title: string, desc: string, value: boolean,
+    onChange: (isOn: boolean) => void
+  ) {
+    Row() {
+      Column() {
+        Text(title)
+          .fontSize(15).fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Medium)
+        Text(desc)
+          .fontSize(11)
+          .fontColor(this.colors.textMuted)
+          .margin({ top: 2 })
+          .maxLines(3)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+      Toggle({ type: ToggleType.Switch, isOn: value })
+        .selectedColor(this.colors.accentGold)
+        .onChange(onChange)
+    }
+    .width('100%')
+    .padding({
+      top: 14,
+      bottom: 14,
+      left: 16,
+      right: 16
+    })
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(12)
+    .margin({ bottom: 8 })
   }
 
   @Builder
