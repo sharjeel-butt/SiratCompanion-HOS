@@ -140,6 +140,20 @@ export default class EntryAbility extends UIAbility {
       );
       AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, savedLanguage);
 
+      const savedShowExtraTimings = await PreferencesHelper.getBoolean(
+        STORAGE_KEY_SHOW_EXTRA_TIMINGS, true
+      );
+      AppStorage.setOrCreate(
+        STORAGE_KEY_SHOW_EXTRA_TIMINGS, savedShowExtraTimings
+      );
+
+      const savedShowIslamicEvents = await PreferencesHelper.getBoolean(
+        STORAGE_KEY_SHOW_ISLAMIC_EVENTS, true
+      );
+      AppStorage.setOrCreate(
+        STORAGE_KEY_SHOW_ISLAMIC_EVENTS, savedShowIslamicEvents
+      );
+
       const vibrationEnabled = await PreferencesHelper.getBoolean(
         STORAGE_KEY_VIBRATION_ENABLED, true
       );
