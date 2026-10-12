@@ -104,12 +104,6 @@ struct AdvancedCalcPage {
                 this.HighLatRow()
                 this.PolarRow()
                 this.ShafaqRow()
-
-                if (this.calcMethod === CalculationMethod.CUSTOM) {
-                  Divider().color(this.colors.borderSoft)
-                    .margin({ top: 4, bottom: 8 })
-                  this.CustomAnglesBlock()
-                }
               }
               .width('100%')
               .padding(12)

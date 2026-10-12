@@ -41,6 +41,7 @@ import {
   CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED
 } from '../common/FeatureFlags';
 import { NavHelper } from '../helper/NavHelper';
+import { SettingsRow } from '../components/SettingsRow';
 
 const MAX_HIJRI_OFFSET = 3;
 
@@ -68,6 +69,7 @@ struct SettingsPage {
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
   appThemePreset: string = ThemePreset.SIRAT;
+
   // ---- state ----
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
@@ -150,87 +152,100 @@ struct SettingsPage {
   // ============================================================
 
   build() {
-    Column() {
-      this.TopBar()
+    Stack() {
+      Column() {
+        this.TopBar()
 
-      Scroll() {
-        Row() {
-          Column() {
-            this.CategoryHeader(
-              this.tr('category_location'), '📍', 'Location'
-            )
-            if (this.expandedCategory === 'Location') {
-              this.LocationContent()
-            }
-
-            this.CategoryHeader(
-              this.tr('category_prayer_times'), '🕌', 'Prayer Times'
-            )
-            if (this.expandedCategory === 'Prayer Times') {
-              this.PrayerTimesContent()
-            }
-
-            if (NOTIFICATIONS_ENABLED || CALENDAR_REMINDERS_ENABLED) {
+        Scroll() {
+          Row() {
+            Column() {
               this.CategoryHeader(
-                this.tr('category_notifications'), '🔔', 'Notifications'
+                this.tr('category_location'), '📍', 'Location'
               )
-              if (this.expandedCategory === 'Notifications') {
-                this.NotificationsContent()
+              if (this.expandedCategory === 'Location') {
+                this.LocationContent()
               }
-            }
 
-            this.CategoryHeader(
-              this.tr('category_hijri_calendar'), '📅', 'Hijri Calendar'
-            )
-            if (this.expandedCategory === 'Hijri Calendar') {
-              this.HijriCalendarContent()
-            }
+              this.CategoryHeader(
+                this.tr('category_prayer_times'), '🕌', 'Prayer Times'
+              )
+              if (this.expandedCategory === 'Prayer Times') {
+                this.PrayerTimesContent()
+              }
 
-            this.CategoryHeader(
-              this.tr('category_about'), 'ℹ️', 'About'
-            )
-            if (this.expandedCategory === 'About') {
-              this.AboutContent()
-            }
+              if (NOTIFICATIONS_ENABLED || CALENDAR_REMINDERS_ENABLED) {
+                this.CategoryHeader(
+                  this.tr('category_notifications'), '🔔', 'Notifications'
+                )
+                if (this.expandedCategory === 'Notifications') {
+                  this.NotificationsContent()
+                }
+              }
 
-            if (!NOTIFICATIONS_ENABLED && !CALENDAR_REMINDERS_ENABLED) {
-              this.LogAccessRow()
-            }
+              this.CategoryHeader(
+                this.tr('category_hijri_calendar'), '📅', 'Hijri Calendar'
+              )
+              if (this.expandedCategory === 'Hijri Calendar') {
+                this.HijriCalendarContent()
+              }
 
-            Column().height(40)
+              this.CategoryHeader(
+                this.tr('category_about'), 'ℹ️', 'About'
+              )
+              if (this.expandedCategory === 'About') {
+                this.AboutContent()
+              }
+
+              if (!NOTIFICATIONS_ENABLED && !CALENDAR_REMINDERS_ENABLED) {
+                this.LogAccessRow()
+              }
+
+              Column().height(40)
+            }
+            .width('100%')
+            .constraintSize({
+              maxWidth: Breakpoints.maxContentWidth(this.breakpoint)
+            })
+            .padding({ left: 16, right: 16, top: 20 })
           }
           .width('100%')
-          .constraintSize({
-            maxWidth: Breakpoints.maxContentWidth(this.breakpoint)
-          })
-          .padding({ left: 16, right: 16, top: 20 })
+          .justifyContent(FlexAlign.Center)
         }
+        .layoutWeight(1)
         .width('100%')
-        .justifyContent(FlexAlign.Center)
+        .backgroundColor(this.colors.primaryGreen)
+        .scrollable(ScrollDirection.Vertical)
+        .scrollBar(BarState.Auto)
+        .edgeEffect(EdgeEffect.Spring)
       }
-      .layoutWeight(1)
       .width('100%')
+      .height('100%')
       .backgroundColor(this.colors.primaryGreen)
-      .scrollable(ScrollDirection.Vertical)
-      .scrollBar(BarState.Auto)
-      .edgeEffect(EdgeEffect.Spring)
+      .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+
+      // ---- Picker overlay (topmost) ----
+      // Stack-based rather than a second bindSheet: HarmonyOS does
+      // not support two simultaneous bindSheet bindings on the same
+      // component, so the picker would never open while the log
+      // viewer sheet also had a binding on this page.
+      if (this.showPickerSheet) {
+        this.PickerOverlay(
+          this.pickerTitle(),
+          this.pickerIcon(),
+          this.pickerItems(),
+          (id: string) => {
+            this.pickItem(id);
+          },
+          () => {
+            this.showPickerSheet = false;
+            this.activePicker = 'none';
+          }
+        )
+      }
     }
     .width('100%')
     .height('100%')
     .backgroundColor(this.colors.primaryGreen)
-    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
-    .bindSheet($$this.showPickerSheet, this.PickerSheet(), {
-      height: 520,
-      dragBar: true,
-      showClose: false,
-      backgroundColor: this.colors.cardDark,
-      blurStyle: BlurStyle.Thick,
-      maskColor: this.colors.overlayDim,
-      onDisappear: () => {
-        this.showPickerSheet = false;
-        this.activePicker = 'none';
-      }
-    })
     .bindSheet($$this.showLogViewer, this.LogViewerSheet(), {
       height: 640,
       dragBar: true,
@@ -553,51 +568,55 @@ struct SettingsPage {
   @Builder
   PrayerTimesContent() {
     Column() {
-      this.SettingsRow(
-        this.tr('convention'),
-        this.tr('convention_desc'),
-        SettingsHelper.getCalcMethodLabel(this.calcMethod),
-        () => {
+      SettingsRow({
+        colors: this.colors,
+        title: this.tr('convention'),
+        description: this.tr('convention_desc'),
+        value: SettingsHelper.getCalcMethodLabel(this.calcMethod),
+        onTap: () => {
           this.activePicker = 'method';
           this.showPickerSheet = true;
         }
-      )
+      })
 
-      this.SettingsRow(
-        this.tr('madhab'),
-        this.tr('madhab_desc'),
-        SettingsHelper.getAsrRuleLabel(this.asrRule),
-        () => {
+      SettingsRow({
+        colors: this.colors,
+        title: this.tr('madhab'),
+        description: this.tr('madhab_desc'),
+        value: SettingsHelper.getAsrRuleLabel(this.asrRule),
+        onTap: () => {
           this.activePicker = 'asr';
           this.showPickerSheet = true;
         }
-      )
+      })
 
-      this.SettingsRow(
-        this.tr('source'),
-        this.tr('source_desc'),
-        SettingsHelper.getCalcSourceLabel(this.calcSource),
-        () => {
+      SettingsRow({
+        colors: this.colors,
+        title: this.tr('source'),
+        description: this.tr('source_desc'),
+        value: SettingsHelper.getCalcSourceLabel(this.calcSource),
+        onTap: () => {
           this.activePicker = 'source';
           this.showPickerSheet = true;
         }
-      )
+      })
 
       this.PrayerOffsetsCard()
 
-      this.SettingsRow(
-        this.tr('advanced_calc_title'),
-        '',
-        this.tr('rounding_method') + ' · '
+      SettingsRow({
+        colors: this.colors,
+        title: this.tr('advanced_calc_title'),
+        description: '',
+        value: this.tr('rounding_method') + ' · '
           + this.tr('midnight_method') + ' · '
           + this.tr('high_latitude'),
-        () => {
+        onTap: () => {
           NavHelper.prepareForward();
           router.pushUrl({ url: 'pages/AdvancedCalcPage' })
             .catch((err: Error) =>
             console.error('Navigation failed: ' + err.message));
         }
-      )
+      })
     }
     .width('100%')
     .padding(12)
@@ -605,49 +624,6 @@ struct SettingsPage {
     .borderRadius(16)
     .border({ width: 1, color: this.colors.borderSoft })
     .margin({ bottom: 12 })
-  }
-
-  @Builder
-  SettingsRow(
-    title: string, description: string, value: string,
-    onTap: () => void
-  ) {
-    Row() {
-      Column() {
-        Text(title)
-          .fontSize(15).fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium)
-        if (description.length > 0) {
-          Text(description)
-            .fontSize(11)
-            .fontColor(this.colors.textMuted)
-            .margin({ top: 2 })
-            .maxLines(2)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-        }
-        Text(value)
-          .fontSize(12)
-          .fontColor(this.colors.accentGold)
-          .maxLines(2)
-          .textOverflow({ overflow: TextOverflow.Ellipsis })
-          .margin({ top: 6 })
-      }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
-      Text('›').fontSize(22)
-        .fontColor(this.colors.accentGold).opacity(0.7)
-    }
-    .width('100%')
-    .padding({
-      top: 14,
-      bottom: 14,
-      left: 16,
-      right: 16
-    })
-    .backgroundColor(this.colors.tintSubtle)
-    .borderRadius(12)
-    .margin({ bottom: 8 })
-    .onClick(onTap)
   }
 
   @Builder
@@ -724,7 +700,7 @@ struct SettingsPage {
       Text(label).fontSize(14).fontColor(this.colors.textWhite)
         .layoutWeight(1)
 
-      Button() {
+      Button({ type: ButtonType.Normal }) {
         Text('\u2212').fontSize(24).fontWeight(FontWeight.Bold)
           .fontColor(this.colors.textWhite)
       }
@@ -746,7 +722,7 @@ struct SettingsPage {
         .width(56)
         .textAlign(TextAlign.Center)
 
-      Button() {
+      Button({ type: ButtonType.Normal }) {
         Text('+').fontSize(24).fontWeight(FontWeight.Bold)
           .fontColor(this.colors.textOnAccent)
       }
@@ -849,7 +825,7 @@ struct SettingsPage {
             }
             .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-            Button() {
+            Button({ type: ButtonType.Normal }) {
               Text('\u2212').fontSize(20).fontWeight(FontWeight.Bold)
                 .fontColor(this.notifBefore <= MIN_BEFORE_MINUTES
                   ? this.colors.textMuted : this.colors.textWhite)
@@ -874,9 +850,9 @@ struct SettingsPage {
             }
             .width(64).alignItems(HorizontalAlign.Center)
 
-            Button() {
+            Button({ type: ButtonType.Normal }) {
               Text('+').fontSize(20).fontWeight(FontWeight.Bold)
-                .fontColor(this.notifBefore >= MAX_BEFORE_MINUTES
+                .fontColor(this.hijriOffset >= MAX_HIJRI_OFFSET
                   ? this.colors.textMuted : this.colors.textOnAccent)
             }
             .width(38)
@@ -1044,15 +1020,18 @@ struct SettingsPage {
   @Builder
   HijriCalendarContent() {
     Column() {
-      this.SettingsRow(
-        this.tr('hijri_calendar_type'),
-        this.tr('hijri_calendar_type_desc'),
-        SettingsHelper.getHijriCalendarTypeLabel(this.hijriCalendarType),
-        () => {
+      SettingsRow({
+        colors: this.colors,
+        title: this.tr('hijri_calendar_type'),
+        description: this.tr('hijri_calendar_type_desc'),
+        value: SettingsHelper.getHijriCalendarTypeLabel(
+          this.hijriCalendarType
+        ),
+        onTap: () => {
           this.activePicker = 'hijriType';
           this.showPickerSheet = true;
         }
-      )
+      })
 
       Row() {
         Column() {
@@ -1069,7 +1048,7 @@ struct SettingsPage {
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
         Row() {
-          Button() {
+          Button({ type: ButtonType.Normal }) {
             Text('\u2212').fontSize(20).fontWeight(FontWeight.Bold)
               .fontColor(this.hijriOffset <= -MAX_HIJRI_OFFSET
                 ? this.colors.textMuted : this.colors.textWhite)
@@ -1092,7 +1071,7 @@ struct SettingsPage {
             .width(48)
             .textAlign(TextAlign.Center)
 
-          Button() {
+          Button({ type: ButtonType.Normal }) {
             Text('+').fontSize(20).fontWeight(FontWeight.Bold)
               .fontColor(this.hijriOffset >= MAX_HIJRI_OFFSET
                 ? this.colors.textMuted : this.colors.textOnAccent)
@@ -1197,11 +1176,26 @@ struct SettingsPage {
   }
 
   // ============================================================
-  // PICKER SHEET
+  // PICKER OVERLAY — Stack-based, replaces the former bindSheet
   // ============================================================
 
   @Builder
-  PickerSheet() {
+  PickerOverlay(
+    title: string,
+    icon: string,
+    items: PickerItem[],
+    onSelect: (id: string) => void,
+    onCancel: () => void
+  ) {
+    // ---- Dim backdrop ----
+    Column()
+      .width('100%').height('100%')
+      .backgroundColor(this.colors.overlayDim)
+      .onClick(() => {
+        onCancel();
+      })
+
+    // ---- Bottom sheet ----
     Column() {
       Row()
         .width(44)
@@ -1211,7 +1205,7 @@ struct SettingsPage {
         .margin({ top: 10 })
 
       Row() {
-        Text(this.pickerIcon())
+        Text(icon)
           .fontSize(22)
           .width(44)
           .height(44)
@@ -1220,7 +1214,7 @@ struct SettingsPage {
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
 
-        Text(this.pickerTitle())
+        Text(title)
           .fontSize(20).fontWeight(FontWeight.Bold)
           .fontColor(this.colors.textWhite)
           .margin({ left: 14 })
@@ -1232,7 +1226,7 @@ struct SettingsPage {
 
       Scroll() {
         Column() {
-          ForEach(this.pickerItems(), (item: PickerItem) => {
+          ForEach(items, (item: PickerItem) => {
             Row() {
               Row() {
                 if (item.selected) {
@@ -1274,7 +1268,7 @@ struct SettingsPage {
             .borderRadius(12)
             .margin({ bottom: 4 })
             .onClick(() => {
-              this.pickItem(item.id);
+              onSelect(item.id);
             })
           }, (item: PickerItem) =>
           `${this.activePicker}-${item.id}-${item.selected ? 's' : 'u'}`)
@@ -1283,8 +1277,8 @@ struct SettingsPage {
         .padding({
           left: 8,
           right: 8,
-          top: 8,
-          bottom: 8
+          top: 12,
+          bottom: 12
         })
       }
       .layoutWeight(1)
@@ -1292,23 +1286,30 @@ struct SettingsPage {
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)
 
-      Button() {
-        Text(this.tr('cancel'))
-          .fontSize(15).fontWeight(FontWeight.Medium)
-          .fontColor(this.colors.textWhite)
-      }
-      .width('90%')
-      .height(48)
-      .backgroundColor(this.colors.tintSoft)
-      .borderRadius(12)
-      .margin({ top: 8, bottom: 24 })
-      .onClick(() => {
-        this.showPickerSheet = false;
-        this.activePicker = 'none';
-      })
+      Button(this.tr('cancel'))
+        .width('90%')
+        .height(48)
+        .fontSize(15)
+        .fontWeight(FontWeight.Medium)
+        .fontColor(this.colors.textWhite)
+        .backgroundColor(this.colors.tintSoft)
+        .borderRadius(12)
+        .margin({ top: 8, bottom: 24 })
+        .onClick(() => {
+          onCancel();
+        })
     }
-    .width('100%').height('100%')
+    .width('100%')
     .backgroundColor(this.colors.cardDark)
+    .borderRadius({ topLeft: 28, topRight: 28 })
+    .shadow({
+      radius: 24,
+      color: this.colors.shadowFloating,
+      offsetX: 0,
+      offsetY: -6
+    })
+    .border({ width: { top: 1 }, color: this.colors.borderSoft })
+    .position({ bottom: 0 })
   }
 
   private pickerTitle(): string {

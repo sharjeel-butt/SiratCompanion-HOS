@@ -3,9 +3,7 @@
 import { TimezoneResolver } from '../utils/TimezoneResolver';
 import {
   AdvancedCalcSettings,
-  CustomAngles,
   DEFAULT_ADVANCED_CALC,
-  DEFAULT_CUSTOM_ANGLES,
   MidnightMethod,
   RoundingMethod,
   Shafaq
@@ -37,8 +35,7 @@ export enum CalculationMethod {
   TEHRAN = 'Tehran',
   INDONESIA = 'Indonesia',
   ALGERIA = 'Algeria',
-  BRUNEI = 'Brunei',
-  CUSTOM = 'Custom'
+  BRUNEI = 'Brunei'
 }
 
 export enum AsrShadowRule {
@@ -273,8 +270,7 @@ export class PrayerTimeCalculator {
   // ============================================================
 
   static getParameters(
-    method: CalculationMethod,
-    custom?: CustomAngles
+    method: CalculationMethod
   ): CalculationParameters {
     switch (method) {
       case CalculationMethod.KARACHI:
@@ -323,15 +319,6 @@ export class PrayerTimeCalculator {
         return PrayerTimeCalculator.ALGERIA;
       case CalculationMethod.BRUNEI:
         return PrayerTimeCalculator.BRUNEI;
-      case CalculationMethod.CUSTOM: {
-        const c = custom ?? DEFAULT_CUSTOM_ANGLES;
-        return {
-          fajrAngle: c.fajr,
-          ishaAngle: c.isha,
-          ishaInterval: c.ishaInterval,
-          methodName: 'Custom'
-        };
-      }
       default:
         return PrayerTimeCalculator.KARACHI;
     }
@@ -339,7 +326,6 @@ export class PrayerTimeCalculator {
 
   static getAvailableMethods(): Array<MethodOption> {
     return [
-      { value: CalculationMethod.CUSTOM, label: 'Custom' },
       { value: CalculationMethod.MOONSIGHTING_COMMITTEE, label: 'Moonsighting Committee Worldwide' },
       { value: CalculationMethod.MWL, label: 'Muslim World League (18°/17°)' },
       { value: CalculationMethod.EGYPTIAN, label: 'Egyptian General Survey Authority (19.5°/17.5°)' },
@@ -425,9 +411,7 @@ export class PrayerTimeCalculator {
     highLatRule: HighLatitudeRule = HighLatitudeRule.NONE,
     advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC
   ): DailyPrayerTimes {
-    const params = PrayerTimeCalculator.getParameters(
-      method, advanced.customAngles
-    );
+    const params = PrayerTimeCalculator.getParameters(method);
 
     const solarPos = PrayerTimeCalculator.getSolarPosition(date);
     const dec = solarPos.declination;

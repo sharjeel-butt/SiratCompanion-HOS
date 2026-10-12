@@ -315,32 +315,16 @@ export class SettingsHelper {
     return out;
   }
 
-  /**
-   * Persist the master notification toggle.
-   *
-   * Async so callers can await the write before triggering a
-   * reschedule — rescheduleAll() reads the settings back to decide
-   * what to schedule, so the write must be flushed first.
-   */
   static async saveNotifMaster(value: boolean): Promise<void> {
     await PreferencesHelper.setBoolean(STORAGE_KEY_NOTIF_MASTER, value);
   }
 
-  /**
-   * Persist the lead-time stepper value.
-   *
-   * Async for the same reason as saveNotifMaster — a race here causes
-   * the reschedule to use the previous value.
-   */
   static async saveNotifBeforeMinutes(minutes: number): Promise<void> {
     await PreferencesHelper.setNumber(
       STORAGE_KEY_NOTIF_BEFORE_MINUTES, minutes
     );
   }
 
-  /**
-   * Persist a per-prayer enable toggle. Async for the same reason.
-   */
   static async saveNotifPrayer(
     prayerId: string, value: boolean
   ): Promise<void> {
@@ -494,7 +478,6 @@ export class SettingsHelper {
         return L.get('method_russia');
       case CalculationMethod.UAE:
         return L.get('method_uae');
-      // ---- Newly reachable ----
       case CalculationMethod.MOONSIGHTING_COMMITTEE:
         return L.get('method_moonsighting');
       case CalculationMethod.DUBAI:
@@ -515,8 +498,6 @@ export class SettingsHelper {
         return L.get('method_algeria');
       case CalculationMethod.BRUNEI:
         return L.get('method_brunei');
-      case CalculationMethod.CUSTOM:
-        return L.get('method_custom');
       default:
         return L.get('method_karachi');
     }
@@ -600,7 +581,6 @@ export class SettingsHelper {
         return L.get('method_short_russia');
       case CalculationMethod.UAE:
         return L.get('method_short_uae');
-      // ---- Newly reachable ----
       case CalculationMethod.MOONSIGHTING_COMMITTEE:
         return L.get('method_short_moonsighting');
       case CalculationMethod.DUBAI:
@@ -621,8 +601,6 @@ export class SettingsHelper {
         return L.get('method_short_algeria');
       case CalculationMethod.BRUNEI:
         return L.get('method_short_brunei');
-      case CalculationMethod.CUSTOM:
-        return L.get('method_short_custom');
       default:
         return L.get('method_short_karachi');
     }
@@ -642,7 +620,6 @@ export class SettingsHelper {
 
   static buildMethodPickerItems(current: CalculationMethod): PickerItem[] {
     return [
-      // ---- Existing thirteen ----
       CalculationMethod.KARACHI,
       CalculationMethod.JAFARI,
       CalculationMethod.ISNA,
@@ -656,7 +633,6 @@ export class SettingsHelper {
       CalculationMethod.TURKEY,
       CalculationMethod.RUSSIA,
       CalculationMethod.UAE,
-      // ---- Newly exposed ----
       CalculationMethod.MOONSIGHTING_COMMITTEE,
       CalculationMethod.DUBAI,
       CalculationMethod.KUWAIT,
@@ -666,8 +642,7 @@ export class SettingsHelper {
       CalculationMethod.TEHRAN,
       CalculationMethod.INDONESIA,
       CalculationMethod.ALGERIA,
-      CalculationMethod.BRUNEI,
-      CalculationMethod.CUSTOM
+      CalculationMethod.BRUNEI
     ].map((m): PickerItem => ({
       id: m,
       label: SettingsHelper.getCalcMethodLabel(m),
@@ -767,7 +742,6 @@ export class SettingsHelper {
     PreferencesHelper.setBoolean(STORAGE_KEY_WIZARD_COMPLETED, true);
   }
 
-  /** Reset for testing — clears the flag so the wizard runs again. */
   static resetWizard(): void {
     PreferencesHelper.setBoolean(STORAGE_KEY_WIZARD_COMPLETED, false);
   }
@@ -853,6 +827,11 @@ export class SettingsHelper {
   // ============================================================
   // ADVANCED CALCULATION SETTINGS
   // ============================================================
+  //
+  // The CustomAngles block below is retained for forward
+  // compatibility with existing stored data. The Custom method
+  // itself has been removed from CalculationMethod, so no current
+  // code path writes these values — they are always the defaults.
 
   static async getAdvancedCalcSettings(): Promise<AdvancedCalcSettings> {
     const rounding = await PreferencesHelper.getString(
