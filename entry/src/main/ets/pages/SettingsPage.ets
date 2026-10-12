@@ -21,6 +21,7 @@ import {
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_SETTINGS_INITIAL_CATEGORY,
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
@@ -132,6 +133,18 @@ struct SettingsPage {
         this.colors = c;
       }
     );
+
+    // Read the one-shot category hint set by Home / Prayer before
+    // navigating. Cleared immediately so a subsequent open via the
+    // hamburger menu defaults to Location.
+    const hint = AppStorage.get<string>(
+      STORAGE_KEY_SETTINGS_INITIAL_CATEGORY
+    );
+    if (hint !== undefined && hint.length > 0) {
+      this.expandedCategory = hint;
+      AppStorage.setOrCreate(STORAGE_KEY_SETTINGS_INITIAL_CATEGORY, '');
+    }
+
     this.appInfo = AppInfoHelper.get();
     this.reload();
   }

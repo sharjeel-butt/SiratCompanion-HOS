@@ -22,6 +22,7 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
   STORAGE_KEY_PRAYER_STATE_VERSION,
+  STORAGE_KEY_SETTINGS_INITIAL_CATEGORY,
   STORAGE_KEY_SHOW_EXTRA_TIMINGS,
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
@@ -764,6 +765,9 @@ export struct Prayer {
   }
 
   private navigateToSettings(): void {
+    AppStorage.setOrCreate(
+      STORAGE_KEY_SETTINGS_INITIAL_CATEGORY, 'Prayer Times'
+    );
     NavHelper.prepareForward();
     router.pushUrl({ url: 'pages/SettingsPage' })
       .catch((err: Error) =>
@@ -808,6 +812,16 @@ export struct Prayer {
       }
     }
     return '--:--';
+  }
+
+  private navigateToLocationSettings(): void {
+    AppStorage.setOrCreate(
+      STORAGE_KEY_SETTINGS_INITIAL_CATEGORY, 'Location'
+    );
+    NavHelper.prepareForward();
+    router.pushUrl({ url: 'pages/SettingsPage' })
+      .catch((err: Error) =>
+      console.error('Navigation failed:', JSON.stringify(err)));
   }
 
   private getFirstThirdTime(): string {
@@ -857,8 +871,8 @@ export struct Prayer {
           asrRule: this.asrRule,
           calcSource: this.calcSource,
           showCalcPills: true,
-          onRefreshLocation: () => {
-            this.refreshLocation();
+          onOpenLocationSettings: () => {
+            this.navigateToLocationSettings();
           },
           onOpenSettings: () => {
             this.navigateToSettings();
