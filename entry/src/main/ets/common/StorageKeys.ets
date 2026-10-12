@@ -63,3 +63,5 @@ export const STORAGE_KEY_CUSTOM_ISHA_INTERVAL = 'calc_custom_isha_interval';
 export const STORAGE_KEY_TIME_FORMAT = 'time_format';
 
 export const STORAGE_KEY_HIJRI_CALENDAR_TYPE = 'hijri_calendar_type';
+
+export const STORAGE_KEY_CALC_SETTINGS_VERSION = 'calc_settings_version';

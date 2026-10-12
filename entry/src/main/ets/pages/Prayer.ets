@@ -16,6 +16,7 @@ import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_CALC_SETTINGS_VERSION,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
@@ -78,6 +79,9 @@ export struct Prayer {
   @StorageLink(STORAGE_KEY_SHOW_EXTRA_TIMINGS)
   @Watch('onShowExtraTimingsChanged')
   showExtraTimings: boolean = true;
+  @StorageLink(STORAGE_KEY_CALC_SETTINGS_VERSION)
+  @Watch('onCalcSettingsChanged')
+  calcSettingsVersion: number = 0;
 
   @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
   @Watch('onHijriOffsetChangedInHome')
@@ -138,6 +142,7 @@ export struct Prayer {
   @State locationMode: LocationMode = LocationMode.GPS;
   @State offsets: PrayerOffsets = { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 };
   private advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC;
+  private settingsPending: boolean = false;
 
   @State showIslamicEvents: boolean = true;
   @State private isRefreshingHome: boolean = false;
@@ -256,6 +261,10 @@ export struct Prayer {
     this.refreshHijriDates();
     this.upcomingImportantDates =
       DateHelper.getUpcomingImportantDates(this.hijriOffset);
+  }
+
+  private async onCalcSettingsChanged(): Promise<void> {
+    await this.loadSettingsAndLocation();
   }
 
   private async onAppForegrounded(): Promise<void> {
@@ -407,7 +416,10 @@ export struct Prayer {
   }
 
   private async loadSettingsAndLocation(): Promise<void> {
-    if (this.settingsLoading) return;
+    if (this.settingsLoading) {
+      this.settingsPending = true;
+      return;
+    }
     this.settingsLoading = true;
 
     try {
@@ -437,6 +449,10 @@ export struct Prayer {
       this.settingsLoaded = true;
     } finally {
       this.settingsLoading = false;
+      if (this.settingsPending) {
+        this.settingsPending = false;
+        this.loadSettingsAndLocation();
+      }
     }
   }
 

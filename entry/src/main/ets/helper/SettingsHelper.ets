@@ -5,6 +5,7 @@ import { CalculationSource, LocationMode, ManualCoords, PickerItem } from '../mo
 import { PreferencesHelper } from './PreferencesHelper';
 import {
   STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_CALC_SETTINGS_VERSION,
   STORAGE_KEY_CUSTOM_FAJR_ANGLE,
   STORAGE_KEY_CUSTOM_ISHA_ANGLE,
   STORAGE_KEY_CUSTOM_ISHA_INTERVAL,
@@ -139,6 +140,12 @@ export class SettingsHelper {
     };
   }
 
+  private static bumpCalcSettingsVersion(): void {
+    const prev = AppStorage.get<number>(STORAGE_KEY_CALC_SETTINGS_VERSION);
+    const next = (prev === undefined ? 0 : prev) + 1;
+    AppStorage.setOrCreate(STORAGE_KEY_CALC_SETTINGS_VERSION, next);
+  }
+
   static async getHighLatRule(): Promise<HighLatitudeRule> {
     const stored = await PreferencesHelper.getString(
       STORAGE_KEY_HIGH_LAT_RULE, HighLatitudeRule.NONE
@@ -157,6 +164,7 @@ export class SettingsHelper {
 
   static saveHighLatRule(rule: HighLatitudeRule): void {
     PreferencesHelper.setString(STORAGE_KEY_HIGH_LAT_RULE, rule);
+    SettingsHelper.bumpCalcSettingsVersion();
   }
 
   // ============================================================
@@ -351,19 +359,23 @@ export class SettingsHelper {
 
   static saveMethod(method: CalculationMethod): void {
     PreferencesHelper.setString(KEY_METHOD, method);
+    SettingsHelper.bumpCalcSettingsVersion();
   }
 
   static saveAsrRule(rule: AsrShadowRule): void {
     PreferencesHelper.setNumber(KEY_ASR, rule as number);
+    SettingsHelper.bumpCalcSettingsVersion();
   }
 
   static saveSource(source: CalculationSource): void {
     PreferencesHelper.setString(KEY_SOURCE, source);
+    SettingsHelper.bumpCalcSettingsVersion();
   }
 
   static saveShowExtraTimings(value: boolean): void {
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_EXTRA_TIMINGS, value);
     PreferencesHelper.setBoolean(KEY_SHOW_EXTRA_TIMINGS, value);
+    SettingsHelper.bumpCalcSettingsVersion();
   }
 
   static saveShowIslamicEvents(value: boolean): void {
@@ -393,6 +405,7 @@ export class SettingsHelper {
 
   static saveOffset(key: string, minutes: number): void {
     PreferencesHelper.setNumber(key, minutes);
+    SettingsHelper.bumpCalcSettingsVersion();
   }
 
   static async saveAllOffsets(offsets: PrayerOffsets): Promise<void> {
@@ -401,6 +414,7 @@ export class SettingsHelper {
     await PreferencesHelper.setNumber(KEY_OFFSET_ASR, offsets.asr);
     await PreferencesHelper.setNumber(KEY_OFFSET_MAGHRIB, offsets.maghrib);
     await PreferencesHelper.setNumber(KEY_OFFSET_ISHA, offsets.isha);
+    SettingsHelper.bumpCalcSettingsVersion();
   }
 
   // ============================================================
@@ -875,18 +889,22 @@ export class SettingsHelper {
 
   static saveRounding(r: RoundingMethod): void {
     PreferencesHelper.setString(STORAGE_KEY_ROUNDING_METHOD, r);
+    SettingsHelper.bumpCalcSettingsVersion();
   }
 
   static saveMidnight(m: MidnightMethod): void {
     PreferencesHelper.setString(STORAGE_KEY_MIDNIGHT_METHOD, m);
+    SettingsHelper.bumpCalcSettingsVersion();
   }
 
   static savePolarResolution(p: PolarResolution): void {
     PreferencesHelper.setString(STORAGE_KEY_POLAR_RESOLUTION, p);
+    SettingsHelper.bumpCalcSettingsVersion();
   }
 
   static saveShafaq(s: Shafaq): void {
     PreferencesHelper.setString(STORAGE_KEY_SHAFAQ, s);
+    SettingsHelper.bumpCalcSettingsVersion();
   }
 
   static async saveCustomAngles(a: CustomAngles): Promise<void> {
@@ -895,6 +913,7 @@ export class SettingsHelper {
     await PreferencesHelper.setNumber(
       STORAGE_KEY_CUSTOM_ISHA_INTERVAL, a.ishaInterval
     );
+    SettingsHelper.bumpCalcSettingsVersion();
   }
 
   // ============================================================

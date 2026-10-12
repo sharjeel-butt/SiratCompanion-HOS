@@ -9,6 +9,7 @@ import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_CALC_SETTINGS_VERSION,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
@@ -81,6 +82,9 @@ export struct HomePage {
   @StorageLink(STORAGE_KEY_SHOW_ISLAMIC_EVENTS)
   @Watch('onShowIslamicEventsChanged')
   showIslamicEvents: boolean = true;
+  @StorageLink(STORAGE_KEY_CALC_SETTINGS_VERSION)
+  @Watch('onCalcSettingsChanged')
+  calcSettingsVersion: number = 0;
 
   @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
   @Watch('onHijriOffsetChanged')
@@ -176,11 +180,16 @@ export struct HomePage {
   private advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC;
 
   private settingsLoading: boolean = false;
+  private settingsPending: boolean = false;
 
   @State private currentLanguage: string = 'en';
 
   private onShowIslamicEventsChanged(): void {
     // Re-render is handled by the @StorageLink.
+  }
+
+  private async onCalcSettingsChanged(): Promise<void> {
+    await this.loadSettingsAndLocation();
   }
 
   private tr(key: string): string {
@@ -350,9 +359,13 @@ export struct HomePage {
 
   private async loadSettingsAndLocation(): Promise<void> {
     if (this.settingsLoading) {
+      // A load is already in flight. Queue exactly one follow-up so
+      // a second settings change during the same burst is not lost.
+      this.settingsPending = true;
       return;
     }
     this.settingsLoading = true;
+
     try {
       const data = await SettingsHelper.loadAll();
       this.calcMethod = data.method;
@@ -373,6 +386,11 @@ export struct HomePage {
       this.refreshFastingWindow();
     } finally {
       this.settingsLoading = false;
+      if (this.settingsPending) {
+        this.settingsPending = false;
+        // Fire-and-forget; the second pass will complete on its own.
+        this.loadSettingsAndLocation();
+      }
     }
   }
 
