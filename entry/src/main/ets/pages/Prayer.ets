@@ -16,6 +16,7 @@ import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
@@ -39,6 +40,7 @@ import { Breakpoints } from '../common/Breakpoints';
 import {
   AdvancedCalcSettings, DEFAULT_ADVANCED_CALC
 } from '../models/AdvancedCalcModels';
+import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 
 interface TimelineRow {
   kind: 'prayer' | 'extra';
@@ -64,6 +66,9 @@ export struct Prayer {
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
   appThemePreset: string = ThemePreset.SIRAT;
+  @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_TYPE)
+  @Watch('onHijriCalendarTypeChanged')
+  hijriCalendarType: string = HijriCalendarType.UMM_AL_QURA;
 
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChangedInHome')
@@ -218,6 +223,10 @@ export struct Prayer {
 
   private onAppThemePresetChanged(): void {
     this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  private onHijriCalendarTypeChanged(): void {
+    this.refreshHijriDates();
   }
 
   private onClockFormatChanged(): void {
@@ -444,7 +453,7 @@ export struct Prayer {
     this.extraTimings = HomeController.buildExtraTimings(
       this.viewingDate, this.latitude, this.longitude,
       this.calcMethod, this.asrRule, this.highLatRule,
-      this.offsets, this.extraTimings
+      this.offsets, this.extraTimings, this.advanced
     );
   }
 

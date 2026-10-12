@@ -11,7 +11,8 @@ export enum DstRule {
   NONE = 'NONE', // No DST
   US = 'US', // 2nd Sun March → 1st Sun November
   EU = 'EU', // Last Sun March → Last Sun October
-  AU = 'AU' // Southern hemisphere: 1st Sun Oct → 1st Sun April
+  AU = 'AU', // Southern hemisphere: 1st Sun Oct → 1st Sun April
+  EGYPT = 'EGYPT' // Last Fri April → Last Thu October
 }
 
 export interface City {
@@ -29,7 +30,7 @@ export interface City {
   declinationDeg: number;
 }
 
-const MAX_MATCH_KM = 100;
+const MAX_MATCH_KM = 300;
 
 const CITIES: City[] = [
   {
@@ -95,6 +96,14 @@ const CITIES: City[] = [
     standardOffset: 5,
     dstRule: DstRule.NONE,
     declinationDeg: 1.6
+  },
+  {
+    name: 'Gwadar',
+    lat: 25.1264,
+    lng: 62.3225,
+    standardOffset: 5,
+    dstRule: DstRule.NONE,
+    declinationDeg: 1.4
   },
 
   {
@@ -227,6 +236,30 @@ const CITIES: City[] = [
     declinationDeg: 5.1
   },
   {
+    name: 'Mashhad',
+    lat: 36.2605,
+    lng: 59.6168,
+    standardOffset: 3.5,
+    dstRule: DstRule.NONE,
+    declinationDeg: 4.8
+  },
+  {
+    name: 'Isfahan',
+    lat: 32.6546,
+    lng: 51.6680,
+    standardOffset: 3.5,
+    dstRule: DstRule.NONE,
+    declinationDeg: 4.2
+  },
+  {
+    name: 'Tabriz',
+    lat: 38.0962,
+    lng: 46.2738,
+    standardOffset: 3.5,
+    dstRule: DstRule.NONE,
+    declinationDeg: 5.4
+  },
+  {
     name: 'Istanbul',
     lat: 41.0082,
     lng: 28.9784,
@@ -263,7 +296,7 @@ const CITIES: City[] = [
     lat: 30.0444,
     lng: 31.2357,
     standardOffset: 2,
-    dstRule: DstRule.EU,
+    dstRule: DstRule.EGYPT,
     declinationDeg: 4.5
   },
 
@@ -348,6 +381,30 @@ const CITIES: City[] = [
     declinationDeg: 0.8
   },
   {
+    name: 'Bangkok',
+    lat: 13.7563,
+    lng: 100.5018,
+    standardOffset: 7,
+    dstRule: DstRule.NONE,
+    declinationDeg: -0.4
+  },
+  {
+    name: 'Hanoi',
+    lat: 21.0285,
+    lng: 105.8542,
+    standardOffset: 7,
+    dstRule: DstRule.NONE,
+    declinationDeg: -2.1
+  },
+  {
+    name: 'Manila',
+    lat: 14.5995,
+    lng: 120.9842,
+    standardOffset: 8,
+    dstRule: DstRule.NONE,
+    declinationDeg: -1.6
+  },
+  {
     name: 'Dhaka',
     lat: 23.8103,
     lng: 90.4125,
@@ -356,12 +413,68 @@ const CITIES: City[] = [
     declinationDeg: -0.5
   },
   {
+    name: 'Chittagong',
+    lat: 22.3569,
+    lng: 91.7832,
+    standardOffset: 6,
+    dstRule: DstRule.NONE,
+    declinationDeg: -0.7
+  },
+  {
+    name: 'Kathmandu',
+    lat: 27.7172,
+    lng: 85.3240,
+    standardOffset: 5.75,
+    dstRule: DstRule.NONE,
+    declinationDeg: 0.4
+  },
+  {
+    name: 'Colombo',
+    lat: 6.9271,
+    lng: 79.8612,
+    standardOffset: 5.5,
+    dstRule: DstRule.NONE,
+    declinationDeg: -1.8
+  },
+  {
     name: 'Kabul',
     lat: 34.5553,
     lng: 69.2075,
     standardOffset: 4.5,
     dstRule: DstRule.NONE,
     declinationDeg: 2.4
+  },
+  {
+    name: 'Kandahar',
+    lat: 31.6133,
+    lng: 65.7167,
+    standardOffset: 4.5,
+    dstRule: DstRule.NONE,
+    declinationDeg: 2.6
+  },
+  {
+    name: 'Herat',
+    lat: 34.3419,
+    lng: 62.2031,
+    standardOffset: 4.5,
+    dstRule: DstRule.NONE,
+    declinationDeg: 3.1
+  },
+  {
+    name: 'Jalalabad',
+    lat: 34.4302,
+    lng: 70.4515,
+    standardOffset: 4.5,
+    dstRule: DstRule.NONE,
+    declinationDeg: 2.4
+  },
+  {
+    name: 'Mazar-i-Sharif',
+    lat: 36.7069,
+    lng: 67.1108,
+    standardOffset: 4.5,
+    dstRule: DstRule.NONE,
+    declinationDeg: 3.2
   },
 
   {
@@ -420,6 +533,14 @@ const CITIES: City[] = [
     dstRule: DstRule.NONE,
     declinationDeg: 10.5
   },
+  {
+    name: 'Tashkent',
+    lat: 41.2995,
+    lng: 69.2401,
+    standardOffset: 5,
+    dstRule: DstRule.NONE,
+    declinationDeg: 3.6
+  },
 
   {
     name: 'Lagos',
@@ -436,6 +557,22 @@ const CITIES: City[] = [
     standardOffset: 3,
     dstRule: DstRule.NONE,
     declinationDeg: 0.5
+  },
+  {
+    name: 'Addis Ababa',
+    lat: 9.0320,
+    lng: 38.7469,
+    standardOffset: 3,
+    dstRule: DstRule.NONE,
+    declinationDeg: 1.4
+  },
+  {
+    name: 'Khartoum',
+    lat: 15.5007,
+    lng: 32.5599,
+    standardOffset: 2,
+    dstRule: DstRule.NONE,
+    declinationDeg: 2.6
   },
   {
     name: 'Cape Town',

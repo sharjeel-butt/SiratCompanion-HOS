@@ -9,6 +9,7 @@ import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
@@ -55,6 +56,7 @@ import { Breakpoints } from '../common/Breakpoints';
 import {
   AdvancedCalcSettings, DEFAULT_ADVANCED_CALC
 } from '../models/AdvancedCalcModels';
+import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 
 @Component
 export struct HomePage {
@@ -94,6 +96,9 @@ export struct HomePage {
   @StorageLink(STORAGE_KEY_TIME_FORMAT)
   @Watch('onClockFormatChanged')
   clockFormat: string = ClockFormat.SYSTEM;
+  @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_TYPE)
+  @Watch('onHijriCalendarTypeChanged')
+  hijriCalendarType: string = HijriCalendarType.UMM_AL_QURA;
 
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
@@ -189,6 +194,12 @@ export struct HomePage {
     return ClockFormatHelper.reformat(t);
   }
 
+  private onHijriCalendarTypeChanged(): void {
+    this.refreshHijriDate();
+    this.refreshRamadan();
+    this.upcomingEvents = DateHelper.getUpcomingImportantDates(this.hijriOffset);
+  }
+
   private isRtl(): boolean {
     return L.isRtlLang(this.currentLanguage);
   }
@@ -271,6 +282,8 @@ export struct HomePage {
 
   private onLanguageChanged(): void {
     this.currentLanguage = this.appLanguage;
+    this.prayerProgress =
+      ProgressHelper.getPrayerProgress(this.currentLanguage);
   }
 
   private async onLocationVersionChanged(): Promise<void> {
@@ -364,7 +377,7 @@ export struct HomePage {
   }
 
   private async refreshDashboard(): Promise<void> {
-    this.prayerProgress = ProgressHelper.getPrayerProgress();
+    this.prayerProgress = ProgressHelper.getPrayerProgress(this.currentLanguage);
     this.monthProgress = ProgressHelper.getMonthProgress();
 
     const loaded = await TasbihStorage.load(TasbihManager.createDefaults());
@@ -830,6 +843,10 @@ export struct HomePage {
 
   private cellBorderWidth(cell: MonthDayCell): number {
     return cell.isToday ? 2 : 0;
+  }
+
+  private monthDayLabels(): string[] {
+    return L.getArray('days_of_week_short', this.currentLanguage);
   }
 
   build() {
@@ -1746,7 +1763,9 @@ export struct HomePage {
             .width('100%').height(36)
           }
           .layoutWeight(1).alignItems(HorizontalAlign.Center)
-        }, (done: boolean, i: number) => `w-${i}-${done ? 'd' : 'u'}`)
+        }, (done: boolean, i: number) => {
+          return `w-${i}-${done ? 'd' : 'u'}-${this.prayerProgress.weeklyLabels[i]}`;
+        })
       }
       .width('100%')
 
@@ -1789,7 +1808,7 @@ export struct HomePage {
       .width('100%').padding({ bottom: 14 })
 
       Row() {
-        ForEach(['S', 'M', 'T', 'W', 'T', 'F', 'S'], (d: string, i: number) => {
+        ForEach(this.monthDayLabels(), (d: string, i: number) => {
           Text(d)
             .fontSize(10)
             .fontColor(this.colors.textMuted)

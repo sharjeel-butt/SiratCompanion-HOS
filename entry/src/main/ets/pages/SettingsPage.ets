@@ -130,8 +130,7 @@ struct SettingsPage {
         this.colors = c;
       }
     );
-    const ctx = getContext(this) as common.UIAbilityContext;
-    this.appInfo = AppInfoHelper.get(ctx);
+    this.appInfo = AppInfoHelper.get();
     this.reload();
   }
 
@@ -1510,11 +1509,11 @@ struct SettingsPage {
 
   private onLanguageChanged(): void {
     this.currentLanguage = this.appLanguage;
+    this.appInfo = AppInfoHelper.get();
   }
 
   private async onAppForegrounded(): Promise<void> {
-    const ctx = getContext(this) as common.UIAbilityContext;
-    this.appInfo = AppInfoHelper.get(ctx);
+    this.appInfo = AppInfoHelper.get();
     await this.reload();
   }
 
