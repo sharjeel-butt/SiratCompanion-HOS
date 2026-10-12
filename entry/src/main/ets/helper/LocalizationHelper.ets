@@ -16,6 +16,12 @@ export class L {
   private static readonly EN: Map<string, string> = L.buildEn();
   private static readonly ZH: Map<string, string> = L.buildZh();
   private static readonly AR: Map<string, string> = L.buildAr();
+  private static readonly DAYS_SHORT_EN: string[] =
+    ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  private static readonly DAYS_SHORT_ZH: string[] =
+    ['日', '一', '二', '三', '四', '五', '六'];
+  private static readonly DAYS_SHORT_AR: string[] =
+    ['أحد', 'إثن', 'ثلا', 'أرب', 'خمي', 'جمع', 'سبت'];
 
   private static readonly MONTHS_EN: string[] = [
     'Muharram', 'Safar', 'Rabi al-Awwal', 'Rabi al-Thani',
@@ -92,6 +98,15 @@ export class L {
         return L.DAYS_AR;
       }
       return L.DAYS_EN;
+    }
+    if (key === 'days_of_week_short') {
+      if (l === AppLanguage.CHINESE) {
+        return L.DAYS_SHORT_ZH;
+      }
+      if (l === AppLanguage.ARABIC) {
+        return L.DAYS_SHORT_AR;
+      }
+      return L.DAYS_SHORT_EN;
     }
     return [];
   }
@@ -675,6 +690,13 @@ export class L {
     m.set('event_arafah', 'Day of Arafah');
     m.set('event_eid_adha', 'Eid al-Adha');
 
+    m.set('countdown_fast_ends_desc', 'Prepare to break your fast');
+    m.set('countdown_fast_starts_desc', 'Finish suhoor before Imsak');
+    m.set('countdown_fast_ends_now', 'Its time to break your fast');
+    m.set('countdown_fast_starts_now', 'Its time to begin fasting');
+
+
+
     return m;
   }
 
@@ -1199,6 +1221,11 @@ export class L {
     m.set('event_eid_fitr', '开斋节');
     m.set('event_arafah', '阿拉法日');
     m.set('event_eid_adha', '宰牲节');
+
+    m.set('countdown_fast_ends_desc', '准备开斋');
+    m.set('countdown_fast_starts_desc', '请在封斋前完成封斋饭');
+    m.set('countdown_fast_ends_now', '开斋时间到');
+    m.set('countdown_fast_starts_now', '封斋时间到');
 
     return m;
   }
@@ -1731,6 +1758,11 @@ export class L {
     m.set('event_eid_fitr', 'عيد الفطر');
     m.set('event_arafah', 'يوم عرفة');
     m.set('event_eid_adha', 'عيد الأضحى');
+
+    m.set('countdown_fast_ends_desc', 'استعد للإفطار');
+    m.set('countdown_fast_starts_desc', 'أنهِ السحور قبل الإمساك');
+    m.set('countdown_fast_ends_now', 'حان وقت الإفطار');
+    m.set('countdown_fast_starts_now', 'حان وقت الإمساك');
 
     return m;
   }

@@ -2,6 +2,7 @@
 
 import { Tasbih } from '../tasbih/TasbihModels';
 import { PrayerCheckState, PrayerManager } from '../prayer/PrayerManager';
+import { L } from '../helper/LocalizationHelper';
 
 export interface PrayerProgress {
   todayCompleted: number; // 0–5
@@ -58,8 +59,6 @@ export interface MonthProgress {
   daysInMonth: number;
 }
 
-const DAY_LABELS: string[] = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-
 export class ProgressHelper {
   static getDateKey(d: Date): string {
     const y = d.getFullYear();
@@ -107,9 +106,12 @@ export class ProgressHelper {
     return result;
   }
 
-  static getPrayerProgress(): PrayerProgress {
+  static getPrayerProgress(lang: string = 'en'): PrayerProgress {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+
+    const dayLabels: string[] =
+      L.getArray('days_of_week_short', lang);
 
     const todayState = ProgressHelper.readState(ProgressHelper.getDateKey(today));
     const todayCompleted = ProgressHelper.countCompleted(todayState);
@@ -130,7 +132,7 @@ export class ProgressHelper {
       const st = ProgressHelper.readState(ProgressHelper.getDateKey(d));
       const c = ProgressHelper.countCompleted(st);
       weeklyGrid.push(c === 5);
-      weeklyLabels.push(DAY_LABELS[d.getDay()]);
+      weeklyLabels.push(dayLabels[d.getDay()]);
       weekCompleted += c;
     }
 
