@@ -22,6 +22,8 @@ import { SoundHelper } from '../helper/SoundHelper';
 import { SoundOptions, TASBIH_SOUND_OPTIONS, TasbihSoundOption } from '../common/SoundOptions';
 import { Breakpoints } from '../common/Breakpoints';
 import { ClockFormat } from '../common/ClockFormat';
+import { SubsectionHeader } from '../components/SubsectionHeader';
+
 
 @Entry
 @Component
@@ -335,21 +337,37 @@ struct CustomizePage {
   UICustomizationContent() {
     Column() {
       // ============ Home Page UI ============
-      this.SubsectionHeader(this.tr('subsection_home_ui'))
+      SubsectionHeader({
+        colors: this.colors,
+        titleKey: 'subsection_home_ui',
+        currentLanguage: this.currentLanguage
+      })
       this.ShowIslamicEventsRow()
 
       // ============ Prayer UI ============
-      this.SubsectionHeader(this.tr('subsection_prayer_ui'))
+      SubsectionHeader({
+        colors: this.colors,
+        titleKey: 'subsection_prayer_ui',
+        currentLanguage: this.currentLanguage
+      })
       this.ShowExtraTimingsRow()
 
       // ============ Sound & Feedback ============
-      this.SubsectionHeader(this.tr('subsection_feedback'))
+      SubsectionHeader({
+        colors: this.colors,
+        titleKey: 'subsection_feedback',
+        currentLanguage: this.currentLanguage
+      })
       this.VibrationRow()
       this.SoundRow()
       this.SoundStyleRow()
 
       // ============ Language ============
-      this.SubsectionHeader(this.tr('subsection_language'))
+      SubsectionHeader({
+        colors: this.colors,
+        titleKey: 'subsection_language',
+        currentLanguage: this.currentLanguage
+      })
       this.LanguageRow()
     }
     .width('100%')

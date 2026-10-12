@@ -11,6 +11,7 @@ import {
 import { PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
 import { LocationData, LocationHelper } from '../utils/LocationUtils';
 import { LocationCache } from '../utils/LocationCache';
+import { CategoryHeader } from '../components/CategoryHeader';
 import {
   CalculationSource, LocationMode, PickerItem
 } from '../models/SettingsModels';
@@ -172,39 +173,87 @@ struct SettingsPage {
         Scroll() {
           Row() {
             Column() {
-              this.CategoryHeader(
-                this.tr('category_location'), '📍', 'Location'
-              )
+              CategoryHeader({
+                colors: this.colors,
+                icon: '📍',
+                titleKey: 'category_location',
+                categoryKey: 'Location',
+                expanded: this.expandedCategory === 'Location',
+                currentLanguage: this.currentLanguage,
+                onTap: () => {
+                  this.expandedCategory =
+                    this.expandedCategory === 'Location' ? null : 'Location';
+                }
+              })
               if (this.expandedCategory === 'Location') {
                 this.LocationContent()
               }
 
-              this.CategoryHeader(
-                this.tr('category_prayer_times'), '🕌', 'Prayer Times'
-              )
+              CategoryHeader({
+                colors: this.colors,
+                icon: '🕌',
+                titleKey: 'category_prayer_times',
+                categoryKey: 'Prayer Times',
+                expanded: this.expandedCategory === 'Prayer Times',
+                currentLanguage: this.currentLanguage,
+                onTap: () => {
+                  this.expandedCategory =
+                    this.expandedCategory === 'Prayer Times'
+                      ? null : 'Prayer Times';
+                }
+              })
               if (this.expandedCategory === 'Prayer Times') {
                 this.PrayerTimesContent()
               }
 
               if (NOTIFICATIONS_ENABLED || CALENDAR_REMINDERS_ENABLED) {
-                this.CategoryHeader(
-                  this.tr('category_notifications'), '🔔', 'Notifications'
-                )
+                CategoryHeader({
+                  colors: this.colors,
+                  icon: '🔔',
+                  titleKey: 'category_notifications',
+                  categoryKey: 'Notifications',
+                  expanded: this.expandedCategory === 'Notifications',
+                  currentLanguage: this.currentLanguage,
+                  onTap: () => {
+                    this.expandedCategory =
+                      this.expandedCategory === 'Notifications'
+                        ? null : 'Notifications';
+                  }
+                })
                 if (this.expandedCategory === 'Notifications') {
                   this.NotificationsContent()
                 }
               }
 
-              this.CategoryHeader(
-                this.tr('category_hijri_calendar'), '📅', 'Hijri Calendar'
-              )
+              CategoryHeader({
+                colors: this.colors,
+                icon: '📅',
+                titleKey: 'category_hijri_calendar',
+                categoryKey: 'Hijri Calendar',
+                expanded: this.expandedCategory === 'Hijri Calendar',
+                currentLanguage: this.currentLanguage,
+                onTap: () => {
+                  this.expandedCategory =
+                    this.expandedCategory === 'Hijri Calendar'
+                      ? null : 'Hijri Calendar';
+                }
+              })
               if (this.expandedCategory === 'Hijri Calendar') {
                 this.HijriCalendarContent()
               }
 
-              this.CategoryHeader(
-                this.tr('category_about'), 'ℹ️', 'About'
-              )
+              CategoryHeader({
+                colors: this.colors,
+                icon: 'ℹ️',
+                titleKey: 'category_about',
+                categoryKey: 'About',
+                expanded: this.expandedCategory === 'About',
+                currentLanguage: this.currentLanguage,
+                onTap: () => {
+                  this.expandedCategory =
+                    this.expandedCategory === 'About' ? null : 'About';
+                }
+              })
               if (this.expandedCategory === 'About') {
                 this.AboutContent()
               }
@@ -237,10 +286,6 @@ struct SettingsPage {
       .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
 
       // ---- Picker overlay (topmost) ----
-      // Stack-based rather than a second bindSheet: HarmonyOS does
-      // not support two simultaneous bindSheet bindings on the same
-      // component, so the picker would never open while the log
-      // viewer sheet also had a binding on this page.
       if (this.showPickerSheet) {
         this.PickerOverlay(
           this.pickerTitle(),
