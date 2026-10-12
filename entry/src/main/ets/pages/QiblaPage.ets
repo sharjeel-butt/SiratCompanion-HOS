@@ -13,6 +13,7 @@ import {
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_SETTINGS_INITIAL_CATEGORY,
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
 import { QiblaCalculator } from '../qibla/QiblaCalculator';
@@ -612,6 +613,9 @@ export struct QiblaPage {
   }
 
   private openLocationSettings(): void {
+    AppStorage.setOrCreate(
+      STORAGE_KEY_SETTINGS_INITIAL_CATEGORY, 'Location'
+    );
     NavHelper.prepareForward();
     router.pushUrl({ url: 'pages/SettingsPage' })
       .catch((err: Error) =>

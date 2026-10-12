@@ -5,26 +5,26 @@
         "name": "debug",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "C:\\Users\\sharj\\.ohos\\config\\debug_SiratCompanion_tu9KjqcsGm8LgBvXOaEpwxAR8JokrKVL9PIJy0h03CU=.cer",
+          "certpath": "C:/Users/sharj/.ohos/config/debug_SiratCompanion_tu9KjqcsGm8LgBvXOaEpwxAR8JokrKVL9PIJy0h03CU=.cer",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001BAC755796C2B92A03AEB5F994454BD5A5C8AC65FADB752E4AA19F6A49DB1EEF163FA2B486B97D76",
-          "profile": "C:\\Users\\sharj\\.ohos\\config\\debug_SiratCompanion_tu9KjqcsGm8LgBvXOaEpwxAR8JokrKVL9PIJy0h03CU=.p7b",
+          "keyPassword": "0000001B2490A4C79BAD6284B10D3B5EA204DA0C3D3E9B73B358F452D704057A01C897D6E747A40DC754FE",
+          "profile": "C:/Users/sharj/.ohos/config/debug_SiratCompanion_tu9KjqcsGm8LgBvXOaEpwxAR8JokrKVL9PIJy0h03CU=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\sharj\\.ohos\\config\\debug_SiratCompanion_tu9KjqcsGm8LgBvXOaEpwxAR8JokrKVL9PIJy0h03CU=.p12",
-          "storePassword": "0000001B87BA75BECF11F9766B51B17BC173268DEBDFC1B47BB077C31104D56F2C067D819D38275742FA30"
+          "storeFile": "C:/Users/sharj/.ohos/config/debug_SiratCompanion_tu9KjqcsGm8LgBvXOaEpwxAR8JokrKVL9PIJy0h03CU=.p12",
+          "storePassword": "0000001B400FA5C001D4BEA6E8196340E76603F7B34A46FF07AC1220FAF96A345C1630D64A93438169DA92"
         }
       },
       {
         "name": "release",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "D:/Smartphone/Key and Certificate/SiratCompanion/release/release_siratCompanion_21092026.cer",
+          "storeFile": "D:/GitHub/SiratCompanion/secrets/release/release_siratCompanionReleasep12.p12",
+          "storePassword": "0000001E31D324D7DBDF714501E6C53384E07538B0A4D3BF027118786D6ECACFF8990F30855ED008FD41F250FB67",
           "keyAlias": "release_siratcompanionreleasep12",
-          "keyPassword": "0000001E1AA1122C4DCA5D16413A46C7F365C55B09EE7796A3F8E1C265BDA14D87AFAABEACA47108D7F17D602F7C",
-          "profile": "D:/Smartphone/Key and Certificate/SiratCompanion/release/release_siratCompanionReleaseProfileRelease.p7b",
+          "keyPassword": "0000001E682E9DC3E77C963B892840F78E4ACF95299662F2DC177BA5A427681FE9515BAB38960C2D493F48C3E69C",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "D:/Smartphone/Key and Certificate/SiratCompanion/release/release_siratCompanionReleasep12.p12",
-          "storePassword": "0000001EECFE72CE80DBC6063167FB9CD9FD7D563426B88667C1A032A6B913CBD4434F87CAD08CFA49592CC396C4"
+          "profile": "D:/GitHub/SiratCompanion/secrets/release/release_siratCompanionReleaseProfileRelease.p7b",
+          "certpath": "D:/GitHub/SiratCompanion/secrets/release/release_siratCompanion_21092026.cer"
         }
       }
     ],

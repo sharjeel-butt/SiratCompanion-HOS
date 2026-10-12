@@ -15,6 +15,7 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
   STORAGE_KEY_PRAYER_STATE_VERSION,
+  STORAGE_KEY_SETTINGS_INITIAL_CATEGORY,
   STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
@@ -726,6 +727,9 @@ export struct HomePage {
   }
 
   private navigateToSettings(): void {
+    AppStorage.setOrCreate(
+      STORAGE_KEY_SETTINGS_INITIAL_CATEGORY, 'Prayer Times'
+    );
     NavHelper.prepareForward();
     router.pushUrl({ url: 'pages/SettingsPage' })
       .catch((e: Error) =>
@@ -836,6 +840,16 @@ export struct HomePage {
     return 'transparent';
   }
 
+  private navigateToLocationSettings(): void {
+    AppStorage.setOrCreate(
+      STORAGE_KEY_SETTINGS_INITIAL_CATEGORY, 'Location'
+    );
+    NavHelper.prepareForward();
+    router.pushUrl({ url: 'pages/SettingsPage' })
+      .catch((e: Error) =>
+      console.error('Navigation failed:', JSON.stringify(e)));
+  }
+
   private cellTextColor(cell: MonthDayCell): string {
     if (cell.isFuture) {
       return this.colors.textMuted;
@@ -889,8 +903,8 @@ export struct HomePage {
           asrRule: this.asrRule,
           calcSource: this.calcSource,
           showCalcPills: true,
-          onRefreshLocation: () => {
-            this.refreshLocation();
+          onOpenLocationSettings: () => {
+            this.navigateToLocationSettings();
           },
           onOpenSettings: () => {
             this.navigateToSettings();
@@ -1850,8 +1864,15 @@ export struct HomePage {
             `mc-${wi}-${di}-${cell.dayOfMonth}-${cell.completed}-${cell.isToday ? 'T' : ''}`)
           }
           .width('100%').margin({ bottom: 4 })
-        }, (week: MonthDayCell[], wi: number) =>
-        `mw-${wi}-${this.monthProgress.year}-${this.monthProgress.monthIndex}`)
+        }, (week: MonthDayCell[], wi: number) => {
+          // Completion signature: one digit per cell, 0-5. Forces the
+          // week row to rebuild whenever any day's count changes.
+          let sig = '';
+          for (const c of week) {
+            sig += c.completed;
+          }
+          return `mw-${wi}-${this.monthProgress.year}-${this.monthProgress.monthIndex}-${sig}`;
+        })
       }
       .width('100%').direction(Direction.Ltr)
 

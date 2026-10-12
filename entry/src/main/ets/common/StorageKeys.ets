@@ -65,3 +65,5 @@ export const STORAGE_KEY_TIME_FORMAT = 'time_format';
 export const STORAGE_KEY_HIJRI_CALENDAR_TYPE = 'hijri_calendar_type';
 
 export const STORAGE_KEY_CALC_SETTINGS_VERSION = 'calc_settings_version';
+
+export const STORAGE_KEY_SETTINGS_INITIAL_CATEGORY = 'settings_initial_category';

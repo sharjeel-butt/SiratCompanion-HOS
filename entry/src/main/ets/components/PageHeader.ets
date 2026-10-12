@@ -43,8 +43,7 @@ export struct PageHeader {
   @StorageLink(STORAGE_KEY_TIME_FORMAT)
   @Watch('onClockFormatChanged')
   clockFormat: string = ClockFormat.SYSTEM;
-
-  onRefreshLocation: () => void = () => {
+  onOpenLocationSettings: () => void = () => {
   };
   onOpenSettings: () => void = () => {
   };
@@ -141,10 +140,17 @@ export struct PageHeader {
               .color(this.colors.accentGold)
               .margin({ left: 8 })
           } else {
-            Text('📡').fontSize(16).margin({ left: 8 })
+            Image($r('app.media.ic_chevron_right'))
+              .width(16)
+              .height(16)
+              .fillColor(this.colors.accentGold)
+              .opacity(0.7)
+              .objectFit(ImageFit.Contain)
+              .margin({ left: 8 })
           }
         }
         .height(38)
+        .alignItems(VerticalAlign.Center)
         .padding({ left: 14, right: 12 })
         .backgroundColor(this.colors.cardDark)
         .borderRadius(19)
@@ -153,7 +159,7 @@ export struct PageHeader {
         .alignSelf(ItemAlign.Start)
         .hoverEffect(HoverEffect.Highlight)
         .onClick(() => {
-          this.onRefreshLocation();
+          this.onOpenLocationSettings();
         })
       }
       .alignItems(HorizontalAlign.Start)
