@@ -37,10 +37,6 @@ interface ThemeOption {
 @Entry
 @Component
 struct WizardPage {
-  // ============================================================
-  // STORAGE LINKS
-  // ============================================================
-
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
@@ -57,16 +53,9 @@ struct WizardPage {
   breakpoint: string = 'sm';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State step: number = 0;
-  // ---- Step 0: language ----
   @State selectedLanguage: string = AppLanguage.ENGLISH;
-  // ============================================================
-  // WIZARD STATE
-  // ============================================================
-  // ---- Step 1: privacy policy ----
   @State privacyAccepted: boolean = false;
-  // ---- Step 2: theme ----
   @State selectedTheme: string = ThemePreset.SIRAT;
-  // ---- Step 3: location ----
   @State locationMode: LocationMode = LocationMode.GPS;
   @State manualLat: string = '';
   @State manualLng: string = '';
@@ -74,7 +63,6 @@ struct WizardPage {
   @State isGettingLocation: boolean = false;
   @State locationStatus: string = 'idle';
   @State detectedCity: string = '';
-  // ---- Step 4: calculation ----
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
   @State asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
   @State calcSource: CalculationSource = CalculationSource.LOCAL;
@@ -83,10 +71,6 @@ struct WizardPage {
   @State showSourcePicker: boolean = false;
   @State private currentLanguage: string = AppLanguage.ENGLISH;
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
-
-  // ============================================================
-  // LOCALIZATION + DIRECTION + BREAKPOINT HELPERS
-  // ============================================================
 
   aboutToAppear(): void {
     this.currentLanguage = this.appLanguage;
@@ -110,10 +94,6 @@ struct WizardPage {
     this.colors = PageTheme.compute(this.themeMode);
   }
 
-  // ============================================================
-  // WATCHERS
-  // ============================================================
-
   pageTransition() {
     PageTransitionEnter({ type: RouteType.Push, duration: 300, curve: Curve.Friction })
       .opacity(0)
@@ -135,10 +115,8 @@ struct WizardPage {
       Column() {
         this.ProgressHeader()
 
-        // Constrained content wrapper for tablet.
         Row() {
           Column() {
-            // ---- Title + description ----
             Column() {
               Text(this.stepTitle())
                 .fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
@@ -159,7 +137,6 @@ struct WizardPage {
             })
             .alignItems(HorizontalAlign.Start)
 
-            // ---- Step content ----
             if (this.step === 0) {
               this.LanguageStep()
             } else if (this.step === 1) {
@@ -180,7 +157,6 @@ struct WizardPage {
         .justifyContent(FlexAlign.Center)
         .layoutWeight(1)
 
-        // Constrained footer for tablet.
         Row() {
           Column() {
             this.Footer()
@@ -361,10 +337,6 @@ struct WizardPage {
     .edgeEffect(EdgeEffect.Spring)
   }
 
-  // ============================================================
-  // LIFECYCLE
-  // ============================================================
-
   @Builder
   PrivacyStep() {
     Column() {
@@ -455,7 +427,6 @@ struct WizardPage {
       Column() {
         ForEach(this.getThemeOptions(), (opt: ThemeOption) => {
           Row() {
-            // ---- Preview swatch: mini card in the theme's colours ----
             Stack() {
               Column()
                 .width('100%').height('100%')
@@ -493,7 +464,6 @@ struct WizardPage {
             .alignItems(HorizontalAlign.Start)
             .layoutWeight(1).margin({ left: 14 })
 
-            // ---- Selection indicator ----
             Stack() {
               if (opt.id === this.selectedTheme) {
                 Text('✓')
@@ -821,10 +791,6 @@ struct WizardPage {
       })
   }
 
-  // ============================================================
-  // PAGE TRANSITION
-  // ============================================================
-
   @Builder
   ConventionStep() {
     Scroll() {
@@ -923,10 +889,6 @@ struct WizardPage {
     .edgeEffect(EdgeEffect.Spring)
   }
 
-  // ============================================================
-  // STEP NAVIGATION
-  // ============================================================
-
   @Builder
   Footer() {
     Row() {
@@ -965,6 +927,7 @@ struct WizardPage {
     onSelect: (id: string) => void,
     onCancel: () => void
   ) {
+    // ---- Dim backdrop ----
     Column()
       .width('100%').height('100%')
       .backgroundColor(this.colors.overlayDim)
@@ -972,6 +935,7 @@ struct WizardPage {
         onCancel();
       })
 
+    // ---- Bottom sheet ----
     Column() {
       Row()
         .width(44)
@@ -997,56 +961,62 @@ struct WizardPage {
 
       Divider().color(this.colors.borderSoft).width('90%')
 
-      Column() {
-        ForEach(items, (item: PickerItem) => {
-          Row() {
+      Scroll() {
+        Column() {
+          ForEach(items, (item: PickerItem) => {
             Row() {
-              if (item.selected) {
-                Row().width(10).height(10).borderRadius(5)
-                  .backgroundColor(this.colors.accentGold)
+              Row() {
+                if (item.selected) {
+                  Row().width(10).height(10).borderRadius(5)
+                    .backgroundColor(this.colors.accentGold)
+                }
               }
-            }
-            .width(22)
-            .height(22)
-            .borderRadius(11)
-            .border({
-              width: item.selected ? 2 : 1.5,
-              color: item.selected ? this.colors.accentGold : this.colors.borderStrong
-            })
-            .justifyContent(FlexAlign.Center)
-            .alignItems(VerticalAlign.Center)
+              .width(22)
+              .height(22)
+              .borderRadius(11)
+              .border({
+                width: item.selected ? 2 : 1.5,
+                color: item.selected ? this.colors.accentGold : this.colors.borderStrong
+              })
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Center)
 
-            Text(item.label)
-              .fontSize(15)
-              .fontColor(item.selected ? this.colors.accentGold : this.colors.textWhite)
-              .fontWeight(item.selected ? FontWeight.Bold : FontWeight.Normal)
-              .layoutWeight(1)
-              .maxLines(2)
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-              .margin({ left: 14 })
-          }
-          .width('100%')
-          .padding({
-            top: 16,
-            bottom: 16,
-            left: 20,
-            right: 20
-          })
-          .backgroundColor(item.selected ? this.colors.tintSoft : 'transparent')
-          .borderRadius(12)
-          .margin({ bottom: 4 })
-          .onClick(() => {
-            onSelect(item.id);
-          })
-        }, (item: PickerItem) => item.id)
+              Text(item.label)
+                .fontSize(15)
+                .fontColor(item.selected ? this.colors.accentGold : this.colors.textWhite)
+                .fontWeight(item.selected ? FontWeight.Bold : FontWeight.Normal)
+                .layoutWeight(1)
+                .maxLines(2)
+                .textOverflow({ overflow: TextOverflow.Ellipsis })
+                .margin({ left: 14 })
+            }
+            .width('100%')
+            .padding({
+              top: 16,
+              bottom: 16,
+              left: 20,
+              right: 20
+            })
+            .backgroundColor(item.selected ? this.colors.tintSoft : 'transparent')
+            .borderRadius(12)
+            .margin({ bottom: 4 })
+            .onClick(() => {
+              onSelect(item.id);
+            })
+          }, (item: PickerItem) => item.id)
+        }
+        .width('100%')
+        .padding({
+          left: 8,
+          right: 8,
+          top: 12,
+          bottom: 12
+        })
       }
+      .layoutWeight(1)
       .width('100%')
-      .padding({
-        left: 8,
-        right: 8,
-        top: 12,
-        bottom: 12
-      })
+      .scrollBar(BarState.Auto)
+      .edgeEffect(EdgeEffect.Spring)
 
       Button(this.tr('cancel'))
         .width('90%')
@@ -1062,6 +1032,7 @@ struct WizardPage {
         })
     }
     .width('100%')
+    .height('70%')
     .backgroundColor(this.colors.cardDark)
     .borderRadius({ topLeft: 28, topRight: 28 })
     .shadow({
@@ -1082,10 +1053,6 @@ struct WizardPage {
     return L.isRtlLang(this.currentLanguage);
   }
 
-  // ============================================================
-  // STEP 0 — LANGUAGE
-  // ============================================================
-
   private isTablet(): boolean {
     return Breakpoints.isTablet(this.breakpoint);
   }
@@ -1094,20 +1061,11 @@ struct WizardPage {
     this.colors = PageTheme.compute(this.themeMode);
   }
 
-  // ============================================================
-  // STEP 1 — PRIVACY POLICY
-  // ============================================================
-
   private onLanguageChanged(): void {
     this.currentLanguage = this.appLanguage;
   }
 
-  // ============================================================
-  // STEP 2 — THEME
-  // ============================================================
-
   private onAppThemeChanged(): void {
-    // Recompute the wizard's palette the instant a new theme is picked.
     this.colors = PageTheme.compute(this.themeMode);
     this.selectedTheme = this.appTheme;
   }
@@ -1128,16 +1086,11 @@ struct WizardPage {
   }
 
   private canProceed(): boolean {
-    // Step 1 (privacy) requires acceptance.
     if (this.step === 1 && !this.privacyAccepted) {
       return false;
     }
     return true;
   }
-
-  // ============================================================
-  // STEP 3 — LOCATION
-  // ============================================================
 
   private goNext(): void {
     if (!this.canProceed()) {
@@ -1165,10 +1118,6 @@ struct WizardPage {
       .catch((err: Error) => console.error('Wizard finish failed:', JSON.stringify(err)));
   }
 
-  // ============================================================
-  // STEP 4 — CALCULATION
-  // ============================================================
-
   private getLanguageOptions(): LanguageOption[] {
     const en: LanguageOption = {
       id: AppLanguage.ENGLISH, nativeName: 'English', englishName: 'English'
@@ -1192,10 +1141,6 @@ struct WizardPage {
   private getPrivacyPolicyText(): string {
     return PrivacyPolicyProvider.get(this.currentLanguage);
   }
-
-  // ============================================================
-  // HEADER TEXT
-  // ============================================================
 
   private getThemeOptions(): ThemeOption[] {
     const sirat: ThemeOption = {
@@ -1226,10 +1171,6 @@ struct WizardPage {
     return [sirat, current, h7, h6, h5];
   }
 
-  /**
-   * Applies the theme immediately — both to the persisted setting
-   * and to the wizard's own colours.
-   */
   private pickAppTheme(id: string): void {
     this.selectedTheme = id;
     this.appTheme = id;
@@ -1237,11 +1178,6 @@ struct WizardPage {
     this.colors = PageTheme.compute(this.themeMode);
   }
 
-  // ============================================================
-  // BUILD
-  // ============================================================
-
-  /** Preview swatch — accent colour for the current mode. */
   private themePreviewSwatch(preset: string): string {
     const preview = Theme.getColors(
       this.themeMode,
@@ -1251,11 +1187,6 @@ struct WizardPage {
     return preview.accentGold;
   }
 
-  // ============================================================
-  // PROGRESS HEADER
-  // ============================================================
-
-  /** Preview background — page background for the current mode. */
   private themePreviewBackground(preset: string): string {
     const preview = Theme.getColors(
       this.themeMode,
@@ -1264,10 +1195,6 @@ struct WizardPage {
     );
     return preview.primaryGreen;
   }
-
-  // ============================================================
-  // STEP 0 — LANGUAGE
-  // ============================================================
 
   private async requestGpsLocation(): Promise<void> {
     if (this.isGettingLocation) {
@@ -1296,10 +1223,6 @@ struct WizardPage {
       this.isGettingLocation = false;
     }
   }
-
-  // ============================================================
-  // STEP 1 — PRIVACY POLICY
-  // ============================================================
 
   private async saveManualCoords(): Promise<void> {
     const lat = parseFloat(this.manualLat.trim());
@@ -1345,10 +1268,6 @@ struct WizardPage {
     });
   }
 
-  // ============================================================
-  // STEP 2 — THEME
-  // ============================================================
-
   private async selectLocationMode(mode: LocationMode): Promise<void> {
     this.locationMode = mode;
     this.locationStatus = 'idle';
@@ -1359,10 +1278,6 @@ struct WizardPage {
     }
     SettingsHelper.saveLocationMode(mode);
   }
-
-  // ============================================================
-  // STEP 3 — LOCATION
-  // ============================================================
 
   private pickMethod(id: string): void {
     const method = id as CalculationMethod;
@@ -1378,10 +1293,6 @@ struct WizardPage {
     this.showAsrPicker = false;
   }
 
-  // ============================================================
-  // STEP 4 — CONVENTION / MADHAB / SOURCE
-  // ============================================================
-
   private pickSource(id: string): void {
     const source = id as CalculationSource;
     if (source === CalculationSource.API) {
@@ -1395,10 +1306,6 @@ struct WizardPage {
     SettingsHelper.saveSource(source);
     this.showSourcePicker = false;
   }
-
-  // ============================================================
-  // FOOTER
-  // ============================================================
 
   private stepTitle(): string {
     if (this.step === 0) {
@@ -1415,10 +1322,6 @@ struct WizardPage {
     }
     return this.tr('wizard_convention_title');
   }
-
-  // ============================================================
-  // PICKER OVERLAY
-  // ============================================================
 
   private stepDescription(): string {
     if (this.step === 0) {

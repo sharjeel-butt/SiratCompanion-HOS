@@ -117,6 +117,25 @@ struct MainTabs {
     }
   }
 
+  /**
+   * Color for the menu popup's icons and labels.
+   *
+   * The menu popup's background tracks the system theme, not the
+   * app's themeMode setting. So the icon and label colors are picked
+   * from the system state directly, ensuring they always contrast.
+   */
+  private menuIconColor(): string {
+    return PageTheme.isSystemDark()
+      ? '#FFFFFF'
+      : '#1A1A1A';
+  }
+
+  private menuTextColor(): string {
+    return PageTheme.isSystemDark()
+      ? '#FFFFFF'
+      : '#1A1A1A';
+  }
+
   private currentTabTitle(): string {
     switch (this.currentIndex) {
       case 0:
@@ -311,32 +330,101 @@ struct MainTabs {
   @Builder
   HamburgerMenuContent() {
     Menu() {
-      MenuItem({
-        startIcon: $r('app.media.ic_menu_customize'),
-        content: L.get('title_customize', this.currentLanguage)
-      })
-        .onClick(() => {
-          this.isMenuVisible = false;
-          this.closeMenuAndNavigate('pages/CustomizePage');
-        })
+      MenuItem() {
+        Row() {
+          Image($r('app.media.ic_menu_customize'))
+            .width(20)
+            .height(20)
+            .fillColor(this.menuIconColor())
+            .objectFit(ImageFit.Contain)
+            .flexShrink(0)
 
-      MenuItem({
-        startIcon: $r('app.media.ic_menu_settings'),
-        content: L.get('title_settings', this.currentLanguage)
-      })
-        .onClick(() => {
-          this.isMenuVisible = false;
-          this.closeMenuAndNavigate('pages/SettingsPage');
+          Text(L.get('title_customize', this.currentLanguage))
+            .fontSize(15)
+            .fontColor(this.menuTextColor())
+            .fontWeight(FontWeight.Medium)
+            .margin(this.isRtl() ? { right: 12 } : { left: 12 })
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .layoutWeight(1)
+        }
+        .width('100%')
+        .padding({
+          top: 10,
+          bottom: 10,
+          left: this.isRtl() ? 20 : 14,
+          right: this.isRtl() ? 14 : 20
         })
+        .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+      }
+      .onClick(() => {
+        this.isMenuVisible = false;
+        this.closeMenuAndNavigate('pages/CustomizePage');
+      })
 
-      MenuItem({
-        startIcon: $r('app.media.ic_menu_exit'),
-        content: L.get('exit', this.currentLanguage)
-      })
-        .onClick(() => {
-          this.isMenuVisible = false;
-          this.exitApp();
+      MenuItem() {
+        Row() {
+          Image($r('app.media.ic_menu_settings'))
+            .width(20)
+            .height(20)
+            .fillColor(this.menuIconColor())
+            .objectFit(ImageFit.Contain)
+            .flexShrink(0)
+
+          Text(L.get('title_settings', this.currentLanguage))
+            .fontSize(15)
+            .fontColor(this.menuTextColor())
+            .fontWeight(FontWeight.Medium)
+            .margin(this.isRtl() ? { right: 12 } : { left: 12 })
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .layoutWeight(1)
+        }
+        .width('100%')
+        .padding({
+          top: 10,
+          bottom: 10,
+          left: this.isRtl() ? 20 : 14,
+          right: this.isRtl() ? 14 : 20
         })
+        .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+      }
+      .onClick(() => {
+        this.isMenuVisible = false;
+        this.closeMenuAndNavigate('pages/SettingsPage');
+      })
+
+      MenuItem() {
+        Row() {
+          Image($r('app.media.ic_menu_exit'))
+            .width(20)
+            .height(20)
+            .fillColor(this.menuIconColor())
+            .objectFit(ImageFit.Contain)
+            .flexShrink(0)
+
+          Text(L.get('exit', this.currentLanguage))
+            .fontSize(15)
+            .fontColor(this.menuTextColor())
+            .fontWeight(FontWeight.Medium)
+            .margin(this.isRtl() ? { right: 12 } : { left: 12 })
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .layoutWeight(1)
+        }
+        .width('100%')
+        .padding({
+          top: 10,
+          bottom: 10,
+          left: this.isRtl() ? 20 : 14,
+          right: this.isRtl() ? 14 : 20
+        })
+        .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+      }
+      .onClick(() => {
+        this.isMenuVisible = false;
+        this.exitApp();
+      })
     }
   }
 
