@@ -285,6 +285,17 @@ export default class EntryAbility extends UIAbility {
     }
   }
 
+  onBackground(): void {
+    // Flush any pending debounced preference write before the process
+    // is suspended. Fire-and-forget — onBackground is synchronous.
+    PreferencesHelper.flushNow().catch((err: Error) => {
+      AppLogger.warn(
+        'EntryAbility',
+        `Flush on background failed: ${err.message}`
+      );
+    });
+  }
+
   // ============================================================
   // REMINDER RENEWAL
   // ============================================================

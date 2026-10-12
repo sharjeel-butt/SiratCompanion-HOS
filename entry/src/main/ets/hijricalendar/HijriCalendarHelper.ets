@@ -5,6 +5,7 @@ import {
   EventRecurrence, IslamicEvent
 } from '../models/DateModels';
 import { IMPORTANT_ISLAMIC_EVENTS } from '../data/IslamicEvents';
+import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
 
 export const HIJRI_MONTH_NAMES: string[] = [
   'Muharram',
@@ -28,35 +29,33 @@ export const DAYS_OF_WEEK_SHORT: string[] = [
 const MS_PER_DAY = 86400000;
 
 export class HijriCalendarHelper {
-  // Formatter is expensive to construct — cache once.
-  private static formatter: Intl.DateTimeFormat | null = null;
 
   /**
    * Return the Hijri date for a given Gregorian date, after applying
    * the user's offset (in days). Positive offset moves the Hijri date
    * forward (a day later than the civil calculation).
+   *
+   * Conversion runs through whichever engine the user has selected
+   * in Settings → Hijri Calendar (Umm al-Qura or Tabular), so the
+   * calendar page matches the Home header, the Home countdown card,
+   * and the Hijri offset preview.
    */
   static getHijriDate(date: Date, offsetDays: number): HijriDate {
     const adjusted = new Date(date.getTime());
     adjusted.setDate(adjusted.getDate() + offsetDays);
 
-    const parts = HijriCalendarHelper.getFormatter().formatToParts(adjusted);
-
-    let y = 0;
-    let m = 0;
-    let d = 0;
-    for (const p of parts) {
-      if (p.type === 'year') {
-        y = parseInt(p.value, 10);
-      } else if (p.type === 'month') {
-        m = parseInt(p.value, 10);
-      } else if (p.type === 'day') {
-        d = parseInt(p.value, 10);
-      }
+    const h = HijriEngineResolver.current().toHijri(adjusted);
+    if (h !== null) {
+      return h;
     }
 
-    const result: HijriDate = { year: y, month: m, day: d };
-    return result;
+    // The engines return null only when the Gregorian Julian Day
+    // Number is negative — i.e. a date before 4713 BC. Unreachable
+    // for any date a user can enter through the UI. Return a
+    // neutral placeholder rather than throwing so a stray call
+    // from a preview or a test harness cannot crash the page.
+    const placeholder: HijriDate = { year: 0, month: 0, day: 0 };
+    return placeholder;
   }
 
   static monthName(month: number): string {
@@ -148,7 +147,12 @@ export class HijriCalendarHelper {
   }
 
   /**
-   * Event names that fall on a given Hijri month/day.
+   * Event keys that fall on a given Hijri month/day.
+   *
+   * Returns the stable `IslamicEvent.key` (e.g. 'ashura', 'eid_fitr'),
+   * not the English display name. Callers that need a localized label
+   * should resolve it via `L.get('event_' + key, lang)`, matching how
+   * every other event surface in the app works.
    *
    * @param hijriMonth  Hijri month of the cell.
    * @param hijriDay    Hijri day of the cell.
@@ -164,19 +168,16 @@ export class HijriCalendarHelper {
     const out: string[] = [];
     for (const e of IMPORTANT_ISLAMIC_EVENTS) {
       if (e.recurrence === EventRecurrence.FIRST_THURSDAY_NIGHT) {
-        // Match the first Thursday of the month: the cell must be a
-        // Thursday, in the target Hijri month, in the first seven
-        // days of that month.
         if (gregorianDate !== undefined &&
           e.month === hijriMonth &&
           gregorianDate.getDay() === 4 &&
           hijriDay >= 1 && hijriDay <= 7) {
-          out.push(e.name);
+          out.push(e.key);
         }
         continue;
       }
       if (e.month === hijriMonth && e.day === hijriDay) {
-        out.push(e.name);
+        out.push(e.key);
       }
     }
     return out;
@@ -211,15 +212,5 @@ export class HijriCalendarHelper {
     }
     return `${monthShort(first)} ${first.getDate()} – ` +
       `${monthShort(last)} ${last.getDate()}, ${year}`;
-  }
-
-  private static getFormatter(): Intl.DateTimeFormat {
-    if (HijriCalendarHelper.formatter === null) {
-      HijriCalendarHelper.formatter = new Intl.DateTimeFormat(
-        'en-u-ca-islamic',
-        { day: 'numeric', month: 'numeric', year: 'numeric' }
-      );
-    }
-    return HijriCalendarHelper.formatter;
   }
 }
