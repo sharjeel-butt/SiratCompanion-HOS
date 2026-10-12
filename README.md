@@ -5,7 +5,7 @@
 Prayer times, Qibla compass, Tasbih, and Hijri calendar — all in one calm, modern app that respects your settings and
 your battery.
 
-**Version 2.5.0** &nbsp;·&nbsp; **HarmonyOS 6+ (API 20+)** &nbsp;·&nbsp; **English · 中文 · العربية**
+**Version 3.2.0** · **HarmonyOS 6+ (API 21+)** · **English · 中文 · العربية**
 
 > On HarmonyOS 7 (API 26+) the bottom navigation bar uses the native immersive system material. On earlier releases it
 > falls back to a translucent blurred bar with identical behaviour.
@@ -18,21 +18,23 @@ your battery.
 ## Table of Contents
 
 1. [Features](#features)
-2. [Getting Started](#getting-started)
-3. [Configuration](#configuration)
-4. [Permissions](#permissions)
-5. [Localization](#localization)
-6. [Project Structure](#project-structure)
-7. [Navigation Architecture](#navigation-architecture)
-8. [Theming](#theming)
-9. [Immersive Material (HarmonyOS 7)](#immersive-material-harmonyos-7)
-10. [Prayer Reminders](#prayer-reminders)
-11. [Testing Reminders](#testing-reminders)
-12. [Timezone Handling](#timezone-handling)
-13. [Roadmap](#roadmap)
-14. [Contributing](#contributing)
-15. [Known Limitations](#known-limitations)
-16. [License](#license)
+2. [Screenshots](#screenshots)
+3. [Getting Started](#getting-started)
+4. [Configuration](#configuration)
+5. [Permissions](#permissions)
+6. [Localization](#localization)
+7. [Project Structure](#project-structure)
+8. [Navigation Architecture](#navigation-architecture)
+9. [Theming](#theming)
+10. [Immersive Material (HarmonyOS 7)](#immersive-material-harmonyos-7)
+11. [Prayer Reminders](#prayer-reminders)
+12. [Testing Reminders](#testing-reminders)
+13. [Timezone Handling](#timezone-handling)
+14. [Backup and Restore](#backup-and-restore)
+15. [Roadmap](#roadmap)
+16. [Contributing](#contributing)
+17. [Known Limitations](#known-limitations)
+18. [License](#license)
 
 ---
 
@@ -41,28 +43,55 @@ your battery.
 ### Prayer Times
 
 - Five daily prayers: Fajr, Dhuhr, Asr, Maghrib, Isha
-- Four calculation conventions
+- **Twenty-four calculation methods** — full Adhan-library parity (Karachi, Jafari, ISNA, MWL, Umm al-Qura, Egyptian,
+  Sunni Iraq, Qatar, Singapore, France, Turkey, Russia, UAE, Moonsighting Committee, Dubai, Kuwait, France 15°, France
+  18°, Turkey Europe, Tehran, Indonesia (KEMENAG), Algeria, Brunei, Custom)
 - Two Asr shadow rules: Standard and Hanafi
 - Extra timings: Imsak, Sunrise, Sunset, First Third, Midnight, Last Third
 - Per-prayer minute offsets (±60)
-- High-latitude rules: None, Middle of Night, One Seventh, Angle Based
+- High-latitude rules: None, Middle of Night, One Seventh, Angle Based, Proportional Depression
+- **Advanced Calculation page** — Rounding Method, Midnight Method, High-Latitude Rule, Polar Resolution, Shafaq, Custom
+  Angles
 - Timeline-aware **Next** — after Isha shows First Third, Midnight, Last Third, Imsak, then tomorrow's Fajr
 - Time-based **Current / Next** header that never lies about the active prayer
+- **Pre-Fajr fallback** — before Fajr, the app shows the previous day's Isha as the current prayer
 - Custom sun-path visualization
     - Full 24-hour arc — the ticker travels continuously from 12:00 AM to 11:59 PM without reversing
     - Smooth slide-back animation at midnight
     - Per-prayer dotted leaders, sunrise/sunset markers, live "We are here" ticker
+  - Full-height dotted guides for First Third / Midnight / Last Third
 - Jummah rename on Fridays, applied consistently to the header and the timeline
 - "Today" shortcut in the day navigator to return to the current date
+- **Time format setting** — System / 12-hour / 24-hour, applied live across every surface
 
-#### Calculation Conventions
+#### Calculation Methods
 
-| Convention                          | Fajr angle | Isha angle |
-|-------------------------------------|------------|------------|
-| Karachi (Univ. of Islamic Sciences) | 18°        | 18°        |
-| ISNA (North America)                | 15°        | 15°        |
-| MWL (Muslim World League)           | 18°        | 17°        |
-| Jafari (Leva Institute, Qum)        | 16°        | 14°        |
+| Method                 | Region                                  | Fajr angle | Isha angle |
+|------------------------|-----------------------------------------|------------|------------|
+| Karachi                | University of Islamic Sciences          | 18°        | 18°        |
+| ISNA                   | North America                           | 15°        | 15°        |
+| MWL                    | Muslim World League                     | 18°        | 17°        |
+| Jafari                 | Shia Ithna Ashari (Leva Institute, Qum) | 16°        | 14°        |
+| Umm al-Qura            | Makkah                                  | 18.5°      | 90 min     |
+| Egyptian               | Egyptian Survey                         | 19.5°      | 17.5°      |
+| Sunni Iraq             | Sunni Endowment                         | 19.5°      | 17.5°      |
+| Qatar                  | Qatar Awqaf                             | 18°        | 90 min     |
+| Singapore              | MUIS                                    | 20°        | 18°        |
+| France                 | UOIF                                    | 12°        | 12°        |
+| Turkey                 | Diyanet                                 | 18°        | 17°        |
+| Russia                 | SAMR                                    | 16°        | 15°        |
+| UAE                    | GIAE                                    | 18.2°      | 18.2°      |
+| Moonsighting Committee | Worldwide                               | 18°        | 18°        |
+| Dubai                  | Gulf Region                             | 18.2°      | 18.2°      |
+| Kuwait                 | Kuwait                                  | 18°        | 17.5°      |
+| France 15°             | France (alternative)                    | 15°        | 15°        |
+| France 18°             | France (alternative)                    | 18°        | 18°        |
+| Turkey Europe          | Diyanet Europe                          | 18°        | 17°        |
+| Tehran                 | Institute of Geophysics                 | 17.7°      | 14°        |
+| Indonesia              | KEMENAG                                 | 20°        | 18°        |
+| Algeria                | Ministry of Religious Affairs           | 18°        | 17°        |
+| Brunei                 | Kementrian Hal Ehwal Ugama              | 20°        | 18°        |
+| Custom                 | User-defined                            | —          | —          |
 
 ### Home Dashboard
 
@@ -70,7 +99,7 @@ your battery.
 - Current and best streaks
 - Weekly grid and monthly heatmap
 - Lifetime Tasbih statistics
-- Upcoming Islamic event countdown honoring the Hijri offset
+- Upcoming Islamic event countdown honoring the Hijri offset and calendar type
 - Ramadan card with fasting window, three Ashras, Laylat al-Qadr nights, and Jummah tul Widah
 - Live countdown to Imsak and Maghrib (opens 15 min before, holds 5 min after with the appropriate Dua displayed)
 - Pull-to-refresh
@@ -80,10 +109,10 @@ your battery.
 
 Prayer reminders are delivered through one of two interchangeable backends. Both fire even when the app is closed.
 
-| Backend                    | Status               | Mechanism                                                                           | Requires                                           |
-|----------------------------|----------------------|-------------------------------------------------------------------------------------|----------------------------------------------------|
-| **Calendar Kit**           | **Active**           | Writes prayer events into a dedicated system calendar account with reminder offsets | `READ_CALENDAR` + `WRITE_CALENDAR` (user-granted)  |
-| **Agent-Powered Reminder** | Pending AGC approval | Uses `reminderAgentManager.publishReminder()`                                       | `PUBLISH_AGENT_REMINDER` (AGC capability approval) |
+| Backend                    | Status               | Mechanism                                                                           | Requires                                         |
+|----------------------------|----------------------|-------------------------------------------------------------------------------------|--------------------------------------------------|
+| **Calendar Kit**           | **Active**           | Writes prayer events into a dedicated system calendar account with reminder offsets | READ_CALENDAR + WRITE_CALENDAR (user-granted)    |
+| **Agent-Powered Reminder** | Pending AGC approval | Uses reminderAgentManager.publishReminder()                                         | PUBLISH_AGENT_REMINDER (AGC capability approval) |
 
 - Two reminders per prayer: one at a configurable lead time (5–60 min), one at exact time
 - Per-prayer toggles
@@ -122,11 +151,21 @@ Prayer reminders are delivered through one of two interchangeable backends. Both
 
 ### Hijri Calendar
 
+- **Dual Hijri calendar engines** — Umm al-Qura (KACST table 1318–1500 AH) and Tabular (arithmetical with civil epoch)
 - Gregorian and Hijri dates side by side
 - Upcoming Islamic events highlighted in the grid
 - ±3 day offset for local moon-sighting differences
 - Offset applies everywhere — top pill, prayer-list header, calendar, event countdown, Ramadan card
 - Localized month names in all three languages
+- Calendar type setting honored on every surface — calendar grid, Home pill, Home countdown, Prayer header
+
+### Backup and Restore
+
+- **Full system backup support** — implements `BackupExtensionAbility.onBackup()` and `onRestore()`
+- Preserves all settings (`sirat_settings` store) and Tasbih data (`tasbih_prefs` store) across device migration
+- Language, theme, Hijri offset, calculation method, location, notification config, prayer-check state, all Tasbihs, all
+  Dhikr counts, and lifetime totals survive a device switch
+- Diagnostic log excluded from backup so it regenerates fresh
 
 ### Design
 
@@ -146,28 +185,71 @@ Prayer reminders are delivered through one of two interchangeable backends. Both
 
 ---
 
+## Screenshots
+
+Every screen is available in **three device classes** — Phone, Tablet, and PC (2-in-1 / desktop window) — each captured
+in all **three languages** (English, 中文, العربية).
+
+The screenshot set covers ten screens per device and language:
+
+| #  | Screen                | File         |
+|----|-----------------------|--------------|
+| 01 | Home dashboard        | 01_home      |
+| 02 | Prayer times timeline | 02_prayers   |
+| 03 | Sun path arc          | 03_sunpath   |
+| 04 | Qibla compass         | 04_qibla     |
+| 05 | Tasbih                | 05_tasbih    |
+| 06 | Hijri calendar        | 06_calendar  |
+| 07 | Islamic events        | 07_events    |
+| 08 | Settings              | 08_settings  |
+| 09 | Customize             | 09_customize |
+| 10 | Advanced Calculation  | 10_advanced  |
+
+### Directory layout
+
+```
+screenshot/
+├── Phone/
+│   ├── En/      01_home.png … 10_advanced.png
+│   ├── Zh/      01_home.png … 10_advanced.png
+│   └── Ar/      01_home.png … 10_advanced.png
+├── Tablet/
+│   ├── En/      01_home.jpg … 10_advanced.jpg
+│   ├── Zh/      01_home.jpg … 10_advanced.jpg
+│   └── Ar/      01_home.jpg … 10_advanced.jpg
+└── PC/
+    ├── En/      01_home.jpg … 10_advanced.jpg
+    ├── Zh/      01_home.jpg … 10_advanced.jpg
+    └── Ar/      01_home.jpg … 10_advanced.jpg
+```
+
+A browsable gallery with device tabs, language tabs, and a keyboard-navigable lightbox is available at *
+*screenshots.html** in the repository root.
+
+---
+
 ## Getting Started
 
 ### Prerequisites
 
 - DevEco Studio 5.0 or later
-- HarmonyOS SDK API 20+
+- HarmonyOS SDK API 21+
 - For immersive material features: HarmonyOS 7 device (API 26+)
 - A HarmonyOS device or emulator (see [Known Limitations](#known-limitations))
-- Node.js 18+ and `ohpm` (installed with DevEco Studio)
+- Node.js 18+ and ohpm (installed with DevEco Studio)
 
 ### Install and Run
 
 **1. Clone the repository**
 
-```bash
-git clone https://github.com/your-org/sirat-companion.git
-cd sirat-companion
+```
+git clone https://github.com/sharjeel-butt/SiratCompanion-HOS.git
+cd SiratCompanion-HOS
 ```
 
 **2. Open in DevEco Studio**
 
-File → Open → select the `sirat-companion` folder.
+File → Open → select the SiratCompanion-HOS folder.
 
 **3. Sync dependencies**
 
@@ -176,18 +258,18 @@ File → Sync and Refresh Project.
 **4. Select a device**
 
 - Physical device: connect via USB, enable Developer Options and USB Debugging
-- Emulator: Device Manager → Create Emulator → API 20+ → Start
+- Emulator: Device Manager → Create Emulator → API 21+ → Start
 
 **5. Build and run**
 
-Press `Shift + F10` or use Build → Build Hap(s).
+Press Shift + F10 or use Build → Build Hap(s).
 
 ### Building a Release HAP
 
 1. Sign the app in DevEco Studio: Build → Generate Key and CSR
 2. Build: Build → Build Hap(s) / App(s) → Build Hap(s)
 
-The signed HAP appears under `entry/build/default/outputs/default/`.
+The signed HAP appears under entry/build/default/outputs/default/.
 
 ---
 
@@ -197,6 +279,7 @@ The signed HAP appears under `entry/build/default/outputs/default/`.
 
 **Default:** Karachi
 **Location:** Settings → Prayer Times → Convention
+**Options:** 24 methods — see the table in [Features](#features)
 
 ### Asr Rule
 
@@ -206,7 +289,20 @@ The signed HAP appears under `entry/build/default/outputs/default/`.
 ### High-Latitude Rule
 
 **Default:** None
-**Location:** Settings → Prayer Times → High Latitude
+**Location:** Settings → Prayer Times → Advanced Calculation → High Latitude
+**Options:** None, Middle of Night, One Seventh, Angle Based, Proportional Depression
+
+### Advanced Calculation
+
+**Location:** Settings → Prayer Times → Advanced Calculation
+**Options:**
+
+- Rounding Method — Nearest, Up, None
+- Midnight Method — Sunset to Sunrise, Sunset to Fajr
+- High-Latitude Rule — see above
+- Polar Resolution — Unresolved, Aqrab Balad, Aqrab Yaum
+- Shafaq — General, Ahmer, Abyad
+- Custom Angles — Fajr angle, Isha angle, Isha interval (only with Custom method)
 
 ### Location Mode
 
@@ -217,6 +313,19 @@ The signed HAP appears under `entry/build/default/outputs/default/`.
 
 **Location:** Settings → Hijri Calendar → Hijri Date & Calendar Offset
 Shifts all Islamic dates by ±3 days.
+
+### Hijri Calendar Type
+
+**Location:** Settings → Hijri Calendar → Calendar Type
+**Options:**
+
+- Umm al-Qura — official calendar of Saudi Arabia (1318–1500 AH)
+- Tabular (Arithmetical) — Kuwaiti algorithm, deterministic for all years
+
+### Time Format
+
+**Location:** Customize → UI Customization → Time Format
+**Options:** Use System Settings, 12-hour (AM/PM), 24-hour
 
 ### Theme Mode
 
@@ -253,20 +362,22 @@ time — see [Prayer Reminders](#prayer-reminders).
 
 ## Permissions
 
-Declared in `entry/src/main/module.json5`.
+Declared in entry/src/main/module.json5.
 
-| Permission                               | Purpose                                          | Requested                                   |
-|------------------------------------------|--------------------------------------------------|---------------------------------------------|
-| `ohos.permission.APPROXIMATELY_LOCATION` | Approximate location for prayer times            | On first GPS request                        |
-| `ohos.permission.LOCATION`               | Precise location for prayer times                | On first GPS request                        |
-| `ohos.permission.ACCELEROMETER`          | Compass and Qibla direction                      | On Compass open                             |
-| `ohos.permission.VIBRATE`                | Haptic feedback on Tasbih counts                 | Declared only, no runtime request           |
-| `ohos.permission.READ_CALENDAR`          | Read the app's own calendar events for cleanup   | On first reminder enable (Calendar backend) |
-| `ohos.permission.WRITE_CALENDAR`         | Write prayer reminder events to the app calendar | On first reminder enable (Calendar backend) |
-| `ohos.permission.PUBLISH_AGENT_REMINDER` | Prayer notifications                             | **Commented out — pending AGC approval**    |
+| Permission                             | Purpose                                          | Requested                                   |
+|----------------------------------------|--------------------------------------------------|---------------------------------------------|
+| ohos.permission.APPROXIMATELY_LOCATION | Approximate location for prayer times            | On first GPS request                        |
+| ohos.permission.LOCATION               | Precise location for prayer times                | On first GPS request                        |
+| ohos.permission.ACCELEROMETER          | Compass and Qibla direction                      | On Compass open                             |
+| ohos.permission.VIBRATE                | Haptic feedback on Tasbih counts                 | Declared only, no runtime request           |
+| ohos.permission.READ_CALENDAR          | Read the app's own calendar events for cleanup   | On first reminder enable (Calendar backend) |
+| ohos.permission.WRITE_CALENDAR         | Write prayer reminder events to the app calendar | On first reminder enable (Calendar backend) |
+| ohos.permission.PUBLISH_AGENT_REMINDER | Prayer notifications                             | **Commented out — pending AGC approval**    |
 
-All permissions can be denied without affecting other features. The `PUBLISH_AGENT_REMINDER` declaration is present in
-`module.json5` but commented out; it will be un-commented when the AGC capability is approved.
+All permissions can be denied without affecting other features. The PUBLISH_AGENT_REMINDER declaration is present in
+module.json5 but commented out; it will be un-commented when the AGC capability is approved.
+
+The app declares **no INTERNET permission** — it is fully offline and does not transmit any data.
 
 ---
 
@@ -276,19 +387,19 @@ The app is fully localized in three languages.
 
 | Language                 | Code | RTL |
 |--------------------------|------|-----|
-| English                  | `en` | No  |
-| 中文 (Chinese, Simplified) | `zh` | No  |
-| العربية (Arabic)         | `ar` | Yes |
+| English                  | en   | No  |
+| 中文 (Chinese, Simplified) | zh   | No  |
+| العربية (Arabic)         | ar   | Yes |
 
-Localization strings live in `helper/LocalizationHelper.ets` as `Map<string, string>` tables built once at class init.
+Localization strings live in helper/LocalizationHelper.ets as Map<string, string> tables built once at class init.
 
 ### Adding a New Language
 
-1. Add the language code to the `AppLanguage` enum
-2. Add a new `buildXx()` method returning a `Map<string, string>`
-3. Register it in `tableFor()`, `get()`, and `getArray()`
-4. Add the `Xx` static table reference
-5. Add the language to `LanguageOption` in `WizardPage.ets`
+1. Add the language code to the AppLanguage enum
+2. Add a new buildXx() method returning a Map<string, string>
+3. Register it in tableFor(), get(), and getArray()
+4. Add the Xx static table reference
+5. Add the language to LanguageOption in WizardPage.ets
 
 ---
 
@@ -298,6 +409,7 @@ Localization strings live in `helper/LocalizationHelper.ets` as `Map<string, str
 entry/src/main/ets/
 ├── common/
 │   ├── Breakpoints.ets              # xs / sm / md / lg width classes
+│   ├── ClockFormat.ets              # System / 12h / 24h time formatting
 │   ├── FeatureFlags.ets             # Compile-time feature flags
 │   ├── PageTheme.ets                # Theme orchestration + isDarkFor()
 │   ├── SoundOptions.ets             # Tasbih click sound registry
@@ -315,6 +427,7 @@ entry/src/main/ets/
 │   ├── IslamicEvents.ets            # Static event table
 │   └── PrivacyPolicy.ets            # EN / ZH / AR privacy text
 ├── models/
+│   ├── AdvancedCalcModels.ets       # RoundingMethod, MidnightMethod, etc.
 │   ├── DateModels.ets               # IslamicEvent, UpcomingImportantDate
 │   ├── HijriCalendarModels.ets      # CalendarDay, HijriDate
 │   ├── PrayerModel.ets              # PrayerModel, ExtraTiming
@@ -325,7 +438,6 @@ entry/src/main/ets/
 │   ├── AppLogger.ets                # Sandboxed file logger
 │   ├── CalendarReminderHelper.ets   # Calendar Kit reminder backend
 │   ├── HapticHelper.ets             # Vibration wrapper with two gates
-│   ├── HijriCalendarHelper.ets      # Hijri month math
 │   ├── LayoutHelper.ets             # Responsive breakpoint tracking
 │   ├── LocalizationHelper.ets       # All translations
 │   ├── MaterialHelper.ets           # HOS7 immersive material capability
@@ -339,20 +451,28 @@ entry/src/main/ets/
 │   ├── SoundHelper.ets              # SoundPool for Tasbih clicks
 │   ├── SystemFeedbackHelper.ets     # Reads ringer mode + haptics toggle
 │   └── TasbihCanvasRenderer.ets     # Premium bead canvas renderer
+├── hijricalendar/
+│   ├── HijriCalendarHelper.ets      # Month math + event lookup
+│   ├── HijriCalendarType.ets        # Umm al-Qura / Tabular enum
+│   └── HijriEngineResolver.ets      # Engine selection by setting
 ├── utils/
-│   ├── DateUtils.ets
-│   ├── HomeController.ets
-│   ├── LocationCache.ets
-│   ├── LocationUtils.ets
-│   ├── OfflineCityLookup.ets
-│   ├── PrayerManager.ets
-│   ├── PrayerTimeCalculator.ets
-│   ├── ProgressHelper.ets
-│   ├── QiblaCalculator.ets
-│   ├── TasbihManager.ets
-│   ├── TasbihStorage.ets
-│   └── TimezoneResolver.ets
+│   ├── DateUtils.ets                # Next-event lookup + formatted dates
+│   ├── HijriCalendarEngine.ets      # Engine interface
+│   ├── HomeController.ets           # Prayer-time snapshot builder
+│   ├── LocationCache.ets            # Cached GPS location
+│   ├── LocationUtils.ets            # GPS fetch + reverse geocode
+│   ├── OfflineCityLookup.ets        # City table with timezone + declination
+│   ├── PrayerManager.ets            # Prayer state + status
+│   ├── PrayerTimeCalculator.ets     # Astronomy math
+│   ├── ProgressHelper.ets           # Home dashboard progress stats
+│   ├── QiblaCalculator.ets          # Bearing + distance to Kaaba
+│   ├── TabularHijriEngine.ets       # Arithmetical Hijri engine
+│   ├── TasbihManager.ets            # Tasbih CRUD + counting
+│   ├── TasbihStorage.ets            # Tasbih persistence
+│   ├── TimezoneResolver.ets         # Offset + DST resolution
+│   └── UmmAlQuraEngine.ets          # KACST table Hijri engine
 ├── pages/
+│   ├── AdvancedCalcPage.ets
 │   ├── CustomizePage.ets
 │   ├── HijriCalendarPage.ets
 │   ├── HomePage.ets
@@ -371,48 +491,47 @@ entry/src/main/ets/
 
 The codebase follows a three-layer architecture.
 
-**Pages** are `@Entry` or `@Component` components holding `@State`, `@Builder`, and event handlers. They render and
-delegate — no business logic.
+**Pages** are @Entry or @Component components holding @State, @Builder, and event handlers. They render and delegate —
+no business logic.
 
-**Helpers** are stateless façades: `SettingsHelper`, `NotificationHelper`, `CalendarReminderHelper`, `HomeController`,
-`PrayerManager`, `LocalizationHelper`, `NavHelper`, `MaterialHelper`. They orchestrate and contain pure logic where
-possible.
+**Helpers** are stateless façades: SettingsHelper, NotificationHelper, CalendarReminderHelper, HomeController,
+PrayerManager, LocalizationHelper, NavHelper, MaterialHelper. They orchestrate and contain pure logic where possible.
 
-**Core** is the bottom layer: `PrayerTimeCalculator`, `PreferencesHelper`, `TimezoneResolver`, `QiblaCalculator`.
-Astronomy math, persistence, and DST rules.
+**Core** is the bottom layer: PrayerTimeCalculator, PreferencesHelper, TimezoneResolver, QiblaCalculator,
+HijriEngineResolver. Astronomy math, persistence, DST rules, calendar conversion.
 
-> **Rule of thumb:** pages never touch `@ohos.data.preferences` directly. All persistence goes through
-`PreferencesHelper` via `SettingsHelper`.
+> **Rule of thumb:** pages never touch @ohos.data.preferences directly. All persistence goes through PreferencesHelper
+> via SettingsHelper.
 
 ---
 
 ## Navigation Architecture
 
-The app uses a single root page — `MainTabs.ets` — that hosts five primary screens inside a native `Tabs` container:
+The app uses a single root page — MainTabs.ets — that hosts five primary screens inside a native Tabs container:
 
 ```
 Home → Prayers → Calendar → Compass → Tasbih
 ```
 
-`MainTabs` is a **routable page** (declared in `main_pages.json`). The five screen components inside it are plain
-`@Component export struct` files with **no** `@Entry` decorator, **no** `pageTransition()`, and **no** `FloatingNavBar`.
+MainTabs is a **routable page** (declared in main_pages.json). The five screen components inside it are plain @Component
+export struct files with **no** @Entry decorator, **no** pageTransition(), and **no** FloatingNavBar.
 
-Secondary pages — `WizardPage`, `CustomizePage`, `SettingsPage` — remain routable and use `router.pushUrl()` /
-`router.back()` for navigation.
+Secondary pages — WizardPage, CustomizePage, SettingsPage, AdvancedCalcPage — remain routable and use router.pushUrl() /
+router.back() for navigation.
 
 ### Why a single root page?
 
 HarmonyOS 7 grants the immersive system material only to specific host components. The bottom TabBar of a horizontal
-`Tabs(barPosition.End)` qualifies. A free-floating Row does not. Consolidating the five primary screens inside
-`MainTabs` is what makes the material possible.
+Tabs(barPosition.End) qualifies. A free-floating Row does not. Consolidating the five primary screens inside MainTabs is
+what makes the material possible.
 
 ### Adding a new tab
 
-1. Create the screen as `@Component export struct MyNewPage` (no `@Entry`)
-2. Import it in `MainTabs.ets`
-3. Add a `TabContent() { MyNewPage() }` block inside `TabContents()` with a `.tabBar(...)`
-4. Add an SVG icon under `resources/base/media/`
-5. Add its label key to `LocalizationHelper.ets`
+1. Create the screen as @Component export struct MyNewPage (no @Entry)
+2. Import it in MainTabs.ets
+3. Add a TabContent() { MyNewPage() } block inside TabContents() with a .tabBar(...)
+4. Add an SVG icon under resources/base/media/
+5. Add its label key to LocalizationHelper.ets
 
 ---
 
@@ -434,19 +553,19 @@ Selected from **Customize → Appearance → App Theme** or during the wizard. S
 
 Orthogonal to the preset. Selected from **Customize → Appearance → Dark Mode**.
 
-When resolving which palette is in effect, always use `PageTheme.isDarkFor(themeMode)` — never
-`PageTheme.isSystemDark()` alone. `isSystemDark()` reports the OS setting; `isDarkFor()` honours the user's choice,
-falling back to the OS only when the mode is `System`.
+When resolving which palette is in effect, always use PageTheme.isDarkFor(themeMode) — never PageTheme.isSystemDark()
+alone. isSystemDark() reports the OS setting; isDarkFor() honours the user's choice, falling back to the OS only when
+the mode is System.
 
 ### Live propagation
 
-Every page observes both `STORAGE_KEY_THEME_MODE` and `STORAGE_KEY_APP_THEME` via `@StorageLink` and recomputes its
-`colors` on change. When the user switches preset or mode, every visible page — plus the tab bar — updates immediately
-without a reload.
+Every page observes both STORAGE_KEY_THEME_MODE and STORAGE_KEY_APP_THEME via @StorageLink and recomputes its colors on
+change. When the user switches preset or mode, every visible page — plus the tab bar — updates immediately without a
+reload.
 
 The general rule for any new page:
 
-```ts
+```
 @StorageLink(STORAGE_KEY_THEME_MODE)
 @Watch('onThemeModeChanged')
 themeMode: string = ThemeMode.SYSTEM;
@@ -470,7 +589,7 @@ Miss either link, and the page will lag behind until cold start.
 
 The tab bar's active and inactive colours read from the current theme:
 
-```ts
+```
 private activeColor(): string {
   return this.colors.accentGold;
 }
@@ -480,67 +599,57 @@ private inactiveColor(): string {
 }
 ```
 
-Icons are SVG glyphs that tint via `.fillColor()` to the same values, so the icon and its label always match.
+Icons are SVG glyphs that tint via .fillColor() to the same values, so the icon and its label always match.
 
 ### Splash
 
-The launch splash background follows the OS light / dark setting via `entry/src/main/resources/base/element/color.json`
-and `entry/src/main/resources/dark/element/color.json`. Both carry the Sirat palette's `primaryGreen` for their
-respective modes, so the transition from splash to the Home screen is seamless.
+The launch splash background follows the OS light / dark setting via entry/src/main/resources/base/element/color.json
+and entry/src/main/resources/dark/element/color.json.
 
 ---
 
 ## Immersive Material (HarmonyOS 7)
 
-On HarmonyOS 7 (API 26+) the bottom navigation bar uses the native system immersive material. On API 20–25 it falls back
+On HarmonyOS 7 (API 26+) the bottom navigation bar uses the native system immersive material. On API 21–25 it falls back
 to a translucent blurred bar with identical interaction.
 
 ### How it works
 
-`MainTabs.ets` branches at runtime on `deviceInfo.sdkApiVersion`:
+MainTabs.ets branches at runtime on deviceInfo.sdkApiVersion:
 
-| Device              | `sdkApiVersion` | Bar path                                                |
-|---------------------|-----------------|---------------------------------------------------------|
-| HarmonyOS 7         | 26+             | `barFloatingStyle` + `ImmersiveMaterial(THIN)`          |
-| HarmonyOS 6.1 / 6.0 | 20–25           | `barOverlap` + `barBackgroundBlurStyle(BlurStyle.Thin)` |
+| Device              | sdkApiVersion | Bar path                                                          |
+|---------------------|---------------|-------------------------------------------------------------------|
+| HarmonyOS 7         | 26+           | HdsTabs with hdsMaterial.MaterialType.ADAPTIVE                    |
+| HarmonyOS 6.1 / 6.0 | 21–25         | Tabs(barPosition.End) with barBackgroundBlurStyle(BlurStyle.Thin) |
 
-Both branches share the same `TabContents()` builder, so the tab set stays in sync.
+Both branches share the same TabContents() builder, so the tab set stays in sync.
 
 ### Requirements
 
-Three preconditions for `systemMaterial` to take effect:
+Three preconditions for the immersive material to take effect:
 
-1. `module.json5` metadata `ohos.arkui.UIMaterial.state` = `enable`
-2. Device supports `uiMaterial.isImmersiveMaterialSupported()`
-3. Host is a horizontal `Tabs(barPosition.End)` with `barOverlap(true)`
+1. module.json5 metadata ohos.arkui.UIMaterial.state = enable
+2. Device supports the HDS material tier (API 23+)
+3. Host is a horizontal HdsTabs with barFloatingStyle
 
-If any is missing, `systemMaterial` is silently ignored and the bar renders normally.
+If any is missing, the framework falls back silently to the standard bar.
 
 ### Diagnostics
 
-`MaterialHelper.logCapability()` writes a line to the in-app log at startup:
-
-```
-[INFO] [MaterialHelper] SDK=26, distOS=26, immersiveMaterialSupported=true,
-                        globalMaterialLevel=EXQUISITE, materialPath=barFloatingStyle
-```
-
-View it from **Settings → Diagnostic Logs**.
+MaterialHelper.logCapability() writes a line to the in-app log at startup. View it from **Settings → Diagnostic Logs**.
 
 ### Safe-area note
 
-In a page that hosts `Tabs(barPosition.End)` with `barFloatingStyle`, call `expandSafeArea` with **at most**
-`SafeAreaEdge.TOP`. Never include `SafeAreaEdge.BOTTOM`. The floating bar handles its own bottom spacing via
-`barBottomMargin`; expanding into the bottom gesture area pushes the bar into the system navigation indicator.
-
-`MainTabs.ets` currently does not call `expandSafeArea` at all — this is intentional.
+In a page that hosts Tabs(barPosition.End) with barFloatingStyle, call expandSafeArea with **at most** SafeAreaEdge.TOP.
+Never include SafeAreaEdge.BOTTOM. The floating bar handles its own bottom spacing via barBottomMargin; expanding into
+the bottom gesture area pushes the bar into the system navigation indicator.
 
 ---
 
 ## Prayer Reminders
 
-The app supports two reminder backends, selected at compile time by flags in `common/FeatureFlags.ets`. Only one is
-active at a time; if both flags are true, the Calendar backend wins because it requires no external approval.
+The app supports two reminder backends, selected at compile time by flags in common/FeatureFlags.ets. Only one is active
+at a time; if both flags are true, the Calendar backend wins because it requires no external approval.
 
 ### Backend 1 — Calendar Kit (active)
 
@@ -550,7 +659,7 @@ event carries a system reminder set to fire at the prayer time and, optionally, 
 **Advantages**
 
 - No AppGallery Connect capability approval required
-- The user grants two standard permissions (`READ_CALENDAR`, `WRITE_CALENDAR`)
+- The user grants two standard permissions (READ_CALENDAR, WRITE_CALENDAR)
 - Precise timing — the system calendar fires reminders exactly on time
 - Works when the app is closed or killed
 
@@ -563,15 +672,15 @@ event carries a system reminder set to fire at the prayer time and, optionally, 
 **How it works**
 
 1. User enables reminders in Settings → Notifications
-2. App requests `READ_CALENDAR` and `WRITE_CALENDAR`
-3. On grant, `CalendarReminderHelper.init()` creates (or re-uses) the app's calendar account
-4. On every app open — and on every change to settings, prayer state, or location — `NotificationHelper.rescheduleAll()`
+2. App requests READ_CALENDAR and WRITE_CALENDAR
+3. On grant, CalendarReminderHelper.init() creates (or re-uses) the app's calendar account
+4. On every app open — and on every change to settings, prayer state, or location — NotificationHelper.rescheduleAll()
    runs:
     - Cancels all existing Sirat events
     - Reads location, method, Asr rule, offsets, and reminder settings
     - Calculates prayer times for the next 3 days
    - Skips any prayer already marked as prayed on that date
-   - Writes one calendar event per remaining prayer, with `reminderTime: [0, leadMinutes]`
+   - Writes one calendar event per remaining prayer, with reminderTime: [0, leadMinutes]
 5. Every event carries the associated Hadith in its description, localized to the app's current language
 
 **Skip-if-prayed**
@@ -583,10 +692,10 @@ three days of pending reminders at all times.
 
 **Cleanup safety**
 
-`CalendarReminderHelper.cancelAll()` applies three independent layers of scoping:
+CalendarReminderHelper.cancelAll() applies three independent layers of scoping:
 
 1. **Account scoping** — the calendar object is the app's own account, so events in other calendars are unreachable
-2. **Title filter** — `EventFilter.filterByTitle('Sirat · ')` restricts the result set to the app's events
+2. **Title filter** — EventFilter.filterByTitle('Sirat · ') restricts the result set to the app's events
 3. **Per-event re-check** — each event is verified to carry the prefix before its delete call
 
 A user who adds their own event to the "Sirat Companion" calendar account from the system Calendar app will find it
@@ -594,15 +703,15 @@ untouched by the app's cleanup.
 
 ### Backend 2 — Agent-Powered Reminder (pending AGC approval)
 
-Uses `reminderAgentManager.publishReminder()` from `@kit.BackgroundTasksKit`. Produces standard app notifications rather
+Uses reminderAgentManager.publishReminder() from @kit.BackgroundTasksKit. Produces standard app notifications rather
 than calendar events.
 
 **Requires**
 
-- The `PUBLISH_AGENT_REMINDER` capability approved in AppGallery Connect
-- The permission un-commented in `module.json5`
+- The PUBLISH_AGENT_REMINDER capability approved in AppGallery Connect
+- The permission un-commented in module.json5
 - A signing profile regenerated after approval
-- `NOTIFICATIONS_ENABLED = true` in `FeatureFlags.ets`
+- NOTIFICATIONS_ENABLED = true in FeatureFlags.ets
 
 ### Switching between backends
 
@@ -610,22 +719,21 @@ The switch is entirely compile-time. No runtime logic differs between the two.
 
 **To activate the Calendar backend** (current state):
 
-```ts
-// FeatureFlags.ets
+```
 export const NOTIFICATIONS_ENABLED = false;
 export const CALENDAR_REMINDERS_ENABLED = true;
 ```
 
 **To switch to the Agent-Powered Reminder backend** after AGC approval:
 
-1. `FeatureFlags.ets` → `NOTIFICATIONS_ENABLED = true`; `CALENDAR_REMINDERS_ENABLED = false`
-2. `module.json5` → un-comment `PUBLISH_AGENT_REMINDER`; comment out `READ_CALENDAR` / `WRITE_CALENDAR`
-3. `data/PrivacyPolicy.ets` + hosted `index.md` → swap the calendar disclosure for a notification disclosure
+1. FeatureFlags.ets → NOTIFICATIONS_ENABLED = true; CALENDAR_REMINDERS_ENABLED = false
+2. module.json5 → un-comment PUBLISH_AGENT_REMINDER; comment out READ_CALENDAR / WRITE_CALENDAR
+3. data/PrivacyPolicy.ets + hosted index.md → swap the calendar disclosure for a notification disclosure
 4. Regenerate the signing Profile and re-sign the app
-5. (Optional) Call `CalendarReminderHelper.cancelAll()` once on the first launch after the switch to clear leftover
+5. (Optional) Call CalendarReminderHelper.cancelAll() once on the first launch after the switch to clear leftover
    calendar events
 
-No other source file changes. `NotificationHelper.resolveBackend()` picks the correct backend automatically based on the
+No other source file changes. NotificationHelper.resolveBackend() picks the correct backend automatically based on the
 flags.
 
 ---
@@ -650,12 +758,12 @@ The Calendar backend can be tested on **any** HarmonyOS 6+ device or emulator. N
 
 ### Agent-Powered Reminder backend
 
-| Emulator API | `reminderAgentManager` support |
-|--------------|--------------------------------|
-| API 9 – 19   | Not supported                  |
-| API 20+      | Supported                      |
+| Emulator API | reminderAgentManager support |
+|--------------|------------------------------|
+| API 9 – 19   | Not supported                |
+| API 20+      | Supported                    |
 
-**On API 20+ emulator** you can verify the permission dialog, `publishReminder()` return values, notification display in
+**On API 20+ emulator** you can verify the permission dialog, publishReminder() return values, notification display in
 the shade, and localization — once the AGC capability is approved and the flag is flipped.
 
 **On a real device** you get full validation including the exact timed trigger. Cloud debugging via AppGallery Connect
@@ -667,14 +775,45 @@ is a good alternative.
 
 Prayer times are calculated for the location's timezone, not the device's.
 
-`TimezoneResolver.effectiveOffsetForLocation()` does the following:
+TimezoneResolver.effectiveOffsetForLocation() does the following:
 
-1. Checks `OfflineCityLookup` for the nearest known city (60+ cities with standard offset and DST rule)
-2. Applies US / EU / AU DST rules based on the date
-3. If the device's own offset is within 30 minutes of the location estimate, prefers the device's offset (the OS knows
+1. Checks OfflineCityLookup for the nearest known city within 300 km (70+ cities with standard offset, DST rule, and
+   magnetic declination)
+2. Applies US / EU / AU / Egypt DST rules based on the date
+3. If the device's own offset is within 15 minutes of the location estimate, prefers the device's offset (the OS knows
    DST transitions more precisely)
 
-This means viewing NYC prayer times from Pakistan shows NYC local times, with correct EDT / EST transitions.
+This means viewing NYC prayer times from Pakistan shows NYC local times, with correct EDT / EST transitions. Egypt's DST
+window (last Friday of April → last Thursday of October) is handled separately from the EU rule since the two do not
+align.
+
+---
+
+## Backup and Restore
+
+The app implements HarmonyOS's system backup framework via EntryBackupAbility.
+
+### What is preserved
+
+- All settings — language, theme mode, app theme preset, Hijri offset, Hijri calendar type, calculation method, Asr
+  rule, calculation source, high-latitude rule, prayer offsets, location mode, manual coordinates, notification
+  configuration, sound and vibration preferences, time format, and advanced calculation settings
+- All Tasbih data — every custom Tasbih, every Dhikr, all counts, targets, and lifetime totals
+- Cached GPS location — so the app can show correct prayer times on first launch after restore even before GPS re-locks
+
+### What is excluded
+
+- The diagnostic log — regenerates fresh on the new device, so no unbounded growth across migrations
+
+### When it runs
+
+HarmonyOS invokes the backup automatically during device migration and during system backup / restore operations. No
+user action is required inside the app; the user opts in from the system Settings app.
+
+### Format
+
+Each preferences store is written to a line-based text file in the backup directory. The format is self-describing (type
+marker, key, value) so restores are resilient to added or removed keys across app versions.
 
 ---
 
@@ -690,19 +829,26 @@ This means viewing NYC prayer times from Pakistan shows NYC local times, with co
 - [x] Qibla calibration overlay
 - [x] Tablet / foldable / 2-in-1 responsive layouts
 - [x] System feedback integration — respects ringer mode and haptics toggle
-- [x] HarmonyOS 7 immersive material with API 20 fallback
+- [x] HarmonyOS 7 immersive material with API 21 fallback
 - [x] Calendar Kit reminder backend (workaround for AGC-pending capability)
 - [x] Switchable reminder backend architecture
 - [x] Full 24-hour sun-path arc with continuous ticker and midnight slide
 - [x] Skip-if-prayed reminder behaviour with rolling 3-day window
 - [x] Live theme propagation across all pages
 - [x] SVG tab bar icons tinted to the current theme
+- [x] Advanced Calculation page — Rounding, Midnight, High Latitude, Polar, Shafaq, Custom Angles
+- [x] Twenty-four calculation methods — full Adhan-library parity
+- [x] Dual Hijri calendar engines — Umm al-Qura + Tabular, selectable at runtime
+- [x] Time format setting — System / 12h / 24h, live across every surface
+- [x] System backup and restore via EntryBackupAbility
+- [x] Localized app identity and About page
 
 ### In Progress
 
 - [ ] Agent-Powered Reminder capability approval (AGC)
 - [ ] Re-sign and re-apply to AppGallery
 - [ ] Investigate Tasbih animation performance on Mate 80 RS Ultimate
+- [ ] API 26 migration — build-profile and hvigor updates
 
 ### Next Up
 
@@ -714,6 +860,7 @@ This means viewing NYC prayer times from Pakistan shows NYC local times, with co
 
 - [ ] Additional languages — Turkish, Urdu, Indonesian
 - [ ] Consolidate persistence backends
+- [ ] Full immersive-material refactor beyond the current HDS fallback
 
 ---
 
@@ -725,7 +872,7 @@ Contributions are welcome.
 
 **2. Create a feature branch**
 
-```bash
+```
 git checkout -b feature/your-feature-name
 ```
 
@@ -735,7 +882,7 @@ git checkout -b feature/your-feature-name
 
 ### Commit Convention
 
-This project uses [Conventional Commits](https://www.conventionalcommits.org/).
+This project uses Conventional Commits.
 
 ```
 feat: add Hanafi Asr shadow rule
@@ -747,19 +894,21 @@ chore: bump target API to 26
 
 ### Code Style
 
-- ArkTS strict mode is required — no `any`, no untyped object literals
+- ArkTS strict mode is required — no any, no untyped object literals
 - Object literals must be assigned to named interfaces
-- Do not use `Record<K, V>` in types — use `Map<K, V>` instead
-- Namespaces imported from `@kit.*` must not be used as values (`arkts-no-ns-as-obj`) — guard with
-  `deviceInfo.sdkApiVersion`, never `uiModule !== undefined`
+- Do not use Record<K, V> in types — use Map<K, V> instead
+- Namespaces imported from @kit.* must not be used as values (arkts-no-ns-as-obj) — guard with deviceInfo.sdkApiVersion,
+  never uiModule !== undefined
 - Keep pages free of business logic — delegate to helpers
-- Every page follows the `tr()` pattern for localization
-- Resolve dark-mode state via `PageTheme.isDarkFor(themeMode)`, not `PageTheme.isSystemDark()`
-- Tab-hosted pages must be `@Component export struct` with no `@Entry`, no `pageTransition()`, and no `FloatingNavBar`
-- Reminder backends are selected by feature flags only — never branch on `NOTIFICATIONS_ENABLED` or
-  `CALENDAR_REMINDERS_ENABLED` outside `NotificationHelper.resolveBackend()`
-- Every page that computes `PageTheme.compute(...)` must observe both `STORAGE_KEY_THEME_MODE` and
-  `STORAGE_KEY_APP_THEME` with `@StorageLink` and `@Watch`, and recompute colours in both watchers
+- Every page follows the tr() pattern for localization
+- Resolve dark-mode state via PageTheme.isDarkFor(themeMode), not PageTheme.isSystemDark()
+- Tab-hosted pages must be @Component export struct with no @Entry, no pageTransition(), and no FloatingNavBar
+- Reminder backends are selected by feature flags only — never branch on NOTIFICATIONS_ENABLED or
+  CALENDAR_REMINDERS_ENABLED outside NotificationHelper.resolveBackend()
+- Every page that computes PageTheme.compute(...) must observe both STORAGE_KEY_THEME_MODE and STORAGE_KEY_APP_THEME
+  with @StorageLink and @Watch, and recompute colours in both watchers
+- Hijri date conversion must go through HijriEngineResolver — never call Intl.DateTimeFormat with the islamic calendar
+  directly
 
 ---
 
@@ -770,12 +919,11 @@ chore: bump target API to 26
   compile time.
 - **Online (API) prayer times** are stubbed. Selecting it shows a "Coming Soon" card.
 - **Compass** requires a real device. Emulators without a magnetometer show "sensor unavailable".
-- **Reverse geocoding** returns `"Unknown location"` for some regions. The offline city lookup and manual city name
-  field are fallbacks.
-- **High-latitude prayer times** clamp the hour angle to `[-1, 1]`. The four fallback rules are implemented, but the
-  angle-based rule uses a simplified formula.
-- **Multiple persistence backends** coexist: `PreferencesHelper`, `AppStorage`, and Tasbih's private store.
-  Consolidation is on the roadmap.
+- **Reverse geocoding** returns "Unknown location" for some regions. The offline city lookup and manual city name field
+  are fallbacks.
+- **High-latitude prayer times** clamp the hour angle to [-1, 1]. All five fallback rules are implemented.
+- **Multiple persistence backends** coexist: PreferencesHelper, AppStorage, and Tasbih's private store. Consolidation is
+  on the roadmap.
 - **Tasbih canvas animation** may stutter on a small number of high-refresh-rate devices. Under investigation.
 - **Immersive material** requires HarmonyOS 7 (API 26+) and a supporting device. On older releases, the bar falls back
   to a translucent blur.
@@ -783,6 +931,10 @@ chore: bump target API to 26
   the system Calendar app; the app will recreate them on next open if the master toggle is still on.
 - **Midnight slide-back** is visible only when the app is in the foreground at the crossing. If the app is backgrounded
   across midnight, the ticker simply appears at its new position on return.
+- **Nearest-city timezone resolution** can pick the wrong zone for users within a few kilometres of a border between two
+  offsets (for example, the Afghanistan–Pakistan line near Torkham). Affected users should set their location manually.
+- **Hijri calendar type** applies to every surface, but the Umm al-Qura engine covers 1318–1500 AH. Dates outside that
+  range fall back to the Tabular engine automatically.
 
 ---
 
@@ -798,18 +950,18 @@ copyright notice is retained.
 ## Acknowledgements
 
 - **Jean Meeus** — *Astronomical Algorithms* — source of the solar position math
-- **PrayTimes.org** — reference for the four calculation conventions
-- **HarmonyOS Developer Docs** — for `@kit.ArkUI`, `@kit.ArkData`, `@kit.BackgroundTasksKit`, `@kit.CalendarKit`, and
-  the immersive material API
+- **PrayTimes.org** — reference for the calculation conventions
+- **Adhan library** — reference for the extended calculation-method set
+- **HarmonyOS Developer Docs** — for @kit.ArkUI, @kit.ArkData, @kit.BackgroundTasksKit, @kit.CalendarKit, and the
+  immersive material API
 - **Every beta tester** who reported bugs and suggested features
 
 ---
 
 ## Contact
 
-- **Issues
-  ** — [github.com/sharjeel-butt/SiratCompanion-HOS/issues](https://github.com/sharjeel-butt/SiratCompanion-HOS/issues)
-- **Telegram** — [t.me/siratcompanionhos](https://t.me/siratcompanionhos)
+- **Issues** — github.com/sharjeel-butt/SiratCompanion-HOS/issues
+- **Telegram** — t.me/siratcompanionhos
 
 ---
 

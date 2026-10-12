@@ -1,49 +1,85 @@
 // entry/src/main/ets/helper/AppInfoHelper.ets
 
-import { bundleManager, common } from '@kit.AbilityKit';
+import { bundleManager } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { L } from './LocalizationHelper';
 
 export interface AppInfoSnapshot {
-  /** Localized app name from AppScope's $string:app_name. */
+  /**
+   * Localized app name, resolved from the app's own language tables
+   * so it tracks STORAGE_KEY_LANGUAGE rather than the system locale.
+   */
   name: string;
 
-  /** From AppScope/app.json5 → "versionName". e.g. "1.4.1". */
+  /** From AppScope/app.json5 → "versionName". e.g. "3.0.1". */
   versionName: string;
 
-  /** From AppScope/app.json5 → "versionCode". e.g. 1000005. */
+  /** From AppScope/app.json5 → "versionCode". e.g. 3000001. */
   versionCode: number;
 
   /** Bundle identifier. e.g. "com.siratcompanion.hos.app". */
   bundleName: string;
 }
 
+/** Bundle-derived fields — invariant for the process lifetime. */
+interface VersionInfo {
+  versionName: string;
+  versionCode: number;
+  bundleName: string;
+}
+
 /**
- * Resolves the app's identity from the installed bundle, so no
- * version string is ever hard-coded in the UI.
+ * Resolves the app's identity for display.
  *
- * Results are cached for the lifetime of the process — the bundle
- * info cannot change while the app is running.
+ * The name is resolved from LocalizationHelper on every call, so it
+ * follows the in-app language setting. The version fields come from
+ * a process-lifetime cache because bundle metadata cannot change
+ * while the app is running.
+ *
+ * Callers that render `name` must re-invoke `get()` when the
+ * language changes — SettingsPage does so from its existing
+ * onLanguageChanged watcher.
  */
 export class AppInfoHelper {
-  private static cached: AppInfoSnapshot | null = null;
+  private static versionInfo: VersionInfo | null = null;
 
   /**
-   * @param context  A UIAbilityContext — required to resolve the
-   *                 localized app name via the resource manager.
-   *                 The version info itself comes from bundleManager
-   *                 and does not need the context.
+   * Build an app-info snapshot for display.
+   *
+   * `L.get('app_name')` reads the current language from AppStorage,
+   * falling through to English and then to the key itself, so the
+   * result is always a non-empty string.
    */
-  static get(context: common.UIAbilityContext): AppInfoSnapshot {
-    if (AppInfoHelper.cached !== null) {
-      return AppInfoHelper.cached;
+  static get(): AppInfoSnapshot {
+    const version = AppInfoHelper.loadVersionInfo();
+    const snapshot: AppInfoSnapshot = {
+      name: L.get('app_name'),
+      versionName: version.versionName,
+      versionCode: version.versionCode,
+      bundleName: version.bundleName
+    };
+    return snapshot;
+  }
+
+  /** "3.0.1 (3000001)" — compact version+build string for the UI. */
+  static formattedVersion(): string {
+    const info = AppInfoHelper.get();
+    return `${info.versionName} (${info.versionCode})`;
+  }
+
+  // ============================================================
+  // INTERNAL
+  // ============================================================
+
+  private static loadVersionInfo(): VersionInfo {
+    if (AppInfoHelper.versionInfo !== null) {
+      return AppInfoHelper.versionInfo;
     }
 
     let versionName = '—';
     let versionCode = 0;
     let bundleName = '—';
 
-    // ---- Version + bundle name ----
     try {
       const info = bundleManager.getBundleInfoForSelfSync(
         bundleManager.BundleFlag.GET_BUNDLE_INFO_DEFAULT
@@ -59,36 +95,8 @@ export class AppInfoHelper {
       );
     }
 
-    // ---- App name (localized) ----
-    // Pulled from AppScope/resources/*/element/string.json → app_name.
-    // Falls back to the LocalizationHelper's own app_name if the
-    // resource lookup fails.
-    let name = '';
-    try {
-      name = context.resourceManager.getStringSync(
-        $r('app.string.app_name').id
-      );
-    } catch (err) {
-      const e = err as BusinessError;
-      console.warn(
-        `[AppInfoHelper] app_name lookup failed: ${e.code} ${e.message}`
-      );
-      name = L.get('app_name');
-    }
-
-    const snapshot: AppInfoSnapshot = {
-      name,
-      versionName,
-      versionCode,
-      bundleName
-    };
-    AppInfoHelper.cached = snapshot;
-    return snapshot;
-  }
-
-  /** "1.4.1 (1000005)" — a compact version+build string for the UI. */
-  static formattedVersion(context: common.UIAbilityContext): string {
-    const info = AppInfoHelper.get(context);
-    return `${info.versionName} (${info.versionCode})`;
+    const result: VersionInfo = { versionName, versionCode, bundleName };
+    AppInfoHelper.versionInfo = result;
+    return result;
   }
 }

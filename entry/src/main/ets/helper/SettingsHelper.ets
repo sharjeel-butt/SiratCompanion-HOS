@@ -494,6 +494,29 @@ export class SettingsHelper {
         return L.get('method_russia');
       case CalculationMethod.UAE:
         return L.get('method_uae');
+      // ---- Newly reachable ----
+      case CalculationMethod.MOONSIGHTING_COMMITTEE:
+        return L.get('method_moonsighting');
+      case CalculationMethod.DUBAI:
+        return L.get('method_dubai');
+      case CalculationMethod.KUWAIT:
+        return L.get('method_kuwait');
+      case CalculationMethod.FRANCE_15:
+        return L.get('method_france_15');
+      case CalculationMethod.FRANCE_18:
+        return L.get('method_france_18');
+      case CalculationMethod.TURKEY_EUROPE:
+        return L.get('method_turkey_europe');
+      case CalculationMethod.TEHRAN:
+        return L.get('method_tehran');
+      case CalculationMethod.INDONESIA:
+        return L.get('method_indonesia');
+      case CalculationMethod.ALGERIA:
+        return L.get('method_algeria');
+      case CalculationMethod.BRUNEI:
+        return L.get('method_brunei');
+      case CalculationMethod.CUSTOM:
+        return L.get('method_custom');
       default:
         return L.get('method_karachi');
     }
@@ -577,6 +600,29 @@ export class SettingsHelper {
         return L.get('method_short_russia');
       case CalculationMethod.UAE:
         return L.get('method_short_uae');
+      // ---- Newly reachable ----
+      case CalculationMethod.MOONSIGHTING_COMMITTEE:
+        return L.get('method_short_moonsighting');
+      case CalculationMethod.DUBAI:
+        return L.get('method_short_dubai');
+      case CalculationMethod.KUWAIT:
+        return L.get('method_short_kuwait');
+      case CalculationMethod.FRANCE_15:
+        return L.get('method_short_france_15');
+      case CalculationMethod.FRANCE_18:
+        return L.get('method_short_france_18');
+      case CalculationMethod.TURKEY_EUROPE:
+        return L.get('method_short_turkey_europe');
+      case CalculationMethod.TEHRAN:
+        return L.get('method_short_tehran');
+      case CalculationMethod.INDONESIA:
+        return L.get('method_short_indonesia');
+      case CalculationMethod.ALGERIA:
+        return L.get('method_short_algeria');
+      case CalculationMethod.BRUNEI:
+        return L.get('method_short_brunei');
+      case CalculationMethod.CUSTOM:
+        return L.get('method_short_custom');
       default:
         return L.get('method_short_karachi');
     }
@@ -596,6 +642,7 @@ export class SettingsHelper {
 
   static buildMethodPickerItems(current: CalculationMethod): PickerItem[] {
     return [
+      // ---- Existing thirteen ----
       CalculationMethod.KARACHI,
       CalculationMethod.JAFARI,
       CalculationMethod.ISNA,
@@ -608,7 +655,19 @@ export class SettingsHelper {
       CalculationMethod.FRANCE,
       CalculationMethod.TURKEY,
       CalculationMethod.RUSSIA,
-      CalculationMethod.UAE
+      CalculationMethod.UAE,
+      // ---- Newly exposed ----
+      CalculationMethod.MOONSIGHTING_COMMITTEE,
+      CalculationMethod.DUBAI,
+      CalculationMethod.KUWAIT,
+      CalculationMethod.FRANCE_15,
+      CalculationMethod.FRANCE_18,
+      CalculationMethod.TURKEY_EUROPE,
+      CalculationMethod.TEHRAN,
+      CalculationMethod.INDONESIA,
+      CalculationMethod.ALGERIA,
+      CalculationMethod.BRUNEI,
+      CalculationMethod.CUSTOM
     ].map((m): PickerItem => ({
       id: m,
       label: SettingsHelper.getCalcMethodLabel(m),

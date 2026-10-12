@@ -2,6 +2,8 @@
 
 import { City, DstRule, OfflineCityLookup } from './OfflineCityLookup';
 
+
+const MS_PER_DAY = 86400000;
 /**
  * Resolves the effective UTC offset (hours) for a location on a
  * given date, including DST where applicable.
@@ -26,7 +28,6 @@ import { City, DstRule, OfflineCityLookup } from './OfflineCityLookup';
  * refusing to override legitimate half-hour and quarter-hour offsets.
  */
 export class TimezoneResolver {
-
   /**
    * Effective offset for a location, preferring the device's offset
    * when the two are within 15 minutes of each other.
@@ -119,9 +120,56 @@ export class TimezoneResolver {
         return TimezoneResolver.isEuDst(date, year);
       case DstRule.AU:
         return TimezoneResolver.isAuDst(date, year);
+      case DstRule.EGYPT:
+        return TimezoneResolver.isEgyptDst(date, year);
       default:
         return false;
     }
+  }
+
+  /**
+   * Egypt DST: last Friday of April → last Thursday of October,
+   * per Law No. 34 of 2023.
+   *
+   * The clock goes forward at midnight entering the last Friday of
+   * April, and back at midnight at the end of the last Thursday of
+   * October. The `end` Date is therefore the Friday *after* the last
+   * Thursday, so a date on that Friday (the transition day) is
+   * already outside DST.
+   */
+  private static isEgyptDst(date: Date, year: number): boolean {
+    const start = TimezoneResolver.lastWeekdayOfMonth(
+      year, 4, 5
+    ); // Friday = 5
+    const lastThursday = TimezoneResolver.lastWeekdayOfMonth(
+      year, 10, 4
+    ); // Thursday = 4
+    const end = new Date(lastThursday.getTime() + MS_PER_DAY);
+
+    const t = date.getTime();
+    return t >= start.getTime() && t < end.getTime();
+  }
+
+  /**
+   * Last occurrence of a given weekday in a 1-based month, at 00:00 UTC.
+   *
+   * @param year      Calendar year
+   * @param month     1-based month (4 = April, 10 = October)
+   * @param weekday   0 = Sunday … 6 = Saturday
+   */
+  private static lastWeekdayOfMonth(
+    year: number, month: number, weekday: number
+  ): Date {
+    // Day 0 of month+1 is the last day of `month`.
+    const last = new Date(Date.UTC(year, month, 0));
+    const lastDow = last.getUTCDay();
+    let delta = lastDow - weekday;
+    if (delta < 0) {
+      delta += 7;
+    }
+    return new Date(Date.UTC(
+      year, month - 1, last.getUTCDate() - delta
+    ));
   }
 
   /**

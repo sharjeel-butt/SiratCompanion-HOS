@@ -12,5 +12,11 @@ export interface CalendarDay {
   hijri: HijriDate;
   isToday: boolean;
   isFriday: boolean;
-  events: string[]; // names of events on this Hijri day
+
+  /**
+   * Stable event keys (`IslamicEvent.key`) for events on this Hijri
+   * day. Resolve to a localized label via `L.get('event_' + key)`,
+   * as done elsewhere in the app. Empty when no events match.
+   */
+  events: string[];
 }
