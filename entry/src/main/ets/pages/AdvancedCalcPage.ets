@@ -326,18 +326,43 @@ struct AdvancedCalcPage {
     Row() {
       Column() {
         Text(this.tr('shafaq'))
-          .fontSize(15).fontColor(this.colors.textWhite)
+          .fontSize(15)
+          .fontColor(this.isShafaqApplicable()
+            ? this.colors.textWhite
+            : this.colors.textMuted)
           .fontWeight(FontWeight.Medium)
-        Text(this.tr('shafaq_desc'))
-          .fontSize(11).fontColor(this.colors.textMuted)
-          .margin({ top: 2 })
-        Text(this.shafaqLabel())
-          .fontSize(12).fontColor(this.colors.accentGold)
-          .margin({ top: 6 })
-      }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+        Text(this.tr('shafaq_desc'))
+          .fontSize(11)
+          .fontColor(this.colors.textMuted)
+          .margin({ top: 2 })
+
+        Text(this.shafaqLabel())
+          .fontSize(12)
+          .fontColor(this.isShafaqApplicable()
+            ? this.colors.accentGold
+            : this.colors.textMuted)
+          .margin({ top: 6 })
+
+        if (!this.isShafaqApplicable()) {
+          Text(this.tr('shafaq_method_unavailable'))
+            .fontSize(10)
+            .fontColor(this.colors.textMuted)
+            .fontStyle(FontStyle.Italic)
+            .margin({ top: 4 })
+            .maxLines(2)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+        }
+      }
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+
+      Text('›')
+        .fontSize(22)
+        .fontColor(this.isShafaqApplicable()
+          ? this.colors.accentGold
+          : this.colors.textMuted)
+        .opacity(this.isShafaqApplicable() ? 0.7 : 0.3)
     }
     .width('100%')
     .padding({
@@ -349,8 +374,11 @@ struct AdvancedCalcPage {
     .backgroundColor(this.colors.tintSubtle)
     .borderRadius(12)
     .margin({ bottom: 8 })
+    .opacity(this.isShafaqApplicable() ? 1.0 : 0.55)
     .onClick(() => {
-      this.activeSheet = 'shafaq';
+      if (this.isShafaqApplicable()) {
+        this.activeSheet = 'shafaq';
+      }
     })
   }
 
@@ -801,6 +829,15 @@ struct AdvancedCalcPage {
     }
   }
 
+  /**
+   * Shafaq is a parameter of the Moonsighting Committee method only.
+   * Every other convention uses a fixed Isha angle or interval that
+   * Shafaq has no way to influence.
+   */
+  private isShafaqApplicable(): boolean {
+    return this.calcMethod === CalculationMethod.MOONSIGHTING_COMMITTEE;
+  }
+
   // ============================================================
   // LOAD + SAVE
   // ============================================================
@@ -836,8 +873,7 @@ struct AdvancedCalcPage {
         this.calcMethod = data.method;
       })
       .catch((err: Error) => {
-        console.error('[AdvancedCalcPage] reload base failed: '
-          + err.message);
+        console.error('[AdvancedCalcPage] reload base failed: ' + err.message);
       });
   }
 
