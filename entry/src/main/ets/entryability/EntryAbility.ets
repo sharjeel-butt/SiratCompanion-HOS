@@ -8,6 +8,8 @@ import { PreferencesHelper } from '../helper/PreferencesHelper';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_EVENT_PERSPECTIVE,
+  STORAGE_KEY_EVENT_SETTINGS_VERSION,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
@@ -72,6 +74,9 @@ export default class EntryAbility extends UIAbility {
     // Pre-create the foreground tick so @StorageLink + @Watch
     // subscribers reliably receive updates from onForeground().
     AppStorage.setOrCreate(STORAGE_KEY_APP_FOREGROUND_TICK, 0);
+
+    // Pre-create the event-settings counter for the same reason.
+    AppStorage.setOrCreate(STORAGE_KEY_EVENT_SETTINGS_VERSION, 0);
   }
 
   // ============================================================
@@ -153,6 +158,11 @@ export default class EntryAbility extends UIAbility {
       AppStorage.setOrCreate(
         STORAGE_KEY_SHOW_ISLAMIC_EVENTS, savedShowIslamicEvents
       );
+
+      const savedPerspective = await PreferencesHelper.getString(
+        STORAGE_KEY_EVENT_PERSPECTIVE, 'universal'
+      );
+      AppStorage.setOrCreate(STORAGE_KEY_EVENT_PERSPECTIVE, savedPerspective);
 
       const vibrationEnabled = await PreferencesHelper.getBoolean(
         STORAGE_KEY_VIBRATION_ENABLED, true

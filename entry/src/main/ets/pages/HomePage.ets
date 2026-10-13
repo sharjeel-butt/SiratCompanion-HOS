@@ -10,6 +10,7 @@ import {
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_CALC_SETTINGS_VERSION,
+  STORAGE_KEY_EVENT_SETTINGS_VERSION,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
@@ -59,6 +60,7 @@ import {
   AdvancedCalcSettings, DEFAULT_ADVANCED_CALC
 } from '../models/AdvancedCalcModels';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
+import { EventPerspectiveNotifier } from '../utils/EventPerspectiveNotifier';
 
 @Component
 export struct HomePage {
@@ -73,6 +75,9 @@ export struct HomePage {
   @StorageLink(STORAGE_KEY_LOCATION_VERSION)
   @Watch('onLocationVersionChanged')
   locationVersion: number = 0;
+  @StorageLink(STORAGE_KEY_EVENT_SETTINGS_VERSION)
+  @Watch('onEventSettingsChanged')
+  eventSettingsVersion: number = 0;
 
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
@@ -189,6 +194,13 @@ export struct HomePage {
     // Re-render is handled by the @StorageLink.
   }
 
+  private onEventSettingsChanged(): void {
+    this.upcomingEvents = DateHelper.getUpcomingImportantDates(
+      this.hijriOffset,
+      SettingsHelper.getEventPerspective()
+    );
+  }
+
   private async onCalcSettingsChanged(): Promise<void> {
     await this.loadSettingsAndLocation();
   }
@@ -207,7 +219,7 @@ export struct HomePage {
   private onHijriCalendarTypeChanged(): void {
     this.refreshHijriDate();
     this.refreshRamadan();
-    this.upcomingEvents = DateHelper.getUpcomingImportantDates(this.hijriOffset);
+    this.upcomingEvents = DateHelper.getUpcomingImportantDates(this.hijriOffset, SettingsHelper.getEventPerspective());
   }
 
   private isRtl(): boolean {
@@ -286,6 +298,14 @@ export struct HomePage {
     return e.name;
   }
 
+  private translateEventSignificance(key: string): string {
+    const descKey = 'event_' + key + '_desc';
+    const translated = this.tr(descKey);
+    // L.get falls back to the key itself when missing. Return an
+    // empty string in that case so the layout collapses cleanly.
+    return translated === descKey ? '' : translated;
+  }
+
   private onThemeModeChanged(): void {
     this.colors = PageTheme.compute(this.themeMode);
   }
@@ -304,19 +324,27 @@ export struct HomePage {
   private onHijriOffsetChanged(): void {
     this.refreshHijriDate();
     this.refreshRamadan();
-    this.upcomingEvents = DateHelper.getUpcomingImportantDates(this.hijriOffset);
+    this.upcomingEvents = DateHelper.getUpcomingImportantDates(this.hijriOffset, SettingsHelper.getEventPerspective());
   }
 
   private async onAppForegrounded(): Promise<void> {
     this.refreshHijriDate();
     this.refreshRamadan();
-    this.upcomingEvents = DateHelper.getUpcomingImportantDates(this.hijriOffset);
+    this.upcomingEvents = DateHelper.getUpcomingImportantDates(this.hijriOffset, SettingsHelper.getEventPerspective());
     await this.loadSettingsAndLocation();
     await this.refreshDashboard();
     this.updateCountdown();
     this.startCountdownTimer();
     this.refreshLocationSilently();
   }
+
+  private eventPerspectiveListener: () => void = (): void => {
+    console.info('[HomePage] perspective listener fired');
+    this.upcomingEvents = DateHelper.getUpcomingImportantDates(
+      this.hijriOffset,
+      SettingsHelper.getEventPerspective()
+    );
+  };
 
   async aboutToAppear(): Promise<void> {
     this.currentLanguage = this.appLanguage;
@@ -331,17 +359,19 @@ export struct HomePage {
 
     this.refreshHijriDate();
     this.refreshRamadan();
-    this.upcomingEvents = DateHelper.getUpcomingImportantDates(this.hijriOffset);
+    this.upcomingEvents = DateHelper.getUpcomingImportantDates(this.hijriOffset, SettingsHelper.getEventPerspective());
     await this.loadSettingsAndLocation();
     await this.refreshDashboard();
     this.startCountdownTimer();
     this.refreshLocationSilently();
+    EventPerspectiveNotifier.subscribe(this.eventPerspectiveListener);
   }
 
   aboutToDisappear(): void {
     PageTheme.uninstallSystemListener(this.systemDarkListener);
     this.systemDarkListener = null;
     this.stopCountdownTimer();
+    EventPerspectiveNotifier.unsubscribe(this.eventPerspectiveListener);
   }
 
   async onPageShow(): Promise<void> {
@@ -349,7 +379,7 @@ export struct HomePage {
     this.colors = PageTheme.compute(this.themeMode);
     this.refreshHijriDate();
     this.refreshRamadan();
-    this.upcomingEvents = DateHelper.getUpcomingImportantDates(this.hijriOffset);
+    this.upcomingEvents = DateHelper.getUpcomingImportantDates(this.hijriOffset, SettingsHelper.getEventPerspective());
     await this.refreshDashboard();
     this.startCountdownTimer();
   }
@@ -718,7 +748,8 @@ export struct HomePage {
     try {
       this.refreshHijriDate();
       this.refreshRamadan();
-      this.upcomingEvents = DateHelper.getUpcomingImportantDates(this.hijriOffset);
+      this.upcomingEvents =
+        DateHelper.getUpcomingImportantDates(this.hijriOffset, SettingsHelper.getEventPerspective());
       await this.loadSettingsAndLocation();
       await this.refreshDashboard();
     } finally {
@@ -986,7 +1017,7 @@ export struct HomePage {
     if (this.upcomingEvents.length > 0) {
       Column() {
         Row() {
-          Text('🌙').fontSize(14).margin({ right: 8 })
+          Text('✨').fontSize(14).margin({ right: 8 })
           Text(this.tr('home_next_event'))
             .fontSize(11)
             .fontColor(this.colors.textMuted)
@@ -996,14 +1027,15 @@ export struct HomePage {
         }
         .width('100%').padding({ bottom: 14 })
 
-        this.CountdownMainEvent(this.upcomingEvents[0])
+        this.CountdownMainEvent()
 
         if (this.upcomingEvents.length > 1) {
-          Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 12 })
+          Divider().color(this.colors.borderSoft)
+            .margin({ top: 14, bottom: 12 })
           Column() {
-            this.CountdownSecondaryRow(this.upcomingEvents[1])
+            this.CountdownSecondaryRow(1)
             if (this.upcomingEvents.length > 2) {
-              this.CountdownSecondaryRow(this.upcomingEvents[2])
+              this.CountdownSecondaryRow(2)
             }
           }
           .width('100%')
@@ -1025,16 +1057,16 @@ export struct HomePage {
   }
 
   @Builder
-  CountdownMainEvent(e: UpcomingImportantDate) {
+  CountdownMainEvent() {
     Row() {
       Column() {
-        if (e.daysUntil === 0) {
+        if (this.upcomingEvents[0].daysUntil === 0) {
           Text('🎉').fontSize(30)
           Text(this.tr('home_event_today'))
             .fontSize(12).fontWeight(FontWeight.Bold)
             .fontColor(this.colors.textOnAccent)
             .margin({ top: 2 })
-        } else if (e.daysUntil === 1) {
+        } else if (this.upcomingEvents[0].daysUntil === 1) {
           Text('1')
             .fontSize(38).fontWeight(FontWeight.Bold)
             .fontColor(this.colors.textOnAccent)
@@ -1042,7 +1074,7 @@ export struct HomePage {
             .fontSize(10).fontWeight(FontWeight.Medium)
             .fontColor(this.colors.textOnAccent).opacity(0.9)
         } else {
-          Text(`${e.daysUntil}`)
+          Text(`${this.upcomingEvents[0].daysUntil}`)
             .fontSize(38).fontWeight(FontWeight.Bold)
             .fontColor(this.colors.textOnAccent)
           Text(this.tr('home_days'))
@@ -1058,40 +1090,52 @@ export struct HomePage {
       .alignItems(HorizontalAlign.Center)
 
       Column() {
-        Text(this.translateUpcomingEventName(e))
+        Text(this.translateUpcomingEventName(this.upcomingEvents[0]))
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .fontColor(this.colors.textWhite)
           .maxLines(2)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .width('100%')
-        Text(e.hijriDate)
+
+        Text(this.upcomingEvents[0].hijriDate)
           .fontSize(12)
           .fontColor(this.colors.accentGold)
           .margin({ top: 6 })
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .width('100%')
+
+        if (this.translateEventSignificance(this.upcomingEvents[0].key).length > 0) {
+          Text(this.translateEventSignificance(this.upcomingEvents[0].key))
+            .fontSize(11)
+            .fontColor(this.colors.textMuted)
+            .lineHeight(16)
+            .maxLines(3)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .margin({ top: 8 })
+            .width('100%')
+        }
       }
       .layoutWeight(1).margin({ left: 16 })
       .alignItems(HorizontalAlign.Start)
     }
     .width('100%')
-    .alignItems(VerticalAlign.Center)
+    .alignItems(VerticalAlign.Top)
   }
 
   @Builder
-  CountdownSecondaryRow(e: UpcomingImportantDate) {
+  CountdownSecondaryRow(index: number) {
     Row() {
       Text('✨').fontSize(13).margin({ right: 8 }).opacity(0.75)
-      Text(this.translateUpcomingEventName(e))
+      Text(this.translateUpcomingEventName(this.upcomingEvents[index]))
         .fontSize(13)
         .fontColor(this.colors.textWhite)
         .fontWeight(FontWeight.Medium)
         .maxLines(1)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
         .layoutWeight(1)
-      Text(this.countdownShortLabel(e.daysUntil))
+      Text(this.countdownShortLabel(this.upcomingEvents[index].daysUntil))
         .fontSize(11).fontColor(this.colors.accentGold)
         .margin({ left: 8 })
     }
@@ -1494,6 +1538,7 @@ export struct HomePage {
   TodayProgressCard() {
     Column() {
       Row() {
+        Text('🕌').fontSize(14).margin({ right: 8 })
         Text(this.tr('home_today_progress'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
@@ -1761,6 +1806,7 @@ export struct HomePage {
   WeekGridCard() {
     Column() {
       Row() {
+        Text('📅').fontSize(14).margin({ right: 8 })
         Text(this.tr('home_this_week'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)

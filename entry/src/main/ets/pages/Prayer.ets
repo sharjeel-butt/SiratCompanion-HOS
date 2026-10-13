@@ -17,6 +17,7 @@ import {
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_CALC_SETTINGS_VERSION,
+  STORAGE_KEY_EVENT_SETTINGS_VERSION,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
@@ -43,6 +44,7 @@ import {
   AdvancedCalcSettings, DEFAULT_ADVANCED_CALC
 } from '../models/AdvancedCalcModels';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
+import { EventPerspectiveNotifier } from '../utils/EventPerspectiveNotifier';
 
 interface TimelineRow {
   kind: 'prayer' | 'extra';
@@ -91,6 +93,9 @@ export struct Prayer {
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
+  @StorageLink(STORAGE_KEY_EVENT_SETTINGS_VERSION)
+  @Watch('onEventSettingsChanged')
+  eventSettingsVersion: number = 0;
 
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
@@ -162,6 +167,13 @@ export struct Prayer {
     // buildCombinedTimeline() re-reads this.showExtraTimings on
     // the next render pass, and the sun path receives the new
     // value through its @Prop.
+  }
+
+  private onEventSettingsChanged(): void {
+    this.upcomingImportantDates = DateHelper.getUpcomingImportantDates(
+      this.hijriOffset,
+      SettingsHelper.getEventPerspective()
+    );
   }
 
   private dt(t: string): string {
@@ -261,7 +273,7 @@ export struct Prayer {
   private onHijriOffsetChangedInHome(): void {
     this.refreshHijriDates();
     this.upcomingImportantDates =
-      DateHelper.getUpcomingImportantDates(this.hijriOffset);
+      DateHelper.getUpcomingImportantDates(this.hijriOffset, SettingsHelper.getEventPerspective());
   }
 
   private async onCalcSettingsChanged(): Promise<void> {
@@ -273,7 +285,7 @@ export struct Prayer {
 
     this.refreshHijriDates();
     this.upcomingImportantDates =
-      DateHelper.getUpcomingImportantDates(this.hijriOffset);
+      DateHelper.getUpcomingImportantDates(this.hijriOffset, SettingsHelper.getEventPerspective());
 
     await this.loadSettingsAndLocation();
     this.prayers = PrayerManager.updateStatuses(
@@ -285,6 +297,13 @@ export struct Prayer {
     this.refreshLocationSilently();
   }
 
+  private eventPerspectiveListener: () => void = (): void => {
+    this.upcomingImportantDates = DateHelper.getUpcomingImportantDates(
+      this.hijriOffset,
+      SettingsHelper.getEventPerspective()
+    );
+  };
+
   aboutToAppear(): void {
     this.colors = PageTheme.compute(this.themeMode);
     this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
@@ -292,13 +311,15 @@ export struct Prayer {
     });
 
     this.refreshHijriDates();
-    this.upcomingImportantDates = DateHelper.getUpcomingImportantDates(this.hijriOffset);
+    this.upcomingImportantDates =
+      DateHelper.getUpcomingImportantDates(this.hijriOffset, SettingsHelper.getEventPerspective());
 
     this.refreshViewingDate(true);
     this.initialize();
     this.startStatusTimer();
 
     this.refreshLocationSilently();
+    EventPerspectiveNotifier.subscribe(this.eventPerspectiveListener);
   }
 
   aboutToDisappear(): void {
@@ -308,6 +329,7 @@ export struct Prayer {
       clearInterval(this.statusTimerId);
       this.statusTimerId = -1;
     }
+    EventPerspectiveNotifier.unsubscribe(this.eventPerspectiveListener);
   }
 
   onPageShow(): void {

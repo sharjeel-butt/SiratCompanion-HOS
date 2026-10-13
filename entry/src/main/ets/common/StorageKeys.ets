@@ -67,3 +67,7 @@ export const STORAGE_KEY_HIJRI_CALENDAR_TYPE = 'hijri_calendar_type';
 export const STORAGE_KEY_CALC_SETTINGS_VERSION = 'calc_settings_version';
 
 export const STORAGE_KEY_SETTINGS_INITIAL_CATEGORY = 'settings_initial_category';
+
+export const STORAGE_KEY_EVENT_PERSPECTIVE = 'event_perspective';
+
+export const STORAGE_KEY_EVENT_SETTINGS_VERSION = 'event_settings_version';

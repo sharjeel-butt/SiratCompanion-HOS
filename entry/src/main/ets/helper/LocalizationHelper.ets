@@ -696,6 +696,45 @@ export class L {
     m.set('countdown_fast_starts_now', 'Its time to begin fasting');
     m.set('shafaq_method_unavailable', 'Available only with Moonsighting Committee');
 
+    m.set('event_perspective', 'Event Tradition');
+    m.set('event_perspective_desc',
+      'Choose whether Home shows events shared by all Muslims, or also those particular to the Sunni and Shia traditions.');
+    m.set('event_perspective_universal', 'Universal only');
+    m.set('event_perspective_sunni', 'Sunni + universal');
+    m.set('event_perspective_shia', 'Shia + universal');
+    m.set('event_perspective_all', 'Show all');
+    m.set('event_arbaeen', 'Arbaeen');
+    m.set('event_imam_ali_birthday', 'Birthday of Imam Ali');
+    m.set('event_ghadir', 'Eid al-Ghadir');
+
+    // ---- Event significance ----
+    m.set('event_new_year_desc',
+      'The start of the Hijri year, marking the Prophet\u2019s migration to Madinah.');
+    m.set('event_ashura_desc',
+      'A day of fasting and reflection observed across the Muslim world.');
+    m.set('event_arbaeen_desc',
+      'Marks forty days after Ashura — a period of mourning in the Shia tradition.');
+    m.set('event_mawlid_desc',
+      'The birth of the Prophet Muhammad \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645.');
+    m.set('event_raghaib_desc',
+      'The first Thursday night of Rajab — a night of prayer in the Sunni tradition.');
+    m.set('event_imam_ali_birthday_desc',
+      'The birth of Imam Ali ibn Abi Talib, observed in the Shia tradition.');
+    m.set('event_isra_miraj_desc',
+      'The Prophet\u2019s night journey to Jerusalem and ascension to the heavens.');
+    m.set('event_mid_shaban_desc',
+      'The fifteenth night of Sha\u2019ban — a night of prayer and seeking forgiveness.');
+    m.set('event_ramadan_start_desc',
+      'The beginning of the month of fasting, the ninth month of the Hijri year.');
+    m.set('event_eid_fitr_desc',
+      'The festival marking the end of Ramadan.');
+    m.set('event_arafah_desc',
+      'The day of standing at Arafah, the most sacred day of the Hajj pilgrimage.');
+    m.set('event_eid_adha_desc',
+      'The festival of sacrifice, commemorating Prophet Ibrahim\u2019s devotion.');
+    m.set('event_ghadir_desc',
+      'Marks the day the Prophet appointed Imam Ali as his successor, in the Shia tradition.');
+
     return m;
   }
 
@@ -1226,6 +1265,45 @@ export class L {
     m.set('countdown_fast_ends_now', '开斋时间到');
     m.set('countdown_fast_starts_now', '封斋时间到');
     m.set('shafaq_method_unavailable', '仅适用于观月委员会方法');
+
+    m.set('event_perspective', '节日传统');
+    m.set('event_perspective_desc',
+      '选择首页显示所有穆斯林共同遵守的节日，或同时显示逊尼派与什叶派特有的节日。');
+    m.set('event_perspective_universal', '仅通用');
+    m.set('event_perspective_sunni', '逊尼派 + 通用');
+    m.set('event_perspective_shia', '什叶派 + 通用');
+    m.set('event_perspective_all', '全部显示');
+    m.set('event_arbaeen', '阿尔巴因');
+    m.set('event_imam_ali_birthday', '伊玛目阿里诞辰');
+    m.set('event_ghadir', '加迪尔节');
+
+    // ---- 节日意义 ----
+    m.set('event_new_year_desc',
+      '回历新年的开始，纪念先知迁徙至麦地那。');
+    m.set('event_ashura_desc',
+      '阿舒拉日，穆斯林世界共同遵行的斋戒与反思之日。');
+    m.set('event_arbaeen_desc',
+      '阿舒拉日后的第四十天，什叶派传统中的哀悼期。');
+    m.set('event_mawlid_desc',
+      '先知穆罕默德ﷺ的诞辰。');
+    m.set('event_raghaib_desc',
+      '赖哲卜月的第一个星期四之夜，逊尼派传统中的祈祷之夜。');
+    m.set('event_imam_ali_birthday_desc',
+      '伊玛目阿里·本·阿比·塔利卜的诞辰，什叶派传统节日。');
+    m.set('event_isra_miraj_desc',
+      '先知夜行至耶路撒冷并登霄的纪念日。');
+    m.set('event_mid_shaban_desc',
+      '舍尔邦月十五之夜，祈祷与求恕之夜。');
+    m.set('event_ramadan_start_desc',
+      '斋月的开始，回历第九个月。');
+    m.set('event_eid_fitr_desc',
+      '庆祝斋月结束的开斋节。');
+    m.set('event_arafah_desc',
+      '阿拉法日，朝觐中最神圣的一天。');
+    m.set('event_eid_adha_desc',
+      '宰牲节，纪念先知易卜拉欣的虔诚奉献。');
+    m.set('event_ghadir_desc',
+      '先知ﷺ任命伊玛目阿里为继承人之日，什叶派传统节日。');
 
     return m;
   }
@@ -1764,6 +1842,45 @@ export class L {
     m.set('countdown_fast_ends_now', 'حان وقت الإفطار');
     m.set('countdown_fast_starts_now', 'حان وقت الإمساك');
     m.set('shafaq_method_unavailable', 'متاح فقط مع طريقة لجنة رؤية الهلال');
+
+    m.set('event_perspective', 'المناسبات بحسب المذهب');
+    m.set('event_perspective_desc',
+      'اختر ما إذا كانت الشاشة الرئيسية تعرض المناسبات المشتركة بين جميع المسلمين، أم تشمل أيضًا المناسبات الخاصة بالسنّة أو الشيعة.');
+    m.set('event_perspective_universal', 'العامة فقط');
+    m.set('event_perspective_sunni', 'سنّي + عام');
+    m.set('event_perspective_shia', 'شيعي + عام');
+    m.set('event_perspective_all', 'عرض الكل');
+    m.set('event_arbaeen', 'الأربعين');
+    m.set('event_imam_ali_birthday', 'مولد الإمام علي');
+    m.set('event_ghadir', 'عيد الغدير');
+
+    // ---- معاني المناسبات ----
+    m.set('event_new_year_desc',
+      'بداية السنة الهجرية، ذكرى هجرة النبي ﷺ إلى المدينة.');
+    m.set('event_ashura_desc',
+      'يوم صيام وتأمل يصومه المسلمون في مشارق الأرض ومغاربها.');
+    m.set('event_arbaeen_desc',
+      'بعد أربعين يومًا من عاشوراء — فترة حداد في التقليد الشيعي.');
+    m.set('event_mawlid_desc',
+      'مولد النبي محمد ﷺ.');
+    m.set('event_raghaib_desc',
+      'أول ليلة خميس من رجب — ليلة دعاء في التقليد السنّي.');
+    m.set('event_imam_ali_birthday_desc',
+      'مولد الإمام علي بن أبي طالب، يُحتفل به في التقليد الشيعي.');
+    m.set('event_isra_miraj_desc',
+      'رحلة النبي ﷺ الليلية إلى القدس وعروجه إلى السماوات.');
+    m.set('event_mid_shaban_desc',
+      'الليلة الخامسة عشرة من شعبان — ليلة دعاء وطلب المغفرة.');
+    m.set('event_ramadan_start_desc',
+      'بداية شهر الصيام، الشهر التاسع من السنة الهجرية.');
+    m.set('event_eid_fitr_desc',
+      'عيد الفطر، احتفال بنهاية رمضان.');
+    m.set('event_arafah_desc',
+      'يوم الوقوف بعرفة، أقدس أيام الحج.');
+    m.set('event_eid_adha_desc',
+      'عيد الأضحى، ذكرى تضحية النبي إبراهيم عليه السلام.');
+    m.set('event_ghadir_desc',
+      'يوم تعيين النبي ﷺ للإمام علي خليفةً له، في التقليد الشيعي.');
 
     return m;
   }

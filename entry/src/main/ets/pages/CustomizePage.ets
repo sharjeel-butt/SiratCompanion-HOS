@@ -9,6 +9,7 @@ import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_EVENT_PERSPECTIVE,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_SHOW_EXTRA_TIMINGS,
   STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
@@ -62,6 +63,9 @@ struct CustomizePage {
   @StorageLink(STORAGE_KEY_SHOW_ISLAMIC_EVENTS)
   @Watch('onShowIslamicEventsChanged')
   showIslamicEvents: boolean = true;
+  @StorageLink(STORAGE_KEY_EVENT_PERSPECTIVE)
+  @Watch('onEventPerspectiveChanged')
+  eventPerspective: string = 'universal';
 
   // ============================================================
   // UI CUSTOMIZATION STATE
@@ -72,13 +76,14 @@ struct CustomizePage {
   @State selectedSound: string = SoundOptions.DEFAULT_ID;
   @State expandedCategory: string | null = 'UI Customization';
   @State showThemePicker: boolean = false;
+  @State showEventPerspectivePicker: boolean = false;
   // ============================================================
   // UI STATE
   // ============================================================
   @State showLanguagePicker: boolean = false;
   @State showAppThemePicker: boolean = false;
   @State showSoundPicker: boolean = false;
-  @State private currentLanguage: string = AppLanguage.ENGLISH;
+  @State currentLanguage: string = AppLanguage.ENGLISH;
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
 
   // ============================================================
@@ -114,6 +119,10 @@ struct CustomizePage {
     // No state to update — the @StorageLink re-render is enough.
     // Pages call ClockFormatHelper.reformat() during build, and the
     // helper reads the freshly-written value from AppStorage.
+  }
+
+  private onEventPerspectiveChanged(): void {
+    // Re-render handled by the @StorageLink.
   }
 
   private onShowExtraTimingsChanged(): void {
@@ -254,6 +263,20 @@ struct CustomizePage {
       }
       .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
 
+      if (this.showEventPerspectivePicker) {
+        this.PickerOverlay(
+          this.tr('event_perspective'),
+          '🌙',
+          SettingsHelper.buildEventPerspectivePickerItems(this.eventPerspective),
+          (id: string) => {
+            this.pickEventPerspective(id);
+          },
+          () => {
+            this.showEventPerspectivePicker = false;
+          }
+        )
+      }
+
       if (this.showThemePicker) {
         this.PickerOverlay(
           this.tr('dark_mode'),
@@ -343,6 +366,7 @@ struct CustomizePage {
         currentLanguage: this.currentLanguage
       })
       this.ShowIslamicEventsRow()
+      this.EventPerspectiveRow()
 
       // ============ Prayer UI ============
       SubsectionHeader({
@@ -376,6 +400,62 @@ struct CustomizePage {
     .borderRadius(16)
     .border({ width: 1, color: this.colors.borderSoft })
     .margin({ bottom: 12 })
+  }
+
+  @Builder
+  EventPerspectiveRow() {
+    Row() {
+      Column() {
+        Text(this.tr('event_perspective'))
+          .fontSize(15).fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Medium)
+        Text(this.tr('event_perspective_desc'))
+          .fontSize(11)
+          .fontColor(this.colors.textMuted)
+          .margin({ top: 2 })
+          .maxLines(3)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+        Text(SettingsHelper.getEventPerspectiveLabel(
+          this.eventPerspective, this.currentLanguage
+        ))
+          .fontSize(12)
+          .fontColor(this.colors.accentGold)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+          .margin({ top: 6 })
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+      Text('›').fontSize(22)
+        .fontColor(this.colors.accentGold).opacity(0.7)
+    }
+    .width('100%')
+    .padding({
+      top: 14,
+      bottom: 14,
+      left: 16,
+      right: 16
+    })
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(12)
+    .margin({ bottom: 8 })
+    .onClick(() => {
+      this.showEventPerspectivePicker = true;
+    })
+  }
+
+  private eventPerspectiveLabel(): string {
+    switch (this.eventPerspective) {
+      case SettingsHelper.EVENT_PERSPECTIVE_SUNNI:
+        return this.tr('event_perspective_sunni');
+      case SettingsHelper.EVENT_PERSPECTIVE_SHIA:
+        return this.tr('event_perspective_shia');
+      case SettingsHelper.EVENT_PERSPECTIVE_ALL:
+        return this.tr('event_perspective_all');
+      case SettingsHelper.EVENT_PERSPECTIVE_UNIVERSAL:
+      default:
+        return this.tr('event_perspective_universal');
+    }
   }
 
   @Builder
@@ -1143,6 +1223,12 @@ struct CustomizePage {
 
   private isTablet(): boolean {
     return Breakpoints.isTablet(this.breakpoint);
+  }
+
+  private pickEventPerspective(id: string): void {
+    this.eventPerspective = id;
+    SettingsHelper.saveEventPerspective(id);
+    this.showEventPerspectivePicker = false;
   }
 
   // ============================================================
