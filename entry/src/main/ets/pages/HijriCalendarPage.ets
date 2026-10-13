@@ -7,6 +7,7 @@ import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_EVENT_SETTINGS_VERSION,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
@@ -19,6 +20,8 @@ import { L } from '../helper/LocalizationHelper';
 import { Breakpoints } from '../common/Breakpoints';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 import { SettingsHelper } from '../helper/SettingsHelper';
+import { EventPerspectiveNotifier } from '../utils/EventPerspectiveNotifier';
+import { CalendarDayCell } from '../components/CalendarDayCell';
 
 @Component
 export struct HijriCalendarPage {
@@ -37,6 +40,9 @@ export struct HijriCalendarPage {
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
   appThemePreset: string = ThemePreset.SIRAT;
+  @StorageLink(STORAGE_KEY_EVENT_SETTINGS_VERSION)
+  @Watch('onEventSettingsChanged')
+  eventSettingsVersion: number = 0;
 
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
@@ -51,10 +57,11 @@ export struct HijriCalendarPage {
   @State private currentLanguage: string = 'en';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
 
-
   @State viewingHijriYear: number = 1447;
   @State viewingHijriMonth: number = 1;
   @State monthDays: CalendarDay[] = [];
+  @State private monthEvents: IslamicEvent[] = [];
+
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
 
   private tr(key: string): string {
@@ -93,6 +100,12 @@ export struct HijriCalendarPage {
     this.jumpToToday();
   }
 
+  private onEventSettingsChanged(): void {
+    this.rebuildFromAnchor(this.monthDays.length > 0
+      ? this.monthDays[0].gregorianDate
+      : new Date());
+  }
+
   private onAppForegrounded(): void {
     const today = new Date();
     const h: HijriDate = HijriCalendarHelper.getHijriDate(today, this.offsetDays);
@@ -103,6 +116,14 @@ export struct HijriCalendarPage {
     }
   }
 
+  private eventPerspectiveListener: () => void = (): void => {
+    this.rebuildFromAnchor(
+      this.monthDays.length > 0
+        ? this.monthDays[0].gregorianDate
+        : new Date()
+    );
+  };
+
   aboutToAppear(): void {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
@@ -110,6 +131,7 @@ export struct HijriCalendarPage {
       this.colors = c;
     });
     this.jumpToToday();
+    EventPerspectiveNotifier.subscribe(this.eventPerspectiveListener);
   }
 
   aboutToDisappear(): void {
@@ -120,6 +142,7 @@ export struct HijriCalendarPage {
   onPageShow(): void {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
+    EventPerspectiveNotifier.unsubscribe(this.eventPerspectiveListener);
   }
 
   private jumpToToday(): void {
@@ -132,7 +155,11 @@ export struct HijriCalendarPage {
 
   private rebuildFromAnchor(anchor: Date): void {
     this.monthDays = HijriCalendarHelper.buildMonthDays(
-      this.viewingHijriYear, this.viewingHijriMonth, this.offsetDays, anchor
+      this.viewingHijriYear, this.viewingHijriMonth,
+      this.offsetDays, anchor, SettingsHelper.getEventPerspective()
+    );
+    this.monthEvents = HijriCalendarHelper.eventsInMonth(
+      this.viewingHijriMonth, SettingsHelper.getEventPerspective()
     );
   }
 
@@ -147,7 +174,9 @@ export struct HijriCalendarPage {
   }
 
   private getMonthEvents(): IslamicEvent[] {
-    return HijriCalendarHelper.eventsInMonth(this.viewingHijriMonth);
+    return HijriCalendarHelper.eventsInMonth(
+      this.viewingHijriMonth, SettingsHelper.getEventPerspective()
+    );
   }
 
   private getLocalizedMonthName(): string {
@@ -165,6 +194,12 @@ export struct HijriCalendarPage {
       if (translated !== 'event_' + e.key) return translated;
     }
     return e.name;
+  }
+
+  private translateEventSignificance(key: string): string {
+    const descKey = 'event_' + key + '_desc';
+    const translated = this.tr(descKey);
+    return translated === descKey ? '' : translated;
   }
 
   private buildPaddedWeeks(): Array<Array<CalendarDay | null>> {
@@ -298,24 +333,42 @@ export struct HijriCalendarPage {
   @Builder
   Grid() {
     Column() {
-      ForEach(this.buildPaddedWeeks(), (week: Array<CalendarDay | null>, wi: number) => {
-        Row() {
-          ForEach(week, (cell: CalendarDay | null, di: number) => {
-            if (cell !== null) {
-              this.DayCell(cell)
-            } else {
-              Column().layoutWeight(1).height(56).margin({ left: 2, right: 2 })
-            }
-          }, (cell: CalendarDay | null, di: number) => {
-            const key = cell !== null
-              ? `${cell.hijri.year}-${cell.hijri.month}-${cell.hijri.day}`
-              : `empty-${wi}-${di}`;
-            return `cell-${key}`;
-          })
-        }
-        .width('100%').margin({ bottom: 4 })
-      }, (week: Array<CalendarDay | null>, wi: number) =>
-      `week-${wi}-${this.viewingHijriYear}-${this.viewingHijriMonth}-${this.offsetDays}`)
+      ForEach(this.buildPaddedWeeks(),
+        (week: Array<CalendarDay | null>, wi: number) => {
+          Row() {
+            ForEach(week, (cell: CalendarDay | null, di: number) => {
+              if (cell !== null) {
+                CalendarDayCell({
+                  cell: cell,
+                  colors: this.colors
+                })
+              } else {
+                Column()
+                  .layoutWeight(1)
+                  .height(56)
+                  .margin({ left: 2, right: 2 })
+              }
+            }, (cell: CalendarDay | null, di: number) => {
+              if (cell === null) {
+                return `empty-${wi}-${di}`;
+              }
+              // Include the event count so a cell rebuilds when its
+              // events change, even though the date is unchanged.
+              return `cell-${cell.hijri.year}-${cell.hijri.month}-${cell.hijri.day}-${cell.events.length}`;
+            })
+          }
+          .width('100%')
+          .margin({ bottom: 4 })
+        },
+        (week: Array<CalendarDay | null>, wi: number) => {
+          // Event signature across the row. Forces the row to rebuild
+          // whenever any cell's event list changes.
+          let sig = '';
+          for (const c of week) {
+            sig += c === null ? '_' : c.events.length;
+          }
+          return `week-${wi}-${this.viewingHijriYear}-${this.viewingHijriMonth}-${this.offsetDays}-${sig}`;
+        })
     }
     .width('100%')
     .padding(8)
@@ -326,75 +379,52 @@ export struct HijriCalendarPage {
   }
 
   @Builder
-  DayCell(cell: CalendarDay) {
-    Column() {
-      Text(`${cell.hijri.day}`)
-        .fontSize(17)
-        .fontWeight(cell.isToday ? FontWeight.Bold : FontWeight.Medium)
-        .fontColor(cell.isToday ? this.colors.textOnAccent
-          : (cell.events.length > 0 ? this.colors.accentGold : this.colors.textWhite))
-
-      Text(`${cell.gregorianDate.getDate()}`)
-        .fontSize(10)
-        .fontColor(cell.isToday ? this.colors.textOnAccent : this.colors.textMuted)
-        .opacity(cell.isToday ? 0.85 : 0.7).margin({ top: -2 })
-
-      if (cell.events.length > 0 && !cell.isToday) {
-        Row()
-          .width(5)
-          .height(5)
-          .borderRadius(3)
-          .backgroundColor(this.colors.accentGold)
-          .margin({ top: 3 })
-      } else if (cell.events.length > 0 && cell.isToday) {
-        Row()
-          .width(5)
-          .height(5)
-          .borderRadius(3)
-          .backgroundColor(this.colors.textOnAccent)
-          .margin({ top: 3 })
-      } else {
-        Row().width(5).height(5).margin({ top: 3 })
-      }
-    }
-    .layoutWeight(1)
-    .height(56)
-    .justifyContent(FlexAlign.Center)
-    .alignItems(HorizontalAlign.Center)
-    .backgroundColor(cell.isToday ? this.colors.accentGold
-      : (cell.isFriday ? this.colors.tintSubtle : Color.Transparent))
-    .borderRadius(10)
-    .border(cell.isFriday && !cell.isToday
-      ? { width: 1, color: this.colors.borderSoft } : { width: 0 })
-    .margin({ left: 2, right: 2 })
-  }
-
-  @Builder
   EventsList() {
     Column() {
       Row() {
         Text('📅').fontSize(14)
-          .margin({ left: this.isRtl() ? 8 : 0, right: this.isRtl() ? 0 : 8 })
+          .margin({
+            left: this.isRtl() ? 8 : 0,
+            right: this.isRtl() ? 0 : 8
+          })
         Text(this.tr('important_dates'))
           .fontSize(12).fontColor(this.colors.accentGold)
           .fontWeight(FontWeight.Bold).letterSpacing(1.2)
       }
       .width('100%').padding({ bottom: 12 })
 
-      if (this.getMonthEvents().length === 0) {
+      if (this.monthEvents.length === 0) {
         Text(this.tr('no_events_this_month'))
           .fontSize(13).fontColor(this.colors.textMuted)
           .width('100%').padding({ top: 4, bottom: 4 })
       } else {
-        ForEach(this.getMonthEvents(), (e: IslamicEvent) => {
+        ForEach(this.monthEvents, (e: IslamicEvent) => {
           Row() {
             Text(`${e.day}`)
               .fontSize(16).fontWeight(FontWeight.Bold)
               .fontColor(this.colors.accentGold)
               .width(36)
               .textAlign(TextAlign.Center)
-            Text(this.translateEventName(e))
-              .fontSize(14).fontColor(this.colors.textWhite).layoutWeight(1)
+              .margin({ top: 2 })
+
+            Column() {
+              Text(this.translateEventName(e))
+                .fontSize(14).fontColor(this.colors.textWhite)
+                .width('100%')
+
+              if (this.translateEventSignificance(e.key).length > 0) {
+                Text(this.translateEventSignificance(e.key))
+                  .fontSize(11)
+                  .fontColor(this.colors.textMuted)
+                  .lineHeight(15)
+                  .maxLines(3)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+                  .margin({ top: 4 })
+                  .width('100%')
+              }
+            }
+            .alignItems(HorizontalAlign.Start)
+            .layoutWeight(1)
           }
           .width('100%')
           .padding({
@@ -406,7 +436,8 @@ export struct HijriCalendarPage {
           .borderRadius(8)
           .margin({ bottom: 4 })
           .backgroundColor(this.colors.tintSubtle)
-        }, (e: IslamicEvent) => `event-${e.month}-${e.day}-${e.name}`)
+          .alignItems(VerticalAlign.Top)
+        }, (e: IslamicEvent) => `event-${e.key}`)
       }
     }
     .width('100%')

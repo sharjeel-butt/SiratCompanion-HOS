@@ -4,7 +4,7 @@ import { CalendarDay, HijriDate } from './HijriCalendarModels';
 import {
   EventRecurrence, IslamicEvent
 } from '../models/DateModels';
-import { IMPORTANT_ISLAMIC_EVENTS } from '../data/IslamicEvents';
+import { eventMatchesPerspective, IMPORTANT_ISLAMIC_EVENTS } from '../data/IslamicEvents';
 import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
 
 export const HIJRI_MONTH_NAMES: string[] = [
@@ -110,7 +110,8 @@ export class HijriCalendarHelper {
     year: number,
     month: number,
     offsetDays: number,
-    anchor: Date
+    anchor: Date,
+    perspective: string = 'universal'
   ): CalendarDay[] {
     const firstGreg = HijriCalendarHelper.findGregorianForHijri(
       year, month, 1, offsetDays, anchor
@@ -133,7 +134,9 @@ export class HijriCalendarHelper {
       const gm = new Date(g.getTime());
       gm.setHours(0, 0, 0, 0);
 
-      const events = HijriCalendarHelper.eventsFor(h.month, h.day, g);
+      const events = HijriCalendarHelper.eventsFor(
+        h.month, h.day, g, perspective
+      );
       const cd: CalendarDay = {
         gregorianDate: g,
         hijri: h,
@@ -163,10 +166,14 @@ export class HijriCalendarHelper {
   static eventsFor(
     hijriMonth: number,
     hijriDay: number,
-    gregorianDate?: Date
+    gregorianDate: Date | undefined,
+    perspective: string = 'universal'
   ): string[] {
     const out: string[] = [];
     for (const e of IMPORTANT_ISLAMIC_EVENTS) {
+      if (!eventMatchesPerspective(e, perspective)) {
+        continue;
+      }
       if (e.recurrence === EventRecurrence.FIRST_THURSDAY_NIGHT) {
         if (gregorianDate !== undefined &&
           e.month === hijriMonth &&
@@ -184,9 +191,15 @@ export class HijriCalendarHelper {
   }
 
   /** All events in a Hijri month, in calendar order. */
-  static eventsInMonth(hijriMonth: number): IslamicEvent[] {
+  static eventsInMonth(
+    hijriMonth: number,
+    perspective: string = 'universal'
+  ): IslamicEvent[] {
     const out: IslamicEvent[] = [];
     for (const e of IMPORTANT_ISLAMIC_EVENTS) {
+      if (!eventMatchesPerspective(e, perspective)) {
+        continue;
+      }
       if (e.month === hijriMonth) {
         out.push(e);
       }
