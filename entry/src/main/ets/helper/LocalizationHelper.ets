@@ -694,8 +694,7 @@ export class L {
     m.set('countdown_fast_starts_desc', 'Finish suhoor before Imsak');
     m.set('countdown_fast_ends_now', 'Its time to break your fast');
     m.set('countdown_fast_starts_now', 'Its time to begin fasting');
-
-
+    m.set('shafaq_method_unavailable', 'Available only with Moonsighting Committee');
 
     return m;
   }
@@ -1226,6 +1225,7 @@ export class L {
     m.set('countdown_fast_starts_desc', '请在封斋前完成封斋饭');
     m.set('countdown_fast_ends_now', '开斋时间到');
     m.set('countdown_fast_starts_now', '封斋时间到');
+    m.set('shafaq_method_unavailable', '仅适用于观月委员会方法');
 
     return m;
   }
@@ -1763,6 +1763,7 @@ export class L {
     m.set('countdown_fast_starts_desc', 'أنهِ السحور قبل الإمساك');
     m.set('countdown_fast_ends_now', 'حان وقت الإفطار');
     m.set('countdown_fast_starts_now', 'حان وقت الإمساك');
+    m.set('shafaq_method_unavailable', 'متاح فقط مع طريقة لجنة رؤية الهلال');
 
     return m;
   }
