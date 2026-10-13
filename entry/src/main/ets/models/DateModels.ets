@@ -15,6 +15,12 @@ export enum EventRecurrence {
   FIRST_THURSDAY_NIGHT = 'firstThursdayNight'
 }
 
+export enum EventSect {
+  UNIVERSAL = 'universal',
+  SUNNI = 'sunni',
+  SHIA = 'shia'
+}
+
 export interface IslamicEvent {
   /** Stable identifier used for localisation — e.g. 'ashura' → event_ashura */
   key: string;
@@ -28,6 +34,12 @@ export interface IslamicEvent {
 
   /** How the event recurs within the month. */
   recurrence: EventRecurrence;
+
+  /**
+   * Which tradition observes this event. Used by the Home screen's
+   * Event Perspective filter.
+   */
+  sect: EventSect;
 }
 
 export interface UpcomingImportantDate {

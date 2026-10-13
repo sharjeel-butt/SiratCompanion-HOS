@@ -1,6 +1,6 @@
 // entry/src/main/ets/utils/DateUtils.ets
 
-import { IMPORTANT_ISLAMIC_EVENTS } from '../data/IslamicEvents';
+import { eventMatchesPerspective, IMPORTANT_ISLAMIC_EVENTS } from '../data/IslamicEvents';
 import {
   EventRecurrence, IslamicEvent, UpcomingImportantDate
 } from '../models/DateModels';
@@ -106,7 +106,8 @@ export class DateHelper {
    * @param offsetDays  The Hijri offset from Settings (+3 … −3).
    */
   static getUpcomingImportantDates(
-    offsetDays: number
+    offsetDays: number,
+    perspective: string = 'universal'
   ): UpcomingImportantDate[] {
     const now = new Date();
     const todayMidnight = new Date(now);
@@ -116,6 +117,9 @@ export class DateHelper {
     const found: UpcomingImportantDate[] = [];
 
     for (const event of IMPORTANT_ISLAMIC_EVENTS) {
+      if (!eventMatchesPerspective(event, perspective)) {
+        continue;
+      }
       const gregorianDate = DateHelper.findNextGregorianForEvent(
         event, now, offsetDays
       );
