@@ -9,6 +9,7 @@ import {
   STORAGE_KEY_CUSTOM_FAJR_ANGLE,
   STORAGE_KEY_CUSTOM_ISHA_ANGLE,
   STORAGE_KEY_CUSTOM_ISHA_INTERVAL,
+  STORAGE_KEY_EVENT_PERSPECTIVE,
   STORAGE_KEY_HIGH_LAT_RULE,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
@@ -50,6 +51,7 @@ import {
 } from '../models/AdvancedCalcModels';
 import { ClockFormat } from '../common/ClockFormat';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
+import { EventPerspectiveNotifier } from '../utils/EventPerspectiveNotifier';
 
 const KEY_METHOD = 'calc_method';
 const KEY_ASR = 'asr_rule';
@@ -112,6 +114,11 @@ export class SettingsHelper {
     maghrib: KEY_OFFSET_MAGHRIB,
     isha: KEY_OFFSET_ISHA
   };
+  static readonly EVENT_PERSPECTIVE_UNIVERSAL = 'universal';
+  static readonly EVENT_PERSPECTIVE_SUNNI = 'sunni';
+  static readonly EVENT_PERSPECTIVE_SHIA = 'shia';
+  static readonly EVENT_PERSPECTIVE_ALL = 'all';
+
 
   // ============================================================
   // HIGH-LATITUDE RULE
@@ -958,5 +965,52 @@ export class SettingsHelper {
     out.push(tab);
 
     return out;
+  }
+
+  // ============================================================
+  // EVENT PERSPECTIVE
+  // ============================================================
+
+
+  static getEventPerspective(): string {
+    const cached = AppStorage.get<string>(STORAGE_KEY_EVENT_PERSPECTIVE);
+    if (cached !== undefined && cached.length > 0) {
+      return cached;
+    }
+    return SettingsHelper.EVENT_PERSPECTIVE_UNIVERSAL;
+  }
+
+  static saveEventPerspective(value: string): void {
+    AppStorage.setOrCreate(STORAGE_KEY_EVENT_PERSPECTIVE, value);
+    PreferencesHelper.setString(STORAGE_KEY_EVENT_PERSPECTIVE, value);
+    EventPerspectiveNotifier.notify();
+  }
+
+  static getEventPerspectiveLabel(value: string, lang?: string): string {
+    switch (value) {
+      case SettingsHelper.EVENT_PERSPECTIVE_SUNNI:
+        return L.get('event_perspective_sunni', lang);
+      case SettingsHelper.EVENT_PERSPECTIVE_SHIA:
+        return L.get('event_perspective_shia', lang);
+      case SettingsHelper.EVENT_PERSPECTIVE_ALL:
+        return L.get('event_perspective_all', lang);
+      case SettingsHelper.EVENT_PERSPECTIVE_UNIVERSAL:
+      default:
+        return L.get('event_perspective_universal', lang);
+    }
+  }
+
+
+  static buildEventPerspectivePickerItems(current: string): PickerItem[] {
+    return [
+      SettingsHelper.EVENT_PERSPECTIVE_UNIVERSAL,
+      SettingsHelper.EVENT_PERSPECTIVE_SUNNI,
+      SettingsHelper.EVENT_PERSPECTIVE_SHIA,
+      SettingsHelper.EVENT_PERSPECTIVE_ALL
+    ].map((v): PickerItem => ({
+      id: v,
+      label: SettingsHelper.getEventPerspectiveLabel(v),
+      selected: v === current
+    }));
   }
 }
