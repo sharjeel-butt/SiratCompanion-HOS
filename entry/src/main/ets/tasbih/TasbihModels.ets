@@ -9,6 +9,27 @@ export interface Dhikr {
   translation: string;
   target: number;
   count: number;
+
+  /**
+   * Date key (YYYY-MM-DD) of the last day on which count was
+   * modified. Used to roll the previous day's total into history
+   * at midnight and reset the live counter.
+   *
+   * Absent on data created before 3.2.5 — the migration in
+   * TasbihStorage treats a missing value as "today" so no data is
+   * lost on first launch after upgrade.
+   */
+  lastCountDate?: string;
+}
+
+export interface DhikrDayCount {
+  dhikrId: string;
+  count: number;
+}
+
+export interface TasbihDayLog {
+  dateKey: string;
+  dhikrCounts: DhikrDayCount[];
 }
 
 export interface Tasbih {
@@ -18,12 +39,15 @@ export interface Tasbih {
   createdAt: number;
   lifetimeCount: number;
 
-  /** Optional per-tasbih theme. When absent, the global default is used. */
   theme?: TasbihTheme;
-
-  /** Preset id ('amber' | 'charcoal' | ...) — kept alongside the theme so the
-   *  preset can be restored verbatim (including its swatch). */
   themePresetId?: string;
+
+  /**
+   * Rolling daily log. One entry per day on which the tasbih was
+   * touched, capped at HISTORY_MAX_DAYS. Absent on data created
+   * before 3.2.5.
+   */
+  history?: TasbihDayLog[];
 }
 
 export interface DhikrFields {

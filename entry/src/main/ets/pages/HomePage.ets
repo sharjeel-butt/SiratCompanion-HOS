@@ -44,7 +44,7 @@ import {
   MonthProgress,
   PrayerProgress,
   ProgressHelper,
-  TasbihProgress
+  TasbihTodayProgress
 } from '../utils/ProgressHelper';
 import { TasbihStorage } from '../tasbih/TasbihStorage';
 import { TasbihManager } from '../tasbih/TasbihManager';
@@ -140,12 +140,12 @@ export struct HomePage {
     monthCompleted: 0,
     yearCompleted: 0
   };
-
-  @State private tasbihProgress: TasbihProgress = {
+  @State private tasbihToday: TasbihTodayProgress = {
+    dhikrsCompleted: 0,
+    dhikrsTotal: 0,
+    percent: 0,
     totalTasbihs: 0,
-    totalDhikrs: 0,
-    lifetimeCount: 0,
-    completedDhikrs: 0
+    lifetimeCount: 0
   };
 
   @State private monthProgress: MonthProgress = {
@@ -431,7 +431,7 @@ export struct HomePage {
 
     const loaded = await TasbihStorage.load(TasbihManager.createDefaults());
     const tasbihs: Tasbih[] = loaded.tasbihs;
-    this.tasbihProgress = ProgressHelper.getTasbihProgress(tasbihs);
+    this.tasbihToday = ProgressHelper.getTasbihTodayProgress(tasbihs);
 
     this.refreshHeader();
     this.refreshFastingWindow();
@@ -959,9 +959,6 @@ export struct HomePage {
 
                   Column() {
                     this.TodayProgressCard()
-                    this.StreakCard()
-                    this.WeekGridCard()
-                    this.MonthCard()
                     this.TasbihCard()
                   }
                   .layoutWeight(1)
@@ -972,15 +969,17 @@ export struct HomePage {
                 .padding({ left: 24, right: 24 })
               } else {
                 Column() {
+                  // ---- Next Event ----
                   if (this.showIslamicEvents) {
                     this.CountdownCard()
                   }
                   this.LiveCountdownBanner()
                   this.RamadanCard()
+
+                  // ---- Prayers ----
                   this.TodayProgressCard()
-                  this.StreakCard()
-                  this.WeekGridCard()
-                  this.MonthCard()
+
+                  // ---- Tasbih ----
                   this.TasbihCard()
                 }
                 .width('100%')
@@ -1545,8 +1544,18 @@ export struct HomePage {
           .fontWeight(FontWeight.Bold)
           .letterSpacing(1.2)
           .layoutWeight(1)
-        Text(this.tr('home_keep_going'))
-          .fontSize(11).fontColor(this.colors.accentGold)
+        Row() {
+          Text(this.tr('details_view'))
+            .fontSize(11).fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Medium)
+          Text('›').fontSize(14).fontColor(this.colors.accentGold)
+            .margin({ left: 2 })
+        }
+        .onClick(() => {
+          router.pushUrl({ url: 'pages/PrayerDetailsPage' })
+            .catch((e: Error) =>
+            console.error('Navigation failed:', JSON.stringify(e)));
+        })
       }
       .width('100%').padding({ bottom: 14 })
 
@@ -1745,232 +1754,6 @@ export struct HomePage {
   }
 
   @Builder
-  StreakCard() {
-    Row() {
-      Row() {
-        Column() {
-          Text('🔥').fontSize(28)
-        }
-        .width(48)
-        .height(48)
-        .borderRadius(24)
-        .backgroundColor(this.colors.tintSoft)
-        .justifyContent(FlexAlign.Center)
-        .alignItems(HorizontalAlign.Center)
-
-        Column() {
-          Row() {
-            Text(`${this.prayerProgress.currentStreak}`)
-              .fontSize(28).fontWeight(FontWeight.Bold)
-              .fontColor(this.colors.textWhite)
-            Text(` ${this.tr('home_days')}`)
-              .fontSize(12).fontColor(this.colors.textMuted)
-              .margin({ left: 2, bottom: 4 })
-          }.alignItems(VerticalAlign.Bottom)
-          Text(this.tr('home_streak'))
-            .fontSize(11).fontColor(this.colors.textMuted)
-        }
-        .alignItems(HorizontalAlign.Start).margin({ left: 12 }).layoutWeight(1)
-      }.layoutWeight(1)
-
-      Divider().vertical(true).height(48).color(this.colors.borderSoft)
-
-      Column() {
-        Text('🏆').fontSize(20).margin({ bottom: 4 })
-        Row() {
-          Text(`${this.prayerProgress.bestStreak}`)
-            .fontSize(18).fontWeight(FontWeight.Bold)
-            .fontColor(this.colors.accentGold)
-          Text(` ${this.tr('home_best_streak')}`)
-            .fontSize(10).fontColor(this.colors.textMuted).margin({ left: 4 })
-        }
-      }
-      .layoutWeight(1).padding({ left: 12 }).alignItems(HorizontalAlign.Center)
-    }
-    .width('100%')
-    .padding(18)
-    .backgroundColor(this.colors.cardDark)
-    .borderRadius(Theme.radiusLarge)
-    .border({ width: 1, color: this.colors.borderSoft })
-    .shadow({
-      radius: 12,
-      color: this.colors.shadowCard,
-      offsetX: 0,
-      offsetY: 4
-    })
-    .margin({ bottom: 14 })
-    .alignItems(VerticalAlign.Center)
-  }
-
-  @Builder
-  WeekGridCard() {
-    Column() {
-      Row() {
-        Text('📅').fontSize(14).margin({ right: 8 })
-        Text(this.tr('home_this_week'))
-          .fontSize(12)
-          .fontColor(this.colors.textMuted)
-          .fontWeight(FontWeight.Bold)
-          .letterSpacing(1.2)
-          .layoutWeight(1)
-        Text(`${this.prayerProgress.weekCompleted} / 35`)
-          .fontSize(12).fontColor(this.colors.accentGold)
-          .fontWeight(FontWeight.Medium)
-      }
-      .width('100%').padding({ bottom: 14 })
-
-      Row({ space: 6 }) {
-        ForEach(this.prayerProgress.weeklyGrid, (done: boolean, i: number) => {
-          Column() {
-            Text(this.prayerProgress.weeklyLabels[i])
-              .fontSize(11).fontColor(this.colors.textMuted).margin({ bottom: 8 })
-            Stack() {
-              Row()
-                .width('100%')
-                .height(36)
-                .borderRadius(8)
-                .backgroundColor(done ? this.colors.accentGold : this.colors.tintSoft)
-                .border({
-                  width: 1,
-                  color: done ? this.colors.accentGold : this.colors.borderSoft
-                })
-              if (done) {
-                Text('✓').fontSize(14).fontColor(this.colors.textOnAccent)
-              }
-            }
-            .width('100%').height(36)
-          }
-          .layoutWeight(1).alignItems(HorizontalAlign.Center)
-        }, (done: boolean, i: number) => {
-          return `w-${i}-${done ? 'd' : 'u'}-${this.prayerProgress.weeklyLabels[i]}`;
-        })
-      }
-      .width('100%')
-
-      Text(`${this.prayerProgress.weekCompleted} ${this.tr('home_week_summary')}`)
-        .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 12 })
-    }
-    .width('100%')
-    .padding(18)
-    .backgroundColor(this.colors.cardDark)
-    .borderRadius(Theme.radiusLarge)
-    .border({ width: 1, color: this.colors.borderSoft })
-    .shadow({
-      radius: 12,
-      color: this.colors.shadowCard,
-      offsetX: 0,
-      offsetY: 4
-    })
-    .margin({ bottom: 14 })
-  }
-
-  @Builder
-  MonthCard() {
-    Column() {
-      Row() {
-        Text('📊').fontSize(14).margin({ right: 8 })
-        Text(this.tr('home_monthly_view'))
-          .fontSize(12)
-          .fontColor(this.colors.textMuted)
-          .fontWeight(FontWeight.Bold)
-          .letterSpacing(1.2)
-          .layoutWeight(1)
-        Text(ProgressHelper.formatGregorianMonth(
-          this.monthProgress.year,
-          this.monthProgress.monthIndex,
-          this.currentLanguage
-        ))
-          .fontSize(12).fontColor(this.colors.accentGold)
-          .fontWeight(FontWeight.Medium)
-      }
-      .width('100%').padding({ bottom: 14 })
-
-      Row() {
-        ForEach(this.monthDayLabels(), (d: string, i: number) => {
-          Text(d)
-            .fontSize(10)
-            .fontColor(this.colors.textMuted)
-            .fontWeight(FontWeight.Medium)
-            .textAlign(TextAlign.Center)
-            .layoutWeight(1)
-        }, (d: string, i: number) => `mh-${i}-${d}`)
-      }
-      .width('100%').padding({ bottom: 6 }).direction(Direction.Ltr)
-
-      Column() {
-        ForEach(this.monthProgress.weeks, (week: MonthDayCell[], wi: number) => {
-          Row() {
-            ForEach(week, (cell: MonthDayCell, di: number) => {
-              if (cell.isPadding) {
-                Column().layoutWeight(1).height(32).margin({ left: 2, right: 2 })
-              } else {
-                this.MonthDayCellView(cell)
-              }
-            }, (cell: MonthDayCell, di: number) =>
-            `mc-${wi}-${di}-${cell.dayOfMonth}-${cell.completed}-${cell.isToday ? 'T' : ''}`)
-          }
-          .width('100%').margin({ bottom: 4 })
-        }, (week: MonthDayCell[], wi: number) => {
-          // Completion signature: one digit per cell, 0-5. Forces the
-          // week row to rebuild whenever any day's count changes.
-          let sig = '';
-          for (const c of week) {
-            sig += c.completed;
-          }
-          return `mw-${wi}-${this.monthProgress.year}-${this.monthProgress.monthIndex}-${sig}`;
-        })
-      }
-      .width('100%').direction(Direction.Ltr)
-
-      Row() {
-        Column() {
-          Text(`${this.monthProgress.totalCompleted}`)
-            .fontSize(18).fontWeight(FontWeight.Bold)
-            .fontColor(this.colors.accentGold)
-          Text(this.tr('home_month_summary'))
-            .fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
-        }
-        .layoutWeight(1).alignItems(HorizontalAlign.Center)
-
-        Divider().vertical(true).height(30).color(this.colors.borderSoft)
-
-        Column() {
-          Text(`${this.monthProgress.perfectDays}`)
-            .fontSize(18).fontWeight(FontWeight.Bold)
-            .fontColor(this.colors.accentGoldLight)
-          Text(this.tr('home_perfect_days'))
-            .fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
-        }
-        .layoutWeight(1).alignItems(HorizontalAlign.Center)
-
-        Divider().vertical(true).height(30).color(this.colors.borderSoft)
-
-        Column() {
-          Text(`${this.monthProgress.daysElapsed}`)
-            .fontSize(18).fontWeight(FontWeight.Bold)
-            .fontColor(this.colors.textWhite)
-          Text(this.tr('home_days_elapsed'))
-            .fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
-        }
-        .layoutWeight(1).alignItems(HorizontalAlign.Center)
-      }
-      .width('100%').margin({ top: 14 }).alignItems(VerticalAlign.Center)
-    }
-    .width('100%')
-    .padding(18)
-    .backgroundColor(this.colors.cardDark)
-    .borderRadius(Theme.radiusLarge)
-    .border({ width: 1, color: this.colors.borderSoft })
-    .shadow({
-      radius: 12,
-      color: this.colors.shadowCard,
-      offsetX: 0,
-      offsetY: 4
-    })
-    .margin({ bottom: 14 })
-  }
-
-  @Builder
   MonthDayCellView(cell: MonthDayCell) {
     Column() {
       Text(`${cell.dayOfMonth}`)
@@ -2003,52 +1786,103 @@ export struct HomePage {
           .fontWeight(FontWeight.Bold)
           .letterSpacing(1.2)
           .layoutWeight(1)
+        Row() {
+          Text(this.tr('details_view'))
+            .fontSize(11).fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Medium)
+          Text('›').fontSize(14).fontColor(this.colors.accentGold)
+            .margin({ left: 2 })
+        }
+        .onClick(() => {
+          router.pushUrl({ url: 'pages/TasbihDetailsPage' })
+            .catch((e: Error) =>
+            console.error('Navigation failed:', JSON.stringify(e)));
+        })
       }
       .width('100%').padding({ bottom: 14 })
 
+      // ---- Today's progress ----
       Row() {
         Column() {
-          Text(`${this.tasbihProgress.lifetimeCount}`)
-            .fontSize(32).fontWeight(FontWeight.Bold)
-            .fontColor(this.colors.accentGold)
-          Text(this.tr('home_tasbih_lifetime'))
-            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+          Row() {
+            Text(`${this.tasbihToday.dhikrsCompleted}`)
+              .fontSize(42).fontWeight(FontWeight.Bold)
+              .fontColor(this.tasbihToday.percent === 100
+                ? this.colors.accentGoldLight : this.colors.textWhite)
+            Text(` / ${this.tasbihToday.dhikrsTotal}`)
+              .fontSize(18).fontColor(this.colors.textMuted)
+              .margin({ left: 4, bottom: 8 })
+          }
+          .alignItems(VerticalAlign.Bottom)
+
+          Text(this.tr('details_tasbih_summary_dhikrs'))
+            .fontSize(12).fontColor(this.colors.textMuted)
+            .margin({ top: -4 })
         }
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-        Divider().vertical(true).height(50).color(this.colors.borderSoft)
-
-        Column() {
-          Text(`${this.tasbihProgress.totalTasbihs}`)
-            .fontSize(22).fontWeight(FontWeight.Bold)
+        Stack() {
+          Circle()
+            .width(64)
+            .height(64)
+            .fill(Color.Transparent)
+            .stroke(this.colors.tintMedium)
+            .strokeWidth(6)
+          Circle()
+            .width(64)
+            .height(64)
+            .fill(Color.Transparent)
+            .stroke(this.colors.accentGold)
+            .strokeWidth(6)
+            .strokeDashArray([this.tasbihToday.percent / 100 * 201, 500])
+            .strokeLineCap(LineCapStyle.Round)
+            .rotate({ angle: -90 })
+          Text(`${this.tasbihToday.percent}%`)
+            .fontSize(13).fontWeight(FontWeight.Bold)
             .fontColor(this.colors.textWhite)
-          Text(this.tr('home_tasbih_summary'))
-            .fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
         }
-        .padding({ left: 16 }).layoutWeight(1).alignItems(HorizontalAlign.Start)
-
-        Divider().vertical(true).height(50).color(this.colors.borderSoft)
-
-        Column() {
-          Text(`${this.tasbihProgress.totalDhikrs}`)
-            .fontSize(22).fontWeight(FontWeight.Bold)
-            .fontColor(this.colors.textWhite)
-          Text(this.tr('home_dhikrs'))
-            .fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
-        }
-        .padding({ left: 16 }).layoutWeight(1).alignItems(HorizontalAlign.Start)
+        .width(64).height(64)
       }
       .width('100%')
 
-      Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 12 })
-
+      // ---- Progress bar ----
       Row() {
-        Text('✨').fontSize(11).margin({ right: 6 }).opacity(0.75)
-        Text(`${this.prayerProgress.yearCompleted} ${this.tr('home_lifetime_1y')}`)
-          .fontSize(10).fontColor(this.colors.textMuted)
-          .fontStyle(FontStyle.Italic).layoutWeight(1)
+        Row()
+          .width(`${this.tasbihToday.percent}%`)
+          .height(6)
+          .backgroundColor(this.colors.accentGold)
+          .borderRadius(3)
       }
-      .width('100%').justifyContent(FlexAlign.Center)
+      .width('100%')
+      .height(6)
+      .backgroundColor(this.colors.tintMedium)
+      .borderRadius(3)
+      .margin({ top: 16 })
+
+      // ---- Summary row ----
+      Row() {
+        Column() {
+          Text(`${this.tasbihToday.totalTasbihs}`)
+            .fontSize(18).fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.textWhite)
+          Text(this.tr('details_tasbih_summary_tasbihs'))
+            .fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
+        }
+        .layoutWeight(1).alignItems(HorizontalAlign.Start)
+
+        Divider().vertical(true).height(32).color(this.colors.borderSoft)
+
+        Column() {
+          Text(`${this.tasbihToday.lifetimeCount}`)
+            .fontSize(18).fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.accentGold)
+          Text(this.tr('details_tasbih_summary_lifetime'))
+            .fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
+        }
+        .padding({ left: 16 })
+        .layoutWeight(1).alignItems(HorizontalAlign.Start)
+      }
+      .width('100%').margin({ top: 14 })
       .alignItems(VerticalAlign.Center)
     }
     .width('100%')

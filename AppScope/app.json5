@@ -2,10 +2,10 @@
   "app": {
     "bundleName": "com.siratcompanion.hos.app",
     "vendor": "Sharjeel Idris",
-    "versionCode": 3000240,
-    "versionName": "3.2.4",
+    "versionCode": 3000300,
+    "versionName": "3.3.0",
     "icon": "$media:app_icon",
-    "buildVersion": "324",
+    "buildVersion": "330",
     "label": "$string:app_name"
   }
 }
