@@ -22,6 +22,33 @@ export interface PrayerProgress {
   yearCompleted: number;
 }
 
+export interface WeekDetailCell {
+  dateKey: string;
+  dayOfWeek: number; // 0 = Sunday
+  dayOfMonth: number;
+  isToday: boolean;
+  completed: number; // 0–5
+}
+
+export interface YearMonthRow {
+  monthIndex: number; // 0 = January
+  daysInMonth: number;
+
+  /**
+   * Per-day completion count. Length = daysInMonth, index 0 = day 1.
+   * A value of -1 marks a day still in the future.
+   */
+  completed: number[];
+  isFuture: boolean; // the entire month is ahead of today
+  totalCompleted: number;
+}
+
+export interface YearDetailSnapshot {
+  year: number;
+  months: YearMonthRow[];
+  totalCompleted: number;
+}
+
 export interface TasbihProgress {
   totalTasbihs: number;
   totalDhikrs: number;
@@ -729,5 +756,78 @@ export class ProgressHelper {
       ];
       return `${fallback[monthIndex]} ${year}`;
     }
+  }
+
+  /** Seven days ending today. */
+  static getWeekDetail(): WeekDetailCell[] {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const out: WeekDetailCell[] = [];
+
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const st = ProgressHelper.readState(ProgressHelper.getDateKey(d));
+      const cell: WeekDetailCell = {
+        dateKey: ProgressHelper.getDateKey(d),
+        dayOfWeek: d.getDay(),
+        dayOfMonth: d.getDate(),
+        isToday: i === 0,
+        completed: ProgressHelper.countCompleted(st)
+      };
+      out.push(cell);
+    }
+    return out;
+  }
+
+  /** Twelve months of the current year, elapsed days only. */
+  static getYearDetail(): YearDetailSnapshot {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const year = today.getFullYear();
+    const months: YearMonthRow[] = [];
+    let totalCompleted = 0;
+
+    for (let m = 0; m < 12; m++) {
+      const firstOfMonth = new Date(year, m, 1);
+      const lastOfMonth = new Date(year, m + 1, 0);
+      const daysInMonth = lastOfMonth.getDate();
+      const isFuture = firstOfMonth.getTime() > today.getTime();
+
+      const completed: number[] = [];
+      let monthTotal = 0;
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const date = new Date(year, m, d);
+        date.setHours(0, 0, 0, 0);
+        if (date.getTime() > today.getTime()) {
+          completed.push(-1);
+        } else {
+          const st = ProgressHelper.readState(
+            ProgressHelper.getDateKey(date)
+          );
+          const c = ProgressHelper.countCompleted(st);
+          completed.push(c);
+          monthTotal += c;
+        }
+      }
+
+      const row: YearMonthRow = {
+        monthIndex: m,
+        daysInMonth: daysInMonth,
+        completed: completed,
+        isFuture: isFuture,
+        totalCompleted: monthTotal
+      };
+      months.push(row);
+      totalCompleted += monthTotal;
+    }
+
+    const out: YearDetailSnapshot = {
+      year: year,
+      months: months,
+      totalCompleted: totalCompleted
+    };
+    return out;
   }
 }
