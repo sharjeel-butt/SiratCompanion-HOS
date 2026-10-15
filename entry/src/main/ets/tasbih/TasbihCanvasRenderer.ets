@@ -174,20 +174,27 @@ export class TasbihCanvasRenderer {
       const alpha = 1 - eased;
 
       if (alpha > 0.01) {
-        // Halo — wide, warm amber glow that peaks mid-flight and
-        // fades as the bead lands.
+
         const haloRadius = r * 3.8;
         const bloom = Math.sin(Math.PI * fly);
         const haloAlpha = (0.35 + 0.45 * bloom) * alpha;
 
+        // Halo — blooms in the theme's own hue. Uses the same
+        // topColors as the flying bead itself, so a themed bead
+        // gets a themed glow and a completing bead gets a green
+        // glow. Alpha profile is unchanged from the amber version.
         const halo = ctx.createRadialGradient(
           cx, currentY, r * 0.4,
           cx, currentY, haloRadius
         );
-        halo.addColorStop(0, `rgba(255, 200, 110, ${0.85 * haloAlpha})`);
-        halo.addColorStop(0.35, `rgba(245, 175, 80,  ${0.45 * haloAlpha})`);
-        halo.addColorStop(0.70, `rgba(232, 150, 60,  ${0.15 * haloAlpha})`);
-        halo.addColorStop(1, 'rgba(232, 150, 60, 0)');
+        halo.addColorStop(0,
+          TasbihCanvasRenderer.rgba(topColors.hi, 0.85 * haloAlpha));
+        halo.addColorStop(0.35,
+          TasbihCanvasRenderer.rgba(topColors.base, 0.45 * haloAlpha));
+        halo.addColorStop(0.70,
+          TasbihCanvasRenderer.rgba(topColors.lo, 0.15 * haloAlpha));
+        halo.addColorStop(1,
+          TasbihCanvasRenderer.rgba(topColors.lo, 0));
         ctx.beginPath();
         ctx.arc(cx, currentY, haloRadius, 0, Math.PI * 2);
         ctx.fillStyle = halo;
@@ -198,7 +205,7 @@ export class TasbihCanvasRenderer {
         ctx.globalAlpha = alpha;
         TasbihCanvasRenderer.drawBead(
           ctx, cx, currentY, r * scaleFor(currentY),
-          botColors, cfg.renderStyle, cfg.theme.finish
+          topColors, cfg.renderStyle, cfg.theme.finish
         );
         ctx.restore();
       }
@@ -242,6 +249,40 @@ export class TasbihCanvasRenderer {
     ctx.lineCap = 'round';
     ctx.stroke();
     ctx.restore();
+  }
+
+  /**
+   * Parse a hex color (#RGB or #RRGGBB) into an [r, g, b] triple.
+   * Returns the amber fallback on any malformed input so a bad
+   * palette value cannot break rendering.
+   */
+  private static hexToRgb(hex: string): number[] {
+    let h = hex.trim();
+    if (h.startsWith('#')) {
+      h = h.substring(1);
+    }
+    if (h.length === 3) {
+      const r = parseInt(h[0] + h[0], 16);
+      const g = parseInt(h[1] + h[1], 16);
+      const b = parseInt(h[2] + h[2], 16);
+      if (!isNaN(r) && !isNaN(g) && !isNaN(b)) {
+        return [r, g, b];
+      }
+    } else if (h.length === 6) {
+      const r = parseInt(h.substring(0, 2), 16);
+      const g = parseInt(h.substring(2, 4), 16);
+      const b = parseInt(h.substring(4, 6), 16);
+      if (!isNaN(r) && !isNaN(g) && !isNaN(b)) {
+        return [r, g, b];
+      }
+    }
+    return [255, 200, 110]; // amber fallback
+  }
+
+  /** Compose an rgba() string from a hex color and an alpha. */
+  private static rgba(hex: string, alpha: number): string {
+    const rgb = TasbihCanvasRenderer.hexToRgb(hex);
+    return `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha})`;
   }
 
   // ============================================================
