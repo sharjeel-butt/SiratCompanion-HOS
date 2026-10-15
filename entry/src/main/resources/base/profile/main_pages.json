@@ -4,6 +4,8 @@
     "pages/MainTabs",
     "pages/CustomizePage",
     "pages/SettingsPage",
-    "pages/AdvancedCalcPage"
+    "pages/AdvancedCalcPage",
+    "pages/PrayerDetailsPage",
+    "pages/TasbihDetailsPage"
   ]
 }

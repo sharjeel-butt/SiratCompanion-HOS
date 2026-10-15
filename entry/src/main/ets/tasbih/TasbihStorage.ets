@@ -1,8 +1,9 @@
-// entry/src/main/ets/utils/TasbihStorage.ets
+// entry/src/main/ets/tasbih/TasbihStorage.ets
 
 import { preferences } from '@kit.ArkData';
 import { common } from '@kit.AbilityKit';
-import { Tasbih } from './TasbihModels';
+import { Dhikr, Tasbih } from './TasbihModels';
+import { TasbihManager } from './TasbihManager';
 
 const PREF_STORE = 'tasbih_prefs';
 const KEY_TASBIHS = 'tasbihs_data';
@@ -46,23 +47,49 @@ export class TasbihStorage {
         tasbihs = defaults;
       }
 
-      // Migration: older stored tasbihs may be missing lifetimeCount
-      // and/or themePresetId. Fill in safe defaults so downstream code
-      // never has to guard against undefined.
+      // ---- Migration ----
+      // Older stores may be missing lifetimeCount, themePresetId,
+      // history, or per-dhikr lastCountDate. Fill in safe defaults.
       tasbihs = tasbihs.map((t: Tasbih): Tasbih => {
+        const dhikrs: Dhikr[] = (t.dhikrs || []).map(
+          (d: Dhikr): Dhikr => {
+            const fixed: Dhikr = {
+              id: d.id,
+              arabic: d.arabic,
+              transliteration: d.transliteration,
+              translation: d.translation,
+              target: d.target,
+              count: d.count,
+              lastCountDate: d.lastCountDate
+            };
+            return fixed;
+          }
+        );
         const fixed: Tasbih = {
           id: t.id,
           name: t.name,
-          dhikrs: t.dhikrs,
+          dhikrs: dhikrs,
           createdAt: t.createdAt,
-          lifetimeCount: typeof t.lifetimeCount === 'number' ? t.lifetimeCount : 0,
+          lifetimeCount: typeof t.lifetimeCount === 'number'
+            ? t.lifetimeCount : 0,
           theme: t.theme,
-          themePresetId: (typeof t.themePresetId === 'string' && t.themePresetId.length > 0)
-            ? t.themePresetId
-            : undefined
+          themePresetId: (typeof t.themePresetId === 'string'
+            && t.themePresetId.length > 0)
+            ? t.themePresetId : undefined,
+          history: Array.isArray(t.history) ? t.history : []
         };
         return fixed;
       });
+
+      // ---- Day rollover ----
+      // If any dhikr's lastCountDate is stale, roll its count into
+      // history and reset the live counter. Persist if anything
+      // changed so the next launch is a no-op.
+      const rolled = TasbihManager.rollOverStaleCounts(tasbihs);
+      const rolloverHappened = rolled !== tasbihs;
+      if (rolloverHappened) {
+        tasbihs = rolled;
+      }
 
       const activeId = await TasbihStorage.store.get(KEY_ACTIVE, '') as string;
       const found = tasbihs.find((t): boolean => t.id === activeId);
@@ -74,6 +101,14 @@ export class TasbihStorage {
         ? tasbih.dhikrs.length - 1
         : 0;
       const activeDhikrIndex = Math.min(Math.max(0, rawIdx), maxIdx);
+
+      if (rolloverHappened) {
+        // Save the normalized state so the next launch skips the
+        // rollover entirely.
+        TasbihStorage.save(tasbihs, activeTasbihId, activeDhikrIndex)
+          .catch(() => { /* non-fatal */
+          });
+      }
 
       return { tasbihs, activeTasbihId, activeDhikrIndex };
     } catch (err) {

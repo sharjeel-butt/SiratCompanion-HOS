@@ -751,6 +751,23 @@ export class L {
     m.set('subsection_prayer_list', 'SHOW IN PRAYER LIST');
     m.set('subsection_sun_path', 'SHOW ON SUN PATH');
 
+    m.set('title_prayer_details', 'Prayer Details');
+    m.set('title_tasbih_details', 'Tasbih Details');
+    m.set('details_view', 'View Details');
+    m.set('details_period_week', 'Week');
+    m.set('details_period_month', 'Month');
+    m.set('details_period_year', 'Year');
+    m.set('details_prayers_completed', 'prayers completed');
+    m.set('details_per_prayer', 'PER-PRAYER BREAKDOWN');
+    m.set('details_per_tasbih', 'PER-TASBIH BREAKDOWN');
+    m.set('details_this_month', 'THIS MONTH');
+    m.set('details_perfect_days', 'Perfect days');
+    m.set('details_best_streak', 'Best');
+    m.set('details_days_of', 'of');
+    m.set('details_tasbih_summary_lifetime', 'Lifetime counts');
+    m.set('details_tasbih_summary_tasbihs', 'Tasbihs');
+    m.set('details_tasbih_summary_dhikrs', 'Dhikrs complete');
+
     return m;
   }
 
@@ -1336,6 +1353,23 @@ export class L {
     m.set('show_last_third_desc', '夜的最后一个三分之一，夜间礼拜的时间');
     m.set('subsection_prayer_list', '在礼拜列表中显示');
     m.set('subsection_sun_path', '在太阳路径上显示');
+
+    m.set('title_prayer_details', '礼拜详情');
+    m.set('title_tasbih_details', '念珠详情');
+    m.set('details_view', '查看详情');
+    m.set('details_period_week', '本周');
+    m.set('details_period_month', '本月');
+    m.set('details_period_year', '本年');
+    m.set('details_prayers_completed', '次礼拜已完成');
+    m.set('details_per_prayer', '各礼拜进度');
+    m.set('details_per_tasbih', '各念珠进度');
+    m.set('details_this_month', '本月');
+    m.set('details_perfect_days', '完美日');
+    m.set('details_best_streak', '最佳');
+    m.set('details_days_of', '/');
+    m.set('details_tasbih_summary_lifetime', '累计计数');
+    m.set('details_tasbih_summary_tasbihs', '念珠');
+    m.set('details_tasbih_summary_dhikrs', '已完成念词');
 
     return m;
   }
@@ -1929,6 +1963,23 @@ export class L {
     m.set('show_last_third_desc', 'بداية الثلث الأخير من الليل، وقت قيام الليل');
     m.set('subsection_prayer_list', 'إظهار في قائمة الصلاة');
     m.set('subsection_sun_path', 'إظهار على مسار الشمس');
+
+    m.set('title_prayer_details', 'تفاصيل الصلاة');
+    m.set('title_tasbih_details', 'تفاصيل التسبيح');
+    m.set('details_view', 'عرض التفاصيل');
+    m.set('details_period_week', 'الأسبوع');
+    m.set('details_period_month', 'الشهر');
+    m.set('details_period_year', 'السنة');
+    m.set('details_prayers_completed', 'صلاة مكتملة');
+    m.set('details_per_prayer', 'تفصيل حسب الصلاة');
+    m.set('details_per_tasbih', 'تفصيل حسب المسبحة');
+    m.set('details_this_month', 'هذا الشهر');
+    m.set('details_perfect_days', 'أيام كاملة');
+    m.set('details_best_streak', 'الأفضل');
+    m.set('details_days_of', 'من');
+    m.set('details_tasbih_summary_lifetime', 'العدد الإجمالي');
+    m.set('details_tasbih_summary_tasbihs', 'مسبحات');
+    m.set('details_tasbih_summary_dhikrs', 'أذكار مكتملة');
 
     return m;
   }
