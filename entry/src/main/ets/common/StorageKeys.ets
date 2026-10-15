@@ -9,23 +9,24 @@ export const STORAGE_KEY_MANUAL_LAT = 'manual_lat';
 export const STORAGE_KEY_MANUAL_LNG = 'manual_lng';
 export const STORAGE_KEY_MANUAL_REFRESH = 'manual_refresh';
 export const STORAGE_KEY_MANUAL_CITY = 'manual_city';
-export const STORAGE_KEY_SHOW_EXTRA_TIMINGS = 'show_extra_timings';
+
+// ---- Show Islamic events ----
 export const STORAGE_KEY_SHOW_ISLAMIC_EVENTS = 'show_islamic_events';
+
+// ---- Prayer offsets ----
 export const STORAGE_KEY_OFFSET_FAJR = 'offset_fajr';
 export const STORAGE_KEY_OFFSET_DHUHR = 'offset_dhuhr';
 export const STORAGE_KEY_OFFSET_ASR = 'offset_asr';
 export const STORAGE_KEY_OFFSET_MAGHRIB = 'offset_maghrib';
 export const STORAGE_KEY_OFFSET_ISHA = 'offset_isha';
+
+// ---- Theme ----
 export const STORAGE_KEY_THEME_MODE = 'theme_mode';
 export const STORAGE_KEY_NAV_DIRECTION = 'nav_direction';
 export const STORAGE_KEY_LOCATION_VERSION = 'location_version';
 
 /**
  * Bumped on every PrayerManager.saveStateForDate() call.
- *
- * Pages hosted as TabContent (which receive no onPageShow on tab
- * switches) subscribe to this key so they refresh the moment a
- * prayer is checked on another tab.
  */
 export const STORAGE_KEY_PRAYER_STATE_VERSION = 'prayer_state_version';
 
@@ -64,10 +65,90 @@ export const STORAGE_KEY_TIME_FORMAT = 'time_format';
 
 export const STORAGE_KEY_HIJRI_CALENDAR_TYPE = 'hijri_calendar_type';
 
-export const STORAGE_KEY_CALC_SETTINGS_VERSION = 'calc_settings_version';
-
+/**
+ * One-shot hint for SettingsPage: which category to expand when
+ * the page is opened. Set by Home / Prayer before navigating, read
+ * and cleared by SettingsPage.aboutToAppear(). Empty string means
+ * "use the default", which is Location.
+ */
 export const STORAGE_KEY_SETTINGS_INITIAL_CATEGORY = 'settings_initial_category';
 
+/**
+ * Which sect perspective to use when choosing Islamic events to
+ * display. Values: 'universal' | 'sunni' | 'shia' | 'all'.
+ */
 export const STORAGE_KEY_EVENT_PERSPECTIVE = 'event_perspective';
 
+/**
+ * Bumped whenever the Islamic Events perspective changes. Home,
+ * Prayer, and HijriCalendar watch this counter rather than the
+ * perspective value itself — an incrementing integer reliably
+ * triggers @Watch on every SDK build, whereas a direct @StorageLink
+ * on a string setting can miss notifications.
+ */
 export const STORAGE_KEY_EVENT_SETTINGS_VERSION = 'event_settings_version';
+
+/**
+ * Bumped whenever a prayer-calculation setting changes: method,
+ * Asr rule, source, high-latitude rule, offsets, rounding,
+ * midnight method, polar resolution, Shafaq, or custom angles.
+ */
+export const STORAGE_KEY_CALC_SETTINGS_VERSION = 'calc_settings_version';
+
+// ============================================================
+// PER-TIMING VISIBILITY — PRAYER LIST
+// ============================================================
+
+/**
+ * Each of these gates the corresponding row in the prayer-list
+ * timeline. Sunrise and Sunset are core astronomical markers and
+ * are always shown, so they have no toggle.
+ */
+export const STORAGE_KEY_SHOW_IMSAK_LIST = 'show_imsak_list';
+
+export const STORAGE_KEY_SHOW_FIRST_THIRD_LIST = 'show_first_third_list';
+
+export const STORAGE_KEY_SHOW_MIDNIGHT_LIST = 'show_midnight_list';
+
+export const STORAGE_KEY_SHOW_LAST_THIRD_LIST = 'show_last_third_list';
+
+// ============================================================
+// PER-TIMING VISIBILITY — SUN PATH
+// ============================================================
+
+/**
+ * Each of these gates the vertical dotted guide and label for the
+ * corresponding timing on the sun path.
+ */
+export const STORAGE_KEY_SHOW_IMSAK_SUNPATH = 'show_imsak_sunpath';
+
+export const STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH = 'show_first_third_sunpath';
+
+export const STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH = 'show_midnight_sunpath';
+
+export const STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH = 'show_last_third_sunpath';
+
+// ============================================================
+// LEGACY KEYS — kept for migration
+// ============================================================
+
+/**
+ * Legacy group toggles. Superseded by the per-timing keys above.
+ */
+export const STORAGE_KEY_SHOW_EXTRA_TIMINGS_LIST = 'show_extra_timings_list';
+
+export const STORAGE_KEY_SHOW_EXTRA_TIMINGS_SUNPATH = 'show_extra_timings_sunpath';
+
+export const STORAGE_KEY_SHOW_EXTRA_TIMINGS = 'show_extra_timings';
+
+/**
+ * Legacy per-timing keys. Each controlled both list and sun path
+ * at once. Superseded by the list/sunpath split above.
+ */
+export const STORAGE_KEY_SHOW_IMSAK = 'show_imsak';
+
+export const STORAGE_KEY_SHOW_FIRST_THIRD = 'show_first_third';
+
+export const STORAGE_KEY_SHOW_MIDNIGHT = 'show_midnight';
+
+export const STORAGE_KEY_SHOW_LAST_THIRD = 'show_last_third';

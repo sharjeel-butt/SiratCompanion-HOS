@@ -8,13 +8,26 @@ import { PreferencesHelper } from '../helper/PreferencesHelper';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_CALC_SETTINGS_VERSION,
   STORAGE_KEY_EVENT_PERSPECTIVE,
   STORAGE_KEY_EVENT_SETTINGS_VERSION,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_SHOW_EXTRA_TIMINGS,
+  STORAGE_KEY_SHOW_FIRST_THIRD,
+  STORAGE_KEY_SHOW_FIRST_THIRD_LIST,
+  STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH,
+  STORAGE_KEY_SHOW_IMSAK,
+  STORAGE_KEY_SHOW_IMSAK_LIST,
+  STORAGE_KEY_SHOW_IMSAK_SUNPATH,
   STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
+  STORAGE_KEY_SHOW_LAST_THIRD,
+  STORAGE_KEY_SHOW_LAST_THIRD_LIST,
+  STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH,
+  STORAGE_KEY_SHOW_MIDNIGHT,
+  STORAGE_KEY_SHOW_MIDNIGHT_LIST,
+  STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH,
   STORAGE_KEY_SOUND_ENABLED,
   STORAGE_KEY_TASBIH_SOUND,
   STORAGE_KEY_THEME_MODE,
@@ -71,12 +84,15 @@ export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     hilog.info(0x0000, 'Sirat', '%{public}s', 'EntryAbility onCreate');
 
-    // Pre-create the foreground tick so @StorageLink + @Watch
-    // subscribers reliably receive updates from onForeground().
-    AppStorage.setOrCreate(STORAGE_KEY_APP_FOREGROUND_TICK, 0);
+    // Pre-create AppStorage keys that pages bind to via
+    // @StorageLink + @Watch. If a key does not exist when the
+    // first subscriber attaches, its initial value can be created
+    // without firing a change notification on some SDK builds.
+    // Seeding them here guarantees a stable value from the start.
 
-    // Pre-create the event-settings counter for the same reason.
+    AppStorage.setOrCreate(STORAGE_KEY_APP_FOREGROUND_TICK, 0);
     AppStorage.setOrCreate(STORAGE_KEY_EVENT_SETTINGS_VERSION, 0);
+    AppStorage.setOrCreate(STORAGE_KEY_CALC_SETTINGS_VERSION, 0);
   }
 
   // ============================================================
@@ -107,7 +123,10 @@ export default class EntryAbility extends UIAbility {
     }
 
     PreferencesHelper.init(this.context).then(async () => {
-      // ---- Load persisted preferences into AppStorage ----
+      // ========================================================
+      // LOAD PERSISTED PREFERENCES INTO APPSTORAGE
+      // ========================================================
+
       const savedMode = await PreferencesHelper.getString(
         STORAGE_KEY_THEME_MODE, ThemeMode.SYSTEM
       );
@@ -145,13 +164,6 @@ export default class EntryAbility extends UIAbility {
       );
       AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, savedLanguage);
 
-      const savedShowExtraTimings = await PreferencesHelper.getBoolean(
-        STORAGE_KEY_SHOW_EXTRA_TIMINGS, true
-      );
-      AppStorage.setOrCreate(
-        STORAGE_KEY_SHOW_EXTRA_TIMINGS, savedShowExtraTimings
-      );
-
       const savedShowIslamicEvents = await PreferencesHelper.getBoolean(
         STORAGE_KEY_SHOW_ISLAMIC_EVENTS, true
       );
@@ -159,10 +171,17 @@ export default class EntryAbility extends UIAbility {
         STORAGE_KEY_SHOW_ISLAMIC_EVENTS, savedShowIslamicEvents
       );
 
-      const savedPerspective = await PreferencesHelper.getString(
+      // ---- Event perspective ----
+      // Seed the AppStorage mirror so @StorageLink subscribers on
+      // Home / Prayer / Calendar bind to the persisted value at
+      // startup rather than the default. Without this, a change
+      // made in Customize would appear to revert on relaunch.
+      const savedEventPerspective = await PreferencesHelper.getString(
         STORAGE_KEY_EVENT_PERSPECTIVE, 'universal'
       );
-      AppStorage.setOrCreate(STORAGE_KEY_EVENT_PERSPECTIVE, savedPerspective);
+      AppStorage.setOrCreate(
+        STORAGE_KEY_EVENT_PERSPECTIVE, savedEventPerspective
+      );
 
       const vibrationEnabled = await PreferencesHelper.getBoolean(
         STORAGE_KEY_VIBRATION_ENABLED, true
@@ -173,6 +192,100 @@ export default class EntryAbility extends UIAbility {
         STORAGE_KEY_TIME_FORMAT, ClockFormat.SYSTEM
       );
       AppStorage.setOrCreate(STORAGE_KEY_TIME_FORMAT, savedTimeFormat);
+
+      // ========================================================
+      // PER-TIMING VISIBILITY — MIGRATION
+      // ========================================================
+      //
+      // Each extra timing's visibility was split into separate
+      // list and sun-path toggles in 3.2.4. Seed both new keys
+      // from the previous single per-timing value on the first
+      // launch after upgrade. On subsequent launches the new keys
+      // already exist, so the legacy value is ignored.
+      //
+      // Legacy chain for context:
+      //   - 3.0.x:  one group toggle (show_extra_timings)
+      //   - 3.2.3:  four per-timing keys (show_imsak, …)
+      //   - 3.2.4:  eight per-surface keys
+      //
+      // A very old install might only have the group toggle. The
+      // chain below handles every hop in order.
+
+      const legacyGroup = await PreferencesHelper.getBoolean(
+        STORAGE_KEY_SHOW_EXTRA_TIMINGS, true
+      );
+
+      const legacyImsak = await PreferencesHelper.getBoolean(
+        STORAGE_KEY_SHOW_IMSAK, legacyGroup
+      );
+      const legacyFirstThird = await PreferencesHelper.getBoolean(
+        STORAGE_KEY_SHOW_FIRST_THIRD, legacyGroup
+      );
+      const legacyMidnight = await PreferencesHelper.getBoolean(
+        STORAGE_KEY_SHOW_MIDNIGHT, legacyGroup
+      );
+      const legacyLastThird = await PreferencesHelper.getBoolean(
+        STORAGE_KEY_SHOW_LAST_THIRD, legacyGroup
+      );
+
+      AppStorage.setOrCreate(
+        STORAGE_KEY_SHOW_IMSAK_LIST,
+        await PreferencesHelper.getBoolean(
+          STORAGE_KEY_SHOW_IMSAK_LIST, legacyImsak
+        )
+      );
+      AppStorage.setOrCreate(
+        STORAGE_KEY_SHOW_IMSAK_SUNPATH,
+        await PreferencesHelper.getBoolean(
+          STORAGE_KEY_SHOW_IMSAK_SUNPATH, legacyImsak
+        )
+      );
+
+      AppStorage.setOrCreate(
+        STORAGE_KEY_SHOW_FIRST_THIRD_LIST,
+        await PreferencesHelper.getBoolean(
+          STORAGE_KEY_SHOW_FIRST_THIRD_LIST, legacyFirstThird
+        )
+      );
+      AppStorage.setOrCreate(
+        STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH,
+        await PreferencesHelper.getBoolean(
+          STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH, legacyFirstThird
+        )
+      );
+
+      AppStorage.setOrCreate(
+        STORAGE_KEY_SHOW_MIDNIGHT_LIST,
+        await PreferencesHelper.getBoolean(
+          STORAGE_KEY_SHOW_MIDNIGHT_LIST, legacyMidnight
+        )
+      );
+      AppStorage.setOrCreate(
+        STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH,
+        await PreferencesHelper.getBoolean(
+          STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH, legacyMidnight
+        )
+      );
+
+      AppStorage.setOrCreate(
+        STORAGE_KEY_SHOW_LAST_THIRD_LIST,
+        await PreferencesHelper.getBoolean(
+          STORAGE_KEY_SHOW_LAST_THIRD_LIST, legacyLastThird
+        )
+      );
+      AppStorage.setOrCreate(
+        STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH,
+        await PreferencesHelper.getBoolean(
+          STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH, legacyLastThird
+        )
+      );
+
+      // Legacy group keys are read but never written going forward.
+      // They remain in Preferences only as migration inputs.
+
+      // ========================================================
+      // REMAINING STARTUP
+      // ========================================================
 
       // ---- Log material capability once per session ----
       MaterialHelper.logCapability();
@@ -188,12 +301,12 @@ export default class EntryAbility extends UIAbility {
         AppLogger.info('EntryAbility', 'Device timezone lookup failed');
       }
 
-      // ---- Load the persisted prayer-state map into memory so every
-      //      subsequent read/write is synchronous ----
+      // ---- Load the persisted prayer-state map into memory so
+      //      every subsequent read/write is synchronous ----
       await PrayerManager.primeStateMap();
 
-      // ---- Read system sound & haptics state, start listening for
-      //      changes ----
+      // ---- Read system sound & haptics state, start listening
+      //      for changes ----
       SystemFeedbackHelper.init(this.context);
 
       // ---- Decide the start page ----
@@ -261,6 +374,26 @@ export default class EntryAbility extends UIAbility {
   }
 
   // ============================================================
+  // LIFECYCLE — onBackground
+  // ============================================================
+
+  onBackground(): void {
+    // Flush any pending debounced preference write before the
+    // process is suspended. PreferencesHelper batches writes on a
+    // 250 ms debounce; without this, a setting changed in the
+    // final moments before backgrounding could be lost if the
+    // process is killed before the timer fires.
+    //
+    // Fire-and-forget — onBackground is synchronous.
+    PreferencesHelper.flushNow().catch((err: Error) => {
+      AppLogger.warn(
+        'EntryAbility',
+        `Flush on background failed: ${err.message}`
+      );
+    });
+  }
+
+  // ============================================================
   // TIMEZONE CHANGE DETECTION
   // ============================================================
 
@@ -293,17 +426,6 @@ export default class EntryAbility extends UIAbility {
     } catch (err) {
       // Never let this break foreground handling.
     }
-  }
-
-  onBackground(): void {
-    // Flush any pending debounced preference write before the process
-    // is suspended. Fire-and-forget — onBackground is synchronous.
-    PreferencesHelper.flushNow().catch((err: Error) => {
-      AppLogger.warn(
-        'EntryAbility',
-        `Flush on background failed: ${err.message}`
-      );
-    });
   }
 
   // ============================================================

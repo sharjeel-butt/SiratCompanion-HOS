@@ -17,14 +17,20 @@ import {
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_CALC_SETTINGS_VERSION,
-  STORAGE_KEY_EVENT_SETTINGS_VERSION,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
   STORAGE_KEY_PRAYER_STATE_VERSION,
   STORAGE_KEY_SETTINGS_INITIAL_CATEGORY,
-  STORAGE_KEY_SHOW_EXTRA_TIMINGS,
+  STORAGE_KEY_SHOW_FIRST_THIRD_LIST,
+  STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH,
+  STORAGE_KEY_SHOW_IMSAK_LIST,
+  STORAGE_KEY_SHOW_IMSAK_SUNPATH,
+  STORAGE_KEY_SHOW_LAST_THIRD_LIST,
+  STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH,
+  STORAGE_KEY_SHOW_MIDNIGHT_LIST,
+  STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH,
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
 } from '../common/StorageKeys';
@@ -43,8 +49,10 @@ import { Breakpoints } from '../common/Breakpoints';
 import {
   AdvancedCalcSettings, DEFAULT_ADVANCED_CALC
 } from '../models/AdvancedCalcModels';
+import {
+  EventPerspectiveNotifier
+} from '../utils/EventPerspectiveNotifier';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
-import { EventPerspectiveNotifier } from '../utils/EventPerspectiveNotifier';
 
 interface TimelineRow {
   kind: 'prayer' | 'extra';
@@ -67,35 +75,28 @@ export struct Prayer {
   @StorageLink(STORAGE_KEY_LOCATION_VERSION)
   @Watch('onLocationVersionChanged')
   locationVersion: number = 0;
+
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
   appThemePreset: string = ThemePreset.SIRAT;
-  @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_TYPE)
-  @Watch('onHijriCalendarTypeChanged')
-  hijriCalendarType: string = HijriCalendarType.UMM_AL_QURA;
 
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChangedInHome')
   appLanguage: string = 'en';
+
   @StorageLink(STORAGE_KEY_PRAYER_STATE_VERSION)
   prayerStateVersion: number = 0;
-  @StorageLink(STORAGE_KEY_SHOW_EXTRA_TIMINGS)
-  @Watch('onShowExtraTimingsChanged')
-  showExtraTimings: boolean = true;
-  @StorageLink(STORAGE_KEY_CALC_SETTINGS_VERSION)
-  @Watch('onCalcSettingsChanged')
-  calcSettingsVersion: number = 0;
 
   @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
   @Watch('onHijriOffsetChangedInHome')
   hijriOffset: number = 0;
+  @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_TYPE)
+  @Watch('onHijriCalendarTypeChanged')
+  hijriCalendarType: string = HijriCalendarType.UMM_AL_QURA;
 
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
-  @StorageLink(STORAGE_KEY_EVENT_SETTINGS_VERSION)
-  @Watch('onEventSettingsChanged')
-  eventSettingsVersion: number = 0;
 
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
@@ -103,6 +104,35 @@ export struct Prayer {
   @StorageLink(STORAGE_KEY_TIME_FORMAT)
   @Watch('onClockFormatChanged')
   clockFormat: string = ClockFormat.SYSTEM;
+  @StorageLink(STORAGE_KEY_CALC_SETTINGS_VERSION)
+  @Watch('onCalcSettingsChanged')
+  calcSettingsVersion: number = 0;
+  // ---- Per-timing visibility — prayer list ----
+  @StorageLink(STORAGE_KEY_SHOW_IMSAK_LIST)
+  @Watch('onShowImsakListChanged')
+  showImsakList: boolean = true;
+  @StorageLink(STORAGE_KEY_SHOW_FIRST_THIRD_LIST)
+  @Watch('onShowFirstThirdListChanged')
+  showFirstThirdList: boolean = true;
+  @StorageLink(STORAGE_KEY_SHOW_MIDNIGHT_LIST)
+  @Watch('onShowMidnightListChanged')
+  showMidnightList: boolean = true;
+  @StorageLink(STORAGE_KEY_SHOW_LAST_THIRD_LIST)
+  @Watch('onShowLastThirdListChanged')
+  showLastThirdList: boolean = true;
+  // ---- Per-timing visibility — sun path ----
+  @StorageLink(STORAGE_KEY_SHOW_IMSAK_SUNPATH)
+  @Watch('onShowImsakSunpathChanged')
+  showImsakSunpath: boolean = true;
+  @StorageLink(STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH)
+  @Watch('onShowFirstThirdSunpathChanged')
+  showFirstThirdSunpath: boolean = true;
+  @StorageLink(STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH)
+  @Watch('onShowMidnightSunpathChanged')
+  showMidnightSunpath: boolean = true;
+  @StorageLink(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH)
+  @Watch('onShowLastThirdSunpathChanged')
+  showLastThirdSunpath: boolean = true;
 
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
@@ -148,32 +178,47 @@ export struct Prayer {
   @State locationMode: LocationMode = LocationMode.GPS;
   @State offsets: PrayerOffsets = { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 };
   private advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC;
-  private settingsPending: boolean = false;
 
-  @State showIslamicEvents: boolean = true;
   @State private isRefreshingHome: boolean = false;
   @State highLatRule: HighLatitudeRule = HighLatitudeRule.NONE;
 
   private statusTimerId: number = -1;
   private settingsLoaded: boolean = false;
   private settingsLoading: boolean = false;
+  private settingsPending: boolean = false;
+  private eventPerspectiveListener: () => void = (): void => {
+    this.upcomingImportantDates = DateHelper.getUpcomingImportantDates(
+      this.hijriOffset,
+      SettingsHelper.getEventPerspective()
+    );
+  };
 
   private tr(key: string): string {
     return L.get(key, this.appLanguage);
   }
 
-  private onShowExtraTimingsChanged(): void {
-    // Re-render is handled by the @StorageLink. The timeline's
-    // buildCombinedTimeline() re-reads this.showExtraTimings on
-    // the next render pass, and the sun path receives the new
-    // value through its @Prop.
+  private onShowImsakListChanged(): void {
   }
 
-  private onEventSettingsChanged(): void {
-    this.upcomingImportantDates = DateHelper.getUpcomingImportantDates(
-      this.hijriOffset,
-      SettingsHelper.getEventPerspective()
-    );
+  private onShowFirstThirdListChanged(): void {
+  }
+
+  private onShowMidnightListChanged(): void {
+  }
+
+  private onShowLastThirdListChanged(): void {
+  }
+
+  private onShowImsakSunpathChanged(): void {
+  }
+
+  private onShowFirstThirdSunpathChanged(): void {
+  }
+
+  private onShowMidnightSunpathChanged(): void {
+  }
+
+  private onShowLastThirdSunpathChanged(): void {
   }
 
   private dt(t: string): string {
@@ -243,12 +288,12 @@ export struct Prayer {
     this.colors = PageTheme.compute(this.themeMode);
   }
 
-  private onHijriCalendarTypeChanged(): void {
-    this.refreshHijriDates();
-  }
-
   private onClockFormatChanged(): void {
     // Re-render is handled by the @StorageLink.
+  }
+
+  private async onCalcSettingsChanged(): Promise<void> {
+    await this.loadSettingsAndLocation();
   }
 
   private async onLocationVersionChanged(): Promise<void> {
@@ -272,20 +317,28 @@ export struct Prayer {
 
   private onHijriOffsetChangedInHome(): void {
     this.refreshHijriDates();
-    this.upcomingImportantDates =
-      DateHelper.getUpcomingImportantDates(this.hijriOffset, SettingsHelper.getEventPerspective());
+    this.upcomingImportantDates = DateHelper.getUpcomingImportantDates(
+      this.hijriOffset,
+      SettingsHelper.getEventPerspective()
+    );
   }
 
-  private async onCalcSettingsChanged(): Promise<void> {
-    await this.loadSettingsAndLocation();
+  private onHijriCalendarTypeChanged(): void {
+    this.refreshHijriDates();
+    this.upcomingImportantDates = DateHelper.getUpcomingImportantDates(
+      this.hijriOffset,
+      SettingsHelper.getEventPerspective()
+    );
   }
 
   private async onAppForegrounded(): Promise<void> {
     this.syncViewingDateIfStale();
 
     this.refreshHijriDates();
-    this.upcomingImportantDates =
-      DateHelper.getUpcomingImportantDates(this.hijriOffset, SettingsHelper.getEventPerspective());
+    this.upcomingImportantDates = DateHelper.getUpcomingImportantDates(
+      this.hijriOffset,
+      SettingsHelper.getEventPerspective()
+    );
 
     await this.loadSettingsAndLocation();
     this.prayers = PrayerManager.updateStatuses(
@@ -297,39 +350,35 @@ export struct Prayer {
     this.refreshLocationSilently();
   }
 
-  private eventPerspectiveListener: () => void = (): void => {
-    this.upcomingImportantDates = DateHelper.getUpcomingImportantDates(
-      this.hijriOffset,
-      SettingsHelper.getEventPerspective()
-    );
-  };
-
   aboutToAppear(): void {
     this.colors = PageTheme.compute(this.themeMode);
     this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
       this.colors = c;
     });
 
+    EventPerspectiveNotifier.subscribe(this.eventPerspectiveListener);
+
     this.refreshHijriDates();
-    this.upcomingImportantDates =
-      DateHelper.getUpcomingImportantDates(this.hijriOffset, SettingsHelper.getEventPerspective());
+    this.upcomingImportantDates = DateHelper.getUpcomingImportantDates(
+      this.hijriOffset,
+      SettingsHelper.getEventPerspective()
+    );
 
     this.refreshViewingDate(true);
     this.initialize();
     this.startStatusTimer();
 
     this.refreshLocationSilently();
-    EventPerspectiveNotifier.subscribe(this.eventPerspectiveListener);
   }
 
   aboutToDisappear(): void {
     PageTheme.uninstallSystemListener(this.systemDarkListener);
     this.systemDarkListener = null;
+    EventPerspectiveNotifier.unsubscribe(this.eventPerspectiveListener);
     if (this.statusTimerId !== -1) {
       clearInterval(this.statusTimerId);
       this.statusTimerId = -1;
     }
-    EventPerspectiveNotifier.unsubscribe(this.eventPerspectiveListener);
   }
 
   onPageShow(): void {
@@ -524,18 +573,35 @@ export struct Prayer {
       rows.push(row);
     }
 
-    if (this.showExtraTimings) {
-      for (const t of this.extraTimings) {
-        const row: TimelineRow = {
-          kind: 'extra',
-          id: t.id,
-          time: t.time,
-          sortMinutes: 0,
-          prayerRef: null,
-          extraRef: t
-        };
-        rows.push(row);
+    // Sunrise and Sunset are core astronomical markers — always
+    // shown. The other four extras are gated individually by their
+    // list toggle.
+    const GATED_EXTRAS: string[] = ['imsak', 'firstThird', 'midnight', 'lastThird'];
+
+    for (const t of this.extraTimings) {
+      if (GATED_EXTRAS.indexOf(t.id) !== -1) {
+        if (t.id === 'imsak' && !this.showImsakList) {
+          continue;
+        }
+        if (t.id === 'firstThird' && !this.showFirstThirdList) {
+          continue;
+        }
+        if (t.id === 'midnight' && !this.showMidnightList) {
+          continue;
+        }
+        if (t.id === 'lastThird' && !this.showLastThirdList) {
+          continue;
+        }
       }
+      const row: TimelineRow = {
+        kind: 'extra',
+        id: t.id,
+        time: t.time,
+        sortMinutes: 0,
+        prayerRef: null,
+        extraRef: t
+      };
+      rows.push(row);
     }
 
     for (const r of rows) {
@@ -796,6 +862,16 @@ export struct Prayer {
       console.error('Navigation failed:', JSON.stringify(err)));
   }
 
+  private navigateToLocationSettings(): void {
+    AppStorage.setOrCreate(
+      STORAGE_KEY_SETTINGS_INITIAL_CATEGORY, 'Location'
+    );
+    NavHelper.prepareForward();
+    router.pushUrl({ url: 'pages/SettingsPage' })
+      .catch((err: Error) =>
+      console.error('Navigation failed:', JSON.stringify(err)));
+  }
+
   private getStatusColor(status: string): string {
     switch (status) {
       case 'next':    return this.colors.accentGold;
@@ -818,69 +894,42 @@ export struct Prayer {
     }
   }
 
-  private getSunriseTime(): string {
+  private getExtraTimeById(id: string): string {
     for (const t of this.extraTimings) {
-      if (t.id === 'sunrise') {
+      if (t.id === id) {
         return t.time;
       }
     }
     return '--:--';
+  }
+
+  private getSunriseTime(): string {
+    return this.getExtraTimeById('sunrise');
   }
 
   private getSunsetTime(): string {
-    for (const t of this.extraTimings) {
-      if (t.id === 'sunset') {
-        return t.time;
-      }
-    }
-    return '--:--';
+    return this.getExtraTimeById('sunset');
   }
 
-  private navigateToLocationSettings(): void {
-    AppStorage.setOrCreate(
-      STORAGE_KEY_SETTINGS_INITIAL_CATEGORY, 'Location'
-    );
-    NavHelper.prepareForward();
-    router.pushUrl({ url: 'pages/SettingsPage' })
-      .catch((err: Error) =>
-      console.error('Navigation failed:', JSON.stringify(err)));
+  private getImsakTime(): string {
+    return this.getExtraTimeById('imsak');
   }
 
   private getFirstThirdTime(): string {
-    for (const t of this.extraTimings) {
-      if (t.id === 'firstThird') {
-        return t.time;
-      }
-    }
-    return '--:--';
+    return this.getExtraTimeById('firstThird');
   }
 
   private getMidnightTime(): string {
-    for (const t of this.extraTimings) {
-      if (t.id === 'midnight') {
-        return t.time;
-      }
-    }
-    return '--:--';
+    return this.getExtraTimeById('midnight');
   }
 
   private getLastThirdTime(): string {
-    for (const t of this.extraTimings) {
-      if (t.id === 'lastThird') {
-        return t.time;
-      }
-    }
-    return '--:--';
+    return this.getExtraTimeById('lastThird');
   }
 
   build() {
     Stack() {
       Column() {
-        // inside the Column, before PageHeader:
-        //   if (deviceInfo.sdkApiVersion < 23) {
-        //     Column().height(72)
-        //   }
-        // Fixed page header.
         PageHeader({
           colors: this.colors,
           currentLanguage: this.appLanguage,
@@ -923,12 +972,16 @@ export struct Prayer {
                       prayers: this.prayers,
                       sunriseTime: this.getSunriseTime(),
                       sunsetTime: this.getSunsetTime(),
+                      imsakTime: this.getImsakTime(),
                       firstThirdTime: this.getFirstThirdTime(),
                       midnightTime: this.getMidnightTime(),
                       lastThirdTime: this.getLastThirdTime(),
-                      showExtraTimings: this.showExtraTimings,
                       currentLanguage: this.appLanguage,
-                      isDarkMode: this.isDarkMode()
+                      isDarkMode: this.isDarkMode(),
+                      showImsakGuide: this.showImsakSunpath,
+                      showFirstThirdGuide: this.showFirstThirdSunpath,
+                      showMidnightGuide: this.showMidnightSunpath,
+                      showLastThirdGuide: this.showLastThirdSunpath
                     })
                   }
                   .layoutWeight(1)
@@ -947,12 +1000,16 @@ export struct Prayer {
                       prayers: this.prayers,
                       sunriseTime: this.getSunriseTime(),
                       sunsetTime: this.getSunsetTime(),
+                      imsakTime: this.getImsakTime(),
                       firstThirdTime: this.getFirstThirdTime(),
                       midnightTime: this.getMidnightTime(),
                       lastThirdTime: this.getLastThirdTime(),
-                      showExtraTimings: this.showExtraTimings,
                       currentLanguage: this.appLanguage,
-                      isDarkMode: this.isDarkMode()
+                      isDarkMode: this.isDarkMode(),
+                      showImsakGuide: this.showImsakSunpath,
+                      showFirstThirdGuide: this.showFirstThirdSunpath,
+                      showMidnightGuide: this.showMidnightSunpath,
+                      showLastThirdGuide: this.showLastThirdSunpath
                     })
                   }
                   .width('100%')
