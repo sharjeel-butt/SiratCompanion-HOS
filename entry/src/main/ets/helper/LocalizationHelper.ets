@@ -569,7 +569,7 @@ export class L {
     m.set('wizard_finish', 'Get Started');
 
     // ---- Home dashboard ----
-    m.set('home_today_progress', "TODAY'S PROGRESS");
+    m.set('home_today_progress', "DAILY PRAYERS");
     m.set('home_prayers_completed', 'prayers completed');
     m.set('home_keep_going', 'Keep it up!');
     m.set('home_streak', 'Day Streak');
@@ -579,7 +579,7 @@ export class L {
     m.set('home_week_summary', 'prayers this week');
     m.set('home_this_month', 'THIS MONTH');
     m.set('home_month_summary', 'prayers this month');
-    m.set('home_tasbih', 'TASBIH');
+    m.set('home_tasbih', "DAILY TASBIH");
     m.set('home_tasbih_lifetime', 'Lifetime count');
     m.set('home_tasbih_summary', 'tasbihs');
     m.set('home_dhikrs', 'dhikrs');
@@ -1184,7 +1184,7 @@ export class L {
     m.set('wizard_next', '下一步');
     m.set('wizard_finish', '开始使用');
 
-    m.set('home_today_progress', '今日进度');
+    m.set('home_today_progress', '每日礼拜');
     m.set('home_prayers_completed', '次礼拜已完成');
     m.set('home_keep_going', '继续保持！');
     m.set('home_streak', '天连续');
@@ -1194,7 +1194,7 @@ export class L {
     m.set('home_week_summary', '次礼拜本周');
     m.set('home_this_month', '本月');
     m.set('home_month_summary', '次礼拜本月');
-    m.set('home_tasbih', '念珠');
+    m.set('home_tasbih', '每日念珠');
     m.set('home_tasbih_lifetime', '累计计数');
     m.set('home_tasbih_summary', '串念珠');
     m.set('home_dhikrs', '个念词');
@@ -1788,7 +1788,7 @@ export class L {
     m.set('wizard_next', 'التالي');
     m.set('wizard_finish', 'ابدأ الآن');
 
-    m.set('home_today_progress', 'تقدم اليوم');
+    m.set('home_today_progress', 'الصلوات اليومية');
     m.set('home_prayers_completed', 'صلوات مكتملة');
     m.set('home_keep_going', 'واصل!');
     m.set('home_streak', 'يوم متتالي');
@@ -1798,7 +1798,7 @@ export class L {
     m.set('home_week_summary', 'صلاة هذا الأسبوع');
     m.set('home_this_month', 'هذا الشهر');
     m.set('home_month_summary', 'صلاة هذا الشهر');
-    m.set('home_tasbih', 'التسبيح');
+    m.set('home_tasbih', 'التسبيح اليومي');
     m.set('home_tasbih_lifetime', 'العدد الإجمالي');
     m.set('home_tasbih_summary', 'مسبحات');
     m.set('home_dhikrs', 'أذكار');

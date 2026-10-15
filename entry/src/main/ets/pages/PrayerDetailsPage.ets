@@ -3,6 +3,7 @@
 import { mediaquery, router } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
+
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -14,7 +15,13 @@ import {
 import { L } from '../helper/LocalizationHelper';
 import { Breakpoints } from '../common/Breakpoints';
 import {
-  MonthDayCell, PerPrayerCount, PrayerDetailsSnapshot, ProgressHelper
+  MonthDayCell,
+  PerPrayerCount,
+  PrayerDetailsSnapshot,
+  ProgressHelper,
+  WeekDetailCell,
+  YearDetailSnapshot,
+  YearMonthRow
 } from '../utils/ProgressHelper';
 
 type Period = 'week' | 'month' | 'year';
@@ -81,6 +88,12 @@ struct PrayerDetailsPage {
       daysInMonth: 0
     }
   };
+  @State weekDetail: WeekDetailCell[] = [];
+  @State yearDetail: YearDetailSnapshot = {
+    year: 2026,
+    months: [],
+    totalCompleted: 0
+  };
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
 
   aboutToAppear(): void {
@@ -105,6 +118,8 @@ struct PrayerDetailsPage {
 
   private reload(): void {
     this.snapshot = ProgressHelper.getPrayerDetails();
+    this.weekDetail = ProgressHelper.getWeekDetail();
+    this.yearDetail = ProgressHelper.getYearDetail();
   }
 
   private onThemeModeChanged(): void {
@@ -228,7 +243,7 @@ struct PrayerDetailsPage {
               this.PeriodSelector()
               this.SummaryCard()
               this.PerPrayerCard()
-              this.MonthHeatmapCard()
+              this.PeriodViewCard()
               Column().height(40)
             }
             .width('100%')
@@ -253,6 +268,248 @@ struct PrayerDetailsPage {
     .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+  }
+
+  @Builder
+  PeriodViewCard() {
+    if (this.period === 'week') {
+      this.WeekViewCard()
+    } else if (this.period === 'month') {
+      this.MonthHeatmapCard()
+    } else {
+      this.YearViewCard()
+    }
+  }
+
+  @Builder
+  WeekViewCard() {
+    Column() {
+      Row() {
+        Text('📅').fontSize(14).margin({ right: 8 })
+        Text(this.tr('details_period_week'))
+          .fontSize(12)
+          .fontColor(this.colors.textMuted)
+          .fontWeight(FontWeight.Bold)
+          .letterSpacing(1.2)
+          .layoutWeight(1)
+        Text(`${this.snapshot.weekTotal} / ${this.snapshot.weekPossible}`)
+          .fontSize(12)
+          .fontColor(this.colors.accentGold)
+          .fontWeight(FontWeight.Medium)
+          .direction(Direction.Ltr)
+      }
+      .width('100%').padding({ bottom: 14 })
+
+      Row({ space: 4 }) {
+        ForEach(this.weekDetail, (cell: WeekDetailCell) => {
+          this.WeekDayCell(cell)
+        }, (cell: WeekDetailCell) =>
+        `wd-${cell.dateKey}-${cell.completed}-${cell.isToday ? 'T' : ''}`)
+      }
+      .width('100%')
+
+      Row() {
+        Text(`${this.snapshot.weekTotal}`)
+          .fontSize(18).fontWeight(FontWeight.Bold)
+          .fontColor(this.colors.accentGold)
+        Text(`  ${this.tr('details_prayers_completed')}`)
+          .fontSize(11).fontColor(this.colors.textMuted)
+          .margin({ left: 6, bottom: 2 })
+      }
+      .width('100%').margin({ top: 14 })
+      .alignItems(VerticalAlign.Bottom)
+    }
+    .width('100%')
+    .padding(18)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(Theme.radiusLarge)
+    .border({ width: 1, color: this.colors.borderSoft })
+    .shadow({
+      radius: 12,
+      color: this.colors.shadowCard,
+      offsetX: 0,
+      offsetY: 4
+    })
+  }
+
+  @Builder
+  WeekDayCell(cell: WeekDetailCell) {
+    Column() {
+      Text(this.weekdayShort(cell.dayOfWeek))
+        .fontSize(9)
+        .fontColor(this.colors.textMuted)
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .margin({ bottom: 4 })
+
+      Column() {
+        Text(`${cell.dayOfMonth}`)
+          .fontSize(14)
+          .fontWeight(cell.isToday ? FontWeight.Bold : FontWeight.Medium)
+          .fontColor(this.weekCellTextColor(cell))
+      }
+      .width('100%')
+      .height(44)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(HorizontalAlign.Center)
+      .backgroundColor(this.weekCellBg(cell))
+      .borderRadius(8)
+      .border({
+        width: cell.isToday ? 2 : 0,
+        color: this.colors.accentGold
+      })
+
+      Text(`${cell.completed}/5`)
+        .fontSize(9).fontColor(this.colors.textMuted)
+        .margin({ top: 4 })
+        .direction(Direction.Ltr)
+    }
+    .layoutWeight(1)
+    .alignItems(HorizontalAlign.Center)
+  }
+
+  private weekdayShort(dow: number): string {
+    const labels = L.getArray('days_of_week_short', this.appLanguage);
+    return labels[dow];
+  }
+
+  private weekCellBg(cell: WeekDetailCell): string {
+    if (cell.completed === 5) {
+      return this.colors.accentGold;
+    }
+    if (cell.completed >= 3) {
+      return this.colors.tintMedium;
+    }
+    if (cell.completed >= 1) {
+      return this.colors.tintSubtle;
+    }
+    return 'transparent';
+  }
+
+  private weekCellTextColor(cell: WeekDetailCell): string {
+    if (cell.completed === 5) {
+      return this.colors.textOnAccent;
+    }
+    if (cell.completed > 0) {
+      return this.colors.accentGold;
+    }
+    if (cell.isToday) {
+      return this.colors.accentGold;
+    }
+    return this.colors.textWhite;
+  }
+
+  @Builder
+  YearViewCard() {
+    Column() {
+      Row() {
+        Text('📅').fontSize(14).margin({ right: 8 })
+        Text(this.tr('details_period_year'))
+          .fontSize(12)
+          .fontColor(this.colors.textMuted)
+          .fontWeight(FontWeight.Bold)
+          .letterSpacing(1.2)
+          .layoutWeight(1)
+        Text(`${this.yearDetail.year}`)
+          .fontSize(12)
+          .fontColor(this.colors.accentGold)
+          .fontWeight(FontWeight.Medium)
+          .direction(Direction.Ltr)
+      }
+      .width('100%').padding({ bottom: 14 })
+
+      Column() {
+        ForEach(this.yearDetail.months, (m: YearMonthRow) => {
+          this.YearMonthRow(m)
+        }, (m: YearMonthRow) =>
+        `ym-${m.monthIndex}-${m.totalCompleted}-${m.isFuture ? 'f' : 'p'}`)
+      }
+      .width('100%')
+
+      Row() {
+        Text(`${this.yearDetail.totalCompleted}`)
+          .fontSize(18).fontWeight(FontWeight.Bold)
+          .fontColor(this.colors.accentGold)
+        Text(`  ${this.tr('details_prayers_completed')}`)
+          .fontSize(11).fontColor(this.colors.textMuted)
+          .margin({ left: 6, bottom: 2 })
+      }
+      .width('100%').margin({ top: 14 })
+      .alignItems(VerticalAlign.Bottom)
+    }
+    .width('100%')
+    .padding(18)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(Theme.radiusLarge)
+    .border({ width: 1, color: this.colors.borderSoft })
+    .shadow({
+      radius: 12,
+      color: this.colors.shadowCard,
+      offsetX: 0,
+      offsetY: 4
+    })
+  }
+
+  @Builder
+  YearMonthRow(m: YearMonthRow) {
+    Row() {
+      Text(this.monthShortLabel(m.monthIndex))
+        .fontSize(10)
+        .fontColor(m.isFuture ? this.colors.textMuted : this.colors.textWhite)
+        .width(30)
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .opacity(m.isFuture ? 0.5 : 1.0)
+
+      Row() {
+        ForEach(m.completed, (c: number, i: number) => {
+          Column()
+            .layoutWeight(1)
+            .height(10)
+            .backgroundColor(this.yearCellBg(c))
+            .borderRadius(2)
+            .margin({ left: 1, right: 1 })
+        }, (c: number, i: number) => `yc-${m.monthIndex}-${i}-${c}`)
+      }
+      .layoutWeight(1)
+      .alignItems(VerticalAlign.Center)
+      .padding({ left: 6, right: 0 })
+    }
+    .width('100%')
+    .padding({ top: 3, bottom: 3 })
+    .alignItems(VerticalAlign.Center)
+  }
+
+  private yearCellBg(completed: number): string {
+    if (completed < 0) {
+      return this.colors.tintSubtle;
+    }
+    if (completed === 5) {
+      return this.colors.accentGold;
+    }
+    if (completed >= 3) {
+      return this.colors.tintMedium;
+    }
+    if (completed >= 1) {
+      return this.colors.tintSubtle;
+    }
+    return this.colors.tintSoft;
+  }
+
+  private monthShortLabel(monthIndex: number): string {
+    const locale = this.appLanguage === 'zh' ? 'zh-CN'
+      : this.appLanguage === 'ar' ? 'ar'
+        : 'en-US';
+    try {
+      const fmt = new Intl.DateTimeFormat(locale, { month: 'short' });
+      return fmt.format(new Date(this.yearDetail.year, monthIndex, 1));
+    } catch (err) {
+      const fallback: string[] = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      ];
+      return fallback[monthIndex];
+    }
   }
 
   @Builder
