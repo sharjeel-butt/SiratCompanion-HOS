@@ -734,6 +734,22 @@ export class L {
       'The festival of sacrifice, commemorating Prophet Ibrahim\u2019s devotion.');
     m.set('event_ghadir_desc',
       'Marks the day the Prophet appointed Imam Ali as his successor, in the Shia tradition.');
+    m.set('show_extra_timings_list', 'Show Night Times');
+    m.set('show_extra_timings_list_desc',
+      'Imsak and the night divisions. Sunrise and Sunset are always shown.');
+    m.set('show_extra_timings_sunpath', 'Show Sun Path Guides');
+    m.set('show_extra_timings_sunpath_desc',
+      'First Third, Midnight and Last Third guides on the sun path');
+    m.set('show_imsak', 'Imsak');
+    m.set('show_imsak_desc', 'Pre-dawn cutoff, ten minutes before Fajr');
+    m.set('show_first_third', 'First Third');
+    m.set('show_first_third_desc', 'Start of the night\u2019s first third, after Maghrib');
+    m.set('show_midnight', 'Midnight');
+    m.set('show_midnight_desc', 'Islamic midnight \u2014 halfway through the night');
+    m.set('show_last_third', 'Last Third');
+    m.set('show_last_third_desc', 'Start of the night\u2019s last third, a time for Qiyam');
+    m.set('subsection_prayer_list', 'SHOW IN PRAYER LIST');
+    m.set('subsection_sun_path', 'SHOW ON SUN PATH');
 
     return m;
   }
@@ -1304,6 +1320,22 @@ export class L {
       '宰牲节，纪念先知易卜拉欣的虔诚奉献。');
     m.set('event_ghadir_desc',
       '先知ﷺ任命伊玛目阿里为继承人之日，什叶派传统节日。');
+    m.set('show_extra_timings_list', '显示夜间时间');
+    m.set('show_extra_timings_list_desc',
+      '封斋和夜间时段。日出和日落始终显示。');
+    m.set('show_extra_timings_sunpath', '显示太阳路径指引');
+    m.set('show_extra_timings_sunpath_desc',
+      '太阳路径上的第一夜段、午夜和最后夜段指引线');
+    m.set('show_imsak', '封斋');
+    m.set('show_imsak_desc', '黎明前十分钟的封斋截止时间');
+    m.set('show_first_third', '第一夜段');
+    m.set('show_first_third_desc', '昏礼后的第一个夜段');
+    m.set('show_midnight', '午夜');
+    m.set('show_midnight_desc', '伊斯兰午夜——夜的正中');
+    m.set('show_last_third', '最后夜段');
+    m.set('show_last_third_desc', '夜的最后一个三分之一，夜间礼拜的时间');
+    m.set('subsection_prayer_list', '在礼拜列表中显示');
+    m.set('subsection_sun_path', '在太阳路径上显示');
 
     return m;
   }
@@ -1881,6 +1913,22 @@ export class L {
       'عيد الأضحى، ذكرى تضحية النبي إبراهيم عليه السلام.');
     m.set('event_ghadir_desc',
       'يوم تعيين النبي ﷺ للإمام علي خليفةً له، في التقليد الشيعي.');
+    m.set('show_extra_timings_list', 'إظهار أوقات الليل');
+    m.set('show_extra_timings_list_desc',
+      'الإمساك وأقسام الليل. يظهر الشروق والغروب دائمًا.');
+    m.set('show_extra_timings_sunpath', 'إظهار أدلة مسار الشمس');
+    m.set('show_extra_timings_sunpath_desc',
+      'أدلة الثلث الأول ومنتصف الليل والثلث الأخير على مسار الشمس');
+    m.set('show_imsak', 'الإمساك');
+    m.set('show_imsak_desc', 'وقت الإمساك قبل الفجر بعشر دقائق');
+    m.set('show_first_third', 'الثلث الأول');
+    m.set('show_first_third_desc', 'بداية الثلث الأول من الليل بعد المغرب');
+    m.set('show_midnight', 'منتصف الليل');
+    m.set('show_midnight_desc', 'منتصف الليل الإسلامي — منتصف الليل');
+    m.set('show_last_third', 'الثلث الأخير');
+    m.set('show_last_third_desc', 'بداية الثلث الأخير من الليل، وقت قيام الليل');
+    m.set('subsection_prayer_list', 'إظهار في قائمة الصلاة');
+    m.set('subsection_sun_path', 'إظهار على مسار الشمس');
 
     return m;
   }

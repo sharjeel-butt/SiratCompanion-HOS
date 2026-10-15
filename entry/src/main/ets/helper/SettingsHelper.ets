@@ -25,8 +25,17 @@ import {
   STORAGE_KEY_POLAR_RESOLUTION,
   STORAGE_KEY_ROUNDING_METHOD,
   STORAGE_KEY_SHAFAQ,
-  STORAGE_KEY_SHOW_EXTRA_TIMINGS,
+  STORAGE_KEY_SHOW_EXTRA_TIMINGS_LIST,
+  STORAGE_KEY_SHOW_EXTRA_TIMINGS_SUNPATH,
+  STORAGE_KEY_SHOW_FIRST_THIRD_LIST,
+  STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH,
+  STORAGE_KEY_SHOW_IMSAK_LIST,
+  STORAGE_KEY_SHOW_IMSAK_SUNPATH,
   STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
+  STORAGE_KEY_SHOW_LAST_THIRD_LIST,
+  STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH,
+  STORAGE_KEY_SHOW_MIDNIGHT_LIST,
+  STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH,
   STORAGE_KEY_SOUND_ENABLED,
   STORAGE_KEY_TASBIH_RENDER_STYLE,
   STORAGE_KEY_TASBIH_SOUND,
@@ -102,7 +111,14 @@ export interface LoadedSettings {
   method: CalculationMethod;
   asr: AsrShadowRule;
   source: CalculationSource;
-  showExtraTimings: boolean;
+  showImsakList: boolean;
+  showFirstThirdList: boolean;
+  showMidnightList: boolean;
+  showLastThirdList: boolean;
+  showImsakSunpath: boolean;
+  showFirstThirdSunpath: boolean;
+  showMidnightSunpath: boolean;
+  showLastThirdSunpath: boolean;
   showIslamicEvents: boolean;
 }
 
@@ -125,24 +141,66 @@ export class SettingsHelper {
   // ============================================================
 
   static async loadAll(): Promise<LoadedSettings> {
-    const methodStr = await PreferencesHelper.getString(KEY_METHOD, CalculationMethod.KARACHI);
-    const asrNum = await PreferencesHelper.getNumber(KEY_ASR, AsrShadowRule.STANDARD as number);
-    const sourceStr = await PreferencesHelper.getString(KEY_SOURCE, CalculationSource.LOCAL);
-    const showExtraTimings = await PreferencesHelper.getBoolean(
-      KEY_SHOW_EXTRA_TIMINGS, true
+    const methodStr = await PreferencesHelper.getString(
+      KEY_METHOD, CalculationMethod.KARACHI
+    );
+    const asrNum = await PreferencesHelper.getNumber(
+      KEY_ASR, AsrShadowRule.STANDARD as number
+    );
+    const sourceStr = await PreferencesHelper.getString(
+      KEY_SOURCE, CalculationSource.LOCAL
+    );
+
+    const showImsakList = await PreferencesHelper.getBoolean(
+      STORAGE_KEY_SHOW_IMSAK_LIST, true
+    );
+    const showFirstThirdList = await PreferencesHelper.getBoolean(
+      STORAGE_KEY_SHOW_FIRST_THIRD_LIST, true
+    );
+    const showMidnightList = await PreferencesHelper.getBoolean(
+      STORAGE_KEY_SHOW_MIDNIGHT_LIST, true
+    );
+    const showLastThirdList = await PreferencesHelper.getBoolean(
+      STORAGE_KEY_SHOW_LAST_THIRD_LIST, true
+    );
+    const showImsakSunpath = await PreferencesHelper.getBoolean(
+      STORAGE_KEY_SHOW_IMSAK_SUNPATH, true
+    );
+    const showFirstThirdSunpath = await PreferencesHelper.getBoolean(
+      STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH, true
+    );
+    const showMidnightSunpath = await PreferencesHelper.getBoolean(
+      STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH, true
+    );
+    const showLastThirdSunpath = await PreferencesHelper.getBoolean(
+      STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH, true
     );
     const showIslamicEvents = await PreferencesHelper.getBoolean(
       KEY_SHOW_ISLAMIC_EVENTS, true
     );
 
-    AppStorage.setOrCreate(STORAGE_KEY_SHOW_EXTRA_TIMINGS, showExtraTimings);
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_IMSAK_LIST, showImsakList);
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_FIRST_THIRD_LIST, showFirstThirdList);
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_MIDNIGHT_LIST, showMidnightList);
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_LAST_THIRD_LIST, showLastThirdList);
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_IMSAK_SUNPATH, showImsakSunpath);
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH, showFirstThirdSunpath);
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH, showMidnightSunpath);
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH, showLastThirdSunpath);
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_ISLAMIC_EVENTS, showIslamicEvents);
 
     return {
       method: methodStr as CalculationMethod,
       asr: asrNum as AsrShadowRule,
       source: sourceStr as CalculationSource,
-      showExtraTimings,
+      showImsakList,
+      showFirstThirdList,
+      showMidnightList,
+      showLastThirdList,
+      showImsakSunpath,
+      showFirstThirdSunpath,
+      showMidnightSunpath,
+      showLastThirdSunpath,
       showIslamicEvents
     };
   }
@@ -379,15 +437,59 @@ export class SettingsHelper {
     SettingsHelper.bumpCalcSettingsVersion();
   }
 
-  static saveShowExtraTimings(value: boolean): void {
-    AppStorage.setOrCreate(STORAGE_KEY_SHOW_EXTRA_TIMINGS, value);
-    PreferencesHelper.setBoolean(KEY_SHOW_EXTRA_TIMINGS, value);
-    SettingsHelper.bumpCalcSettingsVersion();
+  static saveShowExtraTimingsList(value: boolean): void {
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_EXTRA_TIMINGS_LIST, value);
+    PreferencesHelper.setBoolean(STORAGE_KEY_SHOW_EXTRA_TIMINGS_LIST, value);
+  }
+
+  static saveShowExtraTimingsSunpath(value: boolean): void {
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_EXTRA_TIMINGS_SUNPATH, value);
+    PreferencesHelper.setBoolean(STORAGE_KEY_SHOW_EXTRA_TIMINGS_SUNPATH, value);
   }
 
   static saveShowIslamicEvents(value: boolean): void {
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_ISLAMIC_EVENTS, value);
     PreferencesHelper.setBoolean(KEY_SHOW_ISLAMIC_EVENTS, value);
+  }
+
+  static saveShowImsakList(value: boolean): void {
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_IMSAK_LIST, value);
+    PreferencesHelper.setBoolean(STORAGE_KEY_SHOW_IMSAK_LIST, value);
+  }
+
+  static saveShowFirstThirdList(value: boolean): void {
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_FIRST_THIRD_LIST, value);
+    PreferencesHelper.setBoolean(STORAGE_KEY_SHOW_FIRST_THIRD_LIST, value);
+  }
+
+  static saveShowMidnightList(value: boolean): void {
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_MIDNIGHT_LIST, value);
+    PreferencesHelper.setBoolean(STORAGE_KEY_SHOW_MIDNIGHT_LIST, value);
+  }
+
+  static saveShowLastThirdList(value: boolean): void {
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_LAST_THIRD_LIST, value);
+    PreferencesHelper.setBoolean(STORAGE_KEY_SHOW_LAST_THIRD_LIST, value);
+  }
+
+  static saveShowImsakSunpath(value: boolean): void {
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_IMSAK_SUNPATH, value);
+    PreferencesHelper.setBoolean(STORAGE_KEY_SHOW_IMSAK_SUNPATH, value);
+  }
+
+  static saveShowFirstThirdSunpath(value: boolean): void {
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH, value);
+    PreferencesHelper.setBoolean(STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH, value);
+  }
+
+  static saveShowMidnightSunpath(value: boolean): void {
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH, value);
+    PreferencesHelper.setBoolean(STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH, value);
+  }
+
+  static saveShowLastThirdSunpath(value: boolean): void {
+    AppStorage.setOrCreate(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH, value);
+    PreferencesHelper.setBoolean(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH, value);
   }
 
   // ============================================================

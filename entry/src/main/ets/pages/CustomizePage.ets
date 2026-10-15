@@ -11,8 +11,15 @@ import {
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_EVENT_PERSPECTIVE,
   STORAGE_KEY_LANGUAGE,
-  STORAGE_KEY_SHOW_EXTRA_TIMINGS,
+  STORAGE_KEY_SHOW_FIRST_THIRD_LIST,
+  STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH,
+  STORAGE_KEY_SHOW_IMSAK_LIST,
+  STORAGE_KEY_SHOW_IMSAK_SUNPATH,
   STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
+  STORAGE_KEY_SHOW_LAST_THIRD_LIST,
+  STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH,
+  STORAGE_KEY_SHOW_MIDNIGHT_LIST,
+  STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH,
   STORAGE_KEY_SYSTEM_HAPTICS_ENABLED,
   STORAGE_KEY_SYSTEM_SOUND_ENABLED,
   STORAGE_KEY_THEME_MODE,
@@ -24,7 +31,7 @@ import { SoundOptions, TASBIH_SOUND_OPTIONS, TasbihSoundOption } from '../common
 import { Breakpoints } from '../common/Breakpoints';
 import { ClockFormat } from '../common/ClockFormat';
 import { SubsectionHeader } from '../components/SubsectionHeader';
-
+import { ExtraTimingToggleRow } from '../components/ExtraTimingToggleRow';
 
 @Entry
 @Component
@@ -36,58 +43,89 @@ struct CustomizePage {
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
+
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = AppLanguage.ENGLISH;
+
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
   appTheme: string = ThemePreset.CURRENT;
+
   @StorageLink(STORAGE_KEY_SYSTEM_SOUND_ENABLED)
   @Watch('onSystemFeedbackChanged')
   systemSoundEnabled: boolean = true;
+
   @StorageLink(STORAGE_KEY_SYSTEM_HAPTICS_ENABLED)
   @Watch('onSystemFeedbackChanged')
   systemHapticsEnabled: boolean = true;
+
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
+
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
-  @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
+
   @StorageLink(STORAGE_KEY_TIME_FORMAT)
   @Watch('onClockFormatChanged')
   ClockFormat: string = ClockFormat.SYSTEM;
-  @StorageLink(STORAGE_KEY_SHOW_EXTRA_TIMINGS)
-  @Watch('onShowExtraTimingsChanged')
-  showExtraTimings: boolean = true;
+
   @StorageLink(STORAGE_KEY_SHOW_ISLAMIC_EVENTS)
   @Watch('onShowIslamicEventsChanged')
   showIslamicEvents: boolean = true;
+
   @StorageLink(STORAGE_KEY_EVENT_PERSPECTIVE)
   @Watch('onEventPerspectiveChanged')
   eventPerspective: string = 'universal';
+  // ---- Per-timing visibility — prayer list ----
+  @StorageLink(STORAGE_KEY_SHOW_IMSAK_LIST)
+  @Watch('onShowImsakListChanged')
+  showImsakList: boolean = true;
+  @StorageLink(STORAGE_KEY_SHOW_FIRST_THIRD_LIST)
+  @Watch('onShowFirstThirdListChanged')
+  showFirstThirdList: boolean = true;
+  @StorageLink(STORAGE_KEY_SHOW_MIDNIGHT_LIST)
+  @Watch('onShowMidnightListChanged')
+  showMidnightList: boolean = true;
+  @StorageLink(STORAGE_KEY_SHOW_LAST_THIRD_LIST)
+  @Watch('onShowLastThirdListChanged')
+  showLastThirdList: boolean = true;
+  // ---- Per-timing visibility — sun path ----
+  @StorageLink(STORAGE_KEY_SHOW_IMSAK_SUNPATH)
+  @Watch('onShowImsakSunpathChanged')
+  showImsakSunpath: boolean = true;
+  @StorageLink(STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH)
+  @Watch('onShowFirstThirdSunpathChanged')
+  showFirstThirdSunpath: boolean = true;
+  @StorageLink(STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH)
+  @Watch('onShowMidnightSunpathChanged')
+  showMidnightSunpath: boolean = true;
+  @StorageLink(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH)
+  @Watch('onShowLastThirdSunpathChanged')
+  showLastThirdSunpath: boolean = true;
 
   // ============================================================
-  // UI CUSTOMIZATION STATE
+  // UI STATE
   // ============================================================
+
+  @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
+  @State currentLanguage: string = AppLanguage.ENGLISH;
   @State showClockFormatPicker: boolean = false;
   @State vibrationEnabled: boolean = true;
   @State soundEnabled: boolean = true;
   @State selectedSound: string = SoundOptions.DEFAULT_ID;
   @State expandedCategory: string | null = 'UI Customization';
   @State showThemePicker: boolean = false;
-  @State showEventPerspectivePicker: boolean = false;
-  // ============================================================
-  // UI STATE
-  // ============================================================
   @State showLanguagePicker: boolean = false;
   @State showAppThemePicker: boolean = false;
   @State showSoundPicker: boolean = false;
-  @State currentLanguage: string = AppLanguage.ENGLISH;
+  @State showEventPerspectivePicker: boolean = false;
+
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
 
   // ============================================================
-  // LOCALIZATION + BREAKPOINT HELPERS
+  // LIFECYCLE
   // ============================================================
 
   aboutToAppear(): void {
@@ -115,22 +153,41 @@ struct CustomizePage {
   // ============================================================
   // WATCHERS
   // ============================================================
+
   private onClockFormatChanged(): void {
     // No state to update — the @StorageLink re-render is enough.
-    // Pages call ClockFormatHelper.reformat() during build, and the
-    // helper reads the freshly-written value from AppStorage.
-  }
-
-  private onEventPerspectiveChanged(): void {
-    // Re-render handled by the @StorageLink.
-  }
-
-  private onShowExtraTimingsChanged(): void {
-    // Re-render is handled by the @StorageLink.
   }
 
   private onShowIslamicEventsChanged(): void {
     // Re-render is handled by the @StorageLink.
+  }
+
+  private onEventPerspectiveChanged(): void {
+    // Re-render is handled by the @StorageLink.
+  }
+
+  private onShowImsakListChanged(): void {
+  }
+
+  private onShowFirstThirdListChanged(): void {
+  }
+
+  private onShowMidnightListChanged(): void {
+  }
+
+  private onShowLastThirdListChanged(): void {
+  }
+
+  private onShowImsakSunpathChanged(): void {
+  }
+
+  private onShowFirstThirdSunpathChanged(): void {
+  }
+
+  private onShowMidnightSunpathChanged(): void {
+  }
+
+  private onShowLastThirdSunpathChanged(): void {
   }
 
   private pickClockFormat(id: string): void {
@@ -150,6 +207,15 @@ struct CustomizePage {
     }
   }
 
+  private pickEventPerspective(id: string): void {
+    this.eventPerspective = id;
+    SettingsHelper.saveEventPerspective(id);
+    this.showEventPerspectivePicker = false;
+  }
+
+  // ============================================================
+  // BUILD
+  // ============================================================
 
   build() {
     Stack() {
@@ -263,20 +329,6 @@ struct CustomizePage {
       }
       .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
 
-      if (this.showEventPerspectivePicker) {
-        this.PickerOverlay(
-          this.tr('event_perspective'),
-          '🌙',
-          SettingsHelper.buildEventPerspectivePickerItems(this.eventPerspective),
-          (id: string) => {
-            this.pickEventPerspective(id);
-          },
-          () => {
-            this.showEventPerspectivePicker = false;
-          }
-        )
-      }
-
       if (this.showThemePicker) {
         this.PickerOverlay(
           this.tr('dark_mode'),
@@ -323,6 +375,20 @@ struct CustomizePage {
           },
           () => {
             this.showClockFormatPicker = false;
+          }
+        )
+      }
+
+      if (this.showEventPerspectivePicker) {
+        this.PickerOverlay(
+          this.tr('event_perspective'),
+          '🌙',
+          SettingsHelper.buildEventPerspectivePickerItems(this.eventPerspective),
+          (id: string) => {
+            this.pickEventPerspective(id);
+          },
+          () => {
+            this.showEventPerspectivePicker = false;
           }
         )
       }
@@ -374,7 +440,26 @@ struct CustomizePage {
         titleKey: 'subsection_prayer_ui',
         currentLanguage: this.currentLanguage
       })
-      this.ShowExtraTimingsRow()
+
+      SubsectionHeader({
+        colors: this.colors,
+        titleKey: 'subsection_prayer_list',
+        currentLanguage: this.currentLanguage
+      })
+      this.ShowImsakListRow()
+      this.ShowFirstThirdListRow()
+      this.ShowMidnightListRow()
+      this.ShowLastThirdListRow()
+
+      SubsectionHeader({
+        colors: this.colors,
+        titleKey: 'subsection_sun_path',
+        currentLanguage: this.currentLanguage
+      })
+      this.ShowImsakSunpathRow()
+      this.ShowFirstThirdSunpathRow()
+      this.ShowMidnightSunpathRow()
+      this.ShowLastThirdSunpathRow()
 
       // ============ Sound & Feedback ============
       SubsectionHeader({
@@ -400,73 +485,6 @@ struct CustomizePage {
     .borderRadius(16)
     .border({ width: 1, color: this.colors.borderSoft })
     .margin({ bottom: 12 })
-  }
-
-  @Builder
-  EventPerspectiveRow() {
-    Row() {
-      Column() {
-        Text(this.tr('event_perspective'))
-          .fontSize(15).fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium)
-        Text(this.tr('event_perspective_desc'))
-          .fontSize(11)
-          .fontColor(this.colors.textMuted)
-          .margin({ top: 2 })
-          .maxLines(3)
-          .textOverflow({ overflow: TextOverflow.Ellipsis })
-        Text(SettingsHelper.getEventPerspectiveLabel(
-          this.eventPerspective, this.currentLanguage
-        ))
-          .fontSize(12)
-          .fontColor(this.colors.accentGold)
-          .maxLines(1)
-          .textOverflow({ overflow: TextOverflow.Ellipsis })
-          .margin({ top: 6 })
-      }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
-      Text('›').fontSize(22)
-        .fontColor(this.colors.accentGold).opacity(0.7)
-    }
-    .width('100%')
-    .padding({
-      top: 14,
-      bottom: 14,
-      left: 16,
-      right: 16
-    })
-    .backgroundColor(this.colors.tintSubtle)
-    .borderRadius(12)
-    .margin({ bottom: 8 })
-    .onClick(() => {
-      this.showEventPerspectivePicker = true;
-    })
-  }
-
-  private eventPerspectiveLabel(): string {
-    switch (this.eventPerspective) {
-      case SettingsHelper.EVENT_PERSPECTIVE_SUNNI:
-        return this.tr('event_perspective_sunni');
-      case SettingsHelper.EVENT_PERSPECTIVE_SHIA:
-        return this.tr('event_perspective_shia');
-      case SettingsHelper.EVENT_PERSPECTIVE_ALL:
-        return this.tr('event_perspective_all');
-      case SettingsHelper.EVENT_PERSPECTIVE_UNIVERSAL:
-      default:
-        return this.tr('event_perspective_universal');
-    }
-  }
-
-  @Builder
-  SubsectionHeader(title: string) {
-    Text(title)
-      .fontSize(12)
-      .fontColor(this.colors.accentGold)
-      .fontWeight(FontWeight.Bold)
-      .letterSpacing(1.2)
-      .width('100%')
-      .padding({ left: 4, top: 8, bottom: 8 })
   }
 
   // ---- Each toggle is its own parameterless builder so it re-reads
@@ -508,26 +526,29 @@ struct CustomizePage {
   }
 
   @Builder
-  ShowExtraTimingsRow() {
+  EventPerspectiveRow() {
     Row() {
       Column() {
-        Text(this.tr('show_extra_timings'))
+        Text(this.tr('event_perspective'))
           .fontSize(15).fontColor(this.colors.textWhite)
           .fontWeight(FontWeight.Medium)
-        Text(this.tr('show_extra_timings_desc'))
+        Text(this.tr('event_perspective_desc'))
           .fontSize(11)
           .fontColor(this.colors.textMuted)
           .margin({ top: 2 })
           .maxLines(3)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
+        Text(this.eventPerspectiveLabel())
+          .fontSize(12)
+          .fontColor(this.colors.accentGold)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+          .margin({ top: 6 })
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Toggle({ type: ToggleType.Switch, isOn: this.showExtraTimings })
-        .selectedColor(this.colors.accentGold)
-        .onChange((isOn: boolean) => {
-          this.toggleShowExtraTimings(isOn);
-        })
+      Text('›').fontSize(22)
+        .fontColor(this.colors.accentGold).opacity(0.7)
     }
     .width('100%')
     .padding({
@@ -539,7 +560,112 @@ struct CustomizePage {
     .backgroundColor(this.colors.tintSubtle)
     .borderRadius(12)
     .margin({ bottom: 8 })
+    .onClick(() => {
+      this.showEventPerspectivePicker = true;
+    })
   }
+
+  // ---- Per-timing visibility — prayer list ----
+
+  @Builder
+  ShowImsakListRow() {
+    ExtraTimingToggleRow({
+      colors: this.colors,
+      titleKey: 'show_imsak',
+      descriptionKey: 'show_imsak_desc',
+      currentLanguage: this.currentLanguage,
+      isOn: this.showImsakList,
+      onToggle: (isOn: boolean) => this.toggleShowImsakList(isOn)
+    })
+  }
+
+  @Builder
+  ShowFirstThirdListRow() {
+    ExtraTimingToggleRow({
+      colors: this.colors,
+      titleKey: 'show_first_third',
+      descriptionKey: 'show_first_third_desc',
+      currentLanguage: this.currentLanguage,
+      isOn: this.showFirstThirdList,
+      onToggle: (isOn: boolean) => this.toggleShowFirstThirdList(isOn)
+    })
+  }
+
+  @Builder
+  ShowMidnightListRow() {
+    ExtraTimingToggleRow({
+      colors: this.colors,
+      titleKey: 'show_midnight',
+      descriptionKey: 'show_midnight_desc',
+      currentLanguage: this.currentLanguage,
+      isOn: this.showMidnightList,
+      onToggle: (isOn: boolean) => this.toggleShowMidnightList(isOn)
+    })
+  }
+
+  @Builder
+  ShowLastThirdListRow() {
+    ExtraTimingToggleRow({
+      colors: this.colors,
+      titleKey: 'show_last_third',
+      descriptionKey: 'show_last_third_desc',
+      currentLanguage: this.currentLanguage,
+      isOn: this.showLastThirdList,
+      onToggle: (isOn: boolean) => this.toggleShowLastThirdList(isOn)
+    })
+  }
+
+  // ---- Per-timing visibility — sun path ----
+
+  @Builder
+  ShowImsakSunpathRow() {
+    ExtraTimingToggleRow({
+      colors: this.colors,
+      titleKey: 'show_imsak',
+      descriptionKey: 'show_imsak_desc',
+      currentLanguage: this.currentLanguage,
+      isOn: this.showImsakSunpath,
+      onToggle: (isOn: boolean) => this.toggleShowImsakSunpath(isOn)
+    })
+  }
+
+  @Builder
+  ShowFirstThirdSunpathRow() {
+    ExtraTimingToggleRow({
+      colors: this.colors,
+      titleKey: 'show_first_third',
+      descriptionKey: 'show_first_third_desc',
+      currentLanguage: this.currentLanguage,
+      isOn: this.showFirstThirdSunpath,
+      onToggle: (isOn: boolean) => this.toggleShowFirstThirdSunpath(isOn)
+    })
+  }
+
+  @Builder
+  ShowMidnightSunpathRow() {
+    ExtraTimingToggleRow({
+      colors: this.colors,
+      titleKey: 'show_midnight',
+      descriptionKey: 'show_midnight_desc',
+      currentLanguage: this.currentLanguage,
+      isOn: this.showMidnightSunpath,
+      onToggle: (isOn: boolean) => this.toggleShowMidnightSunpath(isOn)
+    })
+  }
+
+  @Builder
+  ShowLastThirdSunpathRow() {
+    ExtraTimingToggleRow({
+      colors: this.colors,
+      titleKey: 'show_last_third',
+      descriptionKey: 'show_last_third_desc',
+      currentLanguage: this.currentLanguage,
+      isOn: this.showLastThirdSunpath,
+      onToggle: (isOn: boolean) => this.toggleShowLastThirdSunpath(isOn)
+    })
+  }
+
+  // ---- Sound & feedback ----
 
   @Builder
   VibrationRow() {
@@ -691,45 +817,6 @@ struct CustomizePage {
     .onClick(() => {
       this.showLanguagePicker = true;
     })
-  }
-
-  /**
-   * Standard toggle row: title, description, and a right-aligned
-   * switch. Used for the two straightforward toggles.
-   */
-  @Builder
-  SimpleToggleRow(
-    title: string, desc: string, value: boolean,
-    onChange: (isOn: boolean) => void
-  ) {
-    Row() {
-      Column() {
-        Text(title)
-          .fontSize(15).fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium)
-        Text(desc)
-          .fontSize(11)
-          .fontColor(this.colors.textMuted)
-          .margin({ top: 2 })
-          .maxLines(3)
-          .textOverflow({ overflow: TextOverflow.Ellipsis })
-      }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
-      Toggle({ type: ToggleType.Switch, isOn: value })
-        .selectedColor(this.colors.accentGold)
-        .onChange(onChange)
-    }
-    .width('100%')
-    .padding({
-      top: 14,
-      bottom: 14,
-      left: 16,
-      right: 16
-    })
-    .backgroundColor(this.colors.tintSubtle)
-    .borderRadius(12)
-    .margin({ bottom: 8 })
   }
 
   @Builder
@@ -952,10 +1039,6 @@ struct CustomizePage {
     .position({ bottom: 0 })
   }
 
-  // ============================================================
-  // THEME
-  // ============================================================
-
   @Builder
   SoundPicker() {
     Column()
@@ -1090,10 +1173,6 @@ struct CustomizePage {
     .position({ bottom: 0 })
   }
 
-  // ============================================================
-  // PICK HANDLERS
-  // ============================================================
-
   @Builder
   PickerOverlay(
     title: string,
@@ -1213,6 +1292,10 @@ struct CustomizePage {
     .position({ bottom: 0 })
   }
 
+  // ============================================================
+  // HELPERS
+  // ============================================================
+
   private tr(key: string): string {
     return L.get(key, this.currentLanguage);
   }
@@ -1224,16 +1307,6 @@ struct CustomizePage {
   private isTablet(): boolean {
     return Breakpoints.isTablet(this.breakpoint);
   }
-
-  private pickEventPerspective(id: string): void {
-    this.eventPerspective = id;
-    SettingsHelper.saveEventPerspective(id);
-    this.showEventPerspectivePicker = false;
-  }
-
-  // ============================================================
-  // LIFECYCLE
-  // ============================================================
 
   private onThemeModeChanged(): void {
     this.colors = PageTheme.compute(this.themeMode);
@@ -1250,10 +1323,6 @@ struct CustomizePage {
   private onSystemFeedbackChanged(): void {
     // UI reacts via the @StorageLink binding itself.
   }
-
-  // ============================================================
-  // TOGGLES
-  // ============================================================
 
   private async onAppForegrounded(): Promise<void> {
     this.currentLanguage = this.appLanguage;
@@ -1279,10 +1348,6 @@ struct CustomizePage {
     this.showLanguagePicker = false;
   }
 
-  // ============================================================
-  // SOUND DISPLAY HELPERS
-  // ============================================================
-
   private pickAppTheme(id: string): void {
     this.appTheme = id;
     SettingsHelper.saveAppTheme(id);
@@ -1299,14 +1364,19 @@ struct CustomizePage {
     }, 150);
   }
 
-  // ============================================================
-  // PICKER ITEMS
-  // ============================================================
-
   private async reload(): Promise<void> {
     const data = await SettingsHelper.loadAll();
-    this.showExtraTimings = data.showExtraTimings;
     this.showIslamicEvents = data.showIslamicEvents;
+
+    this.showImsakList = data.showImsakList;
+    this.showFirstThirdList = data.showFirstThirdList;
+    this.showMidnightList = data.showMidnightList;
+    this.showLastThirdList = data.showLastThirdList;
+    this.showImsakSunpath = data.showImsakSunpath;
+    this.showFirstThirdSunpath = data.showFirstThirdSunpath;
+    this.showMidnightSunpath = data.showMidnightSunpath;
+    this.showLastThirdSunpath = data.showLastThirdSunpath;
+
     this.vibrationEnabled = SettingsHelper.getVibrationEnabled();
     this.soundEnabled = SettingsHelper.getSoundEnabled();
     this.selectedSound = SettingsHelper.getTasbihSound();
@@ -1315,14 +1385,49 @@ struct CustomizePage {
     this.appTheme = preset;
   }
 
-  private toggleShowExtraTimings(value: boolean): void {
-    this.showExtraTimings = value;
-    SettingsHelper.saveShowExtraTimings(value);
-  }
-
   private toggleShowIslamicEvents(value: boolean): void {
     this.showIslamicEvents = value;
     SettingsHelper.saveShowIslamicEvents(value);
+  }
+
+  private toggleShowImsakList(value: boolean): void {
+    this.showImsakList = value;
+    SettingsHelper.saveShowImsakList(value);
+  }
+
+  private toggleShowFirstThirdList(value: boolean): void {
+    this.showFirstThirdList = value;
+    SettingsHelper.saveShowFirstThirdList(value);
+  }
+
+  private toggleShowMidnightList(value: boolean): void {
+    this.showMidnightList = value;
+    SettingsHelper.saveShowMidnightList(value);
+  }
+
+  private toggleShowLastThirdList(value: boolean): void {
+    this.showLastThirdList = value;
+    SettingsHelper.saveShowLastThirdList(value);
+  }
+
+  private toggleShowImsakSunpath(value: boolean): void {
+    this.showImsakSunpath = value;
+    SettingsHelper.saveShowImsakSunpath(value);
+  }
+
+  private toggleShowFirstThirdSunpath(value: boolean): void {
+    this.showFirstThirdSunpath = value;
+    SettingsHelper.saveShowFirstThirdSunpath(value);
+  }
+
+  private toggleShowMidnightSunpath(value: boolean): void {
+    this.showMidnightSunpath = value;
+    SettingsHelper.saveShowMidnightSunpath(value);
+  }
+
+  private toggleShowLastThirdSunpath(value: boolean): void {
+    this.showLastThirdSunpath = value;
+    SettingsHelper.saveShowLastThirdSunpath(value);
   }
 
   private toggleVibration(value: boolean): void {
@@ -1367,10 +1472,6 @@ struct CustomizePage {
     return SoundOptions.deriveDescription(opt.file);
   }
 
-  // ============================================================
-  // BUILD
-  // ============================================================
-
   private buildLanguageItems(): PickerItem[] {
     const langs = [AppLanguage.ENGLISH, AppLanguage.CHINESE, AppLanguage.ARABIC];
     return langs.map((l): PickerItem => {
@@ -1383,17 +1484,9 @@ struct CustomizePage {
     });
   }
 
-  // ============================================================
-  // TOP BAR
-  // ============================================================
-
   private currentLanguageLabel(): string {
     return L.get(`lang_${this.appLanguage}`, this.currentLanguage);
   }
-
-  // ============================================================
-  // UI CUSTOMIZATION CONTENT
-  // ============================================================
 
   private buildThemeItems(): PickerItem[] {
     const modes = [ThemeMode.LIGHT, ThemeMode.DARK, ThemeMode.SYSTEM];
@@ -1409,10 +1502,6 @@ struct CustomizePage {
     });
   }
 
-  // ============================================================
-  // APPEARANCE CONTENT
-  // ============================================================
-
   private themeModeLabel(): string {
     switch (this.themeMode) {
       case ThemeMode.LIGHT:
@@ -1426,17 +1515,9 @@ struct CustomizePage {
     }
   }
 
-  // ============================================================
-  // APP THEME PICKER
-  // ============================================================
-
   private appThemeLabel(): string {
     return SettingsHelper.getAppThemeLabel(this.appTheme);
   }
-
-  // ============================================================
-  // SOUND PICKER
-  // ============================================================
 
   private appThemeSwatch(preset: string): string {
     const preview = Theme.getColors(
@@ -1446,10 +1527,6 @@ struct CustomizePage {
     );
     return preview.accentGold;
   }
-
-  // ============================================================
-  // GENERIC PICKER OVERLAY
-  // ============================================================
 
   private appThemeSubtitle(preset: string): string {
     switch (preset) {
@@ -1464,6 +1541,26 @@ struct CustomizePage {
       case ThemePreset.CURRENT:
       default:
         return this.tr('theme_preset_current_desc');
+    }
+  }
+
+  /**
+   * Resolve the Event Perspective value label through this.tr(...)
+   * rather than SettingsHelper.getEventPerspectiveLabel, so the
+   * text node depends on currentLanguage and re-renders when the
+   * language changes.
+   */
+  private eventPerspectiveLabel(): string {
+    switch (this.eventPerspective) {
+      case SettingsHelper.EVENT_PERSPECTIVE_SUNNI:
+        return this.tr('event_perspective_sunni');
+      case SettingsHelper.EVENT_PERSPECTIVE_SHIA:
+        return this.tr('event_perspective_shia');
+      case SettingsHelper.EVENT_PERSPECTIVE_ALL:
+        return this.tr('event_perspective_all');
+      case SettingsHelper.EVENT_PERSPECTIVE_UNIVERSAL:
+      default:
+        return this.tr('event_perspective_universal');
     }
   }
 }
