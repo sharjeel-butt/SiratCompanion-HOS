@@ -1,8 +1,8 @@
 # Privacy Policy — Sirat Companion
 
-**Last updated:** October 8, 2026
-**Effective date:** October 8, 2026
-**Applies to:** Sirat Companion version 2.5.0 and later
+**Last updated:** October 16, 2026
+**Effective date:** October 16, 2026
+**Applies to:** Sirat Companion version 3.3.3 and later
 
 [English](#english) · [中文](#chinese) · [العربية](#arabic)
 
@@ -16,8 +16,7 @@
 
 Sirat Companion ("the App", "we", "us", or "our") is an Islamic companion application for HarmonyOS, developed by *
 *Sharjeel Idris** ("the Developer"). This Privacy Policy explains what information the App accesses, how that
-information
-is used, and your rights regarding that information.
+information is used, and your rights regarding that information.
 
 We have designed Sirat Companion to work entirely on your device. The App does not require an account, does not connect
 to any server we operate, and does not transmit your personal data to us or to any third party.
@@ -51,26 +50,31 @@ information is transmitted to us, to Huawei, or to any third party by the App.
 
 - **What we access:** The prayers you mark as prayed each day (Fajr, Dhuhr, Asr, Maghrib, Isha), stored per calendar
   date.
-- **Why we access it:** To power the Home dashboard — today's progress, streaks, weekly grid, monthly heatmap, and
-  lifetime statistics — and to skip creating reminders for prayers you have already performed.
-- **How it is stored:** Stored locally on your device using the HarmonyOS Preferences API. It never leaves your device.
+- **Why we access it:** To power the Home dashboard and the Prayer Details page — today's progress, streaks, weekly and
+  monthly summaries, and lifetime statistics — and to skip creating reminders for prayers you have already performed.
+- **How it is stored:** Stored locally on your device using the HarmonyOS Preferences API. It never leaves your device
+  unless you have enabled system backup, in which case it participates in the backup described in the "Backup and
+  Restore" section below.
 
 ### Prayer Times and Settings
 
-- **What we access:** Your calculation preferences (convention, Asr rule, prayer offsets, high-latitude rule), app
-  theme, dark mode, language preference, Hijri date offset, vibration preference, Tasbih theme preferences, Tasbih sound
-  preference, notification preferences, and home-screen toggles.
+- **What we access:** Your calculation preferences (convention, Asr rule, prayer offsets, high-latitude rule, rounding,
+  midnight method, polar resolution, Shafaq), app theme, dark mode, language preference, time format, Hijri date offset,
+  Hijri calendar type, location mode, manual coordinates, event tradition preference, per-timing visibility toggles,
+  vibration preference, Tasbih theme preferences, Tasbih sound preference, and notification preferences.
 - **Why we access it:** To remember your choices across app restarts.
 - **How it is stored:** All preferences are stored locally on your device using the HarmonyOS Preferences API. They
-  never leave your device.
+  never leave your device unless you have enabled system backup.
 
 ### Tasbih Data
 
-- **What we access:** The Tasbih sessions you create, the dhikr items within them, your counts, and the theme chosen for
-  each Tasbih.
-- **Why we access it:** To display and persist your Tasbih progress and preferences.
-- **How it is stored:** Tasbih data is stored locally on your device using the HarmonyOS Preferences API. It never
-  leaves your device.
+- **What we access:** The Tasbih sessions you create, the dhikr items within them, your current counts, your daily
+  totals, a rolling 90-day history of daily counts per dhikr, and the theme chosen for each Tasbih.
+- **Why we access it:** To display and persist your Tasbih progress on the Tasbih tab and on the Tasbih Details page,
+  which shows weekly, monthly, and yearly views per tasbih and per dhikr.
+- **How it is stored:** Tasbih data is stored locally on your device using the HarmonyOS Preferences API. Daily counts
+  are automatically rolled into history each night; days beyond the most recent 90 are dropped from the rolling window.
+  Nothing is transmitted unless you have enabled system backup.
 
 ### System Feedback State
 
@@ -126,6 +130,24 @@ The active reminder mechanism is the Calendar backend described above. When the 
 approved, this Privacy Policy will be updated to disclose the notification backend, and the `PUBLISH_AGENT_REMINDER`
 permission will be requested at that time.
 
+## Backup and Restore
+
+Sirat Companion supports HarmonyOS's system-level backup framework. When backup is enabled on your device, the App's
+locally stored data is included in the system backup so it can be restored if you migrate to a new device or reinstall
+the App.
+
+- **What is included:** All App settings and preferences (language, theme, prayer calculation settings, location mode
+  and manual coordinates, Hijri offset and calendar type, notification settings, sound and vibration preferences, time
+  format, event tradition, per-timing visibility toggles), all Tasbih data (custom tasbihs, dhikr items, current counts,
+  daily totals, rolling 90-day history, lifetime totals), and the cached GPS location.
+- **What is excluded:** The diagnostic log file is deliberately excluded from backup so it regenerates fresh on each
+  install.
+- **How it works:** The backup is performed entirely by HarmonyOS. It is not transmitted to us, and we do not operate
+  the backup service. Whether a backup is created, where it is stored, and whether it is restored are controlled by your
+  device's system settings and your Huawei account. Please refer to Huawei's privacy policy for details.
+- **Your control:** You can disable backup for this app from your device's system Settings, and you can delete any
+  existing backup through the same settings.
+
 ## What We Do Not Collect
 
 Sirat Companion does **not** collect, store, or transmit:
@@ -149,7 +171,7 @@ All information accessed by the App is used only on your device and only to prov
 | Sensors         | Determine device orientation for the compass                                         |
 | Prayer history  | Track daily prayers, streaks, progress; skip reminders for prayers already performed |
 | Preferences     | Remember your settings                                                               |
-| Tasbih data     | Persist your dhikr progress and preferences                                          |
+| Tasbih data     | Persist your dhikr progress, daily totals, and history                               |
 | System feedback | Respect system sound and haptics settings                                            |
 | Vibration       | Provide haptic feedback while counting Tasbih                                        |
 | Sound           | Play a click when counting Tasbih                                                    |
@@ -170,6 +192,7 @@ privacy policy:
 - **Audio service** — to read the system ringer mode and play local sounds.
 - **Vibration service** — to produce tactile feedback when counting Tasbih.
 - **Calendar service** — to write prayer reminder events into the App's own calendar account.
+- **System backup service** — to include the App's local data in your device's system backup, if you have enabled it.
 
 Please refer to Huawei's privacy policy for details on how the operating system handles these services.
 
@@ -180,6 +203,9 @@ All App data is stored locally on your device and is retained until you:
 - Clear it from within the App (e.g. by resetting Tasbih counts, unchecking individual prayers, or switching to a
   different location)
 - Uninstall the App
+
+If system backup is enabled, a copy of the App's data may also be retained in your system backup until you delete it
+through the system settings or uninstall the App on all devices associated with your account.
 
 Calendar events created for prayer reminders are stored by the system Calendar app and can be deleted at any time by
 turning off the reminder master toggle, by deleting the "Sirat Companion" calendar account, or by uninstalling the App.
@@ -223,7 +249,8 @@ events the App has created.
 
 Because Sirat Companion does not transmit any personal data off your device, there is no server-side risk of data
 exposure. Your local data is protected by the HarmonyOS app sandbox, which prevents other apps from reading Sirat
-Companion's stored preferences.
+Companion's stored preferences. When system backup is enabled, its security is governed by HarmonyOS and your Huawei
+account settings.
 
 ## Children's Privacy
 
@@ -239,6 +266,7 @@ side. You have full control over your data at all times:
 - **Access:** All data is visible within the App.
 - **Deletion:** Uninstalling the App removes all stored data. Prayer completion history can also be cleared by
   unchecking individual prayers. Calendar reminder events can be removed by turning off the reminder master toggle.
+  Backup copies can be deleted through the system backup settings.
 - **Portability:** Data can be viewed and re-entered at any time.
 - **Withdrawal of consent:** Revoke permissions in your device Settings.
 
@@ -299,20 +327,23 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 ### 礼拜完成记录
 
 - **我们访问的内容：** 您每天标记为已礼的礼拜（晨礼、晌礼、晡礼、昏礼、宵礼），按日历日期存储。
-- **我们为何访问：** 用于驱动首页的今日进度、连续天数、每周网格、每月热力图以及累计统计，并用于跳过为已完成礼拜创建的提醒。
-- **存储方式：** 通过 HarmonyOS Preferences API 存储在您的设备本地。它从不离开您的设备。
+- **我们为何访问：** 用于驱动首页和"礼拜详情"页面——今日进度、连续天数、每周和每月摘要以及累计统计，并用于跳过为已完成礼拜创建的提醒。
+- **存储方式：** 通过 HarmonyOS Preferences API
+  存储在您的设备本地。除非您已启用系统备份，否则它不会离开您的设备；若启用，它将参与下文"备份与恢复"一节所述的备份。
 
 ### 礼拜时间与设置
 
-- **我们访问的内容：** 您的计算偏好（计算方式、晡礼规则、礼拜时间偏移、高纬度规则）、应用主题、深色模式、语言偏好、回历日期偏移、振动偏好、念珠主题偏好、念珠音效偏好、通知偏好以及主屏幕开关。
+- **我们访问的内容：**
+  您的计算偏好（计算方式、晡礼规则、礼拜时间偏移、高纬度规则、舍入方式、午夜方式、极地处理、霞光）、应用主题、深色模式、语言偏好、时间格式、回历日期偏移、回历类型、位置模式、手动坐标、节日传统偏好、各时段可见性开关、振动偏好、念珠主题偏好、念珠音效偏好以及通知偏好。
 - **我们为何访问：** 用于在应用重启后记住您的选择。
-- **存储方式：** 所有偏好设置均通过 HarmonyOS Preferences API 存储在您的设备本地。它们从不离开您的设备。
+- **存储方式：** 所有偏好设置均通过 HarmonyOS Preferences API 存储在您的设备本地。除非您已启用系统备份，否则它们不会离开您的设备。
 
 ### 念珠数据
 
-- **我们访问的内容：** 您创建的念珠、其中的念词项目、您的计数以及每串念珠所选择的主题。
-- **我们为何访问：** 用于显示和保存您的念珠进度和偏好。
-- **存储方式：** 念珠数据通过 HarmonyOS Preferences API 存储在您的设备本地。它从不离开您的设备。
+- **我们访问的内容：** 您创建的念珠、其中的念词项目、当前计数、每日总计、每个念词的滚动 90 天历史记录，以及每串念珠所选择的主题。
+- **我们为何访问：** 用于在念珠页面和"念珠详情"页面上显示和保存您的念珠进度；详情页面按念珠和按念词显示周、月、年视图。
+- **存储方式：** 念珠数据通过 HarmonyOS Preferences API 存储在您的设备本地。每日计数每晚自动归档入历史记录；超过最近 90
+  天的日期将从滚动窗口中丢弃。除非您已启用系统备份，否则不会传输任何内容。
 
 ### 系统反馈状态
 
@@ -355,6 +386,17 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 当前生效的提醒机制为上述日历后端。待 Agent-Powered Reminder 能力获批后，本隐私政策将更新以披露通知后端，届时将请求
 `PUBLISH_AGENT_REMINDER` 权限。
 
+## 备份与恢复
+
+Sirat 伴侣支持 HarmonyOS 的系统级备份框架。当您设备上启用了备份时，本应用的本地存储数据将包含在系统备份中，以便您在迁移到新设备或重新安装应用时恢复。
+
+- **包含的内容：**
+  所有应用设置和偏好（语言、主题、礼拜时间计算设置、位置模式和手动坐标、回历偏移与回历类型、通知设置、声音与振动偏好、时间格式、节日传统、各时段可见性开关）、所有念珠数据（自定义念珠、念词项目、当前计数、每日总计、滚动
+  90 天历史记录、累计总数）以及缓存的 GPS 位置。
+- **排除的内容：** 诊断日志文件被有意排除在备份之外，以便在每次安装时重新生成。
+- **工作方式：** 备份完全由 HarmonyOS 执行。它不会传输给我们，我们也不运营备份服务。是否创建备份、备份存储在哪里、是否恢复，均由您设备的系统设置和您的华为账户控制。详情请参阅华为隐私政策。
+- **您的控制：** 您可以在设备的系统设置中为本应用禁用备份，也可通过同一设置删除任何现有备份。
+
 ## 我们不收集的内容
 
 Sirat 伴侣**不**收集、存储或传输：
@@ -378,7 +420,7 @@ Sirat 伴侣**不**收集、存储或传输：
 | 传感器    | 确定设备方向以供指南针使用                |
 | 礼拜完成记录 | 记录每日礼拜、连续天数以及进度，并为已完成的礼拜跳过提醒 |
 | 偏好设置   | 记住您的设置                       |
-| 念珠数据   | 保存您的念词进度和偏好                  |
+| 念珠数据   | 保存您的念词进度、每日总计和历史记录           |
 | 系统反馈   | 遵循系统声音和触感设置                  |
 | 振动     | 念珠计数时提供触觉反馈                  |
 | 声音     | 念珠计数时播放提示音                   |
@@ -397,6 +439,7 @@ Sirat 伴侣**不**收集、存储或传输：
 - **音频服务** —— 用于读取系统铃声模式并播放本地音效。
 - **振动服务** —— 用于念珠计数时产生触觉反馈。
 - **日历服务** —— 用于将礼拜提醒事件写入本应用自己的日历账户。
+- **系统备份服务** —— 用于在您启用时，将本应用的本地数据包含在设备的系统备份中。
 
 有关操作系统如何处理这些服务的详细信息，请参阅华为隐私政策。
 
@@ -406,6 +449,8 @@ Sirat 伴侣**不**收集、存储或传输：
 
 - 在应用内清除（例如重置念珠计数、取消勾选单次礼拜或切换到其他位置）
 - 卸载本应用
+
+如果启用了系统备份，应用数据的副本也可能保留在您的系统备份中，直至您通过系统设置将其删除或在所有关联设备上卸载应用。
 
 为礼拜提醒创建的日历事件由系统日历应用保存，您可以随时关闭提醒总开关、删除"Sirat 伴侣"日历账户或卸载本应用以移除这些事件。卸载
 Sirat 伴侣会永久删除本应用在您设备上存储的所有数据。
@@ -441,7 +486,7 @@ Sirat 伴侣会永久删除本应用在您设备上存储的所有数据。
 ## 安全
 
 由于 Sirat 伴侣不会将任何个人数据传输到您的设备之外，因此不存在服务器端数据泄露的风险。您的本地数据受 HarmonyOS
-应用沙箱保护，可防止其他应用读取 Sirat 伴侣存储的偏好设置。
+应用沙箱保护，可防止其他应用读取 Sirat 伴侣存储的偏好设置。当启用系统备份时，其安全性由 HarmonyOS 和您的华为账户设置决定。
 
 ## 儿童隐私
 
@@ -452,7 +497,7 @@ Sirat 伴侣面向普通受众，适合所有年龄段的用户。本应用不�
 由于本应用不收集或传输您的数据，我们这边没有可供披露、更正或删除的数据。您始终完全掌控自己的数据：
 
 - **访问：** 所有数据均可在应用内查看。
-- **删除：** 卸载应用会删除所有存储的数据。礼拜完成记录也可以通过取消勾选单次礼拜来清除。日历提醒事件可以通过关闭提醒总开关来移除。
+- **删除：** 卸载应用会删除所有存储的数据。礼拜完成记录也可以通过取消勾选单次礼拜来清除。日历提醒事件可以通过关闭提醒总开关来移除。备份副本可通过系统备份设置删除。
 - **可移植性：** 数据可随时查看和重新输入。
 - **撤回同意：** 在设备设置中撤销权限。
 
@@ -516,23 +561,30 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 ### سجل الصلوات المكتملة
 
 - **ما نصل إليه:** الصلوات التي تُعلّمها كمُصلَّاة كل يوم (الفجر، الظهر، العصر، المغرب، العشاء)، محفوظة حسب التاريخ.
-- **لماذا نصل إليها:** لعرض تقدم اليوم والأيام المتتالية والشبكة الأسبوعية والخريطة الشهرية والإحصاءات الإجمالية على
-  الشاشة الرئيسية، ولتخطي إنشاء التذكيرات للصلوات التي أدّيتها بالفعل.
-- **كيفية التخزين:** تُخزَّن محلياً على جهازك باستخدام واجهة HarmonyOS Preferences. لا تغادر جهازك أبداً.
+- **لماذا نصل إليها:** لعرض تقدم اليوم والأيام المتتالية والملخصات الأسبوعية والشهرية والإحصاءات الإجمالية على الشاشة
+  الرئيسية وصفحة تفاصيل الصلاة، ولتخطي إنشاء التذكيرات للصلوات التي أدّيتها بالفعل.
+- **كيفية التخزين:** تُخزَّن محلياً على جهازك باستخدام واجهة HarmonyOS Preferences. لا تغادر جهازك إلا إذا كنت قد مكّنت
+  النسخ الاحتياطي للنظام، وفي هذه الحالة تشارك في النسخ الاحتياطي الموصوف في قسم "النسخ الاحتياطي والاستعادة" أدناه.
 
 ### أوقات الصلاة والإعدادات
 
-- **ما نصل إليه:** تفضيلات الحساب (طريقة الحساب، وقاعدة العصر، وتعديلات أوقات الصلاة، وقاعدة خطوط العرض العليا)، ومظهر
-  التطبيق، والوضع الداكن، وتفضيل اللغة، وإزاحة التقويم الهجري، وتفضيل الاهتزاز، وتفضيلات مظهر المسبحة، وتفضيل صوت
-  المسبحة، وتفضيلات الإشعارات، ومفاتيح الشاشة الرئيسية.
+- **ما نصل إليه:** تفضيلات الحساب (طريقة الحساب، وقاعدة العصر، وتعديلات أوقات الصلاة، وقاعدة خطوط العرض العليا،
+  والتقريب، وطريقة منتصف الليل، وحلّ المناطق القطبية، والشفق)، ومظهر التطبيق، والوضع الداكن، وتفضيل اللغة، وتنسيق الوقت،
+  وإزاحة التقويم الهجري، ونوع التقويم الهجري، ووضع الموقع، والإحداثيات اليدوية، وتفضيل تقليد المناسبات، ومفاتيح رؤية
+  الأوقات، وتفضيل الاهتزاز، وتفضيلات مظهر المسبحة، وتفضيل صوت المسبحة، وتفضيلات الإشعارات.
 - **لماذا نصل إليها:** لتذكر خياراتك عبر إعادة تشغيل التطبيق.
-- **كيفية التخزين:** تُخزَّن جميع التفضيلات محلياً على جهازك باستخدام واجهة HarmonyOS Preferences. لا تغادر جهازك أبداً.
+- **كيفية التخزين:** تُخزَّن جميع التفضيلات محلياً على جهازك باستخدام واجهة HarmonyOS Preferences. لا تغادر جهازك إلا
+  إذا كنت قد مكّنت النسخ الاحتياطي للنظام.
 
 ### بيانات التسبيح
 
-- **ما نصل إليه:** جلسات التسبيح التي تنشئها، وعناصر الأذكار داخلها، وأعدادها، والمظهر المختار لكل مسبحة.
-- **لماذا نصل إليها:** لعرض تقدمك في التسبيح وتفضيلاتك وحفظها.
-- **كيفية التخزين:** تُخزَّن بيانات التسبيح محلياً على جهازك باستخدام واجهة HarmonyOS Preferences. لا تغادر جهازك أبداً.
+- **ما نصل إليه:** جلسات التسبيح التي تنشئها، وعناصر الأذكار داخلها، وأعدادها الحالية، وإجمالياتها اليومية، وسجل متدحرج
+  لمدة 90 يوماً للأعداد اليومية لكل ذكر، والمظهر المختار لكل مسبحة.
+- **لماذا نصل إليها:** لعرض تقدمك في التسبيح وحفظه على صفحة التسبيح وصفحة تفاصيل التسبيح، التي تعرض عروضاً أسبوعية
+  وشهرية وسنوية لكل مسبحة ولكل ذكر.
+- **كيفية التخزين:** تُخزَّن بيانات التسبيح محلياً على جهازك باستخدام واجهة HarmonyOS Preferences. تُرحَّل الأعداد
+  اليومية تلقائياً إلى السجل كل ليلة؛ وتُسقَط الأيام التي تتجاوز آخر 90 يوماً من النافذة المتدحرجة. لا يُنقل أي شيء إلا
+  إذا كنت قد مكّنت النسخ الاحتياطي للنظام.
 
 ### حالة التغذية الراجعة للنظام
 
@@ -586,6 +638,22 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 آلية التذكير الفعّالة حالياً هي خلفية التقويم الموصوفة أعلاه. عند الموافقة على قدرة Agent-Powered Reminder، سيتم تحديث
 سياسة الخصوصية هذه للكشف عن خلفية الإشعارات، وسيُطلب إذن `PUBLISH_AGENT_REMINDER` في ذلك الوقت.
 
+## النسخ الاحتياطي والاستعادة
+
+يدعم رفيق الصراط إطار النسخ الاحتياطي على مستوى النظام في HarmonyOS. عند تمكين النسخ الاحتياطي على جهازك، تُضمَّن بيانات
+التطبيق المخزَّنة محلياً في نسخة النظام الاحتياطية حتى يمكن استعادتها عند الانتقال إلى جهاز جديد أو إعادة تثبيت التطبيق.
+
+- **ما يُضمَّن:** جميع إعدادات التطبيق وتفضيلاته (اللغة، المظهر، إعدادات حساب أوقات الصلاة، وضع الموقع والإحداثيات
+  اليدوية، إزاحة التقويم الهجري ونوعه، إعدادات الإشعارات، تفضيلات الصوت والاهتزاز، تنسيق الوقت، تقليد المناسبات، مفاتيح
+  رؤية الأوقات)، وجميع بيانات التسبيح (المسبحات المخصّصة، عناصر الأذكار، الأعداد الحالية، الإجماليات اليومية، سجل متدحرج
+  لمدة 90 يوماً، الإجماليات الكلية)، والموقع الجغرافي المخزَّن مؤقتاً.
+- **ما يُستثنى:** يُستثنى ملف سجل التشخيص عمداً من النسخ الاحتياطي ليُعاد إنشاؤه من جديد في كل تثبيت.
+- **كيفية العمل:** يُنفَّذ النسخ الاحتياطي بالكامل بواسطة HarmonyOS. لا يُنقل إلينا، ونحن لا نشغّل خدمة النسخ الاحتياطي.
+  إنشاء النسخة الاحتياطية ومكان تخزينها واستعادتها كلها أمور تتحكم بها إعدادات نظام جهازك وحسابك على Huawei. يُرجى
+  الرجوع إلى سياسة الخصوصية الخاصة بـ Huawei للتفاصيل.
+- **تحكّمك:** يمكنك تعطيل النسخ الاحتياطي لهذا التطبيق من إعدادات نظام جهازك، كما يمكنك حذف أي نسخة احتياطية موجودة من
+  خلال الإعدادات نفسها.
+
 ## ما لا نجمعه
 
 رفيق الصراط **لا** يجمع أو يخزّن أو ينقل:
@@ -609,7 +677,7 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 | المستشعرات     | تحديد اتجاه الجهاز للبوصلة                                                       |
 | سجل الصلوات    | تتبع الصلوات اليومية والأيام المتتالية والتقدم، وتخطي التذكيرات للصلوات المؤدّاة |
 | التفضيلات      | تذكر إعداداتك                                                                    |
-| بيانات التسبيح | حفظ تقدم الأذكار والتفضيلات                                                      |
+| بيانات التسبيح | حفظ تقدم الأذكار والإجماليات اليومية والسجل                                      |
 | حالة النظام    | احترام إعدادات الصوت والاهتزاز في النظام                                         |
 | الاهتزاز       | توفير تغذية لمسية أثناء عدّ التسبيح                                              |
 | الصوت          | تشغيل نقرة عند عدّ التسبيح                                                       |
@@ -628,6 +696,7 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 - **خدمة الصوت** — لقراءة وضع الرنين في النظام وتشغيل الأصوات المحلية.
 - **خدمة الاهتزاز** — لإنتاج تغذية لمسية عند عدّ التسبيح.
 - **خدمة التقويم** — لكتابة أحداث تذكير الصلاة في حساب التقويم الخاص بالتطبيق.
+- **خدمة النسخ الاحتياطي للنظام** — لتضمين بيانات التطبيق المحلية في نسخة النظام الاحتياطية، إذا كنت قد مكّنتها.
 
 يرجى الرجوع إلى سياسة الخصوصية الخاصة بـ Huawei للحصول على تفاصيل حول كيفية تعامل نظام التشغيل مع هذه الخدمات.
 
@@ -637,6 +706,9 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 
 - تمسحها من داخل التطبيق (مثلاً، بإعادة تعيين أعداد التسبيح، أو إلغاء تحديد صلوات فردية، أو التبديل إلى موقع آخر)
 - تلغي تثبيت التطبيق
+
+إذا كان النسخ الاحتياطي للنظام ممكّناً، فقد تبقى نسخة من بيانات التطبيق محفوظة في نسخة النظام الاحتياطية حتى تحذفها من
+خلال إعدادات النظام أو تلغي تثبيت التطبيق على جميع الأجهزة المرتبطة بحسابك.
 
 تُخزَّن أحداث التقويم المنشأة لتذكيرات الصلاة بواسطة تطبيق التقويم في النظام، ويمكن حذفها في أي وقت عن طريق إيقاف
 المفتاح الرئيسي للتذكيرات، أو حذف حساب تقويم "رفيق الصراط"، أو إلغاء تثبيت التطبيق. يؤدي إلغاء تثبيت رفيق الصراط إلى حذف
@@ -675,7 +747,8 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 ## الأمان
 
 نظراً لأن رفيق الصراط لا ينقل أي بيانات شخصية خارج جهازك، فلا توجد مخاطر تسرب بيانات على جانب الخادم. بياناتك المحلية
-محمية بواسطة صندوق تطبيقات HarmonyOS، الذي يمنع التطبيقات الأخرى من قراءة التفضيلات المخزنة لرفيق الصراط.
+محمية بواسطة صندوق تطبيقات HarmonyOS، الذي يمنع التطبيقات الأخرى من قراءة التفضيلات المخزنة لرفيق الصراط. عندما يكون
+النسخ الاحتياطي للنظام ممكّناً، تخضع أمنيته لـ HarmonyOS وإعدادات حسابك على Huawei.
 
 ## خصوصية الأطفال
 
@@ -689,7 +762,8 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 
 - **الوصول:** جميع البيانات مرئية داخل التطبيق.
 - **الحذف:** يؤدي إلغاء تثبيت التطبيق إلى إزالة جميع البيانات المخزنة. يمكن أيضاً مسح سجل الصلوات المكتملة بإلغاء تحديد
-  الصلوات الفردية. يمكن إزالة أحداث تذكير التقويم عن طريق إيقاف المفتاح الرئيسي للتذكيرات.
+  الصلوات الفردية. يمكن إزالة أحداث تذكير التقويم عن طريق إيقاف المفتاح الرئيسي للتذكيرات. يمكن حذف نسخ النسخ الاحتياطي
+  من خلال إعدادات النسخ الاحتياطي في النظام.
 - **القابلية للنقل:** يمكن عرض البيانات وإعادة إدخالها في أي وقت.
 - **سحب الموافقة:** اسحب الأذونات من إعدادات جهازك.
 
@@ -715,20 +789,3 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 [العودة إلى الأعلى](#privacy-policy--sirat-companion)
 
 ---
-
-## Summary of changes
-
-| Change                                                                                                                                                                                                                               | Where                       |
-|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|
-| **Date bump** — October 7 → October 8, 2026                                                                                                                                                                                          | Header, all three languages |
-| **Version bump** — "2.3.0 and later" → "2.5.0 and later"                                                                                                                                                                             | Header                      |
-| **Prayer Completion History** — added note that the history is also used to skip reminders for prayers already performed                                                                                                             | EN / ZH / AR                |
-| **Calendar section** — added that event descriptions carry a Hadith with source citation; added a "Prayers already performed" bullet explaining skip-if-prayed behaviour and the immediate reschedule when the last prayer is marked | EN / ZH / AR                |
-| **How We Use table** — updated "Prayer history" row to mention skipping reminders                                                                                                                                                    | EN / ZH / AR                |
-
-Everything else is unchanged. The privacy disclosures for Location, Sensors, Settings, Tasbih, System Feedback,
-Vibration, Sound, and the Notification Features section remain accurate — no permissions were added or removed in 2.5.0,
-and the Calendar backend continues to be the active reminder mechanism.
-
-The in-app `data/PrivacyPolicy.ets` needs the same three edits (date, version, and the two Calendar additions) applied
-to its EN / ZH / AR strings so the two files stay in sync.

@@ -5,7 +5,7 @@
 Prayer times, Qibla compass, Tasbih, and Hijri calendar — all in one calm, modern app that respects your settings and
 your battery.
 
-**Version 3.2.0** · **HarmonyOS 6+ (API 21+)** · **English · 中文 · العربية**
+**Version 3.3.3** · **HarmonyOS 6+ (API 21+)** · **English · 中文 · العربية**
 
 > On HarmonyOS 7 (API 26+) the bottom navigation bar uses the native immersive system material. On earlier releases it
 > falls back to a translucent blurred bar with identical behaviour.
@@ -31,10 +31,11 @@ your battery.
 12. [Testing Reminders](#testing-reminders)
 13. [Timezone Handling](#timezone-handling)
 14. [Backup and Restore](#backup-and-restore)
-15. [Roadmap](#roadmap)
-16. [Contributing](#contributing)
-17. [Known Limitations](#known-limitations)
-18. [License](#license)
+15. [Version History](#version-history)
+16. [Roadmap](#roadmap)
+17. [Contributing](#contributing)
+18. [Known Limitations](#known-limitations)
+19. [License](#license)
 
 ---
 
@@ -63,6 +64,8 @@ your battery.
 - Jummah rename on Fridays, applied consistently to the header and the timeline
 - "Today" shortcut in the day navigator to return to the current date
 - **Time format setting** — System / 12-hour / 24-hour, applied live across every surface
+- **Per-timing visibility toggles** — Imsak, First Third, Midnight, and Last Third can each be shown or hidden
+  independently in the prayer list and on the sun path. Sunrise and Sunset are always shown.
 
 #### Calculation Methods
 
@@ -95,15 +98,46 @@ your battery.
 
 ### Home Dashboard
 
-- Today's progress ring with per-prayer completion dots
-- Current and best streaks
-- Weekly grid and monthly heatmap
-- Lifetime Tasbih statistics
+The Home tab shows three sections in a fixed order: **Next Event**, **Daily Prayers**, and **Daily Tasbih**.
+
+**Next Event** — the countdown card showing the nearest upcoming Islamic event with its Hijri date and a short
+description of its significance, plus the live countdown banner during Ramadan and the Ramadan card with fasting window,
+Ashras, Laylat al-Qadr nights, and Jummah tul Widah.
+
+**Daily Prayers** — today's progress ring with per-prayer completion dots, plus a **View Details ›** link to the Prayer
+Details page.
+
+**Daily Tasbih** — today's dhikr completion (X/N) with a percentage ring and progress bar, plus lifetime totals below. A
+**View Details ›** link opens the Tasbih Details page.
+
+Additional Home features:
+
 - Upcoming Islamic event countdown honoring the Hijri offset and calendar type
-- Ramadan card with fasting window, three Ashras, Laylat al-Qadr nights, and Jummah tul Widah
 - Live countdown to Imsak and Maghrib (opens 15 min before, holds 5 min after with the appropriate Dua displayed)
 - Pull-to-refresh
 - Cross-tab state sync — checking a prayer on the Prayers tab immediately updates the Home dashboard
+
+### Prayer Details Page
+
+Reached from Home → Daily Prayers → View Details.
+
+- **Period selector** — Week / Month / Year
+- **Summary card** — total prayers for the period, percentage ring, current streak, and best streak
+- **Per-prayer breakdown** — five rows, one per prayer, each with count and progress bar
+- **Period view**:
+    - **Week** — seven day cells showing the weekday initial, day-of-month number, and N/5 counter. Today's cell is
+      bordered in gold
+    - **Month** — a calendar heatmap of the current month
+    - **Year** — twelve slim rows, one per month, each a strip of day cells. Future days render faintly
+
+### Tasbih Details Page
+
+Reached from Home → Daily Tasbih → View Details.
+
+- Same Week / Month / Year period selector
+- One card per tasbih with a row per dhikr
+- Each dhikr row shows days-completed over days-in-period, a progress bar, the total count, and the target
+- Active tasbih marked with a gold dot
 
 ### Prayer Reminders
 
@@ -142,12 +176,15 @@ Prayer reminders are delivered through one of two interchangeable backends. Both
 - Nine bead themes: Amber, Charcoal, Emerald, Pearl, Gold, White, Sapphire, Rose, Silver
 - Per-tasbih theme selection
 - Swipe up to count, swipe down to undo
-- Fly-and-pop animation when the top stack fills, with amber halo
+- Fly-and-pop animation when the top stack fills — the flying bead and its halo use the current theme's colour
 - Sound system with five selectable click styles
 - Lifetime counter per tasbih — persisted forever
 - Multiple Tasbihs, unlimited Dhikr items
 - Auto-advance to the next dhikr when one completes
 - Haptic feedback on every flick
+- **Daily mechanics** — each dhikr tracks a daily total that sums all rounds for the day. Reset buttons clear the
+  current counting round without erasing today's accumulated progress. History rolls over at midnight and is retained
+  for 90 days
 
 ### Hijri Calendar
 
@@ -159,12 +196,26 @@ Prayer reminders are delivered through one of two interchangeable backends. Both
 - Localized month names in all three languages
 - Calendar type setting honored on every surface — calendar grid, Home pill, Home countdown, Prayer header
 
+### Event Tradition
+
+A setting under Customize → UI Customization → Home Page UI that controls which Islamic events appear on the Home
+countdown and in the Hijri calendar's Important Dates list.
+
+| Value                        | Events shown                                      |
+|------------------------------|---------------------------------------------------|
+| **Universal only** (default) | Ten events shared by all Muslims                  |
+| Sunni + universal            | Adds Laylat al-Raghaib                            |
+| Shia + universal             | Adds Arbaeen, Birthday of Imam Ali, Eid al-Ghadir |
+| Show all                     | All thirteen registered events                    |
+
+A fresh install ships with the default "Universal only" set.
+
 ### Backup and Restore
 
-- **Full system backup support** — implements `BackupExtensionAbility.onBackup()` and `onRestore()`
-- Preserves all settings (`sirat_settings` store) and Tasbih data (`tasbih_prefs` store) across device migration
+- **Full system backup support** — implements BackupExtensionAbility.onBackup() and onRestore()
+- Preserves all settings (sirat_settings store) and Tasbih data (tasbih_prefs store) across device migration
 - Language, theme, Hijri offset, calculation method, location, notification config, prayer-check state, all Tasbihs, all
-  Dhikr counts, and lifetime totals survive a device switch
+  Dhikr counts, daily totals, history, and lifetime totals survive a device switch
 - Diagnostic log excluded from backup so it regenerates fresh
 
 ### Design
@@ -207,7 +258,6 @@ The screenshot set covers ten screens per device and language:
 
 ### Directory layout
 
-```
 screenshot/
 ├── Phone/
 │   ├── En/      01_home.png … 10_advanced.png
@@ -218,10 +268,9 @@ screenshot/
 │   ├── Zh/      01_home.jpg … 10_advanced.jpg
 │   └── Ar/      01_home.jpg … 10_advanced.jpg
 └── PC/
-    ├── En/      01_home.jpg … 10_advanced.jpg
-    ├── Zh/      01_home.jpg … 10_advanced.jpg
-    └── Ar/      01_home.jpg … 10_advanced.jpg
-```
+├── En/ 01_home.jpg … 10_advanced.jpg
+├── Zh/ 01_home.jpg … 10_advanced.jpg
+└── Ar/ 01_home.jpg … 10_advanced.jpg
 
 A browsable gallery with device tabs, language tabs, and a keyboard-navigable lightbox is available at *
 *screenshots.html** in the repository root.
@@ -242,10 +291,8 @@ A browsable gallery with device tabs, language tabs, and a keyboard-navigable li
 
 **1. Clone the repository**
 
-```
 git clone https://github.com/sharjeel-butt/SiratCompanion-HOS.git
 cd SiratCompanion-HOS
-```
 
 **2. Open in DevEco Studio**
 
@@ -301,8 +348,7 @@ The signed HAP appears under entry/build/default/outputs/default/.
 - Midnight Method — Sunset to Sunrise, Sunset to Fajr
 - High-Latitude Rule — see above
 - Polar Resolution — Unresolved, Aqrab Balad, Aqrab Yaum
-- Shafaq — General, Ahmer, Abyad
-- Custom Angles — Fajr angle, Isha angle, Isha interval (only with Custom method)
+- Shafaq — General, Ahmer, Abyad (enabled only when the Convention is Moonsighting Committee)
 
 ### Location Mode
 
@@ -341,6 +387,22 @@ Shifts all Islamic dates by ±3 days.
 
 **Location:** Customize → UI Customization → Language
 Instantly switches between English, 中文, and العربية.
+
+### Event Tradition
+
+**Location:** Customize → UI Customization → Home Page UI → Event Tradition
+**Options:** Universal only (default), Sunni + universal, Shia + universal, Show all
+
+### Extra Timings Visibility
+
+**Location:** Customize → UI Customization → Prayer UI
+
+Two groups of toggles:
+
+- **SHOW IN PRAYER LIST** — Imsak, First Third, Midnight, Last Third
+- **SHOW ON SUN PATH** — same four timings, controlling the vertical guide lines on the sun path
+
+Sunrise and Sunset are not gated by any toggle — they always appear in the timeline and on the sun path.
 
 ### Tasbih Theme
 
@@ -405,7 +467,6 @@ Localization strings live in helper/LocalizationHelper.ets as Map<string, string
 
 ## Project Structure
 
-```
 entry/src/main/ets/
 ├── common/
 │   ├── Breakpoints.ets              # xs / sm / md / lg width classes
@@ -417,22 +478,27 @@ entry/src/main/ets/
 │   ├── TasbihThemes.ets             # Bead colour palettes and presets
 │   └── Theme.ets                    # ThemeColors, ThemePreset, palettes
 ├── components/
+│ ├── CalendarDayCell.ets # One day cell in the Hijri grid
+│ ├── CategoryHeader.ets # Settings category header
 │   ├── DuaCard.ets                  # Reusable Dua renderer
+│ ├── ExtraTimingToggleRow.ets # One toggle for one timing on one surface
 │   ├── FloatingNavBar.ets           # Legacy — superseded by MainTabs
 │   ├── PageHeader.ets               # Shared Hijri / location / prayer header
 │   ├── PrayerSunPath.ets            # Full 24-hour arc + ticker
-│   └── QiblaCalibrationOverlay.ets  # Figure-8 compass calibration
+│ ├── QiblaCalibrationOverlay.ets # Figure-8 compass calibration
+│ ├── SettingsRow.ets # Tappable settings row
+│ └── SubsectionHeader.ets # Gold section label in Customize
 ├── data/
 │   ├── Duas.ets                     # Iftar / Suhoor Dua registry
-│   ├── IslamicEvents.ets            # Static event table
+│ ├── IslamicEvents.ets # Static event table with sect metadata
 │   └── PrivacyPolicy.ets            # EN / ZH / AR privacy text
 ├── models/
 │   ├── AdvancedCalcModels.ets       # RoundingMethod, MidnightMethod, etc.
-│   ├── DateModels.ets               # IslamicEvent, UpcomingImportantDate
+│ ├── DateModels.ets # IslamicEvent, EventSect, UpcomingImportantDate
 │   ├── HijriCalendarModels.ets      # CalendarDay, HijriDate
 │   ├── PrayerModel.ets              # PrayerModel, ExtraTiming
 │   ├── SettingsModels.ets           # PickerItem, CalculationSource, LocationMode
-│   └── TasbihModels.ets             # Tasbih, Dhikr, BeadView
+│ └── TasbihModels.ets # Tasbih, Dhikr, BeadView, TasbihDayLog
 ├── helper/
 │   ├── AppInfoHelper.ets            # Version + bundle identity
 │   ├── AppLogger.ets                # Sandboxed file logger
@@ -456,7 +522,9 @@ entry/src/main/ets/
 │   ├── HijriCalendarType.ets        # Umm al-Qura / Tabular enum
 │   └── HijriEngineResolver.ets      # Engine selection by setting
 ├── utils/
+│ ├── CountryTimezoneTable.ets # Country bounding boxes with offsets
 │   ├── DateUtils.ets                # Next-event lookup + formatted dates
+│ ├── EventPerspectiveNotifier.ets # Cross-page event filter fan-out
 │   ├── HijriCalendarEngine.ets      # Engine interface
 │   ├── HomeController.ets           # Prayer-time snapshot builder
 │   ├── LocationCache.ets            # Cached GPS location
@@ -464,10 +532,10 @@ entry/src/main/ets/
 │   ├── OfflineCityLookup.ets        # City table with timezone + declination
 │   ├── PrayerManager.ets            # Prayer state + status
 │   ├── PrayerTimeCalculator.ets     # Astronomy math
-│   ├── ProgressHelper.ets           # Home dashboard progress stats
+│ ├── ProgressHelper.ets # Prayer and Tasbih progress stats
 │   ├── QiblaCalculator.ets          # Bearing + distance to Kaaba
 │   ├── TabularHijriEngine.ets       # Arithmetical Hijri engine
-│   ├── TasbihManager.ets            # Tasbih CRUD + counting
+│ ├── TasbihManager.ets # Tasbih CRUD + counting + history
 │   ├── TasbihStorage.ets            # Tasbih persistence
 │   ├── TimezoneResolver.ets         # Offset + DST resolution
 │   └── UmmAlQuraEngine.ets          # KACST table Hijri engine
@@ -478,14 +546,15 @@ entry/src/main/ets/
 │   ├── HomePage.ets
 │   ├── MainTabs.ets                 # Root page hosting the five primary screens
 │   ├── Prayer.ets
+│ ├── PrayerDetailsPage.ets # Week / Month / Year prayer progress
 │   ├── QiblaPage.ets
 │   ├── SettingsPage.ets
+│ ├── TasbihDetailsPage.ets # Week / Month / Year tasbih progress
 │   ├── TasbihPage.ets
 │   └── WizardPage.ets
 └── entryability/
-    ├── EntryAbility.ets
-    └── EntryBackupAbility.ets
-```
+├── EntryAbility.ets
+└── EntryBackupAbility.ets
 
 ### Layering
 
@@ -498,7 +567,7 @@ no business logic.
 PrayerManager, LocalizationHelper, NavHelper, MaterialHelper. They orchestrate and contain pure logic where possible.
 
 **Core** is the bottom layer: PrayerTimeCalculator, PreferencesHelper, TimezoneResolver, QiblaCalculator,
-HijriEngineResolver. Astronomy math, persistence, DST rules, calendar conversion.
+HijriEngineResolver, CountryTimezoneTable. Astronomy math, persistence, DST rules, calendar conversion.
 
 > **Rule of thumb:** pages never touch @ohos.data.preferences directly. All persistence goes through PreferencesHelper
 > via SettingsHelper.
@@ -509,15 +578,13 @@ HijriEngineResolver. Astronomy math, persistence, DST rules, calendar conversion
 
 The app uses a single root page — MainTabs.ets — that hosts five primary screens inside a native Tabs container:
 
-```
 Home → Prayers → Calendar → Compass → Tasbih
-```
 
 MainTabs is a **routable page** (declared in main_pages.json). The five screen components inside it are plain @Component
 export struct files with **no** @Entry decorator, **no** pageTransition(), and **no** FloatingNavBar.
 
-Secondary pages — WizardPage, CustomizePage, SettingsPage, AdvancedCalcPage — remain routable and use router.pushUrl() /
-router.back() for navigation.
+Secondary pages — WizardPage, CustomizePage, SettingsPage, AdvancedCalcPage, PrayerDetailsPage, TasbihDetailsPage —
+remain routable and use router.pushUrl() / router.back() for navigation.
 
 ### Why a single root page?
 
@@ -565,7 +632,6 @@ reload.
 
 The general rule for any new page:
 
-```
 @StorageLink(STORAGE_KEY_THEME_MODE)
 @Watch('onThemeModeChanged')
 themeMode: string = ThemeMode.SYSTEM;
@@ -575,13 +641,12 @@ themeMode: string = ThemeMode.SYSTEM;
 appThemePreset: string = ThemePreset.SIRAT;
 
 private onThemeModeChanged(): void {
-  this.colors = PageTheme.compute(this.themeMode);
+this.colors = PageTheme.compute(this.themeMode);
 }
 
 private onAppThemePresetChanged(): void {
-  this.colors = PageTheme.compute(this.themeMode);
+this.colors = PageTheme.compute(this.themeMode);
 }
-```
 
 Miss either link, and the page will lag behind until cold start.
 
@@ -589,15 +654,13 @@ Miss either link, and the page will lag behind until cold start.
 
 The tab bar's active and inactive colours read from the current theme:
 
-```
 private activeColor(): string {
-  return this.colors.accentGold;
+return this.colors.accentGold;
 }
 
 private inactiveColor(): string {
-  return this.colors.textMuted;
+return this.colors.textMuted;
 }
-```
 
 Icons are SVG glyphs that tint via .fillColor() to the same values, so the icon and its label always match.
 
@@ -719,10 +782,8 @@ The switch is entirely compile-time. No runtime logic differs between the two.
 
 **To activate the Calendar backend** (current state):
 
-```
 export const NOTIFICATIONS_ENABLED = false;
 export const CALENDAR_REMINDERS_ENABLED = true;
-```
 
 **To switch to the Agent-Powered Reminder backend** after AGC approval:
 
@@ -775,17 +836,22 @@ is a good alternative.
 
 Prayer times are calculated for the location's timezone, not the device's.
 
-TimezoneResolver.effectiveOffsetForLocation() does the following:
+TimezoneResolver.effectiveOffsetForLocation() does the following, in order:
 
-1. Checks OfflineCityLookup for the nearest known city within 300 km (70+ cities with standard offset, DST rule, and
-   magnetic declination)
-2. Applies US / EU / AU / Egypt DST rules based on the date
-3. If the device's own offset is within 15 minutes of the location estimate, prefers the device's offset (the OS knows
+1. **Nearest city** — checks OfflineCityLookup for the nearest known city within 300 km (80+ cities with standard
+   offset, DST rule, and magnetic declination)
+2. **Country fallback** — if no city is close enough, tests the location against a table of country bounding boxes
+   covering every populated landmass. This ensures a location between two cities still resolves to the correct country
+   offset rather than a longitude estimate
+3. **Longitude estimate** — only if both lookups miss (open ocean)
+4. Applies US / EU / AU / Egypt DST rules based on the date
+5. If the device's own offset is within 15 minutes of the location estimate, prefers the device's offset (the OS knows
    DST transitions more precisely)
 
 This means viewing NYC prayer times from Pakistan shows NYC local times, with correct EDT / EST transitions. Egypt's DST
 window (last Friday of April → last Thursday of October) is handled separately from the EU rule since the two do not
-align.
+align. Turkey is on permanent UTC+3 with no seasonal changes, and the country fallback ensures Ankara and any other
+Turkish location resolve correctly.
 
 ---
 
@@ -797,8 +863,10 @@ The app implements HarmonyOS's system backup framework via EntryBackupAbility.
 
 - All settings — language, theme mode, app theme preset, Hijri offset, Hijri calendar type, calculation method, Asr
   rule, calculation source, high-latitude rule, prayer offsets, location mode, manual coordinates, notification
-  configuration, sound and vibration preferences, time format, and advanced calculation settings
-- All Tasbih data — every custom Tasbih, every Dhikr, all counts, targets, and lifetime totals
+  configuration, sound and vibration preferences, time format, advanced calculation settings, event tradition, and all
+  eight per-timing visibility toggles
+- All Tasbih data — every custom Tasbih, every Dhikr, current counts, daily totals, 90-day history, targets, and
+  lifetime totals
 - Cached GPS location — so the app can show correct prayer times on first launch after restore even before GPS re-locks
 
 ### What is excluded
@@ -814,6 +882,30 @@ user action is required inside the app; the user opts in from the system Setting
 
 Each preferences store is written to a line-based text file in the backup directory. The format is self-describing (type
 marker, key, value) so restores are resilient to added or removed keys across app versions.
+
+---
+
+## Version History
+
+| Version   | Highlights                                                                              |
+|-----------|-----------------------------------------------------------------------------------------|
+| 2.6.0     | RTL sun path, MainTabs HOS7 material, sunrise/sunset fix, vendor rename                 |
+| 2.7.0     | Adhan-parity methods, Advanced Calculation page                                         |
+| 2.8.0     | Location as top-level category, sun path 24-hour arc                                    |
+| 2.9.0     | Umm al-Qura and Tabular engines, time format                                            |
+| 2.9.1     | Material on sheets and overlays, EasyGo, HDS migration                                  |
+| 2.9.2     | API 21 log viewer crash fix                                                             |
+| 3.0.0     | Consolidated material, adaptive layouts, localization                                   |
+| 3.0.1     | AGC feedback round: events, timezone, AR/ZH missing keys, progress dots, tab bar labels |
+| 3.1.0     | Event Tradition filter, Hijri reactivity, settings propagation                          |
+| 3.2.0     | Hijri engines wired, full 24-method set, backup and restore                             |
+| 3.2.1     | Patch release                                                                           |
+| 3.2.3     | Splash color, localization timing on Customize subsections                              |
+| 3.2.4     | Per-surface extra-timing toggles, Imsak on sun path                                     |
+| 3.3.0     | Prayer and Tasbih detail pages, daily Tasbih mechanics, Home restructure                |
+| 3.3.1     | Themed flying bead and halo in the Tasbih renderer                                      |
+| 3.3.2     | Period-specific views, shorter Home card labels                                         |
+| **3.3.3** | **Country timezone fallback, Tasbih reset semantics, daily total tracking**             |
 
 ---
 
@@ -842,6 +934,12 @@ marker, key, value) so restores are resilient to added or removed keys across ap
 - [x] Time format setting — System / 12h / 24h, live across every surface
 - [x] System backup and restore via EntryBackupAbility
 - [x] Localized app identity and About page
+- [x] Prayer Details page — Week / Month / Year views
+- [x] Tasbih Details page — Week / Month / Year per-dhikr progress
+- [x] Daily Tasbih mechanics — daily total, midnight rollover, 90-day history
+- [x] Country timezone fallback for locations between cities
+- [x] Per-timing visibility toggles for list and sun path
+- [x] Event Tradition setting — universal / Sunni / Shia / all
 
 ### In Progress
 
@@ -872,9 +970,7 @@ Contributions are welcome.
 
 **2. Create a feature branch**
 
-```
 git checkout -b feature/your-feature-name
-```
 
 **3. Commit your changes** following the convention below
 
@@ -884,13 +980,11 @@ git checkout -b feature/your-feature-name
 
 This project uses Conventional Commits.
 
-```
 feat: add Hanafi Asr shadow rule
 fix: correct equation-of-time wrap in PrayerTimeCalculator
 docs: add architecture guide
 refactor: split Tasbih logic into TasbihManager
 chore: bump target API to 26
-```
 
 ### Code Style
 
@@ -909,6 +1003,8 @@ chore: bump target API to 26
   with @StorageLink and @Watch, and recompute colours in both watchers
 - Hijri date conversion must go through HijriEngineResolver — never call Intl.DateTimeFormat with the islamic calendar
   directly
+- Parameterless @Builders for anything that reads state. A parameterized @Builder caches its arguments at first render,
+  so the value freezes. If a row needs a value and a callback, extract it to a @Component with @Prop
 
 ---
 
@@ -932,9 +1028,11 @@ chore: bump target API to 26
 - **Midnight slide-back** is visible only when the app is in the foreground at the crossing. If the app is backgrounded
   across midnight, the ticker simply appears at its new position on return.
 - **Nearest-city timezone resolution** can pick the wrong zone for users within a few kilometres of a border between two
-  offsets (for example, the Afghanistan–Pakistan line near Torkham). Affected users should set their location manually.
+  offsets (for example, the Afghanistan–Pakistan line near Torkham). The country fallback covers most cases; affected
+  users can set their location manually.
 - **Hijri calendar type** applies to every surface, but the Umm al-Qura engine covers 1318–1500 AH. Dates outside that
   range fall back to the Tabular engine automatically.
+- **Tasbih history** is retained for 90 days. Days beyond that window are dropped from the rolling log.
 
 ---
 
