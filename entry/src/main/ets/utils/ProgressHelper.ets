@@ -487,7 +487,8 @@ export class ProgressHelper {
       lifetime += t.lifetimeCount || 0;
       for (const d of t.dhikrs) {
         total++;
-        if (d.target > 0 && d.count >= d.target) {
+        const dayTotal = d.dailyTotal ?? d.count;
+        if (d.target > 0 && dayTotal >= d.target) {
           completed++;
         }
       }

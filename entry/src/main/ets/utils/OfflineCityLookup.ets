@@ -268,6 +268,70 @@ const CITIES: City[] = [
     declinationDeg: 5.5
   },
   {
+    name: 'Ankara',
+    lat: 39.9334,
+    lng: 32.8597,
+    standardOffset: 3,
+    dstRule: DstRule.NONE,
+    declinationDeg: 5.2
+  },
+  {
+    name: 'Çankaya',
+    lat: 39.9208,
+    lng: 32.8541,
+    standardOffset: 3,
+    dstRule: DstRule.NONE,
+    declinationDeg: 5.2
+  },
+  {
+    name: 'Izmir',
+    lat: 38.4237,
+    lng: 27.1428,
+    standardOffset: 3,
+    dstRule: DstRule.NONE,
+    declinationDeg: 5.0
+  },
+  {
+    name: 'Antalya',
+    lat: 36.8969,
+    lng: 30.7133,
+    standardOffset: 3,
+    dstRule: DstRule.NONE,
+    declinationDeg: 4.8
+  },
+  {
+    name: 'Bursa',
+    lat: 40.1826,
+    lng: 29.0665,
+    standardOffset: 3,
+    dstRule: DstRule.NONE,
+    declinationDeg: 5.3
+  },
+  {
+    name: 'Adana',
+    lat: 37.0000,
+    lng: 35.3213,
+    standardOffset: 3,
+    dstRule: DstRule.NONE,
+    declinationDeg: 4.6
+  },
+  {
+    name: 'Gaziantep',
+    lat: 37.0662,
+    lng: 37.3833,
+    standardOffset: 3,
+    dstRule: DstRule.NONE,
+    declinationDeg: 4.4
+  },
+  {
+    name: 'Konya',
+    lat: 37.8746,
+    lng: 32.4932,
+    standardOffset: 3,
+    dstRule: DstRule.NONE,
+    declinationDeg: 5.0
+  },
+  {
     name: 'Baghdad',
     lat: 33.3152,
     lng: 44.3661,

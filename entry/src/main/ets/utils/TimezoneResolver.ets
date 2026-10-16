@@ -1,5 +1,6 @@
 // entry/src/main/ets/utils/TimezoneResolver.ets
 
+import { CountryTimezoneLookup } from './CountryTimezoneTable';
 import { City, DstRule, OfflineCityLookup } from './OfflineCityLookup';
 
 
@@ -78,6 +79,20 @@ export class TimezoneResolver {
       return city.standardOffset +
         (TimezoneResolver.isDst(city.dstRule, date) ? 1 : 0);
     }
+
+    // ---- Country fallback ----
+    // The nearest-city table misses anything more than 300 km from
+    // a listed city. The country table is coarser but covers the
+    // whole landmass, so a lookup that misses a city still lands on
+    // the correct offset rather than a longitude estimate that
+    // ignores political boundaries.
+    const country = CountryTimezoneLookup.zoneFor(latitude, longitude);
+    if (country !== null) {
+      return country.standardOffset +
+        (TimezoneResolver.isDst(country.dstRule, date) ? 1 : 0);
+    }
+
+    // ---- Last resort: mid-ocean or Antarctic ----
     return Math.round(longitude / 15);
   }
 
@@ -111,6 +126,7 @@ export class TimezoneResolver {
   // DST LOGIC
   // ============================================================
 
+  // In TimezoneResolver.ets, inside the isDst method
   private static isDst(rule: DstRule, date: Date): boolean {
     const year = date.getUTCFullYear();
     switch (rule) {

@@ -60,7 +60,8 @@ export class TasbihStorage {
               translation: d.translation,
               target: d.target,
               count: d.count,
-              lastCountDate: d.lastCountDate
+              lastCountDate: d.lastCountDate,
+              dailyTotal: d.dailyTotal
             };
             return fixed;
           }
