@@ -9,17 +9,8 @@ export interface Dhikr {
   translation: string;
   target: number;
   count: number;
-
-  /**
-   * Date key (YYYY-MM-DD) of the last day on which count was
-   * modified. Used to roll the previous day's total into history
-   * at midnight and reset the live counter.
-   *
-   * Absent on data created before 3.2.5 — the migration in
-   * TasbihStorage treats a missing value as "today" so no data is
-   * lost on first launch after upgrade.
-   */
   lastCountDate?: string;
+  dailyTotal?: number;
 }
 
 export interface DhikrDayCount {

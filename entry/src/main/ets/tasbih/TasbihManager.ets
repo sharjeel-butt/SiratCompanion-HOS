@@ -12,6 +12,7 @@ export const MAX_BOTTOM_BEADS = 5;
 export const HISTORY_MAX_DAYS = 90;
 
 export class TasbihManager {
+
   /** Today's date key, matching ProgressHelper.getDateKey format. */
   static todayKey(): string {
     const d = new Date();
@@ -36,7 +37,8 @@ export class TasbihManager {
         translation: 'Glory be to Allah',
         target: 33,
         count: 0,
-        lastCountDate: today
+        lastCountDate: today,
+        dailyTotal: 0
       },
       {
         id: TasbihManager.generateId(),
@@ -45,7 +47,8 @@ export class TasbihManager {
         translation: 'All praise is for Allah',
         target: 33,
         count: 0,
-        lastCountDate: today
+        lastCountDate: today,
+        dailyTotal: 0
       },
       {
         id: TasbihManager.generateId(),
@@ -54,7 +57,8 @@ export class TasbihManager {
         translation: 'Allah is the Greatest',
         target: 34,
         count: 0,
-        lastCountDate: today
+        lastCountDate: today,
+        dailyTotal: 0
       }
     ];
     const tahlil: Dhikr[] = [
@@ -65,7 +69,8 @@ export class TasbihManager {
         translation: 'There is no god but Allah, alone, without partner',
         target: 100,
         count: 0,
-        lastCountDate: today
+        lastCountDate: today,
+        dailyTotal: 0
       }
     ];
     const istighfar: Dhikr[] = [
@@ -76,7 +81,8 @@ export class TasbihManager {
         translation: 'I seek forgiveness from Allah',
         target: 100,
         count: 0,
-        lastCountDate: today
+        lastCountDate: today,
+        dailyTotal: 0
       }
     ];
 
@@ -182,7 +188,8 @@ export class TasbihManager {
         translation: d.translation,
         target: d.target,
         count: d.count + 1,
-        lastCountDate: d.lastCountDate
+        lastCountDate: d.lastCountDate,
+        dailyTotal: (d.dailyTotal ?? d.count) + 1
       };
       return next;
     });
@@ -193,6 +200,7 @@ export class TasbihManager {
   ): Tasbih[] {
     return TasbihManager.mutateDhikr(
       tasbihs, activeId, dhikrId, 0, (d: Dhikr): Dhikr => {
+      const currentTotal = d.dailyTotal ?? d.count;
       const next: Dhikr = {
         id: d.id,
         arabic: d.arabic,
@@ -200,73 +208,99 @@ export class TasbihManager {
         translation: d.translation,
         target: d.target,
         count: d.count > 0 ? d.count - 1 : 0,
-        lastCountDate: d.lastCountDate
+        lastCountDate: d.lastCountDate,
+        dailyTotal: Math.max(0, currentTotal - 1)
       };
       return next;
     });
   }
 
+  /**
+   * Clear the live counter for one dhikr.
+   *
+   * Only `count` is reset. `dailyTotal` and the rolling history
+   * are preserved, so a completion logged earlier today is not
+   * undone by starting a new round.
+   */
   static reset(
     tasbihs: Tasbih[], activeId: string, dhikrId: string
   ): Tasbih[] {
-    return TasbihManager.mutateDhikr(
-      tasbihs, activeId, dhikrId, 0, (d: Dhikr): Dhikr => {
-      const next: Dhikr = {
-        id: d.id,
-        arabic: d.arabic,
-        transliteration: d.transliteration,
-        translation: d.translation,
-        target: d.target,
-        count: 0,
-        lastCountDate: d.lastCountDate
-      };
-      return next;
-    });
-  }
-
-  static resetAll(tasbihs: Tasbih[], activeId: string): Tasbih[] {
     const today = TasbihManager.todayKey();
+
     return tasbihs.map((t: Tasbih): Tasbih => {
       if (t.id !== activeId) {
         return t;
       }
 
-      let history: TasbihDayLog[] = t.history !== undefined
-        ? t.history : [];
-
-      const updated: Dhikr[] = t.dhikrs.map((d: Dhikr): Dhikr => {
-        // Roll any stale count into history for its own date.
-        if (d.lastCountDate !== undefined
-          && d.lastCountDate !== today
-          && d.count > 0) {
-          history = TasbihManager.upsertHistory(
-            history, d.lastCountDate, d.id, d.count
-          );
+      const dhikrs: Dhikr[] = t.dhikrs.map((d: Dhikr): Dhikr => {
+        if (d.id !== dhikrId) {
+          return d;
         }
-        // Today's entry becomes 0.
-        history = TasbihManager.upsertHistory(history, today, d.id, 0);
-
-        const next: Dhikr = {
+        const preservedTotal = d.dailyTotal ?? d.count;
+        const cleared: Dhikr = {
           id: d.id,
           arabic: d.arabic,
           transliteration: d.transliteration,
           translation: d.translation,
           target: d.target,
           count: 0,
-          lastCountDate: today
+          lastCountDate: today,
+          dailyTotal: preservedTotal
         };
-        return next;
+        return cleared;
       });
 
       const result: Tasbih = {
         id: t.id,
         name: t.name,
-        dhikrs: updated,
+        dhikrs: dhikrs,
         createdAt: t.createdAt,
         lifetimeCount: t.lifetimeCount,
         theme: t.theme,
         themePresetId: t.themePresetId,
-        history: TasbihManager.trimHistory(history)
+        history: t.history
+      };
+      return result;
+    });
+  }
+
+  /**
+   * Clear every dhikr's live counter within the active tasbih.
+   * Same semantics as reset() — `dailyTotal` and history are
+   * preserved.
+   */
+  static resetAll(tasbihs: Tasbih[], activeId: string): Tasbih[] {
+    const today = TasbihManager.todayKey();
+
+    return tasbihs.map((t: Tasbih): Tasbih => {
+      if (t.id !== activeId) {
+        return t;
+      }
+
+      const dhikrs: Dhikr[] = t.dhikrs.map((d: Dhikr): Dhikr => {
+        const preservedTotal = d.dailyTotal ?? d.count;
+        const cleared: Dhikr = {
+          id: d.id,
+          arabic: d.arabic,
+          transliteration: d.transliteration,
+          translation: d.translation,
+          target: d.target,
+          count: 0,
+          lastCountDate: today,
+          dailyTotal: preservedTotal
+        };
+        return cleared;
+      });
+
+      const result: Tasbih = {
+        id: t.id,
+        name: t.name,
+        dhikrs: dhikrs,
+        createdAt: t.createdAt,
+        lifetimeCount: t.lifetimeCount,
+        theme: t.theme,
+        themePresetId: t.themePresetId,
+        history: t.history
       };
       return result;
     });
@@ -369,7 +403,8 @@ export class TasbihManager {
       translation: fields.translation,
       target: fields.target,
       count: 0,
-      lastCountDate: today
+      lastCountDate: today,
+      dailyTotal: 0
     };
     return tasbihs.map((t: Tasbih): Tasbih => {
       if (t.id !== activeId) {
@@ -408,7 +443,8 @@ export class TasbihManager {
           translation: fields.translation,
           target: fields.target,
           count: d.count,
-          lastCountDate: d.lastCountDate
+          lastCountDate: d.lastCountDate,
+          dailyTotal: d.dailyTotal
         };
         return next;
       });
@@ -451,15 +487,14 @@ export class TasbihManager {
   }
 
   // ============================================================
-  // NORMALIZATION — call before any load finishes
+  // NORMALIZATION — call once at load time
   // ============================================================
 
   /**
    * Roll any dhikr whose lastCountDate is stale into history and
-   * reset its live count to 0. Called once at load time so the
-   * live counters always represent "today".
-   *
-   * Returns the same array if nothing needed rolling.
+   * reset the live counters. Also seeds dailyTotal and
+   * lastCountDate for data written by versions before they
+   * existed.
    */
   static rollOverStaleCounts(tasbihs: Tasbih[]): Tasbih[] {
     const today = TasbihManager.todayKey();
@@ -471,8 +506,7 @@ export class TasbihManager {
       let changed = false;
 
       const dhikrs: Dhikr[] = t.dhikrs.map((d: Dhikr): Dhikr => {
-        // First run after upgrade — stamp today's date so nothing
-        // rolls on the very first load.
+        // ---- Migration: seed missing fields ----
         if (d.lastCountDate === undefined) {
           changed = true;
           const seeded: Dhikr = {
@@ -482,7 +516,23 @@ export class TasbihManager {
             translation: d.translation,
             target: d.target,
             count: d.count,
-            lastCountDate: today
+            lastCountDate: today,
+            dailyTotal: d.dailyTotal ?? d.count
+          };
+          return seeded;
+        }
+
+        if (d.dailyTotal === undefined) {
+          changed = true;
+          const seeded: Dhikr = {
+            id: d.id,
+            arabic: d.arabic,
+            transliteration: d.transliteration,
+            translation: d.translation,
+            target: d.target,
+            count: d.count,
+            lastCountDate: d.lastCountDate,
+            dailyTotal: d.count
           };
           return seeded;
         }
@@ -491,11 +541,11 @@ export class TasbihManager {
           return d;
         }
 
-        // Stale: roll the count into history and reset.
+        // ---- Stale: roll the day's total into history, reset ----
         changed = true;
-        if (d.count > 0) {
+        if (d.dailyTotal > 0) {
           history = TasbihManager.upsertHistory(
-            history, d.lastCountDate, d.id, d.count
+            history, d.lastCountDate, d.id, d.dailyTotal
           );
         }
         const reset: Dhikr = {
@@ -505,7 +555,8 @@ export class TasbihManager {
           translation: d.translation,
           target: d.target,
           count: 0,
-          lastCountDate: today
+          lastCountDate: today,
+          dailyTotal: 0
         };
         return reset;
       });
@@ -543,6 +594,7 @@ export class TasbihManager {
     fn: (d: Dhikr) => Dhikr
   ): Tasbih[] {
     const today = TasbihManager.todayKey();
+
     return tasbihs.map((t: Tasbih): Tasbih => {
       if (t.id !== activeId) {
         return t;
@@ -558,31 +610,45 @@ export class TasbihManager {
         }
         dhikrChanged = true;
 
-        // Day rollover before applying the change.
-        let baseCount = d.count;
+        // ---- Day rollover before applying the change ----
+        let baseDhikr = d;
         if (d.lastCountDate !== undefined && d.lastCountDate !== today) {
-          if (d.count > 0) {
+          const dayTotal = d.dailyTotal ?? d.count;
+          if (dayTotal > 0) {
             history = TasbihManager.upsertHistory(
-              history, d.lastCountDate, d.id, d.count
+              history, d.lastCountDate, d.id, dayTotal
             );
           }
-          baseCount = 0;
+          baseDhikr = {
+            id: d.id,
+            arabic: d.arabic,
+            transliteration: d.transliteration,
+            translation: d.translation,
+            target: d.target,
+            count: 0,
+            lastCountDate: today,
+            dailyTotal: 0
+          };
+        } else if (d.lastCountDate === undefined) {
+          // First touch after upgrade — seed today.
+          baseDhikr = {
+            id: d.id,
+            arabic: d.arabic,
+            transliteration: d.transliteration,
+            translation: d.translation,
+            target: d.target,
+            count: d.count,
+            lastCountDate: today,
+            dailyTotal: d.dailyTotal ?? d.count
+          };
         }
 
-        const preRoll: Dhikr = {
-          id: d.id,
-          arabic: d.arabic,
-          transliteration: d.transliteration,
-          translation: d.translation,
-          target: d.target,
-          count: baseCount,
-          lastCountDate: today
-        };
-        const afterFn: Dhikr = fn(preRoll);
+        const afterFn: Dhikr = fn(baseDhikr);
 
-        // Record today's new count.
+        // ---- Record the day's running total ----
+        const dayTotal = afterFn.dailyTotal ?? afterFn.count;
         history = TasbihManager.upsertHistory(
-          history, today, d.id, afterFn.count
+          history, today, d.id, dayTotal
         );
 
         return afterFn;
