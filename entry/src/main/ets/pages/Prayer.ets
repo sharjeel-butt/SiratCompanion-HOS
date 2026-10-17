@@ -1,6 +1,6 @@
 // entry/src/main/ets/pages/Prayer.ets
 
-import { mediaquery, router } from '@kit.ArkUI';
+import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import { ExtraTiming, PrayerModel } from '../prayer/PrayerModel';
@@ -12,6 +12,8 @@ import { PrayerManager } from '../prayer/PrayerManager';
 import { PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
 import { CalculationSource, LocationMode } from '../models/SettingsModels';
 import { NotificationHelper } from '../helper/NotificationHelper';
+import { common } from '@kit.AbilityKit';
+import { PdfExportHelper } from '../utils/PdfExportHelper';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -38,7 +40,10 @@ import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
 import { AppLogger } from '../helper/AppLogger';
 import { HomeController } from '../utils/HomeController';
 import {
-  AsrShadowRule, CalculationMethod, HighLatitudeRule
+  AsrShadowRule,
+  CalculationMethod,
+  HighLatitudeRule,
+  PrayerTimeCalculator
 } from '../prayer/PrayerTimeCalculator';
 import { NavHelper } from '../helper/NavHelper';
 import { TimezoneResolver } from '../utils/TimezoneResolver';
@@ -46,13 +51,10 @@ import { L } from '../i8n/LocalizationHelper';
 import { PageHeader } from '../components/PageHeader';
 import { PrayerSunPath } from '../prayer/PrayerSunPath';
 import { Breakpoints } from '../common/Breakpoints';
-import {
-  AdvancedCalcSettings, DEFAULT_ADVANCED_CALC
-} from '../models/AdvancedCalcModels';
-import {
-  EventPerspectiveNotifier
-} from '../utils/EventPerspectiveNotifier';
+import { AdvancedCalcSettings, DEFAULT_ADVANCED_CALC } from '../models/AdvancedCalcModels';
+import { EventPerspectiveNotifier } from '../utils/EventPerspectiveNotifier';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
+import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
 
 interface TimelineRow {
   kind: 'prayer' | 'extra';
@@ -61,6 +63,16 @@ interface TimelineRow {
   sortMinutes: number;
   prayerRef: PrayerModel | null;
   extraRef: ExtraTiming | null;
+}
+
+export interface PrayerTableRow {
+  hijriDate: string;
+  gregorianDate: string;
+  fajr: string;
+  dhuhr: string;
+  asr: string;
+  maghrib: string;
+  isha: string;
 }
 
 const NIGHT_EXTRA_IDS: string[] = ['firstThird', 'midnight', 'lastThird'];
@@ -152,6 +164,14 @@ export struct Prayer {
   @State viewingDate: Date = new Date();
   @State viewingDateKey: string = '';
   @State viewingHijriDate: string = '';
+  @State isExporting: boolean = false;
+  @State pdfPrayerDays: PrayerTableRow[] = [];
+  @State pdfColors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
+  @State pdfMonthName: string = '';
+  @State pdfYear: number = 2026;
+  @State pdfHijriMonthName: string = '';
+  @State pdfHijriYear: number = 1447;
+  @State pdfHijriSpan: string = '';
 
   @State upcomingImportantDates: UpcomingImportantDate[] = [];
 
@@ -788,6 +808,93 @@ export struct Prayer {
     }
   }
 
+  private async handleExportPdf(): Promise<void> {
+    if (this.isExporting) {
+      return;
+    }
+    this.isExporting = true;
+    this.pdfPrayerDays = [];
+    this.pdfColors = PageTheme.compute(ThemeMode.LIGHT);
+
+    try {
+      // 1. Determine the target Hijri Month based on the currently viewing date
+      const anchor = this.viewingDate;
+      const hDate = HijriCalendarHelper.getHijriDate(anchor, this.hijriOffset);
+      const targetHYear = hDate.year;
+      const targetHMonth = hDate.month;
+
+      const hijriMonths = L.getArray('hijri_months', this.appLanguage);
+      this.pdfHijriMonthName = hijriMonths[targetHMonth - 1] || '';
+      this.pdfHijriYear = targetHYear;
+
+      // 2. Build the exact days for this Hijri month (returns 29 or 30 days)
+      const days = HijriCalendarHelper.buildMonthDays(
+        targetHYear, targetHMonth, this.hijriOffset, anchor
+      );
+
+      if (days.length === 0) {
+        console.error('Could not build days for Hijri month');
+        return;
+      }
+
+      // 3. Calculate Gregorian Span for the subtitle (e.g., "Nov 15 – Dec 14, 2026")
+      const startG = days[0].gregorianDate;
+      const endG = days[days.length - 1].gregorianDate;
+      const locale = this.appLanguage === 'zh' ? 'zh-CN' : (this.appLanguage === 'ar' ? 'ar' : 'en-US');
+
+      const startGStr = startG.toLocaleString(locale, { month: 'short', day: 'numeric' });
+      const endGStr = endG.toLocaleString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
+      this.pdfMonthName = `${startGStr} – ${endGStr}`;
+
+      // 4. Calculate Hijri Span for the header
+      const startHStr = DateHelper.getFormattedHijriDateFor(startG);
+      const endHStr = DateHelper.getFormattedHijriDateFor(endG);
+      this.pdfHijriSpan = `${startHStr} – ${endHStr}`;
+
+      // 5. Generate the table rows
+      const rows: PrayerTableRow[] = [];
+
+      for (let i = 0; i < days.length; i++) {
+        const dayObj = days[i];
+        const date = dayObj.gregorianDate;
+
+        const times = PrayerTimeCalculator.calculateWithDeviceTimezone(
+          date, this.latitude, this.longitude, this.calcMethod,
+          this.asrRule, this.highLatRule, this.advanced
+        );
+
+        // Hijri Date is Primary (e.g., "1 Jumada II")
+        const shortHijri = `${dayObj.hijri.day} ${this.pdfHijriMonthName}`;
+
+        // Gregorian Date is Secondary (e.g., "15/11")
+        const shortGregorian = `${date.getDate()}/${date.getMonth() + 1}`;
+
+        rows.push({
+          hijriDate: shortHijri,
+          gregorianDate: shortGregorian,
+          fajr: PrayerManager.offsetTime(times.fajr, this.offsets.fajr),
+          dhuhr: PrayerManager.offsetTime(times.dhuhr, this.offsets.dhuhr),
+          asr: PrayerManager.offsetTime(times.asr, this.offsets.asr),
+          maghrib: PrayerManager.offsetTime(times.maghrib, this.offsets.maghrib),
+          isha: PrayerManager.offsetTime(times.isha, this.offsets.isha)
+        });
+      }
+
+      this.pdfPrayerDays = rows;
+      const ctx = getContext(this) as common.UIAbilityContext;
+
+      await new Promise<void>((resolve) => setTimeout(() => resolve(), 100));
+
+      await PdfExportHelper.exportBuilderToPdf(
+        ctx, this.getUIContext(), this.PrayerExportLayout.bind(this), 'Prayer_Timetable'
+      );
+    } catch (err) {
+      console.error('PDF generation failed:', JSON.stringify(err));
+    } finally {
+      this.isExporting = false;
+    }
+  }
+
   private hasUncheckedCheckablePrayers(): boolean {
     for (const p of this.prayers) {
       if (!p.checked
@@ -1048,6 +1155,127 @@ export struct Prayer {
   }
 
   @Builder
+  PrayerExportLayout() {
+    Column() {
+      // Header
+      Row() {
+        Image($r('app.media.foreground'))
+          .syncLoad(true)
+          .width(36)
+          .height(36)
+          .borderRadius(8)
+          .margin({ right: 12 })
+
+        Column() {
+          // Localized Hijri Year Suffix
+          Text(`${this.pdfHijriMonthName} ${this.pdfHijriYear} ${this.tr('hijri_year_suffix')}`)
+            .fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.pdfColors.textWhite)
+
+          Text(`${this.pdfMonthName} · ${this.currentLocation}`)
+            .fontSize(10).fontColor(this.pdfColors.accentGold).margin({ top: 4 })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+        // Localized Footer
+        Text(this.tr('generated_by'))
+          .fontSize(8).fontColor(this.pdfColors.textMuted).alignSelf(ItemAlign.Start)
+      }
+      .width('100%')
+      .padding({
+        top: 15,
+        bottom: 10,
+        left: 20,
+        right: 20
+      })
+      .backgroundColor(this.pdfColors.cardDark)
+
+      Row().width('100%').height(3).backgroundColor(this.pdfColors.accentGold)
+
+      // Table Headers
+      Row() {
+        // Localized "Date"
+        Text(this.tr('export_date'))
+          .layoutWeight(1.8)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+        Text(this.tr('prayer_fajr'))
+          .layoutWeight(1)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+        Text(this.tr('prayer_dhuhr'))
+          .layoutWeight(1)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+        Text(this.tr('prayer_asr'))
+          .layoutWeight(1)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+        Text(this.tr('prayer_maghrib'))
+          .layoutWeight(1)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+        Text(this.tr('prayer_isha'))
+          .layoutWeight(1)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+      }
+      .width('100%')
+      .padding({
+        top: 6,
+        bottom: 6,
+        left: 20,
+        right: 20
+      })
+      .backgroundColor(this.pdfColors.tintSoft)
+
+      // Table Rows
+      Column() {
+        ForEach(this.pdfPrayerDays, (row: PrayerTableRow, index: number) => {
+          Row() {
+            Column() {
+              Text(row.hijriDate)
+                .fontSize(9)
+                .lineHeight(11)
+                .fontWeight(FontWeight.Medium)
+                .fontColor(this.pdfColors.textWhite)
+              Text(row.gregorianDate).fontSize(7).lineHeight(9).fontColor(this.pdfColors.textMuted).margin({ top: 0 })
+            }.layoutWeight(1.8).alignItems(HorizontalAlign.Start)
+
+            Text(row.fajr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
+            Text(row.dhuhr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
+            Text(row.asr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
+            Text(row.maghrib).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
+            Text(row.isha).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
+          }
+          .width('100%')
+          .padding({
+            top: 2,
+            bottom: 2,
+            left: 20,
+            right: 20
+          })
+          .backgroundColor(index % 2 === 0 ? 'transparent' : this.pdfColors.tintSubtle)
+          .alignItems(VerticalAlign.Center)
+        })
+      }
+      .width('100%')
+
+      // Footer
+      Row() {
+        Text(this.tr('generated_by')).fontSize(8).lineHeight(12).fontColor(this.pdfColors.textMuted)
+      }
+      .width('100%').padding({ top: 4, bottom: 4 }).justifyContent(FlexAlign.Center)
+    }
+    .width(595).height(842).backgroundColor(this.pdfColors.primaryGreen)
+  }
+
+  @Builder
   NextPrayerSection() {
     Column() {
       Row() {
@@ -1097,6 +1325,27 @@ export struct Prayer {
           .margin({ left: 8 })
 
         Blank()
+
+        // --- Export PDF Button ---
+        if (this.isExporting) {
+          LoadingProgress()
+            .width(24).height(24)
+            .color(this.colors.accentGold)
+            .margin({ right: 8 })
+        } else {
+          Text('🖨️')
+            .fontSize(16)
+            .width(32)
+            .height(32)
+            .textAlign(TextAlign.Center)
+            .borderRadius(16)
+            .backgroundColor(this.colors.cardDark)
+            .border({ width: 1, color: this.colors.borderSoft })
+            .margin({ right: 8 })
+            .onClick(() => {
+              this.handleExportPdf();
+            })
+        }
 
         Row() {
           Text('✓').fontSize(12).fontColor(this.colors.accentGold)

@@ -1995,6 +1995,70 @@
     {
       "name": "details_tasbih_summary_dhikrs",
       "value": "已完成念词"
+    },
+    {
+      "name": "export_pdf",
+      "value": "导出为 PDF"
+    },
+    {
+      "name": "export_prayers_title",
+      "value": "礼拜时间表"
+    },
+    {
+      "name": "export_calendar_title",
+      "value": "回历"
+    },
+    {
+      "name": "export_ramadan_title",
+      "value": "斋月时间表"
+    },
+    {
+      "name": "export_print",
+      "value": "打印"
+    },
+    {
+      "name": "export_saving",
+      "value": "正在生成 PDF..."
+    },
+    {
+      "name": "export_success",
+      "value": "PDF 生成成功"
+    },
+    {
+      "name": "export_failed",
+      "value": "PDF 生成失败"
+    },
+    {
+      "name": "export_sahur",
+      "value": "封斋"
+    },
+    {
+      "name": "export_iftar",
+      "value": "开斋"
+    },
+    {
+      "name": "export_ramadan_timetable",
+      "value": "斋月时间表"
+    },
+    {
+      "name": "auto_show_ramadan_view",
+      "value": "自动显示斋月视图"
+    },
+    {
+      "name": "auto_show_ramadan_view_desc",
+      "value": "剩余 60 天时自动显示。关闭可始终显示。"
+    },
+    {
+      "name": "export_date",
+      "value": "日期"
+    },
+    {
+      "name": "hijri_year_suffix",
+      "value": "回历"
+    },
+    {
+      "name": "generated_by",
+      "value": "由 Sirat 伴侣生成"
     }
   ]
 }
