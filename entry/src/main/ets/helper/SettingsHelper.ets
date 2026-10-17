@@ -5,6 +5,7 @@ import { CalculationSource, LocationMode, ManualCoords, PickerItem } from '../mo
 import { PreferencesHelper } from './PreferencesHelper';
 import {
   STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
   STORAGE_KEY_CALC_SETTINGS_VERSION,
   STORAGE_KEY_CUSTOM_FAJR_ANGLE,
   STORAGE_KEY_CUSTOM_ISHA_ANGLE,
@@ -120,6 +121,7 @@ export interface LoadedSettings {
   showMidnightSunpath: boolean;
   showLastThirdSunpath: boolean;
   showIslamicEvents: boolean;
+  autoShowRamadanView: boolean;
 }
 
 export class SettingsHelper {
@@ -178,6 +180,9 @@ export class SettingsHelper {
     const showIslamicEvents = await PreferencesHelper.getBoolean(
       KEY_SHOW_ISLAMIC_EVENTS, true
     );
+    const autoShowRamadanView = await PreferencesHelper.getBoolean(
+      STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW, true
+    );
 
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_IMSAK_LIST, showImsakList);
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_FIRST_THIRD_LIST, showFirstThirdList);
@@ -188,6 +193,7 @@ export class SettingsHelper {
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH, showMidnightSunpath);
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH, showLastThirdSunpath);
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_ISLAMIC_EVENTS, showIslamicEvents);
+    AppStorage.setOrCreate(STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW, autoShowRamadanView);
 
     return {
       method: methodStr as CalculationMethod,
@@ -201,8 +207,14 @@ export class SettingsHelper {
       showFirstThirdSunpath,
       showMidnightSunpath,
       showLastThirdSunpath,
-      showIslamicEvents
+      showIslamicEvents,
+      autoShowRamadanView
     };
+  }
+
+  static saveAutoShowRamadanView(value: boolean): void {
+    AppStorage.setOrCreate(STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW, value);
+    PreferencesHelper.setBoolean(STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW, value);
   }
 
   private static bumpCalcSettingsVersion(): void {
@@ -1042,11 +1054,11 @@ export class SettingsHelper {
     PreferencesHelper.setString(STORAGE_KEY_HIJRI_CALENDAR_TYPE, type);
   }
 
-  static getHijriCalendarTypeLabel(type: string): string {
+  static getHijriCalendarTypeLabel(type: string, lang?: string): string {
     if (type === HijriCalendarType.TABULAR) {
-      return L.get('hijri_calendar_tabular');
+      return L.get('hijri_calendar_tabular', lang);
     }
-    return L.get('hijri_calendar_umm_al_qura');
+    return L.get('hijri_calendar_umm_al_qura', lang);
   }
 
   static buildHijriCalendarTypePickerItems(current: string): PickerItem[] {

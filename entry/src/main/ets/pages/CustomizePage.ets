@@ -8,6 +8,7 @@ import { PickerItem } from '../models/SettingsModels';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_EVENT_PERSPECTIVE,
   STORAGE_KEY_LANGUAGE,
@@ -43,6 +44,9 @@ struct CustomizePage {
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW)
+  @Watch('onAutoShowRamadanViewChanged')
+  autoShowRamadanView: boolean = true;
 
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
@@ -167,6 +171,10 @@ struct CustomizePage {
   }
 
   private onShowImsakListChanged(): void {
+  }
+
+  private onAutoShowRamadanViewChanged(): void {
+    // Re-render is handled by the @StorageLink.
   }
 
   private onShowFirstThirdListChanged(): void {
@@ -432,6 +440,7 @@ struct CustomizePage {
         currentLanguage: this.currentLanguage
       })
       this.ShowIslamicEventsRow()
+      this.AutoShowRamadanViewRow()
       this.EventPerspectiveRow()
 
       // ============ Prayer UI ============
@@ -1292,6 +1301,41 @@ struct CustomizePage {
     .position({ bottom: 0 })
   }
 
+  @Builder
+  AutoShowRamadanViewRow() {
+    Row() {
+      Column() {
+        Text(this.tr('auto_show_ramadan_view'))
+          .fontSize(15).fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Medium)
+        Text(this.tr('auto_show_ramadan_view_desc'))
+          .fontSize(11)
+          .fontColor(this.colors.textMuted)
+          .margin({ top: 2 })
+          .maxLines(3)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+      Toggle({ type: ToggleType.Switch, isOn: this.autoShowRamadanView })
+        .selectedColor(this.colors.accentGold)
+        .onChange((isOn: boolean) => {
+          this.autoShowRamadanView = isOn;
+          SettingsHelper.saveAutoShowRamadanView(isOn);
+        })
+    }
+    .width('100%')
+    .padding({
+      top: 14,
+      bottom: 14,
+      left: 16,
+      right: 16
+    })
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(12)
+    .margin({ bottom: 8 })
+  }
+
   // ============================================================
   // HELPERS
   // ============================================================
@@ -1376,6 +1420,7 @@ struct CustomizePage {
     this.showFirstThirdSunpath = data.showFirstThirdSunpath;
     this.showMidnightSunpath = data.showMidnightSunpath;
     this.showLastThirdSunpath = data.showLastThirdSunpath;
+    this.autoShowRamadanView = data.autoShowRamadanView;
 
     this.vibrationEnabled = SettingsHelper.getVibrationEnabled();
     this.soundEnabled = SettingsHelper.getSoundEnabled();

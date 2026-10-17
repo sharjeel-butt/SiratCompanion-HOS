@@ -92,6 +92,17 @@
           "value": "سبت"
         }
       ]
+    },
+    {
+      "name": "weekend_days",
+      "value": [
+        {
+          "value": "5"
+        },
+        {
+          "value": "6"
+        }
+      ]
     }
   ]
 }

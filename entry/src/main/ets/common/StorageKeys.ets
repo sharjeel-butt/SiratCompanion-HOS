@@ -154,3 +154,5 @@ export const STORAGE_KEY_SHOW_MIDNIGHT = 'show_midnight';
 export const STORAGE_KEY_SHOW_LAST_THIRD = 'show_last_third';
 
 export const STORAGE_KEY_TASBIH_STATE_VERSION = 'tasbih_state_version';
+
+export const STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW = 'auto_show_ramadan_view';

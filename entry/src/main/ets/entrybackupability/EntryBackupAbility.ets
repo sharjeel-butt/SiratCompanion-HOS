@@ -29,6 +29,7 @@ const SETTINGS_SPECS: PrefSpec[] = [
   { key: 'manual_lat', type: TYPE_NUMBER },
   { key: 'manual_lng', type: TYPE_NUMBER },
   { key: 'manual_refresh', type: TYPE_NUMBER },
+  { key: 'auto_show_ramadan_view', type: TYPE_BOOLEAN },
   { key: 'manual_city', type: TYPE_STRING },
   { key: 'show_extra_timings', type: TYPE_BOOLEAN },
   { key: 'show_extra_timings_list', type: TYPE_BOOLEAN },
