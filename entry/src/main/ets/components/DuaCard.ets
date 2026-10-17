@@ -1,7 +1,7 @@
 // entry/src/main/ets/components/DuaCard.ets
 
 import { ThemeColors } from '../common/Theme';
-import { L } from '../helper/LocalizationHelper';
+import { L } from '../i8n/LocalizationHelper';
 import { DuaEntry } from '../data/Duas';
 
 /**

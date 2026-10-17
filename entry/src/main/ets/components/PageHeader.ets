@@ -1,7 +1,7 @@
 // entry/src/main/ets/components/PageHeader.ets
 
 import { Theme, ThemeColors } from '../common/Theme';
-import { L } from '../helper/LocalizationHelper';
+import { L } from '../i8n/LocalizationHelper';
 import { SettingsHelper } from '../helper/SettingsHelper';
 import {
   AsrShadowRule, CalculationMethod

@@ -21,7 +21,7 @@ import { SettingsHelper } from '../helper/SettingsHelper';
 import { LocationCache } from '../utils/LocationCache';
 import { LocationMode } from '../models/SettingsModels';
 import { NavHelper } from '../helper/NavHelper';
-import { L } from '../helper/LocalizationHelper';
+import { L } from '../i8n/LocalizationHelper';
 import { OfflineCityLookup } from '../utils/OfflineCityLookup';
 import { Breakpoints } from '../common/Breakpoints';
 

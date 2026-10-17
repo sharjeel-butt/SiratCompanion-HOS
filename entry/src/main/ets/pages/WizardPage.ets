@@ -15,7 +15,7 @@ import { SettingsHelper } from '../helper/SettingsHelper';
 import { LocationData, LocationHelper } from '../utils/LocationUtils';
 import { LocationCache } from '../utils/LocationCache';
 import { CalculationSource, LocationMode, PickerItem } from '../models/SettingsModels';
-import { AppLanguage, L } from '../helper/LocalizationHelper';
+import { AppLanguage, L } from '../i8n/LocalizationHelper';
 import { NavHelper } from '../helper/NavHelper';
 import { PrivacyPolicyProvider } from '../data/PrivacyPolicy';
 import { Breakpoints } from '../common/Breakpoints';

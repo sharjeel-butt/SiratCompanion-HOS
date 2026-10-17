@@ -5,6 +5,7 @@ import { window } from '@kit.ArkUI';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { deviceInfo } from '@kit.BasicServicesKit';
 import { PreferencesHelper } from '../helper/PreferencesHelper';
+import { L } from '../i8n/LocalizationHelper';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -102,7 +103,8 @@ export default class EntryAbility extends UIAbility {
   onWindowStageCreate(windowStage: window.WindowStage): void {
     AppLogger.init(this.context);
     LayoutHelper.install();
-
+    L.init(this.context);
+    console.info('[Splash] L.init completed');
     // On 2-in-1 devices, request a preferred starting window size.
     // Failures are non-fatal — the system default applies.
     if (deviceInfo.deviceType === '2in1') {

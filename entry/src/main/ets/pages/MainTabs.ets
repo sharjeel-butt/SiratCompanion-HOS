@@ -23,7 +23,7 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
-import { L } from '../helper/LocalizationHelper';
+import { L } from '../i8n/LocalizationHelper';
 import { NavHelper } from '../helper/NavHelper';
 
 import { HomePage } from './HomePage';

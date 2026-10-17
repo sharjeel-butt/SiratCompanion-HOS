@@ -9,9 +9,10 @@ import {
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_TASBIH_STATE_VERSION,
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
-import { L } from '../helper/LocalizationHelper';
+import { L } from '../i8n/LocalizationHelper';
 import { Breakpoints } from '../common/Breakpoints';
 import { Tasbih } from '../tasbih/TasbihModels';
 import { TasbihManager } from '../tasbih/TasbihManager';
@@ -31,6 +32,9 @@ struct TasbihDetailsPage {
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_TASBIH_STATE_VERSION)
+  @Watch('onTasbihStateChanged')
+  tasbihStateVersion: number = 0;
   @StorageLink(STORAGE_KEY_LANGUAGE)
   appLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_APP_THEME)
@@ -97,6 +101,10 @@ struct TasbihDetailsPage {
 
   private onAppThemePresetChanged(): void {
     this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  private onTasbihStateChanged(): void {
+    this.reload();
   }
 
   private async onAppForegrounded(): Promise<void> {

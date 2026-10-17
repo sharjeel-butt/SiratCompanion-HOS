@@ -1,0 +1,97 @@
+{
+  "strarray": [
+    {
+      "name": "hijri_months",
+      "value": [
+        {
+          "value": "Muharram"
+        },
+        {
+          "value": "Safar"
+        },
+        {
+          "value": "Rabi al-Awwal"
+        },
+        {
+          "value": "Rabi al-Thani"
+        },
+        {
+          "value": "Jumada al-Awwal"
+        },
+        {
+          "value": "Jumada al-Thani"
+        },
+        {
+          "value": "Rajab"
+        },
+        {
+          "value": "Sha'ban"
+        },
+        {
+          "value": "Ramadan"
+        },
+        {
+          "value": "Shawwal"
+        },
+        {
+          "value": "Dhu al-Qi'dah"
+        },
+        {
+          "value": "Dhu al-Hijjah"
+        }
+      ]
+    },
+    {
+      "name": "days_of_week",
+      "value": [
+        {
+          "value": "Sun"
+        },
+        {
+          "value": "Mon"
+        },
+        {
+          "value": "Tue"
+        },
+        {
+          "value": "Wed"
+        },
+        {
+          "value": "Thu"
+        },
+        {
+          "value": "Fri"
+        },
+        {
+          "value": "Sat"
+        }
+      ]
+    },
+    {
+      "name": "days_of_week_short",
+      "value": [
+        {
+          "value": "S"
+        },
+        {
+          "value": "M"
+        },
+        {
+          "value": "T"
+        },
+        {
+          "value": "W"
+        },
+        {
+          "value": "T"
+        },
+        {
+          "value": "F"
+        },
+        {
+          "value": "S"
+        }
+      ]
+    }
+  ]
+}

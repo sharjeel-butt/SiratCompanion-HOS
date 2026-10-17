@@ -42,7 +42,7 @@ import {
 } from '../prayer/PrayerTimeCalculator';
 import { NavHelper } from '../helper/NavHelper';
 import { TimezoneResolver } from '../utils/TimezoneResolver';
-import { L } from '../helper/LocalizationHelper';
+import { L } from '../i8n/LocalizationHelper';
 import { PageHeader } from '../components/PageHeader';
 import { PrayerSunPath } from '../prayer/PrayerSunPath';
 import { Breakpoints } from '../common/Breakpoints';

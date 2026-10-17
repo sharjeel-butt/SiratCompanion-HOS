@@ -1,7 +1,7 @@
 // entry/src/main/ets/components/QiblaCalibrationOverlay.ets
 
 import { ThemeColors } from '../common/Theme';
-import { L } from '../helper/LocalizationHelper';
+import { L } from '../i8n/LocalizationHelper';
 
 /**
  * Full-screen calibration overlay for the Qibla compass.
