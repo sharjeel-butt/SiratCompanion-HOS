@@ -15,7 +15,7 @@ import {
 import { PrayerCheckState, PrayerManager } from '../prayer/PrayerManager';
 import { LocationCache } from '../utils/LocationCache';
 import { LocationMode } from '../models/SettingsModels';
-import { L } from './LocalizationHelper';
+import { L } from '../i8n/LocalizationHelper';
 import { AppLogger } from './AppLogger';
 import { CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED } from '../common/FeatureFlags';
 import { CalendarReminderEntry, CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';

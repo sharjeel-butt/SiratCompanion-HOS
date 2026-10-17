@@ -152,3 +152,5 @@ export const STORAGE_KEY_SHOW_FIRST_THIRD = 'show_first_third';
 export const STORAGE_KEY_SHOW_MIDNIGHT = 'show_midnight';
 
 export const STORAGE_KEY_SHOW_LAST_THIRD = 'show_last_third';
+
+export const STORAGE_KEY_TASBIH_STATE_VERSION = 'tasbih_state_version';

@@ -27,6 +27,1974 @@
     {
       "name": "calendar_permission_reason",
       "value": "Used to add prayer-time reminders to your calendar"
+    },
+    {
+      "name": "app_name",
+      "value": "Sirat Companion"
+    },
+    {
+      "name": "app_tagline",
+      "value": "Your Daily Islamic Companion"
+    },
+    {
+      "name": "more_languages_coming",
+      "value": "More languages coming soon"
+    },
+    {
+      "name": "tab_home",
+      "value": "Home"
+    },
+    {
+      "name": "tab_prayers",
+      "value": "Prayers"
+    },
+    {
+      "name": "tab_calendar",
+      "value": "Hijri Calendar"
+    },
+    {
+      "name": "tab_compass",
+      "value": "Qibla Compass"
+    },
+    {
+      "name": "tab_tasbih",
+      "value": "Tasbih"
+    },
+    {
+      "name": "current_prayer",
+      "value": "Current"
+    },
+    {
+      "name": "next_prayer",
+      "value": "Next"
+    },
+    {
+      "name": "todays_prayers",
+      "value": "TODAY'S PRAYERS"
+    },
+    {
+      "name": "extra_timings",
+      "value": "EXTRA TIMINGS"
+    },
+    {
+      "name": "upcoming_islamic_events",
+      "value": "UPCOMING ISLAMIC EVENTS"
+    },
+    {
+      "name": "loading_location",
+      "value": "Loading..."
+    },
+    {
+      "name": "set_manual_location",
+      "value": "Set Manual Location in Settings"
+    },
+    {
+      "name": "online_prayer_times",
+      "value": "Online Prayer Times"
+    },
+    {
+      "name": "coming_soon",
+      "value": "Coming Soon"
+    },
+    {
+      "name": "online_switch_hint",
+      "value": "Switch back to Local Formula in Settings to see prayer times for your location."
+    },
+    {
+      "name": "cancel",
+      "value": "Cancel"
+    },
+    {
+      "name": "save",
+      "value": "Save"
+    },
+    {
+      "name": "reset",
+      "value": "Reset"
+    },
+    {
+      "name": "delete",
+      "value": "Delete"
+    },
+    {
+      "name": "edit",
+      "value": "Edit"
+    },
+    {
+      "name": "add",
+      "value": "Add"
+    },
+    {
+      "name": "back",
+      "value": "Back"
+    },
+    {
+      "name": "today",
+      "value": "Today"
+    },
+    {
+      "name": "exit",
+      "value": "Exit"
+    },
+    {
+      "name": "ok",
+      "value": "OK"
+    },
+    {
+      "name": "exit_confirm_message",
+      "value": "Are you sure you want to exit Sirat Companion?"
+    },
+    {
+      "name": "title_settings",
+      "value": "Settings"
+    },
+    {
+      "name": "title_customize",
+      "value": "Customize"
+    },
+    {
+      "name": "category_location",
+      "value": "Location"
+    },
+    {
+      "name": "category_prayer_times",
+      "value": "Prayer Times"
+    },
+    {
+      "name": "category_hijri_calendar",
+      "value": "Hijri Calendar"
+    },
+    {
+      "name": "category_ui_customization",
+      "value": "UI Customization"
+    },
+    {
+      "name": "category_appearance",
+      "value": "Appearance"
+    },
+    {
+      "name": "category_about",
+      "value": "About"
+    },
+    {
+      "name": "category_notifications",
+      "value": "Notifications"
+    },
+    {
+      "name": "brand_primary",
+      "value": "Sirat"
+    },
+    {
+      "name": "brand_accent",
+      "value": "Companion"
+    },
+    {
+      "name": "convention",
+      "value": "Convention"
+    },
+    {
+      "name": "convention_desc",
+      "value": "Used for calculation of Fajr and Isha"
+    },
+    {
+      "name": "madhab",
+      "value": "Madhab"
+    },
+    {
+      "name": "madhab_desc",
+      "value": "Asr Shadow Rule used in the calculation"
+    },
+    {
+      "name": "source",
+      "value": "Source"
+    },
+    {
+      "name": "source_desc",
+      "value": "Local Formula or Online"
+    },
+    {
+      "name": "prayer_offsets",
+      "value": "Prayer Offsets"
+    },
+    {
+      "name": "prayer_offsets_desc",
+      "value": "Manually shift calculated timings"
+    },
+    {
+      "name": "offsets_hint",
+      "value": "Shift timings in minutes (−60 to +60)"
+    },
+    {
+      "name": "reset_all_offsets",
+      "value": "Reset All Offsets"
+    },
+    {
+      "name": "high_latitude",
+      "value": "High Latitude"
+    },
+    {
+      "name": "high_latitude_desc",
+      "value": "Fallback for Fajr and Isha when the Sun does not reach the angle"
+    },
+    {
+      "name": "highlat_none",
+      "value": "None"
+    },
+    {
+      "name": "highlat_middle",
+      "value": "Middle of Night"
+    },
+    {
+      "name": "highlat_one_seventh",
+      "value": "One Seventh of Night"
+    },
+    {
+      "name": "highlat_angle",
+      "value": "Angle Based"
+    },
+    {
+      "name": "highlat_proportional",
+      "value": "Proportional Depression (Diyanet Takdir)"
+    },
+    {
+      "name": "location",
+      "value": "Location"
+    },
+    {
+      "name": "location_desc",
+      "value": "Choose how the app determines your location"
+    },
+    {
+      "name": "gps",
+      "value": "GPS"
+    },
+    {
+      "name": "manual_location",
+      "value": "Manual Location"
+    },
+    {
+      "name": "current_position",
+      "value": "Current Position"
+    },
+    {
+      "name": "latitude",
+      "value": "Latitude"
+    },
+    {
+      "name": "longitude",
+      "value": "Longitude"
+    },
+    {
+      "name": "city",
+      "value": "City"
+    },
+    {
+      "name": "last_refreshed",
+      "value": "Last refreshed"
+    },
+    {
+      "name": "save_coordinates",
+      "value": "Save Coordinates"
+    },
+    {
+      "name": "latitude_hint",
+      "value": "Latitude  (−90 to 90)"
+    },
+    {
+      "name": "longitude_hint",
+      "value": "Longitude  (−180 to 180)"
+    },
+    {
+      "name": "city_name_optional",
+      "value": "City name (optional)"
+    },
+    {
+      "name": "city_name_placeholder",
+      "value": "Leave blank to auto-detect"
+    },
+    {
+      "name": "hijri_offset",
+      "value": "Hijri Date & Calendar Offset"
+    },
+    {
+      "name": "hijri_offset_desc",
+      "value": "Shift both the Islamic date and the calendar by ±3 days"
+    },
+    {
+      "name": "matching_standard",
+      "value": "Matching the standard calculation"
+    },
+    {
+      "name": "offset_days_ahead",
+      "value": "days ahead"
+    },
+    {
+      "name": "offset_days_behind",
+      "value": "days behind"
+    },
+    {
+      "name": "about_version",
+      "value": "Version"
+    },
+    {
+      "name": "about_platform",
+      "value": "Platform"
+    },
+    {
+      "name": "about_platform_value",
+      "value": "HarmonyOS 6+"
+    },
+    {
+      "name": "about_build",
+      "value": "Build"
+    },
+    {
+      "name": "about_bundle",
+      "value": "Bundle ID"
+    },
+    {
+      "name": "about_copyright",
+      "value": "© 2026"
+    },
+    {
+      "name": "notifications_master",
+      "value": "Enable Notifications"
+    },
+    {
+      "name": "notifications_master_desc",
+      "value": "Get reminders before and at prayer time"
+    },
+    {
+      "name": "notify_before",
+      "value": "Notify Before"
+    },
+    {
+      "name": "notify_before_desc",
+      "value": "How many minutes before the prayer for the first reminder"
+    },
+    {
+      "name": "notify_prayers",
+      "value": "Prayer Reminders"
+    },
+    {
+      "name": "notify_prayers_desc",
+      "value": "Choose which prayers send reminders"
+    },
+    {
+      "name": "notifications_footer",
+      "value": "Reminders are scheduled for the next 3 days and renew each time you open the app"
+    },
+    {
+      "name": "notifications_footer_calendar",
+      "value": "Reminders are added to your system calendar for the next 3 days and renew each time you open the app"
+    },
+    {
+      "name": "notification_permission_denied",
+      "value": "Notification permission is required to enable reminders"
+    },
+    {
+      "name": "calendar_permission_denied",
+      "value": "Calendar permission is required to enable reminders"
+    },
+    {
+      "name": "notif_before_title",
+      "value": "Prayer Reminder"
+    },
+    {
+      "name": "notif_before_content",
+      "value": "is in"
+    },
+    {
+      "name": "notif_exact_title",
+      "value": "Prayer Time"
+    },
+    {
+      "name": "notif_exact_content",
+      "value": "It is now time for"
+    },
+    {
+      "name": "notif_minutes_suffix",
+      "value": "min"
+    },
+    {
+      "name": "notif_test_button",
+      "value": "Send Test Notification"
+    },
+    {
+      "name": "notif_test_sending",
+      "value": "Sending test notification..."
+    },
+    {
+      "name": "notif_test_ok",
+      "value": "Test notification scheduled — you should see it in ~5 seconds"
+    },
+    {
+      "name": "notif_test_ok_calendar",
+      "value": "Test event added to your calendar — check the Calendar app"
+    },
+    {
+      "name": "notif_test_failed",
+      "value": "Test notification failed"
+    },
+    {
+      "name": "notif_dismiss",
+      "value": "Dismiss"
+    },
+    {
+      "name": "notif_pray_fajr",
+      "value": "Pray Fajr"
+    },
+    {
+      "name": "notif_pray_dhuhr",
+      "value": "Pray Dhuhr"
+    },
+    {
+      "name": "notif_pray_asr",
+      "value": "Pray Asr"
+    },
+    {
+      "name": "notif_pray_maghrib",
+      "value": "Pray Maghrib"
+    },
+    {
+      "name": "notif_pray_isha",
+      "value": "Pray Isha"
+    },
+    {
+      "name": "hadith_fajr",
+      "value": "He who prayed the morning prayer (in congregation) he is in fact under the protection of Allah. — Sahih Muslim 657a"
+    },
+    {
+      "name": "hadith_dhuhr",
+      "value": "This is an hour in which the gates of the heavens are opened, and I love that a righteous deed of mine should ascend during it. — Jami\u2019 at-Tirmidhi 478"
+    },
+    {
+      "name": "hadith_asr",
+      "value": "Whoever misses the \u2018Asr prayer (intentionally) then it is as if he lost his family and property. — Sahih al-Bukhari 552"
+    },
+    {
+      "name": "hadith_maghrib",
+      "value": "The five daily prayers... are an expiation for whatever sins are committed between them, so long as major sins are avoided. — Sahih Muslim 233"
+    },
+    {
+      "name": "hadith_isha",
+      "value": "He who observed the \u2018Isha\u2019 prayer in congregation, it was as if he prayed up to midnight. — Sahih Muslim 656a"
+    },
+    {
+      "name": "log_view_button",
+      "value": "Diagnostic Logs"
+    },
+    {
+      "name": "log_view_desc",
+      "value": "View, copy, or clear the app log file"
+    },
+    {
+      "name": "log_view_title",
+      "value": "Diagnostic Logs"
+    },
+    {
+      "name": "log_copy",
+      "value": "Copy"
+    },
+    {
+      "name": "log_clear",
+      "value": "Clear"
+    },
+    {
+      "name": "log_empty",
+      "value": "The log is empty."
+    },
+    {
+      "name": "log_copied",
+      "value": "Log copied to clipboard"
+    },
+    {
+      "name": "log_cleared",
+      "value": "Log cleared"
+    },
+    {
+      "name": "advanced_calc_title",
+      "value": "Advanced Calculation"
+    },
+    {
+      "name": "rounding_method",
+      "value": "Rounding Method"
+    },
+    {
+      "name": "rounding_method_desc",
+      "value": "Controls how displayed times are rounded"
+    },
+    {
+      "name": "midnight_method",
+      "value": "Midnight Method"
+    },
+    {
+      "name": "midnight_method_desc",
+      "value": "Which night boundary defines Islamic midnight"
+    },
+    {
+      "name": "polar_resolution",
+      "value": "Polar Resolution"
+    },
+    {
+      "name": "polar_resolution_desc",
+      "value": "Fallback when the sun does not reach an angle"
+    },
+    {
+      "name": "shafaq",
+      "value": "Shafaq"
+    },
+    {
+      "name": "shafaq_desc",
+      "value": "Shafaq is used by the Moonsighting Committee method to determine which twilight determines Isha."
+    },
+    {
+      "name": "custom_angles",
+      "value": "Custom Angles"
+    },
+    {
+      "name": "custom_fajr_angle",
+      "value": "Fajr angle"
+    },
+    {
+      "name": "custom_isha_angle",
+      "value": "Isha angle"
+    },
+    {
+      "name": "custom_isha_interval",
+      "value": "Isha interval (min)"
+    },
+    {
+      "name": "custom_isha_interval_hint",
+      "value": "0 = use angle. >0 = minutes after Maghrib."
+    },
+    {
+      "name": "rounding_nearest",
+      "value": "Nearest"
+    },
+    {
+      "name": "rounding_up",
+      "value": "Up"
+    },
+    {
+      "name": "rounding_none",
+      "value": "None"
+    },
+    {
+      "name": "midnight_standard",
+      "value": "Sunset to Sunrise"
+    },
+    {
+      "name": "midnight_standard_desc",
+      "value": "Default"
+    },
+    {
+      "name": "midnight_jafari",
+      "value": "Sunset to Fajr"
+    },
+    {
+      "name": "polar_unresolved",
+      "value": "Unresolved"
+    },
+    {
+      "name": "polar_unresolved_desc",
+      "value": "Default"
+    },
+    {
+      "name": "polar_aqrab_balad",
+      "value": "Aqrab Balad"
+    },
+    {
+      "name": "polar_aqrab_yaum",
+      "value": "Aqrab Yaum"
+    },
+    {
+      "name": "shafaq_general",
+      "value": "General"
+    },
+    {
+      "name": "shafaq_general_desc",
+      "value": "Default"
+    },
+    {
+      "name": "shafaq_ahmer",
+      "value": "Ahmer"
+    },
+    {
+      "name": "shafaq_abyad",
+      "value": "Abyad"
+    },
+    {
+      "name": "show_extra_timings",
+      "value": "Show Extra Timings"
+    },
+    {
+      "name": "show_extra_timings_desc",
+      "value": "Imsak, Sunrise, Sunset and night times"
+    },
+    {
+      "name": "show_islamic_events",
+      "value": "Show Islamic Events"
+    },
+    {
+      "name": "show_islamic_events_desc",
+      "value": "Upcoming Islamic events on home screen"
+    },
+    {
+      "name": "dark_mode",
+      "value": "Dark Mode"
+    },
+    {
+      "name": "dark_mode_desc",
+      "value": "Choose how the app looks"
+    },
+    {
+      "name": "theme_light",
+      "value": "Light"
+    },
+    {
+      "name": "theme_dark",
+      "value": "Dark"
+    },
+    {
+      "name": "theme_system",
+      "value": "Use System Settings"
+    },
+    {
+      "name": "tasbih_render_style",
+      "value": "Tasbih Theme"
+    },
+    {
+      "name": "tasbih_render_style_desc",
+      "value": "Choose the style of your prayer beads"
+    },
+    {
+      "name": "bead_style_premium",
+      "value": "Premium (3D)"
+    },
+    {
+      "name": "bead_style_classic",
+      "value": "Classic"
+    },
+    {
+      "name": "language",
+      "value": "Language"
+    },
+    {
+      "name": "language_desc",
+      "value": "Choose your preferred language"
+    },
+    {
+      "name": "lang_en",
+      "value": "English"
+    },
+    {
+      "name": "lang_zh",
+      "value": "中文 (Chinese)"
+    },
+    {
+      "name": "lang_ar",
+      "value": "العربية (Arabic)"
+    },
+    {
+      "name": "haptic_feedback",
+      "value": "Vibration"
+    },
+    {
+      "name": "haptic_feedback_desc",
+      "value": "Vibrate when counting Tasbih"
+    },
+    {
+      "name": "sound_feedback",
+      "value": "Sound"
+    },
+    {
+      "name": "sound_feedback_desc",
+      "value": "Play a click when counting Tasbih"
+    },
+    {
+      "name": "sound_style",
+      "value": "Sound Style"
+    },
+    {
+      "name": "sound_style_desc",
+      "value": "Choose the click sound"
+    },
+    {
+      "name": "controlled_by_system",
+      "value": "Controlled by system settings"
+    },
+    {
+      "name": "sound_glass_tap_name",
+      "value": "Glass Tap"
+    },
+    {
+      "name": "sound_glass_tap_desc",
+      "value": "Glass tap sound"
+    },
+    {
+      "name": "sound_light_chime_name",
+      "value": "Light Chime"
+    },
+    {
+      "name": "sound_light_chime_desc",
+      "value": "Light chime sound"
+    },
+    {
+      "name": "sound_muted_bead_name",
+      "value": "Muted Bead"
+    },
+    {
+      "name": "sound_muted_bead_desc",
+      "value": "Muted bead sound"
+    },
+    {
+      "name": "sound_soft_click_name",
+      "value": "Soft Click"
+    },
+    {
+      "name": "sound_soft_click_desc",
+      "value": "Soft click sound"
+    },
+    {
+      "name": "sound_warm_knock_name",
+      "value": "Warm Knock"
+    },
+    {
+      "name": "sound_warm_knock_desc",
+      "value": "Warm knock sound"
+    },
+    {
+      "name": "title_tasbih",
+      "value": "Tasbih"
+    },
+    {
+      "name": "my_tasbihs",
+      "value": "My Tasbihs"
+    },
+    {
+      "name": "select_dhikr",
+      "value": "Select Dhikr"
+    },
+    {
+      "name": "new_tasbih",
+      "value": "New Tasbih"
+    },
+    {
+      "name": "edit_tasbih",
+      "value": "Edit Tasbih"
+    },
+    {
+      "name": "new_dhikr",
+      "value": "New Dhikr"
+    },
+    {
+      "name": "edit_dhikr",
+      "value": "Edit Dhikr"
+    },
+    {
+      "name": "tasbih_name",
+      "value": "Name"
+    },
+    {
+      "name": "tasbih_name_placeholder",
+      "value": "e.g. Evening Adhkar"
+    },
+    {
+      "name": "dhikr_arabic",
+      "value": "Arabic"
+    },
+    {
+      "name": "dhikr_transliteration",
+      "value": "Transliteration (optional)"
+    },
+    {
+      "name": "dhikr_transliteration_placeholder",
+      "value": "e.g. SubhanAllah"
+    },
+    {
+      "name": "dhikr_translation",
+      "value": "Translation (optional)"
+    },
+    {
+      "name": "dhikr_translation_placeholder",
+      "value": "e.g. Glory be to Allah"
+    },
+    {
+      "name": "target_count",
+      "value": "Target count"
+    },
+    {
+      "name": "flick_up_to_count",
+      "value": "flick up to count"
+    },
+    {
+      "name": "flick_hint",
+      "value": "Flick up: +1     ·     Flick down: −1"
+    },
+    {
+      "name": "total_on_tasbih",
+      "value": "total on this tasbih"
+    },
+    {
+      "name": "dhikr_count_singular",
+      "value": "dhikr"
+    },
+    {
+      "name": "dhikr_count_plural",
+      "value": "dhikrs"
+    },
+    {
+      "name": "new_tasbih_button",
+      "value": "+ New Tasbih"
+    },
+    {
+      "name": "add_dhikr_button",
+      "value": "+ Add Dhikr"
+    },
+    {
+      "name": "all_dhikrs_complete",
+      "value": "All dhikrs complete"
+    },
+    {
+      "name": "counter_reset_toast",
+      "value": "Counter reset"
+    },
+    {
+      "name": "no_dhikr_title",
+      "value": "No Dhikr in this Tasbih"
+    },
+    {
+      "name": "no_dhikr_hint",
+      "value": "Tap the dhikr pill at top to add one"
+    },
+    {
+      "name": "switch_dhikr",
+      "value": "Switch dhikr"
+    },
+    {
+      "name": "reset_counter",
+      "value": "Reset counter"
+    },
+    {
+      "name": "delete_dhikr",
+      "value": "Delete dhikr"
+    },
+    {
+      "name": "add_new_dhikr",
+      "value": "Add new dhikr"
+    },
+    {
+      "name": "reset_all",
+      "value": "Reset All"
+    },
+    {
+      "name": "reset_all_confirm_title",
+      "value": "Reset Tasbih"
+    },
+    {
+      "name": "reset_all_confirm_message",
+      "value": "Reset all dhikr counts in this Tasbih?"
+    },
+    {
+      "name": "reset_all_done",
+      "value": "Tasbih reset"
+    },
+    {
+      "name": "title_qibla",
+      "value": "Qibla Compass"
+    },
+    {
+      "name": "qibla_direction",
+      "value": "Qibla Direction"
+    },
+    {
+      "name": "device_heading",
+      "value": "Device Heading"
+    },
+    {
+      "name": "distance_to_kaaba",
+      "value": "Distance to Kaaba"
+    },
+    {
+      "name": "compass_ready",
+      "value": "Compass is ready. Rotate your device to align with the 🕋 marker."
+    },
+    {
+      "name": "keep_device_flat",
+      "value": "Keep your device flat for accurate readings."
+    },
+    {
+      "name": "sensor_unavailable",
+      "value": "Compass sensor not available. Please test on a real device."
+    },
+    {
+      "name": "location_unavailable",
+      "value": "Location unavailable"
+    },
+    {
+      "name": "qibla_calibrate_title",
+      "value": "Calibrate Compass"
+    },
+    {
+      "name": "qibla_calibrate_desc",
+      "value": "Move your phone in a figure-8 pattern to improve compass accuracy."
+    },
+    {
+      "name": "qibla_calibrate_skip",
+      "value": "Skip for now"
+    },
+    {
+      "name": "qibla_calibrate_hint",
+      "value": "Calibration improves accuracy"
+    },
+    {
+      "name": "title_hijri_calendar",
+      "value": "Hijri Calendar"
+    },
+    {
+      "name": "important_dates",
+      "value": "IMPORTANT DATES"
+    },
+    {
+      "name": "no_events_this_month",
+      "value": "No major Islamic events this month"
+    },
+    {
+      "name": "status_next",
+      "value": "NEXT"
+    },
+    {
+      "name": "status_pray",
+      "value": "Pray"
+    },
+    {
+      "name": "status_both",
+      "value": "Pray  ·  NEXT"
+    },
+    {
+      "name": "status_prayed",
+      "value": "✓ Prayed"
+    },
+    {
+      "name": "status_express",
+      "value": "Express"
+    },
+    {
+      "name": "prayer_fajr",
+      "value": "Fajr"
+    },
+    {
+      "name": "prayer_dhuhr",
+      "value": "Dhuhr"
+    },
+    {
+      "name": "prayer_asr",
+      "value": "Asr"
+    },
+    {
+      "name": "prayer_maghrib",
+      "value": "Maghrib"
+    },
+    {
+      "name": "prayer_isha",
+      "value": "Isha"
+    },
+    {
+      "name": "prayer_jummah",
+      "value": "Jummah"
+    },
+    {
+      "name": "timing_imsak",
+      "value": "Imsak"
+    },
+    {
+      "name": "timing_sunrise",
+      "value": "Sunrise"
+    },
+    {
+      "name": "timing_sunset",
+      "value": "Sunset"
+    },
+    {
+      "name": "timing_first_third",
+      "value": "First Third"
+    },
+    {
+      "name": "timing_midnight",
+      "value": "Midnight"
+    },
+    {
+      "name": "timing_last_third",
+      "value": "Last Third"
+    },
+    {
+      "name": "event_new_year",
+      "value": "Islamic New Year"
+    },
+    {
+      "name": "event_ashura",
+      "value": "Day of Ashura"
+    },
+    {
+      "name": "event_mawlid",
+      "value": "Mawlid al-Nabi"
+    },
+    {
+      "name": "event_isra_miraj",
+      "value": "Isra and Mi'raj"
+    },
+    {
+      "name": "event_mid_shaban",
+      "value": "Mid-Sha'ban"
+    },
+    {
+      "name": "event_ramadan_start",
+      "value": "Ramadan"
+    },
+    {
+      "name": "event_eid_fitr",
+      "value": "Eid al-Fitr"
+    },
+    {
+      "name": "event_arafah",
+      "value": "Day of Arafah"
+    },
+    {
+      "name": "event_eid_adha",
+      "value": "Eid al-Adha"
+    },
+    {
+      "name": "method_karachi",
+      "value": "University of Islamic Sciences, Karachi"
+    },
+    {
+      "name": "method_jafari",
+      "value": "Shia Ithna Ashari (Leva Institute, Qum)"
+    },
+    {
+      "name": "method_isna",
+      "value": "Islamic Society of North America"
+    },
+    {
+      "name": "method_mwl",
+      "value": "Muslim World League"
+    },
+    {
+      "name": "method_umm_al_qura",
+      "value": "Umm al-Qura (Makkah)"
+    },
+    {
+      "name": "method_egyptian",
+      "value": "Egyptian Survey"
+    },
+    {
+      "name": "method_sunni_iraq",
+      "value": "Sunni Endowment (Iraq)"
+    },
+    {
+      "name": "method_qatar",
+      "value": "Qatar Awqaf"
+    },
+    {
+      "name": "method_singapore",
+      "value": "Singapore (MUIS)"
+    },
+    {
+      "name": "method_france",
+      "value": "France (UOIF)"
+    },
+    {
+      "name": "method_turkey",
+      "value": "Turkey (Diyanet)"
+    },
+    {
+      "name": "method_russia",
+      "value": "Russia (SAMR)"
+    },
+    {
+      "name": "method_uae",
+      "value": "UAE (GIAE)"
+    },
+    {
+      "name": "method_moonsighting",
+      "value": "Moonsighting Committee Worldwide"
+    },
+    {
+      "name": "method_dubai",
+      "value": "The Gulf Region (Dubai)"
+    },
+    {
+      "name": "method_kuwait",
+      "value": "Kuwait"
+    },
+    {
+      "name": "method_france_15",
+      "value": "France angle 15"
+    },
+    {
+      "name": "method_france_18",
+      "value": "France angle 18"
+    },
+    {
+      "name": "method_turkey_europe",
+      "value": "Diyanet İşleri Başkanlığı, Europe"
+    },
+    {
+      "name": "method_tehran",
+      "value": "Shia, Institute of Geophysics, University of Tehran, Iran"
+    },
+    {
+      "name": "method_indonesia",
+      "value": "Kementrian Agama Republik Indonesia (KEMENAG)"
+    },
+    {
+      "name": "method_algeria",
+      "value": "Ministry of Religious Affairs and Wakfs, Algeria"
+    },
+    {
+      "name": "method_brunei",
+      "value": "Kementrian Hal Ehwal Ugama (Brunei Darussalam)"
+    },
+    {
+      "name": "method_custom",
+      "value": "Custom"
+    },
+    {
+      "name": "method_short_karachi",
+      "value": "Karachi"
+    },
+    {
+      "name": "method_short_jafari",
+      "value": "Jafari"
+    },
+    {
+      "name": "method_short_isna",
+      "value": "ISNA"
+    },
+    {
+      "name": "method_short_mwl",
+      "value": "MWL"
+    },
+    {
+      "name": "method_short_umm_al_qura",
+      "value": "Makkah"
+    },
+    {
+      "name": "method_short_egyptian",
+      "value": "Egyptian"
+    },
+    {
+      "name": "method_short_sunni_iraq",
+      "value": "Iraq"
+    },
+    {
+      "name": "method_short_qatar",
+      "value": "Qatar"
+    },
+    {
+      "name": "method_short_singapore",
+      "value": "Singapore"
+    },
+    {
+      "name": "method_short_france",
+      "value": "France"
+    },
+    {
+      "name": "method_short_turkey",
+      "value": "Turkey"
+    },
+    {
+      "name": "method_short_russia",
+      "value": "Russia"
+    },
+    {
+      "name": "method_short_uae",
+      "value": "UAE"
+    },
+    {
+      "name": "method_short_moonsighting",
+      "value": "Moonsighting"
+    },
+    {
+      "name": "method_short_dubai",
+      "value": "Dubai"
+    },
+    {
+      "name": "method_short_kuwait",
+      "value": "Kuwait"
+    },
+    {
+      "name": "method_short_france_15",
+      "value": "France 15°"
+    },
+    {
+      "name": "method_short_france_18",
+      "value": "France 18°"
+    },
+    {
+      "name": "method_short_turkey_europe",
+      "value": "Turkey EU"
+    },
+    {
+      "name": "method_short_tehran",
+      "value": "Tehran"
+    },
+    {
+      "name": "method_short_indonesia",
+      "value": "KEMENAG"
+    },
+    {
+      "name": "method_short_algeria",
+      "value": "Algeria"
+    },
+    {
+      "name": "method_short_brunei",
+      "value": "Brunei"
+    },
+    {
+      "name": "method_short_custom",
+      "value": "Custom"
+    },
+    {
+      "name": "asr_standard",
+      "value": "Standard (Shafi'i / Maliki / Hanbali)"
+    },
+    {
+      "name": "asr_hanafi",
+      "value": "Hanafi"
+    },
+    {
+      "name": "asr_short_standard",
+      "value": "Standard"
+    },
+    {
+      "name": "asr_short_hanafi",
+      "value": "Hanafi"
+    },
+    {
+      "name": "source_local",
+      "value": "Local Formula (Offline)"
+    },
+    {
+      "name": "source_api",
+      "value": "API (Online)"
+    },
+    {
+      "name": "source_short_local",
+      "value": "Local"
+    },
+    {
+      "name": "source_short_online",
+      "value": "Online"
+    },
+    {
+      "name": "theme_preset",
+      "value": "App Theme"
+    },
+    {
+      "name": "theme_preset_desc",
+      "value": "Choose the visual style of the app"
+    },
+    {
+      "name": "theme_preset_sirat",
+      "value": "Sirat"
+    },
+    {
+      "name": "theme_preset_sirat_desc",
+      "value": "Modern and minimal — a HarmonyOS 7 aesthetic"
+    },
+    {
+      "name": "theme_preset_current",
+      "value": "Sirat Classic"
+    },
+    {
+      "name": "theme_preset_current_desc",
+      "value": "Warm cream and deep green — the original"
+    },
+    {
+      "name": "theme_preset_harmony7",
+      "value": "Noor"
+    },
+    {
+      "name": "theme_preset_harmony7_desc",
+      "value": "Radiant violet — serene and modern"
+    },
+    {
+      "name": "theme_preset_harmony6",
+      "value": "Sahar"
+    },
+    {
+      "name": "theme_preset_harmony6_desc",
+      "value": "Golden amber — the calm of first light"
+    },
+    {
+      "name": "theme_preset_harmony5",
+      "value": "Bahar"
+    },
+    {
+      "name": "theme_preset_harmony5_desc",
+      "value": "Cool teal — vast, fresh, and clear"
+    },
+    {
+      "name": "theme_amber",
+      "value": "Amber"
+    },
+    {
+      "name": "theme_charcoal",
+      "value": "Charcoal"
+    },
+    {
+      "name": "theme_emerald",
+      "value": "Emerald"
+    },
+    {
+      "name": "theme_pearl",
+      "value": "Pearl"
+    },
+    {
+      "name": "theme_gold",
+      "value": "Gold (Metallic)"
+    },
+    {
+      "name": "theme_white",
+      "value": "White"
+    },
+    {
+      "name": "theme_sapphire",
+      "value": "Sapphire"
+    },
+    {
+      "name": "theme_rose",
+      "value": "Rose"
+    },
+    {
+      "name": "theme_silver",
+      "value": "Silver"
+    },
+    {
+      "name": "wizard_step",
+      "value": "Step"
+    },
+    {
+      "name": "wizard_welcome_title",
+      "value": "Welcome to Sirat Companion"
+    },
+    {
+      "name": "wizard_welcome_desc",
+      "value": "Let us set up your preferences. You can change them anytime in Settings."
+    },
+    {
+      "name": "wizard_language_title",
+      "value": "Choose your language"
+    },
+    {
+      "name": "wizard_language_desc",
+      "value": "The app will use this language across all screens"
+    },
+    {
+      "name": "wizard_privacy_title",
+      "value": "Privacy Policy"
+    },
+    {
+      "name": "wizard_privacy_desc",
+      "value": "Please read and accept before continuing"
+    },
+    {
+      "name": "privacy_agree_label",
+      "value": "I have read and agree to the Privacy Policy"
+    },
+    {
+      "name": "privacy_view_full",
+      "value": "View the full privacy policy online"
+    },
+    {
+      "name": "wizard_theme_title",
+      "value": "Choose your theme"
+    },
+    {
+      "name": "wizard_theme_desc",
+      "value": "Pick a visual style. You can change this anytime in Settings."
+    },
+    {
+      "name": "wizard_location_title",
+      "value": "Set your location"
+    },
+    {
+      "name": "wizard_location_desc",
+      "value": "Used for prayer times and Qibla direction"
+    },
+    {
+      "name": "wizard_convention_title",
+      "value": "Calculation preferences"
+    },
+    {
+      "name": "wizard_convention_desc",
+      "value": "Choose how prayer times should be calculated"
+    },
+    {
+      "name": "wizard_grant_permission",
+      "value": "Grant Location Permission"
+    },
+    {
+      "name": "wizard_getting_location",
+      "value": "Detecting your location..."
+    },
+    {
+      "name": "wizard_location_ready",
+      "value": "Location detected"
+    },
+    {
+      "name": "wizard_location_failed",
+      "value": "Could not get location"
+    },
+    {
+      "name": "wizard_retry",
+      "value": "Retry"
+    },
+    {
+      "name": "wizard_next",
+      "value": "Next"
+    },
+    {
+      "name": "wizard_finish",
+      "value": "Get Started"
+    },
+    {
+      "name": "home_today_progress",
+      "value": "DAILY PRAYERS"
+    },
+    {
+      "name": "home_prayers_completed",
+      "value": "prayers completed"
+    },
+    {
+      "name": "home_keep_going",
+      "value": "Keep it up!"
+    },
+    {
+      "name": "home_streak",
+      "value": "Day Streak"
+    },
+    {
+      "name": "home_best_streak",
+      "value": "Best"
+    },
+    {
+      "name": "home_days",
+      "value": "days"
+    },
+    {
+      "name": "home_this_week",
+      "value": "THIS WEEK"
+    },
+    {
+      "name": "home_week_summary",
+      "value": "prayers this week"
+    },
+    {
+      "name": "home_this_month",
+      "value": "THIS MONTH"
+    },
+    {
+      "name": "home_month_summary",
+      "value": "prayers this month"
+    },
+    {
+      "name": "home_tasbih",
+      "value": "DAILY TASBIH"
+    },
+    {
+      "name": "home_tasbih_lifetime",
+      "value": "Lifetime count"
+    },
+    {
+      "name": "home_tasbih_summary",
+      "value": "tasbihs"
+    },
+    {
+      "name": "home_dhikrs",
+      "value": "dhikrs"
+    },
+    {
+      "name": "home_monthly_view",
+      "value": "MONTHLY VIEW"
+    },
+    {
+      "name": "home_perfect_days",
+      "value": "Perfect days"
+    },
+    {
+      "name": "home_days_elapsed",
+      "value": "Days elapsed"
+    },
+    {
+      "name": "home_lifetime_1y",
+      "value": "prayers in the last year"
+    },
+    {
+      "name": "home_next_event",
+      "value": "NEXT EVENT"
+    },
+    {
+      "name": "home_event_today",
+      "value": "Today!"
+    },
+    {
+      "name": "home_event_tomorrow",
+      "value": "Tomorrow"
+    },
+    {
+      "name": "ramadan_card_title",
+      "value": "RAMADAN"
+    },
+    {
+      "name": "ramadan_day_of",
+      "value": "Day"
+    },
+    {
+      "name": "ramadan_day_of_suffix",
+      "value": "of Ramadan"
+    },
+    {
+      "name": "ramadan_days_until",
+      "value": "Ramadan starts in"
+    },
+    {
+      "name": "ramadan_fast_start",
+      "value": "Fasting Start (Imsak)"
+    },
+    {
+      "name": "ramadan_fast_end",
+      "value": "Fasting End (Maghrib)"
+    },
+    {
+      "name": "ramadan_today_fast",
+      "value": "Today's fasting window"
+    },
+    {
+      "name": "ramadan_first_day_fast",
+      "value": "First day of Ramadan"
+    },
+    {
+      "name": "ramadan_calendar_start",
+      "value": "Ramadan Begins"
+    },
+    {
+      "name": "ramadan_calendar_end",
+      "value": "Ramadan Ends"
+    },
+    {
+      "name": "ramadan_ashras",
+      "value": "ASHRAS"
+    },
+    {
+      "name": "ramadan_first_ashra",
+      "value": "First Ashra"
+    },
+    {
+      "name": "ramadan_second_ashra",
+      "value": "Second Ashra"
+    },
+    {
+      "name": "ramadan_third_ashra",
+      "value": "Third Ashra"
+    },
+    {
+      "name": "ramadan_first_ashra_significance",
+      "value": "Days of Mercy"
+    },
+    {
+      "name": "ramadan_second_ashra_significance",
+      "value": "Days of Forgiveness"
+    },
+    {
+      "name": "ramadan_third_ashra_significance",
+      "value": "Freedom from Hellfire"
+    },
+    {
+      "name": "ramadan_laylat_al_qadr",
+      "value": "LAYLAT AL-QADR"
+    },
+    {
+      "name": "ramadan_laylat_al_qadr_desc",
+      "value": "The Night of Power — better than a thousand months. Seek it on the odd nights of the last ten days."
+    },
+    {
+      "name": "ramadan_jummah_tul_widah",
+      "value": "JUMMAH TUL WIDAH"
+    },
+    {
+      "name": "ramadan_jummah_tul_widah_desc",
+      "value": "The Farewell Friday — the last Friday of Ramadan."
+    },
+    {
+      "name": "ramadan_today",
+      "value": "Tonight!"
+    },
+    {
+      "name": "countdown_fast_ends",
+      "value": "Breaking fast in"
+    },
+    {
+      "name": "countdown_fast_starts",
+      "value": "Fasting begins in"
+    },
+    {
+      "name": "countdown_fast_ends_desc",
+      "value": "Prepare to break your fast"
+    },
+    {
+      "name": "countdown_fast_starts_desc",
+      "value": "Finish suhoor before Imsak"
+    },
+    {
+      "name": "dua_iftar_name",
+      "value": "Dua for Breaking the Fast"
+    },
+    {
+      "name": "dua_iftar_translation",
+      "value": "The thirst is gone, the veins are moistened, and the reward is certain, if Allah wills."
+    },
+    {
+      "name": "dua_suhoor_name",
+      "value": "Intention for Fasting"
+    },
+    {
+      "name": "dua_suhoor_translation",
+      "value": "I intend to keep the fast for tomorrow in the month of Ramadan."
+    },
+    {
+      "name": "sun_path_we_are_here",
+      "value": "We are here"
+    },
+    {
+      "name": "mark_all",
+      "value": "Mark all as prayed"
+    },
+    {
+      "name": "default_location",
+      "value": "Default Location"
+    },
+    {
+      "name": "unknown_location",
+      "value": "Unknown location"
+    },
+    {
+      "name": "dialog_gps_off_title",
+      "value": "Location is disabled"
+    },
+    {
+      "name": "dialog_gps_off_message",
+      "value": "Please enable location services to get accurate prayer times for your city."
+    },
+    {
+      "name": "dialog_permission_title",
+      "value": "Permission required"
+    },
+    {
+      "name": "dialog_permission_message",
+      "value": "Location permission is required to show prayer times for your city.\nPlease grant it in system settings."
+    },
+    {
+      "name": "error_gps_fetch_failed",
+      "value": "Failed to fetch GPS location"
+    },
+    {
+      "name": "error_gps_off",
+      "value": "Please turn on location services"
+    },
+    {
+      "name": "error_location_permission_denied",
+      "value": "Location permission denied"
+    },
+    {
+      "name": "time_format",
+      "value": "Time Format"
+    },
+    {
+      "name": "time_format_desc",
+      "value": "How prayer times are displayed"
+    },
+    {
+      "name": "time_format_system",
+      "value": "Use System Settings"
+    },
+    {
+      "name": "time_format_system_desc",
+      "value": "Follow the device preference"
+    },
+    {
+      "name": "time_format_12h",
+      "value": "12-hour (AM/PM)"
+    },
+    {
+      "name": "time_format_24h",
+      "value": "24-hour"
+    },
+    {
+      "name": "hijri_calendar_type",
+      "value": "Calendar Type"
+    },
+    {
+      "name": "hijri_calendar_type_desc",
+      "value": "Which Hijri calendar to use for conversion"
+    },
+    {
+      "name": "hijri_calendar_umm_al_qura",
+      "value": "Umm al-Qura"
+    },
+    {
+      "name": "hijri_calendar_umm_al_qura_desc",
+      "value": "Official calendar of Saudi Arabia (1318–1500 AH)"
+    },
+    {
+      "name": "hijri_calendar_tabular",
+      "value": "Tabular (Arithmetical)"
+    },
+    {
+      "name": "hijri_calendar_tabular_desc",
+      "value": "Kuwaiti algorithm — deterministic for all years"
+    },
+    {
+      "name": "subsection_home_ui",
+      "value": "Home Page UI"
+    },
+    {
+      "name": "subsection_prayer_ui",
+      "value": "Prayer UI"
+    },
+    {
+      "name": "subsection_feedback",
+      "value": "Sound & Feedback"
+    },
+    {
+      "name": "subsection_language",
+      "value": "Language"
+    },
+    {
+      "name": "event_raghaib",
+      "value": "Laylat al-Raghaib"
+    },
+    {
+      "name": "countdown_fast_ends_now",
+      "value": "Its time to break your fast"
+    },
+    {
+      "name": "countdown_fast_starts_now",
+      "value": "Its time to begin fasting"
+    },
+    {
+      "name": "shafaq_method_unavailable",
+      "value": "Available only with Moonsighting Committee"
+    },
+    {
+      "name": "event_perspective",
+      "value": "Event Tradition"
+    },
+    {
+      "name": "event_perspective_desc",
+      "value": "Choose whether Home shows events shared by all Muslims, or also those particular to the Sunni and Shia traditions."
+    },
+    {
+      "name": "event_perspective_universal",
+      "value": "Universal only"
+    },
+    {
+      "name": "event_perspective_sunni",
+      "value": "Sunni + universal"
+    },
+    {
+      "name": "event_perspective_shia",
+      "value": "Shia + universal"
+    },
+    {
+      "name": "event_perspective_all",
+      "value": "Show all"
+    },
+    {
+      "name": "event_arbaeen",
+      "value": "Arbaeen"
+    },
+    {
+      "name": "event_imam_ali_birthday",
+      "value": "Birthday of Imam Ali"
+    },
+    {
+      "name": "event_ghadir",
+      "value": "Eid al-Ghadir"
+    },
+    {
+      "name": "event_new_year_desc",
+      "value": "The start of the Hijri year, marking the Prophet\u2019s migration to Madinah."
+    },
+    {
+      "name": "event_ashura_desc",
+      "value": "A day of fasting and reflection observed across the Muslim world."
+    },
+    {
+      "name": "event_arbaeen_desc",
+      "value": "Marks forty days after Ashura — a period of mourning in the Shia tradition."
+    },
+    {
+      "name": "event_mawlid_desc",
+      "value": "The birth of the Prophet Muhammad \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645."
+    },
+    {
+      "name": "event_raghaib_desc",
+      "value": "The first Thursday night of Rajab — a night of prayer in the Sunni tradition."
+    },
+    {
+      "name": "event_imam_ali_birthday_desc",
+      "value": "The birth of Imam Ali ibn Abi Talib, observed in the Shia tradition."
+    },
+    {
+      "name": "event_isra_miraj_desc",
+      "value": "The Prophet\u2019s night journey to Jerusalem and ascension to the heavens."
+    },
+    {
+      "name": "event_mid_shaban_desc",
+      "value": "The fifteenth night of Sha\u2019ban — a night of prayer and seeking forgiveness."
+    },
+    {
+      "name": "event_ramadan_start_desc",
+      "value": "The beginning of the month of fasting, the ninth month of the Hijri year."
+    },
+    {
+      "name": "event_eid_fitr_desc",
+      "value": "The festival marking the end of Ramadan."
+    },
+    {
+      "name": "event_arafah_desc",
+      "value": "The day of standing at Arafah, the most sacred day of the Hajj pilgrimage."
+    },
+    {
+      "name": "event_eid_adha_desc",
+      "value": "The festival of sacrifice, commemorating Prophet Ibrahim\u2019s devotion."
+    },
+    {
+      "name": "event_ghadir_desc",
+      "value": "Marks the day the Prophet appointed Imam Ali as his successor, in the Shia tradition."
+    },
+    {
+      "name": "show_extra_timings_list",
+      "value": "Show Night Times"
+    },
+    {
+      "name": "show_extra_timings_list_desc",
+      "value": "Imsak and the night divisions. Sunrise and Sunset are always shown."
+    },
+    {
+      "name": "show_extra_timings_sunpath",
+      "value": "Show Sun Path Guides"
+    },
+    {
+      "name": "show_extra_timings_sunpath_desc",
+      "value": "First Third, Midnight and Last Third guides on the sun path"
+    },
+    {
+      "name": "show_imsak",
+      "value": "Imsak"
+    },
+    {
+      "name": "show_imsak_desc",
+      "value": "Pre-dawn cutoff, ten minutes before Fajr"
+    },
+    {
+      "name": "show_first_third",
+      "value": "First Third"
+    },
+    {
+      "name": "show_first_third_desc",
+      "value": "Start of the night\u2019s first third, after Maghrib"
+    },
+    {
+      "name": "show_midnight",
+      "value": "Midnight"
+    },
+    {
+      "name": "show_midnight_desc",
+      "value": "Islamic midnight \u2014 halfway through the night"
+    },
+    {
+      "name": "show_last_third",
+      "value": "Last Third"
+    },
+    {
+      "name": "show_last_third_desc",
+      "value": "Start of the night\u2019s last third, a time for Qiyam"
+    },
+    {
+      "name": "subsection_prayer_list",
+      "value": "SHOW IN PRAYER LIST"
+    },
+    {
+      "name": "subsection_sun_path",
+      "value": "SHOW ON SUN PATH"
+    },
+    {
+      "name": "title_prayer_details",
+      "value": "Prayer Details"
+    },
+    {
+      "name": "title_tasbih_details",
+      "value": "Tasbih Details"
+    },
+    {
+      "name": "details_view",
+      "value": "View Details"
+    },
+    {
+      "name": "details_period_week",
+      "value": "Week"
+    },
+    {
+      "name": "details_period_month",
+      "value": "Month"
+    },
+    {
+      "name": "details_period_year",
+      "value": "Year"
+    },
+    {
+      "name": "details_prayers_completed",
+      "value": "prayers completed"
+    },
+    {
+      "name": "details_per_prayer",
+      "value": "PER-PRAYER BREAKDOWN"
+    },
+    {
+      "name": "details_per_tasbih",
+      "value": "PER-TASBIH BREAKDOWN"
+    },
+    {
+      "name": "details_this_month",
+      "value": "THIS MONTH"
+    },
+    {
+      "name": "details_perfect_days",
+      "value": "Perfect days"
+    },
+    {
+      "name": "details_best_streak",
+      "value": "Best"
+    },
+    {
+      "name": "details_days_of",
+      "value": "of"
+    },
+    {
+      "name": "details_tasbih_summary_lifetime",
+      "value": "Lifetime counts"
+    },
+    {
+      "name": "details_tasbih_summary_tasbihs",
+      "value": "Tasbihs"
+    },
+    {
+      "name": "details_tasbih_summary_dhikrs",
+      "value": "Dhikrs complete"
     }
   ]
 }

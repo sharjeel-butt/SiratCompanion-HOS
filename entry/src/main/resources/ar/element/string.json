@@ -1,0 +1,2000 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "وحدة دخول رفيق الصراط"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "رفيقك الإسلامي اليومي"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "رفيق الصراط"
+    },
+    {
+      "name": "location_permission_reason",
+      "value": "يُستخدم لحساب أوقات الصلاة واتجاه القبلة لموقعك"
+    },
+    {
+      "name": "sensor_permission_reason",
+      "value": "يُستخدم لبوصلة القبلة"
+    },
+    {
+      "name": "notification_permission_reason",
+      "value": "لإرسال تذكيرات أوقات الصلاة إليك"
+    },
+    {
+      "name": "calendar_permission_reason",
+      "value": "يُستخدم لإضافة تذكيرات أوقات الصلاة إلى تقويمك"
+    },
+    {
+      "name": "app_name",
+      "value": "رفيق الصراط"
+    },
+    {
+      "name": "app_tagline",
+      "value": "رفيقك الإسلامي اليومي"
+    },
+    {
+      "name": "more_languages_coming",
+      "value": "المزيد من اللغات قريباً"
+    },
+    {
+      "name": "tab_home",
+      "value": "الرئيسية"
+    },
+    {
+      "name": "tab_prayers",
+      "value": "الصلاة"
+    },
+    {
+      "name": "tab_calendar",
+      "value": "التقويم الهجري"
+    },
+    {
+      "name": "tab_compass",
+      "value": "بوصلة القبلة"
+    },
+    {
+      "name": "tab_tasbih",
+      "value": "التسبيح"
+    },
+    {
+      "name": "current_prayer",
+      "value": "الحالي"
+    },
+    {
+      "name": "next_prayer",
+      "value": "التالي"
+    },
+    {
+      "name": "todays_prayers",
+      "value": "صلوات اليوم"
+    },
+    {
+      "name": "extra_timings",
+      "value": "الأوقات الإضافية"
+    },
+    {
+      "name": "upcoming_islamic_events",
+      "value": "المناسبات الإسلامية القادمة"
+    },
+    {
+      "name": "loading_location",
+      "value": "جارٍ التحميل..."
+    },
+    {
+      "name": "set_manual_location",
+      "value": "حدّد الموقع يدوياً من الإعدادات"
+    },
+    {
+      "name": "online_prayer_times",
+      "value": "أوقات الصلاة عبر الإنترنت"
+    },
+    {
+      "name": "coming_soon",
+      "value": "قريباً"
+    },
+    {
+      "name": "online_switch_hint",
+      "value": "عُد إلى الحساب المحلي من الإعدادات لعرض أوقات الصلاة لموقعك."
+    },
+    {
+      "name": "cancel",
+      "value": "إلغاء"
+    },
+    {
+      "name": "save",
+      "value": "حفظ"
+    },
+    {
+      "name": "reset",
+      "value": "إعادة تعيين"
+    },
+    {
+      "name": "delete",
+      "value": "حذف"
+    },
+    {
+      "name": "edit",
+      "value": "تعديل"
+    },
+    {
+      "name": "add",
+      "value": "إضافة"
+    },
+    {
+      "name": "back",
+      "value": "رجوع"
+    },
+    {
+      "name": "today",
+      "value": "اليوم"
+    },
+    {
+      "name": "exit",
+      "value": "خروج"
+    },
+    {
+      "name": "ok",
+      "value": "موافق"
+    },
+    {
+      "name": "exit_confirm_message",
+      "value": "هل أنت متأكد من الخروج من رفيق الصراط؟"
+    },
+    {
+      "name": "title_settings",
+      "value": "الإعدادات"
+    },
+    {
+      "name": "title_customize",
+      "value": "التخصيص"
+    },
+    {
+      "name": "category_location",
+      "value": "الموقع"
+    },
+    {
+      "name": "category_prayer_times",
+      "value": "أوقات الصلاة"
+    },
+    {
+      "name": "category_hijri_calendar",
+      "value": "التقويم الهجري"
+    },
+    {
+      "name": "category_ui_customization",
+      "value": "تخصيص الواجهة"
+    },
+    {
+      "name": "category_appearance",
+      "value": "المظهر"
+    },
+    {
+      "name": "category_about",
+      "value": "حول التطبيق"
+    },
+    {
+      "name": "category_notifications",
+      "value": "الإشعارات"
+    },
+    {
+      "name": "brand_primary",
+      "value": "رفيق"
+    },
+    {
+      "name": "brand_accent",
+      "value": "الصراط"
+    },
+    {
+      "name": "convention",
+      "value": "طريقة الحساب"
+    },
+    {
+      "name": "convention_desc",
+      "value": "تُستخدم لحساب الفجر والعشاء"
+    },
+    {
+      "name": "madhab",
+      "value": "المذهب"
+    },
+    {
+      "name": "madhab_desc",
+      "value": "قاعدة ظل العصر المستخدمة في الحساب"
+    },
+    {
+      "name": "source",
+      "value": "المصدر"
+    },
+    {
+      "name": "source_desc",
+      "value": "الحساب المحلي أو عبر الإنترنت"
+    },
+    {
+      "name": "prayer_offsets",
+      "value": "تعديلات الصلاة"
+    },
+    {
+      "name": "prayer_offsets_desc",
+      "value": "تعديل الأوقات المحسوبة يدوياً"
+    },
+    {
+      "name": "offsets_hint",
+      "value": "عدّل الأوقات بالدقائق (−60 إلى +60)"
+    },
+    {
+      "name": "reset_all_offsets",
+      "value": "إعادة تعيين جميع التعديلات"
+    },
+    {
+      "name": "high_latitude",
+      "value": "خطوط العرض العليا"
+    },
+    {
+      "name": "high_latitude_desc",
+      "value": "طريقة احتياطية للفجر والعشاء عندما لا تصل الشمس إلى الزاوية المطلوبة"
+    },
+    {
+      "name": "highlat_none",
+      "value": "بدون"
+    },
+    {
+      "name": "highlat_middle",
+      "value": "منتصف الليل"
+    },
+    {
+      "name": "highlat_one_seventh",
+      "value": "سُبع الليل"
+    },
+    {
+      "name": "highlat_angle",
+      "value": "حسب الزاوية"
+    },
+    {
+      "name": "highlat_proportional",
+      "value": "الانخفاض النسبي (تقدير ديانت)"
+    },
+    {
+      "name": "location",
+      "value": "الموقع"
+    },
+    {
+      "name": "location_desc",
+      "value": "اختر كيف يحدد التطبيق موقعك"
+    },
+    {
+      "name": "gps",
+      "value": "GPS"
+    },
+    {
+      "name": "manual_location",
+      "value": "موقع يدوي"
+    },
+    {
+      "name": "current_position",
+      "value": "الموقع الحالي"
+    },
+    {
+      "name": "latitude",
+      "value": "خط العرض"
+    },
+    {
+      "name": "longitude",
+      "value": "خط الطول"
+    },
+    {
+      "name": "city",
+      "value": "المدينة"
+    },
+    {
+      "name": "last_refreshed",
+      "value": "آخر تحديث"
+    },
+    {
+      "name": "save_coordinates",
+      "value": "حفظ الإحداثيات"
+    },
+    {
+      "name": "latitude_hint",
+      "value": "خط العرض  (−90 إلى 90)"
+    },
+    {
+      "name": "longitude_hint",
+      "value": "خط الطول  (−180 إلى 180)"
+    },
+    {
+      "name": "city_name_optional",
+      "value": "اسم المدينة (اختياري)"
+    },
+    {
+      "name": "city_name_placeholder",
+      "value": "اتركه فارغاً للكشف التلقائي"
+    },
+    {
+      "name": "hijri_offset",
+      "value": "إزاحة التاريخ والتقويم الهجري"
+    },
+    {
+      "name": "hijri_offset_desc",
+      "value": "أزح التاريخ والتقويم الإسلامي بمقدار ±3 أيام"
+    },
+    {
+      "name": "matching_standard",
+      "value": "مطابق للحساب القياسي"
+    },
+    {
+      "name": "offset_days_ahead",
+      "value": "يوم متقدم"
+    },
+    {
+      "name": "offset_days_behind",
+      "value": "يوم متأخر"
+    },
+    {
+      "name": "about_version",
+      "value": "الإصدار"
+    },
+    {
+      "name": "about_platform",
+      "value": "المنصة"
+    },
+    {
+      "name": "about_platform_value",
+      "value": "HarmonyOS 6+"
+    },
+    {
+      "name": "about_build",
+      "value": "رقم البناء"
+    },
+    {
+      "name": "about_bundle",
+      "value": "معرّف الحزمة"
+    },
+    {
+      "name": "about_copyright",
+      "value": "© 2026"
+    },
+    {
+      "name": "notifications_master",
+      "value": "تفعيل الإشعارات"
+    },
+    {
+      "name": "notifications_master_desc",
+      "value": "تذكيرات قبل وقت الصلاة وعنده"
+    },
+    {
+      "name": "notify_before",
+      "value": "التنبيه قبل"
+    },
+    {
+      "name": "notify_before_desc",
+      "value": "كم دقيقة قبل الصلاة لإرسال التنبيه الأول"
+    },
+    {
+      "name": "notify_prayers",
+      "value": "تذكيرات الصلاة"
+    },
+    {
+      "name": "notify_prayers_desc",
+      "value": "اختر الصلوات التي تُرسل تذكيرات"
+    },
+    {
+      "name": "notifications_footer",
+      "value": "التذكيرات مُجدولة للأيام الثلاثة القادمة وتتجدد في كل مرة تفتح فيها التطبيق"
+    },
+    {
+      "name": "notifications_footer_calendar",
+      "value": "تُضاف التذكيرات إلى تقويم النظام للأيام الثلاثة القادمة وتتجدد في كل مرة تفتح فيها التطبيق"
+    },
+    {
+      "name": "notification_permission_denied",
+      "value": "إذن الإشعارات مطلوب لتفعيل التذكيرات"
+    },
+    {
+      "name": "calendar_permission_denied",
+      "value": "إذن التقويم مطلوب لتفعيل التذكيرات"
+    },
+    {
+      "name": "notif_before_title",
+      "value": "تذكير بالصلاة"
+    },
+    {
+      "name": "notif_before_content",
+      "value": "بعد"
+    },
+    {
+      "name": "notif_exact_title",
+      "value": "وقت الصلاة"
+    },
+    {
+      "name": "notif_exact_content",
+      "value": "حان الآن وقت صلاة"
+    },
+    {
+      "name": "notif_minutes_suffix",
+      "value": "دقيقة"
+    },
+    {
+      "name": "notif_test_button",
+      "value": "إرسال إشعار تجريبي"
+    },
+    {
+      "name": "notif_test_sending",
+      "value": "جارٍ إرسال الإشعار التجريبي..."
+    },
+    {
+      "name": "notif_test_ok",
+      "value": "تم جدولة الإشعار التجريبي — سيظهر خلال 5 ثوانٍ"
+    },
+    {
+      "name": "notif_test_ok_calendar",
+      "value": "تمت إضافة حدث تجريبي إلى تقويمك — تحقق من تطبيق التقويم"
+    },
+    {
+      "name": "notif_test_failed",
+      "value": "فشل الإشعار التجريبي"
+    },
+    {
+      "name": "notif_dismiss",
+      "value": "إغلاق"
+    },
+    {
+      "name": "notif_pray_fajr",
+      "value": "صلِّ الفجر"
+    },
+    {
+      "name": "notif_pray_dhuhr",
+      "value": "صلِّ الظهر"
+    },
+    {
+      "name": "notif_pray_asr",
+      "value": "صلِّ العصر"
+    },
+    {
+      "name": "notif_pray_maghrib",
+      "value": "صلِّ المغرب"
+    },
+    {
+      "name": "notif_pray_isha",
+      "value": "صلِّ العشاء"
+    },
+    {
+      "name": "hadith_fajr",
+      "value": "مَنْ صَلَّى الصُّبْحَ فَهُوَ فِي ذِمَّةِ اللَّهِِ — صحيح مسلم ٦٥٧"
+    },
+    {
+      "name": "hadith_dhuhr",
+      "value": "إِنَّهَا سَاعَةٌ تُفْتَحُ فِيهَا أَبْوَابُ السَّمَاءِ فَأُحِبُّ أَنْ يَصْعَدَ لِي فِيهَا عَمَلٌ صَالِحٌ — جامع الترمذي ٤٧٨"
+    },
+    {
+      "name": "hadith_asr",
+      "value": "الَّذِي تَفُوتُهُ صَلاَةُ الْعَصْرِ كَأَنَّمَا وُتِرَ أَهْلَهُ وَمَالَهُ — صحيح البخاري ٥٥٢"
+    },
+    {
+      "name": "hadith_maghrib",
+      "value": "الصَّلَوَاتُ الْخَمْسُ وَالْجُمُعَةُ إِلَى الْجُمُعَةِ وَرَمَضَانُ إِلَى رَمَضَانَ مُكَفِّرَاتٌ مَا بَيْنَهُنَّ إِذَا اجْتَنَبَ الْكَبَائِرَ — صحيح مسلم ٢٣٣"
+    },
+    {
+      "name": "hadith_isha",
+      "value": "مَنْ صَلَّى الْعِشَاءَ فِي جَمَاعَةٍ فَكَأَنَّمَا قَامَ نِصْفَ اللَّيْلِ — صحيح مسلم ٦٥٦"
+    },
+    {
+      "name": "log_view_button",
+      "value": "سجلات التشخيص"
+    },
+    {
+      "name": "log_view_desc",
+      "value": "عرض أو نسخ أو مسح ملف سجل التطبيق"
+    },
+    {
+      "name": "log_view_title",
+      "value": "سجلات التشخيص"
+    },
+    {
+      "name": "log_copy",
+      "value": "نسخ"
+    },
+    {
+      "name": "log_clear",
+      "value": "مسح"
+    },
+    {
+      "name": "log_empty",
+      "value": "السجل فارغ."
+    },
+    {
+      "name": "log_copied",
+      "value": "تم نسخ السجل إلى الحافظة"
+    },
+    {
+      "name": "log_cleared",
+      "value": "تم مسح السجل"
+    },
+    {
+      "name": "advanced_calc_title",
+      "value": "الحساب المتقدم"
+    },
+    {
+      "name": "rounding_method",
+      "value": "طريقة التقريب"
+    },
+    {
+      "name": "rounding_method_desc",
+      "value": "يتحكم في كيفية تقريب الأوقات المعروضة"
+    },
+    {
+      "name": "midnight_method",
+      "value": "طريقة منتصف الليل"
+    },
+    {
+      "name": "midnight_method_desc",
+      "value": "أي حد ليلّي يحدد منتصف الليل الإسلامي"
+    },
+    {
+      "name": "polar_resolution",
+      "value": "حلّ المناطق القطبية"
+    },
+    {
+      "name": "polar_resolution_desc",
+      "value": "الاحتياطي عندما لا تصل الشمس إلى الزاوية المطلوبة"
+    },
+    {
+      "name": "shafaq",
+      "value": "الشفق"
+    },
+    {
+      "name": "shafaq_desc",
+      "value": "يُستخدم الشفق في طريقة لجنة رؤية الهلال لتحديد نوع الشفق الذي يحدد وقت العشاء."
+    },
+    {
+      "name": "custom_angles",
+      "value": "زوايا مخصصة"
+    },
+    {
+      "name": "custom_fajr_angle",
+      "value": "زاوية الفجر"
+    },
+    {
+      "name": "custom_isha_angle",
+      "value": "زاوية العشاء"
+    },
+    {
+      "name": "custom_isha_interval",
+      "value": "فاصل العشاء (دقيقة)"
+    },
+    {
+      "name": "custom_isha_interval_hint",
+      "value": "0 = استخدام الزاوية. >0 = دقائق بعد المغرب."
+    },
+    {
+      "name": "rounding_nearest",
+      "value": "الأقرب"
+    },
+    {
+      "name": "rounding_up",
+      "value": "للأعلى"
+    },
+    {
+      "name": "rounding_none",
+      "value": "بدون"
+    },
+    {
+      "name": "midnight_standard",
+      "value": "الغروب إلى الشروق"
+    },
+    {
+      "name": "midnight_standard_desc",
+      "value": "افتراضي"
+    },
+    {
+      "name": "midnight_jafari",
+      "value": "الغروب إلى الفجر"
+    },
+    {
+      "name": "polar_unresolved",
+      "value": "غير محلول"
+    },
+    {
+      "name": "polar_unresolved_desc",
+      "value": "افتراضي"
+    },
+    {
+      "name": "polar_aqrab_balad",
+      "value": "أقرب بلد"
+    },
+    {
+      "name": "polar_aqrab_yaum",
+      "value": "أقرب يوم"
+    },
+    {
+      "name": "shafaq_general",
+      "value": "عام"
+    },
+    {
+      "name": "shafaq_general_desc",
+      "value": "افتراضي"
+    },
+    {
+      "name": "shafaq_ahmer",
+      "value": "الأحمر"
+    },
+    {
+      "name": "shafaq_abyad",
+      "value": "الأبيض"
+    },
+    {
+      "name": "show_extra_timings",
+      "value": "إظهار الأوقات الإضافية"
+    },
+    {
+      "name": "show_extra_timings_desc",
+      "value": "الإمساك والشروق والغروب وأوقات الليل"
+    },
+    {
+      "name": "show_islamic_events",
+      "value": "إظهار المناسبات الإسلامية"
+    },
+    {
+      "name": "show_islamic_events_desc",
+      "value": "المناسبات الإسلامية القادمة في الشاشة الرئيسية"
+    },
+    {
+      "name": "dark_mode",
+      "value": "الوضع الداكن"
+    },
+    {
+      "name": "dark_mode_desc",
+      "value": "اختر مظهر التطبيق"
+    },
+    {
+      "name": "theme_light",
+      "value": "فاتح"
+    },
+    {
+      "name": "theme_dark",
+      "value": "داكن"
+    },
+    {
+      "name": "theme_system",
+      "value": "حسب إعدادات النظام"
+    },
+    {
+      "name": "tasbih_render_style",
+      "value": "نمط المسبحة"
+    },
+    {
+      "name": "tasbih_render_style_desc",
+      "value": "اختر نمط خرزات المسبحة"
+    },
+    {
+      "name": "bead_style_premium",
+      "value": "متميز (ثلاثي الأبعاد)"
+    },
+    {
+      "name": "bead_style_classic",
+      "value": "كلاسيكي"
+    },
+    {
+      "name": "language",
+      "value": "اللغة"
+    },
+    {
+      "name": "language_desc",
+      "value": "اختر لغتك المفضلة"
+    },
+    {
+      "name": "lang_en",
+      "value": "English (الإنجليزية)"
+    },
+    {
+      "name": "lang_zh",
+      "value": "中文 (الصينية)"
+    },
+    {
+      "name": "lang_ar",
+      "value": "العربية"
+    },
+    {
+      "name": "haptic_feedback",
+      "value": "الاهتزاز"
+    },
+    {
+      "name": "haptic_feedback_desc",
+      "value": "اهتزاز عند عدّ التسبيح"
+    },
+    {
+      "name": "sound_feedback",
+      "value": "الصوت"
+    },
+    {
+      "name": "sound_feedback_desc",
+      "value": "تشغيل نقرة عند عدّ التسبيح"
+    },
+    {
+      "name": "sound_style",
+      "value": "نمط الصوت"
+    },
+    {
+      "name": "sound_style_desc",
+      "value": "اختر صوت النقرة"
+    },
+    {
+      "name": "controlled_by_system",
+      "value": "يُتحكَّم به من إعدادات النظام"
+    },
+    {
+      "name": "sound_glass_tap_name",
+      "value": "نقرة زجاجية"
+    },
+    {
+      "name": "sound_glass_tap_desc",
+      "value": "صوت نقرة زجاجية"
+    },
+    {
+      "name": "sound_light_chime_name",
+      "value": "جرس خفيف"
+    },
+    {
+      "name": "sound_light_chime_desc",
+      "value": "صوت جرس خفيف"
+    },
+    {
+      "name": "sound_muted_bead_name",
+      "value": "خرزة مكتومة"
+    },
+    {
+      "name": "sound_muted_bead_desc",
+      "value": "صوت خرزة مكتومة"
+    },
+    {
+      "name": "sound_soft_click_name",
+      "value": "نقرة ناعمة"
+    },
+    {
+      "name": "sound_soft_click_desc",
+      "value": "صوت نقرة ناعمة"
+    },
+    {
+      "name": "sound_warm_knock_name",
+      "value": "طرقة دافئة"
+    },
+    {
+      "name": "sound_warm_knock_desc",
+      "value": "صوت طرقة دافئة"
+    },
+    {
+      "name": "title_tasbih",
+      "value": "التسبيح"
+    },
+    {
+      "name": "my_tasbihs",
+      "value": "مسبحاتي"
+    },
+    {
+      "name": "select_dhikr",
+      "value": "اختر الذكر"
+    },
+    {
+      "name": "new_tasbih",
+      "value": "مسبحة جديدة"
+    },
+    {
+      "name": "edit_tasbih",
+      "value": "تعديل المسبحة"
+    },
+    {
+      "name": "new_dhikr",
+      "value": "ذكر جديد"
+    },
+    {
+      "name": "edit_dhikr",
+      "value": "تعديل الذكر"
+    },
+    {
+      "name": "tasbih_name",
+      "value": "الاسم"
+    },
+    {
+      "name": "tasbih_name_placeholder",
+      "value": "مثال: أذكار المساء"
+    },
+    {
+      "name": "dhikr_arabic",
+      "value": "العربية"
+    },
+    {
+      "name": "dhikr_transliteration",
+      "value": "النقل الصوتي (اختياري)"
+    },
+    {
+      "name": "dhikr_transliteration_placeholder",
+      "value": "مثال: SubhanAllah"
+    },
+    {
+      "name": "dhikr_translation",
+      "value": "الترجمة (اختياري)"
+    },
+    {
+      "name": "dhikr_translation_placeholder",
+      "value": "مثال: سبحان الله"
+    },
+    {
+      "name": "target_count",
+      "value": "العدد المستهدف"
+    },
+    {
+      "name": "flick_up_to_count",
+      "value": "اسحب لأعلى للعدّ"
+    },
+    {
+      "name": "flick_hint",
+      "value": "اسحب لأعلى: +1     ·     اسحب لأسفل: −1"
+    },
+    {
+      "name": "total_on_tasbih",
+      "value": "الإجمالي على هذه المسبحة"
+    },
+    {
+      "name": "dhikr_count_singular",
+      "value": "ذكر"
+    },
+    {
+      "name": "dhikr_count_plural",
+      "value": "أذكار"
+    },
+    {
+      "name": "new_tasbih_button",
+      "value": "+ مسبحة جديدة"
+    },
+    {
+      "name": "add_dhikr_button",
+      "value": "+ إضافة ذكر"
+    },
+    {
+      "name": "all_dhikrs_complete",
+      "value": "اكتملت جميع الأذكار"
+    },
+    {
+      "name": "counter_reset_toast",
+      "value": "تم إعادة تعيين العداد"
+    },
+    {
+      "name": "no_dhikr_title",
+      "value": "لا يوجد ذكر في هذه المسبحة"
+    },
+    {
+      "name": "no_dhikr_hint",
+      "value": "اضغط على شريحة الذكر في الأعلى للإضافة"
+    },
+    {
+      "name": "switch_dhikr",
+      "value": "تبديل الذكر"
+    },
+    {
+      "name": "reset_counter",
+      "value": "إعادة تعيين العداد"
+    },
+    {
+      "name": "delete_dhikr",
+      "value": "حذف الذكر"
+    },
+    {
+      "name": "add_new_dhikr",
+      "value": "إضافة ذكر جديد"
+    },
+    {
+      "name": "reset_all",
+      "value": "إعادة تعيين الكل"
+    },
+    {
+      "name": "reset_all_confirm_title",
+      "value": "إعادة تعيين المسبحة"
+    },
+    {
+      "name": "reset_all_confirm_message",
+      "value": "هل تريد إعادة تعيين جميع الأذكار في هذه المسبحة؟"
+    },
+    {
+      "name": "reset_all_done",
+      "value": "تم إعادة تعيين المسبحة"
+    },
+    {
+      "name": "title_qibla",
+      "value": "بوصلة القبلة"
+    },
+    {
+      "name": "qibla_direction",
+      "value": "اتجاه القبلة"
+    },
+    {
+      "name": "device_heading",
+      "value": "اتجاه الجهاز"
+    },
+    {
+      "name": "distance_to_kaaba",
+      "value": "المسافة إلى الكعبة"
+    },
+    {
+      "name": "compass_ready",
+      "value": "البوصلة جاهزة. أدر جهازك لمحاذاة علامة 🕋."
+    },
+    {
+      "name": "keep_device_flat",
+      "value": "حافظ على جهازك مستوياً للحصول على قراءات دقيقة."
+    },
+    {
+      "name": "sensor_unavailable",
+      "value": "مستشعر البوصلة غير متوفر. يُرجى الاختبار على جهاز حقيقي."
+    },
+    {
+      "name": "location_unavailable",
+      "value": "الموقع غير متوفر"
+    },
+    {
+      "name": "qibla_calibrate_title",
+      "value": "معايرة البوصلة"
+    },
+    {
+      "name": "qibla_calibrate_desc",
+      "value": "حرّك هاتفك بحركة الرقم 8 لتحسين دقة البوصلة."
+    },
+    {
+      "name": "qibla_calibrate_skip",
+      "value": "تخطَّ الآن"
+    },
+    {
+      "name": "qibla_calibrate_hint",
+      "value": "المعايرة تحسّن الدقة"
+    },
+    {
+      "name": "title_hijri_calendar",
+      "value": "التقويم الهجري"
+    },
+    {
+      "name": "important_dates",
+      "value": "التواريخ المهمة"
+    },
+    {
+      "name": "no_events_this_month",
+      "value": "لا توجد مناسبات إسلامية كبرى هذا الشهر"
+    },
+    {
+      "name": "status_next",
+      "value": "التالية"
+    },
+    {
+      "name": "status_pray",
+      "value": "صلِّ"
+    },
+    {
+      "name": "status_both",
+      "value": "صلِّ · التالية"
+    },
+    {
+      "name": "status_prayed",
+      "value": "✓ صلّيت"
+    },
+    {
+      "name": "status_express",
+      "value": "سريع"
+    },
+    {
+      "name": "prayer_fajr",
+      "value": "الفجر"
+    },
+    {
+      "name": "prayer_dhuhr",
+      "value": "الظهر"
+    },
+    {
+      "name": "prayer_asr",
+      "value": "العصر"
+    },
+    {
+      "name": "prayer_maghrib",
+      "value": "المغرب"
+    },
+    {
+      "name": "prayer_isha",
+      "value": "العشاء"
+    },
+    {
+      "name": "prayer_jummah",
+      "value": "الجمعة"
+    },
+    {
+      "name": "timing_imsak",
+      "value": "الإمساك"
+    },
+    {
+      "name": "timing_sunrise",
+      "value": "الشروق"
+    },
+    {
+      "name": "timing_sunset",
+      "value": "الغروب"
+    },
+    {
+      "name": "timing_first_third",
+      "value": "الثلث الأول"
+    },
+    {
+      "name": "timing_midnight",
+      "value": "منتصف الليل"
+    },
+    {
+      "name": "timing_last_third",
+      "value": "الثلث الأخير"
+    },
+    {
+      "name": "event_new_year",
+      "value": "رأس السنة الهجرية"
+    },
+    {
+      "name": "event_ashura",
+      "value": "يوم عاشوراء"
+    },
+    {
+      "name": "event_mawlid",
+      "value": "المولد النبوي"
+    },
+    {
+      "name": "event_isra_miraj",
+      "value": "الإسراء والمعراج"
+    },
+    {
+      "name": "event_mid_shaban",
+      "value": "ليلة النصف من شعبان"
+    },
+    {
+      "name": "event_ramadan_start",
+      "value": "رمضان"
+    },
+    {
+      "name": "event_eid_fitr",
+      "value": "عيد الفطر"
+    },
+    {
+      "name": "event_arafah",
+      "value": "يوم عرفة"
+    },
+    {
+      "name": "event_eid_adha",
+      "value": "عيد الأضحى"
+    },
+    {
+      "name": "method_karachi",
+      "value": "جامعة العلوم الإسلامية بكراتشي"
+    },
+    {
+      "name": "method_jafari",
+      "value": "الشيعة الاثنا عشرية (معهد ليفا، قم)"
+    },
+    {
+      "name": "method_isna",
+      "value": "الجمعية الإسلامية لأمريكا الشمالية"
+    },
+    {
+      "name": "method_mwl",
+      "value": "رابطة العالم الإسلامي"
+    },
+    {
+      "name": "method_umm_al_qura",
+      "value": "أم القرى (مكة المكرمة)"
+    },
+    {
+      "name": "method_egyptian",
+      "value": "الهيئة المصرية العامة للمساحة"
+    },
+    {
+      "name": "method_sunni_iraq",
+      "value": "ديوان الوقف السني (العراق)"
+    },
+    {
+      "name": "method_qatar",
+      "value": "الأوقاف القطرية"
+    },
+    {
+      "name": "method_singapore",
+      "value": "سنغافورة (MUIS)"
+    },
+    {
+      "name": "method_france",
+      "value": "فرنسا (UOIF)"
+    },
+    {
+      "name": "method_turkey",
+      "value": "تركيا (رئاسة الشؤون الدينية)"
+    },
+    {
+      "name": "method_russia",
+      "value": "روسيا (SAMR)"
+    },
+    {
+      "name": "method_uae",
+      "value": "الإمارات (GIAE)"
+    },
+    {
+      "name": "method_moonsighting",
+      "value": "لجنة رؤية الهلال العالمية"
+    },
+    {
+      "name": "method_dubai",
+      "value": "منطقة الخليج (دبي)"
+    },
+    {
+      "name": "method_kuwait",
+      "value": "الكويت"
+    },
+    {
+      "name": "method_france_15",
+      "value": "فرنسا زاوية 15°"
+    },
+    {
+      "name": "method_france_18",
+      "value": "فرنسا زاوية 18°"
+    },
+    {
+      "name": "method_turkey_europe",
+      "value": "رئاسة الشؤون الدينية التركية - أوروبا"
+    },
+    {
+      "name": "method_tehran",
+      "value": "الشيعة، معهد الجيوفيزياء، جامعة طهران"
+    },
+    {
+      "name": "method_indonesia",
+      "value": "وزارة الشؤون الدينية الإندونيسية"
+    },
+    {
+      "name": "method_algeria",
+      "value": "وزارة الشؤون الدينية والأوقاف، الجزائر"
+    },
+    {
+      "name": "method_brunei",
+      "value": "وزارة الشؤون الدينية، بروناي"
+    },
+    {
+      "name": "method_custom",
+      "value": "مخصص"
+    },
+    {
+      "name": "method_short_karachi",
+      "value": "كراتشي"
+    },
+    {
+      "name": "method_short_jafari",
+      "value": "الجعفري"
+    },
+    {
+      "name": "method_short_isna",
+      "value": "ISNA"
+    },
+    {
+      "name": "method_short_mwl",
+      "value": "MWL"
+    },
+    {
+      "name": "method_short_umm_al_qura",
+      "value": "مكة"
+    },
+    {
+      "name": "method_short_egyptian",
+      "value": "مصر"
+    },
+    {
+      "name": "method_short_sunni_iraq",
+      "value": "العراق"
+    },
+    {
+      "name": "method_short_qatar",
+      "value": "قطر"
+    },
+    {
+      "name": "method_short_singapore",
+      "value": "سنغافورة"
+    },
+    {
+      "name": "method_short_france",
+      "value": "فرنسا"
+    },
+    {
+      "name": "method_short_turkey",
+      "value": "تركيا"
+    },
+    {
+      "name": "method_short_russia",
+      "value": "روسيا"
+    },
+    {
+      "name": "method_short_uae",
+      "value": "الإمارات"
+    },
+    {
+      "name": "method_short_moonsighting",
+      "value": "رؤية الهلال"
+    },
+    {
+      "name": "method_short_dubai",
+      "value": "دبي"
+    },
+    {
+      "name": "method_short_kuwait",
+      "value": "الكويت"
+    },
+    {
+      "name": "method_short_france_15",
+      "value": "فرنسا 15°"
+    },
+    {
+      "name": "method_short_france_18",
+      "value": "فرنسا 18°"
+    },
+    {
+      "name": "method_short_turkey_europe",
+      "value": "تركيا أوروبا"
+    },
+    {
+      "name": "method_short_tehran",
+      "value": "طهران"
+    },
+    {
+      "name": "method_short_indonesia",
+      "value": "إندونيسيا"
+    },
+    {
+      "name": "method_short_algeria",
+      "value": "الجزائر"
+    },
+    {
+      "name": "method_short_brunei",
+      "value": "بروناي"
+    },
+    {
+      "name": "method_short_custom",
+      "value": "مخصص"
+    },
+    {
+      "name": "asr_standard",
+      "value": "القياسي (الشافعي / المالكي / الحنبلي)"
+    },
+    {
+      "name": "asr_hanafi",
+      "value": "الحنفي"
+    },
+    {
+      "name": "asr_short_standard",
+      "value": "القياسي"
+    },
+    {
+      "name": "asr_short_hanafi",
+      "value": "الحنفي"
+    },
+    {
+      "name": "source_local",
+      "value": "الحساب المحلي (دون اتصال)"
+    },
+    {
+      "name": "source_api",
+      "value": "واجهة برمجية (عبر الإنترنت)"
+    },
+    {
+      "name": "source_short_local",
+      "value": "محلي"
+    },
+    {
+      "name": "source_short_online",
+      "value": "عبر الإنترنت"
+    },
+    {
+      "name": "theme_preset",
+      "value": "مظهر التطبيق"
+    },
+    {
+      "name": "theme_preset_desc",
+      "value": "اختر النمط البصري للتطبيق"
+    },
+    {
+      "name": "theme_preset_sirat",
+      "value": "Sirat — عصري"
+    },
+    {
+      "name": "theme_preset_sirat_desc",
+      "value": "عصري وبسيط — بأسلوب HarmonyOS 7"
+    },
+    {
+      "name": "theme_preset_current",
+      "value": "Sirat الكلاسيكي"
+    },
+    {
+      "name": "theme_preset_current_desc",
+      "value": "كريمي دافئ وأخضر غامق — الأصلي"
+    },
+    {
+      "name": "theme_preset_harmony7",
+      "value": "نور"
+    },
+    {
+      "name": "theme_preset_harmony7_desc",
+      "value": "بنفسجي مشرق — هدوء وحداثة"
+    },
+    {
+      "name": "theme_preset_harmony6",
+      "value": "سَحَر"
+    },
+    {
+      "name": "theme_preset_harmony6_desc",
+      "value": "كهرماني ذهبي — سكون الفجر"
+    },
+    {
+      "name": "theme_preset_harmony5",
+      "value": "بَحْر"
+    },
+    {
+      "name": "theme_preset_harmony5_desc",
+      "value": "أزرق مخضرّ بارد — رحب ونقي"
+    },
+    {
+      "name": "theme_amber",
+      "value": "كهرماني"
+    },
+    {
+      "name": "theme_charcoal",
+      "value": "فحمي"
+    },
+    {
+      "name": "theme_emerald",
+      "value": "زمردي"
+    },
+    {
+      "name": "theme_pearl",
+      "value": "لؤلؤي"
+    },
+    {
+      "name": "theme_gold",
+      "value": "ذهبي (معدني)"
+    },
+    {
+      "name": "theme_white",
+      "value": "أبيض"
+    },
+    {
+      "name": "theme_sapphire",
+      "value": "ياقوت أزرق"
+    },
+    {
+      "name": "theme_rose",
+      "value": "وردي"
+    },
+    {
+      "name": "theme_silver",
+      "value": "فضي"
+    },
+    {
+      "name": "wizard_step",
+      "value": "خطوة"
+    },
+    {
+      "name": "wizard_welcome_title",
+      "value": "مرحباً بك في رفيق الصراط"
+    },
+    {
+      "name": "wizard_welcome_desc",
+      "value": "دعنا نُعِدّ تفضيلاتك. يمكنك تغييرها لاحقاً من الإعدادات."
+    },
+    {
+      "name": "wizard_language_title",
+      "value": "اختر لغتك"
+    },
+    {
+      "name": "wizard_language_desc",
+      "value": "سيستخدم التطبيق هذه اللغة في جميع الشاشات"
+    },
+    {
+      "name": "wizard_privacy_title",
+      "value": "سياسة الخصوصية"
+    },
+    {
+      "name": "wizard_privacy_desc",
+      "value": "يرجى القراءة والموافقة قبل المتابعة"
+    },
+    {
+      "name": "privacy_agree_label",
+      "value": "لقد قرأت وأوافق على سياسة الخصوصية"
+    },
+    {
+      "name": "privacy_view_full",
+      "value": "عرض سياسة الخصوصية الكاملة عبر الإنترنت"
+    },
+    {
+      "name": "wizard_theme_title",
+      "value": "اختر مظهرك"
+    },
+    {
+      "name": "wizard_theme_desc",
+      "value": "اختر النمط البصري. يمكنك تغييره لاحقاً من الإعدادات."
+    },
+    {
+      "name": "wizard_location_title",
+      "value": "حدّد موقعك"
+    },
+    {
+      "name": "wizard_location_desc",
+      "value": "يُستخدم لحساب أوقات الصلاة واتجاه القبلة"
+    },
+    {
+      "name": "wizard_convention_title",
+      "value": "تفضيلات الحساب"
+    },
+    {
+      "name": "wizard_convention_desc",
+      "value": "اختر طريقة حساب أوقات الصلاة"
+    },
+    {
+      "name": "wizard_grant_permission",
+      "value": "منح إذن الموقع"
+    },
+    {
+      "name": "wizard_getting_location",
+      "value": "جارٍ تحديد موقعك..."
+    },
+    {
+      "name": "wizard_location_ready",
+      "value": "تم تحديد الموقع"
+    },
+    {
+      "name": "wizard_location_failed",
+      "value": "تعذّر الحصول على الموقع"
+    },
+    {
+      "name": "wizard_retry",
+      "value": "إعادة المحاولة"
+    },
+    {
+      "name": "wizard_next",
+      "value": "التالي"
+    },
+    {
+      "name": "wizard_finish",
+      "value": "ابدأ الآن"
+    },
+    {
+      "name": "home_today_progress",
+      "value": "الصلوات اليومية"
+    },
+    {
+      "name": "home_prayers_completed",
+      "value": "صلوات مكتملة"
+    },
+    {
+      "name": "home_keep_going",
+      "value": "واصل!"
+    },
+    {
+      "name": "home_streak",
+      "value": "يوم متتالي"
+    },
+    {
+      "name": "home_best_streak",
+      "value": "الأفضل"
+    },
+    {
+      "name": "home_days",
+      "value": "أيام"
+    },
+    {
+      "name": "home_this_week",
+      "value": "هذا الأسبوع"
+    },
+    {
+      "name": "home_week_summary",
+      "value": "صلاة هذا الأسبوع"
+    },
+    {
+      "name": "home_this_month",
+      "value": "هذا الشهر"
+    },
+    {
+      "name": "home_month_summary",
+      "value": "صلاة هذا الشهر"
+    },
+    {
+      "name": "home_tasbih",
+      "value": "التسبيح اليومي"
+    },
+    {
+      "name": "home_tasbih_lifetime",
+      "value": "العدد الإجمالي"
+    },
+    {
+      "name": "home_tasbih_summary",
+      "value": "مسبحات"
+    },
+    {
+      "name": "home_dhikrs",
+      "value": "أذكار"
+    },
+    {
+      "name": "home_monthly_view",
+      "value": "عرض شهري"
+    },
+    {
+      "name": "home_perfect_days",
+      "value": "أيام كاملة"
+    },
+    {
+      "name": "home_days_elapsed",
+      "value": "أيام مضت"
+    },
+    {
+      "name": "home_lifetime_1y",
+      "value": "صلاة خلال العام الماضي"
+    },
+    {
+      "name": "home_next_event",
+      "value": "المناسبة القادمة"
+    },
+    {
+      "name": "home_event_today",
+      "value": "اليوم!"
+    },
+    {
+      "name": "home_event_tomorrow",
+      "value": "غداً"
+    },
+    {
+      "name": "ramadan_card_title",
+      "value": "رمضان"
+    },
+    {
+      "name": "ramadan_day_of",
+      "value": "اليوم"
+    },
+    {
+      "name": "ramadan_day_of_suffix",
+      "value": "من رمضان"
+    },
+    {
+      "name": "ramadan_days_until",
+      "value": "يبدأ رمضان بعد"
+    },
+    {
+      "name": "ramadan_fast_start",
+      "value": "بداية الصيام (الإمساك)"
+    },
+    {
+      "name": "ramadan_fast_end",
+      "value": "نهاية الصيام (المغرب)"
+    },
+    {
+      "name": "ramadan_today_fast",
+      "value": "نافذة الصيام اليوم"
+    },
+    {
+      "name": "ramadan_first_day_fast",
+      "value": "أول يوم من رمضان"
+    },
+    {
+      "name": "ramadan_calendar_start",
+      "value": "بداية رمضان"
+    },
+    {
+      "name": "ramadan_calendar_end",
+      "value": "نهاية رمضان"
+    },
+    {
+      "name": "ramadan_ashras",
+      "value": "العشرات"
+    },
+    {
+      "name": "ramadan_first_ashra",
+      "value": "العشر الأولى"
+    },
+    {
+      "name": "ramadan_second_ashra",
+      "value": "العشر الثانية"
+    },
+    {
+      "name": "ramadan_third_ashra",
+      "value": "العشر الثالثة"
+    },
+    {
+      "name": "ramadan_first_ashra_significance",
+      "value": "أيام الرحمة"
+    },
+    {
+      "name": "ramadan_second_ashra_significance",
+      "value": "أيام المغفرة"
+    },
+    {
+      "name": "ramadan_third_ashra_significance",
+      "value": "العتق من النار"
+    },
+    {
+      "name": "ramadan_laylat_al_qadr",
+      "value": "ليلة القدر"
+    },
+    {
+      "name": "ramadan_laylat_al_qadr_desc",
+      "value": "ليلة القدر خير من ألف شهر. التمسوها في الليالي الوترية من العشر الأواخر."
+    },
+    {
+      "name": "ramadan_jummah_tul_widah",
+      "value": "جمعة الوداع"
+    },
+    {
+      "name": "ramadan_jummah_tul_widah_desc",
+      "value": "آخر جمعة من رمضان."
+    },
+    {
+      "name": "ramadan_today",
+      "value": "الليلة!"
+    },
+    {
+      "name": "countdown_fast_ends",
+      "value": "الإفطار بعد"
+    },
+    {
+      "name": "countdown_fast_starts",
+      "value": "يبدأ الصيام بعد"
+    },
+    {
+      "name": "countdown_fast_ends_desc",
+      "value": "استعد للإفطار"
+    },
+    {
+      "name": "countdown_fast_starts_desc",
+      "value": "أنهِ السحور قبل الإمساك"
+    },
+    {
+      "name": "dua_iftar_name",
+      "value": "دعاء الإفطار"
+    },
+    {
+      "name": "dua_iftar_translation",
+      "value": "ذهب الظمأ وابتلت العروق وثبت الأجر إن شاء الله."
+    },
+    {
+      "name": "dua_suhoor_name",
+      "value": "نية الصيام"
+    },
+    {
+      "name": "dua_suhoor_translation",
+      "value": "وبصوم غدٍ نويت من شهر رمضان."
+    },
+    {
+      "name": "sun_path_we_are_here",
+      "value": "نحن هنا"
+    },
+    {
+      "name": "mark_all",
+      "value": "تحديد الكل كمُصلَّاة"
+    },
+    {
+      "name": "default_location",
+      "value": "الموقع الافتراضي"
+    },
+    {
+      "name": "unknown_location",
+      "value": "موقع غير معروف"
+    },
+    {
+      "name": "dialog_gps_off_title",
+      "value": "خدمة الموقع معطّلة"
+    },
+    {
+      "name": "dialog_gps_off_message",
+      "value": "يرجى تمكين خدمة الموقع للحصول على أوقات صلاة دقيقة لمدينتك."
+    },
+    {
+      "name": "dialog_permission_title",
+      "value": "الإذن مطلوب"
+    },
+    {
+      "name": "dialog_permission_message",
+      "value": "إذن الموقع مطلوب لعرض أوقات الصلاة لمدينتك.\nيرجى منحه من إعدادات النظام."
+    },
+    {
+      "name": "error_gps_fetch_failed",
+      "value": "تعذّر الحصول على موقع GPS"
+    },
+    {
+      "name": "error_gps_off",
+      "value": "يرجى تشغيل خدمة الموقع"
+    },
+    {
+      "name": "error_location_permission_denied",
+      "value": "تم رفض إذن الموقع"
+    },
+    {
+      "name": "time_format",
+      "value": "تنسيق الوقت"
+    },
+    {
+      "name": "time_format_desc",
+      "value": "طريقة عرض أوقات الصلاة"
+    },
+    {
+      "name": "time_format_system",
+      "value": "حسب إعدادات النظام"
+    },
+    {
+      "name": "time_format_system_desc",
+      "value": "اتّباع تفضيل الجهاز"
+    },
+    {
+      "name": "time_format_12h",
+      "value": "12 ساعة (ص/م)"
+    },
+    {
+      "name": "time_format_24h",
+      "value": "24 ساعة"
+    },
+    {
+      "name": "hijri_calendar_type",
+      "value": "نوع التقويم"
+    },
+    {
+      "name": "hijri_calendar_type_desc",
+      "value": "أي تقويم هجري يُستخدم للتحويل"
+    },
+    {
+      "name": "hijri_calendar_umm_al_qura",
+      "value": "أم القرى"
+    },
+    {
+      "name": "hijri_calendar_umm_al_qura_desc",
+      "value": "التقويم الرسمي للسعودية (1318–1500 هـ)"
+    },
+    {
+      "name": "hijri_calendar_tabular",
+      "value": "جدولي (حسابي)"
+    },
+    {
+      "name": "hijri_calendar_tabular_desc",
+      "value": "خوارزمية الكويت — محدد لجميع السنوات"
+    },
+    {
+      "name": "subsection_home_ui",
+      "value": "واجهة الرئيسية"
+    },
+    {
+      "name": "subsection_prayer_ui",
+      "value": "واجهة الصلاة"
+    },
+    {
+      "name": "subsection_feedback",
+      "value": "الصوت والتغذية الراجعة"
+    },
+    {
+      "name": "subsection_language",
+      "value": "اللغة"
+    },
+    {
+      "name": "event_raghaib",
+      "value": "ليلة الرغائب"
+    },
+    {
+      "name": "countdown_fast_ends_now",
+      "value": "حان وقت الإفطار"
+    },
+    {
+      "name": "countdown_fast_starts_now",
+      "value": "حان وقت الإمساك"
+    },
+    {
+      "name": "shafaq_method_unavailable",
+      "value": "متاح فقط مع طريقة لجنة رؤية الهلال"
+    },
+    {
+      "name": "event_perspective",
+      "value": "المناسبات بحسب المذهب"
+    },
+    {
+      "name": "event_perspective_desc",
+      "value": "اختر ما إذا كانت الشاشة الرئيسية تعرض المناسبات المشتركة بين جميع المسلمين، أم تشمل أيضًا المناسبات الخاصة بالسنّة أو الشيعة."
+    },
+    {
+      "name": "event_perspective_universal",
+      "value": "العامة فقط"
+    },
+    {
+      "name": "event_perspective_sunni",
+      "value": "سنّي + عام"
+    },
+    {
+      "name": "event_perspective_shia",
+      "value": "شيعي + عام"
+    },
+    {
+      "name": "event_perspective_all",
+      "value": "عرض الكل"
+    },
+    {
+      "name": "event_arbaeen",
+      "value": "الأربعين"
+    },
+    {
+      "name": "event_imam_ali_birthday",
+      "value": "مولد الإمام علي"
+    },
+    {
+      "name": "event_ghadir",
+      "value": "عيد الغدير"
+    },
+    {
+      "name": "event_new_year_desc",
+      "value": "بداية السنة الهجرية، ذكرى هجرة النبي ﷺ إلى المدينة."
+    },
+    {
+      "name": "event_ashura_desc",
+      "value": "يوم صيام وتأمل يصومه المسلمون في مشارق الأرض ومغاربها."
+    },
+    {
+      "name": "event_arbaeen_desc",
+      "value": "بعد أربعين يومًا من عاشوراء — فترة حداد في التقليد الشيعي."
+    },
+    {
+      "name": "event_mawlid_desc",
+      "value": "مولد النبي محمد ﷺ."
+    },
+    {
+      "name": "event_raghaib_desc",
+      "value": "أول ليلة خميس من رجب — ليلة دعاء في التقليد السنّي."
+    },
+    {
+      "name": "event_imam_ali_birthday_desc",
+      "value": "مولد الإمام علي بن أبي طالب، يُحتفل به في التقليد الشيعي."
+    },
+    {
+      "name": "event_isra_miraj_desc",
+      "value": "رحلة النبي ﷺ الليلية إلى القدس وعروجه إلى السماوات."
+    },
+    {
+      "name": "event_mid_shaban_desc",
+      "value": "الليلة الخامسة عشرة من شعبان — ليلة دعاء وطلب المغفرة."
+    },
+    {
+      "name": "event_ramadan_start_desc",
+      "value": "بداية شهر الصيام، الشهر التاسع من السنة الهجرية."
+    },
+    {
+      "name": "event_eid_fitr_desc",
+      "value": "عيد الفطر، احتفال بنهاية رمضان."
+    },
+    {
+      "name": "event_arafah_desc",
+      "value": "يوم الوقوف بعرفة، أقدس أيام الحج."
+    },
+    {
+      "name": "event_eid_adha_desc",
+      "value": "عيد الأضحى، ذكرى تضحية النبي إبراهيم عليه السلام."
+    },
+    {
+      "name": "event_ghadir_desc",
+      "value": "يوم تعيين النبي ﷺ للإمام علي خليفةً له، في التقليد الشيعي."
+    },
+    {
+      "name": "show_extra_timings_list",
+      "value": "إظهار أوقات الليل"
+    },
+    {
+      "name": "show_extra_timings_list_desc",
+      "value": "الإمساك وأقسام الليل. يظهر الشروق والغروب دائمًا."
+    },
+    {
+      "name": "show_extra_timings_sunpath",
+      "value": "إظهار أدلة مسار الشمس"
+    },
+    {
+      "name": "show_extra_timings_sunpath_desc",
+      "value": "أدلة الثلث الأول ومنتصف الليل والثلث الأخير على مسار الشمس"
+    },
+    {
+      "name": "show_imsak",
+      "value": "الإمساك"
+    },
+    {
+      "name": "show_imsak_desc",
+      "value": "وقت الإمساك قبل الفجر بعشر دقائق"
+    },
+    {
+      "name": "show_first_third",
+      "value": "الثلث الأول"
+    },
+    {
+      "name": "show_first_third_desc",
+      "value": "بداية الثلث الأول من الليل بعد المغرب"
+    },
+    {
+      "name": "show_midnight",
+      "value": "منتصف الليل"
+    },
+    {
+      "name": "show_midnight_desc",
+      "value": "منتصف الليل الإسلامي — منتصف الليل"
+    },
+    {
+      "name": "show_last_third",
+      "value": "الثلث الأخير"
+    },
+    {
+      "name": "show_last_third_desc",
+      "value": "بداية الثلث الأخير من الليل، وقت قيام الليل"
+    },
+    {
+      "name": "subsection_prayer_list",
+      "value": "إظهار في قائمة الصلاة"
+    },
+    {
+      "name": "subsection_sun_path",
+      "value": "إظهار على مسار الشمس"
+    },
+    {
+      "name": "title_prayer_details",
+      "value": "تفاصيل الصلاة"
+    },
+    {
+      "name": "title_tasbih_details",
+      "value": "تفاصيل التسبيح"
+    },
+    {
+      "name": "details_view",
+      "value": "عرض التفاصيل"
+    },
+    {
+      "name": "details_period_week",
+      "value": "الأسبوع"
+    },
+    {
+      "name": "details_period_month",
+      "value": "الشهر"
+    },
+    {
+      "name": "details_period_year",
+      "value": "السنة"
+    },
+    {
+      "name": "details_prayers_completed",
+      "value": "صلاة مكتملة"
+    },
+    {
+      "name": "details_per_prayer",
+      "value": "تفصيل حسب الصلاة"
+    },
+    {
+      "name": "details_per_tasbih",
+      "value": "تفصيل حسب المسبحة"
+    },
+    {
+      "name": "details_this_month",
+      "value": "هذا الشهر"
+    },
+    {
+      "name": "details_perfect_days",
+      "value": "أيام كاملة"
+    },
+    {
+      "name": "details_best_streak",
+      "value": "الأفضل"
+    },
+    {
+      "name": "details_days_of",
+      "value": "من"
+    },
+    {
+      "name": "details_tasbih_summary_lifetime",
+      "value": "العدد الإجمالي"
+    },
+    {
+      "name": "details_tasbih_summary_tasbihs",
+      "value": "مسبحات"
+    },
+    {
+      "name": "details_tasbih_summary_dhikrs",
+      "value": "أذكار مكتملة"
+    }
+  ]
+}

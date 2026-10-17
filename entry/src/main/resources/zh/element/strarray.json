@@ -1,0 +1,97 @@
+{
+  "strarray": [
+    {
+      "name": "hijri_months",
+      "value": [
+        {
+          "value": "穆哈兰姆"
+        },
+        {
+          "value": "萨法尔"
+        },
+        {
+          "value": "赖比尔·敖外鲁"
+        },
+        {
+          "value": "赖比尔·阿色尼"
+        },
+        {
+          "value": "主马达·敖外鲁"
+        },
+        {
+          "value": "主马达·阿色尼"
+        },
+        {
+          "value": "赖哲卜"
+        },
+        {
+          "value": "舍尔邦"
+        },
+        {
+          "value": "赖买丹"
+        },
+        {
+          "value": "闪瓦鲁"
+        },
+        {
+          "value": "都尔·盖尔达"
+        },
+        {
+          "value": "都尔·希哲"
+        }
+      ]
+    },
+    {
+      "name": "days_of_week",
+      "value": [
+        {
+          "value": "日"
+        },
+        {
+          "value": "一"
+        },
+        {
+          "value": "二"
+        },
+        {
+          "value": "三"
+        },
+        {
+          "value": "四"
+        },
+        {
+          "value": "五"
+        },
+        {
+          "value": "六"
+        }
+      ]
+    },
+    {
+      "name": "days_of_week_short",
+      "value": [
+        {
+          "value": "日"
+        },
+        {
+          "value": "一"
+        },
+        {
+          "value": "二"
+        },
+        {
+          "value": "三"
+        },
+        {
+          "value": "四"
+        },
+        {
+          "value": "五"
+        },
+        {
+          "value": "六"
+        }
+      ]
+    }
+  ]
+}

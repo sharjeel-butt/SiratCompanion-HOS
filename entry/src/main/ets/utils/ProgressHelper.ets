@@ -2,7 +2,7 @@
 
 import { Tasbih } from '../tasbih/TasbihModels';
 import { PrayerCheckState, PrayerManager } from '../prayer/PrayerManager';
-import { L } from '../helper/LocalizationHelper';
+import { L } from '../i8n/LocalizationHelper';
 
 export interface PrayerProgress {
   todayCompleted: number; // 0–5
