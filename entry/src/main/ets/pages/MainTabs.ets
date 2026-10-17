@@ -20,6 +20,8 @@ import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_EVENT_SETTINGS_VERSION,
+  STORAGE_KEY_HIJRI_CALENDAR_VERSION,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
@@ -89,6 +91,15 @@ struct MainTabs {
   onPageShow(): void {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
+    // Force event settings refresh
+    const prevEv = AppStorage.get<number>(STORAGE_KEY_EVENT_SETTINGS_VERSION);
+    const nextEv = (prevEv === undefined ? 0 : prevEv) + 1;
+    AppStorage.setOrCreate(STORAGE_KEY_EVENT_SETTINGS_VERSION, nextEv);
+
+    // Force Hijri calendar refresh
+    const prevCal = AppStorage.get<number>(STORAGE_KEY_HIJRI_CALENDAR_VERSION);
+    const nextCal = (prevCal === undefined ? 0 : prevCal) + 1;
+    AppStorage.setOrCreate(STORAGE_KEY_HIJRI_CALENDAR_VERSION, nextCal);
   }
 
   private onThemeModeChanged(): void {

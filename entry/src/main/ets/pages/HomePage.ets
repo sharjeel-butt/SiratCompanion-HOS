@@ -5,13 +5,16 @@ import { common } from '@kit.AbilityKit';
 import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import { AppLogger } from '../helper/AppLogger';
+import { PdfExportHelper } from '../utils/PdfExportHelper';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_CALC_SETTINGS_VERSION,
   STORAGE_KEY_EVENT_SETTINGS_VERSION,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
+  STORAGE_KEY_HIJRI_CALENDAR_VERSION,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
@@ -63,6 +66,17 @@ import {
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 import { EventPerspectiveNotifier } from '../utils/EventPerspectiveNotifier';
 
+export interface RamadanTableRow {
+  hijriDate: string;
+  gregorianDate: string;
+  sahur: string;
+  fajr: string;
+  dhuhr: string;
+  asr: string;
+  iftar: string;
+  isha: string;
+}
+
 @Component
 export struct HomePage {
 
@@ -72,6 +86,9 @@ export struct HomePage {
   @StorageLink(STORAGE_KEY_PRAYER_STATE_VERSION)
   @Watch('onPrayerStateChanged')
   prayerStateVersion: number = 0;
+  @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_VERSION)
+  @Watch('onHijriCalendarVersionChanged')
+  calendarVersion: number = 0;
 
   @StorageLink(STORAGE_KEY_LOCATION_VERSION)
   @Watch('onLocationVersionChanged')
@@ -82,6 +99,9 @@ export struct HomePage {
   @StorageLink(STORAGE_KEY_TASBIH_STATE_VERSION)
   @Watch('onTasbihStateChanged')
   tasbihStateVersion: number = 0;
+  @StorageLink(STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW)
+  @Watch('onAutoShowRamadanViewChanged')
+  autoShowRamadanView: boolean = true;
 
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
@@ -126,6 +146,12 @@ export struct HomePage {
   @State todayCurrentPrayerTime: string = '--:--';
   @State todayNextPrayerName: string = '—';
   @State todayNextPrayerTime: string = '--:--';
+  @State isExportingRamadan: boolean = false;
+  @State pdfRamadanDays: RamadanTableRow[] = [];
+  @State pdfColors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
+  @State pdfRamadanHijriSpan: string = '';
+  @State pdfRamadanGregSpan: string = '';
+  @State pdfRamadanYear: number = 1447;
 
   @State locationMode: LocationMode = LocationMode.GPS;
   @State prayerProgress: PrayerProgress = {
@@ -207,6 +233,16 @@ export struct HomePage {
       this.hijriOffset,
       SettingsHelper.getEventPerspective()
     );
+  }
+
+  private onHijriCalendarVersionChanged(): void {
+    this.refreshHijriDate();
+    this.refreshRamadan();
+    this.upcomingEvents = DateHelper.getUpcomingImportantDates(this.hijriOffset);
+  }
+
+  private onAutoShowRamadanViewChanged(): void {
+    this.refreshRamadan(); // Instantly re-evaluate visibility
   }
 
   private async onCalcSettingsChanged(): Promise<void> {
@@ -568,11 +604,18 @@ export struct HomePage {
       this.refreshFastingWindow();
       return;
     }
-    if (info.isRamadanNow || (info.daysUntilStart >= 0 && info.daysUntilStart <= 60)) {
-      this.ramadanInfo = info;
+
+    // If auto is ON: enforce the 60-day rule. If auto is OFF: always show.
+    if (this.autoShowRamadanView) {
+      if (info.isRamadanNow || (info.daysUntilStart >= 0 && info.daysUntilStart <= 60)) {
+        this.ramadanInfo = info;
+      } else {
+        this.ramadanInfo = null;
+      }
     } else {
-      this.ramadanInfo = null;
+      this.ramadanInfo = info;
     }
+
     this.refreshFastingWindow();
   }
 
@@ -602,6 +645,79 @@ export struct HomePage {
       return DUA_SUHOOR;
     }
     return null;
+  }
+
+  private async handleExportRamadan(): Promise<void> {
+    if (this.isExportingRamadan || !this.ramadanInfo) {
+      return;
+    }
+    this.isExportingRamadan = true;
+    this.pdfRamadanDays = [];
+    this.pdfColors = PageTheme.compute(ThemeMode.LIGHT); // Force light mode
+
+    try {
+      this.pdfRamadanYear = this.ramadanInfo.hijriYear;
+
+      // Get Ramadan month names
+      const hijriMonths = L.getArray('hijri_months', this.appLanguage);
+      const ramadanName = hijriMonths[8] || 'Ramadan';
+
+      // Calculate start and end dates
+      const startDate = new Date(this.ramadanInfo.fastingStart);
+      const totalDays = this.ramadanInfo.totalDays;
+      const endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + totalDays - 1);
+
+      // Format spans
+      const locale = this.appLanguage === 'zh' ? 'zh-CN' : (this.appLanguage === 'ar' ? 'ar' : 'en-US');
+
+      const startHStr = DateHelper.getFormattedHijriDateFor(startDate);
+      const endHStr = DateHelper.getFormattedHijriDateFor(endDate);
+      this.pdfRamadanHijriSpan = `${startHStr} – ${endHStr}`;
+
+      const startGStr = startDate.toLocaleString(locale, { month: 'short', day: 'numeric' });
+      const endGStr = endDate.toLocaleString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
+      this.pdfRamadanGregSpan = `${startGStr} – ${endGStr}`;
+
+      const rows: RamadanTableRow[] = [];
+
+      for (let i = 0; i < totalDays; i++) {
+        const date = new Date(startDate);
+        date.setDate(date.getDate() + i);
+
+        const times = PrayerTimeCalculator.calculateWithDeviceTimezone(
+          date, this.latitude, this.longitude, this.calcMethod,
+          this.asrRule, this.highLatRule, this.advanced
+        );
+
+        const shortHijri = `${i + 1} ${ramadanName}`;
+        const shortGregorian = `${date.getDate()}/${date.getMonth() + 1}`;
+
+        rows.push({
+          hijriDate: shortHijri,
+          gregorianDate: shortGregorian,
+          sahur: PrayerManager.offsetTime(times.imsak, this.offsets.fajr),
+          fajr: PrayerManager.offsetTime(times.fajr, this.offsets.fajr),
+          dhuhr: PrayerManager.offsetTime(times.dhuhr, this.offsets.dhuhr),
+          asr: PrayerManager.offsetTime(times.asr, this.offsets.asr),
+          iftar: PrayerManager.offsetTime(times.maghrib, this.offsets.maghrib),
+          isha: PrayerManager.offsetTime(times.isha, this.offsets.isha)
+        });
+      }
+
+      this.pdfRamadanDays = rows;
+      const ctx = getContext(this) as common.UIAbilityContext;
+
+      await new Promise<void>((resolve) => setTimeout(() => resolve(), 100));
+
+      await PdfExportHelper.exportBuilderToPdf(
+        ctx, this.getUIContext(), this.RamadanExportLayout.bind(this), 'Ramadan_Timetable'
+      );
+    } catch (err) {
+      console.error('Ramadan PDF failed:', JSON.stringify(err));
+    } finally {
+      this.isExportingRamadan = false;
+    }
   }
 
   private parseTimeToDateToday(timeStr: string): Date | null {
@@ -965,7 +1081,9 @@ export struct HomePage {
                       this.CountdownCard()
                     }
                     this.LiveCountdownBanner()
-                    this.RamadanCard()
+                    if (this.ramadanInfo !== null) {
+                      this.RamadanCard()
+                    }
                   }
                   .layoutWeight(1)
                   .alignItems(HorizontalAlign.Start)
@@ -1022,6 +1140,134 @@ export struct HomePage {
     .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+  }
+
+  @Builder
+  RamadanExportLayout() {
+    Column() {
+      // Header
+      Row() {
+        Image($r('app.media.foreground'))
+          .syncLoad(true)
+          .width(36)
+          .height(36)
+          .borderRadius(8)
+          .margin({ right: 12 })
+
+        Column() {
+          // Localized Hijri Year Suffix
+          Text(`${L.getArray('hijri_months', this.appLanguage)[8]} ${this.pdfRamadanYear} ${L.get('hijri_year_suffix',
+            this.appLanguage)}`)
+            .fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.pdfColors.textWhite)
+
+          Text(`${this.pdfRamadanGregSpan} · ${this.currentLocation}`)
+            .fontSize(10).fontColor(this.pdfColors.accentGold).margin({ top: 4 })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+        // Localized Footer
+        Text(L.get('generated_by', this.appLanguage))
+          .fontSize(8).fontColor(this.pdfColors.textMuted).alignSelf(ItemAlign.Start)
+      }
+      .width('100%')
+      .padding({
+        top: 15,
+        bottom: 10,
+        left: 20,
+        right: 20
+      })
+      .backgroundColor(this.pdfColors.cardDark)
+
+      Row().width('100%').height(3).backgroundColor(this.pdfColors.accentGold)
+
+      // Table Headers
+      Row() {
+        // Localized "Date"
+        Text(L.get('export_date', this.appLanguage))
+          .layoutWeight(1.8)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+        Text(L.get('export_sahur', this.appLanguage))
+          .layoutWeight(1)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+        Text(L.get('prayer_fajr', this.appLanguage))
+          .layoutWeight(1)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+        Text(L.get('prayer_dhuhr', this.appLanguage))
+          .layoutWeight(1)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+        Text(L.get('prayer_asr', this.appLanguage))
+          .layoutWeight(1)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+        Text(L.get('export_iftar', this.appLanguage))
+          .layoutWeight(1)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+        Text(L.get('prayer_isha', this.appLanguage))
+          .layoutWeight(1)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+      }
+      .width('100%')
+      .padding({
+        top: 6,
+        bottom: 6,
+        left: 20,
+        right: 20
+      })
+      .backgroundColor(this.pdfColors.tintSoft)
+
+      // Table Rows
+      Column() {
+        ForEach(this.pdfRamadanDays, (row: RamadanTableRow, index: number) => {
+          Row() {
+            Column() {
+              Text(row.hijriDate)
+                .fontSize(9)
+                .lineHeight(11)
+                .fontWeight(FontWeight.Medium)
+                .fontColor(this.pdfColors.textWhite)
+              Text(row.gregorianDate).fontSize(7).lineHeight(9).fontColor(this.pdfColors.textMuted).margin({ top: 0 })
+            }.layoutWeight(1.8).alignItems(HorizontalAlign.Start)
+
+            Text(row.sahur).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
+            Text(row.fajr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
+            Text(row.dhuhr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
+            Text(row.asr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
+            Text(row.iftar).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.accentGoldLight) // Highlight Iftar
+            Text(row.isha).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
+          }
+          .width('100%')
+          .padding({
+            top: 2,
+            bottom: 2,
+            left: 20,
+            right: 20
+          })
+          .backgroundColor(index % 2 === 0 ? 'transparent' : this.pdfColors.tintSubtle)
+          .alignItems(VerticalAlign.Center)
+        })
+      }
+      .width('100%')
+
+      // Footer
+      Row() {
+        Text(L.get('generated_by', this.appLanguage)).fontSize(8).lineHeight(12).fontColor(this.pdfColors.textMuted)
+      }
+      .width('100%').padding({ top: 4, bottom: 4 }).justifyContent(FlexAlign.Center)
+    }
+    .width(595).height(842).backgroundColor(this.pdfColors.primaryGreen)
   }
 
   @Builder
@@ -1457,7 +1703,31 @@ export struct HomePage {
             .fontSize(11).fontColor(this.colors.textMuted)
             .lineHeight(16).width('100%')
         }
-      }
+
+        Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 12 })
+        Row() {
+          if (this.isExportingRamadan) {
+            LoadingProgress().width(18).height(18).color(this.colors.accentGold).margin({ right: 8 })
+            Text(L.get('export_saving')).fontSize(12).fontColor(this.colors.textMuted)
+          } else {
+            Text('🖨️').fontSize(16).margin({ right: 8 })
+            Text(L.get('export_ramadan_timetable'))
+              .fontSize(13)
+              .fontWeight(FontWeight.Bold)
+              .fontColor(this.colors.accentGold)
+          }
+        }
+        .width('100%')
+        .padding({ top: 8, bottom: 8 })
+        .justifyContent(FlexAlign.Center)
+        .backgroundColor(this.colors.tintSoft)
+        .borderRadius(10)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .onClick(() => {
+          this.handleExportRamadan();
+        })
+
+      } // end Column
       .width('100%')
       .padding(18)
       .backgroundColor(this.colors.cardDark)

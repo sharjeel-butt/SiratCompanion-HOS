@@ -92,6 +92,17 @@
           "value": "S"
         }
       ]
+    },
+    {
+      "name": "weekend_days",
+      "value": [
+        {
+          "value": "0"
+        },
+        {
+          "value": "6"
+        }
+      ]
     }
   ]
 }
