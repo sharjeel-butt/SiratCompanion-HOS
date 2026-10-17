@@ -102,6 +102,7 @@ export default class EntryAbility extends UIAbility {
 
   onWindowStageCreate(windowStage: window.WindowStage): void {
     AppLogger.init(this.context);
+    L.init(this.context);
     LayoutHelper.install();
     L.init(this.context);
     console.info('[Splash] L.init completed');
