@@ -16,7 +16,7 @@ import {
 import { CalendarDay, HijriDate } from '../hijricalendar/HijriCalendarModels';
 import { IslamicEvent } from '../models/DateModels';
 import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
-import { L } from '../helper/LocalizationHelper';
+import { L } from '../i8n/LocalizationHelper';
 import { Breakpoints } from '../common/Breakpoints';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 import { SettingsHelper } from '../helper/SettingsHelper';

@@ -37,7 +37,7 @@ import {
 } from '../helper/NotificationHelper';
 import { AppLogger } from '../helper/AppLogger';
 import { AppInfoHelper, AppInfoSnapshot } from '../helper/AppInfoHelper';
-import { L } from '../helper/LocalizationHelper';
+import { L } from '../i8n/LocalizationHelper';
 import { Breakpoints } from '../common/Breakpoints';
 import {
   CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED

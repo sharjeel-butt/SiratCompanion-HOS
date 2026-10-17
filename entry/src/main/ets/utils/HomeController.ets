@@ -12,7 +12,7 @@ import { PrayerManager } from '../prayer/PrayerManager';
 import { PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
 import { LocationMode } from '../models/SettingsModels';
 import { CachedLocation, FALLBACK_LOCATION, LocationCache } from './LocationCache';
-import { L } from '../helper/LocalizationHelper';
+import { L } from '../i8n/LocalizationHelper';
 import { TimezoneResolver } from './TimezoneResolver';
 import {
   AdvancedCalcSettings, DEFAULT_ADVANCED_CALC

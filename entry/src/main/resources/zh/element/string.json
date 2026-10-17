@@ -1,0 +1,2000 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "Sirat 伴侣入口模块"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "您的每日伊斯兰伴侣"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "Sirat 伴侣"
+    },
+    {
+      "name": "location_permission_reason",
+      "value": "用于为您所在位置计算礼拜时间和天房方向"
+    },
+    {
+      "name": "sensor_permission_reason",
+      "value": "用于天房指南针"
+    },
+    {
+      "name": "notification_permission_reason",
+      "value": "用于向您发送礼拜时间提醒"
+    },
+    {
+      "name": "calendar_permission_reason",
+      "value": "用于将礼拜时间提醒添加到您的日历"
+    },
+    {
+      "name": "app_name",
+      "value": "Sirat 伴侣"
+    },
+    {
+      "name": "app_tagline",
+      "value": "您的每日伊斯兰伴侣"
+    },
+    {
+      "name": "more_languages_coming",
+      "value": "更多语言即将推出"
+    },
+    {
+      "name": "tab_home",
+      "value": "首页"
+    },
+    {
+      "name": "tab_prayers",
+      "value": "礼拜"
+    },
+    {
+      "name": "tab_calendar",
+      "value": "回历"
+    },
+    {
+      "name": "tab_compass",
+      "value": "天房指南针"
+    },
+    {
+      "name": "tab_tasbih",
+      "value": "念珠"
+    },
+    {
+      "name": "current_prayer",
+      "value": "当前"
+    },
+    {
+      "name": "next_prayer",
+      "value": "下一个"
+    },
+    {
+      "name": "todays_prayers",
+      "value": "今日礼拜"
+    },
+    {
+      "name": "extra_timings",
+      "value": "额外时间"
+    },
+    {
+      "name": "upcoming_islamic_events",
+      "value": "即将到来的伊斯兰节日"
+    },
+    {
+      "name": "loading_location",
+      "value": "加载中..."
+    },
+    {
+      "name": "set_manual_location",
+      "value": "在设置中设置手动位置"
+    },
+    {
+      "name": "online_prayer_times",
+      "value": "在线礼拜时间"
+    },
+    {
+      "name": "coming_soon",
+      "value": "即将推出"
+    },
+    {
+      "name": "online_switch_hint",
+      "value": "请在设置中切换回本地公式以查看您所在位置的礼拜时间。"
+    },
+    {
+      "name": "cancel",
+      "value": "取消"
+    },
+    {
+      "name": "save",
+      "value": "保存"
+    },
+    {
+      "name": "reset",
+      "value": "重置"
+    },
+    {
+      "name": "delete",
+      "value": "删除"
+    },
+    {
+      "name": "edit",
+      "value": "编辑"
+    },
+    {
+      "name": "add",
+      "value": "添加"
+    },
+    {
+      "name": "back",
+      "value": "返回"
+    },
+    {
+      "name": "today",
+      "value": "今天"
+    },
+    {
+      "name": "exit",
+      "value": "退出"
+    },
+    {
+      "name": "ok",
+      "value": "确定"
+    },
+    {
+      "name": "exit_confirm_message",
+      "value": "您确定要退出 Sirat 伴侣吗？"
+    },
+    {
+      "name": "title_settings",
+      "value": "设置"
+    },
+    {
+      "name": "title_customize",
+      "value": "自定义"
+    },
+    {
+      "name": "category_location",
+      "value": "位置"
+    },
+    {
+      "name": "category_prayer_times",
+      "value": "礼拜时间"
+    },
+    {
+      "name": "category_hijri_calendar",
+      "value": "回历"
+    },
+    {
+      "name": "category_ui_customization",
+      "value": "界面自定义"
+    },
+    {
+      "name": "category_appearance",
+      "value": "外观"
+    },
+    {
+      "name": "category_about",
+      "value": "关于"
+    },
+    {
+      "name": "category_notifications",
+      "value": "通知"
+    },
+    {
+      "name": "brand_primary",
+      "value": "Sirat"
+    },
+    {
+      "name": "brand_accent",
+      "value": "伴侣"
+    },
+    {
+      "name": "convention",
+      "value": "计算方式"
+    },
+    {
+      "name": "convention_desc",
+      "value": "用于计算晨礼和宵礼"
+    },
+    {
+      "name": "madhab",
+      "value": "教法学派"
+    },
+    {
+      "name": "madhab_desc",
+      "value": "用于计算晡礼的阴影规则"
+    },
+    {
+      "name": "source",
+      "value": "来源"
+    },
+    {
+      "name": "source_desc",
+      "value": "本地公式或在线"
+    },
+    {
+      "name": "prayer_offsets",
+      "value": "礼拜时间偏移"
+    },
+    {
+      "name": "prayer_offsets_desc",
+      "value": "手动调整计算时间"
+    },
+    {
+      "name": "offsets_hint",
+      "value": "以分钟为单位调整时间（−60 至 +60）"
+    },
+    {
+      "name": "reset_all_offsets",
+      "value": "重置全部偏移"
+    },
+    {
+      "name": "high_latitude",
+      "value": "高纬度"
+    },
+    {
+      "name": "high_latitude_desc",
+      "value": "当太阳未到达所需角度时，晨礼和宵礼的回退方式"
+    },
+    {
+      "name": "highlat_none",
+      "value": "无"
+    },
+    {
+      "name": "highlat_middle",
+      "value": "夜半"
+    },
+    {
+      "name": "highlat_one_seventh",
+      "value": "七分之一夜"
+    },
+    {
+      "name": "highlat_angle",
+      "value": "基于角度"
+    },
+    {
+      "name": "highlat_proportional",
+      "value": "比例衰减（Diyanet Takdir）"
+    },
+    {
+      "name": "location",
+      "value": "位置"
+    },
+    {
+      "name": "location_desc",
+      "value": "选择应用如何确定您的位置"
+    },
+    {
+      "name": "gps",
+      "value": "GPS"
+    },
+    {
+      "name": "manual_location",
+      "value": "手动位置"
+    },
+    {
+      "name": "current_position",
+      "value": "当前位置"
+    },
+    {
+      "name": "latitude",
+      "value": "纬度"
+    },
+    {
+      "name": "longitude",
+      "value": "经度"
+    },
+    {
+      "name": "city",
+      "value": "城市"
+    },
+    {
+      "name": "last_refreshed",
+      "value": "最后更新"
+    },
+    {
+      "name": "save_coordinates",
+      "value": "保存坐标"
+    },
+    {
+      "name": "latitude_hint",
+      "value": "纬度  (−90 至 90)"
+    },
+    {
+      "name": "longitude_hint",
+      "value": "经度  (−180 至 180)"
+    },
+    {
+      "name": "city_name_optional",
+      "value": "城市名称（可选）"
+    },
+    {
+      "name": "city_name_placeholder",
+      "value": "留空自动检测"
+    },
+    {
+      "name": "hijri_offset",
+      "value": "回历日期与日历偏移"
+    },
+    {
+      "name": "hijri_offset_desc",
+      "value": "将伊斯兰日期和日历同时偏移 ±3 天"
+    },
+    {
+      "name": "matching_standard",
+      "value": "与标准计算一致"
+    },
+    {
+      "name": "offset_days_ahead",
+      "value": "天提前"
+    },
+    {
+      "name": "offset_days_behind",
+      "value": "天延后"
+    },
+    {
+      "name": "about_version",
+      "value": "版本"
+    },
+    {
+      "name": "about_platform",
+      "value": "平台"
+    },
+    {
+      "name": "about_platform_value",
+      "value": "HarmonyOS 6+"
+    },
+    {
+      "name": "about_build",
+      "value": "构建号"
+    },
+    {
+      "name": "about_bundle",
+      "value": "应用包名"
+    },
+    {
+      "name": "about_copyright",
+      "value": "© 2026"
+    },
+    {
+      "name": "notifications_master",
+      "value": "启用通知"
+    },
+    {
+      "name": "notifications_master_desc",
+      "value": "在礼拜前和礼拜时接收提醒"
+    },
+    {
+      "name": "notify_before",
+      "value": "提前通知"
+    },
+    {
+      "name": "notify_before_desc",
+      "value": "第一个提醒在礼拜前多少分钟发送"
+    },
+    {
+      "name": "notify_prayers",
+      "value": "礼拜提醒"
+    },
+    {
+      "name": "notify_prayers_desc",
+      "value": "选择哪些礼拜发送提醒"
+    },
+    {
+      "name": "notifications_footer",
+      "value": "提醒已安排在未来 3 天内，每次打开应用都会重新安排"
+    },
+    {
+      "name": "notifications_footer_calendar",
+      "value": "提醒已添加到您的系统日历中，为期 3 天，每次打开应用都会续排"
+    },
+    {
+      "name": "notification_permission_denied",
+      "value": "需要通知权限才能启用提醒"
+    },
+    {
+      "name": "calendar_permission_denied",
+      "value": "需要日历权限才能启用提醒"
+    },
+    {
+      "name": "notif_before_title",
+      "value": "礼拜提醒"
+    },
+    {
+      "name": "notif_before_content",
+      "value": "距离"
+    },
+    {
+      "name": "notif_exact_title",
+      "value": "礼拜时间"
+    },
+    {
+      "name": "notif_exact_content",
+      "value": "现在是"
+    },
+    {
+      "name": "notif_minutes_suffix",
+      "value": "分钟"
+    },
+    {
+      "name": "notif_test_button",
+      "value": "发送测试通知"
+    },
+    {
+      "name": "notif_test_sending",
+      "value": "正在发送测试通知..."
+    },
+    {
+      "name": "notif_test_ok",
+      "value": "测试通知已安排 — 约 5 秒后您将看到它"
+    },
+    {
+      "name": "notif_test_ok_calendar",
+      "value": "测试事件已添加到您的日历 — 请查看日历应用"
+    },
+    {
+      "name": "notif_test_failed",
+      "value": "测试通知失败"
+    },
+    {
+      "name": "notif_dismiss",
+      "value": "关闭"
+    },
+    {
+      "name": "notif_pray_fajr",
+      "value": "礼晨礼"
+    },
+    {
+      "name": "notif_pray_dhuhr",
+      "value": "礼晌礼"
+    },
+    {
+      "name": "notif_pray_asr",
+      "value": "礼晡礼"
+    },
+    {
+      "name": "notif_pray_maghrib",
+      "value": "礼昏礼"
+    },
+    {
+      "name": "notif_pray_isha",
+      "value": "礼宵礼"
+    },
+    {
+      "name": "hadith_fajr",
+      "value": "谁在集体中礼了晨礼，他就在真主的保护之下。 ——《穆斯林圣训实录》657a"
+    },
+    {
+      "name": "hadith_dhuhr",
+      "value": "这是天之门开启的时刻，我喜欢我的善行在这时升上。 ——《提尔密济圣训实录》478"
+    },
+    {
+      "name": "hadith_asr",
+      "value": "谁（故意）撇弃晡礼，就如同失去了家人和财产。 ——《布哈里圣训实录》552"
+    },
+    {
+      "name": "hadith_maghrib",
+      "value": "五番拜功……是它们之间所犯之罪的赎罪，只要远离大罪。 ——《穆斯林圣训实录》233"
+    },
+    {
+      "name": "hadith_isha",
+      "value": "谁在集体中礼了宵礼，就如他礼了半夜的拜。 ——《穆斯林圣训实录》656a"
+    },
+    {
+      "name": "log_view_button",
+      "value": "诊断日志"
+    },
+    {
+      "name": "log_view_desc",
+      "value": "查看、复制或清除应用日志文件"
+    },
+    {
+      "name": "log_view_title",
+      "value": "诊断日志"
+    },
+    {
+      "name": "log_copy",
+      "value": "复制"
+    },
+    {
+      "name": "log_clear",
+      "value": "清除"
+    },
+    {
+      "name": "log_empty",
+      "value": "日志为空。"
+    },
+    {
+      "name": "log_copied",
+      "value": "日志已复制到剪贴板"
+    },
+    {
+      "name": "log_cleared",
+      "value": "日志已清除"
+    },
+    {
+      "name": "advanced_calc_title",
+      "value": "高级计算"
+    },
+    {
+      "name": "rounding_method",
+      "value": "舍入方式"
+    },
+    {
+      "name": "rounding_method_desc",
+      "value": "控制显示时间的舍入方式"
+    },
+    {
+      "name": "midnight_method",
+      "value": "午夜方式"
+    },
+    {
+      "name": "midnight_method_desc",
+      "value": "定义伊斯兰午夜使用哪个夜晚边界"
+    },
+    {
+      "name": "polar_resolution",
+      "value": "极地处理"
+    },
+    {
+      "name": "polar_resolution_desc",
+      "value": "当太阳未到达所需角度时的回退方式"
+    },
+    {
+      "name": "shafaq",
+      "value": "霞光"
+    },
+    {
+      "name": "shafaq_desc",
+      "value": "霞光由 Moonsighting Committee 方法用于确定宵礼使用哪一种暮光。"
+    },
+    {
+      "name": "custom_angles",
+      "value": "自定义角度"
+    },
+    {
+      "name": "custom_fajr_angle",
+      "value": "晨礼角度"
+    },
+    {
+      "name": "custom_isha_angle",
+      "value": "宵礼角度"
+    },
+    {
+      "name": "custom_isha_interval",
+      "value": "宵礼间隔（分钟）"
+    },
+    {
+      "name": "custom_isha_interval_hint",
+      "value": "0 = 使用角度。>0 = 昏礼后分钟数。"
+    },
+    {
+      "name": "rounding_nearest",
+      "value": "最近"
+    },
+    {
+      "name": "rounding_up",
+      "value": "进位"
+    },
+    {
+      "name": "rounding_none",
+      "value": "不舍入"
+    },
+    {
+      "name": "midnight_standard",
+      "value": "日落至日出"
+    },
+    {
+      "name": "midnight_standard_desc",
+      "value": "默认"
+    },
+    {
+      "name": "midnight_jafari",
+      "value": "日落至晨礼"
+    },
+    {
+      "name": "polar_unresolved",
+      "value": "不处理"
+    },
+    {
+      "name": "polar_unresolved_desc",
+      "value": "默认"
+    },
+    {
+      "name": "polar_aqrab_balad",
+      "value": "最近城市"
+    },
+    {
+      "name": "polar_aqrab_yaum",
+      "value": "最近日期"
+    },
+    {
+      "name": "shafaq_general",
+      "value": "一般"
+    },
+    {
+      "name": "shafaq_general_desc",
+      "value": "默认"
+    },
+    {
+      "name": "shafaq_ahmer",
+      "value": "红色"
+    },
+    {
+      "name": "shafaq_abyad",
+      "value": "白色"
+    },
+    {
+      "name": "show_extra_timings",
+      "value": "显示额外时间"
+    },
+    {
+      "name": "show_extra_timings_desc",
+      "value": "封斋、日出、日落和夜间时间"
+    },
+    {
+      "name": "show_islamic_events",
+      "value": "显示伊斯兰节日"
+    },
+    {
+      "name": "show_islamic_events_desc",
+      "value": "在首页显示即将到来的伊斯兰节日"
+    },
+    {
+      "name": "dark_mode",
+      "value": "深色模式"
+    },
+    {
+      "name": "dark_mode_desc",
+      "value": "选择应用的外观"
+    },
+    {
+      "name": "theme_light",
+      "value": "浅色"
+    },
+    {
+      "name": "theme_dark",
+      "value": "深色"
+    },
+    {
+      "name": "theme_system",
+      "value": "跟随系统"
+    },
+    {
+      "name": "tasbih_render_style",
+      "value": "念珠主题"
+    },
+    {
+      "name": "tasbih_render_style_desc",
+      "value": "选择念珠的样式"
+    },
+    {
+      "name": "bead_style_premium",
+      "value": "高级（3D）"
+    },
+    {
+      "name": "bead_style_classic",
+      "value": "经典"
+    },
+    {
+      "name": "language",
+      "value": "语言"
+    },
+    {
+      "name": "language_desc",
+      "value": "选择您偏好的语言"
+    },
+    {
+      "name": "lang_en",
+      "value": "English (英语)"
+    },
+    {
+      "name": "lang_zh",
+      "value": "中文"
+    },
+    {
+      "name": "lang_ar",
+      "value": "العربية (阿拉伯语)"
+    },
+    {
+      "name": "haptic_feedback",
+      "value": "振动"
+    },
+    {
+      "name": "haptic_feedback_desc",
+      "value": "念珠计数时振动"
+    },
+    {
+      "name": "sound_feedback",
+      "value": "声音"
+    },
+    {
+      "name": "sound_feedback_desc",
+      "value": "念珠计数时播放提示音"
+    },
+    {
+      "name": "sound_style",
+      "value": "音效"
+    },
+    {
+      "name": "sound_style_desc",
+      "value": "选择点击音效"
+    },
+    {
+      "name": "controlled_by_system",
+      "value": "受系统设置控制"
+    },
+    {
+      "name": "sound_glass_tap_name",
+      "value": "玻璃轻敲"
+    },
+    {
+      "name": "sound_glass_tap_desc",
+      "value": "玻璃轻敲音效"
+    },
+    {
+      "name": "sound_light_chime_name",
+      "value": "轻铃"
+    },
+    {
+      "name": "sound_light_chime_desc",
+      "value": "轻铃音效"
+    },
+    {
+      "name": "sound_muted_bead_name",
+      "value": "闷珠"
+    },
+    {
+      "name": "sound_muted_bead_desc",
+      "value": "闷珠音效"
+    },
+    {
+      "name": "sound_soft_click_name",
+      "value": "轻点"
+    },
+    {
+      "name": "sound_soft_click_desc",
+      "value": "轻点音效"
+    },
+    {
+      "name": "sound_warm_knock_name",
+      "value": "暖扣"
+    },
+    {
+      "name": "sound_warm_knock_desc",
+      "value": "暖扣音效"
+    },
+    {
+      "name": "title_tasbih",
+      "value": "念珠"
+    },
+    {
+      "name": "my_tasbihs",
+      "value": "我的念珠"
+    },
+    {
+      "name": "select_dhikr",
+      "value": "选择念词"
+    },
+    {
+      "name": "new_tasbih",
+      "value": "新念珠"
+    },
+    {
+      "name": "edit_tasbih",
+      "value": "编辑念珠"
+    },
+    {
+      "name": "new_dhikr",
+      "value": "新念词"
+    },
+    {
+      "name": "edit_dhikr",
+      "value": "编辑念词"
+    },
+    {
+      "name": "tasbih_name",
+      "value": "名称"
+    },
+    {
+      "name": "tasbih_name_placeholder",
+      "value": "例如：晚间赞念"
+    },
+    {
+      "name": "dhikr_arabic",
+      "value": "阿拉伯语"
+    },
+    {
+      "name": "dhikr_transliteration",
+      "value": "音译（可选）"
+    },
+    {
+      "name": "dhikr_transliteration_placeholder",
+      "value": "例如：SubhanAllah"
+    },
+    {
+      "name": "dhikr_translation",
+      "value": "翻译（可选）"
+    },
+    {
+      "name": "dhikr_translation_placeholder",
+      "value": "例如：荣耀归于安拉"
+    },
+    {
+      "name": "target_count",
+      "value": "目标次数"
+    },
+    {
+      "name": "flick_up_to_count",
+      "value": "上滑计数"
+    },
+    {
+      "name": "flick_hint",
+      "value": "上滑：+1     ·     下滑：−1"
+    },
+    {
+      "name": "total_on_tasbih",
+      "value": "此念珠总计"
+    },
+    {
+      "name": "dhikr_count_singular",
+      "value": "个念词"
+    },
+    {
+      "name": "dhikr_count_plural",
+      "value": "个念词"
+    },
+    {
+      "name": "new_tasbih_button",
+      "value": "+ 新建念珠"
+    },
+    {
+      "name": "add_dhikr_button",
+      "value": "+ 添加念词"
+    },
+    {
+      "name": "all_dhikrs_complete",
+      "value": "所有念词已完成"
+    },
+    {
+      "name": "counter_reset_toast",
+      "value": "计数器已重置"
+    },
+    {
+      "name": "no_dhikr_title",
+      "value": "此念珠中没有念词"
+    },
+    {
+      "name": "no_dhikr_hint",
+      "value": "点击顶部的念词标签添加"
+    },
+    {
+      "name": "switch_dhikr",
+      "value": "切换念词"
+    },
+    {
+      "name": "reset_counter",
+      "value": "重置计数器"
+    },
+    {
+      "name": "delete_dhikr",
+      "value": "删除念词"
+    },
+    {
+      "name": "add_new_dhikr",
+      "value": "添加新念词"
+    },
+    {
+      "name": "reset_all",
+      "value": "重置全部"
+    },
+    {
+      "name": "reset_all_confirm_title",
+      "value": "重置念珠"
+    },
+    {
+      "name": "reset_all_confirm_message",
+      "value": "重置此念珠中所有念词的计数？"
+    },
+    {
+      "name": "reset_all_done",
+      "value": "念珠已重置"
+    },
+    {
+      "name": "title_qibla",
+      "value": "天房指南针"
+    },
+    {
+      "name": "qibla_direction",
+      "value": "天房方向"
+    },
+    {
+      "name": "device_heading",
+      "value": "设备朝向"
+    },
+    {
+      "name": "distance_to_kaaba",
+      "value": "距天房距离"
+    },
+    {
+      "name": "compass_ready",
+      "value": "指南针已就绪。旋转设备以对准 🕋 标记。"
+    },
+    {
+      "name": "keep_device_flat",
+      "value": "请保持设备水平以获得准确读数。"
+    },
+    {
+      "name": "sensor_unavailable",
+      "value": "指南针传感器不可用。请在真机上测试。"
+    },
+    {
+      "name": "location_unavailable",
+      "value": "位置不可用"
+    },
+    {
+      "name": "qibla_calibrate_title",
+      "value": "校准指南针"
+    },
+    {
+      "name": "qibla_calibrate_desc",
+      "value": "请以 8 字形摆动手机，以提高指南针精度。"
+    },
+    {
+      "name": "qibla_calibrate_skip",
+      "value": "暂时跳过"
+    },
+    {
+      "name": "qibla_calibrate_hint",
+      "value": "校准可提高精度"
+    },
+    {
+      "name": "title_hijri_calendar",
+      "value": "回历"
+    },
+    {
+      "name": "important_dates",
+      "value": "重要日期"
+    },
+    {
+      "name": "no_events_this_month",
+      "value": "本月没有重大伊斯兰节日"
+    },
+    {
+      "name": "status_next",
+      "value": "下一次"
+    },
+    {
+      "name": "status_pray",
+      "value": "礼拜"
+    },
+    {
+      "name": "status_both",
+      "value": "礼拜 · 下一次"
+    },
+    {
+      "name": "status_prayed",
+      "value": "✓ 已礼"
+    },
+    {
+      "name": "status_express",
+      "value": "抓紧"
+    },
+    {
+      "name": "prayer_fajr",
+      "value": "晨礼"
+    },
+    {
+      "name": "prayer_dhuhr",
+      "value": "晌礼"
+    },
+    {
+      "name": "prayer_asr",
+      "value": "晡礼"
+    },
+    {
+      "name": "prayer_maghrib",
+      "value": "昏礼"
+    },
+    {
+      "name": "prayer_isha",
+      "value": "宵礼"
+    },
+    {
+      "name": "prayer_jummah",
+      "value": "主麻"
+    },
+    {
+      "name": "timing_imsak",
+      "value": "封斋"
+    },
+    {
+      "name": "timing_sunrise",
+      "value": "日出"
+    },
+    {
+      "name": "timing_sunset",
+      "value": "日落"
+    },
+    {
+      "name": "timing_first_third",
+      "value": "第一夜段"
+    },
+    {
+      "name": "timing_midnight",
+      "value": "午夜"
+    },
+    {
+      "name": "timing_last_third",
+      "value": "最后夜段"
+    },
+    {
+      "name": "event_new_year",
+      "value": "伊斯兰新年"
+    },
+    {
+      "name": "event_ashura",
+      "value": "阿舒拉日"
+    },
+    {
+      "name": "event_mawlid",
+      "value": "圣纪节"
+    },
+    {
+      "name": "event_isra_miraj",
+      "value": "登霄夜"
+    },
+    {
+      "name": "event_mid_shaban",
+      "value": "舍尔邦月中"
+    },
+    {
+      "name": "event_ramadan_start",
+      "value": "斋月"
+    },
+    {
+      "name": "event_eid_fitr",
+      "value": "开斋节"
+    },
+    {
+      "name": "event_arafah",
+      "value": "阿拉法日"
+    },
+    {
+      "name": "event_eid_adha",
+      "value": "宰牲节"
+    },
+    {
+      "name": "method_karachi",
+      "value": "卡拉奇伊斯兰科学大学"
+    },
+    {
+      "name": "method_jafari",
+      "value": "什叶派十二伊玛目派（库姆列瓦研究所）"
+    },
+    {
+      "name": "method_isna",
+      "value": "北美伊斯兰协会"
+    },
+    {
+      "name": "method_mwl",
+      "value": "穆斯林世界联盟"
+    },
+    {
+      "name": "method_umm_al_qura",
+      "value": "乌姆·库拉（麦加）"
+    },
+    {
+      "name": "method_egyptian",
+      "value": "埃及测绘局"
+    },
+    {
+      "name": "method_sunni_iraq",
+      "value": "逊尼派基金会（伊拉克）"
+    },
+    {
+      "name": "method_qatar",
+      "value": "卡塔尔宗教基金"
+    },
+    {
+      "name": "method_singapore",
+      "value": "新加坡（MUIS）"
+    },
+    {
+      "name": "method_france",
+      "value": "法国（UOIF）"
+    },
+    {
+      "name": "method_turkey",
+      "value": "土耳其（宗教事务局）"
+    },
+    {
+      "name": "method_russia",
+      "value": "俄罗斯（SAMR）"
+    },
+    {
+      "name": "method_uae",
+      "value": "阿联酋（GIAE）"
+    },
+    {
+      "name": "method_moonsighting",
+      "value": "观月委员会"
+    },
+    {
+      "name": "method_dubai",
+      "value": "海湾地区（迪拜）"
+    },
+    {
+      "name": "method_kuwait",
+      "value": "科威特"
+    },
+    {
+      "name": "method_france_15",
+      "value": "法国 15°"
+    },
+    {
+      "name": "method_france_18",
+      "value": "法国 18°"
+    },
+    {
+      "name": "method_turkey_europe",
+      "value": "土耳其宗教事务局（欧洲）"
+    },
+    {
+      "name": "method_tehran",
+      "value": "什叶派，德黑兰大学地球物理研究所"
+    },
+    {
+      "name": "method_indonesia",
+      "value": "印度尼西亚宗教部（KEMENAG）"
+    },
+    {
+      "name": "method_algeria",
+      "value": "阿尔及利亚宗教事务部"
+    },
+    {
+      "name": "method_brunei",
+      "value": "文莱宗教事务部"
+    },
+    {
+      "name": "method_custom",
+      "value": "自定义"
+    },
+    {
+      "name": "method_short_karachi",
+      "value": "卡拉奇"
+    },
+    {
+      "name": "method_short_jafari",
+      "value": "贾法里"
+    },
+    {
+      "name": "method_short_isna",
+      "value": "ISNA"
+    },
+    {
+      "name": "method_short_mwl",
+      "value": "MWL"
+    },
+    {
+      "name": "method_short_umm_al_qura",
+      "value": "麦加"
+    },
+    {
+      "name": "method_short_egyptian",
+      "value": "埃及"
+    },
+    {
+      "name": "method_short_sunni_iraq",
+      "value": "伊拉克"
+    },
+    {
+      "name": "method_short_qatar",
+      "value": "卡塔尔"
+    },
+    {
+      "name": "method_short_singapore",
+      "value": "新加坡"
+    },
+    {
+      "name": "method_short_france",
+      "value": "法国"
+    },
+    {
+      "name": "method_short_turkey",
+      "value": "土耳其"
+    },
+    {
+      "name": "method_short_russia",
+      "value": "俄罗斯"
+    },
+    {
+      "name": "method_short_uae",
+      "value": "阿联酋"
+    },
+    {
+      "name": "method_short_moonsighting",
+      "value": "观月会"
+    },
+    {
+      "name": "method_short_dubai",
+      "value": "迪拜"
+    },
+    {
+      "name": "method_short_kuwait",
+      "value": "科威特"
+    },
+    {
+      "name": "method_short_france_15",
+      "value": "法国 15°"
+    },
+    {
+      "name": "method_short_france_18",
+      "value": "法国 18°"
+    },
+    {
+      "name": "method_short_turkey_europe",
+      "value": "土耳其欧"
+    },
+    {
+      "name": "method_short_tehran",
+      "value": "德黑兰"
+    },
+    {
+      "name": "method_short_indonesia",
+      "value": "印尼"
+    },
+    {
+      "name": "method_short_algeria",
+      "value": "阿尔及利亚"
+    },
+    {
+      "name": "method_short_brunei",
+      "value": "文莱"
+    },
+    {
+      "name": "method_short_custom",
+      "value": "自定义"
+    },
+    {
+      "name": "asr_standard",
+      "value": "标准（沙斐仪 / 马立克 / 罕百里）"
+    },
+    {
+      "name": "asr_hanafi",
+      "value": "哈乃斐"
+    },
+    {
+      "name": "asr_short_standard",
+      "value": "标准"
+    },
+    {
+      "name": "asr_short_hanafi",
+      "value": "哈乃斐"
+    },
+    {
+      "name": "source_local",
+      "value": "本地公式（离线）"
+    },
+    {
+      "name": "source_api",
+      "value": "在线 API"
+    },
+    {
+      "name": "source_short_local",
+      "value": "本地"
+    },
+    {
+      "name": "source_short_online",
+      "value": "在线"
+    },
+    {
+      "name": "theme_preset",
+      "value": "应用主题"
+    },
+    {
+      "name": "theme_preset_desc",
+      "value": "选择应用的视觉风格"
+    },
+    {
+      "name": "theme_preset_sirat",
+      "value": "Sirat · 现代"
+    },
+    {
+      "name": "theme_preset_sirat_desc",
+      "value": "现代简约 — HarmonyOS 7 风格"
+    },
+    {
+      "name": "theme_preset_current",
+      "value": "Sirat 经典"
+    },
+    {
+      "name": "theme_preset_current_desc",
+      "value": "暖米色与深绿 — 经典原版"
+    },
+    {
+      "name": "theme_preset_harmony7",
+      "value": "Noor · 光辉"
+    },
+    {
+      "name": "theme_preset_harmony7_desc",
+      "value": "光辉紫罗兰 — 宁静现代"
+    },
+    {
+      "name": "theme_preset_harmony6",
+      "value": "Sahar · 晨曦"
+    },
+    {
+      "name": "theme_preset_harmony6_desc",
+      "value": "晨曦琥珀 — 初光之静"
+    },
+    {
+      "name": "theme_preset_harmony5",
+      "value": "Bahar · 海韵"
+    },
+    {
+      "name": "theme_preset_harmony5_desc",
+      "value": "海韵青绿 — 辽阔清爽"
+    },
+    {
+      "name": "theme_amber",
+      "value": "琥珀"
+    },
+    {
+      "name": "theme_charcoal",
+      "value": "炭黑"
+    },
+    {
+      "name": "theme_emerald",
+      "value": "翡翠"
+    },
+    {
+      "name": "theme_pearl",
+      "value": "珍珠"
+    },
+    {
+      "name": "theme_gold",
+      "value": "金色（金属）"
+    },
+    {
+      "name": "theme_white",
+      "value": "白色"
+    },
+    {
+      "name": "theme_sapphire",
+      "value": "蓝宝石"
+    },
+    {
+      "name": "theme_rose",
+      "value": "玫瑰"
+    },
+    {
+      "name": "theme_silver",
+      "value": "银色"
+    },
+    {
+      "name": "wizard_step",
+      "value": "步骤"
+    },
+    {
+      "name": "wizard_welcome_title",
+      "value": "欢迎使用 Sirat 伴侣"
+    },
+    {
+      "name": "wizard_welcome_desc",
+      "value": "让我们设置您的偏好。您可以随时在设置中更改。"
+    },
+    {
+      "name": "wizard_language_title",
+      "value": "选择语言"
+    },
+    {
+      "name": "wizard_language_desc",
+      "value": "应用将在所有界面使用此语言"
+    },
+    {
+      "name": "wizard_privacy_title",
+      "value": "隐私政策"
+    },
+    {
+      "name": "wizard_privacy_desc",
+      "value": "请在继续之前阅读并接受"
+    },
+    {
+      "name": "privacy_agree_label",
+      "value": "我已阅读并同意隐私政策"
+    },
+    {
+      "name": "privacy_view_full",
+      "value": "在线查看完整隐私政策"
+    },
+    {
+      "name": "wizard_theme_title",
+      "value": "选择主题"
+    },
+    {
+      "name": "wizard_theme_desc",
+      "value": "选择一种视觉风格。您可以随时在设置中更改。"
+    },
+    {
+      "name": "wizard_location_title",
+      "value": "设置位置"
+    },
+    {
+      "name": "wizard_location_desc",
+      "value": "用于礼拜时间和天房方向"
+    },
+    {
+      "name": "wizard_convention_title",
+      "value": "计算偏好"
+    },
+    {
+      "name": "wizard_convention_desc",
+      "value": "选择如何计算礼拜时间"
+    },
+    {
+      "name": "wizard_grant_permission",
+      "value": "授予位置权限"
+    },
+    {
+      "name": "wizard_getting_location",
+      "value": "正在定位..."
+    },
+    {
+      "name": "wizard_location_ready",
+      "value": "位置已检测"
+    },
+    {
+      "name": "wizard_location_failed",
+      "value": "无法获取位置"
+    },
+    {
+      "name": "wizard_retry",
+      "value": "重试"
+    },
+    {
+      "name": "wizard_next",
+      "value": "下一步"
+    },
+    {
+      "name": "wizard_finish",
+      "value": "开始使用"
+    },
+    {
+      "name": "home_today_progress",
+      "value": "每日礼拜"
+    },
+    {
+      "name": "home_prayers_completed",
+      "value": "次礼拜已完成"
+    },
+    {
+      "name": "home_keep_going",
+      "value": "继续保持！"
+    },
+    {
+      "name": "home_streak",
+      "value": "天连续"
+    },
+    {
+      "name": "home_best_streak",
+      "value": "最佳"
+    },
+    {
+      "name": "home_days",
+      "value": "天"
+    },
+    {
+      "name": "home_this_week",
+      "value": "本周"
+    },
+    {
+      "name": "home_week_summary",
+      "value": "次礼拜本周"
+    },
+    {
+      "name": "home_this_month",
+      "value": "本月"
+    },
+    {
+      "name": "home_month_summary",
+      "value": "次礼拜本月"
+    },
+    {
+      "name": "home_tasbih",
+      "value": "每日念珠"
+    },
+    {
+      "name": "home_tasbih_lifetime",
+      "value": "累计计数"
+    },
+    {
+      "name": "home_tasbih_summary",
+      "value": "串念珠"
+    },
+    {
+      "name": "home_dhikrs",
+      "value": "个念词"
+    },
+    {
+      "name": "home_monthly_view",
+      "value": "月度视图"
+    },
+    {
+      "name": "home_perfect_days",
+      "value": "完美日"
+    },
+    {
+      "name": "home_days_elapsed",
+      "value": "已过天数"
+    },
+    {
+      "name": "home_lifetime_1y",
+      "value": "次礼拜（近一年）"
+    },
+    {
+      "name": "home_next_event",
+      "value": "下一个事件"
+    },
+    {
+      "name": "home_event_today",
+      "value": "就是今天！"
+    },
+    {
+      "name": "home_event_tomorrow",
+      "value": "明天"
+    },
+    {
+      "name": "ramadan_card_title",
+      "value": "斋月"
+    },
+    {
+      "name": "ramadan_day_of",
+      "value": "第"
+    },
+    {
+      "name": "ramadan_day_of_suffix",
+      "value": "天"
+    },
+    {
+      "name": "ramadan_days_until",
+      "value": "距斋月开始还有"
+    },
+    {
+      "name": "ramadan_fast_start",
+      "value": "封斋开始（Imsak）"
+    },
+    {
+      "name": "ramadan_fast_end",
+      "value": "开斋时间（Maghrib）"
+    },
+    {
+      "name": "ramadan_today_fast",
+      "value": "今日斋戒时段"
+    },
+    {
+      "name": "ramadan_first_day_fast",
+      "value": "斋月第一天"
+    },
+    {
+      "name": "ramadan_calendar_start",
+      "value": "斋月开始"
+    },
+    {
+      "name": "ramadan_calendar_end",
+      "value": "斋月结束"
+    },
+    {
+      "name": "ramadan_ashras",
+      "value": "三个十日"
+    },
+    {
+      "name": "ramadan_first_ashra",
+      "value": "第一个十日"
+    },
+    {
+      "name": "ramadan_second_ashra",
+      "value": "第二个十日"
+    },
+    {
+      "name": "ramadan_third_ashra",
+      "value": "第三个十日"
+    },
+    {
+      "name": "ramadan_first_ashra_significance",
+      "value": "慈悯之旬"
+    },
+    {
+      "name": "ramadan_second_ashra_significance",
+      "value": "宽恕之旬"
+    },
+    {
+      "name": "ramadan_third_ashra_significance",
+      "value": "免于火狱之旬"
+    },
+    {
+      "name": "ramadan_laylat_al_qadr",
+      "value": "高贵之夜"
+    },
+    {
+      "name": "ramadan_laylat_al_qadr_desc",
+      "value": "高贵之夜贵过千月。请在斋月最后十天的奇数夜中寻找它。"
+    },
+    {
+      "name": "ramadan_jummah_tul_widah",
+      "value": "辞别主麻"
+    },
+    {
+      "name": "ramadan_jummah_tul_widah_desc",
+      "value": "斋月的最后一个主麻日。"
+    },
+    {
+      "name": "ramadan_today",
+      "value": "今晚！"
+    },
+    {
+      "name": "countdown_fast_ends",
+      "value": "距开斋还有"
+    },
+    {
+      "name": "countdown_fast_starts",
+      "value": "距封斋还有"
+    },
+    {
+      "name": "countdown_fast_ends_desc",
+      "value": "准备开斋"
+    },
+    {
+      "name": "countdown_fast_starts_desc",
+      "value": "请在封斋前完成封斋饭"
+    },
+    {
+      "name": "dua_iftar_name",
+      "value": "开斋祈祷词"
+    },
+    {
+      "name": "dua_iftar_translation",
+      "value": "干渴已消，血管已润，若真主意欲，报酬已定。"
+    },
+    {
+      "name": "dua_suhoor_name",
+      "value": "封斋举意"
+    },
+    {
+      "name": "dua_suhoor_translation",
+      "value": "我举意为明天在莱麦丹月封斋。"
+    },
+    {
+      "name": "sun_path_we_are_here",
+      "value": "我们在这里"
+    },
+    {
+      "name": "mark_all",
+      "value": "全部标记为已礼"
+    },
+    {
+      "name": "default_location",
+      "value": "默认位置"
+    },
+    {
+      "name": "unknown_location",
+      "value": "未知位置"
+    },
+    {
+      "name": "dialog_gps_off_title",
+      "value": "定位服务已关闭"
+    },
+    {
+      "name": "dialog_gps_off_message",
+      "value": "请开启定位服务，以便为您所在城市准确计算礼拜时间。"
+    },
+    {
+      "name": "dialog_permission_title",
+      "value": "需要权限"
+    },
+    {
+      "name": "dialog_permission_message",
+      "value": "需要位置权限才能显示您所在城市的礼拜时间。\n请在系统设置中授予。"
+    },
+    {
+      "name": "error_gps_fetch_failed",
+      "value": "无法获取 GPS 位置"
+    },
+    {
+      "name": "error_gps_off",
+      "value": "请开启定位服务"
+    },
+    {
+      "name": "error_location_permission_denied",
+      "value": "位置权限被拒绝"
+    },
+    {
+      "name": "time_format",
+      "value": "时间格式"
+    },
+    {
+      "name": "time_format_desc",
+      "value": "礼拜时间的显示方式"
+    },
+    {
+      "name": "time_format_system",
+      "value": "跟随系统"
+    },
+    {
+      "name": "time_format_system_desc",
+      "value": "使用设备的偏好设置"
+    },
+    {
+      "name": "time_format_12h",
+      "value": "12 小时制（上午/下午）"
+    },
+    {
+      "name": "time_format_24h",
+      "value": "24 小时制"
+    },
+    {
+      "name": "hijri_calendar_type",
+      "value": "日历类型"
+    },
+    {
+      "name": "hijri_calendar_type_desc",
+      "value": "选择用于转换的回历"
+    },
+    {
+      "name": "hijri_calendar_umm_al_qura",
+      "value": "乌姆·库拉"
+    },
+    {
+      "name": "hijri_calendar_umm_al_qura_desc",
+      "value": "沙特阿拉伯官方日历（1318–1500 AH）"
+    },
+    {
+      "name": "hijri_calendar_tabular",
+      "value": "表格历（算术）"
+    },
+    {
+      "name": "hijri_calendar_tabular_desc",
+      "value": "科威特算法 — 所有年份均可计算"
+    },
+    {
+      "name": "subsection_home_ui",
+      "value": "首页界面"
+    },
+    {
+      "name": "subsection_prayer_ui",
+      "value": "礼拜界面"
+    },
+    {
+      "name": "subsection_feedback",
+      "value": "声音与反馈"
+    },
+    {
+      "name": "subsection_language",
+      "value": "语言"
+    },
+    {
+      "name": "event_raghaib",
+      "value": "拉加伊卜之夜"
+    },
+    {
+      "name": "countdown_fast_ends_now",
+      "value": "开斋时间到"
+    },
+    {
+      "name": "countdown_fast_starts_now",
+      "value": "封斋时间到"
+    },
+    {
+      "name": "shafaq_method_unavailable",
+      "value": "仅适用于观月委员会方法"
+    },
+    {
+      "name": "event_perspective",
+      "value": "节日传统"
+    },
+    {
+      "name": "event_perspective_desc",
+      "value": "选择首页显示所有穆斯林共同遵守的节日，或同时显示逊尼派与什叶派特有的节日。"
+    },
+    {
+      "name": "event_perspective_universal",
+      "value": "仅通用"
+    },
+    {
+      "name": "event_perspective_sunni",
+      "value": "逊尼派 + 通用"
+    },
+    {
+      "name": "event_perspective_shia",
+      "value": "什叶派 + 通用"
+    },
+    {
+      "name": "event_perspective_all",
+      "value": "全部显示"
+    },
+    {
+      "name": "event_arbaeen",
+      "value": "阿尔巴因"
+    },
+    {
+      "name": "event_imam_ali_birthday",
+      "value": "伊玛目阿里诞辰"
+    },
+    {
+      "name": "event_ghadir",
+      "value": "加迪尔节"
+    },
+    {
+      "name": "event_new_year_desc",
+      "value": "回历新年的开始，纪念先知迁徙至麦地那。"
+    },
+    {
+      "name": "event_ashura_desc",
+      "value": "阿舒拉日，穆斯林世界共同遵行的斋戒与反思之日。"
+    },
+    {
+      "name": "event_arbaeen_desc",
+      "value": "阿舒拉日后的第四十天，什叶派传统中的哀悼期。"
+    },
+    {
+      "name": "event_mawlid_desc",
+      "value": "先知穆罕默德ﷺ的诞辰。"
+    },
+    {
+      "name": "event_raghaib_desc",
+      "value": "赖哲卜月的第一个星期四之夜，逊尼派传统中的祈祷之夜。"
+    },
+    {
+      "name": "event_imam_ali_birthday_desc",
+      "value": "伊玛目阿里·本·阿比·塔利卜的诞辰，什叶派传统节日。"
+    },
+    {
+      "name": "event_isra_miraj_desc",
+      "value": "先知夜行至耶路撒冷并登霄的纪念日。"
+    },
+    {
+      "name": "event_mid_shaban_desc",
+      "value": "舍尔邦月十五之夜，祈祷与求恕之夜。"
+    },
+    {
+      "name": "event_ramadan_start_desc",
+      "value": "斋月的开始，回历第九个月。"
+    },
+    {
+      "name": "event_eid_fitr_desc",
+      "value": "庆祝斋月结束的开斋节。"
+    },
+    {
+      "name": "event_arafah_desc",
+      "value": "阿拉法日，朝觐中最神圣的一天。"
+    },
+    {
+      "name": "event_eid_adha_desc",
+      "value": "宰牲节，纪念先知易卜拉欣的虔诚奉献。"
+    },
+    {
+      "name": "event_ghadir_desc",
+      "value": "先知ﷺ任命伊玛目阿里为继承人之日，什叶派传统节日。"
+    },
+    {
+      "name": "show_extra_timings_list",
+      "value": "显示夜间时间"
+    },
+    {
+      "name": "show_extra_timings_list_desc",
+      "value": "封斋和夜间时段。日出和日落始终显示。"
+    },
+    {
+      "name": "show_extra_timings_sunpath",
+      "value": "显示太阳路径指引"
+    },
+    {
+      "name": "show_extra_timings_sunpath_desc",
+      "value": "太阳路径上的第一夜段、午夜和最后夜段指引线"
+    },
+    {
+      "name": "show_imsak",
+      "value": "封斋"
+    },
+    {
+      "name": "show_imsak_desc",
+      "value": "黎明前十分钟的封斋截止时间"
+    },
+    {
+      "name": "show_first_third",
+      "value": "第一夜段"
+    },
+    {
+      "name": "show_first_third_desc",
+      "value": "昏礼后的第一个夜段"
+    },
+    {
+      "name": "show_midnight",
+      "value": "午夜"
+    },
+    {
+      "name": "show_midnight_desc",
+      "value": "伊斯兰午夜——夜的正中"
+    },
+    {
+      "name": "show_last_third",
+      "value": "最后夜段"
+    },
+    {
+      "name": "show_last_third_desc",
+      "value": "夜的最后一个三分之一，夜间礼拜的时间"
+    },
+    {
+      "name": "subsection_prayer_list",
+      "value": "在礼拜列表中显示"
+    },
+    {
+      "name": "subsection_sun_path",
+      "value": "在太阳路径上显示"
+    },
+    {
+      "name": "title_prayer_details",
+      "value": "礼拜详情"
+    },
+    {
+      "name": "title_tasbih_details",
+      "value": "念珠详情"
+    },
+    {
+      "name": "details_view",
+      "value": "查看详情"
+    },
+    {
+      "name": "details_period_week",
+      "value": "本周"
+    },
+    {
+      "name": "details_period_month",
+      "value": "本月"
+    },
+    {
+      "name": "details_period_year",
+      "value": "本年"
+    },
+    {
+      "name": "details_prayers_completed",
+      "value": "次礼拜已完成"
+    },
+    {
+      "name": "details_per_prayer",
+      "value": "各礼拜进度"
+    },
+    {
+      "name": "details_per_tasbih",
+      "value": "各念珠进度"
+    },
+    {
+      "name": "details_this_month",
+      "value": "本月"
+    },
+    {
+      "name": "details_perfect_days",
+      "value": "完美日"
+    },
+    {
+      "name": "details_best_streak",
+      "value": "最佳"
+    },
+    {
+      "name": "details_days_of",
+      "value": "/"
+    },
+    {
+      "name": "details_tasbih_summary_lifetime",
+      "value": "累计计数"
+    },
+    {
+      "name": "details_tasbih_summary_tasbihs",
+      "value": "念珠"
+    },
+    {
+      "name": "details_tasbih_summary_dhikrs",
+      "value": "已完成念词"
+    }
+  ]
+}

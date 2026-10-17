@@ -46,7 +46,7 @@ import {
   STORAGE_KEY_WIZARD_COMPLETED
 } from '../common/StorageKeys';
 import { ThemeMode, ThemePreset } from '../common/Theme';
-import { L } from './LocalizationHelper';
+import { L } from '../i8n/LocalizationHelper';
 import { SoundOptions } from '../common/SoundOptions';
 import { TasbihThemes } from '../tasbih/TasbihThemes';
 import {

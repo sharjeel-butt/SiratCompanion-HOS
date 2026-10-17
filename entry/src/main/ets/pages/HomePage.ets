@@ -18,6 +18,7 @@ import {
   STORAGE_KEY_PRAYER_STATE_VERSION,
   STORAGE_KEY_SETTINGS_INITIAL_CATEGORY,
   STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
+  STORAGE_KEY_TASBIH_STATE_VERSION,
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
 } from '../common/StorageKeys';
@@ -38,7 +39,7 @@ import {
 } from '../prayer/PrayerTimeCalculator';
 import { PrayerManager } from '../prayer/PrayerManager';
 import { NavHelper } from '../helper/NavHelper';
-import { L } from '../helper/LocalizationHelper';
+import { L } from '../i8n/LocalizationHelper';
 import {
   MonthDayCell,
   MonthProgress,
@@ -78,6 +79,9 @@ export struct HomePage {
   @StorageLink(STORAGE_KEY_EVENT_SETTINGS_VERSION)
   @Watch('onEventSettingsChanged')
   eventSettingsVersion: number = 0;
+  @StorageLink(STORAGE_KEY_TASBIH_STATE_VERSION)
+  @Watch('onTasbihStateChanged')
+  tasbihStateVersion: number = 0;
 
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
@@ -192,6 +196,10 @@ export struct HomePage {
 
   private onShowIslamicEventsChanged(): void {
     // Re-render is handled by the @StorageLink.
+  }
+
+  private onTasbihStateChanged(): void {
+    this.refreshTasbihData();
   }
 
   private onEventSettingsChanged(): void {
@@ -435,6 +443,11 @@ export struct HomePage {
 
     this.refreshHeader();
     this.refreshFastingWindow();
+  }
+
+  private async refreshTasbihData(): Promise<void> {
+    const loaded = await TasbihStorage.load(TasbihManager.createDefaults());
+    this.tasbihToday = ProgressHelper.getTasbihTodayProgress(loaded.tasbihs);
   }
 
   private refreshHeader(): void {
