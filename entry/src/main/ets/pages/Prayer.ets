@@ -1,6 +1,6 @@
 // entry/src/main/ets/pages/Prayer.ets
 
-import { mediaquery, router } from '@kit.ArkUI';
+import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import { ExtraTiming, PrayerModel } from '../prayer/PrayerModel';
