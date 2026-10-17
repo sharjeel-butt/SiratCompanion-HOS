@@ -20,7 +20,7 @@ import { TasbihStorage } from '../tasbih/TasbihStorage';
 import { HapticHelper } from '../helper/HapticHelper';
 import { SoundHelper } from '../helper/SoundHelper';
 import { SettingsHelper } from '../helper/SettingsHelper';
-import { L } from '../helper/LocalizationHelper';
+import { L } from '../i8n/LocalizationHelper';
 import {
   BeadCanvasConfig, BeadRenderStyle, TasbihCanvasRenderer
 } from '../tasbih/TasbihCanvasRenderer';

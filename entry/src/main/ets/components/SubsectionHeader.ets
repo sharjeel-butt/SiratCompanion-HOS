@@ -1,7 +1,7 @@
 // entry/src/main/ets/components/SubsectionHeader.ets
 
 import { ThemeColors } from '../common/Theme';
-import { L } from '../helper/LocalizationHelper';
+import { L } from '../i8n/LocalizationHelper';
 
 /**
  * Small gold section label used inside Customize's category bodies.

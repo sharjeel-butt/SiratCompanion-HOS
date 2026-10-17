@@ -4,6 +4,7 @@ import { preferences } from '@kit.ArkData';
 import { common } from '@kit.AbilityKit';
 import { Dhikr, Tasbih } from './TasbihModels';
 import { TasbihManager } from './TasbihManager';
+import { STORAGE_KEY_TASBIH_STATE_VERSION } from '../common/StorageKeys';
 
 const PREF_STORE = 'tasbih_prefs';
 const KEY_TASBIHS = 'tasbihs_data';
@@ -134,6 +135,11 @@ export class TasbihStorage {
       await TasbihStorage.store.put(KEY_ACTIVE, activeTasbihId);
       await TasbihStorage.store.put(KEY_ACTIVE_DHK, activeDhikrIndex);
       await TasbihStorage.store.flush();
+
+      // Broadcast the change so HomePage and TasbihDetailsPage update.
+      const prev = AppStorage.get<number>(STORAGE_KEY_TASBIH_STATE_VERSION);
+      const next = (prev === undefined ? 0 : prev) + 1;
+      AppStorage.setOrCreate(STORAGE_KEY_TASBIH_STATE_VERSION, next);
     } catch (err) {
       console.warn('[TasbihStorage] save failed');
     }

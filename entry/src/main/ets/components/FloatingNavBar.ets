@@ -2,7 +2,7 @@
 
 import { ThemeColors } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
-import { L } from '../helper/LocalizationHelper';
+import { L } from '../i8n/LocalizationHelper';
 
 /**
  * Shared bottom navigation bar with a heavy frosted-glass effect,
