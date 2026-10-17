@@ -1995,6 +1995,70 @@
     {
       "name": "details_tasbih_summary_dhikrs",
       "value": "أذكار مكتملة"
+    },
+    {
+      "name": "export_pdf",
+      "value": "تصدير إلى PDF"
+    },
+    {
+      "name": "export_prayers_title",
+      "value": "جدول الصلاة"
+    },
+    {
+      "name": "export_calendar_title",
+      "value": "التقويم الهجري"
+    },
+    {
+      "name": "export_ramadan_title",
+      "value": "جدول رمضان"
+    },
+    {
+      "name": "export_print",
+      "value": "طباعة"
+    },
+    {
+      "name": "export_saving",
+      "value": "جارٍ إنشاء PDF..."
+    },
+    {
+      "name": "export_success",
+      "value": "تم إنشاء PDF بنجاح"
+    },
+    {
+      "name": "export_failed",
+      "value": "فشل إنشاء PDF"
+    },
+    {
+      "name": "export_sahur",
+      "value": "السحور"
+    },
+    {
+      "name": "export_iftar",
+      "value": "الإفطار"
+    },
+    {
+      "name": "export_ramadan_timetable",
+      "value": "جدول رمضان"
+    },
+    {
+      "name": "auto_show_ramadan_view",
+      "value": "إظهار عرض رمضان تلقائياً"
+    },
+    {
+      "name": "auto_show_ramadan_view_desc",
+      "value": "يُخفي حتى يتبقى 60 يوماً. أوقفه لعرض البطاقة دائماً."
+    },
+    {
+      "name": "export_date",
+      "value": "التاريخ"
+    },
+    {
+      "name": "hijri_year_suffix",
+      "value": "هـ"
+    },
+    {
+      "name": "generated_by",
+      "value": "تم إنشاؤه بواسطة رفيق الصراط"
     }
   ]
 }

@@ -118,6 +118,9 @@
           ],
           "when": "inuse"
         }
+      },
+      {
+        "name": "ohos.permission.PRINT"
       }
       // ---- Agent-Powered Reminder backend ----
       // Un-comment when the capability is approved in AGC and

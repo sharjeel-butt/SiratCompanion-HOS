@@ -5,6 +5,7 @@ import {
   EventRecurrence, IslamicEvent, UpcomingImportantDate
 } from '../models/DateModels';
 import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
+import { L } from '../i8n/LocalizationHelper';
 
 const MS_PER_DAY = 86400000;
 
@@ -180,7 +181,13 @@ export class DateHelper {
     if (h === null) {
       return '';
     }
-    return `${h.day} ${HIJRI_MONTHS_EN[h.month - 1]} ${h.year}`;
+
+    // Fetch localized month names
+    const lang = L.current();
+    const months = L.getArray('hijri_months', lang);
+    const monthName = months[h.month - 1] || '';
+
+    return `${h.day} ${monthName} ${h.year}`;
   }
 
   static getFormattedHijriDate(): string {

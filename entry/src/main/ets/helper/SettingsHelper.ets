@@ -5,6 +5,7 @@ import { CalculationSource, LocationMode, ManualCoords, PickerItem } from '../mo
 import { PreferencesHelper } from './PreferencesHelper';
 import {
   STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
   STORAGE_KEY_CALC_SETTINGS_VERSION,
   STORAGE_KEY_CUSTOM_FAJR_ANGLE,
   STORAGE_KEY_CUSTOM_ISHA_ANGLE,
@@ -12,6 +13,7 @@ import {
   STORAGE_KEY_EVENT_PERSPECTIVE,
   STORAGE_KEY_HIGH_LAT_RULE,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
+  STORAGE_KEY_HIJRI_CALENDAR_VERSION,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_MIDNIGHT_METHOD,
@@ -120,6 +122,7 @@ export interface LoadedSettings {
   showMidnightSunpath: boolean;
   showLastThirdSunpath: boolean;
   showIslamicEvents: boolean;
+  autoShowRamadanView: boolean;
 }
 
 export class SettingsHelper {
@@ -178,6 +181,9 @@ export class SettingsHelper {
     const showIslamicEvents = await PreferencesHelper.getBoolean(
       KEY_SHOW_ISLAMIC_EVENTS, true
     );
+    const autoShowRamadanView = await PreferencesHelper.getBoolean(
+      STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW, true
+    );
 
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_IMSAK_LIST, showImsakList);
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_FIRST_THIRD_LIST, showFirstThirdList);
@@ -188,6 +194,7 @@ export class SettingsHelper {
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH, showMidnightSunpath);
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH, showLastThirdSunpath);
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_ISLAMIC_EVENTS, showIslamicEvents);
+    AppStorage.setOrCreate(STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW, autoShowRamadanView);
 
     return {
       method: methodStr as CalculationMethod,
@@ -201,8 +208,14 @@ export class SettingsHelper {
       showFirstThirdSunpath,
       showMidnightSunpath,
       showLastThirdSunpath,
-      showIslamicEvents
+      showIslamicEvents,
+      autoShowRamadanView
     };
+  }
+
+  static saveAutoShowRamadanView(value: boolean): void {
+    AppStorage.setOrCreate(STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW, value);
+    PreferencesHelper.setBoolean(STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW, value);
   }
 
   private static bumpCalcSettingsVersion(): void {
@@ -1040,13 +1053,17 @@ export class SettingsHelper {
   static saveHijriCalendarType(type: string): void {
     AppStorage.setOrCreate(STORAGE_KEY_HIJRI_CALENDAR_TYPE, type);
     PreferencesHelper.setString(STORAGE_KEY_HIJRI_CALENDAR_TYPE, type);
+
+    const prev = AppStorage.get<number>(STORAGE_KEY_HIJRI_CALENDAR_VERSION);
+    const next = (prev === undefined ? 0 : prev) + 1;
+    AppStorage.setOrCreate(STORAGE_KEY_HIJRI_CALENDAR_VERSION, next);
   }
 
-  static getHijriCalendarTypeLabel(type: string): string {
+  static getHijriCalendarTypeLabel(type: string, lang?: string): string {
     if (type === HijriCalendarType.TABULAR) {
-      return L.get('hijri_calendar_tabular');
+      return L.get('hijri_calendar_tabular', lang);
     }
-    return L.get('hijri_calendar_umm_al_qura');
+    return L.get('hijri_calendar_umm_al_qura', lang);
   }
 
   static buildHijriCalendarTypePickerItems(current: string): PickerItem[] {

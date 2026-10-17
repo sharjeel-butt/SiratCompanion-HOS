@@ -9,6 +9,7 @@ import { L } from '../i8n/LocalizationHelper';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
   STORAGE_KEY_CALC_SETTINGS_VERSION,
   STORAGE_KEY_EVENT_PERSPECTIVE,
   STORAGE_KEY_EVENT_SETTINGS_VERSION,
@@ -173,6 +174,11 @@ export default class EntryAbility extends UIAbility {
       AppStorage.setOrCreate(
         STORAGE_KEY_SHOW_ISLAMIC_EVENTS, savedShowIslamicEvents
       );
+
+      const savedAutoShowRamadanView = await PreferencesHelper.getBoolean(
+        STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW, true
+      );
+      AppStorage.setOrCreate(STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW, savedAutoShowRamadanView);
 
       // ---- Event perspective ----
       // Seed the AppStorage mirror so @StorageLink subscribers on

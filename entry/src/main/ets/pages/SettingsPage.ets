@@ -1082,9 +1082,7 @@ struct SettingsPage {
         colors: this.colors,
         title: this.tr('hijri_calendar_type'),
         description: this.tr('hijri_calendar_type_desc'),
-        value: SettingsHelper.getHijriCalendarTypeLabel(
-          this.hijriCalendarType
-        ),
+        value: SettingsHelper.getHijriCalendarTypeLabel(this.hijriCalendarType, this.currentLanguage),
         onTap: () => {
           this.activePicker = 'hijriType';
           this.showPickerSheet = true;
