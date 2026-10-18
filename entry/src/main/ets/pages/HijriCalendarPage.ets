@@ -8,6 +8,7 @@ import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_EVENT_SETTINGS_VERSION,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_CALENDAR_VERSION,
   STORAGE_KEY_HIJRI_OFFSET,
@@ -22,6 +23,7 @@ import { Breakpoints } from '../common/Breakpoints';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 import { SettingsHelper } from '../helper/SettingsHelper';
 import { PdfExportHelper } from '../utils/PdfExportHelper';
+import { EventPerspectiveNotifier } from '../utils/EventPerspectiveNotifier';
 
 // Interface for PDF Export
 export interface CalendarExportDay {
@@ -64,6 +66,9 @@ export struct HijriCalendarPage {
   @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_VERSION)
   @Watch('onCalendarVersionChanged')
   calendarVersion: number = 0;
+  @StorageLink(STORAGE_KEY_EVENT_SETTINGS_VERSION)
+  @Watch('onEventSettingsVersionChanged')
+  eventSettingsVersion: number = 0;
 
 
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
@@ -92,6 +97,24 @@ export struct HijriCalendarPage {
   private isTablet(): boolean {
     return Breakpoints.isTablet(this.breakpoint);
   }
+
+  private onEventSettingsVersionChanged(): void {
+    if (this.monthDays.length > 0) {
+      this.rebuildFromAnchor(this.monthDays[0].gregorianDate);
+    } else {
+      this.jumpToToday();
+    }
+  }
+
+  private eventPerspectiveListener: () => void = (): void => {
+    if (this.monthDays.length > 0) {
+      // Rebuild the currently viewed month
+      this.rebuildFromAnchor(this.monthDays[0].gregorianDate);
+    } else {
+      this.jumpToToday();
+    }
+  };
+
 
   // ============================================================
   // WEEKEND LOGIC
@@ -126,10 +149,12 @@ export struct HijriCalendarPage {
     this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
       this.colors = c;
     });
+    EventPerspectiveNotifier.subscribe(this.eventPerspectiveListener);
     this.jumpToToday();
   }
 
   aboutToDisappear(): void {
+    EventPerspectiveNotifier.unsubscribe(this.eventPerspectiveListener);
     PageTheme.uninstallSystemListener(this.systemDarkListener);
     this.systemDarkListener = null;
   }
@@ -189,9 +214,11 @@ export struct HijriCalendarPage {
   }
 
   private getMonthEvents(): IslamicEvent[] {
-    return HijriCalendarHelper.eventsInMonth(this.viewingHijriMonth);
+    return HijriCalendarHelper.eventsInMonth(
+      this.viewingHijriMonth,
+      SettingsHelper.getEventPerspective() // Read directly, not from a stale @State
+    );
   }
-
   private getLocalizedMonthName(): string {
     const names = this.trArray('hijri_months');
     return names[this.viewingHijriMonth - 1] || HijriCalendarHelper.monthName(this.viewingHijriMonth);

@@ -2059,6 +2059,14 @@
     {
       "name": "generated_by",
       "value": "تم إنشاؤه بواسطة رفيق الصراط"
+    },
+    {
+      "name": "calendar_read_permission_denied",
+      "value": "مطلوب إذن قراءة التقويم لمسح التذكيرات القديمة."
+    },
+    {
+      "name": "calendar_write_permission_denied",
+      "value": "مطلوب إذن كتابة التقويم لحفظ التذكيرات الجديدة."
     }
   ]
 }

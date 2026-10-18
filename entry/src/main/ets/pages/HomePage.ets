@@ -94,7 +94,7 @@ export struct HomePage {
   @Watch('onLocationVersionChanged')
   locationVersion: number = 0;
   @StorageLink(STORAGE_KEY_EVENT_SETTINGS_VERSION)
-  @Watch('onEventSettingsChanged')
+  @Watch('onEventSettingsVersionChanged')
   eventSettingsVersion: number = 0;
   @StorageLink(STORAGE_KEY_TASBIH_STATE_VERSION)
   @Watch('onTasbihStateChanged')
@@ -188,8 +188,7 @@ export struct HomePage {
     daysElapsed: 0,
     daysInMonth: 0
   };
-
-  @State private upcomingEvents: UpcomingImportantDate[] = [];
+  @State upcomingEvents: UpcomingImportantDate[] = [];
   @State private ramadanInfo: RamadanInfo | null = null;
 
   @State private todayImsakTime: string = '--:--';
@@ -228,7 +227,7 @@ export struct HomePage {
     this.refreshTasbihData();
   }
 
-  private onEventSettingsChanged(): void {
+  private onEventSettingsVersionChanged(): void {
     this.upcomingEvents = DateHelper.getUpcomingImportantDates(
       this.hijriOffset,
       SettingsHelper.getEventPerspective()
@@ -238,7 +237,10 @@ export struct HomePage {
   private onHijriCalendarVersionChanged(): void {
     this.refreshHijriDate();
     this.refreshRamadan();
-    this.upcomingEvents = DateHelper.getUpcomingImportantDates(this.hijriOffset);
+    this.upcomingEvents = DateHelper.getUpcomingImportantDates(
+      this.hijriOffset,
+      SettingsHelper.getEventPerspective()
+    );
   }
 
   private onAutoShowRamadanViewChanged(): void {
@@ -365,16 +367,23 @@ export struct HomePage {
     await this.refreshDashboard();
   }
 
+  private onEventPerspectiveListener = (): void => {
+    this.upcomingEvents = DateHelper.getUpcomingImportantDates(
+      this.hijriOffset,
+      SettingsHelper.getEventPerspective() // Read directly from SettingsHelper
+    );
+  };
+
   private onHijriOffsetChanged(): void {
     this.refreshHijriDate();
     this.refreshRamadan();
-    this.upcomingEvents = DateHelper.getUpcomingImportantDates(this.hijriOffset, SettingsHelper.getEventPerspective());
+    this.onEventPerspectiveListener();
   }
 
   private async onAppForegrounded(): Promise<void> {
     this.refreshHijriDate();
     this.refreshRamadan();
-    this.upcomingEvents = DateHelper.getUpcomingImportantDates(this.hijriOffset, SettingsHelper.getEventPerspective());
+    this.onEventPerspectiveListener();
     await this.loadSettingsAndLocation();
     await this.refreshDashboard();
     this.updateCountdown();
@@ -394,6 +403,9 @@ export struct HomePage {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
 
+    EventPerspectiveNotifier.subscribe(this.onEventPerspectiveListener);
+    this.onEventPerspectiveListener();
+
     this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
       this.colors = c;
     });
@@ -412,6 +424,7 @@ export struct HomePage {
   }
 
   aboutToDisappear(): void {
+    EventPerspectiveNotifier.unsubscribe(this.onEventPerspectiveListener);
     PageTheme.uninstallSystemListener(this.systemDarkListener);
     this.systemDarkListener = null;
     this.stopCountdownTimer();
@@ -423,7 +436,7 @@ export struct HomePage {
     this.colors = PageTheme.compute(this.themeMode);
     this.refreshHijriDate();
     this.refreshRamadan();
-    this.upcomingEvents = DateHelper.getUpcomingImportantDates(this.hijriOffset, SettingsHelper.getEventPerspective());
+    this.onEventPerspectiveListener();
     await this.refreshDashboard();
     this.startCountdownTimer();
   }
@@ -877,8 +890,7 @@ export struct HomePage {
     try {
       this.refreshHijriDate();
       this.refreshRamadan();
-      this.upcomingEvents =
-        DateHelper.getUpcomingImportantDates(this.hijriOffset, SettingsHelper.getEventPerspective());
+      this.onEventPerspectiveListener();
       await this.loadSettingsAndLocation();
       await this.refreshDashboard();
     } finally {

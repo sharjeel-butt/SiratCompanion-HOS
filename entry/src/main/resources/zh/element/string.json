@@ -2059,6 +2059,14 @@
     {
       "name": "generated_by",
       "value": "由 Sirat 伴侣生成"
+    },
+    {
+      "name": "calendar_read_permission_denied",
+      "value": "需要日历读取权限以清理旧的提醒。"
+    },
+    {
+      "name": "calendar_write_permission_denied",
+      "value": "需要日历写入权限以保存新的提醒。"
     }
   ]
 }

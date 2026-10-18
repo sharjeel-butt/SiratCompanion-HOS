@@ -44,6 +44,7 @@ import {
 } from '../common/FeatureFlags';
 import { NavHelper } from '../helper/NavHelper';
 import { SettingsRow } from '../components/SettingsRow';
+import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
 
 const MAX_HIJRI_OFFSET = 3;
 
@@ -1872,12 +1873,7 @@ struct SettingsPage {
     if (!granted) {
       const requested = await NotificationHelper.requestPermission(ctx);
       if (!requested) {
-        const msgKey = CALENDAR_REMINDERS_ENABLED
-          ? 'calendar_permission_denied'
-          : 'notification_permission_denied';
-        promptAction.showToast({
-          message: this.tr(msgKey), duration: 2500
-        });
+        this.showPermissionError();
         return;
       }
     }
@@ -1905,18 +1901,39 @@ struct SettingsPage {
     }
   }
 
+  private showPermissionError(): void {
+    if (CALENDAR_REMINDERS_ENABLED) {
+      const canRead = CalendarReminderHelper.permissionStatus.read;
+      const canWrite = CalendarReminderHelper.permissionStatus.write;
+
+      if (!canRead && !canWrite) {
+        promptAction.showToast({
+          message: this.tr('calendar_permission_denied'), duration: 2500
+        });
+      } else if (!canRead) {
+        promptAction.showToast({
+          message: this.tr('calendar_read_permission_denied'), duration: 3000
+        });
+      } else if (!canWrite) {
+        promptAction.showToast({
+          message: this.tr('calendar_write_permission_denied'), duration: 3000
+        });
+      }
+    } else {
+      // Standard notification permission
+      promptAction.showToast({
+        message: this.tr('notification_permission_denied'), duration: 2500
+      });
+    }
+  }
+
   private async toggleNotifMaster(value: boolean): Promise<void> {
     if (value) {
       const ctx = getContext(this) as common.UIAbilityContext;
       const granted = await NotificationHelper.requestPermission(ctx);
       if (!granted) {
         this.notifMaster = false;
-        const msgKey = CALENDAR_REMINDERS_ENABLED
-          ? 'calendar_permission_denied'
-          : 'notification_permission_denied';
-        promptAction.showToast({
-          message: this.tr(msgKey), duration: 2500
-        });
+        this.showPermissionError();
         return;
       }
     }

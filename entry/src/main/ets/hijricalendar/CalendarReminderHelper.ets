@@ -49,6 +49,12 @@ import { AppLogger } from '../helper/AppLogger';
  * reminderAgentManager backend — that would deliver two reminders per
  * prayer. NotificationHelper.resolveBackend() enforces this.
  */
+
+export interface CalendarPermissionState {
+  read: boolean;
+  write: boolean;
+}
+
 export class CalendarReminderHelper {
   /** All events we create carry this title prefix, for easy cleanup. */
   private static readonly EVENT_TITLE_PREFIX = 'Sirat · ';
@@ -63,10 +69,15 @@ export class CalendarReminderHelper {
     'ohos.permission.READ_CALENDAR',
     'ohos.permission.WRITE_CALENDAR'
   ];
+
   private static calendarMgr: calendarManager.CalendarManager | null = null;
   private static calendar: calendarManager.Calendar | null = null;
   private static initializing: boolean = false;
   private static ready: boolean = false;
+  static permissionStatus: CalendarPermissionState = {
+    read: false,
+    write: false
+  };
 
   // ============================================================
   // INIT
@@ -144,7 +155,7 @@ export class CalendarReminderHelper {
 
   /**
    * Request the two calendar permissions. Returns true only if both
-   * are granted.
+   * are granted, but records the individual results in `permissionStatus`.
    */
   static async requestPermission(
     context: common.UIAbilityContext
@@ -154,12 +165,22 @@ export class CalendarReminderHelper {
       const result = await atManager.requestPermissionsFromUser(
         context, CalendarReminderHelper.PERMISSIONS
       );
-      for (const status of result.authResults) {
-        if (status !== 0) {
-          return false;
-        }
+
+      // Check both individually (0 = granted)
+      const canRead = result.authResults[0] === 0;
+      const canWrite = result.authResults[1] === 0;
+
+      CalendarReminderHelper.permissionStatus.read = canRead;
+      CalendarReminderHelper.permissionStatus.write = canWrite;
+
+      if (!canRead) {
+        AppLogger.warn('CalendarReminderHelper', 'READ_CALENDAR permission denied');
       }
-      return true;
+      if (!canWrite) {
+        AppLogger.warn('CalendarReminderHelper', 'WRITE_CALENDAR permission denied');
+      }
+
+      return canRead && canWrite;
     } catch (err) {
       const e = err as BusinessError;
       AppLogger.warn('CalendarReminderHelper',
