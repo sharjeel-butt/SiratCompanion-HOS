@@ -11,6 +11,7 @@ import {
   STORAGE_KEY_CUSTOM_ISHA_ANGLE,
   STORAGE_KEY_CUSTOM_ISHA_INTERVAL,
   STORAGE_KEY_EVENT_PERSPECTIVE,
+  STORAGE_KEY_EVENT_SETTINGS_VERSION,
   STORAGE_KEY_HIGH_LAT_RULE,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_CALENDAR_VERSION,
@@ -1102,6 +1103,13 @@ export class SettingsHelper {
   static saveEventPerspective(value: string): void {
     AppStorage.setOrCreate(STORAGE_KEY_EVENT_PERSPECTIVE, value);
     PreferencesHelper.setString(STORAGE_KEY_EVENT_PERSPECTIVE, value);
+
+    // Bump the version counter
+    const prev = AppStorage.get<number>(STORAGE_KEY_EVENT_SETTINGS_VERSION);
+    const next = (prev === undefined ? 0 : prev) + 1;
+    AppStorage.setOrCreate(STORAGE_KEY_EVENT_SETTINGS_VERSION, next);
+
+    // Notify JS listeners
     EventPerspectiveNotifier.notify();
   }
 

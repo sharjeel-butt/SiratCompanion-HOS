@@ -91,12 +91,13 @@ struct MainTabs {
   onPageShow(): void {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
-    // Force event settings refresh
+
+    // Force Event Settings refresh
     const prevEv = AppStorage.get<number>(STORAGE_KEY_EVENT_SETTINGS_VERSION);
     const nextEv = (prevEv === undefined ? 0 : prevEv) + 1;
     AppStorage.setOrCreate(STORAGE_KEY_EVENT_SETTINGS_VERSION, nextEv);
 
-    // Force Hijri calendar refresh
+    // Force Hijri Calendar refresh
     const prevCal = AppStorage.get<number>(STORAGE_KEY_HIJRI_CALENDAR_VERSION);
     const nextCal = (prevCal === undefined ? 0 : prevCal) + 1;
     AppStorage.setOrCreate(STORAGE_KEY_HIJRI_CALENDAR_VERSION, nextCal);
