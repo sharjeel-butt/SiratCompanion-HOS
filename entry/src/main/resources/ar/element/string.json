@@ -2071,6 +2071,10 @@
     {
       "name": "next_3_days",
       "value": "الأيام الثلاثة القادمة"
+    },
+    {
+      "name": "about_developer",
+      "value": "المطور"
     }
   ]
 }
