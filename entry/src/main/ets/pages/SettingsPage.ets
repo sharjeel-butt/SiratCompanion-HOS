@@ -1194,6 +1194,10 @@ struct SettingsPage {
         this.AboutRow(this.tr('about_version'), this.appInfo.versionName)
         this.AboutRow(this.tr('about_build'), `${this.appInfo.versionCode}`)
         this.AboutRow(this.tr('about_bundle'), this.appInfo.bundleName)
+
+        // --- Add Developer Row here ---
+        this.AboutRow(this.tr('about_developer'), 'Sharjeel Idris (sharjeel.butt@gmail.com)')
+
         this.AboutRow(this.tr('about_platform'),
           this.tr('about_platform_value'))
         this.AboutRow(this.tr('about_copyright'), this.appInfo.name)

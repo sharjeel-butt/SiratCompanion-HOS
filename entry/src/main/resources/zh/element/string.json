@@ -2071,6 +2071,10 @@
     {
       "name": "next_3_days",
       "value": "未来3天"
+    },
+    {
+      "name": "about_developer",
+      "value": "开发者"
     }
   ]
 }
