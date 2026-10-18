@@ -1,4 +1,27 @@
+# ============================================================
+# Signing credentials — NEVER COMMIT
+# ============================================================
+secrets/
+signing.properties
+*.p12
+*.p7b
+*.cer
+*.jks
+*.keystore
+debug_*.p12
+debug_*.p7b
+debug_*.cer
+release_*.p12
+release_*.p7b
+release_*.cer
+build-profile.json5.bak
+build-profile.json5
+
+# ============================================================
+# DevEco Studio / HarmonyOS
+# ============================================================
 /node_modules
+/htmlsite
 /oh_modules
 /local.properties
 /.idea
@@ -10,5 +33,3 @@
 /.clang-tidy
 **/.test
 /.appanalyzer
-/secrets
-/htmlsite

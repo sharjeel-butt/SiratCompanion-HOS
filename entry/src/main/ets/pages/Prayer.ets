@@ -1,6 +1,6 @@
 // entry/src/main/ets/pages/Prayer.ets
 
-import { mediaquery, promptAction, router } from '@kit.ArkUI';
+import { mediaquery, router } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import { ExtraTiming, PrayerModel } from '../prayer/PrayerModel';
@@ -1578,8 +1578,20 @@ export struct Prayer {
     }
     .width('92%').padding(28).backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
-    .border({ width: 1, color: this.colors.borderSoft })
-    .shadow({ radius: 12, color: this.colors.shadowCard, offsetX: 0, offsetY: 4 })
+    .border({
+      width: 1,
+      color: PageTheme.isDarkFor(this.themeMode)
+        ? 'rgba(255, 255, 255, 0.08)'
+        : this.colors.borderSoft
+    })
+    .shadow({
+      radius: 16,
+      color: PageTheme.isDarkFor(this.themeMode)
+        ? 'rgba(0, 0, 0, 0.35)'
+        : 'rgba(0, 0, 0, 0.08)',
+      offsetX: 0,
+      offsetY: 6
+    })
     .margin({ top: 4, bottom: 24 })
     .alignItems(HorizontalAlign.Center)
   }

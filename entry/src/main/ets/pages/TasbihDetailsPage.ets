@@ -187,6 +187,7 @@ struct TasbihDetailsPage {
       Text(this.tr('title_tasbih_details'))
         .fontSize(22).fontWeight(FontWeight.Bold)
         .fontColor(this.colors.textWhite)
+        .letterSpacing(-0.5)
         .margin({ left: 16 })
     }
     .width('100%').height(72)
@@ -247,6 +248,7 @@ struct TasbihDetailsPage {
             Text(`${this.snapshot.totalDaysCompleted}`)
               .fontSize(48).fontWeight(FontWeight.Bold)
               .fontColor(this.colors.textWhite)
+              .fontFeature('"tnum" 1')
             Text(` / ${this.snapshot.totalDaysPossible}`)
               .fontSize(20).fontColor(this.colors.textMuted)
               .margin({ left: 4, bottom: 8 })
@@ -300,12 +302,19 @@ struct TasbihDetailsPage {
     .padding(18)
     .backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
-    .border({ width: 1, color: this.colors.borderSoft })
+    .border({
+      width: 1,
+      color: PageTheme.isDarkFor(this.themeMode)
+        ? 'rgba(255, 255, 255, 0.08)'
+        : this.colors.borderSoft
+    })
     .shadow({
-      radius: 12,
-      color: this.colors.shadowCard,
+      radius: 16,
+      color: PageTheme.isDarkFor(this.themeMode)
+        ? 'rgba(0, 0, 0, 0.35)'
+        : 'rgba(0, 0, 0, 0.08)',
       offsetX: 0,
-      offsetY: 4
+      offsetY: 6
     })
     .margin({ bottom: 14 })
   }

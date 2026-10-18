@@ -215,6 +215,7 @@ export struct TasbihPage {
               Text(this.getActiveDhikr()!.arabic)
                 .fontSize(26)
                 .fontFamily(TypographyHelper.getFont(this.currentLanguage, false))
+                .letterSpacing(0)
                 .fontColor(this.colors.textWhite)
                 .textAlign(TextAlign.Start)
                 .lineHeight(38) // Adjust line height for Naskh
@@ -225,6 +226,8 @@ export struct TasbihPage {
               Column() {
                 Text(`${this.getActiveDhikr()!.count}`)
                   .fontSize(96).fontWeight(FontWeight.Normal)
+                  .fontFamily(TypographyHelper.getFont(this.currentLanguage, true))
+                  .fontFeature('"tnum" 1')
                   .fontColor(this.beadView.isComplete
                     ? SHADE_DONE_BASE : this.colors.textWhite)
 

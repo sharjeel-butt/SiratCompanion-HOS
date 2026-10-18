@@ -528,7 +528,7 @@ export struct HijriCalendarPage {
           .margin({ left: this.isRtl() ? 8 : 0, right: this.isRtl() ? 0 : 8 })
         Text(this.tr('important_dates'))
           .fontSize(12).fontColor(this.colors.accentGold)
-          .fontWeight(FontWeight.Bold).letterSpacing(1.2)
+          .fontWeight(FontWeight.Bold).letterSpacing(1.5)
       }
       .width('100%').padding({ bottom: 12 })
 

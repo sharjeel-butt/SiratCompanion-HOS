@@ -1390,12 +1390,19 @@ export struct HomePage {
       .padding(18)
       .backgroundColor(this.colors.cardDark)
       .borderRadius(Theme.radiusLarge)
-      .border({ width: 1, color: this.colors.borderSoft })
+      .border({
+        width: 1,
+        color: PageTheme.isDarkFor(this.themeMode)
+          ? 'rgba(255, 255, 255, 0.08)'
+          : this.colors.borderSoft
+      })
       .shadow({
-        radius: 12,
-        color: this.colors.shadowCard,
+        radius: 16,
+        color: PageTheme.isDarkFor(this.themeMode)
+          ? 'rgba(0, 0, 0, 0.35)'
+          : 'rgba(0, 0, 0, 0.08)',
         offsetX: 0,
-        offsetY: 4
+        offsetY: 6
       })
       .margin({ bottom: 14 })
     }
@@ -1586,7 +1593,7 @@ export struct HomePage {
             .fontSize(12)
             .fontColor(this.colors.textMuted)
             .fontWeight(FontWeight.Bold)
-            .letterSpacing(1.2)
+            .letterSpacing(1.5)
             .layoutWeight(1)
           Text(`${this.ramadanInfo!.hijriYear} AH`)
             .fontSize(11).fontColor(this.colors.accentGold)
@@ -1822,12 +1829,19 @@ export struct HomePage {
       .padding(18)
       .backgroundColor(this.colors.cardDark)
       .borderRadius(Theme.radiusLarge)
-      .border({ width: 1, color: this.colors.borderSoft })
+      .border({
+        width: 1,
+        color: PageTheme.isDarkFor(this.themeMode)
+          ? 'rgba(255, 255, 255, 0.08)'
+          : this.colors.borderSoft
+      })
       .shadow({
-        radius: 12,
-        color: this.colors.shadowCard,
+        radius: 16,
+        color: PageTheme.isDarkFor(this.themeMode)
+          ? 'rgba(0, 0, 0, 0.35)'
+          : 'rgba(0, 0, 0, 0.08)',
         offsetX: 0,
-        offsetY: 4
+        offsetY: 6
       })
       .margin({ bottom: 14 })
     }
@@ -1919,7 +1933,7 @@ export struct HomePage {
             .fontSize(12)
             .fontColor(this.colors.textMuted)
             .fontWeight(FontWeight.Bold)
-            .letterSpacing(1.2)
+            .letterSpacing(1.5)
             .layoutWeight(1)
         }
         .width('100%').padding({ bottom: 14 })
@@ -1943,7 +1957,7 @@ export struct HomePage {
               Row() {
                 Text(this.tr('prayer_fajr')).fontSize(9).fontColor(this.colors.textMuted)
                 Blank()
-                Text(day.fajr).fontSize(9).fontColor(this.colors.textWhite)
+                Text(day.fajr).fontSize(9).fontColor(this.colors.textWhite).fontFeature('"tnum" 1')
               }.width('100%').margin({ bottom: 4 })
 
               Row() {
@@ -1975,7 +1989,12 @@ export struct HomePage {
             .padding(10)
             .backgroundColor(this.colors.tintSubtle)
             .borderRadius(10)
-            .border({ width: 1, color: this.colors.borderSoft })
+            .border({
+              width: 1,
+              color: PageTheme.isDarkFor(this.themeMode)
+                ? 'rgba(255, 255, 255, 0.06)' // Simulates light catching the top edge
+                : 'rgba(0, 0, 0, 0.04)'
+            })
           })
         }
         .width('100%')
@@ -1984,12 +2003,19 @@ export struct HomePage {
       .padding(18)
       .backgroundColor(this.colors.cardDark)
       .borderRadius(Theme.radiusLarge)
-      .border({ width: 1, color: this.colors.borderSoft })
+      .border({
+        width: 1,
+        color: PageTheme.isDarkFor(this.themeMode)
+          ? 'rgba(255, 255, 255, 0.08)'
+          : this.colors.borderSoft
+      })
       .shadow({
-        radius: 12,
-        color: this.colors.shadowCard,
+        radius: 16,
+        color: PageTheme.isDarkFor(this.themeMode)
+          ? 'rgba(0, 0, 0, 0.35)'
+          : 'rgba(0, 0, 0, 0.08)',
         offsetX: 0,
-        offsetY: 4
+        offsetY: 6
       })
       .margin({ bottom: 14 })
     }
@@ -2008,7 +2034,7 @@ export struct HomePage {
           .fontSize(12)
           .fontColor(this.colors.textMuted)
           .fontWeight(FontWeight.Bold)
-          .letterSpacing(1.2)
+          .letterSpacing(1.5)
           .layoutWeight(1)
         Row() {
           Text(this.tr('details_view'))
@@ -2030,7 +2056,8 @@ export struct HomePage {
           Row() {
             Text(`${this.prayerProgress.todayCompleted}`)
               .fontSize(52)
-              .fontFamily(TypographyHelper.getFont(this.currentLanguage, true)) // <---
+              .fontFamily(TypographyHelper.getFont(this.currentLanguage, true))
+              .fontFeature('"tnum" 1')
               .fontWeight(FontWeight.Bold)
               .fontColor(this.prayerProgress.todayCompleted === 5
                 ? this.colors.accentGoldLight : this.colors.textWhite)
@@ -2255,7 +2282,7 @@ export struct HomePage {
           .fontSize(12)
           .fontColor(this.colors.textMuted)
           .fontWeight(FontWeight.Bold)
-          .letterSpacing(1.2)
+          .letterSpacing(1.5)
           .layoutWeight(1)
         Row() {
           Text(this.tr('details_view'))

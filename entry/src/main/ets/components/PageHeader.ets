@@ -10,6 +10,7 @@ import { CalculationSource } from '../models/SettingsModels';
 import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
 import { STORAGE_KEY_TIME_FORMAT } from '../common/StorageKeys';
 import { TypographyHelper } from '../helper/TypographyHelper';
+import { PageTheme } from '../common/PageTheme';
 
 /**
  * Shared page header used by HomePage and Prayer.
@@ -191,16 +192,28 @@ export struct PageHeader {
               .fontSize(16)
               .fontColor(this.colors.textWhite)
               .fontWeight(FontWeight.Medium)
+              .fontFeature('"tnum" 1')
           }
         }
         .width('100%')
         .padding({
-          top: 12,
-          bottom: 12,
           left: 16,
-          right: 16
+          right: 16,
+          top: 8,
+          bottom: 8
         })
-        .backgroundColor(this.colors.cardDark)
+        .backgroundColor(
+          PageTheme.isDarkFor(this.themeMode)
+            ? 'rgba(10, 13, 20, 0.85)'
+            : 'rgba(240, 244, 250, 0.85)'
+        )
+        .backgroundBlurStyle(BlurStyle.Thin) // <--- Gives the frosted glass effect
+        .border({
+          width: { bottom: 1 },
+          color: PageTheme.isDarkFor(this.themeMode)
+            ? 'rgba(255, 255, 255, 0.05)'
+            : 'rgba(0, 0, 0, 0.05)'
+        })
         .borderRadius(Theme.radiusMedium)
         .border({ width: 1, color: this.colors.borderSoft })
       }

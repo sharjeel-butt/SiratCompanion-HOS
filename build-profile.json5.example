@@ -1,0 +1,80 @@
+{
+  app {
+    signingConfigs [
+      {
+        name debug,
+        type HarmonyOS,
+        material {
+          certpath CUsersYOUR_USERNAME.ohosconfigdebug_YourApp_XXXXXXX.cer,
+          keyAlias debugKey,
+          keyPassword ,
+          profile CUsersYOUR_USERNAME.ohosconfigdebug_YourApp_XXXXXXX.p7b,
+          signAlg SHA256withECDSA,
+          storeFile CUsersYOUR_USERNAME.ohosconfigdebug_YourApp_XXXXXXX.p12,
+          storePassword 
+        }
+      },
+      {
+        name release,
+        type HarmonyOS,
+        material {
+          storeFile Dsecretssiratcompanionrelease.p12,
+          storePassword ,
+          keyAlias release_siratcompanionreleasep12,
+          keyPassword ,
+          signAlg SHA256withECDSA,
+          profile Dsecretssiratcompanionrelease.p7b,
+          certpath Dsecretssiratcompanionrelease.cer
+        }
+      }
+    ],
+    products [
+      {
+        name default,
+        signingConfig debug,
+        compileSdkVersion 26.0.0,
+        compatibleSdkVersion 6.0.0(20),
+        targetSdkVersion 26.0.0,
+        runtimeOS HarmonyOS,
+        buildOption {
+          strictMode {
+            caseSensitiveCheck true,
+            apiCompatibilityCheck warn,
+            useNormalizedOHMUrl true
+          }
+        }
+      },
+      {
+        name release-app,
+        signingConfig release,
+        compileSdkVersion 26.0.0,
+        compatibleSdkVersion 6.0.0(20),
+        targetSdkVersion 26.0.0,
+        runtimeOS HarmonyOS,
+        buildOption {
+          strictMode {
+            caseSensitiveCheck true,
+            apiCompatibilityCheck warn,
+            useNormalizedOHMUrl true
+          }
+        }
+      }
+    ],
+    buildModeSet [
+      { name debug },
+      { name release }
+    ]
+  },
+  modules [
+    {
+      name entry,
+      srcPath .entry,
+      targets [
+        {
+          name default,
+          applyToProducts [ default, release-app ]
+        }
+      ]
+    }
+  ]
+}
