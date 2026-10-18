@@ -6,6 +6,7 @@ import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import { AppLogger } from '../helper/AppLogger';
 import { PdfExportHelper } from '../utils/PdfExportHelper';
+import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -65,6 +66,7 @@ import {
 } from '../models/AdvancedCalcModels';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 import { EventPerspectiveNotifier } from '../utils/EventPerspectiveNotifier';
+import { TypographyHelper } from '../helper/TypographyHelper';
 
 export interface RamadanTableRow {
   hijriDate: string;
@@ -74,6 +76,16 @@ export interface RamadanTableRow {
   dhuhr: string;
   asr: string;
   iftar: string;
+  isha: string;
+}
+
+export interface DayPrayerPreview {
+  dateLabel: string;
+  hijriLabel: string;
+  fajr: string;
+  dhuhr: string;
+  asr: string;
+  maghrib: string;
   isha: string;
 }
 
@@ -177,6 +189,7 @@ export struct HomePage {
     totalTasbihs: 0,
     lifetimeCount: 0
   };
+  @State private next3Days: DayPrayerPreview[] = [];
 
   @State private monthProgress: MonthProgress = {
     year: 2026,
@@ -225,6 +238,60 @@ export struct HomePage {
 
   private onTasbihStateChanged(): void {
     this.refreshTasbihData();
+  }
+
+  private refreshNext3Days(): void {
+    if (this.latitude === 0 && this.longitude === 0) {
+      this.next3Days = [];
+      return;
+    }
+
+    const days: DayPrayerPreview[] = [];
+    const locale = this.appLanguage === 'zh' ? 'zh-CN' : (this.appLanguage === 'ar' ? 'ar' : 'en-US');
+    const months = L.getArray('hijri_months', this.appLanguage);
+
+    for (let i = 0; i < 3; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() + i);
+
+      try {
+        const times = PrayerTimeCalculator.calculateWithDeviceTimezone(
+          date, this.latitude, this.longitude, this.calcMethod,
+          this.asrRule, this.highLatRule, this.advanced
+        );
+
+        const shifted = new Date(date);
+        shifted.setDate(shifted.getDate() + this.hijriOffset);
+        const h = HijriEngineResolver.current().toHijri(shifted);
+
+        let hijriStr = '';
+        if (h !== null) {
+          hijriStr = `${h.day} ${months[h.month - 1]}`;
+        }
+
+        let dateLabel = '';
+        if (i === 0) {
+          dateLabel = this.tr('today');
+        } else if (i === 1) {
+          dateLabel = this.tr('home_event_tomorrow');
+        } else {
+          dateLabel = date.toLocaleDateString(locale, { weekday: 'short' });
+        }
+
+        days.push({
+          dateLabel: dateLabel,
+          hijriLabel: hijriStr,
+          fajr: this.dt(PrayerManager.offsetTime(times.fajr, this.offsets.fajr)),
+          dhuhr: this.dt(PrayerManager.offsetTime(times.dhuhr, this.offsets.dhuhr)),
+          asr: this.dt(PrayerManager.offsetTime(times.asr, this.offsets.asr)),
+          maghrib: this.dt(PrayerManager.offsetTime(times.maghrib, this.offsets.maghrib)),
+          isha: this.dt(PrayerManager.offsetTime(times.isha, this.offsets.isha))
+        });
+      } catch (err) {
+        console.error('Failed to calc next 3 days', err);
+      }
+    }
+    this.next3Days = days;
   }
 
   private onEventSettingsVersionChanged(): void {
@@ -286,6 +353,7 @@ export struct HomePage {
 
   private onClockFormatChanged(): void {
     // Re-render is handled by the @StorageLink.
+    this.refreshNext3Days();
   }
 
   private onPrayerStateChanged(): void {
@@ -358,6 +426,7 @@ export struct HomePage {
 
   private onLanguageChanged(): void {
     this.currentLanguage = this.appLanguage;
+    this.refreshNext3Days();
     this.prayerProgress =
       ProgressHelper.getPrayerProgress(this.currentLanguage);
   }
@@ -472,6 +541,7 @@ export struct HomePage {
 
       this.refreshHeader();
       this.refreshFastingWindow();
+      this.refreshNext3Days();
     } finally {
       this.settingsLoading = false;
       if (this.settingsPending) {
@@ -1101,6 +1171,7 @@ export struct HomePage {
                   .alignItems(HorizontalAlign.Start)
 
                   Column() {
+                    this.Next3DaysPreview()
                     this.TodayProgressCard()
                     this.TasbihCard()
                   }
@@ -1118,9 +1189,10 @@ export struct HomePage {
                   }
                   this.LiveCountdownBanner()
                   this.RamadanCard()
-
+                  this.Next3DaysPreview()
                   // ---- Prayers ----
                   this.TodayProgressCard()
+
 
                   // ---- Tasbih ----
                   this.TasbihCard()
@@ -1287,7 +1359,10 @@ export struct HomePage {
     if (this.upcomingEvents.length > 0) {
       Column() {
         Row() {
-          Text('✨').fontSize(14).margin({ right: 8 })
+          Image($r('app.media.ic_nav_home'))
+            .width(16).height(16)
+            .fillColor(this.colors.accentGold)
+            .margin({ right: 8 })
           Text(this.tr('home_next_event'))
             .fontSize(11)
             .fontColor(this.colors.textMuted)
@@ -1503,7 +1578,10 @@ export struct HomePage {
     if (this.ramadanInfo !== null) {
       Column() {
         Row() {
-          Text('🌙').fontSize(16).margin({ right: 8 })
+          Image($r('app.media.ic_ramadan_moon'))
+            .width(16).height(16)
+            .fillColor(this.colors.accentGold)
+            .margin({ right: 8 })
           Text(this.tr('ramadan_card_title'))
             .fontSize(12)
             .fontColor(this.colors.textMuted)
@@ -1829,11 +1907,104 @@ export struct HomePage {
   }
 
   @Builder
+  Next3DaysPreview() {
+    if (this.next3Days.length > 0) {
+      Column() {
+        Row() {
+          Image($r('app.media.ic_nav_calendar'))
+            .width(16).height(16)
+            .fillColor(this.colors.accentGold)
+            .margin({ right: 8 })
+          Text(this.tr('next_3_days'))
+            .fontSize(12)
+            .fontColor(this.colors.textMuted)
+            .fontWeight(FontWeight.Bold)
+            .letterSpacing(1.2)
+            .layoutWeight(1)
+        }
+        .width('100%').padding({ bottom: 14 })
+
+        Row({ space: 8 }) {
+          ForEach(this.next3Days, (day: DayPrayerPreview) => {
+            Column() {
+              // Day Header
+              Text(day.dateLabel)
+                .fontSize(12).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+              Text(day.hijriLabel)
+                .fontSize(9)
+                .fontColor(this.colors.accentGold)
+                .margin({ top: 2 })
+                .maxLines(1)
+                .textOverflow({ overflow: TextOverflow.Ellipsis })
+
+              Divider().color(this.colors.borderSoft).margin({ top: 8, bottom: 8 })
+
+              // Compact 5-Prayer List
+              Row() {
+                Text(this.tr('prayer_fajr')).fontSize(9).fontColor(this.colors.textMuted)
+                Blank()
+                Text(day.fajr).fontSize(9).fontColor(this.colors.textWhite)
+              }.width('100%').margin({ bottom: 4 })
+
+              Row() {
+                Text(this.tr('prayer_dhuhr')).fontSize(9).fontColor(this.colors.textMuted)
+                Blank()
+                Text(day.dhuhr).fontSize(9).fontColor(this.colors.textWhite)
+              }.width('100%').margin({ bottom: 4 })
+
+              Row() {
+                Text(this.tr('prayer_asr')).fontSize(9).fontColor(this.colors.textMuted)
+                Blank()
+                Text(day.asr).fontSize(9).fontColor(this.colors.textWhite)
+              }.width('100%').margin({ bottom: 4 })
+
+              Row() {
+                Text(this.tr('prayer_maghrib')).fontSize(9).fontColor(this.colors.textMuted)
+                Blank()
+                Text(day.maghrib).fontSize(9).fontColor(this.colors.textWhite)
+              }.width('100%').margin({ bottom: 4 })
+
+              Row() {
+                Text(this.tr('prayer_isha')).fontSize(9).fontColor(this.colors.textMuted)
+                Blank()
+                Text(day.isha).fontSize(9).fontColor(this.colors.textWhite)
+              }.width('100%')
+
+            }
+            .layoutWeight(1)
+            .padding(10)
+            .backgroundColor(this.colors.tintSubtle)
+            .borderRadius(10)
+            .border({ width: 1, color: this.colors.borderSoft })
+          })
+        }
+        .width('100%')
+      }
+      .width('100%')
+      .padding(18)
+      .backgroundColor(this.colors.cardDark)
+      .borderRadius(Theme.radiusLarge)
+      .border({ width: 1, color: this.colors.borderSoft })
+      .shadow({
+        radius: 12,
+        color: this.colors.shadowCard,
+        offsetX: 0,
+        offsetY: 4
+      })
+      .margin({ bottom: 14 })
+    }
+  }
+
+  @Builder
   TodayProgressCard() {
     Column() {
       Row() {
-        Text('🕌').fontSize(14).margin({ right: 8 })
+        Image($r('app.media.ic_nav_mosque'))
+          .width(16).height(16)
+          .fillColor(this.colors.accentGold)
+          .margin({ right: 8 })
         Text(this.tr('home_today_progress'))
+          .fontFamily(TypographyHelper.getFont(this.currentLanguage, true)) // <---
           .fontSize(12)
           .fontColor(this.colors.textMuted)
           .fontWeight(FontWeight.Bold)
@@ -1858,7 +2029,9 @@ export struct HomePage {
         Column() {
           Row() {
             Text(`${this.prayerProgress.todayCompleted}`)
-              .fontSize(52).fontWeight(FontWeight.Bold)
+              .fontSize(52)
+              .fontFamily(TypographyHelper.getFont(this.currentLanguage, true)) // <---
+              .fontWeight(FontWeight.Bold)
               .fontColor(this.prayerProgress.todayCompleted === 5
                 ? this.colors.accentGoldLight : this.colors.textWhite)
             Text(` / ${this.prayerProgress.todayTotal}`)
@@ -2074,7 +2247,10 @@ export struct HomePage {
   TasbihCard() {
     Column() {
       Row() {
-        Text('📿').fontSize(14).margin({ right: 8 })
+        Image($r('app.media.ic_nav_tasbih'))
+          .width(16).height(16)
+          .fillColor(this.colors.accentGold)
+          .margin({ right: 8 })
         Text(this.tr('home_tasbih'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)

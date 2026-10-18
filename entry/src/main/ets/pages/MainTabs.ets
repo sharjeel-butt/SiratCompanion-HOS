@@ -33,6 +33,7 @@ import { Prayer } from './Prayer';
 import { HijriCalendarPage } from './HijriCalendarPage';
 import { QiblaPage } from './QiblaPage';
 import { TasbihPage } from './TasbihPage';
+import { TypographyHelper } from '../helper/TypographyHelper';
 
 const HDS_MIN_API = 23;
 
@@ -531,6 +532,7 @@ struct MainTabs {
         .objectFit(ImageFit.Contain)
       Text(L.get('tab_home', this.currentLanguage))
         .fontSize(10)
+        .fontFamily(TypographyHelper.getFont(this.currentLanguage, this.currentIndex === 0)) // <---
         .fontWeight(this.currentIndex === 0
           ? FontWeight.Bold : FontWeight.Medium)
         .fontColor(this.currentIndex === 0

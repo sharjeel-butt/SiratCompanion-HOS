@@ -58,6 +58,7 @@ import {
   HijriCalendarType
 } from '../hijricalendar/HijriCalendarType';
 import { LocationCache } from '../utils/LocationCache';
+import { TypographyHelper } from '../helper/TypographyHelper';
 
 /** How long the splash stays visible, in milliseconds. */
 const SPLASH_DELAY_MS = 1500;
@@ -105,6 +106,7 @@ export default class EntryAbility extends UIAbility {
     AppLogger.init(this.context);
     L.init(this.context);
     LayoutHelper.install();
+    TypographyHelper.init();
     L.init(this.context);
     console.info('[Splash] L.init completed');
     // On 2-in-1 devices, request a preferred starting window size.

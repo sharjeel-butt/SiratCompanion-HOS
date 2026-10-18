@@ -197,9 +197,9 @@ struct TasbihDetailsPage {
   @Builder
   PeriodSelector() {
     Row() {
-      this.PeriodChip('week', this.tr('details_period_week'))
-      this.PeriodChip('month', this.tr('details_period_month'))
-      this.PeriodChip('year', this.tr('details_period_year'))
+      this.PeriodChip('week')
+      this.PeriodChip('month')
+      this.PeriodChip('year')
     }
     .width('100%')
     .padding(4)
@@ -210,8 +210,8 @@ struct TasbihDetailsPage {
   }
 
   @Builder
-  PeriodChip(id: string, label: string) {
-    Text(label)
+  PeriodChip(id: string) {
+    Text(this.periodLabel(id))
       .fontSize(13)
       .fontWeight(this.period === id ? FontWeight.Bold : FontWeight.Normal)
       .fontColor(this.period === id
@@ -226,6 +226,16 @@ struct TasbihDetailsPage {
         this.period = id as TasbihPeriod;
         this.recompute();
       })
+  }
+
+  private periodLabel(id: string): string {
+    if (id === 'week') {
+      return this.tr('details_period_week');
+    }
+    if (id === 'month') {
+      return this.tr('details_period_month');
+    }
+    return this.tr('details_period_year');
   }
 
   @Builder

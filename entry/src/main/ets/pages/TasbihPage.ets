@@ -32,6 +32,7 @@ import {
   TasbihThemes
 } from '../tasbih/TasbihThemes';
 import { Breakpoints } from '../common/Breakpoints';
+import { TypographyHelper } from '../helper/TypographyHelper';
 
 const BEAD_SIZE = 28;
 const BEAD_GAP = 7;
@@ -212,10 +213,11 @@ export struct TasbihPage {
           Column() {
             if (this.getActiveDhikr() !== null) {
               Text(this.getActiveDhikr()!.arabic)
-                .fontSize(22)
+                .fontSize(26)
+                .fontFamily(TypographyHelper.getFont(this.currentLanguage, false))
                 .fontColor(this.colors.textWhite)
                 .textAlign(TextAlign.Start)
-                .lineHeight(34)
+                .lineHeight(38) // Adjust line height for Naskh
                 .width('100%')
 
               Blank().layoutWeight(1)

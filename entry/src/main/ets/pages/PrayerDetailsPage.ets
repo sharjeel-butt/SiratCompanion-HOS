@@ -23,6 +23,7 @@ import {
   YearDetailSnapshot,
   YearMonthRow
 } from '../utils/ProgressHelper';
+import { TypographyHelper } from '../helper/TypographyHelper';
 
 type Period = 'week' | 'month' | 'year';
 
@@ -285,7 +286,10 @@ struct PrayerDetailsPage {
   WeekViewCard() {
     Column() {
       Row() {
-        Text('📅').fontSize(14).margin({ right: 8 })
+        Image($r('app.media.ic_nav_calendar'))
+          .width(16).height(16)
+          .fillColor(this.colors.accentGold)
+          .margin({ right: 8 })
         Text(this.tr('details_period_week'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
@@ -403,7 +407,10 @@ struct PrayerDetailsPage {
   YearViewCard() {
     Column() {
       Row() {
-        Text('📅').fontSize(14).margin({ right: 8 })
+        Image($r('app.media.ic_nav_calendar'))
+          .width(16).height(16)
+          .fillColor(this.colors.accentGold)
+          .margin({ right: 8 })
         Text(this.tr('details_period_year'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
@@ -539,9 +546,9 @@ struct PrayerDetailsPage {
   @Builder
   PeriodSelector() {
     Row() {
-      this.PeriodChip('week', this.tr('details_period_week'))
-      this.PeriodChip('month', this.tr('details_period_month'))
-      this.PeriodChip('year', this.tr('details_period_year'))
+      this.PeriodChip('week')
+      this.PeriodChip('month')
+      this.PeriodChip('year')
     }
     .width('100%')
     .padding(4)
@@ -552,8 +559,8 @@ struct PrayerDetailsPage {
   }
 
   @Builder
-  PeriodChip(id: string, label: string) {
-    Text(label)
+  PeriodChip(id: string) {
+    Text(this.periodLabel(id))
       .fontSize(13)
       .fontWeight(this.period === id ? FontWeight.Bold : FontWeight.Normal)
       .fontColor(this.period === id
@@ -569,6 +576,16 @@ struct PrayerDetailsPage {
       })
   }
 
+  private periodLabel(id: string): string {
+    if (id === 'week') {
+      return this.tr('details_period_week');
+    }
+    if (id === 'month') {
+      return this.tr('details_period_month');
+    }
+    return this.tr('details_period_year');
+  }
+
   @Builder
   SummaryCard() {
     Column() {
@@ -576,7 +593,9 @@ struct PrayerDetailsPage {
         Column() {
           Row() {
             Text(`${this.totalForPeriod()}`)
-              .fontSize(48).fontWeight(FontWeight.Bold)
+              .fontSize(48)
+              .fontFamily(TypographyHelper.getFont(this.appLanguage, true)) // <---
+              .fontWeight(FontWeight.Bold)
               .fontColor(this.colors.textWhite)
             Text(` / ${this.possibleForPeriod()}`)
               .fontSize(20).fontColor(this.colors.textMuted)
@@ -618,7 +637,9 @@ struct PrayerDetailsPage {
 
       Row() {
         Row() {
-          Text('🔥').fontSize(16).margin({ right: 6 })
+          Image($r('app.media.ic_streak_fire'))
+            .width(28).height(28)
+            .fillColor(this.colors.accentGold)
           Column() {
             Row() {
               Text(`${this.snapshot.currentStreak}`)
@@ -639,7 +660,9 @@ struct PrayerDetailsPage {
         Divider().vertical(true).height(36).color(this.colors.borderSoft)
 
         Row() {
-          Text('🏆').fontSize(16).margin({ right: 6 })
+          Image($r('app.media.ic_trophy'))
+            .width(28).height(28)
+            .fillColor(this.colors.accentGold)
           Column() {
             Row() {
               Text(`${this.snapshot.bestStreak}`)
@@ -685,11 +708,11 @@ struct PrayerDetailsPage {
         .width('100%')
         .padding({ bottom: 12 })
 
-      this.PrayerRow('fajr', this.perPrayerForPeriod().fajr, this.prayerLabel('fajr'))
-      this.PrayerRow('dhuhr', this.perPrayerForPeriod().dhuhr, this.prayerLabel('dhuhr'))
-      this.PrayerRow('asr', this.perPrayerForPeriod().asr, this.prayerLabel('asr'))
-      this.PrayerRow('maghrib', this.perPrayerForPeriod().maghrib, this.prayerLabel('maghrib'))
-      this.PrayerRow('isha', this.perPrayerForPeriod().isha, this.prayerLabel('isha'))
+      this.PrayerRow('fajr', this.perPrayerForPeriod().fajr)
+      this.PrayerRow('dhuhr', this.perPrayerForPeriod().dhuhr)
+      this.PrayerRow('asr', this.perPrayerForPeriod().asr)
+      this.PrayerRow('maghrib', this.perPrayerForPeriod().maghrib)
+      this.PrayerRow('isha', this.perPrayerForPeriod().isha)
     }
     .width('100%')
     .padding(18)
@@ -706,10 +729,10 @@ struct PrayerDetailsPage {
   }
 
   @Builder
-  PrayerRow(id: string, count: number, label: string) {
+  PrayerRow(id: string, count: number) {
     Column() {
       Row() {
-        Text(label)
+        Text(this.prayerLabel(id)) // Use the helper here instead of the parameter
           .fontSize(14).fontColor(this.colors.textWhite)
           .fontWeight(FontWeight.Medium)
           .layoutWeight(1)
@@ -752,7 +775,10 @@ struct PrayerDetailsPage {
   MonthHeatmapCard() {
     Column() {
       Row() {
-        Text('📊').fontSize(14).margin({ right: 8 })
+        Image($r('app.media.ic_chart'))
+          .width(16).height(16)
+          .fillColor(this.colors.accentGold)
+          .margin({ right: 8 })
         Text(this.tr('details_this_month'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)

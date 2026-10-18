@@ -2067,6 +2067,10 @@
     {
       "name": "calendar_write_permission_denied",
       "value": "需要日历写入权限以保存新的提醒。"
+    },
+    {
+      "name": "next_3_days",
+      "value": "未来3天"
     }
   ]
 }

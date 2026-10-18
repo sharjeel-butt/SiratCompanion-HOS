@@ -2067,6 +2067,10 @@
     {
       "name": "calendar_write_permission_denied",
       "value": "مطلوب إذن كتابة التقويم لحفظ التذكيرات الجديدة."
+    },
+    {
+      "name": "next_3_days",
+      "value": "الأيام الثلاثة القادمة"
     }
   ]
 }

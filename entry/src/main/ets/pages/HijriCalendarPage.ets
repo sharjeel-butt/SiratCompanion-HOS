@@ -407,15 +407,17 @@ export struct HijriCalendarPage {
             .color(this.colors.accentGold)
             .margin({ left: 12 })
         } else {
-          Text('🖨️')
-            .fontSize(20)
-            .width(40)
-            .height(40)
-            .textAlign(TextAlign.Center)
-            .borderRadius(20)
-            .backgroundColor(this.colors.tintSoft)
+          Image($r('app.media.ic_printer'))
+            .width(16)
+            .height(16)
+            .fillColor(this.colors.accentGold)
+            .width(32)
+            .height(32)
+            .padding(8)
+            .borderRadius(16)
+            .backgroundColor(this.colors.cardDark)
             .border({ width: 1, color: this.colors.borderSoft })
-            .margin({ left: 12 })
+            .margin({ right: 8 })
             .onClick(() => {
               this.handleExport();
             })
@@ -520,7 +522,9 @@ export struct HijriCalendarPage {
   EventsList() {
     Column() {
       Row() {
-        Text('📅').fontSize(14)
+        Image($r('app.media.ic_nav_calendar'))
+          .width(16).height(16)
+          .fillColor(this.colors.accentGold)
           .margin({ left: this.isRtl() ? 8 : 0, right: this.isRtl() ? 0 : 8 })
         Text(this.tr('important_dates'))
           .fontSize(12).fontColor(this.colors.accentGold)

@@ -9,6 +9,7 @@ import {
 import { CalculationSource } from '../models/SettingsModels';
 import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
 import { STORAGE_KEY_TIME_FORMAT } from '../common/StorageKeys';
+import { TypographyHelper } from '../helper/TypographyHelper';
 
 /**
  * Shared page header used by HomePage and Prayer.
@@ -108,9 +109,12 @@ export struct PageHeader {
       Column() {
         // Hijri date pill
         Row() {
-          Text('🌙').fontSize(12)
+          Image($r('app.media.ic_ramadan_moon'))
+            .width(14).height(14)
+            .fillColor(this.colors.accentGold)
           Text(this.hijriDateString)
             .fontSize(13)
+            .fontFamily(TypographyHelper.getFont(this.currentLanguage, true)) // <---
             .fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
             .margin({ left: 6 })
@@ -126,9 +130,12 @@ export struct PageHeader {
 
         // Location pill
         Row() {
-          Text('📍').fontSize(15)
+          Image($r('app.media.ic_pin'))
+            .width(16).height(16)
+            .fillColor(this.colors.accentGold)
           Text(this.currentLocation)
             .fontSize(16)
+            .fontFamily(TypographyHelper.getFont(this.currentLanguage, true)) // <---
             .fontColor(this.colors.textWhite)
             .fontWeight(FontWeight.Bold)
             .margin({ left: 8 })
@@ -205,7 +212,10 @@ export struct PageHeader {
         Row() {
           // Method
           Row() {
-            Text('🕌').fontSize(13).margin({ right: 6 })
+            Image($r('app.media.ic_nav_mosque'))
+              .width(14).height(14)
+              .fillColor(this.colors.accentGold)
+              .margin({ right: 6 })
             Text(SettingsHelper.getCalcMethodShortLabel(this.calcMethod))
               .fontSize(12)
               .fontColor(this.colors.accentGold)
@@ -228,7 +238,10 @@ export struct PageHeader {
 
           // Asr rule
           Row() {
-            Text('🌅').fontSize(13).margin({ right: 6 })
+            Image($r('app.media.ic_sunrise'))
+              .width(14).height(14)
+              .fillColor(this.colors.accentGold)
+              .margin({ right: 6 })
             Text(SettingsHelper.getAsrRuleShortLabel(this.asrRule))
               .fontSize(12)
               .fontColor(this.colors.accentGold)
@@ -251,7 +264,10 @@ export struct PageHeader {
 
           // Source
           Row() {
-            Text('🌐').fontSize(13).margin({ right: 6 })
+            Image($r('app.media.ic_globe'))
+              .width(14).height(14)
+              .fillColor(this.colors.accentGold)
+              .margin({ right: 6 })
             Text(SettingsHelper.getCalcSourceShortLabel(this.calcSource))
               .fontSize(12)
               .fontColor(this.colors.accentGold)

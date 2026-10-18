@@ -237,11 +237,16 @@ struct CustomizePage {
               // UI Customization — header inlined
               // ==================================================
               Row() {
-                Text('🎛️')
-                  .fontSize(18)
+                Image($r('app.media.ic_ui_customize'))
+                  .width(20)
+                  .height(20)
+                  .fillColor(this.colors.accentGold)
                   .width(40)
                   .height(40)
-                  .textAlign(TextAlign.Center)
+                  .padding(10)
+                  .backgroundColor(this.colors.tintSoft)
+                  .borderRadius(12)
+                  .border({ width: 1, color: this.colors.borderSoft })
                   .backgroundColor(this.colors.tintSoft)
                   .borderRadius(12)
                   .border({ width: 1, color: this.colors.borderSoft })
@@ -280,11 +285,16 @@ struct CustomizePage {
               // Appearance — header inlined
               // ==================================================
               Row() {
-                Text('🎨')
-                  .fontSize(18)
+                Image($r('app.media.ic_ui_appearance'))
+                  .width(20)
+                  .height(20)
+                  .fillColor(this.colors.accentGold)
                   .width(40)
                   .height(40)
-                  .textAlign(TextAlign.Center)
+                  .padding(10)
+                  .backgroundColor(this.colors.tintSoft)
+                  .borderRadius(12)
+                  .border({ width: 1, color: this.colors.borderSoft })
                   .backgroundColor(this.colors.tintSoft)
                   .borderRadius(12)
                   .border({ width: 1, color: this.colors.borderSoft })

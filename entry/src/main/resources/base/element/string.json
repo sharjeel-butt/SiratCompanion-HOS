@@ -2067,6 +2067,10 @@
     {
       "name": "calendar_write_permission_denied",
       "value": "Calendar Write permission is required to save new reminders."
+    },
+    {
+      "name": "next_3_days",
+      "value": "NEXT 3 DAYS"
     }
   ]
 }
