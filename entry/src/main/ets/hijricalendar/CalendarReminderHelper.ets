@@ -1,7 +1,7 @@
 // entry/src/main/ets/helper/CalendarReminderHelper.ets
 
 import { calendarManager } from '@kit.CalendarKit';
-import { abilityAccessCtrl, common, Permissions } from '@kit.AbilityKit';
+import { abilityAccessCtrl, bundleManager, common, Permissions } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { AppLogger } from '../helper/AppLogger';
 
@@ -189,13 +189,51 @@ export class CalendarReminderHelper {
     }
   }
 
-  /** True when both calendar permissions are already granted. */
+  /**
+   * Silent permission check — does not prompt the user.
+   *
+   * Reads the app's own access-token ID and asks the ability-access-
+   * control manager whether each calendar permission is granted.
+   * Returns true only when both are.
+   *
+   * Used by NotificationHelper.isPermissionGranted, which is called
+   * from SettingsPage.sendTestNotification. Without this, checking
+   * whether permission was already granted would pop the system
+   * dialog on every "Send Test Notification" tap.
+   */
   static async isPermissionGranted(
     context: common.UIAbilityContext
   ): Promise<boolean> {
-    // The most reliable check is to re-request; the system returns
-    // immediately without a dialog if the permission is already granted.
-    return CalendarReminderHelper.requestPermission(context);
+    try {
+      const bundleInfo = bundleManager.getBundleInfoForSelfSync(
+        bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION
+      );
+      const tokenId = bundleInfo.appInfo.accessTokenId;
+
+      const atManager = abilityAccessCtrl.createAtManager();
+
+      for (const perm of CalendarReminderHelper.PERMISSIONS) {
+        const status = atManager.checkAccessTokenSync(tokenId, perm);
+        if (status !== abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED) {
+          CalendarReminderHelper.permissionStatus.read =
+            perm === 'ohos.permission.READ_CALENDAR' ? false
+              : CalendarReminderHelper.permissionStatus.read;
+          CalendarReminderHelper.permissionStatus.write =
+            perm === 'ohos.permission.WRITE_CALENDAR' ? false
+              : CalendarReminderHelper.permissionStatus.write;
+          return false;
+        }
+      }
+
+      CalendarReminderHelper.permissionStatus.read = true;
+      CalendarReminderHelper.permissionStatus.write = true;
+      return true;
+    } catch (err) {
+      const e = err as BusinessError;
+      AppLogger.warn('CalendarReminderHelper',
+        `isPermissionGranted failed: ${e.code} ${e.message}`);
+      return false;
+    }
   }
 
   // ============================================================

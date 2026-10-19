@@ -1595,7 +1595,7 @@ export struct HomePage {
             .fontWeight(FontWeight.Bold)
             .letterSpacing(1.5)
             .layoutWeight(1)
-          Text(`${this.ramadanInfo!.hijriYear} AH`)
+          Text(`${this.ramadanInfo!.hijriYear} ${this.tr('hijri_year_suffix')}`)
             .fontSize(11).fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
         }

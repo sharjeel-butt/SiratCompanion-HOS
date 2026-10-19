@@ -13,12 +13,13 @@ import {
 import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator';
 import { SettingsHelper } from '../helper/SettingsHelper';
 import { LocationData, LocationHelper } from '../utils/LocationUtils';
-import { LocationCache } from '../utils/LocationCache';
 import { CalculationSource, LocationMode, PickerItem } from '../models/SettingsModels';
 import { AppLanguage, L } from '../i8n/LocalizationHelper';
 import { NavHelper } from '../helper/NavHelper';
 import { PrivacyPolicyProvider } from '../data/PrivacyPolicy';
 import { Breakpoints } from '../common/Breakpoints';
+import { FALLBACK_LOCATION, LocationCache } from '../utils/LocationCache';
+import { common, Want } from '@kit.AbilityKit';
 
 const TOTAL_STEPS = 5;
 
@@ -56,6 +57,7 @@ struct WizardPage {
   @State selectedLanguage: string = AppLanguage.ENGLISH;
   @State privacyAccepted: boolean = false;
   @State selectedTheme: string = ThemePreset.SIRAT;
+  @State private usedDefaultLocation: boolean = false;
   @State locationMode: LocationMode = LocationMode.GPS;
   @State manualLat: string = '';
   @State manualLng: string = '';
@@ -407,9 +409,7 @@ struct WizardPage {
       .padding({ bottom: 4 })
       .justifyContent(FlexAlign.Start)
       .onClick(() => {
-        this.getUIContext().getPromptAction().showToast({
-          message: PrivacyPolicyProvider.FULL_URL, duration: 3000
-        });
+        this.openPrivacyPolicyInBrowser();
       })
     }
     .width('100%')
@@ -587,6 +587,14 @@ struct WizardPage {
                   .onClick(() => {
                     this.requestGpsLocation();
                   })
+                Text(this.tr('wizard_use_default_location'))
+                  .fontSize(12)
+                  .fontColor(this.colors.textMuted)
+                  .decoration({ type: TextDecorationType.Underline })
+                  .margin({ top: 12 })
+                  .onClick(() => {
+                    this.useDefaultLocation();
+                  })
               }
               .width('100%')
               .padding(20)
@@ -625,6 +633,15 @@ struct WizardPage {
                 .onClick(() => {
                   this.requestGpsLocation();
                 })
+
+                Text(this.tr('wizard_use_default_location'))
+                  .fontSize(12)
+                  .fontColor(this.colors.textMuted)
+                  .decoration({ type: TextDecorationType.Underline })
+                  .margin({ top: 12 })
+                  .onClick(() => {
+                    this.useDefaultLocation();
+                  })
               }
               .width('100%')
               .padding(20)
@@ -892,22 +909,33 @@ struct WizardPage {
   @Builder
   Footer() {
     Row() {
-      Button(this.step < TOTAL_STEPS - 1 ? this.tr('wizard_next') : this.tr('wizard_finish'))
-        .width('100%')
-        .height(50)
-        .fontSize(15)
-        .fontWeight(FontWeight.Medium)
-        .fontColor(this.canProceed()
-          ? this.colors.textOnAccent
-          : this.colors.textMuted)
-        .backgroundColor(this.canProceed()
-          ? this.colors.accentGold
-          : this.colors.tintMedium)
-        .borderRadius(12)
-        .enabled(this.canProceed())
-        .onClick(() => {
-          this.goNext();
-        })
+      Column() {
+        if (this.step === 3 && this.locationStatus !== 'ready') {
+          Text(this.tr('wizard_location_required_hint'))
+            .fontSize(11)
+            .fontColor(this.colors.textMuted)
+            .textAlign(TextAlign.Center)
+            .width('100%')
+            .margin({ bottom: 8 })
+        }
+        Button(this.step < TOTAL_STEPS - 1
+          ? this.tr('wizard_next') : this.tr('wizard_finish'))
+          .width('100%')
+          .height(50)
+          .fontSize(15)
+          .fontWeight(FontWeight.Medium)
+          .fontColor(this.canProceed()
+            ? this.colors.textOnAccent : this.colors.textMuted)
+          .backgroundColor(this.canProceed()
+            ? this.colors.accentGold : this.colors.tintMedium)
+          .borderRadius(12)
+          .enabled(this.canProceed())
+          .onClick(() => {
+            this.goNext();
+          })
+      }
+      .width('100%')
+      .alignItems(HorizontalAlign.Center)
     }
     .width('100%')
     .padding({
@@ -1063,6 +1091,9 @@ struct WizardPage {
 
   private onLanguageChanged(): void {
     this.currentLanguage = this.appLanguage;
+    if (this.usedDefaultLocation && this.locationStatus === 'ready') {
+      this.detectedCity = this.tr('default_location');
+    }
   }
 
   private onAppThemeChanged(): void {
@@ -1087,6 +1118,9 @@ struct WizardPage {
 
   private canProceed(): boolean {
     if (this.step === 1 && !this.privacyAccepted) {
+      return false;
+    }
+    if (this.step === 3 && this.locationStatus !== 'ready') {
       return false;
     }
     return true;
@@ -1140,6 +1174,39 @@ struct WizardPage {
 
   private getPrivacyPolicyText(): string {
     return PrivacyPolicyProvider.get(this.currentLanguage);
+  }
+
+  /**
+   * Open the hosted privacy policy in the device's default browser.
+   *
+   * Uses the standard OHOS "view data" intent — the same mechanism
+   * the system uses for any app that wants to launch a URL. No
+   * permission is required; the browser handles the navigation.
+   *
+   * If no browser is installed (or the intent fails for any other
+   * reason), fall back to a longer-duration toast so the user can
+   * at least read and copy the URL manually.
+   */
+  private async openPrivacyPolicyInBrowser(): Promise<void> {
+    const context = getContext(this) as common.UIAbilityContext;
+    const want: Want = {
+      action: 'ohos.want.action.viewData',
+      entities: ['entity.system.browsable'],
+      uri: PrivacyPolicyProvider.FULL_URL
+    };
+
+    try {
+      await context.startAbility(want);
+    } catch (err) {
+      const e = err as Error;
+      console.warn(
+        '[WizardPage] openPrivacyPolicyInBrowser failed: ' + e.message
+      );
+      this.getUIContext().getPromptAction().showToast({
+        message: PrivacyPolicyProvider.FULL_URL,
+        duration: 4000
+      });
+    }
   }
 
   private getThemeOptions(): ThemeOption[] {
@@ -1201,8 +1268,10 @@ struct WizardPage {
       return;
     }
     this.isGettingLocation = true;
+    this.usedDefaultLocation = false;
     this.locationStatus = 'idle';
     this.detectedCity = '';
+    this.usedDefaultLocation = false;
 
     try {
       const data: LocationData = await LocationHelper.fetchLocationData(getContext(this));
@@ -1219,6 +1288,42 @@ struct WizardPage {
       } else if (error.message === 'PERMISSION_DENIED') {
         await LocationHelper.showPermissionDeniedDialog();
       }
+    } finally {
+      this.isGettingLocation = false;
+    }
+  }
+
+  /**
+   * Escape hatch — save the fallback location so a user who cannot or
+   * will not grant location permission is not stuck on the wizard's
+   * location step. Without this, `canProceed()` would block them from
+   * advancing forever, and MainTabs would open with no location.
+   */
+  private async useDefaultLocation(): Promise<void> {
+    if (this.isGettingLocation) {
+      return;
+    }
+    this.isGettingLocation = true;
+
+    try {
+      const fallbackName = this.tr('default_location');
+
+      await LocationCache.save(
+        FALLBACK_LOCATION.latitude,
+        FALLBACK_LOCATION.longitude,
+        fallbackName
+      );
+      SettingsHelper.saveLocationMode(LocationMode.GPS);
+
+      this.locationMode = LocationMode.GPS;
+      this.detectedCity = fallbackName;
+      this.locationStatus = 'ready';
+      this.usedDefaultLocation = true;
+    } catch (err) {
+      const e = err as Error;
+      console.warn('[WizardPage] useDefaultLocation failed:', e.message);
+      this.locationStatus = 'failed';
+      this.usedDefaultLocation = false;
     } finally {
       this.isGettingLocation = false;
     }
@@ -1242,6 +1347,7 @@ struct WizardPage {
     }
 
     this.isGettingLocation = true;
+    this.usedDefaultLocation = false;
 
     let cityName = this.manualCity.trim();
     if (cityName.length === 0) {

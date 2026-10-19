@@ -1946,15 +1946,15 @@
     },
     {
       "name": "details_period_week",
-      "value": "本周"
+      "value": "周"
     },
     {
       "name": "details_period_month",
-      "value": "本月"
+      "value": "月"
     },
     {
       "name": "details_period_year",
-      "value": "本年"
+      "value": "年"
     },
     {
       "name": "details_prayers_completed",
@@ -2054,7 +2054,7 @@
     },
     {
       "name": "hijri_year_suffix",
-      "value": "回历"
+      "value": "年"
     },
     {
       "name": "generated_by",
@@ -2075,6 +2075,18 @@
     {
       "name": "about_developer",
       "value": "开发者"
+    },
+    {
+      "name": "wizard_use_default_location",
+      "value": "使用默认位置"
+    },
+    {
+      "name": "wizard_location_required_hint",
+      "value": "请先设置位置以继续"
+    },
+    {
+      "name": "subsection_language_and_time",
+      "value": "语言与时间格式"
     }
   ]
 }

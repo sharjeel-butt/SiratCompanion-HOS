@@ -17,11 +17,14 @@ export interface CountryZone {
  * timezone region. Only used as a fallback when the nearest-city
  * lookup misses — so precision is not critical, coverage is.
  *
- * A country with multiple zones (US, Russia, Australia, Canada,
- * Brazil, Indonesia) has multiple entries. They are tested in
- * order and the first containing box wins, so put the smaller
- * boxes first for countries where they overlap.
+ * Tested in array order; the first containing box wins. Put the
+ * smaller / more-specific boxes before the wider ones for the
+ * same country.
+ *
+ * Multi-zone splits included:
+ *   US (4), CA (6), RU (11), AU (5), BR (2), MX (3), ID (3)
  */
+
 export const COUNTRY_ZONES: CountryZone[] = [
   // ---- Middle East / Anatolia ----
   {
@@ -240,6 +243,118 @@ export const COUNTRY_ZONES: CountryZone[] = [
     dstRule: DstRule.NONE
   },
 
+  // ---- Russia — eleven zones, west → east ----
+  // Kaliningrad is the only +2 zone; small box, put it first.
+  {
+    code: 'RU-KGD',
+    minLat: 54.3,
+    maxLat: 55.3,
+    minLng: 19.5,
+    maxLng: 23.0,
+    standardOffset: 2,
+    dstRule: DstRule.NONE
+  },
+  // Moscow Time (European Russia)
+  {
+    code: 'RU-MSK',
+    minLat: 41.0,
+    maxLat: 82.0,
+    minLng: 26.0,
+    maxLng: 46.0,
+    standardOffset: 3,
+    dstRule: DstRule.NONE
+  },
+  // Samara Time (Samara, Udmurtia, Ulyanovsk)
+  {
+    code: 'RU-SAM',
+    minLat: 50.0,
+    maxLat: 60.0,
+    minLng: 46.0,
+    maxLng: 56.0,
+    standardOffset: 4,
+    dstRule: DstRule.NONE
+  },
+  // Yekaterinburg Time (Sverdlovsk, Chelyabinsk, Bashkortostan)
+  {
+    code: 'RU-YEK',
+    minLat: 50.0,
+    maxLat: 70.0,
+    minLng: 56.0,
+    maxLng: 68.0,
+    standardOffset: 5,
+    dstRule: DstRule.NONE
+  },
+  // Omsk Time
+  {
+    code: 'RU-OMS',
+    minLat: 53.0,
+    maxLat: 60.0,
+    minLng: 68.0,
+    maxLng: 79.0,
+    standardOffset: 6,
+    dstRule: DstRule.NONE
+  },
+  // Krasnoyarsk Time (Novosibirsk, Krasnoyarsk, Tomsk)
+  {
+    code: 'RU-NOV',
+    minLat: 50.0,
+    maxLat: 80.0,
+    minLng: 79.0,
+    maxLng: 96.0,
+    standardOffset: 7,
+    dstRule: DstRule.NONE
+  },
+  // Irkutsk Time
+  {
+    code: 'RU-IRK',
+    minLat: 50.0,
+    maxLat: 60.0,
+    minLng: 96.0,
+    maxLng: 116.0,
+    standardOffset: 8,
+    dstRule: DstRule.NONE
+  },
+  // Yakutsk Time (Yakutia west, Amur, Zabaykalsky)
+  {
+    code: 'RU-YAK',
+    minLat: 50.0,
+    maxLat: 73.0,
+    minLng: 116.0,
+    maxLng: 140.0,
+    standardOffset: 9,
+    dstRule: DstRule.NONE
+  },
+  // Vladivostok Time (Primorsky, Khabarovsk south)
+  {
+    code: 'RU-VLA',
+    minLat: 42.0,
+    maxLat: 50.0,
+    minLng: 130.0,
+    maxLng: 142.0,
+    standardOffset: 10,
+    dstRule: DstRule.NONE
+  },
+  // Magadan Time (Magadan, Sakhalin, Kuril)
+  {
+    code: 'RU-MAG',
+    minLat: 43.0,
+    maxLat: 73.0,
+    minLng: 140.0,
+    maxLng: 160.0,
+    standardOffset: 11,
+    dstRule: DstRule.NONE
+  },
+  // Kamchatka Time (Kamchatka, Chukotka)
+  {
+    code: 'RU-KAM',
+    minLat: 50.0,
+    maxLat: 72.0,
+    minLng: 158.0,
+    maxLng: 180.0,
+    standardOffset: 12,
+    dstRule: DstRule.NONE
+  },
+
   // ---- East / Southeast Asia ----
   {
     code: 'CN',
@@ -268,15 +383,39 @@ export const COUNTRY_ZONES: CountryZone[] = [
     standardOffset: 9,
     dstRule: DstRule.NONE
   },
+
+  // ---- Indonesia — three zones ----
+  // WIB (Java, Sumatra) — +7
   {
-    code: 'ID',
+    code: 'ID-WIB',
     minLat: -11.0,
     maxLat: 6.1,
     minLng: 95.0,
-    maxLng: 141.1,
+    maxLng: 115.0,
     standardOffset: 7,
     dstRule: DstRule.NONE
   },
+  // WITA (Bali, Lombok, Sulawesi, Kalimantan south/east) — +8
+  {
+    code: 'ID-WITA',
+    minLat: -11.0,
+    maxLat: 6.1,
+    minLng: 115.0,
+    maxLng: 127.5,
+    standardOffset: 8,
+    dstRule: DstRule.NONE
+  },
+  // WIT (Papua, Maluku) — +9
+  {
+    code: 'ID-WIT',
+    minLat: -11.0,
+    maxLat: 6.1,
+    minLng: 127.5,
+    maxLng: 141.1,
+    standardOffset: 9,
+    dstRule: DstRule.NONE
+  },
+
   {
     code: 'MY',
     minLat: 0.8,
@@ -360,15 +499,91 @@ export const COUNTRY_ZONES: CountryZone[] = [
     standardOffset: -8,
     dstRule: DstRule.US
   },
+
+  // ---- Canada — six zones, smallest / most-specific first ----
+  // Newfoundland — the only half-hour offset in North America.
   {
-    code: 'CA',
-    minLat: 41.7,
-    maxLat: 83.1,
-    minLng: -141.0,
+    code: 'CA-NL',
+    minLat: 46.5,
+    maxLat: 60.5,
+    minLng: -60.0,
     maxLng: -52.6,
+    standardOffset: -3.5,
+    dstRule: DstRule.US
+  },
+  // Atlantic (Nova Scotia, New Brunswick, PEI)
+  {
+    code: 'CA-ATL',
+    minLat: 43.0,
+    maxLat: 48.5,
+    minLng: -69.1,
+    maxLng: -59.9,
+    standardOffset: -4,
+    dstRule: DstRule.US
+  },
+  // Eastern (Ontario, Quebec)
+  {
+    code: 'CA-E',
+    minLat: 41.7,
+    maxLat: 53.0,
+    minLng: -90.0,
+    maxLng: -59.9,
     standardOffset: -5,
     dstRule: DstRule.US
   },
+  // Central (Manitoba, Saskatchewan, Nunavut east)
+  {
+    code: 'CA-C',
+    minLat: 48.0,
+    maxLat: 70.0,
+    minLng: -102.0,
+    maxLng: -90.0,
+    standardOffset: -6,
+    dstRule: DstRule.US
+  },
+  // Mountain (Alberta, Northwest Territories)
+  {
+    code: 'CA-M',
+    minLat: 48.0,
+    maxLat: 70.0,
+    minLng: -120.0,
+    maxLng: -102.0,
+    standardOffset: -7,
+    dstRule: DstRule.US
+  },
+  // Pacific (British Columbia, Yukon)
+  {
+    code: 'CA-P',
+    minLat: 48.0,
+    maxLat: 70.0,
+    minLng: -141.0,
+    maxLng: -120.0,
+    standardOffset: -8,
+    dstRule: DstRule.US
+  },
+
+  // ---- Mexico — three zones ----
+  // Quintana Roo (Cancún) — the only -5 area
+  {
+    code: 'MX-CUN',
+    minLat: 18.0,
+    maxLat: 21.7,
+    minLng: -88.5,
+    maxLng: -86.7,
+    standardOffset: -5,
+    dstRule: DstRule.NONE
+  },
+  // Sonora — the only -7 area
+  {
+    code: 'MX-SON',
+    minLat: 26.0,
+    maxLat: 32.5,
+    minLng: -115.0,
+    maxLng: -108.4,
+    standardOffset: -7,
+    dstRule: DstRule.NONE
+  },
+  // Rest of Mexico — -6
   {
     code: 'MX',
     minLat: 14.5,
@@ -378,6 +593,19 @@ export const COUNTRY_ZONES: CountryZone[] = [
     standardOffset: -6,
     dstRule: DstRule.NONE
   },
+
+  // ---- Brazil — two zones ----
+  // Amazonas (Manaus) — the only -4 area
+  {
+    code: 'BR-AM',
+    minLat: -9.0,
+    maxLat: 2.0,
+    minLng: -73.9,
+    maxLng: -56.0,
+    standardOffset: -4,
+    dstRule: DstRule.NONE
+  },
+  // Rest of Brazil — -3
   {
     code: 'BR',
     minLat: -33.7,
@@ -388,16 +616,61 @@ export const COUNTRY_ZONES: CountryZone[] = [
     dstRule: DstRule.NONE
   },
 
-  // ---- Oceania ----
+  // ---- Oceania — split by state ----
+  // Western Australia (Perth) — +8, no DST
   {
-    code: 'AU',
-    minLat: -43.7,
-    maxLat: -10.0,
+    code: 'AU-WA',
+    minLat: -35.0,
+    maxLat: -13.0,
     minLng: 112.9,
-    maxLng: 153.6,
+    maxLng: 129.0,
+    standardOffset: 8,
+    dstRule: DstRule.NONE
+  },
+  // Northern Territory (Darwin) — +9:30, no DST
+  {
+    code: 'AU-NT',
+    minLat: -26.0,
+    maxLat: -11.0,
+    minLng: 129.0,
+    maxLng: 138.0,
+    standardOffset: 9.5,
+    dstRule: DstRule.NONE
+  },
+  // South Australia (Adelaide) — +9:30, DST
+  {
+    code: 'AU-SA',
+    minLat: -38.0,
+    maxLat: -26.0,
+    minLng: 129.0,
+    maxLng: 141.0,
+    standardOffset: 9.5,
+    dstRule: DstRule.AU
+  },
+  // Eastern states (NSW, VIC, TAS, ACT) — +10, DST
+  // Listed before QLD so the Gold Coast / Tweed Heads
+  // border region falls to DST (NSW) rather than no-DST.
+  {
+    code: 'AU-E',
+    minLat: -44.0,
+    maxLat: -28.0,
+    minLng: 140.0,
+    maxLng: 154.0,
     standardOffset: 10,
     dstRule: DstRule.AU
   },
+  // Queensland (Brisbane) — +10, no DST
+  {
+    code: 'AU-QLD',
+    minLat: -29.0,
+    maxLat: -10.0,
+    minLng: 138.0,
+    maxLng: 154.0,
+    standardOffset: 10,
+    dstRule: DstRule.NONE
+  },
+
+  // New Zealand — +12, DST
   {
     code: 'NZ',
     minLat: -47.3,

@@ -182,6 +182,14 @@ export class UmmAlQuraEngine implements HijriCalendarEngine {
       return null;
     }
 
+    // Validate day against this month's actual length.
+    const monthDays = UmmAlQuraEngine.staticDaysInMonth(
+      hijri.year, hijri.month
+    );
+    if (hijri.day < 1 || hijri.day > monthDays) {
+      return null;
+    }
+
     let jdn = UmmAlQuraEngine.YEAR_START_JDN[
     hijri.year - UmmAlQuraEngine.MIN_YEAR
     ];

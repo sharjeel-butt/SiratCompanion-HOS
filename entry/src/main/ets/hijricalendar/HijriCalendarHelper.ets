@@ -208,15 +208,33 @@ export class HijriCalendarHelper {
     return out;
   }
 
-  /** "Sep 15 – Oct 14, 2025" style string for the Gregorian span. */
-  static formatGregorianSpan(days: CalendarDay[]): string {
+  /**
+   * "Sep 15 – Oct 14, 2026" style string for the Gregorian span.
+   *
+   * @param lang  The app's current UI language ('en' | 'ar' | 'zh').
+   *              Localizes month abbreviations via Intl.DateTimeFormat.
+   *              Falls back to English when Intl is unavailable.
+   */
+  static formatGregorianSpan(
+    days: CalendarDay[], lang: string = 'en'
+  ): string {
     if (days.length === 0) {
       return '';
     }
     const first = days[0].gregorianDate;
     const last = days[days.length - 1].gregorianDate;
-    const monthShort = (d: Date): string =>
-    d.toLocaleDateString('en-US', { month: 'short' });
+
+    const locale = lang === 'zh' ? 'zh-CN'
+      : lang === 'ar' ? 'ar'
+        : 'en-US';
+
+    const monthShort = (d: Date): string => {
+      try {
+        return d.toLocaleDateString(locale, { month: 'short' });
+      } catch (err) {
+        return d.toLocaleDateString('en-US', { month: 'short' });
+      }
+    };
     const year = last.getFullYear();
 
     if (first.getMonth() === last.getMonth() &&

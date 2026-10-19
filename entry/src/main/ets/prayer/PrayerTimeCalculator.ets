@@ -5,6 +5,7 @@ import {
   AdvancedCalcSettings,
   DEFAULT_ADVANCED_CALC,
   MidnightMethod,
+  PolarResolution,
   RoundingMethod,
   Shafaq
 } from '../models/AdvancedCalcModels';
@@ -401,6 +402,140 @@ export class PrayerTimeCalculator {
     return new Date(base.getTime() + (goBackward ? -portionMs : portionMs));
   }
 
+  /**
+   * Aqrab al-Balad fallback for an unreachable twilight angle.
+   *
+   * Walks from the actual latitude toward the equator in 0.5° steps
+   * until the requested altitude is reachable on the same date, then
+   * returns the resulting UTC hour for that reference latitude.
+   *
+   * Longitude and timezone stay at the observer's actual values — we
+   * are simulating a different latitude, not relocating the observer.
+   *
+   * Returns null only when even 0° latitude cannot reach the altitude
+   * on this date. That is impossible for real twilight angles (18°,
+   * 17°, 15°, etc.) at any declination the sun actually reaches, but
+   * checked defensively. The caller falls back to `applyHighLatFallback`
+   * in that case.
+   */
+  private static calculateAtAqrabBaladLatitude(
+    date: Date,
+    latitude: number,
+    longitude: number,
+    targetAltitudeDeg: number,
+    isAfternoon: boolean,
+    declinationDeg: number,
+    equationOfTimeMinutes: number
+  ): number | null {
+    // Equator always uses the actual declination, so this check is
+    // fast and definitive: if the angle isn't reachable there, it
+    // isn't reachable anywhere on Earth today.
+    if (!PrayerTimeCalculator.isAngleReachable(
+      0, declinationDeg, targetAltitudeDeg
+    )) {
+      return null;
+    }
+
+    const equatorward = latitude >= 0 ? 1 : -1;
+    const STEP = 0.5;
+
+    for (let refLat = latitude - equatorward * STEP;
+      Math.abs(refLat) > 0.001;
+      refLat -= equatorward * STEP) {
+      if (PrayerTimeCalculator.isAngleReachable(
+        refLat, declinationDeg, targetAltitudeDeg
+      )) {
+        return PrayerTimeCalculator.calculateTimeForAltitude(
+          date, refLat, longitude, declinationDeg,
+          equationOfTimeMinutes, targetAltitudeDeg, isAfternoon
+        );
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Aqrab al-Yaum fallback for an unreachable twilight angle.
+   *
+   * Searches forward and backward from the target date for the
+   * nearest day whose declination makes the target altitude
+   * reachable at the *actual* latitude. Uses that day's solar
+   * position to compute the prayer time-of-day, which the caller
+   * then places on the target date.
+   *
+   * Search window is ±183 days (half a year). That is guaranteed
+   * sufficient below the polar circles, because the sun's
+   * declination sweeps the full ±23.5° range within six months —
+   * any altitude that is ever reachable at a given latitude will
+   * be reachable within that window.
+   *
+   * Returns null only if no day within the window reaches the
+   * altitude. The caller falls back to `applyHighLatFallback`.
+   */
+  private static calculateAtAqrabYaum(
+    date: Date,
+    latitude: number,
+    longitude: number,
+    targetAltitudeDeg: number,
+    isAfternoon: boolean
+  ): number | null {
+    const MS_PER_DAY = 86400000;
+    const MAX_DAYS = 183;
+
+    for (let offset = 1; offset <= MAX_DAYS; offset++) {
+      // Probe both directions at each offset — the nearest day
+      // might be before or after the target.
+      for (const direction of [1, -1]) {
+        const probe = new Date(
+          date.getTime() + direction * offset * MS_PER_DAY
+        );
+        const solar = PrayerTimeCalculator.getSolarPosition(probe);
+        if (PrayerTimeCalculator.isAngleReachable(
+          latitude, solar.declination, targetAltitudeDeg
+        )) {
+          return PrayerTimeCalculator.calculateTimeForAltitude(
+            probe, latitude, longitude, solar.declination,
+            solar.equationOfTime, targetAltitudeDeg, isAfternoon
+          );
+        }
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Dispatch polar resolution to the selected rule, or return null
+   * when no polar rule is active or the rule cannot resolve the
+   * angle. Keeps the Fajr / Isha blocks in `calculate()` free of
+   * the polar-rule branches, which is what makes their definite-
+   * assignment structure clean.
+   */
+  private static calculatePolarFallback(
+    date: Date,
+    latitude: number,
+    longitude: number,
+    targetAltitudeDeg: number,
+    isAfternoon: boolean,
+    declinationDeg: number,
+    equationOfTimeMinutes: number,
+    polarResolution: PolarResolution
+  ): number | null {
+    if (polarResolution === PolarResolution.AQRAB_BALAD) {
+      return PrayerTimeCalculator.calculateAtAqrabBaladLatitude(
+        date, latitude, longitude, targetAltitudeDeg, isAfternoon,
+        declinationDeg, equationOfTimeMinutes
+      );
+    }
+    if (polarResolution === PolarResolution.AQRAB_YAUM) {
+      return PrayerTimeCalculator.calculateAtAqrabYaum(
+        date, latitude, longitude, targetAltitudeDeg, isAfternoon
+      );
+    }
+    return null;
+  }
+
   static calculate(
     date: Date,
     latitude: number,
@@ -474,11 +609,24 @@ export class PrayerTimeCalculator {
 
     // ---- Fajr ----
     let fajr: Date;
-    if (fajrReachable || highLatRule === HighLatitudeRule.NONE) {
+    const fajrPolarUTC = fajrReachable
+      ? null
+      : PrayerTimeCalculator.calculatePolarFallback(
+        date, latitude, longitude, -params.fajrAngle, false,
+        dec, eot, advanced.polarResolution
+      );
+
+    if (fajrPolarUTC !== null) {
+      fajr = PrayerTimeCalculator.dateFromUTCHours(
+        date, fajrPolarUTC + timezoneOffset
+      );
+    } else if (fajrReachable || highLatRule === HighLatitudeRule.NONE) {
       const fajrUTC = PrayerTimeCalculator.calculateTimeForAltitude(
         date, latitude, longitude, dec, eot, -params.fajrAngle, false
       );
-      fajr = PrayerTimeCalculator.dateFromUTCHours(date, fajrUTC + timezoneOffset);
+      fajr = PrayerTimeCalculator.dateFromUTCHours(
+        date, fajrUTC + timezoneOffset
+      );
     } else {
       fajr = PrayerTimeCalculator.applyHighLatFallback(
         sunrise, nightMs, params.fajrAngle, highLatRule, true
@@ -501,15 +649,30 @@ export class PrayerTimeCalculator {
     let isha: Date;
     if (params.ishaInterval > 0) {
       isha = new Date(maghrib.getTime() + params.ishaInterval * 60 * 1000);
-    } else if (ishaReachable || highLatRule === HighLatitudeRule.NONE) {
-      const ishaUTC = PrayerTimeCalculator.calculateTimeForAltitude(
-        date, latitude, longitude, dec, eot, -effectiveIshaAngle, true
-      );
-      isha = PrayerTimeCalculator.dateFromUTCHours(date, ishaUTC + timezoneOffset);
     } else {
-      isha = PrayerTimeCalculator.applyHighLatFallback(
-        sunset, nightMs, effectiveIshaAngle, highLatRule, false
-      );
+      const ishaPolarUTC = ishaReachable
+        ? null
+        : PrayerTimeCalculator.calculatePolarFallback(
+          date, latitude, longitude, -effectiveIshaAngle, true,
+          dec, eot, advanced.polarResolution
+        );
+
+      if (ishaPolarUTC !== null) {
+        isha = PrayerTimeCalculator.dateFromUTCHours(
+          date, ishaPolarUTC + timezoneOffset
+        );
+      } else if (ishaReachable || highLatRule === HighLatitudeRule.NONE) {
+        const ishaUTC = PrayerTimeCalculator.calculateTimeForAltitude(
+          date, latitude, longitude, dec, eot, -effectiveIshaAngle, true
+        );
+        isha = PrayerTimeCalculator.dateFromUTCHours(
+          date, ishaUTC + timezoneOffset
+        );
+      } else {
+        isha = PrayerTimeCalculator.applyHighLatFallback(
+          sunset, nightMs, effectiveIshaAngle, highLatRule, false
+        );
+      }
     }
 
     // ---- Imsak (Fajr − 10 min) ----

@@ -129,6 +129,27 @@ export class PrayerManager {
     return `${y}-${m}-${day}`;
   }
 
+  /**
+   * Reconstruct a local-midnight Date from a 'YYYY-MM-DD' key.
+   * Used to derive the day-of-week for Jummah naming when a
+   * caller passes a key without a matching Date.
+   */
+  private static dateFromKey(dateKey: string): Date {
+    const parts = dateKey.split('-');
+    if (parts.length !== 3) {
+      return new Date();
+    }
+    const y = parseInt(parts[0], 10);
+    const m = parseInt(parts[1], 10) - 1;
+    const d = parseInt(parts[2], 10);
+    if (isNaN(y) || isNaN(m) || isNaN(d)) {
+      return new Date();
+    }
+    const result = new Date(y, m, d);
+    result.setHours(0, 0, 0, 0);
+    return result;
+  }
+
   // ============================================================
   // FRIDAY NAMING
   // ============================================================
@@ -518,6 +539,10 @@ export class PrayerManager {
     prayers: PrayerModel[],
     date?: Date
   ): PrayerModel[] {
+    const resolvedDate = date !== undefined
+      ? date
+      : PrayerManager.dateFromKey(dateKey);
+
     const resetPrayers = prayers.map((p): PrayerModel => ({
       id: p.id,
       name: p.name,
@@ -529,7 +554,7 @@ export class PrayerManager {
 
     const json = PrayerManager.stateMap[dateKey];
     if (!json || json === '') {
-      return PrayerManager.applyDayNames(resetPrayers, date);
+      return PrayerManager.applyDayNames(resetPrayers, resolvedDate);
     }
 
     try {
@@ -562,10 +587,10 @@ export class PrayerManager {
           checked: checked
         } as PrayerModel;
       });
-      return PrayerManager.applyDayNames(mapped, date);
+      return PrayerManager.applyDayNames(mapped, resolvedDate);
     } catch (err) {
       console.error('[PrayerStore] parse failed: ' + JSON.stringify(err));
-      return PrayerManager.applyDayNames(resetPrayers, date);
+      return PrayerManager.applyDayNames(resetPrayers, resolvedDate);
     }
   }
 

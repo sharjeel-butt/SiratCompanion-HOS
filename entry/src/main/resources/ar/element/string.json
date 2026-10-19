@@ -2075,6 +2075,18 @@
     {
       "name": "about_developer",
       "value": "المطور"
+    },
+    {
+      "name": "wizard_use_default_location",
+      "value": "استخدم الموقع الافتراضي"
+    },
+    {
+      "name": "wizard_location_required_hint",
+      "value": "حدّد موقعاً للمتابعة"
+    },
+    {
+      "name": "subsection_language_and_time",
+      "value": "اللغة وتنسيق الوقت"
     }
   ]
 }

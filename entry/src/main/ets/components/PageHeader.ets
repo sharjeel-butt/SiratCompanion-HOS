@@ -1,14 +1,12 @@
 // entry/src/main/ets/components/PageHeader.ets
 
-import { Theme, ThemeColors } from '../common/Theme';
+import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
 import { L } from '../i8n/LocalizationHelper';
 import { SettingsHelper } from '../helper/SettingsHelper';
-import {
-  AsrShadowRule, CalculationMethod
-} from '../prayer/PrayerTimeCalculator';
+import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator';
 import { CalculationSource } from '../models/SettingsModels';
 import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
-import { STORAGE_KEY_TIME_FORMAT } from '../common/StorageKeys';
+import { STORAGE_KEY_THEME_MODE, STORAGE_KEY_TIME_FORMAT } from '../common/StorageKeys';
 import { TypographyHelper } from '../helper/TypographyHelper';
 import { PageTheme } from '../common/PageTheme';
 
@@ -41,6 +39,9 @@ export struct PageHeader {
   @Prop asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
   @Prop calcSource: CalculationSource = CalculationSource.LOCAL;
   @Prop showCalcPills: boolean = true;
+  @StorageLink(STORAGE_KEY_THEME_MODE)
+  @Watch('onClockFormatChanged')
+  themeMode: string = ThemeMode.SYSTEM;
 
   @StorageLink(STORAGE_KEY_TIME_FORMAT)
   @Watch('onClockFormatChanged')

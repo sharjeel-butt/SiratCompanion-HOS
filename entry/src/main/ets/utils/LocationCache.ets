@@ -68,12 +68,16 @@ export class LocationCache {
    * timezone changes so that stale coordinates are not reused with
    * the wrong clock. After clearing, the next resolve falls through
    * to the fallback or a fresh GPS fix.
+   *
+   * Deletes the keys rather than writing NaN — preferences don't
+   * reliably accept NaN, and a deleted key is unambiguously absent
+   * to the next load() call.
    */
   static async clear(): Promise<void> {
-    await PreferencesHelper.setNumber(KEY_LAT, NaN);
-    await PreferencesHelper.setNumber(KEY_LNG, NaN);
-    await PreferencesHelper.setString(KEY_CITY, '');
-    await PreferencesHelper.setNumber(KEY_REFRESH, 0);
+    await PreferencesHelper.remove(KEY_LAT);
+    await PreferencesHelper.remove(KEY_LNG);
+    await PreferencesHelper.remove(KEY_CITY);
+    await PreferencesHelper.remove(KEY_REFRESH);
 
     const prev = AppStorage.get<number>(STORAGE_KEY_LOCATION_VERSION);
     const next = (prev === undefined ? 0 : prev) + 1;

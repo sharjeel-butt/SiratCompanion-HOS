@@ -33,14 +33,3 @@ build-profile.json5
 /.clang-tidy
 **/.test
 /.appanalyzer
-# ============================================================
-# Signing credentials � NEVER COMMIT
-# ============================================================
-secrets/
-build-profile.json5
-*.p12
-*.p7b
-*.cer
-*.jks
-*.keystore
-/how 377af82build-profile.json5  Select-String Password

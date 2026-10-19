@@ -181,6 +181,24 @@ export class PreferencesHelper {
     }
   }
 
+  /**
+   * Delete a key from the store and schedule a debounced flush.
+   * Succeeds silently if the key doesn't exist.
+   */
+  static async remove(key: string): Promise<void> {
+    await PreferencesHelper.ensureReady();
+    if (!PreferencesHelper.store) {
+      return;
+    }
+    try {
+      await PreferencesHelper.store.delete(key);
+      PreferencesHelper.scheduleFlush();
+    } catch (err) {
+      // Missing key — treat as success.
+      console.info(`[PreferencesHelper] remove(${key}) — key absent`);
+    }
+  }
+
   // ============================================================
   // FLUSH
   // ============================================================

@@ -419,6 +419,46 @@ struct CustomizePage {
   }
 
   @Builder
+  ClockFormatRow() {
+    Row() {
+      Column() {
+        Text(this.tr('time_format'))
+          .fontSize(15).fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Medium)
+        Text(this.tr('time_format_desc'))
+          .fontSize(11)
+          .fontColor(this.colors.textMuted)
+          .margin({ top: 2 })
+          .maxLines(2)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+        Text(this.ClockFormatLabel())
+          .fontSize(12)
+          .fontColor(this.colors.accentGold)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+          .margin({ top: 6 })
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+      Text('›').fontSize(22)
+        .fontColor(this.colors.accentGold).opacity(0.7)
+    }
+    .width('100%')
+    .padding({
+      top: 14,
+      bottom: 14,
+      left: 16,
+      right: 16
+    })
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(12)
+    .margin({ bottom: 8 })
+    .onClick(() => {
+      this.showClockFormatPicker = true;
+    })
+  }
+
+  @Builder
   TopBar() {
     Row() {
       Text('←')
@@ -490,13 +530,14 @@ struct CustomizePage {
       this.SoundRow()
       this.SoundStyleRow()
 
-      // ============ Language ============
+      // ============ Language & Time Format ============
       SubsectionHeader({
         colors: this.colors,
         titleKey: 'subsection_language',
         currentLanguage: this.currentLanguage
       })
       this.LanguageRow()
+      this.ClockFormatRow()
     }
     .width('100%')
     .padding(12)

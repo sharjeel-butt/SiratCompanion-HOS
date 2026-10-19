@@ -372,7 +372,7 @@ export struct HijriCalendarPage {
             .textAlign(TextAlign.Center)
             .width('100%')
           Row() {
-            Text(`${this.viewingHijriYear} AH`)
+            Text(`${this.viewingHijriYear} ${this.tr('hijri_year_suffix')}`)
               .fontSize(13).fontColor(this.colors.accentGold)
 
             Text('·')
@@ -387,7 +387,8 @@ export struct HijriCalendarPage {
           .justifyContent(FlexAlign.Center)
           .width('100%')
           .margin({ top: 2 })
-          Text(HijriCalendarHelper.formatGregorianSpan(this.monthDays))
+
+          Text(HijriCalendarHelper.formatGregorianSpan(this.monthDays, this.currentLanguage))
             .fontSize(11).fontColor(this.colors.textMuted)
             .textAlign(TextAlign.Center).width('100%').margin({ top: 4 })
         }

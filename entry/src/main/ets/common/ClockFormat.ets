@@ -1,5 +1,8 @@
 // entry/src/main/ets/common/ClockFormat.ets
 
+import { i18n } from '@kit.LocalizationKit';
+import { settings } from '@kit.BasicServicesKit';
+import { common } from '@kit.AbilityKit';
 import { STORAGE_KEY_TIME_FORMAT } from './StorageKeys';
 
 export enum ClockFormat {
@@ -33,10 +36,8 @@ export class ClockFormatHelper {
     return ClockFormatHelper.isSystem24Hour();
   }
 
-  /**
-   * Reformat the app's internal 12-hour string ("5:23 AM") into the
-   * user's preferred display format.
-   */
+  /** Reformat the app's internal 12-hour string ("5:23 AM") into the
+   *  user's preferred display format. */
   static reformat(timeStr: string): string {
     if (timeStr === undefined || timeStr === null) {
       return '--:--';
@@ -45,7 +46,6 @@ export class ClockFormatHelper {
     if (trimmed.length === 0 || trimmed === '--:--') {
       return timeStr;
     }
-
     const minutes: number = ClockFormatHelper.parseToMinutes(trimmed);
     if (minutes < 0) {
       return timeStr;
@@ -71,43 +71,80 @@ export class ClockFormatHelper {
     return `${dh}:${mm} ${period}`;
   }
 
-  /**
-   * Detect the device's hour-cycle preference by formatting a known
-   * afternoon time (15:00) and inspecting the leading hour digit.
-   *
-   * A 24-hour locale formats 15:00 as "15" (or "15时"); a 12-hour
-   * locale formats it as "3 PM" or a localized form. Arabic-Indic
-   * digits are normalized to Latin before parsing.
-   */
+  // ============================================================
+  // SYSTEM HOUR-CYCLE DETECTION
+  // ============================================================
+  //
+  // Detection layers, tried in order:
+  //
+  //   1. i18n.System.is24HourClock()  — authoritative. Reads the
+  //      OS 24-hour toggle from the system config. Available since
+  //      API 9. This is the API Huawei documents for exactly this
+  //      purpose.
+  //
+  //   2. @ohos.settings TIME_FORMAT   — secondary. Reads the same
+  //      toggle through the settings database. Returns "24" or "12".
+  //      Only used if layer 1 is unavailable.
+  //
+  //   3. Intl.DateTimeFormat          — last resort. Known to be
+  //      unreliable on HarmonyOS (ignores hour12 / hourCycle
+  //      overrides), so this layer is genuinely a fallback for
+  //      exotic builds, not a primary signal.
+  //
+  // If the app still shows 12-hour on a 24-hour device, check the
+  // HiLog line "[ClockFormat] is24HourClock = true|false" printed
+  // once at startup. That is what the OS reports, and it is what
+  // the rest of the app will follow.
+
+  private static hourCycleLogged: boolean = false;
+
   private static isSystem24Hour(): boolean {
+    // ---- Layer 1: i18n.System.is24HourClock() (authoritative) ----
     try {
-      const test: Date = new Date(2020, 0, 1, 15, 0, 0);
-      const options: Intl.DateTimeFormatOptions = { hour: 'numeric' };
-      const formatter: Intl.DateTimeFormat =
-        new Intl.DateTimeFormat('en-GB', options);
-      const formatted: string = formatter.format(test);
+      const is24: boolean = i18n.System.is24HourClock();
 
-      let normalized: string = '';
-      for (let i = 0; i < formatted.length; i++) {
-        const code: number = formatted.charCodeAt(i);
-        // Arabic-Indic digits U+0660–U+0669 → ASCII 0–9.
-        if (code >= 0x0660 && code <= 0x0669) {
-          normalized += String.fromCharCode(code - 0x0660 + 0x30);
-        } else {
-          normalized += formatted.charAt(i);
-        }
+      if (!ClockFormatHelper.hourCycleLogged) {
+        ClockFormatHelper.hourCycleLogged = true;
+        console.info(`[ClockFormat] is24HourClock = ${is24}`);
+      }
+      return is24;
+    } catch (err) {
+      console.warn(
+        '[ClockFormat] i18n.System.is24HourClock() threw: ' +
+          JSON.stringify(err)
+      );
+    }
+
+    // ---- Layer 2: @ohos.settings TIME_FORMAT ("24" | "12") ----
+    // settings.date.TIME_FORMAT: "24" for 24-hour, "12" for 12-hour.
+    try {
+      const context = getContext() as common.Context;
+      const raw: string = settings.getValueSync(
+        context,
+        settings.date.TIME_FORMAT,
+        '12'
+      );
+      return raw === '24';
+    } catch (err) {
+      // No context (e.g. called from a plain JS module), or the
+      // setting isn't readable — fall through.
+    }
+
+    // ---- Layer 3: Intl.DateTimeFormat (last resort) ----
+    try {
+      const resolved = new Intl.DateTimeFormat(undefined, {
+        hour: 'numeric'
+      }).resolvedOptions();
+
+      if (typeof resolved.hour12 === 'boolean') {
+        return !resolved.hour12;
       }
 
-      const match: RegExpMatchArray | null = normalized.match(/\d+/);
-      if (match !== null) {
-        const hour: number = parseInt(match[0], 10);
-        if (!isNaN(hour)) {
-          return hour > 12;
-        }
+      const hc = resolved.hourCycle;
+      if (hc === 'h23' || hc === 'h24') {
+        return true;
       }
-
-      const lower: string = normalized.toLowerCase();
-      if (lower.indexOf('am') >= 0 || lower.indexOf('pm') >= 0) {
+      if (hc === 'h11' || hc === 'h12') {
         return false;
       }
     } catch (err) {

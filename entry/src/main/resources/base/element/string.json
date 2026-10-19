@@ -2075,6 +2075,18 @@
     {
       "name": "about_developer",
       "value": "Developer"
+    },
+    {
+      "name": "wizard_use_default_location",
+      "value": "Use the default location"
+    },
+    {
+      "name": "wizard_location_required_hint",
+      "value": "Set a location to continue"
+    },
+    {
+      "name": "subsection_language_and_time",
+      "value": "Language & Time Format"
     }
   ]
 }
