@@ -34,7 +34,7 @@ build-profile.json5
 **/.test
 /.appanalyzer
 # ============================================================
-# Signing credentials � NEVER COMMIT
+# Signing credentials � NEVER COMMIT
 # ============================================================
 secrets/
 build-profile.json5
@@ -43,3 +43,4 @@ build-profile.json5
 *.cer
 *.jks
 *.keystore
+/how 377af82build-profile.json5  Select-String Password
