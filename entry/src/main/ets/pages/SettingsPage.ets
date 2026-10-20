@@ -389,6 +389,11 @@ struct SettingsPage {
     })
   }
 
+  private isMadhabLocked(): boolean {
+    return this.calcMethod === CalculationMethod.TURKEY ||
+      this.calcMethod === CalculationMethod.TURKEY_EUROPE;
+  }
+
   // ============================================================
   // LOCATION
   // ============================================================
@@ -641,11 +646,17 @@ struct SettingsPage {
       SettingsRow({
         colors: this.colors,
         title: this.tr('madhab'),
-        description: this.tr('madhab_desc'),
-        value: SettingsHelper.getAsrRuleLabel(this.asrRule),
+        description: this.isMadhabLocked()
+          ? this.tr('madhab_desc_diyanet')
+          : this.tr('madhab_desc'),
+        value: this.isMadhabLocked()
+          ? this.tr('asr_standard')
+          : SettingsHelper.getAsrRuleLabel(this.asrRule),
         onTap: () => {
-          this.activePicker = 'asr';
-          this.showPickerSheet = true;
+          if (!this.isMadhabLocked()) {
+            this.activePicker = 'asr';
+            this.showPickerSheet = true;
+          }
         }
       })
 

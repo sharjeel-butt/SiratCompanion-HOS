@@ -5,7 +5,20 @@
 Prayer times, Qibla compass, Tasbih, and Hijri calendar — all in one calm, modern app that respects your settings and
 your battery.
 
-**Version 3.3.3** · **HarmonyOS 6+ (API 21+)** · **English · 中文 · العربية**
+## Changelog
+
+### [v3.4.3] - 2026-10-20
+
+#### Fixed
+
+- **Calculation Accuracy:** Implemented official Diyanet (Turkey) Temkin offsets and forced Standard Asr to exactly
+  match the government calendar.
+- **Calculation Accuracy:** Added Jafari/Tehran Maghrib rule (-4° below horizon) and forced Jafari Midnight method.
+- **Calculation Accuracy:** Added Umm al-Qura Ramadan rule (+30 minutes to Isha during Ramadan).
+- **AppGallery Fix:** Resolved an issue on 2-in-1 (PC) devices where the app would not fully close when selecting "Exit"
+  from the hamburger menu.
+- **AppGallery Fix:** Enforced GUI constraints to prevent invalid combinations (e.g., locking the Madhab selector to
+  Standard when Diyanet is selected).
 
 > On HarmonyOS 7 (API 26+) the bottom navigation bar uses the native immersive system material. On earlier releases it
 > falls back to a translucent blurred bar with identical behaviour.

@@ -2087,6 +2087,10 @@
     {
       "name": "subsection_language_and_time",
       "value": "Language & Time Format"
+    },
+    {
+      "name": "madhab_desc_diyanet",
+      "value": "Diyanet calendar uses the Standard Asr rule"
     }
   ]
 }
