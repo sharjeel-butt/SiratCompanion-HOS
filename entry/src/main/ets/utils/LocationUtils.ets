@@ -192,17 +192,23 @@ export class LocationHelper {
   private static buildLocaleCandidates(): string[] {
     const out: string[] = [];
 
-    try {
-      const sysLocale = i18n.System.getSystemLocale();
-      const lang = sysLocale.split('-')[0];
-      if (lang.length > 0) {
-        out.push(lang);
-      }
-    } catch (err) { /* ignore */
+    // 1. In-app language first
+    const appLang = L.current();
+    if (appLang.length > 0) {
+      out.push(appLang);
     }
 
-    const fallbacks = ['en', 'zh', 'ur', 'ar'];
-    for (const f of fallbacks) {
+    // 2. System locale second
+    try {
+      const sysLang = i18n.System.getSystemLocale().split('-')[0];
+      if (sysLang.length > 0 && out.indexOf(sysLang) === -1) {
+        out.push(sysLang);
+      }
+    } catch (err) {
+    }
+
+    // 3. Fallbacks
+    for (const f of ['en', 'zh', 'ar']) {
       if (out.indexOf(f) === -1) {
         out.push(f);
       }
@@ -232,10 +238,10 @@ export class LocationHelper {
 
       const cityCandidates: Array<string | undefined> = [
         addr.locality,
+        addr.subLocality, // Neighborhood is better than state
         addr.subAdministrativeArea,
-        addr.administrativeArea,
-        addr.subLocality,
-        addr.placeName
+        addr.placeName,
+        addr.administrativeArea// State/Province is last resort
       ];
 
       for (const s of cityCandidates) {

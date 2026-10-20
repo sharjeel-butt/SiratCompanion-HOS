@@ -358,71 +358,87 @@ export class HomeController {
     const isFriday = prayerDay.getDay() === 5;
     const dhuhrName = isFriday ? 'Jummah' : 'Dhuhr';
 
+    // Compute the Maghrib threshold for evening events
+    const maghribStr = PrayerManager.offsetTime(times.maghrib, offsets.maghrib);
+    const maghribMinutes = PrayerManager.timeToMinutes(maghribStr);
+
     const fajrEv: TimelineEvent = {
       name: 'Fajr',
       time: HomeController.parseToDate(
-        PrayerManager.offsetTime(times.fajr, offsets.fajr), prayerDay, false)
+        PrayerManager.offsetTime(times.fajr, offsets.fajr), prayerDay, null)
     };
     events.push(fajrEv);
 
     const dhuhrEv: TimelineEvent = {
       name: dhuhrName,
       time: HomeController.parseToDate(
-        PrayerManager.offsetTime(times.dhuhr, offsets.dhuhr), prayerDay, false)
+        PrayerManager.offsetTime(times.dhuhr, offsets.dhuhr), prayerDay, null)
     };
     events.push(dhuhrEv);
 
     const asrEv: TimelineEvent = {
       name: 'Asr',
       time: HomeController.parseToDate(
-        PrayerManager.offsetTime(times.asr, offsets.asr), prayerDay, false)
+        PrayerManager.offsetTime(times.asr, offsets.asr), prayerDay, null)
     };
     events.push(asrEv);
 
     const maghribEv: TimelineEvent = {
       name: 'Maghrib',
       time: HomeController.parseToDate(
-        PrayerManager.offsetTime(times.maghrib, offsets.maghrib), prayerDay, false)
+        PrayerManager.offsetTime(times.maghrib, offsets.maghrib), prayerDay, null)
     };
     events.push(maghribEv);
 
     const ishaEv: TimelineEvent = {
       name: 'Isha',
       time: HomeController.parseToDate(
-        PrayerManager.offsetTime(times.isha, offsets.isha), prayerDay, false)
+        PrayerManager.offsetTime(times.isha, offsets.isha), prayerDay, null)
     };
     events.push(ishaEv);
 
     const firstThirdEv: TimelineEvent = {
       name: 'First Third',
-      time: HomeController.parseToDate(times.firstThird, prayerDay, true)
+      time: HomeController.parseToDate(
+        times.firstThird, prayerDay, maghribMinutes)
     };
     events.push(firstThirdEv);
 
     const midnightEv: TimelineEvent = {
       name: 'Midnight',
-      time: HomeController.parseToDate(times.midnight, prayerDay, true)
+      time: HomeController.parseToDate(
+        times.midnight, prayerDay, maghribMinutes)
     };
     events.push(midnightEv);
 
     const lastThirdEv: TimelineEvent = {
       name: 'Last Third',
-      time: HomeController.parseToDate(times.lastThird, prayerDay, true)
+      time: HomeController.parseToDate(
+        times.lastThird, prayerDay, maghribMinutes)
     };
     events.push(lastThirdEv);
 
     const imsakEv: TimelineEvent = {
       name: 'Imsak',
       time: HomeController.parseToDate(
-        PrayerManager.offsetTime(times.imsak, offsets.fajr), prayerDay, false)
+        PrayerManager.offsetTime(times.imsak, offsets.fajr), prayerDay, null)
     };
     events.push(imsakEv);
   }
 
+  /**
+   * Parse a formatted time string ("6:32 PM" / "17:23") into a Date
+   * anchored to `prayerDay`.
+   *
+   * `minMinutes` provides the day-boundary threshold: an event whose
+   * parsed time is numerically earlier than `minMinutes` (minutes
+   * since midnight) belongs to the *next* calendar day. Pass `null`
+   * for events that are always same-day (prayers, Imsak).
+   */
   private static parseToDate(
     timeStr: string,
     prayerDay: Date,
-    isEveningEvent: boolean
+    minMinutes: number | null
   ): Date {
     const result = new Date(prayerDay);
     result.setHours(0, 0, 0, 0);
@@ -459,7 +475,7 @@ export class HomeController {
 
     result.setHours(hours, minutes, 0, 0);
 
-    if (isEveningEvent && hours < 6) {
+    if (minMinutes !== null && (hours * 60 + minutes) < minMinutes) {
       result.setDate(result.getDate() + 1);
     }
     return result;

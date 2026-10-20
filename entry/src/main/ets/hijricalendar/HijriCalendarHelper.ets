@@ -89,10 +89,19 @@ export class HijriCalendarHelper {
     day: number,
     offsetDays: number,
     anchor: Date,
-    range: number = 60
+    range?: number
   ): Date | null {
+    let effectiveRange: number;
+    if (range !== undefined) {
+      effectiveRange = range;
+    } else {
+      effectiveRange = HijriCalendarHelper.safeSearchRange(
+        year, month, day, offsetDays, anchor
+      );
+    }
+
     const anchorMs = anchor.getTime();
-    for (let i = -range; i <= range; i++) {
+    for (let i = -effectiveRange; i <= effectiveRange; i++) {
       const candidate = new Date(anchorMs + i * MS_PER_DAY);
       const h = HijriCalendarHelper.getHijriDate(candidate, offsetDays);
       if (h.year === year && h.month === month && h.day === day) {
@@ -100,6 +109,33 @@ export class HijriCalendarHelper {
       }
     }
     return null;
+  }
+
+  /**
+   * Estimate the maximum number of days between the anchor and the
+   * target Hijri date, with 60 days of slack for offset drift.
+   */
+  private static safeSearchRange(
+    year: number,
+    month: number,
+    day: number,
+    offsetDays: number,
+    anchor: Date
+  ): number {
+    try {
+      const anchorShifted = new Date(anchor.getTime());
+      anchorShifted.setDate(anchorShifted.getDate() + offsetDays);
+      const anchorH = HijriEngineResolver.current().toHijri(anchorShifted);
+      if (anchorH === null) {
+        return 60;
+      }
+      const yearDiff = Math.abs(year - anchorH.year);
+      const monthDiff = Math.abs(month - anchorH.month);
+      const estimated = yearDiff * 355 + monthDiff * 30 + 60;
+      return Math.max(60, estimated);
+    } catch (err) {
+      return 60;
+    }
   }
 
   /**

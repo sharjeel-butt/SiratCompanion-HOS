@@ -139,16 +139,9 @@ export class UmmAlQuraEngine implements HijriCalendarEngine {
     }
 
     // Find the year by scanning the pre-computed year-start JDNs.
-    let year = UmmAlQuraEngine.MAX_YEAR;
-    for (let y = UmmAlQuraEngine.MIN_YEAR;
-      y <= UmmAlQuraEngine.MAX_YEAR; y++) {
-      const start = UmmAlQuraEngine.YEAR_START_JDN[y - UmmAlQuraEngine.MIN_YEAR];
-      const next = UmmAlQuraEngine.YEAR_START_JDN[y - UmmAlQuraEngine.MIN_YEAR + 1];
-      if (jdn >= start && jdn < next) {
-        year = y;
-        break;
-      }
-    }
+    // Binary-search the pre-computed year-start JDNs
+    const yearIdx = UmmAlQuraEngine.findYearIndexForJdn(jdn);
+    const year = UmmAlQuraEngine.MIN_YEAR + yearIdx;
 
     let remaining = jdn - UmmAlQuraEngine.YEAR_START_JDN[
     year - UmmAlQuraEngine.MIN_YEAR
@@ -167,6 +160,26 @@ export class UmmAlQuraEngine implements HijriCalendarEngine {
     const day = remaining + 1;
     const result: HijriDate = { year, month, day };
     return result;
+  }
+
+  /**
+   * Binary-search `YEAR_START_JDN` for the year index whose start
+   * is <= jdn and whose *next* year's start is > jdn. Returns the
+   * 0-based index; caller adds `MIN_YEAR`.
+   */
+  private static findYearIndexForJdn(jdn: number): number {
+    const arr = UmmAlQuraEngine.YEAR_START_JDN;
+    let lo = 0;
+    let hi = arr.length - 2; // last valid year index
+    while (lo <= hi) {
+      const mid = Math.floor((lo + hi) / 2);
+      if (arr[mid] <= jdn) {
+        lo = mid + 1;
+      } else {
+        hi = mid - 1;
+      }
+    }
+    return hi;
   }
 
   toGregorian(hijri: HijriDate): Date | null {

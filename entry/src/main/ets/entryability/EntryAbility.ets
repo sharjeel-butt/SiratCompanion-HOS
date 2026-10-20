@@ -363,7 +363,7 @@ export default class EntryAbility extends UIAbility {
       }, splashMs);
     }).catch((err: Error) => {
       AppLogger.error('EntryAbility', `init failed: ${err.message}`);
-      windowStage.loadContent('pages/HomePage');
+      windowStage.loadContent('pages/MainTabs');
     });
   }
 
