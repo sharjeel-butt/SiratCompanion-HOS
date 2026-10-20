@@ -2087,6 +2087,10 @@
     {
       "name": "subsection_language_and_time",
       "value": "اللغة وتنسيق الوقت"
+    },
+    {
+      "name": "madhab_desc_diyanet",
+      "value": "تقويم ديانت يستخدم قاعدة العصر القياسية"
     }
   ]
 }

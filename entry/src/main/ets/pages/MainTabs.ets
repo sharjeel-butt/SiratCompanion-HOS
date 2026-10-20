@@ -1,6 +1,6 @@
 // entry/src/main/ets/pages/MainTabs.ets
 
-import { display, mediaquery, promptAction, router } from '@kit.ArkUI';
+import { display, mediaquery, promptAction, router, window } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { deviceInfo } from '@kit.BasicServicesKit';
 import {
@@ -343,6 +343,7 @@ struct MainTabs {
   @Builder
   HamburgerMenuContent() {
     Menu() {
+      // ---- Customize ----
       MenuItem() {
         Row() {
           Image($r('app.media.ic_menu_customize'))
@@ -359,9 +360,9 @@ struct MainTabs {
             .margin(this.isRtl() ? { right: 12 } : { left: 12 })
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .layoutWeight(1)
+            .constraintSize({ maxWidth: 180 }) // Added max width instead of layoutWeight
         }
-        .width('100%')
+        // Removed .width('100%') so it wraps the content
         .padding({
           top: 10,
           bottom: 10,
@@ -375,6 +376,7 @@ struct MainTabs {
         this.closeMenuAndNavigate('pages/CustomizePage');
       })
 
+      // ---- Settings ----
       MenuItem() {
         Row() {
           Image($r('app.media.ic_menu_settings'))
@@ -391,9 +393,8 @@ struct MainTabs {
             .margin(this.isRtl() ? { right: 12 } : { left: 12 })
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .layoutWeight(1)
+            .constraintSize({ maxWidth: 180 })
         }
-        .width('100%')
         .padding({
           top: 10,
           bottom: 10,
@@ -407,6 +408,7 @@ struct MainTabs {
         this.closeMenuAndNavigate('pages/SettingsPage');
       })
 
+      // ---- Exit ----
       MenuItem() {
         Row() {
           Image($r('app.media.ic_menu_exit'))
@@ -423,9 +425,8 @@ struct MainTabs {
             .margin(this.isRtl() ? { right: 12 } : { left: 12 })
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .layoutWeight(1)
+            .constraintSize({ maxWidth: 180 })
         }
-        .width('100%')
         .padding({
           top: 10,
           bottom: 10,
@@ -688,8 +689,27 @@ struct MainTabs {
     }).then((result: promptAction.ShowDialogSuccessResponse) => {
       if (result.index === 1) {
         const ctx = getContext(this) as common.UIAbilityContext;
-        ctx.terminateSelf().catch((err: Error) =>
-        console.error('Terminate failed:', JSON.stringify(err)));
+
+        // Delay slightly to allow the dialog dismiss animation to finish.
+        // Immediate termination during a dialog animation is often blocked by the OS.
+        setTimeout(() => {
+          if (deviceInfo.deviceType === '2in1' || deviceInfo.deviceType === 'tablet') {
+            // On 2in1/Tablet, terminateSelf often just hides the app.
+            // Destroying the window explicitly forces a clean exit.
+            window.getLastWindow(ctx).then((win) => {
+              win.destroyWindow().catch((e: Error) => {
+                console.error('Destroy window failed:', JSON.stringify(e));
+                ctx.terminateSelf();
+              });
+            }).catch((e: Error) => {
+              console.error('Get window failed:', JSON.stringify(e));
+              ctx.terminateSelf();
+            });
+          } else {
+            // Standard phone behavior
+            ctx.terminateSelf();
+          }
+        }, 150);
       }
     }).catch((err: Error) =>
     console.error('Dialog error:', JSON.stringify(err)));

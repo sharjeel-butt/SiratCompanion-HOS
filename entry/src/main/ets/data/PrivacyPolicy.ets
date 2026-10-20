@@ -13,13 +13,12 @@
  * Applies to: Sirat Companion 3.3.3 and later
  */
 export class PrivacyPolicyProvider {
-  /** Hosted version of the policy — same content as this file. */
   static readonly FULL_URL: string =
     'https://sharjeel-butt.github.io/SiratCompanion-HOS/';
-  /** Effective date, shown at the top of the policy. */
+  /** Update this date to today */
   static readonly LAST_UPDATED: string = 'October 16, 2026';
-  /** Minimum version this policy applies to. */
-  static readonly APPLIES_TO: string = '3.3.3 and later';
+  /** Update this to the new version */
+  static readonly APPLIES_TO: string = '3.4.3 and later';
 
   /** Returns the policy text for the given language code. */
   static get(lang: string): string {

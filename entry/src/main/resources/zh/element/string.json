@@ -2087,6 +2087,10 @@
     {
       "name": "subsection_language_and_time",
       "value": "语言与时间格式"
+    },
+    {
+      "name": "madhab_desc_diyanet",
+      "value": "Diyanet 日历使用标准晡礼规则"
     }
   ]
 }

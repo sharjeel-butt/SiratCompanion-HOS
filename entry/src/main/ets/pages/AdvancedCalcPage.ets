@@ -151,6 +151,11 @@ struct AdvancedCalcPage {
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 
+  private isMidnightLocked(): boolean {
+    return this.calcMethod === CalculationMethod.JAFARI ||
+      this.calcMethod === CalculationMethod.TEHRAN;
+  }
+
   // ============================================================
   // TOP BAR
   // ============================================================
@@ -227,18 +232,22 @@ struct AdvancedCalcPage {
     Row() {
       Column() {
         Text(this.tr('midnight_method'))
-          .fontSize(15).fontColor(this.colors.textWhite)
+          .fontSize(15)
+          .fontColor(this.isMidnightLocked() ? this.colors.textMuted : this.colors.textWhite)
           .fontWeight(FontWeight.Medium)
         Text(this.tr('midnight_method_desc'))
           .fontSize(11).fontColor(this.colors.textMuted)
           .margin({ top: 2 })
-        Text(this.midnightLabel())
+        Text(this.isMidnightLocked() ? this.tr('midnight_jafari') : this.midnightLabel())
           .fontSize(12).fontColor(this.colors.accentGold)
           .margin({ top: 6 })
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+      Text('›')
+        .fontSize(22)
+        .fontColor(this.isMidnightLocked() ? this.colors.textMuted : this.colors.accentGold)
+        .opacity(this.isMidnightLocked() ? 0.3 : 0.7)
     }
     .width('100%')
     .padding({
@@ -250,8 +259,11 @@ struct AdvancedCalcPage {
     .backgroundColor(this.colors.tintSubtle)
     .borderRadius(12)
     .margin({ bottom: 8 })
+    .opacity(this.isMidnightLocked() ? 0.55 : 1.0)
     .onClick(() => {
-      this.activeSheet = 'midnight';
+      if (!this.isMidnightLocked()) {
+        this.activeSheet = 'midnight';
+      }
     })
   }
 
@@ -871,6 +883,9 @@ struct AdvancedCalcPage {
     SettingsHelper.loadAll()
       .then((data) => {
         this.calcMethod = data.method;
+        if (this.isMidnightLocked()) {
+          this.midnightMethod = MidnightMethod.JAFARI;
+        }
       })
       .catch((err: Error) => {
         console.error('[AdvancedCalcPage] reload base failed: ' + err.message);
