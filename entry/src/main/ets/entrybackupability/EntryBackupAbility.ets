@@ -22,6 +22,7 @@ interface PrefSpec {
 }
 
 const SETTINGS_SPECS: PrefSpec[] = [
+  // ---- Calculation & Location ----
   { key: 'calc_method', type: TYPE_STRING },
   { key: 'asr_rule', type: TYPE_NUMBER },
   { key: 'calc_source', type: TYPE_STRING },
@@ -29,8 +30,40 @@ const SETTINGS_SPECS: PrefSpec[] = [
   { key: 'manual_lat', type: TYPE_NUMBER },
   { key: 'manual_lng', type: TYPE_NUMBER },
   { key: 'manual_refresh', type: TYPE_NUMBER },
-  { key: 'auto_show_ramadan_view', type: TYPE_BOOLEAN },
   { key: 'manual_city', type: TYPE_STRING },
+  { key: 'high_lat_rule', type: TYPE_STRING },
+  { key: 'calc_rounding_method', type: TYPE_STRING },
+  { key: 'calc_midnight_method', type: TYPE_STRING },
+  { key: 'calc_polar_resolution', type: TYPE_STRING },
+  { key: 'calc_shafaq', type: TYPE_STRING },
+  { key: 'calc_custom_fajr', type: TYPE_NUMBER },
+  { key: 'calc_custom_isha', type: TYPE_NUMBER },
+  { key: 'calc_custom_isha_interval', type: TYPE_NUMBER },
+  { key: 'offset_fajr', type: TYPE_NUMBER },
+  { key: 'offset_dhuhr', type: TYPE_NUMBER },
+  { key: 'offset_asr', type: TYPE_NUMBER },
+  { key: 'offset_maghrib', type: TYPE_NUMBER },
+  { key: 'offset_isha', type: TYPE_NUMBER },
+
+  // ---- GPS Cache ----
+  { key: 'gps_lat', type: TYPE_NUMBER },
+  { key: 'gps_lng', type: TYPE_NUMBER },
+  { key: 'gps_city', type: TYPE_STRING },
+  { key: 'gps_refresh', type: TYPE_NUMBER },
+
+  // ---- App Settings ----
+  { key: 'theme_mode', type: TYPE_STRING },
+  { key: 'app_theme_preset', type: TYPE_STRING },
+  { key: 'app_language', type: TYPE_STRING },
+  { key: 'time_format', type: TYPE_STRING },
+  { key: 'wizard_completed', type: TYPE_BOOLEAN },
+  { key: 'hijri_offset', type: TYPE_NUMBER },
+  { key: 'hijri_calendar_type', type: TYPE_STRING },
+  { key: 'event_perspective', type: TYPE_STRING },
+  { key: 'auto_show_ramadan_view', type: TYPE_BOOLEAN },
+  { key: 'show_islamic_events', type: TYPE_BOOLEAN },
+
+  // ---- Extra Timings (Legacy & Current) ----
   { key: 'show_extra_timings', type: TYPE_BOOLEAN },
   { key: 'show_extra_timings_list', type: TYPE_BOOLEAN },
   { key: 'show_extra_timings_sunpath', type: TYPE_BOOLEAN },
@@ -40,7 +73,6 @@ const SETTINGS_SPECS: PrefSpec[] = [
   { key: 'show_last_third', type: TYPE_BOOLEAN },
   { key: 'show_imsak_list', type: TYPE_BOOLEAN },
   { key: 'show_first_third_list', type: TYPE_BOOLEAN },
-  { key: 'event_perspective', type: TYPE_STRING },
   { key: 'show_midnight_list', type: TYPE_BOOLEAN },
   { key: 'show_last_third_list', type: TYPE_BOOLEAN },
   { key: 'show_imsak_sunpath', type: TYPE_BOOLEAN },
@@ -48,16 +80,7 @@ const SETTINGS_SPECS: PrefSpec[] = [
   { key: 'show_midnight_sunpath', type: TYPE_BOOLEAN },
   { key: 'show_last_third_sunpath', type: TYPE_BOOLEAN },
 
-  { key: 'show_islamic_events', type: TYPE_BOOLEAN },
-  { key: 'offset_fajr', type: TYPE_NUMBER },
-  { key: 'offset_dhuhr', type: TYPE_NUMBER },
-  { key: 'offset_asr', type: TYPE_NUMBER },
-  { key: 'offset_maghrib', type: TYPE_NUMBER },
-  { key: 'offset_isha', type: TYPE_NUMBER },
-  { key: 'theme_mode', type: TYPE_STRING },
-  { key: 'hijri_offset', type: TYPE_NUMBER },
-  { key: 'app_language', type: TYPE_STRING },
-  { key: 'wizard_completed', type: TYPE_BOOLEAN },
+  // ---- Notifications ----
   { key: 'notif_master_enabled', type: TYPE_BOOLEAN },
   { key: 'notif_before_minutes', type: TYPE_NUMBER },
   { key: 'notif_fajr', type: TYPE_BOOLEAN },
@@ -65,26 +88,18 @@ const SETTINGS_SPECS: PrefSpec[] = [
   { key: 'notif_asr', type: TYPE_BOOLEAN },
   { key: 'notif_maghrib', type: TYPE_BOOLEAN },
   { key: 'notif_isha', type: TYPE_BOOLEAN },
-  { key: 'high_lat_rule', type: TYPE_STRING },
+
+  // ---- Sound & Haptics ----
   { key: 'vibration_enabled', type: TYPE_BOOLEAN },
-  { key: 'tasbih_render_style', type: TYPE_STRING },
-  { key: 'tasbih_theme_preset', type: TYPE_STRING },
-  { key: 'app_theme_preset', type: TYPE_STRING },
   { key: 'sound_enabled', type: TYPE_BOOLEAN },
   { key: 'tasbih_sound', type: TYPE_STRING },
-  { key: 'time_format', type: TYPE_STRING },
-  { key: 'hijri_calendar_type', type: TYPE_STRING },
-  { key: 'calc_rounding_method', type: TYPE_STRING },
-  { key: 'calc_midnight_method', type: TYPE_STRING },
-  { key: 'calc_polar_resolution', type: TYPE_STRING },
-  { key: 'calc_shafaq', type: TYPE_STRING },
-  { key: 'calc_custom_fajr', type: TYPE_NUMBER },
-  { key: 'calc_custom_isha', type: TYPE_NUMBER },
-  { key: 'calc_custom_isha_interval', type: TYPE_NUMBER },
-  { key: 'gps_lat', type: TYPE_NUMBER },
-  { key: 'gps_lng', type: TYPE_NUMBER },
-  { key: 'gps_city', type: TYPE_STRING },
-  { key: 'gps_refresh', type: TYPE_NUMBER }
+  { key: 'tasbih_render_style', type: TYPE_STRING },
+  { key: 'tasbih_theme_preset', type: TYPE_STRING },
+
+  // ---- Prayer Progress (CRITICAL) ----
+  // This stores the JSON map of all past prayer completions.
+  // Without this, users lose their streaks and heatmaps on migration.
+  { key: 'prayer_state_map', type: TYPE_STRING }
 ];
 
 const TASBIH_SPECS: PrefSpec[] = [
@@ -98,11 +113,7 @@ const TASBIH_SPECS: PrefSpec[] = [
  *
  * Each store is written to `<backupDir>/<storeName>.txt` in a
  * line-based format. One record per line:
- *
  *   <type>\t<key>\t<value>
- *
- * Every call that can throw is individually guarded. The public
- * callbacks wrap their whole body as a second layer of safety.
  */
 export default class EntryBackupAbility extends BackupExtensionAbility {
   async onBackup(): Promise<void> {
@@ -120,6 +131,11 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
   async onRestore(bundleVersion: BundleVersion): Promise<void> {
     hilog.info(DOMAIN, TAG,
       'onRestore start: %{public}s', JSON.stringify(bundleVersion));
+
+    // Log the backup version so we have a record of what was restored.
+    // (The minCompatibleVersionCode in app.json5 prevents restoring
+    // from an older, incompatible version).
+
     const backupDir: string = this.safeBackupDir();
     if (backupDir.length === 0) {
       hilog.error(DOMAIN, TAG, 'backupDir unavailable');
@@ -170,10 +186,6 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
     }
   }
 
-  /**
-   * Reads a preference value as a string. Returns an empty string
-   * when the key is absent or the read fails. Never throws.
-   */
   private static async readAsString(
     store: preferences.Preferences, spec: PrefSpec
   ): Promise<string> {
@@ -286,7 +298,7 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
   }
 
   // ============================================================
-  // GUARDED WRAPPERS — none of these throw
+  // GUARDED WRAPPERS
   // ============================================================
 
   private safeBackupDir(): string {
