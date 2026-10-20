@@ -2091,6 +2091,70 @@
     {
       "name": "madhab_desc_diyanet",
       "value": "Diyanet calendar uses the Standard Asr rule"
+    },
+    {
+      "name": "home_fasting",
+      "value": "FASTING"
+    },
+    {
+      "name": "home_fasting_desc",
+      "value": "Mark today's fast"
+    },
+    {
+      "name": "ramadan_fasting_tracking",
+      "value": "RAMADAN FASTING TRACKING"
+    },
+    {
+      "name": "fasted",
+      "value": "Fasted"
+    },
+    {
+      "name": "missed",
+      "value": "Missed"
+    },
+    {
+      "name": "clear",
+      "value": "Clear"
+    },
+    {
+      "name": "fasting_missed_reason",
+      "value": "Reason for not fasting (optional)"
+    },
+    {
+      "name": "not_marked",
+      "value": "Not Marked"
+    },
+    {
+      "name": "mark_today_fast",
+      "value": "Today's Fast"
+    },
+    {
+      "name": "missed_history",
+      "value": "Missed Fasts History"
+    },
+    {
+      "name": "save_reason",
+      "value": "Save Reason"
+    },
+    {
+      "name": "ramadan_details_title",
+      "value": "Ramadan Details"
+    },
+    {
+      "name": "past_fasting_history",
+      "value": "Past Fasting History"
+    },
+    {
+      "name": "no_past_history",
+      "value": "No fasting history from previous years"
+    },
+    {
+      "name": "ramadan_has_ended",
+      "value": "Ramadan has ended"
+    },
+    {
+      "name": "ramadan_eid_mubarak",
+      "value": "Eid Mubarak! You can review your past fasts below."
     }
   ]
 }

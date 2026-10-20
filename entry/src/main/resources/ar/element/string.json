@@ -2091,6 +2091,70 @@
     {
       "name": "madhab_desc_diyanet",
       "value": "تقويم ديانت يستخدم قاعدة العصر القياسية"
+    },
+    {
+      "name": "home_fasting",
+      "value": "الصيام"
+    },
+    {
+      "name": "home_fasting_desc",
+      "value": "تسجيل صيام اليوم"
+    },
+    {
+      "name": "ramadan_fasting_tracking",
+      "value": "تتبع صيام رمضان"
+    },
+    {
+      "name": "fasted",
+      "value": "صمت"
+    },
+    {
+      "name": "missed",
+      "value": "أفطرت"
+    },
+    {
+      "name": "clear",
+      "value": "مسح"
+    },
+    {
+      "name": "fasting_missed_reason",
+      "value": "سبب عدم الصيام (اختياري)"
+    },
+    {
+      "name": "not_marked",
+      "value": "لم يتم التحديد"
+    },
+    {
+      "name": "mark_today_fast",
+      "value": "صيام اليوم"
+    },
+    {
+      "name": "missed_history",
+      "value": "سجل الأيام التي لم تُصم"
+    },
+    {
+      "name": "save_reason",
+      "value": "حفظ السبب"
+    },
+    {
+      "name": "ramadan_details_title",
+      "value": "تفاصيل رمضان"
+    },
+    {
+      "name": "past_fasting_history",
+      "value": "سجل الصيام السابق"
+    },
+    {
+      "name": "no_past_history",
+      "value": "لا يوجد سجل صيام من السنوات السابقة"
+    },
+    {
+      "name": "ramadan_has_ended",
+      "value": "انتهى شهر رمضان"
+    },
+    {
+      "name": "ramadan_eid_mubarak",
+      "value": "عيد مبارك! يمكنك مراجعة صيامك السابق أدناه."
     }
   ]
 }

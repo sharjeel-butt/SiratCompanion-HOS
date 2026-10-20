@@ -2091,6 +2091,70 @@
     {
       "name": "madhab_desc_diyanet",
       "value": "Diyanet 日历使用标准晡礼规则"
+    },
+    {
+      "name": "home_fasting",
+      "value": "斋戒"
+    },
+    {
+      "name": "home_fasting_desc",
+      "value": "记录今天的斋戒"
+    },
+    {
+      "name": "ramadan_fasting_tracking",
+      "value": "斋月斋戒记录"
+    },
+    {
+      "name": "fasted",
+      "value": "已斋戒"
+    },
+    {
+      "name": "missed",
+      "value": "未斋戒"
+    },
+    {
+      "name": "clear",
+      "value": "清除"
+    },
+    {
+      "name": "fasting_missed_reason",
+      "value": "未斋戒原因（可选）"
+    },
+    {
+      "name": "not_marked",
+      "value": "未记录"
+    },
+    {
+      "name": "mark_today_fast",
+      "value": "今日斋戒"
+    },
+    {
+      "name": "missed_history",
+      "value": "未斋戒记录"
+    },
+    {
+      "name": "save_reason",
+      "value": "保存原因"
+    },
+    {
+      "name": "ramadan_details_title",
+      "value": "斋月详情"
+    },
+    {
+      "name": "past_fasting_history",
+      "value": "过往斋戒记录"
+    },
+    {
+      "name": "no_past_history",
+      "value": "没有往年的斋戒记录"
+    },
+    {
+      "name": "ramadan_has_ended",
+      "value": "斋月已结束"
+    },
+    {
+      "name": "ramadan_eid_mubarak",
+      "value": "开斋节吉庆！您可以在下方查看过往的斋戒记录。"
     }
   ]
 }

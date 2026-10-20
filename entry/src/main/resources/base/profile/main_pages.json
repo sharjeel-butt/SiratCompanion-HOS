@@ -6,6 +6,7 @@
     "pages/SettingsPage",
     "pages/AdvancedCalcPage",
     "pages/PrayerDetailsPage",
-    "pages/TasbihDetailsPage"
+    "pages/TasbihDetailsPage",
+    "pages/RamadanDetailsPage"
   ]
 }

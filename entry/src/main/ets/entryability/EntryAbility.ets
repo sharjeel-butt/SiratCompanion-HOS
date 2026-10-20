@@ -59,6 +59,7 @@ import {
 } from '../hijricalendar/HijriCalendarType';
 import { LocationCache } from '../utils/LocationCache';
 import { TypographyHelper } from '../helper/TypographyHelper';
+import { FastingManager } from '../utils/FastingManager';
 
 /** How long the splash stays visible, in milliseconds. */
 const SPLASH_DELAY_MS = 1500;
@@ -315,6 +316,9 @@ export default class EntryAbility extends UIAbility {
       // ---- Load the persisted prayer-state map into memory so
       //      every subsequent read/write is synchronous ----
       await PrayerManager.primeStateMap();
+
+      // ---- Load the persisted fasting-state map into memory ----
+      await FastingManager.primeStateMap();
 
       // ---- Read system sound & haptics state, start listening
       //      for changes ----

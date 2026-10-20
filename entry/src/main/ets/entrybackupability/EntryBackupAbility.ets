@@ -99,7 +99,11 @@ const SETTINGS_SPECS: PrefSpec[] = [
   // ---- Prayer Progress (CRITICAL) ----
   // This stores the JSON map of all past prayer completions.
   // Without this, users lose their streaks and heatmaps on migration.
-  { key: 'prayer_state_map', type: TYPE_STRING }
+  { key: 'prayer_state_map', type: TYPE_STRING },
+
+  // ---- Fasting Progress (CRITICAL) ----
+  { key: 'fasting_state_map', type: TYPE_STRING }
+
 ];
 
 const TASBIH_SPECS: PrefSpec[] = [
