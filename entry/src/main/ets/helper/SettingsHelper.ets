@@ -819,7 +819,8 @@ export class SettingsHelper {
   // ============================================================
 
   static buildThemePickerItems(current: string): PickerItem[] {
-    return [ThemeMode.LIGHT, ThemeMode.DARK, ThemeMode.SYSTEM]
+    // Only Light and System are exposed in the UI.
+    return [ThemeMode.LIGHT, ThemeMode.SYSTEM]
       .map((m): PickerItem => ({
         id: m,
         label: SettingsHelper.getThemeModeLabel(m),

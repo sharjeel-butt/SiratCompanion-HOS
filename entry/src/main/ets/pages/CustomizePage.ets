@@ -1585,13 +1585,14 @@ struct CustomizePage {
   }
 
   private buildThemeItems(): PickerItem[] {
-    const modes = [ThemeMode.LIGHT, ThemeMode.DARK, ThemeMode.SYSTEM];
+    // Only Light and System are exposed in the UI.
+    const modes = [ThemeMode.LIGHT, ThemeMode.SYSTEM];
+
     return modes.map((m): PickerItem => {
       const item: PickerItem = {
         id: m,
         label: m === ThemeMode.LIGHT ? this.tr('theme_light')
-          : m === ThemeMode.DARK ? this.tr('theme_dark')
-            : this.tr('theme_system'),
+          : this.tr('theme_system'),
         selected: m === this.themeMode
       };
       return item;
