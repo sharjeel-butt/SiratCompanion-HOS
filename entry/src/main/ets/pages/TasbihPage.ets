@@ -84,11 +84,7 @@ export struct TasbihPage {
   @State tasbihs: Tasbih[] = [];
   @State activeTasbihId: string = '';
   @State activeDhikrIndex: number = 0;
-  /**
-   * Which sheet is presented. A single @State drives one bindSheet so
-   * the sheets never stack, and the modal layer always renders above
-   * the native Tabs chrome.
-   */
+
   @State private activeSheet: TasbihSheet = 'none';
 
   @State editingTasbihId: string = '';
@@ -203,10 +199,6 @@ export struct TasbihPage {
         .backgroundColor(this.colors.primaryGreen)
 
       Column() {
-        // if (deviceInfo.sdkApiVersion < 23) {
-        //   Column().height(72)
-        // }
-
         this.TopBar()
 
         Row() {
@@ -218,7 +210,7 @@ export struct TasbihPage {
                 .letterSpacing(0)
                 .fontColor(this.colors.textWhite)
                 .textAlign(TextAlign.Start)
-                .lineHeight(38) // Adjust line height for Naskh
+                .lineHeight(38)
                 .width('100%')
 
               Blank().layoutWeight(1)
@@ -242,13 +234,16 @@ export struct TasbihPage {
               .alignItems(HorizontalAlign.Start)
 
               Row() {
-                Text('↑').fontSize(18)
-                  .fontColor(this.colors.textMuted).opacity(0.5)
+                Image($r('app.media.ic_chevron_up'))
+                  .width(18).height(18)
+                  .fillColor(this.colors.textMuted)
+                  .opacity(0.5)
                 Text(`  ${this.tr('flick_up_to_count')}  `)
                   .fontSize(12).fontColor(this.colors.textMuted)
                   .letterSpacing(1)
               }
               .margin({ top: 24 })
+              .alignItems(VerticalAlign.Center)
 
               Text(this.tr('flick_hint'))
                 .fontSize(10).fontColor(this.colors.textMuted)
@@ -256,7 +251,9 @@ export struct TasbihPage {
 
               Row() {
                 Row() {
-                  Text('↺').fontSize(14).fontColor(this.colors.textMuted)
+                  Image($r('app.media.ic_refresh'))
+                    .width(14).height(14)
+                    .fillColor(this.colors.textMuted)
                   Text(this.tr('reset'))
                     .fontSize(12).fontColor(this.colors.textMuted)
                     .margin({ left: 6 })
@@ -275,7 +272,9 @@ export struct TasbihPage {
                 })
 
                 Row() {
-                  Text('↻').fontSize(14).fontColor(this.colors.textMuted)
+                  Image($r('app.media.ic_refresh'))
+                    .width(14).height(14)
+                    .fillColor(this.colors.textMuted)
                   Text(this.tr('reset_all'))
                     .fontSize(12).fontColor(this.colors.textMuted)
                     .margin({ left: 6 })
@@ -325,9 +324,6 @@ export struct TasbihPage {
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
-    // Single bindSheet for all four overlay types. Renders in the system
-    // modal layer, above the native Tabs chrome — so the floating tab
-    // bar cannot overlap any Tasbih dialog.
     .bindSheet(
       this.activeSheet !== 'none',
       this.ActiveSheetContent(),
@@ -348,7 +344,12 @@ export struct TasbihPage {
     Row() {
       // Tasbih picker
       Row() {
-        Text('📿').fontSize(14).margin({ right: 6 }).flexShrink(0)
+        Image($r('app.media.ic_nav_tasbih'))
+          .width(14)
+          .height(14)
+          .fillColor(this.colors.accentGold)
+          .margin({ right: 6 })
+          .flexShrink(0)
         Text(this.getActiveTasbih()
           ? this.getActiveTasbih()!.name
           : this.tr('tab_tasbih'))
@@ -358,9 +359,10 @@ export struct TasbihPage {
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .layoutWeight(1)
-        Text('▼')
-          .fontSize(10)
-          .fontColor(this.colors.accentGold)
+        Image($r('app.media.ic_chevron_down'))
+          .width(10)
+          .height(10)
+          .fillColor(this.colors.accentGold)
           .margin({ left: 6 })
           .opacity(0.7)
           .flexShrink(0)
@@ -393,9 +395,10 @@ export struct TasbihPage {
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .layoutWeight(1)
-        Text('▼')
-          .fontSize(10)
-          .fontColor(this.colors.accentGold)
+        Image($r('app.media.ic_chevron_down'))
+          .width(10)
+          .height(10)
+          .fillColor(this.colors.accentGold)
           .margin({ left: 6 })
           .opacity(0.7)
           .flexShrink(0)
@@ -424,14 +427,6 @@ export struct TasbihPage {
     .alignItems(VerticalAlign.Center)
   }
 
-  // ============================================================
-  // SHEET DISPATCH
-  // ============================================================
-
-  /**
-   * Return the sheet height for the current sheet type. TasbihEditor
-   * and DhikrEditor need more room; the two pickers are more compact.
-   */
   private sheetHeight(): number {
     switch (this.activeSheet) {
       case 'tasbihPicker':
@@ -461,10 +456,6 @@ export struct TasbihPage {
       Column().width('100%').height('100%')
     }
   }
-
-  // ============================================================
-  // BEAD VIEWS
-  // ============================================================
 
   @Builder
   Bead(hi: string, base: string, lo: string) {
@@ -587,7 +578,10 @@ export struct TasbihPage {
   @Builder
   EmptyState() {
     Column() {
-      Text('📿').fontSize(64).opacity(0.5)
+      Image($r('app.media.ic_nav_tasbih'))
+        .width(64).height(64)
+        .fillColor(this.colors.textMuted)
+        .opacity(0.5)
       Text(this.tr('no_dhikr_title'))
         .fontSize(16).fontColor(this.colors.textMuted).margin({ top: 16 })
       Text(this.tr('no_dhikr_hint'))
@@ -596,14 +590,9 @@ export struct TasbihPage {
     .width('100%').justifyContent(FlexAlign.Center)
   }
 
-  // ============================================================
-  // TASBIH PICKER SHEET
-  // ============================================================
-
   @Builder
   TasbihPickerContent() {
     Column() {
-      // Header band — title vertically and horizontally centred.
       Row() {
         Text(this.tr('my_tasbihs'))
           .fontSize(20)
@@ -618,7 +607,6 @@ export struct TasbihPage {
       .justifyContent(FlexAlign.Center)
       .margin({ top: 4, bottom: 4 })
 
-      // Divider under the title.
       Divider()
         .strokeWidth(1)
         .color(this.colors.borderMedium)
@@ -670,21 +658,21 @@ export struct TasbihPage {
               .alignItems(HorizontalAlign.Start)
               .layoutWeight(1).margin({ left: 12 })
 
-              Text('✏️')
-                .fontSize(18)
-                .width(36)
-                .height(36)
-                .textAlign(TextAlign.Center)
+              Image($r('app.media.ic_edit'))
+                .width(18)
+                .height(18)
+                .fillColor(this.colors.accentGold)
+                .margin({ right: 8 })
                 .onClick(() => {
                   this.openEditTasbihEditor(t);
                 })
 
               if (this.tasbihs.length > 1) {
-                Text('🗑️')
-                  .fontSize(18)
-                  .width(36)
-                  .height(36)
-                  .textAlign(TextAlign.Center)
+                Image($r('app.media.ic_trash'))
+                  .width(18)
+                  .height(18)
+                  .fillColor(this.colors.statusExpress)
+                  .margin({ right: 8 })
                   .onClick(() => {
                     this.deleteTasbih(t.id);
                   })
@@ -742,14 +730,9 @@ export struct TasbihPage {
     .width('100%').height('100%')
   }
 
-  // ============================================================
-  // DHIKR PICKER SHEET
-  // ============================================================
-
   @Builder
   DhikrPickerContent() {
     Column() {
-      // Header band — title vertically and horizontally centred.
       Row() {
         Text(this.tr('select_dhikr'))
           .fontSize(20)
@@ -764,7 +747,6 @@ export struct TasbihPage {
       .justifyContent(FlexAlign.Center)
       .margin({ top: 4, bottom: 4 })
 
-      // Divider under the title.
       Divider()
         .strokeWidth(1)
         .color(this.colors.borderMedium)
@@ -810,20 +792,20 @@ export struct TasbihPage {
                   .alignItems(HorizontalAlign.Start)
                   .layoutWeight(1).margin({ left: 14 })
 
-                  Text('✏️')
-                    .fontSize(16)
+                  Image($r('app.media.ic_edit'))
                     .width(32)
                     .height(32)
-                    .textAlign(TextAlign.Center)
+                    .padding(7) // 18px icon + 7px padding = 32px tap target
+                    .fillColor(this.colors.accentGold)
                     .onClick(() => {
                       this.openEditDhikrEditor(d);
                     })
 
-                  Text('🗑️')
-                    .fontSize(16)
+                  Image($r('app.media.ic_trash'))
                     .width(32)
                     .height(32)
-                    .textAlign(TextAlign.Center)
+                    .padding(7) // 18px icon + 7px padding = 32px tap target
+                    .fillColor(this.colors.statusExpress)
                     .onClick(() => {
                       this.deleteDhikr(d.id);
                     })
@@ -880,14 +862,9 @@ export struct TasbihPage {
     .width('100%').height('100%')
   }
 
-  // ============================================================
-  // TASBIH EDITOR SHEET
-  // ============================================================
-
   @Builder
   TasbihEditorContent() {
     Column() {
-      // Header band — title vertically and horizontally centred.
       Row() {
         Text(this.editingTasbihId.length > 0
           ? this.tr('edit_tasbih') : this.tr('new_tasbih'))
@@ -903,7 +880,6 @@ export struct TasbihPage {
       .justifyContent(FlexAlign.Center)
       .margin({ top: 4, bottom: 4 })
 
-      // Divider under the title.
       Divider()
         .strokeWidth(1)
         .color(this.colors.borderMedium)
@@ -1011,14 +987,9 @@ export struct TasbihPage {
     .width('100%').height('100%')
   }
 
-  // ============================================================
-  // DHIKR EDITOR SHEET
-  // ============================================================
-
   @Builder
   DhikrEditorContent() {
     Column() {
-      // Header band — title vertically and horizontally centred.
       Row() {
         Text(this.editingDhikrId.length > 0
           ? this.tr('edit_dhikr') : this.tr('new_dhikr'))
@@ -1034,7 +1005,6 @@ export struct TasbihPage {
       .justifyContent(FlexAlign.Center)
       .margin({ top: 4, bottom: 4 })
 
-      // Divider under the title.
       Divider()
         .strokeWidth(1)
         .color(this.colors.borderMedium)
@@ -1580,9 +1550,6 @@ export struct TasbihPage {
   }
 
   private handleSwipe(event: TouchEvent): void {
-    // Guard: while a modal sheet is presented, do not treat drags as
-    // Tasbih swipes. The sheet is in the system modal layer, but on
-    // some HOS builds the initial drag can still land on this Row.
     if (this.activeSheet !== 'none') {
       return;
     }
@@ -1616,10 +1583,6 @@ export struct TasbihPage {
       }
     }
   }
-
-  // ============================================================
-  // EDITOR OPEN/SAVE
-  // ============================================================
 
   private openNewTasbihEditor(): void {
     this.editingTasbihId = '';

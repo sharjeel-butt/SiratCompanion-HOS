@@ -204,6 +204,8 @@ struct MainTabs {
         .vertical(false)
         .barHeight(80)
         .barFloatingStyle(this.buildHdsFloatingStyle())
+        .barBackgroundColor(this.colors.cardDark)
+        .barBackgroundBlurStyle(BlurStyle.COMPONENT_THICK)
         .scrollable(false)
         .onChange((index: number) => {
           this.currentIndex = index;
@@ -223,10 +225,6 @@ struct MainTabs {
             enableScrollEffect: false,
             scrollEffectType: ScrollEffectType.GRADIENT_BLUR
           },
-          systemMaterialEffect: {
-            materialType: hdsMaterial.MaterialType.ADAPTIVE,
-            materialLevel: hdsMaterial.MaterialLevel.ADAPTIVE
-          }
         },
         avoidLayoutSafeArea: false,
         enableComponentSafeArea: true
@@ -304,8 +302,8 @@ struct MainTabs {
   private fallbackBarColor(): string {
     const dark = PageTheme.isDarkFor(this.themeMode);
     return dark
-      ? 'rgba(20, 27, 46, 0.55)'
-      : 'rgba(255, 255, 255, 0.55)';
+      ? 'rgba(18, 18, 18, 0.85)' // Neutral dark
+      : 'rgba(255, 255, 255, 0.85)';
   }
 
   // ============================================================
@@ -315,9 +313,10 @@ struct MainTabs {
   @Builder
   HamburgerButton() {
     Button({ type: ButtonType.Circle, stateEffect: true }) {
-      Text('☰')
-        .fontSize(22)
-        .fontColor(this.colors.textWhite)
+      Image($r('app.media.ic_menu'))
+        .width(22)
+        .height(22)
+        .fillColor(this.colors.textWhite)
     }
     .width(44)
     .height(44)
@@ -533,11 +532,12 @@ struct MainTabs {
         .objectFit(ImageFit.Contain)
       Text(L.get('tab_home', this.currentLanguage))
         .fontSize(10)
-        .fontFamily(TypographyHelper.getFont(this.currentLanguage, this.currentIndex === 0)) // <---
+        .fontFamily(TypographyHelper.getFont(this.currentLanguage, this.currentIndex === 1))
         .fontWeight(this.currentIndex === 0
           ? FontWeight.Bold : FontWeight.Medium)
         .fontColor(this.currentIndex === 0
-          ? this.colors.accentGold : this.colors.textMuted)
+          ? this.colors.accentGold : this.colors.textWhite)
+        .opacity(this.currentIndex === 1 ? 1.0 : 0.6)
         .margin({ top: 4 })
         .maxLines(2)
         .textAlign(TextAlign.Center)
@@ -557,10 +557,12 @@ struct MainTabs {
         .objectFit(ImageFit.Contain)
       Text(L.get('tab_prayers', this.currentLanguage))
         .fontSize(10)
+        .fontFamily(TypographyHelper.getFont(this.currentLanguage, this.currentIndex === 1))
         .fontWeight(this.currentIndex === 1
           ? FontWeight.Bold : FontWeight.Medium)
         .fontColor(this.currentIndex === 1
-          ? this.colors.accentGold : this.colors.textMuted)
+          ? this.colors.accentGold : this.colors.textWhite)
+        .opacity(this.currentIndex === 1 ? 1.0 : 0.6)
         .margin({ top: 4 })
         .maxLines(2)
         .textAlign(TextAlign.Center)
@@ -580,10 +582,12 @@ struct MainTabs {
         .objectFit(ImageFit.Contain)
       Text(L.get('tab_calendar', this.currentLanguage))
         .fontSize(10)
+        .fontFamily(TypographyHelper.getFont(this.currentLanguage, this.currentIndex === 1))
         .fontWeight(this.currentIndex === 2
           ? FontWeight.Bold : FontWeight.Medium)
         .fontColor(this.currentIndex === 2
-          ? this.colors.accentGold : this.colors.textMuted)
+          ? this.colors.accentGold : this.colors.textWhite)
+        .opacity(this.currentIndex === 1 ? 1.0 : 0.6)
         .margin({ top: 4 })
         .maxLines(2)
         .textAlign(TextAlign.Center)
@@ -603,10 +607,12 @@ struct MainTabs {
         .objectFit(ImageFit.Contain)
       Text(L.get('tab_compass', this.currentLanguage))
         .fontSize(10)
+        .fontFamily(TypographyHelper.getFont(this.currentLanguage, this.currentIndex === 1))
         .fontWeight(this.currentIndex === 3
           ? FontWeight.Bold : FontWeight.Medium)
         .fontColor(this.currentIndex === 3
-          ? this.colors.accentGold : this.colors.textMuted)
+          ? this.colors.accentGold : this.colors.textWhite)
+        .opacity(this.currentIndex === 1 ? 1.0 : 0.6)
         .margin({ top: 4 })
         .maxLines(2)
         .textAlign(TextAlign.Center)
@@ -626,10 +632,12 @@ struct MainTabs {
         .objectFit(ImageFit.Contain)
       Text(L.get('tab_tasbih', this.currentLanguage))
         .fontSize(10)
+        .fontFamily(TypographyHelper.getFont(this.currentLanguage, this.currentIndex === 1))
         .fontWeight(this.currentIndex === 4
           ? FontWeight.Bold : FontWeight.Medium)
         .fontColor(this.currentIndex === 4
-          ? this.colors.accentGold : this.colors.textMuted)
+          ? this.colors.accentGold : this.colors.textWhite)
+        .opacity(this.currentIndex === 1 ? 1.0 : 0.6)
         .margin({ top: 4 })
         .maxLines(2)
         .textAlign(TextAlign.Center)
@@ -654,7 +662,6 @@ struct MainTabs {
     const style: HdsTabsFloatingStyle = {
       barBottomMargin: 24,
       barWidth: widths,
-      systemMaterialEffect: material
     };
     return style;
   }

@@ -132,7 +132,10 @@ export struct QiblaPage {
             Row({ space: 32 }) {
               Column() {
                 Row() {
-                  Text('📍').fontSize(14).flexShrink(0)
+                  Image($r('app.media.ic_location'))
+                    .width(14).height(14)
+                    .fillColor(this.colors.accentGold)
+                    .flexShrink(0)
                   Text(this.cityName.length > 0
                     ? this.cityName
                     : this.tr('loading_location'))
@@ -220,7 +223,10 @@ export struct QiblaPage {
             // Phone: single-column layout.
             Column() {
               Row() {
-                Text('📍').fontSize(14).flexShrink(0)
+                Image($r('app.media.ic_location'))
+                  .width(14).height(14)
+                  .fillColor(this.colors.accentGold)
+                  .flexShrink(0)
                 Text(this.cityName.length > 0
                   ? this.cityName
                   : this.tr('loading_location'))
@@ -343,7 +349,10 @@ export struct QiblaPage {
 
       Column() {
         Column() {
-          Text('🕋').fontSize(36).margin({ bottom: -8 })
+          Image($r('app.media.ic_kaaba'))
+            .width(36).height(36)
+            .fillColor(this.colors.accentGold)
+            .margin({ bottom: -8 })
           Column()
             .width(4).height(90)
             .backgroundColor(this.colors.accentGold)
@@ -412,21 +421,30 @@ export struct QiblaPage {
     Column() {
       if (!this.sensorReady) {
         Row() {
-          Text('⚠️').fontSize(16).margin({ right: 8 })
+          Image($r('app.media.ic_alert_triangle'))
+            .width(16).height(16)
+            .fillColor(this.colors.statusExpress)
+            .margin({ right: 8 })
           Text(this.tr('sensor_unavailable'))
             .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
         }
         .width('100%')
       } else if (!this.isFlat) {
         Row() {
-          Text('📐').fontSize(16).margin({ right: 8 })
+          Image($r('app.media.ic_phone'))
+            .width(16).height(16)
+            .fillColor(this.colors.textMuted)
+            .margin({ right: 8 })
           Text(this.tr('keep_device_flat'))
             .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
         }
         .width('100%')
       } else {
         Row() {
-          Text('✅').fontSize(16).margin({ right: 8 })
+          Image($r('app.media.ic_check_circle'))
+            .width(16).height(16)
+            .fillColor(this.colors.accentGold)
+            .margin({ right: 8 })
           Text(this.tr('compass_ready'))
             .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
           Text(this.tr('qibla_calibrate_hint'))
@@ -632,6 +650,7 @@ export struct QiblaPage {
     if (km < 1) {
       return `${Math.round(km * 1000)} m`;
     }
-    return `${Math.round(km).toLocaleString()} km`;
+    // Force Latin digits since the "km" suffix is Latin
+    return `${Math.round(km).toLocaleString('en-US')} km`;
   }
 }

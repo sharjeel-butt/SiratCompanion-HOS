@@ -357,10 +357,14 @@ export struct HijriCalendarPage {
   MonthHeader() {
     Column() {
       Row() {
-        Text('◀')
-          .fontSize(16)
-          .fontColor(this.colors.accentGold)
-          .width(40).height(40).textAlign(TextAlign.Center)
+        Image($r('app.media.ic_chevron_right'))
+          .width(16)
+          .height(16)
+          .fillColor(this.colors.accentGold)
+          .rotate({ angle: 180 }) // Points left
+          .width(40)
+          .height(40)
+          .padding(12)
           .borderRadius(20).backgroundColor(this.colors.tintSoft)
           .border({ width: 1, color: this.colors.borderSoft })
           .onClick(() => { this.navigate(-1); })
@@ -394,10 +398,13 @@ export struct HijriCalendarPage {
         }
         .layoutWeight(1).alignItems(HorizontalAlign.Center)
 
-        Text('▶')
-          .fontSize(16)
-          .fontColor(this.colors.accentGold)
-          .width(40).height(40).textAlign(TextAlign.Center)
+        Image($r('app.media.ic_chevron_right'))
+          .width(16)
+          .height(16)
+          .fillColor(this.colors.accentGold)
+          .width(40)
+          .height(40)
+          .padding(12)
           .borderRadius(20).backgroundColor(this.colors.tintSoft)
           .border({ width: 1, color: this.colors.borderSoft })
           .onClick(() => { this.navigate(1); })

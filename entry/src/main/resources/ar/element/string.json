@@ -2155,6 +2155,58 @@
     {
       "name": "ramadan_eid_mubarak",
       "value": "عيد مبارك! يمكنك مراجعة صيامك السابق أدناه."
+    },
+    {
+      "name": "qada_tracking",
+      "value": "قضاء الصيام"
+    },
+    {
+      "name": "qada_remaining",
+      "value": "أيام متبقية"
+    },
+    {
+      "name": "qada_done",
+      "value": "تم قضاؤها"
+    },
+    {
+      "name": "log_qada",
+      "value": "+ تسجيل يوم قضاء"
+    },
+    {
+      "name": "undo",
+      "value": "تراجع"
+    },
+    {
+      "name": "no_qada_needed",
+      "value": "لا توجد أيام قضاء متبقية."
+    },
+    {
+      "name": "qada_completed",
+      "value": "تم قضاء جميع الأيام!"
+    },
+    {
+      "name": "ramadan_duas",
+      "value": "أدعية السحور والإفطار"
+    },
+    {
+      "name": "taraweeh_tracker",
+      "value": "تتبع التراويح"
+    },
+    {
+      "name": "taraweeh_desc",
+      "value": "هل صليت التراويح اليوم؟"
+    },
+    {
+      "name": "eid_mubarak",
+      "value": "عيد مبارك!"
+    },
+    {
+      "name": "eid_zakat_reminder",
+      "value": "لا تنسَ إخراج زكاة الفطر قبل صلاة العيد."
+    },
+    {
+      "name": "eid_takbeer",
+      "value": "الله أكبر، الله أكبر، لا إله إلا الله، والله أكبر، الله أكبر، ولله الحمد."
     }
   ]
 }

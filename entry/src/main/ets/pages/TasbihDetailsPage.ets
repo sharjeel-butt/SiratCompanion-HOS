@@ -173,12 +173,13 @@ struct TasbihDetailsPage {
   @Builder
   TopBar() {
     Row() {
-      Text('←')
-        .fontSize(26)
-        .fontColor(this.colors.textWhite)
+      Image($r('app.media.ic_back'))
+        .width(26)
+        .height(26)
+        .fillColor(this.colors.textWhite)
         .width(40)
         .height(40)
-        .textAlign(TextAlign.Center)
+        .padding(7) // Centers the icon inside the 40x40 circle
         .borderRadius(20)
         .backgroundColor(this.colors.tintSoft)
         .margin({ left: 16 })
@@ -302,12 +303,7 @@ struct TasbihDetailsPage {
     .padding(18)
     .backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
-    .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
-    })
+    .border({ width: 1, color: this.colors.borderSoft })
     .shadow({
       radius: 16,
       color: PageTheme.isDarkFor(this.themeMode)
@@ -343,9 +339,12 @@ struct TasbihDetailsPage {
           .margin({ left: 12 })
 
         if (row.isActive) {
-          Text('●')
-            .fontSize(8).fontColor(this.colors.accentGold)
-            .margin({ right: 6 })
+          Row()
+            .width(6)
+            .height(6)
+            .borderRadius(3)
+            .backgroundColor(this.colors.accentGold)
+            .margin({ right: 8 })
         }
 
         Text(`${row.totalDaysCompleted} / ${row.totalDaysPossible}`)

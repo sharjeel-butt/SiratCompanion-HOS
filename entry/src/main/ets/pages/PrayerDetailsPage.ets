@@ -327,12 +327,7 @@ struct PrayerDetailsPage {
     .padding(18)
     .backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
-    .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
-    })
+    .border({ width: 1, color: this.colors.borderSoft })
     .shadow({
       radius: 16,
       color: PageTheme.isDarkFor(this.themeMode)
@@ -455,12 +450,7 @@ struct PrayerDetailsPage {
     .padding(18)
     .backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
-    .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
-    })
+    .border({ width: 1, color: this.colors.borderSoft })
     .shadow({
       radius: 16,
       color: PageTheme.isDarkFor(this.themeMode)
@@ -536,12 +526,13 @@ struct PrayerDetailsPage {
   @Builder
   TopBar() {
     Row() {
-      Text('←')
-        .fontSize(26)
-        .fontColor(this.colors.textWhite)
+      Image($r('app.media.ic_back'))
+        .width(26)
+        .height(26)
+        .fillColor(this.colors.textWhite)
         .width(40)
         .height(40)
-        .textAlign(TextAlign.Center)
+        .padding(7) // Centers the icon inside the 40x40 circle
         .borderRadius(20)
         .backgroundColor(this.colors.tintSoft)
         .margin({ left: 16 })
@@ -703,12 +694,7 @@ struct PrayerDetailsPage {
     .padding(18)
     .backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
-    .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
-    })
+    .border({ width: 1, color: this.colors.borderSoft })
     .shadow({
       radius: 16,
       color: PageTheme.isDarkFor(this.themeMode)
@@ -741,12 +727,7 @@ struct PrayerDetailsPage {
     .padding(18)
     .backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
-    .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
-    })
+    .border({ width: 1, color: this.colors.borderSoft })
     .shadow({
       radius: 16,
       color: PageTheme.isDarkFor(this.themeMode)
@@ -880,12 +861,7 @@ struct PrayerDetailsPage {
     .padding(18)
     .backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
-    .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
-    })
+    .border({ width: 1, color: this.colors.borderSoft })
     .shadow({
       radius: 16,
       color: PageTheme.isDarkFor(this.themeMode)

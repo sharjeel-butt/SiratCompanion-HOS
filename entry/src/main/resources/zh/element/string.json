@@ -2155,6 +2155,58 @@
     {
       "name": "ramadan_eid_mubarak",
       "value": "开斋节吉庆！您可以在下方查看过往的斋戒记录。"
+    },
+    {
+      "name": "qada_tracking",
+      "value": "补斋记录"
+    },
+    {
+      "name": "qada_remaining",
+      "value": "剩余补斋天数"
+    },
+    {
+      "name": "qada_done",
+      "value": "已补斋"
+    },
+    {
+      "name": "log_qada",
+      "value": "+ 记录补斋"
+    },
+    {
+      "name": "undo",
+      "value": "撤销"
+    },
+    {
+      "name": "no_qada_needed",
+      "value": "没有需要补的斋戒。"
+    },
+    {
+      "name": "qada_completed",
+      "value": "所有错过的斋戒都已补全！"
+    },
+    {
+      "name": "ramadan_duas",
+      "value": "封斋与开斋祈祷词"
+    },
+    {
+      "name": "taraweeh_tracker",
+      "value": "间歇拜记录"
+    },
+    {
+      "name": "taraweeh_desc",
+      "value": "今天礼了间歇拜吗？"
+    },
+    {
+      "name": "eid_mubarak",
+      "value": "开斋节吉庆！"
+    },
+    {
+      "name": "eid_zakat_reminder",
+      "value": "请不要忘记在开斋节礼拜前缴纳开斋捐（Zakat al-Fitr）。"
+    },
+    {
+      "name": "eid_takbeer",
+      "value": "真主至大，真主至大，万物非主唯有真主，真主至大，真主至大，一切赞颂全归真主。"
     }
   ]
 }

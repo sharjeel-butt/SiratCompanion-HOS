@@ -188,12 +188,54 @@ export struct Prayer {
   ];
 
   @State extraTimings: ExtraTiming[] = [
-    { id: 'imsak',      name: 'Imsak',       arabicName: 'الإمساك',     time: '--:--', status: 'abbreviation', icon: '🌙' },
-    { id: 'sunrise',    name: 'Sunrise',     arabicName: 'الشروق',      time: '--:--', status: 'abbreviation', icon: '🌅' },
-    { id: 'sunset',     name: 'Sunset',      arabicName: 'المغرب',      time: '--:--', status: 'abbreviation', icon: '🌇' },
-    { id: 'firstThird', name: 'First Third', arabicName: 'الثلث الأول', time: '--:--', status: 'abbreviation', icon: '🌃' },
-    { id: 'midnight',   name: 'Midnight',    arabicName: 'منتصف الليل', time: '--:--', status: 'abbreviation', icon: '🌌' },
-    { id: 'lastThird',  name: 'Last Third',  arabicName: 'الثلث الأخير', time: '--:--', status: 'abbreviation', icon: '🌠' }
+    {
+      id: 'imsak',
+      name: 'Imsak',
+      arabicName: 'الإمساك',
+      time: '--:--',
+      status: 'abbreviation',
+      icon: 'app.media.ic_moon'
+    },
+    {
+      id: 'sunrise',
+      name: 'Sunrise',
+      arabicName: 'الشروق',
+      time: '--:--',
+      status: 'abbreviation',
+      icon: 'app.media.ic_sunrise'
+    },
+    {
+      id: 'sunset',
+      name: 'Sunset',
+      arabicName: 'المغرب',
+      time: '--:--',
+      status: 'abbreviation',
+      icon: 'app.media.ic_sunset'
+    },
+    {
+      id: 'firstThird',
+      name: 'First Third',
+      arabicName: 'الثلث الأول',
+      time: '--:--',
+      status: 'abbreviation',
+      icon: 'app.media.ic_star'
+    },
+    {
+      id: 'midnight',
+      name: 'Midnight',
+      arabicName: 'منتصف الليل',
+      time: '--:--',
+      status: 'abbreviation',
+      icon: 'app.media.ic_star'
+    },
+    {
+      id: 'lastThird',
+      name: 'Last Third',
+      arabicName: 'الثلث الأخير',
+      time: '--:--',
+      status: 'abbreviation',
+      icon: 'app.media.ic_star'
+    }
   ];
 
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
@@ -1342,11 +1384,13 @@ export struct Prayer {
             .color(this.colors.accentGold)
             .margin({ right: 8 })
         } else {
-          Text('🖨️')
-            .fontSize(16)
+          Image($r('app.media.ic_print'))
+            .width(16)
+            .height(16)
+            .fillColor(this.colors.accentGold)
             .width(32)
             .height(32)
-            .textAlign(TextAlign.Center)
+            .padding(8)
             .borderRadius(16)
             .backgroundColor(this.colors.cardDark)
             .border({ width: 1, color: this.colors.borderSoft })
@@ -1357,8 +1401,10 @@ export struct Prayer {
         }
 
         Row() {
-          Text('✓').fontSize(12).fontColor(this.colors.accentGold)
-            .fontWeight(FontWeight.Bold).margin({ right: 4 })
+          Image($r('app.media.ic_check'))
+            .width(12).height(12)
+            .fillColor(this.colors.accentGold)
+            .margin({ right: 4 })
           Text(this.tr('mark_all'))
             .fontSize(11).fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium).maxLines(1)
@@ -1381,10 +1427,15 @@ export struct Prayer {
       .alignItems(VerticalAlign.Center)
 
       Row() {
-        Text('◀')
-          .fontSize(14)
-          .fontColor(this.colors.accentGold)
-          .width(36).height(36).textAlign(TextAlign.Center).borderRadius(18)
+        Image($r('app.media.ic_chevron_right'))
+          .width(14)
+          .height(14)
+          .fillColor(this.colors.accentGold)
+          .rotate({ angle: 180 }) // Points left
+          .width(36)
+          .height(36)
+          .padding(11)
+          .borderRadius(18)
           .backgroundColor(this.colors.cardDark)
           .border({ width: 1, color: this.colors.borderSoft })
           .onClick(() => { this.goToPreviousDay(); })
@@ -1396,10 +1447,14 @@ export struct Prayer {
           .layoutWeight(1).textAlign(TextAlign.Center).maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
 
-        Text('▶')
-          .fontSize(14)
-          .fontColor(this.colors.accentGold)
-          .width(36).height(36).textAlign(TextAlign.Center).borderRadius(18)
+        Image($r('app.media.ic_chevron_right'))
+          .width(14)
+          .height(14)
+          .fillColor(this.colors.accentGold)
+          .width(36)
+          .height(36)
+          .padding(11)
+          .borderRadius(18)
           .backgroundColor(this.colors.cardDark)
           .border({ width: 1, color: this.colors.borderSoft })
           .onClick(() => { this.goToNextDay(); })
@@ -1457,13 +1512,13 @@ export struct Prayer {
     Row() {
       Stack() {
         if (prayer.checked) {
-          Text('✓')
-            .fontSize(14)
-            .fontColor(this.colors.textOnAccent)
-            .fontWeight(FontWeight.Bold)
-            .textAlign(TextAlign.Center)
+          Image($r('app.media.ic_check'))
+            .width(14)
+            .height(14)
+            .fillColor(this.colors.textOnAccent)
             .width('100%')
             .height('100%')
+            .padding(4)
         }
       }
       .width(22)
@@ -1522,12 +1577,19 @@ export struct Prayer {
   @Builder
   ExtraTimingRow(timing: ExtraTiming) {
     Row() {
-      Text(timing.icon ?? '•')
-        .fontSize(15)
-        .width(20)
-        .height(20)
-        .textAlign(TextAlign.Center)
-        .opacity(0.85)
+      if (timing.icon && timing.icon.length > 0) {
+        Image($r(timing.icon))
+          .width(16).height(16)
+          .fillColor(this.colors.textMuted)
+          .margin({ right: 8 })
+      } else {
+        Text('•')
+          .fontSize(15)
+          .fontColor(this.colors.textMuted)
+          .width(20)
+          .height(20)
+          .textAlign(TextAlign.Center)
+      }
 
       Column() {
         Row() {
@@ -1560,7 +1622,10 @@ export struct Prayer {
   @Builder
   ComingSoonCard() {
     Column() {
-      Text('🌐').fontSize(56).margin({ bottom: 12 })
+      Image($r('app.media.ic_globe'))
+        .width(56).height(56)
+        .fillColor(this.colors.accentGold)
+        .margin({ bottom: 12 })
       Text(this.tr('online_prayer_times'))
         .fontSize(18).fontWeight(FontWeight.Bold)
         .fontColor(this.colors.textWhite)
@@ -1578,12 +1643,7 @@ export struct Prayer {
     }
     .width('92%').padding(28).backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
-    .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
-    })
+    .border({ width: 1, color: this.colors.borderSoft })
     .shadow({
       radius: 16,
       color: PageTheme.isDarkFor(this.themeMode)

@@ -161,3 +161,9 @@ export const STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW = 'auto_show_ramadan_view';
 export const STORAGE_KEY_FASTING_MAP = 'fasting_state_map';
 
 export const STORAGE_KEY_FASTING_STATE_VERSION = 'fasting_state_version';
+
+export const STORAGE_KEY_QADA_DONE_COUNT = 'qada_done_count';
+
+export const STORAGE_KEY_TARAWEEH_MAP = 'taraweeh_state_map';
+
+export const STORAGE_KEY_TARAWEEH_STATE_VERSION = 'taraweeh_state_version';

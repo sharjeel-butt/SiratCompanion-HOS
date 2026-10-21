@@ -3,6 +3,7 @@
 import { ThemeColors } from '../common/Theme';
 import { L } from '../i8n/LocalizationHelper';
 import { DuaEntry } from '../data/Duas';
+import { TypographyHelper } from '../helper/TypographyHelper';
 
 /**
  * Renders a single Dua: optional name header, then Arabic,
@@ -37,10 +38,11 @@ export struct DuaCard {
 
       // ---- Arabic (always shown) ----
       Text(this.dua.arabic)
-        .fontSize(20)
+        .fontSize(22)
+        .fontFamily(TypographyHelper.getFont('ar', false))
         .fontColor(this.colors.textWhite)
         .textAlign(TextAlign.Center)
-        .lineHeight(34)
+        .lineHeight(38)
         .width('100%')
 
       // ---- Transliteration + translation ----

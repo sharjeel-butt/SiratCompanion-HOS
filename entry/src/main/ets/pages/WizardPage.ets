@@ -173,7 +173,7 @@ struct WizardPage {
 
       if (this.showMethodPicker) {
         this.PickerOverlay(
-          this.tr('convention'), '🕌',
+          this.tr('convention'), 'app.media.ic_mosque',
           SettingsHelper.buildMethodPickerItems(this.calcMethod),
           (id: string) => {
             this.pickMethod(id);
@@ -185,7 +185,7 @@ struct WizardPage {
       }
       if (this.showAsrPicker) {
         this.PickerOverlay(
-          this.tr('madhab'), '🌅',
+          this.tr('madhab'), 'app.media.ic_sunrise',
           SettingsHelper.buildAsrPickerItems(this.asrRule),
           (id: string) => {
             this.pickAsrRule(id);
@@ -197,7 +197,7 @@ struct WizardPage {
       }
       if (this.showSourcePicker) {
         this.PickerOverlay(
-          this.tr('source'), '🌐',
+          this.tr('source'), 'app.media.ic_globe',
           SettingsHelper.buildSourcePickerItems(this.calcSource),
           (id: string) => {
             this.pickSource(id);
@@ -218,12 +218,13 @@ struct WizardPage {
   @Builder
   ProgressHeader() {
     Row() {
-      Text('←')
-        .fontSize(22)
-        .fontColor(this.step === 0 ? this.colors.textMuted : this.colors.textWhite)
+      Image($r('app.media.ic_back'))
+        .width(22)
+        .height(22)
+        .fillColor(this.step === 0 ? this.colors.textMuted : this.colors.textWhite)
         .width(40)
         .height(40)
-        .textAlign(TextAlign.Center)
+        .padding(9) // Centers the icon inside the 40x40 circle
         .borderRadius(20)
         .backgroundColor(this.step === 0 ? 'transparent' : this.colors.tintSoft)
         .border(this.step === 0
@@ -365,10 +366,10 @@ struct WizardPage {
       Row() {
         Stack() {
           if (this.privacyAccepted) {
-            Text('✓')
-              .fontSize(14)
-              .fontColor(this.colors.textOnAccent)
-              .fontWeight(FontWeight.Bold)
+            Image($r('app.media.ic_check'))
+              .width(14)
+              .height(14)
+              .fillColor(this.colors.textOnAccent)
           }
         }
         .width(24)
@@ -466,10 +467,10 @@ struct WizardPage {
 
             Stack() {
               if (opt.id === this.selectedTheme) {
-                Text('✓')
-                  .fontSize(14)
-                  .fontColor(this.colors.textOnAccent)
-                  .fontWeight(FontWeight.Bold)
+                Image($r('app.media.ic_check'))
+                  .width(14)
+                  .height(14)
+                  .fillColor(this.colors.textOnAccent)
               }
             }
             .width(24)
@@ -535,7 +536,7 @@ struct WizardPage {
           Column() {
             if (this.locationStatus === 'ready' && this.detectedCity.length > 0) {
               Row() {
-                Text('✅').fontSize(20)
+                Image($r('app.media.ic_check_circle')).width(20).height(20).fillColor(this.colors.accentGold)
                 Column() {
                   Text(this.tr('wizard_location_ready'))
                     .fontSize(12).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
@@ -571,7 +572,11 @@ struct WizardPage {
                 })
             } else if (this.locationStatus === 'failed') {
               Column() {
-                Text('⚠️').fontSize(40).margin({ bottom: 10 })
+                Image($r('app.media.ic_alert_triangle'))
+                  .width(40)
+                  .height(40)
+                  .fillColor(this.colors.statusExpress)
+                  .margin({ bottom: 10 })
                 Text(this.tr('wizard_location_failed'))
                   .fontSize(14).fontColor(this.colors.textWhite)
                   .textAlign(TextAlign.Center)
@@ -604,7 +609,11 @@ struct WizardPage {
               .alignItems(HorizontalAlign.Center)
             } else {
               Column() {
-                Text('📍').fontSize(48).margin({ bottom: 12 })
+                Image($r('app.media.ic_location'))
+                  .width(48)
+                  .height(48)
+                  .fillColor(this.colors.accentGold)
+                  .margin({ bottom: 12 })
                 Text(this.isGettingLocation
                   ? this.tr('wizard_getting_location')
                   : this.tr('wizard_location_desc'))
@@ -747,7 +756,7 @@ struct WizardPage {
 
             if (this.locationStatus === 'ready' && this.detectedCity.length > 0) {
               Row() {
-                Text('✅').fontSize(16)
+                Image($r('app.media.ic_check_circle')).width(16).height(16).fillColor(this.colors.accentGold)
                 Text(this.detectedCity)
                   .fontSize(13)
                   .fontColor(this.colors.accentGold)
@@ -827,7 +836,7 @@ struct WizardPage {
           }
           .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-          Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+          Image($r('app.media.ic_chevron_right')).width(22).height(22).fillColor(this.colors.accentGold)
         }
         .width('100%')
         .padding(16)
@@ -854,7 +863,7 @@ struct WizardPage {
           }
           .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-          Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+          Image($r('app.media.ic_chevron_right')).width(22).height(22).fillColor(this.colors.accentGold)
         }
         .width('100%')
         .padding(16)
@@ -881,7 +890,7 @@ struct WizardPage {
           }
           .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-          Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+          Image($r('app.media.ic_chevron_right')).width(22).height(22).fillColor(this.colors.accentGold)
         }
         .width('100%')
         .padding(16)
@@ -973,11 +982,13 @@ struct WizardPage {
         .margin({ top: 10 })
 
       Row() {
-        Text(icon)
-          .fontSize(22)
+        Image($r(icon))
+          .width(22)
+          .height(22)
+          .fillColor(this.colors.accentGold)
           .width(44)
           .height(44)
-          .textAlign(TextAlign.Center)
+          .padding(11)
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
@@ -1271,7 +1282,6 @@ struct WizardPage {
     this.usedDefaultLocation = false;
     this.locationStatus = 'idle';
     this.detectedCity = '';
-    this.usedDefaultLocation = false;
 
     try {
       const data: LocationData = await LocationHelper.fetchLocationData(getContext(this));

@@ -2155,6 +2155,59 @@
     {
       "name": "ramadan_eid_mubarak",
       "value": "Eid Mubarak! You can review your past fasts below."
+    },
+    {
+      "name": "qada_tracking",
+      "value": "Qada (Make-up) Tracking"
+    },
+    {
+      "name": "qada_remaining",
+      "value": "Fasts Remaining"
+    },
+    {
+      "name": "qada_done",
+      "value": "Made Up"
+    },
+    {
+      "name": "log_qada",
+      "value": "+ Log Make-up Fast"
+    },
+    {
+      "name": "undo",
+      "value": "Undo"
+    },
+    {
+      "name": "no_qada_needed",
+      "value": "No missed fasts to make up."
+    },
+    {
+      "name": "qada_completed",
+      "value": "All missed fasts have been made up!"
+    },
+    {
+      "name": "ramadan_duas",
+      "value": "Suhoor & Iftar Duas"
+    },
+    {
+      "name": "taraweeh_tracker",
+      "value": "Taraweeh Tracker"
+    },
+    {
+      "name": "taraweeh_desc",
+      "value": "Prayed Taraweeh today?"
+    },
+    {
+      "name": "eid_mubarak",
+      "value": "Eid Mubarak!"
+    },
+    {
+      "name": "eid_zakat_reminder",
+      "value": "Don't forget to pay Zakat al-Fitr before the Eid prayer."
+    },
+    {
+      "name": "eid_takbeer",
+      "value": "Allahu Akbar, Allahu Akbar, La ilaha illallah, Allahu Akbar, Allahu Akbar, wa lillahil hamd."
     }
+
   ]
 }

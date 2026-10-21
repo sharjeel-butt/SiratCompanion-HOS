@@ -88,8 +88,9 @@ export struct QiblaCalibrationOverlay {
       // ---- Centered card ----
       Column() {
         // Icon
-        Text('🧭')
-          .fontSize(48)
+        Image($r('app.media.ic_globe'))
+          .width(48).height(48)
+          .fillColor('#FFFFFF')
           .margin({ bottom: 16 })
 
         // Title
@@ -173,8 +174,9 @@ export struct QiblaCalibrationOverlay {
           })
 
         // Phone glyph
-        Text('📱')
-          .fontSize(14)
+        Image($r('app.media.ic_phone'))
+          .width(14).height(14)
+          .fillColor('#000000')
           .position({ x: 4, y: 4 })
       }
       .width(24).height(24)

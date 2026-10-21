@@ -60,6 +60,7 @@ import {
 import { LocationCache } from '../utils/LocationCache';
 import { TypographyHelper } from '../helper/TypographyHelper';
 import { FastingManager } from '../utils/FastingManager';
+import { TaraweehManager } from '../utils/TaraweehManager';
 
 /** How long the splash stays visible, in milliseconds. */
 const SPLASH_DELAY_MS = 1500;
@@ -319,6 +320,8 @@ export default class EntryAbility extends UIAbility {
 
       // ---- Load the persisted fasting-state map into memory ----
       await FastingManager.primeStateMap();
+
+      await TaraweehManager.primeStateMap();
 
       // ---- Read system sound & haptics state, start listening
       //      for changes ----

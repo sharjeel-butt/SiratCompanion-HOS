@@ -82,6 +82,7 @@ struct CustomizePage {
   @StorageLink(STORAGE_KEY_EVENT_PERSPECTIVE)
   @Watch('onEventPerspectiveChanged')
   eventPerspective: string = 'universal';
+
   // ---- Per-timing visibility — prayer list ----
   @StorageLink(STORAGE_KEY_SHOW_IMSAK_LIST)
   @Watch('onShowImsakListChanged')
@@ -95,6 +96,7 @@ struct CustomizePage {
   @StorageLink(STORAGE_KEY_SHOW_LAST_THIRD_LIST)
   @Watch('onShowLastThirdListChanged')
   showLastThirdList: boolean = true;
+
   // ---- Per-timing visibility — sun path ----
   @StorageLink(STORAGE_KEY_SHOW_IMSAK_SUNPATH)
   @Watch('onShowImsakSunpathChanged')
@@ -133,13 +135,12 @@ struct CustomizePage {
   // ============================================================
 
   aboutToAppear(): void {
-    this.currentLanguage = this.appLanguage;
+    if (this.themeMode !== ThemeMode.SYSTEM) {
+      this.themeMode = ThemeMode.SYSTEM;
+      SettingsHelper.saveThemeMode(ThemeMode.SYSTEM);
+    }
+
     this.applyTheme();
-
-    this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
-      this.colors = c;
-    });
-
     this.reload();
   }
 
@@ -159,22 +160,18 @@ struct CustomizePage {
   // ============================================================
 
   private onClockFormatChanged(): void {
-    // No state to update — the @StorageLink re-render is enough.
   }
 
   private onShowIslamicEventsChanged(): void {
-    // Re-render is handled by the @StorageLink.
   }
 
   private onEventPerspectiveChanged(): void {
-    // Re-render is handled by the @StorageLink.
   }
 
   private onShowImsakListChanged(): void {
   }
 
   private onAutoShowRamadanViewChanged(): void {
-    // Re-render is handled by the @StorageLink.
   }
 
   private onShowFirstThirdListChanged(): void {
@@ -247,9 +244,6 @@ struct CustomizePage {
                   .backgroundColor(this.colors.tintSoft)
                   .borderRadius(12)
                   .border({ width: 1, color: this.colors.borderSoft })
-                  .backgroundColor(this.colors.tintSoft)
-                  .borderRadius(12)
-                  .border({ width: 1, color: this.colors.borderSoft })
 
                 Text(this.tr('category_ui_customization'))
                   .fontSize(17)
@@ -258,8 +252,12 @@ struct CustomizePage {
                   .margin({ left: 14 })
                   .layoutWeight(1)
 
-                Text(this.expandedCategory === 'UI Customization' ? '▲' : '▼')
-                  .fontSize(12).fontColor(this.colors.accentGold).opacity(0.8)
+                Image(this.expandedCategory === 'UI Customization'
+                  ? $r('app.media.ic_chevron_up')
+                  : $r('app.media.ic_chevron_down'))
+                  .width(14).height(14)
+                  .fillColor(this.colors.accentGold)
+                  .opacity(0.8)
               }
               .width('100%')
               .padding({
@@ -295,9 +293,6 @@ struct CustomizePage {
                   .backgroundColor(this.colors.tintSoft)
                   .borderRadius(12)
                   .border({ width: 1, color: this.colors.borderSoft })
-                  .backgroundColor(this.colors.tintSoft)
-                  .borderRadius(12)
-                  .border({ width: 1, color: this.colors.borderSoft })
 
                 Text(this.tr('category_appearance'))
                   .fontSize(17)
@@ -306,8 +301,12 @@ struct CustomizePage {
                   .margin({ left: 14 })
                   .layoutWeight(1)
 
-                Text(this.expandedCategory === 'Appearance' ? '▲' : '▼')
-                  .fontSize(12).fontColor(this.colors.accentGold).opacity(0.8)
+                Image(this.expandedCategory === 'Appearance'
+                  ? $r('app.media.ic_chevron_up')
+                  : $r('app.media.ic_chevron_down'))
+                  .width(14).height(14)
+                  .fillColor(this.colors.accentGold)
+                  .opacity(0.8)
               }
               .width('100%')
               .padding({
@@ -350,7 +349,7 @@ struct CustomizePage {
       if (this.showThemePicker) {
         this.PickerOverlay(
           this.tr('dark_mode'),
-          '🎨',
+          $r('app.media.ic_palette'), // <--- SVG
           this.buildThemeItems(),
           (id: string) => {
             this.pickThemeMode(id);
@@ -364,7 +363,7 @@ struct CustomizePage {
       if (this.showLanguagePicker) {
         this.PickerOverlay(
           this.tr('language'),
-          '🌐',
+          $r('app.media.ic_globe'), // <--- Existing SVG
           this.buildLanguageItems(),
           (id: string) => {
             this.pickLanguage(id);
@@ -386,7 +385,7 @@ struct CustomizePage {
       if (this.showClockFormatPicker) {
         this.PickerOverlay(
           this.tr('time_format'),
-          '🕐',
+          $r('app.media.ic_clock'), // <--- SVG
           SettingsHelper.buildClockFormatPickerItems(this.ClockFormat),
           (id: string) => {
             this.pickClockFormat(id);
@@ -400,7 +399,7 @@ struct CustomizePage {
       if (this.showEventPerspectivePicker) {
         this.PickerOverlay(
           this.tr('event_perspective'),
-          '🌙',
+          $r('app.media.ic_ramadan_moon'), // <--- Existing SVG
           SettingsHelper.buildEventPerspectivePickerItems(this.eventPerspective),
           (id: string) => {
             this.pickEventPerspective(id);
@@ -440,8 +439,9 @@ struct CustomizePage {
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text('›').fontSize(22)
-        .fontColor(this.colors.accentGold).opacity(0.7)
+      Image($r('app.media.ic_chevron_right'))
+        .width(20).height(20)
+        .fillColor(this.colors.accentGold).opacity(0.7)
     }
     .width('100%')
     .padding({
@@ -461,12 +461,13 @@ struct CustomizePage {
   @Builder
   TopBar() {
     Row() {
-      Text('←')
-        .fontSize(26)
-        .fontColor(this.colors.textWhite)
+      Image($r('app.media.ic_arrow_left')) // <--- SVG
+        .width(20)
+        .height(20)
+        .fillColor(this.colors.textWhite)
         .width(40)
         .height(40)
-        .textAlign(TextAlign.Center)
+        .padding(10)
         .borderRadius(20)
         .backgroundColor(this.colors.tintSoft)
         .margin({ left: 16 })
@@ -483,59 +484,31 @@ struct CustomizePage {
   @Builder
   UICustomizationContent() {
     Column() {
-      // ============ Home Page UI ============
-      SubsectionHeader({
-        colors: this.colors,
-        titleKey: 'subsection_home_ui',
-        currentLanguage: this.currentLanguage
-      })
+      SubsectionHeader({ colors: this.colors, titleKey: 'subsection_home_ui', currentLanguage: this.currentLanguage })
       this.ShowIslamicEventsRow()
       this.AutoShowRamadanViewRow()
       this.EventPerspectiveRow()
 
-      // ============ Prayer UI ============
-      SubsectionHeader({
-        colors: this.colors,
-        titleKey: 'subsection_prayer_ui',
-        currentLanguage: this.currentLanguage
-      })
-
-      SubsectionHeader({
-        colors: this.colors,
-        titleKey: 'subsection_prayer_list',
-        currentLanguage: this.currentLanguage
-      })
+      SubsectionHeader({ colors: this.colors, titleKey: 'subsection_prayer_ui', currentLanguage: this.currentLanguage })
+      SubsectionHeader(
+        { colors: this.colors, titleKey: 'subsection_prayer_list', currentLanguage: this.currentLanguage })
       this.ShowImsakListRow()
       this.ShowFirstThirdListRow()
       this.ShowMidnightListRow()
       this.ShowLastThirdListRow()
 
-      SubsectionHeader({
-        colors: this.colors,
-        titleKey: 'subsection_sun_path',
-        currentLanguage: this.currentLanguage
-      })
+      SubsectionHeader({ colors: this.colors, titleKey: 'subsection_sun_path', currentLanguage: this.currentLanguage })
       this.ShowImsakSunpathRow()
       this.ShowFirstThirdSunpathRow()
       this.ShowMidnightSunpathRow()
       this.ShowLastThirdSunpathRow()
 
-      // ============ Sound & Feedback ============
-      SubsectionHeader({
-        colors: this.colors,
-        titleKey: 'subsection_feedback',
-        currentLanguage: this.currentLanguage
-      })
+      SubsectionHeader({ colors: this.colors, titleKey: 'subsection_feedback', currentLanguage: this.currentLanguage })
       this.VibrationRow()
       this.SoundRow()
       this.SoundStyleRow()
 
-      // ============ Language & Time Format ============
-      SubsectionHeader({
-        colors: this.colors,
-        titleKey: 'subsection_language',
-        currentLanguage: this.currentLanguage
-      })
+      SubsectionHeader({ colors: this.colors, titleKey: 'subsection_language', currentLanguage: this.currentLanguage })
       this.LanguageRow()
       this.ClockFormatRow()
     }
@@ -547,25 +520,19 @@ struct CustomizePage {
     .margin({ bottom: 12 })
   }
 
-  // ---- Each toggle is its own parameterless builder so it re-reads
-  // state on every parent render. Passing the value as a builder
-  // parameter would freeze it at first render.
-
   @Builder
   ShowIslamicEventsRow() {
     Row() {
       Column() {
         Text(this.tr('show_islamic_events'))
-          .fontSize(15).fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium)
+          .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
         Text(this.tr('show_islamic_events_desc'))
           .fontSize(11)
           .fontColor(this.colors.textMuted)
           .margin({ top: 2 })
           .maxLines(3)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
-      }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+      }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
       Toggle({ type: ToggleType.Switch, isOn: this.showIslamicEvents })
         .selectedColor(this.colors.accentGold)
@@ -590,8 +557,7 @@ struct CustomizePage {
     Row() {
       Column() {
         Text(this.tr('event_perspective'))
-          .fontSize(15).fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium)
+          .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
         Text(this.tr('event_perspective_desc'))
           .fontSize(11)
           .fontColor(this.colors.textMuted)
@@ -604,11 +570,11 @@ struct CustomizePage {
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .margin({ top: 6 })
-      }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+      }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text('›').fontSize(22)
-        .fontColor(this.colors.accentGold).opacity(0.7)
+      Image($r('app.media.ic_chevron_right'))
+        .width(20).height(20)
+        .fillColor(this.colors.accentGold).opacity(0.7)
     }
     .width('100%')
     .padding({
@@ -624,8 +590,6 @@ struct CustomizePage {
       this.showEventPerspectivePicker = true;
     })
   }
-
-  // ---- Per-timing visibility — prayer list ----
 
   @Builder
   ShowImsakListRow() {
@@ -675,8 +639,6 @@ struct CustomizePage {
     })
   }
 
-  // ---- Per-timing visibility — sun path ----
-
   @Builder
   ShowImsakSunpathRow() {
     ExtraTimingToggleRow({
@@ -725,25 +687,20 @@ struct CustomizePage {
     })
   }
 
-  // ---- Sound & feedback ----
-
   @Builder
   VibrationRow() {
     Row() {
       Column() {
         Text(this.tr('haptic_feedback'))
-          .fontSize(15).fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium)
+          .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
         Text(this.tr('haptic_feedback_desc'))
-          .fontSize(11).fontColor(this.colors.textMuted)
-          .margin({ top: 2 })
+          .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
         if (!this.systemHapticsEnabled) {
           Text(this.tr('controlled_by_system'))
             .fontSize(10).fontColor(this.colors.accentGold)
             .fontStyle(FontStyle.Italic).margin({ top: 4 })
         }
-      }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+      }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
       Toggle({ type: ToggleType.Switch, isOn: this.vibrationEnabled })
         .selectedColor(this.colors.accentGold)
@@ -770,18 +727,15 @@ struct CustomizePage {
     Row() {
       Column() {
         Text(this.tr('sound_feedback'))
-          .fontSize(15).fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium)
+          .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
         Text(this.tr('sound_feedback_desc'))
-          .fontSize(11).fontColor(this.colors.textMuted)
-          .margin({ top: 2 })
+          .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
         if (!this.systemSoundEnabled) {
           Text(this.tr('controlled_by_system'))
             .fontSize(10).fontColor(this.colors.accentGold)
             .fontStyle(FontStyle.Italic).margin({ top: 4 })
         }
-      }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+      }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
       Toggle({ type: ToggleType.Switch, isOn: this.soundEnabled })
         .selectedColor(this.colors.accentGold)
@@ -809,22 +763,20 @@ struct CustomizePage {
       Row() {
         Column() {
           Text(this.tr('sound_style'))
-            .fontSize(15).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
+            .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
           Text(this.tr('sound_style_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted)
-            .margin({ top: 2 })
+            .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
           Text(this.soundDisplayName(this.selectedSound))
             .fontSize(12)
             .fontColor(this.colors.accentGold)
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
             .margin({ top: 6 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+        }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-        Text('›').fontSize(22)
-          .fontColor(this.colors.accentGold).opacity(0.7)
+        Image($r('app.media.ic_chevron_right'))
+          .width(20).height(20)
+          .fillColor(this.colors.accentGold).opacity(0.7)
       }
       .width('100%')
       .padding({
@@ -847,22 +799,20 @@ struct CustomizePage {
     Row() {
       Column() {
         Text(this.tr('language'))
-          .fontSize(15).fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium)
+          .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
         Text(this.tr('language_desc'))
-          .fontSize(11).fontColor(this.colors.textMuted)
-          .margin({ top: 2 })
+          .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
         Text(this.currentLanguageLabel())
           .fontSize(12)
           .fontColor(this.colors.accentGold)
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .margin({ top: 6 })
-      }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+      }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text('›').fontSize(22)
-        .fontColor(this.colors.accentGold).opacity(0.7)
+      Image($r('app.media.ic_chevron_right'))
+        .width(20).height(20)
+        .fillColor(this.colors.accentGold).opacity(0.7)
     }
     .width('100%')
     .padding({
@@ -882,7 +832,6 @@ struct CustomizePage {
   @Builder
   AppearanceContent() {
     Column() {
-      // ---- App Theme preset ----
       Row() {
         Column() {
           Text(this.tr('theme_preset'))
@@ -902,13 +851,12 @@ struct CustomizePage {
               .margin({ left: 8 })
               .maxLines(1)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
-          }
-          .margin({ top: 6 })
-          .alignItems(VerticalAlign.Center)
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+          }.margin({ top: 6 }).alignItems(VerticalAlign.Center)
+        }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+        Image($r('app.media.ic_chevron_right'))
+          .width(20).height(20)
+          .fillColor(this.colors.accentGold).opacity(0.7)
       }
       .width('100%')
       .padding({
@@ -924,7 +872,6 @@ struct CustomizePage {
         this.showAppThemePicker = true;
       })
 
-      // ---- Dark Mode ----
       Row() {
         Column() {
           Text(this.tr('dark_mode'))
@@ -937,10 +884,11 @@ struct CustomizePage {
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
             .margin({ top: 6 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+        }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-        Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+        Image($r('app.media.ic_chevron_right'))
+          .width(20).height(20)
+          .fillColor(this.colors.accentGold).opacity(0.7)
       }
       .width('100%')
       .padding({
@@ -965,9 +913,7 @@ struct CustomizePage {
 
   @Builder
   AppThemePicker() {
-    Column()
-      .width('100%').height('100%')
-      .backgroundColor(this.colors.overlayDim)
+    Column().width('100%').height('100%').backgroundColor(this.colors.overlayDim)
       .onClick(() => {
         this.showAppThemePicker = false;
       })
@@ -981,11 +927,13 @@ struct CustomizePage {
         .margin({ top: 10 })
 
       Row() {
-        Text('🎨')
-          .fontSize(22)
+        Image($r('app.media.ic_palette')) // <--- SVG
+          .width(22)
+          .height(22)
+          .fillColor(this.colors.accentGold)
           .width(44)
           .height(44)
-          .textAlign(TextAlign.Center)
+          .padding(11)
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
@@ -1000,8 +948,7 @@ struct CustomizePage {
 
       Column() {
         ForEach(
-          [ThemePreset.SIRAT, ThemePreset.CURRENT, ThemePreset.HARMONY_7,
-            ThemePreset.HARMONY_6, ThemePreset.HARMONY_5],
+          [ThemePreset.SIRAT, ThemePreset.CURRENT, ThemePreset.HARMONY_7, ThemePreset.HARMONY_6, ThemePreset.HARMONY_5],
           (preset: string) => {
             Row() {
               Row()
@@ -1009,23 +956,13 @@ struct CustomizePage {
                 .height(34)
                 .borderRadius(17)
                 .backgroundColor(this.appThemeSwatch(preset))
-                .border({
-                  width: 2,
-                  color: preset === this.appTheme
-                    ? this.colors.accentGold
-                    : this.colors.borderSoft
-                })
+                .border({ width: 2, color: preset === this.appTheme ? this.colors.accentGold : this.colors.borderSoft })
 
               Column() {
                 Text(SettingsHelper.getAppThemeLabel(preset))
                   .fontSize(15)
-                  .fontColor(preset === this.appTheme
-                    ? this.colors.accentGold
-                    : this.colors.textWhite)
-                  .fontWeight(preset === this.appTheme
-                    ? FontWeight.Bold
-                    : FontWeight.Normal)
-                  .width('100%')
+                  .fontColor(preset === this.appTheme ? this.colors.accentGold : this.colors.textWhite)
+                  .fontWeight(preset === this.appTheme ? FontWeight.Bold : FontWeight.Normal).width('100%')
 
                 Text(this.appThemeSubtitle(preset))
                   .fontSize(11)
@@ -1034,15 +971,12 @@ struct CustomizePage {
                   .width('100%')
                   .maxLines(2)
                   .textOverflow({ overflow: TextOverflow.Ellipsis })
-              }
-              .alignItems(HorizontalAlign.Start)
-              .layoutWeight(1).margin({ left: 14 })
+              }.alignItems(HorizontalAlign.Start).layoutWeight(1).margin({ left: 14 })
 
               if (preset === this.appTheme) {
-                Text('✓')
-                  .fontSize(18)
-                  .fontColor(this.colors.accentGold)
-                  .fontWeight(FontWeight.Bold)
+                Image($r('app.media.ic_check')) // <--- SVG
+                  .width(18).height(18)
+                  .fillColor(this.colors.accentGold)
               }
             }
             .width('100%')
@@ -1052,18 +986,14 @@ struct CustomizePage {
               left: 20,
               right: 20
             })
-            .backgroundColor(preset === this.appTheme
-              ? this.colors.tintSoft
-              : 'transparent')
+            .backgroundColor(preset === this.appTheme ? this.colors.tintSoft : 'transparent')
             .borderRadius(12)
             .margin({ bottom: 4 })
             .alignItems(VerticalAlign.Center)
             .onClick(() => {
               this.pickAppTheme(preset);
             })
-          },
-          (preset: string) => `preset-${preset}`
-        )
+          }, (preset: string) => `preset-${preset}`)
       }
       .width('100%')
       .padding({
@@ -1101,9 +1031,7 @@ struct CustomizePage {
 
   @Builder
   SoundPicker() {
-    Column()
-      .width('100%').height('100%')
-      .backgroundColor(this.colors.overlayDim)
+    Column().width('100%').height('100%').backgroundColor(this.colors.overlayDim)
       .onClick(() => {
         this.showSoundPicker = false;
       })
@@ -1117,11 +1045,13 @@ struct CustomizePage {
         .margin({ top: 10 })
 
       Row() {
-        Text('🔊')
-          .fontSize(22)
+        Image($r('app.media.ic_sound')) // <--- SVG
+          .width(22)
+          .height(22)
+          .fillColor(this.colors.accentGold)
           .width(44)
           .height(44)
-          .textAlign(TextAlign.Center)
+          .padding(11)
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
@@ -1138,9 +1068,9 @@ struct CustomizePage {
         ForEach(TASBIH_SOUND_OPTIONS, (opt: TasbihSoundOption) => {
           Row() {
             Stack() {
-              Text('▶')
-                .fontSize(14)
-                .fontColor(this.colors.accentGold)
+              Image($r('app.media.ic_play')) // <--- SVG
+                .width(14).height(14)
+                .fillColor(this.colors.accentGold)
             }
             .width(38)
             .height(38)
@@ -1155,13 +1085,8 @@ struct CustomizePage {
             Column() {
               Text(this.soundDisplayName(opt.id))
                 .fontSize(15)
-                .fontColor(opt.id === this.selectedSound
-                  ? this.colors.accentGold
-                  : this.colors.textWhite)
-                .fontWeight(opt.id === this.selectedSound
-                  ? FontWeight.Bold
-                  : FontWeight.Normal)
-                .width('100%')
+                .fontColor(opt.id === this.selectedSound ? this.colors.accentGold : this.colors.textWhite)
+                .fontWeight(opt.id === this.selectedSound ? FontWeight.Bold : FontWeight.Normal).width('100%')
 
               Text(this.soundDescription(opt.id))
                 .fontSize(11)
@@ -1170,15 +1095,12 @@ struct CustomizePage {
                 .width('100%')
                 .maxLines(2)
                 .textOverflow({ overflow: TextOverflow.Ellipsis })
-            }
-            .alignItems(HorizontalAlign.Start)
-            .layoutWeight(1).margin({ left: 14 })
+            }.alignItems(HorizontalAlign.Start).layoutWeight(1).margin({ left: 14 })
 
             if (opt.id === this.selectedSound) {
-              Text('✓')
-                .fontSize(18)
-                .fontColor(this.colors.accentGold)
-                .fontWeight(FontWeight.Bold)
+              Image($r('app.media.ic_check')) // <--- SVG
+                .width(18).height(18)
+                .fillColor(this.colors.accentGold)
             }
           }
           .width('100%')
@@ -1188,9 +1110,7 @@ struct CustomizePage {
             left: 20,
             right: 20
           })
-          .backgroundColor(opt.id === this.selectedSound
-            ? this.colors.tintSoft
-            : 'transparent')
+          .backgroundColor(opt.id === this.selectedSound ? this.colors.tintSoft : 'transparent')
           .borderRadius(12)
           .margin({ bottom: 4 })
           .alignItems(VerticalAlign.Center)
@@ -1236,14 +1156,12 @@ struct CustomizePage {
   @Builder
   PickerOverlay(
     title: string,
-    icon: string,
+    icon: Resource, // <--- Changed to Resource
     items: PickerItem[],
     onSelect: (id: string) => void,
     onCancel: () => void
   ) {
-    Column()
-      .width('100%').height('100%')
-      .backgroundColor(this.colors.overlayDim)
+    Column().width('100%').height('100%').backgroundColor(this.colors.overlayDim)
       .onClick(() => {
         onCancel();
       })
@@ -1257,11 +1175,13 @@ struct CustomizePage {
         .margin({ top: 10 })
 
       Row() {
-        Text(icon)
-          .fontSize(22)
+        Image(icon) // <--- Now uses Image
+          .width(22)
+          .height(22)
+          .fillColor(this.colors.accentGold)
           .width(44)
           .height(44)
-          .textAlign(TextAlign.Center)
+          .padding(11)
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
@@ -1279,8 +1199,7 @@ struct CustomizePage {
           Row() {
             Row() {
               if (item.selected) {
-                Row()
-                  .width(10).height(10).borderRadius(5)
+                Row().width(10).height(10).borderRadius(5)
                   .backgroundColor(this.colors.accentGold)
               }
             }
@@ -1357,16 +1276,14 @@ struct CustomizePage {
     Row() {
       Column() {
         Text(this.tr('auto_show_ramadan_view'))
-          .fontSize(15).fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium)
+          .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
         Text(this.tr('auto_show_ramadan_view_desc'))
           .fontSize(11)
           .fontColor(this.colors.textMuted)
           .margin({ top: 2 })
           .maxLines(3)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
-      }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+      }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
       Toggle({ type: ToggleType.Switch, isOn: this.autoShowRamadanView })
         .selectedColor(this.colors.accentGold)
@@ -1416,7 +1333,6 @@ struct CustomizePage {
   }
 
   private onSystemFeedbackChanged(): void {
-    // UI reacts via the @StorageLink binding itself.
   }
 
   private async onAppForegrounded(): Promise<void> {
@@ -1462,7 +1378,6 @@ struct CustomizePage {
   private async reload(): Promise<void> {
     const data = await SettingsHelper.loadAll();
     this.showIslamicEvents = data.showIslamicEvents;
-
     this.showImsakList = data.showImsakList;
     this.showFirstThirdList = data.showFirstThirdList;
     this.showMidnightList = data.showMidnightList;
@@ -1541,14 +1456,12 @@ struct CustomizePage {
     if (!opt) {
       return id;
     }
-
     const base = opt.file.replace(/^tasbih_/, '').replace(/\.ogg$/, '');
     const key = `sound_${base}_name`;
     const localized = this.tr(key);
     if (localized !== key) {
       return localized;
     }
-
     return SoundOptions.deriveDisplayName(opt.file);
   }
 
@@ -1557,25 +1470,20 @@ struct CustomizePage {
     if (!opt) {
       return '';
     }
-
     const base = opt.file.replace(/^tasbih_/, '').replace(/\.ogg$/, '');
     const key = `sound_${base}_desc`;
     const localized = this.tr(key);
     if (localized !== key) {
       return localized;
     }
-
     return SoundOptions.deriveDescription(opt.file);
   }
 
   private buildLanguageItems(): PickerItem[] {
     const langs = [AppLanguage.ENGLISH, AppLanguage.CHINESE, AppLanguage.ARABIC];
     return langs.map((l): PickerItem => {
-      const item: PickerItem = {
-        id: l,
-        label: L.get(`lang_${l}`, this.currentLanguage),
-        selected: l === this.appLanguage
-      };
+      const item: PickerItem =
+        { id: l, label: L.get(`lang_${l}`, this.currentLanguage), selected: l === this.appLanguage };
       return item;
     });
   }
@@ -1585,16 +1493,9 @@ struct CustomizePage {
   }
 
   private buildThemeItems(): PickerItem[] {
-    // Only Light and System are exposed in the UI.
-    const modes = [ThemeMode.LIGHT, ThemeMode.SYSTEM];
-
+    const modes = [ThemeMode.SYSTEM];
     return modes.map((m): PickerItem => {
-      const item: PickerItem = {
-        id: m,
-        label: m === ThemeMode.LIGHT ? this.tr('theme_light')
-          : this.tr('theme_system'),
-        selected: m === this.themeMode
-      };
+      const item: PickerItem = { id: m, label: this.tr('theme_system'), selected: m === this.themeMode };
       return item;
     });
   }
@@ -1617,11 +1518,7 @@ struct CustomizePage {
   }
 
   private appThemeSwatch(preset: string): string {
-    const preview = Theme.getColors(
-      this.themeMode,
-      PageTheme.isSystemDark(),
-      preset
-    );
+    const preview = Theme.getColors(this.themeMode, PageTheme.isSystemDark(), preset);
     return preview.accentGold;
   }
 
@@ -1641,12 +1538,6 @@ struct CustomizePage {
     }
   }
 
-  /**
-   * Resolve the Event Perspective value label through this.tr(...)
-   * rather than SettingsHelper.getEventPerspectiveLabel, so the
-   * text node depends on currentLanguage and re-renders when the
-   * language changes.
-   */
   private eventPerspectiveLabel(): string {
     switch (this.eventPerspective) {
       case SettingsHelper.EVENT_PERSPECTIVE_SUNNI:

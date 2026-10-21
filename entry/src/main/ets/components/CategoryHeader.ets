@@ -16,11 +16,13 @@ export struct CategoryHeader {
 
   build() {
     Row() {
-      Text(this.icon)
-        .fontSize(18)
+      Image($r(this.icon))
+        .width(18)
+        .height(18)
+        .fillColor(this.colors.accentGold)
         .width(40)
         .height(40)
-        .textAlign(TextAlign.Center)
+        .padding(11)
         .backgroundColor(this.colors.tintSoft)
         .borderRadius(12)
         .border({ width: 1, color: this.colors.borderSoft })
@@ -32,9 +34,10 @@ export struct CategoryHeader {
         .margin({ left: 14 })
         .layoutWeight(1)
 
-      Text(this.expanded ? '▲' : '▼')
-        .fontSize(12)
-        .fontColor(this.colors.accentGold)
+      Image(this.expanded ? $r('app.media.ic_chevron_up') : $r('app.media.ic_chevron_down'))
+        .width(12)
+        .height(12)
+        .fillColor(this.colors.accentGold)
         .opacity(0.8)
     }
     .width('100%')

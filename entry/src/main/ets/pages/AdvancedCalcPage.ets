@@ -53,11 +53,7 @@ struct AdvancedCalcPage {
   @State polarResolution: PolarResolution = PolarResolution.UNRESOLVED;
   @State shafaqValue: Shafaq = Shafaq.GENERAL;
   @State highLatRule: HighLatitudeRule = HighLatitudeRule.NONE;
-  /**
-   * Read-only mirror of the current calculation method. Controls
-   * whether the Custom Angles block shows. The method picker itself
-   * lives in Settings → Prayer Times.
-   */
+
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
 
   @State activeSheet: SheetKind = 'none';
@@ -163,12 +159,13 @@ struct AdvancedCalcPage {
   @Builder
   TopBar() {
     Row() {
-      Text('←')
-        .fontSize(26)
-        .fontColor(this.colors.textWhite)
+      Image($r('app.media.ic_arrow_left')) // <--- SVG
+        .width(20)
+        .height(20)
+        .fillColor(this.colors.textWhite)
         .width(40)
         .height(40)
-        .textAlign(TextAlign.Center)
+        .padding(10)
         .borderRadius(20)
         .backgroundColor(this.colors.tintSoft)
         .margin({ left: 16 })
@@ -188,10 +185,7 @@ struct AdvancedCalcPage {
   }
 
   // ============================================================
-  // ROWS — each is its own parameterless @Builder so ArkUI
-  // correctly re-renders the label whenever the backing @State
-  // changes. Passing computed values into a @Builder with
-  // parameters causes the value to be snapshotted once.
+  // ROWS
   // ============================================================
 
   @Builder
@@ -210,7 +204,9 @@ struct AdvancedCalcPage {
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+      Image($r('app.media.ic_chevron_right')) // <--- SVG
+        .width(20).height(20)
+        .fillColor(this.colors.accentGold).opacity(0.7)
     }
     .width('100%')
     .padding({
@@ -244,9 +240,9 @@ struct AdvancedCalcPage {
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text('›')
-        .fontSize(22)
-        .fontColor(this.isMidnightLocked() ? this.colors.textMuted : this.colors.accentGold)
+      Image($r('app.media.ic_chevron_right')) // <--- SVG
+        .width(20).height(20)
+        .fillColor(this.isMidnightLocked() ? this.colors.textMuted : this.colors.accentGold)
         .opacity(this.isMidnightLocked() ? 0.3 : 0.7)
     }
     .width('100%')
@@ -283,7 +279,9 @@ struct AdvancedCalcPage {
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+      Image($r('app.media.ic_chevron_right')) // <--- SVG
+        .width(20).height(20)
+        .fillColor(this.colors.accentGold).opacity(0.7)
     }
     .width('100%')
     .padding({
@@ -316,7 +314,9 @@ struct AdvancedCalcPage {
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+      Image($r('app.media.ic_chevron_right')) // <--- SVG
+        .width(20).height(20)
+        .fillColor(this.colors.accentGold).opacity(0.7)
     }
     .width('100%')
     .padding({
@@ -369,9 +369,9 @@ struct AdvancedCalcPage {
       .alignItems(HorizontalAlign.Start)
       .layoutWeight(1)
 
-      Text('›')
-        .fontSize(22)
-        .fontColor(this.isShafaqApplicable()
+      Image($r('app.media.ic_chevron_right')) // <--- SVG
+        .width(20).height(20)
+        .fillColor(this.isShafaqApplicable()
           ? this.colors.accentGold
           : this.colors.textMuted)
         .opacity(this.isShafaqApplicable() ? 0.7 : 0.3)
@@ -395,123 +395,13 @@ struct AdvancedCalcPage {
   }
 
   // ============================================================
-  // CUSTOM ANGLES
-  // ============================================================
-
-  @Builder
-  CustomAnglesBlock() {
-    Column() {
-      Text(this.tr('custom_angles'))
-        .fontSize(11)
-        .fontColor(this.colors.accentGold)
-        .fontWeight(FontWeight.Bold)
-        .letterSpacing(1)
-        .width('100%')
-        .padding({ bottom: 10 })
-
-      Column() {
-        Text(this.tr('custom_fajr_angle')).fontSize(11)
-          .fontColor(this.colors.textMuted)
-          .width('100%').margin({ bottom: 4 })
-        TextInput({ text: this.customFajrInput, placeholder: '18' })
-          .type(InputType.Normal)
-          .inputFilter('[0-9\\.]')
-          .direction(Direction.Ltr)
-          .onChange((v: string) => {
-            this.customFajrInput = v;
-            this.persistCustomAngles();
-          })
-          .fontSize(14)
-          .fontColor(this.colors.textWhite)
-          .placeholderColor(this.colors.placeholder)
-          .caretColor(this.colors.accentGold)
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(8)
-          .padding({
-            left: 12,
-            right: 12,
-            top: 8,
-            bottom: 8
-          })
-      }
-      .width('100%').margin({ bottom: 10 })
-
-      Column() {
-        Text(this.tr('custom_isha_angle')).fontSize(11)
-          .fontColor(this.colors.textMuted)
-          .width('100%').margin({ bottom: 4 })
-        TextInput({ text: this.customIshaInput, placeholder: '18' })
-          .type(InputType.Normal)
-          .inputFilter('[0-9\\.]')
-          .direction(Direction.Ltr)
-          .onChange((v: string) => {
-            this.customIshaInput = v;
-            this.persistCustomAngles();
-          })
-          .fontSize(14)
-          .fontColor(this.colors.textWhite)
-          .placeholderColor(this.colors.placeholder)
-          .caretColor(this.colors.accentGold)
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(8)
-          .padding({
-            left: 12,
-            right: 12,
-            top: 8,
-            bottom: 8
-          })
-      }
-      .width('100%').margin({ bottom: 10 })
-
-      Column() {
-        Text(this.tr('custom_isha_interval')).fontSize(11)
-          .fontColor(this.colors.textMuted)
-          .width('100%').margin({ bottom: 4 })
-        TextInput({ text: this.customIntervalInput, placeholder: '0' })
-          .type(InputType.Normal)
-          .inputFilter('[0-9]')
-          .direction(Direction.Ltr)
-          .onChange((v: string) => {
-            this.customIntervalInput = v;
-            this.persistCustomAngles();
-          })
-          .fontSize(14)
-          .fontColor(this.colors.textWhite)
-          .placeholderColor(this.colors.placeholder)
-          .caretColor(this.colors.accentGold)
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(8)
-          .padding({
-            left: 12,
-            right: 12,
-            top: 8,
-            bottom: 8
-          })
-      }
-      .width('100%').margin({ bottom: 8 })
-
-      Text(this.tr('custom_isha_interval_hint'))
-        .fontSize(10)
-        .fontColor(this.colors.textMuted)
-        .fontStyle(FontStyle.Italic)
-        .width('100%')
-        .margin({ top: 2 })
-    }
-    .width('100%')
-    .padding(14)
-    .backgroundColor(this.colors.tintSubtle)
-    .borderRadius(12)
-    .border({ width: 1, color: this.colors.borderSoft })
-  }
-
-  // ============================================================
   // PICKER OVERLAY
   // ============================================================
 
   @Builder
   PickerOverlay(
     title: string,
-    icon: string,
+    icon: Resource, // <--- Changed to Resource
     items: PickerItem[],
     onSelect: (id: string) => void,
     onCancel: () => void
@@ -532,14 +422,17 @@ struct AdvancedCalcPage {
         .margin({ top: 10 })
 
       Row() {
-        Text(icon)
-          .fontSize(22)
+        Image(icon) // <--- Now uses Image
+          .width(22)
+          .height(22)
+          .fillColor(this.colors.accentGold)
           .width(44)
           .height(44)
-          .textAlign(TextAlign.Center)
+          .padding(11)
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
+
         Text(title)
           .fontSize(20).fontWeight(FontWeight.Bold)
           .fontColor(this.colors.textWhite).margin({ left: 14 })
@@ -651,24 +544,25 @@ struct AdvancedCalcPage {
     }
   }
 
-  private sheetIcon(): string {
+  private sheetIcon(): Resource { // <--- Changed to Resource
     switch (this.activeSheet) {
       case 'rounding':
-        return '🔢';
+        return $r('app.media.ic_numeric');
       case 'midnight':
-        return '🌃';
+        return $r('app.media.ic_night');
       case 'polar':
-        return '❄️';
+        return $r('app.media.ic_snowflake');
       case 'shafaq':
-        return '🌆';
+        return $r('app.media.ic_sunset');
       case 'highlat':
-        return '🧭';
+        return $r('app.media.ic_compass');
       default:
-        return '⚙️';
+        return $r('app.media.ic_settings');
     }
   }
 
   private sheetItems(): PickerItem[] {
+    // ... unchanged ...
     const items: PickerItem[] = [];
 
     switch (this.activeSheet) {
@@ -679,11 +573,8 @@ struct AdvancedCalcPage {
           selected: this.roundingMethod === RoundingMethod.NEAREST
         };
         items.push(a);
-        const b: PickerItem = {
-          id: RoundingMethod.UP,
-          label: this.tr('rounding_up'),
-          selected: this.roundingMethod === RoundingMethod.UP
-        };
+        const b: PickerItem =
+          { id: RoundingMethod.UP, label: this.tr('rounding_up'), selected: this.roundingMethod === RoundingMethod.UP };
         items.push(b);
         const c: PickerItem = {
           id: RoundingMethod.NONE,
@@ -693,7 +584,6 @@ struct AdvancedCalcPage {
         items.push(c);
         break;
       }
-
       case 'midnight': {
         const a: PickerItem = {
           id: MidnightMethod.STANDARD,
@@ -709,7 +599,6 @@ struct AdvancedCalcPage {
         items.push(b);
         break;
       }
-
       case 'polar': {
         const a: PickerItem = {
           id: PolarResolution.UNRESOLVED,
@@ -731,7 +620,6 @@ struct AdvancedCalcPage {
         items.push(c);
         break;
       }
-
       case 'shafaq': {
         const a: PickerItem = {
           id: Shafaq.GENERAL,
@@ -739,38 +627,29 @@ struct AdvancedCalcPage {
           selected: this.shafaqValue === Shafaq.GENERAL
         };
         items.push(a);
-        const b: PickerItem = {
-          id: Shafaq.AHMER,
-          label: this.tr('shafaq_ahmer'),
-          selected: this.shafaqValue === Shafaq.AHMER
-        };
+        const b: PickerItem =
+          { id: Shafaq.AHMER, label: this.tr('shafaq_ahmer'), selected: this.shafaqValue === Shafaq.AHMER };
         items.push(b);
-        const c: PickerItem = {
-          id: Shafaq.ABYAD,
-          label: this.tr('shafaq_abyad'),
-          selected: this.shafaqValue === Shafaq.ABYAD
-        };
+        const c: PickerItem =
+          { id: Shafaq.ABYAD, label: this.tr('shafaq_abyad'), selected: this.shafaqValue === Shafaq.ABYAD };
         items.push(c);
         break;
       }
-
       case 'highlat': {
-        const opts: PickerItem[] =
-          SettingsHelper.buildHighLatPickerItems(this.highLatRule);
+        const opts: PickerItem[] = SettingsHelper.buildHighLatPickerItems(this.highLatRule);
         for (const o of opts) {
           items.push(o);
         }
         break;
       }
-
       default:
         break;
     }
-
     return items;
   }
 
   private pickItem(id: string): void {
+    // ... unchanged ...
     switch (this.activeSheet) {
       case 'rounding':
         this.roundingMethod = id as RoundingMethod;
@@ -841,11 +720,6 @@ struct AdvancedCalcPage {
     }
   }
 
-  /**
-   * Shafaq is a parameter of the Moonsighting Committee method only.
-   * Every other convention uses a fixed Isha angle or interval that
-   * Shafaq has no way to influence.
-   */
   private isShafaqApplicable(): boolean {
     return this.calcMethod === CalculationMethod.MOONSIGHTING_COMMITTEE;
   }
@@ -861,14 +735,12 @@ struct AdvancedCalcPage {
         this.midnightMethod = adv.midnight;
         this.polarResolution = adv.polarResolution;
         this.shafaqValue = adv.shafaq;
-
         this.customFajrInput = String(adv.customAngles.fajr);
         this.customIshaInput = String(adv.customAngles.isha);
         this.customIntervalInput = String(adv.customAngles.ishaInterval);
       })
       .catch((err: Error) => {
-        console.error('[AdvancedCalcPage] reload advanced failed: '
-          + err.message);
+        console.error('[AdvancedCalcPage] reload advanced failed: ' + err.message);
       });
 
     SettingsHelper.getHighLatRule()
@@ -876,8 +748,7 @@ struct AdvancedCalcPage {
         this.highLatRule = rule;
       })
       .catch((err: Error) => {
-        console.error('[AdvancedCalcPage] reload highLat failed: '
-          + err.message);
+        console.error('[AdvancedCalcPage] reload highLat failed: ' + err.message);
       });
 
     SettingsHelper.loadAll()

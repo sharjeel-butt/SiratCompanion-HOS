@@ -176,7 +176,7 @@ struct SettingsPage {
             Column() {
               CategoryHeader({
                 colors: this.colors,
-                icon: '📍',
+                icon: 'app.media.ic_location',
                 titleKey: 'category_location',
                 categoryKey: 'Location',
                 expanded: this.expandedCategory === 'Location',
@@ -192,7 +192,7 @@ struct SettingsPage {
 
               CategoryHeader({
                 colors: this.colors,
-                icon: '🕌',
+                icon: 'app.media.ic_mosque',
                 titleKey: 'category_prayer_times',
                 categoryKey: 'Prayer Times',
                 expanded: this.expandedCategory === 'Prayer Times',
@@ -210,7 +210,7 @@ struct SettingsPage {
               if (NOTIFICATIONS_ENABLED || CALENDAR_REMINDERS_ENABLED) {
                 CategoryHeader({
                   colors: this.colors,
-                  icon: '🔔',
+                  icon: 'app.media.ic_bell',
                   titleKey: 'category_notifications',
                   categoryKey: 'Notifications',
                   expanded: this.expandedCategory === 'Notifications',
@@ -228,7 +228,7 @@ struct SettingsPage {
 
               CategoryHeader({
                 colors: this.colors,
-                icon: '📅',
+                icon: 'app.media.ic_calendar',
                 titleKey: 'category_hijri_calendar',
                 categoryKey: 'Hijri Calendar',
                 expanded: this.expandedCategory === 'Hijri Calendar',
@@ -245,7 +245,7 @@ struct SettingsPage {
 
               CategoryHeader({
                 colors: this.colors,
-                icon: 'ℹ️',
+                icon: 'app.media.ic_alert',
                 titleKey: 'category_about',
                 categoryKey: 'About',
                 expanded: this.expandedCategory === 'About',
@@ -325,12 +325,13 @@ struct SettingsPage {
   @Builder
   TopBar() {
     Row() {
-      Text('←')
-        .fontSize(26)
-        .fontColor(this.colors.textWhite)
+      Image($r('app.media.ic_back'))
+        .width(26)
+        .height(26)
+        .fillColor(this.colors.textWhite)
         .width(40)
         .height(40)
-        .textAlign(TextAlign.Center)
+        .padding(7)
         .borderRadius(20)
         .backgroundColor(this.colors.tintSoft)
         .margin({ left: 16 })
@@ -412,7 +413,7 @@ struct SettingsPage {
               .width(18).height(18)
               .color(this.colors.accentGold)
           } else {
-            Text('📡').fontSize(18).fontColor(this.colors.accentGold)
+            Image($r('app.media.ic_refresh')).width(18).height(18).fillColor(this.colors.accentGold)
           }
         }
         .width(36)
@@ -866,7 +867,11 @@ struct SettingsPage {
 
       if (this.notifDiagnostic.length > 0) {
         Row() {
-          Text('⚠️').fontSize(12).margin({ right: 6 })
+          Image($r('app.media.ic_alert_triangle'))
+            .width(12)
+            .height(12)
+            .fillColor(this.colors.statusExpress)
+            .margin({ right: 6 })
           Text(this.notifDiagnostic)
             .fontSize(11)
             .fontColor(this.colors.textMuted)
@@ -975,7 +980,12 @@ struct SettingsPage {
         .margin({ bottom: 8 })
 
         Row() {
-          Text('ℹ️').fontSize(12).margin({ right: 6 }).opacity(0.7)
+          Image($r('app.media.ic_alert'))
+            .width(12)
+            .height(12)
+            .fillColor(this.colors.textMuted)
+            .margin({ right: 6 })
+            .opacity(0.7)
           Text(CALENDAR_REMINDERS_ENABLED
             ? this.tr('notifications_footer_calendar')
             : this.tr('notifications_footer'))
@@ -1032,7 +1042,7 @@ struct SettingsPage {
   @Builder
   LogAccessRowInternal() {
     Row() {
-      Text('📄').fontSize(14).margin({ right: 8 })
+      Image($r('app.media.ic_document')).width(14).height(14).fillColor(this.colors.accentGold).margin({ right: 8 })
       Column() {
         Text(this.tr('log_view_button'))
           .fontSize(13).fontColor(this.colors.textWhite)
@@ -1043,8 +1053,8 @@ struct SettingsPage {
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text('›').fontSize(20)
-        .fontColor(this.colors.accentGold).opacity(0.7)
+      Image($r('app.media.ic_chevron_right')).width(20).height(20)
+        .fillColor(this.colors.accentGold).opacity(0.7)
     }
     .width('100%')
     .padding(14)
@@ -1277,11 +1287,13 @@ struct SettingsPage {
         .margin({ top: 10 })
 
       Row() {
-        Text(icon)
-          .fontSize(22)
+        Image($r(icon))
+          .width(22)
+          .height(22)
+          .fillColor(this.colors.accentGold)
           .width(44)
           .height(44)
-          .textAlign(TextAlign.Center)
+          .padding(11)
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
@@ -1402,15 +1414,15 @@ struct SettingsPage {
   private pickerIcon(): string {
     switch (this.activePicker) {
       case 'method':
-        return '🕌';
+        return 'app.media.ic_mosque';
       case 'asr':
-        return '🌅';
+        return 'app.media.ic_sunrise';
       case 'source':
-        return '🌐';
+        return 'app.media.ic_globe';
       case 'hijriType':
-        return '📅';
+        return 'app.media.ic_calendar';
       default:
-        return '⚙️';
+        return 'app.media.ic_menu_settings';
     }
   }
 
@@ -1467,17 +1479,18 @@ struct SettingsPage {
         .margin({ top: 10 })
 
       Row() {
-        Text('📄').fontSize(20).margin({ right: 10 })
+        Image($r('app.media.ic_document')).width(20).height(20).fillColor(this.colors.accentGold).margin({ right: 10 })
         Text(this.tr('log_view_title'))
           .fontSize(18).fontWeight(FontWeight.Bold)
           .fontColor(this.colors.textWhite)
           .layoutWeight(1)
-        Text('✕')
-          .fontSize(20)
-          .fontColor(this.colors.textMuted)
+        Image($r('app.media.ic_close'))
+          .width(20)
+          .height(20)
+          .fillColor(this.colors.textMuted)
           .width(36)
           .height(36)
-          .textAlign(TextAlign.Center)
+          .padding(8)
           .onClick(() => {
             this.showLogViewer = false;
           })

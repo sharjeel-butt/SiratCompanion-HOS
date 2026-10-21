@@ -96,14 +96,11 @@ const SETTINGS_SPECS: PrefSpec[] = [
   { key: 'tasbih_render_style', type: TYPE_STRING },
   { key: 'tasbih_theme_preset', type: TYPE_STRING },
 
-  // ---- Prayer Progress (CRITICAL) ----
-  // This stores the JSON map of all past prayer completions.
-  // Without this, users lose their streaks and heatmaps on migration.
+  // ---- Prayer & Fasting Progress (CRITICAL) ----
   { key: 'prayer_state_map', type: TYPE_STRING },
-
-  // ---- Fasting Progress (CRITICAL) ----
-  { key: 'fasting_state_map', type: TYPE_STRING }
-
+  { key: 'fasting_state_map', type: TYPE_STRING },
+  { key: 'qada_done_count', type: TYPE_NUMBER },
+  { key: 'taraweeh_state_map', type: TYPE_STRING }
 ];
 
 const TASBIH_SPECS: PrefSpec[] = [
@@ -135,10 +132,6 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
   async onRestore(bundleVersion: BundleVersion): Promise<void> {
     hilog.info(DOMAIN, TAG,
       'onRestore start: %{public}s', JSON.stringify(bundleVersion));
-
-    // Log the backup version so we have a record of what was restored.
-    // (The minCompatibleVersionCode in app.json5 prevents restoring
-    // from an older, incompatible version).
 
     const backupDir: string = this.safeBackupDir();
     if (backupDir.length === 0) {

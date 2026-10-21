@@ -729,9 +729,11 @@ export struct HomePage {
       return;
     }
 
-    // If auto is ON: enforce the 60-day rule. If auto is OFF: always show.
+    const isEid = RamadanHelper.isEidToday(this.hijriOffset);
+
     if (this.autoShowRamadanView) {
-      if (info.isRamadanNow || (info.daysUntilStart >= 0 && info.daysUntilStart <= 60)) {
+      // Always show during Ramadan, during Eid, or within 60 days of Ramadan.
+      if (info.isRamadanNow || isEid || (info.daysUntilStart >= 0 && info.daysUntilStart <= 60)) {
         this.ramadanInfo = info;
       } else {
         this.ramadanInfo = null;
@@ -1200,12 +1202,19 @@ export struct HomePage {
               if (this.isTablet()) {
                 Row({ space: 16 }) {
                   Column() {
+                    if (!this.isLoadingLocation && !this.hasLocation()) {
+                      this.EmptyLocationCard()
+                    }
                     if (this.showIslamicEvents) {
                       this.CountdownCard()
                     }
                     this.LiveCountdownBanner()
                     if (this.ramadanInfo !== null) {
-                      this.RamadanCard()
+                      if (RamadanHelper.isEidToday(this.hijriOffset)) {
+                        this.EidCard()
+                      } else {
+                        this.RamadanCard()
+                      }
                     }
                   }
                   .layoutWeight(1)
@@ -1224,12 +1233,21 @@ export struct HomePage {
                 .padding({ left: 24, right: 24 })
               } else {
                 Column() {
+                  if (!this.isLoadingLocation && !this.hasLocation()) {
+                    this.EmptyLocationCard()
+                  }
                   // ---- Next Event ----
                   if (this.showIslamicEvents) {
                     this.CountdownCard()
                   }
                   this.LiveCountdownBanner()
-                  this.RamadanCard()
+                  if (this.ramadanInfo !== null) {
+                    if (RamadanHelper.isEidToday(this.hijriOffset)) {
+                      this.EidCard()
+                    } else {
+                      this.RamadanCard()
+                    }
+                  }
                   this.Next3DaysPreview()
                   // ---- Prayers ----
                   this.TodayProgressCard()
@@ -1453,7 +1471,7 @@ export struct HomePage {
     Row() {
       Column() {
         if (this.upcomingEvents[0].daysUntil === 0) {
-          Text('🎉').fontSize(30)
+          Image($r('app.media.ic_party')).width(30).height(30).fillColor(this.colors.accentGold)
           Text(this.tr('home_event_today'))
             .fontSize(12).fontWeight(FontWeight.Bold)
             .fontColor(this.colors.textOnAccent)
@@ -1519,7 +1537,12 @@ export struct HomePage {
   @Builder
   CountdownSecondaryRow(index: number) {
     Row() {
-      Text('✨').fontSize(13).margin({ right: 8 }).opacity(0.75)
+      Image($r('app.media.ic_sparkles'))
+        .width(13)
+        .height(13)
+        .fillColor(this.colors.textMuted)
+        .margin({ right: 8 })
+        .opacity(0.75)
       Text(this.translateUpcomingEventName(this.upcomingEvents[index]))
         .fontSize(13)
         .fontColor(this.colors.textWhite)
@@ -1551,8 +1574,9 @@ export struct HomePage {
     if (this.countdownTarget !== '') {
       Column() {
         Row() {
-          Text(this.countdownTarget === 'maghrib' ? '🌇' : '🌅')
-            .fontSize(32)
+          Image(this.countdownTarget === 'maghrib' ? $r('app.media.ic_sunset') : $r('app.media.ic_sunrise'))
+            .width(32).height(32)
+            .fillColor(this.colors.accentGold)
             .margin({ right: 14 })
 
           Column() {
@@ -1594,6 +1618,7 @@ export struct HomePage {
         .width('100%')
         .alignItems(VerticalAlign.Center)
 
+        // Show the Dua only when the countdown is held (post-Iftar/Suhoor)
         if (this.countdownHeld && this.currentDuaEntry() !== null) {
           Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 14 })
 
@@ -1730,7 +1755,12 @@ export struct HomePage {
         // --- Fasting Window ---
         Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 12 })
         Row() {
-          Text('⏳').fontSize(12).margin({ right: 6 }).opacity(0.75)
+          Image($r('app.media.ic_hourglass'))
+            .width(12)
+            .height(12)
+            .fillColor(this.colors.textMuted)
+            .margin({ right: 6 })
+            .opacity(0.75)
           Text(this.fastingWindowIsPreview
             ? this.tr('ramadan_first_day_fast')
             : this.tr('ramadan_today_fast'))
@@ -1741,7 +1771,10 @@ export struct HomePage {
         .width('100%').padding({ bottom: 6 })
 
         Row() {
-          Text('🌅').fontSize(14).margin({ right: 8 }).width(20).textAlign(TextAlign.Center)
+          Image($r('app.media.ic_sunrise'))
+            .width(14).height(14)
+            .fillColor(this.colors.accentGold)
+            .margin({ right: 8 })
           Text(this.tr('ramadan_fast_start'))
             .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
           Text(this.dt(this.todayImsakTime))
@@ -1751,7 +1784,10 @@ export struct HomePage {
         .width('100%').padding({ top: 6, bottom: 6 }).alignItems(VerticalAlign.Center)
 
         Row() {
-          Text('🌇').fontSize(14).margin({ right: 8 }).width(20).textAlign(TextAlign.Center)
+          Image($r('app.media.ic_sunset'))
+            .width(14).height(14)
+            .fillColor(this.colors.accentGoldLight)
+            .margin({ right: 8 })
           Text(this.tr('ramadan_fast_end'))
             .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
           Text(this.dt(this.todayMaghribTime))
@@ -1764,7 +1800,10 @@ export struct HomePage {
         Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 12 })
 
         Row() {
-          Text('📅').fontSize(14).margin({ right: 8 }).width(20).textAlign(TextAlign.Center)
+          Image($r('app.media.ic_calendar'))
+            .width(14).height(14)
+            .fillColor(this.colors.accentGold)
+            .margin({ right: 8 })
           Text(this.tr('ramadan_calendar_start'))
             .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
           Text(RamadanHelper.formatLong(
@@ -1774,7 +1813,10 @@ export struct HomePage {
         .width('100%').padding({ top: 4, bottom: 4 }).alignItems(VerticalAlign.Center)
 
         Row() {
-          Text('🌙').fontSize(14).margin({ right: 8 }).width(20).textAlign(TextAlign.Center)
+          Image($r('app.media.ic_moon'))
+            .width(14).height(14)
+            .fillColor(this.colors.accentGoldLight)
+            .margin({ right: 8 })
           Text(this.tr('ramadan_calendar_end'))
             .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
           Text(RamadanHelper.formatLong(
@@ -1790,7 +1832,10 @@ export struct HomePage {
             LoadingProgress().width(18).height(18).color(this.colors.accentGold).margin({ right: 8 })
             Text(L.get('export_saving')).fontSize(12).fontColor(this.colors.textMuted)
           } else {
-            Text('🖨️').fontSize(16).margin({ right: 8 })
+            Image($r('app.media.ic_print'))
+              .width(16).height(16)
+              .fillColor(this.colors.accentGold)
+              .margin({ right: 8 })
             Text(L.get('export_ramadan_timetable'))
               .fontSize(13)
               .fontWeight(FontWeight.Bold)
@@ -1828,6 +1873,60 @@ export struct HomePage {
       })
       .margin({ bottom: 14 })
     }
+  }
+
+  @Builder
+  EmptyLocationCard() {
+    Column() {
+      Image($r('app.media.ic_location'))
+        .width(48).height(48)
+        .fillColor(this.colors.accentGold)
+        .margin({ bottom: 12 })
+
+      Text(this.tr('location_unavailable'))
+        .fontSize(16).fontWeight(FontWeight.Bold)
+        .fontColor(this.colors.textWhite)
+        .textAlign(TextAlign.Center)
+
+      Text(this.tr('location_desc'))
+        .fontSize(12)
+        .fontColor(this.colors.textMuted)
+        .textAlign(TextAlign.Center)
+        .lineHeight(18)
+        .margin({ top: 8 })
+        .maxLines(3)
+
+      Button() {
+        Text(this.tr('set_manual_location'))
+          .fontSize(14).fontWeight(FontWeight.Medium)
+          .fontColor(this.colors.textOnAccent)
+      }
+      .width('100%')
+      .height(46)
+      .backgroundColor(this.colors.accentGold)
+      .borderRadius(10)
+      .margin({ top: 16 })
+      .onClick(() => {
+        this.navigateToLocationSettings();
+      })
+    }
+    .width('100%')
+    .padding(24)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(Theme.radiusLarge)
+    .border({ width: 1, color: this.colors.borderSoft })
+    .shadow({
+      radius: 16,
+      color: this.colors.shadowCard,
+      offsetX: 0,
+      offsetY: 6
+    })
+    .margin({ bottom: 14 })
+    .alignItems(HorizontalAlign.Center)
+  }
+
+  private hasLocation(): boolean {
+    return this.latitude !== 0 || this.longitude !== 0;
   }
 
   @Builder
@@ -1869,6 +1968,50 @@ export struct HomePage {
       .width('100%').margin({ top: 6 })
     }
     .width('100%')
+  }
+
+  @Builder
+  EidCard() {
+    Column() {
+      Image($r('app.media.ic_moon')) // Or an Eid icon if you have one
+        .width(48).height(48)
+        .fillColor(this.colors.accentGold)
+        .margin({ bottom: 16 })
+
+      Text(this.tr('eid_mubarak'))
+        .fontSize(28).fontWeight(FontWeight.Bold)
+        .fontColor(this.colors.accentGold)
+        .textAlign(TextAlign.Center)
+
+      Text(this.tr('eid_zakat_reminder'))
+        .fontSize(13)
+        .fontColor(this.colors.textWhite)
+        .textAlign(TextAlign.Center)
+        .lineHeight(20)
+        .margin({ top: 12, bottom: 20 })
+        .padding({ left: 16, right: 16 })
+
+      Text(this.tr('eid_takbeer'))
+        .fontSize(14)
+        .fontColor(this.colors.textMuted)
+        .fontStyle(FontStyle.Italic)
+        .textAlign(TextAlign.Center)
+        .lineHeight(22)
+        .padding({ left: 16, right: 16 })
+    }
+    .width('100%')
+    .padding(24)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(Theme.radiusLarge)
+    .border({ width: 2, color: this.colors.accentGold })
+    .shadow({
+      radius: 16,
+      color: this.colors.shadowFloating,
+      offsetX: 0,
+      offsetY: 6
+    })
+    .margin({ bottom: 14 })
+    .alignItems(HorizontalAlign.Center)
   }
 
   @Builder

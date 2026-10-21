@@ -226,4 +226,19 @@ export class RamadanHelper {
       return date.toDateString();
     }
   }
+
+  /**
+   * Checks if today (with the user's offset applied) falls within the
+   * first three days of Shawwal (month 10, days 1-3).
+   *
+   * This checks the Hijri date directly, independent of ramadanInfo,
+   * because getRamadanInfo() returns *next year's* Ramadan once we're
+   * past this year's — so comparing against fastingEnd would always
+   * be wrong during Eid.
+   */
+  static isEidToday(offsetDays: number): boolean {
+    const today = new Date();
+    const h = HijriCalendarHelper.getHijriDate(today, offsetDays);
+    return h.month === 10 && h.day >= 1 && h.day <= 3;
+  }
 }

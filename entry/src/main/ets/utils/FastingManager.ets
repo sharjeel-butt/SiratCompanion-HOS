@@ -1,9 +1,19 @@
 import { PreferencesHelper } from '../helper/PreferencesHelper';
-import { STORAGE_KEY_FASTING_MAP, STORAGE_KEY_FASTING_STATE_VERSION } from '../common/StorageKeys';
+import {
+  STORAGE_KEY_FASTING_MAP,
+  STORAGE_KEY_FASTING_STATE_VERSION,
+  STORAGE_KEY_QADA_DONE_COUNT
+} from '../common/StorageKeys';
 
 export interface FastingRecord {
   status: 'fasted' | 'missed';
   reason: string;
+}
+
+export interface QadaStats {
+  totalMissed: number;
+  qadaDone: number;
+  remaining: number;
 }
 
 // Add this new interface and export it
@@ -25,7 +35,9 @@ export interface HistoryRecord {
 }
 
 export class FastingManager {
+
   private static stateMap: Record<string, FastingRecord> = {};
+  private static qadaDone: number = 0;
 
   static getDateKey(date: Date): string {
     const y = date.getFullYear();
@@ -33,6 +45,7 @@ export class FastingManager {
     const day = date.getDate().toString().padStart(2, '0');
     return `${y}-${m}-${day}`;
   }
+
 
   /**
    * Retrieves all fasting records that occurred before the
@@ -70,6 +83,9 @@ export class FastingManager {
     } catch (err) {
       FastingManager.stateMap = {};
     }
+
+    // Load Qada count
+    FastingManager.qadaDone = await PreferencesHelper.getNumber(STORAGE_KEY_QADA_DONE_COUNT, 0);
   }
 
   static getRecord(dateKey: string): FastingRecord | null {
@@ -127,6 +143,45 @@ export class FastingManager {
     PreferencesHelper.setString(STORAGE_KEY_FASTING_MAP, json)
       .catch((e: Error) => console.error('[FastingManager] disk write failed: ' + e.message));
 
+    FastingManager.bumpVersion();
+  }
+
+  static getTotalMissedAllTime(): number {
+    let missed = 0;
+    const keys = Object.keys(FastingManager.stateMap);
+    for (let i = 0; i < keys.length; i++) {
+      if (FastingManager.stateMap[keys[i]].status === 'missed') {
+        missed++;
+      }
+    }
+    return missed;
+  }
+
+  static getQadaStats(): QadaStats {
+    const totalMissed = FastingManager.getTotalMissedAllTime();
+    return {
+      totalMissed,
+      qadaDone: FastingManager.qadaDone,
+      remaining: Math.max(0, totalMissed - FastingManager.qadaDone)
+    };
+  }
+
+  static logQada(): void {
+    FastingManager.qadaDone++;
+    PreferencesHelper.setNumber(STORAGE_KEY_QADA_DONE_COUNT, FastingManager.qadaDone);
+    FastingManager.bumpVersion();
+  }
+
+  static undoQada(): void {
+    if (FastingManager.qadaDone > 0) {
+      FastingManager.qadaDone--;
+      PreferencesHelper.setNumber(STORAGE_KEY_QADA_DONE_COUNT, FastingManager.qadaDone);
+      FastingManager.bumpVersion();
+    }
+  }
+
+  // Extract the version bump so it can be reused
+  private static bumpVersion(): void {
     const prev = AppStorage.get<number>(STORAGE_KEY_FASTING_STATE_VERSION);
     const next = (prev === undefined ? 0 : prev) + 1;
     AppStorage.setOrCreate(STORAGE_KEY_FASTING_STATE_VERSION, next);
