@@ -34,6 +34,7 @@ import { HijriCalendarPage } from './HijriCalendarPage';
 import { QiblaPage } from './QiblaPage';
 import { TasbihPage } from './TasbihPage';
 import { TypographyHelper } from '../helper/TypographyHelper';
+import { AppLogger } from '../helper/AppLogger';
 
 const HDS_MIN_API = 23;
 
@@ -102,6 +103,7 @@ struct MainTabs {
     const prevCal = AppStorage.get<number>(STORAGE_KEY_HIJRI_CALENDAR_VERSION);
     const nextCal = (prevCal === undefined ? 0 : prevCal) + 1;
     AppStorage.setOrCreate(STORAGE_KEY_HIJRI_CALENDAR_VERSION, nextCal);
+    AppLogger.info('MainTabs', `deviceType=${deviceInfo.deviceType}`);
   }
 
   private onThemeModeChanged(): void {
@@ -677,41 +679,56 @@ struct MainTabs {
       title: L.get('exit', this.currentLanguage),
       message: L.get('exit_confirm_message', this.currentLanguage),
       buttons: [
-        {
-          text: L.get('cancel', this.currentLanguage),
-          color: this.colors.dialogCancel
-        },
-        {
-          text: L.get('exit', this.currentLanguage),
-          color: this.colors.accentGold
-        }
+        { text: L.get('cancel', this.currentLanguage), color: this.colors.dialogCancel },
+        { text: L.get('exit', this.currentLanguage), color: this.colors.accentGold }
       ]
     }).then((result: promptAction.ShowDialogSuccessResponse) => {
-      if (result.index === 1) {
-        const ctx = getContext(this) as common.UIAbilityContext;
-
-        // Delay slightly to allow the dialog dismiss animation to finish.
-        // Immediate termination during a dialog animation is often blocked by the OS.
-        setTimeout(() => {
-          if (deviceInfo.deviceType === '2in1' || deviceInfo.deviceType === 'tablet') {
-            // On 2in1/Tablet, terminateSelf often just hides the app.
-            // Destroying the window explicitly forces a clean exit.
-            window.getLastWindow(ctx).then((win) => {
-              win.destroyWindow().catch((e: Error) => {
-                console.error('Destroy window failed:', JSON.stringify(e));
-                ctx.terminateSelf();
-              });
-            }).catch((e: Error) => {
-              console.error('Get window failed:', JSON.stringify(e));
-              ctx.terminateSelf();
-            });
-          } else {
-            // Standard phone behavior
-            ctx.terminateSelf();
-          }
-        }, 150);
+      if (result.index !== 1) {
+        return;
       }
-    }).catch((err: Error) =>
-    console.error('Dialog error:', JSON.stringify(err)));
+
+      const ctx = getContext(this) as common.UIAbilityContext;
+      const isLarge = deviceInfo.deviceType === '2in1'
+        || deviceInfo.deviceType === 'tablet';
+      const delayMs = isLarge ? 500 : 200;
+
+      setTimeout(() => {
+        this.performExit(ctx, isLarge);
+      }, delayMs);
+    }).catch((err: Error) => {
+      console.error('[Exit] dialog error: ' + err.message);
+    });
+  }
+
+  // IMPORTANT: destroyWindow() alone does NOT terminate the UIAbility.
+  // On tablet / 2-in-1 (especially Easy-Go routerSplit mode) the window
+  // handle returned by getLastWindow() may not reference the visible
+  // pane, so destroyWindow() resolves without any visible effect. The
+  // only reliable exit is terminateSelf(). Never gate it behind
+  // window-destroy success.
+  private async performExit(
+    ctx: common.UIAbilityContext,
+    isLarge: boolean
+  ): Promise<void> {
+    // Best-effort window cleanup on tablet / 2-in-1. May be a no-op under
+    // Easy-Go routerSplit, which is fine — terminateSelf does the actual exit.
+    if (isLarge) {
+      try {
+        const win = await window.getLastWindow(ctx);
+        await win.destroyWindow();
+      } catch (e) {
+        const err = e as Error;
+        console.warn('[Exit] window destroy failed: ' + err.message);
+      }
+    }
+
+    // Always call terminateSelf — the only API that ends the UIAbility.
+    try {
+      await ctx.terminateSelf();
+      console.info('[Exit] terminateSelf succeeded');
+    } catch (e) {
+      const err = e as Error;
+      console.error('[Exit] terminateSelf failed: ' + err.message);
+    }
   }
 }

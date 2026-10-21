@@ -107,7 +107,6 @@ export default class EntryAbility extends UIAbility {
     L.init(this.context);
     LayoutHelper.install();
     TypographyHelper.init();
-    L.init(this.context);
     console.info('[Splash] L.init completed');
     // On 2-in-1 devices, request a preferred starting window size.
     // Failures are non-fatal — the system default applies.
@@ -402,6 +401,10 @@ export default class EntryAbility extends UIAbility {
         `Flush on background failed: ${err.message}`
       );
     });
+  }
+
+  onDestroy(): void {
+    AppLogger.info('EntryAbility', 'onDestroy — app exiting');
   }
 
   // ============================================================

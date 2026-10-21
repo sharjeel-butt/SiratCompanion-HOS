@@ -462,8 +462,9 @@
     },
     {
       "name": "hadith_fajr",
-      "value": "مَنْ صَلَّى الصُّبْحَ فَهُوَ فِي ذِمَّةِ اللَّهِِ — صحيح مسلم ٦٥٧"
+      "value": "مَنْ صَلَّى الصُّبْحَ فَهُوَ فِي ذِمَّةِ اللَّهِ — صحيح مسلم ٦٥٧"
     },
+
     {
       "name": "hadith_dhuhr",
       "value": "إِنَّهَا سَاعَةٌ تُفْتَحُ فِيهَا أَبْوَابُ السَّمَاءِ فَأُحِبُّ أَنْ يَصْعَدَ لِي فِيهَا عَمَلٌ صَالِحٌ — جامع الترمذي ٤٧٨"
@@ -1298,7 +1299,7 @@
     },
     {
       "name": "theme_preset_sirat",
-      "value": "Sirat — عصري"
+      "value": "الصراط — عصريعصري"
     },
     {
       "name": "theme_preset_sirat_desc",
@@ -1306,7 +1307,7 @@
     },
     {
       "name": "theme_preset_current",
-      "value": "Sirat الكلاسيكي"
+      "value": "الصراط الكلاسيكي"
     },
     {
       "name": "theme_preset_current_desc",
@@ -1330,7 +1331,7 @@
     },
     {
       "name": "theme_preset_harmony5",
-      "value": "بَحْر"
+      "value": "بهار"
     },
     {
       "name": "theme_preset_harmony5_desc",
@@ -2091,6 +2092,66 @@
     {
       "name": "madhab_desc_diyanet",
       "value": "تقويم ديانت يستخدم قاعدة العصر القياسية"
+    },
+    {
+      "name": "category_backup_restore",
+      "value": "النسخ الاحتياطي والاستعادة"
+    },
+    {
+      "name": "backup_to_file",
+      "value": "نسخ احتياطي إلى ملف"
+    },
+    {
+      "name": "backup_to_file_desc",
+      "value": "احفظ جميع إعداداتك وتقدم صلواتك وبيانات مسبحتك في ملف يمكنك الاحتفاظ به."
+    },
+    {
+      "name": "restore_from_file",
+      "value": "استعادة من ملف"
+    },
+    {
+      "name": "restore_from_file_desc",
+      "value": "حمّل نسخة احتياطية محفوظة مسبقاً واستبدل جميع البيانات الحالية."
+    },
+    {
+      "name": "backup_footer",
+      "value": "لا تتضمن النسخة الاحتياطية سجل التشخيص أو أي معرّفات خاصة بالجهاز."
+    },
+    {
+      "name": "backup_success",
+      "value": "تم حفظ النسخة الاحتياطية"
+    },
+    {
+      "name": "backup_failed",
+      "value": "فشل النسخ الاحتياطي"
+    },
+    {
+      "name": "restore_confirm_title",
+      "value": "استعادة النسخة الاحتياطية؟"
+    },
+    {
+      "name": "restore_confirm_message",
+      "value": "سيؤدي هذا إلى استبدال جميع الإعدادات الحالية وتقدم الصلوات وبيانات المسبحة بمحتويات ملف النسخة الاحتياطية. لا يمكن التراجع عن هذا الإجراء."
+    },
+    {
+      "name": "restore_success",
+      "value": "تمت استعادة النسخة الاحتياطية. سيتم تحديث التطبيق الآن."
+    },
+    {
+      "name": "restore_failed",
+      "value": "فشلت الاستعادة"
+    },
+    {
+      "name": "home_days_singular",
+      "value": "يوم"
+    },
+    {
+      "name": "home_days_dual",
+      "value": "يومان"
+    },
+    {
+      "name": "dhikr_count_dual",
+      "value": "ذكران"
     }
   ]
 }

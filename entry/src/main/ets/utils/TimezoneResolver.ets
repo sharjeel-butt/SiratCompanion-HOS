@@ -27,7 +27,10 @@ const MS_PER_DAY = 86400000;
  * Kabul's prayers on Karachi's clock. The tighter window keeps the
  * "prefer device" safety for cases where the two clocks agree, while
  * refusing to override legitimate half-hour and quarter-hour offsets.
+ *
  */
+
+
 export class TimezoneResolver {
   /**
    * Effective offset for a location, preferring the device's offset
@@ -105,19 +108,49 @@ export class TimezoneResolver {
    * showing today's times, a day of slack on the boundary is
    * acceptable; a full month of the wrong offset is not.
    */
+  /**
+   * True when the given date falls within Morocco's Ramadan window
+   * for the years covered by the table below.
+   *
+   * The window dates are approximate — the real transition follows
+   * the local crescent sighting and can shift by a day. For a
+   * companion app showing today's times, a day of slack on the
+   * boundary is acceptable; a full month of the wrong offset is
+   * what this method prevents.
+   *
+   * Years beyond the table fall back to standard +1. That is one
+   * hour off during the missed Ramadan — noticeable but not
+   * catastrophic, and easily fixed by extending the table before
+   * the app reaches that year.
+   */
   private static isMoroccoRamadan(date: Date): boolean {
-    const year = date.getUTCFullYear();
+    // Windows are built with local-time Date constructors, so the
+    // comparison year must also be local. Using getUTCFullYear()
+    // here would test 31 Dec UTC / 1 Jan local against the wrong
+    // row around New Year's Eve.
+    const year = date.getFullYear();
+    const t = date.getTime();
+
     switch (year) {
       case 2025:
-        return date >= new Date(2025, 1, 28) &&
-          date < new Date(2025, 2, 30);
+        return t >= new Date(2025, 1, 28).getTime()
+          && t < new Date(2025, 2, 30).getTime();
       case 2026:
-        return date >= new Date(2026, 1, 17) &&
-          date < new Date(2026, 2, 19);
+        return t >= new Date(2026, 1, 17).getTime()
+          && t < new Date(2026, 2, 19).getTime();
       case 2027:
-        return date >= new Date(2027, 1, 7) &&
-          date < new Date(2027, 2, 9);
+        return t >= new Date(2027, 1, 7).getTime()
+          && t < new Date(2027, 2, 9).getTime();
+      // Extended table — approximate, ±1 day, same policy as above.
+      case 2028:
+        return t >= new Date(2028, 0, 27).getTime()
+          && t < new Date(2028, 1, 27).getTime();
+      case 2029:
+        return t >= new Date(2029, 0, 15).getTime()
+          && t < new Date(2029, 1, 15).getTime();
       default:
+      // Table exhausted — fall back to standard time. See the
+      // method comment: 1 hour off during the actual Ramadan.
         return false;
     }
   }
@@ -136,6 +169,8 @@ export class TimezoneResolver {
         return TimezoneResolver.isEuDst(date, year);
       case DstRule.AU:
         return TimezoneResolver.isAuDst(date, year);
+      case DstRule.NZ: // NEW
+        return TimezoneResolver.isNzDst(date, year);
       case DstRule.EGYPT:
         return TimezoneResolver.isEgyptDst(date, year);
       default:
@@ -230,6 +265,45 @@ export class TimezoneResolver {
       const end = TimezoneResolver.nthSunday(year, 4, 1);
       return t < end.getTime();
     }
+    return false;
+  }
+
+  /**
+   * New Zealand DST: last Sunday of September → first Sunday of April.
+   *
+   * Differs from Australia's window only in the start date. NZ starts
+   * DST roughly one week earlier, on the last Sunday of September,
+   * whereas Australia starts on the first Sunday of October. Without
+   * this distinct rule, Auckland would be treated as on standard time
+   * for that one week in late September / early October and every
+   * displayed prayer time would be one hour late.
+   *
+   * The window spans the new-year boundary, so the year argument is
+   * the calendar year of the date being tested.
+   */
+  private static isNzDst(date: Date, year: number): boolean {
+    const m = date.getUTCMonth(); // 0 = Jan, 3 = Apr, 8 = Sep, 9 = Oct
+    const t = date.getTime();
+
+    if (m >= 9) {
+      // October, November, December — inside DST since September.
+      return true;
+    }
+    if (m === 8) {
+      // September — check whether the last Sunday has passed.
+      const start = TimezoneResolver.lastSunday(year, 9);
+      return t >= start.getTime();
+    }
+    if (m <= 2) {
+      // January, February, March — inside DST since October.
+      return true;
+    }
+    if (m === 3) {
+      // April — DST ends at the first Sunday.
+      const end = TimezoneResolver.nthSunday(year, 4, 1);
+      return t < end.getTime();
+    }
+    // May, June, July, August — outside DST.
     return false;
   }
 

@@ -678,8 +678,8 @@ export const COUNTRY_ZONES: CountryZone[] = [
     minLng: 166.4,
     maxLng: 178.6,
     standardOffset: 12,
-    dstRule: DstRule.AU
-  },
+    dstRule: DstRule.NZ    // was: DstRule.AU
+  }
 ];
 
 export class CountryTimezoneLookup {

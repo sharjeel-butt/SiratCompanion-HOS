@@ -162,6 +162,11 @@ export struct HijriCalendarPage {
   onPageShow(): void {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
+    if (this.monthDays.length > 0) {
+      this.rebuildFromAnchor(this.monthDays[0].gregorianDate);
+    } else {
+      this.jumpToToday();
+    }
   }
 
   private onThemeModeChanged(): void {
@@ -177,7 +182,11 @@ export struct HijriCalendarPage {
     this.currentLanguage = this.appLanguage;
   }
   private onCalendarTypeChanged(): void {
-    this.jumpToToday();
+    if (this.monthDays.length > 0) {
+      this.rebuildFromAnchor(this.monthDays[0].gregorianDate);
+    } else {
+      this.jumpToToday();
+    }
   }
   private onAppForegrounded(): void {
     const today = new Date();
@@ -457,15 +466,34 @@ export struct HijriCalendarPage {
               Column().layoutWeight(1).height(56).margin({ left: 2, right: 2 })
             }
           }, (cell: CalendarDay | null, di: number) => {
-            const key = cell !== null
-              ? `${cell.hijri.year}-${cell.hijri.month}-${cell.hijri.day}`
-              : `empty-${wi}-${di}`;
-            return `cell-${key}`;
+            if (cell === null) {
+              return `e-${wi}-${di}`;
+            }
+            return `c-${cell.hijri.year}-${cell.hijri.month}-${cell.hijri.day}` +
+              `-${cell.isToday ? 'T' : 'f'}-${cell.events.length}`;
           })
         }
         .width('100%').margin({ bottom: 4 })
-      }, (week: Array<CalendarDay | null>, wi: number) =>
-      `week-${wi}-${this.viewingHijriYear}-${this.viewingHijriMonth}-${this.offsetDays}`)
+      }, (week: Array<CalendarDay | null>, wi: number) => {
+        // Key encodes the week's actual Hijri data so that ANY change
+        // (calendar type switch, offset, month navigation, event
+        // perspective, today rollover) forces ArkUI to re-render the
+        // week's cells. A key based only on `viewingHijriYear/Month`
+        // is stable across calendar type changes and would leave the
+        // grid showing the previous engine's dates.
+        const parts: string[] = [];
+        for (const cell of week) {
+          if (cell === null) {
+            parts.push('_');
+          } else {
+            parts.push(
+              `${cell.hijri.year}-${cell.hijri.month}-${cell.hijri.day}-` +
+                `${cell.isToday ? 'T' : 'f'}-${cell.events.length}`
+            );
+          }
+        }
+        return `w${wi}-${parts.join('|')}`;
+      })
     }
     .width('100%')
     .padding(8)

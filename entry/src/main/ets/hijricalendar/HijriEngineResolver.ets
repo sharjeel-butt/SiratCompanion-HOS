@@ -3,7 +3,7 @@
 import { HijriCalendarEngine } from './HijriCalendarEngine';
 import { UmmAlQuraEngine } from './UmmAlQuraEngine';
 import { TabularHijriEngine } from './TabularHijriEngine';
-import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
+import { HijriCalendarType } from './HijriCalendarType';
 import { STORAGE_KEY_HIJRI_CALENDAR_TYPE } from '../common/StorageKeys';
 
 /**

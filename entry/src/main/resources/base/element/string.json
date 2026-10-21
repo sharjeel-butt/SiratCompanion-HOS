@@ -2091,6 +2091,66 @@
     {
       "name": "madhab_desc_diyanet",
       "value": "Diyanet calendar uses the Standard Asr rule"
+    },
+    {
+      "name": "category_backup_restore",
+      "value": "Backup & Restore"
+    },
+    {
+      "name": "backup_to_file",
+      "value": "Backup to File"
+    },
+    {
+      "name": "backup_to_file_desc",
+      "value": "Save all your settings, prayer progress, and tasbih data to a file you can keep."
+    },
+    {
+      "name": "restore_from_file",
+      "value": "Restore from File"
+    },
+    {
+      "name": "restore_from_file_desc",
+      "value": "Load a previously saved backup and replace all current data."
+    },
+    {
+      "name": "backup_footer",
+      "value": "The backup does not include your diagnostic log or any device-specific identifiers."
+    },
+    {
+      "name": "backup_success",
+      "value": "Backup saved"
+    },
+    {
+      "name": "backup_failed",
+      "value": "Backup failed"
+    },
+    {
+      "name": "restore_confirm_title",
+      "value": "Restore Backup?"
+    },
+    {
+      "name": "restore_confirm_message",
+      "value": "This will replace all current settings, prayer progress, and tasbih data with the contents of the backup file. This cannot be undone."
+    },
+    {
+      "name": "restore_success",
+      "value": "Backup restored. The app will refresh now."
+    },
+    {
+      "name": "restore_failed",
+      "value": "Restore failed"
+    },
+    {
+      "name": "home_days_singular",
+      "value": ""
+    },
+    {
+      "name": "home_days_dual",
+      "value": ""
+    },
+    {
+      "name": "dhikr_count_dual",
+      "value": ""
     }
   ]
 }

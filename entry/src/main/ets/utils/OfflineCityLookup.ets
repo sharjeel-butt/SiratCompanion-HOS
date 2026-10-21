@@ -11,7 +11,8 @@ export enum DstRule {
   NONE = 'NONE', // No DST
   US = 'US', // 2nd Sun March → 1st Sun November
   EU = 'EU', // Last Sun March → Last Sun October
-  AU = 'AU', // Southern hemisphere: 1st Sun Oct → 1st Sun April
+  AU = 'AU', // Southern hemisphere AU: 1st Sun Oct → 1st Sun April
+  NZ = 'NZ', // Southern hemisphere NZ: last Sun Sep → 1st Sun April
   EGYPT = 'EGYPT' // Last Fri April → Last Thu October
 }
 
@@ -733,7 +734,7 @@ const CITIES: City[] = [
     lat: -36.8485,
     lng: 174.7633,
     standardOffset: 12,
-    dstRule: DstRule.AU,
+    dstRule: DstRule.NZ, // was: DstRule.AU
     declinationDeg: 19.0
   }
 ];

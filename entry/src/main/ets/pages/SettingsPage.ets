@@ -26,6 +26,7 @@ import {
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
+import { UserBackupService } from '../utils/UserBackupService';
 import {
   OffsetKey, PrayerOffsetsHelper
 } from '../prayer/PrayerOffsetsHelper';
@@ -79,6 +80,7 @@ struct SettingsPage {
   @State asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
   @State calcSource: CalculationSource = CalculationSource.LOCAL;
   @State showOffsets: boolean = false;
+  @State isBackupBusy: boolean = false;
   @State offsets: PrayerOffsets = {
     fajr: 0,
     dhuhr: 0,
@@ -245,6 +247,23 @@ struct SettingsPage {
 
               CategoryHeader({
                 colors: this.colors,
+                icon: '💾',
+                titleKey: 'category_backup_restore',
+                categoryKey: 'Backup & Restore',
+                expanded: this.expandedCategory === 'Backup & Restore',
+                currentLanguage: this.currentLanguage,
+                onTap: () => {
+                  this.expandedCategory =
+                    this.expandedCategory === 'Backup & Restore'
+                      ? null : 'Backup & Restore';
+                }
+              })
+              if (this.expandedCategory === 'Backup & Restore') {
+                this.BackupRestoreContent()
+              }
+
+              CategoryHeader({
+                colors: this.colors,
                 icon: 'ℹ️',
                 titleKey: 'category_about',
                 categoryKey: 'About',
@@ -258,6 +277,7 @@ struct SettingsPage {
               if (this.expandedCategory === 'About') {
                 this.AboutContent()
               }
+
 
               if (!NOTIFICATIONS_ENABLED && !CALENDAR_REMINDERS_ENABLED) {
                 this.LogAccessRow()
@@ -316,6 +336,94 @@ struct SettingsPage {
         this.showLogViewer = false;
       }
     })
+  }
+
+  @Builder
+  BackupRestoreContent() {
+    Column() {
+      // ---- Backup to File ----
+      Row() {
+        Column() {
+          Text(this.tr('backup_to_file'))
+            .fontSize(15).fontColor(this.colors.textWhite)
+            .fontWeight(FontWeight.Medium)
+          Text(this.tr('backup_to_file_desc'))
+            .fontSize(11)
+            .fontColor(this.colors.textMuted)
+            .margin({ top: 2 })
+            .maxLines(3)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+        Text('›').fontSize(22)
+          .fontColor(this.colors.accentGold).opacity(0.7)
+      }
+      .width('100%')
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .margin({ bottom: 8 })
+      .enabled(!this.isBackupBusy)
+      .opacity(this.isBackupBusy ? 0.5 : 1.0)
+      .onClick(() => {
+        this.handleBackup();
+      })
+
+      // ---- Restore from File ----
+      Row() {
+        Column() {
+          Text(this.tr('restore_from_file'))
+            .fontSize(15).fontColor(this.colors.textWhite)
+            .fontWeight(FontWeight.Medium)
+          Text(this.tr('restore_from_file_desc'))
+            .fontSize(11)
+            .fontColor(this.colors.textMuted)
+            .margin({ top: 2 })
+            .maxLines(3)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+        Text('›').fontSize(22)
+          .fontColor(this.colors.accentGold).opacity(0.7)
+      }
+      .width('100%')
+      .padding({
+        top: 14,
+        bottom: 14,
+        left: 16,
+        right: 16
+      })
+      .backgroundColor(this.colors.tintSubtle)
+      .borderRadius(12)
+      .margin({ bottom: 8 })
+      .enabled(!this.isBackupBusy)
+      .opacity(this.isBackupBusy ? 0.5 : 1.0)
+      .onClick(() => {
+        this.handleRestore();
+      })
+
+      // ---- Footer ----
+      Text(this.tr('backup_footer'))
+        .fontSize(10)
+        .fontColor(this.colors.textMuted)
+        .fontStyle(FontStyle.Italic)
+        .width('100%')
+        .padding({ left: 4, top: 4 })
+        .lineHeight(14)
+    }
+    .width('100%')
+    .padding(12)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(16)
+    .border({ width: 1, color: this.colors.borderSoft })
+    .margin({ bottom: 12 })
   }
 
   // ============================================================
@@ -2034,6 +2142,82 @@ struct SettingsPage {
       });
       this.logContents = '';
       this.showLogViewer = true;
+    }
+  }
+
+  private async handleBackup(): Promise<void> {
+    if (this.isBackupBusy) {
+      return;
+    }
+    this.isBackupBusy = true;
+    try {
+      const ctx = getContext(this) as common.UIAbilityContext;
+      const result = await UserBackupService.backupToFile(
+        ctx, this.appInfo.versionName
+      );
+      if (result.ok) {
+        promptAction.showToast({
+          message: this.tr('backup_success'), duration: 2500
+        });
+      } else if (result.message !== 'cancelled') {
+        promptAction.showToast({
+          message: `${this.tr('backup_failed')}: ${result.message}`,
+          duration: 3000
+        });
+      }
+    } finally {
+      this.isBackupBusy = false;
+    }
+  }
+
+  private async handleRestore(): Promise<void> {
+    if (this.isBackupBusy) {
+      return;
+    }
+
+    // Confirm before wiping any current data.
+    try {
+      const confirmResult = await promptAction.showDialog({
+        title: this.tr('restore_confirm_title'),
+        message: this.tr('restore_confirm_message'),
+        buttons: [
+          { text: this.tr('cancel'), color: this.colors.dialogCancel },
+          { text: this.tr('restore_from_file'), color: this.colors.accentGold }
+        ]
+      });
+      if (confirmResult.index !== 1) {
+        return;
+      }
+    } catch {
+      return;
+    }
+
+    this.isBackupBusy = true;
+    try {
+      const ctx = getContext(this) as common.UIAbilityContext;
+      const result = await UserBackupService.restoreFromFile(ctx);
+      if (!result.ok) {
+        if (result.message !== 'cancelled') {
+          promptAction.showToast({
+            message: `${this.tr('restore_failed')}: ${result.message}`,
+            duration: 3000
+          });
+        }
+        return;
+      }
+
+      promptAction.showToast({
+        message: this.tr('restore_success'), duration: 2000
+      });
+
+      // Replace SettingsPage with a fresh MainTabs so every tab
+      // renders against the restored state.
+      NavHelper.prepareForward();
+      router.replaceUrl({ url: 'pages/MainTabs' }).catch((err: Error) => {
+        console.error('[SettingsPage] restore navigate failed: ' + err.message);
+      });
+    } finally {
+      this.isBackupBusy = false;
     }
   }
 

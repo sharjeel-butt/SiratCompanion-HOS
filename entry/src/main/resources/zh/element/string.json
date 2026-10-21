@@ -1330,7 +1330,7 @@
     },
     {
       "name": "theme_preset_harmony5",
-      "value": "Bahar · 海韵"
+      "value": "Bahar · 春韵"
     },
     {
       "name": "theme_preset_harmony5_desc",
@@ -1474,7 +1474,7 @@
     },
     {
       "name": "home_streak",
-      "value": "天连续"
+      "value": "连续"
     },
     {
       "name": "home_best_streak",
@@ -1490,7 +1490,7 @@
     },
     {
       "name": "home_week_summary",
-      "value": "次礼拜本周"
+      "value": "本周礼拜"
     },
     {
       "name": "home_this_month",
@@ -1498,7 +1498,7 @@
     },
     {
       "name": "home_month_summary",
-      "value": "次礼拜本月"
+      "value": "本月礼拜"
     },
     {
       "name": "home_tasbih",
@@ -2091,6 +2091,66 @@
     {
       "name": "madhab_desc_diyanet",
       "value": "Diyanet 日历使用标准晡礼规则"
+    },
+    {
+      "name": "category_backup_restore",
+      "value": "备份与恢复"
+    },
+    {
+      "name": "backup_to_file",
+      "value": "备份到文件"
+    },
+    {
+      "name": "backup_to_file_desc",
+      "value": "将所有设置、礼拜进度和念珠数据保存到您可以保留的文件中。"
+    },
+    {
+      "name": "restore_from_file",
+      "value": "从文件恢复"
+    },
+    {
+      "name": "restore_from_file_desc",
+      "value": "加载之前保存的备份并替换所有当前数据。"
+    },
+    {
+      "name": "backup_footer",
+      "value": "备份不包含诊断日志或任何设备标识符。"
+    },
+    {
+      "name": "backup_success",
+      "value": "备份已保存"
+    },
+    {
+      "name": "backup_failed",
+      "value": "备份失败"
+    },
+    {
+      "name": "restore_confirm_title",
+      "value": "恢复备份？"
+    },
+    {
+      "name": "restore_confirm_message",
+      "value": "这将用备份文件的内容替换所有当前设置、礼拜进度和念珠数据。此操作无法撤销。"
+    },
+    {
+      "name": "restore_success",
+      "value": "备份已恢复。应用将立即刷新。"
+    },
+    {
+      "name": "restore_failed",
+      "value": "恢复失败"
+    },
+    {
+      "name": "home_days_singular",
+      "value": ""
+    },
+    {
+      "name": "home_days_dual",
+      "value": ""
+    },
+    {
+      "name": "dhikr_count_dual",
+      "value": ""
     }
   ]
 }

@@ -1503,6 +1503,10 @@ export struct HomePage {
     if (days === 1) {
       return this.tr('home_event_tomorrow');
     }
+    // Arabic dual form ("يومان") implies "two" and takes no numeral.
+    if (this.currentLanguage === 'ar' && days === 2) {
+      return this.tr('home_days_dual');
+    }
     return `${days} ${this.tr('home_days')}`;
   }
 

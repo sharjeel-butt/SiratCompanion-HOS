@@ -40,7 +40,6 @@ export struct PageHeader {
   @Prop calcSource: CalculationSource = CalculationSource.LOCAL;
   @Prop showCalcPills: boolean = true;
   @StorageLink(STORAGE_KEY_THEME_MODE)
-  @Watch('onClockFormatChanged')
   themeMode: string = ThemeMode.SYSTEM;
 
   @StorageLink(STORAGE_KEY_TIME_FORMAT)

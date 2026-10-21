@@ -661,9 +661,7 @@ export struct TasbihPage {
                 Text(t.name)
                   .fontSize(15).fontColor(this.colors.textWhite)
                   .fontWeight(FontWeight.Medium).width('100%')
-                Text(`${t.dhikrs.length} ${t.dhikrs.length === 1
-                  ? this.tr('dhikr_count_singular')
-                  : this.tr('dhikr_count_plural')} · ${t.lifetimeCount || 0} ${this.tr('total_on_tasbih')}`)
+                Text(`${this.dhikrCountLabel(t.dhikrs.length)} · ${t.lifetimeCount || 0} ${this.tr('total_on_tasbih')}`)
                   .fontSize(11).fontColor(this.colors.textMuted)
                   .margin({ top: 2 }).width('100%')
               }
@@ -740,6 +738,17 @@ export struct TasbihPage {
         })
     }
     .width('100%').height('100%')
+  }
+
+  private dhikrCountLabel(n: number): string {
+    // Arabic dual form ("ذكران") implies "two" and takes no numeral.
+    if (this.currentLanguage === 'ar' && n === 2) {
+      return this.tr('dhikr_count_dual');
+    }
+    const word = n === 1
+      ? this.tr('dhikr_count_singular')
+      : this.tr('dhikr_count_plural');
+    return `${n} ${word}`;
   }
 
   // ============================================================

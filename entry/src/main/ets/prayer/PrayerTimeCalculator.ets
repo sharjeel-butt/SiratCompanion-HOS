@@ -543,10 +543,47 @@ export class PrayerTimeCalculator {
     }
 
     // ---- Asr ----
+    //
+    // Unlike Fajr and Isha, Asr's target altitude is derived from
+    // the shadow rule and the day's declination, so its reachability
+    // varies with latitude and season. When the sun never climbs to
+    // the Asr altitude (extreme latitudes in winter), the raw
+    // calculateTimeForAltitude() clamps cosHA to ±1 and returns a
+    // meaningless time near sunrise or noon. Guard the same way Fajr
+    // and Isha do.
     const asrAltitude = PrayerTimeCalculator.calculateAsrAltitude(latitude, dec, effectiveAsrRule);
-    const asrUTC =
-      PrayerTimeCalculator.calculateTimeForAltitude(date, latitude, longitude, dec, eot, asrAltitude, true);
-    const asr = PrayerTimeCalculator.dateFromUTCHours(date, asrUTC + timezoneOffset);
+    const asrReachable = PrayerTimeCalculator.isAngleReachable(latitude, dec, asrAltitude);
+
+    let asr: Date;
+    if (asrReachable) {
+      const asrUTC = PrayerTimeCalculator.calculateTimeForAltitude(
+        date, latitude, longitude, dec, eot, asrAltitude, true
+      );
+      asr = PrayerTimeCalculator.dateFromUTCHours(date, asrUTC + timezoneOffset);
+    } else {
+      // 1. Preferred fallback — use the user's polar resolution
+      //    (Aqrab al-Balad or Aqrab al-Yaum) to find a reference
+      //    latitude/day where the Asr altitude is reachable.
+      const asrPolarUTC = PrayerTimeCalculator.calculatePolarFallback(
+        date, latitude, longitude, asrAltitude, true,
+        dec, eot, advanced.polarResolution
+      );
+
+      if (asrPolarUTC !== null) {
+        asr = PrayerTimeCalculator.dateFromUTCHours(
+          date, asrPolarUTC + timezoneOffset
+        );
+      } else {
+        // 2. Last resort — place Asr at two-thirds of the
+        //    Dhuhr → sunset interval. This preserves the correct
+        //    ordering (Dhuhr < Asr < Maghrib) at every latitude
+        //    without requiring a "night" quantity for the
+        //    afternoon prayer.
+        const dhuhrMs: number = dhuhr.getTime();
+        const sunsetMs: number = sunset.getTime();
+        asr = new Date(dhuhrMs + (sunsetMs - dhuhrMs) * (2 / 3));
+      }
+    }
 
     // ---- Maghrib ----
     let maghrib: Date;

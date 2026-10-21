@@ -50,7 +50,7 @@
           ]
         },
         {
-          "label": "Screen orientation sensor",
+          "label": "Orientation sensor",
           "purposes": [
             "App functionality"
           ]
@@ -68,6 +68,29 @@
         },
         {
           "label": "App run logs",
+          "purposes": [
+            "App functionality"
+          ]
+        }
+      ]
+    },
+    {
+      "dataType": "User content",
+      "dataLabels": [
+        {
+          "label": "Prayer completion history",
+          "purposes": [
+            "App functionality"
+          ]
+        },
+        {
+          "label": "Custom Tasbih definitions",
+          "purposes": [
+            "App functionality"
+          ]
+        },
+        {
+          "label": "Tasbih session data",
           "purposes": [
             "App functionality"
           ]
