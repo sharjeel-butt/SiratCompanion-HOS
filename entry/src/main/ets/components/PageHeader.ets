@@ -69,6 +69,10 @@ export struct PageHeader {
     // Re-render is handled by the @StorageLink.
   }
 
+  private isRtl(): boolean {
+    return L.isRtlLang(this.currentLanguage);
+  }
+
   private translateEventName(raw: string): string {
     switch (raw) {
       case 'Fajr':
@@ -154,7 +158,8 @@ export struct PageHeader {
               .fillColor(this.colors.accentGold)
               .opacity(0.7)
               .objectFit(ImageFit.Contain)
-              .margin({ left: 8 })
+              .margin({ left: this.isRtl() ? 0 : 8, right: this.isRtl() ? 8 : 0 })
+              .rotate({ angle: L.isRtlLang(this.currentLanguage) ? 180 : 0 })
           }
         }
         .height(38)

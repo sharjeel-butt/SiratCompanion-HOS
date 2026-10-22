@@ -1140,7 +1140,7 @@ export struct Prayer {
                 .width('100%')
               }
 
-              Column().height(140)
+              Column().height(180)
             }
             .width('100%')
           }
@@ -1465,10 +1465,12 @@ export struct Prayer {
             .width('100%')
             .height('100%')
         }
+
       }
       .width(22)
       .height(22)
       .borderRadius(5)
+
       .backgroundColor(prayer.checked
         ? this.colors.accentGold : 'transparent')
       .border({
@@ -1478,7 +1480,7 @@ export struct Prayer {
       })
       .opacity(PrayerManager.isPrayerCheckable(prayer, this.viewingDate)
         ? 1.0 : 0.4)
-      .margin({ right: 12 })
+      .margin({ left: this.isRtl() ? 12 : 0, right: this.isRtl() ? 0 : 12 })
       .onClick(() => {
         if (PrayerManager.isPrayerCheckable(prayer, this.viewingDate)) {
           this.setPrayerChecked(prayer.id, !prayer.checked);
@@ -1492,9 +1494,12 @@ export struct Prayer {
             .fontWeight(prayer.checked
               ? FontWeight.Normal : FontWeight.Medium)
             .opacity(prayer.checked ? 0.5 : 1.0)
+          if (this.appLanguage !== 'ar') {
+
           Text('  ')
           Text(prayer.arabicName)
             .fontSize(14).fontColor(this.colors.textMuted)
+        }
         }
         Text(this.getStatusLabel(prayer.status))
           .fontSize(11).fontColor(this.getStatusColor(prayer.status))
@@ -1528,15 +1533,19 @@ export struct Prayer {
         .height(20)
         .textAlign(TextAlign.Center)
         .opacity(0.85)
+        .margin({ left: this.isRtl() ? 12 : 0, right: this.isRtl() ? 0 : 12 })
 
       Column() {
         Row() {
           Text(this.translateTimingName(timing.name))
             .fontSize(14).fontColor(this.colors.textMuted)
             .fontStyle(FontStyle.Italic)
-          Text('  ')
-          Text(timing.arabicName)
-            .fontSize(12).fontColor(this.colors.textMuted).opacity(0.65)
+          if (this.appLanguage !== 'ar') {
+            Text('  ')
+            Text(timing.arabicName)
+
+              .fontSize(12).fontColor(this.colors.textMuted).opacity(0.65)
+          }
         }
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)

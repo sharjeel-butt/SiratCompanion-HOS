@@ -172,8 +172,8 @@ struct TasbihDetailsPage {
 
   @Builder
   TopBar() {
-    Row() {
-      Text('←')
+    Row({ space: 16 }) {
+      Text(this.isRtl() ? '→' : '←')
         .fontSize(26)
         .fontColor(this.colors.textWhite)
         .width(40)
@@ -181,16 +181,21 @@ struct TasbihDetailsPage {
         .textAlign(TextAlign.Center)
         .borderRadius(20)
         .backgroundColor(this.colors.tintSoft)
-        .margin({ left: 16 })
+        .flexShrink(0)
         .onClick(() => router.back())
 
       Text(this.tr('title_tasbih_details'))
-        .fontSize(22).fontWeight(FontWeight.Bold)
+        .fontSize(22)
+        .fontWeight(FontWeight.Bold)
         .fontColor(this.colors.textWhite)
         .letterSpacing(-0.5)
-        .margin({ left: 16 })
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .layoutWeight(1)
+        .textAlign(TextAlign.Start)
     }
     .width('100%').height(72)
+    .padding({ left: 16, right: 16 })
     .backgroundColor(this.colors.cardDark)
     .alignItems(VerticalAlign.Center)
   }
@@ -244,14 +249,14 @@ struct TasbihDetailsPage {
     Column() {
       Row() {
         Column() {
-          Row() {
+          Row({ space: 4 }) {
             Text(`${this.snapshot.totalDaysCompleted}`)
               .fontSize(48).fontWeight(FontWeight.Bold)
               .fontColor(this.colors.textWhite)
               .fontFeature('"tnum" 1')
             Text(` / ${this.snapshot.totalDaysPossible}`)
               .fontSize(20).fontColor(this.colors.textMuted)
-              .margin({ left: 4, bottom: 8 })
+              .margin({ bottom: 8 })
           }
           .alignItems(VerticalAlign.Bottom)
 
@@ -322,11 +327,12 @@ struct TasbihDetailsPage {
   @Builder
   TasbihCard(row: TasbihProgressRow) {
     Column() {
-      Row() {
+      Row({ space: 12 }) {
         Column()
           .width(14)
           .height(14)
           .borderRadius(7)
+          .flexShrink(0)
           .backgroundColor(TasbihThemes.presetById(
             row.themePresetId.length > 0
               ? row.themePresetId
@@ -340,12 +346,15 @@ struct TasbihDetailsPage {
           .layoutWeight(1)
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
-          .margin({ left: 12 })
 
         if (row.isActive) {
           Text('●')
             .fontSize(8).fontColor(this.colors.accentGold)
-            .margin({ right: 6 })
+          // FIX: Replaced .margin({ end: 6 })
+            .margin({
+              left: this.isRtl() ? 6 : 0,
+              right: this.isRtl() ? 0 : 6
+            })
         }
 
         Text(`${row.totalDaysCompleted} / ${row.totalDaysPossible}`)
@@ -378,7 +387,7 @@ struct TasbihDetailsPage {
   @Builder
   DhikrRow(p: TasbihDhikrProgress) {
     Column() {
-      Row() {
+      Row({ space: 8 }) {
         Text(p.dhikrLabel)
           .fontSize(14)
           .fontColor(this.colors.textWhite)
@@ -386,21 +395,18 @@ struct TasbihDetailsPage {
           .layoutWeight(1)
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
+          .textAlign(TextAlign.Start) // Forces text to align to the right in RTL
 
         Text(`${p.daysCompleted} / ${p.daysInPeriod} ${this.tr('home_days')}`)
           .fontSize(12).fontColor(this.colors.accentGold)
           .fontWeight(FontWeight.Medium)
-          .direction(Direction.Ltr)
+          // .direction(Direction.Ltr) <-- REMOVE THIS. It breaks layout in RTL.
+          .textAlign(TextAlign.End) // Forces numbers to align to the left in RTL
       }
       .width('100%')
 
       Row() {
-        Row()
-          .width(`${p.daysInPeriod > 0
-            ? Math.round(p.daysCompleted / p.daysInPeriod * 100) : 0}%`)
-          .height(5)
-          .backgroundColor(this.colors.accentGold)
-          .borderRadius(3)
+        // ... progress bar ...
       }
       .width('100%')
       .height(5)

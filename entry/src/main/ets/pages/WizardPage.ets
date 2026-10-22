@@ -836,7 +836,7 @@ struct WizardPage {
           }
           .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-          Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+          Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7).rotate({ angle: L.isRtl() ? 180 : 0 })
         }
         .width('100%')
         .padding(16)
@@ -863,7 +863,7 @@ struct WizardPage {
           }
           .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-          Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+          Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7).rotate({ angle: L.isRtl() ? 180 : 0 })
         }
         .width('100%')
         .padding(16)
@@ -890,7 +890,7 @@ struct WizardPage {
           }
           .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-          Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+          Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7).rotate({ angle: L.isRtl() ? 180 : 0 })
         }
         .width('100%')
         .padding(16)

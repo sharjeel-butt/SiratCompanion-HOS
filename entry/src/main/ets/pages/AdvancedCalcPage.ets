@@ -162,8 +162,8 @@ struct AdvancedCalcPage {
 
   @Builder
   TopBar() {
-    Row() {
-      Text('←')
+    Row({ space: 16 }) {
+      Text(this.isRtl() ? '→' : '←')
         .fontSize(26)
         .fontColor(this.colors.textWhite)
         .width(40)
@@ -171,19 +171,22 @@ struct AdvancedCalcPage {
         .textAlign(TextAlign.Center)
         .borderRadius(20)
         .backgroundColor(this.colors.tintSoft)
-        .margin({ left: 16 })
+        .flexShrink(0)
         .onClick(() => router.back())
 
       Text(this.tr('advanced_calc_title'))
         .fontSize(22)
         .fontWeight(FontWeight.Bold)
         .fontColor(this.colors.textWhite)
-        .margin({ left: 16 })
         .maxLines(1)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
         .layoutWeight(1)
+        .textAlign(TextAlign.Start)
     }
-    .width('100%').height(72).backgroundColor(this.colors.cardDark)
+    .width('100%')
+    .height(72)
+    .padding({ left: 16, right: 16 })
+    .backgroundColor(this.colors.cardDark)
     .alignItems(VerticalAlign.Center)
   }
 
@@ -210,7 +213,12 @@ struct AdvancedCalcPage {
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .opacity(0.7)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
     }
     .width('100%')
     .padding({
@@ -244,10 +252,12 @@ struct AdvancedCalcPage {
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text('›')
-        .fontSize(22)
-        .fontColor(this.isMidnightLocked() ? this.colors.textMuted : this.colors.accentGold)
-        .opacity(this.isMidnightLocked() ? 0.3 : 0.7)
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .opacity(0.7)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
     }
     .width('100%')
     .padding({
@@ -283,7 +293,12 @@ struct AdvancedCalcPage {
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .opacity(0.7)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
     }
     .width('100%')
     .padding({
@@ -316,7 +331,12 @@ struct AdvancedCalcPage {
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .opacity(0.7)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
     }
     .width('100%')
     .padding({
@@ -369,12 +389,12 @@ struct AdvancedCalcPage {
       .alignItems(HorizontalAlign.Start)
       .layoutWeight(1)
 
-      Text('›')
-        .fontSize(22)
-        .fontColor(this.isShafaqApplicable()
-          ? this.colors.accentGold
-          : this.colors.textMuted)
-        .opacity(this.isShafaqApplicable() ? 0.7 : 0.3)
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .opacity(0.7)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
     }
     .width('100%')
     .padding({

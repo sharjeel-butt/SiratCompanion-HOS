@@ -245,7 +245,11 @@ struct MainTabs {
       .width('100%')
       .height('100%')
       .alignItems(VerticalAlign.Top)
-      .padding({ top: 8, right: 8 })
+      .padding({
+        top: 8,
+        left: this.isRtl() ? 8 : 0,
+        right: this.isRtl() ? 0 : 8
+      })
       .hitTestBehavior(HitTestMode.Transparent)
     }
     .width('100%')
@@ -268,13 +272,17 @@ struct MainTabs {
           .fontColor(this.colors.textWhite)
           .layoutWeight(1)
           .maxLines(1)
+          .textAlign(this.isRtl() ? TextAlign.End : TextAlign.Start)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
 
         this.HamburgerButton()
       }
       .width('100%')
       .height(56)
-      .padding({ left: 16, right: 12 })
+      .padding({
+        left: this.isRtl() ? 12 : 16,
+        right: this.isRtl() ? 16 : 12
+      })
       .alignItems(VerticalAlign.Center)
       .backgroundColor(this.colors.primaryGreen)
 
@@ -347,7 +355,7 @@ struct MainTabs {
     Menu() {
       // ---- Customize ----
       MenuItem() {
-        Row() {
+        Row({ space: 12 }) {
           Image($r('app.media.ic_menu_customize'))
             .width(20)
             .height(20)
@@ -359,19 +367,17 @@ struct MainTabs {
             .fontSize(15)
             .fontColor(this.menuTextColor())
             .fontWeight(FontWeight.Medium)
-            .margin(this.isRtl() ? { right: 12 } : { left: 12 })
             .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .constraintSize({ maxWidth: 180 }) // Added max width instead of layoutWeight
+            .constraintSize({ minWidth: 90 }) // <-- Forces straight alignment
         }
-        // Removed .width('100%') so it wraps the content
         .padding({
           top: 10,
           bottom: 10,
-          left: this.isRtl() ? 20 : 14,
-          right: this.isRtl() ? 14 : 20
+          left: 16,
+          right: 16
         })
         .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+        .alignItems(VerticalAlign.Center)
       }
       .onClick(() => {
         this.isMenuVisible = false;
@@ -380,7 +386,7 @@ struct MainTabs {
 
       // ---- Settings ----
       MenuItem() {
-        Row() {
+        Row({ space: 12 }) {
           Image($r('app.media.ic_menu_settings'))
             .width(20)
             .height(20)
@@ -392,18 +398,17 @@ struct MainTabs {
             .fontSize(15)
             .fontColor(this.menuTextColor())
             .fontWeight(FontWeight.Medium)
-            .margin(this.isRtl() ? { right: 12 } : { left: 12 })
             .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .constraintSize({ maxWidth: 180 })
+            .constraintSize({ minWidth: 90 }) // <-- Forces straight alignment
         }
         .padding({
           top: 10,
           bottom: 10,
-          left: this.isRtl() ? 20 : 14,
-          right: this.isRtl() ? 14 : 20
+          left: 16,
+          right: 16
         })
         .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+        .alignItems(VerticalAlign.Center)
       }
       .onClick(() => {
         this.isMenuVisible = false;
@@ -412,30 +417,30 @@ struct MainTabs {
 
       // ---- Exit ----
       MenuItem() {
-        Row() {
+        Row({ space: 12 }) {
           Image($r('app.media.ic_menu_exit'))
             .width(20)
             .height(20)
             .fillColor(this.menuIconColor())
             .objectFit(ImageFit.Contain)
             .flexShrink(0)
+            .scale({ x: this.isRtl() ? -1 : 1 }) // <-- Flips the exit icon in RTL
 
           Text(L.get('exit', this.currentLanguage))
             .fontSize(15)
             .fontColor(this.menuTextColor())
             .fontWeight(FontWeight.Medium)
-            .margin(this.isRtl() ? { right: 12 } : { left: 12 })
             .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .constraintSize({ maxWidth: 180 })
+            .constraintSize({ minWidth: 90 }) // <-- Forces straight alignment
         }
         .padding({
           top: 10,
           bottom: 10,
-          left: this.isRtl() ? 20 : 14,
-          right: this.isRtl() ? 14 : 20
+          left: 16,
+          right: 16
         })
         .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+        .alignItems(VerticalAlign.Center)
       }
       .onClick(() => {
         this.isMenuVisible = false;
