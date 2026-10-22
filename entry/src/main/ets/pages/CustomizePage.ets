@@ -245,6 +245,66 @@ struct CustomizePage {
               // UI Customization — header inlined
               // ==================================================
               Row() {
+                Image($r('app.media.ic_ui_customize'))
+                  .width(20)
+                  .height(20)
+                  .fillColor(this.colors.accentGold)
+                  .width(40)
+                  .height(40)
+                  .padding(10)
+                  .backgroundColor(this.colors.tintSoft)
+                  .borderRadius(12)
+                  .border({ width: 1, color: this.colors.borderSoft })
+                  .flexShrink(0)
+
+                Text(this.tr('category_ui_customization'))
+                  .fontSize(17)
+                  .fontWeight(FontWeight.Bold)
+                  .fontColor(this.colors.textWhite)
+                  .layoutWeight(1)
+                  .textAlign(TextAlign.Start)
+                  .margin({
+                    left: this.isRtl() ? 0 : 14,
+                    right: this.isRtl() ? 14 : 0
+                  })
+
+                Text(this.expandedCategory === 'UI Customization' ? '▲' : '▼')
+                  .fontSize(12).fontColor(this.colors.accentGold).opacity(0.8)
+                  .flexShrink(0)
+              }
+              .width('100%')
+              .padding(this.isRtl()
+                ? {
+                  top: 12,
+                  bottom: 12,
+                  left: 16,
+                  right: 12
+                }
+                : {
+                  top: 12,
+                  bottom: 12,
+                  left: 12,
+                  right: 16
+                }
+              )
+              .alignItems(VerticalAlign.Center)
+              .backgroundColor(this.colors.cardDark)
+              .borderRadius(16)
+              .border({ width: 1, color: this.colors.borderSoft })
+              .margin({ bottom: 8 })
+              .onClick(() => {
+                this.expandedCategory = this.expandedCategory === 'UI Customization'
+                  ? null : 'UI Customization';
+              })
+
+              if (this.expandedCategory === 'UI Customization') {
+                this.UICustomizationContent()
+              }
+
+              // ==================================================
+              // Appearance — header inlined
+              // ==================================================
+              Row() {
                 Image($r('app.media.ic_ui_appearance'))
                   .width(20)
                   .height(20)
@@ -288,66 +348,6 @@ struct CustomizePage {
                 }
               )
               .alignItems(VerticalAlign.Center)
-              .backgroundColor(this.colors.cardDark)
-              .borderRadius(16)
-              .border({ width: 1, color: this.colors.borderSoft })
-              .margin({ bottom: 8 })
-              .onClick(() => {
-                this.expandedCategory = this.expandedCategory === 'Appearance'
-                  ? null : 'Appearance';
-              })
-
-              if (this.expandedCategory === 'UI Customization') {
-                this.UICustomizationContent()
-              }
-
-              // ==================================================
-              // Appearance — header inlined
-              // ==================================================
-              Row() {
-                Image($r('app.media.ic_ui_appearance'))
-                  .width(20)
-                  .height(20)
-                  .fillColor(this.colors.accentGold)
-                  .width(40)
-                  .height(40)
-                  .padding(10)
-                  .backgroundColor(this.colors.tintSoft)
-                  .borderRadius(12)
-                  .border({ width: 1, color: this.colors.borderSoft })
-                  .flexShrink(0)
-
-                Text(this.tr('category_appearance'))
-                  .fontSize(17)
-                  .fontWeight(FontWeight.Bold)
-                  .fontColor(this.colors.textWhite)
-                  .layoutWeight(1) // Expands to fill space
-                  .textAlign(TextAlign.Start) // Aligns text next to icon
-                  .margin({
-                    left: this.isRtl() ? 0 : 14,
-                    right: this.isRtl() ? 14 : 0
-                  })
-
-                Text(this.expandedCategory === 'Appearance' ? '▲' : '▼')
-                  .fontSize(12).fontColor(this.colors.accentGold).opacity(0.8)
-                  .flexShrink(0)
-              }
-              .width('100%')
-              .padding(this.isRtl()
-                ? {
-                  top: 12,
-                  bottom: 12,
-                  left: 16,
-                  right: 12
-                }
-                : {
-                  top: 12,
-                  bottom: 12,
-                  left: 12,
-                  right: 16
-                }
-              )
-              .alignItems(VerticalAlign.Center) // Ensures perfect vertical centering
               .backgroundColor(this.colors.cardDark)
               .borderRadius(16)
               .border({ width: 1, color: this.colors.borderSoft })
@@ -435,6 +435,7 @@ struct CustomizePage {
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
+
 
   @Builder
   ClockFormatRow() {

@@ -1,7 +1,7 @@
 // entry/src/main/ets/pages/WizardPage.ets
 
-import { mediaquery } from '@kit.ArkUI';
-import { ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
+import { mediaquery, router } from '@kit.ArkUI';
+import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
@@ -12,8 +12,15 @@ import {
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
 import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator';
+import { SettingsHelper } from '../helper/SettingsHelper';
+import { LocationData, LocationHelper } from '../utils/LocationUtils';
 import { CalculationSource, LocationMode, PickerItem } from '../models/SettingsModels';
-import { AppLanguage } from '../i8n/LocalizationHelper';
+import { AppLanguage, L } from '../i8n/LocalizationHelper';
+import { NavHelper } from '../helper/NavHelper';
+import { PrivacyPolicyProvider } from '../data/PrivacyPolicy';
+import { Breakpoints } from '../common/Breakpoints';
+import { FALLBACK_LOCATION, LocationCache } from '../utils/LocationCache';
+import { common, Want } from '@kit.AbilityKit';
 
 const TOTAL_STEPS = 5;
 
