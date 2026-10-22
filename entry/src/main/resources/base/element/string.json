@@ -2151,6 +2151,278 @@
     {
       "name": "dhikr_count_dual",
       "value": ""
+    },
+    {
+      "name": "title_ramadan_details",
+      "value": "Ramadan Tracker"
+    },
+    {
+      "name": "track_ramadan",
+      "value": "Track Ramadan"
+    },
+    {
+      "name": "section_fasting",
+      "value": "FASTING"
+    },
+    {
+      "name": "fasting_status_fasted",
+      "value": "Fasted"
+    },
+    {
+      "name": "fasting_status_missed",
+      "value": "Missed"
+    },
+    {
+      "name": "fasting_status_unmarked",
+      "value": "Not marked"
+    },
+    {
+      "name": "fasting_summary_fasted",
+      "value": "fasted"
+    },
+    {
+      "name": "fasting_summary_missed",
+      "value": "missed"
+    },
+    {
+      "name": "fasting_summary_unmarked",
+      "value": "not marked"
+    },
+    {
+      "name": "fasting_mark_title",
+      "value": "Mark Fasting"
+    },
+    {
+      "name": "fasting_day_label",
+      "value": "Day"
+    },
+    {
+      "name": "fasting_clear",
+      "value": "Clear mark"
+    },
+    {
+      "name": "fasting_reason_title",
+      "value": "Reason for Missing"
+    },
+    {
+      "name": "fasting_reason_travel",
+      "value": "Travel"
+    },
+    {
+      "name": "fasting_reason_illness",
+      "value": "Illness"
+    },
+    {
+      "name": "fasting_reason_menstruation",
+      "value": "Menstruation"
+    },
+    {
+      "name": "fasting_reason_pregnancy_nursing",
+      "value": "Pregnancy / nursing"
+    },
+    {
+      "name": "fasting_reason_forgetfulness",
+      "value": "Forgetfulness"
+    },
+    {
+      "name": "fasting_reason_other",
+      "value": "Other"
+    },
+    {
+      "name": "fasting_reason_custom_label",
+      "value": "Please specify"
+    },
+    {
+      "name": "fasting_reason_custom_placeholder",
+      "value": "Your reason"
+    },
+    {
+      "name": "ramadan_not_active",
+      "value": "Open this page during Ramadan to track your fasts."
+    },
+    {
+      "name": "section_qada",
+      "value": "QADA (MAKE-UP)"
+    },
+    {
+      "name": "qada_remaining",
+      "value": "Remaining"
+    },
+    {
+      "name": "qada_total_missed",
+      "value": "Total missed"
+    },
+    {
+      "name": "qada_total_made_up",
+      "value": "Total made up"
+    },
+    {
+      "name": "qada_per_year",
+      "value": "BY YEAR"
+    },
+    {
+      "name": "qada_log_button",
+      "value": "Log make-up fast"
+    },
+    {
+      "name": "qada_log_title",
+      "value": "Log Make-Up Fast"
+    },
+    {
+      "name": "qada_log_desc",
+      "value": "How many fasts did you make up?"
+    },
+    {
+      "name": "qada_all_done",
+      "value": "All caught up. Alhamdulillah."
+    },
+    {
+      "name": "qada_no_data",
+      "value": "No missed fasts recorded yet."
+    },
+    {
+      "name": "qada_year_label",
+      "value": "For year"
+    },
+    {
+      "name": "qada_count_label",
+      "value": "How many"
+    },
+    {
+      "name": "qada_count_suffix",
+      "value": "fasts"
+    },
+    {
+      "name": "qada_row_missed_suffix",
+      "value": "missed"
+    },
+    {
+      "name": "qada_row_made_up_suffix",
+      "value": "made up"
+    },
+    {
+      "name": "section_taraweeh",
+      "value": "TARAWEEH"
+    },
+    {
+      "name": "taraweeh_empty",
+      "value": "Tracking starts once Ramadan begins."
+    },
+    {
+      "name": "taraweeh_nights_suffix",
+      "value": "nights"
+    },
+    {
+      "name": "qada_not_during_ramadan",
+      "value": "Make-up fasts can be logged after Eid al-Fitr."
+    },
+    {
+      "name": "qada_total_fasted",
+      "value": "Total fasted"
+    },
+    {
+      "name": "qada_total_unmarked",
+      "value": "Total not marked"
+    },
+    {
+      "name": "qada_row_fasted_suffix",
+      "value": "fasted"
+    },
+    {
+      "name": "qada_row_unmarked_suffix",
+      "value": "not marked"
+    },
+    {
+      "name": "section_duas",
+      "value": "DUAS"
+    },
+    {
+      "name": "eid_card_title",
+      "value": "EID AL-FITR"
+    },
+    {
+      "name": "eid_greeting",
+      "value": "Eid Mubarak"
+    },
+    {
+      "name": "eid_greeting_subtitle",
+      "value": "May Allah accept your fasts and deeds"
+    },
+    {
+      "name": "eid_zakat_fitr",
+      "value": "ZAKAT AL-FITR"
+    },
+    {
+      "name": "eid_zakat_fitr_desc",
+      "value": "One sa' (approximately 2.5 kg) of your local staple food per household member, due before the Eid prayer."
+    },
+    {
+      "name": "eid_takbeer_arabic",
+      "value": "اللّٰهُ أَكْبَرُ، اللّٰهُ أَكْبَرُ، لَا إِلٰهَ إِلَّا اللّٰهُ، وَاللّٰهُ أَكْبَرُ، اللّٰهُ أَكْبَرُ، وَلِلّٰهِ الْحَمْدُ"
+    },
+    {
+      "name": "eid_takbeer_translation",
+      "value": "Allah is the Greatest, Allah is the Greatest. There is no god but Allah. Allah is the Greatest, Allah is the Greatest, and to Allah belongs all praise."
+    },
+    {
+      "name": "ramadan_about_this_month",
+      "value": "ABOUT THIS RAMADAN"
+    },
+    {
+      "name": "eid_card_link",
+      "value": "Review Ramadan"
+    },
+    {
+      "name": "qada_card_link",
+      "value": "Manage Qada"
+    },
+    {
+      "name": "qada_banner_log_action",
+      "value": "Log"
+    },
+    {
+      "name": "qada_banner_singular",
+      "value": "fast to make up"
+    },
+    {
+      "name": "qada_banner_plural",
+      "value": "fasts to make up"
+    },
+    {
+      "name": "qada_banner_dual",
+      "value": "Two fasts to make up"
+    },
+    {
+      "name": "qada_year_sheet_title_prefix",
+      "value": "Qada for"
+    },
+    {
+      "name": "qada_of",
+      "value": "of"
+    },
+    {
+      "name": "qada_made_up_of_total",
+      "value": "made up"
+    },
+    {
+      "name": "qada_day_mark_made_up",
+      "value": "Mark made up"
+    },
+    {
+      "name": "qada_day_made_up",
+      "value": "Made up"
+    },
+    {
+      "name": "qada_year_sheet_empty",
+      "value": "All missed fasts for this year have been made up. Alhamdulillah."
+    },
+    {
+      "name": "qada_tap_year_hint",
+      "value": "Tap a year to view and manage its make-ups."
+    },
+    {
+      "name": "close",
+      "value": "Close"
     }
   ]
 }

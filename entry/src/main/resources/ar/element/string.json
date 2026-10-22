@@ -2152,6 +2152,278 @@
     {
       "name": "dhikr_count_dual",
       "value": "ذكران"
+    },
+    {
+      "name": "title_ramadan_details",
+      "value": "متتبع رمضان"
+    },
+    {
+      "name": "track_ramadan",
+      "value": "تتبّع رمضان"
+    },
+    {
+      "name": "section_fasting",
+      "value": "الصيام"
+    },
+    {
+      "name": "fasting_status_fasted",
+      "value": "صُمت"
+    },
+    {
+      "name": "fasting_status_missed",
+      "value": "أفطرت"
+    },
+    {
+      "name": "fasting_status_unmarked",
+      "value": "غير محدد"
+    },
+    {
+      "name": "fasting_summary_fasted",
+      "value": "صُمت"
+    },
+    {
+      "name": "fasting_summary_missed",
+      "value": "أفطرت"
+    },
+    {
+      "name": "fasting_summary_unmarked",
+      "value": "غير محدد"
+    },
+    {
+      "name": "fasting_mark_title",
+      "value": "تحديد الصيام"
+    },
+    {
+      "name": "fasting_day_label",
+      "value": "اليوم"
+    },
+    {
+      "name": "fasting_clear",
+      "value": "مسح التحديد"
+    },
+    {
+      "name": "fasting_reason_title",
+      "value": "سبب الإفطار"
+    },
+    {
+      "name": "fasting_reason_travel",
+      "value": "سفر"
+    },
+    {
+      "name": "fasting_reason_illness",
+      "value": "مرض"
+    },
+    {
+      "name": "fasting_reason_menstruation",
+      "value": "حيض"
+    },
+    {
+      "name": "fasting_reason_pregnancy_nursing",
+      "value": "حمل / رضاعة"
+    },
+    {
+      "name": "fasting_reason_forgetfulness",
+      "value": "نسيان"
+    },
+    {
+      "name": "fasting_reason_other",
+      "value": "أخرى"
+    },
+    {
+      "name": "fasting_reason_custom_label",
+      "value": "يرجى التحديد"
+    },
+    {
+      "name": "fasting_reason_custom_placeholder",
+      "value": "سببك"
+    },
+    {
+      "name": "ramadan_not_active",
+      "value": "افتح هذه الصفحة خلال رمضان لتتبع صيامك."
+    },
+    {
+      "name": "section_qada",
+      "value": "القضاء"
+    },
+    {
+      "name": "qada_remaining",
+      "value": "المتبقي"
+    },
+    {
+      "name": "qada_total_missed",
+      "value": "إجمالي المفطرات"
+    },
+    {
+      "name": "qada_total_made_up",
+      "value": "إجمالي المقضي"
+    },
+    {
+      "name": "qada_per_year",
+      "value": "حسب السنة"
+    },
+    {
+      "name": "qada_log_button",
+      "value": "تسجيل صيام قضاء"
+    },
+    {
+      "name": "qada_log_title",
+      "value": "تسجيل القضاء"
+    },
+    {
+      "name": "qada_log_desc",
+      "value": "كم يوماً قضيت؟"
+    },
+    {
+      "name": "qada_all_done",
+      "value": "تم القضاء بالكامل. الحمد لله."
+    },
+    {
+      "name": "qada_no_data",
+      "value": "لم يتم تسجيل أي إفطار بعد."
+    },
+    {
+      "name": "qada_year_label",
+      "value": "للسنة"
+    },
+    {
+      "name": "qada_count_label",
+      "value": "العدد"
+    },
+    {
+      "name": "qada_count_suffix",
+      "value": "أيام"
+    },
+    {
+      "name": "qada_row_missed_suffix",
+      "value": "مفطر"
+    },
+    {
+      "name": "qada_row_made_up_suffix",
+      "value": "مقضي"
+    },
+    {
+      "name": "section_taraweeh",
+      "value": "التراويح"
+    },
+    {
+      "name": "taraweeh_empty",
+      "value": "يبدأ التتبع مع بداية رمضان."
+    },
+    {
+      "name": "taraweeh_nights_suffix",
+      "value": "ليالٍ"
+    },
+    {
+      "name": "qada_not_during_ramadan",
+      "value": "يمكن تسجيل صيام القضاء بعد عيد الفطر."
+    },
+    {
+      "name": "qada_total_fasted",
+      "value": "إجمالي ما صُمت"
+    },
+    {
+      "name": "qada_total_unmarked",
+      "value": "إجمالي غير المحدد"
+    },
+    {
+      "name": "qada_row_fasted_suffix",
+      "value": "صائم"
+    },
+    {
+      "name": "qada_row_unmarked_suffix",
+      "value": "غير محدد"
+    },
+    {
+      "name": "section_duas",
+      "value": "الأدعية"
+    },
+    {
+      "name": "eid_card_title",
+      "value": "عيد الفطر"
+    },
+    {
+      "name": "eid_greeting",
+      "value": "عيد مبارك"
+    },
+    {
+      "name": "eid_greeting_subtitle",
+      "value": "تقبّل الله صيامكم وأعمالكم"
+    },
+    {
+      "name": "eid_zakat_fitr",
+      "value": "زكاة الفطر"
+    },
+    {
+      "name": "eid_zakat_fitr_desc",
+      "value": "صاع (حوالي 2.5 كجم) من طعام البلد الأساسي عن كل فرد من الأسرة، يجب إخراجه قبل صلاة العيد."
+    },
+    {
+      "name": "eid_takbeer_arabic",
+      "value": "اللّٰهُ أَكْبَرُ، اللّٰهُ أَكْبَرُ، لَا إِلٰهَ إِلَّا اللّٰهُ، وَاللّٰهُ أَكْبَرُ، اللّٰهُ أَكْبَرُ، وَلِلّٰهِ الْحَمْدُ"
+    },
+    {
+      "name": "eid_takbeer_translation",
+      "value": "الله أكبر، الله أكبر، لا إله إلا الله، والله أكبر، الله أكبر، ولله الحمد."
+    },
+    {
+      "name": "ramadan_about_this_month",
+      "value": "حول رمضان هذا"
+    },
+    {
+      "name": "eid_card_link",
+      "value": "استعراض رمضان"
+    },
+    {
+      "name": "qada_card_link",
+      "value": "إدارة القضاء"
+    },
+    {
+      "name": "qada_banner_log_action",
+      "value": "تسجيل"
+    },
+    {
+      "name": "qada_banner_singular",
+      "value": "صوم للقضاء"
+    },
+    {
+      "name": "qada_banner_plural",
+      "value": "صيام للقضاء"
+    },
+    {
+      "name": "qada_banner_dual",
+      "value": "صومان للقضاء"
+    },
+    {
+      "name": "qada_year_sheet_title_prefix",
+      "value": "قضاء سنة"
+    },
+    {
+      "name": "qada_of",
+      "value": "من"
+    },
+    {
+      "name": "qada_made_up_of_total",
+      "value": "مقضي"
+    },
+    {
+      "name": "qada_day_mark_made_up",
+      "value": "تسجيل القضاء"
+    },
+    {
+      "name": "qada_day_made_up",
+      "value": "تم القضاء"
+    },
+    {
+      "name": "qada_year_sheet_empty",
+      "value": "تم قضاء جميع أيام الإفطار لهذه السنة. الحمد لله."
+    },
+    {
+      "name": "qada_tap_year_hint",
+      "value": "اضغط على سنة لعرض وإدارة قضائها."
+    },
+    {
+      "name": "close",
+      "value": "إغلاق"
     }
   ]
 }

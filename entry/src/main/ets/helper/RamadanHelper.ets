@@ -3,6 +3,7 @@
 import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
 import { DateHelper } from '../utils/DateUtils';
 import { HijriDate } from '../hijricalendar/HijriCalendarModels';
+import { EidInfo } from '../models/RamadanModels';
 
 /** One of the three ten-day periods of Ramadan. */
 export interface RamadanAshra {
@@ -225,5 +226,47 @@ export class RamadanHelper {
     } catch (err) {
       return date.toDateString();
     }
+  }
+
+  /**
+   * Detect whether the current date falls within Eid al-Fitr's
+   * 3-day window (1–3 Shawwal).
+   *
+   * Returns null at every other time of the year, so callers can
+   * use `getEidInfo(...) !== null` as a simple toggle.
+   *
+   * The Eid date is computed by walking backwards from today's
+   * Hijri day: if today is 3 Shawwal, then 1 Shawwal was
+   * (3 - 1) = 2 days ago. This avoids a forward scan (which would
+   * find NEXT year's 1 Shawwal) and requires no engine-specific
+   * leap-year handling because both the Umm al-Qura and Tabular
+   * engines agree on days 1–3 of Shawwal for any given year.
+   */
+  static getEidInfo(offsetDays: number): EidInfo | null {
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+
+    const h = HijriCalendarHelper.getHijriDate(now, offsetDays);
+
+    // Eid al-Fitr is 1 Shawwal (month 10). Only the first three
+    // days are considered the "Eid period".
+    if (h.month !== 10) {
+      return null;
+    }
+    if (h.day < 1 || h.day > 3) {
+      return null;
+    }
+
+    const eidDate = new Date(now);
+    eidDate.setDate(eidDate.getDate() - (h.day - 1));
+    eidDate.setHours(0, 0, 0, 0);
+
+    const info: EidInfo = {
+      isEidPeriod: true,
+      eidDay: h.day,
+      hijriYear: h.year,
+      eidDate: eidDate
+    };
+    return info;
   }
 }

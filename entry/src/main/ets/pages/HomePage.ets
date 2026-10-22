@@ -20,12 +20,15 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
   STORAGE_KEY_PRAYER_STATE_VERSION,
+  STORAGE_KEY_RAMADAN_STATE_VERSION,
   STORAGE_KEY_SETTINGS_INITIAL_CATEGORY,
   STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
   STORAGE_KEY_TASBIH_STATE_VERSION,
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
 } from '../common/StorageKeys';
+import { RamadanStorage } from '../helper/RamadanStorage';
+import { EidInfo, QadaSummary } from '../models/RamadanModels';
 import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
 import { DateHelper } from '../utils/DateUtils';
 import { PrayerModel } from '../prayer/PrayerModel';
@@ -57,13 +60,9 @@ import { Tasbih } from '../tasbih/TasbihModels';
 import { PageHeader } from '../components/PageHeader';
 import { DuaCard } from '../components/DuaCard';
 import { DUA_IFTAR, DUA_SUHOOR, DuaEntry } from '../data/Duas';
-import {
-  LaylatAlQadrNight, RamadanAshra, RamadanHelper, RamadanInfo
-} from '../helper/RamadanHelper';
+import { RamadanAshra, RamadanHelper, RamadanInfo } from '../helper/RamadanHelper';
 import { Breakpoints } from '../common/Breakpoints';
-import {
-  AdvancedCalcSettings, DEFAULT_ADVANCED_CALC
-} from '../models/AdvancedCalcModels';
+import { AdvancedCalcSettings, DEFAULT_ADVANCED_CALC } from '../models/AdvancedCalcModels';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 import { EventPerspectiveNotifier } from '../utils/EventPerspectiveNotifier';
 import { TypographyHelper } from '../helper/TypographyHelper';
@@ -145,6 +144,9 @@ export struct HomePage {
   @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_TYPE)
   @Watch('onHijriCalendarTypeChanged')
   hijriCalendarType: string = HijriCalendarType.UMM_AL_QURA;
+  @StorageLink(STORAGE_KEY_RAMADAN_STATE_VERSION)
+  @Watch('onRamadanStateVersionChanged')
+  ramadanStateVersion: number = 0;
 
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
@@ -190,6 +192,8 @@ export struct HomePage {
     lifetimeCount: 0
   };
   @State private next3Days: DayPrayerPreview[] = [];
+  // ---- Qada (Home banner) ----
+  @State private qadaSummary: QadaSummary | null = null;
 
   @State private monthProgress: MonthProgress = {
     year: 2026,
@@ -203,6 +207,7 @@ export struct HomePage {
   };
   @State upcomingEvents: UpcomingImportantDate[] = [];
   @State private ramadanInfo: RamadanInfo | null = null;
+  @State private eidInfo: EidInfo | null = null;
 
   @State private todayImsakTime: string = '--:--';
   @State private todayMaghribTime: string = '--:--';
@@ -339,6 +344,10 @@ export struct HomePage {
     return L.isRtlLang(this.currentLanguage);
   }
 
+  private async onRamadanStateVersionChanged(): Promise<void> {
+    await this.refreshQadaStatus();
+  }
+
   private isTablet(): boolean {
     return Breakpoints.isTablet(this.breakpoint);
   }
@@ -358,6 +367,16 @@ export struct HomePage {
 
   private onPrayerStateChanged(): void {
     this.refreshDashboard();
+  }
+
+  private async refreshQadaStatus(): Promise<void> {
+    try {
+      const store = await RamadanStorage.load();
+      this.qadaSummary = RamadanStorage.computeQadaSummary(store);
+    } catch (err) {
+      console.error('[HomePage] refreshQadaStatus failed: ' +
+        JSON.stringify(err));
+    }
   }
 
   private translatePrayerName(raw: string): string {
@@ -458,6 +477,7 @@ export struct HomePage {
     this.updateCountdown();
     this.startCountdownTimer();
     this.refreshLocationSilently();
+    await this.refreshQadaStatus();
   }
 
   private eventPerspectiveListener: () => void = (): void => {
@@ -490,6 +510,7 @@ export struct HomePage {
     this.startCountdownTimer();
     this.refreshLocationSilently();
     EventPerspectiveNotifier.subscribe(this.eventPerspectiveListener);
+    await this.refreshQadaStatus();
   }
 
   aboutToDisappear(): void {
@@ -681,6 +702,12 @@ export struct HomePage {
   }
 
   private refreshRamadan(): void {
+    // Eid detection runs regardless of whether ramadanInfo is set.
+    // During Eid, getRamadanInfo() returns the NEXT year's Ramadan
+    // (with daysUntilStart ≈ 355), so ramadanInfo may be null — but
+    // the Eid card must still render.
+    this.eidInfo = RamadanHelper.getEidInfo(this.hijriOffset);
+
     const info = RamadanHelper.getRamadanInfo(this.hijriOffset);
     if (!info) {
       this.ramadanInfo = null;
@@ -715,9 +742,37 @@ export struct HomePage {
     return null;
   }
 
-  private isCurrentAshra(a: RamadanAshra): boolean {
-    const cur = this.currentAshra();
-    return cur !== null && cur.number === a.number;
+  private isCurrentlyInRamadan(): boolean {
+    return this.ramadanInfo !== null && this.ramadanInfo.isRamadanNow;
+  }
+
+  private hasOutstandingQada(): boolean {
+    return this.qadaSummary !== null && this.qadaSummary.remaining > 0;
+  }
+
+  private shouldShowQadaCard(): boolean {
+    // Do not show during Eid — the Eid card owns that slot.
+    if (this.eidInfo !== null) {
+      return false;
+    }
+    // Do not show during active Ramadan — logging is gated.
+    if (this.isCurrentlyInRamadan()) {
+      return false;
+    }
+    // Do not show during the 60-day pre-Ramadan preview window.
+    // During this phase the Ramadan countdown card is the primary
+    // message ("prepare for Ramadan"); the Qada banner would
+    // compete with it. The user can still log make-ups via
+    // RamadanDetailsPage (reached from the Ramadan card's
+    // "Track Ramadan ›" link). The banner returns after Eid, on
+    // day 4 of Shawwal, when logging is valid again.
+    if (this.ramadanInfo !== null && !this.ramadanInfo.isRamadanNow) {
+      const daysUntil = this.ramadanInfo.daysUntilStart;
+      if (daysUntil >= 0 && daysUntil <= 60) {
+        return false;
+      }
+    }
+    return this.hasOutstandingQada();
   }
 
   private currentDuaEntry(): DuaEntry | null {
@@ -1163,7 +1218,9 @@ export struct HomePage {
                       this.CountdownCard()
                     }
                     this.LiveCountdownBanner()
-                    if (this.ramadanInfo !== null) {
+                    if (this.eidInfo !== null) {
+                      this.EidCard()
+                    } else if (this.ramadanInfo !== null) {
                       this.RamadanCard()
                     }
                   }
@@ -1174,6 +1231,10 @@ export struct HomePage {
                     this.Next3DaysPreview()
                     this.TodayProgressCard()
                     this.TasbihCard()
+                    // ---- Qada (persistent obligation — bottom of column) ----
+                    if (this.shouldShowQadaCard()) {
+                      this.QadaHomeBanner()
+                    }
                   }
                   .layoutWeight(1)
                   .alignItems(HorizontalAlign.Start)
@@ -1188,7 +1249,11 @@ export struct HomePage {
                     this.CountdownCard()
                   }
                   this.LiveCountdownBanner()
-                  this.RamadanCard()
+                  if (this.eidInfo !== null) {
+                    this.EidCard()
+                  } else if (this.ramadanInfo !== null) {
+                    this.RamadanCard()
+                  }
                   this.Next3DaysPreview()
                   // ---- Prayers ----
                   this.TodayProgressCard()
@@ -1196,6 +1261,11 @@ export struct HomePage {
 
                   // ---- Tasbih ----
                   this.TasbihCard()
+
+                  // ---- Qada (persistent obligation — bottom of page) ----
+                  if (this.shouldShowQadaCard()) {
+                    this.QadaHomeBanner()
+                  }
                 }
                 .width('100%')
                 .padding({ left: 16, right: 16 })
@@ -1224,6 +1294,107 @@ export struct HomePage {
     .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+  }
+
+  // ============================================================
+  // QADA HOME BANNER
+  // ============================================================
+  //
+  // A compact single-row reminder shown at the bottom of Home
+  // whenever the user has outstanding make-up fasts and is not
+  // in a phase where logging is gated (Ramadan / Eid / the
+  // 60-day pre-Ramadan preview).
+  //
+  // Layout:  🔄  15 fasts to make up    [Log]  ›
+  //
+  //   Tap anywhere except [Log] → navigate to RamadanDetailsPage
+  //   Tap [Log]               → open the Qada log sheet
+
+  @Builder
+  QadaHomeBanner() {
+    if (this.qadaSummary !== null && this.qadaSummary.remaining > 0) {
+      Row() {
+        Text('🔄')
+          .fontSize(16)
+          .margin({ right: 10 })
+
+        Column() {
+          Text(this.tr('section_qada'))
+            .fontSize(10)
+            .fontColor(this.colors.textMuted)
+            .fontWeight(FontWeight.Bold)
+            .letterSpacing(1.2)
+
+          Row() {
+            Text(this.qadaBannerText())
+              .fontSize(13)
+              .fontColor(this.colors.textWhite)
+              .fontWeight(FontWeight.Medium)
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+            Text('›')
+              .fontSize(14)
+              .fontColor(this.colors.accentGold)
+              .opacity(0.85)
+              .margin({ left: 4 })
+          }
+          .margin({ top: 2 })
+        }
+        .alignItems(HorizontalAlign.Start)
+        .layoutWeight(1)
+
+        // Compact "Manage ›" hint in place of the old [Log] button
+        Text('›')
+          .fontSize(18).fontColor(this.colors.accentGold)
+          .opacity(0.7)
+          .margin({ left: 8, right: 4 })
+      }
+      .width('100%')
+      .padding({
+        top: 10,
+        bottom: 10,
+        left: 16,
+        right: 12
+      })
+      .backgroundColor(this.colors.cardDark)
+      .borderRadius(Theme.radiusMedium)
+      .border({ width: 1, color: this.colors.borderSoft })
+      .shadow({
+        radius: 8,
+        color: this.colors.shadowCard,
+        offsetX: 0,
+        offsetY: 2
+      })
+      .margin({ bottom: 14 })
+      .onClick(() => {
+        router.pushUrl({ url: 'pages/RamadanDetailsPage' })
+          .catch((e: Error) =>
+          console.error('Navigation failed:', JSON.stringify(e)));
+      })
+    }
+  }
+
+  /**
+   * Compose the banner's main label:
+   *   n === 1           → "1 fast to make up"
+   *   n === 2, ar       → "صومان للقضاء"  (Arabic dual)
+   *   n >= 2, otherwise → "N fasts to make up"
+   */
+  private qadaBannerText(): string {
+    if (this.qadaSummary === null) {
+      return '';
+    }
+    const n = this.qadaSummary.remaining;
+    if (n <= 0) {
+      return '';
+    }
+    if (n === 2 && this.currentLanguage === 'ar') {
+      return this.tr('qada_banner_dual');
+    }
+    const word = n === 1
+      ? this.tr('qada_banner_singular')
+      : this.tr('qada_banner_plural');
+    return `${n} ${word}`;
   }
 
   @Builder
@@ -1598,10 +1769,23 @@ export struct HomePage {
             .fontColor(this.colors.textMuted)
             .fontWeight(FontWeight.Bold)
             .letterSpacing(1.5)
-            .layoutWeight(1)
-          Text(`${this.ramadanInfo!.hijriYear} ${this.tr('hijri_year_suffix')}`)
-            .fontSize(11).fontColor(this.colors.accentGold)
+          Text(`  ${this.ramadanInfo!.hijriYear} ${this.tr('hijri_year_suffix')}`)
+            .fontSize(12)
+            .fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
+          Blank()
+          Row() {
+            Text(this.tr('track_ramadan'))
+              .fontSize(11).fontColor(this.colors.accentGold)
+              .fontWeight(FontWeight.Medium)
+            Text('›').fontSize(14).fontColor(this.colors.accentGold)
+              .margin({ left: 2 })
+          }
+          .onClick(() => {
+            router.pushUrl({ url: 'pages/RamadanDetailsPage' })
+              .catch((e: Error) =>
+              console.error('Navigation failed:', JSON.stringify(e)));
+          })
         }
         .width('100%').padding({ bottom: 14 })
 
@@ -1612,200 +1796,8 @@ export struct HomePage {
         }
 
         Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 12 })
-        Row() {
-          Text('⏳').fontSize(12).margin({ right: 6 }).opacity(0.75)
-          Text(this.fastingWindowIsPreview
-            ? this.tr('ramadan_first_day_fast')
-            : this.tr('ramadan_today_fast'))
-            .fontSize(10).fontColor(this.colors.textMuted)
-            .fontStyle(FontStyle.Italic)
-            .layoutWeight(1)
-        }
-        .width('100%').padding({ bottom: 6 })
 
-        Row() {
-          Text('🌅').fontSize(14).margin({ right: 8 }).width(20).textAlign(TextAlign.Center)
-          Text(this.tr('ramadan_fast_start'))
-            .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
-          Text(this.dt(this.todayImsakTime))
-            .fontSize(16).fontColor(this.colors.accentGold).fontWeight(FontWeight.Bold)
-            .direction(Direction.Ltr)
-        }
-        .width('100%').padding({ top: 6, bottom: 6 }).alignItems(VerticalAlign.Center)
-
-        Row() {
-          Text('🌇').fontSize(14).margin({ right: 8 }).width(20).textAlign(TextAlign.Center)
-          Text(this.tr('ramadan_fast_end'))
-            .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
-          Text(this.dt(this.todayMaghribTime))
-            .fontSize(16).fontColor(this.colors.accentGoldLight).fontWeight(FontWeight.Bold)
-            .direction(Direction.Ltr)
-        }
-        .width('100%').padding({ top: 6, bottom: 6 }).alignItems(VerticalAlign.Center)
-
-        Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 12 })
-
-        Row() {
-          Text('📅').fontSize(14).margin({ right: 8 }).width(20).textAlign(TextAlign.Center)
-          Text(this.tr('ramadan_calendar_start'))
-            .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
-          Text(RamadanHelper.formatLong(
-            this.ramadanInfo!.fastingStart, this.currentLanguage))
-            .fontSize(12).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
-        }
-        .width('100%').padding({ top: 4, bottom: 4 }).alignItems(VerticalAlign.Center)
-
-        Row() {
-          Text('🌙').fontSize(14).margin({ right: 8 }).width(20).textAlign(TextAlign.Center)
-          Text(this.tr('ramadan_calendar_end'))
-            .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
-          Text(RamadanHelper.formatLong(
-            this.ramadanInfo!.fastingEnd, this.currentLanguage))
-            .fontSize(12).fontColor(this.colors.accentGoldLight).fontWeight(FontWeight.Medium)
-        }
-        .width('100%').padding({ top: 4, bottom: 4 }).alignItems(VerticalAlign.Center)
-
-        Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 12 })
-        Text(this.tr('ramadan_ashras'))
-          .fontSize(11)
-          .fontColor(this.colors.textMuted)
-          .fontWeight(FontWeight.Bold)
-          .letterSpacing(1.2)
-          .width('100%')
-          .padding({ bottom: 10 })
-
-        ForEach(this.ramadanInfo!.ashras, (a: RamadanAshra) => {
-          Row() {
-            Text(`${a.number}`)
-              .fontSize(12)
-              .fontWeight(FontWeight.Bold)
-              .fontColor(this.isCurrentAshra(a)
-                ? this.colors.textOnAccent : this.colors.accentGold)
-              .width(24)
-              .height(24)
-              .textAlign(TextAlign.Center)
-              .backgroundColor(this.isCurrentAshra(a)
-                ? this.colors.accentGold : this.colors.tintSoft)
-              .borderRadius(12)
-              .border({
-                width: 1,
-                color: this.isCurrentAshra(a)
-                  ? this.colors.accentGold : this.colors.borderSoft
-              })
-
-            Column() {
-              Row() {
-                Text(this.tr(a.nameKey))
-                  .fontSize(13).fontColor(this.colors.textWhite)
-                  .fontWeight(this.isCurrentAshra(a)
-                    ? FontWeight.Bold : FontWeight.Medium)
-                Text('  ·  ').fontSize(11).fontColor(this.colors.textMuted)
-                Text(this.tr(a.significanceKey))
-                  .fontSize(11)
-                  .fontColor(this.colors.accentGold)
-                  .maxLines(1)
-                  .textOverflow({ overflow: TextOverflow.Ellipsis })
-                  .layoutWeight(1)
-              }
-              .width('100%')
-
-              Text(`${RamadanHelper.formatShort(a.startDate, this.currentLanguage)} – ${RamadanHelper.formatShort(
-                a.endDate, this.currentLanguage)}`)
-                .fontSize(10).fontColor(this.colors.textMuted)
-                .margin({ top: 2 }).width('100%')
-            }
-            .layoutWeight(1).margin({ left: 10 })
-            .alignItems(HorizontalAlign.Start)
-          }
-          .width('100%')
-          .padding({
-            top: 8,
-            bottom: 8,
-            left: 8,
-            right: 8
-          })
-          .backgroundColor(this.isCurrentAshra(a)
-            ? this.colors.tintSubtle : 'transparent')
-          .borderRadius(10)
-          .margin({ bottom: 4 })
-          .alignItems(VerticalAlign.Center)
-        }, (a: RamadanAshra) =>
-        `ashra-${a.number}-${a.startHijriDay}-${a.endHijriDay}`)
-
-        Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 12 })
-        Row() {
-          Text('✨').fontSize(13).margin({ right: 6 })
-          Text(this.tr('ramadan_laylat_al_qadr'))
-            .fontSize(11).fontColor(this.colors.accentGold)
-            .fontWeight(FontWeight.Bold).letterSpacing(1.2)
-        }
-        .width('100%').padding({ bottom: 8 })
-
-        Text(this.tr('ramadan_laylat_al_qadr_desc'))
-          .fontSize(11)
-          .fontColor(this.colors.textMuted)
-          .lineHeight(16)
-          .width('100%')
-          .padding({ bottom: 12 })
-
-        Row({ space: 6 }) {
-          ForEach(this.ramadanInfo!.laylatAlQadrNights,
-            (n: LaylatAlQadrNight) => {
-              Column() {
-                Text(`${n.hijriDay}`)
-                  .fontSize(14)
-                  .fontWeight(n.isToday ? FontWeight.Bold : FontWeight.Medium)
-                  .fontColor(n.isToday ? this.colors.textOnAccent
-                    : n.isPast ? this.colors.textMuted : this.colors.accentGold)
-                if (n.isToday) {
-                  Text(this.tr('ramadan_today'))
-                    .fontSize(8).fontColor(this.colors.textOnAccent)
-                    .margin({ top: 1 })
-                } else {
-                  Text(RamadanHelper.formatShort(
-                    n.gregorianDate, this.currentLanguage))
-                    .fontSize(8).fontColor(this.colors.textMuted)
-                    .margin({ top: 1 })
-                }
-              }
-              .layoutWeight(1)
-              .padding({ top: 8, bottom: 8 })
-              .backgroundColor(n.isToday ? this.colors.accentGold
-                : n.isPast ? 'transparent' : this.colors.tintSubtle)
-              .borderRadius(10)
-              .border({
-                width: n.isToday ? 0 : 1,
-                color: n.isPast ? this.colors.borderSoft : this.colors.borderMedium
-              })
-              .opacity(n.isPast && !n.isToday ? 0.55 : 1.0)
-              .alignItems(HorizontalAlign.Center)
-            }, (n: LaylatAlQadrNight) =>
-            `laq-${n.hijriDay}-${n.isPast ? 'p' : n.isToday ? 't' : 'f'}`)
-        }
-        .width('100%').justifyContent(FlexAlign.SpaceBetween)
-
-        if (this.ramadanInfo!.jummahTulWidah !== null) {
-          Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 12 })
-          Row() {
-            Text('🕌').fontSize(13).margin({ right: 6 })
-            Text(this.tr('ramadan_jummah_tul_widah'))
-              .fontSize(11)
-              .fontColor(this.colors.accentGold)
-              .fontWeight(FontWeight.Bold)
-              .letterSpacing(1.2)
-              .layoutWeight(1)
-            Text(RamadanHelper.formatShort(
-              this.ramadanInfo!.jummahTulWidah!, this.currentLanguage))
-              .fontSize(11).fontColor(this.colors.accentGoldLight)
-              .fontWeight(FontWeight.Medium)
-          }
-          .width('100%').padding({ bottom: 4 })
-          Text(this.tr('ramadan_jummah_tul_widah_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted)
-            .lineHeight(16).width('100%')
-        }
-
-        Divider().color(this.colors.borderSoft).margin({ top: 14, bottom: 12 })
+        // ---- Export Ramadan timetable button (existing) ----
         Row() {
           if (this.isExportingRamadan) {
             LoadingProgress().width(18).height(18).color(this.colors.accentGold).margin({ right: 8 })
@@ -2399,5 +2391,112 @@ export struct HomePage {
       offsetY: 4
     })
     .margin({ bottom: 14 })
+  }
+
+  // ============================================================
+  // EID AL-FITR CARD
+  // ============================================================
+
+  @Builder
+  EidCard() {
+    if (this.eidInfo !== null) {
+      Column() {
+        // ---- Header: 🌙 EID AL-FITR · 1447 AH · View Details › ----
+        Row() {
+          Image($r('app.media.ic_ramadan_moon'))
+            .width(16).height(16)
+            .fillColor(this.colors.accentGold)
+            .margin({ right: 8 })
+          Text(this.tr('eid_card_title'))
+            .fontSize(12)
+            .fontColor(this.colors.textMuted)
+            .fontWeight(FontWeight.Bold)
+            .letterSpacing(1.5)
+          Text(`  ${this.eidInfo!.hijriYear} ${this.tr('hijri_year_suffix')}`)
+            .fontSize(12)
+            .fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Medium)
+          Blank()
+          Row() {
+            Text(this.tr('eid_card_link'))
+              .fontSize(11).fontColor(this.colors.accentGold)
+              .fontWeight(FontWeight.Medium)
+            Text('›').fontSize(14).fontColor(this.colors.accentGold)
+              .margin({ left: 2 })
+          }
+          .onClick(() => {
+            router.pushUrl({ url: 'pages/RamadanDetailsPage' })
+              .catch((e: Error) =>
+              console.error('Navigation failed:', JSON.stringify(e)));
+          })
+        }
+        .width('100%').padding({ bottom: 16 })
+
+        // ---- Greeting ----
+        Text(this.tr('eid_greeting'))
+          .fontSize(28)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.colors.textWhite)
+          .width('100%')
+          .margin({ bottom: 4 })
+        Text(this.tr('eid_greeting_subtitle'))
+          .fontSize(13)
+          .fontColor(this.colors.accentGold)
+          .width('100%')
+          .lineHeight(18)
+          .margin({ bottom: 18 })
+
+        Divider().color(this.colors.borderSoft).margin({ bottom: 14 })
+
+        // ---- Zakat al-Fitr ----
+        Text(this.tr('eid_zakat_fitr'))
+          .fontSize(11)
+          .fontColor(this.colors.textMuted)
+          .fontWeight(FontWeight.Bold)
+          .letterSpacing(1.2)
+          .width('100%')
+          .padding({ bottom: 8 })
+        Text(this.tr('eid_zakat_fitr_desc'))
+          .fontSize(12)
+          .fontColor(this.colors.textWhite)
+          .lineHeight(18)
+          .width('100%')
+          .padding({ bottom: 16 })
+
+        Divider().color(this.colors.borderSoft).margin({ bottom: 16 })
+
+        // ---- Takbeer ----
+        Text(this.tr('eid_takbeer_arabic'))
+          .fontSize(20)
+          .fontFamily(TypographyHelper.getFont('ar', false))
+          .fontColor(this.colors.accentGold)
+          .textAlign(TextAlign.Center)
+          .lineHeight(34)
+          .width('100%')
+          .padding({ bottom: 10 })
+
+        if (this.currentLanguage !== 'ar') {
+          Text(this.tr('eid_takbeer_translation'))
+            .fontSize(11)
+            .fontColor(this.colors.textMuted)
+            .fontStyle(FontStyle.Italic)
+            .textAlign(TextAlign.Center)
+            .lineHeight(16)
+            .width('100%')
+        }
+      }
+      .width('100%')
+      .padding(18)
+      .backgroundColor(this.colors.cardDark)
+      .borderRadius(Theme.radiusLarge)
+      .border({ width: 2, color: this.colors.accentGold })
+      .shadow({
+        radius: 16,
+        color: this.colors.shadowFloating,
+        offsetX: 0,
+        offsetY: 6
+      })
+      .margin({ bottom: 14 })
+    }
   }
 }

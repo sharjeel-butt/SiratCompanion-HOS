@@ -156,4 +156,9 @@ export const STORAGE_KEY_SHOW_LAST_THIRD = 'show_last_third';
 export const STORAGE_KEY_TASBIH_STATE_VERSION = 'tasbih_state_version';
 
 export const STORAGE_KEY_HIJRI_CALENDAR_VERSION = 'hijri_calendar_version';
+
 export const STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW = 'auto_show_ramadan_view';
+
+export const STORAGE_KEY_RAMADAN_LOG = 'ramadan_log';
+
+export const STORAGE_KEY_RAMADAN_STATE_VERSION = 'ramadan_state_version';

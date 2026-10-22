@@ -2151,6 +2151,278 @@
     {
       "name": "dhikr_count_dual",
       "value": ""
+    },
+    {
+      "name": "title_ramadan_details",
+      "value": "斋月追踪"
+    },
+    {
+      "name": "track_ramadan",
+      "value": "追踪斋月"
+    },
+    {
+      "name": "section_fasting",
+      "value": "封斋"
+    },
+    {
+      "name": "fasting_status_fasted",
+      "value": "已封斋"
+    },
+    {
+      "name": "fasting_status_missed",
+      "value": "未封斋"
+    },
+    {
+      "name": "fasting_status_unmarked",
+      "value": "未标记"
+    },
+    {
+      "name": "fasting_summary_fasted",
+      "value": "封斋"
+    },
+    {
+      "name": "fasting_summary_missed",
+      "value": "未封"
+    },
+    {
+      "name": "fasting_summary_unmarked",
+      "value": "未标记"
+    },
+    {
+      "name": "fasting_mark_title",
+      "value": "标记封斋"
+    },
+    {
+      "name": "fasting_day_label",
+      "value": "第"
+    },
+    {
+      "name": "fasting_clear",
+      "value": "清除标记"
+    },
+    {
+      "name": "fasting_reason_title",
+      "value": "未封斋原因"
+    },
+    {
+      "name": "fasting_reason_travel",
+      "value": "旅行"
+    },
+    {
+      "name": "fasting_reason_illness",
+      "value": "疾病"
+    },
+    {
+      "name": "fasting_reason_menstruation",
+      "value": "月经"
+    },
+    {
+      "name": "fasting_reason_pregnancy_nursing",
+      "value": "怀孕 / 哺乳"
+    },
+    {
+      "name": "fasting_reason_forgetfulness",
+      "value": "遗忘"
+    },
+    {
+      "name": "fasting_reason_other",
+      "value": "其他"
+    },
+    {
+      "name": "fasting_reason_custom_label",
+      "value": "请说明"
+    },
+    {
+      "name": "fasting_reason_custom_placeholder",
+      "value": "您的原因"
+    },
+    {
+      "name": "ramadan_not_active",
+      "value": "请在斋月期间打开此页面以追踪您的斋戒。"
+    },
+    {
+      "name": "section_qada",
+      "value": "补斋"
+    },
+    {
+      "name": "qada_remaining",
+      "value": "剩余"
+    },
+    {
+      "name": "qada_total_missed",
+      "value": "累计未封"
+    },
+    {
+      "name": "qada_total_made_up",
+      "value": "累计已补"
+    },
+    {
+      "name": "qada_per_year",
+      "value": "按年份"
+    },
+    {
+      "name": "qada_log_button",
+      "value": "记录补斋"
+    },
+    {
+      "name": "qada_log_title",
+      "value": "记录补斋"
+    },
+    {
+      "name": "qada_log_desc",
+      "value": "您补了多少天的斋？"
+    },
+    {
+      "name": "qada_all_done",
+      "value": "全部补齐，感赞安拉。"
+    },
+    {
+      "name": "qada_no_data",
+      "value": "暂无未封斋记录。"
+    },
+    {
+      "name": "qada_year_label",
+      "value": "年份"
+    },
+    {
+      "name": "qada_count_label",
+      "value": "数量"
+    },
+    {
+      "name": "qada_count_suffix",
+      "value": "天"
+    },
+    {
+      "name": "qada_row_missed_suffix",
+      "value": "未封"
+    },
+    {
+      "name": "qada_row_made_up_suffix",
+      "value": "已补"
+    },
+    {
+      "name": "section_taraweeh",
+      "value": "泰拉威拜"
+    },
+    {
+      "name": "taraweeh_empty",
+      "value": "斋月开始后即可记录。"
+    },
+    {
+      "name": "taraweeh_nights_suffix",
+      "value": "夜"
+    },
+    {
+      "name": "qada_not_during_ramadan",
+      "value": "补斋记录可在开斋节后开始。"
+    },
+    {
+      "name": "qada_total_fasted",
+      "value": "累计已封"
+    },
+    {
+      "name": "qada_total_unmarked",
+      "value": "累计未标记"
+    },
+    {
+      "name": "qada_row_fasted_suffix",
+      "value": "封斋"
+    },
+    {
+      "name": "qada_row_unmarked_suffix",
+      "value": "未标记"
+    },
+    {
+      "name": "section_duas",
+      "value": "祈祷词"
+    },
+    {
+      "name": "eid_card_title",
+      "value": "开斋节"
+    },
+    {
+      "name": "eid_greeting",
+      "value": "开斋节快乐"
+    },
+    {
+      "name": "eid_greeting_subtitle",
+      "value": "愿安拉接受您的斋戒与善行"
+    },
+    {
+      "name": "eid_zakat_fitr",
+      "value": "开斋捐"
+    },
+    {
+      "name": "eid_zakat_fitr_desc",
+      "value": "每位家庭成员一沙阿（约 2.5 公斤）本地主食，须在开斋节会礼前缴纳。"
+    },
+    {
+      "name": "eid_takbeer_arabic",
+      "value": "اللّٰهُ أَكْبَرُ، اللّٰهُ أَكْبَرُ، لَا إِلٰهَ إِلَّا اللّٰهُ، وَاللّٰهُ أَكْبَرُ، اللّٰهُ أَكْبَرُ، وَلِلّٰهِ الْحَمْدُ"
+    },
+    {
+      "name": "eid_takbeer_translation",
+      "value": "安拉至大，安拉至大，万物非主唯有安拉，安拉至大，安拉至大，一切赞颂全归安拉。"
+    },
+    {
+      "name": "ramadan_about_this_month",
+      "value": "关于本月斋戒"
+    },
+    {
+      "name": "eid_card_link",
+      "value": "回顾斋月"
+    },
+    {
+      "name": "qada_card_link",
+      "value": "管理补斋"
+    },
+    {
+      "name": "qada_banner_log_action",
+      "value": "记录"
+    },
+    {
+      "name": "qada_banner_singular",
+      "value": "天补斋"
+    },
+    {
+      "name": "qada_banner_plural",
+      "value": "天补斋"
+    },
+    {
+      "name": "qada_banner_dual",
+      "value": "两天补斋"
+    },
+    {
+      "name": "qada_year_sheet_title_prefix",
+      "value": "补斋记录"
+    },
+    {
+      "name": "qada_of",
+      "value": "/"
+    },
+    {
+      "name": "qada_made_up_of_total",
+      "value": "已补"
+    },
+    {
+      "name": "qada_day_mark_made_up",
+      "value": "标记已补"
+    },
+    {
+      "name": "qada_day_made_up",
+      "value": "已补"
+    },
+    {
+      "name": "qada_year_sheet_empty",
+      "value": "本年未封斋已全部补齐，感赞安拉。"
+    },
+    {
+      "name": "qada_tap_year_hint",
+      "value": "点击年份以查看和管理补斋记录。"
+    },
+    {
+      "name": "close",
+      "value": "关闭"
     }
   ]
 }

@@ -133,7 +133,18 @@ const SETTINGS_SPECS: PrefSpec[] = [
 const TASBIH_SPECS: PrefSpec[] = [
   { key: 'tasbihs_data', type: TYPE_STRING },
   { key: 'tasbih_active_id', type: TYPE_STRING },
-  { key: 'tasbih_active_dhikr', type: TYPE_NUMBER }
+  { key: 'tasbih_active_dhikr', type: TYPE_NUMBER },
+  // ---- Prayer Progress (CRITICAL) ----
+  // This stores the JSON map of all past prayer completions.
+  // Without this, users lose their streaks and heatmaps on migration.
+  { key: 'prayer_state_map', type: TYPE_STRING },
+
+  // ---- Ramadan Tracker ----
+  // JSON-serialized RamadanLogStore. Covers the fasting tracker,
+  // taraweeh toggles, and per-day qada made-up flags for every
+  // year. Schema migrations are handled inside RamadanStorage.doLoad()
+  // — this spec only cares about the JSON string round-trip.
+  { key: 'ramadan_log', type: TYPE_STRING }
 ];
 
 /**

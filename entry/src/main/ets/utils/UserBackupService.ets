@@ -9,6 +9,7 @@ import { PreferencesHelper } from '../helper/PreferencesHelper';
 import { PrayerManager } from '../prayer/PrayerManager';
 import { TasbihStorage } from '../tasbih/TasbihStorage';
 import { TasbihManager } from '../tasbih/TasbihManager';
+import { RamadanStorage } from '../helper/RamadanStorage';
 import { AppLogger } from '../helper/AppLogger';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
@@ -23,6 +24,7 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
   STORAGE_KEY_PRAYER_STATE_VERSION,
+  STORAGE_KEY_RAMADAN_STATE_VERSION,
   STORAGE_KEY_SHOW_FIRST_THIRD_LIST,
   STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH,
   STORAGE_KEY_SHOW_IMSAK_LIST,
@@ -189,7 +191,11 @@ const SETTINGS_SPECS: PrefSpec[] = [
   // Stored as a JSON string: { "<date>": "<json-check-state>" }.
   // Kept as-is in the backup so it round-trips through both this
   // service and EntryBackupAbility without type gymnastics.
-  { key: 'prayer_state_map', type: 'string' }
+  { key: 'prayer_state_map', type: 'string' },
+  // ---- Ramadan Tracker ----
+  // JSON-serialized RamadanLogStore covering fasting, taraweeh,
+  // and qada data for every year the user has tracked.
+  { key: 'ramadan_log', type: 'string' }
 ];
 
 const TASBIH_SPECS: PrefSpec[] = [
@@ -583,10 +589,20 @@ export class UserBackupService {
     await TasbihStorage.init(context);
     await TasbihStorage.load(TasbihManager.createDefaults());
 
-    // 2. Re-seed AppStorage from the restored preferences.
+    // 2. RamadanStorage.doLoad() runs schema migrations inline if
+    //    the restored backup was written by an older build (e.g.
+    //    pre-v3.5.0 backups that carry a `qadaMadeUp` counter
+    //    instead of per-day `madeUp` flags). Loading here
+    //    guarantees the migration persists before the version
+    //    bump wakes any UI — no page ever sees the pre-migration
+    //    schema. The returned store is discarded: pages read it
+    //    fresh via RamadanStorage.load() on the version bump.
+    await RamadanStorage.load();
+
+    // 3. Re-seed AppStorage from the restored preferences.
     await UserBackupService.seedAppStorageFromPrefs();
 
-    // 3. Bump every version counter — this triggers @Watch on every
+    // 4. Bump every version counter — this triggers @Watch on every
     //    subscribed page, forcing a fresh load via SettingsHelper.
     UserBackupService.bumpVersion(STORAGE_KEY_PRAYER_STATE_VERSION);
     UserBackupService.bumpVersion(STORAGE_KEY_CALC_SETTINGS_VERSION);
@@ -594,6 +610,7 @@ export class UserBackupService {
     UserBackupService.bumpVersion(STORAGE_KEY_HIJRI_CALENDAR_VERSION);
     UserBackupService.bumpVersion(STORAGE_KEY_LOCATION_VERSION);
     UserBackupService.bumpVersion(STORAGE_KEY_TASBIH_STATE_VERSION);
+    UserBackupService.bumpVersion(STORAGE_KEY_RAMADAN_STATE_VERSION);
     UserBackupService.bumpVersion(STORAGE_KEY_APP_FOREGROUND_TICK);
   }
 
