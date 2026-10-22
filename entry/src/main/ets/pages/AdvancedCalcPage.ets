@@ -548,61 +548,67 @@ struct AdvancedCalcPage {
 
       Divider().color(this.colors.borderSoft).width('90%')
 
-      Column() {
-        ForEach(items, (item: PickerItem) => {
-          Row() {
+      Scroll() {
+        Column() {
+          ForEach(items, (item: PickerItem) => {
             Row() {
-              if (item.selected) {
-                Row().width(10).height(10).borderRadius(5)
-                  .backgroundColor(this.colors.accentGold)
+              Row() {
+                if (item.selected) {
+                  Row().width(10).height(10).borderRadius(5)
+                    .backgroundColor(this.colors.accentGold)
+                }
               }
-            }
-            .width(22)
-            .height(22)
-            .borderRadius(11)
-            .border({
-              width: item.selected ? 2 : 1.5,
-              color: item.selected
-                ? this.colors.accentGold : this.colors.borderStrong
-            })
-            .justifyContent(FlexAlign.Center)
-            .alignItems(VerticalAlign.Center)
+              .width(22)
+              .height(22)
+              .borderRadius(11)
+              .border({
+                width: item.selected ? 2 : 1.5,
+                color: item.selected
+                  ? this.colors.accentGold : this.colors.borderStrong
+              })
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Center)
 
-            Text(item.label)
-              .fontSize(15)
-              .fontColor(item.selected
-                ? this.colors.accentGold : this.colors.textWhite)
-              .fontWeight(item.selected
-                ? FontWeight.Bold : FontWeight.Normal)
-              .layoutWeight(1)
-              .maxLines(2)
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-              .margin({ left: 14 })
-          }
-          .width('100%')
-          .padding({
-            top: 16,
-            bottom: 16,
-            left: 20,
-            right: 20
-          })
-          .backgroundColor(item.selected
-            ? this.colors.tintSoft : 'transparent')
-          .borderRadius(12)
-          .margin({ bottom: 4 })
-          .onClick(() => {
-            onSelect(item.id);
-          })
-        }, (item: PickerItem) =>
-        `adv-${this.activeSheet}-${item.id}-${item.selected ? 's' : 'u'}`)
+              Text(item.label)
+                .fontSize(15)
+                .fontColor(item.selected
+                  ? this.colors.accentGold : this.colors.textWhite)
+                .fontWeight(item.selected
+                  ? FontWeight.Bold : FontWeight.Normal)
+                .layoutWeight(1)
+                .maxLines(2)
+                .textOverflow({ overflow: TextOverflow.Ellipsis })
+                .margin({ left: 14 })
+            }
+            .width('100%')
+            .padding({
+              top: 16,
+              bottom: 16,
+              left: 20,
+              right: 20
+            })
+            .backgroundColor(item.selected
+              ? this.colors.tintSoft : 'transparent')
+            .borderRadius(12)
+            .margin({ bottom: 4 })
+            .onClick(() => {
+              onSelect(item.id);
+            })
+          }, (item: PickerItem) =>
+          `adv-${this.activeSheet}-${item.id}-${item.selected ? 's' : 'u'}`)
+        }
+        .width('100%')
+        .padding({
+          left: 8,
+          right: 8,
+          top: 12,
+          bottom: 12
+        })
       }
+      .layoutWeight(1)
       .width('100%')
-      .padding({
-        left: 8,
-        right: 8,
-        top: 12,
-        bottom: 12
-      })
+      .scrollBar(BarState.Auto)
+      .edgeEffect(EdgeEffect.Spring)
 
       Button(this.tr('cancel'))
         .width('90%')
@@ -627,6 +633,7 @@ struct AdvancedCalcPage {
       offsetY: -6
     })
     .border({ width: { top: 1 }, color: this.colors.borderSoft })
+    .constraintSize({ maxHeight: '85%' })
     .position({ bottom: 0 })
   }
 

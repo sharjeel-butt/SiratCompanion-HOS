@@ -2423,6 +2423,14 @@
     {
       "name": "close",
       "value": "关闭"
+    },
+    {
+      "name": "lang_system",
+      "value": "跟随系统"
+    },
+    {
+      "name": "lang_system_desc",
+      "value": "自动"
     }
   ]
 }

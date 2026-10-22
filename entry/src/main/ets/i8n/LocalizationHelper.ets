@@ -1,13 +1,14 @@
 // entry/src/main/ets/helper/LocalizationHelper.ets
 
-import { resourceManager } from '@kit.LocalizationKit';
+import { i18n, resourceManager } from '@kit.LocalizationKit';
 import { common } from '@kit.AbilityKit';
 import { STORAGE_KEY_LANGUAGE } from '../common/StorageKeys';
 
 export enum AppLanguage {
   ENGLISH = 'en',
   CHINESE = 'zh',
-  ARABIC = 'ar'
+  ARABIC = 'ar',
+  SYSTEM = 'system'
 }
 
 /**
@@ -28,6 +29,13 @@ export enum AppLanguage {
  *     rather than silently blank.
  */
 export class L {
+  /**
+   * Fallback when the device locale does not match any of our
+   * supported languages. English is the safe default — it is the
+   * base resource set and every key is guaranteed to be defined.
+   */
+  static readonly DEFAULT_LANGUAGE = AppLanguage.ENGLISH;
+
   private static ctx: common.UIAbilityContext | null = null;
   private static readonly overrideCache: Map<string, resourceManager.ResourceManager>
     = new Map<string, resourceManager.ResourceManager>();
@@ -40,6 +48,57 @@ export class L {
   static init(context: common.UIAbilityContext): void {
     L.ctx = context;
     L.overrideCache.clear();
+  }
+
+  /**
+   * Resolve a raw override value to a concrete language code.
+   *
+   * - 'en' | 'zh' | 'ar'  → returned as-is
+   * - 'system'            → matched against the device locale,
+   *                          falling back to English
+   * - anything else       → treated as 'system'
+   *
+   * Used by SettingsHelper.saveLanguage() and the migration path
+   * in EntryAbility. Safe to call from any context.
+   */
+  static resolveOverride(override: string): string {
+    if (override === AppLanguage.ENGLISH
+      || override === AppLanguage.CHINESE
+      || override === AppLanguage.ARABIC) {
+      return override;
+    }
+    return L.matchSystemLocale();
+  }
+
+  /**
+   * Return the language code matching the device's current locale,
+   * or English when no match exists.
+   *
+   * Reads the primary subtag of the system locale (e.g. "en-US"
+   * → "en", "zh-Hans-CN" → "zh") and compares against our
+   * supported set. Any failure (thrown exception, empty result)
+   * falls through to English.
+   */
+  static matchSystemLocale(): string {
+    try {
+      const sysLocale = i18n.System.getSystemLocale();
+      if (sysLocale === undefined || sysLocale.length === 0) {
+        return L.DEFAULT_LANGUAGE;
+      }
+      const sysLang = sysLocale.split('-')[0].toLowerCase();
+      if (sysLang === 'zh') {
+        return AppLanguage.CHINESE;
+      }
+      if (sysLang === 'ar') {
+        return AppLanguage.ARABIC;
+      }
+      if (sysLang === 'en') {
+        return AppLanguage.ENGLISH;
+      }
+      return L.DEFAULT_LANGUAGE;
+    } catch (err) {
+      return L.DEFAULT_LANGUAGE;
+    }
   }
 
   // ============================================================
@@ -72,8 +131,11 @@ export class L {
   // ============================================================
 
   static get(key: string, lang?: string): string {
-    const language = (lang !== undefined && lang.length > 0)
+    let language = (lang !== undefined && lang.length > 0)
       ? lang : L.current();
+    if (language === AppLanguage.SYSTEM) {
+      language = L.matchSystemLocale();
+    }
     const mgr = L.mgrFor(language);
     if (mgr === null) {
       return key;
@@ -95,8 +157,11 @@ export class L {
   }
 
   static getArray(key: string, lang?: string): string[] {
-    const language = (lang !== undefined && lang.length > 0)
+    let language = (lang !== undefined && lang.length > 0)
       ? lang : L.current();
+    if (language === AppLanguage.SYSTEM) {
+      language = L.matchSystemLocale();
+    }
     const mgr = L.mgrFor(language);
     if (mgr === null) {
       return [];
@@ -133,10 +198,6 @@ export class L {
       return null;
     }
 
-    if (lang === AppLanguage.ENGLISH) {
-      return L.ctx.resourceManager;
-    }
-
     const cached = L.overrideCache.get(lang);
     if (cached !== undefined) {
       return cached;
@@ -147,6 +208,13 @@ export class L {
       // one from scratch. This preserves every qualifier the
       // system set (density, color mode, mcc/mnc, etc.) and only
       // changes the locale, which is exactly what we need.
+      //
+      // IMPORTANT: this path is taken for EVERY language including
+      // English. The previous implementation short-circuited
+      // English to L.ctx.resourceManager, which respects the
+      // device locale — so on a Chinese device, picking English
+      // rendered Chinese text. All languages now go through the
+      // override path so the picked language always wins.
       const cfg: resourceManager.Configuration =
         L.ctx.resourceManager.getOverrideConfiguration();
       cfg.locale = lang;
@@ -156,7 +224,10 @@ export class L {
       return mgr;
     } catch (err) {
       console.warn(`[L] override manager for "${lang}" failed: ${JSON.stringify(err)}`);
-      return null;
+      // Fall back to the base resource manager. This may return
+      // device-locale text on non-English devices, but it
+      // prevents a total failure.
+      return L.ctx.resourceManager;
     }
   }
 }

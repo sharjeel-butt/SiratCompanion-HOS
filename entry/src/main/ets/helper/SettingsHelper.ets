@@ -17,6 +17,7 @@ import {
   STORAGE_KEY_HIJRI_CALENDAR_VERSION,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_LANGUAGE_OVERRIDE,
   STORAGE_KEY_MIDNIGHT_METHOD,
   STORAGE_KEY_NOTIF_ASR,
   STORAGE_KEY_NOTIF_BEFORE_MINUTES,
@@ -49,7 +50,7 @@ import {
   STORAGE_KEY_WIZARD_COMPLETED
 } from '../common/StorageKeys';
 import { ThemeMode, ThemePreset } from '../common/Theme';
-import { L } from '../i8n/LocalizationHelper';
+import { AppLanguage, L } from '../i8n/LocalizationHelper';
 import { SoundOptions } from '../common/SoundOptions';
 import { TasbihThemes } from '../tasbih/TasbihThemes';
 import {
@@ -819,12 +820,15 @@ export class SettingsHelper {
   // ============================================================
 
   static buildThemePickerItems(current: string): PickerItem[] {
-    // Only Light and System are exposed in the UI.
-    return [ThemeMode.LIGHT, ThemeMode.SYSTEM]
+    // v3.5.1: dark mode follows the system only. Any other value is
+    // coerced to System on load — this picker will therefore only
+    // ever contain one entry. Kept for defensive use by any caller
+    // that still constructs the list.
+    return [ThemeMode.SYSTEM]
       .map((m): PickerItem => ({
         id: m,
         label: SettingsHelper.getThemeModeLabel(m),
-        selected: m === current
+        selected: true
       }));
   }
 
@@ -859,13 +863,44 @@ export class SettingsHelper {
     return loaded;
   }
 
+  /**
+   * Return the user's raw language pick ('system' | 'en' | 'zh' | 'ar').
+   * Distinct from getLanguage(), which returns the resolved concrete
+   * language. Used by the picker UI to show what the user selected
+   * — 'system' displays as "Use System Settings".
+   */
+  static async getLanguageOverride(): Promise<string> {
+    const cached = AppStorage.get<string>(STORAGE_KEY_LANGUAGE_OVERRIDE);
+    if (cached !== undefined && cached.length > 0) {
+      return cached;
+    }
+    const loaded = await PreferencesHelper.getString(
+      STORAGE_KEY_LANGUAGE_OVERRIDE, AppLanguage.SYSTEM
+    );
+    AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE_OVERRIDE, loaded);
+    return loaded;
+  }
+
   // ============================================================
   // LANGUAGE
   // ============================================================
 
+  /**
+   * Persist the user's language pick. Callers pass the raw override
+   * value ('system' | 'en' | 'zh' | 'ar') — this method stores it
+   * under STORAGE_KEY_LANGUAGE_OVERRIDE and writes the resolved
+   * concrete language to STORAGE_KEY_LANGUAGE for all pages that
+   * bind to it via @StorageLink.
+   */
   static saveLanguage(lang: string): void {
-    AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, lang);
-    PreferencesHelper.setString(STORAGE_KEY_LANGUAGE, lang);
+    // Raw pick
+    AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE_OVERRIDE, lang);
+    PreferencesHelper.setString(STORAGE_KEY_LANGUAGE_OVERRIDE, lang);
+
+    // Resolved value used by every translation lookup
+    const resolved = L.resolveOverride(lang);
+    AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, resolved);
+    PreferencesHelper.setString(STORAGE_KEY_LANGUAGE, resolved);
   }
 
   static async isWizardCompleted(): Promise<boolean> {

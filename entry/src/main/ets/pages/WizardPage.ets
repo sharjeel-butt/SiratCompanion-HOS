@@ -8,6 +8,7 @@ import {
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_LANGUAGE_OVERRIDE,
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
 import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator';
@@ -44,6 +45,9 @@ struct WizardPage {
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = AppLanguage.ENGLISH;
+  @StorageLink(STORAGE_KEY_LANGUAGE_OVERRIDE)
+  @Watch('onLanguageOverrideChanged')
+  languageOverride: string = AppLanguage.SYSTEM;
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemeChanged')
   appTheme: string = ThemePreset.CURRENT;
@@ -52,6 +56,7 @@ struct WizardPage {
   appForegroundTick: number = 0;
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
+
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State step: number = 0;
   @State selectedLanguage: string = AppLanguage.ENGLISH;
@@ -76,7 +81,7 @@ struct WizardPage {
 
   aboutToAppear(): void {
     this.currentLanguage = this.appLanguage;
-    this.selectedLanguage = this.appLanguage;
+    this.selectedLanguage = this.languageOverride;
     this.selectedTheme = this.appTheme;
     this.colors = PageTheme.compute(this.themeMode);
     this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
@@ -106,6 +111,10 @@ struct WizardPage {
       .opacity(0)
     PageTransitionExit({ type: RouteType.Pop, duration: 300, curve: Curve.Friction })
       .opacity(0)
+  }
+
+  private onLanguageOverrideChanged(): void {
+    // No-op — the picker reads languageOverride directly.
   }
 
   build() {
@@ -1153,6 +1162,11 @@ struct WizardPage {
   }
 
   private getLanguageOptions(): LanguageOption[] {
+    const system: LanguageOption = {
+      id: AppLanguage.SYSTEM,
+      nativeName: L.get('lang_system', this.currentLanguage),
+      englishName: L.get('lang_system_desc', this.currentLanguage)
+    };
     const en: LanguageOption = {
       id: AppLanguage.ENGLISH, nativeName: 'English', englishName: 'English'
     };
@@ -1162,14 +1176,16 @@ struct WizardPage {
     const ar: LanguageOption = {
       id: AppLanguage.ARABIC, nativeName: 'العربية', englishName: 'Arabic'
     };
-    return [en, zh, ar];
+    return [system, en, zh, ar];
   }
 
   private pickLanguage(id: string): void {
     this.selectedLanguage = id;
-    this.appLanguage = id;
-    this.currentLanguage = id;
+    // Persist both the override and resolved language.
     SettingsHelper.saveLanguage(id);
+    // Update local display language for wizard translations.
+    this.currentLanguage = L.resolveOverride(id);
+    // appLanguage auto-syncs via @StorageLink(STORAGE_KEY_LANGUAGE).
   }
 
   private getPrivacyPolicyText(): string {

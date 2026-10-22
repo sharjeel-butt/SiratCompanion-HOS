@@ -2423,6 +2423,14 @@
     {
       "name": "close",
       "value": "Close"
+    },
+    {
+      "name": "lang_system",
+      "value": "Use System Settings"
+    },
+    {
+      "name": "lang_system_desc",
+      "value": "Automatic"
     }
   ]
 }

@@ -2424,6 +2424,14 @@
     {
       "name": "close",
       "value": "إغلاق"
+    },
+    {
+      "name": "lang_system",
+      "value": "استخدام إعدادات النظام"
+    },
+    {
+      "name": "lang_system_desc",
+      "value": "تلقائي"
     }
   ]
 }

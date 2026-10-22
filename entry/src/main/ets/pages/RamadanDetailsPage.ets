@@ -1295,39 +1295,45 @@ struct RamadanDetailsPage {
 
       Divider().color(this.colors.borderSoft).width('90%')
 
-      Column() {
-        this.MarkOption(
-          '✓',
-          this.tr('fasting_status_fasted'),
-          this.colors.accentGold,
-          (): void => {
-            this.markFasted();
-          }
-        )
-        this.MarkOption(
-          '✗',
-          this.tr('fasting_status_missed'),
-          this.colors.statusExpress,
-          (): void => {
-            this.activeSheet = 'reason';
-          }
-        )
-        this.MarkOption(
-          '↺',
-          this.tr('fasting_clear'),
-          this.colors.textMuted,
-          (): void => {
-            this.clearDay();
-          }
-        )
+      Scroll() {
+        Column() {
+          this.MarkOption(
+            '✓',
+            this.tr('fasting_status_fasted'),
+            this.colors.accentGold,
+            (): void => {
+              this.markFasted();
+            }
+          )
+          this.MarkOption(
+            '✗',
+            this.tr('fasting_status_missed'),
+            this.colors.statusExpress,
+            (): void => {
+              this.activeSheet = 'reason';
+            }
+          )
+          this.MarkOption(
+            '↺',
+            this.tr('fasting_clear'),
+            this.colors.textMuted,
+            (): void => {
+              this.clearDay();
+            }
+          )
+        }
+        .width('100%')
+        .padding({
+          left: 8,
+          right: 8,
+          top: 12,
+          bottom: 12
+        })
       }
+      .layoutWeight(1)
       .width('100%')
-      .padding({
-        left: 8,
-        right: 8,
-        top: 12,
-        bottom: 12
-      })
+      .scrollBar(BarState.Auto)
+      .edgeEffect(EdgeEffect.Spring)
 
       Button(this.tr('cancel'))
         .width('90%')
@@ -1444,18 +1450,24 @@ struct RamadanDetailsPage {
 
       Divider().color(this.colors.borderSoft).width('90%')
 
-      Column() {
-        ForEach(this.allReasons(), (reason: MissedReason) => {
-          this.ReasonRow(reason)
-        }, (reason: MissedReason) => `reason-${reason}`)
+      Scroll() {
+        Column() {
+          ForEach(this.allReasons(), (reason: MissedReason) => {
+            this.ReasonRow(reason)
+          }, (reason: MissedReason) => `reason-${reason}`)
+        }
+        .width('100%')
+        .padding({
+          left: 8,
+          right: 8,
+          top: 12,
+          bottom: 12
+        })
       }
+      .layoutWeight(1)
       .width('100%')
-      .padding({
-        left: 8,
-        right: 8,
-        top: 12,
-        bottom: 12
-      })
+      .scrollBar(BarState.Auto)
+      .edgeEffect(EdgeEffect.Spring)
 
       if (this.selectedReason === MissedReason.OTHER) {
         Column() {

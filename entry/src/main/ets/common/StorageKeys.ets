@@ -32,6 +32,8 @@ export const STORAGE_KEY_PRAYER_STATE_VERSION = 'prayer_state_version';
 
 export const STORAGE_KEY_HIJRI_OFFSET = 'hijri_offset';
 export const STORAGE_KEY_LANGUAGE = 'app_language';
+
+export const STORAGE_KEY_LANGUAGE_OVERRIDE = 'app_language_override';
 export const STORAGE_KEY_WIZARD_COMPLETED = 'wizard_completed';
 export const STORAGE_KEY_NOTIF_MASTER = 'notif_master_enabled';
 export const STORAGE_KEY_NOTIF_BEFORE_MINUTES = 'notif_before_minutes';

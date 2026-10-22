@@ -5,7 +5,7 @@ import { window } from '@kit.ArkUI';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { deviceInfo } from '@kit.BasicServicesKit';
 import { PreferencesHelper } from '../helper/PreferencesHelper';
-import { L } from '../i8n/LocalizationHelper';
+import { AppLanguage, L } from '../i8n/LocalizationHelper';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -16,6 +16,7 @@ import {
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_LANGUAGE_OVERRIDE,
   STORAGE_KEY_SHOW_EXTRA_TIMINGS,
   STORAGE_KEY_SHOW_FIRST_THIRD,
   STORAGE_KEY_SHOW_FIRST_THIRD_LIST,
@@ -132,10 +133,20 @@ export default class EntryAbility extends UIAbility {
       // LOAD PERSISTED PREFERENCES INTO APPSTORAGE
       // ========================================================
 
+      // v3.5.1: dark mode now follows the system only. Any stored
+      // 'Light' or 'Dark' value is migrated to 'System' on first
+      // launch, then persisted so subsequent launches are no-ops.
       const savedMode = await PreferencesHelper.getString(
         STORAGE_KEY_THEME_MODE, ThemeMode.SYSTEM
       );
-      AppStorage.setOrCreate(STORAGE_KEY_THEME_MODE, savedMode);
+      AppStorage.setOrCreate(STORAGE_KEY_THEME_MODE, ThemeMode.SYSTEM);
+      if (savedMode !== ThemeMode.SYSTEM) {
+        AppLogger.info('EntryAbility',
+          `Migrating theme mode '${savedMode}' → System`);
+        PreferencesHelper.setString(
+          STORAGE_KEY_THEME_MODE, ThemeMode.SYSTEM
+        );
+      }
 
       const tasbihSound = await PreferencesHelper.getString(
         STORAGE_KEY_TASBIH_SOUND, SoundOptions.DEFAULT_ID
@@ -164,10 +175,41 @@ export default class EntryAbility extends UIAbility {
         STORAGE_KEY_HIJRI_CALENDAR_TYPE, savedHijriCalendarType
       );
 
-      const savedLanguage = await PreferencesHelper.getString(
-        STORAGE_KEY_LANGUAGE, 'en'
+      // v3.5.1: language now carries an override ('system' | 'en' |
+      // 'zh' | 'ar'). Migrate from the legacy STORAGE_KEY_LANGUAGE
+      // (which only stored a concrete code) on first launch after
+      // update. New installs default to 'system'.
+      let savedOverride = await PreferencesHelper.getString(
+        STORAGE_KEY_LANGUAGE_OVERRIDE, ''
       );
-      AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, savedLanguage);
+      if (savedOverride.length === 0) {
+        const legacyLang = await PreferencesHelper.getString(
+          STORAGE_KEY_LANGUAGE, ''
+        );
+        if (legacyLang.length > 0
+          && legacyLang !== AppLanguage.SYSTEM) {
+          // Existing user with explicit choice — preserve it
+          savedOverride = legacyLang;
+        } else {
+          // Fresh install — follow the device
+          savedOverride = AppLanguage.SYSTEM;
+        }
+        PreferencesHelper.setString(
+          STORAGE_KEY_LANGUAGE_OVERRIDE, savedOverride
+        );
+        AppLogger.info('EntryAbility',
+          `Language override migrated → '${savedOverride}'`);
+      }
+      const resolvedLanguage = L.resolveOverride(savedOverride);
+      AppStorage.setOrCreate(
+        STORAGE_KEY_LANGUAGE_OVERRIDE, savedOverride
+      );
+      AppStorage.setOrCreate(
+        STORAGE_KEY_LANGUAGE, resolvedLanguage
+      );
+      PreferencesHelper.setString(
+        STORAGE_KEY_LANGUAGE, resolvedLanguage
+      );
 
       const savedShowIslamicEvents = await PreferencesHelper.getBoolean(
         STORAGE_KEY_SHOW_ISLAMIC_EVENTS, true
@@ -379,8 +421,32 @@ export default class EntryAbility extends UIAbility {
     LayoutHelper.install(); // re-install if needed (idempotent)
 
     this.checkTimezoneChange();
+    this.reResolveSystemLanguage();
 
     hilog.info(0x0000, 'Sirat', 'onForeground tick=%{public}d', next);
+  }
+
+  /**
+   * v3.5.1: if the user picked "Use System Settings" as their
+   * language, re-check the device locale every time the app
+   * foregrounds. Catches the case where the user changed their
+   * phone language while the app was backgrounded.
+   *
+   * No-op when the user has an explicit language pick.
+   */
+  private reResolveSystemLanguage(): void {
+    const override = AppStorage.get<string>(STORAGE_KEY_LANGUAGE_OVERRIDE);
+    if (override !== AppLanguage.SYSTEM) {
+      return;
+    }
+    const current = AppStorage.get<string>(STORAGE_KEY_LANGUAGE);
+    const resolved = L.matchSystemLocale();
+    if (current !== resolved) {
+      AppLogger.info('EntryAbility',
+        `System language changed → '${resolved}'`);
+      AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, resolved);
+      PreferencesHelper.setString(STORAGE_KEY_LANGUAGE, resolved);
+    }
   }
 
   // ============================================================
