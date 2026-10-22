@@ -1,6 +1,7 @@
 // entry/src/main/ets/components/SettingsRow.ets
 
 import { ThemeColors } from '../common/Theme';
+import { L } from '../i8n/LocalizationHelper';
 
 /**
  * A single tappable settings row: title, optional description, a
@@ -48,10 +49,18 @@ export struct SettingsRow {
       .alignItems(HorizontalAlign.Start)
       .layoutWeight(1)
 
-      Text('›')
-        .fontSize(22)
-        .fontColor(this.colors.accentGold)
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
         .opacity(0.7)
+        // Use logical margins to prevent overlap in RTL
+        .margin({
+          left: L.isRtl() ? 8 : 0,
+          right: L.isRtl() ? 0 : 8
+        })
+        // Manually flip the image for RTL
+        .rotate({ angle: L.isRtl() ? 180 : 0 })
     }
     .width('100%')
     .padding({

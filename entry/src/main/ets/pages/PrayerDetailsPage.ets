@@ -535,8 +535,8 @@ struct PrayerDetailsPage {
 
   @Builder
   TopBar() {
-    Row() {
-      Text('←')
+    Row({ space: 16 }) {
+      Text(this.isRtl() ? '→' : '←')
         .fontSize(26)
         .fontColor(this.colors.textWhite)
         .width(40)
@@ -544,16 +544,21 @@ struct PrayerDetailsPage {
         .textAlign(TextAlign.Center)
         .borderRadius(20)
         .backgroundColor(this.colors.tintSoft)
-        .margin({ left: 16 })
+        .flexShrink(0)
         .onClick(() => router.back())
 
       Text(this.tr('title_prayer_details'))
-        .fontSize(22).fontWeight(FontWeight.Bold)
+        .fontSize(22)
+        .fontWeight(FontWeight.Bold)
         .fontColor(this.colors.textWhite)
         .letterSpacing(-0.5)
-        .margin({ left: 16 })
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .layoutWeight(1)
+        .textAlign(TextAlign.Start)
     }
     .width('100%').height(72)
+    .padding({ left: 16, right: 16 })
     .backgroundColor(this.colors.cardDark)
     .alignItems(VerticalAlign.Center)
   }
@@ -826,6 +831,18 @@ struct PrayerDetailsPage {
       .width('100%').padding({ bottom: 14 })
 
       Column() {
+        Row() {
+          ForEach(L.getArray('days_of_week_short', this.appLanguage), (day: string) => {
+            Text(day)
+              .fontSize(10)
+              .fontColor(this.colors.textMuted)
+              .textAlign(TextAlign.Center)
+              .layoutWeight(1)
+          })
+        }
+        .width('100%')
+        .margin({ bottom: 8 })
+        .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
         ForEach(this.snapshot.monthProgress.weeks, (week: MonthDayCell[], wi: number) => {
           Row() {
             ForEach(week, (cell: MonthDayCell, di: number) => {

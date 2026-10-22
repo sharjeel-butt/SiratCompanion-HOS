@@ -357,7 +357,7 @@ struct SettingsPage {
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
         Text('›').fontSize(22)
-          .fontColor(this.colors.accentGold).opacity(0.7)
+          .fontColor(this.colors.accentGold).opacity(0.7).rotate({ angle: L.isRtl() ? 180 : 0 })
       }
       .width('100%')
       .padding({
@@ -391,7 +391,7 @@ struct SettingsPage {
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
         Text('›').fontSize(22)
-          .fontColor(this.colors.accentGold).opacity(0.7)
+          .fontColor(this.colors.accentGold).opacity(0.7).rotate({ angle: L.isRtl() ? 180 : 0 })
       }
       .width('100%')
       .padding({
@@ -432,8 +432,8 @@ struct SettingsPage {
 
   @Builder
   TopBar() {
-    Row() {
-      Text('←')
+    Row({ space: 16 }) {
+      Text(this.isRtl() ? '→' : '←')
         .fontSize(26)
         .fontColor(this.colors.textWhite)
         .width(40)
@@ -441,17 +441,21 @@ struct SettingsPage {
         .textAlign(TextAlign.Center)
         .borderRadius(20)
         .backgroundColor(this.colors.tintSoft)
-        .margin({ left: 16 })
+        .flexShrink(0)
         .onClick(() => router.back())
 
       Text(this.tr('title_settings'))
         .fontSize(22)
         .fontWeight(FontWeight.Bold)
         .fontColor(this.colors.textWhite)
-        .margin({ left: 16 })
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .layoutWeight(1)
+        .textAlign(TextAlign.Start)
     }
     .width('100%')
     .height(72)
+    .padding({ left: 16, right: 16 })
     .backgroundColor(this.colors.cardDark)
     .alignItems(VerticalAlign.Center)
   }
@@ -467,26 +471,41 @@ struct SettingsPage {
         .backgroundColor(this.colors.tintSoft)
         .borderRadius(12)
         .border({ width: 1, color: this.colors.borderSoft })
+        .flexShrink(0)
 
       Text(title)
         .fontSize(17)
         .fontWeight(FontWeight.Bold)
         .fontColor(this.colors.textWhite)
-        .margin({ left: 14 })
         .layoutWeight(1)
+        .textAlign(TextAlign.Start)
+        .margin({
+          left: this.isRtl() ? 0 : 14,
+          right: this.isRtl() ? 14 : 0
+        })
 
       Text(this.expandedCategory === categoryKey ? '▲' : '▼')
         .fontSize(12)
         .fontColor(this.colors.accentGold)
         .opacity(0.8)
+        .flexShrink(0)
     }
     .width('100%')
-    .padding({
-      top: 12,
-      bottom: 12,
-      left: 12,
-      right: 16
-    })
+    .padding(this.isRtl()
+      ? {
+        top: 12,
+        bottom: 12,
+        left: 16,
+        right: 12
+      }
+      : {
+        top: 12,
+        bottom: 12,
+        left: 12,
+        right: 16
+      }
+    )
+    .alignItems(VerticalAlign.Center)
     .backgroundColor(this.colors.cardDark)
     .borderRadius(16)
     .border({ width: 1, color: this.colors.borderSoft })
@@ -1152,7 +1171,7 @@ struct SettingsPage {
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
       Text('›').fontSize(20)
-        .fontColor(this.colors.accentGold).opacity(0.7)
+        .fontColor(this.colors.accentGold).opacity(0.7).rotate({ angle: L.isRtl() ? 180 : 0 })
     }
     .width('100%')
     .padding(14)
@@ -1178,7 +1197,7 @@ struct SettingsPage {
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
       Text('›').fontSize(20)
-        .fontColor(this.colors.accentGold).opacity(0.7)
+        .fontColor(this.colors.accentGold).opacity(0.7).rotate({ angle: L.isRtl() ? 180 : 0 })
     }
     .width('100%')
     .padding(14)

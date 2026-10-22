@@ -1332,11 +1332,13 @@ export struct HomePage {
               .fontWeight(FontWeight.Medium)
               .maxLines(1)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
-            Text('›')
-              .fontSize(14)
-              .fontColor(this.colors.accentGold)
+            Image($r('app.media.ic_chevron_right'))
+              .width(12)
+              .height(12)
+              .fillColor(this.colors.accentGold)
               .opacity(0.85)
-              .margin({ left: 4 })
+              .margin({ left: this.isRtl() ? 0 : 4, right: this.isRtl() ? 4 : 0 })
+              .rotate({ angle: this.isRtl() ? 180 : 0 })
           }
           .margin({ top: 2 })
         }
@@ -1344,10 +1346,13 @@ export struct HomePage {
         .layoutWeight(1)
 
         // Compact "Manage ›" hint in place of the old [Log] button
-        Text('›')
-          .fontSize(18).fontColor(this.colors.accentGold)
+        Image($r('app.media.ic_chevron_right'))
+          .width(16)
+          .height(16)
+          .fillColor(this.colors.accentGold)
           .opacity(0.7)
-          .margin({ left: 8, right: 4 })
+          .margin({ left: this.isRtl() ? 4 : 8, right: this.isRtl() ? 8 : 4 })
+          .rotate({ angle: this.isRtl() ? 180 : 0 })
       }
       .width('100%')
       .padding({
@@ -1529,11 +1534,10 @@ export struct HomePage {
   CountdownCard() {
     if (this.upcomingEvents.length > 0) {
       Column() {
-        Row() {
+        Row({ space: 8 }) {
           Image($r('app.media.ic_nav_home'))
             .width(16).height(16)
             .fillColor(this.colors.accentGold)
-            .margin({ right: 8 })
           Text(this.tr('home_next_event'))
             .fontSize(11)
             .fontColor(this.colors.textMuted)
@@ -1581,7 +1585,7 @@ export struct HomePage {
 
   @Builder
   CountdownMainEvent() {
-    Row() {
+    Row({ space: 16 }) {
       Column() {
         if (this.upcomingEvents[0].daysUntil === 0) {
           Text('🎉').fontSize(30)
@@ -1607,6 +1611,7 @@ export struct HomePage {
       }
       .width(84)
       .height(84)
+      .flexShrink(0)
       .backgroundColor(this.colors.accentGold)
       .borderRadius(18)
       .justifyContent(FlexAlign.Center)
@@ -1640,7 +1645,7 @@ export struct HomePage {
             .width('100%')
         }
       }
-      .layoutWeight(1).margin({ left: 16 })
+      .layoutWeight(1)
       .alignItems(HorizontalAlign.Start)
     }
     .width('100%')
@@ -1649,8 +1654,8 @@ export struct HomePage {
 
   @Builder
   CountdownSecondaryRow(index: number) {
-    Row() {
-      Text('✨').fontSize(13).margin({ right: 8 }).opacity(0.75)
+    Row({ space: 8 }) {
+      Text('✨').fontSize(13).opacity(0.75)
       Text(this.translateUpcomingEventName(this.upcomingEvents[index]))
         .fontSize(13)
         .fontColor(this.colors.textWhite)
@@ -1660,7 +1665,6 @@ export struct HomePage {
         .layoutWeight(1)
       Text(this.countdownShortLabel(this.upcomingEvents[index].daysUntil))
         .fontSize(11).fontColor(this.colors.accentGold)
-        .margin({ left: 8 })
     }
     .width('100%')
     .padding({ top: 4, bottom: 4 })
@@ -1685,10 +1689,9 @@ export struct HomePage {
   LiveCountdownBanner() {
     if (this.countdownTarget !== '') {
       Column() {
-        Row() {
+        Row({ space: 14 }) {
           Text(this.countdownTarget === 'maghrib' ? '🌇' : '🌅')
             .fontSize(32)
-            .margin({ right: 14 })
 
           Column() {
             Text(this.countdownHeld
@@ -1724,7 +1727,7 @@ export struct HomePage {
             .fontWeight(FontWeight.Bold)
             .fontColor(this.colors.accentGold)
             .direction(Direction.Ltr)
-            .margin({ left: 12 })
+
         }
         .width('100%')
         .alignItems(VerticalAlign.Center)
@@ -1759,11 +1762,10 @@ export struct HomePage {
   RamadanCard() {
     if (this.ramadanInfo !== null) {
       Column() {
-        Row() {
+        Row({ space: 8 }) {
           Image($r('app.media.ic_ramadan_moon'))
             .width(16).height(16)
             .fillColor(this.colors.accentGold)
-            .margin({ right: 8 })
           Text(this.tr('ramadan_card_title'))
             .fontSize(12)
             .fontColor(this.colors.textMuted)
@@ -1774,12 +1776,16 @@ export struct HomePage {
             .fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
           Blank()
-          Row() {
+          Row({ space: 2 }) {
             Text(this.tr('track_ramadan'))
               .fontSize(11).fontColor(this.colors.accentGold)
               .fontWeight(FontWeight.Medium)
-            Text('›').fontSize(14).fontColor(this.colors.accentGold)
-              .margin({ left: 2 })
+            Image($r('app.media.ic_chevron_right'))
+              .width(12)
+              .height(12)
+              .fillColor(this.colors.accentGold)
+              .margin({ left: this.isRtl() ? 0 : 2, right: this.isRtl() ? 2 : 0 })
+              .rotate({ angle: this.isRtl() ? 180 : 0 })
           }
           .onClick(() => {
             router.pushUrl({ url: 'pages/RamadanDetailsPage' })
@@ -1852,9 +1858,17 @@ export struct HomePage {
         Text(`${this.ramadanInfo!.currentDayNumber}`)
           .fontSize(32).fontWeight(FontWeight.Bold)
           .fontColor(this.colors.accentGold)
+          .margin({
+            left: this.isRtl() ? 4 : 0,
+            right: this.isRtl() ? 0 : 4
+          })
         Text(` ${this.tr('ramadan_day_of_suffix')}`)
           .fontSize(12).fontColor(this.colors.textMuted)
-          .margin({ left: 6, bottom: 4 })
+          .margin({
+            left: this.isRtl() ? 0 : 6,
+            right: this.isRtl() ? 6 : 0,
+            bottom: 4
+          })
         Blank()
       }
       .width('100%').alignItems(VerticalAlign.Bottom)
@@ -1886,7 +1900,7 @@ export struct HomePage {
 
   @Builder
   RamadanCountdown() {
-    Row() {
+    Row({ space: 16 }) {
       Column() {
         Text(`${this.ramadanInfo!.daysUntilStart}`)
           .fontSize(38).fontWeight(FontWeight.Bold)
@@ -1897,6 +1911,7 @@ export struct HomePage {
       }
       .width(84)
       .height(84)
+      .flexShrink(0) // ADD THIS
       .backgroundColor(this.colors.accentGold)
       .borderRadius(18)
       .justifyContent(FlexAlign.Center)
@@ -1911,7 +1926,8 @@ export struct HomePage {
           .fontSize(12).fontColor(this.colors.accentGold)
           .margin({ top: 6 }).width('100%')
       }
-      .layoutWeight(1).margin({ left: 16 }).alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+      .alignItems(HorizontalAlign.Start)
     }
     .width('100%').alignItems(VerticalAlign.Center)
   }
@@ -1920,7 +1936,7 @@ export struct HomePage {
   Next3DaysPreview() {
     if (this.next3Days.length > 0) {
       Column() {
-        Row() {
+        Row({ space: 8 }) {
           Image($r('app.media.ic_nav_calendar'))
             .width(16).height(16)
             .fillColor(this.colors.accentGold)
@@ -2020,7 +2036,7 @@ export struct HomePage {
   @Builder
   TodayProgressCard() {
     Column() {
-      Row() {
+      Row({ space: 8 }) {
         Image($r('app.media.ic_nav_mosque'))
           .width(16).height(16)
           .fillColor(this.colors.accentGold)
@@ -2032,12 +2048,16 @@ export struct HomePage {
           .fontWeight(FontWeight.Bold)
           .letterSpacing(1.5)
           .layoutWeight(1)
-        Row() {
+        Row({ space: 2 }) {
           Text(this.tr('details_view'))
             .fontSize(11).fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
-          Text('›').fontSize(14).fontColor(this.colors.accentGold)
-            .margin({ left: 2 })
+          Image($r('app.media.ic_chevron_right'))
+            .width(12)
+            .height(12)
+            .fillColor(this.colors.accentGold)
+            .margin({ left: this.isRtl() ? 0 : 2, right: this.isRtl() ? 2 : 0 })
+            .rotate({ angle: this.isRtl() ? 180 : 0 })
         }
         .onClick(() => {
           router.pushUrl({ url: 'pages/PrayerDetailsPage' })
@@ -2269,7 +2289,7 @@ export struct HomePage {
   @Builder
   TasbihCard() {
     Column() {
-      Row() {
+      Row({ space: 8 }) {
         Image($r('app.media.ic_nav_tasbih'))
           .width(16).height(16)
           .fillColor(this.colors.accentGold)
@@ -2280,12 +2300,16 @@ export struct HomePage {
           .fontWeight(FontWeight.Bold)
           .letterSpacing(1.5)
           .layoutWeight(1)
-        Row() {
+        Row({ space: 2 }) {
           Text(this.tr('details_view'))
             .fontSize(11).fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
-          Text('›').fontSize(14).fontColor(this.colors.accentGold)
-            .margin({ left: 2 })
+          Image($r('app.media.ic_chevron_right'))
+            .width(12)
+            .height(12)
+            .fillColor(this.colors.accentGold)
+            .margin({ left: this.isRtl() ? 0 : 2, right: this.isRtl() ? 2 : 0 })
+            .rotate({ angle: this.isRtl() ? 180 : 0 })
         }
         .onClick(() => {
           router.pushUrl({ url: 'pages/TasbihDetailsPage' })
@@ -2421,8 +2445,12 @@ export struct HomePage {
             Text(this.tr('eid_card_link'))
               .fontSize(11).fontColor(this.colors.accentGold)
               .fontWeight(FontWeight.Medium)
-            Text('›').fontSize(14).fontColor(this.colors.accentGold)
-              .margin({ left: 2 })
+            Image($r('app.media.ic_chevron_right'))
+              .width(12)
+              .height(12)
+              .fillColor(this.colors.accentGold)
+              .margin({ left: this.isRtl() ? 0 : 2, right: this.isRtl() ? 2 : 0 })
+              .rotate({ angle: this.isRtl() ? 180 : 0 })
           }
           .onClick(() => {
             router.pushUrl({ url: 'pages/RamadanDetailsPage' })

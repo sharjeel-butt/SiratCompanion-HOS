@@ -148,9 +148,13 @@ export class DateHelper {
       );
 
       const h = engine.toHijri(shiftedForDisplay);
-      const hijriString = h !== null
-        ? `${h.day} ${HIJRI_MONTHS_EN[h.month - 1]} ${h.year}`
-        : '';
+      let hijriString = '';
+      if (h !== null) {
+        const lang = L.current();
+        const localizedMonths = L.getArray('hijri_months', lang);
+        const monthName = localizedMonths[h.month - 1] || HIJRI_MONTHS_EN[h.month - 1];
+        hijriString = `${h.day} ${monthName} ${h.year}`;
+      }
 
       const entry: UpcomingImportantDate = {
         key: event.key,

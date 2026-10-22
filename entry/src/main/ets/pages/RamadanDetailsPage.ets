@@ -542,8 +542,9 @@ struct RamadanDetailsPage {
 
   @Builder
   TopBar() {
-    Row() {
-      Text('←')
+    Row({ space: 16 }) {
+      // Arrow points Right in Arabic, Left in English
+      Text(this.isRtl() ? '→' : '←')
         .fontSize(26)
         .fontColor(this.colors.textWhite)
         .width(40)
@@ -551,7 +552,7 @@ struct RamadanDetailsPage {
         .textAlign(TextAlign.Center)
         .borderRadius(20)
         .backgroundColor(this.colors.tintSoft)
-        .margin({ left: 16 })
+        .flexShrink(0)
         .onClick(() => router.back())
 
       Column() {
@@ -562,6 +563,8 @@ struct RamadanDetailsPage {
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .width('100%')
+          .textAlign(TextAlign.Start) // Start = Right in AR, Left in EN
+
         if (this.ramadanInfo !== null) {
           Text(this.ramadanSubtitle())
             .fontSize(12)
@@ -570,17 +573,19 @@ struct RamadanDetailsPage {
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
             .width('100%')
+            .textAlign(TextAlign.Start)
         }
       }
       .layoutWeight(1)
-      .alignItems(HorizontalAlign.Start)
-      .margin({ left: 16 })
+      .alignItems(this.isRtl() ? HorizontalAlign.End : HorizontalAlign.Start)
     }
     .width('100%')
     .height(72)
-    .padding({ right: 16 })
+    .padding({ left: 16, right: 16 })
     .backgroundColor(this.colors.cardDark)
     .alignItems(VerticalAlign.Center)
+
+    // Removed .direction(Direction.Ltr) so the system naturally flips it
   }
 
   // ============================================================
@@ -886,6 +891,7 @@ struct RamadanDetailsPage {
       Text('›')
         .fontSize(18).fontColor(this.colors.accentGold).opacity(0.7)
         .margin({ left: 8 })
+        .rotate({ angle: L.isRtl() ? 180 : 0 })
     }
     .width('100%')
     .padding({
@@ -1386,6 +1392,7 @@ struct RamadanDetailsPage {
         .margin({ left: 14 })
       Text('›')
         .fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
+        .rotate({ angle: L.isRtl() ? 180 : 0 })
     }
     .width('100%')
     .padding({
