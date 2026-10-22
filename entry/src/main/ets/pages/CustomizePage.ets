@@ -438,6 +438,37 @@ struct CustomizePage {
 
 
   @Builder
+  TopBar() {
+    Row({ space: 16 }) {
+      // Arrow points Right in Arabic, Left in English
+      Text(this.isRtl() ? '→' : '←')
+        .fontSize(26)
+        .fontColor(this.colors.textWhite)
+        .width(40)
+        .height(40)
+        .textAlign(TextAlign.Center)
+        .borderRadius(20)
+        .backgroundColor(this.colors.tintSoft)
+        .flexShrink(0)
+        .onClick(() => router.back())
+
+      Text(this.tr('title_customize'))
+        .fontSize(22)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(this.colors.textWhite)
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .layoutWeight(1)
+        .textAlign(TextAlign.Start) // Start = Right in Arabic, Left in English
+    }
+    .width('100%')
+    .height(72)
+    .padding({ left: 16, right: 16 })
+    .backgroundColor(this.colors.cardDark)
+    .alignItems(VerticalAlign.Center)
+  }
+
+  @Builder
   ClockFormatRow() {
     Row() {
       Column() {
@@ -479,36 +510,6 @@ struct CustomizePage {
     .onClick(() => {
       this.showClockFormatPicker = true;
     })
-  }
-
-  @Builder
-  TopBar() {
-    Row({ space: 16 }) {
-      Text(this.isRtl() ? '→' : '←')
-        .fontSize(26)
-        .fontColor(this.colors.textWhite)
-        .width(40)
-        .height(40)
-        .textAlign(TextAlign.Center)
-        .borderRadius(20)
-        .backgroundColor(this.colors.tintSoft)
-        .flexShrink(0)
-        .onClick(() => router.back())
-
-      Text(this.tr('title_customize'))
-        .fontSize(22)
-        .fontWeight(FontWeight.Bold)
-        .fontColor(this.colors.textWhite)
-        .maxLines(1)
-        .textOverflow({ overflow: TextOverflow.Ellipsis })
-        .layoutWeight(1)
-        .textAlign(TextAlign.Start)
-    }
-    .width('100%')
-    .height(72)
-    .padding({ left: 16, right: 16 })
-    .backgroundColor(this.colors.cardDark)
-    .alignItems(VerticalAlign.Center)
   }
 
   @Builder
