@@ -3,6 +3,7 @@
 import { mediaquery } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode, ThemePreset } from './Theme';
 import { STORAGE_KEY_APP_THEME, STORAGE_KEY_THEME_MODE } from './StorageKeys';
+import { common, ConfigurationConstant } from '@kit.AbilityKit';
 
 export class PageTheme {
   /**
@@ -87,5 +88,28 @@ export class PageTheme {
   private static currentPreset(): string {
     const v = AppStorage.get<string>(STORAGE_KEY_APP_THEME);
     return (v !== undefined && v.length > 0) ? v : ThemePreset.SIRAT;
+  }
+
+  /**
+   * Applies the selected color mode to the system context.
+   * This forces native overlays (bindSheet, Menu, etc.) to adapt.
+   */
+  static applyColorMode(mode: string, context: common.UIAbilityContext): void {
+    try {
+      let sysMode: ConfigurationConstant.ColorMode;
+
+      if (mode === ThemeMode.DARK) {
+        sysMode = ConfigurationConstant.ColorMode.COLOR_MODE_DARK;
+      } else if (mode === ThemeMode.LIGHT) {
+        sysMode = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+      } else {
+        // SYSTEM (Auto Detect)
+        sysMode = ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET;
+      }
+
+      context.getApplicationContext().setColorMode(sysMode);
+    } catch (err) {
+      console.warn(`[PageTheme] Failed to set colorMode: ${JSON.stringify(err)}`);
+    }
   }
 }

@@ -569,9 +569,9 @@ export class ProgressHelper {
           }
         }
 
-        const label = d.transliteration.length > 0
-          ? d.transliteration
-          : d.arabic;
+        const label = (d.transliterationKey && d.transliterationKey.length > 0)
+          ? L.get(d.transliterationKey, 'en') // Note: L.get defaults to current app language
+          : (d.transliteration.length > 0 ? d.transliteration : d.arabic);
 
         const row: TasbihDhikrProgress = {
           dhikrId: d.id,
@@ -587,9 +587,12 @@ export class ProgressHelper {
       }
 
       const possible = t.dhikrs.length * daysInPeriod;
+      const tasbihName = (t.nameKey && t.nameKey.length > 0)
+        ? L.get(t.nameKey)
+        : t.name;
       const tasbihRow: TasbihProgressRow = {
         tasbihId: t.id,
-        tasbihName: t.name,
+        tasbihName: tasbihName,
         themePresetId: t.themePresetId !== undefined
           ? t.themePresetId : '',
         isActive: t.id === activeId,

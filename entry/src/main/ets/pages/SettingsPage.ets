@@ -264,6 +264,22 @@ struct SettingsPage {
 
               CategoryHeader({
                 colors: this.colors,
+                icon: '📄',
+                titleKey: 'category_logs',
+                categoryKey: 'Logs',
+                expanded: this.expandedCategory === 'Logs',
+                currentLanguage: this.currentLanguage,
+                onTap: () => {
+                  this.expandedCategory =
+                    this.expandedCategory === 'Logs' ? null : 'Logs';
+                }
+              })
+              if (this.expandedCategory === 'Logs') {
+                this.LogsContent()
+              }
+
+              CategoryHeader({
+                colors: this.colors,
                 icon: 'ℹ️',
                 titleKey: 'category_about',
                 categoryKey: 'About',
@@ -276,11 +292,6 @@ struct SettingsPage {
               })
               if (this.expandedCategory === 'About') {
                 this.AboutContent()
-              }
-
-
-              if (!NOTIFICATIONS_ENABLED && !CALENDAR_REMINDERS_ENABLED) {
-                this.LogAccessRow()
               }
 
               Column().height(40)
@@ -326,7 +337,7 @@ struct SettingsPage {
     .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .bindSheet($$this.showLogViewer, this.LogViewerSheet(), {
-      height: 640,
+      height: SheetSize.FIT_CONTENT,
       dragBar: true,
       showClose: false,
       backgroundColor: this.colors.cardDark,
@@ -342,7 +353,7 @@ struct SettingsPage {
   BackupRestoreContent() {
     Column() {
       // ---- Backup to File ----
-      Row() {
+      Row({ space: 8 }) {
         Column() {
           Text(this.tr('backup_to_file'))
             .fontSize(15).fontColor(this.colors.textWhite)
@@ -356,8 +367,13 @@ struct SettingsPage {
         }
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-        Text('›').fontSize(22)
-          .fontColor(this.colors.accentGold).opacity(0.7).rotate({ angle: L.isRtl() ? 180 : 0 })
+        Image($r('app.media.ic_chevron_right'))
+          .width(16)
+          .height(16)
+          .fillColor(this.colors.accentGold)
+          .opacity(0.7)
+          .rotate({ angle: this.isRtl() ? 180 : 0 })
+          .flexShrink(0)
       }
       .width('100%')
       .padding({
@@ -376,7 +392,7 @@ struct SettingsPage {
       })
 
       // ---- Restore from File ----
-      Row() {
+      Row({ space: 8 }) {
         Column() {
           Text(this.tr('restore_from_file'))
             .fontSize(15).fontColor(this.colors.textWhite)
@@ -390,8 +406,13 @@ struct SettingsPage {
         }
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-        Text('›').fontSize(22)
-          .fontColor(this.colors.accentGold).opacity(0.7).rotate({ angle: L.isRtl() ? 180 : 0 })
+        Image($r('app.media.ic_chevron_right'))
+          .width(16)
+          .height(16)
+          .fillColor(this.colors.accentGold)
+          .opacity(0.7)
+          .rotate({ angle: this.isRtl() ? 180 : 0 })
+          .flexShrink(0)
       }
       .width('100%')
       .padding({
@@ -1122,7 +1143,7 @@ struct SettingsPage {
         .alignItems(VerticalAlign.Top)
       }
 
-      this.LogAccessRowInternal()
+      // this.LogAccessRowInternal()
     }
     .width('100%')
     .padding(12)
@@ -1158,8 +1179,8 @@ struct SettingsPage {
 
   @Builder
   LogAccessRowInternal() {
-    Row() {
-      Text('📄').fontSize(14).margin({ right: 8 })
+    Row({ space: 8 }) {
+      Text('📄').fontSize(14).flexShrink(0)
       Column() {
         Text(this.tr('log_view_button'))
           .fontSize(13).fontColor(this.colors.textWhite)
@@ -1170,8 +1191,14 @@ struct SettingsPage {
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text('›').fontSize(20)
-        .fontColor(this.colors.accentGold).opacity(0.7).rotate({ angle: L.isRtl() ? 180 : 0 })
+      // Use SVG Image instead of Text to bypass Bidi mirroring
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .opacity(0.7)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
+        .flexShrink(0)
     }
     .width('100%')
     .padding(14)
@@ -1184,8 +1211,8 @@ struct SettingsPage {
 
   @Builder
   LogAccessRow() {
-    Row() {
-      Text('📄').fontSize(14).margin({ right: 8 })
+    Row({ space: 8 }) {
+      Text('📄').fontSize(14).flexShrink(0)
       Column() {
         Text(this.tr('log_view_button'))
           .fontSize(13).fontColor(this.colors.textWhite)
@@ -1196,8 +1223,14 @@ struct SettingsPage {
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Text('›').fontSize(20)
-        .fontColor(this.colors.accentGold).opacity(0.7).rotate({ angle: L.isRtl() ? 180 : 0 })
+      // Use SVG Image
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .opacity(0.7)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
+        .flexShrink(0)
     }
     .width('100%')
     .padding(14)
@@ -1357,21 +1390,31 @@ struct SettingsPage {
   @Builder
   AboutRow(label: string, value: string) {
     Row() {
-      Text(label).fontSize(13).fontColor(this.colors.textMuted)
-      Blank()
+      Text(label)
+        .fontSize(13)
+        .fontColor(this.colors.textMuted)
+        .flexShrink(0) // Prevents the label from squishing
+
       Text(value)
         .fontSize(12)
         .fontColor(this.colors.textWhite)
         .fontWeight(FontWeight.Medium)
-        .direction(Direction.Ltr)
+        .direction(Direction.Ltr) // Keeps versions/bundle IDs formatting LTR
         .maxLines(1)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
-        .layoutWeight(1)
-        .textAlign(TextAlign.End)
+        .layoutWeight(1) // Takes up all remaining space
+        // Push the text to the correct edge of the remaining space
+        .textAlign(this.isRtl() ? TextAlign.Start : TextAlign.End)
+        // Add a guaranteed gap between the label and the value box
+        .margin({
+          left: this.isRtl() ? 0 : 16,
+          right: this.isRtl() ? 16 : 0
+        })
     }
     .width('100%')
     .padding({ left: 8, right: 8 })
     .margin({ top: 6 })
+    .alignItems(VerticalAlign.Center)
   }
 
   // ============================================================
@@ -1403,7 +1446,7 @@ struct SettingsPage {
         .borderRadius(2)
         .margin({ top: 10 })
 
-      Row() {
+      Row({ space: 14 }) {
         Text(icon)
           .fontSize(22)
           .width(44)
@@ -1412,21 +1455,27 @@ struct SettingsPage {
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
+          .flexShrink(0)
 
         Text(title)
           .fontSize(20).fontWeight(FontWeight.Bold)
           .fontColor(this.colors.textWhite)
-          .margin({ left: 14 })
+          .layoutWeight(1)
       }
       .width('100%')
-      .padding({ left: 20, top: 20, bottom: 20 })
+      .padding({
+        top: 20,
+        bottom: 20,
+        left: this.isRtl() ? 20 : 16,
+        right: this.isRtl() ? 16 : 20
+      })
 
       Divider().color(this.colors.borderSoft).width('90%')
 
       Scroll() {
         Column() {
           ForEach(items, (item: PickerItem) => {
-            Row() {
+            Row({ space: 14 }) { // <-- Added Row space
               Row() {
                 if (item.selected) {
                   Row().width(10).height(10).borderRadius(5)
@@ -1438,22 +1487,19 @@ struct SettingsPage {
               .borderRadius(11)
               .border({
                 width: item.selected ? 2 : 1.5,
-                color: item.selected
-                  ? this.colors.accentGold : this.colors.borderStrong
+                color: item.selected ? this.colors.accentGold : this.colors.borderStrong
               })
               .justifyContent(FlexAlign.Center)
               .alignItems(VerticalAlign.Center)
+              .flexShrink(0)
 
               Text(item.label)
                 .fontSize(15)
-                .fontColor(item.selected
-                  ? this.colors.accentGold : this.colors.textWhite)
-                .fontWeight(item.selected
-                  ? FontWeight.Bold : FontWeight.Normal)
+                .fontColor(item.selected ? this.colors.accentGold : this.colors.textWhite)
+                .fontWeight(item.selected ? FontWeight.Bold : FontWeight.Normal)
                 .layoutWeight(1)
                 .maxLines(2)
                 .textOverflow({ overflow: TextOverflow.Ellipsis })
-                .margin({ left: 14 })
             }
             .width('100%')
             .padding({
@@ -1593,8 +1639,8 @@ struct SettingsPage {
         .borderRadius(2)
         .margin({ top: 10 })
 
-      Row() {
-        Text('📄').fontSize(20).margin({ right: 10 })
+      Row({ space: 10 }) {
+        Text('📄').fontSize(20).flexShrink(0)
         Text(this.tr('log_view_title'))
           .fontSize(18).fontWeight(FontWeight.Bold)
           .fontColor(this.colors.textWhite)
@@ -1605,16 +1651,17 @@ struct SettingsPage {
           .width(36)
           .height(36)
           .textAlign(TextAlign.Center)
+          .flexShrink(0)
           .onClick(() => {
             this.showLogViewer = false;
           })
       }
       .width('100%')
       .padding({
-        left: 20,
-        right: 12,
         top: 16,
-        bottom: 12
+        bottom: 12,
+        left: this.isRtl() ? 12 : 20,
+        right: this.isRtl() ? 20 : 12
       })
       .alignItems(VerticalAlign.Center)
 
@@ -1638,7 +1685,7 @@ struct SettingsPage {
           .padding(14)
           .textAlign(TextAlign.Start)
       }
-      .layoutWeight(1)
+      .flexShrink(1)
       .width('100%')
       .margin({ left: 20, right: 20, top: 12 })
       .backgroundColor(this.colors.tintSubtle)
@@ -1685,6 +1732,25 @@ struct SettingsPage {
     }
     .width('100%').height('100%')
     .backgroundColor(this.colors.cardDark)
+  }
+
+  @Builder
+  LogsContent() {
+    Column() {
+      Text(this.tr('log_view_desc'))
+        .fontSize(12)
+        .fontColor(this.colors.textMuted)
+        .width('100%')
+        .padding({ bottom: 12 })
+
+      this.LogAccessRowInternal()
+    }
+    .width('100%')
+    .padding(12)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(16)
+    .border({ width: 1, color: this.colors.borderSoft })
+    .margin({ bottom: 12 })
   }
 
   // ============================================================
@@ -2078,6 +2144,7 @@ struct SettingsPage {
         this.showPermissionError();
         return;
       }
+      await CalendarReminderHelper.init(ctx, false); // <-- Added this
     }
     this.notifMaster = value;
     await SettingsHelper.saveNotifMaster(value);

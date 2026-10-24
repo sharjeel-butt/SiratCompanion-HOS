@@ -7,10 +7,24 @@ export interface Dhikr {
   arabic: string;
   transliteration: string;
   translation: string;
+  transliterationKey?: string; // NEW
+  translationKey?: string; // NEW
   target: number;
   count: number;
   lastCountDate?: string;
   dailyTotal?: number;
+}
+
+export interface Tasbih {
+  id: string;
+  name: string;
+  nameKey?: string; // NEW
+  dhikrs: Dhikr[];
+  createdAt: number;
+  lifetimeCount: number;
+  theme?: TasbihTheme;
+  themePresetId?: string;
+  history?: TasbihDayLog[];
 }
 
 export interface DhikrDayCount {
@@ -21,24 +35,6 @@ export interface DhikrDayCount {
 export interface TasbihDayLog {
   dateKey: string;
   dhikrCounts: DhikrDayCount[];
-}
-
-export interface Tasbih {
-  id: string;
-  name: string;
-  dhikrs: Dhikr[];
-  createdAt: number;
-  lifetimeCount: number;
-
-  theme?: TasbihTheme;
-  themePresetId?: string;
-
-  /**
-   * Rolling daily log. One entry per day on which the tasbih was
-   * touched, capped at HISTORY_MAX_DAYS. Absent on data created
-   * before 3.2.5.
-   */
-  history?: TasbihDayLog[];
 }
 
 export interface DhikrFields {

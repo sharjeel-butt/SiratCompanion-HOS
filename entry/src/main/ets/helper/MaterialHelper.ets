@@ -68,7 +68,7 @@ export class MaterialHelper {
    * the app declares UIMaterial.state = enable in module.json5.
    */
   static buildSheetOptions(
-    height: number,
+    height: number | SheetSize | string,
     dragBar: boolean,
     fallbackBackground: string,
     maskColor: string,

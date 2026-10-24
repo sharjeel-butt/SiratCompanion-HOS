@@ -366,7 +366,8 @@ export struct HijriCalendarPage {
   MonthHeader() {
     Column() {
       Row() {
-        Text('◀')
+        // Previous Month
+        Text(this.isRtl() ? '▶' : '◀')
           .fontSize(16)
           .fontColor(this.colors.accentGold)
           .width(40).height(40).textAlign(TextAlign.Center)
@@ -403,7 +404,8 @@ export struct HijriCalendarPage {
         }
         .layoutWeight(1).alignItems(HorizontalAlign.Center)
 
-        Text('▶')
+        // Next Month
+        Text(this.isRtl() ? '◀' : '▶')
           .fontSize(16)
           .fontColor(this.colors.accentGold)
           .width(40).height(40).textAlign(TextAlign.Center)
@@ -415,7 +417,10 @@ export struct HijriCalendarPage {
           LoadingProgress()
             .width(24).height(24)
             .color(this.colors.accentGold)
-            .margin({ left: 12 })
+            .margin({
+              left: this.isRtl() ? 0 : 12,
+              right: this.isRtl() ? 12 : 0
+            })
         } else {
           Image($r('app.media.ic_printer'))
             .width(16)
@@ -427,14 +432,17 @@ export struct HijriCalendarPage {
             .borderRadius(16)
             .backgroundColor(this.colors.cardDark)
             .border({ width: 1, color: this.colors.borderSoft })
-            .margin({ right: 8 })
+            .margin({
+              left: this.isRtl() ? 0 : 8,
+              right: this.isRtl() ? 8 : 0
+            })
             .onClick(() => {
               this.handleExport();
             })
         }
       }
       .width('100%').alignItems(VerticalAlign.Center)
-      .direction(Direction.Ltr)
+      // Removed .direction(Direction.Ltr) so it naturally flips
     }
     .width('100%').padding({ top: 8, bottom: 16 })
   }
@@ -550,11 +558,11 @@ export struct HijriCalendarPage {
   @Builder
   EventsList() {
     Column() {
-      Row() {
+      Row({ space: 8 }) {
         Image($r('app.media.ic_nav_calendar'))
           .width(16).height(16)
           .fillColor(this.colors.accentGold)
-          .margin({ left: this.isRtl() ? 8 : 0, right: this.isRtl() ? 0 : 8 })
+          .flexShrink(0)
         Text(this.tr('important_dates'))
           .fontSize(12).fontColor(this.colors.accentGold)
           .fontWeight(FontWeight.Bold).letterSpacing(1.5)
@@ -567,12 +575,13 @@ export struct HijriCalendarPage {
           .width('100%').padding({ top: 4, bottom: 4 })
       } else {
         ForEach(this.getMonthEvents(), (e: IslamicEvent) => {
-          Row() {
+          Row({ space: 8 }) {
             Text(`${e.day}`)
               .fontSize(16).fontWeight(FontWeight.Bold)
               .fontColor(this.colors.accentGold)
               .width(36)
               .textAlign(TextAlign.Center)
+              .flexShrink(0) // <-- Prevents circle squishing
             Text(this.translateEventName(e))
               .fontSize(14).fontColor(this.colors.textWhite).layoutWeight(1)
           }
@@ -605,18 +614,18 @@ export struct HijriCalendarPage {
   CalendarExportLayout() {
     Column() {
       // Header
-      Row() {
+      Row({ space: 16 }) { // <-- Replaced margin({ right: 16 })
         Image($r('app.media.foreground'))
           .syncLoad(true)
           .width(44)
           .height(44)
           .borderRadius(10)
-          .margin({ right: 16 })
+          .flexShrink(0)
 
         Column() {
-          // Localized Hijri Year Suffix
           Text(`${this.getLocalizedMonthName()} ${this.viewingHijriYear} ${this.tr('hijri_year_suffix')}`)
             .fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.pdfColors.textWhite)
+            .width('100%')
 
           Row() {
             Text(this.getLocalizedGregorianSpan())
@@ -629,24 +638,18 @@ export struct HijriCalendarPage {
         }
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-        // Localized Footer
         Text(this.tr('generated_by'))
           .fontSize(9).fontColor(this.pdfColors.textMuted).alignSelf(ItemAlign.Start).margin({ top: 4 })
       }
       .width('100%')
-      .padding({
-        top: 30,
-        bottom: 20,
-        left: 24,
-        right: 24
-      })
+      .padding({ top: 30, bottom: 20, left: 24, right: 24 })
       .backgroundColor(this.pdfColors.cardDark)
+      .alignItems(VerticalAlign.Center)
 
       Row().width('100%').height(4).backgroundColor(this.pdfColors.accentGold)
 
-      // Calendar Grid (Using Row/Column to match padding)
+      // Calendar Grid
       Column() {
-        // Weekday Headers
         Row() {
           ForEach(this.getLocalizedDaysOfWeek(), (day: string) => {
             Text(day)
@@ -660,7 +663,6 @@ export struct HijriCalendarPage {
         }
         .width('100%')
 
-        // Weeks
         ForEach(this.pdfWeeks, (week: Array<CalendarExportDay | null>, wi: number) => {
           Row() {
             ForEach(week, (day: CalendarExportDay | null, di: number) => {
@@ -680,9 +682,7 @@ export struct HijriCalendarPage {
 
                   if (day.hasEvents) {
                     Row()
-                      .width(4)
-                      .height(4)
-                      .borderRadius(2)
+                      .width(4).height(4).borderRadius(2)
                       .backgroundColor(this.pdfColors.accentGold)
                       .margin({ top: 3 })
                   }
@@ -714,16 +714,21 @@ export struct HijriCalendarPage {
           .margin({ bottom: 8 })
 
         if (this.getMonthEvents().length === 0) {
-          Text(this.tr('no_events_this_month')).fontSize(10).fontColor(this.pdfColors.textMuted)
+          Text(this.tr('no_events_this_month'))
+            .fontSize(10)
+            .fontColor(this.pdfColors.textMuted)
+            .width('100%') // <-- Forces it to take full width
+            .textAlign(TextAlign.Start)// <-- Aligns to right in Arabic
         } else {
           ForEach(this.getMonthEvents(), (e: IslamicEvent) => {
-            Row() {
+            Row({ space: 8 }) { // <-- Added Row space
               Text(`${e.day}`)
                 .fontSize(12)
                 .fontWeight(FontWeight.Bold)
                 .fontColor(this.pdfColors.accentGold)
                 .width(24)
                 .margin({ top: 2 })
+                .flexShrink(0)
 
               Column() {
                 Text(this.translateEventName(e))
@@ -749,6 +754,7 @@ export struct HijriCalendarPage {
       .margin({ left: 24, right: 24, bottom: 10 })
     }
     .width(595).height(842).backgroundColor(this.pdfColors.primaryGreen)
+    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr) // <-- ADDED
   }
 
   private getLocalizedGregorianSpan(): string {

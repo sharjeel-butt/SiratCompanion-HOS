@@ -2426,11 +2426,92 @@
     },
     {
       "name": "lang_system",
-      "value": "跟随系统"
+      "value": "自动检测"
     },
     {
       "name": "lang_system_desc",
-      "value": "自动"
-    }
+      "value": "匹配系统语言"
+    },
+    {
+      "name": "lang_supported_hint",
+      "value": "支持的语言：英语、阿拉伯语、中文"
+    },
+    {
+      "name": "tasbih_default_classic_name",
+      "value": "传统 33"
+    },
+    {
+      "name": "tasbih_default_tahlil_name",
+      "value": "清净言 100"
+    },
+    {
+      "name": "tasbih_default_istighfar_name",
+      "value": "求恕词"
+    },
+    {
+      "name": "dhikr_subhanallah_translit",
+      "value": "SubhanAllah"
+    },
+    {
+      "name": "dhikr_subhanallah_trans",
+      "value": "荣耀归于安拉"
+    },
+    {
+      "name": "dhikr_alhamdulillah_translit",
+      "value": "Alhamdulillah"
+    },
+    {
+      "name": "dhikr_alhamdulillah_trans",
+      "value": "一切赞颂全归安拉"
+    },
+    {
+      "name": "dhikr_allahuakbar_translit",
+      "value": "Allahu Akbar"
+    },
+    {
+      "name": "dhikr_allahuakbar_trans",
+      "value": "安拉至大"
+    },
+    {
+      "name": "dhikr_tahlil_translit",
+      "value": "La ilaha illallahu wahdahu la sharika lah"
+    },
+    {
+      "name": "dhikr_tahlil_trans",
+      "value": "万物非主，唯有安拉，独一无偶"
+    },
+    {
+      "name": "dhikr_istighfar_translit",
+      "value": "Astaghfirullah"
+    },
+    {
+      "name": "dhikr_istighfar_trans",
+      "value": "我向安拉求恕"
+    },
+    {
+      "name": "tasbih_active_badge",
+      "value": "当前"
+    },
+    {
+      "name": "notif_step_title",
+      "value": "礼拜提醒"
+    },
+    {
+      "name": "notif_step_desc",
+      "value": "启用提醒以获取礼拜时间通知。这需要日历权限。"
+    },
+    {
+      "name": "permission_required",
+      "value": "需要日历权限"
+    },
+    {
+      "name": "calendar_permission_required_msg",
+      "value": "礼拜提醒需要日历读取和写入权限。请授予它们以继续。"
+    },
+    {
+      "name": "grant",
+      "value": "授予"
+    },
+    { "name": "category_logs", "value": "诊断日志" }
   ]
 }

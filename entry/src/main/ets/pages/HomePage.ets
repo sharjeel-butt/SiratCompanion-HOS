@@ -1406,86 +1406,82 @@ export struct HomePage {
   RamadanExportLayout() {
     Column() {
       // Header
-      Row() {
+      Row({ space: 12 }) { // <-- Replaced margin({ right: 12 })
         Image($r('app.media.foreground'))
           .syncLoad(true)
           .width(36)
           .height(36)
           .borderRadius(8)
-          .margin({ right: 12 })
+          .flexShrink(0)
 
         Column() {
-          // Localized Hijri Year Suffix
-          Text(`${L.getArray('hijri_months', this.appLanguage)[8]} ${this.pdfRamadanYear} ${L.get('hijri_year_suffix',
-            this.appLanguage)}`)
+          Text(`${L.getArray('hijri_months', this.appLanguage)[8]} ${this.pdfRamadanYear} ${L.get('hijri_year_suffix', this.appLanguage)}`)
             .fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.pdfColors.textWhite)
+            .width('100%')
 
           Text(`${this.pdfRamadanGregSpan} · ${this.currentLocation}`)
             .fontSize(10).fontColor(this.pdfColors.accentGold).margin({ top: 4 })
+            .width('100%')
         }
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-        // Localized Footer
         Text(L.get('generated_by', this.appLanguage))
           .fontSize(8).fontColor(this.pdfColors.textMuted).alignSelf(ItemAlign.Start)
       }
       .width('100%')
-      .padding({
-        top: 15,
-        bottom: 10,
-        left: 20,
-        right: 20
-      })
+      .padding({ top: 15, bottom: 10, left: 20, right: 20 })
       .backgroundColor(this.pdfColors.cardDark)
+      .alignItems(VerticalAlign.Center)
 
       Row().width('100%').height(3).backgroundColor(this.pdfColors.accentGold)
 
       // Table Headers
       Row() {
-        // Localized "Date"
         Text(L.get('export_date', this.appLanguage))
           .layoutWeight(1.8)
           .fontWeight(FontWeight.Bold)
           .fontSize(9)
           .fontColor(this.pdfColors.accentGold)
+          .textAlign(this.isRtl() ? TextAlign.End : TextAlign.Start)
         Text(L.get('export_sahur', this.appLanguage))
           .layoutWeight(1)
           .fontWeight(FontWeight.Bold)
           .fontSize(9)
           .fontColor(this.pdfColors.accentGold)
+          .textAlign(TextAlign.Center)
         Text(L.get('prayer_fajr', this.appLanguage))
           .layoutWeight(1)
           .fontWeight(FontWeight.Bold)
           .fontSize(9)
           .fontColor(this.pdfColors.accentGold)
+          .textAlign(TextAlign.Center)
         Text(L.get('prayer_dhuhr', this.appLanguage))
           .layoutWeight(1)
           .fontWeight(FontWeight.Bold)
           .fontSize(9)
           .fontColor(this.pdfColors.accentGold)
+          .textAlign(TextAlign.Center)
         Text(L.get('prayer_asr', this.appLanguage))
           .layoutWeight(1)
           .fontWeight(FontWeight.Bold)
           .fontSize(9)
           .fontColor(this.pdfColors.accentGold)
+          .textAlign(TextAlign.Center)
         Text(L.get('export_iftar', this.appLanguage))
           .layoutWeight(1)
           .fontWeight(FontWeight.Bold)
           .fontSize(9)
           .fontColor(this.pdfColors.accentGold)
+          .textAlign(TextAlign.Center)
         Text(L.get('prayer_isha', this.appLanguage))
           .layoutWeight(1)
           .fontWeight(FontWeight.Bold)
           .fontSize(9)
           .fontColor(this.pdfColors.accentGold)
+          .textAlign(TextAlign.Center)
       }
       .width('100%')
-      .padding({
-        top: 6,
-        bottom: 6,
-        left: 20,
-        right: 20
-      })
+      .padding({ top: 6, bottom: 6, left: 20, right: 20 })
       .backgroundColor(this.pdfColors.tintSoft)
 
       // Table Rows
@@ -1498,23 +1494,27 @@ export struct HomePage {
                 .lineHeight(11)
                 .fontWeight(FontWeight.Medium)
                 .fontColor(this.pdfColors.textWhite)
-              Text(row.gregorianDate).fontSize(7).lineHeight(9).fontColor(this.pdfColors.textMuted).margin({ top: 0 })
-            }.layoutWeight(1.8).alignItems(HorizontalAlign.Start)
-
-            Text(row.sahur).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
-            Text(row.fajr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
-            Text(row.dhuhr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
-            Text(row.asr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
-            Text(row.iftar).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.accentGoldLight) // Highlight Iftar
-            Text(row.isha).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
+                .width('100%')
+                .textAlign(TextAlign.Start) // <-- Forces text to the right in RTL
+              Text(row.gregorianDate)
+                .fontSize(7)
+                .lineHeight(9)
+                .fontColor(this.pdfColors.textMuted)
+                .margin({ top: 0 })
+                .width('100%')
+                .textAlign(TextAlign.Start) // <-- Forces text to the right in RTL
+            }
+            .layoutWeight(1.8)
+            .alignItems(HorizontalAlign.Start)
+            Text(row.sahur).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
+            Text(row.fajr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
+            Text(row.dhuhr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
+            Text(row.asr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
+            Text(row.iftar).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.accentGoldLight).textAlign(TextAlign.Center)
+            Text(row.isha).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
           }
           .width('100%')
-          .padding({
-            top: 2,
-            bottom: 2,
-            left: 20,
-            right: 20
-          })
+          .padding({ top: 2, bottom: 2, left: 20, right: 20 })
           .backgroundColor(index % 2 === 0 ? 'transparent' : this.pdfColors.tintSubtle)
           .alignItems(VerticalAlign.Center)
         })
@@ -1528,6 +1528,7 @@ export struct HomePage {
       .width('100%').padding({ top: 4, bottom: 4 }).justifyContent(FlexAlign.Center)
     }
     .width(595).height(842).backgroundColor(this.pdfColors.primaryGreen)
+    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr) // <-- ADDED
   }
 
   @Builder
@@ -1538,6 +1539,7 @@ export struct HomePage {
           Image($r('app.media.ic_nav_home'))
             .width(16).height(16)
             .fillColor(this.colors.accentGold)
+            .flexShrink(0)
           Text(this.tr('home_next_event'))
             .fontSize(11)
             .fontColor(this.colors.textMuted)
@@ -1940,7 +1942,7 @@ export struct HomePage {
           Image($r('app.media.ic_nav_calendar'))
             .width(16).height(16)
             .fillColor(this.colors.accentGold)
-            .margin({ right: 8 })
+            .flexShrink(0)
           Text(this.tr('next_3_days'))
             .fontSize(12)
             .fontColor(this.colors.textMuted)
@@ -2040,9 +2042,9 @@ export struct HomePage {
         Image($r('app.media.ic_nav_mosque'))
           .width(16).height(16)
           .fillColor(this.colors.accentGold)
-          .margin({ right: 8 })
+          .flexShrink(0)
         Text(this.tr('home_today_progress'))
-          .fontFamily(TypographyHelper.getFont(this.currentLanguage, true)) // <---
+          .fontFamily(TypographyHelper.getFont(this.currentLanguage, true))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
           .fontWeight(FontWeight.Bold)
@@ -2052,17 +2054,13 @@ export struct HomePage {
           Text(this.tr('details_view'))
             .fontSize(11).fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
-          Image($r('app.media.ic_chevron_right'))
-            .width(12)
-            .height(12)
-            .fillColor(this.colors.accentGold)
-            .margin({ left: this.isRtl() ? 0 : 2, right: this.isRtl() ? 2 : 0 })
+          Text(this.isRtl() ? '‹' : '›')
+            .fontSize(14).fontColor(this.colors.accentGold)
             .rotate({ angle: this.isRtl() ? 180 : 0 })
         }
         .onClick(() => {
           router.pushUrl({ url: 'pages/PrayerDetailsPage' })
-            .catch((e: Error) =>
-            console.error('Navigation failed:', JSON.stringify(e)));
+            .catch((e: Error) => console.error('Nav fail', e));
         })
       }
       .width('100%').padding({ bottom: 14 })
@@ -2293,7 +2291,7 @@ export struct HomePage {
         Image($r('app.media.ic_nav_tasbih'))
           .width(16).height(16)
           .fillColor(this.colors.accentGold)
-          .margin({ right: 8 })
+          .flexShrink(0)
         Text(this.tr('home_tasbih'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
@@ -2304,17 +2302,13 @@ export struct HomePage {
           Text(this.tr('details_view'))
             .fontSize(11).fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
-          Image($r('app.media.ic_chevron_right'))
-            .width(12)
-            .height(12)
-            .fillColor(this.colors.accentGold)
-            .margin({ left: this.isRtl() ? 0 : 2, right: this.isRtl() ? 2 : 0 })
+          Text(this.isRtl() ? '‹' : '›')
+            .fontSize(14).fontColor(this.colors.accentGold)
             .rotate({ angle: this.isRtl() ? 180 : 0 })
         }
         .onClick(() => {
           router.pushUrl({ url: 'pages/TasbihDetailsPage' })
-            .catch((e: Error) =>
-            console.error('Navigation failed:', JSON.stringify(e)));
+            .catch((e: Error) => console.error('Nav fail', e));
         })
       }
       .width('100%').padding({ bottom: 14 })

@@ -1167,80 +1167,77 @@ export struct Prayer {
   PrayerExportLayout() {
     Column() {
       // Header
-      Row() {
+      Row({ space: 12 }) { // <-- Replaced margin({ right: 12 })
         Image($r('app.media.foreground'))
           .syncLoad(true)
           .width(36)
           .height(36)
           .borderRadius(8)
-          .margin({ right: 12 })
+          .flexShrink(0)
 
         Column() {
-          // Localized Hijri Year Suffix
           Text(`${this.pdfHijriMonthName} ${this.pdfHijriYear} ${this.tr('hijri_year_suffix')}`)
             .fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.pdfColors.textWhite)
+            .width('100%')
 
           Text(`${this.pdfMonthName} · ${this.currentLocation}`)
             .fontSize(10).fontColor(this.pdfColors.accentGold).margin({ top: 4 })
+            .width('100%')
         }
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-        // Localized Footer
         Text(this.tr('generated_by'))
           .fontSize(8).fontColor(this.pdfColors.textMuted).alignSelf(ItemAlign.Start)
       }
       .width('100%')
-      .padding({
-        top: 15,
-        bottom: 10,
-        left: 20,
-        right: 20
-      })
+      .padding({ top: 15, bottom: 10, left: 20, right: 20 })
       .backgroundColor(this.pdfColors.cardDark)
+      .alignItems(VerticalAlign.Center)
 
       Row().width('100%').height(3).backgroundColor(this.pdfColors.accentGold)
 
       // Table Headers
       Row() {
-        // Localized "Date"
         Text(this.tr('export_date'))
           .layoutWeight(1.8)
           .fontWeight(FontWeight.Bold)
           .fontSize(9)
           .fontColor(this.pdfColors.accentGold)
+          .textAlign(TextAlign.Start)
+          .width('100%')
         Text(this.tr('prayer_fajr'))
           .layoutWeight(1)
           .fontWeight(FontWeight.Bold)
           .fontSize(9)
           .fontColor(this.pdfColors.accentGold)
+          .textAlign(TextAlign.Center) // <-- Center aligned
         Text(this.tr('prayer_dhuhr'))
           .layoutWeight(1)
           .fontWeight(FontWeight.Bold)
           .fontSize(9)
           .fontColor(this.pdfColors.accentGold)
+          .textAlign(TextAlign.Center)
         Text(this.tr('prayer_asr'))
           .layoutWeight(1)
           .fontWeight(FontWeight.Bold)
           .fontSize(9)
           .fontColor(this.pdfColors.accentGold)
+          .textAlign(TextAlign.Center)
         Text(this.tr('prayer_maghrib'))
           .layoutWeight(1)
           .fontWeight(FontWeight.Bold)
           .fontSize(9)
           .fontColor(this.pdfColors.accentGold)
+          .textAlign(TextAlign.Center)
         Text(this.tr('prayer_isha'))
           .layoutWeight(1)
           .fontWeight(FontWeight.Bold)
           .fontSize(9)
           .fontColor(this.pdfColors.accentGold)
+          .textAlign(TextAlign.Center)
       }
       .width('100%')
-      .padding({
-        top: 6,
-        bottom: 6,
-        left: 20,
-        right: 20
-      })
+      .padding({ top: 6, bottom: 6, left: 20, right: 20 })
       .backgroundColor(this.pdfColors.tintSoft)
 
       // Table Rows
@@ -1253,22 +1250,26 @@ export struct Prayer {
                 .lineHeight(11)
                 .fontWeight(FontWeight.Medium)
                 .fontColor(this.pdfColors.textWhite)
-              Text(row.gregorianDate).fontSize(7).lineHeight(9).fontColor(this.pdfColors.textMuted).margin({ top: 0 })
-            }.layoutWeight(1.8).alignItems(HorizontalAlign.Start)
-
-            Text(row.fajr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
-            Text(row.dhuhr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
-            Text(row.asr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
-            Text(row.maghrib).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
-            Text(row.isha).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite)
+                .width('100%')
+                .textAlign(TextAlign.Start) // <-- Forces text to the right in RTL
+              Text(row.gregorianDate)
+                .fontSize(7)
+                .lineHeight(9)
+                .fontColor(this.pdfColors.textMuted)
+                .margin({ top: 0 })
+                .width('100%')
+                .textAlign(TextAlign.Start) // <-- Forces text to the right in RTL
+            }
+            .layoutWeight(1.8)
+            .alignItems(HorizontalAlign.Start)
+            Text(row.fajr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
+            Text(row.dhuhr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
+            Text(row.asr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
+            Text(row.maghrib).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
+            Text(row.isha).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
           }
           .width('100%')
-          .padding({
-            top: 2,
-            bottom: 2,
-            left: 20,
-            right: 20
-          })
+          .padding({ top: 2, bottom: 2, left: 20, right: 20 })
           .backgroundColor(index % 2 === 0 ? 'transparent' : this.pdfColors.tintSubtle)
           .alignItems(VerticalAlign.Center)
         })
@@ -1282,6 +1283,7 @@ export struct Prayer {
       .width('100%').padding({ top: 4, bottom: 4 }).justifyContent(FlexAlign.Center)
     }
     .width(595).height(842).backgroundColor(this.pdfColors.primaryGreen)
+    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr) // <-- ADDED
   }
 
   @Builder
@@ -1381,7 +1383,8 @@ export struct Prayer {
       .alignItems(VerticalAlign.Center)
 
       Row() {
-        Text('◀')
+        // Previous Day: Points Right (▶) in RTL, Left (◀) in LTR
+        Text(this.isRtl() ? '▶' : '◀')
           .fontSize(14)
           .fontColor(this.colors.accentGold)
           .width(36).height(36).textAlign(TextAlign.Center).borderRadius(18)
@@ -1396,7 +1399,8 @@ export struct Prayer {
           .layoutWeight(1).textAlign(TextAlign.Center).maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
 
-        Text('▶')
+        // Next Day: Points Left (◀) in RTL, Right (▶) in LTR
+        Text(this.isRtl() ? '◀' : '▶')
           .fontSize(14)
           .fontColor(this.colors.accentGold)
           .width(36).height(36).textAlign(TextAlign.Center).borderRadius(18)
@@ -1410,15 +1414,16 @@ export struct Prayer {
             .fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
             .padding({
-              left: 12,
-              right: 12,
-              top: 9,
-              bottom: 9
+              left: 12, right: 12, top: 9, bottom: 9
             })
             .backgroundColor(this.colors.cardDark)
             .borderRadius(18)
             .border({ width: 1, color: this.colors.borderSoft })
-            .margin({ left: 8 })
+            // Use logical margins for RTL
+            .margin({
+              left: this.isRtl() ? 0 : 8,
+              right: this.isRtl() ? 8 : 0
+            })
             .onClick(() => {
               this.goToToday();
             })
@@ -1426,7 +1431,6 @@ export struct Prayer {
       }
       .width('100%').padding({ bottom: 12 })
       .alignItems(VerticalAlign.Center)
-      .direction(Direction.Ltr)
 
       Column() {
         ForEach(this.buildCombinedTimeline(), (row: TimelineRow) => {
@@ -1454,7 +1458,7 @@ export struct Prayer {
 
   @Builder
   PrayerItem(prayer: PrayerModel) {
-    Row() {
+    Row({ space: 12 }) {
       Stack() {
         if (prayer.checked) {
           Text('✓')
@@ -1465,12 +1469,10 @@ export struct Prayer {
             .width('100%')
             .height('100%')
         }
-
       }
       .width(22)
       .height(22)
       .borderRadius(5)
-
       .backgroundColor(prayer.checked
         ? this.colors.accentGold : 'transparent')
       .border({
@@ -1480,7 +1482,7 @@ export struct Prayer {
       })
       .opacity(PrayerManager.isPrayerCheckable(prayer, this.viewingDate)
         ? 1.0 : 0.4)
-      .margin({ left: this.isRtl() ? 12 : 0, right: this.isRtl() ? 0 : 12 })
+      .flexShrink(0) // <-- Prevents squishing
       .onClick(() => {
         if (PrayerManager.isPrayerCheckable(prayer, this.viewingDate)) {
           this.setPrayerChecked(prayer.id, !prayer.checked);
@@ -1494,18 +1496,27 @@ export struct Prayer {
             .fontWeight(prayer.checked
               ? FontWeight.Normal : FontWeight.Medium)
             .opacity(prayer.checked ? 0.5 : 1.0)
-          if (this.appLanguage !== 'ar') {
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
 
-          Text('  ')
-          Text(prayer.arabicName)
-            .fontSize(14).fontColor(this.colors.textMuted)
+          // Conditionally render to prevent double text in Arabic
+          if (this.appLanguage !== 'ar') {
+            Text('  ')
+            Text(prayer.arabicName)
+              .fontSize(14).fontColor(this.colors.textMuted)
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+          }
         }
-        }
+        .width('100%') // <-- CRITICAL: Fills the column so text aligns to the Start (Right in RTL)
+
         Text(this.getStatusLabel(prayer.status))
           .fontSize(11).fontColor(this.getStatusColor(prayer.status))
           .letterSpacing(1).margin({ top: 2 })
+          .width('100%')
       }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
 
       Text(this.dt(prayer.time)).fontSize(16)
         .fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
@@ -1526,29 +1537,36 @@ export struct Prayer {
 
   @Builder
   ExtraTimingRow(timing: ExtraTiming) {
-    Row() {
+    Row({ space: 12 }) {
       Text(timing.icon ?? '•')
         .fontSize(15)
         .width(20)
         .height(20)
         .textAlign(TextAlign.Center)
         .opacity(0.85)
-        .margin({ left: this.isRtl() ? 12 : 0, right: this.isRtl() ? 0 : 12 })
+        .flexShrink(0) // <-- Prevents squishing
 
       Column() {
         Row() {
           Text(this.translateTimingName(timing.name))
             .fontSize(14).fontColor(this.colors.textMuted)
             .fontStyle(FontStyle.Italic)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+
+          // Conditionally render to prevent double text in Arabic
           if (this.appLanguage !== 'ar') {
             Text('  ')
             Text(timing.arabicName)
-
               .fontSize(12).fontColor(this.colors.textMuted).opacity(0.65)
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
           }
         }
+        .width('100%') // <-- CRITICAL: Fills the column
       }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
 
       Text(this.dt(timing.time)).fontSize(14)
         .fontColor(this.colors.textMuted).fontStyle(FontStyle.Italic)

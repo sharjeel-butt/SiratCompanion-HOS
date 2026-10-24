@@ -90,7 +90,10 @@ export class CalendarReminderHelper {
    *
    * @returns true when the backend is ready to schedule events
    */
-  static async init(context: common.UIAbilityContext): Promise<boolean> {
+  static async init(
+    context: common.UIAbilityContext,
+    requestPermissions: boolean = false
+  ): Promise<boolean> {
     if (CalendarReminderHelper.ready) {
       return true;
     }
@@ -100,8 +103,12 @@ export class CalendarReminderHelper {
     CalendarReminderHelper.initializing = true;
 
     try {
-      const granted =
-        await CalendarReminderHelper.requestPermission(context);
+      // If requestPermissions is true, show the OS prompt.
+      // Otherwise, just check if they are already granted silently.
+      const granted = requestPermissions
+        ? await CalendarReminderHelper.requestPermission(context)
+        : await CalendarReminderHelper.isPermissionGranted(context);
+
       if (!granted) {
         AppLogger.warn('CalendarReminderHelper',
           'Calendar permissions not granted');
@@ -119,9 +126,6 @@ export class CalendarReminderHelper {
       }
       CalendarReminderHelper.calendar = cal;
 
-      // Enable reminders on this account. Without this, the system
-      // will not fire calendar notifications even if reminderTime
-      // is set on the events.
       const config: calendarManager.CalendarConfig = {
         enableReminder: true,
         color: '#0F5132'

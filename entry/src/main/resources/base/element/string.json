@@ -2426,11 +2426,92 @@
     },
     {
       "name": "lang_system",
-      "value": "Use System Settings"
+      "value": "Auto Detect"
     },
     {
       "name": "lang_system_desc",
-      "value": "Automatic"
-    }
+      "value": "Matches system language"
+    },
+    {
+      "name": "lang_supported_hint",
+      "value": "Supported languages: English, Arabic, Chinese"
+    },
+    {
+      "name": "tasbih_default_classic_name",
+      "value": "Classic 33"
+    },
+    {
+      "name": "tasbih_default_tahlil_name",
+      "value": "Tahlil 100"
+    },
+    {
+      "name": "tasbih_default_istighfar_name",
+      "value": "Istighfar"
+    },
+    {
+      "name": "dhikr_subhanallah_translit",
+      "value": "SubhanAllah"
+    },
+    {
+      "name": "dhikr_subhanallah_trans",
+      "value": "Glory be to Allah"
+    },
+    {
+      "name": "dhikr_alhamdulillah_translit",
+      "value": "Alhamdulillah"
+    },
+    {
+      "name": "dhikr_alhamdulillah_trans",
+      "value": "All praise is for Allah"
+    },
+    {
+      "name": "dhikr_allahuakbar_translit",
+      "value": "Allahu Akbar"
+    },
+    {
+      "name": "dhikr_allahuakbar_trans",
+      "value": "Allah is the Greatest"
+    },
+    {
+      "name": "dhikr_tahlil_translit",
+      "value": "La ilaha illallahu wahdahu la sharika lah"
+    },
+    {
+      "name": "dhikr_tahlil_trans",
+      "value": "There is no god but Allah, alone, without partner"
+    },
+    {
+      "name": "dhikr_istighfar_translit",
+      "value": "Astaghfirullah"
+    },
+    {
+      "name": "dhikr_istighfar_trans",
+      "value": "I seek forgiveness from Allah"
+    },
+    {
+      "name": "tasbih_active_badge",
+      "value": "Active"
+    },
+    {
+      "name": "notif_step_title",
+      "value": "Prayer Reminders"
+    },
+    {
+      "name": "notif_step_desc",
+      "value": "Enable reminders to get notified for prayer times. This requires Calendar permissions."
+    },
+    {
+      "name": "permission_required",
+      "value": "Calendar Permission Required"
+    },
+    {
+      "name": "calendar_permission_required_msg",
+      "value": "Both Calendar Read and Write permissions are required for prayer reminders. Please grant them to continue."
+    },
+    {
+      "name": "grant",
+      "value": "Grant"
+    },
+    { "name": "category_logs", "value": "Diagnostic Logs" }
   ]
 }

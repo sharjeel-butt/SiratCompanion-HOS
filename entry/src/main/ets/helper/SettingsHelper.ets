@@ -45,6 +45,7 @@ import {
   STORAGE_KEY_TASBIH_SOUND,
   STORAGE_KEY_TASBIH_THEME_PRESET,
   STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_THEME_OVERRIDE,
   STORAGE_KEY_TIME_FORMAT,
   STORAGE_KEY_VIBRATION_ENABLED,
   STORAGE_KEY_WIZARD_COMPLETED
@@ -811,24 +812,19 @@ export class SettingsHelper {
   }
 
   static saveThemeMode(mode: string): void {
+    AppStorage.setOrCreate(STORAGE_KEY_THEME_OVERRIDE, mode);
+    PreferencesHelper.setString(STORAGE_KEY_THEME_OVERRIDE, mode);
+
     AppStorage.setOrCreate(STORAGE_KEY_THEME_MODE, mode);
     PreferencesHelper.setString(STORAGE_KEY_THEME_MODE, mode);
   }
 
-  // ============================================================
-  // THEME MODE
-  // ============================================================
-
   static buildThemePickerItems(current: string): PickerItem[] {
-    // v3.5.1: dark mode follows the system only. Any other value is
-    // coerced to System on load — this picker will therefore only
-    // ever contain one entry. Kept for defensive use by any caller
-    // that still constructs the list.
-    return [ThemeMode.SYSTEM]
+    return [ThemeMode.SYSTEM, ThemeMode.LIGHT, ThemeMode.DARK]
       .map((m): PickerItem => ({
         id: m,
         label: SettingsHelper.getThemeModeLabel(m),
-        selected: true
+        selected: m === current
       }));
   }
 
@@ -901,6 +897,9 @@ export class SettingsHelper {
     const resolved = L.resolveOverride(lang);
     AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, resolved);
     PreferencesHelper.setString(STORAGE_KEY_LANGUAGE, resolved);
+
+    // Tell the system context to adopt this language (fixes native overlays)
+    L.applySystemLanguage(lang);
   }
 
   static async isWizardCompleted(): Promise<boolean> {

@@ -1,10 +1,12 @@
 // entry/src/main/ets/entryability/EntryAbility.ets
 
 import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
+import { Configuration } from '@ohos.app.ability.Configuration'; // Direct import fixes fontScale error
 import { window } from '@kit.ArkUI';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { deviceInfo } from '@kit.BasicServicesKit';
 import { PreferencesHelper } from '../helper/PreferencesHelper';
+import { AppLogger } from '../helper/AppLogger';
 import { AppLanguage, L } from '../i8n/LocalizationHelper';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
@@ -17,6 +19,7 @@ import {
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LANGUAGE_OVERRIDE,
+  STORAGE_KEY_RAMADAN_STATE_VERSION,
   STORAGE_KEY_SHOW_EXTRA_TIMINGS,
   STORAGE_KEY_SHOW_FIRST_THIRD,
   STORAGE_KEY_SHOW_FIRST_THIRD_LIST,
@@ -34,6 +37,7 @@ import {
   STORAGE_KEY_SOUND_ENABLED,
   STORAGE_KEY_TASBIH_SOUND,
   STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_THEME_OVERRIDE,
   STORAGE_KEY_TIME_FORMAT,
   STORAGE_KEY_VIBRATION_ENABLED,
   STORAGE_KEY_WIZARD_COMPLETED
@@ -42,24 +46,18 @@ import { SoundHelper } from '../helper/SoundHelper';
 import { SoundOptions } from '../common/SoundOptions';
 import { SystemFeedbackHelper } from '../helper/SystemFeedbackHelper';
 import { ThemeMode, ThemePreset } from '../common/Theme';
-import { AppLogger } from '../helper/AppLogger';
 import { PrayerManager } from '../prayer/PrayerManager';
 import { LayoutHelper } from '../helper/LayoutHelper';
 import { MaterialHelper } from '../helper/MaterialHelper';
 import { SettingsHelper } from '../helper/SettingsHelper';
 import { NotificationHelper } from '../helper/NotificationHelper';
-import {
-  CalendarReminderHelper
-} from '../hijricalendar/CalendarReminderHelper';
-import {
-  CALENDAR_REMINDERS_ENABLED
-} from '../common/FeatureFlags';
+import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
+import { CALENDAR_REMINDERS_ENABLED } from '../common/FeatureFlags';
 import { ClockFormat } from '../common/ClockFormat';
-import {
-  HijriCalendarType
-} from '../hijricalendar/HijriCalendarType';
+import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 import { LocationCache } from '../utils/LocationCache';
 import { TypographyHelper } from '../helper/TypographyHelper';
+import { PageTheme } from '../common/PageTheme';
 
 /** How long the splash stays visible, in milliseconds. */
 const SPLASH_DELAY_MS = 1500;
@@ -93,10 +91,10 @@ export default class EntryAbility extends UIAbility {
     // first subscriber attaches, its initial value can be created
     // without firing a change notification on some SDK builds.
     // Seeding them here guarantees a stable value from the start.
-
     AppStorage.setOrCreate(STORAGE_KEY_APP_FOREGROUND_TICK, 0);
     AppStorage.setOrCreate(STORAGE_KEY_EVENT_SETTINGS_VERSION, 0);
     AppStorage.setOrCreate(STORAGE_KEY_CALC_SETTINGS_VERSION, 0);
+    AppStorage.setOrCreate(STORAGE_KEY_RAMADAN_STATE_VERSION, 0);
   }
 
   // ============================================================
@@ -108,7 +106,7 @@ export default class EntryAbility extends UIAbility {
     L.init(this.context);
     LayoutHelper.install();
     TypographyHelper.init();
-    console.info('[Splash] L.init completed');
+
     // On 2-in-1 devices, request a preferred starting window size.
     // Failures are non-fatal — the system default applies.
     if (deviceInfo.deviceType === '2in1') {
@@ -133,21 +131,48 @@ export default class EntryAbility extends UIAbility {
       // LOAD PERSISTED PREFERENCES INTO APPSTORAGE
       // ========================================================
 
-      // v3.5.1: dark mode now follows the system only. Any stored
-      // 'Light' or 'Dark' value is migrated to 'System' on first
-      // launch, then persisted so subsequent launches are no-ops.
-      const savedMode = await PreferencesHelper.getString(
-        STORAGE_KEY_THEME_MODE, ThemeMode.SYSTEM
+      // ---- Theme Override ----
+      let savedThemeOverride = await PreferencesHelper.getString(
+        STORAGE_KEY_THEME_OVERRIDE, ''
       );
-      AppStorage.setOrCreate(STORAGE_KEY_THEME_MODE, ThemeMode.SYSTEM);
-      if (savedMode !== ThemeMode.SYSTEM) {
-        AppLogger.info('EntryAbility',
-          `Migrating theme mode '${savedMode}' → System`);
-        PreferencesHelper.setString(
+      if (savedThemeOverride.length === 0) {
+        // Migrate from previous versions (which only had THEME_MODE)
+        const legacyTheme = await PreferencesHelper.getString(
           STORAGE_KEY_THEME_MODE, ThemeMode.SYSTEM
         );
+        savedThemeOverride = legacyTheme;
+        PreferencesHelper.setString(STORAGE_KEY_THEME_OVERRIDE, savedThemeOverride);
+        AppLogger.info('EntryAbility', `Theme override migrated → '${savedThemeOverride}'`);
       }
 
+      AppStorage.setOrCreate(STORAGE_KEY_THEME_OVERRIDE, savedThemeOverride);
+      AppStorage.setOrCreate(STORAGE_KEY_THEME_MODE, savedThemeOverride);
+      PageTheme.applyColorMode(savedThemeOverride, this.context);
+
+      // ---- Language Override ----
+      let savedOverride = await PreferencesHelper.getString(
+        STORAGE_KEY_LANGUAGE_OVERRIDE, ''
+      );
+      if (savedOverride.length === 0) {
+        const legacyLang = await PreferencesHelper.getString(
+          STORAGE_KEY_LANGUAGE, ''
+        );
+        if (legacyLang.length > 0 && legacyLang !== AppLanguage.SYSTEM) {
+          savedOverride = legacyLang;
+        } else {
+          savedOverride = AppLanguage.SYSTEM;
+        }
+        PreferencesHelper.setString(STORAGE_KEY_LANGUAGE_OVERRIDE, savedOverride);
+        AppLogger.info('EntryAbility', `Language override migrated → '${savedOverride}'`);
+      }
+
+      const resolvedLanguage = L.resolveOverride(savedOverride);
+      AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE_OVERRIDE, savedOverride);
+      AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, resolvedLanguage);
+      PreferencesHelper.setString(STORAGE_KEY_LANGUAGE, resolvedLanguage);
+      L.applySystemLanguage(savedOverride);
+
+      // ---- Other Preferences ----
       const tasbihSound = await PreferencesHelper.getString(
         STORAGE_KEY_TASBIH_SOUND, SoundOptions.DEFAULT_ID
       );
@@ -175,42 +200,6 @@ export default class EntryAbility extends UIAbility {
         STORAGE_KEY_HIJRI_CALENDAR_TYPE, savedHijriCalendarType
       );
 
-      // v3.5.1: language now carries an override ('system' | 'en' |
-      // 'zh' | 'ar'). Migrate from the legacy STORAGE_KEY_LANGUAGE
-      // (which only stored a concrete code) on first launch after
-      // update. New installs default to 'system'.
-      let savedOverride = await PreferencesHelper.getString(
-        STORAGE_KEY_LANGUAGE_OVERRIDE, ''
-      );
-      if (savedOverride.length === 0) {
-        const legacyLang = await PreferencesHelper.getString(
-          STORAGE_KEY_LANGUAGE, ''
-        );
-        if (legacyLang.length > 0
-          && legacyLang !== AppLanguage.SYSTEM) {
-          // Existing user with explicit choice — preserve it
-          savedOverride = legacyLang;
-        } else {
-          // Fresh install — follow the device
-          savedOverride = AppLanguage.SYSTEM;
-        }
-        PreferencesHelper.setString(
-          STORAGE_KEY_LANGUAGE_OVERRIDE, savedOverride
-        );
-        AppLogger.info('EntryAbility',
-          `Language override migrated → '${savedOverride}'`);
-      }
-      const resolvedLanguage = L.resolveOverride(savedOverride);
-      AppStorage.setOrCreate(
-        STORAGE_KEY_LANGUAGE_OVERRIDE, savedOverride
-      );
-      AppStorage.setOrCreate(
-        STORAGE_KEY_LANGUAGE, resolvedLanguage
-      );
-      PreferencesHelper.setString(
-        STORAGE_KEY_LANGUAGE, resolvedLanguage
-      );
-
       const savedShowIslamicEvents = await PreferencesHelper.getBoolean(
         STORAGE_KEY_SHOW_ISLAMIC_EVENTS, true
       );
@@ -224,10 +213,6 @@ export default class EntryAbility extends UIAbility {
       AppStorage.setOrCreate(STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW, savedAutoShowRamadanView);
 
       // ---- Event perspective ----
-      // Seed the AppStorage mirror so @StorageLink subscribers on
-      // Home / Prayer / Calendar bind to the persisted value at
-      // startup rather than the default. Without this, a change
-      // made in Customize would appear to revert on relaunch.
       const savedEventPerspective = await PreferencesHelper.getString(
         STORAGE_KEY_EVENT_PERSPECTIVE, 'universal'
       );
@@ -248,21 +233,6 @@ export default class EntryAbility extends UIAbility {
       // ========================================================
       // PER-TIMING VISIBILITY — MIGRATION
       // ========================================================
-      //
-      // Each extra timing's visibility was split into separate
-      // list and sun-path toggles in 3.2.4. Seed both new keys
-      // from the previous single per-timing value on the first
-      // launch after upgrade. On subsequent launches the new keys
-      // already exist, so the legacy value is ignored.
-      //
-      // Legacy chain for context:
-      //   - 3.0.x:  one group toggle (show_extra_timings)
-      //   - 3.2.3:  four per-timing keys (show_imsak, …)
-      //   - 3.2.4:  eight per-surface keys
-      //
-      // A very old install might only have the group toggle. The
-      // chain below handles every hop in order.
-
       const legacyGroup = await PreferencesHelper.getBoolean(
         STORAGE_KEY_SHOW_EXTRA_TIMINGS, true
       );
@@ -282,68 +252,46 @@ export default class EntryAbility extends UIAbility {
 
       AppStorage.setOrCreate(
         STORAGE_KEY_SHOW_IMSAK_LIST,
-        await PreferencesHelper.getBoolean(
-          STORAGE_KEY_SHOW_IMSAK_LIST, legacyImsak
-        )
+        await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_IMSAK_LIST, legacyImsak)
       );
       AppStorage.setOrCreate(
         STORAGE_KEY_SHOW_IMSAK_SUNPATH,
-        await PreferencesHelper.getBoolean(
-          STORAGE_KEY_SHOW_IMSAK_SUNPATH, legacyImsak
-        )
+        await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_IMSAK_SUNPATH, legacyImsak)
       );
 
       AppStorage.setOrCreate(
         STORAGE_KEY_SHOW_FIRST_THIRD_LIST,
-        await PreferencesHelper.getBoolean(
-          STORAGE_KEY_SHOW_FIRST_THIRD_LIST, legacyFirstThird
-        )
+        await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_FIRST_THIRD_LIST, legacyFirstThird)
       );
       AppStorage.setOrCreate(
         STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH,
-        await PreferencesHelper.getBoolean(
-          STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH, legacyFirstThird
-        )
+        await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH, legacyFirstThird)
       );
 
       AppStorage.setOrCreate(
         STORAGE_KEY_SHOW_MIDNIGHT_LIST,
-        await PreferencesHelper.getBoolean(
-          STORAGE_KEY_SHOW_MIDNIGHT_LIST, legacyMidnight
-        )
+        await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_MIDNIGHT_LIST, legacyMidnight)
       );
       AppStorage.setOrCreate(
         STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH,
-        await PreferencesHelper.getBoolean(
-          STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH, legacyMidnight
-        )
+        await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH, legacyMidnight)
       );
 
       AppStorage.setOrCreate(
         STORAGE_KEY_SHOW_LAST_THIRD_LIST,
-        await PreferencesHelper.getBoolean(
-          STORAGE_KEY_SHOW_LAST_THIRD_LIST, legacyLastThird
-        )
+        await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_LAST_THIRD_LIST, legacyLastThird)
       );
       AppStorage.setOrCreate(
         STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH,
-        await PreferencesHelper.getBoolean(
-          STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH, legacyLastThird
-        )
+        await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH, legacyLastThird)
       );
-
-      // Legacy group keys are read but never written going forward.
-      // They remain in Preferences only as migration inputs.
 
       // ========================================================
       // REMAINING STARTUP
       // ========================================================
 
-      // ---- Log material capability once per session ----
       MaterialHelper.logCapability();
 
-      // ---- Log the device timezone so cross-zone issues are
-      //      diagnosable from the in-app log ----
       try {
         const deviceOffset = -new Date().getTimezoneOffset() / 60;
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -353,12 +301,7 @@ export default class EntryAbility extends UIAbility {
         AppLogger.info('EntryAbility', 'Device timezone lookup failed');
       }
 
-      // ---- Load the persisted prayer-state map into memory so
-      //      every subsequent read/write is synchronous ----
       await PrayerManager.primeStateMap();
-
-      // ---- Read system sound & haptics state, start listening
-      //      for changes ----
       SystemFeedbackHelper.init(this.context);
 
       // ---- Decide the start page ----
@@ -369,16 +312,13 @@ export default class EntryAbility extends UIAbility {
 
       // ---- Tasbih sound player (non-blocking) ----
       SoundHelper.init(this.context).catch((e: Error) => {
-        AppLogger.warn(
-          'EntryAbility', `SoundHelper init failed: ${e.message}`
-        );
+        AppLogger.warn('EntryAbility', `SoundHelper init failed: ${e.message}`);
       });
 
-      // ---- Calendar reminder backend (non-blocking) ----
+      // ---- Calendar reminder backend (silent check on startup) ----
       if (CALENDAR_REMINDERS_ENABLED) {
-        CalendarReminderHelper.init(this.context).catch((e: Error) => {
-          AppLogger.warn('EntryAbility',
-            `CalendarReminderHelper init failed: ${e.message}`);
+        CalendarReminderHelper.init(this.context, false).catch((e: Error) => {
+          AppLogger.warn('EntryAbility', `CalendarReminderHelper init failed: ${e.message}`);
         });
       }
 
@@ -426,13 +366,35 @@ export default class EntryAbility extends UIAbility {
     hilog.info(0x0000, 'Sirat', 'onForeground tick=%{public}d', next);
   }
 
+  // ============================================================
+  // LIFECYCLE — onBackground
+  // ============================================================
+
+  onBackground(): void {
+    // Flush any pending debounced preference write before the
+    // process is suspended. Fire-and-forget.
+    PreferencesHelper.flushNow().catch((err: Error) => {
+      AppLogger.warn('EntryAbility', `Flush on background failed: ${err.message}`);
+    });
+  }
+
+  // ============================================================
+  // CONFIGURATION UPDATE (OS Language Change)
+  // ============================================================
+
+  onConfigurationUpdate(newConfig: Configuration): void {
+    AppLogger.info('EntryAbility', 'onConfigurationUpdate fired');
+    this.reResolveSystemLanguage();
+  }
+
+  // ============================================================
+  // HELPER METHODS
+  // ============================================================
+
   /**
-   * v3.5.1: if the user picked "Use System Settings" as their
-   * language, re-check the device locale every time the app
-   * foregrounds. Catches the case where the user changed their
-   * phone language while the app was backgrounded.
-   *
-   * No-op when the user has an explicit language pick.
+   * If the user picked "Auto Detect" as their language, re-check
+   * the device locale every time the app foregrounds or the OS
+   * configuration changes.
    */
   private reResolveSystemLanguage(): void {
     const override = AppStorage.get<string>(STORAGE_KEY_LANGUAGE_OVERRIDE);
@@ -441,52 +403,18 @@ export default class EntryAbility extends UIAbility {
     }
     const current = AppStorage.get<string>(STORAGE_KEY_LANGUAGE);
     const resolved = L.matchSystemLocale();
+
     if (current !== resolved) {
-      AppLogger.info('EntryAbility',
-        `System language changed → '${resolved}'`);
+      AppLogger.info('EntryAbility', `System language changed → '${resolved}'`);
       AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, resolved);
       PreferencesHelper.setString(STORAGE_KEY_LANGUAGE, resolved);
+      L.applySystemLanguage(override);
     }
   }
 
-  // ============================================================
-  // LIFECYCLE — onBackground
-  // ============================================================
-
-  onBackground(): void {
-    // Flush any pending debounced preference write before the
-    // process is suspended. PreferencesHelper batches writes on a
-    // 250 ms debounce; without this, a setting changed in the
-    // final moments before backgrounding could be lost if the
-    // process is killed before the timer fires.
-    //
-    // Fire-and-forget — onBackground is synchronous.
-    PreferencesHelper.flushNow().catch((err: Error) => {
-      AppLogger.warn(
-        'EntryAbility',
-        `Flush on background failed: ${err.message}`
-      );
-    });
-  }
-
-  onDestroy(): void {
-    AppLogger.info('EntryAbility', 'onDestroy — app exiting');
-  }
-
-  // ============================================================
-  // TIMEZONE CHANGE DETECTION
-  // ============================================================
-
   /**
    * If the device's timezone offset has changed since the last
-   * foreground, the cached location's coordinates are still valid
-   * but the clock they were computed against is not. Invalidate the
-   * cache so times are recomputed with the correct offset.
-   *
-   * The "last offset" lives in AppStorage, so it is reset on every
-   * process start — the check only fires when a running session
-   * crosses a timezone boundary (e.g., a flight, or a manual change
-   * in device settings).
+   * foreground, invalidate the cache so times are recomputed.
    */
   private checkTimezoneChange(): void {
     try {
@@ -496,8 +424,7 @@ export default class EntryAbility extends UIAbility {
       if (lastOffset !== undefined &&
         Math.abs(lastOffset - currentOffset) > 0.25) {
         AppLogger.info('EntryAbility',
-          `Timezone changed ${lastOffset}h → ${currentOffset}h; ` +
-            `clearing location cache`);
+          `Timezone changed ${lastOffset}h → ${currentOffset}h; clearing location cache`);
         LocationCache.clear().catch(() => { /* non-fatal */
         });
       }
@@ -508,10 +435,6 @@ export default class EntryAbility extends UIAbility {
     }
   }
 
-  // ============================================================
-  // REMINDER RENEWAL
-  // ============================================================
-
   /**
    * Renew the prayer-reminder window on app start.
    */
@@ -519,8 +442,7 @@ export default class EntryAbility extends UIAbility {
     try {
       const ns = await SettingsHelper.getNotificationSettings();
       if (!ns.masterEnabled) {
-        AppLogger.info('EntryAbility',
-          'Reminder renewal skipped — master toggle off');
+        AppLogger.info('EntryAbility', 'Reminder renewal skipped — master toggle off');
         return;
       }
       await NotificationHelper.rescheduleAll();

@@ -2427,11 +2427,91 @@
     },
     {
       "name": "lang_system",
-      "value": "استخدام إعدادات النظام"
+      "value": "الكشف التلقائي"
     },
     {
       "name": "lang_system_desc",
-      "value": "تلقائي"
-    }
+      "value": "مطابقة لغة النظام"
+    },
+    {
+      "name": "lang_supported_hint",
+      "value": "اللغات المدعومة: الإنجليزية، العربية، الصينية"
+    },
+    {
+      "name": "tasbih_default_classic_name",
+      "value": "كلاسيك 33"
+    },
+    {
+      "name": "tasbih_default_tahlil_name",
+      "value": "تهليل 100"
+    },
+    {
+      "name": "tasbih_default_istighfar_name",
+      "value": "استغفار"
+    },
+    {
+      "name": "dhikr_subhanallah_translit",
+      "value": "سبحان الله"
+    },
+    {
+      "name": "dhikr_subhanallah_trans",
+      "value": "سبحان الله"
+    },
+    {
+      "name": "dhikr_alhamdulillah_translit",
+      "value": "الحمد لله"
+    },
+    {
+      "name": "dhikr_alhamdulillah_trans",
+      "value": "الحمد لله"
+    },
+    {
+      "name": "dhikr_allahuakbar_translit",
+      "value": "الله أكبر"
+    },
+    {
+      "name": "dhikr_allahuakbar_trans",
+      "value": "الله أكبر"
+    },
+    {
+      "name": "dhikr_tahlil_translit",
+      "value": "لا إله إلا الله وحده لا شريك له"
+    },
+    {
+      "name": "dhikr_tahlil_trans",
+      "value": "لا إله إلا الله وحده لا شريك له"
+    },
+    {
+      "name": "dhikr_istighfar_translit",
+      "value": "أستغفر الله"
+    },
+    {
+      "name": "dhikr_istighfar_trans",
+      "value": "أستغفر الله"
+    },
+    {
+      "name": "tasbih_active_badge",
+      "value": "نشط"
+    },
+    {
+      "name": "notif_step_title",
+      "value": "تذكيرات الصلاة"
+    },
+    {
+      "name": "notif_step_desc",
+      "value": "قم بتفعيل التذكيرات ليتم تنبيهك بأوقات الصلاة. يتطلب ذلك أذونات التقويم."
+    },
+    {
+      "name": "permission_required",
+      "value": "مطلوب إذن التقويم"
+    },
+    {
+      "name": "calendar_permission_required_msg",
+      "value": "مطلوب إذن قراءة وكتابة التقويم لتذكيرات الصلاة. يرجى منحها للمتابعة."
+    },
+    {
+      "name": "grant",
+      "value": "منح"
+    },{ "name": "category_logs", "value": "سجلات التشخيص" }
   ]
 }
