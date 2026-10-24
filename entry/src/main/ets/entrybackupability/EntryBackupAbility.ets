@@ -144,7 +144,14 @@ const TASBIH_SPECS: PrefSpec[] = [
   // taraweeh toggles, and per-day qada made-up flags for every
   // year. Schema migrations are handled inside RamadanStorage.doLoad()
   // — this spec only cares about the JSON string round-trip.
-  { key: 'ramadan_log', type: TYPE_STRING }
+  { key: 'ramadan_log', type: TYPE_STRING },
+  // ---- App Settings ----
+  { key: 'theme_mode', type: TYPE_STRING },
+  { key: 'theme_mode_override', type: TYPE_STRING },   // <-- ADD THIS
+  { key: 'app_theme_preset', type: TYPE_STRING },
+  { key: 'app_language', type: TYPE_STRING },
+  { key: 'app_language_override', type: TYPE_STRING }, // <-- ADD THIS
+  { key: 'time_format', type: TYPE_STRING },
 ];
 
 /**

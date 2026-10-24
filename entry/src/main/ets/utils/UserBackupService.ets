@@ -22,6 +22,7 @@ import {
   STORAGE_KEY_HIJRI_CALENDAR_VERSION,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_LANGUAGE_OVERRIDE,
   STORAGE_KEY_LOCATION_VERSION,
   STORAGE_KEY_PRAYER_STATE_VERSION,
   STORAGE_KEY_RAMADAN_STATE_VERSION,
@@ -38,6 +39,7 @@ import {
   STORAGE_KEY_TASBIH_SOUND,
   STORAGE_KEY_TASBIH_STATE_VERSION,
   STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_THEME_OVERRIDE,
   STORAGE_KEY_TIME_FORMAT,
   STORAGE_KEY_VIBRATION_ENABLED,
   STORAGE_KEY_WIZARD_COMPLETED
@@ -70,8 +72,8 @@ interface ValidationResult {
 
 /**
  * Every value in preferences is one of these three primitives.
- * Structured data (`prayer_state_map`, `tasbihs_data`) is stored
- * as a JSON-in-string and therefore also lands here as `string`.
+ * Structured data (`prayer_state_map`, `tasbihs_data`, `ramadan_log`)
+ * is stored as a JSON-in-string and therefore also lands here as `string`.
  */
 type BackupValue = string | number | boolean;
 
@@ -144,8 +146,10 @@ const SETTINGS_SPECS: PrefSpec[] = [
 
   // ---- App Settings ----
   { key: 'theme_mode', type: 'string' },
+  { key: 'theme_mode_override', type: 'string' },
   { key: 'app_theme_preset', type: 'string' },
   { key: 'app_language', type: 'string' },
+  { key: 'app_language_override', type: 'string' },
   { key: 'time_format', type: 'string' },
   { key: 'wizard_completed', type: 'boolean' },
   { key: 'hijri_offset', type: 'number' },
@@ -187,19 +191,12 @@ const SETTINGS_SPECS: PrefSpec[] = [
   { key: 'tasbih_render_style', type: 'string' },
   { key: 'tasbih_theme_preset', type: 'string' },
 
-  // ---- Prayer Progress (CRITICAL) ----
-  // Stored as a JSON string: { "<date>": "<json-check-state>" }.
-  // Kept as-is in the backup so it round-trips through both this
-  // service and EntryBackupAbility without type gymnastics.
+  // ---- Progress & Logs ----
   { key: 'prayer_state_map', type: 'string' },
-  // ---- Ramadan Tracker ----
-  // JSON-serialized RamadanLogStore covering fasting, taraweeh,
-  // and qada data for every year the user has tracked.
   { key: 'ramadan_log', type: 'string' }
 ];
 
 const TASBIH_SPECS: PrefSpec[] = [
-  // Stored as a JSON string of the full tasbih array.
   { key: 'tasbihs_data', type: 'string' },
   { key: 'tasbih_active_id', type: 'string' },
   { key: 'tasbih_active_dhikr', type: 'number' }
@@ -210,6 +207,7 @@ const TASBIH_SPECS: PrefSpec[] = [
 // ============================================================
 
 export class UserBackupService {
+
   // ============================================================
   // BACKUP
   // ============================================================
@@ -219,19 +217,14 @@ export class UserBackupService {
     appVersion: string
   ): Promise<BackupResult> {
     try {
-      // 1. Build the backup payload.
-      const backup = await UserBackupService.buildBackupObject(
-        context, appVersion
-      );
+      const backup = await UserBackupService.buildBackupObject(context, appVersion);
       const json = JSON.stringify(backup, null, 2);
 
-      // 2. Let the user pick a save location.
       const uri = await UserBackupService.pickSaveLocation(context, backup);
       if (uri.length === 0) {
         return { ok: false, message: 'cancelled' };
       }
 
-      // 3. Write.
       const written = UserBackupService.writeTextToUri(uri, json);
       if (!written) {
         return { ok: false, message: 'write_failed' };
@@ -287,8 +280,6 @@ export class UserBackupService {
       try {
         const has = await store.has(spec.key);
         if (!has) {
-          // Absent — skip. On restore, the key falls through to its
-          // default, which matches the current (never-set) state.
           continue;
         }
 
@@ -317,7 +308,7 @@ export class UserBackupService {
     try {
       const documentPicker = new picker.DocumentViewPicker(context);
       const options = new picker.DocumentSaveOptions();
-      const datePart = backup.createdAt.substring(0, 10); // YYYY-MM-DD
+      const datePart = backup.createdAt.substring(0, 10);
       options.newFileNames = [`SiratBackup_${datePart}.json`];
       const uris = await documentPicker.save(options);
       if (!uris || uris.length === 0) {
@@ -325,8 +316,6 @@ export class UserBackupService {
       }
       return uris[0];
     } catch (err) {
-      // User cancel is often surfaced as a thrown BusinessError on
-      // some SDK builds — treat as a silent cancellation.
       AppLogger.info('UserBackupService',
         'save picker dismissed by user or unavailable');
       return '';
@@ -336,8 +325,6 @@ export class UserBackupService {
   private static writeTextToUri(uri: string, content: string): boolean {
     let file: fs.File | null = null;
     try {
-      // The picker has already created the file. TRUNC clears any
-      // pre-existing content before we write.
       file = fs.openSync(uri, fs.OpenMode.WRITE_ONLY | fs.OpenMode.TRUNC);
     } catch (err) {
       try {
@@ -372,19 +359,16 @@ export class UserBackupService {
     context: common.UIAbilityContext
   ): Promise<RestoreResult> {
     try {
-      // 1. Let the user pick a file.
       const uri = await UserBackupService.pickOpenLocation(context);
       if (uri.length === 0) {
         return { ok: false, message: 'cancelled' };
       }
 
-      // 2. Read.
       const content = UserBackupService.readTextFromUri(uri);
       if (content.length === 0) {
         return { ok: false, message: 'read_failed' };
       }
 
-      // 3. Parse.
       let backup: BackupFileShape;
       try {
         backup = JSON.parse(content) as BackupFileShape;
@@ -392,16 +376,12 @@ export class UserBackupService {
         return { ok: false, message: 'invalid_json' };
       }
 
-      // 4. Validate.
       const validation = UserBackupService.validateBackup(backup);
       if (!validation.ok) {
         return { ok: false, message: validation.message };
       }
 
-      // 5. Apply — full replacement.
       await UserBackupService.applyBackup(context, backup);
-
-      // 6. Reload everything so the UI reflects the new state.
       await UserBackupService.reloadAllAfterRestore(context);
 
       AppLogger.info('UserBackupService',
@@ -461,7 +441,7 @@ export class UserBackupService {
     try {
       const buf = new ArrayBuffer(stat.size);
       const opts: ReadOptions = { offset: 0, length: stat.size };
-      const bytesRead = fs.readSync(file.fd, buf, opts);
+      const bytesRead: number = fs.readSync(file.fd, buf, opts);
       fs.closeSync(file);
       const u8 = new Uint8Array(buf, 0, bytesRead);
       return buffer.from(u8).toString('utf8');
@@ -508,7 +488,6 @@ export class UserBackupService {
     await UserBackupService.applyStore(
       context, STORE_TASBIH, backup.tasbih, TASBIH_SPECS
     );
-    // Defensive flush so the subsequent reload reads the new values.
     await PreferencesHelper.flushNow();
   }
 
@@ -519,8 +498,6 @@ export class UserBackupService {
     specs: PrefSpec[]
   ): Promise<void> {
     const store = await preferences.getPreferences(context, storeName);
-
-    // Full replacement — clear first.
     await store.clear();
 
     let applied = 0;
@@ -559,7 +536,6 @@ export class UserBackupService {
       }
     }
 
-    // Log any keys in the file that this build doesn't know about.
     const knownKeys = new Set<string>();
     for (const spec of specs) {
       knownKeys.add(spec.key);
@@ -590,13 +566,7 @@ export class UserBackupService {
     await TasbihStorage.load(TasbihManager.createDefaults());
 
     // 2. RamadanStorage.doLoad() runs schema migrations inline if
-    //    the restored backup was written by an older build (e.g.
-    //    pre-v3.5.0 backups that carry a `qadaMadeUp` counter
-    //    instead of per-day `madeUp` flags). Loading here
-    //    guarantees the migration persists before the version
-    //    bump wakes any UI — no page ever sees the pre-migration
-    //    schema. The returned store is discarded: pages read it
-    //    fresh via RamadanStorage.load() on the version bump.
+    //    the restored backup was written by an older build.
     await RamadanStorage.load();
 
     // 3. Re-seed AppStorage from the restored preferences.
@@ -617,54 +587,79 @@ export class UserBackupService {
   private static async seedAppStorageFromPrefs(): Promise<void> {
     AppStorage.setOrCreate(STORAGE_KEY_THEME_MODE,
       await PreferencesHelper.getString(STORAGE_KEY_THEME_MODE, 'System'));
+
+    AppStorage.setOrCreate(STORAGE_KEY_THEME_OVERRIDE,
+      await PreferencesHelper.getString(STORAGE_KEY_THEME_OVERRIDE, 'System'));
+
     AppStorage.setOrCreate(STORAGE_KEY_APP_THEME,
       await PreferencesHelper.getString(STORAGE_KEY_APP_THEME, 'Sirat'));
+
     AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE,
       await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE, 'en'));
+
+    AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE_OVERRIDE,
+      await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE_OVERRIDE, 'system'));
+
     AppStorage.setOrCreate(STORAGE_KEY_TIME_FORMAT,
       await PreferencesHelper.getString(STORAGE_KEY_TIME_FORMAT, 'System'));
+
     AppStorage.setOrCreate(STORAGE_KEY_HIJRI_OFFSET,
       await PreferencesHelper.getNumber(STORAGE_KEY_HIJRI_OFFSET, 0));
+
     AppStorage.setOrCreate(STORAGE_KEY_HIJRI_CALENDAR_TYPE,
       await PreferencesHelper.getString(
         STORAGE_KEY_HIJRI_CALENDAR_TYPE, 'UmmAlQura'));
+
     AppStorage.setOrCreate(STORAGE_KEY_EVENT_PERSPECTIVE,
       await PreferencesHelper.getString(
         STORAGE_KEY_EVENT_PERSPECTIVE, 'universal'));
+
     AppStorage.setOrCreate(STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
       await PreferencesHelper.getBoolean(
         STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW, true));
+
     AppStorage.setOrCreate(STORAGE_KEY_SOUND_ENABLED,
       await PreferencesHelper.getBoolean(STORAGE_KEY_SOUND_ENABLED, true));
+
     AppStorage.setOrCreate(STORAGE_KEY_VIBRATION_ENABLED,
       await PreferencesHelper.getBoolean(STORAGE_KEY_VIBRATION_ENABLED, true));
+
     AppStorage.setOrCreate(STORAGE_KEY_TASBIH_SOUND,
       await PreferencesHelper.getString(STORAGE_KEY_TASBIH_SOUND, 'soft_click'));
+
     AppStorage.setOrCreate(STORAGE_KEY_WIZARD_COMPLETED,
       await PreferencesHelper.getBoolean(STORAGE_KEY_WIZARD_COMPLETED, false));
 
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
       await PreferencesHelper.getBoolean(
         STORAGE_KEY_SHOW_ISLAMIC_EVENTS, true));
+
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_IMSAK_LIST,
       await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_IMSAK_LIST, true));
+
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_FIRST_THIRD_LIST,
       await PreferencesHelper.getBoolean(
         STORAGE_KEY_SHOW_FIRST_THIRD_LIST, true));
+
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_MIDNIGHT_LIST,
       await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_MIDNIGHT_LIST, true));
+
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_LAST_THIRD_LIST,
       await PreferencesHelper.getBoolean(
         STORAGE_KEY_SHOW_LAST_THIRD_LIST, true));
+
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_IMSAK_SUNPATH,
       await PreferencesHelper.getBoolean(
         STORAGE_KEY_SHOW_IMSAK_SUNPATH, true));
+
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH,
       await PreferencesHelper.getBoolean(
         STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH, true));
+
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH,
       await PreferencesHelper.getBoolean(
         STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH, true));
+
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH,
       await PreferencesHelper.getBoolean(
         STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH, true));

@@ -285,11 +285,11 @@ struct PrayerDetailsPage {
   @Builder
   WeekViewCard() {
     Column() {
-      Row() {
+      Row({ space: 8 }) {
         Image($r('app.media.ic_nav_calendar'))
           .width(16).height(16)
           .fillColor(this.colors.accentGold)
-          .margin({ right: 8 })
+          .flexShrink(0)
         Text(this.tr('details_period_week'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
@@ -413,11 +413,11 @@ struct PrayerDetailsPage {
   @Builder
   YearViewCard() {
     Column() {
-      Row() {
+      Row({ space: 8 }) {
         Image($r('app.media.ic_nav_calendar'))
           .width(16).height(16)
           .fillColor(this.colors.accentGold)
-          .margin({ right: 8 })
+          .flexShrink(0)
         Text(this.tr('details_period_year'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
@@ -809,11 +809,11 @@ struct PrayerDetailsPage {
   @Builder
   MonthHeatmapCard() {
     Column() {
-      Row() {
+      Row({ space: 8 }) {
         Image($r('app.media.ic_chart'))
           .width(16).height(16)
           .fillColor(this.colors.accentGold)
-          .margin({ right: 8 })
+          .flexShrink(0)
         Text(this.tr('details_this_month'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)

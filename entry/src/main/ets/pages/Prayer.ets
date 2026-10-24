@@ -1454,7 +1454,7 @@ export struct Prayer {
 
   @Builder
   PrayerItem(prayer: PrayerModel) {
-    Row() {
+    Row({ space: 12 }) {
       Stack() {
         if (prayer.checked) {
           Text('✓')
@@ -1465,12 +1465,10 @@ export struct Prayer {
             .width('100%')
             .height('100%')
         }
-
       }
       .width(22)
       .height(22)
       .borderRadius(5)
-
       .backgroundColor(prayer.checked
         ? this.colors.accentGold : 'transparent')
       .border({
@@ -1480,7 +1478,7 @@ export struct Prayer {
       })
       .opacity(PrayerManager.isPrayerCheckable(prayer, this.viewingDate)
         ? 1.0 : 0.4)
-      .margin({ left: this.isRtl() ? 12 : 0, right: this.isRtl() ? 0 : 12 })
+      .flexShrink(0) // <-- Prevents squishing
       .onClick(() => {
         if (PrayerManager.isPrayerCheckable(prayer, this.viewingDate)) {
           this.setPrayerChecked(prayer.id, !prayer.checked);
@@ -1494,18 +1492,27 @@ export struct Prayer {
             .fontWeight(prayer.checked
               ? FontWeight.Normal : FontWeight.Medium)
             .opacity(prayer.checked ? 0.5 : 1.0)
-          if (this.appLanguage !== 'ar') {
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
 
-          Text('  ')
-          Text(prayer.arabicName)
-            .fontSize(14).fontColor(this.colors.textMuted)
+          // Conditionally render to prevent double text in Arabic
+          if (this.appLanguage !== 'ar') {
+            Text('  ')
+            Text(prayer.arabicName)
+              .fontSize(14).fontColor(this.colors.textMuted)
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+          }
         }
-        }
+        .width('100%') // <-- CRITICAL: Fills the column so text aligns to the Start (Right in RTL)
+
         Text(this.getStatusLabel(prayer.status))
           .fontSize(11).fontColor(this.getStatusColor(prayer.status))
           .letterSpacing(1).margin({ top: 2 })
+          .width('100%')
       }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
 
       Text(this.dt(prayer.time)).fontSize(16)
         .fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
@@ -1526,29 +1533,36 @@ export struct Prayer {
 
   @Builder
   ExtraTimingRow(timing: ExtraTiming) {
-    Row() {
+    Row({ space: 12 }) {
       Text(timing.icon ?? '•')
         .fontSize(15)
         .width(20)
         .height(20)
         .textAlign(TextAlign.Center)
         .opacity(0.85)
-        .margin({ left: this.isRtl() ? 12 : 0, right: this.isRtl() ? 0 : 12 })
+        .flexShrink(0) // <-- Prevents squishing
 
       Column() {
         Row() {
           Text(this.translateTimingName(timing.name))
             .fontSize(14).fontColor(this.colors.textMuted)
             .fontStyle(FontStyle.Italic)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+
+          // Conditionally render to prevent double text in Arabic
           if (this.appLanguage !== 'ar') {
             Text('  ')
             Text(timing.arabicName)
-
               .fontSize(12).fontColor(this.colors.textMuted).opacity(0.65)
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
           }
         }
+        .width('100%') // <-- CRITICAL: Fills the column
       }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
 
       Text(this.dt(timing.time)).fontSize(14)
         .fontColor(this.colors.textMuted).fontStyle(FontStyle.Italic)

@@ -113,7 +113,7 @@ export struct PageHeader {
       // ============ Row 1: Hijri pill + Location pill ============
       Column() {
         // Hijri date pill
-        Row() {
+        Row({ space: 6 }) {
           Image($r('app.media.ic_ramadan_moon'))
             .width(14).height(14)
             .fillColor(this.colors.accentGold)
@@ -122,7 +122,6 @@ export struct PageHeader {
             .fontFamily(TypographyHelper.getFont(this.currentLanguage, true)) // <---
             .fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
-            .margin({ left: 6 })
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
         }
@@ -134,7 +133,7 @@ export struct PageHeader {
         .alignSelf(ItemAlign.Start)
 
         // Location pill
-        Row() {
+        Row({ space: 8 }) {
           Image($r('app.media.ic_pin'))
             .width(16).height(16)
             .fillColor(this.colors.accentGold)
@@ -143,14 +142,12 @@ export struct PageHeader {
             .fontFamily(TypographyHelper.getFont(this.currentLanguage, true)) // <---
             .fontColor(this.colors.textWhite)
             .fontWeight(FontWeight.Bold)
-            .margin({ left: 8 })
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
           if (this.isLoadingLocation) {
             LoadingProgress()
               .width(16).height(16)
               .color(this.colors.accentGold)
-              .margin({ left: 8 })
           } else {
             Image($r('app.media.ic_chevron_right'))
               .width(16)

@@ -302,8 +302,8 @@ export struct TasbihPage {
           .layoutWeight(1).height('100%')
           .alignItems(HorizontalAlign.Start)
           .padding({
-            left: this.isTablet() ? 48 : 24,
-            right: 8,
+            left: this.isRtl() ? 8 : (this.isTablet() ? 48 : 24),
+            right: this.isRtl() ? (this.isTablet() ? 48 : 24) : 8,
             top: 16,
             bottom: 110
           })
@@ -350,7 +350,7 @@ export struct TasbihPage {
       Row() {
         Text('📿').fontSize(14).margin({ right: 6 }).flexShrink(0)
         Text(this.getActiveTasbih()
-          ? this.getActiveTasbih()!.name
+          ? this.getTasbihName(this.getActiveTasbih()) // <-- Updated
           : this.tr('tab_tasbih'))
           .fontSize(15)
           .fontColor(this.colors.textWhite)
@@ -384,8 +384,7 @@ export struct TasbihPage {
       // Dhikr picker
       Row() {
         Text(this.getActiveDhikr()
-          && this.getActiveDhikr()!.transliteration.length > 0
-          ? this.getActiveDhikr()!.transliteration
+          ? this.getDhikrLabel(this.getActiveDhikr()) // <-- Updated
           : this.tr('select_dhikr'))
           .fontSize(13)
           .fontColor(this.colors.accentGold)
@@ -432,19 +431,8 @@ export struct TasbihPage {
    * Return the sheet height for the current sheet type. TasbihEditor
    * and DhikrEditor need more room; the two pickers are more compact.
    */
-  private sheetHeight(): number {
-    switch (this.activeSheet) {
-      case 'tasbihPicker':
-        return 420;
-      case 'dhikrPicker':
-        return 480;
-      case 'tasbihEditor':
-        return 420;
-      case 'dhikrEditor':
-        return 560;
-      default:
-        return 200;
-    }
+  private sheetHeight(): number | SheetSize {
+    return SheetSize.FIT_CONTENT;
   }
 
   @Builder
@@ -555,7 +543,12 @@ export struct TasbihPage {
     }
     .width(this.isTablet() ? 120 : 72)
     .height('100%')
-    .padding({ top: BEAD_COLUMN_TOP_PADDING, bottom: 110, right: this.isTablet() ? 60 : 40 })
+    .padding({
+      top: BEAD_COLUMN_TOP_PADDING,
+      bottom: 110,
+      left: this.isRtl() ? (this.isTablet() ? 60 : 40) : 0,
+      right: this.isRtl() ? 0 : (this.isTablet() ? 60 : 40)
+    })
     .direction(Direction.Ltr)
   }
 
@@ -580,7 +573,12 @@ export struct TasbihPage {
     }
     .width(this.isTablet() ? 120 : 72)
     .height('100%')
-    .padding({ top: BEAD_COLUMN_TOP_PADDING, bottom: 110, right: this.isTablet() ? 60 : 40 })
+    .padding({
+      top: BEAD_COLUMN_TOP_PADDING,
+      bottom: 110,
+      left: this.isRtl() ? (this.isTablet() ? 60 : 40) : 0,
+      right: this.isRtl() ? 0 : (this.isTablet() ? 60 : 40)
+    })
     .direction(Direction.Ltr)
   }
 
@@ -628,7 +626,7 @@ export struct TasbihPage {
       Scroll() {
         Column() {
           ForEach(this.tasbihs, (t: Tasbih) => {
-            Row() {
+            Row({ space: 12 }) { // <-- Added Row space
               Row() {
                 if (t.id === this.activeTasbihId) {
                   Row().width(10).height(10).borderRadius(5)
@@ -645,34 +643,38 @@ export struct TasbihPage {
               })
               .justifyContent(FlexAlign.Center)
               .alignItems(VerticalAlign.Center)
+              .flexShrink(0) // Prevent squish
 
               Column()
                 .width(16)
                 .height(16)
                 .borderRadius(8)
+                .flexShrink(0) // Prevent squish
                 .backgroundColor(TasbihThemes.presetById(
                   t.themePresetId !== undefined && t.themePresetId.length > 0
                     ? t.themePresetId
                     : TasbihThemes.DEFAULT_PRESET_ID
                 ).swatch)
-                .margin({ left: 12 })
 
               Column() {
-                Text(t.name)
+                Text(this.getTasbihName(t)) // <-- Updated
                   .fontSize(15).fontColor(this.colors.textWhite)
                   .fontWeight(FontWeight.Medium).width('100%')
-                Text(`${this.dhikrCountLabel(t.dhikrs.length)} · ${t.lifetimeCount || 0} ${this.tr('total_on_tasbih')}`)
+                Text(`${t.dhikrs.length} ${t.dhikrs.length === 1
+                  ? this.tr('dhikr_count_singular')
+                  : this.tr('dhikr_count_plural')} · ${t.lifetimeCount || 0} ${this.tr('total_on_tasbih')}`)
                   .fontSize(11).fontColor(this.colors.textMuted)
                   .margin({ top: 2 }).width('100%')
               }
               .alignItems(HorizontalAlign.Start)
-              .layoutWeight(1).margin({ left: 12 })
+              .layoutWeight(1)
 
               Text('✏️')
                 .fontSize(18)
                 .width(36)
                 .height(36)
                 .textAlign(TextAlign.Center)
+                .flexShrink(0)
                 .onClick(() => {
                   this.openEditTasbihEditor(t);
                 })
@@ -683,6 +685,7 @@ export struct TasbihPage {
                   .width(36)
                   .height(36)
                   .textAlign(TextAlign.Center)
+                  .flexShrink(0)
                   .onClick(() => {
                     this.deleteTasbih(t.id);
                   })
@@ -692,8 +695,8 @@ export struct TasbihPage {
             .padding({
               top: 12,
               bottom: 12,
-              left: 16,
-              right: 8
+              left: this.isRtl() ? 8 : 16,
+              right: this.isRtl() ? 16 : 8
             })
             .backgroundColor(t.id === this.activeTasbihId
               ? this.colors.tintSoft : 'transparent')
@@ -708,7 +711,7 @@ export struct TasbihPage {
         .width('100%')
         .padding({ left: 8, right: 8, bottom: 8 })
       }
-      .layoutWeight(1)
+      .flexShrink(1)
       .width('100%')
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)
@@ -785,7 +788,8 @@ export struct TasbihPage {
           if (this.getActiveTasbih() !== null) {
             ForEach(this.getActiveTasbih()!.dhikrs,
               (d: Dhikr, index: number) => {
-                Row() {
+                Row({ space: 14 }) {
+                  // Radio Button
                   Row() {
                     if (index === this.activeDhikrIndex) {
                       Row().width(10).height(10).borderRadius(5)
@@ -802,10 +806,11 @@ export struct TasbihPage {
                   })
                   .justifyContent(FlexAlign.Center)
                   .alignItems(VerticalAlign.Center)
+                  .flexShrink(0)
 
+                  // Text Column (Using localized label)
                   Column() {
-                    Text(d.transliteration.length > 0
-                      ? d.transliteration : d.arabic)
+                    Text(this.getDhikrLabel(d))
                       .fontSize(15)
                       .fontColor(this.colors.textWhite)
                       .fontWeight(FontWeight.Medium)
@@ -817,22 +822,26 @@ export struct TasbihPage {
                       .margin({ top: 2 }).width('100%')
                   }
                   .alignItems(HorizontalAlign.Start)
-                  .layoutWeight(1).margin({ left: 14 })
+                  .layoutWeight(1)
 
+                  // Edit Button
                   Text('✏️')
                     .fontSize(16)
                     .width(32)
                     .height(32)
                     .textAlign(TextAlign.Center)
+                    .flexShrink(0)
                     .onClick(() => {
                       this.openEditDhikrEditor(d);
                     })
 
+                  // Delete Button
                   Text('🗑️')
                     .fontSize(16)
                     .width(32)
                     .height(32)
                     .textAlign(TextAlign.Center)
+                    .flexShrink(0)
                     .onClick(() => {
                       this.deleteDhikr(d.id);
                     })
@@ -841,8 +850,8 @@ export struct TasbihPage {
                 .padding({
                   top: 12,
                   bottom: 12,
-                  left: 16,
-                  right: 8
+                  left: this.isRtl() ? 8 : 16,
+                  right: this.isRtl() ? 16 : 8
                 })
                 .backgroundColor(index === this.activeDhikrIndex
                   ? this.colors.tintSoft : 'transparent')
@@ -862,6 +871,7 @@ export struct TasbihPage {
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)
 
+      // Add Button
       Button(this.tr('add_dhikr_button'))
         .width('90%')
         .height(46)
@@ -873,6 +883,7 @@ export struct TasbihPage {
         .margin({ top: 8, bottom: 8 })
         .onClick(() => { this.openNewDhikrEditor(); })
 
+      // Cancel Button
       Button(this.tr('cancel'))
         .width('90%')
         .height(44)
@@ -921,6 +932,7 @@ export struct TasbihPage {
 
       Scroll() {
         Column() {
+          // --- Name Input ---
           Column() {
             Text(this.tr('tasbih_name'))
               .fontSize(12).fontColor(this.colors.textMuted)
@@ -929,7 +941,23 @@ export struct TasbihPage {
               text: this.formTasbihName,
               placeholder: this.tr('tasbih_name_placeholder')
             })
-            // ... properties (unchanged)
+              .type(InputType.Normal)
+              .onChange((value: string) => {
+                this.formTasbihName = value;
+              })
+              .fontSize(15)
+              .fontColor(this.colors.textWhite)
+              .placeholderColor(this.colors.placeholder)
+              .caretColor(this.colors.accentGold)
+              .backgroundColor(this.colors.tintSoft)
+              .borderRadius(10)
+              .padding({
+                left: 14,
+                right: 14,
+                top: 10,
+                bottom: 10
+              })
+              .width('100%')
           }
           .width('100%')
           .padding({
@@ -939,6 +967,7 @@ export struct TasbihPage {
             bottom: 16
           })
 
+          // --- Theme Swatches ---
           Column() {
             Text(this.tr('tasbih_render_style'))
               .fontSize(12).fontColor(this.colors.textMuted)
@@ -950,10 +979,33 @@ export struct TasbihPage {
               alignItems: ItemAlign.Center
             }) {
               ForEach(TASBIH_THEME_PRESETS, (preset: TasbihThemePreset) => {
-                // ... theme swatch (unchanged)
+                Stack() {
+                  Column()
+                    .width(36)
+                    .height(36)
+                    .borderRadius(18)
+                    .backgroundColor(preset.swatch)
+                    .shadow({
+                      radius: 3,
+                      color: 'rgba(0,0,0,0.35)',
+                      offsetX: 0,
+                      offsetY: 2
+                    })
+
+                  if (preset.id === this.formThemePresetId) {
+                    Column()
+                      .width(48).height(48).borderRadius(24)
+                      .border({ width: 2, color: this.colors.accentGold })
+                  }
+                }
+                .width(52).height(52)
+                // Ensure there is spacing between swatches
+                .margin({ right: 6, bottom: 6 })
+                .onClick(() => {
+                  this.formThemePresetId = preset.id;
+                })
               }, (preset: TasbihThemePreset) =>
-              `editor-${preset.id}-${preset.id === this.formThemePresetId
-                ? 'sel' : 'un'}`)
+              `editor-${preset.id}-${preset.id === this.formThemePresetId ? 'sel' : 'un'}`)
             }
             .width('100%')
           }
@@ -962,11 +1014,12 @@ export struct TasbihPage {
         }
         .width('100%')
       }
-      .layoutWeight(1)
+      .flexShrink(1) // <-- Replaced layoutWeight(1) so content auto-sizes
       .width('100%')
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)
 
+      // --- Buttons ---
       Row() {
         Button(this.tr('cancel'))
           .layoutWeight(1)
@@ -990,9 +1043,14 @@ export struct TasbihPage {
           .onClick(() => { this.saveTasbih(); })
       }
       .width('100%')
-      .padding({ left: 20, right: 20, bottom: 20 })
+      .padding({
+        left: 20,
+        right: 20,
+        top: 8,
+        bottom: 20
+      })
     }
-    .width('100%').height('100%')
+    .width('100%')
   }
 
   // ============================================================
@@ -1135,7 +1193,7 @@ export struct TasbihPage {
           bottom: 8
         })
       }
-      .layoutWeight(1)
+      .flexShrink(1)
       .width('100%')
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)
@@ -1614,7 +1672,7 @@ export struct TasbihPage {
 
   private openEditTasbihEditor(t: Tasbih): void {
     this.editingTasbihId = t.id;
-    this.formTasbihName = t.name;
+    this.formTasbihName = this.getTasbihName(t);
     const presetId = (t.themePresetId !== undefined
       && t.themePresetId.length > 0)
       ? t.themePresetId
@@ -1693,8 +1751,8 @@ export struct TasbihPage {
   private openEditDhikrEditor(d: Dhikr): void {
     this.editingDhikrId = d.id;
     this.formDhikrArabic = d.arabic;
-    this.formDhikrTranslit = d.transliteration;
-    this.formDhikrTranslation = d.translation;
+    this.formDhikrTranslit = this.getDhikrLabel(d); // Uses translation
+    this.formDhikrTranslation = this.getDhikrTranslation(d); // Uses translation
     this.formDhikrTarget = d.target.toString();
     this.activeSheet = 'dhikrEditor';
   }
@@ -1742,5 +1800,32 @@ export struct TasbihPage {
     this.activeDhikrIndex = 0;
     this.refreshBeadView();
     this.persist();
+  }
+
+  private getTasbihName(t: Tasbih | null): string {
+    if (!t) {
+      return '';
+    }
+    return (t.nameKey && t.nameKey.length > 0)
+      ? L.get(t.nameKey, this.currentLanguage)
+      : t.name;
+  }
+
+  private getDhikrLabel(d: Dhikr | null): string {
+    if (!d) {
+      return '';
+    }
+    const trans = (d.transliterationKey && d.transliterationKey.length > 0)
+      ? L.get(d.transliterationKey, this.currentLanguage)
+      : d.transliteration;
+    return trans.length > 0 ? trans : d.arabic;
+  }
+
+  private getDhikrTranslation(d: Dhikr | null): string {
+    if (!d) {
+      return '';
+    }
+    return (d.translationKey && d.translationKey.length > 0)
+      ? L.get(d.translationKey, this.currentLanguage) : d.translation;
   }
 }

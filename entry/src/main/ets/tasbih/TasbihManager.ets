@@ -35,6 +35,8 @@ export class TasbihManager {
         arabic: 'سُبْحَانَ ٱللَّٰهِ',
         transliteration: 'SubhanAllah',
         translation: 'Glory be to Allah',
+        transliterationKey: 'dhikr_subhanallah_translit',
+        translationKey: 'dhikr_subhanallah_trans',
         target: 33,
         count: 0,
         lastCountDate: today,
@@ -45,6 +47,8 @@ export class TasbihManager {
         arabic: 'ٱلْحَمْدُ لِلَّٰهِ',
         transliteration: 'Alhamdulillah',
         translation: 'All praise is for Allah',
+        transliterationKey: 'dhikr_alhamdulillah_translit',
+        translationKey: 'dhikr_alhamdulillah_trans',
         target: 33,
         count: 0,
         lastCountDate: today,
@@ -55,6 +59,8 @@ export class TasbihManager {
         arabic: 'ٱللَّٰهُ أَكْبَرُ',
         transliteration: 'Allahu Akbar',
         translation: 'Allah is the Greatest',
+        transliterationKey: 'dhikr_allahuakbar_translit',
+        translationKey: 'dhikr_allahuakbar_trans',
         target: 34,
         count: 0,
         lastCountDate: today,
@@ -67,6 +73,8 @@ export class TasbihManager {
         arabic: 'لَا إِلَٰهَ إِلَّا ٱللَّٰهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ ٱلْمُلْكُ وَلَهُ ٱلْحَمْدُ',
         transliteration: 'La ilaha illallahu wahdahu la sharika lah',
         translation: 'There is no god but Allah, alone, without partner',
+        transliterationKey: 'dhikr_tahlil_translit',
+        translationKey: 'dhikr_tahlil_trans',
         target: 100,
         count: 0,
         lastCountDate: today,
@@ -79,6 +87,8 @@ export class TasbihManager {
         arabic: 'أَسْتَغْفِرُ ٱللَّٰهَ',
         transliteration: 'Astaghfirullah',
         translation: 'I seek forgiveness from Allah',
+        transliterationKey: 'dhikr_istighfar_translit',
+        translationKey: 'dhikr_istighfar_trans',
         target: 100,
         count: 0,
         lastCountDate: today,
@@ -90,6 +100,7 @@ export class TasbihManager {
       {
         id: TasbihManager.generateId(),
         name: 'Classic 33',
+        nameKey: 'tasbih_default_classic_name',
         createdAt: Date.now(),
         dhikrs: classic,
         lifetimeCount: 0,
@@ -99,6 +110,7 @@ export class TasbihManager {
       {
         id: TasbihManager.generateId(),
         name: 'Tahlil 100',
+        nameKey: 'tasbih_default_tahlil_name',
         createdAt: Date.now() + 1,
         dhikrs: tahlil,
         lifetimeCount: 0,
@@ -108,6 +120,7 @@ export class TasbihManager {
       {
         id: TasbihManager.generateId(),
         name: 'Istighfar',
+        nameKey: 'tasbih_default_istighfar_name',
         createdAt: Date.now() + 2,
         dhikrs: istighfar,
         lifetimeCount: 0,
@@ -346,9 +359,11 @@ export class TasbihManager {
       const presetId = themePresetId.length > 0
         ? themePresetId
         : (t.themePresetId ?? TasbihThemes.DEFAULT_PRESET_ID);
+
       const updated: Tasbih = {
         id: t.id,
         name: name,
+        nameKey: undefined, // Cleared because the user renamed it manually
         dhikrs: t.dhikrs,
         createdAt: t.createdAt,
         lifetimeCount: t.lifetimeCount,
@@ -357,6 +372,47 @@ export class TasbihManager {
         history: t.history
       };
       return updated;
+    });
+  }
+
+  static updateDhikr(
+    tasbihs: Tasbih[], activeId: string,
+    dhikrId: string, fields: DhikrFields
+  ): Tasbih[] {
+    return tasbihs.map((t: Tasbih): Tasbih => {
+      if (t.id !== activeId) {
+        return t;
+      }
+      const updated: Dhikr[] = t.dhikrs.map((d: Dhikr): Dhikr => {
+        if (d.id !== dhikrId) {
+          return d;
+        }
+        const next: Dhikr = {
+          id: d.id,
+          arabic: fields.arabic,
+          transliteration: fields.transliteration,
+          translation: fields.translation,
+          transliterationKey: undefined, // Cleared because user edited
+          translationKey: undefined, // Cleared because user edited
+          target: fields.target,
+          count: d.count,
+          lastCountDate: d.lastCountDate,
+          dailyTotal: d.dailyTotal
+        };
+        return next;
+      });
+      const result: Tasbih = {
+        id: t.id,
+        name: t.name,
+        nameKey: t.nameKey,
+        dhikrs: updated,
+        createdAt: t.createdAt,
+        lifetimeCount: t.lifetimeCount,
+        theme: t.theme,
+        themePresetId: t.themePresetId,
+        history: t.history
+      };
+      return result;
     });
   }
 
@@ -421,44 +477,6 @@ export class TasbihManager {
         history: t.history
       };
       return updated;
-    });
-  }
-
-  static updateDhikr(
-    tasbihs: Tasbih[], activeId: string,
-    dhikrId: string, fields: DhikrFields
-  ): Tasbih[] {
-    return tasbihs.map((t: Tasbih): Tasbih => {
-      if (t.id !== activeId) {
-        return t;
-      }
-      const updated: Dhikr[] = t.dhikrs.map((d: Dhikr): Dhikr => {
-        if (d.id !== dhikrId) {
-          return d;
-        }
-        const next: Dhikr = {
-          id: d.id,
-          arabic: fields.arabic,
-          transliteration: fields.transliteration,
-          translation: fields.translation,
-          target: fields.target,
-          count: d.count,
-          lastCountDate: d.lastCountDate,
-          dailyTotal: d.dailyTotal
-        };
-        return next;
-      });
-      const result: Tasbih = {
-        id: t.id,
-        name: t.name,
-        dhikrs: updated,
-        createdAt: t.createdAt,
-        lifetimeCount: t.lifetimeCount,
-        theme: t.theme,
-        themePresetId: t.themePresetId,
-        history: t.history
-      };
-      return result;
     });
   }
 

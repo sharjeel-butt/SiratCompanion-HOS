@@ -595,8 +595,8 @@ struct RamadanDetailsPage {
   @Builder
   FastingSection() {
     Column() {
-      Row() {
-        Text('📿').fontSize(16).margin({ right: 8 })
+      Row({ space: 8 }) {
+        Text('📿').fontSize(16).flexShrink(0)
         Text(this.tr('section_fasting'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
@@ -611,8 +611,7 @@ struct RamadanDetailsPage {
             .direction(Direction.Ltr)
         }
       }
-      .width('100%')
-      .padding({ bottom: 14 })
+      .width('100%').padding({ bottom: 14 })
 
       if (this.isLoadingInfo) {
         this.LoadingState()
@@ -650,8 +649,8 @@ struct RamadanDetailsPage {
   @Builder
   QadaSection() {
     Column() {
-      Row() {
-        Text('🔄').fontSize(16).margin({ right: 8 })
+      Row({ space: 8 }) {
+        Text('🔄').fontSize(16).flexShrink(0)
         Text(this.tr('section_qada'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
@@ -924,8 +923,8 @@ struct RamadanDetailsPage {
   @Builder
   TaraweehSection() {
     Column() {
-      Row() {
-        Text('🌙').fontSize(16).margin({ right: 8 })
+      Row({ space: 8 }) {
+        Text('🌙').fontSize(16).flexShrink(0)
         Text(this.tr('section_taraweeh'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
@@ -967,37 +966,42 @@ struct RamadanDetailsPage {
 
   @Builder
   TaraweehGrid() {
-    Column({ space: 6 }) {
-      ForEach(this.rowIndices(), (rowIdx: number) => {
-        Row({ space: 6 }) {
-          ForEach(this.colIndices(), (colIdx: number) => {
-            this.TaraweehCell(rowIdx * 5 + colIdx)
-          }, (colIdx: number) => `tw-${rowIdx}-${colIdx}`)
+    Column({ space: 4 }) {
+      // Header row
+      Row({ space: 4 }) {
+        ForEach(L.getArray('days_of_week_short', this.currentLanguage), (day: string) => {
+          Text(day)
+            .fontSize(10)
+            .fontColor(this.colors.textMuted)
+            .textAlign(TextAlign.Center)
+            .layoutWeight(1)
+        })
+      }
+      .width('100%')
+      .margin({ bottom: 4 })
+
+      // Weeks
+      ForEach(this.buildWeeks(), (week: number[], wi: number) => {
+        Row({ space: 4 }) {
+          ForEach(week, (dayIndex: number, di: number) => {
+            if (dayIndex === -1) {
+              Column().layoutWeight(1).height(this.cellSize())
+            } else {
+              this.TaraweehGridCell(dayIndex)
+            }
+          }, (dayIndex: number, di: number) => `td-${wi}-${di}-${dayIndex}`)
         }
         .width('100%')
-        .justifyContent(FlexAlign.Center)
-      }, (rowIdx: number) => `tw-row-${rowIdx}`)
+      }, (week: number[], wi: number) => `tw-${wi}`)
     }
     .width('100%')
-    .direction(Direction.Ltr)
   }
 
   @Builder
-  TaraweehCell(idx: number) {
-    if (this.currentYear === null || idx >= this.currentYear.totalDays) {
-      Column()
-        .width(this.cellSize())
-        .height(this.cellSize())
-    } else {
-      this.ActiveTaraweehCell(idx)
-    }
-  }
-
-  @Builder
-  ActiveTaraweehCell(idx: number) {
+  TaraweehGridCell(idx: number) {
     Column() {
       Text(`${idx + 1}`)
-        .fontSize(14)
+        .fontSize(12)
         .fontWeight(
           this.currentYear!.taraweehNights[idx]
             ? FontWeight.Bold
@@ -1005,7 +1009,7 @@ struct RamadanDetailsPage {
         )
         .fontColor(this.taraweehTextColor(idx))
     }
-    .width(this.cellSize())
+    .layoutWeight(1)
     .height(this.cellSize())
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
@@ -1083,54 +1087,59 @@ struct RamadanDetailsPage {
 
   @Builder
   FastingHeatmap() {
-    Column({ space: 6 }) {
-      ForEach(this.rowIndices(), (rowIdx: number) => {
-        Row({ space: 6 }) {
-          ForEach(this.colIndices(), (colIdx: number) => {
-            this.FastingCell(rowIdx * 5 + colIdx)
-          }, (colIdx: number) => `cell-${rowIdx}-${colIdx}`)
+    Column({ space: 4 }) {
+      // Header row
+      Row({ space: 4 }) {
+        ForEach(L.getArray('days_of_week_short', this.currentLanguage), (day: string) => {
+          Text(day)
+            .fontSize(10)
+            .fontColor(this.colors.textMuted)
+            .textAlign(TextAlign.Center)
+            .layoutWeight(1)
+        })
+      }
+      .width('100%')
+      .margin({ bottom: 4 })
+
+      // Weeks
+      ForEach(this.buildWeeks(), (week: number[], wi: number) => {
+        Row({ space: 4 }) {
+          ForEach(week, (dayIndex: number, di: number) => {
+            if (dayIndex === -1) {
+              Column().layoutWeight(1).height(this.cellSize())
+            } else {
+              this.FastingGridCell(dayIndex)
+            }
+          }, (dayIndex: number, di: number) => `fd-${wi}-${di}-${dayIndex}`)
         }
         .width('100%')
-        .justifyContent(FlexAlign.Center)
-      }, (rowIdx: number) => `row-${rowIdx}`)
+      }, (week: number[], wi: number) => `fw-${wi}`)
     }
     .width('100%')
-    .direction(Direction.Ltr)
   }
 
   @Builder
-  FastingCell(idx: number) {
-    if (this.currentYear === null || idx >= this.currentYear.totalDays) {
-      Column()
-        .width(this.cellSize())
-        .height(this.cellSize())
-    } else {
-      this.ActiveFastingCell(idx)
-    }
-  }
-
-  @Builder
-  ActiveFastingCell(idx: number) {
+  FastingGridCell(dayIndex: number) {
     Column() {
-      Text(`${idx + 1}`)
-        .fontSize(14)
-        .fontWeight(this.isToday(idx) ? FontWeight.Bold : FontWeight.Medium)
-        .fontColor(this.cellTextColor(idx))
+      Text(`${dayIndex + 1}`)
+        .fontSize(12)
+        .fontWeight(this.isToday(dayIndex) ? FontWeight.Bold : FontWeight.Medium)
+        .fontColor(this.cellTextColor(dayIndex))
     }
-    .width(this.cellSize())
+    .layoutWeight(1)
     .height(this.cellSize())
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
-    .backgroundColor(this.cellBg(idx))
+    .backgroundColor(this.cellBg(dayIndex))
     .borderRadius(8)
     .border({
-      width: this.isToday(idx) ? 2 : 0,
+      width: this.isToday(dayIndex) ? 2 : 0,
       color: this.colors.accentGold
     })
-    .opacity(this.isFuture(idx) ? 0.45 : 1.0)
+    .opacity(this.isFuture(dayIndex) ? 0.45 : 1.0)
     .onClick(() => {
-      if (!this.isFuture(idx)) {
-        this.openMarkSheet(idx + 1);
+      if (!this.isFuture(dayIndex)) {
+        this.openMarkSheet(dayIndex + 1);
       }
     })
   }
@@ -1153,12 +1162,12 @@ struct RamadanDetailsPage {
 
   private cellSize(): number {
     if (this.breakpoint === Breakpoints.LG) {
-      return 64;
+      return 48;
     }
     if (this.breakpoint === Breakpoints.MD) {
-      return 56;
+      return 44;
     }
-    return 48;
+    return 38; // Was 48 for the 5-column layout
   }
 
   private isToday(idx: number): boolean {
@@ -1271,7 +1280,7 @@ struct RamadanDetailsPage {
         .borderRadius(2)
         .margin({ top: 10 })
 
-      Row() {
+      Row({ space: 14 }) {
         Text('📿')
           .fontSize(22)
           .width(44)
@@ -1280,6 +1289,8 @@ struct RamadanDetailsPage {
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
+          .flexShrink(0)
+
         Column() {
           Text(this.tr('fasting_mark_title'))
             .fontSize(18).fontWeight(FontWeight.Bold)
@@ -1289,14 +1300,14 @@ struct RamadanDetailsPage {
             .margin({ top: 2 })
         }
         .alignItems(HorizontalAlign.Start)
-        .layoutWeight(1).margin({ left: 14 })
+        .layoutWeight(1)
       }
       .width('100%')
       .padding({
-        left: 20,
-        right: 20,
         top: 20,
-        bottom: 20
+        bottom: 20,
+        left: this.isRtl() ? 20 : 16,
+        right: this.isRtl() ? 16 : 20
       })
 
       Divider().color(this.colors.borderSoft).width('90%')
@@ -1336,7 +1347,7 @@ struct RamadanDetailsPage {
           bottom: 12
         })
       }
-      .layoutWeight(1)
+      .flexShrink(1)
       .width('100%')
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)
@@ -1427,7 +1438,7 @@ struct RamadanDetailsPage {
         .borderRadius(2)
         .margin({ top: 10 })
 
-      Row() {
+      Row({ space: 14 }) {
         Text('💭')
           .fontSize(22)
           .width(44)
@@ -1436,6 +1447,8 @@ struct RamadanDetailsPage {
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
+          .flexShrink(0)
+
         Column() {
           Text(this.tr('fasting_reason_title'))
             .fontSize(18).fontWeight(FontWeight.Bold)
@@ -1445,14 +1458,14 @@ struct RamadanDetailsPage {
             .margin({ top: 2 })
         }
         .alignItems(HorizontalAlign.Start)
-        .layoutWeight(1).margin({ left: 14 })
+        .layoutWeight(1)
       }
       .width('100%')
       .padding({
-        left: 20,
-        right: 20,
         top: 20,
-        bottom: 20
+        bottom: 20,
+        left: this.isRtl() ? 20 : 16,
+        right: this.isRtl() ? 16 : 20
       })
 
       Divider().color(this.colors.borderSoft).width('90%')
@@ -1471,7 +1484,7 @@ struct RamadanDetailsPage {
           bottom: 12
         })
       }
-      .layoutWeight(1)
+      .flexShrink(1)
       .width('100%')
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)
@@ -1615,7 +1628,7 @@ struct RamadanDetailsPage {
         .borderRadius(2)
         .margin({ top: 10 })
 
-      Row() {
+      Row({ space: 14 }) {
         Text('🔄')
           .fontSize(22)
           .width(44)
@@ -1624,6 +1637,8 @@ struct RamadanDetailsPage {
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
+          .flexShrink(0)
+
         Column() {
           Text(`${this.tr('qada_year_sheet_title_prefix')} ` +
             `${this.activeQadaYear} ${this.tr('hijri_year_suffix')}`)
@@ -1637,14 +1652,14 @@ struct RamadanDetailsPage {
             .textOverflow({ overflow: TextOverflow.Ellipsis })
         }
         .alignItems(HorizontalAlign.Start)
-        .layoutWeight(1).margin({ left: 14 })
+        .layoutWeight(1)
       }
       .width('100%')
       .padding({
-        left: 20,
-        right: 20,
         top: 20,
-        bottom: 20
+        bottom: 20,
+        left: this.isRtl() ? 20 : 16,
+        right: this.isRtl() ? 16 : 20
       })
 
       Divider().color(this.colors.borderSoft).width('90%')
@@ -1682,7 +1697,7 @@ struct RamadanDetailsPage {
             bottom: 8
           })
         }
-        .layoutWeight(1)
+        .flexShrink(1)
         .width('100%')
         .scrollBar(BarState.Auto)
         .edgeEffect(EdgeEffect.Spring)
@@ -1699,7 +1714,7 @@ struct RamadanDetailsPage {
         .margin({ top: 8, bottom: 24 })
         .onClick(() => this.closeQadaYearSheet())
     }
-    .width('100%').height('100%')
+    .width('100%').constraintSize({ maxHeight: '85%' })
     .backgroundColor(this.colors.cardDark)
   }
 
@@ -1872,8 +1887,8 @@ struct RamadanDetailsPage {
   @Builder
   AshrasContent() {
     Column() {
-      Row() {
-        Text('📖').fontSize(14).margin({ right: 6 })
+      Row({ space: 6 }) {
+        Text('📖').fontSize(14).flexShrink(0)
         Text(this.tr('ramadan_ashras'))
           .fontSize(11)
           .fontColor(this.colors.textMuted)
@@ -1905,8 +1920,8 @@ struct RamadanDetailsPage {
   @Builder
   LaylatAlQadrContent() {
     Column() {
-      Row() {
-        Text('✨').fontSize(14).margin({ right: 6 })
+      Row({ space: 6 }) {
+        Text('✨').fontSize(14).flexShrink(0)
         Text(this.tr('ramadan_laylat_al_qadr'))
           .fontSize(11)
           .fontColor(this.colors.accentGold)
@@ -1941,8 +1956,8 @@ struct RamadanDetailsPage {
   @Builder
   JummahTulWidahContent() {
     Column() {
-      Row() {
-        Text('🕌').fontSize(14).margin({ right: 6 })
+      Row({ space: 6 }) {
+        Text('🕌').fontSize(14).flexShrink(0)
         Text(this.tr('ramadan_jummah_tul_widah'))
           .fontSize(11)
           .fontColor(this.colors.accentGold)
@@ -1966,7 +1981,7 @@ struct RamadanDetailsPage {
 
   @Builder
   AshraRow(a: RamadanAshra) {
-    Row() {
+    Row({ space: 10 }) {
       Text(`${a.number}`)
         .fontSize(12)
         .fontWeight(FontWeight.Bold)
@@ -1983,6 +1998,7 @@ struct RamadanDetailsPage {
           color: this.isCurrentAshra(a)
             ? this.colors.accentGold : this.colors.borderSoft
         })
+        .flexShrink(0) // <-- Prevents circle squishing
 
       Column() {
         Row() {
@@ -2005,7 +2021,7 @@ struct RamadanDetailsPage {
           .fontSize(10).fontColor(this.colors.textMuted)
           .margin({ top: 2 }).width('100%')
       }
-      .layoutWeight(1).margin({ left: 10 })
+      .layoutWeight(1) // <-- Removed margin({ left: 10 })
       .alignItems(HorizontalAlign.Start)
     }
     .width('100%')
@@ -2062,8 +2078,9 @@ struct RamadanDetailsPage {
   @Builder
   DuasSection() {
     Column() {
-      Row() {
-        Text('🤲').fontSize(16).margin({ right: 8 })
+      // FIX: Use Row({ space: 8 }) for consistent RTL/LTR alignment
+      Row({ space: 8 }) {
+        Text('🤲').fontSize(16).flexShrink(0)
         Text(this.tr('section_duas'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
@@ -2117,5 +2134,33 @@ struct RamadanDetailsPage {
       offsetY: 4
     })
     .margin({ bottom: 14 })
+  }
+
+  private buildWeeks(): number[][] {
+    if (this.ramadanInfo === null || this.currentYear === null) {
+      return [];
+    }
+    const totalDays = this.currentYear.totalDays;
+    const firstDow = this.ramadanInfo.fastingStart.getDay(); // 0 = Sunday
+
+    const padded: number[] = [];
+    // Leading padding to align with the correct day of the week
+    for (let i = 0; i < firstDow; i++) {
+      padded.push(-1);
+    }
+    // Actual days (0-indexed)
+    for (let i = 0; i < totalDays; i++) {
+      padded.push(i);
+    }
+    // Trailing padding to complete the last row
+    while (padded.length % 7 !== 0) {
+      padded.push(-1);
+    }
+
+    const weeks: number[][] = [];
+    for (let i = 0; i < padded.length; i += 7) {
+      weeks.push(padded.slice(i, i + 7));
+    }
+    return weeks;
   }
 }

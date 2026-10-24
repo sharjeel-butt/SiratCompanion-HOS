@@ -550,11 +550,11 @@ export struct HijriCalendarPage {
   @Builder
   EventsList() {
     Column() {
-      Row() {
+      Row({ space: 8 }) {
         Image($r('app.media.ic_nav_calendar'))
           .width(16).height(16)
           .fillColor(this.colors.accentGold)
-          .margin({ left: this.isRtl() ? 8 : 0, right: this.isRtl() ? 0 : 8 })
+          .flexShrink(0)
         Text(this.tr('important_dates'))
           .fontSize(12).fontColor(this.colors.accentGold)
           .fontWeight(FontWeight.Bold).letterSpacing(1.5)
@@ -567,12 +567,13 @@ export struct HijriCalendarPage {
           .width('100%').padding({ top: 4, bottom: 4 })
       } else {
         ForEach(this.getMonthEvents(), (e: IslamicEvent) => {
-          Row() {
+          Row({ space: 8 }) {
             Text(`${e.day}`)
               .fontSize(16).fontWeight(FontWeight.Bold)
               .fontColor(this.colors.accentGold)
               .width(36)
               .textAlign(TextAlign.Center)
+              .flexShrink(0) // <-- Prevents circle squishing
             Text(this.translateEventName(e))
               .fontSize(14).fontColor(this.colors.textWhite).layoutWeight(1)
           }

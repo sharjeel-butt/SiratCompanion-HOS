@@ -50,34 +50,93 @@ export class TasbihStorage {
 
       // ---- Migration ----
       // Older stores may be missing lifetimeCount, themePresetId,
-      // history, or per-dhikr lastCountDate. Fill in safe defaults.
+      // history, per-dhikr lastCountDate, or translation keys.
       tasbihs = tasbihs.map((t: Tasbih): Tasbih => {
-        const dhikrs: Dhikr[] = (t.dhikrs || []).map(
-          (d: Dhikr): Dhikr => {
-            const fixed: Dhikr = {
-              id: d.id,
-              arabic: d.arabic,
-              transliteration: d.transliteration,
-              translation: d.translation,
-              target: d.target,
-              count: d.count,
-              lastCountDate: d.lastCountDate,
-              dailyTotal: d.dailyTotal
-            };
-            return fixed;
+
+        // Migrate Tasbih Name Key
+        let nameKey = t.nameKey;
+        if (!nameKey) {
+          if (t.name === 'Classic 33') {
+            nameKey = 'tasbih_default_classic_name';
+          } else if (t.name === 'Tahlil 100') {
+            nameKey = 'tasbih_default_tahlil_name';
+          } else if (t.name === 'Istighfar') {
+            nameKey = 'tasbih_default_istighfar_name';
           }
-        );
+        }
+
+        // Migrate Dhikrs
+        const dhikrs: Dhikr[] = (t.dhikrs || []).map((d: Dhikr): Dhikr => {
+
+          // Migrate Translation Keys
+          let tKey = d.transliterationKey;
+          let trKey = d.translationKey;
+
+          if (!tKey) {
+            if (d.transliteration === 'SubhanAllah') {
+              tKey = 'dhikr_subhanallah_translit';
+            } else if (d.transliteration ===
+              'Alhamdulillah') {
+              tKey = 'dhikr_alhamdulillah_translit';
+            } else if (d.transliteration ===
+              'Allahu Akbar') {
+              tKey = 'dhikr_allahuakbar_translit';
+            } else if (d.transliteration ===
+              'La ilaha illallahu wahdahu la sharika lah') {
+              tKey =
+                'dhikr_tahlil_translit';
+            } else if (d.transliteration === 'Astaghfirullah') {
+              tKey =
+                'dhikr_istighfar_translit';
+            }
+          }
+
+          if (!trKey) {
+            if (d.translation === 'Glory be to Allah') {
+              trKey = 'dhikr_subhanallah_trans';
+            } else if (d.translation ===
+              'All praise is for Allah') {
+              trKey = 'dhikr_alhamdulillah_trans';
+            } else if (d.translation ===
+              'Allah is the Greatest') {
+              trKey = 'dhikr_allahuakbar_trans';
+            } else if (d.translation ===
+              'There is no god but Allah, alone, without partner') {
+              trKey =
+                'dhikr_tahlil_trans';
+            } else if (d.translation === 'I seek forgiveness from Allah') {
+              trKey =
+                'dhikr_istighfar_trans';
+            }
+          }
+
+          // Explicit construction (no spread)
+          const fixed: Dhikr = {
+            id: d.id,
+            arabic: d.arabic,
+            transliteration: d.transliteration,
+            translation: d.translation,
+            transliterationKey: tKey,
+            translationKey: trKey,
+            target: d.target,
+            count: d.count,
+            lastCountDate: d.lastCountDate,
+            dailyTotal: d.dailyTotal
+          };
+          return fixed;
+        });
+
+        // Explicit construction (no spread)
         const fixed: Tasbih = {
           id: t.id,
           name: t.name,
+          nameKey: nameKey,
           dhikrs: dhikrs,
           createdAt: t.createdAt,
-          lifetimeCount: typeof t.lifetimeCount === 'number'
-            ? t.lifetimeCount : 0,
+          lifetimeCount: typeof t.lifetimeCount === 'number' ? t.lifetimeCount : 0,
           theme: t.theme,
-          themePresetId: (typeof t.themePresetId === 'string'
-            && t.themePresetId.length > 0)
-            ? t.themePresetId : undefined,
+          themePresetId: (typeof t.themePresetId === 'string' && t.themePresetId.length > 0) ? t.themePresetId :
+            undefined,
           history: Array.isArray(t.history) ? t.history : []
         };
         return fixed;

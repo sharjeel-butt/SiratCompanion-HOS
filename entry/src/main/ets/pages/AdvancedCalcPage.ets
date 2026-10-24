@@ -551,7 +551,7 @@ struct AdvancedCalcPage {
         .borderRadius(2)
         .margin({ top: 10 })
 
-      Row() {
+      Row({ space: 14 }) {
         Text(icon)
           .fontSize(22)
           .width(44)
@@ -560,18 +560,26 @@ struct AdvancedCalcPage {
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
+          .flexShrink(0)
+
         Text(title)
           .fontSize(20).fontWeight(FontWeight.Bold)
-          .fontColor(this.colors.textWhite).margin({ left: 14 })
+          .fontColor(this.colors.textWhite).layoutWeight(1)
       }
-      .width('100%').padding({ left: 20, top: 20, bottom: 20 })
+      .width('100%')
+      .padding({
+        top: 20,
+        bottom: 20,
+        left: this.isRtl() ? 20 : 16,
+        right: this.isRtl() ? 16 : 20
+      })
 
       Divider().color(this.colors.borderSoft).width('90%')
 
       Scroll() {
         Column() {
           ForEach(items, (item: PickerItem) => {
-            Row() {
+            Row({ space: 14 }) { // <-- Added Row space
               Row() {
                 if (item.selected) {
                   Row().width(10).height(10).borderRadius(5)
@@ -583,22 +591,19 @@ struct AdvancedCalcPage {
               .borderRadius(11)
               .border({
                 width: item.selected ? 2 : 1.5,
-                color: item.selected
-                  ? this.colors.accentGold : this.colors.borderStrong
+                color: item.selected ? this.colors.accentGold : this.colors.borderStrong
               })
               .justifyContent(FlexAlign.Center)
               .alignItems(VerticalAlign.Center)
+              .flexShrink(0)
 
               Text(item.label)
                 .fontSize(15)
-                .fontColor(item.selected
-                  ? this.colors.accentGold : this.colors.textWhite)
-                .fontWeight(item.selected
-                  ? FontWeight.Bold : FontWeight.Normal)
+                .fontColor(item.selected ? this.colors.accentGold : this.colors.textWhite)
+                .fontWeight(item.selected ? FontWeight.Bold : FontWeight.Normal)
                 .layoutWeight(1)
                 .maxLines(2)
                 .textOverflow({ overflow: TextOverflow.Ellipsis })
-                .margin({ left: 14 })
             }
             .width('100%')
             .padding({
@@ -625,7 +630,7 @@ struct AdvancedCalcPage {
           bottom: 12
         })
       }
-      .layoutWeight(1)
+      .flexShrink(1)
       .width('100%')
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)

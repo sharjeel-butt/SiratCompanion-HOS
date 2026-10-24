@@ -4,6 +4,7 @@ import { i18n, resourceManager } from '@kit.LocalizationKit';
 import { common } from '@kit.AbilityKit';
 import { STORAGE_KEY_LANGUAGE } from '../common/StorageKeys';
 
+
 export enum AppLanguage {
   ENGLISH = 'en',
   CHINESE = 'zh',
@@ -98,6 +99,30 @@ export class L {
       return L.DEFAULT_LANGUAGE;
     } catch (err) {
       return L.DEFAULT_LANGUAGE;
+    }
+  }
+
+  /**
+   * Applies the preferred language to the app's system context.
+   * This forces native overlays (bindSheet, Menu, TextInput, etc.)
+   * to adopt the correct RTL/LTR direction automatically.
+   */
+  static applySystemLanguage(override: string): void {
+    try {
+      let sysLang = 'en';
+      if (override === AppLanguage.SYSTEM) {
+        sysLang = i18n.System.getSystemLanguage();
+      } else if (override === AppLanguage.ARABIC) {
+        sysLang = 'ar';
+      } else if (override === AppLanguage.CHINESE) {
+        sysLang = 'zh';
+      } else if (override === AppLanguage.ENGLISH) {
+        sysLang = 'en';
+      }
+      i18n.System.setAppPreferredLanguage(sysLang);
+      console.info(`[L] App preferred language set to ${sysLang}`);
+    } catch (err) {
+      console.warn(`[L] Failed to setAppPreferredLanguage: ${JSON.stringify(err)}`);
     }
   }
 

@@ -1,6 +1,6 @@
 // entry/src/main/ets/pages/WizardPage.ets
 
-import { mediaquery, router } from '@kit.ArkUI';
+import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
 import {
@@ -21,8 +21,10 @@ import { PrivacyPolicyProvider } from '../data/PrivacyPolicy';
 import { Breakpoints } from '../common/Breakpoints';
 import { FALLBACK_LOCATION, LocationCache } from '../utils/LocationCache';
 import { common, Want } from '@kit.AbilityKit';
+import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
+import { NotificationHelper } from '../helper/NotificationHelper';
 
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 6;
 
 interface LanguageOption {
   id: string;
@@ -78,6 +80,8 @@ struct WizardPage {
   @State showSourcePicker: boolean = false;
   @State private currentLanguage: string = AppLanguage.ENGLISH;
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
+  @State notifMasterEnabled: boolean = false;
+  @State notifRequesting: boolean = false;
 
   aboutToAppear(): void {
     this.currentLanguage = this.appLanguage;
@@ -156,8 +160,10 @@ struct WizardPage {
               this.ThemeStep()
             } else if (this.step === 3) {
               this.LocationStep()
-            } else {
+            } else if (this.step === 4) {
               this.ConventionStep()
+            } else if (this.step === 5) {
+              this.NotificationsStep()
             }
           }
           .width('100%')
@@ -225,6 +231,84 @@ struct WizardPage {
   }
 
   @Builder
+  NotificationsStep() {
+    Scroll() {
+      Column() {
+        // Header Card
+        Column() {
+          Text(this.tr('notif_step_title'))
+            .fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+            .width('100%')
+          Text(this.tr('notif_step_desc'))
+            .fontSize(13)
+            .fontColor(this.colors.textMuted)
+            .margin({ top: 6 })
+            .lineHeight(20)
+            .width('100%')
+        }
+        .width('100%')
+        .padding(20)
+        .backgroundColor(this.colors.cardDark)
+        .borderRadius(16)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .margin({ bottom: 24 })
+
+        // Action Button
+        if (this.notifMasterEnabled) {
+          // Enabled State
+          Row({ space: 10 }) {
+            Text('✓')
+              .fontSize(20)
+              .fontColor(this.colors.accentGold)
+              .fontWeight(FontWeight.Bold)
+            Text(this.tr('notifications_master'))
+              .fontSize(16)
+              .fontWeight(FontWeight.Bold)
+              .fontColor(this.colors.accentGold)
+          }
+          .width('100%')
+          .height(54)
+          .backgroundColor(this.colors.tintSoft)
+          .borderRadius(16)
+          .border({ width: 1, color: this.colors.borderSoft })
+          .justifyContent(FlexAlign.Center)
+        } else {
+          // Disabled State (Button to Enable)
+          Button() {
+            if (this.notifRequesting) {
+              LoadingProgress()
+                .width(24).height(24)
+                .color(this.colors.textOnAccent)
+            } else {
+              Text(this.tr('notifications_master'))
+                .fontSize(16)
+                .fontWeight(FontWeight.Bold)
+                .fontColor(this.colors.textOnAccent)
+            }
+          }
+          .width('100%')
+          .height(54)
+          .backgroundColor(this.colors.accentGold)
+          .borderRadius(16)
+          .onClick(() => {
+            this.toggleNotifications(true);
+          })
+        }
+      }
+      .width('100%')
+      .padding({
+        left: this.isTablet() ? 32 : 24,
+        right: this.isTablet() ? 32 : 24,
+        bottom: 24
+      })
+    }
+    .layoutWeight(1)
+    .width('100%')
+    .scrollBar(BarState.Auto)
+    .edgeEffect(EdgeEffect.Spring)
+  }
+
+  @Builder
   ProgressHeader() {
     Row() {
       Text('←')
@@ -238,13 +322,17 @@ struct WizardPage {
         .border(this.step === 0
           ? { width: 0 }
           : { width: 1, color: this.colors.borderSoft })
-        .margin({ left: 16 })
+        .flexShrink(0)
         .enabled(this.step > 0)
         .onClick(() => {
           this.goBack();
         })
 
-      Blank()
+      if (this.isRtl()) {
+        Blank()
+      } else {
+        Row().width(16)
+      }
 
       Row({ space: 6 }) {
         Text(this.tr('wizard_step'))
@@ -253,16 +341,22 @@ struct WizardPage {
           .fontSize(12).fontColor(this.colors.accentGold).fontWeight(FontWeight.Bold)
           .direction(Direction.Ltr)
       }
-      .margin({ right: 20 })
+
+      if (!this.isRtl()) {
+        Blank()
+      }
     }
     .width('100%').height(72)
+    .padding({ left: 16, right: 16 })
     .alignItems(VerticalAlign.Center)
+    .direction(Direction.Ltr) // Locks the arrow to the left
   }
 
   @Builder
   LanguageStep() {
     Scroll() {
       Column() {
+        // Welcome Banner
         Column() {
           Text(this.tr('wizard_welcome_title'))
             .fontSize(15).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
@@ -282,8 +376,9 @@ struct WizardPage {
         .margin({ bottom: 16 })
         .alignItems(HorizontalAlign.Start)
 
+        // Language Options
         ForEach(this.getLanguageOptions(), (opt: LanguageOption) => {
-          Row() {
+          Row({ space: 14 }) {
             Column() {
               Text(opt.nativeName)
                 .fontSize(18).fontWeight(FontWeight.Bold)
@@ -312,6 +407,7 @@ struct WizardPage {
                 : this.colors.borderStrong
             })
             .alignContent(Alignment.Center)
+            .flexShrink(0)
           }
           .width('100%')
           .padding({
@@ -334,6 +430,15 @@ struct WizardPage {
           })
         }, (opt: LanguageOption) =>
         `lang-${opt.id}-${opt.id === this.selectedLanguage ? 'sel' : 'un'}`)
+
+        // Supported Languages Hint
+        Text(this.tr('lang_supported_hint'))
+          .fontSize(11)
+          .fontColor(this.colors.textMuted)
+          .textAlign(TextAlign.Center)
+          .fontStyle(FontStyle.Italic)
+          .width('100%')
+          .margin({ top: 12, bottom: 24 })
       }
       .width('100%')
       .padding({
@@ -371,7 +476,7 @@ struct WizardPage {
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)
 
-      Row() {
+      Row({ space: 12 }) {
         Stack() {
           if (this.privacyAccepted) {
             Text('✓')
@@ -391,6 +496,7 @@ struct WizardPage {
           color: this.colors.borderStrong
         })
         .alignContent(Alignment.Center)
+        .flexShrink(0)
         .onClick(() => {
           this.privacyAccepted = !this.privacyAccepted;
         })
@@ -398,7 +504,6 @@ struct WizardPage {
         Text(this.tr('privacy_agree_label'))
           .fontSize(13)
           .fontColor(this.colors.textWhite)
-          .margin({ left: 12 })
           .layoutWeight(1)
           .onClick(() => {
             this.privacyAccepted = !this.privacyAccepted;
@@ -435,7 +540,7 @@ struct WizardPage {
     Scroll() {
       Column() {
         ForEach(this.getThemeOptions(), (opt: ThemeOption) => {
-          Row() {
+          Row({ space: 14 }) {
             Stack() {
               Column()
                 .width('100%').height('100%')
@@ -454,6 +559,7 @@ struct WizardPage {
                 ? this.colors.accentGold
                 : this.colors.borderSoft
             })
+            .flexShrink(0)
 
             Column() {
               Text(this.tr(opt.nameKey))
@@ -471,7 +577,7 @@ struct WizardPage {
                 .textOverflow({ overflow: TextOverflow.Ellipsis })
             }
             .alignItems(HorizontalAlign.Start)
-            .layoutWeight(1).margin({ left: 14 })
+            .layoutWeight(1)
 
             Stack() {
               if (opt.id === this.selectedTheme) {
@@ -492,6 +598,7 @@ struct WizardPage {
               color: this.colors.borderStrong
             })
             .alignContent(Alignment.Center)
+            .flexShrink(0)
           }
           .width('100%')
           .padding({
@@ -533,7 +640,7 @@ struct WizardPage {
   LocationStep() {
     Scroll() {
       Column() {
-        Row() {
+        Row({ space: 12 }) {
           this.LocationModeButton(this.tr('gps'), LocationMode.GPS)
           this.LocationModeButton(this.tr('manual_location'), LocationMode.MANUAL)
         }
@@ -808,10 +915,6 @@ struct WizardPage {
       .border(this.locationMode === mode
         ? { width: 0 }
         : { width: 1, color: this.colors.borderSoft })
-      .margin({
-        right: mode === LocationMode.GPS ? 6 : 0,
-        left: mode === LocationMode.MANUAL ? 6 : 0
-      })
       .onClick(() => {
         this.selectLocationMode(mode);
       })
@@ -821,6 +924,7 @@ struct WizardPage {
   ConventionStep() {
     Scroll() {
       Column() {
+        // ---- Convention ----
         Row() {
           Column() {
             Text(this.tr('convention'))
@@ -836,7 +940,13 @@ struct WizardPage {
           }
           .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-          Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7).rotate({ angle: L.isRtl() ? 180 : 0 })
+          Image($r('app.media.ic_chevron_right'))
+            .width(16)
+            .height(16)
+            .fillColor(this.colors.accentGold)
+            .opacity(0.7)
+            .rotate({ angle: this.isRtl() ? 180 : 0 })
+            .flexShrink(0)
         }
         .width('100%')
         .padding(16)
@@ -848,6 +958,7 @@ struct WizardPage {
           this.showMethodPicker = true;
         })
 
+        // ---- Madhab ----
         Row() {
           Column() {
             Text(this.tr('madhab'))
@@ -863,7 +974,13 @@ struct WizardPage {
           }
           .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-          Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7).rotate({ angle: L.isRtl() ? 180 : 0 })
+          Image($r('app.media.ic_chevron_right'))
+            .width(16)
+            .height(16)
+            .fillColor(this.colors.accentGold)
+            .opacity(0.7)
+            .rotate({ angle: this.isRtl() ? 180 : 0 })
+            .flexShrink(0)
         }
         .width('100%')
         .padding(16)
@@ -875,6 +992,7 @@ struct WizardPage {
           this.showAsrPicker = true;
         })
 
+        // ---- Source ----
         Row() {
           Column() {
             Text(this.tr('source'))
@@ -890,7 +1008,13 @@ struct WizardPage {
           }
           .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-          Text('›').fontSize(22).fontColor(this.colors.accentGold).opacity(0.7).rotate({ angle: L.isRtl() ? 180 : 0 })
+          Image($r('app.media.ic_chevron_right'))
+            .width(16)
+            .height(16)
+            .fillColor(this.colors.accentGold)
+            .opacity(0.7)
+            .rotate({ angle: this.isRtl() ? 180 : 0 })
+            .flexShrink(0)
         }
         .width('100%')
         .padding(16)
@@ -981,7 +1105,8 @@ struct WizardPage {
         .borderRadius(2)
         .margin({ top: 10 })
 
-      Row() {
+      // Header
+      Row({ space: 14 }) {
         Text(icon)
           .fontSize(22)
           .width(44)
@@ -990,18 +1115,27 @@ struct WizardPage {
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
+          .flexShrink(0)
+
         Text(title)
           .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
-          .margin({ left: 14 })
+          .layoutWeight(1)
       }
-      .width('100%').padding({ left: 20, top: 20, bottom: 20 })
+      .width('100%')
+      .padding({
+        top: 20,
+        bottom: 20,
+        left: this.isRtl() ? 20 : 16,
+        right: this.isRtl() ? 16 : 20
+      })
 
       Divider().color(this.colors.borderSoft).width('90%')
 
+      // List
       Scroll() {
         Column() {
           ForEach(items, (item: PickerItem) => {
-            Row() {
+            Row({ space: 14 }) {
               Row() {
                 if (item.selected) {
                   Row().width(10).height(10).borderRadius(5)
@@ -1017,6 +1151,7 @@ struct WizardPage {
               })
               .justifyContent(FlexAlign.Center)
               .alignItems(VerticalAlign.Center)
+              .flexShrink(0)
 
               Text(item.label)
                 .fontSize(15)
@@ -1025,7 +1160,6 @@ struct WizardPage {
                 .layoutWeight(1)
                 .maxLines(2)
                 .textOverflow({ overflow: TextOverflow.Ellipsis })
-                .margin({ left: 14 })
             }
             .width('100%')
             .padding({
@@ -1069,7 +1203,7 @@ struct WizardPage {
         })
     }
     .width('100%')
-    .height('70%')
+    .constraintSize({ maxHeight: '85%' })
     .backgroundColor(this.colors.cardDark)
     .borderRadius({ topLeft: 28, topRight: 28 })
     .shadow({
@@ -1164,8 +1298,8 @@ struct WizardPage {
   private getLanguageOptions(): LanguageOption[] {
     const system: LanguageOption = {
       id: AppLanguage.SYSTEM,
-      nativeName: L.get('lang_system', this.currentLanguage),
-      englishName: L.get('lang_system_desc', this.currentLanguage)
+      nativeName: this.tr('lang_system'),
+      englishName: this.tr('lang_system_desc')
     };
     const en: LanguageOption = {
       id: AppLanguage.ENGLISH, nativeName: 'English', englishName: 'English'
@@ -1186,6 +1320,47 @@ struct WizardPage {
     // Update local display language for wizard translations.
     this.currentLanguage = L.resolveOverride(id);
     // appLanguage auto-syncs via @StorageLink(STORAGE_KEY_LANGUAGE).
+  }
+
+  private async toggleNotifications(isOn: boolean): Promise<void> {
+    if (!isOn) {
+      this.notifMasterEnabled = false;
+      await SettingsHelper.saveNotifMaster(false);
+      await NotificationHelper.cancelAll();
+      return;
+    }
+
+    this.notifRequesting = true;
+    const context = getContext(this) as common.UIAbilityContext;
+    // Requests exactly READ_CALENDAR and WRITE_CALENDAR
+    const granted = await CalendarReminderHelper.requestPermission(context);
+    this.notifRequesting = false;
+
+    if (granted) {
+      await CalendarReminderHelper.init(context, false);
+      this.notifMasterEnabled = true;
+      await SettingsHelper.saveNotifMaster(true);
+      await NotificationHelper.rescheduleAll();
+    } else {
+      this.notifMasterEnabled = false;
+      await SettingsHelper.saveNotifMaster(false);
+
+      // Enforce: Show dialog and force them to retry
+      promptAction.showDialog({
+        title: this.tr('permission_required'),
+        message: this.tr('calendar_permission_required_msg'),
+        buttons: [
+          { text: this.tr('cancel'), color: this.colors.dialogCancel },
+          { text: this.tr('grant'), color: this.colors.accentGold }
+        ]
+      }).then((res: promptAction.ShowDialogSuccessResponse) => {
+        if (res.index === 1) {
+          this.toggleNotifications(true);
+        }
+      }).catch((err: Error) => {
+        console.error('Dialog error', err);
+      });
+    }
   }
 
   private getPrivacyPolicyText(): string {
@@ -1442,7 +1617,10 @@ struct WizardPage {
     if (this.step === 3) {
       return this.tr('wizard_location_title');
     }
-    return this.tr('wizard_convention_title');
+    if (this.step === 4) {
+      return this.tr('wizard_convention_title');
+    }
+    return this.tr('notif_step_title');
   }
 
   private stepDescription(): string {
@@ -1458,6 +1636,9 @@ struct WizardPage {
     if (this.step === 3) {
       return this.tr('wizard_location_desc');
     }
-    return this.tr('wizard_convention_desc');
+    if (this.step === 4) {
+      return this.tr('wizard_convention_desc');
+    }
+    return this.tr('notif_step_desc');
   }
 }

@@ -25,6 +25,7 @@ import {
   STORAGE_KEY_SYSTEM_HAPTICS_ENABLED,
   STORAGE_KEY_SYSTEM_SOUND_ENABLED,
   STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_THEME_OVERRIDE,
   STORAGE_KEY_TIME_FORMAT
 } from '../common/StorageKeys';
 import { AppLanguage, L } from '../i8n/LocalizationHelper';
@@ -34,6 +35,7 @@ import { Breakpoints } from '../common/Breakpoints';
 import { ClockFormat } from '../common/ClockFormat';
 import { SubsectionHeader } from '../components/SubsectionHeader';
 import { ExtraTimingToggleRow } from '../components/ExtraTimingToggleRow';
+import { common } from '@kit.AbilityKit';
 
 @Entry
 @Component
@@ -51,6 +53,10 @@ struct CustomizePage {
   @StorageLink(STORAGE_KEY_LANGUAGE_OVERRIDE)
   @Watch('onLanguageOverrideChanged')
   languageOverride: string = AppLanguage.SYSTEM;
+  @StorageLink(STORAGE_KEY_THEME_OVERRIDE)
+  @Watch('onThemeOverrideChanged')
+  themeOverride: string = ThemeMode.SYSTEM;
+
 
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
@@ -128,6 +134,7 @@ struct CustomizePage {
   @State showAppThemePicker: boolean = false;
   @State showSoundPicker: boolean = false;
   @State showEventPerspectivePicker: boolean = false;
+  @State showThemePicker: boolean = false;
 
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
 
@@ -163,6 +170,10 @@ struct CustomizePage {
 
   private onClockFormatChanged(): void {
     // No state to update — the @StorageLink re-render is enough.
+  }
+
+  private onThemeOverrideChanged(): void {
+    // UI updates automatically via the themeOverride state binding
   }
 
   private onLanguageOverrideChanged(): void {
@@ -370,7 +381,7 @@ struct CustomizePage {
           .width('100%')
           .justifyContent(FlexAlign.Center)
         }
-        .layoutWeight(1)
+        .flexShrink(1)
         .width('100%')
         .backgroundColor(this.colors.primaryGreen)
         .scrollable(ScrollDirection.Vertical)
@@ -389,6 +400,20 @@ struct CustomizePage {
           },
           () => {
             this.showLanguagePicker = false;
+          }
+        )
+      }
+
+      if (this.showThemePicker) {
+        this.PickerOverlay(
+          this.tr('dark_mode'),
+          '🎨',
+          SettingsHelper.buildThemePickerItems(this.themeOverride),
+          (id: string) => {
+            this.pickThemeMode(id);
+          },
+          () => {
+            this.showThemePicker = false;
           }
         )
       }
@@ -898,15 +923,16 @@ struct CustomizePage {
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .margin({ top: 6 })
+        // ADDED HINT HERE
+        Text(this.tr('lang_supported_hint'))
+          .fontSize(10)
+          .fontColor(this.colors.textMuted)
+          .margin({ top: 4 })
       }
       .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-      Image($r('app.media.ic_chevron_right'))
-        .width(16)
-        .height(16)
-        .fillColor(this.colors.accentGold)
-        .opacity(0.7)
-        .rotate({ angle: this.isRtl() ? 180 : 0 })
+      Text('›')
+        .fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
     }
     .width('100%')
     .padding({
@@ -933,17 +959,20 @@ struct CustomizePage {
             .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
           Text(this.tr('theme_preset_desc'))
             .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-          Row() {
+
+          // FIX: Use Row({ space: 8 }) instead of margin left
+          Row({ space: 8 }) {
             Row()
               .width(14)
               .height(14)
               .borderRadius(7)
               .backgroundColor(this.appThemeSwatch(this.appTheme))
               .border({ width: 1, color: this.colors.borderSoft })
+              .flexShrink(0)
+
             Text(this.appThemeLabel())
               .fontSize(12)
               .fontColor(this.colors.accentGold)
-              .margin({ left: 8 })
               .maxLines(1)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
           }
@@ -952,12 +981,14 @@ struct CustomizePage {
         }
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
+        // FIX: Use SVG image for chevron
         Image($r('app.media.ic_chevron_right'))
           .width(16)
           .height(16)
           .fillColor(this.colors.accentGold)
           .opacity(0.7)
           .rotate({ angle: this.isRtl() ? 180 : 0 })
+          .flexShrink(0)
       }
       .width('100%')
       .padding({
@@ -973,14 +1004,14 @@ struct CustomizePage {
         this.showAppThemePicker = true;
       })
 
-      // ---- Dark Mode (v3.5.1: follows system only) ----
+      // ---- Dark Mode ----
       Row() {
         Column() {
           Text(this.tr('dark_mode'))
             .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
           Text(this.tr('dark_mode_desc'))
             .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
-          Text(this.tr('theme_system'))
+          Text(this.themeModeLabel())
             .fontSize(12)
             .fontColor(this.colors.accentGold)
             .maxLines(1)
@@ -988,6 +1019,14 @@ struct CustomizePage {
             .margin({ top: 6 })
         }
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+        Image($r('app.media.ic_chevron_right'))
+          .width(16)
+          .height(16)
+          .fillColor(this.colors.accentGold)
+          .opacity(0.7)
+          .rotate({ angle: this.isRtl() ? 180 : 0 })
+          .flexShrink(0)
       }
       .width('100%')
       .padding({
@@ -998,6 +1037,9 @@ struct CustomizePage {
       })
       .backgroundColor(this.colors.tintSubtle)
       .borderRadius(12)
+      .onClick(() => {
+        this.showThemePicker = true;
+      })
     }
     .width('100%')
     .padding(12)
@@ -1024,7 +1066,7 @@ struct CustomizePage {
         .borderRadius(2)
         .margin({ top: 10 })
 
-      Row() {
+      Row({ space: 14 }) {
         Text('🎨')
           .fontSize(22)
           .width(44)
@@ -1033,12 +1075,19 @@ struct CustomizePage {
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
+          .flexShrink(0)
 
         Text(this.tr('theme_preset'))
           .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
-          .margin({ left: 14 })
+          .layoutWeight(1)
       }
-      .width('100%').padding({ left: 20, top: 20, bottom: 20 })
+      .width('100%')
+      .padding({
+        top: 20,
+        bottom: 20,
+        left: this.isRtl() ? 20 : 16,
+        right: this.isRtl() ? 16 : 20
+      })
 
       Divider().color(this.colors.borderSoft).width('90%')
 
@@ -1048,7 +1097,64 @@ struct CustomizePage {
             [ThemePreset.SIRAT, ThemePreset.CURRENT, ThemePreset.HARMONY_7,
               ThemePreset.HARMONY_6, ThemePreset.HARMONY_5],
             (preset: string) => {
-              // ... full row body (unchanged)
+              Row({ space: 14 }) { // <-- Added Row space
+                Row()
+                  .width(34)
+                  .height(34)
+                  .borderRadius(17)
+                  .backgroundColor(this.appThemeSwatch(preset))
+                  .border({
+                    width: 2,
+                    color: preset === this.appTheme
+                      ? this.colors.accentGold : this.colors.borderSoft
+                  })
+                  .flexShrink(0)
+
+                Column() {
+                  Text(SettingsHelper.getAppThemeLabel(preset))
+                    .fontSize(15)
+                    .fontColor(preset === this.appTheme
+                      ? this.colors.accentGold
+                      : this.colors.textWhite)
+                    .fontWeight(preset === this.appTheme
+                      ? FontWeight.Bold
+                      : FontWeight.Normal)
+                    .width('100%')
+
+                  Text(this.appThemeSubtitle(preset))
+                    .fontSize(11)
+                    .fontColor(this.colors.textMuted)
+                    .margin({ top: 2 })
+                    .width('100%')
+                    .maxLines(2)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+                }
+                .alignItems(HorizontalAlign.Start)
+                .layoutWeight(1)
+
+                if (preset === this.appTheme) {
+                  Text('✓')
+                    .fontSize(18)
+                    .fontColor(this.colors.accentGold)
+                    .fontWeight(FontWeight.Bold)
+                }
+              }
+              .width('100%')
+              .padding({
+                top: 14,
+                bottom: 14,
+                left: 20,
+                right: 20
+              })
+              .backgroundColor(preset === this.appTheme
+                ? this.colors.tintSoft
+                : 'transparent')
+              .borderRadius(12)
+              .margin({ bottom: 4 })
+              .alignItems(VerticalAlign.Center)
+              .onClick(() => {
+                this.pickAppTheme(preset);
+              })
             },
             (preset: string) => `preset-${preset}`
           )
@@ -1061,7 +1167,7 @@ struct CustomizePage {
           bottom: 12
         })
       }
-      .layoutWeight(1)
+      .layoutWeight(1) // <-- Critical fix
       .width('100%')
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)
@@ -1080,6 +1186,7 @@ struct CustomizePage {
         })
     }
     .width('100%')
+    .constraintSize({ maxHeight: '85%' }) // <-- Critical fix
     .backgroundColor(this.colors.cardDark)
     .borderRadius({ topLeft: 28, topRight: 28 })
     .shadow({
@@ -1109,7 +1216,7 @@ struct CustomizePage {
         .borderRadius(2)
         .margin({ top: 10 })
 
-      Row() {
+      Row({ space: 14 }) {
         Text('🔊')
           .fontSize(22)
           .width(44)
@@ -1118,19 +1225,85 @@ struct CustomizePage {
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
+          .flexShrink(0)
 
         Text(this.tr('sound_style'))
           .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
-          .margin({ left: 14 })
+          .layoutWeight(1)
       }
-      .width('100%').padding({ left: 20, top: 20, bottom: 20 })
+      .width('100%')
+      .padding({
+        top: 20,
+        bottom: 20,
+        left: this.isRtl() ? 20 : 16,
+        right: this.isRtl() ? 16 : 20
+      })
 
       Divider().color(this.colors.borderSoft).width('90%')
 
       Scroll() {
         Column() {
           ForEach(TASBIH_SOUND_OPTIONS, (opt: TasbihSoundOption) => {
-            // ... full row body (unchanged)
+            Row({ space: 14 }) { // <-- Added Row space
+              Stack() {
+                Text('▶').fontSize(14).fontColor(this.colors.accentGold)
+              }
+              .width(38)
+              .height(38)
+              .borderRadius(19)
+              .backgroundColor(this.colors.tintSoft)
+              .border({ width: 1, color: this.colors.borderSoft })
+              .alignContent(Alignment.Center)
+              .flexShrink(0)
+              .onClick(() => {
+                SoundHelper.preview(opt.id);
+              })
+
+              Column() {
+                Text(this.soundDisplayName(opt.id))
+                  .fontSize(15)
+                  .fontColor(opt.id === this.selectedSound
+                    ? this.colors.accentGold
+                    : this.colors.textWhite)
+                  .fontWeight(opt.id === this.selectedSound
+                    ? FontWeight.Bold
+                    : FontWeight.Normal)
+                  .width('100%')
+
+                Text(this.soundDescription(opt.id))
+                  .fontSize(11)
+                  .fontColor(this.colors.textMuted)
+                  .margin({ top: 2 })
+                  .width('100%')
+                  .maxLines(2)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+              }
+              .alignItems(HorizontalAlign.Start)
+              .layoutWeight(1)
+
+              if (opt.id === this.selectedSound) {
+                Text('✓')
+                  .fontSize(18)
+                  .fontColor(this.colors.accentGold)
+                  .fontWeight(FontWeight.Bold)
+              }
+            }
+            .width('100%')
+            .padding({
+              top: 12,
+              bottom: 12,
+              left: 20,
+              right: 20
+            })
+            .backgroundColor(opt.id === this.selectedSound
+              ? this.colors.tintSoft
+              : 'transparent')
+            .borderRadius(12)
+            .margin({ bottom: 4 })
+            .alignItems(VerticalAlign.Center)
+            .onClick(() => {
+              this.pickSound(opt.id);
+            })
           }, (opt: TasbihSoundOption) => `sound-${opt.id}`)
         }
         .width('100%')
@@ -1141,7 +1314,7 @@ struct CustomizePage {
           bottom: 12
         })
       }
-      .layoutWeight(1)
+      .layoutWeight(1) // <-- Critical fix
       .width('100%')
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)
@@ -1160,6 +1333,7 @@ struct CustomizePage {
         })
     }
     .width('100%')
+    .constraintSize({ maxHeight: '85%' }) // <-- Critical fix
     .backgroundColor(this.colors.cardDark)
     .borderRadius({ topLeft: 28, topRight: 28 })
     .shadow({
@@ -1195,7 +1369,7 @@ struct CustomizePage {
         .borderRadius(2)
         .margin({ top: 10 })
 
-      Row() {
+      Row({ space: 14 }) {
         Text(icon)
           .fontSize(22)
           .width(44)
@@ -1204,19 +1378,26 @@ struct CustomizePage {
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
+          .flexShrink(0)
 
         Text(title)
           .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
-          .margin({ left: 14 })
+          .layoutWeight(1)
       }
-      .width('100%').padding({ left: 20, top: 20, bottom: 20 })
+      .width('100%')
+      .padding({
+        top: 20,
+        bottom: 20,
+        left: this.isRtl() ? 20 : 16,
+        right: this.isRtl() ? 16 : 20
+      })
 
       Divider().color(this.colors.borderSoft).width('90%')
 
       Scroll() {
         Column() {
           ForEach(items, (item: PickerItem) => {
-            Row() {
+            Row({ space: 14 }) { // <-- Added Row space
               Row() {
                 if (item.selected) {
                   Row()
@@ -1233,6 +1414,7 @@ struct CustomizePage {
               })
               .justifyContent(FlexAlign.Center)
               .alignItems(VerticalAlign.Center)
+              .flexShrink(0)
 
               Text(item.label)
                 .fontSize(15)
@@ -1241,8 +1423,8 @@ struct CustomizePage {
                 .layoutWeight(1)
                 .maxLines(2)
                 .textOverflow({ overflow: TextOverflow.Ellipsis })
-                .margin({ left: 14 })
             }
+
             .width('100%')
             .padding({
               top: 16,
@@ -1266,7 +1448,7 @@ struct CustomizePage {
           bottom: 12
         })
       }
-      .layoutWeight(1)
+      .layoutWeight(1) // <-- Critical fix
       .width('100%')
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)
@@ -1285,6 +1467,7 @@ struct CustomizePage {
         })
     }
     .width('100%')
+    .constraintSize({ maxHeight: '85%' }) // <-- Critical fix
     .backgroundColor(this.colors.cardDark)
     .borderRadius({ topLeft: 28, topRight: 28 })
     .shadow({
@@ -1294,7 +1477,6 @@ struct CustomizePage {
       offsetY: -6
     })
     .border({ width: { top: 1 }, color: this.colors.borderSoft })
-    .constraintSize({ maxHeight: '85%' })
     .position({ bottom: 0 })
   }
 
@@ -1519,7 +1701,9 @@ struct CustomizePage {
     return langs.map((l): PickerItem => {
       const item: PickerItem = {
         id: l,
-        label: L.get(`lang_${l}`, this.currentLanguage),
+        label: l === AppLanguage.SYSTEM
+          ? this.tr('lang_system')
+          : L.get(`lang_${l}`, this.currentLanguage),
         selected: l === this.languageOverride
       };
       return item;
@@ -1528,7 +1712,7 @@ struct CustomizePage {
 
   private currentLanguageLabel(): string {
     if (this.languageOverride === AppLanguage.SYSTEM) {
-      return L.get('lang_system', this.currentLanguage);
+      return this.tr('lang_system');
     }
     return L.get(`lang_${this.languageOverride}`, this.currentLanguage);
   }
@@ -1580,5 +1764,29 @@ struct CustomizePage {
       default:
         return this.tr('event_perspective_universal');
     }
+  }
+
+  private themeModeLabel(): string {
+    switch (this.themeOverride) {
+      case ThemeMode.LIGHT:
+        return this.tr('theme_light');
+      case ThemeMode.DARK:
+        return this.tr('theme_dark');
+      case ThemeMode.SYSTEM:
+      default:
+        return this.tr('theme_system');
+    }
+  }
+
+  private pickThemeMode(id: string): void {
+    this.themeOverride = id;
+    this.themeMode = id;
+    SettingsHelper.saveThemeMode(id);
+
+    // Apply immediately to the native system context
+    const ctx = getContext(this) as common.UIAbilityContext;
+    PageTheme.applyColorMode(id, ctx);
+
+    this.showThemePicker = false;
   }
 }

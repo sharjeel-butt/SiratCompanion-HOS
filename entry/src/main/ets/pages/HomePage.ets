@@ -1538,6 +1538,7 @@ export struct HomePage {
           Image($r('app.media.ic_nav_home'))
             .width(16).height(16)
             .fillColor(this.colors.accentGold)
+            .flexShrink(0)
           Text(this.tr('home_next_event'))
             .fontSize(11)
             .fontColor(this.colors.textMuted)
@@ -1940,7 +1941,7 @@ export struct HomePage {
           Image($r('app.media.ic_nav_calendar'))
             .width(16).height(16)
             .fillColor(this.colors.accentGold)
-            .margin({ right: 8 })
+            .flexShrink(0)
           Text(this.tr('next_3_days'))
             .fontSize(12)
             .fontColor(this.colors.textMuted)
@@ -2040,9 +2041,9 @@ export struct HomePage {
         Image($r('app.media.ic_nav_mosque'))
           .width(16).height(16)
           .fillColor(this.colors.accentGold)
-          .margin({ right: 8 })
+          .flexShrink(0)
         Text(this.tr('home_today_progress'))
-          .fontFamily(TypographyHelper.getFont(this.currentLanguage, true)) // <---
+          .fontFamily(TypographyHelper.getFont(this.currentLanguage, true))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
           .fontWeight(FontWeight.Bold)
@@ -2052,17 +2053,13 @@ export struct HomePage {
           Text(this.tr('details_view'))
             .fontSize(11).fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
-          Image($r('app.media.ic_chevron_right'))
-            .width(12)
-            .height(12)
-            .fillColor(this.colors.accentGold)
-            .margin({ left: this.isRtl() ? 0 : 2, right: this.isRtl() ? 2 : 0 })
+          Text(this.isRtl() ? '‹' : '›')
+            .fontSize(14).fontColor(this.colors.accentGold)
             .rotate({ angle: this.isRtl() ? 180 : 0 })
         }
         .onClick(() => {
           router.pushUrl({ url: 'pages/PrayerDetailsPage' })
-            .catch((e: Error) =>
-            console.error('Navigation failed:', JSON.stringify(e)));
+            .catch((e: Error) => console.error('Nav fail', e));
         })
       }
       .width('100%').padding({ bottom: 14 })
@@ -2293,7 +2290,7 @@ export struct HomePage {
         Image($r('app.media.ic_nav_tasbih'))
           .width(16).height(16)
           .fillColor(this.colors.accentGold)
-          .margin({ right: 8 })
+          .flexShrink(0)
         Text(this.tr('home_tasbih'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
@@ -2304,17 +2301,13 @@ export struct HomePage {
           Text(this.tr('details_view'))
             .fontSize(11).fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
-          Image($r('app.media.ic_chevron_right'))
-            .width(12)
-            .height(12)
-            .fillColor(this.colors.accentGold)
-            .margin({ left: this.isRtl() ? 0 : 2, right: this.isRtl() ? 2 : 0 })
+          Text(this.isRtl() ? '‹' : '›')
+            .fontSize(14).fontColor(this.colors.accentGold)
             .rotate({ angle: this.isRtl() ? 180 : 0 })
         }
         .onClick(() => {
           router.pushUrl({ url: 'pages/TasbihDetailsPage' })
-            .catch((e: Error) =>
-            console.error('Navigation failed:', JSON.stringify(e)));
+            .catch((e: Error) => console.error('Nav fail', e));
         })
       }
       .width('100%').padding({ bottom: 14 })

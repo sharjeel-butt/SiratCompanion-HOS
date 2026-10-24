@@ -164,3 +164,5 @@ export const STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW = 'auto_show_ramadan_view';
 export const STORAGE_KEY_RAMADAN_LOG = 'ramadan_log';
 
 export const STORAGE_KEY_RAMADAN_STATE_VERSION = 'ramadan_state_version';
+
+export const STORAGE_KEY_THEME_OVERRIDE = 'theme_mode_override';

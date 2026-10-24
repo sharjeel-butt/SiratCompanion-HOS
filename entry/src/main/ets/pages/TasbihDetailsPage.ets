@@ -328,6 +328,7 @@ struct TasbihDetailsPage {
   TasbihCard(row: TasbihProgressRow) {
     Column() {
       Row({ space: 12 }) {
+        // Theme Color Swatch
         Column()
           .width(14)
           .height(14)
@@ -339,6 +340,7 @@ struct TasbihDetailsPage {
               : TasbihThemes.DEFAULT_PRESET_ID
           ).swatch)
 
+        // Tasbih Name
         Text(row.tasbihName)
           .fontSize(16)
           .fontColor(this.colors.textWhite)
@@ -347,20 +349,34 @@ struct TasbihDetailsPage {
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
 
+        // Active Badge (Replaces the dot)
         if (row.isActive) {
-          Text('●')
-            .fontSize(8).fontColor(this.colors.accentGold)
-          // FIX: Replaced .margin({ end: 6 })
-            .margin({
-              left: this.isRtl() ? 6 : 0,
-              right: this.isRtl() ? 0 : 6
+          Text(this.tr('tasbih_active_badge'))
+            .fontSize(10)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.textOnAccent)
+            .backgroundColor(this.colors.accentGold)
+            .padding({
+              left: 8,
+              right: 8,
+              top: 2,
+              bottom: 2
             })
+            .borderRadius(8)
+            .margin({
+              left: this.isRtl() ? 0 : 4,
+              right: this.isRtl() ? 4 : 0
+            })
+            .flexShrink(0)
         }
 
+        // Completion Count
         Text(`${row.totalDaysCompleted} / ${row.totalDaysPossible}`)
-          .fontSize(13).fontColor(this.colors.accentGold)
+          .fontSize(13)
+          .fontColor(this.colors.accentGold)
           .fontWeight(FontWeight.Bold)
           .direction(Direction.Ltr)
+          .flexShrink(0)
       }
       .width('100%')
       .alignItems(VerticalAlign.Center)
