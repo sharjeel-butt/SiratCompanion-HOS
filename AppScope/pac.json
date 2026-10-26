@@ -94,6 +94,18 @@
           "purposes": [
             "App functionality"
           ]
+        },
+        {
+          "label": "Ramadan fasting tracker",
+          "purposes": [
+            "App functionality"
+          ]
+        },
+        {
+          "label": "Qada (make-up fast) log",
+          "purposes": [
+            "App functionality"
+          ]
         }
       ]
     }

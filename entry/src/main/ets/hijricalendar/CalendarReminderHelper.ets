@@ -479,6 +479,24 @@ export class CalendarReminderHelper {
     return false;
   }
 
+
+  static async addTestEvent(
+    entry: CalendarReminderEntry
+  ): Promise<number> {
+    if (!CalendarReminderHelper.ready ||
+      CalendarReminderHelper.calendar === null) {
+      return 0;
+    }
+    const ok = await CalendarReminderHelper.publishEvent(entry);
+    if (ok) {
+      AppLogger.info('CalendarReminderHelper',
+        `Test event scheduled: "${entry.title}" at ` +
+          `${new Date(entry.startTime).toISOString()}`);
+      return 1;
+    }
+    return 0;
+  }
+
   // ============================================================
   // HELPERS
   // ============================================================
@@ -496,6 +514,7 @@ export class CalendarReminderHelper {
     return CalendarReminderHelper.ready;
   }
 }
+
 
 /**
  * One calendar event to create. The caller builds these after

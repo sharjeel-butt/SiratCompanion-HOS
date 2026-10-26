@@ -519,7 +519,8 @@ export class ProgressHelper {
   static getTasbihDetails(
     tasbihs: Tasbih[],
     activeId: string,
-    period: TasbihPeriod
+    period: TasbihPeriod,
+    lang: string = 'en'
   ): TasbihDetailsSnapshot {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -570,7 +571,7 @@ export class ProgressHelper {
         }
 
         const label = (d.transliterationKey && d.transliterationKey.length > 0)
-          ? L.get(d.transliterationKey, 'en') // Note: L.get defaults to current app language
+          ? L.get(d.transliterationKey, lang)
           : (d.transliteration.length > 0 ? d.transliteration : d.arabic);
 
         const row: TasbihDhikrProgress = {
@@ -588,7 +589,7 @@ export class ProgressHelper {
 
       const possible = t.dhikrs.length * daysInPeriod;
       const tasbihName = (t.nameKey && t.nameKey.length > 0)
-        ? L.get(t.nameKey)
+        ? L.get(t.nameKey, lang)
         : t.name;
       const tasbihRow: TasbihProgressRow = {
         tasbihId: t.id,

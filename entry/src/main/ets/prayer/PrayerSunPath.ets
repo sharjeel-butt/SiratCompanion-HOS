@@ -255,7 +255,16 @@ export struct PrayerSunPath {
     const maghribHour = timeToHour(this.prayers[3].time);
     const ishaHour = timeToHour(this.prayers[4].time);
 
-    if (fajrHour <= 0 || dhuhrHour <= 0 || ishaHour <= 0) {
+    // A genuine 12:00 AM prayer yields fajrHour = 0, which the previous
+    // `<= 0` guard treated as "invalid" and aborted the entire render.
+    // isValidTime() only rejects empty strings and the "--:--" placeholder.
+    // Midnight is a legitimate prayer time at high latitudes in summer
+    // and must still draw the arc.
+    if (!isValidTime(this.prayers[0].time) ||
+      !isValidTime(this.prayers[1].time) ||
+      !isValidTime(this.prayers[2].time) ||
+      !isValidTime(this.prayers[3].time) ||
+      !isValidTime(this.prayers[4].time)) {
       return;
     }
 
@@ -444,7 +453,11 @@ export struct PrayerSunPath {
     ];
     let activeIdx: number = -1;
     for (let i = 0; i < prayerMinutes.length; i++) {
-      if (prayerMinutes[i] > 0 && prayerMinutes[i] <= nowMinute) {
+      // A 12:00 AM prayer yields prayerMinutes[i] = 0. The previous
+      // `> 0` guard would exclude it from ever becoming active. Use
+      // isValidTime() to distinguish a real midnight from --:--.
+      if (isValidTime(this.prayers[i].time) &&
+        prayerMinutes[i] <= nowMinute) {
         activeIdx = i;
       }
     }

@@ -36,6 +36,7 @@ struct TasbihDetailsPage {
   @Watch('onTasbihStateChanged')
   tasbihStateVersion: number = 0;
   @StorageLink(STORAGE_KEY_LANGUAGE)
+  @Watch('onLanguageChanged')
   appLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
@@ -91,8 +92,19 @@ struct TasbihDetailsPage {
 
   private recompute(): void {
     this.snapshot = ProgressHelper.getTasbihDetails(
-      this.tasbihs, this.activeId, this.period
+      this.tasbihs, this.activeId, this.period, this.appLanguage
     );
+  }
+
+  private onLanguageChanged(): void {
+    // The snapshot stores resolved label strings. When the user
+    // switches language while the page is mounted (e.g. via a
+    // background Customize open in the split-pane layout), the
+    // already-captured labels would go stale. Recompute so the
+    // resolved text follows the new language immediately.
+    if (this.tasbihs.length > 0) {
+      this.recompute();
+    }
   }
 
   private onThemeModeChanged(): void {
@@ -173,16 +185,21 @@ struct TasbihDetailsPage {
   @Builder
   TopBar() {
     Row({ space: 16 }) {
-      Text(this.isRtl() ? '→' : '←')
-        .fontSize(26)
-        .fontColor(this.colors.textWhite)
-        .width(40)
-        .height(40)
-        .textAlign(TextAlign.Center)
-        .borderRadius(20)
-        .backgroundColor(this.colors.tintSoft)
-        .flexShrink(0)
-        .onClick(() => router.back())
+      Row() {
+        Image($r('app.media.ic_chevron_right'))
+          .width(20)
+          .height(20)
+          .fillColor(this.colors.textWhite)
+          .rotate({ angle: this.isRtl() ? 0 : 180 })
+      }
+      .width(40)
+      .height(40)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Center)
+      .borderRadius(20)
+      .backgroundColor(this.colors.tintSoft)
+      .flexShrink(0)
+      .onClick(() => router.back())
 
       Text(this.tr('title_tasbih_details'))
         .fontSize(22)

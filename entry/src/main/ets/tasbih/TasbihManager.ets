@@ -230,10 +230,9 @@ export class TasbihManager {
 
   /**
    * Clear the live counter for one dhikr.
-   *
-   * Only `count` is reset. `dailyTotal` and the rolling history
-   * are preserved, so a completion logged earlier today is not
-   * undone by starting a new round.
+   * Only `count` is reset. `dailyTotal`, `lifetimeCount`, and the
+   * rolling history are preserved, so a completion logged earlier
+   * today is not undone by starting a new round.
    */
   static reset(
     tasbihs: Tasbih[], activeId: string, dhikrId: string
@@ -249,6 +248,7 @@ export class TasbihManager {
         if (d.id !== dhikrId) {
           return d;
         }
+        // Preserve the total accumulated today
         const preservedTotal = d.dailyTotal ?? d.count;
         const cleared: Dhikr = {
           id: d.id,
@@ -266,12 +266,13 @@ export class TasbihManager {
       const result: Tasbih = {
         id: t.id,
         name: t.name,
+        nameKey: t.nameKey,
         dhikrs: dhikrs,
         createdAt: t.createdAt,
-        lifetimeCount: t.lifetimeCount,
+        lifetimeCount: t.lifetimeCount, // Preserved
         theme: t.theme,
         themePresetId: t.themePresetId,
-        history: t.history
+        history: t.history // Preserved
       };
       return result;
     });
@@ -279,8 +280,8 @@ export class TasbihManager {
 
   /**
    * Clear every dhikr's live counter within the active tasbih.
-   * Same semantics as reset() — `dailyTotal` and history are
-   * preserved.
+   * Same semantics as reset() — `dailyTotal`, `lifetimeCount`, and
+   * history are preserved.
    */
   static resetAll(tasbihs: Tasbih[], activeId: string): Tasbih[] {
     const today = TasbihManager.todayKey();
@@ -308,12 +309,13 @@ export class TasbihManager {
       const result: Tasbih = {
         id: t.id,
         name: t.name,
+        nameKey: t.nameKey,
         dhikrs: dhikrs,
         createdAt: t.createdAt,
-        lifetimeCount: t.lifetimeCount,
+        lifetimeCount: t.lifetimeCount, // Preserved
         theme: t.theme,
         themePresetId: t.themePresetId,
-        history: t.history
+        history: t.history // Preserved
       };
       return result;
     });

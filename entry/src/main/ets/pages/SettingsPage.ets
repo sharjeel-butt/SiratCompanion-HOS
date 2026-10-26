@@ -454,16 +454,21 @@ struct SettingsPage {
   @Builder
   TopBar() {
     Row({ space: 16 }) {
-      Text(this.isRtl() ? '→' : '←')
-        .fontSize(26)
-        .fontColor(this.colors.textWhite)
-        .width(40)
-        .height(40)
-        .textAlign(TextAlign.Center)
-        .borderRadius(20)
-        .backgroundColor(this.colors.tintSoft)
-        .flexShrink(0)
-        .onClick(() => router.back())
+      Row() {
+        Image($r('app.media.ic_chevron_right'))
+          .width(20)
+          .height(20)
+          .fillColor(this.colors.textWhite)
+          .rotate({ angle: this.isRtl() ? 0 : 180 })
+      }
+      .width(40)
+      .height(40)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Center)
+      .borderRadius(20)
+      .backgroundColor(this.colors.tintSoft)
+      .flexShrink(0)
+      .onClick(() => router.back())
 
       Text(this.tr('title_settings'))
         .fontSize(22)

@@ -779,7 +779,9 @@ export struct Prayer {
     if (target.checked === checked) {
       return;
     }
-    if (checked && !PrayerManager.isPrayerCheckable(target, this.viewingDate)) {
+    if (checked && !PrayerManager.isPrayerCheckable(
+      target, this.viewingDate, this.getLocationOffsetHours()
+    )) {
       return;
     }
 
@@ -933,7 +935,9 @@ export struct Prayer {
       if (p.checked) {
         return p;
       }
-      if (!PrayerManager.isPrayerCheckable(p, this.viewingDate)) {
+      if (!PrayerManager.isPrayerCheckable(
+        p, this.viewingDate, this.getLocationOffsetHours()
+      )) {
         return p;
       }
       changed = true;
@@ -1483,11 +1487,14 @@ export struct Prayer {
         color: prayer.checked
           ? this.colors.accentGold : this.colors.borderStrong
       })
-      .opacity(PrayerManager.isPrayerCheckable(prayer, this.viewingDate)
-        ? 1.0 : 0.4)
+      .opacity(PrayerManager.isPrayerCheckable(
+        prayer, this.viewingDate, this.getLocationOffsetHours()
+      ) ? 1.0 : 0.4)
       .flexShrink(0) // <-- Prevents squishing
       .onClick(() => {
-        if (PrayerManager.isPrayerCheckable(prayer, this.viewingDate)) {
+        if (PrayerManager.isPrayerCheckable(
+          prayer, this.viewingDate, this.getLocationOffsetHours()
+        )) {
           this.setPrayerChecked(prayer.id, !prayer.checked);
         }
       })

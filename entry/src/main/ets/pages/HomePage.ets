@@ -167,10 +167,7 @@ export struct HomePage {
   @State pdfRamadanGregSpan: string = '';
   @State pdfRamadanYear: number = 1447;
   @State private todayFastingStatus: FastingStatus = FastingStatus.UNMARKED;
-  @State private taraweehCount: number = 0;
-  @State private isTaraweehTonight: boolean = false;
   @State private showLaylatNote: boolean = false;
-  @State private showFastNudge: boolean = false;
 
   @State locationMode: LocationMode = LocationMode.GPS;
   @State prayerProgress: PrayerProgress = {
@@ -308,10 +305,7 @@ export struct HomePage {
   private async loadTrackerState(): Promise<void> {
     if (this.ramadanInfo === null || !this.ramadanInfo.isRamadanNow) {
       this.todayFastingStatus = FastingStatus.UNMARKED;
-      this.taraweehCount = 0;
-      this.isTaraweehTonight = false;
       this.showLaylatNote = false;
-      this.showFastNudge = false;
       return;
     }
 
@@ -325,45 +319,10 @@ export struct HomePage {
 
     if (yearData) {
       this.todayFastingStatus = yearData.days[day - 1]?.status ?? FastingStatus.UNMARKED;
-      this.isTaraweehTonight = yearData.taraweehNights[day - 1] ?? false;
-      this.taraweehCount = yearData.taraweehNights.filter((n: boolean) => n).length;
     } else {
       this.todayFastingStatus = FastingStatus.UNMARKED;
-      this.isTaraweehTonight = false;
-      this.taraweehCount = 0;
     }
 
-    // 3. Fast Nudge Check (Show if past Maghrib and unmarked)
-    if (this.todayFastingStatus === FastingStatus.UNMARKED) {
-      const now = new Date();
-      const currentMin = now.getHours() * 60 + now.getMinutes();
-      const maghribMin = PrayerManager.timeToMinutes(this.todayMaghribTime);
-      this.showFastNudge = currentMin >= maghribMin && maghribMin > 0;
-    } else {
-      this.showFastNudge = false;
-    }
-  }
-
-  private async toggleTaraweehFromHome(isOn: boolean): Promise<void> {
-    if (!this.ramadanInfo) {
-      return;
-    }
-    this.isTaraweehTonight = isOn; // Optimistic UI update
-    if (isOn) {
-      this.taraweehCount++;
-    } else {
-      this.taraweehCount--;
-    }
-    try {
-      await RamadanStorage.toggleTaraweeh(this.ramadanInfo.hijriYear, this.ramadanInfo.currentDayNumber);
-    } catch (e) {
-      this.isTaraweehTonight = !isOn; // revert on failure
-      if (isOn) {
-        this.taraweehCount--;
-      } else {
-        this.taraweehCount++;
-      }
-    }
   }
 
   private onEventSettingsVersionChanged(): void {
@@ -1951,48 +1910,6 @@ export struct HomePage {
         .onClick(() => {
           this.handleExportRamadan();
         })
-
-        // 2. "Mark today's fast" Nudge
-        if (this.showFastNudge) {
-          Row({ space: 8 }) {
-            Text('🌙').fontSize(16).flexShrink(0)
-            Text(this.tr('ramadan_fast_nudge'))
-              .fontSize(13).fontColor(this.colors.textWhite)
-              .fontWeight(FontWeight.Medium).layoutWeight(1)
-            Image($r('app.media.ic_chevron_right'))
-              .width(14)
-              .height(14)
-              .fillColor(this.colors.accentGold)
-              .rotate({ angle: this.isRtl() ? 180 : 0 })
-              .flexShrink(0)
-          }
-          .width('100%')
-          .padding(12)
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(10)
-          .margin({ top: 10, bottom: 10 })
-          .onClick(() => {
-            router.pushUrl({ url: 'pages/RamadanDetailsPage' })
-              .catch((e: Error) => console.error(JSON.stringify(e)));
-          })
-        }
-
-        // 3. Taraweeh Quick Toggle
-        if (this.ramadanInfo !== null && this.ramadanInfo.isRamadanNow) {
-          Row({ space: 8 }) {
-            Text('🌙').fontSize(16).flexShrink(0)
-            Text(`${this.tr('ramadan_taraweeh_quick')} ${this.taraweehCount} / ${this.ramadanInfo.totalDays}`)
-              .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
-            Toggle({ type: ToggleType.Switch, isOn: this.isTaraweehTonight })
-              .selectedColor(this.colors.accentGold)
-              .onChange((isOn: boolean) => {
-                this.toggleTaraweehFromHome(isOn);
-              })
-          }
-          .width('100%')
-          .padding({ top: 10, bottom: 10 })
-          .alignItems(VerticalAlign.Center)
-        }
 
       } // end Column
       .width('100%')

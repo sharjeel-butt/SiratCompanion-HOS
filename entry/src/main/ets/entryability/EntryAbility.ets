@@ -107,25 +107,6 @@ export default class EntryAbility extends UIAbility {
     LayoutHelper.install();
     TypographyHelper.init();
 
-    // On 2-in-1 devices, request a preferred starting window size.
-    // Failures are non-fatal — the system default applies.
-    if (deviceInfo.deviceType === '2in1') {
-      windowStage.getMainWindow()
-        .then((win: window.Window) => {
-          win.resize(
-            PREFERRED_WINDOW_WIDTH_2IN1,
-            PREFERRED_WINDOW_HEIGHT_2IN1
-          ).catch((err: Error) => {
-            AppLogger.info('EntryAbility',
-              `Window resize skipped: ${err.message}`);
-          });
-        })
-        .catch((err: Error) => {
-          AppLogger.info('EntryAbility',
-            `getMainWindow failed: ${err.message}`);
-        });
-    }
-
     PreferencesHelper.init(this.context).then(async () => {
       // ========================================================
       // LOAD PERSISTED PREFERENCES INTO APPSTORAGE
@@ -340,11 +321,23 @@ export default class EntryAbility extends UIAbility {
             return;
           }
           hilog.info(0x0000, 'Sirat', 'Loaded %{public}s', startPage);
+
+          // Resize AFTER the initial page has painted. Doing this
+          // here (instead of at the top of onWindowStageCreate)
+          // prevents the routerSplit evaluator from seeing a wide
+          // window with a pending navigation event — which on some
+          // 2-in-1 hardware briefly shows a split view with an
+          // empty secondary pane before MainTabs renders.
+          this.resizeWindowFor2in1(windowStage);
         });
       }, splashMs);
     }).catch((err: Error) => {
       AppLogger.error('EntryAbility', `init failed: ${err.message}`);
-      windowStage.loadContent('pages/MainTabs');
+      windowStage.loadContent('pages/MainTabs', () => {
+        // Fallback load — apply the 2-in-1 resize on the same
+        // post-paint schedule as the primary path.
+        this.resizeWindowFor2in1(windowStage);
+      });
     });
   }
 
@@ -410,6 +403,37 @@ export default class EntryAbility extends UIAbility {
       PreferencesHelper.setString(STORAGE_KEY_LANGUAGE, resolved);
       L.applySystemLanguage(override);
     }
+  }
+
+  /**
+   * Request the preferred 2-in-1 starting window size.
+   *
+   * Must be called AFTER loadContent has completed. If it runs
+   * before, the routerSplit evaluator can see a wide window with
+   * a pending navigation and briefly render a split view with an
+   * empty secondary pane before MainTabs paints.
+   *
+   * No-op on phone / tablet / foldable. Failures are non-fatal —
+   * the system default window size applies.
+   */
+  private resizeWindowFor2in1(windowStage: window.WindowStage): void {
+    if (deviceInfo.deviceType !== '2in1') {
+      return;
+    }
+    windowStage.getMainWindow()
+      .then((win: window.Window) => {
+        win.resize(
+          PREFERRED_WINDOW_WIDTH_2IN1,
+          PREFERRED_WINDOW_HEIGHT_2IN1
+        ).catch((err: Error) => {
+          AppLogger.info('EntryAbility',
+            `Window resize skipped: ${err.message}`);
+        });
+      })
+      .catch((err: Error) => {
+        AppLogger.info('EntryAbility',
+          `getMainWindow failed: ${err.message}`);
+      });
   }
 
   /**

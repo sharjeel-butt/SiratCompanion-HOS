@@ -5,7 +5,7 @@
       "squareWindowMode": "routerSplit",
       "routerSplitOptions": {
         "homePage": "pages/MainTabs",
-        "relatedPage": "pages/SettingsPage,pages/CustomizePage,pages/AdvancedCalcPage"
+        "relatedPage": "pages/SettingsPage,pages/CustomizePage,pages/AdvancedCalcPage,pages/PrayerDetailsPage,pages/RamadanDetailsPage,pages/tasbihDetailsPage"
       }
     }
   }

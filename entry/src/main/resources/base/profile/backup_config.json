@@ -1,3 +1,12 @@
 {
-  "allowToBackupRestore": true
+  "allowToBackupRestore": true,
+  "excludes": [
+    "files/sirat_log.txt",
+    "files/*.pdf",
+    "files/*.jpg",
+    "files/*.jpeg",
+    "files/sirat_log.txt.bak",
+    "cache/*",
+    "temp/*"
+  ]
 }
