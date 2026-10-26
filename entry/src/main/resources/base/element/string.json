@@ -2512,6 +2512,33 @@
       "name": "grant",
       "value": "Grant"
     },
-    { "name": "category_logs", "value": "Diagnostic Logs" }
+    {
+      "name": "category_logs",
+      "value": "Diagnostic Logs"
+    },
+    {
+      "name": "jummah_mubarak",
+      "value": "Jummah Mubarak"
+    },
+    {
+      "name": "fasting_ends_at",
+      "value": "Fasting ends at"
+    },
+    {
+      "name": "duas_link",
+      "value": "Duas"
+    },
+    {
+      "name": "ramadan_laylat_today",
+      "value": "Tonight: possible Laylat al-Qadr"
+    },
+    {
+      "name": "ramadan_taraweeh_quick",
+      "value": "Taraweeh:"
+    },
+    {
+      "name": "ramadan_fast_nudge",
+      "value": "Did you fast today? Mark"
+    }
   ]
 }

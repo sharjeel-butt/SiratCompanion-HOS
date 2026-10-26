@@ -207,6 +207,7 @@ export struct Prayer {
   @State highLatRule: HighLatitudeRule = HighLatitudeRule.NONE;
 
   private statusTimerId: number = -1;
+
   private settingsLoaded: boolean = false;
   private settingsLoading: boolean = false;
   private settingsPending: boolean = false;
@@ -1058,6 +1059,8 @@ export struct Prayer {
           asrRule: this.asrRule,
           calcSource: this.calcSource,
           showCalcPills: true,
+          isRamadan: false,
+          fastingEndTime: this.getSunsetTime(),
           onOpenLocationSettings: () => {
             this.navigateToLocationSettings();
           },

@@ -9,6 +9,7 @@ import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
 import { STORAGE_KEY_THEME_MODE, STORAGE_KEY_TIME_FORMAT } from '../common/StorageKeys';
 import { TypographyHelper } from '../helper/TypographyHelper';
 import { PageTheme } from '../common/PageTheme';
+import { router } from '@kit.ArkUI';
 
 /**
  * Shared page header used by HomePage and Prayer.
@@ -49,6 +50,8 @@ export struct PageHeader {
   };
   onOpenSettings: () => void = () => {
   };
+  @Prop isRamadan: boolean = false;
+  @Prop fastingEndTime: string = '';
 
   // ============================================================
   // HELPERS
@@ -222,8 +225,45 @@ export struct PageHeader {
       .width('100%')
       .margin({ top: 4, bottom: 12 })
 
-      // ============ Row 3: Calc pills (optional) ============
-      if (this.showCalcPills) {
+      // ============ Row 3: Calc pills or Fasting Window ============
+      if (this.isRamadan) {
+        Row() {
+          Image($r('app.media.ic_ramadan_moon'))
+            .width(16).height(16)
+            .fillColor(this.colors.accentGold)
+            .margin({ right: 8 })
+          Text(this.tr('fasting_ends_at'))
+            .fontSize(12).fontColor(this.colors.textMuted)
+          Text(this.dt(this.fastingEndTime))
+            .fontSize(14)
+            .fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Bold)
+            .margin({ left: 8, right: 8 })
+            .direction(Direction.Ltr)
+          Blank()
+          Text(this.tr('details_view'))
+            .fontSize(11).fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Medium)
+          Image($r('app.media.ic_chevron_right'))
+            .width(12)
+            .height(12)
+            .fillColor(this.colors.accentGold)
+            .margin({ left: this.isRtl() ? 0 : 2, right: this.isRtl() ? 2 : 0 })
+            .rotate({ angle: this.isRtl() ? 180 : 0 })
+        }
+        .width('100%')
+        .height(38)
+        .padding({ left: 14, right: 14 })
+        .backgroundColor(this.colors.cardDark)
+        .borderRadius(12)
+        .border({ width: 1, color: this.colors.accentGold })
+        .margin({ bottom: 8 })
+        .alignItems(VerticalAlign.Center)
+        .onClick(() => {
+          router.pushUrl({ url: 'pages/RamadanDetailsPage' })
+            .catch((e: Error) => console.error(JSON.stringify(e)));
+        })
+      } else if (this.showCalcPills) {
         Row() {
           // Method
           Row() {

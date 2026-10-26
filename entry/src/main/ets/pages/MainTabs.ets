@@ -684,24 +684,46 @@ struct MainTabs {
       title: L.get('exit', this.currentLanguage),
       message: L.get('exit_confirm_message', this.currentLanguage),
       buttons: [
-        { text: L.get('cancel', this.currentLanguage), color: this.colors.dialogCancel },
-        { text: L.get('exit', this.currentLanguage), color: this.colors.accentGold }
+        {
+          text: L.get('cancel', this.currentLanguage),
+          color: this.colors.dialogCancel
+        },
+        {
+          text: L.get('exit', this.currentLanguage),
+          color: this.colors.accentGold
+        }
       ]
     }).then((result: promptAction.ShowDialogSuccessResponse) => {
-      if (result.index !== 1) {
-        return;
+      if (result.index === 1) {
+        const ctx = getContext(this) as common.UIAbilityContext;
+
+        // Delay slightly to allow the dialog dismiss animation to finish.
+        // Immediate termination during a dialog animation is often blocked by the OS.
+        setTimeout(() => {
+          const isPC = deviceInfo.deviceType === '2in1' || deviceInfo.deviceType === 'tablet';
+
+          if (isPC) {
+            // On PC/2-in-1, we must explicitly destroy the window first.
+            window.getLastWindow(ctx).then((win) => {
+              win.destroyWindow().then(() => {
+                // Terminate after the window is destroyed
+                ctx.terminateSelf();
+              }).catch((e: Error) => {
+                console.error('Destroy window failed:', JSON.stringify(e));
+                ctx.terminateSelf();
+              });
+            }).catch((e: Error) => {
+              console.error('Get window failed:', JSON.stringify(e));
+              ctx.terminateSelf();
+            });
+          } else {
+            // Standard phone behavior
+            ctx.terminateSelf();
+          }
+        }, 250);
       }
-
-      const ctx = getContext(this) as common.UIAbilityContext;
-      const isLarge = deviceInfo.deviceType === '2in1'
-        || deviceInfo.deviceType === 'tablet';
-      const delayMs = isLarge ? 500 : 200;
-
-      setTimeout(() => {
-        this.performExit(ctx, isLarge);
-      }, delayMs);
     }).catch((err: Error) => {
-      console.error('[Exit] dialog error: ' + err.message);
+      console.error('Dialog error:', JSON.stringify(err));
     });
   }
 

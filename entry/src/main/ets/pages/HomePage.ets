@@ -28,7 +28,7 @@ import {
   STORAGE_KEY_TIME_FORMAT
 } from '../common/StorageKeys';
 import { RamadanStorage } from '../helper/RamadanStorage';
-import { EidInfo, QadaSummary } from '../models/RamadanModels';
+import { EidInfo, FastingStatus, QadaSummary } from '../models/RamadanModels';
 import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
 import { DateHelper } from '../utils/DateUtils';
 import { PrayerModel } from '../prayer/PrayerModel';
@@ -166,6 +166,11 @@ export struct HomePage {
   @State pdfRamadanHijriSpan: string = '';
   @State pdfRamadanGregSpan: string = '';
   @State pdfRamadanYear: number = 1447;
+  @State private todayFastingStatus: FastingStatus = FastingStatus.UNMARKED;
+  @State private taraweehCount: number = 0;
+  @State private isTaraweehTonight: boolean = false;
+  @State private showLaylatNote: boolean = false;
+  @State private showFastNudge: boolean = false;
 
   @State locationMode: LocationMode = LocationMode.GPS;
   @State prayerProgress: PrayerProgress = {
@@ -215,8 +220,8 @@ export struct HomePage {
   @State private countdownTarget: string = '';
   @State private countdownDisplay: string = '';
   @State private countdownHeld: boolean = false;
-  private countdownTimerId: number = -1;
-
+  @State private isFriday: boolean = false;
+  @State private currentLanguage: string = 'en';
   @State private isRefreshing: boolean = false;
 
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
@@ -234,8 +239,9 @@ export struct HomePage {
 
   private settingsLoading: boolean = false;
   private settingsPending: boolean = false;
+  private countdownTimerId: number = -1;
 
-  @State private currentLanguage: string = 'en';
+
 
   private onShowIslamicEventsChanged(): void {
     // Re-render is handled by the @StorageLink.
@@ -299,6 +305,67 @@ export struct HomePage {
     this.next3Days = days;
   }
 
+  private async loadTrackerState(): Promise<void> {
+    if (this.ramadanInfo === null || !this.ramadanInfo.isRamadanNow) {
+      this.todayFastingStatus = FastingStatus.UNMARKED;
+      this.taraweehCount = 0;
+      this.isTaraweehTonight = false;
+      this.showLaylatNote = false;
+      this.showFastNudge = false;
+      return;
+    }
+
+    // 1. Laylat al-Qadr Check (Odd nights in the last 10 days: 21, 23, 25, 27, 29)
+    const day = this.ramadanInfo.currentDayNumber;
+    this.showLaylatNote = (day >= 21 && day % 2 !== 0);
+
+    // 2. Load Storage
+    const store = await RamadanStorage.load();
+    const yearData = store.years.find((y) => y.hijriYear === this.ramadanInfo!.hijriYear);
+
+    if (yearData) {
+      this.todayFastingStatus = yearData.days[day - 1]?.status ?? FastingStatus.UNMARKED;
+      this.isTaraweehTonight = yearData.taraweehNights[day - 1] ?? false;
+      this.taraweehCount = yearData.taraweehNights.filter((n: boolean) => n).length;
+    } else {
+      this.todayFastingStatus = FastingStatus.UNMARKED;
+      this.isTaraweehTonight = false;
+      this.taraweehCount = 0;
+    }
+
+    // 3. Fast Nudge Check (Show if past Maghrib and unmarked)
+    if (this.todayFastingStatus === FastingStatus.UNMARKED) {
+      const now = new Date();
+      const currentMin = now.getHours() * 60 + now.getMinutes();
+      const maghribMin = PrayerManager.timeToMinutes(this.todayMaghribTime);
+      this.showFastNudge = currentMin >= maghribMin && maghribMin > 0;
+    } else {
+      this.showFastNudge = false;
+    }
+  }
+
+  private async toggleTaraweehFromHome(isOn: boolean): Promise<void> {
+    if (!this.ramadanInfo) {
+      return;
+    }
+    this.isTaraweehTonight = isOn; // Optimistic UI update
+    if (isOn) {
+      this.taraweehCount++;
+    } else {
+      this.taraweehCount--;
+    }
+    try {
+      await RamadanStorage.toggleTaraweeh(this.ramadanInfo.hijriYear, this.ramadanInfo.currentDayNumber);
+    } catch (e) {
+      this.isTaraweehTonight = !isOn; // revert on failure
+      if (isOn) {
+        this.taraweehCount--;
+      } else {
+        this.taraweehCount++;
+      }
+    }
+  }
+
   private onEventSettingsVersionChanged(): void {
     this.upcomingEvents = DateHelper.getUpcomingImportantDates(
       this.hijriOffset,
@@ -346,6 +413,7 @@ export struct HomePage {
 
   private async onRamadanStateVersionChanged(): Promise<void> {
     await this.refreshQadaStatus();
+    await this.loadTrackerState();
   }
 
   private isTablet(): boolean {
@@ -469,6 +537,7 @@ export struct HomePage {
   }
 
   private async onAppForegrounded(): Promise<void> {
+    this.isFriday = new Date().getDay() === 5;
     this.refreshHijriDate();
     this.refreshRamadan();
     this.onEventPerspectiveListener();
@@ -522,6 +591,7 @@ export struct HomePage {
   }
 
   async onPageShow(): Promise<void> {
+    this.isFriday = new Date().getDay() === 5;
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
     this.refreshHijriDate();
@@ -702,20 +772,14 @@ export struct HomePage {
   }
 
   private refreshRamadan(): void {
-    // Eid detection runs regardless of whether ramadanInfo is set.
-    // During Eid, getRamadanInfo() returns the NEXT year's Ramadan
-    // (with daysUntilStart ≈ 355), so ramadanInfo may be null — but
-    // the Eid card must still render.
-    this.eidInfo = RamadanHelper.getEidInfo(this.hijriOffset);
-
     const info = RamadanHelper.getRamadanInfo(this.hijriOffset);
     if (!info) {
       this.ramadanInfo = null;
       this.refreshFastingWindow();
+      this.loadTrackerState(); // Clears tracker states
       return;
     }
 
-    // If auto is ON: enforce the 60-day rule. If auto is OFF: always show.
     if (this.autoShowRamadanView) {
       if (info.isRamadanNow || (info.daysUntilStart >= 0 && info.daysUntilStart <= 60)) {
         this.ramadanInfo = info;
@@ -727,6 +791,7 @@ export struct HomePage {
     }
 
     this.refreshFastingWindow();
+    this.loadTrackerState(); // Loads tracker states
   }
 
   private currentAshra(): RamadanAshra | null {
@@ -1200,6 +1265,8 @@ export struct HomePage {
           asrRule: this.asrRule,
           calcSource: this.calcSource,
           showCalcPills: true,
+          isRamadan: this.ramadanInfo !== null && this.ramadanInfo.isRamadanNow,
+          fastingEndTime: this.todayMaghribTime,
           onOpenLocationSettings: () => {
             this.navigateToLocationSettings();
           },
@@ -1214,6 +1281,15 @@ export struct HomePage {
               if (this.isTablet()) {
                 Row({ space: 16 }) {
                   Column() {
+                    if (this.isFriday) {
+                      Text(this.tr('jummah_mubarak'))
+                        .fontSize(15)
+                        .fontWeight(FontWeight.Bold)
+                        .fontColor(this.colors.accentGold)
+                        .width('100%')
+                        .textAlign(TextAlign.Center)
+                        .margin({ top: 8, bottom: 12 })
+                    }
                     if (this.showIslamicEvents) {
                       this.CountdownCard()
                     }
@@ -1230,11 +1306,12 @@ export struct HomePage {
                   Column() {
                     this.Next3DaysPreview()
                     this.TodayProgressCard()
-                    this.TasbihCard()
                     // ---- Qada (persistent obligation — bottom of column) ----
                     if (this.shouldShowQadaCard()) {
                       this.QadaHomeBanner()
                     }
+                    this.TasbihCard()
+
                   }
                   .layoutWeight(1)
                   .alignItems(HorizontalAlign.Start)
@@ -1244,6 +1321,15 @@ export struct HomePage {
                 .padding({ left: 24, right: 24 })
               } else {
                 Column() {
+                  if (new Date().getDay() === 5) {
+                    Text(this.tr('jummah_mubarak'))
+                      .fontSize(15)
+                      .fontWeight(FontWeight.Bold)
+                      .fontColor(this.colors.accentGold)
+                      .width('100%')
+                      .textAlign(TextAlign.Center)
+                      .margin({ top: 8, bottom: 12 })
+                  }
                   // ---- Next Event ----
                   if (this.showIslamicEvents) {
                     this.CountdownCard()
@@ -1258,14 +1344,14 @@ export struct HomePage {
                   // ---- Prayers ----
                   this.TodayProgressCard()
 
-
-                  // ---- Tasbih ----
-                  this.TasbihCard()
-
                   // ---- Qada (persistent obligation — bottom of page) ----
                   if (this.shouldShowQadaCard()) {
                     this.QadaHomeBanner()
                   }
+                  // ---- Tasbih ----
+                  this.TasbihCard()
+
+
                 }
                 .width('100%')
                 .padding({ left: 16, right: 16 })
@@ -1764,10 +1850,12 @@ export struct HomePage {
   RamadanCard() {
     if (this.ramadanInfo !== null) {
       Column() {
+        // Header Row
         Row({ space: 8 }) {
           Image($r('app.media.ic_ramadan_moon'))
             .width(16).height(16)
             .fillColor(this.colors.accentGold)
+            .flexShrink(0)
           Text(this.tr('ramadan_card_title'))
             .fontSize(12)
             .fontColor(this.colors.textMuted)
@@ -1778,24 +1866,60 @@ export struct HomePage {
             .fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
           Blank()
-          Row({ space: 2 }) {
+
+          // Duas Quick Link
+          Row({ space: 4 }) {
+            Text(this.tr('duas_link'))
+              .fontSize(11).fontColor(this.colors.accentGold)
+              .fontWeight(FontWeight.Medium)
+            Image($r('app.media.ic_chevron_right'))
+              .width(12).height(12)
+              .fillColor(this.colors.accentGold)
+              .rotate({ angle: this.isRtl() ? 180 : 0 })
+          }
+          .onClick(() => {
+            router.pushUrl({
+              url: 'pages/RamadanDetailsPage',
+              params: { scrollToDuas: true }
+            }).catch((e: Error) => console.error(JSON.stringify(e)));
+          })
+          .margin({ right: this.isRtl() ? 0 : 8, left: this.isRtl() ? 8 : 0 })
+
+          // Track Link
+          Row({ space: 4 }) {
             Text(this.tr('track_ramadan'))
               .fontSize(11).fontColor(this.colors.accentGold)
               .fontWeight(FontWeight.Medium)
             Image($r('app.media.ic_chevron_right'))
-              .width(12)
-              .height(12)
+              .width(12).height(12)
               .fillColor(this.colors.accentGold)
-              .margin({ left: this.isRtl() ? 0 : 2, right: this.isRtl() ? 2 : 0 })
               .rotate({ angle: this.isRtl() ? 180 : 0 })
           }
           .onClick(() => {
             router.pushUrl({ url: 'pages/RamadanDetailsPage' })
-              .catch((e: Error) =>
-              console.error('Navigation failed:', JSON.stringify(e)));
+              .catch((e: Error) => console.error(JSON.stringify(e)));
           })
         }
         .width('100%').padding({ bottom: 14 })
+
+        // 1. Laylat al-Qadr Inline Note
+        if (this.showLaylatNote) {
+          Row({ space: 8 }) {
+            Text('✨').fontSize(14)
+            Text(this.tr('ramadan_laylat_today'))
+              .fontSize(12).fontColor(this.colors.accentGold).fontWeight(FontWeight.Bold)
+          }
+          .width('100%')
+          .padding({
+            top: 8,
+            bottom: 8,
+            left: 12,
+            right: 12
+          })
+          .backgroundColor(this.colors.tintSoft)
+          .borderRadius(8)
+          .margin({ bottom: 12 })
+        }
 
         if (this.ramadanInfo!.isRamadanNow) {
           this.RamadanInProgress()
@@ -1827,6 +1951,48 @@ export struct HomePage {
         .onClick(() => {
           this.handleExportRamadan();
         })
+
+        // 2. "Mark today's fast" Nudge
+        if (this.showFastNudge) {
+          Row({ space: 8 }) {
+            Text('🌙').fontSize(16).flexShrink(0)
+            Text(this.tr('ramadan_fast_nudge'))
+              .fontSize(13).fontColor(this.colors.textWhite)
+              .fontWeight(FontWeight.Medium).layoutWeight(1)
+            Image($r('app.media.ic_chevron_right'))
+              .width(14)
+              .height(14)
+              .fillColor(this.colors.accentGold)
+              .rotate({ angle: this.isRtl() ? 180 : 0 })
+              .flexShrink(0)
+          }
+          .width('100%')
+          .padding(12)
+          .backgroundColor(this.colors.tintSoft)
+          .borderRadius(10)
+          .margin({ top: 10, bottom: 10 })
+          .onClick(() => {
+            router.pushUrl({ url: 'pages/RamadanDetailsPage' })
+              .catch((e: Error) => console.error(JSON.stringify(e)));
+          })
+        }
+
+        // 3. Taraweeh Quick Toggle
+        if (this.ramadanInfo !== null && this.ramadanInfo.isRamadanNow) {
+          Row({ space: 8 }) {
+            Text('🌙').fontSize(16).flexShrink(0)
+            Text(`${this.tr('ramadan_taraweeh_quick')} ${this.taraweehCount} / ${this.ramadanInfo.totalDays}`)
+              .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
+            Toggle({ type: ToggleType.Switch, isOn: this.isTaraweehTonight })
+              .selectedColor(this.colors.accentGold)
+              .onChange((isOn: boolean) => {
+                this.toggleTaraweehFromHome(isOn);
+              })
+          }
+          .width('100%')
+          .padding({ top: 10, bottom: 10 })
+          .alignItems(VerticalAlign.Center)
+        }
 
       } // end Column
       .width('100%')

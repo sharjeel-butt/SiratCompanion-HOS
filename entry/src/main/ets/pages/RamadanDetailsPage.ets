@@ -87,6 +87,7 @@ struct RamadanDetailsPage {
   @State activeQadaYear: number = 0;
   @State qadaYearDays: QadaDayEntry[] = [];
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
+  private scrollController: Scroller = new Scroller();
 
   // ============================================================
   // LIFECYCLE
@@ -101,6 +102,15 @@ struct RamadanDetailsPage {
     }
     );
     this.loadRamadanInfo();
+
+    // Check if we navigated here from the "Duas" link
+    const params = router.getParams() as Record<string, Object>;
+    if (params && params['scrollToDuas'] === true) {
+      // Delay slightly to allow the page to render and measure content height
+      setTimeout(() => {
+        this.scrollController.scrollEdge(Edge.Bottom);
+      }, 300);
+    }
   }
 
   aboutToDisappear(): void {
@@ -479,7 +489,7 @@ struct RamadanDetailsPage {
       Column() {
         this.TopBar()
 
-        Scroll() {
+        Scroll(this.scrollController) {
           Row() {
             Column() {
               this.FastingSection()

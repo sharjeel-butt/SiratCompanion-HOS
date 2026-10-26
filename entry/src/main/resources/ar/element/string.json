@@ -2512,6 +2512,34 @@
     {
       "name": "grant",
       "value": "منح"
-    },{ "name": "category_logs", "value": "سجلات التشخيص" }
+    },
+    {
+      "name": "category_logs",
+      "value": "سجلات التشخيص"
+    },
+    {
+      "name": "jummah_mubarak",
+      "value": "جمعة مباركة"
+    },
+    {
+      "name": "fasting_ends_at",
+      "value": "ينتهي الصيام في"
+    },
+    {
+      "name": "duas_link",
+      "value": "الأدعية"
+    },
+    {
+      "name": "ramadan_laylat_today",
+      "value": "الليلة: يُرجى تحري ليلة القدر"
+    },
+    {
+      "name": "ramadan_taraweeh_quick",
+      "value": "التراويح:"
+    },
+    {
+      "name": "ramadan_fast_nudge",
+      "value": "هل صمت اليوم؟ تسجيل"
+    }
   ]
 }
