@@ -311,22 +311,33 @@ struct WizardPage {
   @Builder
   ProgressHeader() {
     Row() {
-      Text('←')
-        .fontSize(22)
-        .fontColor(this.step === 0 ? this.colors.textMuted : this.colors.textWhite)
-        .width(40)
-        .height(40)
-        .textAlign(TextAlign.Center)
-        .borderRadius(20)
-        .backgroundColor(this.step === 0 ? 'transparent' : this.colors.tintSoft)
-        .border(this.step === 0
-          ? { width: 0 }
-          : { width: 1, color: this.colors.borderSoft })
-        .flexShrink(0)
-        .enabled(this.step > 0)
-        .onClick(() => {
-          this.goBack();
-        })
+      Row() {
+        Image($r('app.media.ic_chevron_right'))
+          .width(18)
+          .height(18)
+          .fillColor(this.step === 0
+            ? this.colors.textMuted
+            : this.colors.textWhite)
+          // Parent Row is .direction(Direction.Ltr)-locked, so the
+          // icon stays physically left in both languages. Rotate 180°
+          // unconditionally to point left — matching the "back on the
+          // physical left" design of the wizard header.
+          .rotate({ angle: 180 })
+      }
+      .width(40)
+      .height(40)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Center)
+      .borderRadius(20)
+      .backgroundColor(this.step === 0 ? 'transparent' : this.colors.tintSoft)
+      .border(this.step === 0
+        ? { width: 0 }
+        : { width: 1, color: this.colors.borderSoft })
+      .flexShrink(0)
+      .enabled(this.step > 0)
+      .onClick(() => {
+        this.goBack();
+      })
 
       if (this.isRtl()) {
         Blank()

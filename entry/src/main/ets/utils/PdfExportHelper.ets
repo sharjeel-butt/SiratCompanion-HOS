@@ -28,7 +28,6 @@ export class PdfExportHelper {
       const imagePacker: image.ImagePacker = image.createImagePacker();
       const packOpts: image.PackingOption = { format: 'image/jpeg', quality: 95 };
 
-      // Use filesDir for better persistence and stability
       const imagePath: string = context.filesDir + '/' + fileName + '.jpg';
 
       const imageFile: fs.File = fs.openSync(
@@ -39,7 +38,7 @@ export class PdfExportHelper {
       await imagePacker.packToFile(pixelMap, imageFile.fd, packOpts);
       fs.closeSync(imageFile);
 
-      // Verify the image file was created and is not empty
+      // Verify the image file was created and is not empty.
       if (fs.statSync(imagePath).size === 0) {
         throw new Error('Generated image file is empty.');
       }
@@ -48,25 +47,52 @@ export class PdfExportHelper {
       const pdfDoc: pdfService.PdfDocument = new pdfService.PdfDocument();
       const pdfPath: string = context.filesDir + '/' + fileName + '.pdf';
 
-      pdfDoc.createDocument(595.28, 841.89); // A4 size in points
-      const page: pdfService.PdfPage = pdfDoc.getPage(0);
+      try {
+        pdfDoc.createDocument(595.28, 841.89); // A4 size in points
+        const page: pdfService.PdfPage = pdfDoc.getPage(0);
 
-      // Insert the JPEG image
-      page.addImageObject(imagePath, 0, 0, 595.28, 841.89);
+        // Insert the JPEG image.
+        page.addImageObject(imagePath, 0, 0, 595.28, 841.89);
 
-      // Save the PDF
-      const saveResult = pdfDoc.saveDocument(pdfPath);
-      pdfDoc.releaseDocument();
+        // saveDocument() returns boolean: true = written, false = failed.
+        // Check it BEFORE showing success — the previous build fired
+        // the toast unconditionally, so save errors were invisible.
+        const saved: boolean = pdfDoc.saveDocument(pdfPath);
+        if (!saved) {
+          throw new Error('saveDocument() returned false for ' + pdfPath);
+        }
+      } finally {
+        // Release the document whether or not saveDocument() threw.
+        // Without this, a save failure leaves a native handle open.
+        pdfDoc.releaseDocument();
+      }
 
-      // Check the save result if the API provides one
-      // if (saveResult !== pdfService.ParseResult.PARSE_SUCCESS) {
-      //    throw new Error('Failed to save PDF document.');
-      // }
+      // 4. Sanity-check the file on disk. saveDocument() returning
+      //    true does not guarantee non-zero bytes in every SDK build
+      //    (rare disk-full case), so verify with stat() as well.
+      let pdfSize = 0;
+      try {
+        pdfSize = fs.statSync(pdfPath).size;
+      } catch (err) {
+        throw new Error('PDF file missing after save: ' + pdfPath);
+      }
+      if (pdfSize === 0) {
+        throw new Error('PDF file is empty: ' + pdfPath);
+      }
 
+      // 5. Success toast fires ONLY here, after every check passed.
       promptAction.showToast({ message: L.get('export_success') });
 
-      // 4. Trigger the native HarmonyOS print dialog.
-      // Use fileUri for the print service.
+      // 6. Clean up the intermediate JPEG. The PDF embeds it; the
+      //    raw file is no longer needed and would otherwise end up
+      //    in filesDir (and therefore in any directory-based backup).
+      try {
+        fs.unlinkSync(imagePath);
+      } catch (err) {
+        // Non-fatal — the JPEG is harmless if it lingers.
+      }
+
+      // 7. Trigger the native HarmonyOS print dialog.
       print.print([fileUri.getUriFromPath(pdfPath)], context)
         .catch((err: Error) => {
           console.error('Print failed: ' + err.message);

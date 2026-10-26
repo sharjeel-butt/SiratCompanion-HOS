@@ -206,12 +206,15 @@ export class NotificationHelper {
       reminderMinutes: [0],
       description: NotificationHelper.hadithFor('Fajr')
     };
-    const count = await CalendarReminderHelper.rescheduleAll([entry]);
+    // Non-destructive: publish one test event without cancelling
+    // the user's real prayer reminders. addTestEvent() is the only
+    // path that can safely do this — rescheduleAll() would wipe them.
+    const created = await CalendarReminderHelper.addTestEvent(entry);
     const result: ScheduleResult = {
-      ok: count > 0,
-      scheduled: count,
-      errorCode: count > 0 ? 0 : -1,
-      errorMessage: count > 0 ? '' : 'calendar addEvent failed'
+      ok: created > 0,
+      scheduled: created,
+      errorCode: created > 0 ? 0 : -1,
+      errorMessage: created > 0 ? '' : 'calendar addEvent failed'
     };
     return result;
   }

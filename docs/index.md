@@ -1,7 +1,7 @@
-# Privacy Policy — Sirat Companion
+Privacy Policy — Sirat Companion
 
-**Last updated:** October 16, 2026
-**Effective date:** October 16, 2026
+**Last updated:** October 26, 2026
+**Effective date:** October 26, 2026
 **Applies to:** Sirat Companion version 3.3.3 and later
 
 [English](#english) · [中文](#chinese) · [العربية](#arabic)
@@ -117,6 +117,17 @@ information is transmitted to us, to Huawei, or to any third party by the App.
 - **Removal:** You can remove all of these events at any time by turning off the master reminder toggle in Settings →
   Notifications, or by deleting the "Sirat Companion" calendar account from the system Calendar app.
 
+### Diagnostic Log
+
+- **What we access:** A plain-text log file written by the App's own code, recording lifecycle events, errors, and
+  warnings generated locally.
+- **Why we access it:** To help diagnose issues reported by users. You can inspect, copy, or clear this file at any time
+  from **Settings → Diagnostic Logs**.
+- **How it is stored:** Stored locally on your device, inside the App's private sandbox. It is never transmitted to us
+  or to any third party.
+- **Backup:** The log is explicitly excluded from the system backup, so it regenerates fresh on each install and cannot
+  be recovered from a previous device.
+
 ### Notification Features (Not Currently Active)
 
 The App includes a native notification backend for prayer reminders. This backend is currently disabled while the
@@ -141,7 +152,8 @@ the App.
   format, event tradition, per-timing visibility toggles), all Tasbih data (custom tasbihs, dhikr items, current counts,
   daily totals, rolling 90-day history, lifetime totals), and the cached GPS location.
 - **What is excluded:** The diagnostic log file is deliberately excluded from backup so it regenerates fresh on each
-  install.
+  install. Exported PDFs and their intermediate images are also excluded, as they are regenerable from the stored
+  settings.
 - **How it works:** The backup is performed entirely by HarmonyOS. It is not transmitted to us, and we do not operate
   the backup service. Whether a backup is created, where it is stored, and whether it is restored are controlled by your
   device's system settings and your Huawei account. Please refer to Huawei's privacy policy for details.
@@ -154,7 +166,9 @@ Sirat Companion does **not** collect, store, or transmit:
 
 - Your name, email address, phone number, or any account information
 - Device identifiers (IMEI, MAC address, Advertising ID, or similar)
-- Analytics, crash logs, or usage statistics
+- Analytics or usage statistics
+- App run logs transmitted off-device — a diagnostic log is written locally in the App's private sandbox for
+  troubleshooting, but it is never transmitted to us or any third party and is excluded from system backup
 - Browsing history, contacts, photos, or files
 - Financial or payment information
 - Advertising identifiers
@@ -176,6 +190,7 @@ All information accessed by the App is used only on your device and only to prov
 | Vibration       | Provide haptic feedback while counting Tasbih                                        |
 | Sound           | Play a click when counting Tasbih                                                    |
 | Calendar        | Add prayer-time reminders to a dedicated calendar account                            |
+| Diagnostic log  | Help diagnose issues reported by users; viewable, copyable, and clearable in-app     |
 
 We do not use your information for advertising, profiling, or any purpose unrelated to the App's core functionality.
 
@@ -209,7 +224,8 @@ through the system settings or uninstall the App on all devices associated with 
 
 Calendar events created for prayer reminders are stored by the system Calendar app and can be deleted at any time by
 turning off the reminder master toggle, by deleting the "Sirat Companion" calendar account, or by uninstalling the App.
-Uninstalling Sirat Companion permanently removes all data the App has stored on your device.
+Uninstalling Sirat Companion permanently removes all data the App has stored on your device, including the diagnostic
+log.
 
 ## Permissions Requested
 
@@ -374,6 +390,13 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 - **已完成的礼拜：** 当您将某一天的某个礼拜标记为已礼后，本应用会在下次重新排程时移除该日期该礼拜的提醒。将当天最后一个礼拜标记为已礼会立即触发重新排程，从而在您离开应用前为第二天排好提醒。
 - **删除：** 您可以随时在 设置 → 通知 中关闭提醒总开关，或在系统日历应用中删除"Sirat 伴侣"日历账户，从而移除所有相关事件。
 
+### 诊断日志
+
+- **我们访问的内容：** 应用自身代码写入的纯文本日志文件，记录本地生成的生命周期事件、错误和警告。
+- **我们为何访问：** 用于诊断用户报告的问题。您可以随时从 **设置 → 诊断日志** 查看、复制或清除此文件。
+- **存储方式：** 存储在您设备上应用的私有沙箱中。绝不传输给我们或任何第三方。
+- **备份：** 日志被明确排除在系统备份之外，因此每次安装都会重新生成，且无法从之前的设备恢复。
+
 ### 通知功能（当前未启用）
 
 本应用包含用于礼拜提醒的原生通知后端。该后端目前处于停用状态，因为 Agent-Powered Reminder 能力正在等待 AppGallery Connect
@@ -393,7 +416,7 @@ Sirat 伴侣支持 HarmonyOS 的系统级备份框架。当您设备上启用了
 - **包含的内容：**
   所有应用设置和偏好（语言、主题、礼拜时间计算设置、位置模式和手动坐标、回历偏移与回历类型、通知设置、声音与振动偏好、时间格式、节日传统、各时段可见性开关）、所有念珠数据（自定义念珠、念词项目、当前计数、每日总计、滚动
   90 天历史记录、累计总数）以及缓存的 GPS 位置。
-- **排除的内容：** 诊断日志文件被有意排除在备份之外，以便在每次安装时重新生成。
+- **排除的内容：** 诊断日志文件被有意排除在备份之外，以便在每次安装时重新生成。导出的 PDF 及其中间图像也被排除，因为它们可以从已存储的设置重新生成。
 - **工作方式：** 备份完全由 HarmonyOS 执行。它不会传输给我们，我们也不运营备份服务。是否创建备份、备份存储在哪里、是否恢复，均由您设备的系统设置和您的华为账户控制。详情请参阅华为隐私政策。
 - **您的控制：** 您可以在设备的系统设置中为本应用禁用备份，也可通过同一设置删除任何现有备份。
 
@@ -403,7 +426,8 @@ Sirat 伴侣**不**收集、存储或传输：
 
 - 您的姓名、电子邮件地址、电话号码或任何账户信息
 - 设备标识符（IMEI、MAC 地址、广告 ID 或类似信息）
-- 分析、崩溃日志或使用统计
+- 分析或使用统计
+- 传输到设备外的应用日志 —— 应用在本地私有沙箱中写入诊断日志用于排查问题，但绝不在设备外传输，且不包含在系统备份中
 - 浏览历史、联系人、照片或文件
 - 财务或支付信息
 - 广告标识符
@@ -425,6 +449,7 @@ Sirat 伴侣**不**收集、存储或传输：
 | 振动     | 念珠计数时提供触觉反馈                  |
 | 声音     | 念珠计数时播放提示音                   |
 | 日历     | 将礼拜提醒添加到专用日历账户               |
+| 诊断日志   | 帮助诊断用户报告的问题；可在应用内查看、复制和清除    |
 
 我们不会将您的信息用于广告、画像或与本应用核心功能无关的任何目的。
 
@@ -453,7 +478,7 @@ Sirat 伴侣**不**收集、存储或传输：
 如果启用了系统备份，应用数据的副本也可能保留在您的系统备份中，直至您通过系统设置将其删除或在所有关联设备上卸载应用。
 
 为礼拜提醒创建的日历事件由系统日历应用保存，您可以随时关闭提醒总开关、删除"Sirat 伴侣"日历账户或卸载本应用以移除这些事件。卸载
-Sirat 伴侣会永久删除本应用在您设备上存储的所有数据。
+Sirat 伴侣会永久删除本应用在您设备上存储的所有数据，包括诊断日志。
 
 ## 请求的权限
 
@@ -626,6 +651,16 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 - **الإزالة:** يمكنك إزالة كل هذه الأحداث في أي وقت عن طريق إيقاف المفتاح الرئيسي للتذكيرات من الإعدادات ← الإشعارات، أو
   حذف حساب تقويم "رفيق الصراط" من تطبيق التقويم في النظام.
 
+### سجل التشخيص
+
+- **ما نصل إليه:** ملف سجل نصي يكتبه رمز التطبيق نفسه، ويُسجّل أحداث دورة الحياة والأخطاء والتحذيرات المُنشأة محلياً.
+- **لماذا نصل إليه:** للمساعدة في تشخيص المشكلات التي يُبلّغ عنها المستخدمون. يمكنك عرض هذا الملف أو نسخه أو مسحه في أي
+  وقت من **الإعدادات ← سجلات التشخيص**.
+- **كيفية التخزين:** يُخزَّن محلياً على جهازك، داخل الصندوق الرملي الخاص بالتطبيق. لا يُنقل أبداً إلينا أو إلى أي طرف
+  ثالث.
+- **النسخ الاحتياطي:** يُستثنى السجل صراحةً من النسخة الاحتياطية للنظام، لذا يُعاد إنشاؤه من جديد في كل تثبيت ولا يمكن
+  استعادته من جهاز سابق.
+
 ### ميزات الإشعارات (غير مُفعَّلة حالياً)
 
 يتضمن التطبيق خلفية إشعارات أصلية لتذكيرات الصلاة. هذه الخلفية معطّلة حالياً في انتظار موافقة AppGallery Connect على
@@ -647,7 +682,8 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
   اليدوية، إزاحة التقويم الهجري ونوعه، إعدادات الإشعارات، تفضيلات الصوت والاهتزاز، تنسيق الوقت، تقليد المناسبات، مفاتيح
   رؤية الأوقات)، وجميع بيانات التسبيح (المسبحات المخصّصة، عناصر الأذكار، الأعداد الحالية، الإجماليات اليومية، سجل متدحرج
   لمدة 90 يوماً، الإجماليات الكلية)، والموقع الجغرافي المخزَّن مؤقتاً.
-- **ما يُستثنى:** يُستثنى ملف سجل التشخيص عمداً من النسخ الاحتياطي ليُعاد إنشاؤه من جديد في كل تثبيت.
+- **ما يُستثنى:** يُستثنى ملف سجل التشخيص عمداً من النسخ الاحتياطي ليُعاد إنشاؤه من جديد في كل تثبيت. كما تُستثنى ملفات
+  PDF المصدَّرة والصور الوسيطة الخاصة بها، لأنها قابلة لإعادة الإنشاء من الإعدادات المخزَّنة.
 - **كيفية العمل:** يُنفَّذ النسخ الاحتياطي بالكامل بواسطة HarmonyOS. لا يُنقل إلينا، ونحن لا نشغّل خدمة النسخ الاحتياطي.
   إنشاء النسخة الاحتياطية ومكان تخزينها واستعادتها كلها أمور تتحكم بها إعدادات نظام جهازك وحسابك على Huawei. يُرجى
   الرجوع إلى سياسة الخصوصية الخاصة بـ Huawei للتفاصيل.
@@ -660,7 +696,9 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 
 - اسمك أو بريدك الإلكتروني أو رقم هاتفك أو أي معلومات حساب
 - معرفات الجهاز (IMEI، عنوان MAC، معرف الإعلان، أو ما شابه)
-- التحليلات أو سجلات الأعطال أو إحصاءات الاستخدام
+- التحليلات أو إحصاءات الاستخدام
+- سجلات تشغيل التطبيق المنقولة خارج الجهاز — يُكتَب سجل تشخيص محلي في الصندوق الرملي الخاص بالتطبيق لأغراض استكشاف
+  الأخطاء، لكنه لا يُنقل أبداً إلينا أو إلى أي طرف ثالث ولا يُضمَّن في النسخة الاحتياطية للنظام
 - سجل التصفح أو جهات الاتصال أو الصور أو الملفات
 - المعلومات المالية أو معلومات الدفع
 - معرفات الإعلانات
@@ -671,17 +709,18 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 
 تُستخدم جميع المعلومات التي يصل إليها التطبيق على جهازك فقط، ولتقديم ميزات التطبيق حصراً:
 
-| المعلومات      | الغرض                                                                            |
-|----------------|----------------------------------------------------------------------------------|
-| الموقع         | حساب أوقات الصلاة واتجاه القبلة                                                  |
-| المستشعرات     | تحديد اتجاه الجهاز للبوصلة                                                       |
-| سجل الصلوات    | تتبع الصلوات اليومية والأيام المتتالية والتقدم، وتخطي التذكيرات للصلوات المؤدّاة |
-| التفضيلات      | تذكر إعداداتك                                                                    |
-| بيانات التسبيح | حفظ تقدم الأذكار والإجماليات اليومية والسجل                                      |
-| حالة النظام    | احترام إعدادات الصوت والاهتزاز في النظام                                         |
-| الاهتزاز       | توفير تغذية لمسية أثناء عدّ التسبيح                                              |
-| الصوت          | تشغيل نقرة عند عدّ التسبيح                                                       |
-| التقويم        | إضافة تذكيرات الصلاة إلى حساب تقويم مخصّص                                        |
+| المعلومات      | الغرض                                                                                      |
+|----------------|--------------------------------------------------------------------------------------------|
+| الموقع         | حساب أوقات الصلاة واتجاه القبلة                                                            |
+| المستشعرات     | تحديد اتجاه الجهاز للبوصلة                                                                 |
+| سجل الصلوات    | تتبع الصلوات اليومية والأيام المتتالية والتقدم، وتخطي التذكيرات للصلوات المؤدّاة           |
+| التفضيلات      | تذكر إعداداتك                                                                              |
+| بيانات التسبيح | حفظ تقدم الأذكار والإجماليات اليومية والسجل                                                |
+| حالة النظام    | احترام إعدادات الصوت والاهتزاز في النظام                                                   |
+| الاهتزاز       | توفير تغذية لمسية أثناء عدّ التسبيح                                                        |
+| الصوت          | تشغيل نقرة عند عدّ التسبيح                                                                 |
+| التقويم        | إضافة تذكيرات الصلاة إلى حساب تقويم مخصّص                                                  |
+| سجل التشخيص    | المساعدة في تشخيص المشكلات التي يُبلّغ عنها المستخدمون؛ يمكن عرضه ونسخه ومسحه داخل التطبيق |
 
 لا نستخدم معلوماتك للإعلانات أو التنميط أو أي غرض لا يتصل بالوظائف الأساسية للتطبيق.
 
@@ -712,7 +751,7 @@ Huawei أو إلى أي طرف ثالث بواسطة التطبيق.
 
 تُخزَّن أحداث التقويم المنشأة لتذكيرات الصلاة بواسطة تطبيق التقويم في النظام، ويمكن حذفها في أي وقت عن طريق إيقاف
 المفتاح الرئيسي للتذكيرات، أو حذف حساب تقويم "رفيق الصراط"، أو إلغاء تثبيت التطبيق. يؤدي إلغاء تثبيت رفيق الصراط إلى حذف
-جميع البيانات نهائياً.
+جميع البيانات نهائياً، بما في ذلك سجل التشخيص.
 
 ## الأذونات المطلوبة
 

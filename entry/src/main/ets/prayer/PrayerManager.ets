@@ -162,29 +162,52 @@ export class PrayerManager {
   // APPLY TIMES + OFFSETS
   // ============================================================
 
-  static isPrayerCheckable(prayer: PrayerModel, viewingDate?: Date): boolean {
+  static isPrayerCheckable(
+    prayer: PrayerModel,
+    viewingDate?: Date,
+    locationOffsetHours?: number
+  ): boolean {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
     const view = viewingDate ? new Date(viewingDate) : new Date();
     view.setHours(0, 0, 0, 0);
 
+    // Future date — never checkable.
     if (view.getTime() > today.getTime()) {
       return false;
     }
 
+    // Already checked — always allows uncheck, regardless of time.
     if (prayer.checked) {
       return true;
     }
 
+    // Past date — always checkable (catch-up logging).
     if (view.getTime() < today.getTime()) {
       return true;
     }
 
-    const now = new Date();
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    // Today — checkable only once the prayer's time has arrived,
+    // evaluated in the *location's* timezone. Comparing against
+    // device-local time was wrong for a user whose manual location
+    // is in a different zone from the device (e.g. Karachi device,
+    // New York manual location — Fajr at 5:30 AM NY appears
+    // "not yet" at 4:00 AM Karachi even though it happened hours ago).
+    const trimmed = prayer.time.trim();
+    if (trimmed.length === 0 || trimmed === '--:--') {
+      return false;
+    }
+
+    const currentMinutes =
+      PrayerManager.getCurrentMinutesInLocation(locationOffsetHours);
     const prayerMinutes = PrayerManager.timeToMinutes(prayer.time);
-    return prayerMinutes > 0 && prayerMinutes <= currentMinutes;
+
+    // prayerMinutes can be 0 for a genuine 12:00 AM prayer — that is
+    // a valid time and should be treated as "arrived". The string
+    // check above rejects the "--:--" sentinel; here 0 <= current is
+    // the correct comparison for both normal and midnight prayers.
+    return prayerMinutes <= currentMinutes;
   }
 
   static applyDayNames(prayers: PrayerModel[], date?: Date): PrayerModel[] {

@@ -16,9 +16,9 @@ export class PrivacyPolicyProvider {
   static readonly FULL_URL: string =
     'https://sharjeel-butt.github.io/SiratCompanion-HOS/';
   /** Update this date to today */
-  static readonly LAST_UPDATED: string = 'October 16, 2026';
+  static readonly LAST_UPDATED: string = 'October 26, 2026';
   /** Update this to the new version */
-  static readonly APPLIES_TO: string = '3.4.3 and later';
+  static readonly APPLIES_TO: string = '3.5.0 and later';
 
   /** Returns the policy text for the given language code. */
   static get(lang: string): string {
@@ -37,8 +37,8 @@ export class PrivacyPolicyProvider {
 
   private static readonly EN: string = `Privacy Policy — Sirat Companion
 
-Last updated: October 16, 2026
-Effective date: October 16, 2026
+Last updated: October 26, 2026
+Effective date: October 26, 2026
 Applies to: Sirat Companion version 3.3.3 and later
 
 INTRODUCTION
@@ -107,6 +107,12 @@ The App includes a native notification backend for prayer reminders. This backen
 - The App does not publish any notifications.
 - No notification-related data is created, stored, or transmitted.
 
+Diagnostic Log
+- What we access: A plain-text log file written by the app's own code, recording lifecycle events, errors, and warnings generated locally.
+- Why we access it: To help diagnose issues reported by users. You can inspect, copy, or clear this file at any time from Settings → Diagnostic Logs.
+- How it is stored: Stored locally on your device, inside the app's private sandbox. It is never transmitted to us or to any third party.
+- Backup: The log is explicitly excluded from the system backup, so it regenerates fresh on each install and cannot be recovered from a previous device.
+
 The active reminder mechanism is the Calendar backend described above. When the Agent-Powered Reminder capability is approved, this Privacy Policy will be updated to disclose the notification backend, and the PUBLISH_AGENT_REMINDER permission will be requested at that time.
 
 BACKUP AND RESTORE
@@ -123,7 +129,8 @@ WHAT WE DO NOT COLLECT
 Sirat Companion does not collect, store, or transmit:
 - Your name, email address, phone number, or any account information
 - Device identifiers (IMEI, MAC address, Advertising ID, or similar)
-- Analytics, crash logs, or usage statistics
+- Analytics or usage statistics
+- App run logs transmitted off-device — a diagnostic log is written locally in the app's private sandbox for troubleshooting, but it is never transmitted to us or any third party and is excluded from system backup
 - Browsing history, contacts, photos, or files
 - Financial or payment information
 - Advertising identifiers
@@ -228,8 +235,8 @@ Developer: Sharjeel Idris`;
 
   private static readonly ZH: string = `隐私政策 — Sirat 伴侣
 
-最后更新：2026 年 10 月 16 日
-生效日期：2026 年 10 月 16 日
+最后更新：2026 年 10 月 26 日
+生效日期：2026 年 10 月 26 日
 适用于：Sirat 伴侣 3.3.3 及更高版本
 
 引言
@@ -300,6 +307,12 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 
 当前生效的提醒机制为上述日历后端。待 Agent-Powered Reminder 能力获批后，本隐私政策将更新以披露通知后端，届时将请求 PUBLISH_AGENT_REMINDER 权限。
 
+诊断日志
+- 我们访问的内容：应用自身代码写入的纯文本日志文件，记录本地生成的生命周期事件、错误和警告。
+- 我们为何访问：用于诊断用户报告的问题。您可以随时从 设置 → 诊断日志 查看、复制或清除此文件。
+- 存储方式：存储在您设备上应用的私有沙箱中。绝不传输给我们或任何第三方。
+- 备份：日志被明确排除在系统备份之外，因此每次安装都会重新生成，且无法从之前的设备恢复。
+
 备份与恢复
 
 Sirat 伴侣支持 HarmonyOS 的系统级备份框架。当您设备上启用了备份时，本应用的本地存储数据将包含在系统备份中，以便您在迁移到新设备或重新安装应用时恢复。
@@ -314,7 +327,8 @@ Sirat 伴侣支持 HarmonyOS 的系统级备份框架。当您设备上启用了
 Sirat 伴侣不收集、存储或传输：
 - 您的姓名、电子邮件地址、电话号码或任何账户信息
 - 设备标识符（IMEI、MAC 地址、广告 ID 或类似信息）
-- 分析、崩溃日志或使用统计
+- 分析或使用统计
+- 传输到设备外的应用日志 —— 应用在本地私有沙箱中写入诊断日志用于排查问题，但绝不在设备外传输，且不包含在系统备份中
 - 浏览历史、联系人、照片或文件
 - 财务或支付信息
 - 广告标识符
@@ -419,8 +433,8 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 
   private static readonly AR: string = `سياسة الخصوصية — رفيق الصراط
 
-آخر تحديث: 16 أكتوبر 2026
-تاريخ السريان: 16 أكتوبر 2026
+آخر تحديث: 26 أكتوبر 2026
+تاريخ السريان: 26 أكتوبر 2026
 ينطبق على: رفيق الصراط الإصدار 3.3.3 وما بعده
 
 مقدمة
@@ -449,7 +463,11 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 سجل الصلوات المكتملة
 - ما نصل إليه: الصلوات التي تُعلّمها كمُصلَّاة كل يوم (الفجر، الظهر، العصر، المغرب، العشاء)، محفوظة حسب التاريخ.
 - لماذا نصل إليها: لعرض تقدم اليوم والأيام المتتالية والملخصات الأسبوعية والشهرية والإحصاءات الإجمالية على الشاشة الرئيسية وصفحة تفاصيل الصلاة، ولتخطي إنشاء التذكيرات للصلوات التي أدّيتها بالفعل.
-- كيفية التخزين: تُخزَّن محلياً على جهازك باستخدام واجهة HarmonyOS Preferences. لا تغادر جهازك إلا إذا كنت قد مكّنت النسخ الاحتياطي للنظام، وفي هذه الحالة تشارك في النسخ الاحتياطي الموصوف في قسم "النسخ الاحتياطي والاستعادة" أدناه.
+- كيفية التخزين: تُخزَّن محلياً على جهازك باستخدام واجهة HarmonyOS Preferences. لا تغادر جهازك إلا إذا كنت قد مكّنت النسخ الاحتياطي للنظام، وفي هذه الحالة تشارك في النسخ الاحتياطي الموصوف في قسم سجل التشخيص
+- ما نصل إليه: ملف سجل نصي يكتبه رمز التطبيق نفسه، ويُسجّل أحداث دورة الحياة والأخطاء والتحذيرات المُنشأة محلياً.
+- لماذا نصل إليه: للمساعدة في تشخيص المشكلات التي يُبلّغ عنها المستخدمون. يمكنك عرض هذا الملف أو نسخه أو مسحه في أي وقت من الإعدادات → سجلات التشخيص.
+- كيفية التخزين: يُخزَّن محلياً على جهازك، داخل الصندوق الرملي الخاص بالتطبيق. لا يُنقل أبداً إلينا أو إلى أي طرف ثالث.
+- النسخ الاحتياطي: يُستثنى السجل صراحةً من النسخة الاحتياطية للنظام، لذا يُعاد إنشاؤه من جديد في كل تثبيت ولا يمكن استعادته من جهاز سابق. "النسخ الاحتياطي والاستعادة" أدناه.
 
 أوقات الصلاة والإعدادات
 - ما نصل إليه: تفضيلات الحساب (طريقة الحساب، وقاعدة العصر، وتعديلات أوقات الصلاة، وقاعدة خطوط العرض العليا، والتقريب، وطريقة منتصف الليل، وحلّ المناطق القطبية، والشفق)، ومظهر التطبيق، والوضع الداكن، وتفضيل اللغة، وتنسيق الوقت، وإزاحة التقويم الهجري، ونوع التقويم الهجري، ووضع الموقع، والإحداثيات اليدوية، وتفضيل تقليد المناسبات، ومفاتيح رؤية الأوقات، وتفضيل الاهتزاز، وتفضيلات مظهر المسبحة، وتفضيل صوت المسبحة، وتفضيلات الإشعارات.
@@ -505,7 +523,8 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 رفيق الصراط لا يجمع أو يخزّن أو ينقل:
 - اسمك أو بريدك الإلكتروني أو رقم هاتفك أو أي معلومات حساب
 - معرفات الجهاز (IMEI، عنوان MAC، معرف الإعلان، أو ما شابه)
-- التحليلات أو سجلات الأعطال أو إحصاءات الاستخدام
+- التحليلات أو إحصاءات الاستخدام
+- سجلات تشغيل التطبيق المنقولة خارج الجهاز — يُكتَب سجل تشخيص محلي في الصندوق الرملي الخاص بالتطبيق لأغراض استكشاف الأخطاء، لكنه لا يُنقل أبداً إلينا أو إلى أي طرف ثالث ولا يُضمَّن في النسخة الاحتياطية للنظام
 - سجل التصفح أو جهات الاتصال أو الصور أو الملفات
 - المعلومات المالية أو معلومات الدفع
 - معرفات الإعلانات
