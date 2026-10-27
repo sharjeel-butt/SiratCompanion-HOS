@@ -2539,6 +2539,34 @@
     {
       "name": "ramadan_fast_nudge",
       "value": "今天封斋了吗？标记"
+    },
+    {
+      "name": "bind_to_prayers",
+      "value": "绑定到礼拜"
+    },
+    {
+      "name": "tasbih_reminder_title",
+      "value": "待完成的赞念"
+    },
+    {
+      "name": "tasbih_reminder_desc",
+      "value": "已完成礼拜，但您仍有待完成的赞念。"
+    },
+    {
+      "name": "go_to_tasbih",
+      "value": "前往赞念"
+    },
+    {
+      "name": "dismiss",
+      "value": "忽略"
+    },
+    {
+      "name": "tasbih_status_completed",
+      "value": "已完成"
+    },
+    {
+      "name": "tasbih_left",
+      "value": "剩余"
     }
   ]
 }

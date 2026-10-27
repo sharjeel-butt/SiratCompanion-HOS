@@ -2540,6 +2540,34 @@
     {
       "name": "ramadan_fast_nudge",
       "value": "هل صمت اليوم؟ تسجيل"
+    },
+    {
+      "name": "bind_to_prayers",
+      "value": "الربط بالصلوات"
+    },
+    {
+      "name": "tasbih_reminder_title",
+      "value": "تسبيح معلّق"
+    },
+    {
+      "name": "tasbih_reminder_desc",
+      "value": "لقد صلّيت، لكن لا تزال لديك تسبيحات معلّقة."
+    },
+    {
+      "name": "go_to_tasbih",
+      "value": "الانتقال إلى التسبيح"
+    },
+    {
+      "name": "dismiss",
+      "value": "تجاهل"
+    },
+    {
+      "name": "tasbih_status_completed",
+      "value": "مكتمل"
+    },
+    {
+      "name": "tasbih_left",
+      "value": "متبقي"
     }
   ]
 }

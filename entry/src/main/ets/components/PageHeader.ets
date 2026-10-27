@@ -1,6 +1,6 @@
 // entry/src/main/ets/components/PageHeader.ets
 
-import { Theme, ThemeColors, ThemeMode } from '../common/Theme';
+import { ThemeColors, ThemeMode } from '../common/Theme';
 import { L } from '../i8n/LocalizationHelper';
 import { SettingsHelper } from '../helper/SettingsHelper';
 import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator';
@@ -10,6 +10,7 @@ import { STORAGE_KEY_THEME_MODE, STORAGE_KEY_TIME_FORMAT } from '../common/Stora
 import { TypographyHelper } from '../helper/TypographyHelper';
 import { PageTheme } from '../common/PageTheme';
 import { router } from '@kit.ArkUI';
+import { TasbihPill } from './TasbihPill';
 
 /**
  * Shared page header used by HomePage and Prayer.
@@ -42,6 +43,8 @@ export struct PageHeader {
   @Prop showCalcPills: boolean = true;
   @StorageLink(STORAGE_KEY_THEME_MODE)
   themeMode: string = ThemeMode.SYSTEM;
+  onNavigateToTasbih: (tasbihId: string, dhikrIndex: number, prayerId: string) => void = () => {
+  };
 
   @StorageLink(STORAGE_KEY_TIME_FORMAT)
   @Watch('onClockFormatChanged')
@@ -122,7 +125,7 @@ export struct PageHeader {
             .fillColor(this.colors.accentGold)
           Text(this.hijriDateString)
             .fontSize(13)
-            .fontFamily(TypographyHelper.getFont(this.currentLanguage, true)) // <---
+            .fontFamily(TypographyHelper.getFont(this.currentLanguage, true))
             .fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
             .maxLines(1)
@@ -142,7 +145,7 @@ export struct PageHeader {
             .fillColor(this.colors.accentGold)
           Text(this.currentLocation)
             .fontSize(16)
-            .fontFamily(TypographyHelper.getFont(this.currentLanguage, true)) // <---
+            .fontFamily(TypographyHelper.getFont(this.currentLanguage, true))
             .fontColor(this.colors.textWhite)
             .fontWeight(FontWeight.Bold)
             .maxLines(1)
@@ -178,29 +181,40 @@ export struct PageHeader {
       .alignItems(HorizontalAlign.Start)
       .width('100%')
 
-      // ============ Row 2: Current prayer ============
-      Column() {
-        Row() {
+      // ============ Row 2: Current prayer + Tasbih ============
+      Row({ space: 8 }) {
+        // Current Prayer Pill (Two Lines)
+        Column({ space: 4 }) {
           Text(this.tr('current_prayer'))
-            .fontSize(12)
+            .fontSize(10)
             .fontColor(this.colors.textMuted)
-            .letterSpacing(1)
+            .letterSpacing(0.5)
             .fontWeight(FontWeight.Medium)
-          Blank()
+            .width('100%')
+            .textAlign(TextAlign.Start)
+
           Row() {
             Text(this.translateEventName(this.todayCurrentPrayerName))
               .fontSize(16)
               .fontColor(this.colors.accentGold)
               .fontWeight(FontWeight.Bold)
-            Text('   ')
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+              .layoutWeight(1) // Pushes the time to the opposite edge
+              .textAlign(TextAlign.Start)
+
             Text(this.dt(this.todayCurrentPrayerTime))
               .fontSize(16)
               .fontColor(this.colors.textWhite)
               .fontWeight(FontWeight.Medium)
               .fontFeature('"tnum" 1')
+              .maxLines(1)
+              .flexShrink(0)
           }
+          .width('100%')
         }
-        .width('100%')
+        .layoutWeight(1)
+        .height(52)
         .padding({
           left: 16,
           right: 16,
@@ -212,18 +226,23 @@ export struct PageHeader {
             ? 'rgba(10, 13, 20, 0.85)'
             : 'rgba(240, 244, 250, 0.85)'
         )
-        .backgroundBlurStyle(BlurStyle.Thin) // <--- Gives the frosted glass effect
-        .border({
-          width: { bottom: 1 },
-          color: PageTheme.isDarkFor(this.themeMode)
-            ? 'rgba(255, 255, 255, 0.05)'
-            : 'rgba(0, 0, 0, 0.05)'
-        })
-        .borderRadius(Theme.radiusMedium)
+        .backgroundBlurStyle(BlurStyle.Thin)
+        .borderRadius(19)
         .border({ width: 1, color: this.colors.borderSoft })
+        .justifyContent(FlexAlign.Center)
+        .alignItems(HorizontalAlign.Start)
+
+        // Tasbih Pill
+        TasbihPill({
+          colors: this.colors,
+          currentLanguage: this.currentLanguage,
+          prayerName: this.todayCurrentPrayerName,
+          onNavigate: this.onNavigateToTasbih
+        })
       }
       .width('100%')
       .margin({ top: 4, bottom: 12 })
+      .alignItems(VerticalAlign.Center)
 
       // ============ Row 3: Calc pills or Fasting Window ============
       if (this.isRamadan) {

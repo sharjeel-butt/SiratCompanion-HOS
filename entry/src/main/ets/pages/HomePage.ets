@@ -1231,6 +1231,12 @@ export struct HomePage {
           },
           onOpenSettings: () => {
             this.navigateToSettings();
+          },
+          onNavigateToTasbih: (tasbihId: string, dhikrIndex: number, prayerId: string) => {
+            AppStorage.setOrCreate('nav_target_tasbih', tasbihId);
+            AppStorage.setOrCreate('nav_target_dhikr', dhikrIndex);
+            AppStorage.setOrCreate('nav_target_prayer', prayerId);
+            AppStorage.setOrCreate('nav_target_tab', 'tasbih');
           }
         })
 

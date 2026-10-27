@@ -7,24 +7,27 @@ export interface Dhikr {
   arabic: string;
   transliteration: string;
   translation: string;
-  transliterationKey?: string; // NEW
-  translationKey?: string; // NEW
+  transliterationKey?: string;
+  translationKey?: string;
   target: number;
   count: number;
   lastCountDate?: string;
   dailyTotal?: number;
+  liveCounts?: Record<string, number>;
 }
 
 export interface Tasbih {
   id: string;
   name: string;
-  nameKey?: string; // NEW
+  nameKey?: string;
   dhikrs: Dhikr[];
   createdAt: number;
   lifetimeCount: number;
   theme?: TasbihTheme;
   themePresetId?: string;
   history?: TasbihDayLog[];
+  boundPrayerIds?: string[];
+  prayerCompletions?: Record<string, string>;
 }
 
 export interface DhikrDayCount {

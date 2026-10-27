@@ -1,6 +1,6 @@
 {
   "name": "entry",
-  "version": "3.5.6",
+  "version": "3.6.0",
   "description": "Sirat Companion entry module — an offline-first Islamic companion for HarmonyOS with prayer times, Hijri calendar, Qibla compass, and Tasbih.",
   "main": "",
   "author": "Sharjeel Idris",

@@ -1,5 +1,3 @@
-// entry/src/main/ets/tasbih/TasbihStorage.ets
-
 import { preferences } from '@kit.ArkData';
 import { common } from '@kit.AbilityKit';
 import { Dhikr, Tasbih } from './TasbihModels';
@@ -19,6 +17,10 @@ export interface TasbihLoadResult {
 
 export class TasbihStorage {
   private static store: preferences.Preferences | null = null;
+  // ADD MEMORY CACHE to prevent UI freeze on fast flicking
+  public static cachedTasbihs: Tasbih[] | null = null;
+  public static cachedActiveTasbihId: string = '';
+  public static cachedActiveDhikrIndex: number = 0;
 
   static async init(context: common.UIAbilityContext): Promise<void> {
     if (TasbihStorage.store) {
@@ -32,46 +34,51 @@ export class TasbihStorage {
   }
 
   static async load(defaults: Tasbih[]): Promise<TasbihLoadResult> {
-    if (!TasbihStorage.store) {
+    // 1. Return from cache instantly (but check for midnight rollover first)
+    if (TasbihStorage.cachedTasbihs) {
+      const rolled = TasbihManager.rollOverStaleCounts(TasbihStorage.cachedTasbihs);
+      if (rolled !== TasbihStorage.cachedTasbihs) {
+        TasbihStorage.cachedTasbihs = rolled;
+        // Save in background to bump version and persist the reset
+        TasbihStorage.save(rolled, TasbihStorage.cachedActiveTasbihId, TasbihStorage.cachedActiveDhikrIndex)
+          .catch(() => {
+          });
+      }
       return {
-        tasbihs: defaults,
-        activeTasbihId: defaults.length > 0 ? defaults[0].id : '',
-        activeDhikrIndex: 0
+        tasbihs: TasbihStorage.cachedTasbihs,
+        activeTasbihId: TasbihStorage.cachedActiveTasbihId,
+        activeDhikrIndex: TasbihStorage.cachedActiveDhikrIndex
       };
+    }
+
+    // 2. Load from disk if cache is empty
+    if (!TasbihStorage.store) {
+      return { tasbihs: defaults, activeTasbihId: defaults.length > 0 ? defaults[0].id : '', activeDhikrIndex: 0 };
     }
     try {
       const json = await TasbihStorage.store.get(KEY_TASBIHS, '') as string;
-      let tasbihs: Tasbih[] = json && json.length > 0
-        ? JSON.parse(json) as Tasbih[]
-        : [];
+      let tasbihs: Tasbih[] = json && json.length > 0 ? JSON.parse(json) as Tasbih[] : [];
       if (tasbihs.length === 0) {
         tasbihs = defaults;
       }
 
-      // ---- Migration ----
-      // Older stores may be missing lifetimeCount, themePresetId,
-      // history, per-dhikr lastCountDate, or translation keys.
       tasbihs = tasbihs.map((t: Tasbih): Tasbih => {
-
-        // Migrate Tasbih Name Key
         let nameKey = t.nameKey;
         if (!nameKey) {
           if (t.name === 'Classic 33') {
             nameKey = 'tasbih_default_classic_name';
-          } else if (t.name === 'Tahlil 100') {
+          } else if (t.name ===
+            'Tahlil 100') {
             nameKey = 'tasbih_default_tahlil_name';
           } else if (t.name === 'Istighfar') {
-            nameKey = 'tasbih_default_istighfar_name';
+            nameKey =
+              'tasbih_default_istighfar_name';
           }
         }
 
-        // Migrate Dhikrs
         const dhikrs: Dhikr[] = (t.dhikrs || []).map((d: Dhikr): Dhikr => {
-
-          // Migrate Translation Keys
           let tKey = d.transliterationKey;
           let trKey = d.translationKey;
-
           if (!tKey) {
             if (d.transliteration === 'SubhanAllah') {
               tKey = 'dhikr_subhanallah_translit';
@@ -90,7 +97,6 @@ export class TasbihStorage {
                 'dhikr_istighfar_translit';
             }
           }
-
           if (!trKey) {
             if (d.translation === 'Glory be to Allah') {
               trKey = 'dhikr_subhanallah_trans';
@@ -109,9 +115,7 @@ export class TasbihStorage {
                 'dhikr_istighfar_trans';
             }
           }
-
-          // Explicit construction (no spread)
-          const fixed: Dhikr = {
+          return {
             id: d.id,
             arabic: d.arabic,
             transliteration: d.transliteration,
@@ -121,13 +125,12 @@ export class TasbihStorage {
             target: d.target,
             count: d.count,
             lastCountDate: d.lastCountDate,
-            dailyTotal: d.dailyTotal
+            dailyTotal: d.dailyTotal,
+            liveCounts: d.liveCounts
           };
-          return fixed;
         });
 
-        // Explicit construction (no spread)
-        const fixed: Tasbih = {
+        return {
           id: t.id,
           name: t.name,
           nameKey: nameKey,
@@ -137,15 +140,13 @@ export class TasbihStorage {
           theme: t.theme,
           themePresetId: (typeof t.themePresetId === 'string' && t.themePresetId.length > 0) ? t.themePresetId :
             undefined,
-          history: Array.isArray(t.history) ? t.history : []
+          history: Array.isArray(t.history) ? t.history : [],
+          boundPrayerIds: Array.isArray(t.boundPrayerIds) ? t.boundPrayerIds : [],
+          prayerCompletions: (typeof t.prayerCompletions === 'object' && t.prayerCompletions !== null) ?
+            t.prayerCompletions as Record<string, string> : {}
         };
-        return fixed;
       });
 
-      // ---- Day rollover ----
-      // If any dhikr's lastCountDate is stale, roll its count into
-      // history and reset the live counter. Persist if anything
-      // changed so the next launch is a no-op.
       const rolled = TasbihManager.rollOverStaleCounts(tasbihs);
       const rolloverHappened = rolled !== tasbihs;
       if (rolloverHappened) {
@@ -158,34 +159,32 @@ export class TasbihStorage {
 
       const rawIdx = await TasbihStorage.store.get(KEY_ACTIVE_DHK, 0) as number;
       const tasbih = tasbihs.find((t): boolean => t.id === activeTasbihId);
-      const maxIdx = tasbih && tasbih.dhikrs.length > 0
-        ? tasbih.dhikrs.length - 1
-        : 0;
+      const maxIdx = tasbih && tasbih.dhikrs.length > 0 ? tasbih.dhikrs.length - 1 : 0;
       const activeDhikrIndex = Math.min(Math.max(0, rawIdx), maxIdx);
 
+      // 3. Save to cache
+      TasbihStorage.cachedTasbihs = tasbihs;
+      TasbihStorage.cachedActiveTasbihId = activeTasbihId;
+      TasbihStorage.cachedActiveDhikrIndex = activeDhikrIndex;
+
       if (rolloverHappened) {
-        // Save the normalized state so the next launch skips the
-        // rollover entirely.
-        TasbihStorage.save(tasbihs, activeTasbihId, activeDhikrIndex)
-          .catch(() => { /* non-fatal */
-          });
+        TasbihStorage.save(tasbihs, activeTasbihId, activeDhikrIndex).catch(() => {
+        });
       }
 
       return { tasbihs, activeTasbihId, activeDhikrIndex };
     } catch (err) {
-      return {
-        tasbihs: defaults,
-        activeTasbihId: defaults.length > 0 ? defaults[0].id : '',
-        activeDhikrIndex: 0
-      };
+      return { tasbihs: defaults, activeTasbihId: defaults.length > 0 ? defaults[0].id : '', activeDhikrIndex: 0 };
     }
   }
 
-  static async save(
-    tasbihs: Tasbih[],
-    activeTasbihId: string,
-    activeDhikrIndex: number
-  ): Promise<void> {
+  static async save(tasbihs: Tasbih[], activeTasbihId: string, activeDhikrIndex: number): Promise<void> {
+    // 1. Update cache immediately so UI is fluid
+    TasbihStorage.cachedTasbihs = tasbihs;
+    TasbihStorage.cachedActiveTasbihId = activeTasbihId;
+    TasbihStorage.cachedActiveDhikrIndex = activeDhikrIndex;
+
+    // 2. Save to disk in background
     if (!TasbihStorage.store) {
       return;
     }
@@ -195,7 +194,6 @@ export class TasbihStorage {
       await TasbihStorage.store.put(KEY_ACTIVE_DHK, activeDhikrIndex);
       await TasbihStorage.store.flush();
 
-      // Broadcast the change so HomePage and TasbihDetailsPage update.
       const prev = AppStorage.get<number>(STORAGE_KEY_TASBIH_STATE_VERSION);
       const next = (prev === undefined ? 0 : prev) + 1;
       AppStorage.setOrCreate(STORAGE_KEY_TASBIH_STATE_VERSION, next);

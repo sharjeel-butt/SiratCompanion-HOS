@@ -2539,6 +2539,34 @@
     {
       "name": "ramadan_fast_nudge",
       "value": "Did you fast today? Mark"
+    },
+    {
+      "name": "bind_to_prayers",
+      "value": "Bind to Prayers"
+    },
+    {
+      "name": "tasbih_reminder_title",
+      "value": "Pending Tasbih"
+    },
+    {
+      "name": "tasbih_reminder_desc",
+      "value": "prayed, but you still have pending Tasbihs."
+    },
+    {
+      "name": "go_to_tasbih",
+      "value": "Go to Tasbih"
+    },
+    {
+      "name": "dismiss",
+      "value": "Dismiss"
+    },
+    {
+      "name": "tasbih_status_completed",
+      "value": "Completed"
+    },
+    {
+      "name": "tasbih_left",
+      "value": "left"
     }
   ]
 }
