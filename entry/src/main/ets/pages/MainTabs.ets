@@ -55,6 +55,9 @@ struct MainTabs {
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   @Watch('onBreakpointChanged')
   breakpoint: string = 'sm';
+  @StorageLink('nav_target_tab')
+  @Watch('onNavTargetTabChanged')
+  navTargetTab: string = '';
 
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State private currentLanguage: string = 'en';
@@ -83,6 +86,15 @@ struct MainTabs {
       `[MainTabs] sdkApiVersion=${deviceInfo.sdkApiVersion}, ` +
         `hds=${this.useHds}`
     );
+  }
+
+  private onNavTargetTabChanged(): void {
+    if (this.navTargetTab === 'tasbih') {
+      this.currentIndex = 4;
+      this.hdsController.changeIndex(4);
+      this.tabsController.changeIndex(4);
+      AppStorage.setOrCreate('nav_target_tab', '');
+    }
   }
 
   aboutToDisappear(): void {

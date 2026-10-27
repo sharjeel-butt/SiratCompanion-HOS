@@ -16,7 +16,7 @@ export class PrivacyPolicyProvider {
   static readonly FULL_URL: string =
     'https://sharjeel-butt.github.io/SiratCompanion-HOS/';
   /** Update this date to today */
-  static readonly LAST_UPDATED: string = 'October 26, 2026';
+  static readonly LAST_UPDATED: string = 'October 27, 2026';
   /** Update this to the new version */
   static readonly APPLIES_TO: string = '3.5.0 and later';
 
@@ -75,8 +75,8 @@ Prayer Times and Settings
 - How it is stored: All preferences are stored locally on your device using the HarmonyOS Preferences API. They never leave your device unless you have enabled system backup.
 
 Tasbih Data
-- What we access: The Tasbih sessions you create, the dhikr items within them, your current counts, your daily totals, a rolling 90-day history of daily counts per dhikr, and the theme chosen for each Tasbih.
-- Why we access it: To display and persist your Tasbih progress on the Tasbih tab and on the Tasbih Details page, which shows weekly, monthly, and yearly views per tasbih and per dhikr.
+- What we access: The Tasbih sessions you create, the dhikr items within them, your current counts, your daily totals, a rolling 90-day history of daily counts per dhikr, and the theme chosen for each Tasbih. You can optionally associate Tasbihs with specific prayers, which links your Tasbih progress to your prayer completion history on your device.
+- Why we access it: To display and persist your Tasbih progress on the Tasbih tab and on the Tasbih Details page, and to show contextual Tasbih reminders alongside your daily prayers.
 - How it is stored: Tasbih data is stored locally on your device using the HarmonyOS Preferences API. Daily counts are automatically rolled into history each night; days beyond the most recent 90 are dropped from the rolling window. Nothing is transmitted unless you have enabled system backup.
 
 System Feedback State
@@ -273,8 +273,8 @@ Sirat 伴侣仅在您的设备上访问以下信息，用于提供其功能。�
 - 存储方式：所有偏好设置均通过 HarmonyOS Preferences API 存储在您的设备本地。除非您已启用系统备份，否则它们不会离开您的设备。
 
 念珠数据
-- 我们访问的内容：您创建的念珠、其中的念词项目、当前计数、每日总计、每个念词的滚动 90 天历史记录，以及每串念珠所选择的主题。
-- 我们为何访问：用于在念珠页面和"念珠详情"页面上显示和保存您的念珠进度；详情页面按念珠和按念词显示周、月、年视图。
+- 我们访问的内容：您创建的念珠、其中的念词项目、当前计数、每日总计、每个念词的滚动 90 天历史记录，以及每串念珠所选择的主题。您可以选择将念珠与特定的礼拜关联，从而在您的设备上将念珠进度与礼拜完成记录关联起来。
+- 我们为何访问：用于在念珠页面和“念珠详情”页面上显示和保存您的念珠进度，并在您的日常礼拜旁显示相关的念珠提醒。
 - 存储方式：念珠数据通过 HarmonyOS Preferences API 存储在您的设备本地。每日计数每晚自动归档入历史记录；超过最近 90 天的日期将从滚动窗口中丢弃。除非您已启用系统备份，否则不会传输任何内容。
 
 系统反馈状态
@@ -475,8 +475,8 @@ Sirat 伴侣不集成任何第三方分析、广告或追踪服务。
 - كيفية التخزين: تُخزَّن جميع التفضيلات محلياً على جهازك باستخدام واجهة HarmonyOS Preferences. لا تغادر جهازك إلا إذا كنت قد مكّنت النسخ الاحتياطي للنظام.
 
 بيانات التسبيح
-- ما نصل إليه: جلسات التسبيح التي تنشئها، وعناصر الأذكار داخلها، وأعدادها الحالية، وإجمالياتها اليومية، وسجل متدحرج لمدة 90 يوماً للأعداد اليومية لكل ذكر، والمظهر المختار لكل مسبحة.
-- لماذا نصل إليها: لعرض تقدمك في التسبيح وحفظه على صفحة التسبيح وصفحة تفاصيل التسبيح، التي تعرض عروضاً أسبوعية وشهرية وسنوية لكل مسبحة ولكل ذكر.
+- ما نصل إليه: جلسات التسبيح التي تنشئها، وعناصر الأذكار داخلها، وأعدادها الحالية، وإجمالياتها اليومية، وسجل متدحرج لمدة 90 يوماً للأعداد اليومية لكل ذكر، والمظهر المختار لكل مسبحة. يمكنك اختيارياً ربط المسبحة بصلوات محددة، مما يربط تقدمك في التسبيح بسجل إتمام الصلاة على جهازك.
+- لماذا نصل إليها: لعرض تقدمك في التسبيح وحفظه على صفحة التسبيح وصفحة تفاصيل التسبيح، ولعرض تذكيرات التسبيح السياقية إلى جانب صلواتك اليومية.
 - كيفية التخزين: تُخزَّن بيانات التسبيح محلياً على جهازك باستخدام واجهة HarmonyOS Preferences. تُرحَّل الأعداد اليومية تلقائياً إلى السجل كل ليلة؛ وتُسقَط الأيام التي تتجاوز آخر 90 يوماً من النافذة المتدحرجة. لا يُنقل أي شيء إلا إذا كنت قد مكّنت النسخ الاحتياطي للنظام.
 
 حالة التغذية الراجعة للنظام

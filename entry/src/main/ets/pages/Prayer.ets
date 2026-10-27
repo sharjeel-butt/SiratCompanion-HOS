@@ -14,6 +14,7 @@ import { CalculationSource, LocationMode } from '../models/SettingsModels';
 import { NotificationHelper } from '../helper/NotificationHelper';
 import { common } from '@kit.AbilityKit';
 import { PdfExportHelper } from '../utils/PdfExportHelper';
+import { TasbihPill } from '../components/TasbihPill';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -176,7 +177,6 @@ export struct Prayer {
   @State pdfHijriMonthName: string = '';
   @State pdfHijriYear: number = 1447;
   @State pdfHijriSpan: string = '';
-
   @State upcomingImportantDates: UpcomingImportantDate[] = [];
 
   @State prayers: PrayerModel[] = [
@@ -779,9 +779,7 @@ export struct Prayer {
     if (target.checked === checked) {
       return;
     }
-    if (checked && !PrayerManager.isPrayerCheckable(
-      target, this.viewingDate, this.getLocationOffsetHours()
-    )) {
+    if (checked && !PrayerManager.isPrayerCheckable(target, this.viewingDate, this.getLocationOffsetHours())) {
       return;
     }
 
@@ -1295,35 +1293,67 @@ export struct Prayer {
 
   @Builder
   NextPrayerSection() {
-    Column() {
-      Row() {
+    Row({ space: 8 }) {
+      // Next Prayer Pill (Two Lines)
+      Column({ space: 4 }) {
         Text(this.tr('next_prayer'))
-          .fontSize(12).fontColor(this.colors.textMuted)
-          .letterSpacing(1).fontWeight(FontWeight.Medium)
-        Blank()
+          .fontSize(10)
+          .fontColor(this.colors.textMuted)
+          .letterSpacing(0.5)
+          .fontWeight(FontWeight.Medium)
+          .width('100%')
+          .textAlign(TextAlign.Start)
+
         Row() {
           Text(this.translateEventName(this.todayNextPrayerName))
-            .fontSize(16).fontColor(this.colors.accentGold)
+            .fontSize(16)
+            .fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Bold)
-          Text('   ')
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .layoutWeight(1) // Pushes time to the opposite edge
+            .textAlign(TextAlign.Start)
+
           Text(this.dt(this.todayNextPrayerTime))
-            .fontSize(16).fontColor(this.colors.textWhite)
+            .fontSize(16)
+            .fontColor(this.colors.textWhite)
             .fontWeight(FontWeight.Medium)
+            .maxLines(1)
+            .flexShrink(0)
         }
+        .width('100%')
       }
-      .width('100%')
+      .layoutWeight(1)
+      .height(52)
       .padding({
-        top: 12,
-        bottom: 12,
         left: 16,
-        right: 16
+        right: 16,
+        top: 8,
+        bottom: 8
       })
-      .backgroundColor(this.colors.cardDark).borderRadius(Theme.radiusMedium)
+      .backgroundColor(this.colors.cardDark)
+      .borderRadius(19)
       .border({ width: 1, color: this.colors.borderSoft })
+      .justifyContent(FlexAlign.Center)
+      .alignItems(HorizontalAlign.Start)
+
+      // Tasbih Pill
+      TasbihPill({
+        colors: this.colors,
+        currentLanguage: this.appLanguage,
+        prayerName: this.todayNextPrayerName,
+        onNavigate: (tasbihId: string, dhikrIndex: number, prayerId: string) => {
+          AppStorage.setOrCreate('nav_target_tasbih', tasbihId);
+          AppStorage.setOrCreate('nav_target_dhikr', dhikrIndex);
+          AppStorage.setOrCreate('nav_target_prayer', prayerId);
+          AppStorage.setOrCreate('nav_target_tab', 'tasbih');
+        }
+      })
     }
     .width('100%')
     .padding({ left: 16, right: 16 })
     .margin({ top: 4, bottom: 12 })
+    .alignItems(VerticalAlign.Center)
   }
 
   @Builder

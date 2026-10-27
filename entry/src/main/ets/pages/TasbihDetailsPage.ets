@@ -438,8 +438,13 @@ struct TasbihDetailsPage {
       }
       .width('100%')
 
+      // FIXED: Added the inner Row for the progress fill
       Row() {
-        // ... progress bar ...
+        Row()
+          .height('100%')
+          .width(`${p.daysInPeriod > 0 ? Math.round(p.daysCompleted / p.daysInPeriod * 100) : 0}%`)
+          .backgroundColor(this.colors.accentGold)
+          .borderRadius(3)
       }
       .width('100%')
       .height(5)
