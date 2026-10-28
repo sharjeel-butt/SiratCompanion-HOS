@@ -15,6 +15,7 @@ import { NotificationHelper } from '../helper/NotificationHelper';
 import { common } from '@kit.AbilityKit';
 import { PdfExportHelper } from '../utils/PdfExportHelper';
 import { TasbihPill } from '../components/TasbihPill';
+import { DuaIndicator } from '../components/DuaIndicator';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -1294,48 +1295,53 @@ export struct Prayer {
   @Builder
   NextPrayerSection() {
     Row({ space: 8 }) {
-      // Next Prayer Pill (Two Lines)
-      Column({ space: 4 }) {
-        Text(this.tr('next_prayer'))
-          .fontSize(10)
-          .fontColor(this.colors.textMuted)
-          .letterSpacing(0.5)
-          .fontWeight(FontWeight.Medium)
-          .width('100%')
-          .textAlign(TextAlign.Start)
+      // Next Prayer Pill (Large Time)
+      Row() {
+        // Left Side: Label + Name
+        Column({ space: 2 }) {
+          Text(this.tr('next_prayer'))
+            .fontSize(10)
+            .fontColor(this.colors.textMuted)
+            .letterSpacing(0.5)
+            .fontWeight(FontWeight.Medium)
+            .width('100%')
+            .textAlign(TextAlign.Start)
 
-        Row() {
           Text(this.translateEventName(this.todayNextPrayerName))
             .fontSize(16)
             .fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Bold)
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .layoutWeight(1) // Pushes time to the opposite edge
+            .width('100%')
             .textAlign(TextAlign.Start)
-
-          Text(this.dt(this.todayNextPrayerTime))
-            .fontSize(16)
-            .fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
-            .maxLines(1)
-            .flexShrink(0)
         }
-        .width('100%')
+        .layoutWeight(1)
+        .alignItems(HorizontalAlign.Start)
+        .justifyContent(FlexAlign.Center)
+
+        // Right Side: Large Time
+        Text(this.dt(this.todayNextPrayerTime))
+          .fontSize(26)
+          .fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Bold)
+          .fontFeature('"tnum" 1')
+          .direction(Direction.Ltr)
+          .flexShrink(0)
+          .textAlign(TextAlign.End)
       }
       .layoutWeight(1)
-      .height(52)
+      .height(56)
       .padding({
         left: 16,
         right: 16,
-        top: 8,
-        bottom: 8
+        top: 6,
+        bottom: 6
       })
       .backgroundColor(this.colors.cardDark)
       .borderRadius(19)
       .border({ width: 1, color: this.colors.borderSoft })
-      .justifyContent(FlexAlign.Center)
-      .alignItems(HorizontalAlign.Start)
+      .alignItems(VerticalAlign.Center)
 
       // Tasbih Pill
       TasbihPill({
@@ -1558,6 +1564,11 @@ export struct Prayer {
       .alignItems(HorizontalAlign.Start)
       .layoutWeight(1)
 
+      // --- NEW: Dua Indicator ---
+      DuaIndicator({
+        colors: this.colors,
+        prayerId: prayer.id
+      })
       Text(this.dt(prayer.time)).fontSize(16)
         .fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
     }

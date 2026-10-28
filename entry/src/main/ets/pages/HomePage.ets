@@ -7,6 +7,8 @@ import { PageTheme } from '../common/PageTheme';
 import { AppLogger } from '../helper/AppLogger';
 import { PdfExportHelper } from '../utils/PdfExportHelper';
 import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
+import { DuaService } from '../helper/DuaService';
+import { CompleteDua } from '../models/DuaModels';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -168,6 +170,7 @@ export struct HomePage {
   @State pdfRamadanYear: number = 1447;
   @State private todayFastingStatus: FastingStatus = FastingStatus.UNMARKED;
   @State private showLaylatNote: boolean = false;
+  @State private dailyDuas: CompleteDua[] = [];
 
   @State locationMode: LocationMode = LocationMode.GPS;
   @State prayerProgress: PrayerProgress = {
@@ -345,6 +348,27 @@ export struct HomePage {
     this.refreshRamadan(); // Instantly re-evaluate visibility
   }
 
+  private async refreshDashboard(): Promise<void> {
+    this.prayerProgress = ProgressHelper.getPrayerProgress(this.currentLanguage);
+    this.monthProgress = ProgressHelper.getMonthProgress();
+
+    const loaded = await TasbihStorage.load(TasbihManager.createDefaults());
+    const tasbihs: Tasbih[] = loaded.tasbihs;
+    this.tasbihToday = ProgressHelper.getTasbihTodayProgress(tasbihs);
+
+    // FETCH CONTEXTUAL DUAS
+    try {
+      const ctx = getContext(this) as common.UIAbilityContext;
+      const allDuas = await DuaService.loadDuas(ctx, this.currentLanguage);
+      this.dailyDuas = DuaService.getDailyDuas(allDuas, this.ramadanInfo, this.isFriday);
+    } catch (e) {
+      console.error('Failed to load daily duas', e);
+    }
+
+    this.refreshHeader();
+    this.refreshFastingWindow();
+  }
+
   private async onCalcSettingsChanged(): Promise<void> {
     await this.loadSettingsAndLocation();
   }
@@ -475,6 +499,7 @@ export struct HomePage {
     this.refreshNext3Days();
     this.prayerProgress =
       ProgressHelper.getPrayerProgress(this.currentLanguage);
+    this.refreshDashboard();
   }
 
   private async onLocationVersionChanged(): Promise<void> {
@@ -600,18 +625,6 @@ export struct HomePage {
         this.loadSettingsAndLocation();
       }
     }
-  }
-
-  private async refreshDashboard(): Promise<void> {
-    this.prayerProgress = ProgressHelper.getPrayerProgress(this.currentLanguage);
-    this.monthProgress = ProgressHelper.getMonthProgress();
-
-    const loaded = await TasbihStorage.load(TasbihManager.createDefaults());
-    const tasbihs: Tasbih[] = loaded.tasbihs;
-    this.tasbihToday = ProgressHelper.getTasbihTodayProgress(tasbihs);
-
-    this.refreshHeader();
-    this.refreshFastingWindow();
   }
 
   private async refreshTasbihData(): Promise<void> {
@@ -1269,6 +1282,7 @@ export struct HomePage {
                   .alignItems(HorizontalAlign.Start)
 
                   Column() {
+                    this.DuasCard()
                     this.Next3DaysPreview()
                     this.TodayProgressCard()
                     // ---- Qada (persistent obligation — bottom of column) ----
@@ -1305,6 +1319,7 @@ export struct HomePage {
                   } else if (this.ramadanInfo !== null) {
                     this.RamadanCard()
                   }
+                  this.DuasCard()
                   this.Next3DaysPreview()
                   // ---- Prayers ----
                   this.TodayProgressCard()
@@ -1631,6 +1646,107 @@ export struct HomePage {
           : 'rgba(0, 0, 0, 0.08)',
         offsetX: 0,
         offsetY: 6
+      })
+      .margin({ bottom: 14 })
+    }
+  }
+
+  @Builder
+  DuasCard() {
+    if (this.dailyDuas.length > 0) {
+      Column() {
+        // Header
+        Row({ space: 8 }) {
+          Text('🤲').fontSize(16).flexShrink(0)
+
+          Text(this.tr('home_duas_title'))
+            .fontSize(12)
+            .fontColor(this.colors.textMuted)
+            .fontWeight(FontWeight.Bold)
+            .letterSpacing(1.2)
+            .layoutWeight(1)
+            .textAlign(TextAlign.Start) // Ensures RTL alignment
+
+          Row({ space: 2 }) {
+            Text(this.tr('view_all'))
+              .fontSize(11).fontColor(this.colors.accentGold)
+              .fontWeight(FontWeight.Medium)
+            Image($r('app.media.ic_chevron_right'))
+              .width(12).height(12)
+              .fillColor(this.colors.accentGold)
+              .rotate({ angle: this.isRtl() ? 180 : 0 })
+          }
+          .flexShrink(0)
+          .onClick(() => {
+            router.pushUrl({ url: 'pages/DuasPage' })
+              .catch((e: Error) => console.error(JSON.stringify(e)));
+          })
+        }
+        .width('100%').padding({ bottom: 14 })
+
+        // List of 3 Duas
+        Column({ space: 10 }) {
+          ForEach(this.dailyDuas, (dua: CompleteDua) => {
+            Row({ space: 12 }) {
+              Column() {
+                Text(dua.translatedName)
+                  .fontSize(14)
+                  .fontWeight(FontWeight.Medium)
+                  .fontColor(this.colors.textWhite)
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+                  .width('100%')
+                  .textAlign(TextAlign.Start)
+
+                Text(dua.translatedText)
+                  .fontSize(11)
+                  .fontColor(this.colors.textMuted)
+                  .maxLines(2)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+                  .margin({ top: 2 })
+                  .width('100%')
+                  .textAlign(TextAlign.Start)
+              }
+              .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+              Image($r('app.media.ic_chevron_right'))
+                .width(12)
+                .height(12)
+                .fillColor(this.colors.accentGold)
+                .opacity(0.6)
+                .rotate({ angle: this.isRtl() ? 180 : 0 })
+                .flexShrink(0)
+            }
+            .width('100%')
+            .padding(12)
+            .backgroundColor(this.colors.tintSubtle)
+            .borderRadius(10)
+            .onClick(() => {
+              // Pass the category to filter the page
+              router.pushUrl({
+                url: 'pages/DuasPage',
+                params: { filterCategory: dua.category }
+              }).catch((e: Error) => console.error(JSON.stringify(e)));
+            })
+          })
+        }
+        .width('100%')
+      }
+      .width('100%')
+      .padding(18)
+      .backgroundColor(this.colors.cardDark)
+      .borderRadius(Theme.radiusLarge)
+      .border({
+        width: 1,
+        color: PageTheme.isDarkFor(this.themeMode)
+          ? 'rgba(255, 255, 255, 0.08)'
+          : this.colors.borderSoft
+      })
+      .shadow({
+        radius: 12,
+        color: this.colors.shadowCard,
+        offsetX: 0,
+        offsetY: 4
       })
       .margin({ bottom: 14 })
     }

@@ -1,0 +1,487 @@
+{
+  "dua_sayyidul_istighfar": {
+    "name": "忏悔之主祷词",
+    "translation": "主啊，您是我的养主，万物非主，唯有您。您创造了我，我是您的仆人。我尽力遵守对您的约定和承诺。我求您护佑我免受自己行为之恶。我承认您赐予我的恩典，也承认自己的罪过。求您饶恕我，因为除您之外，无人能饶恕罪过。",
+    "reference": "《布哈里圣训实录》 6306"
+  },
+  "dua_anxiety": {
+    "name": "消除焦虑与忧愁的祷词",
+    "translation": "主啊，我求您护佑我免于焦虑和忧愁、无能和懒惰、吝啬和懦弱、债务的重担以及受人压迫。",
+    "reference": "《布哈里圣训实录》 2893"
+  },
+  "dua_travel": {
+    "name": "旅行祷词",
+    "translation": "赞颂使此物为我们所驾驭的主，我们本无力驾驭它；我们必将归于我们的养主。",
+    "reference": "《穆斯林圣训实录》 1342"
+  },
+  "dua_waking_up": {
+    "name": "醒来时的祷词",
+    "translation": "一切赞颂全归安拉，他使我们死后复生，复活只归于他。",
+    "reference": "《布哈里圣训实录》 6312"
+  },
+  "dua_morning": {
+    "name": "清晨记主词",
+    "translation": "我们进入了清晨，一切国权都属于安拉。一切赞颂全归安拉。万物非主，唯有安拉，独一无偶。",
+    "reference": "《穆斯林圣训实录》 2723"
+  },
+  "dua_after_fajr": {
+    "name": "晨礼后的祷词",
+    "translation": "主啊，求您护佑我免入火狱。",
+    "reference": "《艾布·达伍德圣训集》 5079"
+  },
+  "dua_protection": {
+    "name": "求护佑的祷词",
+    "translation": "奉安拉之名，天地间万物皆不能伤害奉其名者；他是全听的、全知的。",
+    "reference": "《艾布·达伍德圣训集》 5088"
+  },
+  "dua_guidance_to_the_straight_path": {
+    "name": "求引导至正道",
+    "translation": "求您引导我们走上正道。",
+    "reference": "《古兰经》 1:6"
+  },
+  "dua_good_in_this_world_and_the_hereafter": {
+    "name": "求今后两世之善",
+    "translation": "我们的养主啊，求您在今世赐我们美好，在后世也赐我们美好，并护我们免于火狱的刑罚。",
+    "reference": "《古兰经》 2:201"
+  },
+  "dua_acceptance_of_good_deeds": {
+    "name": "求善功被接受",
+    "translation": "我们的养主啊，求您接受我们的善功。您确是全听的、全知的。",
+    "reference": "《古兰经》 2:127"
+  },
+  "dua_submission_and_repentance": {
+    "name": "顺服与悔罪",
+    "translation": "我们的养主啊，求使我们成为顺服您的人，也使我们的后裔成为顺服您的民众。求您昭示我们的礼仪功课，并接受我们的忏悔。您确是至赦的、至慈的。",
+    "reference": "《古兰经》 2:128"
+  },
+  "dua_patience_and_firmness": {
+    "name": "求忍耐与坚定",
+    "translation": "我们的养主啊，求您把坚忍倾注于我们，使我们的脚步稳固，并援助我们战胜不信道的民众。",
+    "reference": "《古兰经》 2:250"
+  },
+  "dua_no_burden_beyond_capacity": {
+    "name": "求勿承担无力承受之重担",
+    "translation": "我们的养主啊，我们若遗忘或犯错，求您不要责罚我们。我们的养主啊，求您不要使我们承担如您加于前人般的重负。我们的养主啊，求您不要使我们承担无力承受的负担。求您宽恕我们、饶恕我们、慈悯我们。",
+    "reference": "《古兰经》 2:286"
+  },
+  "dua_steadfast_hearts": {
+    "name": "求心灵坚定",
+    "translation": "我们的养主啊，您既已引导我们，求您不要使我们的心偏离；求您从您那里赐予我们慈悯。您确是博施的。",
+    "reference": "《古兰经》 3:8"
+  },
+  "dua_forgiveness_and_protection_from_fire": {
+    "name": "求饶恕并免受火狱",
+    "translation": "我们的养主啊，我们确已归信，求您饶恕我们的罪过，护我们免于火狱的刑罚。",
+    "reference": "《古兰经》 3:16"
+  },
+  "dua_forgiveness_and_steadfastness": {
+    "name": "求饶恕与坚定",
+    "translation": "我们的养主啊，求您饶恕我们的罪过与过分，使我们的脚步稳固，并援助我们战胜不信道的民众。",
+    "reference": "《古兰经》 3:147"
+  },
+  "dua_creation_and_protection_from_fire": {
+    "name": "赞颂创造并求免火狱",
+    "translation": "我们的养主啊，您创造这一切并非徒然。赞您超绝！求您护我们免于火狱的刑罚。",
+    "reference": "《古兰经》 3:191"
+  },
+  "dua_forgiveness_and_a_righteous_death": {
+    "name": "求饶恕与善终",
+    "translation": "我们的养主啊，求您饶恕我们的罪过，消除我们的过失，使我们与善人同归。",
+    "reference": "《古兰经》 3:193"
+  },
+  "dua_promise_of_the_hereafter": {
+    "name": "求后世的许诺",
+    "translation": "我们的养主啊，求您赐予您通过使者们所许诺的，并在复生日不要羞辱我们。您确不爽约。",
+    "reference": "《古兰经》 3:194"
+  },
+  "dua_dua_of_adam_and_hawwa": {
+    "name": "阿丹与哈娃的祷词",
+    "translation": "我们的养主啊，我们已自亏。若您不饶恕我们、不慈悯我们，我们必将成为亏折之人。",
+    "reference": "《古兰经》 7:23"
+  },
+  "dua_patience_and_a_muslim_death": {
+    "name": "求忍耐与归信而终",
+    "translation": "我们的养主啊，求您把坚忍倾注于我们，使我们以穆斯林的身份死去。",
+    "reference": "《古兰经》 7:126"
+  },
+  "dua_dua_of_nuh_for_forgiveness": {
+    "name": "努哈圣人求饶恕的祷词",
+    "translation": "我的养主啊，我求您护佑我，不要让我询问我所无知之事。若您不饶恕我、不慈悯我，我必将成为亏折之人。",
+    "reference": "《古兰经》 11:47"
+  },
+  "dua_dua_of_yusuf_for_a_muslim_death": {
+    "name": "优素福圣人求善终的祷词",
+    "translation": "我的养主啊，您确已赐我王权，并教我圆梦。创造天地的主啊，您在今世和后世都是我的保护者。求您使我以穆斯林的身份死去，并使我与善人同列。",
+    "reference": "《古兰经》 12:101"
+  },
+  "dua_dua_of_ibrahim_for_a_secure_city": {
+    "name": "易卜拉欣圣人求城市安宁",
+    "translation": "我的养主啊，求您使此城安宁，并使我与我的子孙远离偶像崇拜。",
+    "reference": "《古兰经》 14:35"
+  },
+  "dua_dua_of_ibrahim_for_prayer": {
+    "name": "易卜拉欣圣人求坚守礼拜",
+    "translation": "我的养主啊，求您使我成为坚守礼拜者，也使我后裔中的一部分如此。我们的养主啊，求您接受我的祈祷。",
+    "reference": "《古兰经》 14:40"
+  },
+  "dua_forgiveness_for_parents_and_believers": {
+    "name": "为父母和信士求饶恕",
+    "translation": "我们的养主啊，求您在清算成立之日饶恕我、我的父母以及众信士。",
+    "reference": "《古兰经》 14:41"
+  },
+  "dua_mercy_for_parents": {
+    "name": "为父母求慈悯",
+    "translation": "我的养主啊，求您慈悯他俩，如他俩在我幼时抚育我一般。",
+    "reference": "《古兰经》 17:24"
+  },
+  "dua_dua_of_the_young_believers": {
+    "name": "青年信士的祷词",
+    "translation": "我们的养主啊，求您从您那里赐予我们慈悯，并为我们的事务成就正道。",
+    "reference": "《古兰经》 18:10"
+  },
+  "dua_dua_of_musa_for_ease_and_eloquence": {
+    "name": "穆萨圣人求便利与口才",
+    "translation": "我的养主啊，求您舒展我的胸怀，使我的事务容易，并解开我舌上的结，使他们明白我的话。",
+    "reference": "《古兰经》 20:25-28"
+  },
+  "dua_increase_me_in_knowledge": {
+    "name": "求增加知识",
+    "translation": "我的养主啊，求您增加我的知识。",
+    "reference": "《古兰经》 20:114"
+  },
+  "dua_dua_of_ayyub_in_illness": {
+    "name": "艾优卜圣人患病时的祷词",
+    "translation": "我确已遭患难，而您是至慈之主。",
+    "reference": "《古兰经》 21:83"
+  },
+  "dua_dua_of_yunus_in_distress": {
+    "name": "尤努斯圣人困境中的祷词",
+    "translation": "万物非主，唯有您。赞您超绝！我确是行亏之人。",
+    "reference": "《古兰经》 21:87"
+  },
+  "dua_dua_of_zakariyya_for_an_heir": {
+    "name": "宰凯里雅圣人求子嗣",
+    "translation": "我的养主啊，求您不要使我孤独一身，您是最好的继承者。",
+    "reference": "《古兰经》 21:89"
+  },
+  "dua_protection_from_devils": {
+    "name": "求免恶魔侵扰",
+    "translation": "我的养主啊，我求您护佑免于恶魔的教唆；我的养主啊，我求您护佑免于他们临场。",
+    "reference": "《古兰经》 23:97-98"
+  },
+  "dua_forgiveness_and_mercy": {
+    "name": "求饶恕与慈悯",
+    "translation": "我的养主啊，求您饶恕并慈悯，您是最好的慈悯者。",
+    "reference": "《古兰经》 23:118"
+  },
+  "dua_righteous_spouses_and_children": {
+    "name": "求贤良配偶与子女",
+    "translation": "我们的养主啊，求您从我们的配偶和子嗣中赐予我们眼目之慰，并使我们成为敬畏者的楷模。",
+    "reference": "《古兰经》 25:74"
+  },
+  "dua_dua_of_musa_for_help": {
+    "name": "穆萨圣人求援助",
+    "translation": "我的养主啊，我确是急需您降下的任何福利的。",
+    "reference": "《古兰经》 28:24"
+  },
+  "dua_dua_of_sulayman_for_gratitude": {
+    "name": "苏莱曼圣人求感恩",
+    "translation": "我的养主啊，求您启示我感谢您赐予我和我父母的恩典，并做您所喜悦的善功。",
+    "reference": "《古兰经》 27:19"
+  },
+  "dua_dua_of_ibrahim_for_wisdom": {
+    "name": "易卜拉欣圣人求智慧",
+    "translation": "我的养主啊，求您赐我智慧，并使我与善人同列。",
+    "reference": "《古兰经》 26:83"
+  },
+  "dua_trust_in_allah": {
+    "name": "托靠安拉",
+    "translation": "我们的养主啊，我们托靠您，归向您，最终的归宿只归于您。",
+    "reference": "《古兰经》 60:4"
+  },
+  "dua_light_and_forgiveness": {
+    "name": "求光明与饶恕",
+    "translation": "我们的养主啊，求您为我们完善我们的光明，并饶恕我们。您对万物确是全能的。",
+    "reference": "《古兰经》 66:8"
+  },
+  "dua_dua_of_nuh_for_believers": {
+    "name": "努哈圣人为信士祈祷",
+    "translation": "我的养主啊，求您饶恕我、我的父母、凡以信士身份进入我家的人，以及众男女信士。",
+    "reference": "《古兰经》 71:28"
+  },
+  "dua_before_sleeping": {
+    "name": "睡前祷词",
+    "translation": "安拉啊，奉您的名，我死我活。",
+    "reference": "《布哈里圣训实录》 6324"
+  },
+  "dua_before_entering_the_restroom": {
+    "name": "进入洗手间前的祷词",
+    "translation": "安拉啊，我求您护佑免于男女恶魔。",
+    "reference": "《布哈里圣训实录》 142; 《穆斯林圣训实录》 375"
+  },
+  "dua_after_leaving_the_restroom": {
+    "name": "离开洗手间后的祷词",
+    "translation": "求您饶恕。",
+    "reference": "《艾布·达伍德圣训集》 30; 《提尔密济圣训集》 7"
+  },
+  "dua_leaving_the_home": {
+    "name": "出门时的祷词",
+    "translation": "奉安拉之名，我托靠安拉；无法无力，唯凭安拉。",
+    "reference": "《艾布·达伍德圣训集》 5095; 《提尔密济圣训集》 3426"
+  },
+  "dua_entering_the_mosque": {
+    "name": "进入清真寺时的祷词",
+    "translation": "安拉啊，求您为我开启您的慈悯之门。",
+    "reference": "《穆斯林圣训实录》 713"
+  },
+  "dua_leaving_the_mosque": {
+    "name": "离开清真寺时的祷词",
+    "translation": "安拉啊，我求您的恩惠。",
+    "reference": "《穆斯林圣训实录》 713"
+  },
+  "dua_after_the_adhan": {
+    "name": "宣礼后的祷词",
+    "translation": "安拉啊，这完美召唤与即将成立之拜的主啊，求您赐予穆罕默德说情权与尊荣，并使他升到您所许的受赞之位。",
+    "reference": "《布哈里圣训实录》 614"
+  },
+  "dua_opening_supplication_in_prayer": {
+    "name": "礼拜中的开拜祷词",
+    "translation": "安拉啊，求您使我的罪过与我如您使东方与西方相隔般相隔。安拉啊，求您涤净我的罪过，如白衣从污渍中被涤净一般。安拉啊，求您以雪、水与冰洗净我的罪过。",
+    "reference": "《布哈里圣训实录》 744; 《穆斯林圣训实录》 598"
+  },
+  "dua_between_the_two_prostrations": {
+    "name": "两个叩头之间的祷词",
+    "translation": "我的养主啊，求您饶恕我；我的养主啊，求您饶恕我。",
+    "reference": "《艾布·达伍德圣训集》 874"
+  },
+  "dua_help_me_worship_you_well": {
+    "name": "求助于记念、感恩与善拜",
+    "translation": "安拉啊，求您助我记念您、感谢您、善事崇拜您。",
+    "reference": "《艾布·达伍德圣训集》 1522; 《奈萨仪圣训集》 1303"
+  },
+  "dua_protection_from_four_trials": {
+    "name": "求免四种磨难",
+    "translation": "安拉啊，我求您护佑免于坟墓的刑罚、火狱的刑罚、生死的磨难，以及伪基督的恶毒磨难。",
+    "reference": "《布哈里圣训实录》 1377; 《穆斯林圣训实录》 588"
+  },
+  "dua_for_guidance_piety_chastity_and_sufficiency": {
+    "name": "求引导、敬畏、贞洁与知足",
+    "translation": "安拉啊，我求您赐予我引导、敬畏、贞洁与知足。",
+    "reference": "《穆斯林圣训实录》 2721"
+  },
+  "dua_for_forgiveness_mercy_guidance_health_and_provision": {
+    "name": "求饶恕、慈悯、引导、健康与给养",
+    "translation": "安拉啊，求您饶恕我、慈悯我、引导我、赐我安康，并供给我。",
+    "reference": "《穆斯林圣训实录》 2697"
+  },
+  "dua_for_beneficial_knowledge_and_accepted_deeds": {
+    "name": "求有益的知识与被接受的善功",
+    "translation": "安拉啊，我求您赐予有益的知识、美好的给养与被接受的善功。",
+    "reference": "《伊本·马哲圣训集》 925"
+  },
+  "dua_the_quran_as_spring_of_the_heart": {
+    "name": "求《古兰经》成为心灵之春",
+    "translation": "安拉啊，我是您的仆人，是您的男仆与女仆之子。我的额发在您手中；您对我的判决已行，您对我的前定公正。我以属于您的每一个尊名向您祈求：求您使《古兰经》成为我心灵之春、我胸中之光、我忧愁之消、我焦虑之散。",
+    "reference": "《艾哈迈德圣训集》 3712; 经阿尔巴尼鉴定为可靠"
+  },
+  "dua_protection_for_children_from_evil_eye": {
+    "name": "为儿童求免毒眼之护佑",
+    "translation": "我以安拉完美的言辞护佑你们俩免于一切恶魔、毒虫与毒眼。",
+    "reference": "《布哈里圣训实录》 3371"
+  },
+  "dua_visiting_the_sick": {
+    "name": "探望病人时的祷词",
+    "translation": "我求伟大的安拉、伟大宝座的主治愈您。",
+    "reference": "《艾布·达伍德圣训集》 3106; 《提尔密济圣训集》 2083"
+  },
+  "dua_for_healing": {
+    "name": "求治愈",
+    "translation": "安拉啊，人类的主啊，求您消除病痛、治愈之。您是治愈者，除您的治愈外别无治愈——一种不留疾病的治愈。",
+    "reference": "《布哈里圣训实录》 5743; 《穆斯林圣训实录》 2191"
+  },
+  "dua_when_afflicted_by_calamity": {
+    "name": "遭遇灾难时的祷词",
+    "translation": "我们属于安拉，我们必将归于他。安拉啊，求您在我遭难时赐我报酬，并以更好的替代它。",
+    "reference": "《穆斯林圣训实录》 918"
+  },
+  "dua_before_eating": {
+    "name": "进食前的祷词",
+    "translation": "奉安拉之名。",
+    "reference": "《艾布·达伍德圣训集》 3767; 《提尔密济圣训集》 1858"
+  },
+  "dua_after_eating": {
+    "name": "进食后的祷词",
+    "translation": "一切赞颂全归安拉，他供我此食，并在我无丝毫力量与能力的情况下赐予我。",
+    "reference": "《艾布·达伍德圣训集》 4023; 《提尔密济圣训集》 3458"
+  },
+  "dua_breaking_the_fast": {
+    "name": "开斋时的祷词",
+    "translation": "干渴已消，血管已润，若安拉意欲，报酬已定。",
+    "reference": "《艾布·达伍德圣训集》 2357"
+  },
+  "dua_upon_seeing_the_new_moon": {
+    "name": "见到新月时的祷词",
+    "translation": "安拉啊，求您以安宁、信仰、平安与伊斯兰使新月降临于我们。我的主与你的主都是安拉。",
+    "reference": "《提尔密济圣训集》 3451"
+  },
+  "dua_during_strong_wind": {
+    "name": "强风时的祷词",
+    "translation": "安拉啊，我求您赐予它之善、它内之善、它被遣送之善；我求您护佑免于它之恶、它内之恶、它被遣送之恶。",
+    "reference": "《穆斯林圣训实录》 899"
+  },
+  "dua_for_rain": {
+    "name": "求雨",
+    "translation": "安拉啊，求您降下有益的雨。",
+    "reference": "《布哈里圣训实录》 1032"
+  },
+  "dua_entering_a_marketplace": {
+    "name": "进入市场时的祷词",
+    "translation": "万物非主，唯有安拉，独一无偶。国权归他，赞颂归他。他使生使死，他是永生的、不死的。一切善在其手中，他对万物确是全能的。",
+    "reference": "《提尔密济圣训集》 3428"
+  },
+  "dua_expiation_of_a_gathering": {
+    "name": "聚会结束时的赎罪词",
+    "translation": "安拉啊，赞您超绝，并赞颂您。我作证万物非主，唯有您。我求您饶恕，并向您忏悔。",
+    "reference": "《艾布·达伍德圣训集》 4859; 《提尔密济圣训集》 3433"
+  },
+  "dua_for_protection_from_harm": {
+    "name": "求免伤害的护佑",
+    "translation": "我以安拉完美的言辞护佑免于他所造之物的恶。",
+    "reference": "《穆斯林圣训实录》 2708"
+  },
+  "dua_contentment_with_allah_islam_and_muhammad": {
+    "name": "悦纳安拉、伊斯兰与穆罕默德",
+    "translation": "我悦纳安拉为主、伊斯兰为教、穆罕默德为先知。",
+    "reference": "《艾布·达伍德圣训集》 5072; 《提尔密济圣训集》 3389"
+  },
+  "dua_for_well_being_in_both_worlds": {
+    "name": "求今后两世的安康",
+    "translation": "安拉啊，我求您在今世和后世赐予宽恕与安康。",
+    "reference": "《伊本·马哲圣训集》 3871; 《艾布·达伍德圣训集》 5074"
+  },
+  "dua_do_not_leave_me_to_myself": {
+    "name": "求勿弃我于自身",
+    "translation": "永生的主啊，自立的主啊，我以您的慈悯求助。求您改善我的一切事务，求您不要在一瞬间将我交付于我自己。",
+    "reference": "《哈基姆圣训补遗》 1/545; 经阿尔巴尼鉴定为可靠"
+  },
+  "dua_for_paradise_and_protection_from_fire": {
+    "name": "求乐园并免于火狱",
+    "translation": "安拉啊，我求您赐我乐园，我求您护我免于火狱。",
+    "reference": "《艾布·达伍德圣训集》 792; 《伊本·马哲圣训集》 910"
+  },
+  "dua_istikhara": {
+    "name": "伊斯提哈拉祷词",
+    "translation": "主啊，我以您的知识向您求善择，以您的能力向您求力量，并向您祈求宏恩。您能而我不能，您知而我不知，您全知幽玄。主啊，若您知道此事对我的宗教、生活和结局有益，就为我注定它，使它容易，并赐福其中；若您知道它有害，就使它远离我，也使我远离它。请在善所在之处为我注定善，并使我对此满意。",
+    "reference": "《布哈里圣训实录》 6382"
+  },
+  "dua_laylatul_qadr": {
+    "name": "盖德尔夜祷词",
+    "translation": "主啊，您确是至恕的，喜爱宽恕，求您宽恕我。",
+    "reference": "《提尔密济圣训集》 3513; 《伊本·马哲圣训集》 3850"
+  },
+  "dua_qunut_witr": {
+    "name": "奇数拜古努特祷词",
+    "translation": "主啊，求您使我加入您所引导者的行列，使我加入您所赐安康者的行列，使我加入您所护佑者的行列；求您赐福于您所赐予我的，并保护我免受您所判定之恶。您判定，而无人能判定您；您所护佑者绝不受辱。我们的养主啊，您多福而崇高。",
+    "reference": "《艾布·达伍德圣训集》 1425; 《提尔密济圣训集》 464"
+  },
+  "dua_after_wudu": {
+    "name": "小净后的祷词",
+    "translation": "我作证：万物非主，唯有安拉，独一无偶；我又作证：穆罕默德是他的仆人和使者。",
+    "reference": "《穆斯林圣训实录》 234"
+  },
+  "dua_entering_home": {
+    "name": "进家门祷词",
+    "translation": "奉安拉之名我们进入，奉安拉之名我们离开，我们只托靠我们的养主。",
+    "reference": "《艾布·达伍德圣训集》 5096"
+  },
+  "dua_wearing_garment": {
+    "name": "穿衣祷词",
+    "translation": "一切赞颂全归安拉，他使我穿上这件衣服，并在我无能无力的情况下赐给我它。",
+    "reference": "《艾布·达伍德圣训集》 4023; 《提尔密济圣训集》 3458"
+  },
+  "dua_new_garment": {
+    "name": "穿新衣祷词",
+    "translation": "主啊，一切赞颂归您，是您使我穿上它。我向您祈求它的益处和制造它的善意，并求您护佑我免受它的恶及制造它所带来的恶。",
+    "reference": "《艾布·达伍德圣训集》 4020; 《提尔密济圣训集》 1767"
+  },
+  "dua_before_intimacy": {
+    "name": "夫妻亲密前祷词",
+    "translation": "奉安拉之名。主啊，求您使恶魔远离我们，也使恶魔远离您可能赐予我们的子嗣。",
+    "reference": "《布哈里圣训实录》 141; 《穆斯林圣训实录》 1434"
+  },
+  "dua_for_righteous_child": {
+    "name": "求贤良子嗣的祷词",
+    "translation": "我的养主啊，求您赐我一个善良的后裔。",
+    "reference": "《古兰经》 37:100"
+  },
+  "dua_debt_sufficiency": {
+    "name": "求合法充足与解除债务",
+    "translation": "主啊，求您以合法的使我足够，不需非法的；并以您的恩惠使我无需依赖除您之外的任何人。",
+    "reference": "《提尔密济圣训集》 3563"
+  },
+  "dua_difficult_matter": {
+    "name": "困难时求容易的祷词",
+    "translation": "主啊，除了您使之容易的，没有容易之事；如果您意欲，您能使困难变得容易。",
+    "reference": "《伊本·希班圣训实录》 974; 经阿尔巴尼鉴定为可靠"
+  },
+  "dua_anger": {
+    "name": "生气时的祷词",
+    "translation": "我求安拉护佑，免受被驱逐的恶魔侵扰。",
+    "reference": "《布哈里圣训实录》 3282; 《穆斯林圣训实录》 2610"
+  },
+  "dua_bad_dream": {
+    "name": "噩梦后的祷词",
+    "translation": "我求安拉护佑，免受恶魔以及我所见之恶的伤害。",
+    "reference": "《穆斯林圣训实录》 2261"
+  },
+  "dua_visiting_graves": {
+    "name": "探望坟墓时的祷词",
+    "translation": "愿平安降临此处的信士和穆斯林。若安拉意欲，我们也将与你们相会。我祈求安拉赐予我们和你们安宁。",
+    "reference": "《穆斯林圣训实录》 975"
+  },
+  "dua_funeral_deceased": {
+    "name": "为亡者祈祷",
+    "translation": "主啊，求您饶恕他、慈悯他、赐他安宁并宽恕他；礼遇他的归宿，拓宽他的入口，以水、雪和冰雹洗涤他，并像洗净白衣污渍那样净化他的罪过。",
+    "reference": "《穆斯林圣训实录》 963"
+  },
+  "dua_condolence": {
+    "name": "吊唁用语",
+    "translation": "安拉拥有他所取走的，也拥有他所赐予的；万物在他那里都有一个规定的期限。因此应当忍耐，并向安拉寻求回赐。",
+    "reference": "《布哈里圣训实录》 1284; 《穆斯林圣训实录》 923"
+  },
+  "dua_thunder": {
+    "name": "听到雷声时的记主词",
+    "translation": "赞颂那一位，雷霆赞颂他，众天使因敬畏他而赞颂他。",
+    "reference": "《穆宛塔》 2/992; 经鉴定为阿卜杜拉·伊本·祖拜尔的可靠言论"
+  },
+  "dua_rain_around_us": {
+    "name": "雨势过大时的祷词",
+    "translation": "主啊，求您使雨降在我们周围，不要降在我们身上；降在山丘、高地、山谷和树木生长之处。",
+    "reference": "《布哈里圣训实录》 1014; 《穆斯林圣训实录》 897"
+  },
+  "dua_protection_dajjal": {
+    "name": "求免达加勒与重大考验",
+    "translation": "主啊，我求您护佑我免受火狱的刑罚、坟墓的刑罚、生与死的考验，以及假弥赛亚达加勒的邪恶考验。",
+    "reference": "《穆斯林圣训实录》 588"
+  },
+  "dua_all_good": {
+    "name": "求一切善的综合祷词",
+    "translation": "主啊，我向您祈求一切善，无论眼前或将来、我知道或不知道的；我求您护佑我免受一切恶，无论眼前或将来、我知道或不知道的。",
+    "reference": "《伊本·马哲圣训集》 3846; 经阿尔巴尼鉴定为可靠"
+  },
+  "dua_steadfast_heart": {
+    "name": "求心灵坚定的祷词",
+    "translation": "掌握众心的主啊，求您使我的心坚定在您的宗教上。",
+    "reference": "《提尔密济圣训集》 2140"
+  },
+  "dua_good_character": {
+    "name": "求美德的祷词",
+    "translation": "主啊，求您引导我获得最优美的品德，除您之外无人能如此引导；求您使恶劣品德远离我，除您之外无人能使其远离。",
+    "reference": "《穆斯林圣训实录》 771"
+  },
+  "dua_light": {
+    "name": "求光明的祷词",
+    "translation": "主啊，求您在我的心中、视力和听觉中置入光明；在我的右边、左边、上方、下方、前方和后方置入光明，并赐我光明。",
+    "reference": "《布哈里圣训实录》 6316; 《穆斯林圣训实录》 763"
+  }
+}

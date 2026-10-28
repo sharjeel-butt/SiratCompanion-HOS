@@ -2568,6 +2568,146 @@
     {
       "name": "tasbih_left",
       "value": "متبقي"
+    },
+    {
+      "name": "duas",
+      "value": "أدعية"
+    },
+    {
+      "name": "search_duas",
+      "value": "ابحث في الأدعية..."
+    },
+    {
+      "name": "dua_cat_all",
+      "value": "الكل"
+    },
+    {
+      "name": "dua_cat_favorites",
+      "value": "المفضلة"
+    },
+    {
+      "name": "dua_cat_forgiveness",
+      "value": "الاستغفار"
+    },
+    {
+      "name": "dua_cat_distress",
+      "value": "الكرب"
+    },
+    {
+      "name": "dua_cat_travel",
+      "value": "السفر"
+    },
+    {
+      "name": "bind_prayer",
+      "value": "ربط بالصلاة"
+    },
+    {
+      "name": "home_duas_title",
+      "value": "أدعية اليوم"
+    },
+    {
+      "name": "view_all",
+      "value": "عرض الكل"
+    },
+    {
+      "name": "dua_cat_morning_evening",
+      "value": "الصباح والمساء"
+    },
+    {
+      "name": "dua_cat_prayer",
+      "value": "الصلاة"
+    },
+    {
+      "name": "dua_cat_protection",
+      "value": "الحماية"
+    },
+    {
+      "name": "dua_cat_guidance",
+      "value": "الهداية"
+    },
+    {
+      "name": "dua_cat_general",
+      "value": "عام"
+    },
+    {
+      "name": "dua_cat_worship",
+      "value": "العبادة"
+    },
+    {
+      "name": "dua_cat_repentance",
+      "value": "التوبة"
+    },
+    {
+      "name": "dua_cat_steadfastness",
+      "value": "الثبات"
+    },
+    {
+      "name": "dua_cat_mercy",
+      "value": "الرحمة"
+    },
+    {
+      "name": "dua_cat_reflection",
+      "value": "التفكر"
+    },
+    {
+      "name": "dua_cat_hereafter",
+      "value": "الآخرة"
+    },
+    {
+      "name": "dua_cat_family",
+      "value": "العائلة"
+    },
+    {
+      "name": "dua_cat_knowledge",
+      "value": "العلم"
+    },
+    {
+      "name": "dua_cat_healing",
+      "value": "الشفاء"
+    },
+    {
+      "name": "dua_cat_need",
+      "value": "الحاجة"
+    },
+    {
+      "name": "dua_cat_gratitude",
+      "value": "الشكر"
+    },
+    {
+      "name": "dua_cat_reliance",
+      "value": "التوكل"
+    },
+    {
+      "name": "dua_cat_daily",
+      "value": "الحياة اليومية"
+    },
+    {
+      "name": "dua_cat_fasting",
+      "value": "الصيام"
+    },
+    {
+      "name": "dua_cat_weather",
+      "value": "الطقس"
+    },
+    {
+      "name": "dua_cat_faith",
+      "value": "الإيمان"
+    },
+    {
+      "name": "dua_cat_purification",
+      "value": "الطهارة"
+    },
+    {
+      "name": "dua_cat_provision",
+      "value": "الرزق"
+    },
+    {
+      "name": "dua_cat_funeral",
+      "value": "الجنازة"
+    },
+    {
+      "name": "duas_for",
+      "value": "أدعية"
     }
   ]
 }

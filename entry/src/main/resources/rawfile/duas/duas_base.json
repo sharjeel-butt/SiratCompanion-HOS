@@ -1,0 +1,584 @@
+[
+  {
+    "id": "dua_sayyidul_istighfar",
+    "category": "forgiveness",
+    "arabic": "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",
+    "reference": "Sahih al-Bukhari 6306"
+  },
+  {
+    "id": "dua_anxiety",
+    "category": "distress",
+    "arabic": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالْعَجْزِ وَالْكَسَلِ، وَالْبُخْلِ وَالْجُبْنِ، وَضَلَعِ الدَّيْنِ وَغَلَبَةِ الرِّجَالِ",
+    "reference": "Sahih al-Bukhari 2893"
+  },
+  {
+    "id": "dua_travel",
+    "category": "travel",
+    "arabic": "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ",
+    "reference": "Sahih Muslim 1342"
+  },
+  {
+    "id": "dua_waking_up",
+    "category": "morning_evening",
+    "arabic": "الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ",
+    "reference": "Sahih al-Bukhari 6312"
+  },
+  {
+    "id": "dua_morning",
+    "category": "morning_evening",
+    "arabic": "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ",
+    "reference": "Sahih Muslim 2723"
+  },
+  {
+    "id": "dua_after_fajr",
+    "category": "prayer",
+    "arabic": "اللَّهُمَّ أَجِرْنِي مِنَ النَّارِ",
+    "reference": "Sunan Abi Dawud 5079"
+  },
+  {
+    "id": "dua_protection",
+    "category": "protection",
+    "arabic": "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",
+    "reference": "Sunan Abi Dawud 5088"
+  },
+  {
+    "id": "dua_guidance_to_the_straight_path",
+    "category": "guidance",
+    "arabic": "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ",
+    "reference": "Quran 1:6"
+  },
+  {
+    "id": "dua_good_in_this_world_and_the_hereafter",
+    "category": "general",
+    "arabic": "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+    "reference": "Quran 2:201"
+  },
+  {
+    "id": "dua_acceptance_of_good_deeds",
+    "category": "worship",
+    "arabic": "رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنْتَ السَّمِيعُ الْعَلِيمُ",
+    "reference": "Quran 2:127"
+  },
+  {
+    "id": "dua_submission_and_repentance",
+    "category": "repentance",
+    "arabic": "رَبَّنَا وَاجْعَلْنَا مُسْلِمَيْنِ لَكَ وَمِنْ ذُرِّيَّتِنَا أُمَّةً مُسْلِمَةً لَكَ وَأَرِنَا مَنَاسِكَنَا وَتُبْ عَلَيْنَا إِنَّكَ أَنْتَ التَّوَّابُ الرَّحِيمُ",
+    "reference": "Quran 2:128"
+  },
+  {
+    "id": "dua_patience_and_firmness",
+    "category": "steadfastness",
+    "arabic": "رَبَّنَا أَفْرِغْ عَلَيْنَا صَبْرًا وَثَبِّتْ أَقْدَامَنَا وَانْصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ",
+    "reference": "Quran 2:250"
+  },
+  {
+    "id": "dua_no_burden_beyond_capacity",
+    "category": "mercy",
+    "arabic": "رَبَّنَا لَا تُؤَاخِذْنَا إِنْ نَسِينَا أَوْ أَخْطَأْنَا رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَا إِصْرًا كَمَا حَمَلْتَهُ عَلَى الَّذِينَ مِنْ قَبْلِنَا رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا",
+    "reference": "Quran 2:286"
+  },
+  {
+    "id": "dua_steadfast_hearts",
+    "category": "guidance",
+    "arabic": "رَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا وَهَبْ لَنَا مِنْ لَدُنْكَ رَحْمَةً إِنَّكَ أَنْتَ الْوَهَّابُ",
+    "reference": "Quran 3:8"
+  },
+  {
+    "id": "dua_forgiveness_and_protection_from_fire",
+    "category": "forgiveness",
+    "arabic": "رَبَّنَا إِنَّنَا آمَنَّا فَاغْفِرْ لَنَا ذُنُوبَنَا وَقِنَا عَذَابَ النَّارِ",
+    "reference": "Quran 3:16"
+  },
+  {
+    "id": "dua_forgiveness_and_steadfastness",
+    "category": "forgiveness",
+    "arabic": "رَبَّنَا اغْفِرْ لَنَا ذُنُوبَنَا وَإِسْرَافَنَا فِي أَمْرِنَا وَثَبِّتْ أَقْدَامَنَا وَانْصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ",
+    "reference": "Quran 3:147"
+  },
+  {
+    "id": "dua_creation_and_protection_from_fire",
+    "category": "reflection",
+    "arabic": "رَبَّنَا مَا خَلَقْتَ هَذَا بَاطِلًا سُبْحَانَكَ فَقِنَا عَذَابَ النَّارِ",
+    "reference": "Quran 3:191"
+  },
+  {
+    "id": "dua_forgiveness_and_a_righteous_death",
+    "category": "forgiveness",
+    "arabic": "رَبَّنَا فَاغْفِرْ لَنَا ذُنُوبَنَا وَكَفِّرْ عَنَّا سَيِّئَاتِنَا وَتَوَفَّنَا مَعَ الْأَبْرَارِ",
+    "reference": "Quran 3:193"
+  },
+  {
+    "id": "dua_promise_of_the_hereafter",
+    "category": "hereafter",
+    "arabic": "رَبَّنَا وَآتِنَا مَا وَعَدْتَنَا عَلَى رُسُلِكَ وَلَا تُخْزِنَا يَوْمَ الْقِيَامَةِ إِنَّكَ لَا تُخْلِفُ الْمِيعَادَ",
+    "reference": "Quran 3:194"
+  },
+  {
+    "id": "dua_dua_of_adam_and_hawwa",
+    "category": "forgiveness",
+    "arabic": "رَبَّنَا ظَلَمْنَا أَنْفُسَنَا وَإِنْ لَمْ تَغْفِرْ لَنَا وَتَرْحَمْنَا لَنَكُونَنَّ مِنَ الْخَاسِرِينَ",
+    "reference": "Quran 7:23"
+  },
+  {
+    "id": "dua_patience_and_a_muslim_death",
+    "category": "steadfastness",
+    "arabic": "رَبَّنَا أَفْرِغْ عَلَيْنَا صَبْرًا وَتَوَفَّنَا مُسْلِمِينَ",
+    "reference": "Quran 7:126"
+  },
+  {
+    "id": "dua_dua_of_nuh_for_forgiveness",
+    "category": "forgiveness",
+    "arabic": "رَبِّ إِنِّي أَعُوذُ بِكَ أَنْ أَسْأَلَكَ مَا لَيْسَ لِي بِهِ عِلْمٌ وَإِلَّا تَغْفِرْ لِي وَتَرْحَمْنِي أَكُنْ مِنَ الْخَاسِرِينَ",
+    "reference": "Quran 11:47"
+  },
+  {
+    "id": "dua_dua_of_yusuf_for_a_muslim_death",
+    "category": "hereafter",
+    "arabic": "رَبِّ قَدْ آتَيْتَنِي مِنَ الْمُلْكِ وَعَلَّمْتَنِي مِنْ تَأْوِيلِ الْأَحَادِيثِ فَاطِرَ السَّمَاوَاتِ وَالْأَرْضِ أَنْتَ وَلِيِّي فِي الدُّنْيَا وَالْآخِرَةِ تَوَفَّنِي مُسْلِمًا وَأَلْحِقْنِي بِالصَّالِحِينَ",
+    "reference": "Quran 12:101"
+  },
+  {
+    "id": "dua_dua_of_ibrahim_for_a_secure_city",
+    "category": "protection",
+    "arabic": "رَبِّ اجْعَلْ هَذَا الْبَلَدَ آمِنًا وَاجْنُبْنِي وَبَنِيَّ أَنْ نَعْبُدَ الْأَصْنَامَ",
+    "reference": "Quran 14:35"
+  },
+  {
+    "id": "dua_dua_of_ibrahim_for_prayer",
+    "category": "family",
+    "arabic": "رَبِّ اجْعَلْنِي مُقِيمَ الصَّلَاةِ وَمِنْ ذُرِّيَّتِي رَبَّنَا وَتَقَبَّلْ دُعَاءِ",
+    "reference": "Quran 14:40"
+  },
+  {
+    "id": "dua_forgiveness_for_parents_and_believers",
+    "category": "forgiveness",
+    "arabic": "رَبَّنَا اغْفِرْ لِي وَلِوَالِدَيَّ وَلِلْمُؤْمِنِينَ يَوْمَ يَقُومُ الْحِسَابُ",
+    "reference": "Quran 14:41"
+  },
+  {
+    "id": "dua_mercy_for_parents",
+    "category": "family",
+    "arabic": "رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا",
+    "reference": "Quran 17:24"
+  },
+  {
+    "id": "dua_dua_of_the_young_believers",
+    "category": "guidance",
+    "arabic": "رَبَّنَا آتِنَا مِنْ لَدُنْكَ رَحْمَةً وَهَيِّئْ لَنَا مِنْ أَمْرِنَا رَشَدًا",
+    "reference": "Quran 18:10"
+  },
+  {
+    "id": "dua_dua_of_musa_for_ease_and_eloquence",
+    "category": "guidance",
+    "arabic": "رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي وَاحْلُلْ عُقْدَةً مِنْ لِسَانِي يَفْقَهُوا قَوْلِي",
+    "reference": "Quran 20:25-28"
+  },
+  {
+    "id": "dua_increase_me_in_knowledge",
+    "category": "knowledge",
+    "arabic": "رَبِّ زِدْنِي عِلْمًا",
+    "reference": "Quran 20:114"
+  },
+  {
+    "id": "dua_dua_of_ayyub_in_illness",
+    "category": "healing",
+    "arabic": "أَنِّي مَسَّنِيَ الضُّرُّ وَأَنْتَ أَرْحَمُ الرَّاحِمِينَ",
+    "reference": "Quran 21:83"
+  },
+  {
+    "id": "dua_dua_of_yunus_in_distress",
+    "category": "distress",
+    "arabic": "لَا إِلَهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ",
+    "reference": "Quran 21:87"
+  },
+  {
+    "id": "dua_dua_of_zakariyya_for_an_heir",
+    "category": "family",
+    "arabic": "رَبِّ لَا تَذَرْنِي فَرْدًا وَأَنْتَ خَيْرُ الْوَارِثِينَ",
+    "reference": "Quran 21:89"
+  },
+  {
+    "id": "dua_protection_from_devils",
+    "category": "protection",
+    "arabic": "رَبِّ أَعُوذُ بِكَ مِنْ هَمَزَاتِ الشَّيَاطِينِ وَأَعُوذُ بِكَ رَبِّ أَنْ يَحْضُرُونِ",
+    "reference": "Quran 23:97-98"
+  },
+  {
+    "id": "dua_forgiveness_and_mercy",
+    "category": "forgiveness",
+    "arabic": "رَبِّ اغْفِرْ وَارْحَمْ وَأَنْتَ خَيْرُ الرَّاحِمِينَ",
+    "reference": "Quran 23:118"
+  },
+  {
+    "id": "dua_righteous_spouses_and_children",
+    "category": "family",
+    "arabic": "رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ وَاجْعَلْنَا لِلْمُتَّقِينَ إِمَامًا",
+    "reference": "Quran 25:74"
+  },
+  {
+    "id": "dua_dua_of_musa_for_help",
+    "category": "need",
+    "arabic": "رَبِّ إِنِّي لِمَا أَنْزَلْتَ إِلَيَّ مِنْ خَيْرٍ فَقِيرٌ",
+    "reference": "Quran 28:24"
+  },
+  {
+    "id": "dua_dua_of_sulayman_for_gratitude",
+    "category": "gratitude",
+    "arabic": "رَبِّ أَوْزِعْنِي أَنْ أَشْكُرَ نِعْمَتَكَ الَّتِي أَنْعَمْتَ عَلَيَّ وَعَلَى وَالِدَيَّ وَأَنْ أَعْمَلَ صَالِحًا تَرْضَاهُ",
+    "reference": "Quran 27:19"
+  },
+  {
+    "id": "dua_dua_of_ibrahim_for_wisdom",
+    "category": "guidance",
+    "arabic": "رَبِّ هَبْ لِي حُكْمًا وَأَلْحِقْنِي بِالصَّالِحِينَ",
+    "reference": "Quran 26:83"
+  },
+  {
+    "id": "dua_trust_in_allah",
+    "category": "reliance",
+    "arabic": "رَبَّنَا عَلَيْكَ تَوَكَّلْنَا وَإِلَيْكَ أَنَبْنَا وَإِلَيْكَ الْمَصِيرُ",
+    "reference": "Quran 60:4"
+  },
+  {
+    "id": "dua_light_and_forgiveness",
+    "category": "hereafter",
+    "arabic": "رَبَّنَا أَتْمِمْ لَنَا نُورَنَا وَاغْفِرْ لَنَا إِنَّكَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+    "reference": "Quran 66:8"
+  },
+  {
+    "id": "dua_dua_of_nuh_for_believers",
+    "category": "forgiveness",
+    "arabic": "رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ وَلِمَنْ دَخَلَ بَيْتِيَ مُؤْمِنًا وَلِلْمُؤْمِنِينَ وَالْمُؤْمِنَاتِ",
+    "reference": "Quran 71:28"
+  },
+  {
+    "id": "dua_before_sleeping",
+    "category": "daily",
+    "arabic": "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",
+    "reference": "Sahih al-Bukhari 6324"
+  },
+  {
+    "id": "dua_before_entering_the_restroom",
+    "category": "daily",
+    "arabic": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْخُبُثِ وَالْخَبَائِثِ",
+    "reference": "Sahih al-Bukhari 142; Sahih Muslim 375"
+  },
+  {
+    "id": "dua_after_leaving_the_restroom",
+    "category": "daily",
+    "arabic": "غُفْرَانَكَ",
+    "reference": "Sunan Abi Dawud 30; Jami at-Tirmidhi 7"
+  },
+  {
+    "id": "dua_leaving_the_home",
+    "category": "protection",
+    "arabic": "بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+    "reference": "Sunan Abi Dawud 5095; Jami at-Tirmidhi 3426"
+  },
+  {
+    "id": "dua_entering_the_mosque",
+    "category": "prayer",
+    "arabic": "اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",
+    "reference": "Sahih Muslim 713"
+  },
+  {
+    "id": "dua_leaving_the_mosque",
+    "category": "prayer",
+    "arabic": "اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ",
+    "reference": "Sahih Muslim 713"
+  },
+  {
+    "id": "dua_after_the_adhan",
+    "category": "prayer",
+    "arabic": "اللَّهُمَّ رَبَّ هَذِهِ الدَّعْوَةِ التَّامَّةِ وَالصَّلَاةِ الْقَائِمَةِ آتِ مُحَمَّدًا الْوَسِيلَةَ وَالْفَضِيلَةَ وَابْعَثْهُ مَقَامًا مَحْمُودًا الَّذِي وَعَدْتَهُ",
+    "reference": "Sahih al-Bukhari 614"
+  },
+  {
+    "id": "dua_opening_supplication_in_prayer",
+    "category": "prayer",
+    "arabic": "اللَّهُمَّ بَاعِدْ بَيْنِي وَبَيْنَ خَطَايَايَ كَمَا بَاعَدْتَ بَيْنَ الْمَشْرِقِ وَالْمَغْرِبِ اللَّهُمَّ نَقِّنِي مِنْ خَطَايَايَ كَمَا يُنَقَّى الثَّوْبُ الْأَبْيَضُ مِنَ الدَّنَسِ اللَّهُمَّ اغْسِلْنِي مِنْ خَطَايَايَ بِالثَّلْجِ وَالْمَاءِ وَالْبَرَدِ",
+    "reference": "Sahih al-Bukhari 744; Sahih Muslim 598"
+  },
+  {
+    "id": "dua_between_the_two_prostrations",
+    "category": "prayer",
+    "arabic": "رَبِّ اغْفِرْ لِي رَبِّ اغْفِرْ لِي",
+    "reference": "Sunan Abi Dawud 874"
+  },
+  {
+    "id": "dua_help_me_worship_you_well",
+    "category": "worship",
+    "arabic": "اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ",
+    "reference": "Sunan Abi Dawud 1522; Sunan an-Nasai 1303"
+  },
+  {
+    "id": "dua_protection_from_four_trials",
+    "category": "protection",
+    "arabic": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ وَمِنْ عَذَابِ جَهَنَّمَ وَمِنْ فِتْنَةِ الْمَحْيَا وَالْمَمَاتِ وَمِنْ شَرِّ فِتْنَةِ الْمَسِيحِ الدَّجَّالِ",
+    "reference": "Sahih al-Bukhari 1377; Sahih Muslim 588"
+  },
+  {
+    "id": "dua_for_guidance_piety_chastity_and_sufficiency",
+    "category": "guidance",
+    "arabic": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى وَالْعَفَافَ وَالْغِنَى",
+    "reference": "Sahih Muslim 2721"
+  },
+  {
+    "id": "dua_for_forgiveness_mercy_guidance_health_and_provision",
+    "category": "general",
+    "arabic": "اللَّهُمَّ اغْفِرْ لِي وَارْحَمْنِي وَاهْدِنِي وَعَافِنِي وَارْزُقْنِي",
+    "reference": "Sahih Muslim 2697"
+  },
+  {
+    "id": "dua_for_beneficial_knowledge_and_accepted_deeds",
+    "category": "knowledge",
+    "arabic": "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا وَرِزْقًا طَيِّبًا وَعَمَلًا مُتَقَبَّلًا",
+    "reference": "Sunan Ibn Majah 925"
+  },
+  {
+    "id": "dua_the_quran_as_spring_of_the_heart",
+    "category": "distress",
+    "arabic": "اللَّهُمَّ إِنِّي عَبْدُكَ ابْنُ عَبْدِكَ ابْنُ أَمَتِكَ نَاصِيَتِي بِيَدِكَ مَاضٍ فِيَّ حُكْمُكَ عَدْلٌ فِيَّ قَضَاؤُكَ أَسْأَلُكَ بِكُلِّ اسْمٍ هُوَ لَكَ أَنْ تَجْعَلَ الْقُرْآنَ رَبِيعَ قَلْبِي وَنُورَ صَدْرِي وَجَلَاءَ حُزْنِي وَذَهَابَ هَمِّي",
+    "reference": "Musnad Ahmad 3712; authenticated by al-Albani"
+  },
+  {
+    "id": "dua_protection_for_children_from_evil_eye",
+    "category": "protection",
+    "arabic": "أُعِيذُكُمَا بِكَلِمَاتِ اللَّهِ التَّامَّةِ مِنْ كُلِّ شَيْطَانٍ وَهَامَّةٍ وَمِنْ كُلِّ عَيْنٍ لَامَّةٍ",
+    "reference": "Sahih al-Bukhari 3371"
+  },
+  {
+    "id": "dua_visiting_the_sick",
+    "category": "healing",
+    "arabic": "أَسْأَلُ اللَّهَ الْعَظِيمَ رَبَّ الْعَرْشِ الْعَظِيمِ أَنْ يَشْفِيَكَ",
+    "reference": "Sunan Abi Dawud 3106; Jami at-Tirmidhi 2083"
+  },
+  {
+    "id": "dua_for_healing",
+    "category": "healing",
+    "arabic": "اللَّهُمَّ رَبَّ النَّاسِ أَذْهِبِ الْبَأْسَ اشْفِ أَنْتَ الشَّافِي لَا شِفَاءَ إِلَّا شِفَاؤُكَ شِفَاءً لَا يُغَادِرُ سَقَمًا",
+    "reference": "Sahih al-Bukhari 5743; Sahih Muslim 2191"
+  },
+  {
+    "id": "dua_when_afflicted_by_calamity",
+    "category": "distress",
+    "arabic": "إِنَّا لِلَّهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ اللَّهُمَّ أْجُرْنِي فِي مُصِيبَتِي وَأَخْلِفْ لِي خَيْرًا مِنْهَا",
+    "reference": "Sahih Muslim 918"
+  },
+  {
+    "id": "dua_before_eating",
+    "category": "daily",
+    "arabic": "بِسْمِ اللَّهِ",
+    "reference": "Sunan Abi Dawud 3767; Jami at-Tirmidhi 1858"
+  },
+  {
+    "id": "dua_after_eating",
+    "category": "gratitude",
+    "arabic": "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَذَا وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ",
+    "reference": "Sunan Abi Dawud 4023; Jami at-Tirmidhi 3458"
+  },
+  {
+    "id": "dua_breaking_the_fast",
+    "category": "fasting",
+    "arabic": "ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ وَثَبَتَ الْأَجْرُ إِنْ شَاءَ اللَّهُ",
+    "reference": "Sunan Abi Dawud 2357"
+  },
+  {
+    "id": "dua_upon_seeing_the_new_moon",
+    "category": "daily",
+    "arabic": "اللَّهُمَّ أَهِلَّهُ عَلَيْنَا بِالْأَمْنِ وَالْإِيمَانِ وَالسَّلَامَةِ وَالْإِسْلَامِ رَبِّي وَرَبُّكَ اللَّهُ",
+    "reference": "Jami at-Tirmidhi 3451"
+  },
+  {
+    "id": "dua_during_strong_wind",
+    "category": "weather",
+    "arabic": "اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَهَا وَخَيْرَ مَا فِيهَا وَخَيْرَ مَا أُرْسِلَتْ بِهِ وَأَعُوذُ بِكَ مِنْ شَرِّهَا وَشَرِّ مَا فِيهَا وَشَرِّ مَا أُرْسِلَتْ بِهِ",
+    "reference": "Sahih Muslim 899"
+  },
+  {
+    "id": "dua_for_rain",
+    "category": "weather",
+    "arabic": "اللَّهُمَّ صَيِّبًا نَافِعًا",
+    "reference": "Sahih al-Bukhari 1032"
+  },
+  {
+    "id": "dua_entering_a_marketplace",
+    "category": "daily",
+    "arabic": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ يُحْيِي وَيُمِيتُ وَهُوَ حَيٌّ لَا يَمُوتُ بِيَدِهِ الْخَيْرُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+    "reference": "Jami at-Tirmidhi 3428"
+  },
+  {
+    "id": "dua_expiation_of_a_gathering",
+    "category": "forgiveness",
+    "arabic": "سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا أَنْتَ أَسْتَغْفِرُكَ وَأَتُوبُ إِلَيْكَ",
+    "reference": "Sunan Abi Dawud 4859; Jami at-Tirmidhi 3433"
+  },
+  {
+    "id": "dua_for_protection_from_harm",
+    "category": "protection",
+    "arabic": "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
+    "reference": "Sahih Muslim 2708"
+  },
+  {
+    "id": "dua_contentment_with_allah_islam_and_muhammad",
+    "category": "faith",
+    "arabic": "رَضِيتُ بِاللَّهِ رَبًّا وَبِالْإِسْلَامِ دِينًا وَبِمُحَمَّدٍ نَبِيًّا",
+    "reference": "Sunan Abi Dawud 5072; Jami at-Tirmidhi 3389"
+  },
+  {
+    "id": "dua_for_well_being_in_both_worlds",
+    "category": "protection",
+    "arabic": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ",
+    "reference": "Sunan Ibn Majah 3871; Sunan Abi Dawud 5074"
+  },
+  {
+    "id": "dua_do_not_leave_me_to_myself",
+    "category": "guidance",
+    "arabic": "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ",
+    "reference": "Al-Hakim 1/545; authenticated by al-Albani"
+  },
+  {
+    "id": "dua_for_paradise_and_protection_from_fire",
+    "category": "hereafter",
+    "arabic": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْجَنَّةَ وَأَعُوذُ بِكَ مِنَ النَّارِ",
+    "reference": "Sunan Abi Dawud 792; Sunan Ibn Majah 910"
+  },
+  {
+    "id": "dua_istikhara",
+    "category": "guidance",
+    "arabic": "اللَّهُمَّ إِنِّي أَسْتَخِيرُكَ بِعِلْمِكَ، وَأَسْتَقْدِرُكَ بِقُدْرَتِكَ، وَأَسْأَلُكَ مِنْ فَضْلِكَ الْعَظِيمِ، فَإِنَّكَ تَقْدِرُ وَلَا أَقْدِرُ، وَتَعْلَمُ وَلَا أَعْلَمُ، وَأَنْتَ عَلَّامُ الْغُيُوبِ، اللَّهُمَّ إِنْ كُنْتَ تَعْلَمُ أَنَّ هَذَا الْأَمْرَ خَيْرٌ لِي فِي دِينِي وَمَعَاشِي وَعَاقِبَةِ أَمْرِي، فَاقْدُرْهُ لِي وَيَسِّرْهُ لِي، ثُمَّ بَارِكْ لِي فِيهِ، وَإِنْ كُنْتَ تَعْلَمُ أَنَّ هَذَا الْأَمْرَ شَرٌّ لِي فِي دِينِي وَمَعَاشِي وَعَاقِبَةِ أَمْرِي، فَاصْرِفْهُ عَنِّي وَاصْرِفْنِي عَنْهُ، وَاقْدُرْ لِيَ الْخَيْرَ حَيْثُ كَانَ، ثُمَّ أَرْضِنِي بِهِ",
+    "reference": "Sahih al-Bukhari 6382"
+  },
+  {
+    "id": "dua_laylatul_qadr",
+    "category": "forgiveness",
+    "arabic": "اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي",
+    "reference": "Jami at-Tirmidhi 3513; Sunan Ibn Majah 3850"
+  },
+  {
+    "id": "dua_qunut_witr",
+    "category": "prayer",
+    "arabic": "اللَّهُمَّ اهْدِنِي فِيمَنْ هَدَيْتَ، وَعَافِنِي فِيمَنْ عَافَيْتَ، وَتَوَلَّنِي فِيمَنْ تَوَلَّيْتَ، وَبَارِكْ لِي فِيمَا أَعْطَيْتَ، وَقِنِي شَرَّ مَا قَضَيْتَ، فَإِنَّكَ تَقْضِي وَلَا يُقْضَى عَلَيْكَ، إِنَّهُ لَا يَذِلُّ مَنْ وَالَيْتَ، تَبَارَكْتَ رَبَّنَا وَتَعَالَيْتَ",
+    "reference": "Sunan Abi Dawud 1425; Jami at-Tirmidhi 464"
+  },
+  {
+    "id": "dua_after_wudu",
+    "category": "purification",
+    "arabic": "أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ",
+    "reference": "Sahih Muslim 234"
+  },
+  {
+    "id": "dua_entering_home",
+    "category": "daily",
+    "arabic": "بِسْمِ اللَّهِ وَلَجْنَا، وَبِسْمِ اللَّهِ خَرَجْنَا، وَعَلَى رَبِّنَا تَوَكَّلْنَا",
+    "reference": "Sunan Abi Dawud 5096"
+  },
+  {
+    "id": "dua_wearing_garment",
+    "category": "daily",
+    "arabic": "الْحَمْدُ لِلَّهِ الَّذِي كَسَانِي هَذَا الثَّوْبَ وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ",
+    "reference": "Sunan Abi Dawud 4023; Jami at-Tirmidhi 3458"
+  },
+  {
+    "id": "dua_new_garment",
+    "category": "daily",
+    "arabic": "اللَّهُمَّ لَكَ الْحَمْدُ أَنْتَ كَسَوْتَنِيهِ، أَسْأَلُكَ مِنْ خَيْرِهِ وَخَيْرِ مَا صُنِعَ لَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّهِ وَشَرِّ مَا صُنِعَ لَهُ",
+    "reference": "Sunan Abi Dawud 4020; Jami at-Tirmidhi 1767"
+  },
+  {
+    "id": "dua_before_intimacy",
+    "category": "family",
+    "arabic": "بِسْمِ اللَّهِ، اللَّهُمَّ جَنِّبْنَا الشَّيْطَانَ وَجَنِّبِ الشَّيْطَانَ مَا رَزَقْتَنَا",
+    "reference": "Sahih al-Bukhari 141; Sahih Muslim 1434"
+  },
+  {
+    "id": "dua_for_righteous_child",
+    "category": "family",
+    "arabic": "رَبِّ هَبْ لِي مِنَ الصَّالِحِينَ",
+    "reference": "Quran 37:100"
+  },
+  {
+    "id": "dua_debt_sufficiency",
+    "category": "provision",
+    "arabic": "اللَّهُمَّ اكْفِنِي بِحَلَالِكَ عَنْ حَرَامِكَ، وَأَغْنِنِي بِفَضْلِكَ عَمَّنْ سِوَاكَ",
+    "reference": "Jami at-Tirmidhi 3563"
+  },
+  {
+    "id": "dua_difficult_matter",
+    "category": "distress",
+    "arabic": "اللَّهُمَّ لَا سَهْلَ إِلَّا مَا جَعَلْتَهُ سَهْلًا، وَأَنْتَ تَجْعَلُ الْحَزْنَ إِذَا شِئْتَ سَهْلًا",
+    "reference": "Sahih Ibn Hibban 974; authenticated by al-Albani"
+  },
+  {
+    "id": "dua_anger",
+    "category": "protection",
+    "arabic": "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ",
+    "reference": "Sahih al-Bukhari 3282; Sahih Muslim 2610"
+  },
+  {
+    "id": "dua_bad_dream",
+    "category": "protection",
+    "arabic": "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ وَمِنْ شَرِّ مَا رَأَيْتُ",
+    "reference": "Sahih Muslim 2261"
+  },
+  {
+    "id": "dua_visiting_graves",
+    "category": "funeral",
+    "arabic": "السَّلَامُ عَلَيْكُمْ أَهْلَ الدِّيَارِ مِنَ الْمُؤْمِنِينَ وَالْمُسْلِمِينَ، وَإِنَّا إِنْ شَاءَ اللَّهُ بِكُمْ لَاحِقُونَ، أَسْأَلُ اللَّهَ لَنَا وَلَكُمُ الْعَافِيَةَ",
+    "reference": "Sahih Muslim 975"
+  },
+  {
+    "id": "dua_funeral_deceased",
+    "category": "funeral",
+    "arabic": "اللَّهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ، وَعَافِهِ وَاعْفُ عَنْهُ، وَأَكْرِمْ نُزُلَهُ، وَوَسِّعْ مُدْخَلَهُ، وَاغْسِلْهُ بِالْمَاءِ وَالثَّلْجِ وَالْبَرَدِ، وَنَقِّهِ مِنَ الْخَطَايَا كَمَا نَقَّيْتَ الثَّوْبَ الْأَبْيَضَ مِنَ الدَّنَسِ",
+    "reference": "Sahih Muslim 963"
+  },
+  {
+    "id": "dua_condolence",
+    "category": "funeral",
+    "arabic": "إِنَّ لِلَّهِ مَا أَخَذَ، وَلَهُ مَا أَعْطَى، وَكُلُّ شَيْءٍ عِنْدَهُ بِأَجَلٍ مُسَمًّى، فَلْتَصْبِرْ وَلْتَحْتَسِبْ",
+    "reference": "Sahih al-Bukhari 1284; Sahih Muslim 923"
+  },
+  {
+    "id": "dua_thunder",
+    "category": "weather",
+    "arabic": "سُبْحَانَ الَّذِي يُسَبِّحُ الرَّعْدُ بِحَمْدِهِ وَالْمَلَائِكَةُ مِنْ خِيفَتِهِ",
+    "reference": "Al-Muwatta 2/992; authenticated as a statement of Abdullah ibn al-Zubayr"
+  },
+  {
+    "id": "dua_rain_around_us",
+    "category": "weather",
+    "arabic": "اللَّهُمَّ حَوَالَيْنَا وَلَا عَلَيْنَا، اللَّهُمَّ عَلَى الْآكَامِ وَالظِّرَابِ وَبُطُونِ الْأَوْدِيَةِ وَمَنَابِتِ الشَّجَرِ",
+    "reference": "Sahih al-Bukhari 1014; Sahih Muslim 897"
+  },
+  {
+    "id": "dua_protection_dajjal",
+    "category": "protection",
+    "arabic": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ جَهَنَّمَ، وَمِنْ عَذَابِ الْقَبْرِ، وَمِنْ فِتْنَةِ الْمَحْيَا وَالْمَمَاتِ، وَمِنْ شَرِّ فِتْنَةِ الْمَسِيحِ الدَّجَّالِ",
+    "reference": "Sahih Muslim 588"
+  },
+  {
+    "id": "dua_all_good",
+    "category": "general",
+    "arabic": "اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنَ الْخَيْرِ كُلِّهِ عَاجِلِهِ وَآجِلِهِ، مَا عَلِمْتُ مِنْهُ وَمَا لَمْ أَعْلَمْ، وَأَعُوذُ بِكَ مِنَ الشَّرِّ كُلِّهِ عَاجِلِهِ وَآجِلِهِ، مَا عَلِمْتُ مِنْهُ وَمَا لَمْ أَعْلَمْ",
+    "reference": "Sunan Ibn Majah 3846; authenticated by al-Albani"
+  },
+  {
+    "id": "dua_steadfast_heart",
+    "category": "guidance",
+    "arabic": "يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَى دِينِكَ",
+    "reference": "Jami at-Tirmidhi 2140"
+  },
+  {
+    "id": "dua_good_character",
+    "category": "guidance",
+    "arabic": "اللَّهُمَّ اهْدِنِي لِأَحْسَنِ الْأَخْلَاقِ لَا يَهْدِي لِأَحْسَنِهَا إِلَّا أَنْتَ، وَاصْرِفْ عَنِّي سَيِّئَهَا لَا يَصْرِفُ عَنِّي سَيِّئَهَا إِلَّا أَنْتَ",
+    "reference": "Sahih Muslim 771"
+  },
+  {
+    "id": "dua_light",
+    "category": "guidance",
+    "arabic": "اللَّهُمَّ اجْعَلْ فِي قَلْبِي نُورًا، وَفِي بَصَرِي نُورًا، وَفِي سَمْعِي نُورًا، وَعَنْ يَمِينِي نُورًا، وَعَنْ يَسَارِي نُورًا، وَفَوْقِي نُورًا، وَتَحْتِي نُورًا، وَأَمَامِي نُورًا، وَخَلْفِي نُورًا، وَاجْعَلْ لِي نُورًا",
+    "reference": "Sahih al-Bukhari 6316; Sahih Muslim 763"
+  }
+]

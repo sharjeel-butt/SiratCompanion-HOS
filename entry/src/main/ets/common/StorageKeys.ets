@@ -166,3 +166,5 @@ export const STORAGE_KEY_RAMADAN_LOG = 'ramadan_log';
 export const STORAGE_KEY_RAMADAN_STATE_VERSION = 'ramadan_state_version';
 
 export const STORAGE_KEY_THEME_OVERRIDE = 'theme_mode_override';
+
+export const STORAGE_KEY_DUA_BINDINGS_VERSION = 'dua_bindings_version';

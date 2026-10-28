@@ -1,0 +1,487 @@
+{
+  "dua_sayyidul_istighfar": {
+    "name": "Sayyidul Istighfar (The Master of Forgiveness)",
+    "translation": "O Allah, You are my Lord, there is no deity except You. You created me and I am Your servant. I abide by Your covenant and promise as best I can. I seek refuge in You from the evil of what I have done. I acknowledge Your favour upon me and confess my sin. Forgive me, for none forgives sins except You.",
+    "reference": "Sahih al-Bukhari 6306"
+  },
+  "dua_anxiety": {
+    "name": "Dua for Anxiety and Sorrow",
+    "translation": "O Allah, I seek refuge in You from anxiety and sorrow, weakness and laziness, miserliness and cowardice, the burden of debt and being overpowered by people.",
+    "reference": "Sahih al-Bukhari 2893"
+  },
+  "dua_travel": {
+    "name": "Dua for Travel",
+    "translation": "Glory to Him who has subjected this to us, though we could never have controlled it by our own efforts. Surely, to our Lord we will return.",
+    "reference": "Sahih Muslim 1342"
+  },
+  "dua_waking_up": {
+    "name": "Dua Upon Waking Up",
+    "translation": "All praise is for Allah who gave us life after having taken it from us, and unto Him is the resurrection.",
+    "reference": "Sahih al-Bukhari 6312"
+  },
+  "dua_morning": {
+    "name": "Morning Remembrance",
+    "translation": "We have entered a new morning and with it all dominion belongs to Allah. All praise is for Allah. None has the right to be worshipped except Allah, alone, without partner.",
+    "reference": "Sahih Muslim 2723"
+  },
+  "dua_after_fajr": {
+    "name": "Dua After Fajr",
+    "translation": "O Allah, protect me from the Fire.",
+    "reference": "Sunan Abi Dawud 5079"
+  },
+  "dua_protection": {
+    "name": "Dua for Protection",
+    "translation": "In the name of Allah with whose name nothing is harmed on earth nor in the heavens, and He is the All-Hearing, the All-Knowing.",
+    "reference": "Sunan Abi Dawud 5088"
+  },
+  "dua_guidance_to_the_straight_path": {
+    "name": "Guidance to the Straight Path",
+    "translation": "Guide us to the straight path.",
+    "reference": "Quran 1:6"
+  },
+  "dua_good_in_this_world_and_the_hereafter": {
+    "name": "Good in This World and the Hereafter",
+    "translation": "Our Lord, grant us good in this world and good in the Hereafter, and protect us from the punishment of the Fire.",
+    "reference": "Quran 2:201"
+  },
+  "dua_acceptance_of_good_deeds": {
+    "name": "Acceptance of Good Deeds",
+    "translation": "Our Lord, accept from us. Indeed, You are the All-Hearing, All-Knowing.",
+    "reference": "Quran 2:127"
+  },
+  "dua_submission_and_repentance": {
+    "name": "Submission and Repentance",
+    "translation": "Our Lord, make us submissive to You and from our descendants a community submissive to You. Show us our rites and accept our repentance. You are the Accepter of repentance, the Merciful.",
+    "reference": "Quran 2:128"
+  },
+  "dua_patience_and_firmness": {
+    "name": "Patience and Firmness",
+    "translation": "Our Lord, pour upon us patience, make our feet firm, and grant us victory over the disbelieving people.",
+    "reference": "Quran 2:250"
+  },
+  "dua_no_burden_beyond_capacity": {
+    "name": "No Burden Beyond Capacity",
+    "translation": "Our Lord, do not take us to task if we forget or err. Do not place on us a burden like that placed on those before us. Do not burden us with what we cannot bear. Pardon us, forgive us, and have mercy on us.",
+    "reference": "Quran 2:286"
+  },
+  "dua_steadfast_hearts": {
+    "name": "Steadfast Hearts",
+    "translation": "Our Lord, do not let our hearts deviate after You have guided us, and grant us mercy from Yourself. You are the Bestower.",
+    "reference": "Quran 3:8"
+  },
+  "dua_forgiveness_and_protection_from_fire": {
+    "name": "Forgiveness and Protection from Fire",
+    "translation": "Our Lord, we have believed, so forgive our sins and protect us from the punishment of the Fire.",
+    "reference": "Quran 3:16"
+  },
+  "dua_forgiveness_and_steadfastness": {
+    "name": "Forgiveness and Steadfastness",
+    "translation": "Our Lord, forgive our sins and excesses, make our feet firm, and grant us victory over the disbelieving people.",
+    "reference": "Quran 3:147"
+  },
+  "dua_creation_and_protection_from_fire": {
+    "name": "Creation and Protection from Fire",
+    "translation": "Our Lord, You did not create this without purpose. Glory be to You, so protect us from the punishment of the Fire.",
+    "reference": "Quran 3:191"
+  },
+  "dua_forgiveness_and_a_righteous_death": {
+    "name": "Forgiveness and a Righteous Death",
+    "translation": "Our Lord, forgive our sins, erase our misdeeds, and let us die among the righteous.",
+    "reference": "Quran 3:193"
+  },
+  "dua_promise_of_the_hereafter": {
+    "name": "Promise of the Hereafter",
+    "translation": "Our Lord, grant us what You promised through Your messengers and do not disgrace us on the Day of Resurrection. You never break Your promise.",
+    "reference": "Quran 3:194"
+  },
+  "dua_dua_of_adam_and_hawwa": {
+    "name": "Dua of Adam and Hawwa",
+    "translation": "Our Lord, we have wronged ourselves. If You do not forgive us and have mercy on us, we will surely be among the losers.",
+    "reference": "Quran 7:23"
+  },
+  "dua_patience_and_a_muslim_death": {
+    "name": "Patience and a Muslim Death",
+    "translation": "Our Lord, pour upon us patience and let us die as Muslims.",
+    "reference": "Quran 7:126"
+  },
+  "dua_dua_of_nuh_for_forgiveness": {
+    "name": "Dua of Nuh for Forgiveness",
+    "translation": "My Lord, I seek refuge in You from asking about that of which I have no knowledge. Unless You forgive me and have mercy on me, I will be among the losers.",
+    "reference": "Quran 11:47"
+  },
+  "dua_dua_of_yusuf_for_a_muslim_death": {
+    "name": "Dua of Yusuf for a Muslim Death",
+    "translation": "My Lord, You have granted me authority and taught me the interpretation of events. Creator of the heavens and earth, You are my Protector in this world and the Hereafter. Let me die as a Muslim and join me with the righteous.",
+    "reference": "Quran 12:101"
+  },
+  "dua_dua_of_ibrahim_for_a_secure_city": {
+    "name": "Dua of Ibrahim for a Secure City",
+    "translation": "My Lord, make this city secure and keep me and my children away from worshipping idols.",
+    "reference": "Quran 14:35"
+  },
+  "dua_dua_of_ibrahim_for_prayer": {
+    "name": "Dua of Ibrahim for Prayer",
+    "translation": "My Lord, make me an establisher of prayer, and also from my descendants. Our Lord, accept my supplication.",
+    "reference": "Quran 14:40"
+  },
+  "dua_forgiveness_for_parents_and_believers": {
+    "name": "Forgiveness for Parents and Believers",
+    "translation": "Our Lord, forgive me, my parents, and the believers on the Day the account is established.",
+    "reference": "Quran 14:41"
+  },
+  "dua_mercy_for_parents": {
+    "name": "Mercy for Parents",
+    "translation": "My Lord, have mercy upon them as they raised me when I was small.",
+    "reference": "Quran 17:24"
+  },
+  "dua_dua_of_the_young_believers": {
+    "name": "Dua of the Young Believers",
+    "translation": "Our Lord, grant us mercy from Yourself and guide us rightly through our affair.",
+    "reference": "Quran 18:10"
+  },
+  "dua_dua_of_musa_for_ease_and_eloquence": {
+    "name": "Dua of Musa for Ease and Eloquence",
+    "translation": "My Lord, expand my chest, ease my task, and untie the knot from my tongue so they may understand my speech.",
+    "reference": "Quran 20:25-28"
+  },
+  "dua_increase_me_in_knowledge": {
+    "name": "Increase Me in Knowledge",
+    "translation": "My Lord, increase me in knowledge.",
+    "reference": "Quran 20:114"
+  },
+  "dua_dua_of_ayyub_in_illness": {
+    "name": "Dua of Ayyub in Illness",
+    "translation": "Adversity has touched me, and You are the Most Merciful of the merciful.",
+    "reference": "Quran 21:83"
+  },
+  "dua_dua_of_yunus_in_distress": {
+    "name": "Dua of Yunus in Distress",
+    "translation": "There is no deity except You. Glory be to You. Indeed, I have been among the wrongdoers.",
+    "reference": "Quran 21:87"
+  },
+  "dua_dua_of_zakariyya_for_an_heir": {
+    "name": "Dua of Zakariyya for an Heir",
+    "translation": "My Lord, do not leave me alone, though You are the best of inheritors.",
+    "reference": "Quran 21:89"
+  },
+  "dua_protection_from_devils": {
+    "name": "Protection from Devils",
+    "translation": "My Lord, I seek refuge in You from the incitements of devils, and I seek refuge in You, my Lord, from their presence.",
+    "reference": "Quran 23:97-98"
+  },
+  "dua_forgiveness_and_mercy": {
+    "name": "Forgiveness and Mercy",
+    "translation": "My Lord, forgive and have mercy, for You are the best of the merciful.",
+    "reference": "Quran 23:118"
+  },
+  "dua_righteous_spouses_and_children": {
+    "name": "Righteous Spouses and Children",
+    "translation": "Our Lord, grant us comfort in our spouses and children and make us examples for the mindful.",
+    "reference": "Quran 25:74"
+  },
+  "dua_dua_of_musa_for_help": {
+    "name": "Dua of Musa for Help",
+    "translation": "My Lord, I am truly in need of whatever good You send down to me.",
+    "reference": "Quran 28:24"
+  },
+  "dua_dua_of_sulayman_for_gratitude": {
+    "name": "Dua of Sulayman for Gratitude",
+    "translation": "My Lord, inspire me to be grateful for Your favor upon me and my parents, and to do righteous deeds that please You.",
+    "reference": "Quran 27:19"
+  },
+  "dua_dua_of_ibrahim_for_wisdom": {
+    "name": "Dua of Ibrahim for Wisdom",
+    "translation": "My Lord, grant me wisdom and join me with the righteous.",
+    "reference": "Quran 26:83"
+  },
+  "dua_trust_in_allah": {
+    "name": "Trust in Allah",
+    "translation": "Our Lord, upon You we rely, to You we turn, and to You is the final return.",
+    "reference": "Quran 60:4"
+  },
+  "dua_light_and_forgiveness": {
+    "name": "Light and Forgiveness",
+    "translation": "Our Lord, perfect our light for us and forgive us. You are able to do all things.",
+    "reference": "Quran 66:8"
+  },
+  "dua_dua_of_nuh_for_believers": {
+    "name": "Dua of Nuh for Believers",
+    "translation": "My Lord, forgive me, my parents, whoever enters my house as a believer, and all believing men and women.",
+    "reference": "Quran 71:28"
+  },
+  "dua_before_sleeping": {
+    "name": "Before Sleeping",
+    "translation": "In Your name, O Allah, I die and I live.",
+    "reference": "Sahih al-Bukhari 6324"
+  },
+  "dua_before_entering_the_restroom": {
+    "name": "Before Entering the Restroom",
+    "translation": "O Allah, I seek refuge in You from male and female devils.",
+    "reference": "Sahih al-Bukhari 142; Sahih Muslim 375"
+  },
+  "dua_after_leaving_the_restroom": {
+    "name": "After Leaving the Restroom",
+    "translation": "I seek Your forgiveness.",
+    "reference": "Sunan Abi Dawud 30; Jami at-Tirmidhi 7"
+  },
+  "dua_leaving_the_home": {
+    "name": "Leaving the Home",
+    "translation": "In the name of Allah, I place my trust in Allah; there is no might or power except through Allah.",
+    "reference": "Sunan Abi Dawud 5095; Jami at-Tirmidhi 3426"
+  },
+  "dua_entering_the_mosque": {
+    "name": "Entering the Mosque",
+    "translation": "O Allah, open for me the gates of Your mercy.",
+    "reference": "Sahih Muslim 713"
+  },
+  "dua_leaving_the_mosque": {
+    "name": "Leaving the Mosque",
+    "translation": "O Allah, I ask You from Your bounty.",
+    "reference": "Sahih Muslim 713"
+  },
+  "dua_after_the_adhan": {
+    "name": "After the Adhan",
+    "translation": "O Allah, Lord of this perfect call and established prayer, grant Muhammad the intercession and distinction, and raise him to the praised station You promised him.",
+    "reference": "Sahih al-Bukhari 614"
+  },
+  "dua_opening_supplication_in_prayer": {
+    "name": "Opening Supplication in Prayer",
+    "translation": "O Allah, distance me from my sins as You distanced East from West. Cleanse me of sins as a white garment is cleansed of stains, and wash my sins with snow, water, and hail.",
+    "reference": "Sahih al-Bukhari 744; Sahih Muslim 598"
+  },
+  "dua_between_the_two_prostrations": {
+    "name": "Between the Two Prostrations",
+    "translation": "My Lord, forgive me; my Lord, forgive me.",
+    "reference": "Sunan Abi Dawud 874"
+  },
+  "dua_help_me_worship_you_well": {
+    "name": "Help Me Worship You Well",
+    "translation": "O Allah, help me remember You, thank You, and worship You well.",
+    "reference": "Sunan Abi Dawud 1522; Sunan an-Nasai 1303"
+  },
+  "dua_protection_from_four_trials": {
+    "name": "Protection from Four Trials",
+    "translation": "O Allah, I seek refuge in You from the punishment of the grave and Hell, the trials of life and death, and the evil trial of the False Messiah.",
+    "reference": "Sahih al-Bukhari 1377; Sahih Muslim 588"
+  },
+  "dua_for_guidance_piety_chastity_and_sufficiency": {
+    "name": "For Guidance, Piety, Chastity, and Sufficiency",
+    "translation": "O Allah, I ask You for guidance, piety, chastity, and sufficiency.",
+    "reference": "Sahih Muslim 2721"
+  },
+  "dua_for_forgiveness_mercy_guidance_health_and_provision": {
+    "name": "For Forgiveness, Mercy, Guidance, Health, and Provision",
+    "translation": "O Allah, forgive me, have mercy on me, guide me, grant me well-being, and provide for me.",
+    "reference": "Sahih Muslim 2697"
+  },
+  "dua_for_beneficial_knowledge_and_accepted_deeds": {
+    "name": "For Beneficial Knowledge and Accepted Deeds",
+    "translation": "O Allah, I ask You for beneficial knowledge, good provision, and accepted deeds.",
+    "reference": "Sunan Ibn Majah 925"
+  },
+  "dua_the_quran_as_spring_of_the_heart": {
+    "name": "The Quran as Spring of the Heart",
+    "translation": "O Allah, I am Your servant, son of Your servant and maidservant. My forelock is in Your hand; Your judgment over me is executed and Your decree is just. I ask You by every name belonging to You to make the Quran the spring of my heart, the light of my chest, the removal of my sorrow, and the departure of my anxiety.",
+    "reference": "Musnad Ahmad 3712; authenticated by al-Albani"
+  },
+  "dua_protection_for_children_from_evil_eye": {
+    "name": "Protection for Children from Evil Eye",
+    "translation": "I seek protection for you both in Allah’s perfect words from every devil, harmful creature, and evil eye.",
+    "reference": "Sahih al-Bukhari 3371"
+  },
+  "dua_visiting_the_sick": {
+    "name": "Visiting the Sick",
+    "translation": "I ask Allah the Magnificent, Lord of the Magnificent Throne, to heal you.",
+    "reference": "Sunan Abi Dawud 3106; Jami at-Tirmidhi 2083"
+  },
+  "dua_for_healing": {
+    "name": "For Healing",
+    "translation": "O Allah, Lord of mankind, remove the harm and heal. You are the Healer. There is no healing except Your healing, a healing that leaves no sickness.",
+    "reference": "Sahih al-Bukhari 5743; Sahih Muslim 2191"
+  },
+  "dua_when_afflicted_by_calamity": {
+    "name": "When Afflicted by Calamity",
+    "translation": "We belong to Allah and to Him we return. O Allah, reward me in my affliction and replace it for me with something better.",
+    "reference": "Sahih Muslim 918"
+  },
+  "dua_before_eating": {
+    "name": "Before Eating",
+    "translation": "In the name of Allah.",
+    "reference": "Sunan Abi Dawud 3767; Jami at-Tirmidhi 1858"
+  },
+  "dua_after_eating": {
+    "name": "After Eating",
+    "translation": "Praise is to Allah who fed me this and provided it without any power or ability from me.",
+    "reference": "Sunan Abi Dawud 4023; Jami at-Tirmidhi 3458"
+  },
+  "dua_breaking_the_fast": {
+    "name": "Breaking the Fast",
+    "translation": "The thirst has gone, the veins are moistened, and the reward is confirmed, if Allah wills.",
+    "reference": "Sunan Abi Dawud 2357"
+  },
+  "dua_upon_seeing_the_new_moon": {
+    "name": "Upon Seeing the New Moon",
+    "translation": "O Allah, bring it over us with security, faith, safety, and Islam. My Lord and your Lord is Allah.",
+    "reference": "Jami at-Tirmidhi 3451"
+  },
+  "dua_during_strong_wind": {
+    "name": "During Strong Wind",
+    "translation": "O Allah, I ask You for its good, the good within it, and the good for which it was sent. I seek refuge in You from its evil, the evil within it, and the evil for which it was sent.",
+    "reference": "Sahih Muslim 899"
+  },
+  "dua_for_rain": {
+    "name": "For Rain",
+    "translation": "O Allah, make it beneficial rain.",
+    "reference": "Sahih al-Bukhari 1032"
+  },
+  "dua_entering_a_marketplace": {
+    "name": "Entering a Marketplace",
+    "translation": "None is worthy of worship but Allah alone, without partner. His is the dominion and praise. He gives life and causes death. He is Living and does not die. In His hand is all good, and He is able to do all things.",
+    "reference": "Jami at-Tirmidhi 3428"
+  },
+  "dua_expiation_of_a_gathering": {
+    "name": "Expiation of a Gathering",
+    "translation": "Glory and praise are Yours, O Allah. I testify that none is worthy of worship but You. I seek Your forgiveness and repent to You.",
+    "reference": "Sunan Abi Dawud 4859; Jami at-Tirmidhi 3433"
+  },
+  "dua_for_protection_from_harm": {
+    "name": "For Protection from Harm",
+    "translation": "I seek refuge in Allah’s perfect words from the evil of what He created.",
+    "reference": "Sahih Muslim 2708"
+  },
+  "dua_contentment_with_allah_islam_and_muhammad": {
+    "name": "Contentment with Allah, Islam, and Muhammad",
+    "translation": "I am pleased with Allah as Lord, Islam as religion, and Muhammad as Prophet.",
+    "reference": "Sunan Abi Dawud 5072; Jami at-Tirmidhi 3389"
+  },
+  "dua_for_well_being_in_both_worlds": {
+    "name": "For Well-Being in Both Worlds",
+    "translation": "O Allah, I ask You for pardon and well-being in this world and the Hereafter.",
+    "reference": "Sunan Ibn Majah 3871; Sunan Abi Dawud 5074"
+  },
+  "dua_do_not_leave_me_to_myself": {
+    "name": "Do Not Leave Me to Myself",
+    "translation": "O Ever-Living, O Sustainer, by Your mercy I seek help. Set right all my affairs and do not leave me to myself even for the blink of an eye.",
+    "reference": "Al-Hakim 1/545; authenticated by al-Albani"
+  },
+  "dua_for_paradise_and_protection_from_fire": {
+    "name": "For Paradise and Protection from Fire",
+    "translation": "O Allah, I ask You for Paradise and seek refuge in You from the Fire.",
+    "reference": "Sunan Abi Dawud 792; Sunan Ibn Majah 910"
+  },
+  "dua_istikhara": {
+    "name": "Dua of Istikhara",
+    "translation": "O Allah, I seek Your guidance through Your knowledge and seek ability through Your power, and I ask You from Your immense bounty. You are capable and I am not; You know and I do not; You are the Knower of the unseen. O Allah, if You know this matter is good for my religion, livelihood and outcome, decree it for me, make it easy and bless it for me. If You know it is harmful for my religion, livelihood and outcome, turn it away from me and turn me away from it. Decree good for me wherever it may be, then make me content with it.",
+    "reference": "Sahih al-Bukhari 6382"
+  },
+  "dua_laylatul_qadr": {
+    "name": "Dua for Laylat al-Qadr",
+    "translation": "O Allah, You are Pardoning and You love to pardon, so pardon me.",
+    "reference": "Jami at-Tirmidhi 3513; Sunan Ibn Majah 3850"
+  },
+  "dua_qunut_witr": {
+    "name": "Qunut of Witr",
+    "translation": "O Allah, guide me among those You have guided; grant me well-being among those You have granted well-being; take me into Your care among those You have taken into Your care; bless what You have given me; and protect me from the evil of what You have decreed. You decree and none decrees over You. The one You befriend is never disgraced. Blessed and Exalted are You, our Lord.",
+    "reference": "Sunan Abi Dawud 1425; Jami at-Tirmidhi 464"
+  },
+  "dua_after_wudu": {
+    "name": "Dua After Ablution",
+    "translation": "I bear witness that none has the right to be worshipped except Allah alone, without partner, and I bear witness that Muhammad is His servant and Messenger.",
+    "reference": "Sahih Muslim 234"
+  },
+  "dua_entering_home": {
+    "name": "Dua When Entering the Home",
+    "translation": "In the name of Allah we enter, in the name of Allah we leave, and upon our Lord we rely.",
+    "reference": "Sunan Abi Dawud 5096"
+  },
+  "dua_wearing_garment": {
+    "name": "Dua When Wearing a Garment",
+    "translation": "Praise is to Allah who clothed me with this garment and provided it for me without any power or ability from me.",
+    "reference": "Sunan Abi Dawud 4023; Jami at-Tirmidhi 3458"
+  },
+  "dua_new_garment": {
+    "name": "Dua When Wearing New Clothes",
+    "translation": "O Allah, praise is Yours. You clothed me with it. I ask You for its good and the good for which it was made, and seek refuge in You from its evil and the evil for which it was made.",
+    "reference": "Sunan Abi Dawud 4020; Jami at-Tirmidhi 1767"
+  },
+  "dua_before_intimacy": {
+    "name": "Dua Before Marital Relations",
+    "translation": "In the name of Allah. O Allah, keep Satan away from us and keep Satan away from what You grant us.",
+    "reference": "Sahih al-Bukhari 141; Sahih Muslim 1434"
+  },
+  "dua_for_righteous_child": {
+    "name": "Dua for Righteous Offspring",
+    "translation": "My Lord, grant me offspring from among the righteous.",
+    "reference": "Quran 37:100"
+  },
+  "dua_debt_sufficiency": {
+    "name": "Dua for Halal Sufficiency and Debt Relief",
+    "translation": "O Allah, suffice me with what You have made lawful instead of what You have forbidden, and make me independent by Your bounty from everyone besides You.",
+    "reference": "Jami at-Tirmidhi 3563"
+  },
+  "dua_difficult_matter": {
+    "name": "Dua When a Matter Is Difficult",
+    "translation": "O Allah, there is no ease except what You make easy, and You make difficulty easy if You will.",
+    "reference": "Sahih Ibn Hibban 974; authenticated by al-Albani"
+  },
+  "dua_anger": {
+    "name": "Dua When Angry",
+    "translation": "I seek refuge in Allah from Satan, the accursed.",
+    "reference": "Sahih al-Bukhari 3282; Sahih Muslim 2610"
+  },
+  "dua_bad_dream": {
+    "name": "Dua After a Bad Dream",
+    "translation": "I seek refuge in Allah from Satan and from the evil of what I saw.",
+    "reference": "Sahih Muslim 2261"
+  },
+  "dua_visiting_graves": {
+    "name": "Dua When Visiting Graves",
+    "translation": "Peace be upon you, inhabitants of these dwellings, believers and Muslims. We will, if Allah wills, join you. I ask Allah for well-being for us and for you.",
+    "reference": "Sahih Muslim 975"
+  },
+  "dua_funeral_deceased": {
+    "name": "Dua for the Deceased",
+    "translation": "O Allah, forgive him, have mercy on him, grant him well-being and pardon him. Honour his reception, widen his entrance, wash him with water, snow and hail, and cleanse him of sins as a white garment is cleansed of stains.",
+    "reference": "Sahih Muslim 963"
+  },
+  "dua_condolence": {
+    "name": "Words of Condolence",
+    "translation": "To Allah belongs what He took and what He gave, and everything with Him has an appointed term. So be patient and seek reward from Allah.",
+    "reference": "Sahih al-Bukhari 1284; Sahih Muslim 923"
+  },
+  "dua_thunder": {
+    "name": "Remembrance Upon Hearing Thunder",
+    "translation": "Glory is to Him whom thunder glorifies with praise, and the angels glorify out of fear of Him.",
+    "reference": "Al-Muwatta 2/992; authenticated as a statement of Abdullah ibn al-Zubayr"
+  },
+  "dua_rain_around_us": {
+    "name": "Dua When Rain Becomes Excessive",
+    "translation": "O Allah, let the rain fall around us and not upon us; upon the hills, small mountains, valleys and places where trees grow.",
+    "reference": "Sahih al-Bukhari 1014; Sahih Muslim 897"
+  },
+  "dua_protection_dajjal": {
+    "name": "Protection from the Dajjal and Major Trials",
+    "translation": "O Allah, I seek refuge in You from the punishment of Hell, the punishment of the grave, the trials of life and death, and the evil trial of the False Messiah.",
+    "reference": "Sahih Muslim 588"
+  },
+  "dua_all_good": {
+    "name": "Comprehensive Dua for All Good",
+    "translation": "O Allah, I ask You for every good, immediate and delayed, known to me and unknown to me; and I seek refuge in You from every evil, immediate and delayed, known to me and unknown to me.",
+    "reference": "Sunan Ibn Majah 3846; authenticated by al-Albani"
+  },
+  "dua_steadfast_heart": {
+    "name": "Dua for Steadfastness of the Heart",
+    "translation": "O Turner of hearts, keep my heart firm upon Your religion.",
+    "reference": "Jami at-Tirmidhi 2140"
+  },
+  "dua_good_character": {
+    "name": "Dua for Good Character",
+    "translation": "O Allah, guide me to the best character, for none can guide to it except You; and turn bad character away from me, for none can turn it away except You.",
+    "reference": "Sahih Muslim 771"
+  },
+  "dua_light": {
+    "name": "Dua for Light",
+    "translation": "O Allah, place light in my heart, sight and hearing; place light on my right and left, above and below me, before and behind me; and grant me light.",
+    "reference": "Sahih al-Bukhari 6316; Sahih Muslim 763"
+  }
+}

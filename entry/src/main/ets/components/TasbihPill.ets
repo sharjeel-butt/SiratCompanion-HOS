@@ -213,7 +213,7 @@ export struct TasbihPill {
           .flexShrink(0)
       }
       .constraintSize({ maxWidth: '40%' })
-      .height(52)
+      .height(56)
       .padding({ left: 10, right: 8 })
       .backgroundColor(this.colors.cardDark)
       .borderRadius(19)

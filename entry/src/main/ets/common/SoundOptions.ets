@@ -1,33 +1,23 @@
-// entry/src/main/ets/common/SoundOptions.ets
-
 /**
  * Registry of Tasbih click sounds.
  *
- * Each entry maps a stable id to a bundled .ogg file. Names and
- * descriptions are auto-derived from the filename via
- * `SoundOptions.deriveDisplayName()` — you don't have to hand-craft
- * strings for each new sound.
- *
- * To add a sound later:
- *   1. Drop the .ogg into resources/rawfile/
- *   2. Append one line to TASBIH_SOUND_OPTIONS
- * Nothing else needs to change.
+ * Each entry maps a stable id to a bundled .ogg file.
  */
 
 export interface TasbihSoundOption {
   /** Stable id used for persistence. */
   id: string;
 
-  /** Raw filename inside resources/rawfile/. */
+  /** Raw file path inside resources/rawfile/. */
   file: string;
 }
 
 export const TASBIH_SOUND_OPTIONS: TasbihSoundOption[] = [
-  { id: 'glass_tap', file: 'tasbih_glass_tap.ogg' },
-  { id: 'light_chime', file: 'tasbih_light_chime.ogg' },
-  { id: 'muted_bead', file: 'tasbih_muted_bead.ogg' },
-  { id: 'soft_click', file: 'tasbih_soft_click.ogg' },
-  { id: 'warm_knock', file: 'tasbih_warm_knock.ogg' }
+  { id: 'glass_tap', file: 'sounds/tasbih/tasbih_glass_tap.ogg' },
+  { id: 'light_chime', file: 'sounds/tasbih/tasbih_light_chime.ogg' },
+  { id: 'muted_bead', file: 'sounds/tasbih/tasbih_muted_bead.ogg' },
+  { id: 'soft_click', file: 'sounds/tasbih/tasbih_soft_click.ogg' },
+  { id: 'warm_knock', file: 'sounds/tasbih/tasbih_warm_knock.ogg' }
 ];
 
 export class SoundOptions {
@@ -45,12 +35,15 @@ export class SoundOptions {
 
   /**
    * Derive a display name from the file name.
-   *
-   *   "tasbih_glass_tap.ogg"  →  "Glass Tap"
-   *   "tasbih_soft_click.ogg" →  "Soft Click"
    */
   static deriveDisplayName(file: string): string {
-    const base = file.replace(/^tasbih_/, '').replace(/\.ogg$/, '');
+    // 1. Extract just the filename (e.g., "tasbih_glass_tap.ogg")
+    // This handles files in subdirectories correctly.
+    const filename = file.substring(file.lastIndexOf('/') + 1);
+
+    // 2. Strip the prefix and extension
+    const base = filename.replace(/^tasbih_/, '').replace(/\.ogg$/, '');
+
     const words = base.split('_');
     let out = '';
     for (let i = 0; i < words.length; i++) {
@@ -68,9 +61,6 @@ export class SoundOptions {
 
   /**
    * Derive a description from the file name.
-   *
-   *   "tasbih_glass_tap.ogg"  →  "Glass tap sound"
-   *   "tasbih_soft_click.ogg" →  "Soft click sound"
    */
   static deriveDescription(file: string): string {
     const name = SoundOptions.deriveDisplayName(file);

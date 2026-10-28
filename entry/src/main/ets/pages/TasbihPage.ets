@@ -181,9 +181,32 @@ export struct TasbihPage {
     this.tasbihs = loaded.tasbihs;
     this.activeTasbihId = loaded.activeTasbihId;
     this.activeDhikrIndex = loaded.activeDhikrIndex;
-    this.resolveActiveTheme();
-    this.resolveActivePrayer();
-    this.refreshBeadView();
+
+    // CHECK FOR PENDING NAVIGATION HERE (Data is now loaded safely)
+    const targetTasbih = AppStorage.get<string>('nav_target_tasbih');
+    if (targetTasbih) {
+      this.activeTasbihId = targetTasbih;
+      this.activeDhikrIndex = AppStorage.get<number>('nav_target_dhikr') ?? 0;
+      const targetPrayer = AppStorage.get<string>('nav_target_prayer') ?? '';
+
+      if (targetPrayer) {
+        this.restorePrayerCount(targetPrayer);
+      } else {
+        // Ensure the index is valid
+        const t = this.getActiveTasbih();
+        if (t && t.dhikrs.length > 0) {
+          this.activeDhikrIndex = Math.min(this.activeDhikrIndex, t.dhikrs.length - 1);
+        }
+        this.resolveActiveTheme();
+        this.refreshBeadView();
+      }
+
+      // Clear the targets so it doesn't re-trigger
+      AppStorage.setOrCreate('nav_target_tasbih', '');
+    } else {
+      this.resolveActiveTheme();
+      this.refreshBeadView();
+    }
   }
 
   private onNavTargetTasbihChanged(): void {
@@ -235,8 +258,20 @@ export struct TasbihPage {
   onPageShow(): void {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
-    this.resolveActiveTheme();
-    this.refreshBeadView();
+
+    // If there's a pending target, reload to process it. Otherwise, just refresh.
+    const target = AppStorage.get<string>('nav_target_tasbih');
+    if (target) {
+      this.reloadTasbihs();
+    } else {
+      this.resolveActiveTheme();
+      this.refreshBeadView();
+    }
+  }
+
+  private getSortedBoundPrayers(prayerIds: string[]): string[] {
+    const order = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
+    return prayerIds.slice().sort((a, b) => order.indexOf(a) - order.indexOf(b));
   }
 
   private resolveActivePrayer(): void {
@@ -270,8 +305,7 @@ export struct TasbihPage {
           return tas;
         }
 
-        const newDhikrs: Dhikr[] = tas.dhikrs.map((d: Dhikr): Dhikr => {
-          // 1. Copy existing live counts safely
+        const newDhikrs = tas.dhikrs.map((d: Dhikr): Dhikr => {
           const lc: Record<string, number> = {};
           if (d.liveCounts) {
             const keys = Object.keys(d.liveCounts);
@@ -280,15 +314,14 @@ export struct TasbihPage {
             }
           }
 
-          // 2. Save current count to the old prayer
+          // Save old prayer's count
           if (oldPrayer) {
             lc[oldPrayer] = d.count;
           }
 
-          // 3. Restore count for the new prayer
+          // Restore new prayer's count
           const newCount = lc[newPrayer] || 0;
 
-          // Explicitly type the object
           const updatedDhikr: Dhikr = {
             id: d.id,
             arabic: d.arabic,
@@ -305,7 +338,6 @@ export struct TasbihPage {
           return updatedDhikr;
         });
 
-        // Explicitly type the object
         const updatedTasbih: Tasbih = {
           id: tas.id,
           name: tas.name,
@@ -323,7 +355,14 @@ export struct TasbihPage {
       });
     }
 
-    this.activeDhikrIndex = 0;
+    // Force index to be valid
+    const active = this.getActiveTasbih();
+    if (active && active.dhikrs.length > 0) {
+      this.activeDhikrIndex = Math.min(this.activeDhikrIndex, active.dhikrs.length - 1);
+    } else {
+      this.activeDhikrIndex = 0;
+    }
+
     this.refreshBeadView();
     this.persist();
   }
@@ -346,15 +385,16 @@ export struct TasbihPage {
         this.TopBar()
 
         // --- NEW: Prayer Selector ---
+        // --- Prayer Selector ---
         if (this.getActiveTasbih()?.boundPrayerIds && this.getActiveTasbih()!.boundPrayerIds!.length > 0) {
           Row({ space: 8 }) {
-            ForEach(this.getActiveTasbih()!.boundPrayerIds!, (prayer: string) => {
+            // USE THE SORTED ARRAY HERE
+            ForEach(this.getSortedBoundPrayers(this.getActiveTasbih()!.boundPrayerIds!), (prayer: string) => {
               Row({ space: 4 }) {
                 Text(this.tr('prayer_' + prayer))
                   .fontSize(12)
                   .fontColor(this.activePrayerId === prayer ? this.colors.textOnAccent : this.colors.textMuted)
 
-                // Check if this prayer is completed for today
                 if (TasbihManager.isTasbihCompleteForPrayer(this.getActiveTasbih()!, prayer,
                   TasbihManager.todayKey())) {
                   Text('✓')
@@ -371,7 +411,6 @@ export struct TasbihPage {
               })
               .backgroundColor(this.activePrayerId === prayer ? this.colors.accentGold : this.colors.tintSoft)
               .borderRadius(12)
-              // Add a border if it's completed but not currently selected
               .border({
                 width: 1,
                 color: (!this.activePrayerId || this.activePrayerId !== prayer) &&

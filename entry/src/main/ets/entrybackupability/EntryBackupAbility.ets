@@ -75,8 +75,10 @@ const SETTINGS_SPECS: PrefSpec[] = [
 
   // ---- App Settings ----
   { key: 'theme_mode', type: TYPE_STRING },
+  { key: 'theme_mode_override', type: TYPE_STRING },
   { key: 'app_theme_preset', type: TYPE_STRING },
   { key: 'app_language', type: TYPE_STRING },
+  { key: 'app_language_override', type: TYPE_STRING },
   { key: 'time_format', type: TYPE_STRING },
   { key: 'wizard_completed', type: TYPE_BOOLEAN },
   { key: 'hijri_offset', type: TYPE_NUMBER },
@@ -118,40 +120,27 @@ const SETTINGS_SPECS: PrefSpec[] = [
   { key: 'tasbih_render_style', type: TYPE_STRING },
   { key: 'tasbih_theme_preset', type: TYPE_STRING },
 
-  // ---- Prayer Progress (CRITICAL) ----
-  // This stores the JSON map of all past prayer completions.
-  // Without this, users lose their streaks and heatmaps on migration.
-  { key: 'prayer_state_map', type: TYPE_STRING }
+  // ---- Progress & Logs ----
+  { key: 'prayer_state_map', type: TYPE_STRING },
+  { key: 'ramadan_log', type: TYPE_STRING },
+
+  // ---- Duas ----
+  { key: 'dua_favorites', type: TYPE_STRING },
+  { key: 'dua_bindings', type: TYPE_STRING }
 ];
 
-// NOTE on `tasbihs_data`: it carries the JSON-serialized full tasbih
-// state — every tasbih, every dhikr, and up to 90 days of per-day
-// per-dhikr counts. For a heavy user this can reach 500 KB–2 MB of
-// JSON, which percent-encodes to 1.5–6 MB as a single line. This is
-// the largest single value in any backup. If backup failures are ever
-// reported for power users, this is the first item to check.
+/**
+ * NOTE on `tasbihs_data`: it carries the JSON-serialized full tasbih
+ * state — every tasbih, every dhikr, and up to 90 days of per-day
+ * per-dhikr counts. For a heavy user this can reach 500 KB–2 MB of
+ * JSON, which percent-encodes to 1.5–6 MB as a single line. This is
+ * the largest single value in any backup. If backup failures are ever
+ * reported for power users, this is the first item to check.
+ */
 const TASBIH_SPECS: PrefSpec[] = [
   { key: 'tasbihs_data', type: TYPE_STRING },
   { key: 'tasbih_active_id', type: TYPE_STRING },
-  { key: 'tasbih_active_dhikr', type: TYPE_NUMBER },
-  // ---- Prayer Progress (CRITICAL) ----
-  // This stores the JSON map of all past prayer completions.
-  // Without this, users lose their streaks and heatmaps on migration.
-  { key: 'prayer_state_map', type: TYPE_STRING },
-
-  // ---- Ramadan Tracker ----
-  // JSON-serialized RamadanLogStore. Covers the fasting tracker,
-  // taraweeh toggles, and per-day qada made-up flags for every
-  // year. Schema migrations are handled inside RamadanStorage.doLoad()
-  // — this spec only cares about the JSON string round-trip.
-  { key: 'ramadan_log', type: TYPE_STRING },
-  // ---- App Settings ----
-  { key: 'theme_mode', type: TYPE_STRING },
-  { key: 'theme_mode_override', type: TYPE_STRING },   // <-- ADD THIS
-  { key: 'app_theme_preset', type: TYPE_STRING },
-  { key: 'app_language', type: TYPE_STRING },
-  { key: 'app_language_override', type: TYPE_STRING }, // <-- ADD THIS
-  { key: 'time_format', type: TYPE_STRING },
+  { key: 'tasbih_active_dhikr', type: TYPE_NUMBER }
 ];
 
 /**

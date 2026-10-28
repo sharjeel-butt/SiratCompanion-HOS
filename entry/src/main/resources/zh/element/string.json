@@ -2567,6 +2567,147 @@
     {
       "name": "tasbih_left",
       "value": "剩余"
+    },
+    {
+      "name": "duas",
+      "value": "祈祷词"
+    },
+    {
+      "name": "search_duas",
+      "value": "搜索祈祷词..."
+    },
+    {
+      "name": "dua_cat_all",
+      "value": "全部"
+    },
+    {
+      "name": "dua_cat_favorites",
+      "value": "收藏"
+    },
+    {
+      "name": "dua_cat_forgiveness",
+      "value": "求恕"
+    },
+    {
+      "name": "dua_cat_distress",
+      "value": "困境"
+    },
+    {
+      "name": "dua_cat_travel",
+      "value": "旅行"
+    },
+    {
+      "name": "bind_prayer",
+      "value": "关联礼拜"
+    },
+    {
+      "name": "home_duas_title",
+      "value": "今日祈祷词"
+    },
+    {
+      "name": "view_all",
+      "value": "查看全部"
+    },
+    {
+      "name": "dua_cat_morning_evening",
+      "value": "早晚祈祷"
+    },
+    {
+      "name": "dua_cat_prayer",
+      "value": "礼拜"
+    },
+    {
+      "name": "dua_cat_protection",
+      "value": "保护"
+    },
+    {
+      "name": "dua_cat_guidance",
+      "value": "指引"
+    },
+    {
+      "name": "dua_cat_general",
+      "value": "通用"
+    },
+    {
+      "name": "dua_cat_worship",
+      "value": "崇拜"
+    },
+    {
+      "name": "dua_cat_repentance",
+      "value": "忏悔"
+    },
+    {
+      "name": "dua_cat_steadfastness",
+      "value": "坚定"
+    },
+    {
+      "name": "dua_cat_mercy",
+      "value": "怜悯"
+    },
+    {
+      "name": "dua_cat_reflection",
+      "value": "反思"
+    },
+    {
+      "name": "dua_cat_hereafter",
+      "value": "后世"
+    },
+    {
+      "name": "dua_cat_family",
+      "value": "家庭"
+    },
+    {
+      "name": "dua_cat_knowledge",
+      "value": "知识"
+    },
+    {
+      "name": "dua_cat_healing",
+      "value": "治愈"
+    },
+    {
+      "name": "dua_cat_need",
+      "value": "需求"
+    },
+    {
+      "name": "dua_cat_gratitude",
+      "value": "感恩"
+    },
+    {
+      "name": "dua_cat_reliance",
+      "value": "托靠"
+    },
+    {
+      "name": "dua_cat_daily",
+      "value": "日常生活"
+    },
+    {
+      "name": "dua_cat_fasting",
+      "value": "斋戒"
+    },
+    {
+      "name": "dua_cat_weather",
+      "value": "天气"
+    },
+    {
+      "name": "dua_cat_faith",
+      "value": "信仰"
+    },
+    {
+      "name": "dua_cat_purification",
+      "value": "净化"
+    },
+    {
+      "name": "dua_cat_provision",
+      "value": "给养"
+    },
+    {
+      "name": "dua_cat_funeral",
+      "value": "殡礼"
+    },
+    {
+      "name": "duas_for",
+      "value": "祈祷词"
     }
+
   ]
 }

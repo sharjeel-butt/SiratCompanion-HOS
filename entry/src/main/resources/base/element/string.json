@@ -2567,6 +2567,146 @@
     {
       "name": "tasbih_left",
       "value": "left"
+    },
+    {
+      "name": "duas",
+      "value": "Duas"
+    },
+    {
+      "name": "search_duas",
+      "value": "Search supplications..."
+    },
+    {
+      "name": "dua_cat_all",
+      "value": "All"
+    },
+    {
+      "name": "dua_cat_favorites",
+      "value": "Favorites"
+    },
+    {
+      "name": "dua_cat_forgiveness",
+      "value": "Forgiveness"
+    },
+    {
+      "name": "dua_cat_distress",
+      "value": "Distress"
+    },
+    {
+      "name": "dua_cat_travel",
+      "value": "Travel"
+    },
+    {
+      "name": "bind_prayer",
+      "value": "Bind to Prayer"
+    },
+    {
+      "name": "home_duas_title",
+      "value": "DUAS OF THE DAY"
+    },
+    {
+      "name": "view_all",
+      "value": "View All"
+    },
+    {
+      "name": "dua_cat_morning_evening",
+      "value": "Morning & Evening"
+    },
+    {
+      "name": "dua_cat_prayer",
+      "value": "Prayer"
+    },
+    {
+      "name": "dua_cat_protection",
+      "value": "Protection"
+    },
+    {
+      "name": "dua_cat_guidance",
+      "value": "Guidance"
+    },
+    {
+      "name": "dua_cat_general",
+      "value": "General"
+    },
+    {
+      "name": "dua_cat_worship",
+      "value": "Worship"
+    },
+    {
+      "name": "dua_cat_repentance",
+      "value": "Repentance"
+    },
+    {
+      "name": "dua_cat_steadfastness",
+      "value": "Steadfastness"
+    },
+    {
+      "name": "dua_cat_mercy",
+      "value": "Mercy"
+    },
+    {
+      "name": "dua_cat_reflection",
+      "value": "Reflection"
+    },
+    {
+      "name": "dua_cat_hereafter",
+      "value": "Hereafter"
+    },
+    {
+      "name": "dua_cat_family",
+      "value": "Family"
+    },
+    {
+      "name": "dua_cat_knowledge",
+      "value": "Knowledge"
+    },
+    {
+      "name": "dua_cat_healing",
+      "value": "Healing"
+    },
+    {
+      "name": "dua_cat_need",
+      "value": "Need"
+    },
+    {
+      "name": "dua_cat_gratitude",
+      "value": "Gratitude"
+    },
+    {
+      "name": "dua_cat_reliance",
+      "value": "Reliance"
+    },
+    {
+      "name": "dua_cat_daily",
+      "value": "Daily Life"
+    },
+    {
+      "name": "dua_cat_fasting",
+      "value": "Fasting"
+    },
+    {
+      "name": "dua_cat_weather",
+      "value": "Weather"
+    },
+    {
+      "name": "dua_cat_faith",
+      "value": "Faith"
+    },
+    {
+      "name": "dua_cat_purification",
+      "value": "Purification"
+    },
+    {
+      "name": "dua_cat_provision",
+      "value": "Provision"
+    },
+    {
+      "name": "dua_cat_funeral",
+      "value": "Funeral"
+    },
+    {
+      "name": "duas_for",
+      "value": "Duas for"
     }
   ]
 }

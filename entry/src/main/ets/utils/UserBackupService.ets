@@ -193,7 +193,11 @@ const SETTINGS_SPECS: PrefSpec[] = [
 
   // ---- Progress & Logs ----
   { key: 'prayer_state_map', type: 'string' },
-  { key: 'ramadan_log', type: 'string' }
+  { key: 'ramadan_log', type: 'string' },
+
+  // ---- Duas ----
+  { key: 'dua_favorites', type: 'string' },
+  { key: 'dua_bindings', type: 'string' }
 ];
 
 const TASBIH_SPECS: PrefSpec[] = [
