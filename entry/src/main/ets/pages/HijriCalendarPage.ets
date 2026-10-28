@@ -367,13 +367,22 @@ export struct HijriCalendarPage {
     Column() {
       Row() {
         // Previous Month
-        Text(this.isRtl() ? '▶' : '◀')
-          .fontSize(16)
-          .fontColor(this.colors.accentGold)
-          .width(40).height(40).textAlign(TextAlign.Center)
-          .borderRadius(20).backgroundColor(this.colors.tintSoft)
-          .border({ width: 1, color: this.colors.borderSoft })
-          .onClick(() => { this.navigate(-1); })
+        Row() {
+          Image($r('app.media.ic_chevron_right'))
+            .width(16).height(16)
+            .fillColor(this.colors.accentGold)
+            .rotate({ angle: this.isRtl() ? 0 : 180 }) // <-- FIXED
+        }
+        .width(40)
+        .height(40)
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
+        .borderRadius(20)
+        .backgroundColor(this.colors.tintSoft)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .onClick(() => {
+          this.navigate(-1);
+        })
 
         Column() {
           Text(this.getLocalizedMonthName())
@@ -381,13 +390,12 @@ export struct HijriCalendarPage {
             .fontColor(this.colors.textWhite)
             .textAlign(TextAlign.Center)
             .width('100%')
-          Row() {
+          Row({ space: 6 }) {
             Text(`${this.viewingHijriYear} ${this.tr('hijri_year_suffix')}`)
               .fontSize(13).fontColor(this.colors.accentGold)
 
             Text('·')
               .fontSize(11).fontColor(this.colors.textMuted)
-              .margin({ left: 6, right: 6 })
 
             Text(SettingsHelper.getHijriCalendarTypeLabel(this.hijriCalendarType, this.currentLanguage))
               .fontSize(11)
@@ -405,13 +413,22 @@ export struct HijriCalendarPage {
         .layoutWeight(1).alignItems(HorizontalAlign.Center)
 
         // Next Month
-        Text(this.isRtl() ? '◀' : '▶')
-          .fontSize(16)
-          .fontColor(this.colors.accentGold)
-          .width(40).height(40).textAlign(TextAlign.Center)
-          .borderRadius(20).backgroundColor(this.colors.tintSoft)
-          .border({ width: 1, color: this.colors.borderSoft })
-          .onClick(() => { this.navigate(1); })
+        Row() {
+          Image($r('app.media.ic_chevron_right'))
+            .width(16).height(16)
+            .fillColor(this.colors.accentGold)
+            .rotate({ angle: this.isRtl() ? 180 : 0 }) // <-- FIXED
+        }
+        .width(40)
+        .height(40)
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
+        .borderRadius(20)
+        .backgroundColor(this.colors.tintSoft)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .onClick(() => {
+          this.navigate(1);
+        })
 
         if (this.isExporting) {
           LoadingProgress()

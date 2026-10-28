@@ -178,7 +178,7 @@ struct SettingsPage {
             Column() {
               CategoryHeader({
                 colors: this.colors,
-                icon: '📍',
+                icon: $r('app.media.ic_pin'),
                 titleKey: 'category_location',
                 categoryKey: 'Location',
                 expanded: this.expandedCategory === 'Location',
@@ -194,7 +194,7 @@ struct SettingsPage {
 
               CategoryHeader({
                 colors: this.colors,
-                icon: '🕌',
+                icon: $r('app.media.ic_nav_mosque'),
                 titleKey: 'category_prayer_times',
                 categoryKey: 'Prayer Times',
                 expanded: this.expandedCategory === 'Prayer Times',
@@ -212,7 +212,7 @@ struct SettingsPage {
               if (NOTIFICATIONS_ENABLED || CALENDAR_REMINDERS_ENABLED) {
                 CategoryHeader({
                   colors: this.colors,
-                  icon: '🔔',
+                  icon: $r('app.media.ic_bell'),
                   titleKey: 'category_notifications',
                   categoryKey: 'Notifications',
                   expanded: this.expandedCategory === 'Notifications',
@@ -230,7 +230,7 @@ struct SettingsPage {
 
               CategoryHeader({
                 colors: this.colors,
-                icon: '📅',
+                icon: $r('app.media.ic_nav_calendar'),
                 titleKey: 'category_hijri_calendar',
                 categoryKey: 'Hijri Calendar',
                 expanded: this.expandedCategory === 'Hijri Calendar',
@@ -247,7 +247,7 @@ struct SettingsPage {
 
               CategoryHeader({
                 colors: this.colors,
-                icon: '💾',
+                icon: $r('app.media.ic_save'),
                 titleKey: 'category_backup_restore',
                 categoryKey: 'Backup & Restore',
                 expanded: this.expandedCategory === 'Backup & Restore',
@@ -264,7 +264,7 @@ struct SettingsPage {
 
               CategoryHeader({
                 colors: this.colors,
-                icon: '📄',
+                icon: $r('app.media.ic_log'),
                 titleKey: 'category_logs',
                 categoryKey: 'Logs',
                 expanded: this.expandedCategory === 'Logs',
@@ -280,7 +280,7 @@ struct SettingsPage {
 
               CategoryHeader({
                 colors: this.colors,
-                icon: 'ℹ️',
+                icon: $r('app.media.ic_info'),
                 titleKey: 'category_about',
                 categoryKey: 'About',
                 expanded: this.expandedCategory === 'About',
@@ -487,17 +487,19 @@ struct SettingsPage {
   }
 
   @Builder
-  CategoryHeader(title: string, icon: string, categoryKey: string) {
-    Row() {
-      Text(icon)
-        .fontSize(18)
-        .width(40)
-        .height(40)
-        .textAlign(TextAlign.Center)
-        .backgroundColor(this.colors.tintSoft)
-        .borderRadius(12)
-        .border({ width: 1, color: this.colors.borderSoft })
-        .flexShrink(0)
+  CategoryHeader(title: string, icon: Resource, categoryKey: string) {
+    Row({ space: 14 }) {
+      Row() {
+        Image(icon).width(20).height(20).fillColor(this.colors.accentGold)
+      }
+      .width(40)
+      .height(40)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Center)
+      .backgroundColor(this.colors.tintSoft)
+      .borderRadius(12)
+      .border({ width: 1, color: this.colors.borderSoft })
+      .flexShrink(0)
 
       Text(title)
         .fontSize(17)
@@ -505,10 +507,6 @@ struct SettingsPage {
         .fontColor(this.colors.textWhite)
         .layoutWeight(1)
         .textAlign(TextAlign.Start)
-        .margin({
-          left: this.isRtl() ? 0 : 14,
-          right: this.isRtl() ? 14 : 0
-        })
 
       Text(this.expandedCategory === categoryKey ? '▲' : '▼')
         .fontSize(12)
@@ -565,7 +563,7 @@ struct SettingsPage {
               .width(18).height(18)
               .color(this.colors.accentGold)
           } else {
-            Text('📡').fontSize(18).fontColor(this.colors.accentGold)
+            Image($r('app.media.ic_refresh')).width(18).height(18).fillColor(this.colors.accentGold)
           }
         }
         .width(36)
@@ -863,8 +861,13 @@ struct SettingsPage {
         }
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-        Text(this.showOffsets ? '▲' : '▼')
-          .fontSize(12).fontColor(this.colors.accentGold).opacity(0.8)
+        Image(this.showOffsets
+          ? $r('app.media.ic_chevron_up')
+          : $r('app.media.ic_chevron_down'))
+          .width(16)
+          .height(16)
+          .fillColor(this.colors.accentGold)
+          .opacity(0.8)
       }
       .width('100%')
       .padding({
@@ -1018,8 +1021,8 @@ struct SettingsPage {
       })
 
       if (this.notifDiagnostic.length > 0) {
-        Row() {
-          Text('⚠️').fontSize(12).margin({ right: 6 })
+        Row({ space: 6 }) {
+          Image($r('app.media.ic_warning')).width(14).height(14).fillColor(this.colors.statusExpress).flexShrink(0)
           Text(this.notifDiagnostic)
             .fontSize(11)
             .fontColor(this.colors.textMuted)
@@ -1127,8 +1130,13 @@ struct SettingsPage {
         .borderRadius(12)
         .margin({ bottom: 8 })
 
-        Row() {
-          Text('ℹ️').fontSize(12).margin({ right: 6 }).opacity(0.7)
+        Row({ space: 6 }) {
+          Image($r('app.media.ic_info'))
+            .width(14)
+            .height(14)
+            .fillColor(this.colors.textMuted)
+            .opacity(0.7)
+            .flexShrink(0)
           Text(CALENDAR_REMINDERS_ENABLED
             ? this.tr('notifications_footer_calendar')
             : this.tr('notifications_footer'))
@@ -1185,7 +1193,7 @@ struct SettingsPage {
   @Builder
   LogAccessRowInternal() {
     Row({ space: 8 }) {
-      Text('📄').fontSize(14).flexShrink(0)
+      Image($r('app.media.ic_log')).width(14).height(14).fillColor(this.colors.accentGold).flexShrink(0)
       Column() {
         Text(this.tr('log_view_button'))
           .fontSize(13).fontColor(this.colors.textWhite)
@@ -1217,7 +1225,7 @@ struct SettingsPage {
   @Builder
   LogAccessRow() {
     Row({ space: 8 }) {
-      Text('📄').fontSize(14).flexShrink(0)
+      Image($r('app.media.ic_log')).width(14).height(14).fillColor(this.colors.accentGold).flexShrink(0)
       Column() {
         Text(this.tr('log_view_button'))
           .fontSize(13).fontColor(this.colors.textWhite)
@@ -1394,27 +1402,21 @@ struct SettingsPage {
 
   @Builder
   AboutRow(label: string, value: string) {
-    Row() {
+    Row({ space: 16 }) {
       Text(label)
         .fontSize(13)
         .fontColor(this.colors.textMuted)
-        .flexShrink(0) // Prevents the label from squishing
+        .flexShrink(0)
 
       Text(value)
         .fontSize(12)
         .fontColor(this.colors.textWhite)
         .fontWeight(FontWeight.Medium)
-        .direction(Direction.Ltr) // Keeps versions/bundle IDs formatting LTR
+        .direction(Direction.Ltr)
         .maxLines(1)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
-        .layoutWeight(1) // Takes up all remaining space
-        // Push the text to the correct edge of the remaining space
+        .layoutWeight(1)
         .textAlign(this.isRtl() ? TextAlign.Start : TextAlign.End)
-        // Add a guaranteed gap between the label and the value box
-        .margin({
-          left: this.isRtl() ? 0 : 16,
-          right: this.isRtl() ? 16 : 0
-        })
     }
     .width('100%')
     .padding({ left: 8, right: 8 })
@@ -1429,7 +1431,7 @@ struct SettingsPage {
   @Builder
   PickerOverlay(
     title: string,
-    icon: string,
+    icon: Resource,
     items: PickerItem[],
     onSelect: (id: string) => void,
     onCancel: () => void
@@ -1452,20 +1454,23 @@ struct SettingsPage {
         .margin({ top: 10 })
 
       Row({ space: 14 }) {
-        Text(icon)
-          .fontSize(22)
-          .width(44)
-          .height(44)
-          .textAlign(TextAlign.Center)
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(12)
-          .border({ width: 1, color: this.colors.borderSoft })
-          .flexShrink(0)
+        Row() {
+          Image(icon).width(22).height(22).fillColor(this.colors.accentGold)
+        }
+        .width(44)
+        .height(44)
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
+        .backgroundColor(this.colors.tintSoft)
+        .borderRadius(12)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .flexShrink(0)
 
         Text(title)
           .fontSize(20).fontWeight(FontWeight.Bold)
           .fontColor(this.colors.textWhite)
           .layoutWeight(1)
+          .textAlign(TextAlign.Start)
       }
       .width('100%')
       .padding({
@@ -1577,18 +1582,18 @@ struct SettingsPage {
     }
   }
 
-  private pickerIcon(): string {
+  private pickerIcon(): Resource {
     switch (this.activePicker) {
       case 'method':
-        return '🕌';
+        return $r('app.media.ic_nav_mosque');
       case 'asr':
-        return '🌅';
+        return $r('app.media.ic_sunrise');
       case 'source':
-        return '🌐';
+        return $r('app.media.ic_globe');
       case 'hijriType':
-        return '📅';
+        return $r('app.media.ic_nav_calendar');
       default:
-        return '⚙️';
+        return $r('app.media.ic_settings');
     }
   }
 
@@ -1645,18 +1650,19 @@ struct SettingsPage {
         .margin({ top: 10 })
 
       Row({ space: 10 }) {
-        Text('📄').fontSize(20).flexShrink(0)
+        Image($r('app.media.ic_log')).width(20).height(20).fillColor(this.colors.accentGold).flexShrink(0)
         Text(this.tr('log_view_title'))
           .fontSize(18).fontWeight(FontWeight.Bold)
           .fontColor(this.colors.textWhite)
           .layoutWeight(1)
-        Text('✕')
-          .fontSize(20)
-          .fontColor(this.colors.textMuted)
-          .width(36)
-          .height(36)
-          .textAlign(TextAlign.Center)
-          .flexShrink(0)
+        Row() {
+          Image($r('app.media.ic_close')).width(16).height(16).fillColor(this.colors.textMuted)
+        }
+        .width(36)
+        .height(36)
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
+        .flexShrink(0)
           .onClick(() => {
             this.showLogViewer = false;
           })
@@ -1699,7 +1705,7 @@ struct SettingsPage {
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)
 
-      Row() {
+      Row({ space: 8 }) {
         Button() {
           Text(this.tr('log_copy'))
             .fontSize(14).fontWeight(FontWeight.Medium)
@@ -1722,7 +1728,6 @@ struct SettingsPage {
         .height(44)
         .backgroundColor(this.colors.tintSoft)
         .borderRadius(10)
-        .margin({ left: 8 })
         .onClick(() => {
           this.clearLogs();
         })

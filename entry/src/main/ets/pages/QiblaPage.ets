@@ -131,15 +131,16 @@ export struct QiblaPage {
             // Two columns: compass on the left, info on the right.
             Row({ space: 32 }) {
               Column() {
-                Row() {
-                  Text('📍').fontSize(14).flexShrink(0)
-                  Text(this.cityName.length > 0
-                    ? this.cityName
-                    : this.tr('loading_location'))
+                Row({ space: 8 }) { // <-- Added space
+                  Image($r('app.media.ic_pin'))
+                    .width(16).height(16) // <-- Matched size to PageHeader
+                    .fillColor(this.colors.accentGold)
+                    .flexShrink(0)
+                  Text(this.cityName.length > 0 ? this.cityName : this.tr('loading_location'))
                     .fontSize(14)
                     .fontColor(this.colors.textWhite)
                     .fontWeight(FontWeight.Medium)
-                    .margin({ left: 8 })
+                    // REMOVED: .margin({ left: 8 })
                     .maxLines(1)
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
                 }
@@ -219,15 +220,16 @@ export struct QiblaPage {
           } else {
             // Phone: single-column layout.
             Column() {
-              Row() {
-                Text('📍').fontSize(14).flexShrink(0)
-                Text(this.cityName.length > 0
-                  ? this.cityName
-                  : this.tr('loading_location'))
+              Row({ space: 8 }) { // <-- Added space
+                Image($r('app.media.ic_pin'))
+                  .width(16).height(16) // <-- Matched size to PageHeader
+                  .fillColor(this.colors.accentGold)
+                  .flexShrink(0)
+                Text(this.cityName.length > 0 ? this.cityName : this.tr('loading_location'))
                   .fontSize(14)
                   .fontColor(this.colors.textWhite)
                   .fontWeight(FontWeight.Medium)
-                  .margin({ left: 8 })
+                  // REMOVED: .margin({ left: 8 })
                   .maxLines(1)
                   .textOverflow({ overflow: TextOverflow.Ellipsis })
               }
@@ -343,7 +345,7 @@ export struct QiblaPage {
 
       Column() {
         Column() {
-          Text('🕋').fontSize(36).margin({ bottom: -8 })
+          Image($r('app.media.ic_kaaba')).width(36).height(36).fillColor(this.colors.accentGold).margin({ bottom: -8 })
           Column()
             .width(4).height(90)
             .backgroundColor(this.colors.accentGold)
@@ -411,22 +413,18 @@ export struct QiblaPage {
   StatusCard() {
     Column() {
       if (!this.sensorReady) {
-        Row() {
-          Text('⚠️').fontSize(16).margin({ right: 8 })
-          Text(this.tr('sensor_unavailable'))
-            .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
+        Row({ space: 8 }) {
+          Image($r('app.media.ic_close')).width(16).height(16).fillColor(this.colors.statusExpress).flexShrink(0)
+          Text(this.tr('sensor_unavailable')).fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
         }
-        .width('100%')
       } else if (!this.isFlat) {
-        Row() {
-          Text('📐').fontSize(16).margin({ right: 8 })
-          Text(this.tr('keep_device_flat'))
-            .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
+        Row({ space: 8 }) {
+          Image($r('app.media.ic_edit')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
+          Text(this.tr('keep_device_flat')).fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
         }
-        .width('100%')
       } else {
-        Row() {
-          Text('✅').fontSize(16).margin({ right: 8 })
+        Row({ space: 8 }) {
+          Image($r('app.media.ic_check')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
           Text(this.tr('compass_ready'))
             .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
           Text(this.tr('qibla_calibrate_hint'))

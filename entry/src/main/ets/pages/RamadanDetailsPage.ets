@@ -624,7 +624,7 @@ struct RamadanDetailsPage {
   FastingSection() {
     Column() {
       Row({ space: 8 }) {
-        Text('📿').fontSize(16).flexShrink(0)
+        Image($r('app.media.ic_nav_tasbih')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
         Text(this.tr('section_fasting'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
@@ -678,7 +678,7 @@ struct RamadanDetailsPage {
   QadaSection() {
     Column() {
       Row({ space: 8 }) {
-        Text('🔄').fontSize(16).flexShrink(0)
+        Image($r('app.media.ic_refresh')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
         Text(this.tr('section_qada'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
@@ -720,7 +720,7 @@ struct RamadanDetailsPage {
   @Builder
   QadaEmptyState() {
     Column() {
-      Text('🔄').fontSize(40).opacity(0.4)
+      Image($r('app.media.ic_refresh')).width(40).height(40).fillColor(this.colors.textMuted).opacity(0.4)
       Text(this.tr('qada_no_data'))
         .fontSize(13)
         .fontColor(this.colors.textMuted)
@@ -736,7 +736,7 @@ struct RamadanDetailsPage {
   @Builder
   QadaAllDoneState() {
     Column() {
-      Text('✅').fontSize(40)
+      Image($r('app.media.ic_check')).width(40).height(40).fillColor(this.colors.accentGold)
       Text(this.tr('qada_all_done'))
         .fontSize(14)
         .fontColor(this.colors.accentGold)
@@ -915,10 +915,13 @@ struct RamadanDetailsPage {
       .layoutWeight(1)
       .alignItems(HorizontalAlign.Start)
 
-      Text('›')
-        .fontSize(18).fontColor(this.colors.accentGold).opacity(0.7)
-        .margin({ left: 8 })
-        .rotate({ angle: L.isRtl() ? 180 : 0 })
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .opacity(0.7)
+        .margin({ left: this.isRtl() ? 0 : 8, right: this.isRtl() ? 8 : 0 })
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
     }
     .width('100%')
     .padding({
@@ -952,7 +955,7 @@ struct RamadanDetailsPage {
   TaraweehSection() {
     Column() {
       Row({ space: 8 }) {
-        Text('🌙').fontSize(16).flexShrink(0)
+        Image($r('app.media.ic_ramadan_moon')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
         Text(this.tr('section_taraweeh'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
@@ -1096,7 +1099,7 @@ struct RamadanDetailsPage {
   @Builder
   EmptyState() {
     Column() {
-      Text('🌙').fontSize(48).opacity(0.5)
+      Image($r('app.media.ic_ramadan_moon')).width(48).height(48).fillColor(this.colors.textMuted).opacity(0.5)
       Text(this.tr('ramadan_not_active'))
         .fontSize(14)
         .fontColor(this.colors.textMuted)
@@ -1309,11 +1312,13 @@ struct RamadanDetailsPage {
         .margin({ top: 10 })
 
       Row({ space: 14 }) {
-        Text('📿')
-          .fontSize(22)
-          .width(44)
-          .height(44)
-          .textAlign(TextAlign.Center)
+        Row() {
+          Image($r('app.media.ic_nav_tasbih')).width(22).height(22).fillColor(this.colors.accentGold)
+        }
+        .width(44)
+        .height(44)
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
@@ -1342,26 +1347,17 @@ struct RamadanDetailsPage {
 
       Scroll() {
         Column() {
-          this.MarkOption(
-            '✓',
-            this.tr('fasting_status_fasted'),
-            this.colors.accentGold,
+          this.MarkOption($r('app.media.ic_check'), this.tr('fasting_status_fasted'), this.colors.accentGold,
             (): void => {
               this.markFasted();
             }
           )
-          this.MarkOption(
-            '✗',
-            this.tr('fasting_status_missed'),
-            this.colors.statusExpress,
+          this.MarkOption($r('app.media.ic_close'), this.tr('fasting_status_missed'), this.colors.statusExpress,
             (): void => {
               this.activeSheet = 'reason';
             }
           )
-          this.MarkOption(
-            '↺',
-            this.tr('fasting_clear'),
-            this.colors.textMuted,
+          this.MarkOption($r('app.media.ic_refresh'), this.tr('fasting_clear'), this.colors.textMuted,
             (): void => {
               this.clearDay();
             }
@@ -1408,37 +1404,46 @@ struct RamadanDetailsPage {
 
   @Builder
   MarkOption(
-    icon: string,
+    icon: Resource,
     label: string,
     color: string,
     onTap: () => void
   ) {
     Row() {
-      Text(icon)
-        .fontSize(20)
-        .fontColor(color)
-        .width(40)
-        .height(40)
-        .textAlign(TextAlign.Center)
-        .backgroundColor(this.colors.tintSoft)
-        .borderRadius(20)
-        .border({ width: 1, color: this.colors.borderSoft })
+      // ICON WRAPPER
+      Row() {
+        Image(icon)
+          .width(20).height(20)
+          .fillColor(color) // <-- Now works perfectly with the solid SVGs
+      }
+      .width(40)
+      .height(40)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Center)
+      .backgroundColor(this.colors.tintSoft)
+      .borderRadius(20)
+      .border({ width: 1, color: this.colors.borderSoft }) // <-- ensures a subtle theme-colored border, not black
+
       Text(label)
         .fontSize(16)
         .fontColor(this.colors.textWhite)
         .fontWeight(FontWeight.Medium)
         .layoutWeight(1)
-        .margin({ left: 14 })
-      Text('›')
-        .fontSize(22).fontColor(this.colors.accentGold).opacity(0.7)
-        .rotate({ angle: L.isRtl() ? 180 : 0 })
+        .margin({ left: this.isRtl() ? 0 : 14, right: this.isRtl() ? 14 : 0 })
+
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .opacity(0.7)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
     }
     .width('100%')
     .padding({
       top: 12,
       bottom: 12,
-      left: 16,
-      right: 20
+      left: this.isRtl() ? 20 : 16,
+      right: this.isRtl() ? 16 : 20
     })
     .borderRadius(12)
     .margin({ bottom: 6 })
@@ -1467,15 +1472,19 @@ struct RamadanDetailsPage {
         .margin({ top: 10 })
 
       Row({ space: 14 }) {
-        Text('💭')
-          .fontSize(22)
-          .width(44)
-          .height(44)
-          .textAlign(TextAlign.Center)
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(12)
-          .border({ width: 1, color: this.colors.borderSoft })
-          .flexShrink(0)
+        Row() {
+          Image($r('app.media.ic_edit'))
+            .width(22).height(22)
+            .fillColor(this.colors.accentGold) // <-- Now tints gold
+        }
+        .width(44)
+        .height(44)
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
+        .backgroundColor(this.colors.tintSoft)
+        .borderRadius(12)
+        .border({ width: 1, color: this.colors.borderSoft }) // <-- Theme border
+        .flexShrink(0)
 
         Column() {
           Text(this.tr('fasting_reason_title'))
@@ -1657,11 +1666,13 @@ struct RamadanDetailsPage {
         .margin({ top: 10 })
 
       Row({ space: 14 }) {
-        Text('🔄')
-          .fontSize(22)
-          .width(44)
-          .height(44)
-          .textAlign(TextAlign.Center)
+        Row() {
+          Image($r('app.media.ic_refresh')).width(22).height(22).fillColor(this.colors.accentGold)
+        }
+        .width(44)
+        .height(44)
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
@@ -1788,9 +1799,8 @@ struct RamadanDetailsPage {
 
       // Toggle state — button or badge
       if (entry.madeUp) {
-        Row() {
-          Text('✓').fontSize(12).fontColor(this.colors.textOnAccent)
-            .fontWeight(FontWeight.Bold).margin({ right: 4 })
+        Row({ space: 4 }) {
+          Image($r('app.media.ic_check')).width(12).height(12).fillColor(this.colors.textOnAccent)
           Text(this.tr('qada_day_made_up'))
             .fontSize(11).fontColor(this.colors.textOnAccent)
             .fontWeight(FontWeight.Medium)
@@ -1916,7 +1926,10 @@ struct RamadanDetailsPage {
   AshrasContent() {
     Column() {
       Row({ space: 6 }) {
-        Text('📖').fontSize(14).flexShrink(0)
+        Image($r('app.media.ic_book'))
+          .width(14).height(14)
+          .fillColor(this.colors.accentGold)
+          .flexShrink(0)
         Text(this.tr('ramadan_ashras'))
           .fontSize(11)
           .fontColor(this.colors.textMuted)
@@ -1949,7 +1962,7 @@ struct RamadanDetailsPage {
   LaylatAlQadrContent() {
     Column() {
       Row({ space: 6 }) {
-        Text('✨').fontSize(14).flexShrink(0)
+        Image($r('app.media.ic_star')).width(14).height(14).fillColor(this.colors.accentGold).flexShrink(0)
         Text(this.tr('ramadan_laylat_al_qadr'))
           .fontSize(11)
           .fontColor(this.colors.accentGold)
@@ -1985,7 +1998,7 @@ struct RamadanDetailsPage {
   JummahTulWidahContent() {
     Column() {
       Row({ space: 6 }) {
-        Text('🕌').fontSize(14).flexShrink(0)
+        Image($r('app.media.ic_nav_mosque')).width(14).height(14).fillColor(this.colors.accentGold).flexShrink(0)
         Text(this.tr('ramadan_jummah_tul_widah'))
           .fontSize(11)
           .fontColor(this.colors.accentGold)
@@ -2108,7 +2121,7 @@ struct RamadanDetailsPage {
     Column() {
       // FIX: Use Row({ space: 8 }) for consistent RTL/LTR alignment
       Row({ space: 8 }) {
-        Text('🤲').fontSize(16).flexShrink(0)
+        Image($r('app.media.ic_dua')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
         Text(this.tr('section_duas'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)

@@ -254,9 +254,16 @@ export struct PageHeader {
           Image($r('app.media.ic_ramadan_moon'))
             .width(16).height(16)
             .fillColor(this.colors.accentGold)
-            .margin({ right: 8 })
+            .flexShrink(0)
+            // FIX: Dynamic margin to handle LTR/RTL
+            .margin({
+              right: this.isRtl() ? 0 : 8,
+              left: this.isRtl() ? 8 : 0
+            })
+
           Text(this.tr('fasting_ends_at'))
             .fontSize(12).fontColor(this.colors.textMuted)
+
           Text(this.dt(this.fastingEndTime))
             .fontSize(14)
             .fontColor(this.colors.accentGold)

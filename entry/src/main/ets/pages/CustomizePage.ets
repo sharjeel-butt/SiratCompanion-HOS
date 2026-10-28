@@ -255,18 +255,21 @@ struct CustomizePage {
               // ==================================================
               // UI Customization — header inlined
               // ==================================================
-              Row() {
-                Image($r('app.media.ic_ui_customize'))
-                  .width(20)
-                  .height(20)
-                  .fillColor(this.colors.accentGold)
-                  .width(40)
-                  .height(40)
-                  .padding(10)
-                  .backgroundColor(this.colors.tintSoft)
-                  .borderRadius(12)
-                  .border({ width: 1, color: this.colors.borderSoft })
-                  .flexShrink(0)
+              Row({ space: 14 }) {
+                Row() {
+                  Image($r('app.media.ic_ui_customize'))
+                    .width(20)
+                    .height(20)
+                    .fillColor(this.colors.accentGold)
+                }
+                .width(40)
+                .height(40)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(VerticalAlign.Center)
+                .backgroundColor(this.colors.tintSoft)
+                .borderRadius(12)
+                .border({ width: 1, color: this.colors.borderSoft })
+                .flexShrink(0)
 
                 Text(this.tr('category_ui_customization'))
                   .fontSize(17)
@@ -274,30 +277,23 @@ struct CustomizePage {
                   .fontColor(this.colors.textWhite)
                   .layoutWeight(1)
                   .textAlign(TextAlign.Start)
-                  .margin({
-                    left: this.isRtl() ? 0 : 14,
-                    right: this.isRtl() ? 14 : 0
-                  })
 
-                Text(this.expandedCategory === 'UI Customization' ? '▲' : '▼')
-                  .fontSize(12).fontColor(this.colors.accentGold).opacity(0.8)
+                Image(this.expandedCategory === 'UI Customization'
+                  ? $r('app.media.ic_chevron_up')
+                  : $r('app.media.ic_chevron_down'))
+                  .width(16)
+                  .height(16)
+                  .fillColor(this.colors.accentGold)
+                  .opacity(0.8)
                   .flexShrink(0)
               }
               .width('100%')
-              .padding(this.isRtl()
-                ? {
-                  top: 12,
-                  bottom: 12,
-                  left: 16,
-                  right: 12
-                }
-                : {
-                  top: 12,
-                  bottom: 12,
-                  left: 12,
-                  right: 16
-                }
-              )
+              .padding({
+                top: 12,
+                bottom: 12,
+                left: 16,
+                right: 16
+              })
               .alignItems(VerticalAlign.Center)
               .backgroundColor(this.colors.cardDark)
               .borderRadius(16)
@@ -315,18 +311,21 @@ struct CustomizePage {
               // ==================================================
               // Appearance — header inlined
               // ==================================================
-              Row() {
-                Image($r('app.media.ic_ui_appearance'))
-                  .width(20)
-                  .height(20)
-                  .fillColor(this.colors.accentGold)
-                  .width(40)
-                  .height(40)
-                  .padding(10)
-                  .backgroundColor(this.colors.tintSoft)
-                  .borderRadius(12)
-                  .border({ width: 1, color: this.colors.borderSoft })
-                  .flexShrink(0)
+              Row({ space: 14 }) {
+                Row() {
+                  Image($r('app.media.ic_ui_appearance'))
+                    .width(20)
+                    .height(20)
+                    .fillColor(this.colors.accentGold)
+                }
+                .width(40)
+                .height(40)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(VerticalAlign.Center)
+                .backgroundColor(this.colors.tintSoft)
+                .borderRadius(12)
+                .border({ width: 1, color: this.colors.borderSoft })
+                .flexShrink(0)
 
                 Text(this.tr('category_appearance'))
                   .fontSize(17)
@@ -334,30 +333,23 @@ struct CustomizePage {
                   .fontColor(this.colors.textWhite)
                   .layoutWeight(1)
                   .textAlign(TextAlign.Start)
-                  .margin({
-                    left: this.isRtl() ? 0 : 14,
-                    right: this.isRtl() ? 14 : 0
-                  })
 
-                Text(this.expandedCategory === 'Appearance' ? '▲' : '▼')
-                  .fontSize(12).fontColor(this.colors.accentGold).opacity(0.8)
+                Image(this.expandedCategory === 'Appearance'
+                  ? $r('app.media.ic_chevron_up')
+                  : $r('app.media.ic_chevron_down'))
+                  .width(16)
+                  .height(16)
+                  .fillColor(this.colors.accentGold)
+                  .opacity(0.8)
                   .flexShrink(0)
               }
               .width('100%')
-              .padding(this.isRtl()
-                ? {
-                  top: 12,
-                  bottom: 12,
-                  left: 16,
-                  right: 12
-                }
-                : {
-                  top: 12,
-                  bottom: 12,
-                  left: 12,
-                  right: 16
-                }
-              )
+              .padding({
+                top: 12,
+                bottom: 12,
+                left: 16,
+                right: 16
+              })
               .alignItems(VerticalAlign.Center)
               .backgroundColor(this.colors.cardDark)
               .borderRadius(16)
@@ -393,7 +385,7 @@ struct CustomizePage {
       if (this.showLanguagePicker) {
         this.PickerOverlay(
           this.tr('language'),
-          '🌐',
+          $r('app.media.ic_globe'),
           this.buildLanguageItems(),
           (id: string) => {
             this.pickLanguage(id);
@@ -407,7 +399,7 @@ struct CustomizePage {
       if (this.showThemePicker) {
         this.PickerOverlay(
           this.tr('dark_mode'),
-          '🎨',
+          $r('app.media.ic_palette'),
           SettingsHelper.buildThemePickerItems(this.themeOverride),
           (id: string) => {
             this.pickThemeMode(id);
@@ -429,7 +421,7 @@ struct CustomizePage {
       if (this.showClockFormatPicker) {
         this.PickerOverlay(
           this.tr('time_format'),
-          '🕐',
+          $r('app.media.ic_clock'),
           SettingsHelper.buildClockFormatPickerItems(this.ClockFormat),
           (id: string) => {
             this.pickClockFormat(id);
@@ -443,7 +435,7 @@ struct CustomizePage {
       if (this.showEventPerspectivePicker) {
         this.PickerOverlay(
           this.tr('event_perspective'),
-          '🌙',
+          $r('app.media.ic_ramadan_moon'),
           SettingsHelper.buildEventPerspectivePickerItems(this.eventPerspective),
           (id: string) => {
             this.pickEventPerspective(id);
@@ -674,6 +666,7 @@ struct CustomizePage {
         .height(16)
         .fillColor(this.colors.accentGold)
         .opacity(0.7)
+        .flexShrink(0)
         .rotate({ angle: this.isRtl() ? 180 : 0 })
     }
     .width('100%')
@@ -971,7 +964,7 @@ struct CustomizePage {
             .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
 
           // FIX: Use Row({ space: 8 }) instead of margin left
-          Row({ space: 8 }) {
+          Row({ space: 14 }) {
             Row()
               .width(14)
               .height(14)
@@ -1077,15 +1070,10 @@ struct CustomizePage {
         .margin({ top: 10 })
 
       Row({ space: 14 }) {
-        Text('🎨')
-          .fontSize(22)
-          .width(44)
-          .height(44)
-          .textAlign(TextAlign.Center)
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(12)
-          .border({ width: 1, color: this.colors.borderSoft })
-          .flexShrink(0)
+        Row() {
+          Image($r('app.media.ic_palette')).width(22).height(22).fillColor(this.colors.accentGold)
+        }
+        .width(44).height(44).justifyContent(FlexAlign.Center).alignItems(VerticalAlign.Center)
 
         Text(this.tr('theme_preset'))
           .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
@@ -1143,10 +1131,7 @@ struct CustomizePage {
                 .layoutWeight(1)
 
                 if (preset === this.appTheme) {
-                  Text('✓')
-                    .fontSize(18)
-                    .fontColor(this.colors.accentGold)
-                    .fontWeight(FontWeight.Bold)
+                  Image($r('app.media.ic_check')).width(18).height(18).fillColor(this.colors.accentGold)
                 }
               }
               .width('100%')
@@ -1227,15 +1212,11 @@ struct CustomizePage {
         .margin({ top: 10 })
 
       Row({ space: 14 }) {
-        Text('🔊')
-          .fontSize(22)
-          .width(44)
-          .height(44)
-          .textAlign(TextAlign.Center)
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(12)
-          .border({ width: 1, color: this.colors.borderSoft })
-          .flexShrink(0)
+        Row() {
+          Image($r('app.media.ic_sound')).width(22).height(22).fillColor(this.colors.accentGold)
+        }
+        .width(44).height(44).justifyContent(FlexAlign.Center).alignItems(VerticalAlign.Center)
+
 
         Text(this.tr('sound_style'))
           .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
@@ -1256,10 +1237,11 @@ struct CustomizePage {
           ForEach(TASBIH_SOUND_OPTIONS, (opt: TasbihSoundOption) => {
             Row({ space: 14 }) { // <-- Added Row space
               Stack() {
-                Text('▶').fontSize(14).fontColor(this.colors.accentGold)
+                Image($r('app.media.ic_play')).width(14).height(14).fillColor(this.colors.accentGold)
               }
               .width(38)
               .height(38)
+              .borderRadius(19)
               .borderRadius(19)
               .backgroundColor(this.colors.tintSoft)
               .border({ width: 1, color: this.colors.borderSoft })
@@ -1292,10 +1274,7 @@ struct CustomizePage {
               .layoutWeight(1)
 
               if (opt.id === this.selectedSound) {
-                Text('✓')
-                  .fontSize(18)
-                  .fontColor(this.colors.accentGold)
-                  .fontWeight(FontWeight.Bold)
+                Image($r('app.media.ic_check')).width(18).height(18).fillColor(this.colors.accentGold)
               }
             }
             .width('100%')
@@ -1359,7 +1338,7 @@ struct CustomizePage {
   @Builder
   PickerOverlay(
     title: string,
-    icon: string,
+    icon: Resource,
     items: PickerItem[],
     onSelect: (id: string) => void,
     onCancel: () => void
@@ -1380,15 +1359,19 @@ struct CustomizePage {
         .margin({ top: 10 })
 
       Row({ space: 14 }) {
-        Text(icon)
-          .fontSize(22)
-          .width(44)
-          .height(44)
-          .textAlign(TextAlign.Center)
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(12)
-          .border({ width: 1, color: this.colors.borderSoft })
-          .flexShrink(0)
+        Row() {
+          Image(icon)
+            .width(22).height(22)
+            .fillColor(this.colors.accentGold)
+        }
+        .width(44)
+        .height(44)
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
+        .backgroundColor(this.colors.tintSoft)
+        .borderRadius(12)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .flexShrink(0)
 
         Text(title)
           .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)

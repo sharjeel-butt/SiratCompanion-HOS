@@ -312,13 +312,14 @@ struct PrayerDetailsPage {
       }
       .width('100%')
 
-      Row() {
+      Row({ space: 6 }) {
         Text(`${this.snapshot.weekTotal}`)
           .fontSize(18).fontWeight(FontWeight.Bold)
           .fontColor(this.colors.accentGold)
-        Text(`  ${this.tr('details_prayers_completed')}`)
+          .direction(Direction.Ltr)
+        Text(`${this.tr('details_prayers_completed')}`)
           .fontSize(11).fontColor(this.colors.textMuted)
-          .margin({ left: 6, bottom: 2 })
+          .margin({ bottom: 2 })
       }
       .width('100%').margin({ top: 14 })
       .alignItems(VerticalAlign.Bottom)
@@ -662,10 +663,11 @@ struct PrayerDetailsPage {
       .width('100%')
 
       Row() {
-        Row() {
+        Row({ space: 6 }) {
           Image($r('app.media.ic_streak_fire'))
             .width(28).height(28)
             .fillColor(this.colors.accentGold)
+            .flexShrink(0)
           Column() {
             Row() {
               Text(`${this.snapshot.currentStreak}`)
@@ -679,16 +681,17 @@ struct PrayerDetailsPage {
             Text(this.tr('home_streak'))
               .fontSize(10).fontColor(this.colors.textMuted)
           }
-          .alignItems(HorizontalAlign.Start).margin({ left: 6 })
+          .alignItems(HorizontalAlign.Start)
         }
         .layoutWeight(1)
 
         Divider().vertical(true).height(36).color(this.colors.borderSoft)
 
-        Row() {
+        Row({ space: 6 }) {
           Image($r('app.media.ic_trophy'))
             .width(28).height(28)
             .fillColor(this.colors.accentGold)
+            .flexShrink(0)
           Column() {
             Row() {
               Text(`${this.snapshot.bestStreak}`)
@@ -702,9 +705,9 @@ struct PrayerDetailsPage {
             Text(this.tr('details_best_streak'))
               .fontSize(10).fontColor(this.colors.textMuted)
           }
-          .alignItems(HorizontalAlign.Start).margin({ left: 6 })
+          .alignItems(HorizontalAlign.Start)
         }
-        .layoutWeight(1).padding({ left: 12 })
+        .layoutWeight(1).padding({ left: this.isRtl() ? 0 : 12, right: this.isRtl() ? 12 : 0 })
       }
       .width('100%').margin({ top: 18 })
       .alignItems(VerticalAlign.Center)
@@ -887,13 +890,14 @@ struct PrayerDetailsPage {
       }
       .width('100%').direction(Direction.Ltr)
 
-      Row() {
+      Row({ space: 6 }) {
         Text(`${this.snapshot.monthProgress.perfectDays}`)
           .fontSize(18).fontWeight(FontWeight.Bold)
           .fontColor(this.colors.accentGold)
-        Text(`  ${this.tr('details_perfect_days')}`)
+          .direction(Direction.Ltr)
+        Text(`${this.tr('details_perfect_days')}`)
           .fontSize(11).fontColor(this.colors.textMuted)
-          .margin({ left: 6, bottom: 2 })
+          .margin({ bottom: 2 })
       }
       .width('100%').margin({ top: 14 })
       .alignItems(VerticalAlign.Bottom)

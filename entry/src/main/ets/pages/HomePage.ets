@@ -1380,9 +1380,12 @@ export struct HomePage {
   QadaHomeBanner() {
     if (this.qadaSummary !== null && this.qadaSummary.remaining > 0) {
       Row() {
-        Text('🔄')
-          .fontSize(16)
-          .margin({ right: 10 })
+        Image($r('app.media.ic_refresh'))
+          .width(16)
+          .height(16)
+          .fillColor(this.colors.accentGold)
+          .flexShrink(0)
+          .margin({ right: this.isRtl() ? 0 : 10, left: this.isRtl() ? 10 : 0 })
 
         Column() {
           Text(this.tr('section_qada'))
@@ -1657,8 +1660,10 @@ export struct HomePage {
       Column() {
         // Header
         Row({ space: 8 }) {
-          Text('🤲').fontSize(16).flexShrink(0)
-
+          Image($r('app.media.ic_dua'))
+            .width(16).height(16)
+            .fillColor(this.colors.accentGold)
+            .flexShrink(0)
           Text(this.tr('home_duas_title'))
             .fontSize(12)
             .fontColor(this.colors.textMuted)
@@ -1757,7 +1762,9 @@ export struct HomePage {
     Row({ space: 16 }) {
       Column() {
         if (this.upcomingEvents[0].daysUntil === 0) {
-          Text('🎉').fontSize(30)
+          Image($r('app.media.ic_celebration'))
+            .width(30).height(30)
+            .fillColor(this.colors.accentGold)
           Text(this.tr('home_event_today'))
             .fontSize(12).fontWeight(FontWeight.Bold)
             .fontColor(this.colors.textOnAccent)
@@ -1824,7 +1831,12 @@ export struct HomePage {
   @Builder
   CountdownSecondaryRow(index: number) {
     Row({ space: 8 }) {
-      Text('✨').fontSize(13).opacity(0.75)
+      Image($r('app.media.ic_star'))
+        .width(14)
+        .height(14)
+        .fillColor(this.colors.accentGold)
+        .opacity(0.75)
+        .flexShrink(0)
       Text(this.translateUpcomingEventName(this.upcomingEvents[index]))
         .fontSize(13)
         .fontColor(this.colors.textWhite)
@@ -1859,8 +1871,9 @@ export struct HomePage {
     if (this.countdownTarget !== '') {
       Column() {
         Row({ space: 14 }) {
-          Text(this.countdownTarget === 'maghrib' ? '🌇' : '🌅')
-            .fontSize(32)
+          Image(this.countdownTarget === 'maghrib' ? $r('app.media.ic_sunset') : $r('app.media.ic_sunrise'))
+            .width(32).height(32)
+            .fillColor(this.colors.accentGold)
 
           Column() {
             Text(this.countdownHeld
@@ -1986,7 +1999,10 @@ export struct HomePage {
         // 1. Laylat al-Qadr Inline Note
         if (this.showLaylatNote) {
           Row({ space: 8 }) {
-            Text('✨').fontSize(14)
+            Image($r('app.media.ic_star'))
+              .width(14).height(14)
+              .fillColor(this.colors.accentGold)
+              .flexShrink(0)
             Text(this.tr('ramadan_laylat_today'))
               .fontSize(12).fontColor(this.colors.accentGold).fontWeight(FontWeight.Bold)
           }
@@ -2016,7 +2032,12 @@ export struct HomePage {
             LoadingProgress().width(18).height(18).color(this.colors.accentGold).margin({ right: 8 })
             Text(L.get('export_saving')).fontSize(12).fontColor(this.colors.textMuted)
           } else {
-            Text('🖨️').fontSize(16).margin({ right: 8 })
+            Image($r('app.media.ic_printer'))
+              .width(16)
+              .height(16)
+              .fillColor(this.colors.accentGold)
+              .flexShrink(0)
+              .margin({ right: this.isRtl() ? 0 : 8, left: this.isRtl() ? 8 : 0 })
             Text(L.get('export_ramadan_timetable'))
               .fontSize(13)
               .fontWeight(FontWeight.Bold)
@@ -2166,9 +2187,10 @@ export struct HomePage {
               Text(day.hijriLabel)
                 .fontSize(9)
                 .fontColor(this.colors.accentGold)
-                .margin({ top: 2 })
-                .maxLines(1)
-                .textOverflow({ overflow: TextOverflow.Ellipsis })
+                .margin({ top: 2, bottom: 4 })
+                .width('100%')
+                .textAlign(TextAlign.Center)
+                .maxLines(2)
 
               Divider().color(this.colors.borderSoft).margin({ top: 8, bottom: 8 })
 
@@ -2259,8 +2281,9 @@ export struct HomePage {
           Text(this.tr('details_view'))
             .fontSize(11).fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
-          Text(this.isRtl() ? '‹' : '›')
-            .fontSize(14).fontColor(this.colors.accentGold)
+          Image($r('app.media.ic_chevron_right'))
+            .width(12).height(12)
+            .fillColor(this.colors.accentGold)
             .rotate({ angle: this.isRtl() ? 180 : 0 })
         }
         .onClick(() => {
@@ -2507,8 +2530,9 @@ export struct HomePage {
           Text(this.tr('details_view'))
             .fontSize(11).fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
-          Text(this.isRtl() ? '‹' : '›')
-            .fontSize(14).fontColor(this.colors.accentGold)
+          Image($r('app.media.ic_chevron_right'))
+            .width(12).height(12)
+            .fillColor(this.colors.accentGold)
             .rotate({ angle: this.isRtl() ? 180 : 0 })
         }
         .onClick(() => {

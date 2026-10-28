@@ -460,10 +460,9 @@ export struct TasbihPage {
               }
               .alignItems(HorizontalAlign.Start)
 
-              Row() {
-                Text('↑').fontSize(18)
-                  .fontColor(this.colors.textMuted).opacity(0.5)
-                Text(`  ${this.tr('flick_up_to_count')}  `)
+              Row({ space: 4 }) {
+                Image($r('app.media.ic_arrow_up')).width(18).height(18).fillColor(this.colors.textMuted).opacity(0.5)
+                Text(this.tr('flick_up_to_count'))
                   .fontSize(12).fontColor(this.colors.textMuted)
                   .letterSpacing(1)
               }
@@ -474,11 +473,9 @@ export struct TasbihPage {
                 .opacity(0.7).margin({ top: 6 })
 
               Row() {
-                Row() {
-                  Text('↺').fontSize(14).fontColor(this.colors.textMuted)
-                  Text(this.tr('reset'))
-                    .fontSize(12).fontColor(this.colors.textMuted)
-                    .margin({ left: 6 })
+                Row({ space: 6 }) {
+                  Image($r('app.media.ic_refresh')).width(14).height(14).fillColor(this.colors.textMuted)
+                  Text(this.tr('reset')).fontSize(12).fontColor(this.colors.textMuted)
                 }
                 .padding({
                   left: 16,
@@ -493,11 +490,9 @@ export struct TasbihPage {
                   this.resetCurrent();
                 })
 
-                Row() {
-                  Text('↻').fontSize(14).fontColor(this.colors.textMuted)
-                  Text(this.tr('reset_all'))
-                    .fontSize(12).fontColor(this.colors.textMuted)
-                    .margin({ left: 6 })
+                Row({ space: 6 }) {
+                  Image($r('app.media.ic_refresh')).width(14).height(14).fillColor(this.colors.textMuted)
+                  Text(this.tr('reset_all')).fontSize(12).fontColor(this.colors.textMuted)
                 }
                 .padding({
                   left: 16,
@@ -566,8 +561,8 @@ export struct TasbihPage {
   TopBar() {
     Row() {
       // Tasbih picker
-      Row() {
-        Text('📿').fontSize(14).margin({ right: 6 }).flexShrink(0)
+      Row({ space: 6 }) {
+        Image($r('app.media.ic_nav_tasbih')).width(14).height(14).fillColor(this.colors.accentGold).flexShrink(0)
         Text(this.getActiveTasbih()
           ? this.getTasbihName(this.getActiveTasbih()) // <-- Updated
           : this.tr('tab_tasbih'))
@@ -577,10 +572,11 @@ export struct TasbihPage {
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .layoutWeight(1)
-        Text('▼')
-          .fontSize(10)
-          .fontColor(this.colors.accentGold)
-          .margin({ left: 6 })
+        Image($r('app.media.ic_chevron_right'))
+          .width(10)
+          .height(10)
+          .fillColor(this.colors.accentGold)
+          .rotate({ angle: 90 })
           .opacity(0.7)
           .flexShrink(0)
       }
@@ -804,7 +800,7 @@ export struct TasbihPage {
   @Builder
   EmptyState() {
     Column() {
-      Text('📿').fontSize(64).opacity(0.5)
+      Image($r('app.media.ic_nav_tasbih')).width(64).height(64).fillColor(this.colors.textMuted).opacity(0.5)
       Text(this.tr('no_dhikr_title'))
         .fontSize(16).fontColor(this.colors.textMuted).margin({ top: 16 })
       Text(this.tr('no_dhikr_hint'))
@@ -888,23 +884,27 @@ export struct TasbihPage {
               .alignItems(HorizontalAlign.Start)
               .layoutWeight(1)
 
-              Text('✏️')
-                .fontSize(18)
-                .width(36)
-                .height(36)
-                .textAlign(TextAlign.Center)
-                .flexShrink(0)
+              Row() {
+                Image($r('app.media.ic_edit')).width(16).height(16).fillColor(this.colors.accentGold)
+              }
+              .width(36)
+              .height(36)
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Center)
+              .flexShrink(0)
                 .onClick(() => {
                   this.openEditTasbihEditor(t);
                 })
 
               if (this.tasbihs.length > 1) {
-                Text('🗑️')
-                  .fontSize(18)
-                  .width(36)
-                  .height(36)
-                  .textAlign(TextAlign.Center)
-                  .flexShrink(0)
+                Row() {
+                  Image($r('app.media.ic_delete')).width(16).height(16).fillColor(this.colors.statusExpress)
+                }
+                .width(36)
+                .height(36)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(VerticalAlign.Center)
+                .flexShrink(0)
                   .onClick(() => {
                     this.deleteTasbih(t.id);
                   })
@@ -1044,23 +1044,27 @@ export struct TasbihPage {
                   .layoutWeight(1)
 
                   // Edit Button
-                  Text('✏️')
-                    .fontSize(16)
-                    .width(32)
-                    .height(32)
-                    .textAlign(TextAlign.Center)
-                    .flexShrink(0)
+                  Row() {
+                    Image($r('app.media.ic_edit')).width(16).height(16).fillColor(this.colors.accentGold)
+                  }
+                  .width(36)
+                  .height(36)
+                  .justifyContent(FlexAlign.Center)
+                  .alignItems(VerticalAlign.Center)
+                  .flexShrink(0)
                     .onClick(() => {
                       this.openEditDhikrEditor(d);
                     })
 
                   // Delete Button
-                  Text('🗑️')
-                    .fontSize(16)
-                    .width(32)
-                    .height(32)
-                    .textAlign(TextAlign.Center)
-                    .flexShrink(0)
+                  Row() {
+                    Image($r('app.media.ic_delete')).width(16).height(16).fillColor(this.colors.statusExpress)
+                  }
+                  .width(36)
+                  .height(36)
+                  .justifyContent(FlexAlign.Center)
+                  .alignItems(VerticalAlign.Center)
+                  .flexShrink(0)
                     .onClick(() => {
                       this.deleteDhikr(d.id);
                     })
@@ -1451,7 +1455,7 @@ export struct TasbihPage {
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)
 
-      Row() {
+      Row({ space: 8 }) {
         Button(this.tr('cancel'))
           .layoutWeight(1)
           .height(46)
@@ -1470,7 +1474,6 @@ export struct TasbihPage {
           .fontColor(this.colors.textOnAccent)
           .backgroundColor(this.colors.accentGold)
           .borderRadius(12)
-          .margin({ left: 8 })
           .onClick(() => { this.saveDhikr(); })
       }
       .width('100%')

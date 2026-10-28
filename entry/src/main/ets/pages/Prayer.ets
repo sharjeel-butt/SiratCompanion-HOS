@@ -1385,25 +1385,31 @@ export struct Prayer {
           LoadingProgress()
             .width(24).height(24)
             .color(this.colors.accentGold)
-            .margin({ right: 8 })
+            .margin({ right: this.isRtl() ? 0 : 8, left: this.isRtl() ? 8 : 0 })
         } else {
-          Text('🖨️')
-            .fontSize(16)
-            .width(32)
-            .height(32)
-            .textAlign(TextAlign.Center)
-            .borderRadius(16)
-            .backgroundColor(this.colors.cardDark)
-            .border({ width: 1, color: this.colors.borderSoft })
-            .margin({ right: 8 })
-            .onClick(() => {
-              this.handleExportPdf();
-            })
+          Row() {
+            Image($r('app.media.ic_printer'))
+              .width(16).height(16)
+              .fillColor(this.colors.accentGold)
+          }
+          .width(32)
+          .height(32)
+          .justifyContent(FlexAlign.Center)
+          .alignItems(VerticalAlign.Center)
+          .borderRadius(16)
+          .backgroundColor(this.colors.cardDark)
+          .border({ width: 1, color: this.colors.borderSoft })
+          .margin({ right: this.isRtl() ? 0 : 8, left: this.isRtl() ? 8 : 0 })
+          .onClick(() => {
+            this.handleExportPdf();
+          })
         }
 
-        Row() {
-          Text('✓').fontSize(12).fontColor(this.colors.accentGold)
-            .fontWeight(FontWeight.Bold).margin({ right: 4 })
+        Row({ space: 4 }) {
+          Image($r('app.media.ic_check'))
+            .width(12).height(12)
+            .fillColor(this.colors.accentGold)
+            .flexShrink(0)
           Text(this.tr('mark_all'))
             .fontSize(11).fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium).maxLines(1)
@@ -1427,13 +1433,23 @@ export struct Prayer {
 
       Row() {
         // Previous Day: Points Right (▶) in RTL, Left (◀) in LTR
-        Text(this.isRtl() ? '▶' : '◀')
-          .fontSize(14)
-          .fontColor(this.colors.accentGold)
-          .width(36).height(36).textAlign(TextAlign.Center).borderRadius(18)
-          .backgroundColor(this.colors.cardDark)
-          .border({ width: 1, color: this.colors.borderSoft })
-          .onClick(() => { this.goToPreviousDay(); })
+        Row() {
+          Image($r('app.media.ic_chevron_right'))
+            .width(16).height(16)
+            .fillColor(this.colors.accentGold)
+            // FIXED: Points left in LTR (180), right in RTL (0)
+            .rotate({ angle: this.isRtl() ? 0 : 180 })
+        }
+        .width(36)
+        .height(36)
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
+        .borderRadius(18)
+        .backgroundColor(this.colors.cardDark)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .onClick(() => {
+          this.goToPreviousDay();
+        })
 
         Text(this.viewingHijriDate)
           .fontSize(13)
@@ -1442,14 +1458,23 @@ export struct Prayer {
           .layoutWeight(1).textAlign(TextAlign.Center).maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
 
-        // Next Day: Points Left (◀) in RTL, Right (▶) in LTR
-        Text(this.isRtl() ? '◀' : '▶')
-          .fontSize(14)
-          .fontColor(this.colors.accentGold)
-          .width(36).height(36).textAlign(TextAlign.Center).borderRadius(18)
-          .backgroundColor(this.colors.cardDark)
-          .border({ width: 1, color: this.colors.borderSoft })
-          .onClick(() => { this.goToNextDay(); })
+        Row() {
+          Image($r('app.media.ic_chevron_right'))
+            .width(16).height(16)
+            .fillColor(this.colors.accentGold)
+            // FIXED: Points right in LTR (0), left in RTL (180)
+            .rotate({ angle: this.isRtl() ? 180 : 0 })
+        }
+        .width(36)
+        .height(36)
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
+        .borderRadius(18)
+        .backgroundColor(this.colors.cardDark)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .onClick(() => {
+          this.goToNextDay();
+        })
 
         if (this.dateOffset !== 0) {
           Text(this.tr('today'))
@@ -1638,7 +1663,7 @@ export struct Prayer {
   @Builder
   ComingSoonCard() {
     Column() {
-      Text('🌐').fontSize(56).margin({ bottom: 12 })
+      Image($r('app.media.ic_globe')).width(56).height(56).fillColor(this.colors.accentGold).margin({ bottom: 12 })
       Text(this.tr('online_prayer_times'))
         .fontSize(18).fontWeight(FontWeight.Bold)
         .fontColor(this.colors.textWhite)
