@@ -23,7 +23,7 @@ export struct SettingsRow {
   };
 
   build() {
-    Row() {
+    Row({ space: 8 }) {
       Column() {
         Text(this.title)
           .fontSize(15)
@@ -54,13 +54,8 @@ export struct SettingsRow {
         .height(16)
         .fillColor(this.colors.accentGold)
         .opacity(0.7)
-        // Use logical margins to prevent overlap in RTL
-        .margin({
-          left: L.isRtl() ? 8 : 0,
-          right: L.isRtl() ? 0 : 8
-        })
-        // Manually flip the image for RTL
         .rotate({ angle: L.isRtl() ? 180 : 0 })
+        .flexShrink(0)
     }
     .width('100%')
     .padding({

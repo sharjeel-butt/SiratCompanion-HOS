@@ -78,6 +78,7 @@ export class CalendarReminderHelper {
     read: false,
     write: false
   };
+  static readonly CUSTOM_EVENT_DESCRIPTION = 'Custom Islamic Event';
 
   // ============================================================
   // INIT
@@ -410,13 +411,18 @@ export class CalendarReminderHelper {
           continue;
         }
 
-        // Layer 3 — per-event title re-check. Guards against a filter
-        // that returns a superset (e.g. partial or case-insensitive
-        // matches).
+        // Layer 3 — per-event title re-check.
         if (!CalendarReminderHelper.isOurs(ev)) {
           AppLogger.warn('CalendarReminderHelper',
             `cancelAll: skipping non-Sirat event id=${ev.id} ` +
               `title="${ev.title ?? ''}"`);
+          continue;
+        }
+
+        // Layer 4 — skip custom-event reminders. These are managed by
+        // CustomEventNotifier and must NOT be wiped by a prayer-reminder
+        // reschedule.
+        if (ev.description === CalendarReminderHelper.CUSTOM_EVENT_DESCRIPTION) {
           continue;
         }
 
@@ -512,6 +518,62 @@ export class CalendarReminderHelper {
       await new Promise<void>((resolve) => setTimeout(resolve, 50));
     }
     return CalendarReminderHelper.ready;
+  }
+
+  /**
+   * Delete every custom-event reminder from the app's calendar account.
+   *
+   * Mirror-image of cancelAll(): same account scoping, same title
+   * filter, but the per-event check is inverted — only events whose
+   * description equals CUSTOM_EVENT_DESCRIPTION are deleted, and every
+   * prayer reminder is left untouched.
+   *
+   * Called by CustomEventNotifier.reschedule() before adding new
+   * custom-event reminders, so repeated reschedules do not accumulate
+   * duplicates.
+   */
+  static async cancelCustomEventReminders(): Promise<void> {
+    if (!CalendarReminderHelper.ready ||
+      CalendarReminderHelper.calendar === null) {
+      return;
+    }
+
+    try {
+      const filter = calendarManager.EventFilter.filterByTitle(
+        CalendarReminderHelper.EVENT_TITLE_PREFIX
+      );
+      const events =
+        await CalendarReminderHelper.calendar.getEvents(filter);
+
+      let deleted = 0;
+      let failed = 0;
+
+      for (const ev of events) {
+        if (ev.id === undefined) {
+          continue;
+        }
+        if (!CalendarReminderHelper.isOurs(ev)) {
+          continue;
+        }
+        if (ev.description !== CalendarReminderHelper.CUSTOM_EVENT_DESCRIPTION) {
+          // Prayer reminder — leave it alone.
+          continue;
+        }
+        const ok = await CalendarReminderHelper.deleteWithRetry(ev.id);
+        if (ok) {
+          deleted++;
+        } else {
+          failed++;
+        }
+      }
+
+      AppLogger.info('CalendarReminderHelper',
+        `cancelCustomEventReminders: deleted ${deleted}, failed ${failed}`);
+    } catch (err) {
+      const e = err as BusinessError;
+      AppLogger.warn('CalendarReminderHelper',
+        `cancelCustomEventReminders failed: ${e.code} ${e.message}`);
+    }
   }
 }
 

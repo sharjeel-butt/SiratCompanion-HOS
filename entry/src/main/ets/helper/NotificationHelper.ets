@@ -5,6 +5,7 @@ import { notificationManager } from '@kit.NotificationKit';
 import { common } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { NotificationsSettings, PrayerOffsets, SettingsHelper } from './SettingsHelper';
+import { AdvancedCalcSettings } from '../models/AdvancedCalcModels';
 import {
   AsrShadowRule,
   CalculationMethod,
@@ -420,6 +421,8 @@ export class NotificationHelper {
     const highLatRule: HighLatitudeRule =
       await SettingsHelper.getHighLatRule();
     const offsets: PrayerOffsets = await SettingsHelper.getPrayerOffsets();
+    const advanced: AdvancedCalcSettings =
+      await SettingsHelper.getAdvancedCalcSettings();
 
     // ---- Step 5: schedule fresh ----
     // If today's prayers are all marked as prayed, shift the anchor
@@ -441,12 +444,12 @@ export class NotificationHelper {
     if (backend === 'calendar') {
       return NotificationHelper.scheduleViaCalendar(
         anchor, nowMs, latitude, longitude,
-        method, asrRule, highLatRule, offsets, settings
+        method, asrRule, highLatRule, offsets, advanced, settings
       );
     }
     return NotificationHelper.scheduleViaAgent(
       anchor, nowMs, latitude, longitude,
-      method, asrRule, highLatRule, offsets, settings
+      method, asrRule, highLatRule, offsets, advanced, settings
     );
   }
 
@@ -463,6 +466,7 @@ export class NotificationHelper {
     asrRule: AsrShadowRule,
     highLatRule: HighLatitudeRule,
     offsets: PrayerOffsets,
+    advanced: AdvancedCalcSettings,
     settings: NotificationsSettings
   ): Promise<ScheduleResult> {
     AppLogger.info('NotificationHelper',
@@ -478,7 +482,6 @@ export class NotificationHelper {
       const day = new Date(anchor);
       day.setDate(day.getDate() + dayOffset);
 
-      // Skip prayers already marked as prayed for this date.
       const dateKey = PrayerManager.getDateKeyForDate(day);
       const dayState: PrayerCheckState =
         PrayerManager.getCheckState(dateKey);
@@ -486,7 +489,7 @@ export class NotificationHelper {
       let times: DailyPrayerTimes;
       try {
         times = PrayerTimeCalculator.calculateWithDeviceTimezone(
-          day, latitude, longitude, method, asrRule, highLatRule
+          day, latitude, longitude, method, asrRule, highLatRule, advanced
         );
       } catch (err) {
         const e = err as Error;
@@ -495,7 +498,7 @@ export class NotificationHelper {
         continue;
       }
 
-      const prayers = NotificationHelper.buildPrayerList(times, offsets);
+      const prayers = NotificationHelper.buildPrayerList(day, times, offsets);
       for (const p of prayers) {
         if (!NotificationHelper.isPrayerEnabled(settings, p.id)) {
           continue;
@@ -557,6 +560,7 @@ export class NotificationHelper {
     asrRule: AsrShadowRule,
     highLatRule: HighLatitudeRule,
     offsets: PrayerOffsets,
+    advanced: AdvancedCalcSettings,
     settings: NotificationsSettings
   ): Promise<ScheduleResult> {
     AppLogger.info('NotificationHelper',
@@ -570,7 +574,6 @@ export class NotificationHelper {
       const day = new Date(anchor);
       day.setDate(day.getDate() + dayOffset);
 
-      // Skip prayers already marked as prayed for this date.
       const dateKey = PrayerManager.getDateKeyForDate(day);
       const dayState: PrayerCheckState =
         PrayerManager.getCheckState(dateKey);
@@ -578,7 +581,7 @@ export class NotificationHelper {
       let times: DailyPrayerTimes;
       try {
         times = PrayerTimeCalculator.calculateWithDeviceTimezone(
-          day, latitude, longitude, method, asrRule, highLatRule
+          day, latitude, longitude, method, asrRule, highLatRule, advanced
         );
       } catch (err) {
         const e = err as Error;
@@ -617,7 +620,7 @@ export class NotificationHelper {
     settings: NotificationsSettings,
     nowMs: number
   ): Promise<ScheduleResult> {
-    const prayers = NotificationHelper.buildPrayerList(times, offsets);
+    const prayers = NotificationHelper.buildPrayerList(day, times, offsets);
     let count = 0;
     let lastErr = 0;
     let lastMsg = '';
@@ -793,6 +796,8 @@ export class NotificationHelper {
         return L.get('notif_pray_fajr');
       case 'Dhuhr':
         return L.get('notif_pray_dhuhr');
+      case 'Jummah':
+        return L.get('notif_pray_jummah');
       case 'Asr':
         return L.get('notif_pray_asr');
       case 'Maghrib':
@@ -810,6 +815,8 @@ export class NotificationHelper {
         return L.get('hadith_fajr');
       case 'Dhuhr':
         return L.get('hadith_dhuhr');
+      case 'Jummah':
+        return L.get('hadith_jummah');
       case 'Asr':
         return L.get('hadith_asr');
       case 'Maghrib':
@@ -850,15 +857,30 @@ export class NotificationHelper {
     }
   }
 
+  /**
+   * Build the prayer notification list for a given day.
+   *
+   * On Fridays the Dhuhr entry is relabelled to Jummah so that
+   * both the title (Pray Jummah) and the hadith (Sahih Muslim 233)
+   * match the day. The `id` stays 'dhuhr' because all downstream
+   * logic — per-prayer toggles, already-prayed skip, offset lookup —
+   * keys on 'dhuhr' and the calendar event itself is at the Dhuhr
+   * time. Only the display name is changed.
+   */
   private static buildPrayerList(
+    day: Date,
     times: DailyPrayerTimes,
     offsets: PrayerOffsets
   ): PrayerNotificationItem[] {
+    const isFriday = day.getDay() === 5;
+
     const fajr: PrayerNotificationItem = {
       id: 'fajr', name: 'Fajr', time: times.fajr
     };
     const dhuhr: PrayerNotificationItem = {
-      id: 'dhuhr', name: 'Dhuhr', time: times.dhuhr
+      id: 'dhuhr',
+      name: isFriday ? 'Jummah' : 'Dhuhr',
+      time: times.dhuhr
     };
     const asr: PrayerNotificationItem = {
       id: 'asr', name: 'Asr', time: times.asr
@@ -1005,6 +1027,8 @@ export class NotificationHelper {
         return L.get('prayer_fajr');
       case 'Dhuhr':
         return L.get('prayer_dhuhr');
+      case 'Jummah':
+        return L.get('prayer_jummah');
       case 'Asr':
         return L.get('prayer_asr');
       case 'Maghrib':

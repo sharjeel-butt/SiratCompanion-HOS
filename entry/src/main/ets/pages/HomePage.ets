@@ -9,12 +9,16 @@ import { PdfExportHelper } from '../utils/PdfExportHelper';
 import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
 import { DuaService } from '../helper/DuaService';
 import { CompleteDua } from '../models/DuaModels';
+import { CustomEvent } from '../models/CustomEventModels';
+import { CustomEventStorage } from '../helper/CustomEventStorage';
+import { CustomEventNotifier } from '../helper/CustomEventNotifier';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_CALC_SETTINGS_VERSION,
+  STORAGE_KEY_CUSTOM_EVENTS_VERSION,
   STORAGE_KEY_EVENT_SETTINGS_VERSION,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_CALENDAR_VERSION,
@@ -58,16 +62,16 @@ import {
 } from '../utils/ProgressHelper';
 import { TasbihStorage } from '../tasbih/TasbihStorage';
 import { TasbihManager } from '../tasbih/TasbihManager';
-import { Tasbih } from '../tasbih/TasbihModels';
+import { Dhikr, Tasbih } from '../tasbih/TasbihModels';
 import { PageHeader } from '../components/PageHeader';
 import { DuaCard } from '../components/DuaCard';
-import { DUA_IFTAR, DUA_SUHOOR, DuaEntry } from '../data/Duas';
 import { RamadanAshra, RamadanHelper, RamadanInfo } from '../helper/RamadanHelper';
 import { Breakpoints } from '../common/Breakpoints';
 import { AdvancedCalcSettings, DEFAULT_ADVANCED_CALC } from '../models/AdvancedCalcModels';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 import { EventPerspectiveNotifier } from '../utils/EventPerspectiveNotifier';
 import { TypographyHelper } from '../helper/TypographyHelper';
+import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
 
 export interface RamadanTableRow {
   hijriDate: string;
@@ -90,6 +94,27 @@ export interface DayPrayerPreview {
   isha: string;
 }
 
+export interface UpcomingCustomEvent {
+  ev: CustomEvent;
+  date: Date;
+}
+
+export interface BoundTasbihRowData {
+  tasbih: Tasbih;
+  prayerId: string;
+  completed: boolean;
+  firstPendingDhikrIndex: number;
+  currentCount: number;
+  targetCount: number;
+}
+
+export interface PrayerGroupData {
+  prayerId: string;
+  doneCount: number;
+  totalCount: number;
+  rows: BoundTasbihRowData[];
+}
+
 @Component
 export struct HomePage {
 
@@ -102,6 +127,9 @@ export struct HomePage {
   @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_VERSION)
   @Watch('onHijriCalendarVersionChanged')
   calendarVersion: number = 0;
+  @StorageLink(STORAGE_KEY_CUSTOM_EVENTS_VERSION)
+  @Watch('onCustomEventsVersionChanged')
+  customEventsVersion: number = 0;
 
   @StorageLink(STORAGE_KEY_LOCATION_VERSION)
   @Watch('onLocationVersionChanged')
@@ -171,8 +199,11 @@ export struct HomePage {
   @State private todayFastingStatus: FastingStatus = FastingStatus.UNMARKED;
   @State private showLaylatNote: boolean = false;
   @State private dailyDuas: CompleteDua[] = [];
+  @State private iftarDua: CompleteDua | null = null;
+  @State private suhoorDua: CompleteDua | null = null;
 
   @State locationMode: LocationMode = LocationMode.GPS;
+  @State private upcomingCustomEvents: UpcomingCustomEvent[] = [];
   @State prayerProgress: PrayerProgress = {
     todayCompleted: 0,
     todayTotal: 5,
@@ -223,6 +254,7 @@ export struct HomePage {
   @State private isFriday: boolean = false;
   @State private currentLanguage: string = 'en';
   @State private isRefreshing: boolean = false;
+  @State private boundTasbihs: Tasbih[] = [];
 
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
   @State asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
@@ -258,8 +290,12 @@ export struct HomePage {
     }
 
     const days: DayPrayerPreview[] = [];
-    const locale = this.appLanguage === 'zh' ? 'zh-CN' : (this.appLanguage === 'ar' ? 'ar' : 'en-US');
     const months = L.getArray('hijri_months', this.appLanguage);
+    // Use the localized short weekday array (kept in sync with
+    // the tab bar labels) rather than toLocaleDateString, so the
+    // date label goes through the same resource path as the
+    // Hijri month. This avoids mixed localization sources.
+    const weekdaysShort = L.getArray('days_of_week_short', this.appLanguage);
 
     for (let i = 0; i < 3; i++) {
       const date = new Date();
@@ -286,7 +322,7 @@ export struct HomePage {
         } else if (i === 1) {
           dateLabel = this.tr('home_event_tomorrow');
         } else {
-          dateLabel = date.toLocaleDateString(locale, { weekday: 'short' });
+          dateLabel = weekdaysShort[date.getDay()] || '';
         }
 
         days.push({
@@ -342,6 +378,7 @@ export struct HomePage {
       this.hijriOffset,
       SettingsHelper.getEventPerspective()
     );
+    this.reloadCustomEvents();
   }
 
   private onAutoShowRamadanViewChanged(): void {
@@ -352,21 +389,89 @@ export struct HomePage {
     this.prayerProgress = ProgressHelper.getPrayerProgress(this.currentLanguage);
     this.monthProgress = ProgressHelper.getMonthProgress();
 
-    const loaded = await TasbihStorage.load(TasbihManager.createDefaults());
-    const tasbihs: Tasbih[] = loaded.tasbihs;
-    this.tasbihToday = ProgressHelper.getTasbihTodayProgress(tasbihs);
+    await this.refreshTasbihData();
 
     // FETCH CONTEXTUAL DUAS
     try {
       const ctx = getContext(this) as common.UIAbilityContext;
       const allDuas = await DuaService.loadDuas(ctx, this.currentLanguage);
       this.dailyDuas = DuaService.getDailyDuas(allDuas, this.ramadanInfo, this.isFriday);
+      this.iftarDua = allDuas.find((d: CompleteDua) => d.id === 'dua_breaking_the_fast') ?? null;
+      this.suhoorDua = allDuas.find((d: CompleteDua) => d.id === 'dua_suhoor') ?? null;
     } catch (e) {
       console.error('Failed to load daily duas', e);
     }
 
+    await this.reloadCustomEvents();
+
     this.refreshHeader();
     this.refreshFastingWindow();
+  }
+
+  private formatEventHijriDate(date: Date): string {
+    const shifted = new Date(date);
+    shifted.setDate(shifted.getDate() + this.hijriOffset);
+    const h = HijriEngineResolver.current().toHijri(shifted);
+    if (h === null) {
+      return '';
+    }
+    const months = L.getArray('hijri_months', this.currentLanguage);
+    const monthName = months[h.month - 1] || '';
+    return `${h.day} ${monthName} ${h.year}`;
+  }
+
+  private formatEventDaysUntil(date: Date): string {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const target = new Date(date);
+    target.setHours(0, 0, 0, 0);
+    const days = Math.round((target.getTime() - today.getTime()) / 86400000);
+
+    if (days < 0) {
+      return '';
+    }
+    if (days === 0) {
+      return this.tr('home_event_today');
+    }
+    if (days === 1) {
+      return this.tr('home_event_tomorrow');
+    }
+    // Arabic dual form implies "two" and takes no numeral.
+    if (this.currentLanguage === 'ar' && days === 2) {
+      return this.tr('home_days_dual');
+    }
+    return `${days} ${this.tr('home_days')}`;
+  }
+
+  private async reloadCustomEvents(): Promise<void> {
+    try {
+      const customEvents = await CustomEventStorage.load();
+      const upcoming: UpcomingCustomEvent[] = [];
+
+      for (const ev of customEvents) {
+        const nextDate = CustomEventNotifier.getNextOccurrence(ev, this.hijriOffset);
+        if (nextDate) {
+          const entry: UpcomingCustomEvent = {
+            ev: ev,
+            date: nextDate
+          };
+          upcoming.push(entry);
+        }
+      }
+
+      upcoming.sort((a: UpcomingCustomEvent, b: UpcomingCustomEvent): number => {
+        return a.date.getTime() - b.date.getTime();
+      });
+
+      this.upcomingCustomEvents = upcoming.slice(0, 3);
+    } catch (e) {
+      const err = e as Error;
+      console.error('Failed to load custom events: ' + err.message);
+    }
+  }
+
+  private async onCustomEventsVersionChanged(): Promise<void> {
+    await this.reloadCustomEvents();
   }
 
   private async onCalcSettingsChanged(): Promise<void> {
@@ -518,6 +623,7 @@ export struct HomePage {
     this.refreshHijriDate();
     this.refreshRamadan();
     this.onEventPerspectiveListener();
+    this.reloadCustomEvents();
   }
 
   private async onAppForegrounded(): Promise<void> {
@@ -630,6 +736,118 @@ export struct HomePage {
   private async refreshTasbihData(): Promise<void> {
     const loaded = await TasbihStorage.load(TasbihManager.createDefaults());
     this.tasbihToday = ProgressHelper.getTasbihTodayProgress(loaded.tasbihs);
+    // Reload bound tasbihs too — the version bump fires when the
+    // user increments on the Tasbih tab, and this is what makes the
+    // Home card reflect the new counts in real time.
+    this.boundTasbihs = loaded.tasbihs.filter(
+      (t: Tasbih) => t.boundPrayerIds && t.boundPrayerIds.length > 0
+    );
+  }
+
+  /**
+   * Compute the per-prayer groups shown in the Bound Tasbihs card.
+   *
+   * Iterates the five canonical prayers in order. Any prayer with
+   * at least one bound tasbih produces a group. Within each group,
+   * tasbihs are shown in the order they appear in `boundTasbihs`.
+   *
+   * Completion is read from `liveCounts[prayerId]` — the per-prayer
+   * source of truth — rather than `dailyTotal`/`count`, because a
+   * tasbih bound to both Fajr and Dhuhr has two independent counts.
+   */
+  private getPrayerGroups(): PrayerGroupData[] {
+    const order: string[] = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
+    const groups: PrayerGroupData[] = [];
+
+    for (const prayerId of order) {
+      // Collect tasbihs bound to this prayer.
+      const boundForPrayer: Tasbih[] = [];
+      for (const t of this.boundTasbihs) {
+        const bound = t.boundPrayerIds || [];
+        if (bound.indexOf(prayerId) >= 0) {
+          boundForPrayer.push(t);
+        }
+      }
+      if (boundForPrayer.length === 0) {
+        continue;
+      }
+
+      const rows: BoundTasbihRowData[] = [];
+      let doneCount = 0;
+
+      for (const t of boundForPrayer) {
+        const completed = this.isTasbihCompleteForPrayerInView(t, prayerId);
+        if (completed) {
+          doneCount++;
+        }
+
+        const pendingIdx = this.getFirstPendingDhikrIndexForPrayer(t, prayerId);
+        const pendingDhikr: Dhikr | null =
+          t.dhikrs.length > 0 ? t.dhikrs[pendingIdx] : null;
+        const curCount = pendingDhikr
+          ? this.getDhikrCountForPrayer(pendingDhikr, prayerId)
+          : 0;
+        const tgtCount = pendingDhikr ? pendingDhikr.target : 0;
+
+        rows.push({
+          tasbih: t,
+          prayerId: prayerId,
+          completed: completed,
+          firstPendingDhikrIndex: pendingIdx,
+          currentCount: curCount,
+          targetCount: tgtCount
+        });
+      }
+
+      groups.push({
+        prayerId: prayerId,
+        doneCount: doneCount,
+        totalCount: rows.length,
+        rows: rows
+      });
+    }
+
+    return groups;
+  }
+
+  private isTasbihCompleteForPrayerInView(
+    t: Tasbih, prayerId: string
+  ): boolean {
+    if (t.dhikrs.length === 0) {
+      return false;
+    }
+    for (const d of t.dhikrs) {
+      const count = this.getDhikrCountForPrayer(d, prayerId);
+      if (count < d.target) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private getFirstPendingDhikrIndexForPrayer(
+    t: Tasbih, prayerId: string
+  ): number {
+    for (let i = 0; i < t.dhikrs.length; i++) {
+      const d = t.dhikrs[i];
+      if (this.getDhikrCountForPrayer(d, prayerId) < d.target) {
+        return i;
+      }
+    }
+    return 0;
+  }
+
+  private getDhikrCountForPrayer(d: Dhikr, prayerId: string): number {
+    if (!d.liveCounts) {
+      return 0;
+    }
+    return d.liveCounts[prayerId] ?? 0;
+  }
+
+  private getTasbihDisplayName(t: Tasbih): string {
+    return t.nameKey
+      ? L.get(t.nameKey, this.currentLanguage)
+      : t.name;
   }
 
   private refreshHeader(): void {
@@ -812,12 +1030,12 @@ export struct HomePage {
     return this.hasOutstandingQada();
   }
 
-  private currentDuaEntry(): DuaEntry | null {
+  private currentDuaEntry(): CompleteDua | null {
     if (this.countdownTarget === 'maghrib') {
-      return DUA_IFTAR;
+      return this.iftarDua;
     }
     if (this.countdownTarget === 'imsak') {
-      return DUA_SUHOOR;
+      return this.suhoorDua;
     }
     return null;
   }
@@ -1095,7 +1313,12 @@ export struct HomePage {
         this.refreshHeader();
         this.refreshFastingWindow();
       } catch (err) {
-        console.error('Manual refresh failed:', JSON.stringify(err));
+        const error = err as Error;
+        if (error.message === 'GPS_OFF') {
+          await LocationHelper.showLocationDisabledDialog(this.colors.accentGold);
+        } else if (error.message === 'PERMISSION_DENIED') {
+          await LocationHelper.showPermissionDeniedDialog(this.colors.accentGold);
+        }
       } finally {
         this.isLoadingLocation = false;
       }
@@ -1283,6 +1506,9 @@ export struct HomePage {
 
                   Column() {
                     this.DuasCard()
+                    // --- NEW: Bound Tasbihs Card ---
+                    this.BoundTasbihsCard()
+                    this.CustomEventsCard()
                     this.Next3DaysPreview()
                     this.TodayProgressCard()
                     // ---- Qada (persistent obligation — bottom of column) ----
@@ -1320,6 +1546,9 @@ export struct HomePage {
                     this.RamadanCard()
                   }
                   this.DuasCard()
+                  // --- NEW: Bound Tasbihs Card ---
+                  this.BoundTasbihsCard()
+                  this.CustomEventsCard()
                   this.Next3DaysPreview()
                   // ---- Prayers ----
                   this.TodayProgressCard()
@@ -1440,6 +1669,14 @@ export struct HomePage {
         offsetY: 2
       })
       .margin({ bottom: 14 })
+      // Soft fade-in so the banner does not pop abruptly the
+      // moment the Eid card disappears on Shawwal 4.
+      .transition(
+        TransitionEffect.OPACITY.animation({
+          duration: 400,
+          curve: Curve.EaseInOut
+        })
+      )
       .onClick(() => {
         router.pushUrl({ url: 'pages/RamadanDetailsPage' })
           .catch((e: Error) =>
@@ -1655,6 +1892,152 @@ export struct HomePage {
   }
 
   @Builder
+  CustomEventsCard() {
+    if (this.upcomingCustomEvents.length > 0) {
+      Column() {
+        // Header (unchanged)
+        Row({ space: 8 }) {
+          Image($r('app.media.ic_nav_calendar'))
+            .width(16).height(16)
+            .fillColor(this.colors.accentGold)
+            .flexShrink(0)
+          Text(this.tr('upcoming_custom_events'))
+            .fontSize(12)
+            .fontColor(this.colors.textMuted)
+            .fontWeight(FontWeight.Bold)
+            .letterSpacing(1.2)
+            .layoutWeight(1)
+        }
+        .width('100%').padding({ bottom: 14 })
+
+        // List — UPDATED ForEach type
+        Column({ space: 10 }) {
+          ForEach(this.upcomingCustomEvents.slice(0, 3), (item: UpcomingCustomEvent) => {
+            Row({ space: 12 }) {
+              // Date badge (Gregorian — unchanged)
+              Column() {
+                Text(item.date.toLocaleDateString(this.currentLanguage, { month: 'short' }).toUpperCase())
+                  .fontSize(9).fontColor(this.colors.textOnAccent).fontWeight(FontWeight.Bold)
+                Text(`${item.date.getDate()}`)
+                  .fontSize(16).fontColor(this.colors.textOnAccent).fontWeight(FontWeight.Bold)
+              }
+              .width(44)
+              .height(44)
+              .backgroundColor(this.colors.accentGold)
+              .borderRadius(8)
+              .justifyContent(FlexAlign.Center)
+              .alignItems(HorizontalAlign.Center)
+              .flexShrink(0)
+
+              // Text content — now three rows
+              Column() {
+                // Title
+                Text(item.ev.title)
+                  .fontSize(14)
+                  .fontWeight(FontWeight.Medium)
+                  .fontColor(this.colors.textWhite)
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+                  .width('100%')
+                  .textAlign(TextAlign.Start)
+
+                // Hijri date
+                Row({ space: 4 }) {
+                  Image($r('app.media.ic_ramadan_moon'))
+                    .width(10).height(10)
+                    .fillColor(this.colors.accentGold)
+                    .flexShrink(0)
+                  Text(this.formatEventHijriDate(item.date))
+                    .fontSize(11)
+                    .fontColor(this.colors.accentGold)
+                    .fontWeight(FontWeight.Medium)
+                    .maxLines(1)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    .layoutWeight(1)
+                    .textAlign(TextAlign.Start)
+                }
+                .width('100%')
+                .margin({ top: 3 })
+                .alignItems(VerticalAlign.Center)
+
+                // Days remaining · recurrence (if any)
+                Row({ space: 4 }) {
+                  Text(this.formatEventDaysUntil(item.date))
+                    .fontSize(10)
+                    .fontColor(this.colors.textMuted)
+                    .maxLines(1)
+                  if (item.ev.recurrence && item.ev.recurrence !== 'none') {
+                    Text('·').fontSize(10).fontColor(this.colors.textMuted)
+                    Text(this.tr('recur_' + item.ev.recurrence))
+                      .fontSize(10)
+                      .fontColor(this.colors.textMuted)
+                      .maxLines(1)
+                      .textOverflow({ overflow: TextOverflow.Ellipsis })
+                      .layoutWeight(1)
+                  }
+                }
+                .width('100%')
+                .margin({ top: 2 })
+                .alignItems(VerticalAlign.Center)
+              }
+              .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+              Image($r('app.media.ic_chevron_right'))
+                .width(12)
+                .height(12)
+                .fillColor(this.colors.accentGold)
+                .opacity(0.6)
+                .rotate({ angle: this.isRtl() ? 180 : 0 })
+                .flexShrink(0)
+            }
+            .width('100%')
+            .padding(10)
+            .backgroundColor(this.colors.tintSubtle)
+            .borderRadius(10)
+            .onClick(() => {
+              const h = HijriCalendarHelper.getHijriDate(item.date, this.hijriOffset);
+
+              // Clear any stale target FIRST so setOrCreate always
+              // fires @Watch even when re-tapping the same event
+              // while a previous target is still pending (e.g. after
+              // a first navigation whose page build was interrupted).
+              AppStorage.setOrCreate('nav_target_hijri_year', 0);
+              AppStorage.setOrCreate('nav_target_hijri_month', 0);
+              AppStorage.setOrCreate('nav_target_hijri_day', 0);
+
+              // Then set the actual target.
+              AppStorage.setOrCreate('nav_target_hijri_year', h.year);
+              AppStorage.setOrCreate('nav_target_hijri_month', h.month);
+              AppStorage.setOrCreate('nav_target_hijri_day', h.day);
+
+              // Tab switch LAST so MainTabs sees a fully-prepared target.
+              AppStorage.setOrCreate('nav_target_tab', 'calendar');
+            })
+          }, (item: UpcomingCustomEvent) => `ce-${item.ev.id}-${item.date.getTime()}`)
+        }
+        .width('100%')
+      }
+      .width('100%')
+      .padding(18)
+      .backgroundColor(this.colors.cardDark)
+      .borderRadius(Theme.radiusLarge)
+      .border({
+        width: 1,
+        color: PageTheme.isDarkFor(this.themeMode)
+          ? 'rgba(255, 255, 255, 0.08)'
+          : this.colors.borderSoft
+      })
+      .shadow({
+        radius: 12,
+        color: this.colors.shadowCard,
+        offsetX: 0,
+        offsetY: 4
+      })
+      .margin({ bottom: 14 })
+    }
+  }
+
+  @Builder
   DuasCard() {
     if (this.dailyDuas.length > 0) {
       Column() {
@@ -1755,6 +2138,214 @@ export struct HomePage {
       })
       .margin({ bottom: 14 })
     }
+  }
+
+  @Builder
+  BoundTasbihsCard() {
+    if (this.boundTasbihs.length > 0) {
+      Column() {
+        // Header — unchanged
+        Row({ space: 8 }) {
+          Image($r('app.media.ic_nav_tasbih'))
+            .width(16).height(16)
+            .fillColor(this.colors.accentGold)
+            .flexShrink(0)
+          Text(this.tr('home_tasbih_tracker'))
+            .fontSize(12)
+            .fontColor(this.colors.textMuted)
+            .fontWeight(FontWeight.Bold)
+            .letterSpacing(1.2)
+            .layoutWeight(1)
+
+          Row({ space: 2 }) {
+            Text(this.tr('view_all'))
+              .fontSize(11).fontColor(this.colors.accentGold)
+              .fontWeight(FontWeight.Medium)
+            Image($r('app.media.ic_chevron_right'))
+              .width(12).height(12)
+              .fillColor(this.colors.accentGold)
+              .rotate({ angle: this.isRtl() ? 180 : 0 })
+          }
+          .onClick(() => {
+            AppStorage.setOrCreate('nav_target_tab', 'tasbih');
+          })
+        }
+        .width('100%').padding({ bottom: 14 })
+
+        // Per-prayer groups. The key includes tasbihStateVersion
+        // so ArkUI recreates each group (and its inner rows) when
+        // any tasbih changes — this avoids the @Builder-snapshot
+        // gotcha where the parameterized builder keeps stale data.
+        Column({ space: 10 }) {
+          ForEach(this.getPrayerGroups(), (group: PrayerGroupData) => {
+            this.PrayerGroupHeader(group)
+          }, (group: PrayerGroupData) =>
+          `${group.prayerId}-${group.doneCount}-${group.totalCount}-${this.tasbihStateVersion}`)
+        }
+        .width('100%')
+      }
+      .width('100%')
+      .padding(18)
+      .backgroundColor(this.colors.cardDark)
+      .borderRadius(Theme.radiusLarge)
+      .border({
+        width: 1,
+        color: PageTheme.isDarkFor(this.themeMode)
+          ? 'rgba(255, 255, 255, 0.08)'
+          : this.colors.borderSoft
+      })
+      .shadow({
+        radius: 12,
+        color: this.colors.shadowCard,
+        offsetX: 0,
+        offsetY: 4
+      })
+      .margin({ bottom: 14 })
+    }
+  }
+
+  @Builder
+  PrayerGroupHeader(group: PrayerGroupData) {
+    Column({ space: 6 }) {
+      Row({ space: 6 }) {
+        Text(this.tr('prayer_' + group.prayerId))
+          .fontSize(11)
+          .fontColor(this.colors.accentGold)
+          .fontWeight(FontWeight.Bold)
+          .letterSpacing(0.8)
+          .layoutWeight(1)
+
+        if (group.doneCount === group.totalCount) {
+          Row({ space: 3 }) {
+            Image($r('app.media.ic_check'))
+              .width(10).height(10)
+              .fillColor(this.colors.accentGold)
+              .flexShrink(0)
+            Text(`${group.doneCount}/${group.totalCount}`)
+              .fontSize(10)
+              .fontColor(this.colors.accentGold)
+              .fontWeight(FontWeight.Medium)
+          }
+          .padding({
+            left: 6,
+            right: 8,
+            top: 2,
+            bottom: 2
+          })
+          .backgroundColor(this.colors.tintSoft)
+          .borderRadius(8)
+        } else {
+          Text(`${group.doneCount}/${group.totalCount}`)
+            .fontSize(10)
+            .fontColor(this.colors.textMuted)
+        }
+      }
+      .width('100%')
+      .alignItems(VerticalAlign.Center)
+
+      Column({ space: 2 }) {
+        ForEach(group.rows, (row: BoundTasbihRowData) => {
+          this.BoundTasbihRowView(row)
+        }, (row: BoundTasbihRowData) =>
+        `${row.prayerId}-${row.tasbih.id}-${row.completed}-${row.currentCount}`)
+      }
+      .width('100%')
+    }
+    .width('100%')
+    .padding({
+      top: 8,
+      bottom: 8,
+      left: 8,
+      right: 8
+    })
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(10)
+  }
+
+  @Builder
+  BoundTasbihRowView(row: BoundTasbihRowData) {
+    Row({ space: 10 }) {
+      Image(row.completed
+        ? $r('app.media.ic_check')
+        : $r('app.media.ic_nav_tasbih'))
+        .width(14)
+        .height(14)
+        .fillColor(row.completed
+          ? this.colors.accentGold
+          : this.colors.textMuted)
+        .opacity(row.completed ? 1.0 : 0.7)
+        .flexShrink(0)
+
+      Column() {
+        Text(this.getTasbihDisplayName(row.tasbih))
+          .fontSize(13)
+          .fontColor(row.completed
+            ? this.colors.textMuted
+            : this.colors.textWhite)
+          .fontWeight(row.completed
+            ? FontWeight.Normal
+            : FontWeight.Medium)
+          .opacity(row.completed ? 0.7 : 1.0)
+          .decoration(row.completed
+            ? { type: TextDecorationType.LineThrough }
+            : { type: TextDecorationType.None })
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+          .width('100%')
+          .textAlign(TextAlign.Start)
+
+        if (!row.completed && row.targetCount > 0) {
+          Text(`${row.currentCount}/${row.targetCount}`)
+            .fontSize(10)
+            .fontColor(this.colors.textMuted)
+            .margin({ top: 1 })
+            .width('100%')
+            .textAlign(TextAlign.Start)
+        }
+      }
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+
+      Image($r('app.media.ic_chevron_right'))
+        .width(12)
+        .height(12)
+        .fillColor(this.colors.accentGold)
+        .opacity(0.6)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
+        .flexShrink(0)
+    }
+    .width('100%')
+    .padding({
+      top: 6,
+      bottom: 6,
+      left: 6,
+      right: 4
+    })
+    .borderRadius(6)
+    .onClick(() => {
+      // Navigate to this specific tasbih, this specific prayer,
+      // and the first dhikr that is still pending for that prayer.
+      AppStorage.setOrCreate('nav_target_tasbih', row.tasbih.id);
+      AppStorage.setOrCreate('nav_target_dhikr', row.firstPendingDhikrIndex);
+      AppStorage.setOrCreate('nav_target_prayer', row.prayerId);
+      AppStorage.setOrCreate('nav_target_tab', 'tasbih');
+    })
+  }
+
+  private getTasbihSubtitle(t: Tasbih): string {
+    const prayerId = t.boundPrayerIds![0];
+    const prayerName = L.get('prayer_' + prayerId, this.currentLanguage);
+
+    const pending = t.dhikrs.find(d => (d.dailyTotal ?? d.count) < d.target);
+    if (pending) {
+      const dhikrName = pending.transliterationKey
+        ? L.get(pending.transliterationKey, this.currentLanguage)
+        : pending.transliteration;
+      const total = pending.dailyTotal ?? pending.count;
+      const left = pending.target - total;
+      return `${prayerName} · ${dhikrName} (${left} left)`;
+    }
+    return `${prayerName} · ${this.tr('tasbih_status_completed')}`;
   }
 
   @Builder

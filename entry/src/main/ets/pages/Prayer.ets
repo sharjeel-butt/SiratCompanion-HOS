@@ -14,7 +14,6 @@ import { CalculationSource, LocationMode } from '../models/SettingsModels';
 import { NotificationHelper } from '../helper/NotificationHelper';
 import { common } from '@kit.AbilityKit';
 import { PdfExportHelper } from '../utils/PdfExportHelper';
-import { TasbihPill } from '../components/TasbihPill';
 import { DuaIndicator } from '../components/DuaIndicator';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
@@ -58,6 +57,7 @@ import { AdvancedCalcSettings, DEFAULT_ADVANCED_CALC } from '../models/AdvancedC
 import { EventPerspectiveNotifier } from '../utils/EventPerspectiveNotifier';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
+import { TasbihIndicator } from '../components/TasbihIndicator';
 
 interface TimelineRow {
   kind: 'prayer' | 'extra';
@@ -727,7 +727,12 @@ export struct Prayer {
         this.refreshPrayerTimes();
         this.updateTodayHeaderData();
       } catch (err) {
-        console.error('Manual refresh failed:', JSON.stringify(err));
+        const error = err as Error;
+        if (error.message === 'GPS_OFF') {
+          await LocationHelper.showLocationDisabledDialog(this.colors.accentGold);
+        } else if (error.message === 'PERMISSION_DENIED') {
+          await LocationHelper.showPermissionDeniedDialog(this.colors.accentGold);
+        }
       } finally {
         this.isLoadingLocation = false;
       }
@@ -1294,72 +1299,55 @@ export struct Prayer {
 
   @Builder
   NextPrayerSection() {
-    Row({ space: 8 }) {
-      // Next Prayer Pill (Large Time)
-      Row() {
-        // Left Side: Label + Name
-        Column({ space: 2 }) {
-          Text(this.tr('next_prayer'))
-            .fontSize(10)
-            .fontColor(this.colors.textMuted)
-            .letterSpacing(0.5)
-            .fontWeight(FontWeight.Medium)
-            .width('100%')
-            .textAlign(TextAlign.Start)
+    Column() {
+      // Card surface — inset by the wrapper below, so its left/right
+      // edges land at exactly x=16 like PrayerSunPath and the card
+      // inside TimelineSection.
+      Column({ space: 2 }) {
+        Text(this.tr('next_prayer'))
+          .fontSize(10)
+          .fontColor(this.colors.textMuted)
+          .letterSpacing(0.5)
+          .fontWeight(FontWeight.Medium)
+          .width('100%')
+          .textAlign(TextAlign.Start)
 
+        Row() {
           Text(this.translateEventName(this.todayNextPrayerName))
             .fontSize(16)
             .fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Bold)
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .width('100%')
+            .layoutWeight(1)
             .textAlign(TextAlign.Start)
-        }
-        .layoutWeight(1)
-        .alignItems(HorizontalAlign.Start)
-        .justifyContent(FlexAlign.Center)
 
-        // Right Side: Large Time
-        Text(this.dt(this.todayNextPrayerTime))
-          .fontSize(26)
-          .fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Bold)
-          .fontFeature('"tnum" 1')
-          .direction(Direction.Ltr)
-          .flexShrink(0)
-          .textAlign(TextAlign.End)
+          Text(this.dt(this.todayNextPrayerTime))
+            .fontSize(28)
+            .fontColor(this.colors.textWhite)
+            .fontWeight(FontWeight.Bold)
+            .fontFeature('"tnum" 1')
+            .maxLines(1)
+            .flexShrink(0)
+        }
+        .width('100%')
+        .alignItems(VerticalAlign.Center)
       }
-      .layoutWeight(1)
-      .height(56)
+      .width('100%')
       .padding({
         left: 16,
         right: 16,
-        top: 6,
-        bottom: 6
+        top: 8,
+        bottom: 8
       })
       .backgroundColor(this.colors.cardDark)
       .borderRadius(19)
       .border({ width: 1, color: this.colors.borderSoft })
-      .alignItems(VerticalAlign.Center)
-
-      // Tasbih Pill
-      TasbihPill({
-        colors: this.colors,
-        currentLanguage: this.appLanguage,
-        prayerName: this.todayNextPrayerName,
-        onNavigate: (tasbihId: string, dhikrIndex: number, prayerId: string) => {
-          AppStorage.setOrCreate('nav_target_tasbih', tasbihId);
-          AppStorage.setOrCreate('nav_target_dhikr', dhikrIndex);
-          AppStorage.setOrCreate('nav_target_prayer', prayerId);
-          AppStorage.setOrCreate('nav_target_tab', 'tasbih');
-        }
-      })
+      .alignItems(HorizontalAlign.Start)
     }
     .width('100%')
     .padding({ left: 16, right: 16 })
     .margin({ top: 4, bottom: 12 })
-    .alignItems(VerticalAlign.Center)
   }
 
   @Builder
@@ -1589,11 +1577,22 @@ export struct Prayer {
       .alignItems(HorizontalAlign.Start)
       .layoutWeight(1)
 
-      // --- NEW: Dua Indicator ---
-      DuaIndicator({
-        colors: this.colors,
-        prayerId: prayer.id
-      })
+      // --- NEW: Indicators (Tasbih & Dua) ---
+      Row({ space: 6 }) {
+        TasbihIndicator({
+          colors: this.colors,
+          prayerId: prayer.id,
+          currentLanguage: this.appLanguage
+        })
+
+        DuaIndicator({
+          colors: this.colors,
+          prayerId: prayer.id,
+          currentLanguage: this.appLanguage
+        })
+      }
+      .flexShrink(0)
+
       Text(this.dt(prayer.time)).fontSize(16)
         .fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
     }

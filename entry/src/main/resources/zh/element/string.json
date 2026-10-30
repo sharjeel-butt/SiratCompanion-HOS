@@ -918,7 +918,7 @@
     },
     {
       "name": "compass_ready",
-      "value": "指南针已就绪。旋转设备以对准 🕋 标记。"
+      "value": "指南针已就绪。请旋转设备，直至天房标记指向正上方。"
     },
     {
       "name": "keep_device_flat",
@@ -2707,7 +2707,118 @@
     {
       "name": "duas_for",
       "value": "祈祷词"
+    },
+    {
+      "name": "home_tasbih_tracker",
+      "value": "绑定的念珠"
+    },
+    {
+      "name": "add_custom_event",
+      "value": "添加事件"
+    },
+    {
+      "name": "event_title_placeholder",
+      "value": "事件名称"
+    },
+    {
+      "name": "hijri_date",
+      "value": "伊斯兰历日期"
+    },
+    {
+      "name": "gregorian_date",
+      "value": "公历日期"
+    },
+    {
+      "name": "notify_me",
+      "value": "在这一天通知我"
+    },
+    {
+      "name": "custom_events_title",
+      "value": "自定义事件"
+    },
+    {
+      "name": "date_type",
+      "value": "日期类型"
+    },
+    {
+      "name": "event_title",
+      "value": "事件标题"
+    },
+    {
+      "name": "day",
+      "value": "日"
+    },
+    {
+      "name": "month",
+      "value": "月"
+    },
+    {
+      "name": "year",
+      "value": "年"
+    },
+    {
+      "name": "notify_me_desc",
+      "value": "在上午8:00收到日历提醒"
+    },
+    {
+      "name": "edit_custom_event",
+      "value": "编辑事件"
+    },
+    {
+      "name": "event_title_required",
+      "value": "需要事件标题"
+    },
+    {
+      "name": "invalid_date",
+      "value": "无效日期"
+    },
+    {
+      "name": "hijri_equivalent",
+      "value": "将保存为:"
+    },
+    {
+      "name": "repeats",
+      "value": "重复"
+    },
+    {
+      "name": "recur_none",
+      "value": "不重复"
+    },
+    {
+      "name": "recur_yearly",
+      "value": "每年"
+    },
+    {
+      "name": "recur_monthly",
+      "value": "每月"
+    },
+    {
+      "name": "recur_weekly",
+      "value": "每周"
+    },
+    {
+      "name": "show_all",
+      "value": "显示全部"
+    },
+    {
+      "name": "show_this_month",
+      "value": "本月"
+    },
+    {
+      "name": "no_custom_events",
+      "value": "未找到自定义事件。"
+    },
+    {
+      "name": "upcoming_custom_events",
+      "value": "即将到来的事件"
+    },
+    {
+      "name": "notif_pray_jummah",
+      "value": "礼主麻"
+    },
+    {
+      "name": "hadith_jummah",
+      "value": "五番拜功，从一个主麻到下一个主麻，是它们之间所犯之罪的赎罪，只要远离大罪。 ——《穆斯林圣训实录》233"
     }
-
   ]
 }

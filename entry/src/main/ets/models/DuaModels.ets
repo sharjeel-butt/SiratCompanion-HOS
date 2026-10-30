@@ -2,7 +2,10 @@ export interface BaseDua {
   id: string;
   category: string;
   arabic: string;
-  reference: string; // Default reference if translation fails
+  reference: string;
+
+  /** Optional phonetic transliteration, shown in the simple display card. */
+  transliteration?: string;
 }
 
 export interface TranslatedDua {

@@ -2,6 +2,7 @@
 
 import { TimezoneResolver } from '../utils/TimezoneResolver';
 import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
+import { STORAGE_KEY_HIJRI_OFFSET } from '../common/StorageKeys';
 import {
   AdvancedCalcSettings,
   DEFAULT_ADVANCED_CALC,
@@ -462,9 +463,28 @@ export class PrayerTimeCalculator {
     // --- Umm al-Qura Ramadan Rule ---
     let effectiveIshaInterval = params.ishaInterval;
     if (method === CalculationMethod.UMM_AL_QURA) {
-      const hijri = HijriEngineResolver.current().toHijri(date);
+      // The user's Hijri offset shifts their entire Hijri calendar.
+      // Apply it here so that the "Ramadan" window during which Isha
+      // is extended matches the month the user actually sees on the
+      // Home header and the calendar page. Without this, a user who
+      // has offset +2 would see Isha at 90 min for 2–3 days after
+      // their own 1 Ramadan, until Umm al-Qura catches up.
+      let offsetDays = 0;
+      try {
+        const stored = AppStorage.get<number>(STORAGE_KEY_HIJRI_OFFSET);
+        if (stored !== undefined && !isNaN(stored)) {
+          offsetDays = stored;
+        }
+      } catch (e) {
+        // AppStorage unavailable (e.g. unit tests) — default to zero.
+      }
+
+      const shifted = new Date(date);
+      shifted.setDate(shifted.getDate() + offsetDays);
+
+      const hijri = HijriEngineResolver.current().toHijri(shifted);
       if (hijri !== null && hijri.month === 9) {
-        effectiveIshaInterval = 120; // 90 + 30 mins
+        effectiveIshaInterval = 120; // 90 + 30 min
       }
     }
 
@@ -706,12 +726,22 @@ export class PrayerTimeCalculator {
     return `${hours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
   }
 
+  /**
+   * Round up to the next full minute.
+   *
+   * A prayer time that landed at 5:23:00 stays 5:23; one that landed
+   * at 5:23:01 becomes 5:24. The prior implementation bumped the
+   * minute then handed the bumped Date back to formatTime(), which
+   * adds a further 30 s — over-rounding to 5:25 for the 5:23:30 case.
+   * Using formatTimeExact() prevents the double bump.
+   */
   private static formatTimeUp(date: Date): string {
     const d = new Date(date.getTime());
     if (d.getSeconds() > 0) {
       d.setMinutes(d.getMinutes() + 1);
+      d.setSeconds(0, 0);
     }
-    return PrayerTimeCalculator.formatTime(d);
+    return PrayerTimeCalculator.formatTimeExact(d);
   }
 
   private static formatTimeExact(date: Date): string {

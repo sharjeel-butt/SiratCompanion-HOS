@@ -11,6 +11,17 @@ const KEY_DUA_BINDINGS = 'dua_bindings';
 export class DuaService {
   private static cachedDuas: CompleteDua[] | null = null;
 
+  /**
+   * Clear the in-memory Dua cache. Called by UserBackupService
+   * after a successful restore so that the freshly restored
+   * favorites and bindings take effect on the next load without
+   * requiring a language change or app restart.
+   */
+  static invalidateCache(): void {
+    DuaService.cachedDuas = null;
+    AppStorage.setOrCreate('dua_cache_lang', '');
+  }
+
   static async loadDuas(context: common.UIAbilityContext, lang: string): Promise<CompleteDua[]> {
     if (DuaService.cachedDuas) {
       const cachedLang = AppStorage.get<string>('dua_cache_lang');
@@ -42,14 +53,35 @@ export class DuaService {
         translatedDuas = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(enData));
       }
 
-      // 3. Load User State (Favorites & Bindings)
-      const favJson = await PreferencesHelper.getString(KEY_DUA_FAVORITES, '[]');
-      const favorites: string[] = JSON.parse(favJson);
+      // 2.5 Diagnostic: warn about missing translation keys so a
+      //     broken localization file surfaces at load time rather
+      //     than at render time (where it would silently fall
+      //     through to the raw key).
+      //
+      //     This runs once per language per session. ~100 iterations
+      //     of a couple of string checks — negligible.
+      let missingCount = 0;
+      for (const base of baseDuas) {
+        const t = translatedDuas[base.id];
+        if (!t || !t.name || t.translation === '') {
+          missingCount++;
+          console.warn(
+            `[DuaService] ${lang}: missing translation for "${base.id}"`
+          );
+        }
+      }
+      if (missingCount > 0) {
+        console.warn(
+          `[DuaService] ${lang}: ${missingCount} dua(s) missing name or translation`
+        );
+      }
 
-      const bindJson = await PreferencesHelper.getString(KEY_DUA_BINDINGS, '{}');
-      const bindings: Record<string, string[]> = JSON.parse(bindJson);
+      // 3. Load user state — each preference parses in isolation so a
+      //    single corrupted file only loses that one dimension.
+      const favorites = await DuaService.safeLoadStringArray(KEY_DUA_FAVORITES);
+      const bindings = await DuaService.safeLoadRecord(KEY_DUA_BINDINGS);
 
-      // 4. Merge with explicit typing (No spread operator)
+      // 4. Merge with explicit typing
       const merged: CompleteDua[] = baseDuas.map((base: BaseDua): CompleteDua => {
         const t: TranslatedDua = translatedDuas[base.id] || {
           name: base.id,
@@ -62,6 +94,7 @@ export class DuaService {
           category: base.category,
           arabic: base.arabic,
           reference: base.reference,
+          transliteration: base.transliteration,
           translatedName: t.name,
           translatedText: t.translation,
           translatedReference: t.reference || base.reference,
@@ -76,8 +109,72 @@ export class DuaService {
       return merged;
 
     } catch (e) {
+      // Only reached if the base JSON itself cannot be read/parsed —
+      // i.e. the raw resource is missing or malformed. All user-
+      // preference failures are handled by the safe loaders below.
       console.error('Failed to load duas:', JSON.stringify(e));
       return [];
+    }
+  }
+
+  /**
+   * Read a string[] from preferences. Returns [] on any failure —
+   * missing key, malformed JSON, non-array value, or null. Isolating
+   * this parse from the main loadDuas try/catch means a single
+   * corrupt favorites file no longer wipes every dua from the app.
+   *
+   * No any/unknown: uses Object + Array.isArray + a type assertion,
+   * which is the ArkTS-legal pattern for defensive JSON handling.
+   */
+  private static async safeLoadStringArray(key: string): Promise<string[]> {
+    try {
+      const raw = await PreferencesHelper.getString(key, '[]');
+      if (raw.length === 0) {
+        return [];
+      }
+      const parsed: Object = JSON.parse(raw);
+      // Array.isArray returns false for null, primitives, and
+      // plain objects — all of which we must reject here.
+      if (!Array.isArray(parsed)) {
+        console.warn(`[DuaService] ${key} is not an array — ignoring`);
+        return [];
+      }
+      return parsed as string[];
+    } catch (e) {
+      const err = e as Error;
+      console.warn(`[DuaService] ${key} parse failed: ${err.message}`);
+      return [];
+    }
+  }
+
+  /**
+   * Read a Record<string, string[]> from preferences. Returns {} on
+   * any failure — missing key, malformed JSON, array value, null, or
+   * primitive. Same isolation rationale as safeLoadStringArray.
+   */
+  private static async safeLoadRecord(key: string): Promise<Record<string, string[]>> {
+    try {
+      const raw = await PreferencesHelper.getString(key, '{}');
+      if (raw.length === 0) {
+        return {};
+      }
+      const parsed: Object = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        console.warn(`[DuaService] ${key} is not an object — ignoring`);
+        return {};
+      }
+      const rec = parsed as Record<string, string[]>;
+      // Object.keys throws on null — that routes us into the
+      // catch below and returns {}. Primitive values (string,
+      // number, boolean) don't throw here and are harmless
+      // downstream: bindings[id] returns undefined, which
+      // loadDuas maps to [] via `bindings[base.id] || []`.
+      Object.keys(rec);
+      return rec;
+    } catch (e) {
+      const err = e as Error;
+      console.warn(`[DuaService] ${key} parse failed: ${err.message}`);
+      return {};
     }
   }
 

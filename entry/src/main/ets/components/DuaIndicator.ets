@@ -2,7 +2,6 @@ import { router } from '@kit.ArkUI';
 import { ThemeColors } from '../common/Theme';
 import { PreferencesHelper } from '../helper/PreferencesHelper';
 import { STORAGE_KEY_DUA_BINDINGS_VERSION } from '../common/StorageKeys';
-import { L } from '../i8n/LocalizationHelper';
 
 @Component
 export struct DuaIndicator {
@@ -39,7 +38,12 @@ export struct DuaIndicator {
   build() {
     if (this.count > 0) {
       Row({ space: 4 }) {
-        Text('🤲').fontSize(12)
+        Image($r('app.media.ic_dua'))
+          .width(12)
+          .height(12)
+          .fillColor(this.colors.accentGold)
+          .flexShrink(0)
+
         Text(`${this.count}`)
           .fontSize(12)
           .fontWeight(FontWeight.Bold)

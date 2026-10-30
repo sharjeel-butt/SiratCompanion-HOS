@@ -155,13 +155,13 @@ export class LocationHelper {
     };
   }
 
-  static async showLocationDisabledDialog(): Promise<void> {
+  static async showLocationDisabledDialog(accentColor: string = '#C9A96E'): Promise<void> {
     const lang = LocationHelper.currentLang();
     try {
       await promptAction.showDialog({
         title: L.get('dialog_gps_off_title', lang),
         message: L.get('dialog_gps_off_message', lang),
-        buttons: [{ text: L.get('ok', lang), color: '#C9A96E' }]
+        buttons: [{ text: L.get('ok', lang), color: accentColor }]
       });
     } catch (err) {
       const error = err as BusinessError;
@@ -169,13 +169,13 @@ export class LocationHelper {
     }
   }
 
-  static async showPermissionDeniedDialog(): Promise<void> {
+  static async showPermissionDeniedDialog(accentColor: string = '#C9A96E'): Promise<void> {
     const lang = LocationHelper.currentLang();
     try {
       await promptAction.showDialog({
         title: L.get('dialog_permission_title', lang),
         message: L.get('dialog_permission_message', lang),
-        buttons: [{ text: L.get('ok', lang), color: '#C9A96E' }]
+        buttons: [{ text: L.get('ok', lang), color: accentColor }]
       });
     } catch (err) {
       const error = err as BusinessError;
@@ -236,12 +236,16 @@ export class LocationHelper {
 
       const addr = results[0];
 
+      // placeName intentionally excluded: HarmonyOS returns a
+      // formatted address there (e.g. "Korangi Road, Sector 23,
+      // Karachi"), which reads wrong in the Home header.
+      // locality + subAdministrativeArea cover the common case;
+      // administrativeArea is the state/province fallback.
       const cityCandidates: Array<string | undefined> = [
         addr.locality,
-        addr.subLocality, // Neighborhood is better than state
+        addr.subLocality,
         addr.subAdministrativeArea,
-        addr.placeName,
-        addr.administrativeArea// State/Province is last resort
+        addr.administrativeArea
       ];
 
       for (const s of cityCandidates) {

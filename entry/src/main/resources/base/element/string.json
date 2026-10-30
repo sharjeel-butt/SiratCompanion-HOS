@@ -918,7 +918,7 @@
     },
     {
       "name": "compass_ready",
-      "value": "Compass is ready. Rotate your device to align with the 🕋 marker."
+      "value": "Compass is ready. Rotate your device until the Kaaba marker points up."
     },
     {
       "name": "keep_device_flat",
@@ -2707,6 +2707,118 @@
     {
       "name": "duas_for",
       "value": "Duas for"
+    },
+    {
+      "name": "home_tasbih_tracker",
+      "value": "BOUND TASBIHS"
+    },
+    {
+      "name": "add_custom_event",
+      "value": "Add Event"
+    },
+    {
+      "name": "event_title_placeholder",
+      "value": "Event Name"
+    },
+    {
+      "name": "hijri_date",
+      "value": "Hijri Date"
+    },
+    {
+      "name": "gregorian_date",
+      "value": "Gregorian Date"
+    },
+    {
+      "name": "notify_me",
+      "value": "Notify me on this day"
+    },
+    {
+      "name": "custom_events_title",
+      "value": "CUSTOM EVENTS"
+    },
+    {
+      "name": "date_type",
+      "value": "Date Type"
+    },
+    {
+      "name": "event_title",
+      "value": "Event Title"
+    },
+    {
+      "name": "day",
+      "value": "Day"
+    },
+    {
+      "name": "month",
+      "value": "Month"
+    },
+    {
+      "name": "year",
+      "value": "Year"
+    },
+    {
+      "name": "notify_me_desc",
+      "value": "Receive a calendar reminder at 8:00 AM"
+    },
+    {
+      "name": "edit_custom_event",
+      "value": "Edit Event"
+    },
+    {
+      "name": "event_title_required",
+      "value": "Event title is required"
+    },
+    {
+      "name": "invalid_date",
+      "value": "Invalid date"
+    },
+    {
+      "name": "hijri_equivalent",
+      "value": "Will be saved as:"
+    },
+    {
+      "name": "repeats",
+      "value": "Repeats"
+    },
+    {
+      "name": "recur_none",
+      "value": "None"
+    },
+    {
+      "name": "recur_yearly",
+      "value": "Yearly"
+    },
+    {
+      "name": "recur_monthly",
+      "value": "Monthly"
+    },
+    {
+      "name": "recur_weekly",
+      "value": "Weekly"
+    },
+    {
+      "name": "show_all",
+      "value": "Show All"
+    },
+    {
+      "name": "show_this_month",
+      "value": "This Month"
+    },
+    {
+      "name": "no_custom_events",
+      "value": "No custom events found."
+    },
+    {
+      "name": "upcoming_custom_events",
+      "value": "UPCOMING EVENTS"
+    },
+    {
+      "name": "notif_pray_jummah",
+      "value": "Pray Jummah"
+    },
+    {
+      "name": "hadith_jummah",
+      "value": "The five daily prayers, and from one Friday prayer to the next, are an expiation for whatever sins come in between them, so long as major sins are avoided. — Sahih Muslim 233"
     }
   ]
 }

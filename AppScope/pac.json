@@ -1,112 +1,52 @@
 {
-  "dataProcess": [
+  "dataType": "User content",
+  "dataLabels": [
     {
-      "dataType": "Location information",
-      "dataLabels": [
-        {
-          "label": "GPS location",
-          "purposes": [
-            "App functionality"
-          ]
-        },
-        {
-          "label": "Other approximate location information",
-          "purposes": [
-            "App functionality"
-          ]
-        },
-        {
-          "label": "Other precise location information",
-          "purposes": [
-            "App functionality"
-          ]
-        }
+      "label": "Prayer completion history",
+      "purposes": [
+        "App functionality"
       ]
     },
     {
-      "dataType": "Basic information",
-      "dataLabels": [
-        {
-          "label": "Calendar",
-          "purposes": [
-            "App functionality"
-          ]
-        }
+      "label": "Custom Tasbih definitions",
+      "purposes": [
+        "App functionality"
       ]
     },
     {
-      "dataType": "Device information",
-      "dataLabels": [
-        {
-          "label": "Magnetometer",
-          "purposes": [
-            "App functionality"
-          ]
-        },
-        {
-          "label": "Acceleration sensor",
-          "purposes": [
-            "App functionality"
-          ]
-        },
-        {
-          "label": "Orientation sensor",
-          "purposes": [
-            "App functionality"
-          ]
-        }
+      "label": "Tasbih session data",
+      "purposes": [
+        "App functionality"
       ]
     },
     {
-      "dataType": "App information",
-      "dataLabels": [
-        {
-          "label": "App settings",
-          "purposes": [
-            "App functionality"
-          ]
-        },
-        {
-          "label": "App run logs",
-          "purposes": [
-            "App functionality"
-          ]
-        }
+      "label": "Ramadan fasting tracker",
+      "purposes": [
+        "App functionality"
       ]
     },
     {
-      "dataType": "User content",
-      "dataLabels": [
-        {
-          "label": "Prayer completion history",
-          "purposes": [
-            "App functionality"
-          ]
-        },
-        {
-          "label": "Custom Tasbih definitions",
-          "purposes": [
-            "App functionality"
-          ]
-        },
-        {
-          "label": "Tasbih session data",
-          "purposes": [
-            "App functionality"
-          ]
-        },
-        {
-          "label": "Ramadan fasting tracker",
-          "purposes": [
-            "App functionality"
-          ]
-        },
-        {
-          "label": "Qada (make-up fast) log",
-          "purposes": [
-            "App functionality"
-          ]
-        }
+      "label": "Qada (make-up fast) log",
+      "purposes": [
+        "App functionality"
+      ]
+    },
+    {
+      "label": "Dua favorites",
+      "purposes": [
+        "App functionality"
+      ]
+    },
+    {
+      "label": "Dua-to-Prayer bindings",
+      "purposes": [
+        "App functionality"
+      ]
+    },
+    {
+      "label": "Custom calendar events",
+      "purposes": [
+        "App functionality"
       ]
     }
   ]

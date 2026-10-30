@@ -89,12 +89,36 @@ struct MainTabs {
   }
 
   private onNavTargetTabChanged(): void {
-    if (this.navTargetTab === 'tasbih') {
-      this.currentIndex = 4;
-      this.hdsController.changeIndex(4);
-      this.tabsController.changeIndex(4);
-      AppStorage.setOrCreate('nav_target_tab', '');
+    if (!this.navTargetTab || this.navTargetTab.length === 0) {
+      return;
     }
+
+    let targetIndex = -1;
+    switch (this.navTargetTab) {
+      case 'home':
+        targetIndex = 0;
+        break;
+      case 'prayers':
+        targetIndex = 1;
+        break;
+      case 'calendar':
+        targetIndex = 2;
+        break;
+      case 'compass':
+        targetIndex = 3;
+        break;
+      case 'tasbih':
+        targetIndex = 4;
+        break;
+    }
+
+    if (targetIndex >= 0) {
+      this.currentIndex = targetIndex;
+      this.hdsController.changeIndex(targetIndex);
+      this.tabsController.changeIndex(targetIndex);
+    }
+
+    AppStorage.setOrCreate('nav_target_tab', '');
   }
 
   aboutToDisappear(): void {
@@ -217,7 +241,10 @@ struct MainTabs {
         .barOverlap(true)
         .vertical(false)
         .barHeight(80)
-        .barFloatingStyle(this.buildHdsFloatingStyle())
+        // Only apply floating style if HDS accepted it.
+        // If buildHdsFloatingStyle() throws, we skip it and
+        // HDS falls back to a plain tab bar — stable on every SDK.
+        .barFloatingStyle(this.safeFloatingStyle())
         .scrollable(false)
         .onChange((index: number) => {
           this.currentIndex = index;
@@ -268,6 +295,25 @@ struct MainTabs {
     .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+  }
+
+  /**
+   * Build the HDS floating style, or return an empty object so HDS
+   * uses its default tab bar. Guarding prevents a partial parse from
+   * leaving HDS's internal fsTabBarHandler_ undefined, which used to
+   * cause downstream components to crash on access.
+   */
+  private safeFloatingStyle(): HdsTabsFloatingStyle {
+    try {
+      return this.buildHdsFloatingStyle();
+    } catch (err) {
+      AppLogger.warn('MainTabs',
+        `buildHdsFloatingStyle failed: ${(err as Error).message}`);
+      // Return an empty style — HDS will not create the floating
+      // handler, but it will still render a standard tab bar.
+      const empty: HdsTabsFloatingStyle = {};
+      return empty;
+    }
   }
 
   // ============================================================
@@ -710,27 +756,26 @@ struct MainTabs {
         const ctx = getContext(this) as common.UIAbilityContext;
 
         // Delay slightly to allow the dialog dismiss animation to finish.
-        // Immediate termination during a dialog animation is often blocked by the OS.
-        setTimeout(() => {
+        setTimeout(async () => {
           const isPC = deviceInfo.deviceType === '2in1' || deviceInfo.deviceType === 'tablet';
 
           if (isPC) {
-            // On PC/2-in-1, we must explicitly destroy the window first.
-            window.getLastWindow(ctx).then((win) => {
-              win.destroyWindow().then(() => {
-                // Terminate after the window is destroyed
-                ctx.terminateSelf();
-              }).catch((e: Error) => {
-                console.error('Destroy window failed:', JSON.stringify(e));
-                ctx.terminateSelf();
-              });
-            }).catch((e: Error) => {
-              console.error('Get window failed:', JSON.stringify(e));
-              ctx.terminateSelf();
-            });
-          } else {
-            // Standard phone behavior
-            ctx.terminateSelf();
+            // On PC/2-in-1, explicitly destroy the window BEFORE terminating.
+            // If destroyWindow fails (e.g., app running in split screen),
+            // we STILL call terminateSelf unconditionally.
+            try {
+              const win = await window.getLastWindow(ctx);
+              await win.destroyWindow();
+            } catch (e) {
+              console.warn('[Exit] window destroy failed: ' + (e as Error).message);
+            }
+          }
+
+          try {
+            await ctx.terminateSelf();
+            console.info('[Exit] terminateSelf succeeded');
+          } catch (e) {
+            console.error('[Exit] terminateSelf failed: ' + (e as Error).message);
           }
         }, 250);
       }

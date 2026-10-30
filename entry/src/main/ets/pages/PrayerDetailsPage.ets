@@ -504,7 +504,12 @@ struct PrayerDetailsPage {
 
   private yearCellBg(completed: number): string {
     if (completed < 0) {
-      return this.colors.tintSubtle;
+      // Future days — leave transparent so they are visually
+      // distinct from past days with 1–2 completions (which also
+      // use tintSubtle). Prevents the year view from claiming
+      // "not yet happened" looks identical to "happened but
+      // low progress".
+      return 'transparent';
     }
     if (completed === 5) {
       return this.colors.accentGold;

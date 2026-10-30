@@ -40,6 +40,7 @@ const FLUSH_DEBOUNCE_MS = 250;
  */
 export class PreferencesHelper {
   private static store: preferences.Preferences | null = null;
+  private static initContext: common.UIAbilityContext | null = null;
 
   private static initResolve: (() => void) | null = null;
   private static initPromise: Promise<void> = new Promise<void>((resolve) => {
@@ -47,32 +48,68 @@ export class PreferencesHelper {
   });
   /** Timer id for the debounced flush. -1 when none pending. */
   private static flushTimerId: number = -1;
-
-  // ============================================================
-  // INITIALIZATION
-  // ============================================================
+  /** Last attempt timestamp — throttles rapid retries. */
+  private static lastInitAttemptMs: number = 0;
+  private static readonly INIT_RETRY_MS = 30_000;
+  private static readonly INIT_WAIT_MS = 5_000;
 
   static async init(context: common.UIAbilityContext): Promise<void> {
+    PreferencesHelper.initContext = context;
     if (PreferencesHelper.store) {
       return;
     }
+
+    // Debounce: if we just tried, don't hammer the API.
+    const now = Date.now();
+    if (now - PreferencesHelper.lastInitAttemptMs < 100) {
+      return;
+    }
+    PreferencesHelper.lastInitAttemptMs = now;
 
     try {
       PreferencesHelper.store = await preferences.getPreferences(
         context, PREF_STORE_NAME
       );
       console.info('[PreferencesHelper] Store initialized');
-    } catch (err) {
-      console.error(
-        `[PreferencesHelper] Init failed: ${JSON.stringify(err)}`
-      );
-    } finally {
+      // Resolve ONLY on success. A failed init leaves initPromise
+      // pending, which lets ensureReady() retry after the interval.
       if (PreferencesHelper.initResolve) {
         PreferencesHelper.initResolve();
         PreferencesHelper.initResolve = null;
       }
+    } catch (err) {
+      console.error(
+        `[PreferencesHelper] Init failed: ${JSON.stringify(err)}`
+      );
+      // Do NOT resolve initPromise — callers will wait up to
+      // INIT_WAIT_MS, then retry via ensureReady().
     }
   }
+
+  private static async ensureReady(): Promise<void> {
+    if (PreferencesHelper.store) {
+      return;
+    }
+
+    // Wait up to INIT_WAIT_MS for the in-flight init to succeed.
+    if (PreferencesHelper.initResolve !== null) {
+      await Promise.race([
+        PreferencesHelper.initPromise,
+        new Promise<void>((r) => setTimeout(r, PreferencesHelper.INIT_WAIT_MS))
+      ]);
+    }
+
+    if (PreferencesHelper.store) {
+      return;
+    }
+
+    // Retry once per INIT_RETRY_MS if we have a context.
+    if (PreferencesHelper.initContext !== null &&
+      Date.now() - PreferencesHelper.lastInitAttemptMs > PreferencesHelper.INIT_RETRY_MS) {
+      await PreferencesHelper.init(PreferencesHelper.initContext);
+    }
+  }
+
 
   // ============================================================
   // READS
@@ -249,12 +286,5 @@ export class PreferencesHelper {
       clearTimeout(PreferencesHelper.flushTimerId);
       PreferencesHelper.flushTimerId = -1;
     }
-  }
-
-  private static async ensureReady(): Promise<void> {
-    if (PreferencesHelper.store) {
-      return;
-    }
-    await PreferencesHelper.initPromise;
   }
 }

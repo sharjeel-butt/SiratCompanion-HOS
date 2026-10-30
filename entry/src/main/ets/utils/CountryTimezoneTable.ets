@@ -243,6 +243,62 @@ export const COUNTRY_ZONES: CountryZone[] = [
     dstRule: DstRule.NONE
   },
 
+  // ---- Caucasus ----
+  // Added so that RU-MSK (Moscow Time) does not incorrectly claim
+  // Georgian, Armenian, or Azerbaijani coordinates. All three
+  // countries use UTC+4 with no DST.
+  {
+    code: 'GE',
+    minLat: 41.0,
+    maxLat: 43.6,
+    minLng: 40.0,
+    maxLng: 46.8,
+    standardOffset: 4,
+    dstRule: DstRule.NONE
+  },
+  {
+    code: 'AM',
+    minLat: 38.8,
+    maxLat: 41.3,
+    minLng: 43.4,
+    maxLng: 46.7,
+    standardOffset: 4,
+    dstRule: DstRule.NONE
+  },
+  {
+    code: 'AZ',
+    minLat: 38.4,
+    maxLat: 41.9,
+    minLng: 44.8,
+    maxLng: 50.4,
+    standardOffset: 4,
+    dstRule: DstRule.NONE
+  },
+
+  // ---- Kazakhstan — two zones ----
+  // West Kazakhstan (Aktobe, Atyrau, Oral) — UTC+5, no DST.
+  // East Kazakhstan (Almaty, Astana, Shymkent, most of country) —
+  // UTC+6, no DST. The split at 61°E tracks the actual boundary
+  // between the two zones.
+  {
+    code: 'KZ-W',
+    minLat: 45.0,
+    maxLat: 55.4,
+    minLng: 46.5,
+    maxLng: 61.0,
+    standardOffset: 5,
+    dstRule: DstRule.NONE
+  },
+  {
+    code: 'KZ-E',
+    minLat: 40.5,
+    maxLat: 55.4,
+    minLng: 61.0,
+    maxLng: 87.3,
+    standardOffset: 6,
+    dstRule: DstRule.NONE
+  },
+
   // ---- Russia — eleven zones, west → east ----
   // Kaliningrad is the only +2 zone; small box, put it first.
   {

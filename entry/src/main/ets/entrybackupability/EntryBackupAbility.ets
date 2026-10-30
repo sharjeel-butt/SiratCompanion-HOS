@@ -126,7 +126,10 @@ const SETTINGS_SPECS: PrefSpec[] = [
 
   // ---- Duas ----
   { key: 'dua_favorites', type: TYPE_STRING },
-  { key: 'dua_bindings', type: TYPE_STRING }
+  { key: 'dua_bindings', type: TYPE_STRING },
+
+  // ---- Custom Calendar Events ----
+  { key: 'custom_events', type: TYPE_STRING }
 ];
 
 /**

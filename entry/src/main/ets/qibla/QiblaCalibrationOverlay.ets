@@ -87,9 +87,9 @@ export struct QiblaCalibrationOverlay {
 
       // ---- Centered card ----
       Column() {
-        // Icon
-        Text('🧭')
-          .fontSize(48)
+        Image($r('app.media.tab_compass'))
+          .width(48).height(48)
+          .fillColor('#FFFFFF')
           .margin({ bottom: 16 })
 
         // Title
@@ -172,10 +172,6 @@ export struct QiblaCalibrationOverlay {
             offsetY: 0
           })
 
-        // Phone glyph
-        Text('📱')
-          .fontSize(14)
-          .position({ x: 4, y: 4 })
       }
       .width(24).height(24)
       .translate({ x: this.tracerX, y: this.tracerY })

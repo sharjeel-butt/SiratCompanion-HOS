@@ -211,10 +211,20 @@ export class HijriCalendarHelper {
         continue;
       }
       if (e.recurrence === EventRecurrence.FIRST_THURSDAY_NIGHT) {
+        // Thursday = 4. The event fires on the Thursday whose
+        // next day (Friday) is within the first seven days of
+        // the target Hijri month. Since the Thursday precedes
+        // that Friday by one day, its Hijri day must be 0–6.
+        // Day 0 is impossible, so 1–6 is the range.
+        //
+        // The earlier check used 1–7, which could match the
+        // Thursday before the SECOND Friday of the month
+        // (Hijri day 8) while missing the actual first Friday
+        // when the month happened to start mid-week.
         if (gregorianDate !== undefined &&
           e.month === hijriMonth &&
           gregorianDate.getDay() === 4 &&
-          hijriDay >= 1 && hijriDay <= 7) {
+          hijriDay >= 1 && hijriDay <= 6) {
           out.push(e.key);
         }
         continue;

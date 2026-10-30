@@ -919,7 +919,7 @@
     },
     {
       "name": "compass_ready",
-      "value": "البوصلة جاهزة. أدر جهازك لمحاذاة علامة 🕋."
+      "value": "البوصلة جاهزة. أدر جهازك حتى تشير علامة الكعبة إلى الأعلى."
     },
     {
       "name": "keep_device_flat",
@@ -2708,6 +2708,118 @@
     {
       "name": "duas_for",
       "value": "أدعية"
+    },
+    {
+      "name": "home_tasbih_tracker",
+      "value": "التسبيحات المرتبطة"
+    },
+    {
+      "name": "add_custom_event",
+      "value": "إضافة حدث"
+    },
+    {
+      "name": "event_title_placeholder",
+      "value": "اسم الحدث"
+    },
+    {
+      "name": "hijri_date",
+      "value": "التاريخ الهجري"
+    },
+    {
+      "name": "gregorian_date",
+      "value": "التاريخ الميلادي"
+    },
+    {
+      "name": "notify_me",
+      "value": "أبلغني في هذا اليوم"
+    },
+    {
+      "name": "custom_events_title",
+      "value": "أحداث مخصصة"
+    },
+    {
+      "name": "date_type",
+      "value": "نوع التاريخ"
+    },
+    {
+      "name": "event_title",
+      "value": "عنوان الحدث"
+    },
+    {
+      "name": "day",
+      "value": "اليوم"
+    },
+    {
+      "name": "month",
+      "value": "الشهر"
+    },
+    {
+      "name": "year",
+      "value": "السنة"
+    },
+    {
+      "name": "notify_me_desc",
+      "value": "استلام تذكير بالتقويم في الساعة 8:00 صباحًا"
+    },
+    {
+      "name": "edit_custom_event",
+      "value": "تعديل الحدث"
+    },
+    {
+      "name": "event_title_required",
+      "value": "عنوان الحدث مطلوب"
+    },
+    {
+      "name": "invalid_date",
+      "value": "تاريخ غير صالح"
+    },
+    {
+      "name": "hijri_equivalent",
+      "value": "سيتم الحفظ كـ:"
+    },
+    {
+      "name": "repeats",
+      "value": "التكرار"
+    },
+    {
+      "name": "recur_none",
+      "value": "لا يتكرر"
+    },
+    {
+      "name": "recur_yearly",
+      "value": "سنوياً"
+    },
+    {
+      "name": "recur_monthly",
+      "value": "شهرياً"
+    },
+    {
+      "name": "recur_weekly",
+      "value": "أسبوعياً"
+    },
+    {
+      "name": "show_all",
+      "value": "عرض الكل"
+    },
+    {
+      "name": "show_this_month",
+      "value": "هذا الشهر"
+    },
+    {
+      "name": "no_custom_events",
+      "value": "لا توجد أحداث مخصصة."
+    },
+    {
+      "name": "upcoming_custom_events",
+      "value": "الأحداث القادمة"
+    },
+    {
+      "name": "notif_pray_jummah",
+      "value": "صلِّ الجمعة"
+    },
+    {
+      "name": "hadith_jummah",
+      "value": "الصَّلَوَاتُ الْخَمْسُ، وَالْجُمُعَةُ إِلَى الْجُمُعَةِ، كَفَّارَةٌ لِمَا بَيْنَهُنَّ، مَا لَمْ تُغْشَ الْكَبَائِرُ — صحيح مسلم ٢٣٣"
     }
   ]
 }

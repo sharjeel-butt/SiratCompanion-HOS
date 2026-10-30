@@ -605,7 +605,10 @@ This project uses Conventional Commits (e.g., `feat:`, `fix:`, `docs:`).
 - **Compass** requires a real device. Emulators without a magnetometer show "sensor unavailable".
 - **High-latitude prayer times** clamp the hour angle to [-1, 1].
 - **Tasbih history** is retained for 90 days.
-- **PDF exports** are generated locally in the app sandbox and handed to the system print service.
+- **PDF exports** are saved to a file location of the user's choice via the
+  HarmonyOS document picker. Third-party apps cannot request the system-level
+  `ohos.permission.PRINT`, so direct printing is not supported; users can open
+  the saved PDF in any viewer and print from there.
 
 ---
 

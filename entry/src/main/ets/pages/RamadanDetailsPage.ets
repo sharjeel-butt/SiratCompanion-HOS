@@ -15,7 +15,8 @@ import {
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
 import { DuaCard } from '../components/DuaCard';
-import { DUA_IFTAR, DUA_SUHOOR } from '../data/Duas';
+import { DuaService } from '../helper/DuaService';
+import { CompleteDua } from '../models/DuaModels';
 import { Breakpoints } from '../common/Breakpoints';
 import { L } from '../i8n/LocalizationHelper';
 import {
@@ -30,6 +31,7 @@ import {
   QadaYearRow,
   RamadanYearData
 } from '../models/RamadanModels';
+import { common } from '@kit.AbilityKit';
 
 type SheetKind = 'none' | 'mark' | 'reason';
 
@@ -80,6 +82,8 @@ struct RamadanDetailsPage {
   @State selectedDay: number = 0;
   @State selectedReason: MissedReason | null = null;
   @State customReasonText: string = '';
+  @State private suhoorDua: CompleteDua | null = null;
+  @State private iftarDua: CompleteDua | null = null;
   // ---- Qada ----
   @State qadaSummary: QadaSummary | null = null;
   // Year-detail sheet (per-day marking)
@@ -102,6 +106,7 @@ struct RamadanDetailsPage {
     }
     );
     this.loadRamadanInfo();
+    this.loadDuasForSection();
 
     // Check if we navigated here from the "Duas" link
     const params = router.getParams() as Record<string, Object>;
@@ -122,6 +127,7 @@ struct RamadanDetailsPage {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
     this.loadRamadanInfo();
+    this.loadDuasForSection();
   }
 
   // ============================================================
@@ -146,6 +152,17 @@ struct RamadanDetailsPage {
       await this.reloadQadaSummary();
     } finally {
       this.isLoadingInfo = false;
+    }
+  }
+
+  private async loadDuasForSection(): Promise<void> {
+    try {
+      const ctx = getContext(this) as common.UIAbilityContext;
+      const all = await DuaService.loadDuas(ctx, this.currentLanguage);
+      this.suhoorDua = all.find((d: CompleteDua) => d.id === 'dua_suhoor') ?? null;
+      this.iftarDua = all.find((d: CompleteDua) => d.id === 'dua_breaking_the_fast') ?? null;
+    } catch (e) {
+      console.error('[RamadanDetailsPage] loadDuasForSection failed', e);
     }
   }
 
@@ -817,8 +834,13 @@ struct RamadanDetailsPage {
       // the year sheet — see toggleDayMadeUp(). Outside Ramadan, taps
       // open the sheet with full toggle access.
       if (this.ramadanInfo !== null && this.ramadanInfo.isRamadanNow) {
-        Row() {
-          Text('ℹ️').fontSize(12).margin({ right: 6 }).opacity(0.7)
+        Row({ space: 6 }) {
+          Image($r('app.media.ic_info'))
+            .width(12)
+            .height(12)
+            .fillColor(this.colors.textMuted)
+            .opacity(0.7)
+            .flexShrink(0)
           Text(this.tr('qada_not_during_ramadan'))
             .fontSize(11)
             .fontColor(this.colors.textMuted)
@@ -835,8 +857,13 @@ struct RamadanDetailsPage {
         })
         .alignItems(VerticalAlign.Top)
       } else {
-        Row() {
-          Text('ℹ️').fontSize(12).margin({ right: 6 }).opacity(0.7)
+        Row({ space: 6 }) {
+          Image($r('app.media.ic_info'))
+            .width(12)
+            .height(12)
+            .fillColor(this.colors.textMuted)
+            .opacity(0.7)
+            .flexShrink(0)
           Text(this.tr('qada_tap_year_hint'))
             .fontSize(11)
             .fontColor(this.colors.textMuted)
@@ -2132,12 +2159,14 @@ struct RamadanDetailsPage {
       .width('100%').padding({ bottom: 14 })
 
       Column() {
-        DuaCard({
-          dua: DUA_SUHOOR,
-          colors: this.colors,
-          currentLanguage: this.currentLanguage,
-          showName: true
-        })
+        if (this.suhoorDua !== null) {
+          DuaCard({
+            dua: this.suhoorDua,
+            colors: this.colors,
+            currentLanguage: this.currentLanguage,
+            showName: true
+          })
+        }
       }
       .width('100%')
       .padding(16)
@@ -2146,12 +2175,14 @@ struct RamadanDetailsPage {
       .margin({ bottom: 10 })
 
       Column() {
-        DuaCard({
-          dua: DUA_IFTAR,
-          colors: this.colors,
-          currentLanguage: this.currentLanguage,
-          showName: true
-        })
+        if (this.iftarDua !== null) {
+          DuaCard({
+            dua: this.iftarDua,
+            colors: this.colors,
+            currentLanguage: this.currentLanguage,
+            showName: true
+          })
+        }
       }
       .width('100%')
       .padding(16)

@@ -3,6 +3,8 @@
 import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { Configuration } from '@ohos.app.ability.Configuration'; // Direct import fixes fontScale error
 import { window } from '@kit.ArkUI';
+import { CustomEventStorage } from '../helper/CustomEventStorage';
+import { CustomEventNotifier } from '../helper/CustomEventNotifier';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { deviceInfo } from '@kit.BasicServicesKit';
 import { PreferencesHelper } from '../helper/PreferencesHelper';
@@ -470,6 +472,22 @@ export default class EntryAbility extends UIAbility {
         return;
       }
       await NotificationHelper.rescheduleAll();
+
+      // Custom event reminders were wiped by cancelAll() inside
+      // rescheduleAll(). Re-add them now so they survive the launch.
+      try {
+        const customEvents = await CustomEventStorage.load();
+        if (customEvents.length > 0) {
+          const hijriOffset = await SettingsHelper.getHijriOffset();
+          await CustomEventNotifier.reschedule(customEvents, hijriOffset);
+          AppLogger.info('EntryAbility',
+            `Rescheduled ${customEvents.length} custom event reminder(s)`);
+        }
+      } catch (e) {
+        AppLogger.warn('EntryAbility',
+          `Custom event reschedule failed: ${(e as Error).message}`);
+      }
+
       AppLogger.info('EntryAbility', 'Reminder renewal complete');
     } catch (e) {
       const err = e as Error;

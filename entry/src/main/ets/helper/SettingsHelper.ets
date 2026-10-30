@@ -296,18 +296,22 @@ export class SettingsHelper {
   // APP THEME PRESET
   // ============================================================
 
-  static getHighLatRuleLabel(rule: HighLatitudeRule): string {
+  static getHighLatRuleLabel(
+    rule: HighLatitudeRule, lang?: string
+  ): string {
     switch (rule) {
       case HighLatitudeRule.NONE:
-        return L.get('highlat_none');
+        return L.get('highlat_none', lang);
       case HighLatitudeRule.MIDDLE_OF_NIGHT:
-        return L.get('highlat_middle');
+        return L.get('highlat_middle', lang);
       case HighLatitudeRule.ONE_SEVENTH:
-        return L.get('highlat_one_seventh');
+        return L.get('highlat_one_seventh', lang);
       case HighLatitudeRule.ANGLE_BASED:
-        return L.get('highlat_angle');
+        return L.get('highlat_angle', lang);
+      case HighLatitudeRule.PROPORTIONAL_DEPRESSION:
+        return L.get('highlat_proportional', lang);
       default:
-        return L.get('highlat_none');
+        return L.get('highlat_none', lang);
     }
   }
 

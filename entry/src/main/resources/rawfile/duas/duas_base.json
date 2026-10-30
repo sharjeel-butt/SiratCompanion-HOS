@@ -381,7 +381,15 @@
     "id": "dua_breaking_the_fast",
     "category": "fasting",
     "arabic": "ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ وَثَبَتَ الْأَجْرُ إِنْ شَاءَ اللَّهُ",
-    "reference": "Sunan Abi Dawud 2357"
+    "reference": "Sunan Abi Dawud 2357",
+    "transliteration": "Dhahaba adh-dhama'u wabtallatil-'urooqu wa thabata al-ajru in sha Allah."
+  },
+  {
+    "id": "dua_suhoor",
+    "category": "fasting",
+    "arabic": "وَبِصَوْمِ غَدٍ نَّوَيْتُ مِنْ شَهْرِ رَمَضَانَ",
+    "reference": "Traditional intention (niyyah)",
+    "transliteration": "Wa bisawmi ghadinn nawaiytu min shahri Ramadan."
   },
   {
     "id": "dua_upon_seeing_the_new_moon",

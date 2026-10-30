@@ -215,6 +215,14 @@ export class HomeController {
    *
    * Returns a minimal PrayerModel carrying only the fields the
    * header needs. The result is not added to any persistent state.
+   *
+   * Note: we do NOT call getLocationAnchor() before passing
+   * `yesterday` to calculateWithDeviceTimezone. Doing so shifted
+   * yesterday by the offset delta, then let calculateWithDeviceTimezone
+   * re-resolve the offset from the shifted date — a double-shift
+   * that could flap across a DST boundary on manual-location users.
+   * The calculator already resolves its own offset from the
+   * (date + coords) pair, so we hand it yesterday unmodified.
    */
   private static buildPreviousIsha(
     today: Date,
@@ -227,14 +235,11 @@ export class HomeController {
     advanced: AdvancedCalcSettings
   ): PrayerModel | null {
     const yesterday = new Date(today.getTime() - MS_PER_DAY);
-    const anchor = HomeController.getLocationAnchor(
-      latitude, longitude, yesterday
-    );
 
     try {
       const yTimes: DailyPrayerTimes =
         PrayerTimeCalculator.calculateWithDeviceTimezone(
-          anchor, latitude, longitude, method, asrRule, highLatRule,
+          yesterday, latitude, longitude, method, asrRule, highLatRule,
           advanced
         );
       const yIsha = PrayerManager.offsetTime(yTimes.isha, offsets.isha);

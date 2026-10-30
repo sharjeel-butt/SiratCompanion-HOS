@@ -1,16 +1,17 @@
 // entry/src/main/ets/components/DuaCard.ets
 
 import { ThemeColors } from '../common/Theme';
-import { L } from '../i8n/LocalizationHelper';
-import { DuaEntry } from '../data/Duas';
+import { CompleteDua } from '../models/DuaModels';
 import { TypographyHelper } from '../helper/TypographyHelper';
 
 /**
- * Renders a single Dua: optional name header, then Arabic,
- * transliteration, and translation.
+ * Renders a single Dua for display: optional name header, then
+ * Arabic, transliteration, and translation.
  *
- * Used by the LiveCountdownBanner when a fast starts or ends, and
- * ready to be reused by a future dedicated Duas tab.
+ * This is the canonical display component. Used by the Home
+ * LiveCountdownBanner (during Ramadan) and by the Ramadan details
+ * page's Duas section. The full DuasPage uses a richer builder that
+ * adds favorite toggles and prayer bindings.
  *
  * Reactivity: `currentLanguage` is passed as a @Prop rather than
  * read from AppStorage so the component re-renders reliably when
@@ -18,16 +19,15 @@ import { TypographyHelper } from '../helper/TypographyHelper';
  */
 @Component
 export struct DuaCard {
-  @Prop dua: DuaEntry;
+  @Prop dua: CompleteDua;
   @Prop colors: ThemeColors;
   @Prop currentLanguage: string = 'en';
-  /** Show the dua's name as a centered header. Default true. */
   @Prop showName: boolean = true;
 
   build() {
     Column() {
       if (this.showName) {
-        Text(L.get(this.dua.nameKey, this.currentLanguage))
+        Text(this.dua.translatedName)
           .fontSize(13)
           .fontWeight(FontWeight.Bold)
           .fontColor(this.colors.accentGold)
@@ -36,10 +36,7 @@ export struct DuaCard {
           .margin({ bottom: 12 })
       }
 
-      // ---- Arabic (always shown) ----
-      // Amiri renders smaller than Outfit at the same pt size — its
-      // cap height is tighter and diacritics extend below the baseline.
-      // Bump to 22 and increase line height to accommodate the marks.
+      // ---- Arabic ----
       Text(this.dua.arabic)
         .fontSize(22)
         .fontFamily(TypographyHelper.getFont('ar', false))
@@ -49,19 +46,20 @@ export struct DuaCard {
         .width('100%')
 
       // ---- Transliteration + translation ----
-      // Skipped when the UI is already Arabic — they would be
-      // redundant with the source text.
       if (this.currentLanguage !== 'ar') {
-        Text(this.dua.transliteration)
-          .fontSize(12)
-          .fontColor(this.colors.accentGold)
-          .fontStyle(FontStyle.Italic)
-          .textAlign(TextAlign.Center)
-          .lineHeight(18)
-          .margin({ top: 10 })
-          .width('100%')
+        if (this.dua.transliteration &&
+          this.dua.transliteration.length > 0) {
+          Text(this.dua.transliteration)
+            .fontSize(12)
+            .fontColor(this.colors.accentGold)
+            .fontStyle(FontStyle.Italic)
+            .textAlign(TextAlign.Center)
+            .lineHeight(18)
+            .margin({ top: 10 })
+            .width('100%')
+        }
 
-        Text(L.get(this.dua.translationKey, this.currentLanguage))
+        Text(this.dua.translatedText)
           .fontSize(12)
           .fontColor(this.colors.textMuted)
           .textAlign(TextAlign.Center)

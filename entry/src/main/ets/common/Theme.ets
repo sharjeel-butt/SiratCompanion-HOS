@@ -69,39 +69,7 @@ class Palettes {
   // ----------------------------------------------------------
 
   static siratLight(): ThemeColors {
-    const c = new ThemeColors();
-    c.primaryGreen = '#F0F4FA';
-    c.cardDark = '#FFFFFF';
-    c.cardMuted = '#EDF2F9';
-    c.accentGold = '#3D7BF7';
-    c.accentGoldLight = '#6B9BFF';
-    c.textWhite = '#16181D';
-    c.textLight = '#4A4F58';
-    c.textMuted = '#7A8089';
-    c.textOnAccent = '#FFFFFF';
-    c.statusPray = '#3D7BF7';
-    c.statusExpress = '#F5A623';
-    c.tintSubtle = 'rgba(61,123,247,0.04)';
-    c.tintSoft = 'rgba(61,123,247,0.07)';
-    c.tintMedium = 'rgba(61,123,247,0.10)';
-    c.tintStrong = 'rgba(61,123,247,0.14)';
-    c.borderSoft = 'rgba(61,123,247,0.08)';
-    c.borderMedium = 'rgba(61,123,247,0.12)';
-    c.borderStrong = 'rgba(61,123,247,0.18)';
-    c.overlayDim = 'rgba(22,24,29,0.38)';
-    c.overlayDimSoft = 'rgba(0,0,0,0.10)';
-    c.shadowCard = 'rgba(22,24,29,0.05)';
-    c.shadowFloating = 'rgba(22,24,29,0.14)';
-    c.placeholder = 'rgba(22,24,29,0.30)';
-    c.dialogCancel = '#7A8089';
-    c.categoryPrayerTimes = '#3D7BF7';
-    c.categoryUICustomization = '#00A0C6';
-    c.categoryAppearance = '#7C3AED';
-    c.categoryCounter = '#3D7BF7';
-    c.categoryAbout = '#F5A623';
-    c.categoryHijriCalendar = '#06B6D4';
-    c.categoryNotifications = '#F97316';
-    return c;
+    return new ThemeColors();
   }
 
   static siratDark(): ThemeColors {

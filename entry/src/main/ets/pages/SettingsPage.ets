@@ -486,60 +486,6 @@ struct SettingsPage {
     .alignItems(VerticalAlign.Center)
   }
 
-  @Builder
-  CategoryHeader(title: string, icon: Resource, categoryKey: string) {
-    Row({ space: 14 }) {
-      Row() {
-        Image(icon).width(20).height(20).fillColor(this.colors.accentGold)
-      }
-      .width(40)
-      .height(40)
-      .justifyContent(FlexAlign.Center)
-      .alignItems(VerticalAlign.Center)
-      .backgroundColor(this.colors.tintSoft)
-      .borderRadius(12)
-      .border({ width: 1, color: this.colors.borderSoft })
-      .flexShrink(0)
-
-      Text(title)
-        .fontSize(17)
-        .fontWeight(FontWeight.Bold)
-        .fontColor(this.colors.textWhite)
-        .layoutWeight(1)
-        .textAlign(TextAlign.Start)
-
-      Text(this.expandedCategory === categoryKey ? '▲' : '▼')
-        .fontSize(12)
-        .fontColor(this.colors.accentGold)
-        .opacity(0.8)
-        .flexShrink(0)
-    }
-    .width('100%')
-    .padding(this.isRtl()
-      ? {
-        top: 12,
-        bottom: 12,
-        left: 16,
-        right: 12
-      }
-      : {
-        top: 12,
-        bottom: 12,
-        left: 12,
-        right: 16
-      }
-    )
-    .alignItems(VerticalAlign.Center)
-    .backgroundColor(this.colors.cardDark)
-    .borderRadius(16)
-    .border({ width: 1, color: this.colors.borderSoft })
-    .margin({ bottom: 8 })
-    .onClick(() => {
-      this.expandedCategory =
-        this.expandedCategory === categoryKey ? null : categoryKey;
-    })
-  }
-
   private isMadhabLocked(): boolean {
     return this.calcMethod === CalculationMethod.TURKEY ||
       this.calcMethod === CalculationMethod.TURKEY_EUROPE;
@@ -850,7 +796,7 @@ struct SettingsPage {
   @Builder
   PrayerOffsetsCard() {
     Column() {
-      Row() {
+      Row({ space: 8 }) {
         Column() {
           Text(this.tr('prayer_offsets'))
             .fontSize(15).fontColor(this.colors.textWhite)
@@ -862,12 +808,17 @@ struct SettingsPage {
         .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
         Image(this.showOffsets
-          ? $r('app.media.ic_chevron_up')
-          : $r('app.media.ic_chevron_down'))
+          ? $r('app.media.ic_chevron_down')
+          : $r('app.media.ic_chevron_right'))
           .width(16)
           .height(16)
           .fillColor(this.colors.accentGold)
           .opacity(0.8)
+          .flexShrink(0)
+          .rotate({
+            angle: this.showOffsets ? 0 : (this.isRtl() ? 180 : 0)
+          })
+          .animation({ duration: 200, curve: Curve.EaseInOut })
       }
       .width('100%')
       .padding({
@@ -1214,7 +1165,12 @@ struct SettingsPage {
         .flexShrink(0)
     }
     .width('100%')
-    .padding(14)
+    .padding({
+      top: 20,
+      bottom: 20,
+      left: this.isRtl() ? 20 : 16,
+      right: this.isRtl() ? 16 : 20
+    })
     .backgroundColor(this.colors.tintSubtle)
     .borderRadius(12)
     .onClick(() => {

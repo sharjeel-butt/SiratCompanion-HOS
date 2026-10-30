@@ -82,6 +82,8 @@ struct WizardPage {
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
   @State notifMasterEnabled: boolean = false;
   @State notifRequesting: boolean = false;
+  @State private notificationPermissionAttempts: number = 0;
+  private static readonly MAX_NOTIF_ATTEMPTS = 3;
 
   aboutToAppear(): void {
     this.currentLanguage = this.appLanguage;
@@ -188,7 +190,8 @@ struct WizardPage {
 
       if (this.showMethodPicker) {
         this.PickerOverlay(
-          this.tr('convention'), '🕌',
+          this.tr('convention'),
+          $r('app.media.ic_nav_mosque'),
           SettingsHelper.buildMethodPickerItems(this.calcMethod),
           (id: string) => {
             this.pickMethod(id);
@@ -200,7 +203,8 @@ struct WizardPage {
       }
       if (this.showAsrPicker) {
         this.PickerOverlay(
-          this.tr('madhab'), '🌅',
+          this.tr('madhab'),
+          $r('app.media.ic_sunrise'),
           SettingsHelper.buildAsrPickerItems(this.asrRule),
           (id: string) => {
             this.pickAsrRule(id);
@@ -212,7 +216,8 @@ struct WizardPage {
       }
       if (this.showSourcePicker) {
         this.PickerOverlay(
-          this.tr('source'), '🌐',
+          this.tr('source'),
+          $r('app.media.ic_globe'),
           SettingsHelper.buildSourcePickerItems(this.calcSource),
           (id: string) => {
             this.pickSource(id);
@@ -662,7 +667,9 @@ struct WizardPage {
           Column() {
             if (this.locationStatus === 'ready' && this.detectedCity.length > 0) {
               Row() {
-                Text('✅').fontSize(20)
+                Image($r('app.media.ic_check'))
+                  .width(20).height(20)
+                  .fillColor(this.colors.accentGold)
                 Column() {
                   Text(this.tr('wizard_location_ready'))
                     .fontSize(12).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
@@ -698,7 +705,10 @@ struct WizardPage {
                 })
             } else if (this.locationStatus === 'failed') {
               Column() {
-                Text('⚠️').fontSize(40).margin({ bottom: 10 })
+                Image($r('app.media.ic_warning'))
+                  .width(40).height(40)
+                  .fillColor(this.colors.statusExpress)
+                  .margin({ bottom: 10 })
                 Text(this.tr('wizard_location_failed'))
                   .fontSize(14).fontColor(this.colors.textWhite)
                   .textAlign(TextAlign.Center)
@@ -731,7 +741,10 @@ struct WizardPage {
               .alignItems(HorizontalAlign.Center)
             } else {
               Column() {
-                Text('📍').fontSize(48).margin({ bottom: 12 })
+                Image($r('app.media.ic_pin'))
+                  .width(48).height(48)
+                  .fillColor(this.colors.accentGold)
+                  .margin({ bottom: 12 })
                 Text(this.isGettingLocation
                   ? this.tr('wizard_getting_location')
                   : this.tr('wizard_location_desc'))
@@ -874,7 +887,9 @@ struct WizardPage {
 
             if (this.locationStatus === 'ready' && this.detectedCity.length > 0) {
               Row() {
-                Text('✅').fontSize(16)
+                Image($r('app.media.ic_check'))
+                  .width(16).height(16)
+                  .fillColor(this.colors.accentGold)
                 Text(this.detectedCity)
                   .fontSize(13)
                   .fontColor(this.colors.accentGold)
@@ -1094,7 +1109,7 @@ struct WizardPage {
   @Builder
   PickerOverlay(
     title: string,
-    icon: string,
+    icon: Resource,
     items: PickerItem[],
     onSelect: (id: string) => void,
     onCancel: () => void
@@ -1118,19 +1133,25 @@ struct WizardPage {
 
       // Header
       Row({ space: 14 }) {
-        Text(icon)
-          .fontSize(22)
-          .width(44)
-          .height(44)
-          .textAlign(TextAlign.Center)
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(12)
-          .border({ width: 1, color: this.colors.borderSoft })
-          .flexShrink(0)
+        Row() {
+          Image(icon)
+            .width(22)
+            .height(22)
+            .fillColor(this.colors.accentGold)
+        }
+        .width(44)
+        .height(44)
+        .justifyContent(FlexAlign.Center) // ← horizontal
+        .alignItems(VerticalAlign.Center) // ← vertical (was missing)
+        .backgroundColor(this.colors.tintSoft)
+        .borderRadius(12)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .flexShrink(0)
 
         Text(title)
           .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
           .layoutWeight(1)
+          .textAlign(TextAlign.Start)
       }
       .width('100%')
       .padding({
@@ -1336,27 +1357,40 @@ struct WizardPage {
   private async toggleNotifications(isOn: boolean): Promise<void> {
     if (!isOn) {
       this.notifMasterEnabled = false;
+      this.notificationPermissionAttempts = 0;
       await SettingsHelper.saveNotifMaster(false);
       await NotificationHelper.cancelAll();
       return;
     }
 
+    // Guard against an infinite retry loop: if the user keeps
+    // tapping Grant in the follow-up dialog without actually
+    // granting the permission at the system level, stop after
+    // a small number of attempts.
+    if (this.notificationPermissionAttempts >= WizardPage.MAX_NOTIF_ATTEMPTS) {
+      this.getUIContext().getPromptAction().showToast({
+        message: this.tr('calendar_permission_denied'),
+        duration: 3000
+      });
+      return;
+    }
+    this.notificationPermissionAttempts++;
+
     this.notifRequesting = true;
     const context = getContext(this) as common.UIAbilityContext;
-    // Requests exactly READ_CALENDAR and WRITE_CALENDAR
     const granted = await CalendarReminderHelper.requestPermission(context);
     this.notifRequesting = false;
 
     if (granted) {
       await CalendarReminderHelper.init(context, false);
       this.notifMasterEnabled = true;
+      this.notificationPermissionAttempts = 0; // success — reset budget
       await SettingsHelper.saveNotifMaster(true);
       await NotificationHelper.rescheduleAll();
     } else {
       this.notifMasterEnabled = false;
       await SettingsHelper.saveNotifMaster(false);
 
-      // Enforce: Show dialog and force them to retry
       promptAction.showDialog({
         title: this.tr('permission_required'),
         message: this.tr('calendar_permission_required_msg'),
@@ -1367,6 +1401,10 @@ struct WizardPage {
       }).then((res: promptAction.ShowDialogSuccessResponse) => {
         if (res.index === 1) {
           this.toggleNotifications(true);
+        } else {
+          // User cancelled — budget resets so a deliberate retry
+          // later in the session still works.
+          this.notificationPermissionAttempts = 0;
         }
       }).catch((err: Error) => {
         console.error('Dialog error', err);
@@ -1486,9 +1524,9 @@ struct WizardPage {
       const error = err as Error;
       this.locationStatus = 'failed';
       if (error.message === 'GPS_OFF') {
-        await LocationHelper.showLocationDisabledDialog();
+        await LocationHelper.showLocationDisabledDialog(this.colors.accentGold);
       } else if (error.message === 'PERMISSION_DENIED') {
-        await LocationHelper.showPermissionDeniedDialog();
+        await LocationHelper.showPermissionDeniedDialog(this.colors.accentGold);
       }
     } finally {
       this.isGettingLocation = false;

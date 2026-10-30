@@ -10,7 +10,6 @@ import { STORAGE_KEY_THEME_MODE, STORAGE_KEY_TIME_FORMAT } from '../common/Stora
 import { TypographyHelper } from '../helper/TypographyHelper';
 import { PageTheme } from '../common/PageTheme';
 import { router } from '@kit.ArkUI';
-import { TasbihPill } from './TasbihPill';
 
 /**
  * Shared page header used by HomePage and Prayer.
@@ -161,7 +160,7 @@ export struct PageHeader {
               .fillColor(this.colors.accentGold)
               .opacity(0.7)
               .objectFit(ImageFit.Contain)
-              .margin({ left: this.isRtl() ? 0 : 8, right: this.isRtl() ? 8 : 0 })
+              .flexShrink(0)
               .rotate({ angle: L.isRtlLang(this.currentLanguage) ? 180 : 0 })
           }
         }
@@ -181,85 +180,62 @@ export struct PageHeader {
       .alignItems(HorizontalAlign.Start)
       .width('100%')
 
-      // ============ Row 2: Current prayer + Tasbih ============
-      Row({ space: 8 }) {
-        // Current Prayer Pill (Large Time)
+      // ============ Row 2: Current prayer ============
+      Column({ space: 2 }) {
+        Text(this.tr('current_prayer'))
+          .fontSize(10)
+          .fontColor(this.colors.textMuted)
+          .letterSpacing(0.5)
+          .fontWeight(FontWeight.Medium)
+          .width('100%')
+          .textAlign(TextAlign.Start)
+
         Row() {
-          // Left Side: Label + Name
-          Column({ space: 2 }) {
-            Text(this.tr('current_prayer'))
-              .fontSize(10)
-              .fontColor(this.colors.textMuted)
-              .letterSpacing(0.5)
-              .fontWeight(FontWeight.Medium)
-              .width('100%')
-              .textAlign(TextAlign.Start)
+          Text(this.translateEventName(this.todayCurrentPrayerName))
+            .fontSize(16)
+            .fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Bold)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .layoutWeight(1)
+            .textAlign(TextAlign.Start)
 
-            Text(this.translateEventName(this.todayCurrentPrayerName))
-              .fontSize(16)
-              .fontColor(this.colors.accentGold)
-              .fontWeight(FontWeight.Bold)
-              .maxLines(1)
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-              .width('100%')
-              .textAlign(TextAlign.Start)
-          }
-          .layoutWeight(1)
-          .alignItems(HorizontalAlign.Start)
-          .justifyContent(FlexAlign.Center)
-
-          // Right Side: Large Time
           Text(this.dt(this.todayCurrentPrayerTime))
-            .fontSize(26)
+            .fontSize(28)
             .fontColor(this.colors.textWhite)
             .fontWeight(FontWeight.Bold)
             .fontFeature('"tnum" 1')
-            .direction(Direction.Ltr) // Keep AM/PM format stable
+            .maxLines(1)
             .flexShrink(0)
-            .textAlign(TextAlign.End)
         }
-        .layoutWeight(1)
-        .height(56) // Increased height to comfortably fit the 26sp text
-        .padding({
-          left: 16,
-          right: 16,
-          top: 6,
-          bottom: 6
-        })
-        .backgroundColor(
-          PageTheme.isDarkFor(this.themeMode)
-            ? 'rgba(10, 13, 20, 0.85)'
-            : 'rgba(240, 244, 250, 0.85)'
-        )
-        .backgroundBlurStyle(BlurStyle.Thin)
-        .borderRadius(19)
-        .border({ width: 1, color: this.colors.borderSoft })
+        .width('100%')
         .alignItems(VerticalAlign.Center)
-
-        // Tasbih Pill
-        TasbihPill({
-          colors: this.colors,
-          currentLanguage: this.currentLanguage,
-          prayerName: this.todayCurrentPrayerName,
-          onNavigate: this.onNavigateToTasbih
-        })
       }
       .width('100%')
+      .padding({
+        left: 16,
+        right: 16,
+        top: 8,
+        bottom: 8
+      })
+      .backgroundColor(
+        PageTheme.isDarkFor(this.themeMode)
+          ? 'rgba(10, 13, 20, 0.85)'
+          : 'rgba(240, 244, 250, 0.85)'
+      )
+      .backgroundBlurStyle(BlurStyle.Thin)
+      .borderRadius(19)
+      .border({ width: 1, color: this.colors.borderSoft })
+      .alignItems(HorizontalAlign.Start)
       .margin({ top: 4, bottom: 12 })
-      .alignItems(VerticalAlign.Center)
 
       // ============ Row 3: Calc pills or Fasting Window ============
       if (this.isRamadan) {
-        Row() {
+        Row({ space: 8 }) {
           Image($r('app.media.ic_ramadan_moon'))
             .width(16).height(16)
             .fillColor(this.colors.accentGold)
             .flexShrink(0)
-            // FIX: Dynamic margin to handle LTR/RTL
-            .margin({
-              right: this.isRtl() ? 0 : 8,
-              left: this.isRtl() ? 8 : 0
-            })
 
           Text(this.tr('fasting_ends_at'))
             .fontSize(12).fontColor(this.colors.textMuted)
@@ -268,18 +244,19 @@ export struct PageHeader {
             .fontSize(14)
             .fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Bold)
-            .margin({ left: 8, right: 8 })
             .direction(Direction.Ltr)
+
           Blank()
-          Text(this.tr('details_view'))
-            .fontSize(11).fontColor(this.colors.accentGold)
-            .fontWeight(FontWeight.Medium)
-          Image($r('app.media.ic_chevron_right'))
-            .width(12)
-            .height(12)
-            .fillColor(this.colors.accentGold)
-            .margin({ left: this.isRtl() ? 0 : 2, right: this.isRtl() ? 2 : 0 })
-            .rotate({ angle: this.isRtl() ? 180 : 0 })
+
+          Row({ space: 2 }) {
+            Text(this.tr('details_view'))
+              .fontSize(11).fontColor(this.colors.accentGold)
+              .fontWeight(FontWeight.Medium)
+            Image($r('app.media.ic_chevron_right'))
+              .width(12).height(12)
+              .fillColor(this.colors.accentGold)
+              .rotate({ angle: this.isRtl() ? 180 : 0 })
+          }
         }
         .width('100%')
         .height(38)
@@ -294,13 +271,13 @@ export struct PageHeader {
             .catch((e: Error) => console.error(JSON.stringify(e)));
         })
       } else if (this.showCalcPills) {
-        Row() {
+        Row({ space: 4 }) {
           // Method
-          Row() {
+          Row({ space: 6 }) {
             Image($r('app.media.ic_nav_mosque'))
               .width(14).height(14)
               .fillColor(this.colors.accentGold)
-              .margin({ right: 6 })
+              .flexShrink(0)
             Text(SettingsHelper.getCalcMethodShortLabel(this.calcMethod))
               .fontSize(12)
               .fontColor(this.colors.accentGold)
@@ -315,18 +292,17 @@ export struct PageHeader {
           .backgroundColor(this.colors.cardDark)
           .borderRadius(17)
           .border({ width: 1, color: this.colors.borderSoft })
-          .margin({ right: 4 })
           .hoverEffect(HoverEffect.Highlight)
           .onClick(() => {
             this.onOpenSettings();
           })
 
           // Asr rule
-          Row() {
+          Row({ space: 6 }) {
             Image($r('app.media.ic_sunrise'))
               .width(14).height(14)
               .fillColor(this.colors.accentGold)
-              .margin({ right: 6 })
+              .flexShrink(0)
             Text(SettingsHelper.getAsrRuleShortLabel(this.asrRule))
               .fontSize(12)
               .fontColor(this.colors.accentGold)
@@ -341,18 +317,17 @@ export struct PageHeader {
           .backgroundColor(this.colors.cardDark)
           .borderRadius(17)
           .border({ width: 1, color: this.colors.borderSoft })
-          .margin({ right: 4 })
           .hoverEffect(HoverEffect.Highlight)
           .onClick(() => {
             this.onOpenSettings();
           })
 
           // Source
-          Row() {
+          Row({ space: 6 }) {
             Image($r('app.media.ic_globe'))
               .width(14).height(14)
               .fillColor(this.colors.accentGold)
-              .margin({ right: 6 })
+              .flexShrink(0)
             Text(SettingsHelper.getCalcSourceShortLabel(this.calcSource))
               .fontSize(12)
               .fontColor(this.colors.accentGold)

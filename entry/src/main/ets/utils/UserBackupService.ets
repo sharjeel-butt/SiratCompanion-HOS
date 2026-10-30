@@ -10,12 +10,15 @@ import { PrayerManager } from '../prayer/PrayerManager';
 import { TasbihStorage } from '../tasbih/TasbihStorage';
 import { TasbihManager } from '../tasbih/TasbihManager';
 import { RamadanStorage } from '../helper/RamadanStorage';
+import { CustomEventStorage } from '../helper/CustomEventStorage';
+import { CustomEventNotifier } from '../helper/CustomEventNotifier';
 import { AppLogger } from '../helper/AppLogger';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
   STORAGE_KEY_CALC_SETTINGS_VERSION,
+  STORAGE_KEY_DUA_BINDINGS_VERSION,
   STORAGE_KEY_EVENT_PERSPECTIVE,
   STORAGE_KEY_EVENT_SETTINGS_VERSION,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
@@ -44,6 +47,8 @@ import {
   STORAGE_KEY_VIBRATION_ENABLED,
   STORAGE_KEY_WIZARD_COMPLETED
 } from '../common/StorageKeys';
+import { SettingsHelper } from '../helper/SettingsHelper';
+import { DuaService } from '../helper/DuaService';
 
 // ============================================================
 // Public result shapes
@@ -197,7 +202,10 @@ const SETTINGS_SPECS: PrefSpec[] = [
 
   // ---- Duas ----
   { key: 'dua_favorites', type: 'string' },
-  { key: 'dua_bindings', type: 'string' }
+  { key: 'dua_bindings', type: 'string' },
+
+  // ---- Custom Calendar Events ----
+  { key: 'custom_events', type: 'string' }
 ];
 
 const TASBIH_SPECS: PrefSpec[] = [
@@ -569,15 +577,18 @@ export class UserBackupService {
     await TasbihStorage.init(context);
     await TasbihStorage.load(TasbihManager.createDefaults());
 
-    // 2. RamadanStorage.doLoad() runs schema migrations inline if
-    //    the restored backup was written by an older build.
+    // 2. RamadanStorage.doLoad() runs schema migrations inline.
     await RamadanStorage.load();
 
-    // 3. Re-seed AppStorage from the restored preferences.
+    // 3. Invalidate the in-memory Dua cache so restored favorites
+    //    and bindings take effect immediately.
+    DuaService.invalidateCache();
+
+    // 4. Re-seed AppStorage from the restored preferences.
     await UserBackupService.seedAppStorageFromPrefs();
 
-    // 4. Bump every version counter — this triggers @Watch on every
-    //    subscribed page, forcing a fresh load via SettingsHelper.
+    // 5. Bump every version counter — triggers @Watch on every
+    //    subscribed page.
     UserBackupService.bumpVersion(STORAGE_KEY_PRAYER_STATE_VERSION);
     UserBackupService.bumpVersion(STORAGE_KEY_CALC_SETTINGS_VERSION);
     UserBackupService.bumpVersion(STORAGE_KEY_EVENT_SETTINGS_VERSION);
@@ -586,6 +597,21 @@ export class UserBackupService {
     UserBackupService.bumpVersion(STORAGE_KEY_TASBIH_STATE_VERSION);
     UserBackupService.bumpVersion(STORAGE_KEY_RAMADAN_STATE_VERSION);
     UserBackupService.bumpVersion(STORAGE_KEY_APP_FOREGROUND_TICK);
+    UserBackupService.bumpVersion(STORAGE_KEY_DUA_BINDINGS_VERSION);
+
+    // 6. Reschedule custom event notifications (unchanged) ...
+    try {
+      const customEvents = await CustomEventStorage.load();
+      if (customEvents.length > 0) {
+        const hijriOffset = await SettingsHelper.getHijriOffset();
+        await CustomEventNotifier.reschedule(customEvents, hijriOffset);
+        AppLogger.info('UserBackupService',
+          `Rescheduled ${customEvents.length} custom event notification(s)`);
+      }
+    } catch (e) {
+      AppLogger.warn('UserBackupService',
+        `Custom event reschedule after restore failed: ${(e as Error).message}`);
+    }
   }
 
   private static async seedAppStorageFromPrefs(): Promise<void> {

@@ -536,7 +536,7 @@ struct AdvancedCalcPage {
   @Builder
   PickerOverlay(
     title: string,
-    icon: string,
+    icon: Resource,
     items: PickerItem[],
     onSelect: (id: string) => void,
     onCancel: () => void
@@ -549,27 +549,25 @@ struct AdvancedCalcPage {
       })
 
     Column() {
-      Row()
-        .width(44)
-        .height(4)
-        .backgroundColor(this.colors.overlayDimSoft)
-        .borderRadius(2)
-        .margin({ top: 10 })
-
+      // Header
       Row({ space: 14 }) {
-        Text(icon)
-          .fontSize(22)
-          .width(44)
-          .height(44)
-          .textAlign(TextAlign.Center)
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(12)
-          .border({ width: 1, color: this.colors.borderSoft })
-          .flexShrink(0)
+        Row() {
+          Image(icon)
+            .width(22).height(22)
+            .fillColor(this.colors.accentGold)
+        }
+        .width(44)
+        .height(44)
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
+        .backgroundColor(this.colors.tintSoft)
+        .borderRadius(12)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .flexShrink(0)
 
         Text(title)
-          .fontSize(20).fontWeight(FontWeight.Bold)
-          .fontColor(this.colors.textWhite).layoutWeight(1)
+          .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+          .layoutWeight(1)
       }
       .width('100%')
       .padding({
@@ -688,20 +686,20 @@ struct AdvancedCalcPage {
     }
   }
 
-  private sheetIcon(): string {
+  private sheetIcon(): Resource {
     switch (this.activeSheet) {
       case 'rounding':
-        return '🔢';
+        return $r('app.media.ic_chart');
       case 'midnight':
-        return '🌃';
+        return $r('app.media.ic_ramadan_moon');
       case 'polar':
-        return '❄️';
+        return $r('app.media.ic_globe');
       case 'shafaq':
-        return '🌆';
+        return $r('app.media.ic_sunset');
       case 'highlat':
-        return '🧭';
+        return $r('app.media.tab_compass');
       default:
-        return '⚙️';
+        return $r('app.media.ic_settings');
     }
   }
 

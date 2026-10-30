@@ -315,7 +315,7 @@ export struct TasbihPage {
           }
 
           // Save old prayer's count
-          if (oldPrayer) {
+          if (oldPrayer && oldPrayer.length > 0) {
             lc[oldPrayer] = d.count;
           }
 
