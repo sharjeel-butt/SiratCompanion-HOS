@@ -5,7 +5,7 @@ import {
   EventRecurrence, IslamicEvent, UpcomingImportantDate
 } from '../models/DateModels';
 import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
-import { L } from '../i8n/LocalizationHelper';
+import { L } from '../i18n/LocalizationHelper';
 
 const MS_PER_DAY = 86400000;
 

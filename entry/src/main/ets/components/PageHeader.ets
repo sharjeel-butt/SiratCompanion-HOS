@@ -1,7 +1,7 @@
 // entry/src/main/ets/components/PageHeader.ets
 
 import { ThemeColors, ThemeMode } from '../common/Theme';
-import { L } from '../i8n/LocalizationHelper';
+import { L } from '../i18n/LocalizationHelper';
 import { SettingsHelper } from '../helper/SettingsHelper';
 import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator';
 import { CalculationSource } from '../models/SettingsModels';

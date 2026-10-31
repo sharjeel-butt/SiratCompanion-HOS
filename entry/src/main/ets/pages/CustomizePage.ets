@@ -28,7 +28,7 @@ import {
   STORAGE_KEY_THEME_OVERRIDE,
   STORAGE_KEY_TIME_FORMAT
 } from '../common/StorageKeys';
-import { AppLanguage, L } from '../i8n/LocalizationHelper';
+import { AppLanguage, L } from '../i18n/LocalizationHelper';
 import { SoundHelper } from '../helper/SoundHelper';
 import { SoundOptions, TASBIH_SOUND_OPTIONS, TasbihSoundOption } from '../common/SoundOptions';
 import { Breakpoints } from '../common/Breakpoints';
@@ -1688,6 +1688,10 @@ struct CustomizePage {
     const langs = [
       AppLanguage.SYSTEM,
       AppLanguage.ENGLISH,
+      AppLanguage.INDONESIAN,
+      AppLanguage.URDU,
+      AppLanguage.TURKISH,
+      AppLanguage.BENGALI,
       AppLanguage.CHINESE,
       AppLanguage.ARABIC
     ];

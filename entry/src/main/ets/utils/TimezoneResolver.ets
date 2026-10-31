@@ -2,6 +2,8 @@
 
 import { CountryTimezoneLookup } from './CountryTimezoneTable';
 import { City, DstRule, OfflineCityLookup } from './OfflineCityLookup';
+import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
+import { STORAGE_KEY_HIJRI_OFFSET } from '../common/StorageKeys';
 
 
 const MS_PER_DAY = 86400000;
@@ -57,101 +59,90 @@ export class TimezoneResolver {
     return useDevice ? deviceOffset : locationOffset;
   }
 
-  /**
-   * Longitude-derived or table-listed offset, no device input.
-   */
   static tableOffset(
     latitude: number,
     longitude: number,
     date: Date
   ): number {
-    // Morocco — permanent UTC+1 except during Ramadan, when the
-    // country shifts to UTC+0. The transition dates follow the
-    // Ramadan crescent sighting, which varies by year; the windows
-    // below cover the next three years and can be extended.
-    if (latitude >= 27 && latitude <= 36 &&
-      longitude >= -14 && longitude <= -1) {
-      const inRamadan = TimezoneResolver.isMoroccoRamadan(date);
-      return inRamadan ? 0 : 1;
-    }
-
-    const city: City | null = OfflineCityLookup.nearestCity(
+    const city: City | null = OfflineCityLookup.nearestCityForTimezone(
       latitude, longitude
     );
     if (city !== null) {
       return city.standardOffset +
-        (TimezoneResolver.isDst(city.dstRule, date) ? 1 : 0);
+        TimezoneResolver.dstOffset(city.dstRule, date);
     }
 
-    // ---- Country fallback ----
-    // The nearest-city table misses anything more than 300 km from
-    // a listed city. The country table is coarser but covers the
-    // whole landmass, so a lookup that misses a city still lands on
-    // the correct offset rather than a longitude estimate that
-    // ignores political boundaries.
     const country = CountryTimezoneLookup.zoneFor(latitude, longitude);
     if (country !== null) {
       return country.standardOffset +
-        (TimezoneResolver.isDst(country.dstRule, date) ? 1 : 0);
+        TimezoneResolver.dstOffset(country.dstRule, date);
     }
 
-    // ---- Last resort: mid-ocean or Antarctic ----
     return Math.round(longitude / 15);
   }
 
   /**
-   * True when the given date falls within Morocco's Ramadan window
-   * for the years covered by the hard-coded table.
+   * Signed hour delta to apply to a zone's standardOffset for the
+   * given date. Returns +1 for conventional DST, -1 for Morocco's
+   * Ramadan reverse-shift, 0 otherwise.
    *
-   * Dates are approximate — the actual transition follows the local
-   * crescent sighting and can shift by a day. For a companion app
-   * showing today's times, a day of slack on the boundary is
-   * acceptable; a full month of the wrong offset is not.
+   * Replaces the old boolean isDst() because Morocco cannot be
+   * modelled as "standard +1 if DST else 0" — its standard offset
+   * is +1 and Ramadan drops it *below* standard.
    */
+  private static dstOffset(rule: DstRule, date: Date): number {
+    const year = date.getUTCFullYear();
+    switch (rule) {
+      case DstRule.US:
+        return TimezoneResolver.isUsDst(date, year) ? 1 : 0;
+      case DstRule.EU:
+        return TimezoneResolver.isEuDst(date, year) ? 1 : 0;
+      case DstRule.AU:
+        return TimezoneResolver.isAuDst(date, year) ? 1 : 0;
+      case DstRule.NZ:
+        return TimezoneResolver.isNzDst(date, year) ? 1 : 0;
+      case DstRule.EGYPT:
+        return TimezoneResolver.isEgyptDst(date, year) ? 1 : 0;
+      case DstRule.MOROCCO:
+        return TimezoneResolver.isMoroccoRamadan(date) ? -1 : 0;
+      default:
+        return 0;
+    }
+  }
+
   /**
-   * True when the given date falls within Morocco's Ramadan window
-   * for the years covered by the table below.
+   * True when the given date falls within Ramadan in Morocco's
+   * own Hijri calendar.
    *
-   * The window dates are approximate — the real transition follows
-   * the local crescent sighting and can shift by a day. For a
-   * companion app showing today's times, a day of slack on the
-   * boundary is acceptable; a full month of the wrong offset is
-   * what this method prevents.
+   * The user's Hijri offset is honoured — a user who has set +1
+   * because their local sighting differs from Umm al-Qura gets
+   * their extended-Ramadan window on their own day 1. This is the
+   * same policy the Umm al-Qura Isha extension in
+   * PrayerTimeCalculator uses.
    *
-   * Years beyond the table fall back to standard +1. That is one
-   * hour off during the missed Ramadan — noticeable but not
-   * catastrophic, and easily fixed by extending the table before
-   * the app reaches that year.
+   * The previous implementation hard-coded year windows for
+   * 2025–2029 only, silently returning false from 2030 onward —
+   * which produced a 1-hour error for the entire month of Ramadan
+   * every year past the table. Using the conversion engine removes
+   * that expiry entirely.
    */
   private static isMoroccoRamadan(date: Date): boolean {
-    // Windows are built with local-time Date constructors, so the
-    // comparison year must also be local. Using getUTCFullYear()
-    // here would test 31 Dec UTC / 1 Jan local against the wrong
-    // row around New Year's Eve.
-    const year = date.getFullYear();
-    const t = date.getTime();
-
-    switch (year) {
-      case 2025:
-        return t >= new Date(2025, 1, 28).getTime()
-          && t < new Date(2025, 2, 30).getTime();
-      case 2026:
-        return t >= new Date(2026, 1, 17).getTime()
-          && t < new Date(2026, 2, 19).getTime();
-      case 2027:
-        return t >= new Date(2027, 1, 7).getTime()
-          && t < new Date(2027, 2, 9).getTime();
-      // Extended table — approximate, ±1 day, same policy as above.
-      case 2028:
-        return t >= new Date(2028, 0, 27).getTime()
-          && t < new Date(2028, 1, 27).getTime();
-      case 2029:
-        return t >= new Date(2029, 0, 15).getTime()
-          && t < new Date(2029, 1, 15).getTime();
-      default:
-      // Table exhausted — fall back to standard time. See the
-      // method comment: 1 hour off during the actual Ramadan.
-        return false;
+    try {
+      let offsetDays = 0;
+      const stored = AppStorage.get<number>(STORAGE_KEY_HIJRI_OFFSET);
+      if (stored !== undefined && !isNaN(stored)) {
+        offsetDays = stored;
+      }
+      const shifted = new Date(date.getTime());
+      shifted.setDate(shifted.getDate() + offsetDays);
+      const hijri = HijriEngineResolver.current().toHijri(shifted);
+      return hijri !== null && hijri.month === 9;
+    } catch (err) {
+      // AppStorage not ready, engine unavailable — default to
+      // non-Ramadan. The user sees +1 instead of +0 for at most
+      // a few calls during early startup, then the correct value
+      // once the store is primed.
+      return false;
     }
   }
 
@@ -159,7 +150,6 @@ export class TimezoneResolver {
   // DST LOGIC
   // ============================================================
 
-  // In TimezoneResolver.ets, inside the isDst method
   private static isDst(rule: DstRule, date: Date): boolean {
     const year = date.getUTCFullYear();
     switch (rule) {
@@ -169,10 +159,15 @@ export class TimezoneResolver {
         return TimezoneResolver.isEuDst(date, year);
       case DstRule.AU:
         return TimezoneResolver.isAuDst(date, year);
-      case DstRule.NZ: // NEW
+      case DstRule.NZ:
         return TimezoneResolver.isNzDst(date, year);
       case DstRule.EGYPT:
         return TimezoneResolver.isEgyptDst(date, year);
+      case DstRule.MOROCCO:
+        // Morocco observes UTC+1 year-round except during Ramadan,
+        // when it drops to UTC+0. Standard offset is therefore 0,
+        // and "DST" applies to the ~11 non-Ramadan months.
+        return !TimezoneResolver.isMoroccoRamadan(date);
       default:
         return false;
     }

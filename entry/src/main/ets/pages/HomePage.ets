@@ -52,7 +52,7 @@ import {
 } from '../prayer/PrayerTimeCalculator';
 import { PrayerManager } from '../prayer/PrayerManager';
 import { NavHelper } from '../helper/NavHelper';
-import { L } from '../i8n/LocalizationHelper';
+import { L } from '../i18n/LocalizationHelper';
 import {
   MonthDayCell,
   MonthProgress,
@@ -1826,12 +1826,6 @@ export struct HomePage {
         })
       }
       .width('100%')
-
-      // Footer
-      Row() {
-        Text(L.get('generated_by', this.appLanguage)).fontSize(8).lineHeight(12).fontColor(this.pdfColors.textMuted)
-      }
-      .width('100%').padding({ top: 4, bottom: 4 }).justifyContent(FlexAlign.Center)
     }
     .width(595).height(842).backgroundColor(this.pdfColors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr) // <-- ADDED

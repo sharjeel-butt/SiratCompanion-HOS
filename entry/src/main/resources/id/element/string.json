@@ -1,0 +1,2840 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "Modul entri Sirat Companion"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "Pendamping Islam Harian Anda"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "Sirat Companion"
+    },
+    {
+      "name": "location_permission_reason",
+      "value": "Digunakan untuk menghitung waktu shalat dan arah kiblat untuk lokasi Anda"
+    },
+    {
+      "name": "sensor_permission_reason",
+      "value": "Digunakan untuk kompas kiblat"
+    },
+    {
+      "name": "notification_permission_reason",
+      "value": "Untuk mengirim pengingat waktu shalat kepada Anda"
+    },
+    {
+      "name": "calendar_permission_reason",
+      "value": "Digunakan untuk menambahkan pengingat waktu shalat ke kalender Anda"
+    },
+    {
+      "name": "app_name",
+      "value": "Sirat Companion"
+    },
+    {
+      "name": "app_tagline",
+      "value": "Pendamping Islam Harian Anda"
+    },
+    {
+      "name": "more_languages_coming",
+      "value": "Lebih banyak bahasa segera hadir"
+    },
+    {
+      "name": "tab_home",
+      "value": "Beranda"
+    },
+    {
+      "name": "tab_prayers",
+      "value": "Shalat"
+    },
+    {
+      "name": "tab_calendar",
+      "value": "Kalender Hijriah"
+    },
+    {
+      "name": "tab_compass",
+      "value": "Kompas Kiblat"
+    },
+    {
+      "name": "tab_tasbih",
+      "value": "Tasbih"
+    },
+    {
+      "name": "current_prayer",
+      "value": "Sekarang"
+    },
+    {
+      "name": "next_prayer",
+      "value": "Berikutnya"
+    },
+    {
+      "name": "todays_prayers",
+      "value": "SHALAT HARI INI"
+    },
+    {
+      "name": "extra_timings",
+      "value": "WAKTU TAMBAHAN"
+    },
+    {
+      "name": "upcoming_islamic_events",
+      "value": "ACARA ISLAM MENDATANG"
+    },
+    {
+      "name": "loading_location",
+      "value": "Memuat..."
+    },
+    {
+      "name": "set_manual_location",
+      "value": "Atur Lokasi Manual di Pengaturan"
+    },
+    {
+      "name": "online_prayer_times",
+      "value": "Waktu Shalat Online"
+    },
+    {
+      "name": "coming_soon",
+      "value": "Segera Hadir"
+    },
+    {
+      "name": "online_switch_hint",
+      "value": "Beralih kembali ke Rumus Lokal di Pengaturan untuk melihat waktu shalat untuk lokasi Anda."
+    },
+    {
+      "name": "cancel",
+      "value": "Batal"
+    },
+    {
+      "name": "save",
+      "value": "Simpan"
+    },
+    {
+      "name": "reset",
+      "value": "Atur Ulang"
+    },
+    {
+      "name": "delete",
+      "value": "Hapus"
+    },
+    {
+      "name": "edit",
+      "value": "Ubah"
+    },
+    {
+      "name": "add",
+      "value": "Tambah"
+    },
+    {
+      "name": "back",
+      "value": "Kembali"
+    },
+    {
+      "name": "today",
+      "value": "Hari Ini"
+    },
+    {
+      "name": "exit",
+      "value": "Keluar"
+    },
+    {
+      "name": "ok",
+      "value": "OK"
+    },
+    {
+      "name": "exit_confirm_message",
+      "value": "Apakah Anda yakin ingin keluar dari Sirat Companion?"
+    },
+    {
+      "name": "title_settings",
+      "value": "Pengaturan"
+    },
+    {
+      "name": "title_customize",
+      "value": "Kustomisasi"
+    },
+    {
+      "name": "category_location",
+      "value": "Lokasi"
+    },
+    {
+      "name": "category_prayer_times",
+      "value": "Waktu Shalat"
+    },
+    {
+      "name": "category_hijri_calendar",
+      "value": "Kalender Hijriah"
+    },
+    {
+      "name": "category_ui_customization",
+      "value": "Kustomisasi UI"
+    },
+    {
+      "name": "category_appearance",
+      "value": "Tampilan"
+    },
+    {
+      "name": "category_about",
+      "value": "Tentang"
+    },
+    {
+      "name": "category_notifications",
+      "value": "Notifikasi"
+    },
+    {
+      "name": "brand_primary",
+      "value": "Sirat"
+    },
+    {
+      "name": "brand_accent",
+      "value": "Companion"
+    },
+    {
+      "name": "convention",
+      "value": "Konvensi"
+    },
+    {
+      "name": "convention_desc",
+      "value": "Digunakan untuk perhitungan Fajar dan Isya"
+    },
+    {
+      "name": "madhab",
+      "value": "Mazhab"
+    },
+    {
+      "name": "madhab_desc",
+      "value": "Aturan Bayangan Asr yang digunakan dalam perhitungan"
+    },
+    {
+      "name": "source",
+      "value": "Sumber"
+    },
+    {
+      "name": "source_desc",
+      "value": "Rumus Lokal atau Online"
+    },
+    {
+      "name": "prayer_offsets",
+      "value": "Offset Waktu Shalat"
+    },
+    {
+      "name": "prayer_offsets_desc",
+      "value": "Geser waktu yang dihitung secara manual"
+    },
+    {
+      "name": "offsets_hint",
+      "value": "Geser waktu dalam menit (−60 hingga +60)"
+    },
+    {
+      "name": "reset_all_offsets",
+      "value": "Atur Ulang Semua Offset"
+    },
+    {
+      "name": "high_latitude",
+      "value": "Lintang Tinggi"
+    },
+    {
+      "name": "high_latitude_desc",
+      "value": "Cadangan untuk Fajar dan Isya ketika Matahari tidak mencapai sudut"
+    },
+    {
+      "name": "highlat_none",
+      "value": "Tidak Ada"
+    },
+    {
+      "name": "highlat_middle",
+      "value": "Tengah Malam"
+    },
+    {
+      "name": "highlat_one_seventh",
+      "value": "Sepertujuh Malam"
+    },
+    {
+      "name": "highlat_angle",
+      "value": "Berbasis Sudut"
+    },
+    {
+      "name": "highlat_proportional",
+      "value": "Depresi Proporsional (Diyanet Takdir)"
+    },
+    {
+      "name": "location",
+      "value": "Lokasi"
+    },
+    {
+      "name": "location_desc",
+      "value": "Pilih bagaimana aplikasi menentukan lokasi Anda"
+    },
+    {
+      "name": "gps",
+      "value": "GPS"
+    },
+    {
+      "name": "manual_location",
+      "value": "Lokasi Manual"
+    },
+    {
+      "name": "current_position",
+      "value": "Posisi Saat Ini"
+    },
+    {
+      "name": "latitude",
+      "value": "Lintang"
+    },
+    {
+      "name": "longitude",
+      "value": "Bujur"
+    },
+    {
+      "name": "city",
+      "value": "Kota"
+    },
+    {
+      "name": "last_refreshed",
+      "value": "Terakhir diperbarui"
+    },
+    {
+      "name": "save_coordinates",
+      "value": "Simpan Koordinat"
+    },
+    {
+      "name": "latitude_hint",
+      "value": "Lintang  (−90 hingga 90)"
+    },
+    {
+      "name": "longitude_hint",
+      "value": "Bujur  (−180 hingga 180)"
+    },
+    {
+      "name": "city_name_optional",
+      "value": "Nama kota (opsional)"
+    },
+    {
+      "name": "city_name_placeholder",
+      "value": "Biarkan kosong untuk deteksi otomatis"
+    },
+    {
+      "name": "hijri_offset",
+      "value": "Offset Tanggal & Kalender Hijriah"
+    },
+    {
+      "name": "hijri_offset_desc",
+      "value": "Geser tanggal Islam dan kalender sebanyak ±3 hari"
+    },
+    {
+      "name": "matching_standard",
+      "value": "Sesuai dengan perhitungan standar"
+    },
+    {
+      "name": "offset_days_ahead",
+      "value": "hari lebih maju"
+    },
+    {
+      "name": "offset_days_behind",
+      "value": "hari lebih mundur"
+    },
+    {
+      "name": "about_version",
+      "value": "Versi"
+    },
+    {
+      "name": "about_platform",
+      "value": "Platform"
+    },
+    {
+      "name": "about_platform_value",
+      "value": "HarmonyOS 6+"
+    },
+    {
+      "name": "about_build",
+      "value": "Build"
+    },
+    {
+      "name": "about_bundle",
+      "value": "ID Bundle"
+    },
+    {
+      "name": "about_copyright",
+      "value": "© 2026"
+    },
+    {
+      "name": "notifications_master",
+      "value": "Aktifkan Notifikasi"
+    },
+    {
+      "name": "notifications_master_desc",
+      "value": "Dapatkan pengingat sebelum dan saat waktu shalat"
+    },
+    {
+      "name": "notify_before",
+      "value": "Beri Tahu Sebelum"
+    },
+    {
+      "name": "notify_before_desc",
+      "value": "Berapa menit sebelum shalat untuk pengingat pertama"
+    },
+    {
+      "name": "notify_prayers",
+      "value": "Pengingat Shalat"
+    },
+    {
+      "name": "notify_prayers_desc",
+      "value": "Pilih shalat mana yang mengirim pengingat"
+    },
+    {
+      "name": "notifications_footer",
+      "value": "Pengingat dijadwalkan untuk 3 hari ke depan dan diperbarui setiap kali Anda membuka aplikasi"
+    },
+    {
+      "name": "notifications_footer_calendar",
+      "value": "Pengingat ditambahkan ke kalender sistem Anda untuk 3 hari ke depan dan diperbarui setiap kali Anda membuka aplikasi"
+    },
+    {
+      "name": "notification_permission_denied",
+      "value": "Izin notifikasi diperlukan untuk mengaktifkan pengingat"
+    },
+    {
+      "name": "calendar_permission_denied",
+      "value": "Izin kalender diperlukan untuk mengaktifkan pengingat"
+    },
+    {
+      "name": "notif_before_title",
+      "value": "Pengingat Shalat"
+    },
+    {
+      "name": "notif_before_content",
+      "value": "dalam"
+    },
+    {
+      "name": "notif_exact_title",
+      "value": "Waktu Shalat"
+    },
+    {
+      "name": "notif_exact_content",
+      "value": "Sekarang waktunya untuk"
+    },
+    {
+      "name": "notif_minutes_suffix",
+      "value": "mnt"
+    },
+    {
+      "name": "notif_test_button",
+      "value": "Kirim Notifikasi Uji"
+    },
+    {
+      "name": "notif_test_sending",
+      "value": "Mengirim notifikasi uji..."
+    },
+    {
+      "name": "notif_test_ok",
+      "value": "Notifikasi uji dijadwalkan — Anda akan melihatnya dalam ~5 detik"
+    },
+    {
+      "name": "notif_test_ok_calendar",
+      "value": "Acara uji ditambahkan ke kalender Anda — periksa aplikasi Kalender"
+    },
+    {
+      "name": "notif_test_failed",
+      "value": "Notifikasi uji gagal"
+    },
+    {
+      "name": "notif_dismiss",
+      "value": "Tutup"
+    },
+    {
+      "name": "notif_pray_fajr",
+      "value": "Shalat Fajar"
+    },
+    {
+      "name": "notif_pray_dhuhr",
+      "value": "Shalat Dzuhur"
+    },
+    {
+      "name": "notif_pray_asr",
+      "value": "Shalat Asr"
+    },
+    {
+      "name": "notif_pray_maghrib",
+      "value": "Shalat Maghrib"
+    },
+    {
+      "name": "notif_pray_isha",
+      "value": "Shalat Isya"
+    },
+    {
+      "name": "hadith_fajr",
+      "value": "Barangsiapa yang shalat Subuh (berjamaah), maka ia berada dalam perlindungan Allah. — Sahih Muslim 657a"
+    },
+    {
+      "name": "hadith_dhuhr",
+      "value": "Ini adalah saat pintu-pintu langit dibuka, dan aku suka jika amal salehku naik pada saat itu. — Jami' at-Tirmidzi 478"
+    },
+    {
+      "name": "hadith_asr",
+      "value": "Barangsiapa yang meninggalkan shalat Asr (dengan sengaja), maka seolah-olah ia kehilangan keluarga dan hartanya. — Sahih al-Bukhari 552"
+    },
+    {
+      "name": "hadith_maghrib",
+      "value": "Shalat lima waktu... merupakan penghapus dosa apa pun yang dilakukan di antaranya, selama dosa-dosa besar dijauhi. — Sahih Muslim 233"
+    },
+    {
+      "name": "hadith_isha",
+      "value": "Barangsiapa yang mengerjakan shalat Isya berjamaah, seolah-olah ia shalat hingga tengah malam. — Sahih Muslim 656a"
+    },
+    {
+      "name": "log_view_button",
+      "value": "Log Diagnostik"
+    },
+    {
+      "name": "log_view_desc",
+      "value": "Lihat, salin, atau hapus file log aplikasi"
+    },
+    {
+      "name": "log_view_title",
+      "value": "Log Diagnostik"
+    },
+    {
+      "name": "log_copy",
+      "value": "Salin"
+    },
+    {
+      "name": "log_clear",
+      "value": "Hapus"
+    },
+    {
+      "name": "log_empty",
+      "value": "Log kosong."
+    },
+    {
+      "name": "log_copied",
+      "value": "Log disalin ke clipboard"
+    },
+    {
+      "name": "log_cleared",
+      "value": "Log dihapus"
+    },
+    {
+      "name": "advanced_calc_title",
+      "value": "Perhitungan Lanjutan"
+    },
+    {
+      "name": "rounding_method",
+      "value": "Metode Pembulatan"
+    },
+    {
+      "name": "rounding_method_desc",
+      "value": "Mengatur bagaimana waktu yang ditampilkan dibulatkan"
+    },
+    {
+      "name": "midnight_method",
+      "value": "Metode Tengah Malam"
+    },
+    {
+      "name": "midnight_method_desc",
+      "value": "Batas malam mana yang menentukan tengah malam Islam"
+    },
+    {
+      "name": "polar_resolution",
+      "value": "Resolusi Kutub"
+    },
+    {
+      "name": "polar_resolution_desc",
+      "value": "Cadangan ketika matahari tidak mencapai sudut"
+    },
+    {
+      "name": "shafaq",
+      "value": "Shafaq"
+    },
+    {
+      "name": "shafaq_desc",
+      "value": "Shafaq digunakan oleh metode Moonsighting Committee untuk menentukan senja mana yang menentukan Isya."
+    },
+    {
+      "name": "custom_angles",
+      "value": "Sudut Khusus"
+    },
+    {
+      "name": "custom_fajr_angle",
+      "value": "Sudut Fajar"
+    },
+    {
+      "name": "custom_isha_angle",
+      "value": "Sudut Isya"
+    },
+    {
+      "name": "custom_isha_interval",
+      "value": "Interval Isya (mnt)"
+    },
+    {
+      "name": "custom_isha_interval_hint",
+      "value": "0 = gunakan sudut. >0 = menit setelah Maghrib."
+    },
+    {
+      "name": "rounding_nearest",
+      "value": "Terdekat"
+    },
+    {
+      "name": "rounding_up",
+      "value": "Ke Atas"
+    },
+    {
+      "name": "rounding_none",
+      "value": "Tidak Ada"
+    },
+    {
+      "name": "midnight_standard",
+      "value": "Matahari Terbenam hingga Terbit"
+    },
+    {
+      "name": "midnight_standard_desc",
+      "value": "Bawaan"
+    },
+    {
+      "name": "midnight_jafari",
+      "value": "Matahari Terbenam hingga Fajar"
+    },
+    {
+      "name": "polar_unresolved",
+      "value": "Tidak Terselesaikan"
+    },
+    {
+      "name": "polar_unresolved_desc",
+      "value": "Bawaan"
+    },
+    {
+      "name": "polar_aqrab_balad",
+      "value": "Aqrab Balad"
+    },
+    {
+      "name": "polar_aqrab_yaum",
+      "value": "Aqrab Yaum"
+    },
+    {
+      "name": "shafaq_general",
+      "value": "Umum"
+    },
+    {
+      "name": "shafaq_general_desc",
+      "value": "Bawaan"
+    },
+    {
+      "name": "shafaq_ahmer",
+      "value": "Ahmer"
+    },
+    {
+      "name": "shafaq_abyad",
+      "value": "Abyad"
+    },
+    {
+      "name": "show_extra_timings",
+      "value": "Tampilkan Waktu Tambahan"
+    },
+    {
+      "name": "show_extra_timings_desc",
+      "value": "Imsak, Terbit, Terbenam, dan waktu malam"
+    },
+    {
+      "name": "show_islamic_events",
+      "value": "Tampilkan Acara Islam"
+    },
+    {
+      "name": "show_islamic_events_desc",
+      "value": "Acara Islam mendatang di beranda"
+    },
+    {
+      "name": "dark_mode",
+      "value": "Mode Gelap"
+    },
+    {
+      "name": "dark_mode_desc",
+      "value": "Pilih tampilan aplikasi"
+    },
+    {
+      "name": "theme_light",
+      "value": "Terang"
+    },
+    {
+      "name": "theme_dark",
+      "value": "Gelap"
+    },
+    {
+      "name": "theme_system",
+      "value": "Gunakan Pengaturan Sistem"
+    },
+    {
+      "name": "tasbih_render_style",
+      "value": "Tema Tasbih"
+    },
+    {
+      "name": "tasbih_render_style_desc",
+      "value": "Pilih gaya manik-manik doa Anda"
+    },
+    {
+      "name": "bead_style_premium",
+      "value": "Premium (3D)"
+    },
+    {
+      "name": "bead_style_classic",
+      "value": "Klasik"
+    },
+    {
+      "name": "language",
+      "value": "Bahasa"
+    },
+    {
+      "name": "language_desc",
+      "value": "Pilih bahasa yang Anda inginkan"
+    },
+    {
+      "name": "lang_en",
+      "value": "English"
+    },
+    {
+      "name": "lang_zh",
+      "value": "中文 (Chinese)"
+    },
+    {
+      "name": "lang_ar",
+      "value": "العربية (Arabic)"
+    },
+    {
+      "name": "haptic_feedback",
+      "value": "Getaran"
+    },
+    {
+      "name": "haptic_feedback_desc",
+      "value": "Bergetar saat menghitung Tasbih"
+    },
+    {
+      "name": "sound_feedback",
+      "value": "Suara"
+    },
+    {
+      "name": "sound_feedback_desc",
+      "value": "Mainkan klik saat menghitung Tasbih"
+    },
+    {
+      "name": "sound_style",
+      "value": "Gaya Suara"
+    },
+    {
+      "name": "sound_style_desc",
+      "value": "Pilih suara klik"
+    },
+    {
+      "name": "controlled_by_system",
+      "value": "Dikontrol oleh pengaturan sistem"
+    },
+    {
+      "name": "sound_glass_tap_name",
+      "value": "Ketukan Kaca"
+    },
+    {
+      "name": "sound_glass_tap_desc",
+      "value": "Suara ketukan kaca"
+    },
+    {
+      "name": "sound_light_chime_name",
+      "value": "Dentingan Ringan"
+    },
+    {
+      "name": "sound_light_chime_desc",
+      "value": "Suara dentingan ringan"
+    },
+    {
+      "name": "sound_muted_bead_name",
+      "value": "Manik Teredam"
+    },
+    {
+      "name": "sound_muted_bead_desc",
+      "value": "Suara manik teredam"
+    },
+    {
+      "name": "sound_soft_click_name",
+      "value": "Klik Lembut"
+    },
+    {
+      "name": "sound_soft_click_desc",
+      "value": "Suara klik lembut"
+    },
+    {
+      "name": "sound_warm_knock_name",
+      "value": "Ketukan Hangat"
+    },
+    {
+      "name": "sound_warm_knock_desc",
+      "value": "Suara ketukan hangat"
+    },
+    {
+      "name": "title_tasbih",
+      "value": "Tasbih"
+    },
+    {
+      "name": "my_tasbihs",
+      "value": "Tasbih Saya"
+    },
+    {
+      "name": "select_dhikr",
+      "value": "Pilih Dzikir"
+    },
+    {
+      "name": "new_tasbih",
+      "value": "Tasbih Baru"
+    },
+    {
+      "name": "edit_tasbih",
+      "value": "Ubah Tasbih"
+    },
+    {
+      "name": "new_dhikr",
+      "value": "Dzikir Baru"
+    },
+    {
+      "name": "edit_dhikr",
+      "value": "Ubah Dzikir"
+    },
+    {
+      "name": "tasbih_name",
+      "value": "Nama"
+    },
+    {
+      "name": "tasbih_name_placeholder",
+      "value": "mis. Dzikir Petang"
+    },
+    {
+      "name": "dhikr_arabic",
+      "value": "Arab"
+    },
+    {
+      "name": "dhikr_transliteration",
+      "value": "Transliterasi (opsional)"
+    },
+    {
+      "name": "dhikr_transliteration_placeholder",
+      "value": "mis. SubhanAllah"
+    },
+    {
+      "name": "dhikr_translation",
+      "value": "Terjemahan (opsional)"
+    },
+    {
+      "name": "dhikr_translation_placeholder",
+      "value": "mis. Maha Suci Allah"
+    },
+    {
+      "name": "target_count",
+      "value": "Jumlah target"
+    },
+    {
+      "name": "flick_up_to_count",
+      "value": "geser ke atas untuk menghitung"
+    },
+    {
+      "name": "flick_hint",
+      "value": "Geser ke atas: +1     ·     Geser ke bawah: −1"
+    },
+    {
+      "name": "total_on_tasbih",
+      "value": "total pada tasbih ini"
+    },
+    {
+      "name": "dhikr_count_singular",
+      "value": "dzikir"
+    },
+    {
+      "name": "dhikr_count_plural",
+      "value": "dzikir"
+    },
+    {
+      "name": "new_tasbih_button",
+      "value": "+ Tasbih Baru"
+    },
+    {
+      "name": "add_dhikr_button",
+      "value": "+ Tambah Dzikir"
+    },
+    {
+      "name": "all_dhikrs_complete",
+      "value": "Semua dzikir selesai"
+    },
+    {
+      "name": "counter_reset_toast",
+      "value": "Penghitung diatur ulang"
+    },
+    {
+      "name": "no_dhikr_title",
+      "value": "Tidak Ada Dzikir di Tasbih Ini"
+    },
+    {
+      "name": "no_dhikr_hint",
+      "value": "Ketuk pil dzikir di atas untuk menambahkan"
+    },
+    {
+      "name": "switch_dhikr",
+      "value": "Ganti dzikir"
+    },
+    {
+      "name": "reset_counter",
+      "value": "Atur ulang penghitung"
+    },
+    {
+      "name": "delete_dhikr",
+      "value": "Hapus dzikir"
+    },
+    {
+      "name": "add_new_dhikr",
+      "value": "Tambah dzikir baru"
+    },
+    {
+      "name": "reset_all",
+      "value": "Atur Ulang Semua"
+    },
+    {
+      "name": "reset_all_confirm_title",
+      "value": "Atur Ulang Tasbih"
+    },
+    {
+      "name": "reset_all_confirm_message",
+      "value": "Atur ulang semua hitungan dzikir di Tasbih ini?"
+    },
+    {
+      "name": "reset_all_done",
+      "value": "Tasbih diatur ulang"
+    },
+    {
+      "name": "title_qibla",
+      "value": "Kompas Kiblat"
+    },
+    {
+      "name": "qibla_direction",
+      "value": "Arah Kiblat"
+    },
+    {
+      "name": "device_heading",
+      "value": "Arah Perangkat"
+    },
+    {
+      "name": "distance_to_kaaba",
+      "value": "Jarak ke Ka'bah"
+    },
+    {
+      "name": "compass_ready",
+      "value": "Kompas siap. Putar perangkat Anda hingga penanda Ka'bah mengarah ke atas."
+    },
+    {
+      "name": "keep_device_flat",
+      "value": "Jaga perangkat Anda tetap datar untuk pembacaan yang akurat."
+    },
+    {
+      "name": "sensor_unavailable",
+      "value": "Sensor kompas tidak tersedia. Harap uji pada perangkat nyata."
+    },
+    {
+      "name": "location_unavailable",
+      "value": "Lokasi tidak tersedia"
+    },
+    {
+      "name": "qibla_calibrate_title",
+      "value": "Kalibrasi Kompas"
+    },
+    {
+      "name": "qibla_calibrate_desc",
+      "value": "Gerakkan ponsel Anda dalam pola angka-8 untuk meningkatkan akurasi kompas."
+    },
+    {
+      "name": "qibla_calibrate_skip",
+      "value": "Lewati untuk sekarang"
+    },
+    {
+      "name": "qibla_calibrate_hint",
+      "value": "Kalibrasi meningkatkan akurasi"
+    },
+    {
+      "name": "title_hijri_calendar",
+      "value": "Kalender Hijriah"
+    },
+    {
+      "name": "important_dates",
+      "value": "TANGGAL PENTING"
+    },
+    {
+      "name": "no_events_this_month",
+      "value": "Tidak ada acara Islam besar bulan ini"
+    },
+    {
+      "name": "status_next",
+      "value": "BERIKUTNYA"
+    },
+    {
+      "name": "status_pray",
+      "value": "Shalat"
+    },
+    {
+      "name": "status_both",
+      "value": "Shalat  ·  BERIKUTNYA"
+    },
+    {
+      "name": "status_prayed",
+      "value": "✓ Sudah Shalat"
+    },
+    {
+      "name": "status_express",
+      "value": "Singkat"
+    },
+    {
+      "name": "prayer_fajr",
+      "value": "Fajar"
+    },
+    {
+      "name": "prayer_dhuhr",
+      "value": "Dzuhur"
+    },
+    {
+      "name": "prayer_asr",
+      "value": "Asr"
+    },
+    {
+      "name": "prayer_maghrib",
+      "value": "Maghrib"
+    },
+    {
+      "name": "prayer_isha",
+      "value": "Isya"
+    },
+    {
+      "name": "prayer_jummah",
+      "value": "Jumat"
+    },
+    {
+      "name": "timing_imsak",
+      "value": "Imsak"
+    },
+    {
+      "name": "timing_sunrise",
+      "value": "Terbit"
+    },
+    {
+      "name": "timing_sunset",
+      "value": "Terbenam"
+    },
+    {
+      "name": "timing_first_third",
+      "value": "Sepertiga Pertama"
+    },
+    {
+      "name": "timing_midnight",
+      "value": "Tengah Malam"
+    },
+    {
+      "name": "timing_last_third",
+      "value": "Sepertiga Terakhir"
+    },
+    {
+      "name": "event_new_year",
+      "value": "Tahun Baru Islam"
+    },
+    {
+      "name": "event_ashura",
+      "value": "Hari Asyura"
+    },
+    {
+      "name": "event_mawlid",
+      "value": "Maulid Nabi"
+    },
+    {
+      "name": "event_isra_miraj",
+      "value": "Isra dan Mi'raj"
+    },
+    {
+      "name": "event_mid_shaban",
+      "value": "Nisfu Sya'ban"
+    },
+    {
+      "name": "event_ramadan_start",
+      "value": "Ramadhan"
+    },
+    {
+      "name": "event_eid_fitr",
+      "value": "Idul Fitri"
+    },
+    {
+      "name": "event_arafah",
+      "value": "Hari Arafah"
+    },
+    {
+      "name": "event_eid_adha",
+      "value": "Idul Adha"
+    },
+    {
+      "name": "method_karachi",
+      "value": "Universitas Ilmu Islam, Karachi"
+    },
+    {
+      "name": "method_jafari",
+      "value": "Syiah Itsna Asyari (Institut Leva, Qum)"
+    },
+    {
+      "name": "method_isna",
+      "value": "Islamic Society of North America"
+    },
+    {
+      "name": "method_mwl",
+      "value": "Liga Dunia Muslim"
+    },
+    {
+      "name": "method_umm_al_qura",
+      "value": "Umm al-Qura (Makkah)"
+    },
+    {
+      "name": "method_egyptian",
+      "value": "Survei Mesir"
+    },
+    {
+      "name": "method_sunni_iraq",
+      "value": "Wakaf Sunni (Irak)"
+    },
+    {
+      "name": "method_qatar",
+      "value": "Awqaf Qatar"
+    },
+    {
+      "name": "method_singapore",
+      "value": "Singapura (MUIS)"
+    },
+    {
+      "name": "method_france",
+      "value": "Prancis (UOIF)"
+    },
+    {
+      "name": "method_turkey",
+      "value": "Turki (Diyanet)"
+    },
+    {
+      "name": "method_russia",
+      "value": "Rusia (SAMR)"
+    },
+    {
+      "name": "method_uae",
+      "value": "UEA (GIAE)"
+    },
+    {
+      "name": "method_moonsighting",
+      "value": "Moonsighting Committee Worldwide"
+    },
+    {
+      "name": "method_dubai",
+      "value": "Kawasan Teluk (Dubai)"
+    },
+    {
+      "name": "method_kuwait",
+      "value": "Kuwait"
+    },
+    {
+      "name": "method_france_15",
+      "value": "Prancis sudut 15"
+    },
+    {
+      "name": "method_france_18",
+      "value": "Prancis sudut 18"
+    },
+    {
+      "name": "method_turkey_europe",
+      "value": "Diyanet İşleri Başkanlığı, Eropa"
+    },
+    {
+      "name": "method_tehran",
+      "value": "Syiah, Institut Geofisika, Universitas Tehran, Iran"
+    },
+    {
+      "name": "method_indonesia",
+      "value": "Kementerian Agama Republik Indonesia (KEMENAG)"
+    },
+    {
+      "name": "method_algeria",
+      "value": "Kementerian Agama dan Wakaf, Aljazair"
+    },
+    {
+      "name": "method_brunei",
+      "value": "Kementerian Hal Ehwal Ugama (Brunei Darussalam)"
+    },
+    {
+      "name": "method_custom",
+      "value": "Khusus"
+    },
+    {
+      "name": "method_short_karachi",
+      "value": "Karachi"
+    },
+    {
+      "name": "method_short_jafari",
+      "value": "Jafari"
+    },
+    {
+      "name": "method_short_isna",
+      "value": "ISNA"
+    },
+    {
+      "name": "method_short_mwl",
+      "value": "MWL"
+    },
+    {
+      "name": "method_short_umm_al_qura",
+      "value": "Makkah"
+    },
+    {
+      "name": "method_short_egyptian",
+      "value": "Mesir"
+    },
+    {
+      "name": "method_short_sunni_iraq",
+      "value": "Irak"
+    },
+    {
+      "name": "method_short_qatar",
+      "value": "Qatar"
+    },
+    {
+      "name": "method_short_singapore",
+      "value": "Singapura"
+    },
+    {
+      "name": "method_short_france",
+      "value": "Prancis"
+    },
+    {
+      "name": "method_short_turkey",
+      "value": "Turki"
+    },
+    {
+      "name": "method_short_russia",
+      "value": "Rusia"
+    },
+    {
+      "name": "method_short_uae",
+      "value": "UEA"
+    },
+    {
+      "name": "method_short_moonsighting",
+      "value": "Moonsighting"
+    },
+    {
+      "name": "method_short_dubai",
+      "value": "Dubai"
+    },
+    {
+      "name": "method_short_kuwait",
+      "value": "Kuwait"
+    },
+    {
+      "name": "method_short_france_15",
+      "value": "Prancis 15°"
+    },
+    {
+      "name": "method_short_france_18",
+      "value": "Prancis 18°"
+    },
+    {
+      "name": "method_short_turkey_europe",
+      "value": "Turki EU"
+    },
+    {
+      "name": "method_short_tehran",
+      "value": "Tehran"
+    },
+    {
+      "name": "method_short_indonesia",
+      "value": "KEMENAG"
+    },
+    {
+      "name": "method_short_algeria",
+      "value": "Aljazair"
+    },
+    {
+      "name": "method_short_brunei",
+      "value": "Brunei"
+    },
+    {
+      "name": "method_short_custom",
+      "value": "Khusus"
+    },
+    {
+      "name": "asr_standard",
+      "value": "Standar (Syafi'i / Maliki / Hanbali)"
+    },
+    {
+      "name": "asr_hanafi",
+      "value": "Hanafi"
+    },
+    {
+      "name": "asr_short_standard",
+      "value": "Standar"
+    },
+    {
+      "name": "asr_short_hanafi",
+      "value": "Hanafi"
+    },
+    {
+      "name": "source_local",
+      "value": "Rumus Lokal (Luring)"
+    },
+    {
+      "name": "source_api",
+      "value": "API (Daring)"
+    },
+    {
+      "name": "source_short_local",
+      "value": "Lokal"
+    },
+    {
+      "name": "source_short_online",
+      "value": "Online"
+    },
+    {
+      "name": "theme_preset",
+      "value": "Tema Aplikasi"
+    },
+    {
+      "name": "theme_preset_desc",
+      "value": "Pilih gaya visual aplikasi"
+    },
+    {
+      "name": "theme_preset_sirat",
+      "value": "Sirat"
+    },
+    {
+      "name": "theme_preset_sirat_desc",
+      "value": "Modern dan minimalis — estetika HarmonyOS 7"
+    },
+    {
+      "name": "theme_preset_current",
+      "value": "Sirat Klasik"
+    },
+    {
+      "name": "theme_preset_current_desc",
+      "value": "Krem hangat dan hijau tua — yang asli"
+    },
+    {
+      "name": "theme_preset_harmony7",
+      "value": "Noor"
+    },
+    {
+      "name": "theme_preset_harmony7_desc",
+      "value": "Violet bersinar — tenang dan modern"
+    },
+    {
+      "name": "theme_preset_harmony6",
+      "value": "Sahar"
+    },
+    {
+      "name": "theme_preset_harmony6_desc",
+      "value": "Amber keemasan — ketenangan cahaya pertama"
+    },
+    {
+      "name": "theme_preset_harmony5",
+      "value": "Bahar"
+    },
+    {
+      "name": "theme_preset_harmony5_desc",
+      "value": "Teal sejuk — luas, segar, dan jernih"
+    },
+    {
+      "name": "theme_amber",
+      "value": "Amber"
+    },
+    {
+      "name": "theme_charcoal",
+      "value": "Arang"
+    },
+    {
+      "name": "theme_emerald",
+      "value": "Zamrud"
+    },
+    {
+      "name": "theme_pearl",
+      "value": "Mutiara"
+    },
+    {
+      "name": "theme_gold",
+      "value": "Emas (Metalik)"
+    },
+    {
+      "name": "theme_white",
+      "value": "Putih"
+    },
+    {
+      "name": "theme_sapphire",
+      "value": "Safir"
+    },
+    {
+      "name": "theme_rose",
+      "value": "Mawar"
+    },
+    {
+      "name": "theme_silver",
+      "value": "Perak"
+    },
+    {
+      "name": "wizard_step",
+      "value": "Langkah"
+    },
+    {
+      "name": "wizard_welcome_title",
+      "value": "Selamat Datang di Sirat Companion"
+    },
+    {
+      "name": "wizard_welcome_desc",
+      "value": "Mari atur preferensi Anda. Anda dapat mengubahnya kapan saja di Pengaturan."
+    },
+    {
+      "name": "wizard_language_title",
+      "value": "Pilih bahasa Anda"
+    },
+    {
+      "name": "wizard_language_desc",
+      "value": "Aplikasi akan menggunakan bahasa ini di semua layar"
+    },
+    {
+      "name": "wizard_privacy_title",
+      "value": "Kebijakan Privasi"
+    },
+    {
+      "name": "wizard_privacy_desc",
+      "value": "Harap baca dan setujui sebelum melanjutkan"
+    },
+    {
+      "name": "privacy_agree_label",
+      "value": "Saya telah membaca dan menyetujui Kebijakan Privasi"
+    },
+    {
+      "name": "privacy_view_full",
+      "value": "Lihat kebijakan privasi lengkap secara online"
+    },
+    {
+      "name": "wizard_theme_title",
+      "value": "Pilih tema Anda"
+    },
+    {
+      "name": "wizard_theme_desc",
+      "value": "Pilih gaya visual. Anda dapat mengubahnya kapan saja di Pengaturan."
+    },
+    {
+      "name": "wizard_location_title",
+      "value": "Atur lokasi Anda"
+    },
+    {
+      "name": "wizard_location_desc",
+      "value": "Digunakan untuk waktu shalat dan arah kiblat"
+    },
+    {
+      "name": "wizard_convention_title",
+      "value": "Preferensi perhitungan"
+    },
+    {
+      "name": "wizard_convention_desc",
+      "value": "Pilih bagaimana waktu shalat dihitung"
+    },
+    {
+      "name": "wizard_grant_permission",
+      "value": "Berikan Izin Lokasi"
+    },
+    {
+      "name": "wizard_getting_location",
+      "value": "Mendeteksi lokasi Anda..."
+    },
+    {
+      "name": "wizard_location_ready",
+      "value": "Lokasi terdeteksi"
+    },
+    {
+      "name": "wizard_location_failed",
+      "value": "Tidak dapat memperoleh lokasi"
+    },
+    {
+      "name": "wizard_retry",
+      "value": "Coba Lagi"
+    },
+    {
+      "name": "wizard_next",
+      "value": "Berikutnya"
+    },
+    {
+      "name": "wizard_finish",
+      "value": "Mulai"
+    },
+    {
+      "name": "home_today_progress",
+      "value": "SHALAT HARIAN"
+    },
+    {
+      "name": "home_prayers_completed",
+      "value": "shalat selesai"
+    },
+    {
+      "name": "home_keep_going",
+      "value": "Terus semangat!"
+    },
+    {
+      "name": "home_streak",
+      "value": "Rentetan Hari"
+    },
+    {
+      "name": "home_best_streak",
+      "value": "Terbaik"
+    },
+    {
+      "name": "home_days",
+      "value": "hari"
+    },
+    {
+      "name": "home_this_week",
+      "value": "MINGGU INI"
+    },
+    {
+      "name": "home_week_summary",
+      "value": "shalat minggu ini"
+    },
+    {
+      "name": "home_this_month",
+      "value": "BULAN INI"
+    },
+    {
+      "name": "home_month_summary",
+      "value": "shalat bulan ini"
+    },
+    {
+      "name": "home_tasbih",
+      "value": "TASBIH HARIAN"
+    },
+    {
+      "name": "home_tasbih_lifetime",
+      "value": "Hitungan seumur hidup"
+    },
+    {
+      "name": "home_tasbih_summary",
+      "value": "tasbih"
+    },
+    {
+      "name": "home_dhikrs",
+      "value": "dzikir"
+    },
+    {
+      "name": "home_monthly_view",
+      "value": "TAMPILAN BULANAN"
+    },
+    {
+      "name": "home_perfect_days",
+      "value": "Hari sempurna"
+    },
+    {
+      "name": "home_days_elapsed",
+      "value": "Hari berlalu"
+    },
+    {
+      "name": "home_lifetime_1y",
+      "value": "shalat dalam setahun terakhir"
+    },
+    {
+      "name": "home_next_event",
+      "value": "ACARA BERIKUTNYA"
+    },
+    {
+      "name": "home_event_today",
+      "value": "Hari ini!"
+    },
+    {
+      "name": "home_event_tomorrow",
+      "value": "Besok"
+    },
+    {
+      "name": "ramadan_card_title",
+      "value": "RAMADHAN"
+    },
+    {
+      "name": "ramadan_day_of",
+      "value": "Hari"
+    },
+    {
+      "name": "ramadan_day_of_suffix",
+      "value": "Ramadhan"
+    },
+    {
+      "name": "ramadan_days_until",
+      "value": "Ramadhan dimulai dalam"
+    },
+    {
+      "name": "ramadan_fast_start",
+      "value": "Mulai Puasa (Imsak)"
+    },
+    {
+      "name": "ramadan_fast_end",
+      "value": "Akhir Puasa (Maghrib)"
+    },
+    {
+      "name": "ramadan_today_fast",
+      "value": "Jendela puasa hari ini"
+    },
+    {
+      "name": "ramadan_first_day_fast",
+      "value": "Hari pertama Ramadhan"
+    },
+    {
+      "name": "ramadan_calendar_start",
+      "value": "Ramadhan Dimulai"
+    },
+    {
+      "name": "ramadan_calendar_end",
+      "value": "Ramadhan Berakhir"
+    },
+    {
+      "name": "ramadan_ashras",
+      "value": "ASYRA"
+    },
+    {
+      "name": "ramadan_first_ashra",
+      "value": "Asyra Pertama"
+    },
+    {
+      "name": "ramadan_second_ashra",
+      "value": "Asyra Kedua"
+    },
+    {
+      "name": "ramadan_third_ashra",
+      "value": "Asyra Ketiga"
+    },
+    {
+      "name": "ramadan_first_ashra_significance",
+      "value": "Hari-hari Rahmat"
+    },
+    {
+      "name": "ramadan_second_ashra_significance",
+      "value": "Hari-hari Ampunan"
+    },
+    {
+      "name": "ramadan_third_ashra_significance",
+      "value": "Bebas dari Neraka"
+    },
+    {
+      "name": "ramadan_laylat_al_qadr",
+      "value": "LAILATUL QADR"
+    },
+    {
+      "name": "ramadan_laylat_al_qadr_desc",
+      "value": "Malam Kemuliaan — lebih baik dari seribu bulan. Carilah pada malam-malam ganjil sepuluh hari terakhir."
+    },
+    {
+      "name": "ramadan_jummah_tul_widah",
+      "value": "JUMATUL WIDA"
+    },
+    {
+      "name": "ramadan_jummah_tul_widah_desc",
+      "value": "Jumat Perpisahan — Jumat terakhir Ramadhan."
+    },
+    {
+      "name": "ramadan_today",
+      "value": "Malam ini!"
+    },
+    {
+      "name": "countdown_fast_ends",
+      "value": "Berbuka dalam"
+    },
+    {
+      "name": "countdown_fast_starts",
+      "value": "Puasa dimulai dalam"
+    },
+    {
+      "name": "countdown_fast_ends_desc",
+      "value": "Bersiap untuk berbuka puasa"
+    },
+    {
+      "name": "countdown_fast_starts_desc",
+      "value": "Selesaikan sahur sebelum Imsak"
+    },
+    {
+      "name": "dua_iftar_name",
+      "value": "Doa Berbuka Puasa"
+    },
+    {
+      "name": "dua_iftar_translation",
+      "value": "Telah hilang rasa haus, telah basah urat-urat, dan telah tetap pahala, insya Allah."
+    },
+    {
+      "name": "dua_suhoor_name",
+      "value": "Niat Puasa"
+    },
+    {
+      "name": "dua_suhoor_translation",
+      "value": "Saya berniat berpuasa besok di bulan Ramadhan."
+    },
+    {
+      "name": "sun_path_we_are_here",
+      "value": "Kita di sini"
+    },
+    {
+      "name": "mark_all",
+      "value": "Tandai semua sudah shalat"
+    },
+    {
+      "name": "default_location",
+      "value": "Lokasi Bawaan"
+    },
+    {
+      "name": "unknown_location",
+      "value": "Lokasi tidak diketahui"
+    },
+    {
+      "name": "dialog_gps_off_title",
+      "value": "Lokasi dinonaktifkan"
+    },
+    {
+      "name": "dialog_gps_off_message",
+      "value": "Harap aktifkan layanan lokasi untuk mendapatkan waktu shalat yang akurat untuk kota Anda."
+    },
+    {
+      "name": "dialog_permission_title",
+      "value": "Izin diperlukan"
+    },
+    {
+      "name": "dialog_permission_message",
+      "value": "Izin lokasi diperlukan untuk menampilkan waktu shalat untuk kota Anda.\nHarap berikan izin di pengaturan sistem."
+    },
+    {
+      "name": "error_gps_fetch_failed",
+      "value": "Gagal mengambil lokasi GPS"
+    },
+    {
+      "name": "error_gps_off",
+      "value": "Harap aktifkan layanan lokasi"
+    },
+    {
+      "name": "error_location_permission_denied",
+      "value": "Izin lokasi ditolak"
+    },
+    {
+      "name": "time_format",
+      "value": "Format Waktu"
+    },
+    {
+      "name": "time_format_desc",
+      "value": "Bagaimana waktu shalat ditampilkan"
+    },
+    {
+      "name": "time_format_system",
+      "value": "Gunakan Pengaturan Sistem"
+    },
+    {
+      "name": "time_format_system_desc",
+      "value": "Ikuti preferensi perangkat"
+    },
+    {
+      "name": "time_format_12h",
+      "value": "12-jam (AM/PM)"
+    },
+    {
+      "name": "time_format_24h",
+      "value": "24-jam"
+    },
+    {
+      "name": "hijri_calendar_type",
+      "value": "Jenis Kalender"
+    },
+    {
+      "name": "hijri_calendar_type_desc",
+      "value": "Kalender Hijriah mana yang digunakan untuk konversi"
+    },
+    {
+      "name": "hijri_calendar_umm_al_qura",
+      "value": "Umm al-Qura"
+    },
+    {
+      "name": "hijri_calendar_umm_al_qura_desc",
+      "value": "Kalender resmi Arab Saudi (1318–1500 H)"
+    },
+    {
+      "name": "hijri_calendar_tabular",
+      "value": "Tabular (Aritmetika)"
+    },
+    {
+      "name": "hijri_calendar_tabular_desc",
+      "value": "Algoritma Kuwait — deterministik untuk semua tahun"
+    },
+    {
+      "name": "subsection_home_ui",
+      "value": "UI Halaman Beranda"
+    },
+    {
+      "name": "subsection_prayer_ui",
+      "value": "UI Shalat"
+    },
+    {
+      "name": "subsection_feedback",
+      "value": "Suara & Umpan Balik"
+    },
+    {
+      "name": "subsection_language",
+      "value": "Bahasa"
+    },
+    {
+      "name": "event_raghaib",
+      "value": "Lailatul Ragaib"
+    },
+    {
+      "name": "countdown_fast_ends_now",
+      "value": "Saatnya berbuka puasa"
+    },
+    {
+      "name": "countdown_fast_starts_now",
+      "value": "Saatnya mulai berpuasa"
+    },
+    {
+      "name": "shafaq_method_unavailable",
+      "value": "Hanya tersedia dengan Moonsighting Committee"
+    },
+    {
+      "name": "event_perspective",
+      "value": "Tradisi Acara"
+    },
+    {
+      "name": "event_perspective_desc",
+      "value": "Pilih apakah Beranda menampilkan acara yang dirayakan semua Muslim, atau juga yang khusus untuk tradisi Sunni dan Syiah."
+    },
+    {
+      "name": "event_perspective_universal",
+      "value": "Universal saja"
+    },
+    {
+      "name": "event_perspective_sunni",
+      "value": "Sunni + universal"
+    },
+    {
+      "name": "event_perspective_shia",
+      "value": "Syiah + universal"
+    },
+    {
+      "name": "event_perspective_all",
+      "value": "Tampilkan semua"
+    },
+    {
+      "name": "event_arbaeen",
+      "value": "Arbain"
+    },
+    {
+      "name": "event_imam_ali_birthday",
+      "value": "Kelahiran Imam Ali"
+    },
+    {
+      "name": "event_ghadir",
+      "value": "Idul Ghadir"
+    },
+    {
+      "name": "event_new_year_desc",
+      "value": "Awal tahun Hijriah, menandai hijrah Nabi ke Madinah."
+    },
+    {
+      "name": "event_ashura_desc",
+      "value": "Hari puasa dan refleksi yang diperingati di seluruh dunia Muslim."
+    },
+    {
+      "name": "event_arbaeen_desc",
+      "value": "Menandai empat puluh hari setelah Asyura — masa berkabung dalam tradisi Syiah."
+    },
+    {
+      "name": "event_mawlid_desc",
+      "value": "Kelahiran Nabi Muhammad \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645."
+    },
+    {
+      "name": "event_raghaib_desc",
+      "value": "Malam Kamis pertama bulan Rajab — malam doa dalam tradisi Sunni."
+    },
+    {
+      "name": "event_imam_ali_birthday_desc",
+      "value": "Kelahiran Imam Ali bin Abi Thalib, diperingati dalam tradisi Syiah."
+    },
+    {
+      "name": "event_isra_miraj_desc",
+      "value": "Perjalanan malam Nabi ke Yerusalem dan mi'raj ke langit."
+    },
+    {
+      "name": "event_mid_shaban_desc",
+      "value": "Malam kelima belas Sya'ban — malam doa dan memohon ampunan."
+    },
+    {
+      "name": "event_ramadan_start_desc",
+      "value": "Awal bulan puasa, bulan kesembilan tahun Hijriah."
+    },
+    {
+      "name": "event_eid_fitr_desc",
+      "value": "Hari raya yang menandai berakhirnya Ramadhan."
+    },
+    {
+      "name": "event_arafah_desc",
+      "value": "Hari wukuf di Arafah, hari paling suci dalam ibadah haji."
+    },
+    {
+      "name": "event_eid_adha_desc",
+      "value": "Hari raya kurban, memperingati ketakwaan Nabi Ibrahim."
+    },
+    {
+      "name": "event_ghadir_desc",
+      "value": "Menandai hari Nabi mengangkat Imam Ali sebagai penerusnya, dalam tradisi Syiah."
+    },
+    {
+      "name": "show_extra_timings_list",
+      "value": "Tampilkan Waktu Malam"
+    },
+    {
+      "name": "show_extra_timings_list_desc",
+      "value": "Imsak dan pembagian malam. Terbit dan Terbenam selalu ditampilkan."
+    },
+    {
+      "name": "show_extra_timings_sunpath",
+      "value": "Tampilkan Panduan Jalur Matahari"
+    },
+    {
+      "name": "show_extra_timings_sunpath_desc",
+      "value": "Panduan Sepertiga Pertama, Tengah Malam, dan Sepertiga Terakhir pada jalur matahari"
+    },
+    {
+      "name": "show_imsak",
+      "value": "Imsak"
+    },
+    {
+      "name": "show_imsak_desc",
+      "value": "Batas sebelum fajar, sepuluh menit sebelum Fajar"
+    },
+    {
+      "name": "show_first_third",
+      "value": "Sepertiga Pertama"
+    },
+    {
+      "name": "show_first_third_desc",
+      "value": "Awal sepertiga pertama malam, setelah Maghrib"
+    },
+    {
+      "name": "show_midnight",
+      "value": "Tengah Malam"
+    },
+    {
+      "name": "show_midnight_desc",
+      "value": "Tengah malam Islam — separuh malam"
+    },
+    {
+      "name": "show_last_third",
+      "value": "Sepertiga Terakhir"
+    },
+    {
+      "name": "show_last_third_desc",
+      "value": "Awal sepertiga terakhir malam, waktu untuk Qiyam"
+    },
+    {
+      "name": "subsection_prayer_list",
+      "value": "TAMPILKAN DI DAFTAR SHALAT"
+    },
+    {
+      "name": "subsection_sun_path",
+      "value": "TAMPILKAN DI JALUR MATAHARI"
+    },
+    {
+      "name": "title_prayer_details",
+      "value": "Detail Shalat"
+    },
+    {
+      "name": "title_tasbih_details",
+      "value": "Detail Tasbih"
+    },
+    {
+      "name": "details_view",
+      "value": "Lihat Detail"
+    },
+    {
+      "name": "details_period_week",
+      "value": "Minggu"
+    },
+    {
+      "name": "details_period_month",
+      "value": "Bulan"
+    },
+    {
+      "name": "details_period_year",
+      "value": "Tahun"
+    },
+    {
+      "name": "details_prayers_completed",
+      "value": "shalat selesai"
+    },
+    {
+      "name": "details_per_prayer",
+      "value": "RINCIAN PER SHALAT"
+    },
+    {
+      "name": "details_per_tasbih",
+      "value": "RINCIAN PER TASBIH"
+    },
+    {
+      "name": "details_this_month",
+      "value": "BULAN INI"
+    },
+    {
+      "name": "details_perfect_days",
+      "value": "Hari sempurna"
+    },
+    {
+      "name": "details_best_streak",
+      "value": "Terbaik"
+    },
+    {
+      "name": "details_days_of",
+      "value": "dari"
+    },
+    {
+      "name": "details_tasbih_summary_lifetime",
+      "value": "Hitungan seumur hidup"
+    },
+    {
+      "name": "details_tasbih_summary_tasbihs",
+      "value": "Tasbih"
+    },
+    {
+      "name": "details_tasbih_summary_dhikrs",
+      "value": "Dzikir selesai"
+    },
+    {
+      "name": "export_pdf",
+      "value": "Ekspor ke PDF"
+    },
+    {
+      "name": "export_prayers_title",
+      "value": "Jadwal Shalat"
+    },
+    {
+      "name": "export_calendar_title",
+      "value": "Kalender Hijriah"
+    },
+    {
+      "name": "export_ramadan_title",
+      "value": "Jadwal Ramadhan"
+    },
+    {
+      "name": "export_print",
+      "value": "Cetak"
+    },
+    {
+      "name": "export_saving",
+      "value": "Membuat PDF..."
+    },
+    {
+      "name": "export_success",
+      "value": "PDF berhasil dibuat"
+    },
+    {
+      "name": "export_failed",
+      "value": "Gagal membuat PDF"
+    },
+    {
+      "name": "export_sahur",
+      "value": "Sahur"
+    },
+    {
+      "name": "export_iftar",
+      "value": "Buka"
+    },
+    {
+      "name": "export_ramadan_timetable",
+      "value": "Jadwal Ramadhan"
+    },
+    {
+      "name": "auto_show_ramadan_view",
+      "value": "Tampilkan Tampilan Ramadhan Otomatis"
+    },
+    {
+      "name": "auto_show_ramadan_view_desc",
+      "value": "Sembunyikan hingga tersisa 60 hari. Matikan untuk selalu menampilkan kartu."
+    },
+    {
+      "name": "export_date",
+      "value": "Tanggal"
+    },
+    {
+      "name": "hijri_year_suffix",
+      "value": "H"
+    },
+    {
+      "name": "generated_by",
+      "value": "Dibuat oleh Sirat Companion"
+    },
+    {
+      "name": "calendar_read_permission_denied",
+      "value": "Izin Baca Kalender diperlukan untuk membersihkan pengingat lama."
+    },
+    {
+      "name": "calendar_write_permission_denied",
+      "value": "Izin Tulis Kalender diperlukan untuk menyimpan pengingat baru."
+    },
+    {
+      "name": "next_3_days",
+      "value": "3 HARI BERIKUTNYA"
+    },
+    {
+      "name": "about_developer",
+      "value": "Pengembang"
+    },
+    {
+      "name": "wizard_use_default_location",
+      "value": "Gunakan lokasi bawaan"
+    },
+    {
+      "name": "wizard_location_required_hint",
+      "value": "Atur lokasi untuk melanjutkan"
+    },
+    {
+      "name": "subsection_language_and_time",
+      "value": "Bahasa & Format Waktu"
+    },
+    {
+      "name": "madhab_desc_diyanet",
+      "value": "Kalender Diyanet menggunakan aturan Asr Standar"
+    },
+    {
+      "name": "category_backup_restore",
+      "value": "Cadangkan & Pulihkan"
+    },
+    {
+      "name": "backup_to_file",
+      "value": "Cadangkan ke File"
+    },
+    {
+      "name": "backup_to_file_desc",
+      "value": "Simpan semua pengaturan, kemajuan shalat, dan data tasbih Anda ke file yang dapat Anda simpan."
+    },
+    {
+      "name": "restore_from_file",
+      "value": "Pulihkan dari File"
+    },
+    {
+      "name": "restore_from_file_desc",
+      "value": "Muat cadangan yang disimpan sebelumnya dan ganti semua data saat ini."
+    },
+    {
+      "name": "backup_footer",
+      "value": "Cadangan tidak menyertakan log diagnostik atau pengenal khusus perangkat."
+    },
+    {
+      "name": "backup_success",
+      "value": "Cadangan tersimpan"
+    },
+    {
+      "name": "backup_failed",
+      "value": "Pencadangan gagal"
+    },
+    {
+      "name": "restore_confirm_title",
+      "value": "Pulihkan Cadangan?"
+    },
+    {
+      "name": "restore_confirm_message",
+      "value": "Ini akan mengganti semua pengaturan, kemajuan shalat, dan data tasbih Anda dengan isi file cadangan. Ini tidak dapat dibatalkan."
+    },
+    {
+      "name": "restore_success",
+      "value": "Cadangan dipulihkan. Aplikasi akan dimuat ulang sekarang."
+    },
+    {
+      "name": "restore_failed",
+      "value": "Pemulihan gagal"
+    },
+    {
+      "name": "home_days_singular",
+      "value": "hari"
+    },
+    {
+      "name": "home_days_dual",
+      "value": "dua hari"
+    },
+    {
+      "name": "dhikr_count_dual",
+      "value": "dua dzikir"
+    },
+    {
+      "name": "title_ramadan_details",
+      "value": "Pelacak Ramadhan"
+    },
+    {
+      "name": "track_ramadan",
+      "value": "Lacak"
+    },
+    {
+      "name": "section_fasting",
+      "value": "PUASA"
+    },
+    {
+      "name": "fasting_status_fasted",
+      "value": "Berpuasa"
+    },
+    {
+      "name": "fasting_status_missed",
+      "value": "Terlewat"
+    },
+    {
+      "name": "fasting_status_unmarked",
+      "value": "Tidak ditandai"
+    },
+    {
+      "name": "fasting_summary_fasted",
+      "value": "berpuasa"
+    },
+    {
+      "name": "fasting_summary_missed",
+      "value": "terlewat"
+    },
+    {
+      "name": "fasting_summary_unmarked",
+      "value": "tidak ditandai"
+    },
+    {
+      "name": "fasting_mark_title",
+      "value": "Tandai Puasa"
+    },
+    {
+      "name": "fasting_day_label",
+      "value": "Hari"
+    },
+    {
+      "name": "fasting_clear",
+      "value": "Hapus tanda"
+    },
+    {
+      "name": "fasting_reason_title",
+      "value": "Alasan Tidak Berpuasa"
+    },
+    {
+      "name": "fasting_reason_travel",
+      "value": "Perjalanan"
+    },
+    {
+      "name": "fasting_reason_illness",
+      "value": "Sakit"
+    },
+    {
+      "name": "fasting_reason_menstruation",
+      "value": "Haid"
+    },
+    {
+      "name": "fasting_reason_pregnancy_nursing",
+      "value": "Hamil / menyusui"
+    },
+    {
+      "name": "fasting_reason_forgetfulness",
+      "value": "Lupa"
+    },
+    {
+      "name": "fasting_reason_other",
+      "value": "Lainnya"
+    },
+    {
+      "name": "fasting_reason_custom_label",
+      "value": "Mohon tentukan"
+    },
+    {
+      "name": "fasting_reason_custom_placeholder",
+      "value": "Alasan Anda"
+    },
+    {
+      "name": "ramadan_not_active",
+      "value": "Buka halaman ini selama Ramadhan untuk melacak puasa Anda."
+    },
+    {
+      "name": "section_qada",
+      "value": "QADHA (GANTI)"
+    },
+    {
+      "name": "qada_remaining",
+      "value": "Tersisa"
+    },
+    {
+      "name": "qada_total_missed",
+      "value": "Total terlewat"
+    },
+    {
+      "name": "qada_total_made_up",
+      "value": "Total diganti"
+    },
+    {
+      "name": "qada_per_year",
+      "value": "PER TAHUN"
+    },
+    {
+      "name": "qada_log_button",
+      "value": "Catat puasa qadha"
+    },
+    {
+      "name": "qada_log_title",
+      "value": "Catat Puasa Qadha"
+    },
+    {
+      "name": "qada_log_desc",
+      "value": "Berapa puasa yang telah Anda ganti?"
+    },
+    {
+      "name": "qada_all_done",
+      "value": "Semua lunas. Alhamdulillah."
+    },
+    {
+      "name": "qada_no_data",
+      "value": "Belum ada puasa terlewat yang tercatat."
+    },
+    {
+      "name": "qada_year_label",
+      "value": "Untuk tahun"
+    },
+    {
+      "name": "qada_count_label",
+      "value": "Berapa banyak"
+    },
+    {
+      "name": "qada_count_suffix",
+      "value": "puasa"
+    },
+    {
+      "name": "qada_row_missed_suffix",
+      "value": "terlewat"
+    },
+    {
+      "name": "qada_row_made_up_suffix",
+      "value": "diganti"
+    },
+    {
+      "name": "section_taraweeh",
+      "value": "TARAWIH"
+    },
+    {
+      "name": "taraweeh_empty",
+      "value": "Pelacakan dimulai setelah Ramadhan tiba."
+    },
+    {
+      "name": "taraweeh_nights_suffix",
+      "value": "malam"
+    },
+    {
+      "name": "qada_not_during_ramadan",
+      "value": "Puasa qadha dapat dicatat setelah Idul Fitri."
+    },
+    {
+      "name": "qada_total_fasted",
+      "value": "Total berpuasa"
+    },
+    {
+      "name": "qada_total_unmarked",
+      "value": "Total tidak ditandai"
+    },
+    {
+      "name": "qada_row_fasted_suffix",
+      "value": "berpuasa"
+    },
+    {
+      "name": "qada_row_unmarked_suffix",
+      "value": "tidak ditandai"
+    },
+    {
+      "name": "section_duas",
+      "value": "DOA-DOA"
+    },
+    {
+      "name": "eid_card_title",
+      "value": "IDUL FITRI"
+    },
+    {
+      "name": "eid_greeting",
+      "value": "Selamat Idul Fitri"
+    },
+    {
+      "name": "eid_greeting_subtitle",
+      "value": "Semoga Allah menerima puasa dan amal Anda"
+    },
+    {
+      "name": "eid_zakat_fitr",
+      "value": "ZAKAT FITRAH"
+    },
+    {
+      "name": "eid_zakat_fitr_desc",
+      "value": "Satu sha' (sekitar 2,5 kg) makanan pokok lokal Anda per anggota rumah tangga, wajib sebelum shalat Id."
+    },
+    {
+      "name": "eid_takbeer_arabic",
+      "value": "اللّٰهُ أَكْبَرُ، اللّٰهُ أَكْبَرُ، لَا إِلٰهَ إِلَّا اللّٰهُ، وَاللّٰهُ أَكْبَرُ، اللّٰهُ أَكْبَرُ، وَلِلّٰهِ الْحَمْدُ"
+    },
+    {
+      "name": "eid_takbeer_translation",
+      "value": "Allah Maha Besar, Allah Maha Besar. Tiada Tuhan selain Allah. Allah Maha Besar, Allah Maha Besar, dan segala puji bagi Allah."
+    },
+    {
+      "name": "ramadan_about_this_month",
+      "value": "TENTANG RAMADHAN INI"
+    },
+    {
+      "name": "eid_card_link",
+      "value": "Tinjau Ramadhan"
+    },
+    {
+      "name": "qada_card_link",
+      "value": "Kelola Qadha"
+    },
+    {
+      "name": "qada_banner_log_action",
+      "value": "Catat"
+    },
+    {
+      "name": "qada_banner_singular",
+      "value": "puasa untuk diganti"
+    },
+    {
+      "name": "qada_banner_plural",
+      "value": "puasa untuk diganti"
+    },
+    {
+      "name": "qada_banner_dual",
+      "value": "Dua puasa untuk diganti"
+    },
+    {
+      "name": "qada_year_sheet_title_prefix",
+      "value": "Qadha untuk"
+    },
+    {
+      "name": "qada_of",
+      "value": "dari"
+    },
+    {
+      "name": "qada_made_up_of_total",
+      "value": "diganti"
+    },
+    {
+      "name": "qada_day_mark_made_up",
+      "value": "Tandai sudah diganti"
+    },
+    {
+      "name": "qada_day_made_up",
+      "value": "Sudah diganti"
+    },
+    {
+      "name": "qada_year_sheet_empty",
+      "value": "Semua puasa terlewat untuk tahun ini telah diganti. Alhamdulillah."
+    },
+    {
+      "name": "qada_tap_year_hint",
+      "value": "Ketuk tahun untuk melihat dan mengelola penggantiannya."
+    },
+    {
+      "name": "close",
+      "value": "Tutup"
+    },
+    {
+      "name": "lang_system",
+      "value": "Deteksi Otomatis"
+    },
+    {
+      "name": "lang_system_desc",
+      "value": "Menyesuaikan bahasa sistem"
+    },
+    {
+      "name": "lang_supported_hint",
+      "value": "Bahasa yang didukung: Inggris, Arab, Tionghoa, Indonesia, Urdu, Turki, Bengali"
+    },
+    {
+      "name": "tasbih_default_classic_name",
+      "value": "Klasik 33"
+    },
+    {
+      "name": "tasbih_default_tahlil_name",
+      "value": "Tahlil 100"
+    },
+    {
+      "name": "tasbih_default_istighfar_name",
+      "value": "Istighfar"
+    },
+    {
+      "name": "dhikr_subhanallah_translit",
+      "value": "SubhanAllah"
+    },
+    {
+      "name": "dhikr_subhanallah_trans",
+      "value": "Maha Suci Allah"
+    },
+    {
+      "name": "dhikr_alhamdulillah_translit",
+      "value": "Alhamdulillah"
+    },
+    {
+      "name": "dhikr_alhamdulillah_trans",
+      "value": "Segala puji bagi Allah"
+    },
+    {
+      "name": "dhikr_allahuakbar_translit",
+      "value": "Allahu Akbar"
+    },
+    {
+      "name": "dhikr_allahuakbar_trans",
+      "value": "Allah Maha Besar"
+    },
+    {
+      "name": "dhikr_tahlil_translit",
+      "value": "La ilaha illallahu wahdahu la sharika lah"
+    },
+    {
+      "name": "dhikr_tahlil_trans",
+      "value": "Tiada Tuhan selain Allah, Yang Maha Esa, tiada sekutu bagi-Nya"
+    },
+    {
+      "name": "dhikr_istighfar_translit",
+      "value": "Astaghfirullah"
+    },
+    {
+      "name": "dhikr_istighfar_trans",
+      "value": "Aku memohon ampunan kepada Allah"
+    },
+    {
+      "name": "tasbih_active_badge",
+      "value": "Aktif"
+    },
+    {
+      "name": "notif_step_title",
+      "value": "Pengingat Shalat"
+    },
+    {
+      "name": "notif_step_desc",
+      "value": "Aktifkan pengingat untuk mendapatkan notifikasi waktu shalat. Ini memerlukan izin Kalender."
+    },
+    {
+      "name": "permission_required",
+      "value": "Izin Kalender Diperlukan"
+    },
+    {
+      "name": "calendar_permission_required_msg",
+      "value": "Izin Baca dan Tulis Kalender diperlukan untuk pengingat shalat. Harap berikan izin untuk melanjutkan."
+    },
+    {
+      "name": "grant",
+      "value": "Berikan"
+    },
+    {
+      "name": "category_logs",
+      "value": "Log Diagnostik"
+    },
+    {
+      "name": "jummah_mubarak",
+      "value": "Jumat Mubarak"
+    },
+    {
+      "name": "fasting_ends_at",
+      "value": "Puasa berakhir pada"
+    },
+    {
+      "name": "duas_link",
+      "value": "Doa-doa"
+    },
+    {
+      "name": "ramadan_laylat_today",
+      "value": "Malam ini: kemungkinan Lailatul Qadr"
+    },
+    {
+      "name": "ramadan_taraweeh_quick",
+      "value": "Tarawih:"
+    },
+    {
+      "name": "ramadan_fast_nudge",
+      "value": "Apakah Anda berpuasa hari ini? Tandai"
+    },
+    {
+      "name": "bind_to_prayers",
+      "value": "Ikat ke Shalat"
+    },
+    {
+      "name": "tasbih_reminder_title",
+      "value": "Tasbih Tertunda"
+    },
+    {
+      "name": "tasbih_reminder_desc",
+      "value": "sudah shalat, tetapi Anda masih memiliki Tasbih yang tertunda."
+    },
+    {
+      "name": "go_to_tasbih",
+      "value": "Buka Tasbih"
+    },
+    {
+      "name": "dismiss",
+      "value": "Tutup"
+    },
+    {
+      "name": "tasbih_status_completed",
+      "value": "Selesai"
+    },
+    {
+      "name": "tasbih_left",
+      "value": "tersisa"
+    },
+    {
+      "name": "duas",
+      "value": "Doa-doa"
+    },
+    {
+      "name": "search_duas",
+      "value": "Cari doa..."
+    },
+    {
+      "name": "dua_cat_all",
+      "value": "Semua"
+    },
+    {
+      "name": "dua_cat_favorites",
+      "value": "Favorit"
+    },
+    {
+      "name": "dua_cat_forgiveness",
+      "value": "Ampunan"
+    },
+    {
+      "name": "dua_cat_distress",
+      "value": "Kesulitan"
+    },
+    {
+      "name": "dua_cat_travel",
+      "value": "Perjalanan"
+    },
+    {
+      "name": "bind_prayer",
+      "value": "Ikat ke Shalat"
+    },
+    {
+      "name": "home_duas_title",
+      "value": "DOA HARI INI"
+    },
+    {
+      "name": "view_all",
+      "value": "Lihat Semua"
+    },
+    {
+      "name": "dua_cat_morning_evening",
+      "value": "Pagi & Petang"
+    },
+    {
+      "name": "dua_cat_prayer",
+      "value": "Shalat"
+    },
+    {
+      "name": "dua_cat_protection",
+      "value": "Perlindungan"
+    },
+    {
+      "name": "dua_cat_guidance",
+      "value": "Petunjuk"
+    },
+    {
+      "name": "dua_cat_general",
+      "value": "Umum"
+    },
+    {
+      "name": "dua_cat_worship",
+      "value": "Ibadah"
+    },
+    {
+      "name": "dua_cat_repentance",
+      "value": "Taubat"
+    },
+    {
+      "name": "dua_cat_steadfastness",
+      "value": "Keteguhan"
+    },
+    {
+      "name": "dua_cat_mercy",
+      "value": "Rahmat"
+    },
+    {
+      "name": "dua_cat_reflection",
+      "value": "Perenungan"
+    },
+    {
+      "name": "dua_cat_hereafter",
+      "value": "Akhirat"
+    },
+    {
+      "name": "dua_cat_family",
+      "value": "Keluarga"
+    },
+    {
+      "name": "dua_cat_knowledge",
+      "value": "Ilmu"
+    },
+    {
+      "name": "dua_cat_healing",
+      "value": "Penyembuhan"
+    },
+    {
+      "name": "dua_cat_need",
+      "value": "Kebutuhan"
+    },
+    {
+      "name": "dua_cat_gratitude",
+      "value": "Syukur"
+    },
+    {
+      "name": "dua_cat_reliance",
+      "value": "Tawakal"
+    },
+    {
+      "name": "dua_cat_daily",
+      "value": "Kehidupan Sehari-hari"
+    },
+    {
+      "name": "dua_cat_fasting",
+      "value": "Puasa"
+    },
+    {
+      "name": "dua_cat_weather",
+      "value": "Cuaca"
+    },
+    {
+      "name": "dua_cat_faith",
+      "value": "Iman"
+    },
+    {
+      "name": "dua_cat_purification",
+      "value": "Penyucian"
+    },
+    {
+      "name": "dua_cat_provision",
+      "value": "Rezeki"
+    },
+    {
+      "name": "dua_cat_funeral",
+      "value": "Pemakaman"
+    },
+    {
+      "name": "duas_for",
+      "value": "Doa untuk"
+    },
+    {
+      "name": "home_tasbih_tracker",
+      "value": "TASBIH TERIKAT"
+    },
+    {
+      "name": "add_custom_event",
+      "value": "Tambah Acara"
+    },
+    {
+      "name": "event_title_placeholder",
+      "value": "Nama Acara"
+    },
+    {
+      "name": "hijri_date",
+      "value": "Tanggal Hijriah"
+    },
+    {
+      "name": "gregorian_date",
+      "value": "Tanggal Masehi"
+    },
+    {
+      "name": "notify_me",
+      "value": "Beri tahu saya pada hari ini"
+    },
+    {
+      "name": "custom_events_title",
+      "value": "ACARA KHUSUS"
+    },
+    {
+      "name": "date_type",
+      "value": "Jenis Tanggal"
+    },
+    {
+      "name": "event_title",
+      "value": "Judul Acara"
+    },
+    {
+      "name": "day",
+      "value": "Hari"
+    },
+    {
+      "name": "month",
+      "value": "Bulan"
+    },
+    {
+      "name": "year",
+      "value": "Tahun"
+    },
+    {
+      "name": "notify_me_desc",
+      "value": "Terima pengingat kalender pada pukul 8:00 pagi"
+    },
+    {
+      "name": "edit_custom_event",
+      "value": "Ubah Acara"
+    },
+    {
+      "name": "event_title_required",
+      "value": "Judul acara wajib diisi"
+    },
+    {
+      "name": "invalid_date",
+      "value": "Tanggal tidak valid"
+    },
+    {
+      "name": "hijri_equivalent",
+      "value": "Akan disimpan sebagai:"
+    },
+    {
+      "name": "repeats",
+      "value": "Berulang"
+    },
+    {
+      "name": "recur_none",
+      "value": "Tidak Ada"
+    },
+    {
+      "name": "recur_yearly",
+      "value": "Tahunan"
+    },
+    {
+      "name": "recur_monthly",
+      "value": "Bulanan"
+    },
+    {
+      "name": "recur_weekly",
+      "value": "Mingguan"
+    },
+    {
+      "name": "show_all",
+      "value": "Tampilkan Semua"
+    },
+    {
+      "name": "show_this_month",
+      "value": "Bulan Ini"
+    },
+    {
+      "name": "no_custom_events",
+      "value": "Tidak ada acara khusus ditemukan."
+    },
+    {
+      "name": "upcoming_custom_events",
+      "value": "ACARA MENDATANG"
+    },
+    {
+      "name": "notif_pray_jummah",
+      "value": "Shalat Jumat"
+    },
+    {
+      "name": "hadith_jummah",
+      "value": "Shalat lima waktu, dan dari satu shalat Jumat ke Jumat berikutnya, merupakan penghapus dosa yang terjadi di antaranya, selama dosa besar dijauhi. — Sahih Muslim 233"
+    },
+    {
+      "name": "lang_id",
+      "value": "Bahasa Indonesia"
+    },
+    {
+      "name": "lang_ur",
+      "value": "اردو (Urdu)"
+    },
+    {
+      "name": "lang_tr",
+      "value": "Türkçe (Turki)"
+    },
+    {
+      "name": "lang_bn",
+      "value": "বাংলা (Bengali)"
+    }
+  ]
+}

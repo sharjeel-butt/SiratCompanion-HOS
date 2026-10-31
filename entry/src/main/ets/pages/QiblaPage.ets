@@ -21,7 +21,7 @@ import { SettingsHelper } from '../helper/SettingsHelper';
 import { LocationCache } from '../utils/LocationCache';
 import { LocationMode } from '../models/SettingsModels';
 import { NavHelper } from '../helper/NavHelper';
-import { L } from '../i8n/LocalizationHelper';
+import { L } from '../i18n/LocalizationHelper';
 import { OfflineCityLookup } from '../utils/OfflineCityLookup';
 import { Breakpoints } from '../common/Breakpoints';
 
@@ -601,9 +601,13 @@ export struct QiblaPage {
       this.latitude, this.longitude
     );
 
-    this.declinationDeg = OfflineCityLookup.declinationFor(
+    const decl = OfflineCityLookup.declinationFor(
       this.latitude, this.longitude
     );
+    // `null` means no city within 400 km — fall back to 0 so the
+    // needle still points somewhere usable. The compass's built-in
+    // calibration overlay will prompt the user to correct it.
+    this.declinationDeg = decl ?? 0;
 
     const trueHeading = this.smoothedHeading + this.declinationDeg;
     const targetNeedle = this.qiblaBearing - trueHeading;

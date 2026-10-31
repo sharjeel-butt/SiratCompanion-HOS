@@ -2819,6 +2819,22 @@
     {
       "name": "hadith_jummah",
       "value": "五番拜功，从一个主麻到下一个主麻，是它们之间所犯之罪的赎罪，只要远离大罪。 ——《穆斯林圣训实录》233"
+    },
+    {
+      "name": "lang_id",
+      "value": "Bahasa Indonesia (印度尼西亚语)"
+    },
+    {
+      "name": "lang_ur",
+      "value": "اردو (乌尔都语)"
+    },
+    {
+      "name": "lang_tr",
+      "value": "Türkçe (土耳其语)"
+    },
+    {
+      "name": "lang_bn",
+      "value": "বাংলা (孟加拉语)"
     }
   ]
 }

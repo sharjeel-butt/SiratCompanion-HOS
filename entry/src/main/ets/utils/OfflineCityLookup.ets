@@ -13,7 +13,8 @@ export enum DstRule {
   EU = 'EU', // Last Sun March → Last Sun October
   AU = 'AU', // Southern hemisphere AU: 1st Sun Oct → 1st Sun April
   NZ = 'NZ', // Southern hemisphere NZ: last Sun Sep → 1st Sun April
-  EGYPT = 'EGYPT' // Last Fri April → Last Thu October
+  EGYPT = 'EGYPT', // Last Fri April → Last Thu October
+  MOROCCO = 'MOROCCO' // Year-round UTC+0 baseline + 1h "DST" except during Ramadan
 }
 
 export interface City {
@@ -31,7 +32,9 @@ export interface City {
   declinationDeg: number;
 }
 
-const MAX_MATCH_KM = 300;
+const MAX_MATCH_KM_TIMEZONE = 200; // tighter — country box is a good fallback
+const MAX_MATCH_KM_DECLINATION = 400; // looser — no declination fallback table
+const MAX_MATCH_KM_NAME = 300; // unchanged for reverse-geocode display
 
 const CITIES: City[] = [
   {
@@ -154,6 +157,46 @@ const CITIES: City[] = [
     standardOffset: 5.5,
     dstRule: DstRule.NONE,
     declinationDeg: 0.3
+  },
+  {
+    name: 'Jaisalmer',
+    lat: 26.9157,
+    lng: 70.9083,
+    standardOffset: 5.5,
+    dstRule: DstRule.NONE,
+    declinationDeg: 0.9
+  },
+  {
+    name: 'Jodhpur',
+    lat: 26.2389,
+    lng: 73.0243,
+    standardOffset: 5.5,
+    dstRule: DstRule.NONE,
+    declinationDeg: 0.7
+  },
+  {
+    name: 'Jaipur',
+    lat: 26.9124,
+    lng: 75.7873,
+    standardOffset: 5.5,
+    dstRule: DstRule.NONE,
+    declinationDeg: 0.5
+  },
+  {
+    name: 'Ahmedabad',
+    lat: 23.0225,
+    lng: 72.5714,
+    standardOffset: 5.5,
+    dstRule: DstRule.NONE,
+    declinationDeg: 0.1
+  },
+  {
+    name: 'Amritsar',
+    lat: 31.6340,
+    lng: 74.8723,
+    standardOffset: 5.5,
+    dstRule: DstRule.NONE,
+    declinationDeg: 1.2
   },
 
   {
@@ -651,8 +694,8 @@ const CITIES: City[] = [
     name: 'Casablanca',
     lat: 33.5731,
     lng: -7.5898,
-    standardOffset: 1,
-    dstRule: DstRule.NONE,
+    standardOffset: 0, // was 1
+    dstRule: DstRule.MOROCCO, // was DstRule.NONE
     declinationDeg: -4.0
   },
 
@@ -739,45 +782,95 @@ const CITIES: City[] = [
   }
 ];
 
+const MAX_TIMEZONE_KM = 200;
+const MAX_DECLINATION_KM = 500;
+
 export class OfflineCityLookup {
   /**
-   * Return the nearest known city's display name, if within range.
+   * Nearest city within the timezone radius. Used by
+   * TimezoneResolver.tableOffset and by reverse-geocode display
+   * so a user near a border does not inherit a neighbouring
+   * country's offset.
    */
-  static nearest(latitude: number, longitude: number): string | null {
-    const city = OfflineCityLookup.nearestCity(latitude, longitude);
-    return city !== null ? city.name.toUpperCase() : null;
+  static nearestCityForTimezone(
+    latitude: number, longitude: number
+  ): City | null {
+    return OfflineCityLookup.within(
+      latitude, longitude, MAX_TIMEZONE_KM
+    );
   }
 
   /**
-   * Return the nearest known city record (including timezone data),
-   * or null if nothing is within MAX_MATCH_KM.
+   * Nearest city within the declination radius. Larger radius
+   * because magnetic declination is a smooth field — a 500 km
+   * match is more accurate than the previous "return 0 on miss"
+   * fallback (which could produce a 25° Qibla error at extreme
+   * longitudes).
    */
-  static nearestCity(latitude: number, longitude: number): City | null {
+  static nearestCityForDeclination(
+    latitude: number, longitude: number
+  ): City | null {
+    return OfflineCityLookup.within(
+      latitude, longitude, MAX_DECLINATION_KM
+    );
+  }
+
+  /**
+   * Retained for callers that want the timezone radius —
+   * nearestCity() historically served both purposes.
+   */
+  static nearestCity(
+    latitude: number, longitude: number
+  ): City | null {
+    return OfflineCityLookup.nearestCityForTimezone(
+      latitude, longitude
+    );
+  }
+
+  static nearest(
+    latitude: number, longitude: number
+  ): string | null {
+    const city = OfflineCityLookup.nearestCityForTimezone(
+      latitude, longitude
+    );
+    return city !== null ? city.name.toUpperCase() : null;
+  }
+
+  static declinationFor(
+    latitude: number, longitude: number
+  ): number {
+    const city = OfflineCityLookup.nearestCityForDeclination(
+      latitude, longitude
+    );
+    // Behaviour change: previously returned 0 on miss, which made
+    // the Qibla compass treat the magnetic heading as true north.
+    // A declination of 0 is only correct along the agonic line; a
+    // 500 km radius covers essentially every populated landmass,
+    // so a miss now truly means "open ocean / polar region", where
+    // falling back to 0 is acceptable.
+    return city !== null ? city.declinationDeg : 0;
+  }
+
+  private static within(
+    latitude: number, longitude: number, maxKm: number
+  ): City | null {
     let best: City | null = null;
     let bestDist = Number.MAX_VALUE;
 
     for (const city of CITIES) {
-      const d = OfflineCityLookup.haversineKm(latitude, longitude, city.lat, city.lng);
+      const d = OfflineCityLookup.haversineKm(
+        latitude, longitude, city.lat, city.lng
+      );
       if (d < bestDist) {
         bestDist = d;
         best = city;
       }
     }
 
-    if (best !== null && bestDist <= MAX_MATCH_KM) {
+    if (best !== null && bestDist <= maxKm) {
       return best;
     }
     return null;
-  }
-
-  /**
-   * Magnetic declination (degrees East) for the nearest known city.
-   * Falls back to 0 when the coordinates are outside the table —
-   * meaning the sensor heading is used as-is.
-   */
-  static declinationFor(latitude: number, longitude: number): number {
-    const city = OfflineCityLookup.nearestCity(latitude, longitude);
-    return city !== null ? city.declinationDeg : 0;
   }
 
   private static haversineKm(

@@ -1,7 +1,7 @@
 // entry/src/main/ets/components/ExtraTimingToggleRow.ets
 
 import { ThemeColors } from '../common/Theme';
-import { L } from '../i8n/LocalizationHelper';
+import { L } from '../i18n/LocalizationHelper';
 
 /**
  * A single toggle row for one extra timing on one surface — either

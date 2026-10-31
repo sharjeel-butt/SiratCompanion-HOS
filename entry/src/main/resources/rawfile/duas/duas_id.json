@@ -1,0 +1,202 @@
+{
+  "dua_breaking_the_fast": {
+    "name": "Doa Berbuka Puasa",
+    "translation": "Telah hilang rasa haus, telah basah kerongkongan, dan telah tetap pahalanya, insya Allah.",
+    "reference": "Sunan Abu Dawud 2357"
+  },
+  "dua_suhoor": {
+    "name": "Niat Puasa",
+    "translation": "Aku berniat puasa esok hari di bulan Ramadan.",
+    "reference": "Niat puasa tradisional"
+  },
+  "dua_laylatul_qadr": {
+    "name": "Doa Malam Lailatul Qadar",
+    "translation": "Ya Allah, sesungguhnya Engkau Maha Pengampun dan mencintai ampunan, maka ampunilah aku.",
+    "reference": "Jami' at-Tirmidzi 3513; Sunan Ibnu Majah 3850"
+  },
+  "dua_waking_up": {
+    "name": "Doa Bangun Tidur",
+    "translation": "Segala puji bagi Allah yang telah menghidupkan kami setelah mematikan kami, dan kepada-Nya kami dibangkitkan.",
+    "reference": "Sahih al-Bukhari 6312"
+  },
+  "dua_before_sleeping": {
+    "name": "Doa Sebelum Tidur",
+    "translation": "Dengan nama-Mu ya Allah, aku mati dan aku hidup.",
+    "reference": "Sahih al-Bukhari 6324"
+  },
+  "dua_before_eating": {
+    "name": "Doa Sebelum Makan",
+    "translation": "Dengan nama Allah.",
+    "reference": "Sunan Abu Dawud 3767; Jami' at-Tirmidzi 1858"
+  },
+  "dua_after_eating": {
+    "name": "Doa Setelah Makan",
+    "translation": "Segala puji bagi Allah yang telah memberiku makan ini dan memberikannya kepadaku tanpa daya dan kekuatan dariku.",
+    "reference": "Sunan Abu Dawud 4023; Jami' at-Tirmidzi 3458"
+  },
+  "dua_leaving_the_home": {
+    "name": "Doa Keluar Rumah",
+    "translation": "Dengan nama Allah, aku bertawakal kepada Allah; tidak ada daya dan kekuatan kecuali dengan pertolongan Allah.",
+    "reference": "Sunan Abu Dawud 5095; Jami' at-Tirmidzi 3426"
+  },
+  "dua_entering_home": {
+    "name": "Doa Masuk Rumah",
+    "translation": "Dengan nama Allah kami masuk, dengan nama Allah kami keluar, dan kepada Tuhan kami kami bertawakal.",
+    "reference": "Sunan Abu Dawud 5096"
+  },
+  "dua_travel": {
+    "name": "Doa Bepergian",
+    "translation": "Mahasuci Allah yang telah menundukkan kendaraan ini bagi kami, padahal kami sebelumnya tidak mampu menguasainya. Dan sesungguhnya kepada Tuhan kami, kami akan kembali.",
+    "reference": "Sahih Muslim 1342"
+  },
+  "dua_after_fajr": {
+    "name": "Doa Setelah Salat Subuh",
+    "translation": "Ya Allah, lindungilah aku dari api neraka.",
+    "reference": "Sunan Abu Dawud 5079"
+  },
+  "dua_after_the_adhan": {
+    "name": "Doa Setelah Adzan",
+    "translation": "Ya Allah, Tuhan pemilik seruan yang sempurna dan salat yang ditegakkan, berikanlah kepada Muhammad kedudukan wasilah dan keutamaan, serta bangkitkanlah dia pada tempat yang terpuji yang telah Engkau janjikan.",
+    "reference": "Sahih al-Bukhari 614"
+  },
+  "dua_entering_the_mosque": {
+    "name": "Doa Masuk Masjid",
+    "translation": "Ya Allah, bukakanlah untukku pintu-pintu rahmat-Mu.",
+    "reference": "Sahih Muslim 713"
+  },
+  "dua_leaving_the_mosque": {
+    "name": "Doa Keluar Masjid",
+    "translation": "Ya Allah, aku memohon kepada-Mu sebagian dari karunia-Mu.",
+    "reference": "Sahih Muslim 713"
+  },
+  "dua_between_the_two_prostrations": {
+    "name": "Doa Antara Dua Sujud",
+    "translation": "Tuhanku, ampunilah aku; Tuhanku, ampunilah aku.",
+    "reference": "Sunan Abu Dawud 874"
+  },
+  "dua_after_wudu": {
+    "name": "Doa Setelah Wudu",
+    "translation": "Aku bersaksi bahwa tiada tuhan selain Allah, Yang Maha Esa, tiada sekutu bagi-Nya; dan aku bersaksi bahwa Muhammad adalah hamba dan Rasul-Nya.",
+    "reference": "Sahih Muslim 234"
+  },
+  "dua_qunut_witr": {
+    "name": "Doa Qunut Witir",
+    "translation": "Ya Allah, berilah aku petunjuk di antara orang-orang yang Engkau beri petunjuk; berilah aku kesehatan di antara orang-orang yang Engkau beri kesehatan; peliharalah aku di antara orang-orang yang Engkau pelihara; berkahilah aku pada apa yang Engkau berikan; dan lindungilah aku dari keburukan yang Engkau tetapkan. Sesungguhnya Engkau yang menetapkan dan tidak ditetapkan atas-Mu. Sesungguhnya tidak akan hina orang yang Engkau jadikan wali. Mahasuci Engkau, ya Tuhan kami, dan Mahatinggi.",
+    "reference": "Sunan Abu Dawud 1425; Jami' at-Tirmidzi 464"
+  },
+  "dua_sayyidul_istighfar": {
+    "name": "Sayyidul Istighfar",
+    "translation": "Ya Allah, Engkau adalah Tuhanku, tiada tuhan selain Engkau. Engkau menciptakanku dan aku adalah hamba-Mu. Aku berusaha menepati perjanjian dan janjiku kepada-Mu sekuat kemampuanku. Aku berlindung kepada-Mu dari keburukan yang telah aku perbuat. Aku mengakui nikmat-Mu atasku dan aku mengakui dosaku. Maka ampunilah aku, karena tidak ada yang mengampuni dosa selain Engkau.",
+    "reference": "Sahih al-Bukhari 6306"
+  },
+  "dua_guidance_to_the_straight_path": {
+    "name": "Doa Memohon Petunjuk Jalan yang Lurus",
+    "translation": "Tunjukilah kami ke jalan yang lurus.",
+    "reference": "Al-Quran 1:6"
+  },
+  "dua_good_in_this_world_and_the_hereafter": {
+    "name": "Doa Kebaikan Dunia dan Akhirat",
+    "translation": "Tuhan kami, berilah kami kebaikan di dunia dan kebaikan di akhirat, dan lindungilah kami dari azab neraka.",
+    "reference": "Al-Quran 2:201"
+  },
+  "dua_protection": {
+    "name": "Doa Perlindungan",
+    "translation": "Dengan nama Allah yang tidak ada sesuatu pun yang dapat membahayakan bersama nama-Nya, baik di bumi maupun di langit. Dia Maha Mendengar, Maha Mengetahui.",
+    "reference": "Sunan Abu Dawud 5088"
+  },
+  "dua_morning": {
+    "name": "Dzikir Pagi",
+    "translation": "Kami telah memasuki waktu pagi, dan kerajaan hanya milik Allah. Segala puji bagi Allah. Tiada tuhan selain Allah, Yang Maha Esa, tiada sekutu bagi-Nya.",
+    "reference": "Sahih Muslim 2723"
+  },
+  "dua_forgiveness_and_mercy": {
+    "name": "Doa Ampunan dan Rahmat",
+    "translation": "Tuhanku, ampunilah dan rahmatilah, Engkaulah sebaik-baik pemberi rahmat.",
+    "reference": "Al-Quran 23:118"
+  },
+  "dua_anxiety": {
+    "name": "Doa Menghilangkan Rasa Cemas dan Sedih",
+    "translation": "Ya Allah, aku berlindung kepada-Mu dari rasa cemas dan sedih, dari kelemahan dan kemalasan, dari kekikiran dan sifat pengecut, dari beban utang dan dari dikuasai orang lain.",
+    "reference": "Sahih al-Bukhari 2893"
+  },
+  "dua_difficult_matter": {
+    "name": "Doa Ketika Menghadapi Kesulitan",
+    "translation": "Ya Allah, tidak ada kemudahan kecuali yang Engkau jadikan mudah; dan Engkau menjadikan kesusahan menjadi mudah jika Engkau kehendaki.",
+    "reference": "Sahih Ibnu Hibban 974; dinyatakan sahih oleh al-Albani"
+  },
+  "dua_when_afflicted_by_calamity": {
+    "name": "Doa Ketika Ditimpa Musibah",
+    "translation": "Sesungguhnya kami milik Allah dan kepada-Nya kami kembali. Ya Allah, berilah aku pahala atas musibahku ini dan gantilah dengan yang lebih baik.",
+    "reference": "Sahih Muslim 918"
+  },
+  "dua_dua_of_yunus_in_distress": {
+    "name": "Doa Nabi Yunus dalam Kesulitan",
+    "translation": "Tiada tuhan selain Engkau. Mahasuci Engkau. Sesungguhnya aku termasuk orang-orang yang zalim.",
+    "reference": "Al-Quran 21:87"
+  },
+  "dua_mercy_for_parents": {
+    "name": "Doa untuk Kedua Orang Tua",
+    "translation": "Tuhanku, sayangilah keduanya sebagaimana mereka menyayangiku ketika aku masih kecil.",
+    "reference": "Al-Quran 17:24"
+  },
+  "dua_righteous_spouses_and_children": {
+    "name": "Doa untuk Pasangan dan Anak yang Saleh",
+    "translation": "Tuhan kami, karuniakanlah kepada kami pasangan dan keturunan yang menjadi penyejuk mata, dan jadikanlah kami imam bagi orang-orang yang bertakwa.",
+    "reference": "Al-Quran 25:74"
+  },
+  "dua_increase_me_in_knowledge": {
+    "name": "Doa Menambah Ilmu",
+    "translation": "Tuhanku, tambahkanlah ilmu kepadaku.",
+    "reference": "Al-Quran 20:114"
+  },
+  "dua_for_beneficial_knowledge_and_accepted_deeds": {
+    "name": "Doa Ilmu Bermanfaat dan Rezeki yang Baik",
+    "translation": "Ya Allah, aku memohon kepada-Mu ilmu yang bermanfaat, rezeki yang baik, dan amal yang diterima.",
+    "reference": "Sunan Ibnu Majah 925"
+  },
+  "dua_steadfast_hearts": {
+    "name": "Doa Keteguhan Hati",
+    "translation": "Tuhan kami, janganlah Engkau jadikan hati kami menyimpang setelah Engkau beri petunjuk kepada kami, dan karuniakanlah kepada kami rahmat dari sisi-Mu. Sesungguhnya Engkau Maha Pemberi.",
+    "reference": "Al-Quran 3:8"
+  },
+  "dua_steadfast_heart": {
+    "name": "Doa Keteguhan Hati",
+    "translation": "Wahai Zat yang membolak-balikkan hati, teguhkanlah hatiku pada agama-Mu.",
+    "reference": "Jami' at-Tirmidzi 2140"
+  },
+  "dua_do_not_leave_me_to_myself": {
+    "name": "Doa Agar Tidak Diserahkan pada Diri Sendiri",
+    "translation": "Wahai Yang Mahahidup, Wahai Yang Maha Berdiri Sendiri, dengan rahmat-Mu aku memohon pertolongan. Perbaikilah seluruh urusanku, dan jangan Engkau serahkan aku kepada diriku sendiri walau sekejap mata.",
+    "reference": "Al-Hakim 1/545; dinyatakan sahih oleh al-Albani"
+  },
+  "dua_for_healing": {
+    "name": "Doa Kesembuhan",
+    "translation": "Ya Allah, Tuhan seluruh manusia, hilangkanlah penyakit ini dan sembuhkanlah. Engkaulah Yang Maha Penyembuh. Tiada kesembuhan kecuali kesembuhan dari-Mu, kesembuhan yang tidak meninggalkan penyakit.",
+    "reference": "Sahih al-Bukhari 5743; Sahih Muslim 2191"
+  },
+  "dua_for_protection_from_harm": {
+    "name": "Doa Perlindungan dari Keburukan",
+    "translation": "Aku berlindung dengan kalimat-kalimat Allah yang sempurna dari keburukan makhluk yang Dia ciptakan.",
+    "reference": "Sahih Muslim 2708"
+  },
+  "dua_protection_dajjal": {
+    "name": "Doa Perlindungan dari Dajjal dan Fitnah Besar",
+    "translation": "Ya Allah, aku berlindung kepada-Mu dari azab neraka Jahannam, dari azab kubur, dari fitnah kehidupan dan kematian, dan dari keburukan fitnah Al-Masih Ad-Dajjal.",
+    "reference": "Sahih Muslim 588"
+  },
+  "dua_istikhara": {
+    "name": "Doa Istikharah",
+    "translation": "Ya Allah, aku memohon pilihan kepada-Mu dengan ilmu-Mu, dan aku memohon kekuatan dengan kekuasaan-Mu, dan aku memohon kepada-Mu sebagian dari karunia-Mu yang besar. Sesungguhnya Engkau Mahakuasa dan aku tidak berdaya; Engkau Maha Mengetahui dan aku tidak tahu; Engkaulah Yang Maha Mengetahui perkara yang gaib. Ya Allah, jika Engkau mengetahui bahwa perkara ini baik bagi agamaku, kehidupanku, dan akhir urusanku, maka takdirkanlah ia bagiku, mudahkanlah untukku, dan berkahilah aku di dalamnya. Jika Engkau mengetahui bahwa perkara ini buruk bagi agamaku, kehidupanku, dan akhir urusanku, maka jauhkanlah ia dariku dan jauhkanlah aku darinya, dan takdirkanlah kebaikan untukku di mana pun ia berada, lalu ridhakanlah aku dengan keputusan-Mu.",
+    "reference": "Sahih al-Bukhari 6382"
+  },
+  "dua_all_good": {
+    "name": "Doa Menghimpun Segala Kebaikan",
+    "translation": "Ya Allah, aku memohon kepada-Mu segala kebaikan, yang segera maupun yang tertunda, yang aku ketahui maupun yang tidak aku ketahui. Dan aku berlindung kepada-Mu dari segala keburukan, yang segera maupun yang tertunda, yang aku ketahui maupun yang tidak aku ketahui.",
+    "reference": "Sunan Ibnu Majah 3846; dinyatakan sahih oleh al-Albani"
+  },
+  "dua_for_well_being_in_both_worlds": {
+    "name": "Doa Kebaikan Dunia dan Akhirat",
+    "translation": "Ya Allah, aku memohon kepada-Mu ampunan dan kesehatan di dunia dan akhirat.",
+    "reference": "Sunan Ibnu Majah 3871; Sunan Abu Dawud 5074"
+  }
+}

@@ -5,7 +5,7 @@ export interface PrayerModel {
   name: string;
   arabicName: string;
   time: string;
-  status: 'next' | 'pray' | 'both' | 'prayed' | 'express' | 'abbreviation' | 'locked';
+  status: 'next' | 'pray' | 'both' | 'prayed' | 'express' | 'abbreviation';
   checked?: boolean;
 }
 
@@ -14,6 +14,6 @@ export interface ExtraTiming {
   name: string;
   arabicName: string;
   time: string;
-  status: 'next' | 'pray' | 'both' | 'prayed' | 'express' | 'abbreviation' | 'locked';
-  icon?: string;
+  status: 'next' | 'pray' | 'both' | 'prayed' | 'express' | 'abbreviation';
+  icon?: Resource;
 }

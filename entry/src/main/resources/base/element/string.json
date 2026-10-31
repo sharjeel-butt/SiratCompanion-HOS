@@ -1778,11 +1778,11 @@
     },
     {
       "name": "countdown_fast_ends_now",
-      "value": "Its time to break your fast"
+      "value": "It's time to break your fast"
     },
     {
       "name": "countdown_fast_starts_now",
-      "value": "Its time to begin fasting"
+      "value": "It's time to begin fasting"
     },
     {
       "name": "shafaq_method_unavailable",
@@ -2142,15 +2142,15 @@
     },
     {
       "name": "home_days_singular",
-      "value": ""
+      "value": "day"
     },
     {
       "name": "home_days_dual",
-      "value": ""
+      "value": "two days"
     },
     {
       "name": "dhikr_count_dual",
-      "value": ""
+      "value": "two dhikrs"
     },
     {
       "name": "title_ramadan_details",
@@ -2434,7 +2434,7 @@
     },
     {
       "name": "lang_supported_hint",
-      "value": "Supported languages: English, Arabic, Chinese"
+      "value": "Supported languages: English, Arabic, Chinese, Indonesian, Urdu, Turkish, Bengali"
     },
     {
       "name": "tasbih_default_classic_name",
@@ -2819,6 +2819,22 @@
     {
       "name": "hadith_jummah",
       "value": "The five daily prayers, and from one Friday prayer to the next, are an expiation for whatever sins come in between them, so long as major sins are avoided. — Sahih Muslim 233"
+    },
+    {
+      "name": "lang_id",
+      "value": "Bahasa Indonesia (Indonesian)"
+    },
+    {
+      "name": "lang_ur",
+      "value": "اردو (Urdu)"
+    },
+    {
+      "name": "lang_tr",
+      "value": "Türkçe (Turkish)"
+    },
+    {
+      "name": "lang_bn",
+      "value": "বাংলা (Bengali)"
     }
   ]
 }

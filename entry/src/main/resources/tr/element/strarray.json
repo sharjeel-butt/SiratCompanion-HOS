@@ -1,0 +1,108 @@
+{
+  "strarray": [
+    {
+      "name": "hijri_months",
+      "value": [
+        {
+          "value": "Muharrem"
+        },
+        {
+          "value": "Safer"
+        },
+        {
+          "value": "Rebiülevvel"
+        },
+        {
+          "value": "Rebiülahir"
+        },
+        {
+          "value": "Cemaziyelevvel"
+        },
+        {
+          "value": "Cemaziyelahir"
+        },
+        {
+          "value": "Recep"
+        },
+        {
+          "value": "Şaban"
+        },
+        {
+          "value": "Ramazan"
+        },
+        {
+          "value": "Şevval"
+        },
+        {
+          "value": "Zilkade"
+        },
+        {
+          "value": "Zilhicce"
+        }
+      ]
+    },
+    {
+      "name": "days_of_week",
+      "value": [
+        {
+          "value": "Pazar"
+        },
+        {
+          "value": "Pazartesi"
+        },
+        {
+          "value": "Salı"
+        },
+        {
+          "value": "Çarşamba"
+        },
+        {
+          "value": "Perşembe"
+        },
+        {
+          "value": "Cuma"
+        },
+        {
+          "value": "Cumartesi"
+        }
+      ]
+    },
+    {
+      "name": "days_of_week_short",
+      "value": [
+        {
+          "value": "Paz"
+        },
+        {
+          "value": "Pzt"
+        },
+        {
+          "value": "Sal"
+        },
+        {
+          "value": "Çar"
+        },
+        {
+          "value": "Per"
+        },
+        {
+          "value": "Cum"
+        },
+        {
+          "value": "Cmt"
+        }
+      ]
+    },
+    {
+      "name": "weekend_days",
+      "value": [
+        {
+          "value": "0"
+        },
+        {
+          "value": "6"
+        }
+      ]
+    }
+  ]
+}

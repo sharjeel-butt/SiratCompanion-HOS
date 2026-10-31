@@ -18,7 +18,7 @@ import { DuaCard } from '../components/DuaCard';
 import { DuaService } from '../helper/DuaService';
 import { CompleteDua } from '../models/DuaModels';
 import { Breakpoints } from '../common/Breakpoints';
-import { L } from '../i8n/LocalizationHelper';
+import { L } from '../i18n/LocalizationHelper';
 import {
   LaylatAlQadrNight, RamadanAshra, RamadanHelper, RamadanInfo
 } from '../helper/RamadanHelper';

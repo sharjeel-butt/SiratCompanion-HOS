@@ -37,6 +37,16 @@ export const COUNTRY_ZONES: CountryZone[] = [
     dstRule: DstRule.NONE
   },
 
+  {
+    code: 'AF',
+    minLat: 29.3,
+    maxLat: 38.5,
+    minLng: 60.5,
+    maxLng: 74.9,
+    standardOffset: 4.5,
+    dstRule: DstRule.NONE
+  },
+
   // ---- South Asia ----
   {
     code: 'PK',
@@ -56,15 +66,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     standardOffset: 5.5,
     dstRule: DstRule.NONE
   },
-  {
-    code: 'AF',
-    minLat: 29.3,
-    maxLat: 38.5,
-    minLng: 60.5,
-    maxLng: 74.9,
-    standardOffset: 4.5,
-    dstRule: DstRule.NONE
-  },
+
   {
     code: 'BD',
     minLat: 20.6,
@@ -207,13 +209,23 @@ export const COUNTRY_ZONES: CountryZone[] = [
     dstRule: DstRule.EGYPT
   },
   {
+    code: 'MA-WS',
+    minLat: 22.5,
+    maxLat: 28.0,
+    minLng: -17.0,
+    maxLng: -11.5,
+    standardOffset: 0,
+    dstRule: DstRule.MOROCCO
+  },
+  // Morocco proper
+  {
     code: 'MA',
-    minLat: 27.6,
+    minLat: 20.7,
     maxLat: 36.0,
-    minLng: -13.2,
+    minLng: -17.2,
     maxLng: -1.0,
     standardOffset: 1,
-    dstRule: DstRule.NONE
+    dstRule: DstRule.MOROCCO
   },
   {
     code: 'NG',
@@ -618,7 +630,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     dstRule: DstRule.US
   },
 
-  // ---- Mexico — three zones ----
+  // ---- Mexico — five zones ----
   // Quintana Roo (Cancún) — the only -5 area
   {
     code: 'MX-CUN',
@@ -629,7 +641,34 @@ export const COUNTRY_ZONES: CountryZone[] = [
     standardOffset: -5,
     dstRule: DstRule.NONE
   },
-  // Sonora — the only -7 area
+  // Baja California (norte) — Tijuana / Mexicali / Ensenada.
+  // UTC−8 with US DST, synced with California. MUST be listed
+  // before MX-BCS and MX so that points >300 km from the LA city
+  // entry (e.g. Mexicali, ~340 km) do not fall through to the -6
+  // mainland zone. Fixes the 2-hour error for Baja California
+  // users outside the nearest-city table's reach.
+  {
+    code: 'MX-BC',
+    minLat: 28.0,
+    maxLat: 32.72,
+    minLng: -117.13,
+    maxLng: -114.5,
+    standardOffset: -8,
+    dstRule: DstRule.US
+  },
+  // Baja California Sur — La Paz / Cabo San Lucas / Loreto.
+  // UTC−7 (Mountain Standard) year-round, no DST. Fixes the
+  // 1-hour error for the entire peninsula below the BC border.
+  {
+    code: 'MX-BCS',
+    minLat: 22.85,
+    maxLat: 28.0,
+    minLng: -115.08,
+    maxLng: -109.3,
+    standardOffset: -7,
+    dstRule: DstRule.NONE
+  },
+  // Sonora — the only -7 area on the mainland
   {
     code: 'MX-SON',
     minLat: 26.0,
@@ -639,7 +678,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     standardOffset: -7,
     dstRule: DstRule.NONE
   },
-  // Rest of Mexico — -6
+  // Rest of mainland Mexico — -6
   {
     code: 'MX',
     minLat: 14.5,
@@ -650,18 +689,60 @@ export const COUNTRY_ZONES: CountryZone[] = [
     dstRule: DstRule.NONE
   },
 
-  // ---- Brazil — two zones ----
-  // Amazonas (Manaus) — the only -4 area
+  // ---- Brazil — UTC−4 zone (5 states) ----
+  // Amazonas — most of the state (Manaus, Tefé, Tabatinga).
   {
     code: 'BR-AM',
-    minLat: -9.0,
-    maxLat: 2.0,
+    minLat: -10.0,
+    maxLat: 2.3,
     minLng: -73.9,
-    maxLng: -56.0,
+    maxLng: -56.1,
     standardOffset: -4,
     dstRule: DstRule.NONE
   },
-  // Rest of Brazil — -3
+  // Roraima — Boa Vista and the northern savanna.
+  {
+    code: 'BR-RR',
+    minLat: -1.2,
+    maxLat: 5.3,
+    minLng: -64.3,
+    maxLng: -59.7,
+    standardOffset: -4,
+    dstRule: DstRule.NONE
+  },
+  // Rondônia — Porto Velho, Ji-Paraná.
+  {
+    code: 'BR-RO',
+    minLat: -13.7,
+    maxLat: -7.9,
+    minLng: -66.8,
+    maxLng: -59.8,
+    standardOffset: -4,
+    dstRule: DstRule.NONE
+  },
+  // Mato Grosso — Cuiabá, Rondonópolis. East edge stops before
+  // Goiás (which is -3) at lng -50.2.
+  {
+    code: 'BR-MT',
+    minLat: -18.0,
+    maxLat: -7.3,
+    minLng: -61.6,
+    maxLng: -50.2,
+    standardOffset: -4,
+    dstRule: DstRule.NONE
+  },
+  // Mato Grosso do Sul — Campo Grande, Corumbá, Dourados.
+  {
+    code: 'BR-MS',
+    minLat: -24.1,
+    maxLat: -17.9,
+    minLng: -58.2,
+    maxLng: -50.9,
+    standardOffset: -4,
+    dstRule: DstRule.NONE
+  },
+  // Rest of Brazil — UTC−3 (Brasília, São Paulo, Rio, Salvador,
+  // Recife, Fortaleza, Belo Horizonte).
   {
     code: 'BR',
     minLat: -33.7,
@@ -700,6 +781,20 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLat: -26.0,
     minLng: 129.0,
     maxLng: 141.0,
+    standardOffset: 9.5,
+    dstRule: DstRule.AU
+  },
+
+  // Broken Hill (far-western NSW) — observes South Australia
+  // time (−9:30 + AU DST) rather than NSW's −10. Listed before
+  // AU-E so the small box wins on containment. Population
+  // ~17,000; ignored by every other Australian DST data source.
+  {
+    code: 'AU-BH',
+    minLat: -32.5,
+    maxLat: -31.5,
+    minLng: 141.0,
+    maxLng: 142.0,
     standardOffset: 9.5,
     dstRule: DstRule.AU
   },

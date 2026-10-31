@@ -1,0 +1,2840 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "صراط ساتھی کا اندراج ماڈیول"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "آپ کا روزانہ اسلامی ساتھی"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "صراط ساتھی"
+    },
+    {
+      "name": "location_permission_reason",
+      "value": "آپ کے مقام کے لیے اوقاتِ نماز اور قبلہ کی سمت شمار کرنے کے لیے استعمال ہوتا ہے"
+    },
+    {
+      "name": "sensor_permission_reason",
+      "value": "قبلہ قطب نما کے لیے استعمال ہوتا ہے"
+    },
+    {
+      "name": "notification_permission_reason",
+      "value": "آپ کو اوقاتِ نماز کی یاد دہانیاں بھیجنے کے لیے"
+    },
+    {
+      "name": "calendar_permission_reason",
+      "value": "آپ کے کیلنڈر میں اوقاتِ نماز کی یاد دہانیاں شامل کرنے کے لیے استعمال ہوتا ہے"
+    },
+    {
+      "name": "app_name",
+      "value": "صراط ساتھی"
+    },
+    {
+      "name": "app_tagline",
+      "value": "آپ کا روزانہ اسلامی ساتھی"
+    },
+    {
+      "name": "more_languages_coming",
+      "value": "مزید زبانیں جلد آ رہی ہیں"
+    },
+    {
+      "name": "tab_home",
+      "value": "ہوم"
+    },
+    {
+      "name": "tab_prayers",
+      "value": "نمازیں"
+    },
+    {
+      "name": "tab_calendar",
+      "value": "ہجری کیلنڈر"
+    },
+    {
+      "name": "tab_compass",
+      "value": "قبلہ قطب نما"
+    },
+    {
+      "name": "tab_tasbih",
+      "value": "تسبیح"
+    },
+    {
+      "name": "current_prayer",
+      "value": "موجودہ"
+    },
+    {
+      "name": "next_prayer",
+      "value": "اگلی"
+    },
+    {
+      "name": "todays_prayers",
+      "value": "آج کی نمازیں"
+    },
+    {
+      "name": "extra_timings",
+      "value": "اضافی اوقات"
+    },
+    {
+      "name": "upcoming_islamic_events",
+      "value": "آنے والے اسلامی مواقع"
+    },
+    {
+      "name": "loading_location",
+      "value": "لوڈ ہو رہا ہے..."
+    },
+    {
+      "name": "set_manual_location",
+      "value": "ترتیبات میں دستی مقام مقرر کریں"
+    },
+    {
+      "name": "online_prayer_times",
+      "value": "آن لائن اوقاتِ نماز"
+    },
+    {
+      "name": "coming_soon",
+      "value": "جلد آ رہا ہے"
+    },
+    {
+      "name": "online_switch_hint",
+      "value": "اپنے مقام کے اوقاتِ نماز دیکھنے کے لیے ترتیبات میں مقامی فارمولا پر واپس جائیں۔"
+    },
+    {
+      "name": "cancel",
+      "value": "منسوخ"
+    },
+    {
+      "name": "save",
+      "value": "محفوظ کریں"
+    },
+    {
+      "name": "reset",
+      "value": "ری سیٹ"
+    },
+    {
+      "name": "delete",
+      "value": "حذف کریں"
+    },
+    {
+      "name": "edit",
+      "value": "ترمیم"
+    },
+    {
+      "name": "add",
+      "value": "شامل کریں"
+    },
+    {
+      "name": "back",
+      "value": "واپس"
+    },
+    {
+      "name": "today",
+      "value": "آج"
+    },
+    {
+      "name": "exit",
+      "value": "باہر نکلیں"
+    },
+    {
+      "name": "ok",
+      "value": "ٹھیک ہے"
+    },
+    {
+      "name": "exit_confirm_message",
+      "value": "کیا آپ واقعی صراط ساتھی سے باہر نکلنا چاہتے ہیں؟"
+    },
+    {
+      "name": "title_settings",
+      "value": "ترتیبات"
+    },
+    {
+      "name": "title_customize",
+      "value": "حسب ضرورت بنائیں"
+    },
+    {
+      "name": "category_location",
+      "value": "مقام"
+    },
+    {
+      "name": "category_prayer_times",
+      "value": "اوقاتِ نماز"
+    },
+    {
+      "name": "category_hijri_calendar",
+      "value": "ہجری کیلنڈر"
+    },
+    {
+      "name": "category_ui_customization",
+      "value": "یو آئی حسب ضرورت"
+    },
+    {
+      "name": "category_appearance",
+      "value": "ظاہری شکل"
+    },
+    {
+      "name": "category_about",
+      "value": "کے بارے میں"
+    },
+    {
+      "name": "category_notifications",
+      "value": "اطلاعات"
+    },
+    {
+      "name": "brand_primary",
+      "value": "صراط"
+    },
+    {
+      "name": "brand_accent",
+      "value": "ساتھی"
+    },
+    {
+      "name": "convention",
+      "value": "کنونشن"
+    },
+    {
+      "name": "convention_desc",
+      "value": "فجر اور عشاء کے حساب کے لیے استعمال ہوتا ہے"
+    },
+    {
+      "name": "madhab",
+      "value": "مسلک"
+    },
+    {
+      "name": "madhab_desc",
+      "value": "حساب میں استعمال ہونے والا عصر کے سائے کا اصول"
+    },
+    {
+      "name": "source",
+      "value": "ذریعہ"
+    },
+    {
+      "name": "source_desc",
+      "value": "مقامی فارمولا یا آن لائن"
+    },
+    {
+      "name": "prayer_offsets",
+      "value": "نماز کے آفسیٹس"
+    },
+    {
+      "name": "prayer_offsets_desc",
+      "value": "حساب شدہ اوقات کو دستی طور پر شفٹ کریں"
+    },
+    {
+      "name": "offsets_hint",
+      "value": "اوقات کو منٹوں میں شفٹ کریں (−60 سے +60)"
+    },
+    {
+      "name": "reset_all_offsets",
+      "value": "تمام آفسیٹس ری سیٹ کریں"
+    },
+    {
+      "name": "high_latitude",
+      "value": "بلند عرض بلد"
+    },
+    {
+      "name": "high_latitude_desc",
+      "value": "جب سورج زاویے تک نہ پہنچے تو فجر اور عشاء کے لیے متبادل"
+    },
+    {
+      "name": "highlat_none",
+      "value": "کوئی نہیں"
+    },
+    {
+      "name": "highlat_middle",
+      "value": "آدھی رات"
+    },
+    {
+      "name": "highlat_one_seventh",
+      "value": "رات کا ایک ساتواں حصہ"
+    },
+    {
+      "name": "highlat_angle",
+      "value": "زاویے پر مبنی"
+    },
+    {
+      "name": "highlat_proportional",
+      "value": "متناسب زوال (دیانت تکدیر)"
+    },
+    {
+      "name": "location",
+      "value": "مقام"
+    },
+    {
+      "name": "location_desc",
+      "value": "منتخب کریں کہ ایپ آپ کا مقام کیسے متعین کرے"
+    },
+    {
+      "name": "gps",
+      "value": "جی پی ایس"
+    },
+    {
+      "name": "manual_location",
+      "value": "دستی مقام"
+    },
+    {
+      "name": "current_position",
+      "value": "موجودہ مقام"
+    },
+    {
+      "name": "latitude",
+      "value": "عرض بلد"
+    },
+    {
+      "name": "longitude",
+      "value": "طول بلد"
+    },
+    {
+      "name": "city",
+      "value": "شہر"
+    },
+    {
+      "name": "last_refreshed",
+      "value": "آخری تجدید"
+    },
+    {
+      "name": "save_coordinates",
+      "value": "کوآرڈینیٹس محفوظ کریں"
+    },
+    {
+      "name": "latitude_hint",
+      "value": "عرض بلد  (−90 سے 90)"
+    },
+    {
+      "name": "longitude_hint",
+      "value": "طول بلد  (−180 سے 180)"
+    },
+    {
+      "name": "city_name_optional",
+      "value": "شہر کا نام (اختیاری)"
+    },
+    {
+      "name": "city_name_placeholder",
+      "value": "خودکار شناخت کے لیے خالی چھوڑیں"
+    },
+    {
+      "name": "hijri_offset",
+      "value": "ہجری تاریخ اور کیلنڈر آفسیٹ"
+    },
+    {
+      "name": "hijri_offset_desc",
+      "value": "اسلامی تاریخ اور کیلنڈر دونوں کو ±3 دن تک شفٹ کریں"
+    },
+    {
+      "name": "matching_standard",
+      "value": "معیاری حساب سے مطابقت رکھتا ہے"
+    },
+    {
+      "name": "offset_days_ahead",
+      "value": "دن آگے"
+    },
+    {
+      "name": "offset_days_behind",
+      "value": "دن پیچھے"
+    },
+    {
+      "name": "about_version",
+      "value": "ورژن"
+    },
+    {
+      "name": "about_platform",
+      "value": "پلیٹ فارم"
+    },
+    {
+      "name": "about_platform_value",
+      "value": "HarmonyOS 6+"
+    },
+    {
+      "name": "about_build",
+      "value": "بلڈ"
+    },
+    {
+      "name": "about_bundle",
+      "value": "بنڈل آئی ڈی"
+    },
+    {
+      "name": "about_copyright",
+      "value": "© 2026"
+    },
+    {
+      "name": "notifications_master",
+      "value": "اطلاعات فعال کریں"
+    },
+    {
+      "name": "notifications_master_desc",
+      "value": "نماز سے پہلے اور نماز کے وقت یاد دہانیاں حاصل کریں"
+    },
+    {
+      "name": "notify_before",
+      "value": "پہلے اطلاع دیں"
+    },
+    {
+      "name": "notify_before_desc",
+      "value": "پہلی یاد دہانی نماز سے کتنے منٹ پہلے ہو"
+    },
+    {
+      "name": "notify_prayers",
+      "value": "نماز کی یاد دہانیاں"
+    },
+    {
+      "name": "notify_prayers_desc",
+      "value": "منتخب کریں کہ کون سی نمازیں یاد دہانی بھیجیں"
+    },
+    {
+      "name": "notifications_footer",
+      "value": "یاد دہانیاں اگلے 3 دن کے لیے شیڈول کی جاتی ہیں اور ہر بار ایپ کھولنے پر تجدید ہوتی ہیں"
+    },
+    {
+      "name": "notifications_footer_calendar",
+      "value": "یاد دہانیاں آپ کے سسٹم کیلنڈر میں اگلے 3 دن کے لیے شامل کی جاتی ہیں اور ہر بار ایپ کھولنے پر تجدید ہوتی ہیں"
+    },
+    {
+      "name": "notification_permission_denied",
+      "value": "یاد دہانیاں فعال کرنے کے لیے اطلاعات کی اجازت درکار ہے"
+    },
+    {
+      "name": "calendar_permission_denied",
+      "value": "یاد دہانیاں فعال کرنے کے لیے کیلنڈر کی اجازت درکار ہے"
+    },
+    {
+      "name": "notif_before_title",
+      "value": "نماز کی یاد دہانی"
+    },
+    {
+      "name": "notif_before_content",
+      "value": "باقی ہیں"
+    },
+    {
+      "name": "notif_exact_title",
+      "value": "نماز کا وقت"
+    },
+    {
+      "name": "notif_exact_content",
+      "value": "اب وقت ہے"
+    },
+    {
+      "name": "notif_minutes_suffix",
+      "value": "منٹ"
+    },
+    {
+      "name": "notif_test_button",
+      "value": "ٹیسٹ اطلاع بھیجیں"
+    },
+    {
+      "name": "notif_test_sending",
+      "value": "ٹیسٹ اطلاع بھیجی جا رہی ہے..."
+    },
+    {
+      "name": "notif_test_ok",
+      "value": "ٹیسٹ اطلاع شیڈول ہو گئی — تقریباً 5 سیکنڈ میں نظر آئے گی"
+    },
+    {
+      "name": "notif_test_ok_calendar",
+      "value": "ٹیسٹ ایونٹ آپ کے کیلنڈر میں شامل کر دیا گیا — کیلنڈر ایپ دیکھیں"
+    },
+    {
+      "name": "notif_test_failed",
+      "value": "ٹیسٹ اطلاع ناکام رہی"
+    },
+    {
+      "name": "notif_dismiss",
+      "value": "برخاست کریں"
+    },
+    {
+      "name": "notif_pray_fajr",
+      "value": "فجر پڑھیں"
+    },
+    {
+      "name": "notif_pray_dhuhr",
+      "value": "ظہر پڑھیں"
+    },
+    {
+      "name": "notif_pray_asr",
+      "value": "عصر پڑھیں"
+    },
+    {
+      "name": "notif_pray_maghrib",
+      "value": "مغرب پڑھیں"
+    },
+    {
+      "name": "notif_pray_isha",
+      "value": "عشاء پڑھیں"
+    },
+    {
+      "name": "hadith_fajr",
+      "value": "جو صبح کی نماز (باجماعت) پڑھے وہ درحقیقت اللہ کی حفاظت میں ہے۔ — صحیح مسلم 657a"
+    },
+    {
+      "name": "hadith_dhuhr",
+      "value": "یہ وہ گھڑی ہے جس میں آسمان کے دروازے کھول دیے جاتے ہیں، اور مجھے پسند ہے کہ اس میں میرا کوئی نیک عمل اوپر چڑھے۔ — جامع ترمذی 478"
+    },
+    {
+      "name": "hadith_asr",
+      "value": "جو عصر کی نماز (جان بوجھ کر) چھوڑ دے تو گویا اس نے اپنا خاندان اور مال کھو دیا۔ — صحیح البخاری 552"
+    },
+    {
+      "name": "hadith_maghrib",
+      "value": "پانچ روزانہ نمازیں... ان کے درمیان ہونے والے گناہوں کا کفارہ ہیں، بشرطیکہ کبیرہ گناہوں سے بچا جائے۔ — صحیح مسلم 233"
+    },
+    {
+      "name": "hadith_isha",
+      "value": "جو عشاء کی نماز باجماعت پڑھے، گویا اس نے آدھی رات تک نماز پڑھی۔ — صحیح مسلم 656a"
+    },
+    {
+      "name": "log_view_button",
+      "value": "تشخیصی لاگز"
+    },
+    {
+      "name": "log_view_desc",
+      "value": "ایپ لاگ فائل دیکھیں، کاپی کریں یا صاف کریں"
+    },
+    {
+      "name": "log_view_title",
+      "value": "تشخیصی لاگز"
+    },
+    {
+      "name": "log_copy",
+      "value": "کاپی"
+    },
+    {
+      "name": "log_clear",
+      "value": "صاف کریں"
+    },
+    {
+      "name": "log_empty",
+      "value": "لاگ خالی ہے۔"
+    },
+    {
+      "name": "log_copied",
+      "value": "لاگ کلپ بورڈ پر کاپی ہو گیا"
+    },
+    {
+      "name": "log_cleared",
+      "value": "لاگ صاف ہو گیا"
+    },
+    {
+      "name": "advanced_calc_title",
+      "value": "جدید حساب"
+    },
+    {
+      "name": "rounding_method",
+      "value": "گولائی کا طریقہ"
+    },
+    {
+      "name": "rounding_method_desc",
+      "value": "دکھائے گئے اوقات کی گولائی کو کنٹرول کرتا ہے"
+    },
+    {
+      "name": "midnight_method",
+      "value": "آدھی رات کا طریقہ"
+    },
+    {
+      "name": "midnight_method_desc",
+      "value": "کون سی رات کی حد اسلامی آدھی رات متعین کرتی ہے"
+    },
+    {
+      "name": "polar_resolution",
+      "value": "قطبی حل"
+    },
+    {
+      "name": "polar_resolution_desc",
+      "value": "جب سورج کسی زاویے تک نہ پہنچے تو متبادل"
+    },
+    {
+      "name": "shafaq",
+      "value": "شفق"
+    },
+    {
+      "name": "shafaq_desc",
+      "value": "شفق کو مون سائٹنگ کمیٹی طریقہ استعمال کرتا ہے تاکہ عشاء کا تعین ہو سکے۔"
+    },
+    {
+      "name": "custom_angles",
+      "value": "حسب ضرورت زاویے"
+    },
+    {
+      "name": "custom_fajr_angle",
+      "value": "فجر زاویہ"
+    },
+    {
+      "name": "custom_isha_angle",
+      "value": "عشاء زاویہ"
+    },
+    {
+      "name": "custom_isha_interval",
+      "value": "عشاء وقفہ (منٹ)"
+    },
+    {
+      "name": "custom_isha_interval_hint",
+      "value": "0 = زاویہ استعمال کریں۔ >0 = مغرب کے بعد منٹ۔"
+    },
+    {
+      "name": "rounding_nearest",
+      "value": "قریب ترین"
+    },
+    {
+      "name": "rounding_up",
+      "value": "اوپر"
+    },
+    {
+      "name": "rounding_none",
+      "value": "کوئی نہیں"
+    },
+    {
+      "name": "midnight_standard",
+      "value": "غروب سے طلوع تک"
+    },
+    {
+      "name": "midnight_standard_desc",
+      "value": "طے شدہ"
+    },
+    {
+      "name": "midnight_jafari",
+      "value": "غروب سے فجر تک"
+    },
+    {
+      "name": "polar_unresolved",
+      "value": "غیر حل شدہ"
+    },
+    {
+      "name": "polar_unresolved_desc",
+      "value": "طے شدہ"
+    },
+    {
+      "name": "polar_aqrab_balad",
+      "value": "اقرب بلد"
+    },
+    {
+      "name": "polar_aqrab_yaum",
+      "value": "اقرب یوم"
+    },
+    {
+      "name": "shafaq_general",
+      "value": "عام"
+    },
+    {
+      "name": "shafaq_general_desc",
+      "value": "طے شدہ"
+    },
+    {
+      "name": "shafaq_ahmer",
+      "value": "احمر"
+    },
+    {
+      "name": "shafaq_abyad",
+      "value": "ابیض"
+    },
+    {
+      "name": "show_extra_timings",
+      "value": "اضافی اوقات دکھائیں"
+    },
+    {
+      "name": "show_extra_timings_desc",
+      "value": "امساک، طلوعِ آفتاب، غروبِ آفتاب اور رات کے اوقات"
+    },
+    {
+      "name": "show_islamic_events",
+      "value": "اسلامی مواقع دکھائیں"
+    },
+    {
+      "name": "show_islamic_events_desc",
+      "value": "ہوم اسکرین پر آنے والے اسلامی مواقع"
+    },
+    {
+      "name": "dark_mode",
+      "value": "تاریک موڈ"
+    },
+    {
+      "name": "dark_mode_desc",
+      "value": "ایپ کی ظاہری شکل منتخب کریں"
+    },
+    {
+      "name": "theme_light",
+      "value": "روشن"
+    },
+    {
+      "name": "theme_dark",
+      "value": "تاریک"
+    },
+    {
+      "name": "theme_system",
+      "value": "سسٹم ترتیبات استعمال کریں"
+    },
+    {
+      "name": "tasbih_render_style",
+      "value": "تسبیح تھیم"
+    },
+    {
+      "name": "tasbih_render_style_desc",
+      "value": "اپنی تسبیح کے موتیوں کا انداز منتخب کریں"
+    },
+    {
+      "name": "bead_style_premium",
+      "value": "پریمیم (3D)"
+    },
+    {
+      "name": "bead_style_classic",
+      "value": "کلاسک"
+    },
+    {
+      "name": "language",
+      "value": "زبان"
+    },
+    {
+      "name": "language_desc",
+      "value": "اپنی پسندیدہ زبان منتخب کریں"
+    },
+    {
+      "name": "lang_en",
+      "value": "انگریزی"
+    },
+    {
+      "name": "lang_zh",
+      "value": "چینی (Chinese)"
+    },
+    {
+      "name": "lang_ar",
+      "value": "العربية (عربی)"
+    },
+    {
+      "name": "haptic_feedback",
+      "value": "وائبریشن"
+    },
+    {
+      "name": "haptic_feedback_desc",
+      "value": "تسبیح گنتے وقت وائبریٹ کریں"
+    },
+    {
+      "name": "sound_feedback",
+      "value": "آواز"
+    },
+    {
+      "name": "sound_feedback_desc",
+      "value": "تسبیح گنتے وقت کلک بجائیں"
+    },
+    {
+      "name": "sound_style",
+      "value": "آواز کا انداز"
+    },
+    {
+      "name": "sound_style_desc",
+      "value": "کلک کی آواز منتخب کریں"
+    },
+    {
+      "name": "controlled_by_system",
+      "value": "سسٹم ترتیبات کے تحت"
+    },
+    {
+      "name": "sound_glass_tap_name",
+      "value": "شیشے کی ٹک"
+    },
+    {
+      "name": "sound_glass_tap_desc",
+      "value": "شیشے کی ٹک کی آواز"
+    },
+    {
+      "name": "sound_light_chime_name",
+      "value": "ہلکی چائم"
+    },
+    {
+      "name": "sound_light_chime_desc",
+      "value": "ہلکی چائم کی آواز"
+    },
+    {
+      "name": "sound_muted_bead_name",
+      "value": "دبی موتی"
+    },
+    {
+      "name": "sound_muted_bead_desc",
+      "value": "دبے موتی کی آواز"
+    },
+    {
+      "name": "sound_soft_click_name",
+      "value": "نرم کلک"
+    },
+    {
+      "name": "sound_soft_click_desc",
+      "value": "نرم کلک کی آواز"
+    },
+    {
+      "name": "sound_warm_knock_name",
+      "value": "گرم دستک"
+    },
+    {
+      "name": "sound_warm_knock_desc",
+      "value": "گرم دستک کی آواز"
+    },
+    {
+      "name": "title_tasbih",
+      "value": "تسبیح"
+    },
+    {
+      "name": "my_tasbihs",
+      "value": "میری تسبیحیں"
+    },
+    {
+      "name": "select_dhikr",
+      "value": "ذکر منتخب کریں"
+    },
+    {
+      "name": "new_tasbih",
+      "value": "نئی تسبیح"
+    },
+    {
+      "name": "edit_tasbih",
+      "value": "تسبیح میں ترمیم"
+    },
+    {
+      "name": "new_dhikr",
+      "value": "نیا ذکر"
+    },
+    {
+      "name": "edit_dhikr",
+      "value": "ذکر میں ترمیم"
+    },
+    {
+      "name": "tasbih_name",
+      "value": "نام"
+    },
+    {
+      "name": "tasbih_name_placeholder",
+      "value": "مثلاً شام کے اذکار"
+    },
+    {
+      "name": "dhikr_arabic",
+      "value": "عربی"
+    },
+    {
+      "name": "dhikr_transliteration",
+      "value": "نقلِ حروف (اختیاری)"
+    },
+    {
+      "name": "dhikr_transliteration_placeholder",
+      "value": "مثلاً سبحان اللہ"
+    },
+    {
+      "name": "dhikr_translation",
+      "value": "ترجمہ (اختیاری)"
+    },
+    {
+      "name": "dhikr_translation_placeholder",
+      "value": "مثلاً اللہ پاک ہے"
+    },
+    {
+      "name": "target_count",
+      "value": "ہدف گنتی"
+    },
+    {
+      "name": "flick_up_to_count",
+      "value": "گننے کے لیے اوپر سوائپ کریں"
+    },
+    {
+      "name": "flick_hint",
+      "value": "اوپر سوائپ: +1     ·     نیچے سوائپ: −1"
+    },
+    {
+      "name": "total_on_tasbih",
+      "value": "اس تسبیح پر کل"
+    },
+    {
+      "name": "dhikr_count_singular",
+      "value": "ذکر"
+    },
+    {
+      "name": "dhikr_count_plural",
+      "value": "اذکار"
+    },
+    {
+      "name": "new_tasbih_button",
+      "value": "+ نئی تسبیح"
+    },
+    {
+      "name": "add_dhikr_button",
+      "value": "+ ذکر شامل کریں"
+    },
+    {
+      "name": "all_dhikrs_complete",
+      "value": "تمام اذکار مکمل"
+    },
+    {
+      "name": "counter_reset_toast",
+      "value": "کاؤنٹر ری سیٹ ہو گیا"
+    },
+    {
+      "name": "no_dhikr_title",
+      "value": "اس تسبیح میں کوئی ذکر نہیں"
+    },
+    {
+      "name": "no_dhikr_hint",
+      "value": "ایک شامل کرنے کے لیے اوپر ذکر کی پلیٹ پر ٹیپ کریں"
+    },
+    {
+      "name": "switch_dhikr",
+      "value": "ذکر تبدیل کریں"
+    },
+    {
+      "name": "reset_counter",
+      "value": "کاؤنٹر ری سیٹ کریں"
+    },
+    {
+      "name": "delete_dhikr",
+      "value": "ذکر حذف کریں"
+    },
+    {
+      "name": "add_new_dhikr",
+      "value": "نیا ذکر شامل کریں"
+    },
+    {
+      "name": "reset_all",
+      "value": "سب ری سیٹ کریں"
+    },
+    {
+      "name": "reset_all_confirm_title",
+      "value": "تسبیح ری سیٹ کریں"
+    },
+    {
+      "name": "reset_all_confirm_message",
+      "value": "اس تسبیح میں تمام ذکر کی گنتی ری سیٹ کریں؟"
+    },
+    {
+      "name": "reset_all_done",
+      "value": "تسبیح ری سیٹ ہو گئی"
+    },
+    {
+      "name": "title_qibla",
+      "value": "قبلہ قطب نما"
+    },
+    {
+      "name": "qibla_direction",
+      "value": "قبلہ کی سمت"
+    },
+    {
+      "name": "device_heading",
+      "value": "ڈیوائس کا رخ"
+    },
+    {
+      "name": "distance_to_kaaba",
+      "value": "کعبہ تک فاصلہ"
+    },
+    {
+      "name": "compass_ready",
+      "value": "قطب نما تیار ہے۔ اپنے ڈیوائس کو گھمائیں جب تک کعبہ مارکر اوپر کی طرف اشارہ نہ کرے۔"
+    },
+    {
+      "name": "keep_device_flat",
+      "value": "درست پیمائش کے لیے اپنا ڈیوائس سیدھا رکھیں۔"
+    },
+    {
+      "name": "sensor_unavailable",
+      "value": "قطب نما سینسر دستیاب نہیں۔ براہ کرم اصل ڈیوائس پر آزمائیں۔"
+    },
+    {
+      "name": "location_unavailable",
+      "value": "مقام دستیاب نہیں"
+    },
+    {
+      "name": "qibla_calibrate_title",
+      "value": "قطب نما کیلیبریٹ کریں"
+    },
+    {
+      "name": "qibla_calibrate_desc",
+      "value": "قطب نما کی درستگی بہتر کرنے کے لیے اپنے فون کو آٹھ کی شکل میں حرکت دیں۔"
+    },
+    {
+      "name": "qibla_calibrate_skip",
+      "value": "ابھی چھوڑ دیں"
+    },
+    {
+      "name": "qibla_calibrate_hint",
+      "value": "کیلیبریشن درستگی بہتر بناتی ہے"
+    },
+    {
+      "name": "title_hijri_calendar",
+      "value": "ہجری کیلنڈر"
+    },
+    {
+      "name": "important_dates",
+      "value": "اہم تاریخیں"
+    },
+    {
+      "name": "no_events_this_month",
+      "value": "اس مہینے کوئی بڑے اسلامی مواقع نہیں"
+    },
+    {
+      "name": "status_next",
+      "value": "اگلی"
+    },
+    {
+      "name": "status_pray",
+      "value": "نماز"
+    },
+    {
+      "name": "status_both",
+      "value": "نماز  ·  اگلی"
+    },
+    {
+      "name": "status_prayed",
+      "value": "✓ پڑھ لی"
+    },
+    {
+      "name": "status_express",
+      "value": "ایکسپریس"
+    },
+    {
+      "name": "prayer_fajr",
+      "value": "فجر"
+    },
+    {
+      "name": "prayer_dhuhr",
+      "value": "ظہر"
+    },
+    {
+      "name": "prayer_asr",
+      "value": "عصر"
+    },
+    {
+      "name": "prayer_maghrib",
+      "value": "مغرب"
+    },
+    {
+      "name": "prayer_isha",
+      "value": "عشاء"
+    },
+    {
+      "name": "prayer_jummah",
+      "value": "جمعہ"
+    },
+    {
+      "name": "timing_imsak",
+      "value": "امساک"
+    },
+    {
+      "name": "timing_sunrise",
+      "value": "طلوعِ آفتاب"
+    },
+    {
+      "name": "timing_sunset",
+      "value": "غروبِ آفتاب"
+    },
+    {
+      "name": "timing_first_third",
+      "value": "پہلا تہائی"
+    },
+    {
+      "name": "timing_midnight",
+      "value": "آدھی رات"
+    },
+    {
+      "name": "timing_last_third",
+      "value": "آخری تہائی"
+    },
+    {
+      "name": "event_new_year",
+      "value": "اسلامی نیا سال"
+    },
+    {
+      "name": "event_ashura",
+      "value": "یومِ عاشورہ"
+    },
+    {
+      "name": "event_mawlid",
+      "value": "میلاد النبی"
+    },
+    {
+      "name": "event_isra_miraj",
+      "value": "اسراء و معراج"
+    },
+    {
+      "name": "event_mid_shaban",
+      "value": "شعبان کی پندرہویں رات"
+    },
+    {
+      "name": "event_ramadan_start",
+      "value": "رمضان"
+    },
+    {
+      "name": "event_eid_fitr",
+      "value": "عید الفطر"
+    },
+    {
+      "name": "event_arafah",
+      "value": "یومِ عرفہ"
+    },
+    {
+      "name": "event_eid_adha",
+      "value": "عید الاضحیٰ"
+    },
+    {
+      "name": "method_karachi",
+      "value": "جامعہ اسلامی علوم، کراچی"
+    },
+    {
+      "name": "method_jafari",
+      "value": "شیعہ اثنا عشری (لیوا انسٹیٹیوٹ، قم)"
+    },
+    {
+      "name": "method_isna",
+      "value": "اسلامی سوسائٹی آف نارتھ امریکہ"
+    },
+    {
+      "name": "method_mwl",
+      "value": "مسلم ورلڈ لیگ"
+    },
+    {
+      "name": "method_umm_al_qura",
+      "value": "ام القریٰ (مکہ)"
+    },
+    {
+      "name": "method_egyptian",
+      "value": "مصری سروے"
+    },
+    {
+      "name": "method_sunni_iraq",
+      "value": "سنی اوقاف (عراق)"
+    },
+    {
+      "name": "method_qatar",
+      "value": "قطر اوقاف"
+    },
+    {
+      "name": "method_singapore",
+      "value": "سنگاپور (MUIS)"
+    },
+    {
+      "name": "method_france",
+      "value": "فرانس (UOIF)"
+    },
+    {
+      "name": "method_turkey",
+      "value": "ترکی (دیانت)"
+    },
+    {
+      "name": "method_russia",
+      "value": "روس (SAMR)"
+    },
+    {
+      "name": "method_uae",
+      "value": "متحدہ عرب امارات (GIAE)"
+    },
+    {
+      "name": "method_moonsighting",
+      "value": "مون سائٹنگ کمیٹی ورلڈ وائیڈ"
+    },
+    {
+      "name": "method_dubai",
+      "value": "خلیجی خطہ (دبئی)"
+    },
+    {
+      "name": "method_kuwait",
+      "value": "کویت"
+    },
+    {
+      "name": "method_france_15",
+      "value": "فرانس زاویہ 15"
+    },
+    {
+      "name": "method_france_18",
+      "value": "فرانس زاویہ 18"
+    },
+    {
+      "name": "method_turkey_europe",
+      "value": "دیانت ایشلری باشکانلیغی، یورپ"
+    },
+    {
+      "name": "method_tehran",
+      "value": "شیعہ، انسٹیٹیوٹ آف جیو فزکس، یونیورسٹی آف تہران، ایران"
+    },
+    {
+      "name": "method_indonesia",
+      "value": "کیمنٹریان اگاما ریپبلک انڈونیشیا (KEMENAG)"
+    },
+    {
+      "name": "method_algeria",
+      "value": "وزارت مذہبی امور و اوقاف، الجزائر"
+    },
+    {
+      "name": "method_brunei",
+      "value": "کیمنٹریان حال احوال اوگاما (برونائی دارالسلام)"
+    },
+    {
+      "name": "method_custom",
+      "value": "حسب ضرورت"
+    },
+    {
+      "name": "method_short_karachi",
+      "value": "کراچی"
+    },
+    {
+      "name": "method_short_jafari",
+      "value": "جعفری"
+    },
+    {
+      "name": "method_short_isna",
+      "value": "ISNA"
+    },
+    {
+      "name": "method_short_mwl",
+      "value": "MWL"
+    },
+    {
+      "name": "method_short_umm_al_qura",
+      "value": "مکہ"
+    },
+    {
+      "name": "method_short_egyptian",
+      "value": "مصری"
+    },
+    {
+      "name": "method_short_sunni_iraq",
+      "value": "عراق"
+    },
+    {
+      "name": "method_short_qatar",
+      "value": "قطر"
+    },
+    {
+      "name": "method_short_singapore",
+      "value": "سنگاپور"
+    },
+    {
+      "name": "method_short_france",
+      "value": "فرانس"
+    },
+    {
+      "name": "method_short_turkey",
+      "value": "ترکی"
+    },
+    {
+      "name": "method_short_russia",
+      "value": "روس"
+    },
+    {
+      "name": "method_short_uae",
+      "value": "متحدہ عرب امارات"
+    },
+    {
+      "name": "method_short_moonsighting",
+      "value": "مون سائٹنگ"
+    },
+    {
+      "name": "method_short_dubai",
+      "value": "دبئی"
+    },
+    {
+      "name": "method_short_kuwait",
+      "value": "کویت"
+    },
+    {
+      "name": "method_short_france_15",
+      "value": "فرانس 15°"
+    },
+    {
+      "name": "method_short_france_18",
+      "value": "فرانس 18°"
+    },
+    {
+      "name": "method_short_turkey_europe",
+      "value": "ترکی یورپ"
+    },
+    {
+      "name": "method_short_tehran",
+      "value": "تہران"
+    },
+    {
+      "name": "method_short_indonesia",
+      "value": "KEMENAG"
+    },
+    {
+      "name": "method_short_algeria",
+      "value": "الجزائر"
+    },
+    {
+      "name": "method_short_brunei",
+      "value": "برونائی"
+    },
+    {
+      "name": "method_short_custom",
+      "value": "حسب ضرورت"
+    },
+    {
+      "name": "asr_standard",
+      "value": "معیاری (شافعی / مالکی / حنبلی)"
+    },
+    {
+      "name": "asr_hanafi",
+      "value": "حنفی"
+    },
+    {
+      "name": "asr_short_standard",
+      "value": "معیاری"
+    },
+    {
+      "name": "asr_short_hanafi",
+      "value": "حنفی"
+    },
+    {
+      "name": "source_local",
+      "value": "مقامی فارمولا (آف لائن)"
+    },
+    {
+      "name": "source_api",
+      "value": "API (آن لائن)"
+    },
+    {
+      "name": "source_short_local",
+      "value": "مقامی"
+    },
+    {
+      "name": "source_short_online",
+      "value": "آن لائن"
+    },
+    {
+      "name": "theme_preset",
+      "value": "ایپ تھیم"
+    },
+    {
+      "name": "theme_preset_desc",
+      "value": "ایپ کا بصری انداز منتخب کریں"
+    },
+    {
+      "name": "theme_preset_sirat",
+      "value": "صراط"
+    },
+    {
+      "name": "theme_preset_sirat_desc",
+      "value": "جدید اور سادہ — HarmonyOS 7 کا حسن"
+    },
+    {
+      "name": "theme_preset_current",
+      "value": "صراط کلاسک"
+    },
+    {
+      "name": "theme_preset_current_desc",
+      "value": "گرم کریم اور گہرا سبز — اصل"
+    },
+    {
+      "name": "theme_preset_harmony7",
+      "value": "نور"
+    },
+    {
+      "name": "theme_preset_harmony7_desc",
+      "value": "چمکتا بنفشی — پرسکون اور جدید"
+    },
+    {
+      "name": "theme_preset_harmony6",
+      "value": "سحر"
+    },
+    {
+      "name": "theme_preset_harmony6_desc",
+      "value": "سنہری عنبر — پہلی روشنی کی سکون"
+    },
+    {
+      "name": "theme_preset_harmony5",
+      "value": "بہار"
+    },
+    {
+      "name": "theme_preset_harmony5_desc",
+      "value": "ٹھنڈا ٹیل — وسیع، تازہ اور صاف"
+    },
+    {
+      "name": "theme_amber",
+      "value": "عنبر"
+    },
+    {
+      "name": "theme_charcoal",
+      "value": "چارکول"
+    },
+    {
+      "name": "theme_emerald",
+      "value": "زمرد"
+    },
+    {
+      "name": "theme_pearl",
+      "value": "موتی"
+    },
+    {
+      "name": "theme_gold",
+      "value": "سونا (دھاتی)"
+    },
+    {
+      "name": "theme_white",
+      "value": "سفید"
+    },
+    {
+      "name": "theme_sapphire",
+      "value": "نیلم"
+    },
+    {
+      "name": "theme_rose",
+      "value": "گلاب"
+    },
+    {
+      "name": "theme_silver",
+      "value": "چاندی"
+    },
+    {
+      "name": "wizard_step",
+      "value": "مرحلہ"
+    },
+    {
+      "name": "wizard_welcome_title",
+      "value": "صراط ساتھی میں خوش آمدید"
+    },
+    {
+      "name": "wizard_welcome_desc",
+      "value": "آئیے آپ کی ترجیحات ترتیب دیں۔ آپ انہیں کسی بھی وقت ترتیبات میں تبدیل کر سکتے ہیں۔"
+    },
+    {
+      "name": "wizard_language_title",
+      "value": "اپنی زبان منتخب کریں"
+    },
+    {
+      "name": "wizard_language_desc",
+      "value": "ایپ تمام اسکرینوں پر یہی زبان استعمال کرے گی"
+    },
+    {
+      "name": "wizard_privacy_title",
+      "value": "رازداری کی پالیسی"
+    },
+    {
+      "name": "wizard_privacy_desc",
+      "value": "جاری رکھنے سے پہلے براہ کرم پڑھیں اور قبول کریں"
+    },
+    {
+      "name": "privacy_agree_label",
+      "value": "میں نے رازداری کی پالیسی پڑھ لی ہے اور اس سے متفق ہوں"
+    },
+    {
+      "name": "privacy_view_full",
+      "value": "مکمل رازداری پالیسی آن لائن دیکھیں"
+    },
+    {
+      "name": "wizard_theme_title",
+      "value": "اپنی تھیم منتخب کریں"
+    },
+    {
+      "name": "wizard_theme_desc",
+      "value": "بصری انداز منتخب کریں۔ آپ اسے کسی بھی وقت ترتیبات میں تبدیل کر سکتے ہیں۔"
+    },
+    {
+      "name": "wizard_location_title",
+      "value": "اپنا مقام مقرر کریں"
+    },
+    {
+      "name": "wizard_location_desc",
+      "value": "اوقاتِ نماز اور قبلہ کی سمت کے لیے استعمال ہوتا ہے"
+    },
+    {
+      "name": "wizard_convention_title",
+      "value": "حساب کی ترجیحات"
+    },
+    {
+      "name": "wizard_convention_desc",
+      "value": "منتخب کریں کہ اوقاتِ نماز کیسے شمار کیے جائیں"
+    },
+    {
+      "name": "wizard_grant_permission",
+      "value": "مقام کی اجازت دیں"
+    },
+    {
+      "name": "wizard_getting_location",
+      "value": "آپ کا مقام معلوم کیا جا رہا ہے..."
+    },
+    {
+      "name": "wizard_location_ready",
+      "value": "مقام معلوم ہو گیا"
+    },
+    {
+      "name": "wizard_location_failed",
+      "value": "مقام حاصل نہیں ہو سکا"
+    },
+    {
+      "name": "wizard_retry",
+      "value": "دوبارہ کوشش کریں"
+    },
+    {
+      "name": "wizard_next",
+      "value": "اگلا"
+    },
+    {
+      "name": "wizard_finish",
+      "value": "شروع کریں"
+    },
+    {
+      "name": "home_today_progress",
+      "value": "روزانہ کی نمازیں"
+    },
+    {
+      "name": "home_prayers_completed",
+      "value": "نمازیں مکمل"
+    },
+    {
+      "name": "home_keep_going",
+      "value": "جاری رکھیں!"
+    },
+    {
+      "name": "home_streak",
+      "value": "دن کا تسلسل"
+    },
+    {
+      "name": "home_best_streak",
+      "value": "بہترین"
+    },
+    {
+      "name": "home_days",
+      "value": "دن"
+    },
+    {
+      "name": "home_this_week",
+      "value": "اس ہفتے"
+    },
+    {
+      "name": "home_week_summary",
+      "value": "اس ہفتے کی نمازیں"
+    },
+    {
+      "name": "home_this_month",
+      "value": "اس مہینے"
+    },
+    {
+      "name": "home_month_summary",
+      "value": "اس مہینے کی نمازیں"
+    },
+    {
+      "name": "home_tasbih",
+      "value": "روزانہ کی تسبیح"
+    },
+    {
+      "name": "home_tasbih_lifetime",
+      "value": "مجموعی گنتی"
+    },
+    {
+      "name": "home_tasbih_summary",
+      "value": "تسبیحیں"
+    },
+    {
+      "name": "home_dhikrs",
+      "value": "اذکار"
+    },
+    {
+      "name": "home_monthly_view",
+      "value": "ماہانہ منظر"
+    },
+    {
+      "name": "home_perfect_days",
+      "value": "کامل دن"
+    },
+    {
+      "name": "home_days_elapsed",
+      "value": "گزرے دن"
+    },
+    {
+      "name": "home_lifetime_1y",
+      "value": "پچھلے سال کی نمازیں"
+    },
+    {
+      "name": "home_next_event",
+      "value": "اگلا موقع"
+    },
+    {
+      "name": "home_event_today",
+      "value": "آج!"
+    },
+    {
+      "name": "home_event_tomorrow",
+      "value": "کل"
+    },
+    {
+      "name": "ramadan_card_title",
+      "value": "رمضان"
+    },
+    {
+      "name": "ramadan_day_of",
+      "value": "دن"
+    },
+    {
+      "name": "ramadan_day_of_suffix",
+      "value": "رمضان کا"
+    },
+    {
+      "name": "ramadan_days_until",
+      "value": "رمضان شروع ہونے میں"
+    },
+    {
+      "name": "ramadan_fast_start",
+      "value": "روزہ شروع (امساک)"
+    },
+    {
+      "name": "ramadan_fast_end",
+      "value": "روزہ ختم (مغرب)"
+    },
+    {
+      "name": "ramadan_today_fast",
+      "value": "آج کا روزہ کا وقفہ"
+    },
+    {
+      "name": "ramadan_first_day_fast",
+      "value": "رمضان کا پہلا دن"
+    },
+    {
+      "name": "ramadan_calendar_start",
+      "value": "رمضان کا آغاز"
+    },
+    {
+      "name": "ramadan_calendar_end",
+      "value": "رمضان کا اختتام"
+    },
+    {
+      "name": "ramadan_ashras",
+      "value": "عشرے"
+    },
+    {
+      "name": "ramadan_first_ashra",
+      "value": "پہلا عشرہ"
+    },
+    {
+      "name": "ramadan_second_ashra",
+      "value": "دوسرا عشرہ"
+    },
+    {
+      "name": "ramadan_third_ashra",
+      "value": "تیسرا عشرہ"
+    },
+    {
+      "name": "ramadan_first_ashra_significance",
+      "value": "رحمت کے دن"
+    },
+    {
+      "name": "ramadan_second_ashra_significance",
+      "value": "مغفرت کے دن"
+    },
+    {
+      "name": "ramadan_third_ashra_significance",
+      "value": "جہنم سے نجات"
+    },
+    {
+      "name": "ramadan_laylat_al_qadr",
+      "value": "لیلۃ القدر"
+    },
+    {
+      "name": "ramadan_laylat_al_qadr_desc",
+      "value": "طاقت کی رات — ہزار مہینوں سے بہتر۔ اسے آخری دس دنوں کی طاق راتوں میں تلاش کریں۔"
+    },
+    {
+      "name": "ramadan_jummah_tul_widah",
+      "value": "جمعۃ الوداع"
+    },
+    {
+      "name": "ramadan_jummah_tul_widah_desc",
+      "value": "الوداعی جمعہ — رمضان کا آخری جمعہ۔"
+    },
+    {
+      "name": "ramadan_today",
+      "value": "آج رات!"
+    },
+    {
+      "name": "countdown_fast_ends",
+      "value": "روزہ کھلنے میں"
+    },
+    {
+      "name": "countdown_fast_starts",
+      "value": "روزہ شروع ہونے میں"
+    },
+    {
+      "name": "countdown_fast_ends_desc",
+      "value": "اپنا روزہ کھولنے کی تیاری کریں"
+    },
+    {
+      "name": "countdown_fast_starts_desc",
+      "value": "امساک سے پہلے سحری مکمل کریں"
+    },
+    {
+      "name": "dua_iftar_name",
+      "value": "روزہ کھولنے کی دعا"
+    },
+    {
+      "name": "dua_iftar_translation",
+      "value": "پیاس ختم ہو گئی، رگیں تر ہو گئیں، اور اجر یقینی ہے، ان شاء اللہ۔"
+    },
+    {
+      "name": "dua_suhoor_name",
+      "value": "روزے کی نیت"
+    },
+    {
+      "name": "dua_suhoor_translation",
+      "value": "میں نے رمضان کے مہینے میں کل کے روزے کی نیت کی۔"
+    },
+    {
+      "name": "sun_path_we_are_here",
+      "value": "ہم یہاں ہیں"
+    },
+    {
+      "name": "mark_all",
+      "value": "سب کو پڑھا ہوا نشان زد کریں"
+    },
+    {
+      "name": "default_location",
+      "value": "طے شدہ مقام"
+    },
+    {
+      "name": "unknown_location",
+      "value": "نامعلوم مقام"
+    },
+    {
+      "name": "dialog_gps_off_title",
+      "value": "مقام غیر فعال ہے"
+    },
+    {
+      "name": "dialog_gps_off_message",
+      "value": "براہ کرم اپنے شہر کے درست اوقاتِ نماز کے لیے لوکیشن سروسز فعال کریں۔"
+    },
+    {
+      "name": "dialog_permission_title",
+      "value": "اجازت درکار ہے"
+    },
+    {
+      "name": "dialog_permission_message",
+      "value": "آپ کے شہر کے اوقاتِ نماز دکھانے کے لیے لوکیشن کی اجازت درکار ہے۔\nبراہ کرم سسٹم ترتیبات میں اجازت دیں۔"
+    },
+    {
+      "name": "error_gps_fetch_failed",
+      "value": "جی پی ایس مقام حاصل کرنے میں ناکامی"
+    },
+    {
+      "name": "error_gps_off",
+      "value": "براہ کرم لوکیشن سروسز آن کریں"
+    },
+    {
+      "name": "error_location_permission_denied",
+      "value": "لوکیشن کی اجازت مسترد ہو گئی"
+    },
+    {
+      "name": "time_format",
+      "value": "وقت کی شکل"
+    },
+    {
+      "name": "time_format_desc",
+      "value": "اوقاتِ نماز کیسے دکھائے جائیں"
+    },
+    {
+      "name": "time_format_system",
+      "value": "سسٹم ترتیبات استعمال کریں"
+    },
+    {
+      "name": "time_format_system_desc",
+      "value": "ڈیوائس کی ترجیح کی پیروی کریں"
+    },
+    {
+      "name": "time_format_12h",
+      "value": "12 گھنٹے (AM/PM)"
+    },
+    {
+      "name": "time_format_24h",
+      "value": "24 گھنٹے"
+    },
+    {
+      "name": "hijri_calendar_type",
+      "value": "کیلنڈر کی قسم"
+    },
+    {
+      "name": "hijri_calendar_type_desc",
+      "value": "تبدیلی کے لیے کون سا ہجری کیلنڈر استعمال ہو"
+    },
+    {
+      "name": "hijri_calendar_umm_al_qura",
+      "value": "ام القریٰ"
+    },
+    {
+      "name": "hijri_calendar_umm_al_qura_desc",
+      "value": "سعودی عرب کا سرکاری کیلنڈر (1318–1500 ھ)"
+    },
+    {
+      "name": "hijri_calendar_tabular",
+      "value": "جدولی (حسابی)"
+    },
+    {
+      "name": "hijri_calendar_tabular_desc",
+      "value": "کویتی الگورتھم — تمام سالوں کے لیے متعین"
+    },
+    {
+      "name": "subsection_home_ui",
+      "value": "ہوم صفحہ یو آئی"
+    },
+    {
+      "name": "subsection_prayer_ui",
+      "value": "نماز یو آئی"
+    },
+    {
+      "name": "subsection_feedback",
+      "value": "آواز اور فیڈبیک"
+    },
+    {
+      "name": "subsection_language",
+      "value": "زبان"
+    },
+    {
+      "name": "event_raghaib",
+      "value": "لیلۃ الرغائب"
+    },
+    {
+      "name": "countdown_fast_ends_now",
+      "value": "روزہ کھولنے کا وقت ہو گیا ہے"
+    },
+    {
+      "name": "countdown_fast_starts_now",
+      "value": "روزہ شروع کرنے کا وقت ہو گیا ہے"
+    },
+    {
+      "name": "shafaq_method_unavailable",
+      "value": "صرف مون سائٹنگ کمیٹی کے ساتھ دستیاب"
+    },
+    {
+      "name": "event_perspective",
+      "value": "موقع کی روایت"
+    },
+    {
+      "name": "event_perspective_desc",
+      "value": "منتخب کریں کہ ہوم تمام مسلمانوں کے مشترکہ مواقع دکھائے یا سنی اور شیعہ روایات کے مخصوص مواقع بھی۔"
+    },
+    {
+      "name": "event_perspective_universal",
+      "value": "صرف عالمگیر"
+    },
+    {
+      "name": "event_perspective_sunni",
+      "value": "سنی + عالمگیر"
+    },
+    {
+      "name": "event_perspective_shia",
+      "value": "شیعہ + عالمگیر"
+    },
+    {
+      "name": "event_perspective_all",
+      "value": "سب دکھائیں"
+    },
+    {
+      "name": "event_arbaeen",
+      "value": "اربعین"
+    },
+    {
+      "name": "event_imam_ali_birthday",
+      "value": "امام علی کی ولادت"
+    },
+    {
+      "name": "event_ghadir",
+      "value": "عید غدیر"
+    },
+    {
+      "name": "event_new_year_desc",
+      "value": "ہجری سال کا آغاز، جو نبی کریم صلی اللہ علیہ وسلم کی مدینہ ہجرت کی یاد دلاتا ہے۔"
+    },
+    {
+      "name": "event_ashura_desc",
+      "value": "روزہ اور غور و فکر کا دن جو پوری مسلم دنیا میں منایا جاتا ہے۔"
+    },
+    {
+      "name": "event_arbaeen_desc",
+      "value": "عاشورہ کے چالیس دن بعد — شیعہ روایت میں سوگ کا دور۔"
+    },
+    {
+      "name": "event_mawlid_desc",
+      "value": "حضرت محمد صلی اللہ علیہ وسلم کی ولادت۔"
+    },
+    {
+      "name": "event_raghaib_desc",
+      "value": "رجب کی پہلی جمعرات کی رات — سنی روایت میں دعا کی رات۔"
+    },
+    {
+      "name": "event_imam_ali_birthday_desc",
+      "value": "امام علی ابن ابی طالب کی ولادت، جو شیعہ روایت میں منائی جاتی ہے۔"
+    },
+    {
+      "name": "event_isra_miraj_desc",
+      "value": "نبی کریم صلی اللہ علیہ وسلم کا رات کا سفر بیت المقدس اور آسمانوں پر معراج۔"
+    },
+    {
+      "name": "event_mid_shaban_desc",
+      "value": "شعبان کی پندرہویں رات — دعا اور استغفار کی رات۔"
+    },
+    {
+      "name": "event_ramadan_start_desc",
+      "value": "روزوں کے مہینے کا آغاز، ہجری سال کا نواں مہینہ۔"
+    },
+    {
+      "name": "event_eid_fitr_desc",
+      "value": "رمضان کے اختتام پر منایا جانے والا تہوار۔"
+    },
+    {
+      "name": "event_arafah_desc",
+      "value": "عرفہ میں کھڑے ہونے کا دن، حج کے سب سے مقدس دن۔"
+    },
+    {
+      "name": "event_eid_adha_desc",
+      "value": "قربانی کا تہوار، حضرت ابراہیم علیہ السلام کی قربانی کی یاد۔"
+    },
+    {
+      "name": "event_ghadir_desc",
+      "value": "وہ دن جب نبی کریم صلی اللہ علیہ وسلم نے شیعہ روایت کے مطابق امام علی کو اپنا جانشین مقرر کیا۔"
+    },
+    {
+      "name": "show_extra_timings_list",
+      "value": "رات کے اوقات دکھائیں"
+    },
+    {
+      "name": "show_extra_timings_list_desc",
+      "value": "امساک اور رات کی تقسیمیں۔ طلوع اور غروب ہمیشہ دکھائے جاتے ہیں۔"
+    },
+    {
+      "name": "show_extra_timings_sunpath",
+      "value": "سورج کے راستے کی رہنمائی دکھائیں"
+    },
+    {
+      "name": "show_extra_timings_sunpath_desc",
+      "value": "سورج کے راستے پر پہلا تہائی، آدھی رات اور آخری تہائی کی رہنمائی"
+    },
+    {
+      "name": "show_imsak",
+      "value": "امساک"
+    },
+    {
+      "name": "show_imsak_desc",
+      "value": "فجر سے دس منٹ پہلے تک سحری کا اختتام"
+    },
+    {
+      "name": "show_first_third",
+      "value": "پہلا تہائی"
+    },
+    {
+      "name": "show_first_third_desc",
+      "value": "مغرب کے بعد رات کے پہلے تہائی کا آغاز"
+    },
+    {
+      "name": "show_midnight",
+      "value": "آدھی رات"
+    },
+    {
+      "name": "show_midnight_desc",
+      "value": "اسلامی آدھی رات — رات کے وسط میں"
+    },
+    {
+      "name": "show_last_third",
+      "value": "آخری تہائی"
+    },
+    {
+      "name": "show_last_third_desc",
+      "value": "رات کے آخری تہائی کا آغاز، قیام کا وقت"
+    },
+    {
+      "name": "subsection_prayer_list",
+      "value": "نماز کی فہرست میں دکھائیں"
+    },
+    {
+      "name": "subsection_sun_path",
+      "value": "سورج کے راستے پر دکھائیں"
+    },
+    {
+      "name": "title_prayer_details",
+      "value": "نماز کی تفصیلات"
+    },
+    {
+      "name": "title_tasbih_details",
+      "value": "تسبیح کی تفصیلات"
+    },
+    {
+      "name": "details_view",
+      "value": "تفصیلات دیکھیں"
+    },
+    {
+      "name": "details_period_week",
+      "value": "ہفتہ"
+    },
+    {
+      "name": "details_period_month",
+      "value": "مہینہ"
+    },
+    {
+      "name": "details_period_year",
+      "value": "سال"
+    },
+    {
+      "name": "details_prayers_completed",
+      "value": "نمازیں مکمل"
+    },
+    {
+      "name": "details_per_prayer",
+      "value": "فی نماز تفصیل"
+    },
+    {
+      "name": "details_per_tasbih",
+      "value": "فی تسبیح تفصیل"
+    },
+    {
+      "name": "details_this_month",
+      "value": "اس مہینے"
+    },
+    {
+      "name": "details_perfect_days",
+      "value": "کامل دن"
+    },
+    {
+      "name": "details_best_streak",
+      "value": "بہترین"
+    },
+    {
+      "name": "details_days_of",
+      "value": "میں سے"
+    },
+    {
+      "name": "details_tasbih_summary_lifetime",
+      "value": "مجموعی گنتی"
+    },
+    {
+      "name": "details_tasbih_summary_tasbihs",
+      "value": "تسبیحیں"
+    },
+    {
+      "name": "details_tasbih_summary_dhikrs",
+      "value": "اذکار مکمل"
+    },
+    {
+      "name": "export_pdf",
+      "value": "PDF میں ایکسپورٹ کریں"
+    },
+    {
+      "name": "export_prayers_title",
+      "value": "نماز کا ٹائم ٹیبل"
+    },
+    {
+      "name": "export_calendar_title",
+      "value": "ہجری کیلنڈر"
+    },
+    {
+      "name": "export_ramadan_title",
+      "value": "رمضان ٹائم ٹیبل"
+    },
+    {
+      "name": "export_print",
+      "value": "پرنٹ کریں"
+    },
+    {
+      "name": "export_saving",
+      "value": "PDF تیار ہو رہی ہے..."
+    },
+    {
+      "name": "export_success",
+      "value": "PDF کامیابی سے تیار ہو گئی"
+    },
+    {
+      "name": "export_failed",
+      "value": "PDF تیار کرنے میں ناکامی"
+    },
+    {
+      "name": "export_sahur",
+      "value": "سحری"
+    },
+    {
+      "name": "export_iftar",
+      "value": "افطار"
+    },
+    {
+      "name": "export_ramadan_timetable",
+      "value": "رمضان ٹائم ٹیبل"
+    },
+    {
+      "name": "auto_show_ramadan_view",
+      "value": "رمضان منظر خودکار دکھائیں"
+    },
+    {
+      "name": "auto_show_ramadan_view_desc",
+      "value": "60 دن باقی رہنے تک چھپائیں۔ کارڈ ہمیشہ دکھانے کے لیے بند کریں۔"
+    },
+    {
+      "name": "export_date",
+      "value": "تاریخ"
+    },
+    {
+      "name": "hijri_year_suffix",
+      "value": "ھ"
+    },
+    {
+      "name": "generated_by",
+      "value": "صراط ساتھی کے ذریعے تیار کیا گیا"
+    },
+    {
+      "name": "calendar_read_permission_denied",
+      "value": "پرانی یاد دہانیاں صاف کرنے کے لیے کیلنڈر پڑھنے کی اجازت درکار ہے۔"
+    },
+    {
+      "name": "calendar_write_permission_denied",
+      "value": "نئی یاد دہانیاں محفوظ کرنے کے لیے کیلنڈر لکھنے کی اجازت درکار ہے۔"
+    },
+    {
+      "name": "next_3_days",
+      "value": "اگلے 3 دن"
+    },
+    {
+      "name": "about_developer",
+      "value": "ڈویلپر"
+    },
+    {
+      "name": "wizard_use_default_location",
+      "value": "طے شدہ مقام استعمال کریں"
+    },
+    {
+      "name": "wizard_location_required_hint",
+      "value": "جاری رکھنے کے لیے مقام مقرر کریں"
+    },
+    {
+      "name": "subsection_language_and_time",
+      "value": "زبان اور وقت کی شکل"
+    },
+    {
+      "name": "madhab_desc_diyanet",
+      "value": "دیانت کیلنڈر معیاری عصر اصول استعمال کرتا ہے"
+    },
+    {
+      "name": "category_backup_restore",
+      "value": "بیک اپ اور بحالی"
+    },
+    {
+      "name": "backup_to_file",
+      "value": "فائل میں بیک اپ"
+    },
+    {
+      "name": "backup_to_file_desc",
+      "value": "اپنی تمام ترتیبات، نماز کی پیش رفت اور تسبیح کا ڈیٹا ایسی فائل میں محفوظ کریں جو آپ رکھ سکیں۔"
+    },
+    {
+      "name": "restore_from_file",
+      "value": "فائل سے بحال کریں"
+    },
+    {
+      "name": "restore_from_file_desc",
+      "value": "پہلے محفوظ کردہ بیک اپ لوڈ کریں اور موجودہ تمام ڈیٹا بدل دیں۔"
+    },
+    {
+      "name": "backup_footer",
+      "value": "بیک اپ میں آپ کا تشخیصی لاگ یا کوئی ڈیوائس مخصوص شناخت شامل نہیں ہے۔"
+    },
+    {
+      "name": "backup_success",
+      "value": "بیک اپ محفوظ ہو گیا"
+    },
+    {
+      "name": "backup_failed",
+      "value": "بیک اپ ناکام رہا"
+    },
+    {
+      "name": "restore_confirm_title",
+      "value": "بیک اپ بحال کریں؟"
+    },
+    {
+      "name": "restore_confirm_message",
+      "value": "یہ موجودہ تمام ترتیبات، نماز کی پیش رفت اور تسبیح کا ڈیٹا بیک اپ فائل کے مواد سے بدل دے گا۔ اسے واپس نہیں کیا جا سکتا۔"
+    },
+    {
+      "name": "restore_success",
+      "value": "بیک اپ بحال ہو گیا۔ ایپ اب تازہ ہوگی۔"
+    },
+    {
+      "name": "restore_failed",
+      "value": "بحالی ناکام رہی"
+    },
+    {
+      "name": "home_days_singular",
+      "value": "دن"
+    },
+    {
+      "name": "home_days_dual",
+      "value": "دو دن"
+    },
+    {
+      "name": "dhikr_count_dual",
+      "value": "دو اذکار"
+    },
+    {
+      "name": "title_ramadan_details",
+      "value": "رمضان ٹریکر"
+    },
+    {
+      "name": "track_ramadan",
+      "value": "ٹریک کریں"
+    },
+    {
+      "name": "section_fasting",
+      "value": "روزے"
+    },
+    {
+      "name": "fasting_status_fasted",
+      "value": "روزہ رکھا"
+    },
+    {
+      "name": "fasting_status_missed",
+      "value": "چھوٹ گیا"
+    },
+    {
+      "name": "fasting_status_unmarked",
+      "value": "نشان زد نہیں"
+    },
+    {
+      "name": "fasting_summary_fasted",
+      "value": "روزہ رکھا"
+    },
+    {
+      "name": "fasting_summary_missed",
+      "value": "چھوٹ گیا"
+    },
+    {
+      "name": "fasting_summary_unmarked",
+      "value": "نشان زد نہیں"
+    },
+    {
+      "name": "fasting_mark_title",
+      "value": "روزہ نشان زد کریں"
+    },
+    {
+      "name": "fasting_day_label",
+      "value": "دن"
+    },
+    {
+      "name": "fasting_clear",
+      "value": "نشان صاف کریں"
+    },
+    {
+      "name": "fasting_reason_title",
+      "value": "چھوڑنے کی وجہ"
+    },
+    {
+      "name": "fasting_reason_travel",
+      "value": "سفر"
+    },
+    {
+      "name": "fasting_reason_illness",
+      "value": "بیماری"
+    },
+    {
+      "name": "fasting_reason_menstruation",
+      "value": "حیض"
+    },
+    {
+      "name": "fasting_reason_pregnancy_nursing",
+      "value": "حمل / دودھ پلانا"
+    },
+    {
+      "name": "fasting_reason_forgetfulness",
+      "value": "بھول"
+    },
+    {
+      "name": "fasting_reason_other",
+      "value": "دیگر"
+    },
+    {
+      "name": "fasting_reason_custom_label",
+      "value": "براہ کرم بیان کریں"
+    },
+    {
+      "name": "fasting_reason_custom_placeholder",
+      "value": "آپ کی وجہ"
+    },
+    {
+      "name": "ramadan_not_active",
+      "value": "اپنے روزوں کی نگرانی کے لیے رمضان میں یہ صفحہ کھولیں۔"
+    },
+    {
+      "name": "section_qada",
+      "value": "قضا"
+    },
+    {
+      "name": "qada_remaining",
+      "value": "باقی"
+    },
+    {
+      "name": "qada_total_missed",
+      "value": "کل چھوٹے"
+    },
+    {
+      "name": "qada_total_made_up",
+      "value": "کل ادا کیے گئے"
+    },
+    {
+      "name": "qada_per_year",
+      "value": "سال کے حساب سے"
+    },
+    {
+      "name": "qada_log_button",
+      "value": "قضا روزہ درج کریں"
+    },
+    {
+      "name": "qada_log_title",
+      "value": "قضا روزہ درج کریں"
+    },
+    {
+      "name": "qada_log_desc",
+      "value": "آپ نے کتنے روزے قضا کیے؟"
+    },
+    {
+      "name": "qada_all_done",
+      "value": "سب ادا ہو گئے۔ الحمدللہ۔"
+    },
+    {
+      "name": "qada_no_data",
+      "value": "ابھی کوئی چھوٹا ہوا روزہ درج نہیں۔"
+    },
+    {
+      "name": "qada_year_label",
+      "value": "سال کے لیے"
+    },
+    {
+      "name": "qada_count_label",
+      "value": "کتنے"
+    },
+    {
+      "name": "qada_count_suffix",
+      "value": "روزے"
+    },
+    {
+      "name": "qada_row_missed_suffix",
+      "value": "چھوٹے"
+    },
+    {
+      "name": "qada_row_made_up_suffix",
+      "value": "ادا کیے"
+    },
+    {
+      "name": "section_taraweeh",
+      "value": "تراویح"
+    },
+    {
+      "name": "taraweeh_empty",
+      "value": "رمضان شروع ہونے پر نگرانی شروع ہوگی۔"
+    },
+    {
+      "name": "taraweeh_nights_suffix",
+      "value": "راتیں"
+    },
+    {
+      "name": "qada_not_during_ramadan",
+      "value": "قضا روزے عید الفطر کے بعد درج کیے جا سکتے ہیں۔"
+    },
+    {
+      "name": "qada_total_fasted",
+      "value": "کل روزے رکھے"
+    },
+    {
+      "name": "qada_total_unmarked",
+      "value": "کل نشان زد نہیں"
+    },
+    {
+      "name": "qada_row_fasted_suffix",
+      "value": "روزے رکھے"
+    },
+    {
+      "name": "qada_row_unmarked_suffix",
+      "value": "نشان زد نہیں"
+    },
+    {
+      "name": "section_duas",
+      "value": "دعائیں"
+    },
+    {
+      "name": "eid_card_title",
+      "value": "عید الفطر"
+    },
+    {
+      "name": "eid_greeting",
+      "value": "عید مبارک"
+    },
+    {
+      "name": "eid_greeting_subtitle",
+      "value": "اللہ آپ کے روزے اور اعمال قبول فرمائے"
+    },
+    {
+      "name": "eid_zakat_fitr",
+      "value": "زکوٰۃ الفطر"
+    },
+    {
+      "name": "eid_zakat_fitr_desc",
+      "value": "ہر گھر کے فرد کے لیے ایک صاع (تقریباً 2.5 کلوگرام) اپنی مقامی بنیادی خوراک، عید کی نماز سے پہلے ادا کرنا۔"
+    },
+    {
+      "name": "eid_takbeer_arabic",
+      "value": "اللّٰهُ أَكْبَرُ، اللّٰهُ أَكْبَرُ، لَا إِلٰهَ إِلَّا اللّٰهُ، وَاللّٰهُ أَكْبَرُ، اللّٰهُ أَكْبَرُ، وَلِلّٰهِ الْحَمْدُ"
+    },
+    {
+      "name": "eid_takbeer_translation",
+      "value": "اللہ سب سے بڑا ہے، اللہ سب سے بڑا ہے۔ اللہ کے سوا کوئی معبود نہیں۔ اللہ سب سے بڑا ہے، اللہ سب سے بڑا ہے، اور تمام تعریفیں اللہ کے لیے ہیں۔"
+    },
+    {
+      "name": "ramadan_about_this_month",
+      "value": "اس رمضان کے بارے میں"
+    },
+    {
+      "name": "eid_card_link",
+      "value": "رمضان کا جائزہ لیں"
+    },
+    {
+      "name": "qada_card_link",
+      "value": "قضا کا انتظام کریں"
+    },
+    {
+      "name": "qada_banner_log_action",
+      "value": "درج کریں"
+    },
+    {
+      "name": "qada_banner_singular",
+      "value": "روزہ قضا کرنا ہے"
+    },
+    {
+      "name": "qada_banner_plural",
+      "value": "روزے قضا کرنے ہیں"
+    },
+    {
+      "name": "qada_banner_dual",
+      "value": "دو روزے قضا کرنے ہیں"
+    },
+    {
+      "name": "qada_year_sheet_title_prefix",
+      "value": "قضا برائے"
+    },
+    {
+      "name": "qada_of",
+      "value": "میں سے"
+    },
+    {
+      "name": "qada_made_up_of_total",
+      "value": "ادا کیے گئے"
+    },
+    {
+      "name": "qada_day_mark_made_up",
+      "value": "ادا شدہ نشان زد کریں"
+    },
+    {
+      "name": "qada_day_made_up",
+      "value": "ادا شدہ"
+    },
+    {
+      "name": "qada_year_sheet_empty",
+      "value": "اس سال کے تمام چھوٹے ہوئے روزے ادا ہو چکے ہیں۔ الحمدللہ۔"
+    },
+    {
+      "name": "qada_tap_year_hint",
+      "value": "اس سال کی قضا دیکھنے اور سنبھالنے کے لیے سال پر ٹیپ کریں۔"
+    },
+    {
+      "name": "close",
+      "value": "بند کریں"
+    },
+    {
+      "name": "lang_system",
+      "value": "خودکار شناخت"
+    },
+    {
+      "name": "lang_system_desc",
+      "value": "سسٹم زبان سے مطابقت رکھتا ہے"
+    },
+    {
+      "name": "lang_supported_hint",
+      "value": "معاون زبانیں: انگریزی، عربی، چینی، انڈونیشیائی، اردو، ترکی، بنگالی"
+    },
+    {
+      "name": "tasbih_default_classic_name",
+      "value": "کلاسک 33"
+    },
+    {
+      "name": "tasbih_default_tahlil_name",
+      "value": "تہلیل 100"
+    },
+    {
+      "name": "tasbih_default_istighfar_name",
+      "value": "استغفار"
+    },
+    {
+      "name": "dhikr_subhanallah_translit",
+      "value": "سبحان اللہ"
+    },
+    {
+      "name": "dhikr_subhanallah_trans",
+      "value": "اللہ پاک ہے"
+    },
+    {
+      "name": "dhikr_alhamdulillah_translit",
+      "value": "الحمدللہ"
+    },
+    {
+      "name": "dhikr_alhamdulillah_trans",
+      "value": "تمام تعریفیں اللہ کے لیے ہیں"
+    },
+    {
+      "name": "dhikr_allahuakbar_translit",
+      "value": "اللہ اکبر"
+    },
+    {
+      "name": "dhikr_allahuakbar_trans",
+      "value": "اللہ سب سے بڑا ہے"
+    },
+    {
+      "name": "dhikr_tahlil_translit",
+      "value": "لا الہ الا اللہ وحدہ لا شریک لہ"
+    },
+    {
+      "name": "dhikr_tahlil_trans",
+      "value": "اللہ کے سوا کوئی معبود نہیں، وہ اکیلا ہے، اس کا کوئی شریک نہیں"
+    },
+    {
+      "name": "dhikr_istighfar_translit",
+      "value": "استغفر اللہ"
+    },
+    {
+      "name": "dhikr_istighfar_trans",
+      "value": "میں اللہ سے مغفرت چاہتا ہوں"
+    },
+    {
+      "name": "tasbih_active_badge",
+      "value": "فعال"
+    },
+    {
+      "name": "notif_step_title",
+      "value": "نماز کی یاد دہانیاں"
+    },
+    {
+      "name": "notif_step_desc",
+      "value": "اوقاتِ نماز کی اطلاع کے لیے یاد دہانیاں فعال کریں۔ اس کے لیے کیلنڈر کی اجازتیں درکار ہیں۔"
+    },
+    {
+      "name": "permission_required",
+      "value": "کیلنڈر کی اجازت درکار ہے"
+    },
+    {
+      "name": "calendar_permission_required_msg",
+      "value": "نماز کی یاد دہانیوں کے لیے کیلنڈر پڑھنے اور لکھنے دونوں اجازتیں درکار ہیں۔ جاری رکھنے کے لیے براہ کرم انہیں دیں۔"
+    },
+    {
+      "name": "grant",
+      "value": "اجازت دیں"
+    },
+    {
+      "name": "category_logs",
+      "value": "تشخیصی لاگز"
+    },
+    {
+      "name": "jummah_mubarak",
+      "value": "جمعہ مبارک"
+    },
+    {
+      "name": "fasting_ends_at",
+      "value": "روزہ ختم ہوتا ہے"
+    },
+    {
+      "name": "duas_link",
+      "value": "دعائیں"
+    },
+    {
+      "name": "ramadan_laylat_today",
+      "value": "آج رات: ممکنہ لیلۃ القدر"
+    },
+    {
+      "name": "ramadan_taraweeh_quick",
+      "value": "تراویح:"
+    },
+    {
+      "name": "ramadan_fast_nudge",
+      "value": "کیا آپ نے آج روزہ رکھا؟ نشان زد کریں"
+    },
+    {
+      "name": "bind_to_prayers",
+      "value": "نمازوں سے منسلک کریں"
+    },
+    {
+      "name": "tasbih_reminder_title",
+      "value": "زیر التواء تسبیح"
+    },
+    {
+      "name": "tasbih_reminder_desc",
+      "value": "نماز پڑھ لی، لیکن آپ کی کچھ تسبیحیں ابھی زیر التواء ہیں۔"
+    },
+    {
+      "name": "go_to_tasbih",
+      "value": "تسبیح پر جائیں"
+    },
+    {
+      "name": "dismiss",
+      "value": "برخاست کریں"
+    },
+    {
+      "name": "tasbih_status_completed",
+      "value": "مکمل"
+    },
+    {
+      "name": "tasbih_left",
+      "value": "باقی"
+    },
+    {
+      "name": "duas",
+      "value": "دعائیں"
+    },
+    {
+      "name": "search_duas",
+      "value": "دعائیں تلاش کریں..."
+    },
+    {
+      "name": "dua_cat_all",
+      "value": "سب"
+    },
+    {
+      "name": "dua_cat_favorites",
+      "value": "پسندیدہ"
+    },
+    {
+      "name": "dua_cat_forgiveness",
+      "value": "مغفرت"
+    },
+    {
+      "name": "dua_cat_distress",
+      "value": "پریشانی"
+    },
+    {
+      "name": "dua_cat_travel",
+      "value": "سفر"
+    },
+    {
+      "name": "bind_prayer",
+      "value": "نماز سے منسلک کریں"
+    },
+    {
+      "name": "home_duas_title",
+      "value": "آج کی دعائیں"
+    },
+    {
+      "name": "view_all",
+      "value": "سب دیکھیں"
+    },
+    {
+      "name": "dua_cat_morning_evening",
+      "value": "صبح و شام"
+    },
+    {
+      "name": "dua_cat_prayer",
+      "value": "نماز"
+    },
+    {
+      "name": "dua_cat_protection",
+      "value": "حفاظت"
+    },
+    {
+      "name": "dua_cat_guidance",
+      "value": "ہدایت"
+    },
+    {
+      "name": "dua_cat_general",
+      "value": "عام"
+    },
+    {
+      "name": "dua_cat_worship",
+      "value": "عبادت"
+    },
+    {
+      "name": "dua_cat_repentance",
+      "value": "توبہ"
+    },
+    {
+      "name": "dua_cat_steadfastness",
+      "value": "ثابت قدمی"
+    },
+    {
+      "name": "dua_cat_mercy",
+      "value": "رحمت"
+    },
+    {
+      "name": "dua_cat_reflection",
+      "value": "غور و فکر"
+    },
+    {
+      "name": "dua_cat_hereafter",
+      "value": "آخرت"
+    },
+    {
+      "name": "dua_cat_family",
+      "value": "خاندان"
+    },
+    {
+      "name": "dua_cat_knowledge",
+      "value": "علم"
+    },
+    {
+      "name": "dua_cat_healing",
+      "value": "شفا"
+    },
+    {
+      "name": "dua_cat_need",
+      "value": "ضرورت"
+    },
+    {
+      "name": "dua_cat_gratitude",
+      "value": "شکر"
+    },
+    {
+      "name": "dua_cat_reliance",
+      "value": "توکل"
+    },
+    {
+      "name": "dua_cat_daily",
+      "value": "روزمرہ زندگی"
+    },
+    {
+      "name": "dua_cat_fasting",
+      "value": "روزہ"
+    },
+    {
+      "name": "dua_cat_weather",
+      "value": "موسم"
+    },
+    {
+      "name": "dua_cat_faith",
+      "value": "ایمان"
+    },
+    {
+      "name": "dua_cat_purification",
+      "value": "پاکیزگی"
+    },
+    {
+      "name": "dua_cat_provision",
+      "value": "رزق"
+    },
+    {
+      "name": "dua_cat_funeral",
+      "value": "جنازہ"
+    },
+    {
+      "name": "duas_for",
+      "value": "دعائیں برائے"
+    },
+    {
+      "name": "home_tasbih_tracker",
+      "value": "منسلک تسبیحیں"
+    },
+    {
+      "name": "add_custom_event",
+      "value": "ایونٹ شامل کریں"
+    },
+    {
+      "name": "event_title_placeholder",
+      "value": "ایونٹ کا نام"
+    },
+    {
+      "name": "hijri_date",
+      "value": "ہجری تاریخ"
+    },
+    {
+      "name": "gregorian_date",
+      "value": "گریگورین تاریخ"
+    },
+    {
+      "name": "notify_me",
+      "value": "اس دن مجھے اطلاع دیں"
+    },
+    {
+      "name": "custom_events_title",
+      "value": "حسب ضرورت ایونٹس"
+    },
+    {
+      "name": "date_type",
+      "value": "تاریخ کی قسم"
+    },
+    {
+      "name": "event_title",
+      "value": "ایونٹ کا عنوان"
+    },
+    {
+      "name": "day",
+      "value": "دن"
+    },
+    {
+      "name": "month",
+      "value": "مہینہ"
+    },
+    {
+      "name": "year",
+      "value": "سال"
+    },
+    {
+      "name": "notify_me_desc",
+      "value": "صبح 8:00 بجے کیلنڈر یاد دہانی حاصل کریں"
+    },
+    {
+      "name": "edit_custom_event",
+      "value": "ایونٹ میں ترمیم"
+    },
+    {
+      "name": "event_title_required",
+      "value": "ایونٹ کا عنوان درکار ہے"
+    },
+    {
+      "name": "invalid_date",
+      "value": "غلط تاریخ"
+    },
+    {
+      "name": "hijri_equivalent",
+      "value": "اس طرح محفوظ ہوگا:"
+    },
+    {
+      "name": "repeats",
+      "value": "تکرار"
+    },
+    {
+      "name": "recur_none",
+      "value": "کوئی نہیں"
+    },
+    {
+      "name": "recur_yearly",
+      "value": "سالانہ"
+    },
+    {
+      "name": "recur_monthly",
+      "value": "ماہانہ"
+    },
+    {
+      "name": "recur_weekly",
+      "value": "ہفتہ وار"
+    },
+    {
+      "name": "show_all",
+      "value": "سب دکھائیں"
+    },
+    {
+      "name": "show_this_month",
+      "value": "اس مہینے"
+    },
+    {
+      "name": "no_custom_events",
+      "value": "کوئی حسب ضرورت ایونٹ نہیں ملا۔"
+    },
+    {
+      "name": "upcoming_custom_events",
+      "value": "آنے والے ایونٹس"
+    },
+    {
+      "name": "notif_pray_jummah",
+      "value": "جمعہ پڑھیں"
+    },
+    {
+      "name": "hadith_jummah",
+      "value": "پانچ روزانہ نمازیں، اور ایک جمعہ سے دوسرے جمعہ تک، ان کے درمیان ہونے والے گناہوں کا کفارہ ہیں، بشرطیکہ کبیرہ گناہوں سے بچا جائے۔ — صحیح مسلم 233"
+    },
+    {
+      "name": "lang_id",
+      "value": "بہاسا انڈونیشیا (انڈونیشیائی)"
+    },
+    {
+      "name": "lang_ur",
+      "value": "اردو"
+    },
+    {
+      "name": "lang_tr",
+      "value": "ترکش (ترکی)"
+    },
+    {
+      "name": "lang_bn",
+      "value": "بنگلہ (بنگالی)"
+    }
+  ]
+}

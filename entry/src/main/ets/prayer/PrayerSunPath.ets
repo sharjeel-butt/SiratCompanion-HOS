@@ -1,7 +1,7 @@
 // entry/src/main/ets/components/PrayerSunPath.ets
 
 import { ThemeColors } from '../common/Theme';
-import { L } from '../i8n/LocalizationHelper';
+import { L } from '../i18n/LocalizationHelper';
 import { PrayerModel } from '../prayer/PrayerModel';
 import { PrayerManager } from '../prayer/PrayerManager';
 import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';

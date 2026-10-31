@@ -15,7 +15,7 @@ import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator
 import { SettingsHelper } from '../helper/SettingsHelper';
 import { LocationData, LocationHelper } from '../utils/LocationUtils';
 import { CalculationSource, LocationMode, PickerItem } from '../models/SettingsModels';
-import { AppLanguage, L } from '../i8n/LocalizationHelper';
+import { AppLanguage, L } from '../i18n/LocalizationHelper';
 import { NavHelper } from '../helper/NavHelper';
 import { PrivacyPolicyProvider } from '../data/PrivacyPolicy';
 import { Breakpoints } from '../common/Breakpoints';
@@ -262,10 +262,11 @@ struct WizardPage {
         if (this.notifMasterEnabled) {
           // Enabled State
           Row({ space: 10 }) {
-            Text('✓')
-              .fontSize(20)
-              .fontColor(this.colors.accentGold)
-              .fontWeight(FontWeight.Bold)
+            Image($r('app.media.ic_check'))
+              .width(20)
+              .height(20)
+              .fillColor(this.colors.accentGold)
+              .flexShrink(0)
             Text(this.tr('notifications_master'))
               .fontSize(16)
               .fontWeight(FontWeight.Bold)
@@ -495,10 +496,10 @@ struct WizardPage {
       Row({ space: 12 }) {
         Stack() {
           if (this.privacyAccepted) {
-            Text('✓')
-              .fontSize(14)
-              .fontColor(this.colors.textOnAccent)
-              .fontWeight(FontWeight.Bold)
+            Image($r('app.media.ic_check'))
+              .width(14)
+              .height(14)
+              .fillColor(this.colors.textOnAccent)
           }
         }
         .width(24)
@@ -597,10 +598,10 @@ struct WizardPage {
 
             Stack() {
               if (opt.id === this.selectedTheme) {
-                Text('✓')
-                  .fontSize(14)
-                  .fontColor(this.colors.textOnAccent)
-                  .fontWeight(FontWeight.Bold)
+                Image($r('app.media.ic_check'))
+                  .width(14)
+                  .height(14)
+                  .fillColor(this.colors.textOnAccent)
               }
             }
             .width(24)
@@ -1336,13 +1337,27 @@ struct WizardPage {
     const en: LanguageOption = {
       id: AppLanguage.ENGLISH, nativeName: 'English', englishName: 'English'
     };
+    const id: LanguageOption = {
+      id: AppLanguage.INDONESIAN,
+      nativeName: 'Bahasa Indonesia',
+      englishName: 'Indonesian'
+    };
+    const ur: LanguageOption = {
+      id: AppLanguage.URDU, nativeName: 'اردو', englishName: 'Urdu'
+    };
+    const tr: LanguageOption = {
+      id: AppLanguage.TURKISH, nativeName: 'Türkçe', englishName: 'Turkish'
+    };
+    const bn: LanguageOption = {
+      id: AppLanguage.BENGALI, nativeName: 'বাংলা', englishName: 'Bengali'
+    };
     const zh: LanguageOption = {
       id: AppLanguage.CHINESE, nativeName: '中文', englishName: 'Chinese'
     };
     const ar: LanguageOption = {
       id: AppLanguage.ARABIC, nativeName: 'العربية', englishName: 'Arabic'
     };
-    return [system, en, zh, ar];
+    return [system, en, id, ur, tr, bn, zh, ar];
   }
 
   private pickLanguage(id: string): void {

@@ -25,7 +25,7 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
-import { L } from '../i8n/LocalizationHelper';
+import { L } from '../i18n/LocalizationHelper';
 import { NavHelper } from '../helper/NavHelper';
 
 import { HomePage } from './HomePage';
@@ -383,9 +383,11 @@ struct MainTabs {
   @Builder
   HamburgerButton() {
     Button({ type: ButtonType.Circle, stateEffect: true }) {
-      Text('☰')
-        .fontSize(22)
-        .fontColor(this.colors.textWhite)
+      Image($r('app.media.ic_menu'))
+        .width(22)
+        .height(22)
+        .fillColor(this.colors.textWhite)
+        .objectFit(ImageFit.Contain)
     }
     .width(44)
     .height(44)

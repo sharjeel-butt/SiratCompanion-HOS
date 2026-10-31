@@ -12,7 +12,7 @@ import {
   STORAGE_KEY_TASBIH_STATE_VERSION,
   STORAGE_KEY_THEME_MODE
 } from '../common/StorageKeys';
-import { L } from '../i8n/LocalizationHelper';
+import { L } from '../i18n/LocalizationHelper';
 import { Breakpoints } from '../common/Breakpoints';
 import { Tasbih } from '../tasbih/TasbihModels';
 import { TasbihManager } from '../tasbih/TasbihManager';

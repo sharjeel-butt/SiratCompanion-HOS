@@ -20,7 +20,7 @@ import { TasbihStorage } from '../tasbih/TasbihStorage';
 import { HapticHelper } from '../helper/HapticHelper';
 import { SoundHelper } from '../helper/SoundHelper';
 import { SettingsHelper } from '../helper/SettingsHelper';
-import { L } from '../i8n/LocalizationHelper';
+import { L } from '../i18n/LocalizationHelper';
 import {
   BeadCanvasConfig, BeadRenderStyle, TasbihCanvasRenderer
 } from '../tasbih/TasbihCanvasRenderer';
@@ -171,6 +171,7 @@ export struct TasbihPage {
       const now = TasbihManager.todayKey();
       if (this.currentDateKey !== now) {
         this.currentDateKey = now;
+        this.activePrayerId = '';
         this.reloadTasbihs();
       }
     }, 60000);
@@ -198,6 +199,7 @@ export struct TasbihPage {
           this.activeDhikrIndex = Math.min(this.activeDhikrIndex, t.dhikrs.length - 1);
         }
         this.resolveActiveTheme();
+        this.ensureActivePrayer();
         this.refreshBeadView();
       }
 
@@ -205,6 +207,7 @@ export struct TasbihPage {
       AppStorage.setOrCreate('nav_target_tasbih', '');
     } else {
       this.resolveActiveTheme();
+      this.ensureActivePrayer();
       this.refreshBeadView();
     }
   }
@@ -265,6 +268,7 @@ export struct TasbihPage {
       this.reloadTasbihs();
     } else {
       this.resolveActiveTheme();
+      this.ensureActivePrayer();
       this.refreshBeadView();
     }
   }
@@ -285,6 +289,25 @@ export struct TasbihPage {
     const targetPrayer = pending || t.boundPrayerIds[0];
 
     this.restorePrayerCount(targetPrayer);
+  }
+
+  /**
+   * Ensure `activePrayerId` is populated for the current tasbih.
+   *
+   * Called from every load/re-mount path so a tasbih bound to
+   * prayers starts tracking the first pending prayer automatically,
+   * rather than waiting for the user to tap a pill.
+   *
+   * Guarded: if the user has already selected a prayer, that
+   * selection survives tab switches and foreground events. Only an
+   * empty `activePrayerId` (first mount, new day, tasbih switch)
+   * triggers a fresh resolve.
+   */
+  private ensureActivePrayer(): void {
+    if (this.activePrayerId !== '') {
+      return;
+    }
+    this.resolveActivePrayer();
   }
 
   private selectPrayer(prayer: string): void {
@@ -397,10 +420,13 @@ export struct TasbihPage {
 
                 if (TasbihManager.isTasbihCompleteForPrayer(this.getActiveTasbih()!, prayer,
                   TasbihManager.todayKey())) {
-                  Text('✓')
-                    .fontSize(12)
-                    .fontWeight(FontWeight.Bold)
-                    .fontColor(this.activePrayerId === prayer ? this.colors.textOnAccent : this.colors.accentGold)
+                  Image($r('app.media.ic_check'))
+                    .width(12)
+                    .height(12)
+                    .fillColor(this.activePrayerId === prayer
+                      ? this.colors.textOnAccent
+                      : this.colors.accentGold)
+                    .flexShrink(0)
                 }
               }
               .padding({
@@ -607,9 +633,10 @@ export struct TasbihPage {
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .layoutWeight(1)
-        Text('▼')
-          .fontSize(10)
-          .fontColor(this.colors.accentGold)
+        Image($r('app.media.ic_chevron_down'))
+          .width(10)
+          .height(10)
+          .fillColor(this.colors.accentGold)
           .margin({ left: 6 })
           .opacity(0.7)
           .flexShrink(0)
@@ -2030,16 +2057,23 @@ export struct TasbihPage {
     if (wasActive) {
       this.activeTasbihId = this.tasbihs[0].id;
       this.activeDhikrIndex = 0;
+      this.activePrayerId = '';
     }
     this.resolveActiveTheme();
     this.refreshBeadView();
+    this.ensureActivePrayer();
     this.persist();
   }
 
   private selectTasbih(id: string): void {
+    const switched = this.activeTasbihId !== id;
     this.activeTasbihId = id;
     this.activeDhikrIndex = 0;
+    if (switched) {
+      this.activePrayerId = '';
+    }
     this.resolveActiveTheme();
+    this.ensureActivePrayer();
     this.refreshBeadView();
     this.persist();
     this.activeSheet = 'none';

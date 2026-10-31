@@ -1,0 +1,2840 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "সিরাত কম্প্যানিয়ন এন্ট্রি মডিউল"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "আপনার দৈনন্দিন ইসলামিক সঙ্গী"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "সিরাত কম্প্যানিয়ন"
+    },
+    {
+      "name": "location_permission_reason",
+      "value": "আপনার অবস্থানের জন্য নামাজের সময় ও কিবলার দিক হিসাব করতে ব্যবহৃত হয়"
+    },
+    {
+      "name": "sensor_permission_reason",
+      "value": "কিবলা কম্পাসের জন্য ব্যবহৃত হয়"
+    },
+    {
+      "name": "notification_permission_reason",
+      "value": "আপনাকে নামাজের সময়ের রিমাইন্ডার পাঠাতে"
+    },
+    {
+      "name": "calendar_permission_reason",
+      "value": "আপনার ক্যালেন্ডারে নামাজের সময়ের রিমাইন্ডার যোগ করতে ব্যবহৃত হয়"
+    },
+    {
+      "name": "app_name",
+      "value": "সিরাত কম্প্যানিয়ন"
+    },
+    {
+      "name": "app_tagline",
+      "value": "আপনার দৈনন্দিন ইসলামিক সঙ্গী"
+    },
+    {
+      "name": "more_languages_coming",
+      "value": "আরও ভাষা শীঘ্রই আসছে"
+    },
+    {
+      "name": "tab_home",
+      "value": "হোম"
+    },
+    {
+      "name": "tab_prayers",
+      "value": "নামাজ"
+    },
+    {
+      "name": "tab_calendar",
+      "value": "হিজরি ক্যালেন্ডার"
+    },
+    {
+      "name": "tab_compass",
+      "value": "কিবলা কম্পাস"
+    },
+    {
+      "name": "tab_tasbih",
+      "value": "তাসবিহ"
+    },
+    {
+      "name": "current_prayer",
+      "value": "বর্তমান"
+    },
+    {
+      "name": "next_prayer",
+      "value": "পরবর্তী"
+    },
+    {
+      "name": "todays_prayers",
+      "value": "আজকের নামাজ"
+    },
+    {
+      "name": "extra_timings",
+      "value": "অতিরিক্ত সময়"
+    },
+    {
+      "name": "upcoming_islamic_events",
+      "value": "আসন্ন ইসলামিক ইভেন্ট"
+    },
+    {
+      "name": "loading_location",
+      "value": "লোড হচ্ছে..."
+    },
+    {
+      "name": "set_manual_location",
+      "value": "সেটিংসে ম্যানুয়াল অবস্থান সেট করুন"
+    },
+    {
+      "name": "online_prayer_times",
+      "value": "অনলাইন নামাজের সময়"
+    },
+    {
+      "name": "coming_soon",
+      "value": "শীঘ্রই আসছে"
+    },
+    {
+      "name": "online_switch_hint",
+      "value": "আপনার অবস্থানের নামাজের সময় দেখতে সেটিংসে স্থানীয় সূত্রে ফিরে যান।"
+    },
+    {
+      "name": "cancel",
+      "value": "বাতিল"
+    },
+    {
+      "name": "save",
+      "value": "সংরক্ষণ"
+    },
+    {
+      "name": "reset",
+      "value": "রিসেট"
+    },
+    {
+      "name": "delete",
+      "value": "মুছুন"
+    },
+    {
+      "name": "edit",
+      "value": "সম্পাদনা"
+    },
+    {
+      "name": "add",
+      "value": "যোগ করুন"
+    },
+    {
+      "name": "back",
+      "value": "পিছনে"
+    },
+    {
+      "name": "today",
+      "value": "আজ"
+    },
+    {
+      "name": "exit",
+      "value": "প্রস্থান"
+    },
+    {
+      "name": "ok",
+      "value": "ঠিক আছে"
+    },
+    {
+      "name": "exit_confirm_message",
+      "value": "আপনি কি সিরাত কম্প্যানিয়ন থেকে প্রস্থান করতে চান?"
+    },
+    {
+      "name": "title_settings",
+      "value": "সেটিংস"
+    },
+    {
+      "name": "title_customize",
+      "value": "কাস্টমাইজ"
+    },
+    {
+      "name": "category_location",
+      "value": "অবস্থান"
+    },
+    {
+      "name": "category_prayer_times",
+      "value": "নামাজের সময়"
+    },
+    {
+      "name": "category_hijri_calendar",
+      "value": "হিজরি ক্যালেন্ডার"
+    },
+    {
+      "name": "category_ui_customization",
+      "value": "ইউআই কাস্টমাইজেশন"
+    },
+    {
+      "name": "category_appearance",
+      "value": "চেহারা"
+    },
+    {
+      "name": "category_about",
+      "value": "সম্পর্কে"
+    },
+    {
+      "name": "category_notifications",
+      "value": "বিজ্ঞপ্তি"
+    },
+    {
+      "name": "brand_primary",
+      "value": "সিরাত"
+    },
+    {
+      "name": "brand_accent",
+      "value": "কম্প্যানিয়ন"
+    },
+    {
+      "name": "convention",
+      "value": "পদ্ধতি"
+    },
+    {
+      "name": "convention_desc",
+      "value": "ফজর ও ইশার হিসাবের জন্য ব্যবহৃত"
+    },
+    {
+      "name": "madhab",
+      "value": "মাযহাব"
+    },
+    {
+      "name": "madhab_desc",
+      "value": "হিসাবে ব্যবহৃত আসরের ছায়া নিয়ম"
+    },
+    {
+      "name": "source",
+      "value": "উৎস"
+    },
+    {
+      "name": "source_desc",
+      "value": "স্থানীয় সূত্র বা অনলাইন"
+    },
+    {
+      "name": "prayer_offsets",
+      "value": "নামাজের সময় সমন্বয়"
+    },
+    {
+      "name": "prayer_offsets_desc",
+      "value": "হিসাব করা সময় হাতে সরান"
+    },
+    {
+      "name": "offsets_hint",
+      "value": "মিনিটে সময় সরান (−৬০ থেকে +৬০)"
+    },
+    {
+      "name": "reset_all_offsets",
+      "value": "সব সমন্বয় রিসেট করুন"
+    },
+    {
+      "name": "high_latitude",
+      "value": "উচ্চ অক্ষাংশ"
+    },
+    {
+      "name": "high_latitude_desc",
+      "value": "সূর্য নির্দিষ্ট কোণে না পৌঁছালে ফজর ও ইশার বিকল্প"
+    },
+    {
+      "name": "highlat_none",
+      "value": "কোনোটিই না"
+    },
+    {
+      "name": "highlat_middle",
+      "value": "রাতের মধ্যভাগ"
+    },
+    {
+      "name": "highlat_one_seventh",
+      "value": "রাতের এক-সপ্তমাংশ"
+    },
+    {
+      "name": "highlat_angle",
+      "value": "কোণভিত্তিক"
+    },
+    {
+      "name": "highlat_proportional",
+      "value": "আনুপাতিক ডিপ্রেশন (দিয়ানেত তাকদির)"
+    },
+    {
+      "name": "location",
+      "value": "অবস্থান"
+    },
+    {
+      "name": "location_desc",
+      "value": "অ্যাপ কীভাবে আপনার অবস্থান নির্ধারণ করবে তা বেছে নিন"
+    },
+    {
+      "name": "gps",
+      "value": "জিপিএস"
+    },
+    {
+      "name": "manual_location",
+      "value": "ম্যানুয়াল অবস্থান"
+    },
+    {
+      "name": "current_position",
+      "value": "বর্তমান অবস্থান"
+    },
+    {
+      "name": "latitude",
+      "value": "অক্ষাংশ"
+    },
+    {
+      "name": "longitude",
+      "value": "দ্রাঘিমাংশ"
+    },
+    {
+      "name": "city",
+      "value": "শহর"
+    },
+    {
+      "name": "last_refreshed",
+      "value": "সর্বশেষ রিফ্রেশ"
+    },
+    {
+      "name": "save_coordinates",
+      "value": "স্থানাঙ্ক সংরক্ষণ"
+    },
+    {
+      "name": "latitude_hint",
+      "value": "অক্ষাংশ (−৯০ থেকে ৯০)"
+    },
+    {
+      "name": "longitude_hint",
+      "value": "দ্রাঘিমাংশ (−১৮০ থেকে ১৮০)"
+    },
+    {
+      "name": "city_name_optional",
+      "value": "শহরের নাম (ঐচ্ছিক)"
+    },
+    {
+      "name": "city_name_placeholder",
+      "value": "স্বয়ংক্রিয় সনাক্ত করতে খালি রাখুন"
+    },
+    {
+      "name": "hijri_offset",
+      "value": "হিজরি তারিখ ও ক্যালেন্ডার সমন্বয়"
+    },
+    {
+      "name": "hijri_offset_desc",
+      "value": "ইসলামিক তারিখ ও ক্যালেন্ডার উভয়ই ±৩ দিন সরান"
+    },
+    {
+      "name": "matching_standard",
+      "value": "মানক হিসাবের সাথে মিলছে"
+    },
+    {
+      "name": "offset_days_ahead",
+      "value": "দিন এগিয়ে"
+    },
+    {
+      "name": "offset_days_behind",
+      "value": "দিন পিছিয়ে"
+    },
+    {
+      "name": "about_version",
+      "value": "সংস্করণ"
+    },
+    {
+      "name": "about_platform",
+      "value": "প্ল্যাটফর্ম"
+    },
+    {
+      "name": "about_platform_value",
+      "value": "হারমোনিওএস ৬+"
+    },
+    {
+      "name": "about_build",
+      "value": "বিল্ড"
+    },
+    {
+      "name": "about_bundle",
+      "value": "বান্ডেল আইডি"
+    },
+    {
+      "name": "about_copyright",
+      "value": "© ২০২৬"
+    },
+    {
+      "name": "notifications_master",
+      "value": "বিজ্ঞপ্তি চালু করুন"
+    },
+    {
+      "name": "notifications_master_desc",
+      "value": "নামাজের আগে ও সময়ে রিমাইন্ডার পান"
+    },
+    {
+      "name": "notify_before",
+      "value": "আগে জানান"
+    },
+    {
+      "name": "notify_before_desc",
+      "value": "প্রথম রিমাইন্ডারের জন্য নামাজের কত মিনিট আগে"
+    },
+    {
+      "name": "notify_prayers",
+      "value": "নামাজের রিমাইন্ডার"
+    },
+    {
+      "name": "notify_prayers_desc",
+      "value": "কোন নামাজের রিমাইন্ডার পাঠাবে বেছে নিন"
+    },
+    {
+      "name": "notifications_footer",
+      "value": "রিমাইন্ডার পরবর্তী ৩ দিনের জন্য নির্ধারিত হয় এবং অ্যাপ খুললেই নবায়ন হয়"
+    },
+    {
+      "name": "notifications_footer_calendar",
+      "value": "রিমাইন্ডার পরবর্তী ৩ দিনের জন্য আপনার সিস্টেম ক্যালেন্ডারে যোগ হয় এবং অ্যাপ খুললেই নবায়ন হয়"
+    },
+    {
+      "name": "notification_permission_denied",
+      "value": "রিমাইন্ডার চালু করতে বিজ্ঞপ্তির অনুমতি প্রয়োজন"
+    },
+    {
+      "name": "calendar_permission_denied",
+      "value": "রিমাইন্ডার চালু করতে ক্যালেন্ডারের অনুমতি প্রয়োজন"
+    },
+    {
+      "name": "notif_before_title",
+      "value": "নামাজের রিমাইন্ডার"
+    },
+    {
+      "name": "notif_before_content",
+      "value": "আছে"
+    },
+    {
+      "name": "notif_exact_title",
+      "value": "নামাজের সময়"
+    },
+    {
+      "name": "notif_exact_content",
+      "value": "এখন সময় হয়েছে"
+    },
+    {
+      "name": "notif_minutes_suffix",
+      "value": "মিনিট"
+    },
+    {
+      "name": "notif_test_button",
+      "value": "পরীক্ষামূলক বিজ্ঞপ্তি পাঠান"
+    },
+    {
+      "name": "notif_test_sending",
+      "value": "পরীক্ষামূলক বিজ্ঞপ্তি পাঠানো হচ্ছে..."
+    },
+    {
+      "name": "notif_test_ok",
+      "value": "পরীক্ষামূলক বিজ্ঞপ্তি নির্ধারিত হয়েছে — প্রায় ৫ সেকেন্ডে দেখতে পাবেন"
+    },
+    {
+      "name": "notif_test_ok_calendar",
+      "value": "পরীক্ষামূলক ইভেন্ট আপনার ক্যালেন্ডারে যোগ হয়েছে — ক্যালেন্ডার অ্যাপ দেখুন"
+    },
+    {
+      "name": "notif_test_failed",
+      "value": "পরীক্ষামূলক বিজ্ঞপ্তি ব্যর্থ হয়েছে"
+    },
+    {
+      "name": "notif_dismiss",
+      "value": "খারিজ করুন"
+    },
+    {
+      "name": "notif_pray_fajr",
+      "value": "ফজর পড়ুন"
+    },
+    {
+      "name": "notif_pray_dhuhr",
+      "value": "যোহর পড়ুন"
+    },
+    {
+      "name": "notif_pray_asr",
+      "value": "আসর পড়ুন"
+    },
+    {
+      "name": "notif_pray_maghrib",
+      "value": "মাগরিব পড়ুন"
+    },
+    {
+      "name": "notif_pray_isha",
+      "value": "ইশা পড়ুন"
+    },
+    {
+      "name": "hadith_fajr",
+      "value": "যে ব্যক্তি (জামাতে) ফজরের নামাজ পড়ল, সে আল্লাহর নিরাপত্তায় রয়েছে। — সহিহ মুসলিম ৬৫৭ক"
+    },
+    {
+      "name": "hadith_dhuhr",
+      "value": "এটি এমন একটি সময় যখন আকাশের দরজাগুলো খোলা হয়, এবং আমি ভালোবাসি যে আমার একটি নেক আমল তখন উপরে উঠুক। — জামি আত-তিরমিজি ৪৭৮"
+    },
+    {
+      "name": "hadith_asr",
+      "value": "যে ব্যক্তি (ইচ্ছাকৃতভাবে) আসরের নামাজ ছেড়ে দিল, সে যেন তার পরিবার ও সম্পদ হারাল। — সহিহ আল-বুখারি ৫৫২"
+    },
+    {
+      "name": "hadith_maghrib",
+      "value": "দৈনিক পাঁচ ওয়াক্ত নামাজ... তার মধ্যবর্তী গুনাহের কাফফারা, যতক্ষণ কবিরা গুনাহ এড়িয়ে চলে। — সহিহ মুসলিম ২৩৩"
+    },
+    {
+      "name": "hadith_isha",
+      "value": "যে ব্যক্তি জামাতে ইশার নামাজ আদায় করল, সে যেন মধ্যরাত পর্যন্ত নামাজ পড়ল। — সহিহ মুসলিম ৬৫৬ক"
+    },
+    {
+      "name": "log_view_button",
+      "value": "ডায়াগনস্টিক লগ"
+    },
+    {
+      "name": "log_view_desc",
+      "value": "অ্যাপ লগ ফাইল দেখুন, কপি করুন বা মুছুন"
+    },
+    {
+      "name": "log_view_title",
+      "value": "ডায়াগনস্টিক লগ"
+    },
+    {
+      "name": "log_copy",
+      "value": "কপি"
+    },
+    {
+      "name": "log_clear",
+      "value": "মুছুন"
+    },
+    {
+      "name": "log_empty",
+      "value": "লগ খালি।"
+    },
+    {
+      "name": "log_copied",
+      "value": "লগ ক্লিপবোর্ডে কপি হয়েছে"
+    },
+    {
+      "name": "log_cleared",
+      "value": "লগ মুছে ফেলা হয়েছে"
+    },
+    {
+      "name": "advanced_calc_title",
+      "value": "উন্নত হিসাব"
+    },
+    {
+      "name": "rounding_method",
+      "value": "রাউন্ডিং পদ্ধতি"
+    },
+    {
+      "name": "rounding_method_desc",
+      "value": "প্রদর্শিত সময় কীভাবে রাউন্ড হবে তা নিয়ন্ত্রণ করে"
+    },
+    {
+      "name": "midnight_method",
+      "value": "মধ্যরাত পদ্ধতি"
+    },
+    {
+      "name": "midnight_method_desc",
+      "value": "কোন রাতের সীমা ইসলামিক মধ্যরাত নির্ধারণ করে"
+    },
+    {
+      "name": "polar_resolution",
+      "value": "মেরু সমাধান"
+    },
+    {
+      "name": "polar_resolution_desc",
+      "value": "সূর্য নির্দিষ্ট কোণে না পৌঁছালে বিকল্প"
+    },
+    {
+      "name": "shafaq",
+      "value": "শাফাক"
+    },
+    {
+      "name": "shafaq_desc",
+      "value": "চাঁদ দেখার কমিটি পদ্ধতিতে ইশা নির্ধারণে কোন গোধূলি ব্যবহার হবে তা ঠিক করতে শাফাক ব্যবহৃত হয়।"
+    },
+    {
+      "name": "custom_angles",
+      "value": "কাস্টম কোণ"
+    },
+    {
+      "name": "custom_fajr_angle",
+      "value": "ফজরের কোণ"
+    },
+    {
+      "name": "custom_isha_angle",
+      "value": "ইশার কোণ"
+    },
+    {
+      "name": "custom_isha_interval",
+      "value": "ইশার ব্যবধান (মিনিট)"
+    },
+    {
+      "name": "custom_isha_interval_hint",
+      "value": "০ = কোণ ব্যবহার করুন। >০ = মাগরিবের পরে মিনিট।"
+    },
+    {
+      "name": "rounding_nearest",
+      "value": "নিকটতম"
+    },
+    {
+      "name": "rounding_up",
+      "value": "উপরে"
+    },
+    {
+      "name": "rounding_none",
+      "value": "কোনোটিই না"
+    },
+    {
+      "name": "midnight_standard",
+      "value": "সূর্যাস্ত থেকে সূর্যোদয়"
+    },
+    {
+      "name": "midnight_standard_desc",
+      "value": "ডিফল্ট"
+    },
+    {
+      "name": "midnight_jafari",
+      "value": "সূর্যাস্ত থেকে ফজর"
+    },
+    {
+      "name": "polar_unresolved",
+      "value": "অসমাধান"
+    },
+    {
+      "name": "polar_unresolved_desc",
+      "value": "ডিফল্ট"
+    },
+    {
+      "name": "polar_aqrab_balad",
+      "value": "আকরাব বালাদ"
+    },
+    {
+      "name": "polar_aqrab_yaum",
+      "value": "আকরাব ইয়াওম"
+    },
+    {
+      "name": "shafaq_general",
+      "value": "সাধারণ"
+    },
+    {
+      "name": "shafaq_general_desc",
+      "value": "ডিফল্ট"
+    },
+    {
+      "name": "shafaq_ahmer",
+      "value": "আহমার"
+    },
+    {
+      "name": "shafaq_abyad",
+      "value": "আবয়াদ"
+    },
+    {
+      "name": "show_extra_timings",
+      "value": "অতিরিক্ত সময় দেখান"
+    },
+    {
+      "name": "show_extra_timings_desc",
+      "value": "ইমসাক, সূর্যোদয়, সূর্যাস্ত ও রাতের সময়"
+    },
+    {
+      "name": "show_islamic_events",
+      "value": "ইসলামিক ইভেন্ট দেখান"
+    },
+    {
+      "name": "show_islamic_events_desc",
+      "value": "হোম স্ক্রিনে আসন্ন ইসলামিক ইভেন্ট"
+    },
+    {
+      "name": "dark_mode",
+      "value": "ডার্ক মোড"
+    },
+    {
+      "name": "dark_mode_desc",
+      "value": "অ্যাপ দেখতে কেমন হবে বেছে নিন"
+    },
+    {
+      "name": "theme_light",
+      "value": "হালকা"
+    },
+    {
+      "name": "theme_dark",
+      "value": "গাঢ়"
+    },
+    {
+      "name": "theme_system",
+      "value": "সিস্টেম সেটিংস ব্যবহার করুন"
+    },
+    {
+      "name": "tasbih_render_style",
+      "value": "তাসবিহ থিম"
+    },
+    {
+      "name": "tasbih_render_style_desc",
+      "value": "আপনার জপমালার স্টাইল বেছে নিন"
+    },
+    {
+      "name": "bead_style_premium",
+      "value": "প্রিমিয়াম (3D)"
+    },
+    {
+      "name": "bead_style_classic",
+      "value": "ক্লাসিক"
+    },
+    {
+      "name": "language",
+      "value": "ভাষা"
+    },
+    {
+      "name": "language_desc",
+      "value": "আপনার পছন্দের ভাষা বেছে নিন"
+    },
+    {
+      "name": "lang_en",
+      "value": "ইংরেজি"
+    },
+    {
+      "name": "lang_zh",
+      "value": "চীনা (চাইনিজ)"
+    },
+    {
+      "name": "lang_ar",
+      "value": "আরবি (আরবি)"
+    },
+    {
+      "name": "haptic_feedback",
+      "value": "কম্পন"
+    },
+    {
+      "name": "haptic_feedback_desc",
+      "value": "তাসবিহ গণনার সময় কম্পন করুন"
+    },
+    {
+      "name": "sound_feedback",
+      "value": "শব্দ"
+    },
+    {
+      "name": "sound_feedback_desc",
+      "value": "তাসবিহ গণনার সময় ক্লিক বাজান"
+    },
+    {
+      "name": "sound_style",
+      "value": "শব্দের ধরন"
+    },
+    {
+      "name": "sound_style_desc",
+      "value": "ক্লিক শব্দ বেছে নিন"
+    },
+    {
+      "name": "controlled_by_system",
+      "value": "সিস্টেম সেটিংস দ্বারা নিয়ন্ত্রিত"
+    },
+    {
+      "name": "sound_glass_tap_name",
+      "value": "গ্লাস ট্যাপ"
+    },
+    {
+      "name": "sound_glass_tap_desc",
+      "value": "গ্লাস ট্যাপের শব্দ"
+    },
+    {
+      "name": "sound_light_chime_name",
+      "value": "হালকা চাইম"
+    },
+    {
+      "name": "sound_light_chime_desc",
+      "value": "হালকা চাইমের শব্দ"
+    },
+    {
+      "name": "sound_muted_bead_name",
+      "value": "মিউটেড বিড"
+    },
+    {
+      "name": "sound_muted_bead_desc",
+      "value": "মিউটেড বিডের শব্দ"
+    },
+    {
+      "name": "sound_soft_click_name",
+      "value": "নরম ক্লিক"
+    },
+    {
+      "name": "sound_soft_click_desc",
+      "value": "নরম ক্লিকের শব্দ"
+    },
+    {
+      "name": "sound_warm_knock_name",
+      "value": "উষ্ণ নক"
+    },
+    {
+      "name": "sound_warm_knock_desc",
+      "value": "উষ্ণ নকের শব্দ"
+    },
+    {
+      "name": "title_tasbih",
+      "value": "তাসবিহ"
+    },
+    {
+      "name": "my_tasbihs",
+      "value": "আমার তাসবিহগুলো"
+    },
+    {
+      "name": "select_dhikr",
+      "value": "জিকির নির্বাচন করুন"
+    },
+    {
+      "name": "new_tasbih",
+      "value": "নতুন তাসবিহ"
+    },
+    {
+      "name": "edit_tasbih",
+      "value": "তাসবিহ সম্পাদনা"
+    },
+    {
+      "name": "new_dhikr",
+      "value": "নতুন জিকির"
+    },
+    {
+      "name": "edit_dhikr",
+      "value": "জিকির সম্পাদনা"
+    },
+    {
+      "name": "tasbih_name",
+      "value": "নাম"
+    },
+    {
+      "name": "tasbih_name_placeholder",
+      "value": "যেমন সন্ধ্যার আজকার"
+    },
+    {
+      "name": "dhikr_arabic",
+      "value": "আরবি"
+    },
+    {
+      "name": "dhikr_transliteration",
+      "value": "উচ্চারণ (ঐচ্ছিক)"
+    },
+    {
+      "name": "dhikr_transliteration_placeholder",
+      "value": "যেমন সুবহানাল্লাহ"
+    },
+    {
+      "name": "dhikr_translation",
+      "value": "অনুবাদ (ঐচ্ছিক)"
+    },
+    {
+      "name": "dhikr_translation_placeholder",
+      "value": "যেমন আল্লাহর পবিত্রতা"
+    },
+    {
+      "name": "target_count",
+      "value": "লক্ষ্য সংখ্যা"
+    },
+    {
+      "name": "flick_up_to_count",
+      "value": "গণনার জন্য উপরে ফ্লিক করুন"
+    },
+    {
+      "name": "flick_hint",
+      "value": "উপরে ফ্লিক: +১ · নিচে ফ্লিক: −১"
+    },
+    {
+      "name": "total_on_tasbih",
+      "value": "এই তাসবিহে মোট"
+    },
+    {
+      "name": "dhikr_count_singular",
+      "value": "জিকির"
+    },
+    {
+      "name": "dhikr_count_plural",
+      "value": "জিকিরসমূহ"
+    },
+    {
+      "name": "new_tasbih_button",
+      "value": "+ নতুন তাসবিহ"
+    },
+    {
+      "name": "add_dhikr_button",
+      "value": "+ জিকির যোগ করুন"
+    },
+    {
+      "name": "all_dhikrs_complete",
+      "value": "সব জিকির সম্পন্ন"
+    },
+    {
+      "name": "counter_reset_toast",
+      "value": "কাউন্টার রিসেট"
+    },
+    {
+      "name": "no_dhikr_title",
+      "value": "এই তাসবিহে কোনো জিকির নেই"
+    },
+    {
+      "name": "no_dhikr_hint",
+      "value": "যোগ করতে উপরের জিকির পিলে ট্যাপ করুন"
+    },
+    {
+      "name": "switch_dhikr",
+      "value": "জিকির পরিবর্তন"
+    },
+    {
+      "name": "reset_counter",
+      "value": "কাউন্টার রিসেট"
+    },
+    {
+      "name": "delete_dhikr",
+      "value": "জিকির মুছুন"
+    },
+    {
+      "name": "add_new_dhikr",
+      "value": "নতুন জিকির যোগ করুন"
+    },
+    {
+      "name": "reset_all",
+      "value": "সব রিসেট"
+    },
+    {
+      "name": "reset_all_confirm_title",
+      "value": "তাসবিহ রিসেট"
+    },
+    {
+      "name": "reset_all_confirm_message",
+      "value": "এই তাসবিহের সব জিকির গণনা রিসেট করবেন?"
+    },
+    {
+      "name": "reset_all_done",
+      "value": "তাসবিহ রিসেট হয়েছে"
+    },
+    {
+      "name": "title_qibla",
+      "value": "কিবলা কম্পাস"
+    },
+    {
+      "name": "qibla_direction",
+      "value": "কিবলার দিক"
+    },
+    {
+      "name": "device_heading",
+      "value": "ডিভাইসের দিক"
+    },
+    {
+      "name": "distance_to_kaaba",
+      "value": "কাবার দূরত্ব"
+    },
+    {
+      "name": "compass_ready",
+      "value": "কম্পাস প্রস্তুত। কাবা চিহ্নটি উপরে না আসা পর্যন্ত ডিভাইস ঘোরান।"
+    },
+    {
+      "name": "keep_device_flat",
+      "value": "সঠিক পাঠের জন্য ডিভাইস সমতল রাখুন।"
+    },
+    {
+      "name": "sensor_unavailable",
+      "value": "কম্পাস সেন্সর পাওয়া যায়নি। অনুগ্রহ করে আসল ডিভাইসে পরীক্ষা করুন।"
+    },
+    {
+      "name": "location_unavailable",
+      "value": "অবস্থান পাওয়া যায়নি"
+    },
+    {
+      "name": "qibla_calibrate_title",
+      "value": "কম্পাস ক্যালিব্রেট করুন"
+    },
+    {
+      "name": "qibla_calibrate_desc",
+      "value": "কম্পাসের নির্ভুলতা বাড়াতে ফোনটি ৮ আকৃতিতে ঘোরান।"
+    },
+    {
+      "name": "qibla_calibrate_skip",
+      "value": "এখন এড়িয়ে যান"
+    },
+    {
+      "name": "qibla_calibrate_hint",
+      "value": "ক্যালিব্রেশন নির্ভুলতা বাড়ায়"
+    },
+    {
+      "name": "title_hijri_calendar",
+      "value": "হিজরি ক্যালেন্ডার"
+    },
+    {
+      "name": "important_dates",
+      "value": "গুরুত্বপূর্ণ তারিখ"
+    },
+    {
+      "name": "no_events_this_month",
+      "value": "এই মাসে কোনো বড় ইসলামিক ইভেন্ট নেই"
+    },
+    {
+      "name": "status_next",
+      "value": "পরবর্তী"
+    },
+    {
+      "name": "status_pray",
+      "value": "পড়ুন"
+    },
+    {
+      "name": "status_both",
+      "value": "পড়ুন · পরবর্তী"
+    },
+    {
+      "name": "status_prayed",
+      "value": "✓ পড়া হয়েছে"
+    },
+    {
+      "name": "status_express",
+      "value": "এক্সপ্রেস"
+    },
+    {
+      "name": "prayer_fajr",
+      "value": "ফজর"
+    },
+    {
+      "name": "prayer_dhuhr",
+      "value": "যোহর"
+    },
+    {
+      "name": "prayer_asr",
+      "value": "আসর"
+    },
+    {
+      "name": "prayer_maghrib",
+      "value": "মাগরিব"
+    },
+    {
+      "name": "prayer_isha",
+      "value": "ইশা"
+    },
+    {
+      "name": "prayer_jummah",
+      "value": "জুম্মা"
+    },
+    {
+      "name": "timing_imsak",
+      "value": "ইমসাক"
+    },
+    {
+      "name": "timing_sunrise",
+      "value": "সূর্যোদয়"
+    },
+    {
+      "name": "timing_sunset",
+      "value": "সূর্যাস্ত"
+    },
+    {
+      "name": "timing_first_third",
+      "value": "প্রথম তৃতীয়াংশ"
+    },
+    {
+      "name": "timing_midnight",
+      "value": "মধ্যরাত"
+    },
+    {
+      "name": "timing_last_third",
+      "value": "শেষ তৃতীয়াংশ"
+    },
+    {
+      "name": "event_new_year",
+      "value": "ইসলামিক নববর্ষ"
+    },
+    {
+      "name": "event_ashura",
+      "value": "আশুরা দিবস"
+    },
+    {
+      "name": "event_mawlid",
+      "value": "মাওলিদ আন-নবী"
+    },
+    {
+      "name": "event_isra_miraj",
+      "value": "ইসরা ও মিরাজ"
+    },
+    {
+      "name": "event_mid_shaban",
+      "value": "শাবানের মধ্যরাত"
+    },
+    {
+      "name": "event_ramadan_start",
+      "value": "রমজান"
+    },
+    {
+      "name": "event_eid_fitr",
+      "value": "ঈদুল ফিতর"
+    },
+    {
+      "name": "event_arafah",
+      "value": "আরাফার দিন"
+    },
+    {
+      "name": "event_eid_adha",
+      "value": "ঈদুল আজহা"
+    },
+    {
+      "name": "method_karachi",
+      "value": "ইসলামিক সায়েন্সেস বিশ্ববিদ্যালয়, করাচি"
+    },
+    {
+      "name": "method_jafari",
+      "value": "শিয়া ইসনা আশারি (লেভা ইনস্টিটিউট, কুম)"
+    },
+    {
+      "name": "method_isna",
+      "value": "ইসলামিক সোসাইটি অব নর্থ আমেরিকা"
+    },
+    {
+      "name": "method_mwl",
+      "value": "মুসলিম ওয়ার্ল্ড লিগ"
+    },
+    {
+      "name": "method_umm_al_qura",
+      "value": "উম্ম আল-কুরা (মক্কা)"
+    },
+    {
+      "name": "method_egyptian",
+      "value": "মিসরীয় সার্ভে"
+    },
+    {
+      "name": "method_sunni_iraq",
+      "value": "সুন্নি ওয়াকফ (ইরাক)"
+    },
+    {
+      "name": "method_qatar",
+      "value": "কাতার আওকাফ"
+    },
+    {
+      "name": "method_singapore",
+      "value": "সিঙ্গাপুর (MUIS)"
+    },
+    {
+      "name": "method_france",
+      "value": "ফ্রান্স (UOIF)"
+    },
+    {
+      "name": "method_turkey",
+      "value": "তুরস্ক (দিয়ানেত)"
+    },
+    {
+      "name": "method_russia",
+      "value": "রাশিয়া (SAMR)"
+    },
+    {
+      "name": "method_uae",
+      "value": "সংযুক্ত আরব আমিরাত (GIAE)"
+    },
+    {
+      "name": "method_moonsighting",
+      "value": "মুনসাইটিং কমিটি ওয়ার্ল্ডওয়াইড"
+    },
+    {
+      "name": "method_dubai",
+      "value": "উপসাগরীয় অঞ্চল (দুবাই)"
+    },
+    {
+      "name": "method_kuwait",
+      "value": "কুয়েত"
+    },
+    {
+      "name": "method_france_15",
+      "value": "ফ্রান্স কোণ ১৫"
+    },
+    {
+      "name": "method_france_18",
+      "value": "ফ্রান্স কোণ ১৮"
+    },
+    {
+      "name": "method_turkey_europe",
+      "value": "দিয়ানেত ইশলেরি বাশকানলিগি, ইউরোপ"
+    },
+    {
+      "name": "method_tehran",
+      "value": "শিয়া, ভূ-পদার্থবিজ্ঞান ইনস্টিটিউট, তেহরান বিশ্ববিদ্যালয়, ইরান"
+    },
+    {
+      "name": "method_indonesia",
+      "value": "কেমেন্ত্রিয়ান আগামা রেপুবলিক ইন্দোনেশিয়া (KEMENAG)"
+    },
+    {
+      "name": "method_algeria",
+      "value": "ধর্ম বিষয়ক ও ওয়াকফ মন্ত্রণালয়, আলজেরিয়া"
+    },
+    {
+      "name": "method_brunei",
+      "value": "কেমেন্ত্রিয়ান হাল এহওয়াল উগামা (ব্রুনাই দারুসসালাম)"
+    },
+    {
+      "name": "method_custom",
+      "value": "কাস্টম"
+    },
+    {
+      "name": "method_short_karachi",
+      "value": "করাচি"
+    },
+    {
+      "name": "method_short_jafari",
+      "value": "জাফরি"
+    },
+    {
+      "name": "method_short_isna",
+      "value": "ISNA"
+    },
+    {
+      "name": "method_short_mwl",
+      "value": "MWL"
+    },
+    {
+      "name": "method_short_umm_al_qura",
+      "value": "মক্কা"
+    },
+    {
+      "name": "method_short_egyptian",
+      "value": "মিসরীয়"
+    },
+    {
+      "name": "method_short_sunni_iraq",
+      "value": "ইরাক"
+    },
+    {
+      "name": "method_short_qatar",
+      "value": "কাতার"
+    },
+    {
+      "name": "method_short_singapore",
+      "value": "সিঙ্গাপুর"
+    },
+    {
+      "name": "method_short_france",
+      "value": "ফ্রান্স"
+    },
+    {
+      "name": "method_short_turkey",
+      "value": "তুরস্ক"
+    },
+    {
+      "name": "method_short_russia",
+      "value": "রাশিয়া"
+    },
+    {
+      "name": "method_short_uae",
+      "value": "সংযুক্ত আরব আমিরাত"
+    },
+    {
+      "name": "method_short_moonsighting",
+      "value": "মুনসাইটিং"
+    },
+    {
+      "name": "method_short_dubai",
+      "value": "দুবাই"
+    },
+    {
+      "name": "method_short_kuwait",
+      "value": "কুয়েত"
+    },
+    {
+      "name": "method_short_france_15",
+      "value": "ফ্রান্স ১৫°"
+    },
+    {
+      "name": "method_short_france_18",
+      "value": "ফ্রান্স ১৮°"
+    },
+    {
+      "name": "method_short_turkey_europe",
+      "value": "তুরস্ক ইইউ"
+    },
+    {
+      "name": "method_short_tehran",
+      "value": "তেহরান"
+    },
+    {
+      "name": "method_short_indonesia",
+      "value": "KEMENAG"
+    },
+    {
+      "name": "method_short_algeria",
+      "value": "আলজেরিয়া"
+    },
+    {
+      "name": "method_short_brunei",
+      "value": "ব্রুনাই"
+    },
+    {
+      "name": "method_short_custom",
+      "value": "কাস্টম"
+    },
+    {
+      "name": "asr_standard",
+      "value": "মানক (শাফিঈ / মালিকি / হাম্বলি)"
+    },
+    {
+      "name": "asr_hanafi",
+      "value": "হানাফি"
+    },
+    {
+      "name": "asr_short_standard",
+      "value": "মানক"
+    },
+    {
+      "name": "asr_short_hanafi",
+      "value": "হানাফি"
+    },
+    {
+      "name": "source_local",
+      "value": "স্থানীয় সূত্র (অফলাইন)"
+    },
+    {
+      "name": "source_api",
+      "value": "API (অনলাইন)"
+    },
+    {
+      "name": "source_short_local",
+      "value": "স্থানীয়"
+    },
+    {
+      "name": "source_short_online",
+      "value": "অনলাইন"
+    },
+    {
+      "name": "theme_preset",
+      "value": "অ্যাপ থিম"
+    },
+    {
+      "name": "theme_preset_desc",
+      "value": "অ্যাপের ভিজ্যুয়াল স্টাইল বেছে নিন"
+    },
+    {
+      "name": "theme_preset_sirat",
+      "value": "সিরাত"
+    },
+    {
+      "name": "theme_preset_sirat_desc",
+      "value": "আধুনিক ও মিনিমাল — হারমোনিওএস ৭ নান্দনিকতা"
+    },
+    {
+      "name": "theme_preset_current",
+      "value": "সিরাত ক্লাসিক"
+    },
+    {
+      "name": "theme_preset_current_desc",
+      "value": "উষ্ণ ক্রিম ও গভীর সবুজ — মূল রূপ"
+    },
+    {
+      "name": "theme_preset_harmony7",
+      "value": "নূর"
+    },
+    {
+      "name": "theme_preset_harmony7_desc",
+      "value": "দীপ্তিময় বেগুনি — শান্ত ও আধুনিক"
+    },
+    {
+      "name": "theme_preset_harmony6",
+      "value": "সাহার"
+    },
+    {
+      "name": "theme_preset_harmony6_desc",
+      "value": "সোনালি অ্যাম্বার — প্রথম আলোর প্রশান্তি"
+    },
+    {
+      "name": "theme_preset_harmony5",
+      "value": "বাহার"
+    },
+    {
+      "name": "theme_preset_harmony5_desc",
+      "value": "শীতল টিল — বিশাল, সতেজ ও পরিষ্কার"
+    },
+    {
+      "name": "theme_amber",
+      "value": "অ্যাম্বার"
+    },
+    {
+      "name": "theme_charcoal",
+      "value": "চারকোল"
+    },
+    {
+      "name": "theme_emerald",
+      "value": "এমারেল্ড"
+    },
+    {
+      "name": "theme_pearl",
+      "value": "পার্ল"
+    },
+    {
+      "name": "theme_gold",
+      "value": "সোনালি (ধাতব)"
+    },
+    {
+      "name": "theme_white",
+      "value": "সাদা"
+    },
+    {
+      "name": "theme_sapphire",
+      "value": "স্যাফায়ার"
+    },
+    {
+      "name": "theme_rose",
+      "value": "রোজ"
+    },
+    {
+      "name": "theme_silver",
+      "value": "রূপালি"
+    },
+    {
+      "name": "wizard_step",
+      "value": "ধাপ"
+    },
+    {
+      "name": "wizard_welcome_title",
+      "value": "সিরাত কম্প্যানিয়নে স্বাগতম"
+    },
+    {
+      "name": "wizard_welcome_desc",
+      "value": "চলুন আপনার পছন্দগুলো সেট করি। আপনি যেকোনো সময় সেটিংসে পরিবর্তন করতে পারেন।"
+    },
+    {
+      "name": "wizard_language_title",
+      "value": "আপনার ভাষা বেছে নিন"
+    },
+    {
+      "name": "wizard_language_desc",
+      "value": "অ্যাপটি সব স্ক্রিনে এই ভাষা ব্যবহার করবে"
+    },
+    {
+      "name": "wizard_privacy_title",
+      "value": "গোপনীয়তা নীতি"
+    },
+    {
+      "name": "wizard_privacy_desc",
+      "value": "চালিয়ে যাওয়ার আগে অনুগ্রহ করে পড়ুন ও সম্মতি দিন"
+    },
+    {
+      "name": "privacy_agree_label",
+      "value": "আমি গোপনীয়তা নীতি পড়েছি এবং সম্মত আছি"
+    },
+    {
+      "name": "privacy_view_full",
+      "value": "অনলাইনে সম্পূর্ণ গোপনীয়তা নীতি দেখুন"
+    },
+    {
+      "name": "wizard_theme_title",
+      "value": "আপনার থিম বেছে নিন"
+    },
+    {
+      "name": "wizard_theme_desc",
+      "value": "একটি ভিজ্যুয়াল স্টাইল বেছে নিন। আপনি যেকোনো সময় সেটিংসে পরিবর্তন করতে পারেন।"
+    },
+    {
+      "name": "wizard_location_title",
+      "value": "আপনার অবস্থান সেট করুন"
+    },
+    {
+      "name": "wizard_location_desc",
+      "value": "নামাজের সময় ও কিবলার দিকের জন্য ব্যবহৃত হয়"
+    },
+    {
+      "name": "wizard_convention_title",
+      "value": "হিসাবের পছন্দ"
+    },
+    {
+      "name": "wizard_convention_desc",
+      "value": "নামাজের সময় কীভাবে হিসাব হবে তা বেছে নিন"
+    },
+    {
+      "name": "wizard_grant_permission",
+      "value": "অবস্থানের অনুমতি দিন"
+    },
+    {
+      "name": "wizard_getting_location",
+      "value": "আপনার অবস্থান সনাক্ত করা হচ্ছে..."
+    },
+    {
+      "name": "wizard_location_ready",
+      "value": "অবস্থান সনাক্ত হয়েছে"
+    },
+    {
+      "name": "wizard_location_failed",
+      "value": "অবস্থান পাওয়া যায়নি"
+    },
+    {
+      "name": "wizard_retry",
+      "value": "আবার চেষ্টা করুন"
+    },
+    {
+      "name": "wizard_next",
+      "value": "পরবর্তী"
+    },
+    {
+      "name": "wizard_finish",
+      "value": "শুরু করুন"
+    },
+    {
+      "name": "home_today_progress",
+      "value": "দৈনিক নামাজ"
+    },
+    {
+      "name": "home_prayers_completed",
+      "value": "নামাজ সম্পন্ন"
+    },
+    {
+      "name": "home_keep_going",
+      "value": "চালিয়ে যান!"
+    },
+    {
+      "name": "home_streak",
+      "value": "দিনের ধারা"
+    },
+    {
+      "name": "home_best_streak",
+      "value": "সেরা"
+    },
+    {
+      "name": "home_days",
+      "value": "দিন"
+    },
+    {
+      "name": "home_this_week",
+      "value": "এই সপ্তাহ"
+    },
+    {
+      "name": "home_week_summary",
+      "value": "এই সপ্তাহের নামাজ"
+    },
+    {
+      "name": "home_this_month",
+      "value": "এই মাস"
+    },
+    {
+      "name": "home_month_summary",
+      "value": "এই মাসের নামাজ"
+    },
+    {
+      "name": "home_tasbih",
+      "value": "দৈনিক তাসবিহ"
+    },
+    {
+      "name": "home_tasbih_lifetime",
+      "value": "আজীবন গণনা"
+    },
+    {
+      "name": "home_tasbih_summary",
+      "value": "তাসবিহ"
+    },
+    {
+      "name": "home_dhikrs",
+      "value": "জিকির"
+    },
+    {
+      "name": "home_monthly_view",
+      "value": "মাসিক ভিউ"
+    },
+    {
+      "name": "home_perfect_days",
+      "value": "নিখুঁত দিন"
+    },
+    {
+      "name": "home_days_elapsed",
+      "value": "অতিবাহিত দিন"
+    },
+    {
+      "name": "home_lifetime_1y",
+      "value": "গত বছরের নামাজ"
+    },
+    {
+      "name": "home_next_event",
+      "value": "পরবর্তী ইভেন্ট"
+    },
+    {
+      "name": "home_event_today",
+      "value": "আজ!"
+    },
+    {
+      "name": "home_event_tomorrow",
+      "value": "আগামীকাল"
+    },
+    {
+      "name": "ramadan_card_title",
+      "value": "রমজান"
+    },
+    {
+      "name": "ramadan_day_of",
+      "value": "দিন"
+    },
+    {
+      "name": "ramadan_day_of_suffix",
+      "value": "রমজানের"
+    },
+    {
+      "name": "ramadan_days_until",
+      "value": "রমজান শুরু হতে"
+    },
+    {
+      "name": "ramadan_fast_start",
+      "value": "রোজা শুরু (ইমসাক)"
+    },
+    {
+      "name": "ramadan_fast_end",
+      "value": "রোজা শেষ (মাগরিব)"
+    },
+    {
+      "name": "ramadan_today_fast",
+      "value": "আজকের রোজার সময়"
+    },
+    {
+      "name": "ramadan_first_day_fast",
+      "value": "রমজানের প্রথম দিন"
+    },
+    {
+      "name": "ramadan_calendar_start",
+      "value": "রমজান শুরু"
+    },
+    {
+      "name": "ramadan_calendar_end",
+      "value": "রমজান শেষ"
+    },
+    {
+      "name": "ramadan_ashras",
+      "value": "আশরা"
+    },
+    {
+      "name": "ramadan_first_ashra",
+      "value": "প্রথম আশরা"
+    },
+    {
+      "name": "ramadan_second_ashra",
+      "value": "দ্বিতীয় আশরা"
+    },
+    {
+      "name": "ramadan_third_ashra",
+      "value": "তৃতীয় আশরা"
+    },
+    {
+      "name": "ramadan_first_ashra_significance",
+      "value": "রহমতের দিন"
+    },
+    {
+      "name": "ramadan_second_ashra_significance",
+      "value": "ক্ষমার দিন"
+    },
+    {
+      "name": "ramadan_third_ashra_significance",
+      "value": "জাহান্নাম থেকে মুক্তি"
+    },
+    {
+      "name": "ramadan_laylat_al_qadr",
+      "value": "লাইলাতুল কদর"
+    },
+    {
+      "name": "ramadan_laylat_al_qadr_desc",
+      "value": "কদরের রাত — হাজার মাসের চেয়ে উত্তম। শেষ দশ দিনের বিজোড় রাতগুলোতে এটি খোঁজ করুন।"
+    },
+    {
+      "name": "ramadan_jummah_tul_widah",
+      "value": "জুম্মাতুল বিদা"
+    },
+    {
+      "name": "ramadan_jummah_tul_widah_desc",
+      "value": "বিদায়ী জুম্মা — রমজানের শেষ জুম্মা।"
+    },
+    {
+      "name": "ramadan_today",
+      "value": "আজ রাতেই!"
+    },
+    {
+      "name": "countdown_fast_ends",
+      "value": "ইফতার হতে"
+    },
+    {
+      "name": "countdown_fast_starts",
+      "value": "রোজা শুরু হতে"
+    },
+    {
+      "name": "countdown_fast_ends_desc",
+      "value": "ইফতারের প্রস্তুতি নিন"
+    },
+    {
+      "name": "countdown_fast_starts_desc",
+      "value": "ইমসাকের আগে সাহরি শেষ করুন"
+    },
+    {
+      "name": "dua_iftar_name",
+      "value": "ইফতারের দোয়া"
+    },
+    {
+      "name": "dua_iftar_translation",
+      "value": "পিপাসা দূর হয়েছে, শিরাগুলো সিক্ত হয়েছে, এবং আল্লাহ চাইলে প্রতিদান নিশ্চিত।"
+    },
+    {
+      "name": "dua_suhoor_name",
+      "value": "রোজার নিয়ত"
+    },
+    {
+      "name": "dua_suhoor_translation",
+      "value": "আমি রমজান মাসে আগামীকালের রোজা রাখার নিয়ত করলাম।"
+    },
+    {
+      "name": "sun_path_we_are_here",
+      "value": "আমরা এখানে"
+    },
+    {
+      "name": "mark_all",
+      "value": "সব পড়া হয়েছে চিহ্নিত করুন"
+    },
+    {
+      "name": "default_location",
+      "value": "ডিফল্ট অবস্থান"
+    },
+    {
+      "name": "unknown_location",
+      "value": "অজানা অবস্থান"
+    },
+    {
+      "name": "dialog_gps_off_title",
+      "value": "অবস্থান বন্ধ আছে"
+    },
+    {
+      "name": "dialog_gps_off_message",
+      "value": "আপনার শহরের সঠিক নামাজের সময় পেতে অনুগ্রহ করে অবস্থান সেবা চালু করুন।"
+    },
+    {
+      "name": "dialog_permission_title",
+      "value": "অনুমতি প্রয়োজন"
+    },
+    {
+      "name": "dialog_permission_message",
+      "value": "আপনার শহরের নামাজের সময় দেখাতে অবস্থানের অনুমতি প্রয়োজন।\nঅনুগ্রহ করে সিস্টেম সেটিংসে এটি দিন।"
+    },
+    {
+      "name": "error_gps_fetch_failed",
+      "value": "জিপিএস অবস্থান আনতে ব্যর্থ"
+    },
+    {
+      "name": "error_gps_off",
+      "value": "অনুগ্রহ করে অবস্থান সেবা চালু করুন"
+    },
+    {
+      "name": "error_location_permission_denied",
+      "value": "অবস্থানের অনুমতি denied"
+    },
+    {
+      "name": "time_format",
+      "value": "সময়ের বিন্যাস"
+    },
+    {
+      "name": "time_format_desc",
+      "value": "নামাজের সময় কীভাবে দেখানো হবে"
+    },
+    {
+      "name": "time_format_system",
+      "value": "সিস্টেম সেটিংস ব্যবহার করুন"
+    },
+    {
+      "name": "time_format_system_desc",
+      "value": "ডিভাইসের পছন্দ অনুসরণ করুন"
+    },
+    {
+      "name": "time_format_12h",
+      "value": "১২-ঘণ্টা (AM/PM)"
+    },
+    {
+      "name": "time_format_24h",
+      "value": "২৪-ঘণ্টা"
+    },
+    {
+      "name": "hijri_calendar_type",
+      "value": "ক্যালেন্ডারের ধরন"
+    },
+    {
+      "name": "hijri_calendar_type_desc",
+      "value": "রূপান্তরের জন্য কোন হিজরি ক্যালেন্ডার ব্যবহার হবে"
+    },
+    {
+      "name": "hijri_calendar_umm_al_qura",
+      "value": "উম্ম আল-কুরা"
+    },
+    {
+      "name": "hijri_calendar_umm_al_qura_desc",
+      "value": "সৌদি আরবের সরকারি ক্যালেন্ডার (১৩১৮–১৫০০ হিজরি)"
+    },
+    {
+      "name": "hijri_calendar_tabular",
+      "value": "ট্যাবুলার (গাণিতিক)"
+    },
+    {
+      "name": "hijri_calendar_tabular_desc",
+      "value": "কুয়েতি অ্যালগরিদম — সব বছরের জন্য নির্ধারিত"
+    },
+    {
+      "name": "subsection_home_ui",
+      "value": "হোম পেজ ইউআই"
+    },
+    {
+      "name": "subsection_prayer_ui",
+      "value": "নামাজ ইউআই"
+    },
+    {
+      "name": "subsection_feedback",
+      "value": "শব্দ ও ফিডব্যাক"
+    },
+    {
+      "name": "subsection_language",
+      "value": "ভাষা"
+    },
+    {
+      "name": "event_raghaib",
+      "value": "লাইলাতুল রাগাইব"
+    },
+    {
+      "name": "countdown_fast_ends_now",
+      "value": "ইফতারের সময় হয়েছে"
+    },
+    {
+      "name": "countdown_fast_starts_now",
+      "value": "রোজা শুরু করার সময় হয়েছে"
+    },
+    {
+      "name": "shafaq_method_unavailable",
+      "value": "শুধুমাত্র মুনসাইটিং কমিটির সাথে উপলব্ধ"
+    },
+    {
+      "name": "event_perspective",
+      "value": "ইভেন্ট ঐতিহ্য"
+    },
+    {
+      "name": "event_perspective_desc",
+      "value": "হোমে সব মুসলিমের সাধারণ ইভেন্ট দেখাবে, নাকি সুন্নি ও শিয়া ঐতিহ্যের নির্দিষ্ট ইভেন্টও দেখাবে তা বেছে নিন।"
+    },
+    {
+      "name": "event_perspective_universal",
+      "value": "শুধু সার্বজনীন"
+    },
+    {
+      "name": "event_perspective_sunni",
+      "value": "সুন্নি + সার্বজনীন"
+    },
+    {
+      "name": "event_perspective_shia",
+      "value": "শিয়া + সার্বজনীন"
+    },
+    {
+      "name": "event_perspective_all",
+      "value": "সব দেখান"
+    },
+    {
+      "name": "event_arbaeen",
+      "value": "আরবাইন"
+    },
+    {
+      "name": "event_imam_ali_birthday",
+      "value": "ইমাম আলীর জন্মদিন"
+    },
+    {
+      "name": "event_ghadir",
+      "value": "ঈদ আল-গাদির"
+    },
+    {
+      "name": "event_new_year_desc",
+      "value": "হিজরি বছরের শুরু, নবীজির মদিনায় হিজরতের স্মারক।"
+    },
+    {
+      "name": "event_ashura_desc",
+      "value": "সারা মুসলিম বিশ্বে পালিত রোজা ও চিন্তার দিন।"
+    },
+    {
+      "name": "event_arbaeen_desc",
+      "value": "আশুরার চল্লিশ দিন পর — শিয়া ঐতিহ্যে শোকের সময়।"
+    },
+    {
+      "name": "event_mawlid_desc",
+      "value": "নবী মুহাম্মদ ﷺ-এর জন্ম।"
+    },
+    {
+      "name": "event_raghaib_desc",
+      "value": "রজবের প্রথম বৃহস্পতিবার রাত — সুন্নি ঐতিহ্যে ইবাদতের রাত।"
+    },
+    {
+      "name": "event_imam_ali_birthday_desc",
+      "value": "ইমাম আলী ইবনে আবি তালিবের জন্ম, শিয়া ঐতিহ্যে পালিত।"
+    },
+    {
+      "name": "event_isra_miraj_desc",
+      "value": "নবীজির জেরুজালেমে রাত্রিভ্রমণ ও আকাশে আরোহণ।"
+    },
+    {
+      "name": "event_mid_shaban_desc",
+      "value": "শাবানের পঞ্চদশ রাত — ইবাদত ও ক্ষমা প্রার্থনার রাত।"
+    },
+    {
+      "name": "event_ramadan_start_desc",
+      "value": "রোজার মাসের শুরু, হিজরি বছরের নবম মাস।"
+    },
+    {
+      "name": "event_eid_fitr_desc",
+      "value": "রমজান শেষের উৎসব।"
+    },
+    {
+      "name": "event_arafah_desc",
+      "value": "আরাফায় অবস্থানের দিন, হজের সবচেয়ে পবিত্র দিন।"
+    },
+    {
+      "name": "event_eid_adha_desc",
+      "value": "কুরবানির উৎসব, নবী ইব্রাহিমের নিষ্ঠার স্মারক।"
+    },
+    {
+      "name": "event_ghadir_desc",
+      "value": "শিয়া ঐতিহ্যে নবীজি ইমাম আলীকে উত্তরসূরি নিয়োগের দিন।"
+    },
+    {
+      "name": "show_extra_timings_list",
+      "value": "রাতের সময় দেখান"
+    },
+    {
+      "name": "show_extra_timings_list_desc",
+      "value": "ইমসাক ও রাতের বিভাজন। সূর্যোদয় ও সূর্যাস্ত সবসময় দেখানো হয়।"
+    },
+    {
+      "name": "show_extra_timings_sunpath",
+      "value": "সূর্য পথের নির্দেশিকা দেখান"
+    },
+    {
+      "name": "show_extra_timings_sunpath_desc",
+      "value": "সূর্য পথে প্রথম তৃতীয়াংশ, মধ্যরাত ও শেষ তৃতীয়াংশ নির্দেশিকা"
+    },
+    {
+      "name": "show_imsak",
+      "value": "ইমসাক"
+    },
+    {
+      "name": "show_imsak_desc",
+      "value": "ফজরের দশ মিনিট আগে ভোরের পূর্বসীমা"
+    },
+    {
+      "name": "show_first_third",
+      "value": "প্রথম তৃতীয়াংশ"
+    },
+    {
+      "name": "show_first_third_desc",
+      "value": "মাগরিবের পরে রাতের প্রথম তৃতীয়াংশের শুরু"
+    },
+    {
+      "name": "show_midnight",
+      "value": "মধ্যরাত"
+    },
+    {
+      "name": "show_midnight_desc",
+      "value": "ইসলামিক মধ্যরাত — রাতের অর্ধেক"
+    },
+    {
+      "name": "show_last_third",
+      "value": "শেষ তৃতীয়াংশ"
+    },
+    {
+      "name": "show_last_third_desc",
+      "value": "রাতের শেষ তৃতীয়াংশের শুরু, কিয়ামের সময়"
+    },
+    {
+      "name": "subsection_prayer_list",
+      "value": "নামাজের তালিকায় দেখান"
+    },
+    {
+      "name": "subsection_sun_path",
+      "value": "সূর্য পথে দেখান"
+    },
+    {
+      "name": "title_prayer_details",
+      "value": "নামাজের বিবরণ"
+    },
+    {
+      "name": "title_tasbih_details",
+      "value": "তাসবিহের বিবরণ"
+    },
+    {
+      "name": "details_view",
+      "value": "বিস্তারিত দেখুন"
+    },
+    {
+      "name": "details_period_week",
+      "value": "সপ্তাহ"
+    },
+    {
+      "name": "details_period_month",
+      "value": "মাস"
+    },
+    {
+      "name": "details_period_year",
+      "value": "বছর"
+    },
+    {
+      "name": "details_prayers_completed",
+      "value": "নামাজ সম্পন্ন"
+    },
+    {
+      "name": "details_per_prayer",
+      "value": "প্রতি নামাজের বিভাজন"
+    },
+    {
+      "name": "details_per_tasbih",
+      "value": "প্রতি তাসবিহের বিভাজন"
+    },
+    {
+      "name": "details_this_month",
+      "value": "এই মাস"
+    },
+    {
+      "name": "details_perfect_days",
+      "value": "নিখুঁত দিন"
+    },
+    {
+      "name": "details_best_streak",
+      "value": "সেরা"
+    },
+    {
+      "name": "details_days_of",
+      "value": "এর"
+    },
+    {
+      "name": "details_tasbih_summary_lifetime",
+      "value": "আজীবন গণনা"
+    },
+    {
+      "name": "details_tasbih_summary_tasbihs",
+      "value": "তাসবিহ"
+    },
+    {
+      "name": "details_tasbih_summary_dhikrs",
+      "value": "জিকির সম্পন্ন"
+    },
+    {
+      "name": "export_pdf",
+      "value": "PDF-এ রপ্তানি"
+    },
+    {
+      "name": "export_prayers_title",
+      "value": "নামাজের সময়সূচি"
+    },
+    {
+      "name": "export_calendar_title",
+      "value": "হিজরি ক্যালেন্ডার"
+    },
+    {
+      "name": "export_ramadan_title",
+      "value": "রমজানের সময়সূচি"
+    },
+    {
+      "name": "export_print",
+      "value": "প্রিন্ট"
+    },
+    {
+      "name": "export_saving",
+      "value": "PDF তৈরি হচ্ছে..."
+    },
+    {
+      "name": "export_success",
+      "value": "PDF সফলভাবে তৈরি হয়েছে"
+    },
+    {
+      "name": "export_failed",
+      "value": "PDF তৈরি করতে ব্যর্থ"
+    },
+    {
+      "name": "export_sahur",
+      "value": "সাহরি"
+    },
+    {
+      "name": "export_iftar",
+      "value": "ইফতার"
+    },
+    {
+      "name": "export_ramadan_timetable",
+      "value": "রমজানের সময়সূচি"
+    },
+    {
+      "name": "auto_show_ramadan_view",
+      "value": "স্বয়ংক্রিয় রমজান ভিউ দেখান"
+    },
+    {
+      "name": "auto_show_ramadan_view_desc",
+      "value": "৬০ দিন বাকি থাকা পর্যন্ত লুকান। সবসময় কার্ড দেখাতে বন্ধ করুন।"
+    },
+    {
+      "name": "export_date",
+      "value": "তারিখ"
+    },
+    {
+      "name": "hijri_year_suffix",
+      "value": "হিজরি"
+    },
+    {
+      "name": "generated_by",
+      "value": "সিরাত কম্প্যানিয়ন দ্বারা তৈরি"
+    },
+    {
+      "name": "calendar_read_permission_denied",
+      "value": "পুরনো রিমাইন্ডার পরিষ্কার করতে ক্যালেন্ডার পড়ার অনুমতি প্রয়োজন।"
+    },
+    {
+      "name": "calendar_write_permission_denied",
+      "value": "নতুন রিমাইন্ডার সংরক্ষণ করতে ক্যালেন্ডার লেখার অনুমতি প্রয়োজন।"
+    },
+    {
+      "name": "next_3_days",
+      "value": "পরবর্তী ৩ দিন"
+    },
+    {
+      "name": "about_developer",
+      "value": "ডেভেলপার"
+    },
+    {
+      "name": "wizard_use_default_location",
+      "value": "ডিফল্ট অবস্থান ব্যবহার করুন"
+    },
+    {
+      "name": "wizard_location_required_hint",
+      "value": "চালিয়ে যেতে একটি অবস্থান সেট করুন"
+    },
+    {
+      "name": "subsection_language_and_time",
+      "value": "ভাষা ও সময়ের বিন্যাস"
+    },
+    {
+      "name": "madhab_desc_diyanet",
+      "value": "দিয়ানেত ক্যালেন্ডার মানক আসর নিয়ম ব্যবহার করে"
+    },
+    {
+      "name": "category_backup_restore",
+      "value": "ব্যাকআপ ও পুনরুদ্ধার"
+    },
+    {
+      "name": "backup_to_file",
+      "value": "ফাইলে ব্যাকআপ"
+    },
+    {
+      "name": "backup_to_file_desc",
+      "value": "আপনার সব সেটিংস, নামাজের অগ্রগতি ও তাসবিহ ডেটা এমন ফাইলে সংরক্ষণ করুন যা আপনি রাখতে পারেন।"
+    },
+    {
+      "name": "restore_from_file",
+      "value": "ফাইল থেকে পুনরুদ্ধার"
+    },
+    {
+      "name": "restore_from_file_desc",
+      "value": "আগে সংরক্ষিত ব্যাকআপ লোড করুন এবং বর্তমান সব ডেটা প্রতিস্থাপন করুন।"
+    },
+    {
+      "name": "backup_footer",
+      "value": "ব্যাকআপে আপনার ডায়াগনস্টিক লগ বা কোনো ডিভাইস-নির্দিষ্ট শনাক্তকারী অন্তর্ভুক্ত নয়।"
+    },
+    {
+      "name": "backup_success",
+      "value": "ব্যাকআপ সংরক্ষিত হয়েছে"
+    },
+    {
+      "name": "backup_failed",
+      "value": "ব্যাকআপ ব্যর্থ হয়েছে"
+    },
+    {
+      "name": "restore_confirm_title",
+      "value": "ব্যাকআপ পুনরুদ্ধার করবেন?"
+    },
+    {
+      "name": "restore_confirm_message",
+      "value": "এটি বর্তমান সব সেটিংস, নামাজের অগ্রগতি ও তাসবিহ ডেটা ব্যাকআপ ফাইলের বিষয়বস্তু দিয়ে প্রতিস্থাপন করবে। এটি ফিরিয়ে আনা যাবে না।"
+    },
+    {
+      "name": "restore_success",
+      "value": "ব্যাকআপ পুনরুদ্ধার হয়েছে। অ্যাপটি এখন রিফ্রেশ হবে।"
+    },
+    {
+      "name": "restore_failed",
+      "value": "পুনরুদ্ধার ব্যর্থ হয়েছে"
+    },
+    {
+      "name": "home_days_singular",
+      "value": "দিন"
+    },
+    {
+      "name": "home_days_dual",
+      "value": "দুই দিন"
+    },
+    {
+      "name": "dhikr_count_dual",
+      "value": "দুই জিকির"
+    },
+    {
+      "name": "title_ramadan_details",
+      "value": "রমজান ট্র্যাকার"
+    },
+    {
+      "name": "track_ramadan",
+      "value": "ট্র্যাক"
+    },
+    {
+      "name": "section_fasting",
+      "value": "রোজা"
+    },
+    {
+      "name": "fasting_status_fasted",
+      "value": "রোজা রাখা হয়েছে"
+    },
+    {
+      "name": "fasting_status_missed",
+      "value": "ছুটে গেছে"
+    },
+    {
+      "name": "fasting_status_unmarked",
+      "value": "চিহ্নিত নয়"
+    },
+    {
+      "name": "fasting_summary_fasted",
+      "value": "রোজা রাখা"
+    },
+    {
+      "name": "fasting_summary_missed",
+      "value": "ছুটে যাওয়া"
+    },
+    {
+      "name": "fasting_summary_unmarked",
+      "value": "চিহ্নিত নয়"
+    },
+    {
+      "name": "fasting_mark_title",
+      "value": "রোজা চিহ্নিত করুন"
+    },
+    {
+      "name": "fasting_day_label",
+      "value": "দিন"
+    },
+    {
+      "name": "fasting_clear",
+      "value": "চিহ্ন মুছুন"
+    },
+    {
+      "name": "fasting_reason_title",
+      "value": "ছুটে যাওয়ার কারণ"
+    },
+    {
+      "name": "fasting_reason_travel",
+      "value": "ভ্রমণ"
+    },
+    {
+      "name": "fasting_reason_illness",
+      "value": "অসুস্থতা"
+    },
+    {
+      "name": "fasting_reason_menstruation",
+      "value": "মাসিক"
+    },
+    {
+      "name": "fasting_reason_pregnancy_nursing",
+      "value": "গর্ভাবস্থা / দুগ্ধদান"
+    },
+    {
+      "name": "fasting_reason_forgetfulness",
+      "value": "ভুলে যাওয়া"
+    },
+    {
+      "name": "fasting_reason_other",
+      "value": "অন্যান্য"
+    },
+    {
+      "name": "fasting_reason_custom_label",
+      "value": "অনুগ্রহ করে উল্লেখ করুন"
+    },
+    {
+      "name": "fasting_reason_custom_placeholder",
+      "value": "আপনার কারণ"
+    },
+    {
+      "name": "ramadan_not_active",
+      "value": "আপনার রোজা ট্র্যাক করতে রমজানে এই পৃষ্ঠাটি খুলুন।"
+    },
+    {
+      "name": "section_qada",
+      "value": "কাযা (পূরণ)"
+    },
+    {
+      "name": "qada_remaining",
+      "value": "বাকি"
+    },
+    {
+      "name": "qada_total_missed",
+      "value": "মোট ছুটে যাওয়া"
+    },
+    {
+      "name": "qada_total_made_up",
+      "value": "মোট পূরণ"
+    },
+    {
+      "name": "qada_per_year",
+      "value": "বছর অনুযায়ী"
+    },
+    {
+      "name": "qada_log_button",
+      "value": "কাযা রোজা লগ করুন"
+    },
+    {
+      "name": "qada_log_title",
+      "value": "কাযা রোজা লগ"
+    },
+    {
+      "name": "qada_log_desc",
+      "value": "আপনি কতটি রোজা পূরণ করেছেন?"
+    },
+    {
+      "name": "qada_all_done",
+      "value": "সব পূরণ হয়েছে। আলহামদুলিল্লাহ।"
+    },
+    {
+      "name": "qada_no_data",
+      "value": "এখনও কোনো ছুটে যাওয়া রোজা রেকর্ড হয়নি।"
+    },
+    {
+      "name": "qada_year_label",
+      "value": "বছরের জন্য"
+    },
+    {
+      "name": "qada_count_label",
+      "value": "কতটি"
+    },
+    {
+      "name": "qada_count_suffix",
+      "value": "রোজা"
+    },
+    {
+      "name": "qada_row_missed_suffix",
+      "value": "ছুটে গেছে"
+    },
+    {
+      "name": "qada_row_made_up_suffix",
+      "value": "পূরণ হয়েছে"
+    },
+    {
+      "name": "section_taraweeh",
+      "value": "তারাবিহ"
+    },
+    {
+      "name": "taraweeh_empty",
+      "value": "রমজান শুরু হলে ট্র্যাকিং শুরু হবে।"
+    },
+    {
+      "name": "taraweeh_nights_suffix",
+      "value": "রাত"
+    },
+    {
+      "name": "qada_not_during_ramadan",
+      "value": "ঈদুল ফিতরের পরে কাযা রোজা লগ করা যাবে।"
+    },
+    {
+      "name": "qada_total_fasted",
+      "value": "মোট রোজা রাখা"
+    },
+    {
+      "name": "qada_total_unmarked",
+      "value": "মোট চিহ্নিত নয়"
+    },
+    {
+      "name": "qada_row_fasted_suffix",
+      "value": "রোজা রাখা"
+    },
+    {
+      "name": "qada_row_unmarked_suffix",
+      "value": "চিহ্নিত নয়"
+    },
+    {
+      "name": "section_duas",
+      "value": "দোয়া"
+    },
+    {
+      "name": "eid_card_title",
+      "value": "ঈদুল ফিতর"
+    },
+    {
+      "name": "eid_greeting",
+      "value": "ঈদ মোবারক"
+    },
+    {
+      "name": "eid_greeting_subtitle",
+      "value": "আল্লাহ আপনার রোজা ও আমল কবুল করুন"
+    },
+    {
+      "name": "eid_zakat_fitr",
+      "value": "যাকাতুল ফিতর"
+    },
+    {
+      "name": "eid_zakat_fitr_desc",
+      "value": "পরিবারের প্রত্যেক সদস্যের জন্য এক সা‘ (প্রায় ২.৫ কেজি) স্থানীয় প্রধান খাদ্য, ঈদের নামাজের আগে দিতে হবে।"
+    },
+    {
+      "name": "eid_takbeer_arabic",
+      "value": "আল্লাহু আকবার، আল্লাহু আকবার، লা ইলাহা ইল্লাল্লাহু، ওয়াল্লাহু আকবার، আল্লাহু আকবার، ওয়া লিল্লাহিল হামদ"
+    },
+    {
+      "name": "eid_takbeer_translation",
+      "value": "আল্লাহ সর্বশ্রেষ্ঠ, আল্লাহ সর্বশ্রেষ্ঠ। আল্লাহ ছাড়া কোনো ইলাহ নেই। আল্লাহ সর্বশ্রেষ্ঠ, আল্লাহ সর্বশ্রেষ্ঠ, এবং সব প্রশংসা আল্লাহর।"
+    },
+    {
+      "name": "ramadan_about_this_month",
+      "value": "এই রমজান সম্পর্কে"
+    },
+    {
+      "name": "eid_card_link",
+      "value": "রমজান পর্যালোচনা"
+    },
+    {
+      "name": "qada_card_link",
+      "value": "কাযা পরিচালনা"
+    },
+    {
+      "name": "qada_banner_log_action",
+      "value": "লগ"
+    },
+    {
+      "name": "qada_banner_singular",
+      "value": "রোজা পূরণ করতে হবে"
+    },
+    {
+      "name": "qada_banner_plural",
+      "value": "রোজা পূরণ করতে হবে"
+    },
+    {
+      "name": "qada_banner_dual",
+      "value": "দুই রোজা পূরণ করতে হবে"
+    },
+    {
+      "name": "qada_year_sheet_title_prefix",
+      "value": "কাযা জন্য"
+    },
+    {
+      "name": "qada_of",
+      "value": "এর"
+    },
+    {
+      "name": "qada_made_up_of_total",
+      "value": "পূরণ হয়েছে"
+    },
+    {
+      "name": "qada_day_mark_made_up",
+      "value": "পূরণ হয়েছে চিহ্নিত করুন"
+    },
+    {
+      "name": "qada_day_made_up",
+      "value": "পূরণ হয়েছে"
+    },
+    {
+      "name": "qada_year_sheet_empty",
+      "value": "এই বছরের সব ছুটে যাওয়া রোজা পূরণ হয়েছে। আলহামদুলিল্লাহ।"
+    },
+    {
+      "name": "qada_tap_year_hint",
+      "value": "এর পূরণ দেখতে ও পরিচালনা করতে একটি বছরে ট্যাপ করুন।"
+    },
+    {
+      "name": "close",
+      "value": "বন্ধ"
+    },
+    {
+      "name": "lang_system",
+      "value": "স্বয়ংক্রিয় সনাক্ত"
+    },
+    {
+      "name": "lang_system_desc",
+      "value": "সিস্টেম ভাষার সাথে মেলে"
+    },
+    {
+      "name": "lang_supported_hint",
+      "value": "সমর্থিত ভাষা: ইংরেজি, আরবি, চীনা, ইন্দোনেশীয়, উর্দু, তুর্কি, বাংলা"
+    },
+    {
+      "name": "tasbih_default_classic_name",
+      "value": "ক্লাসিক ৩৩"
+    },
+    {
+      "name": "tasbih_default_tahlil_name",
+      "value": "তাহলিল ১০০"
+    },
+    {
+      "name": "tasbih_default_istighfar_name",
+      "value": "ইস্তিগফার"
+    },
+    {
+      "name": "dhikr_subhanallah_translit",
+      "value": "সুবহানাল্লাহ"
+    },
+    {
+      "name": "dhikr_subhanallah_trans",
+      "value": "আল্লাহর পবিত্রতা"
+    },
+    {
+      "name": "dhikr_alhamdulillah_translit",
+      "value": "আলহামদুলিল্লাহ"
+    },
+    {
+      "name": "dhikr_alhamdulillah_trans",
+      "value": "সব প্রশংসা আল্লাহর"
+    },
+    {
+      "name": "dhikr_allahuakbar_translit",
+      "value": "আল্লাহু আকবার"
+    },
+    {
+      "name": "dhikr_allahuakbar_trans",
+      "value": "আল্লাহ সর্বশ্রেষ্ঠ"
+    },
+    {
+      "name": "dhikr_tahlil_translit",
+      "value": "লা ইলাহা ইল্লাল্লাহু ওয়াহদাহু লা শারিকা লাহ"
+    },
+    {
+      "name": "dhikr_tahlil_trans",
+      "value": "আল্লাহ ছাড়া কোনো ইলাহ নেই, তিনি এক, তাঁর কোনো শরিক নেই"
+    },
+    {
+      "name": "dhikr_istighfar_translit",
+      "value": "আস্তাগফিরুল্লাহ"
+    },
+    {
+      "name": "dhikr_istighfar_trans",
+      "value": "আমি আল্লাহর কাছে ক্ষমা চাই"
+    },
+    {
+      "name": "tasbih_active_badge",
+      "value": "সক্রিয়"
+    },
+    {
+      "name": "notif_step_title",
+      "value": "নামাজের রিমাইন্ডার"
+    },
+    {
+      "name": "notif_step_desc",
+      "value": "নামাজের সময়ের বিজ্ঞপ্তি পেতে রিমাইন্ডার চালু করুন। এর জন্য ক্যালেন্ডারের অনুমতি প্রয়োজন।"
+    },
+    {
+      "name": "permission_required",
+      "value": "ক্যালেন্ডারের অনুমতি প্রয়োজন"
+    },
+    {
+      "name": "calendar_permission_required_msg",
+      "value": "নামাজের রিমাইন্ডারের জন্য ক্যালেন্ডার পড়া ও লেখা উভয় অনুমতি প্রয়োজন। চালিয়ে যেতে অনুগ্রহ করে সেগুলো দিন।"
+    },
+    {
+      "name": "grant",
+      "value": "দিন"
+    },
+    {
+      "name": "category_logs",
+      "value": "ডায়াগনস্টিক লগ"
+    },
+    {
+      "name": "jummah_mubarak",
+      "value": "জুম্মা মোবারক"
+    },
+    {
+      "name": "fasting_ends_at",
+      "value": "রোজা শেষ হবে"
+    },
+    {
+      "name": "duas_link",
+      "value": "দোয়া"
+    },
+    {
+      "name": "ramadan_laylat_today",
+      "value": "আজ রাত: সম্ভাব্য লাইলাতুল কদর"
+    },
+    {
+      "name": "ramadan_taraweeh_quick",
+      "value": "তারাবিহ:"
+    },
+    {
+      "name": "ramadan_fast_nudge",
+      "value": "আজ রোজা রেখেছেন? চিহ্নিত করুন"
+    },
+    {
+      "name": "bind_to_prayers",
+      "value": "নামাজের সাথে বাঁধুন"
+    },
+    {
+      "name": "tasbih_reminder_title",
+      "value": "অপেক্ষমাণ তাসবিহ"
+    },
+    {
+      "name": "tasbih_reminder_desc",
+      "value": "পড়া হয়েছে, কিন্তু আপনার এখনও অপেক্ষমাণ তাসবিহ আছে।"
+    },
+    {
+      "name": "go_to_tasbih",
+      "value": "তাসবিহে যান"
+    },
+    {
+      "name": "dismiss",
+      "value": "খারিজ করুন"
+    },
+    {
+      "name": "tasbih_status_completed",
+      "value": "সম্পন্ন"
+    },
+    {
+      "name": "tasbih_left",
+      "value": "বাকি"
+    },
+    {
+      "name": "duas",
+      "value": "দোয়া"
+    },
+    {
+      "name": "search_duas",
+      "value": "দোয়া খুঁজুন..."
+    },
+    {
+      "name": "dua_cat_all",
+      "value": "সব"
+    },
+    {
+      "name": "dua_cat_favorites",
+      "value": "প্রিয়"
+    },
+    {
+      "name": "dua_cat_forgiveness",
+      "value": "ক্ষমা"
+    },
+    {
+      "name": "dua_cat_distress",
+      "value": "বিপদ"
+    },
+    {
+      "name": "dua_cat_travel",
+      "value": "ভ্রমণ"
+    },
+    {
+      "name": "bind_prayer",
+      "value": "নামাজের সাথে বাঁধুন"
+    },
+    {
+      "name": "home_duas_title",
+      "value": "দিনের দোয়া"
+    },
+    {
+      "name": "view_all",
+      "value": "সব দেখুন"
+    },
+    {
+      "name": "dua_cat_morning_evening",
+      "value": "সকাল ও সন্ধ্যা"
+    },
+    {
+      "name": "dua_cat_prayer",
+      "value": "নামাজ"
+    },
+    {
+      "name": "dua_cat_protection",
+      "value": "সুরক্ষা"
+    },
+    {
+      "name": "dua_cat_guidance",
+      "value": "হেদায়েত"
+    },
+    {
+      "name": "dua_cat_general",
+      "value": "সাধারণ"
+    },
+    {
+      "name": "dua_cat_worship",
+      "value": "ইবাদত"
+    },
+    {
+      "name": "dua_cat_repentance",
+      "value": "তওবা"
+    },
+    {
+      "name": "dua_cat_steadfastness",
+      "value": "অবিচলতা"
+    },
+    {
+      "name": "dua_cat_mercy",
+      "value": "রহমত"
+    },
+    {
+      "name": "dua_cat_reflection",
+      "value": "চিন্তা"
+    },
+    {
+      "name": "dua_cat_hereafter",
+      "value": "আখিরাত"
+    },
+    {
+      "name": "dua_cat_family",
+      "value": "পরিবার"
+    },
+    {
+      "name": "dua_cat_knowledge",
+      "value": "জ্ঞান"
+    },
+    {
+      "name": "dua_cat_healing",
+      "value": "নিরাময়"
+    },
+    {
+      "name": "dua_cat_need",
+      "value": "প্রয়োজন"
+    },
+    {
+      "name": "dua_cat_gratitude",
+      "value": "কৃতজ্ঞতা"
+    },
+    {
+      "name": "dua_cat_reliance",
+      "value": "ভরসা"
+    },
+    {
+      "name": "dua_cat_daily",
+      "value": "দৈনন্দিন জীবন"
+    },
+    {
+      "name": "dua_cat_fasting",
+      "value": "রোজা"
+    },
+    {
+      "name": "dua_cat_weather",
+      "value": "আবহাওয়া"
+    },
+    {
+      "name": "dua_cat_faith",
+      "value": "ঈমান"
+    },
+    {
+      "name": "dua_cat_purification",
+      "value": "পবিত্রতা"
+    },
+    {
+      "name": "dua_cat_provision",
+      "value": "রিজিক"
+    },
+    {
+      "name": "dua_cat_funeral",
+      "value": "জানাজা"
+    },
+    {
+      "name": "duas_for",
+      "value": "দোয়া জন্য"
+    },
+    {
+      "name": "home_tasbih_tracker",
+      "value": "বাঁধা তাসবিহ"
+    },
+    {
+      "name": "add_custom_event",
+      "value": "ইভেন্ট যোগ করুন"
+    },
+    {
+      "name": "event_title_placeholder",
+      "value": "ইভেন্টের নাম"
+    },
+    {
+      "name": "hijri_date",
+      "value": "হিজরি তারিখ"
+    },
+    {
+      "name": "gregorian_date",
+      "value": "গ্রেগরিয়ান তারিখ"
+    },
+    {
+      "name": "notify_me",
+      "value": "এই দিনে আমাকে জানান"
+    },
+    {
+      "name": "custom_events_title",
+      "value": "কাস্টম ইভেন্ট"
+    },
+    {
+      "name": "date_type",
+      "value": "তারিখের ধরন"
+    },
+    {
+      "name": "event_title",
+      "value": "ইভেন্টের শিরোনাম"
+    },
+    {
+      "name": "day",
+      "value": "দিন"
+    },
+    {
+      "name": "month",
+      "value": "মাস"
+    },
+    {
+      "name": "year",
+      "value": "বছর"
+    },
+    {
+      "name": "notify_me_desc",
+      "value": "সকাল ৮:০০টায় ক্যালেন্ডার রিমাইন্ডার পান"
+    },
+    {
+      "name": "edit_custom_event",
+      "value": "ইভেন্ট সম্পাদনা"
+    },
+    {
+      "name": "event_title_required",
+      "value": "ইভেন্টের শিরোনাম প্রয়োজন"
+    },
+    {
+      "name": "invalid_date",
+      "value": "অবৈধ তারিখ"
+    },
+    {
+      "name": "hijri_equivalent",
+      "value": "সংরক্ষিত হবে:"
+    },
+    {
+      "name": "repeats",
+      "value": "পুনরাবৃত্তি"
+    },
+    {
+      "name": "recur_none",
+      "value": "কোনোটিই না"
+    },
+    {
+      "name": "recur_yearly",
+      "value": "বার্ষিক"
+    },
+    {
+      "name": "recur_monthly",
+      "value": "মাসিক"
+    },
+    {
+      "name": "recur_weekly",
+      "value": "সাপ্তাহিক"
+    },
+    {
+      "name": "show_all",
+      "value": "সব দেখান"
+    },
+    {
+      "name": "show_this_month",
+      "value": "এই মাস"
+    },
+    {
+      "name": "no_custom_events",
+      "value": "কোনো কাস্টম ইভেন্ট পাওয়া যায়নি।"
+    },
+    {
+      "name": "upcoming_custom_events",
+      "value": "আসন্ন ইভেন্ট"
+    },
+    {
+      "name": "notif_pray_jummah",
+      "value": "জুম্মা পড়ুন"
+    },
+    {
+      "name": "hadith_jummah",
+      "value": "দৈনিক পাঁচ ওয়াক্ত নামাজ এবং এক জুম্মা থেকে পরবর্তী জুম্মা পর্যন্ত মধ্যবর্তী গুনাহের কাফফারা, যতক্ষণ কবিরা গুনাহ এড়িয়ে চলে। — সহিহ মুসলিম ২৩৩"
+    },
+    {
+      "name": "lang_id",
+      "value": "বাহাসা ইন্দোনেশিয়া (ইন্দোনেশীয়)"
+    },
+    {
+      "name": "lang_ur",
+      "value": "উর্দু (উর্দু)"
+    },
+    {
+      "name": "lang_tr",
+      "value": "তুর্কি (তুর্কি)"
+    },
+    {
+      "name": "lang_bn",
+      "value": "বাংলা (বাংলা)"
+    }
+  ]
+}

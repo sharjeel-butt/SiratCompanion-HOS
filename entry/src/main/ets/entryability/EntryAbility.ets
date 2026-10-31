@@ -9,7 +9,7 @@ import { hilog } from '@kit.PerformanceAnalysisKit';
 import { deviceInfo } from '@kit.BasicServicesKit';
 import { PreferencesHelper } from '../helper/PreferencesHelper';
 import { AppLogger } from '../helper/AppLogger';
-import { AppLanguage, L } from '../i8n/LocalizationHelper';
+import { AppLanguage, L } from '../i18n/LocalizationHelper';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,

@@ -33,57 +33,41 @@ export class DuaService {
     try {
       const mgr = context.resourceManager;
 
-      // 1. Load Base JSON
+      // 1. Load base (Arabic text + category + reference)
       const baseData = await mgr.getRawFileContent('duas/duas_base.json');
       const baseJsonStr = util.TextDecoder.create('utf-8').decodeToString(baseData);
       const baseDuas: BaseDua[] = JSON.parse(baseJsonStr);
 
-      // 2. Load Language JSON (Fallback to EN if missing)
-      let langFile = `duas/duas_${lang}.json`;
-      if (lang === 'ar') {
-        langFile = 'duas/duas_ar.json';
-      }
+      // 2. Load English — guaranteed complete. This is the per-ID
+      //    fallback so a partial locale file never shows raw IDs.
+      const enData = await mgr.getRawFileContent('duas/duas_en.json');
+      const englishDuas: Record<string, TranslatedDua> =
+        JSON.parse(util.TextDecoder.create('utf-8').decodeToString(enData));
 
+      // 3. Load requested language — optional. If the file is absent
+      //    entirely, we fall back per-ID to English below.
       let translatedDuas: Record<string, TranslatedDua> = {};
-      try {
-        const langData = await mgr.getRawFileContent(langFile);
-        translatedDuas = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(langData));
-      } catch (e) {
-        const enData = await mgr.getRawFileContent('duas/duas_en.json');
-        translatedDuas = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(enData));
-      }
-
-      // 2.5 Diagnostic: warn about missing translation keys so a
-      //     broken localization file surfaces at load time rather
-      //     than at render time (where it would silently fall
-      //     through to the raw key).
-      //
-      //     This runs once per language per session. ~100 iterations
-      //     of a couple of string checks — negligible.
-      let missingCount = 0;
-      for (const base of baseDuas) {
-        const t = translatedDuas[base.id];
-        if (!t || !t.name || t.translation === '') {
-          missingCount++;
-          console.warn(
-            `[DuaService] ${lang}: missing translation for "${base.id}"`
-          );
+      if (lang === 'en') {
+        translatedDuas = englishDuas;
+      } else {
+        try {
+          const langFile = `duas/duas_${lang}.json`;
+          const langData = await mgr.getRawFileContent(langFile);
+          translatedDuas = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(langData));
+        } catch (e) {
+          translatedDuas = {};
         }
       }
-      if (missingCount > 0) {
-        console.warn(
-          `[DuaService] ${lang}: ${missingCount} dua(s) missing name or translation`
-        );
-      }
 
-      // 3. Load user state — each preference parses in isolation so a
-      //    single corrupted file only loses that one dimension.
+      // 4. Load user state
       const favorites = await DuaService.safeLoadStringArray(KEY_DUA_FAVORITES);
       const bindings = await DuaService.safeLoadRecord(KEY_DUA_BINDINGS);
 
-      // 4. Merge with explicit typing
+      // 5. Merge with three-level fallback: requested → English → base
       const merged: CompleteDua[] = baseDuas.map((base: BaseDua): CompleteDua => {
-        const t: TranslatedDua = translatedDuas[base.id] || {
+        const target = translatedDuas[base.id];
+        const english = englishDuas[base.id];
+        const t: TranslatedDua = target || english || {
           name: base.id,
           translation: '',
           reference: base.reference
@@ -107,11 +91,7 @@ export class DuaService {
       DuaService.cachedDuas = merged;
       AppStorage.setOrCreate('dua_cache_lang', lang);
       return merged;
-
     } catch (e) {
-      // Only reached if the base JSON itself cannot be read/parsed —
-      // i.e. the raw resource is missing or malformed. All user-
-      // preference failures are handled by the safe loaders below.
       console.error('Failed to load duas:', JSON.stringify(e));
       return [];
     }

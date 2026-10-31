@@ -1,0 +1,108 @@
+{
+  "strarray": [
+    {
+      "name": "hijri_months",
+      "value": [
+        {
+          "value": "Muharram"
+        },
+        {
+          "value": "Safar"
+        },
+        {
+          "value": "Rabiul Awal"
+        },
+        {
+          "value": "Rabiul Akhir"
+        },
+        {
+          "value": "Jumadil Awal"
+        },
+        {
+          "value": "Jumadil Akhir"
+        },
+        {
+          "value": "Rajab"
+        },
+        {
+          "value": "Syaban"
+        },
+        {
+          "value": "Ramadan"
+        },
+        {
+          "value": "Syawal"
+        },
+        {
+          "value": "Dzulkaidah"
+        },
+        {
+          "value": "Dzulhijjah"
+        }
+      ]
+    },
+    {
+      "name": "days_of_week",
+      "value": [
+        {
+          "value": "Minggu"
+        },
+        {
+          "value": "Senin"
+        },
+        {
+          "value": "Selasa"
+        },
+        {
+          "value": "Rabu"
+        },
+        {
+          "value": "Kamis"
+        },
+        {
+          "value": "Jumat"
+        },
+        {
+          "value": "Sabtu"
+        }
+      ]
+    },
+    {
+      "name": "days_of_week_short",
+      "value": [
+        {
+          "value": "Min"
+        },
+        {
+          "value": "Sen"
+        },
+        {
+          "value": "Sel"
+        },
+        {
+          "value": "Rab"
+        },
+        {
+          "value": "Kam"
+        },
+        {
+          "value": "Jum"
+        },
+        {
+          "value": "Sab"
+        }
+      ]
+    },
+    {
+      "name": "weekend_days",
+      "value": [
+        {
+          "value": "0"
+        },
+        {
+          "value": "6"
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 import { ThemeColors } from '../common/Theme';
-import { L } from '../i8n/LocalizationHelper';
+import { L } from '../i18n/LocalizationHelper';
 
 @Component
 export struct CategoryHeader {

@@ -1,14 +1,16 @@
 // entry/src/main/ets/utils/PdfExportHelper.ets
 
 import { pdfService } from '@kit.PDFKit';
-import { fileIo as fs, picker, ReadOptions } from '@kit.CoreFileKit';
+import { fileIo as fs, picker } from '@kit.CoreFileKit';
 import { common } from '@kit.AbilityKit';
 import { componentSnapshot, promptAction } from '@kit.ArkUI';
 import { image } from '@kit.ImageKit';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { L } from '../i8n/LocalizationHelper';
+import { L } from '../i18n/LocalizationHelper';
+import { AppLogger } from '../helper/AppLogger';
 
 export class PdfExportHelper {
+
   static async exportBuilderToPdf(
     context: common.UIAbilityContext,
     uiContext: UIContext,
@@ -21,33 +23,42 @@ export class PdfExportHelper {
     try {
       promptAction.showToast({ message: L.get('export_saving') });
 
-      // 1. Render the UI builder to a PixelMap.
+      // ── 1. Snapshot ──────────────────────────────────────
       const snapshotOptions: componentSnapshot.SnapshotOptions = { scale: 1 };
       const pixelMap: image.PixelMap = await uiContext
         .getComponentSnapshot()
         .createFromBuilder(builder, 10, false, snapshotOptions);
 
-      // 2. Pack the PixelMap to a JPEG file (more reliable for PDF Kit).
+      AppLogger.info('PdfExportHelper',
+        `snapshot ok: ${pixelMap.getImageInfoSync().size.width}×` +
+          `${pixelMap.getImageInfoSync().size.height}`);
+
+      // ── 2. JPEG ──────────────────────────────────────────
+      sandboxJpgPath = context.filesDir + '/' + fileName + '.jpg';
+      PdfExportHelper.deleteIfExists(sandboxJpgPath);
+
       const imagePacker: image.ImagePacker = image.createImagePacker();
       const packOpts: image.PackingOption = { format: 'image/jpeg', quality: 95 };
-      sandboxJpgPath = context.filesDir + '/' + fileName + '.jpg';
-
       const imageFile: fs.File = fs.openSync(
         sandboxJpgPath,
         fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC
       );
-
       await imagePacker.packToFile(pixelMap, imageFile.fd, packOpts);
       fs.closeSync(imageFile);
 
-      if (fs.statSync(sandboxJpgPath).size === 0) {
+      const jpgSize = fs.statSync(sandboxJpgPath).size;
+      AppLogger.info('PdfExportHelper', `jpeg packed: ${jpgSize} bytes`);
+      if (jpgSize === 0) {
         throw new Error('Generated image file is empty.');
       }
 
-      // 3. Create the PDF in the sandbox.
-      const pdfDoc: pdfService.PdfDocument = new pdfService.PdfDocument();
+      // ── 3. PDF in sandbox ────────────────────────────────
       sandboxPdfPath = context.filesDir + '/' + fileName + '.pdf';
+      // Delete any stale PDF from a previous failed run so
+      // saveDocument() starts on a clean path.
+      PdfExportHelper.deleteIfExists(sandboxPdfPath);
 
+      const pdfDoc: pdfService.PdfDocument = new pdfService.PdfDocument();
       try {
         pdfDoc.createDocument(595.28, 841.89); // A4 in points
         const page: pdfService.PdfPage = pdfDoc.getPage(0);
@@ -55,66 +66,108 @@ export class PdfExportHelper {
 
         const saved: boolean = pdfDoc.saveDocument(sandboxPdfPath);
         if (!saved) {
-          throw new Error('saveDocument() returned false for ' + sandboxPdfPath);
+          throw new Error('saveDocument() returned false');
         }
       } finally {
         pdfDoc.releaseDocument();
       }
 
-      // 4. Sanity-check the file on disk.
-      let pdfSize = 0;
-      try {
-        pdfSize = fs.statSync(sandboxPdfPath).size;
-      } catch (err) {
-        throw new Error('PDF file missing after save: ' + sandboxPdfPath);
-      }
+      const pdfSize = fs.statSync(sandboxPdfPath).size;
+      AppLogger.info('PdfExportHelper', `pdf saved: ${pdfSize} bytes`);
       if (pdfSize === 0) {
-        throw new Error('PDF file is empty: ' + sandboxPdfPath);
+        throw new Error('PDF file is empty in sandbox');
       }
 
-      // 5. Prompt the user for a save location. On HarmonyOS,
-      //    third-party apps cannot request the system-level
-      //    PRINT permission and the previous print.print() call
-      //    therefore always failed silently. Letting the user
-      //    save the PDF to a file manager location gives them a
-      //    working, discoverable artefact they can open in any
-      //    PDF viewer, print from there, or share.
+      // ── 4. Pick destination ──────────────────────────────
       const dstUri = await PdfExportHelper.pickSaveLocation(context, fileName);
       if (dstUri.length === 0) {
-        // User cancelled the picker — no error, no toast.
-        return;
+        return; // user cancelled
       }
 
+      // ── 5. Copy to destination (the critical fix) ────────
       const copied = PdfExportHelper.copyFileToUri(sandboxPdfPath, dstUri);
       if (!copied) {
-        throw new Error('Failed to write PDF to chosen location: ' + dstUri);
+        throw new Error('Failed to write PDF to chosen location');
       }
 
       promptAction.showToast({ message: L.get('export_success') });
     } catch (err) {
-      console.error('PDF generation failed: ' + JSON.stringify(err));
+      const e = err as BusinessError;
+      AppLogger.error('PdfExportHelper',
+        `export failed: code=${e.code ?? ''} msg=${e.message ?? JSON.stringify(err)}`);
       promptAction.showToast({ message: L.get('export_failed') });
     } finally {
-      // Clean up both intermediate sandbox files.
-      if (sandboxJpgPath.length > 0) {
-        try {
-          fs.unlinkSync(sandboxJpgPath);
-        } catch (e) { /* ignore */
-        }
+      PdfExportHelper.deleteIfExists(sandboxJpgPath);
+      PdfExportHelper.deleteIfExists(sandboxPdfPath);
+    }
+  }
+
+  // ============================================================
+  // COPY — fixed implementation
+  // ============================================================
+
+  /**
+   * Copy the sandbox PDF into the user-chosen document URI.
+   *
+   * The URI returned by DocumentViewPicker.save() is a write-only
+   * content:// handle with a pre-created 0-byte file. It cannot be
+   * opened with READ_WRITE — only WRITE_ONLY.
+   *
+   * fs.writeSync() accepts ArrayBuffer | string, NOT Uint8Array.
+   * The previous implementation passed a Uint8Array, which threw
+   * "invalid parameter" on device (silently swallowed by the outer
+   * catch) and left the pre-created 0-byte file in place.
+   *
+   * This version uses fs.copyFileSync(srcPath, dstFd), which is the
+   * documented pattern for picker URI writes and handles the
+   * read/flush/close cycle internally.
+   */
+  private static copyFileToUri(srcPath: string, dstUri: string): boolean {
+    let dstFile: fs.File | null = null;
+    try {
+      // Picker pre-creates the file, so no CREATE flag needed.
+      // TRUNC may be rejected on some firmware — fall back to
+      // plain WRITE_ONLY if it throws.
+      try {
+        dstFile = fs.openSync(
+          dstUri,
+          fs.OpenMode.WRITE_ONLY | fs.OpenMode.TRUNC
+        );
+      } catch (e1) {
+        AppLogger.warn('PdfExportHelper',
+          'WRITE_ONLY|TRUNC failed, retrying WRITE_ONLY');
+        dstFile = fs.openSync(dstUri, fs.OpenMode.WRITE_ONLY);
       }
-      if (sandboxPdfPath.length > 0) {
+
+      // copyFileSync accepts (path | fd) for both arguments.
+      // srcPath is a real sandbox path, dstFile.fd is the picker fd.
+      fs.copyFileSync(srcPath, dstFile.fd);
+
+      // Verify the write actually landed.
+      const dstStat = fs.statSync(dstUri);
+      AppLogger.info('PdfExportHelper',
+        `copy complete: dst size = ${dstStat.size} bytes`);
+
+      return dstStat.size > 0;
+    } catch (err) {
+      const e = err as BusinessError;
+      AppLogger.error('PdfExportHelper',
+        `copyFileToUri failed: code=${e.code ?? ''} msg=${e.message ?? JSON.stringify(err)}`);
+      return false;
+    } finally {
+      if (dstFile !== null) {
         try {
-          fs.unlinkSync(sandboxPdfPath);
-        } catch (e) { /* ignore */
+          fs.closeSync(dstFile);
+        } catch (ign) { /* ignore */
         }
       }
     }
   }
 
-  /**
-   * Prompt the user for a destination filename via the system
-   * DocumentViewPicker. Returns '' if the picker is dismissed.
-   */
+  // ============================================================
+  // HELPERS
+  // ============================================================
+
   private static async pickSaveLocation(
     context: common.UIAbilityContext,
     fileName: string
@@ -129,54 +182,18 @@ export class PdfExportHelper {
       }
       return uris[0];
     } catch (err) {
+      AppLogger.info('PdfExportHelper', 'save picker dismissed');
       return '';
     }
   }
 
-  /**
-   * Copy the sandbox PDF into the user-chosen document URI.
-   * Returns true on success.
-   */
-  private static copyFileToUri(srcPath: string, dstUri: string): boolean {
-    let srcFile: fs.File | null = null;
-    let dstFile: fs.File | null = null;
+  private static deleteIfExists(path: string): void {
+    if (path.length === 0) {
+      return;
+    }
     try {
-      srcFile = fs.openSync(srcPath, fs.OpenMode.READ_ONLY);
-
-      try {
-        dstFile = fs.openSync(dstUri, fs.OpenMode.WRITE_ONLY | fs.OpenMode.TRUNC);
-      } catch (e) {
-        dstFile = fs.openSync(
-          dstUri,
-          fs.OpenMode.WRITE_ONLY | fs.OpenMode.CREATE | fs.OpenMode.TRUNC
-        );
-      }
-
-      const stat = fs.statSync(srcPath);
-      const buf = new ArrayBuffer(stat.size);
-      const readOpts: ReadOptions = { offset: 0, length: stat.size };
-      const bytesRead = fs.readSync(srcFile.fd, buf, readOpts);
-      fs.writeSync(dstFile.fd, new Uint8Array(buf, 0, bytesRead));
-
-      fs.closeSync(srcFile);
-      fs.closeSync(dstFile);
-      return true;
-    } catch (err) {
-      const e = err as BusinessError;
-      console.error('copyFileToUri failed: ' + e.code + ' ' + e.message);
-      try {
-        if (srcFile) {
-          fs.closeSync(srcFile);
-        }
-      } catch (ign) { /* ignore */
-      }
-      try {
-        if (dstFile) {
-          fs.closeSync(dstFile);
-        }
-      } catch (ign) { /* ignore */
-      }
-      return false;
+      fs.unlinkSync(path);
+    } catch (ign) { /* file absent — fine */
     }
   }
 }

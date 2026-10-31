@@ -49,7 +49,7 @@ import {
 } from '../prayer/PrayerTimeCalculator';
 import { NavHelper } from '../helper/NavHelper';
 import { TimezoneResolver } from '../utils/TimezoneResolver';
-import { L } from '../i8n/LocalizationHelper';
+import { L } from '../i18n/LocalizationHelper';
 import { PageHeader } from '../components/PageHeader';
 import { PrayerSunPath } from '../prayer/PrayerSunPath';
 import { Breakpoints } from '../common/Breakpoints';
@@ -189,12 +189,54 @@ export struct Prayer {
   ];
 
   @State extraTimings: ExtraTiming[] = [
-    { id: 'imsak',      name: 'Imsak',       arabicName: 'الإمساك',     time: '--:--', status: 'abbreviation', icon: '🌙' },
-    { id: 'sunrise',    name: 'Sunrise',     arabicName: 'الشروق',      time: '--:--', status: 'abbreviation', icon: '🌅' },
-    { id: 'sunset',     name: 'Sunset',      arabicName: 'المغرب',      time: '--:--', status: 'abbreviation', icon: '🌇' },
-    { id: 'firstThird', name: 'First Third', arabicName: 'الثلث الأول', time: '--:--', status: 'abbreviation', icon: '🌃' },
-    { id: 'midnight',   name: 'Midnight',    arabicName: 'منتصف الليل', time: '--:--', status: 'abbreviation', icon: '🌌' },
-    { id: 'lastThird',  name: 'Last Third',  arabicName: 'الثلث الأخير', time: '--:--', status: 'abbreviation', icon: '🌠' }
+    {
+      id: 'imsak',
+      name: 'Imsak',
+      arabicName: 'الإمساك',
+      time: '--:--',
+      status: 'abbreviation',
+      icon: $r('app.media.ic_ramadan_moon')
+    },
+    {
+      id: 'sunrise',
+      name: 'Sunrise',
+      arabicName: 'الشروق',
+      time: '--:--',
+      status: 'abbreviation',
+      icon: $r('app.media.ic_sunrise')
+    },
+    {
+      id: 'sunset',
+      name: 'Sunset',
+      arabicName: 'المغرب',
+      time: '--:--',
+      status: 'abbreviation',
+      icon: $r('app.media.ic_sunset')
+    },
+    {
+      id: 'firstThird',
+      name: 'First Third',
+      arabicName: 'الثلث الأول',
+      time: '--:--',
+      status: 'abbreviation',
+      icon: $r('app.media.ic_star')
+    },
+    {
+      id: 'midnight',
+      name: 'Midnight',
+      arabicName: 'منتصف الليل',
+      time: '--:--',
+      status: 'abbreviation',
+      icon: $r('app.media.ic_star')
+    },
+    {
+      id: 'lastThird',
+      name: 'Last Third',
+      arabicName: 'الثلث الأخير',
+      time: '--:--',
+      status: 'abbreviation',
+      icon: $r('app.media.ic_star')
+    }
   ];
 
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
@@ -1287,11 +1329,6 @@ export struct Prayer {
       }
       .width('100%')
 
-      // Footer
-      Row() {
-        Text(this.tr('generated_by')).fontSize(8).lineHeight(12).fontColor(this.pdfColors.textMuted)
-      }
-      .width('100%').padding({ top: 4, bottom: 4 }).justifyContent(FlexAlign.Center)
     }
     .width(595).height(842).backgroundColor(this.pdfColors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr) // <-- ADDED
@@ -1517,13 +1554,10 @@ export struct Prayer {
     Row({ space: 12 }) {
       Stack() {
         if (prayer.checked) {
-          Text('✓')
-            .fontSize(14)
-            .fontColor(this.colors.textOnAccent)
-            .fontWeight(FontWeight.Bold)
-            .textAlign(TextAlign.Center)
-            .width('100%')
-            .height('100%')
+          Image($r('app.media.ic_check'))
+            .width(14)
+            .height(14)
+            .fillColor(this.colors.textOnAccent)
         }
       }
       .width(22)
@@ -1613,13 +1647,13 @@ export struct Prayer {
   @Builder
   ExtraTimingRow(timing: ExtraTiming) {
     Row({ space: 12 }) {
-      Text(timing.icon ?? '•')
-        .fontSize(15)
+      Image(timing.icon ?? $r('app.media.ic_clock'))
         .width(20)
         .height(20)
-        .textAlign(TextAlign.Center)
+        .fillColor(this.colors.textMuted)
         .opacity(0.85)
-        .flexShrink(0) // <-- Prevents squishing
+        .flexShrink(0)
+        .objectFit(ImageFit.Contain)
 
       Column() {
         Row() {

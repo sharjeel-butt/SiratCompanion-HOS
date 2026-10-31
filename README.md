@@ -7,6 +7,106 @@ your battery.
 
 ## Changelog
 
+## [3.6.5] — 2026-10-31
+
+Batch O+P — one cycle of audits and fixes covering code quality, timezone
+accuracy, and rulebook compliance. All 3 HIGH, 8 MEDIUM, and 8 LOW
+findings raised during the audit are closed.
+
+### Fixed — HIGH
+
+- **Settings** — the "notify before" `+` stepper rendered as disabled
+  whenever the Hijri offset was at +3, even though the lead time could
+  still be increased. The colour was reading the wrong state variable.
+- **Tasbih** — `resolveActivePrayer()` was defined but never invoked.
+  Opening a tasbih bound to prayers left no active prayer selected until
+  the user tapped a pill manually, which suppressed per-prayer tracking.
+  Wired into every load path: initial mount, tab-switch, midnight
+  rollover, tasbih switch, tasbih delete.
+- **Qibla / Timezone** — Mexico's Baja California peninsula inherited the
+  mainland −6 offset (2 h error for Mexicali, 1 h for La Paz and Cabo
+  San Lucas) whenever the location was >300 km from the Los Angeles
+  city-table entry. Added `MX-BC` (−8, US DST) and `MX-BCS` (−7, no
+  DST) zones ahead of the mainland `MX` box.
+
+### Fixed — MEDIUM
+
+- **Brazil** — Mato Grosso, Mato Grosso do Sul, Rondônia, and Roraima
+  fell through the `BR-AM` box and landed on `BR` (−3 instead of −4).
+  Split the UTC−4 zone into five state-level boxes.
+- **Afghanistan** — the `AF` bounding box was listed *after* `PK` and
+  `IN`, so Kabul, Kandahar, and every rural Afghan location resolved to
+  +5 or +5.5 instead of +4.5. Reordered `AF` first. Added Jaisalmer,
+  Jodhpur, Jaipur, Ahmedabad, Amritsar to the city table so
+  India–Pakistan border overlaps resolve correctly.
+- **Morocco** — the hard-coded Ramadan table stopped at 2029, producing
+  a 1-hour error every Ramadan from 2030 onward. Dakhla (23.68°N) fell
+  outside both the Morocco special-case box and the `MA` country box,
+  landing on the longitude estimate (2-hour error). Introduced
+  `DstRule.MOROCCO` backed by the actual Hijri conversion engine
+  (honours the user's offset), extended the `MA` box south to 20.7°N.
+- **Qibla declination** — `declinationFor()` returned `0` when no table
+  city was within 300 km, producing a Qibla error up to 25° at extreme
+  longitudes. Split into `MAX_TIMEZONE_KM = 200` and
+  `MAX_DECLINATION_KM = 500`; declination matches now cover essentially
+  every populated landmass.
+- **Extra timings** — six emoji icons (`🌙 🌅 🌇 🌃 🌌 🌠`) rendered as
+  `Text` instead of themeable SVGs. Migrated `ExtraTiming.icon` to
+  `Resource | undefined` and switched `ExtraTimingRow` to `Image`.
+- **UI** — hamburger menu (`☰`), dhikr picker (`▼`), and five checkbox
+  indicators (`✓`) used text glyphs. Replaced with `ic_menu.svg`,
+  `ic_chevron_down`, `ic_check`.
+
+### Fixed — LOW
+
+- **Australia** — Broken Hill (far-western NSW) observes SA time but
+  fell into `AU-E` (+10 DST instead of +9:30 DST). Added `AU-BH` box.
+- **`dateFromUTCHours`** — relied on `Date.setHours(h, 60, …)` implicit
+  rollover. Rewrote using `totalMinutes` first so the invariant is
+  explicit. No behaviour change (verified across all boundary cases).
+- **`HijriCalendarPage.getLocalizedGregorianSpan`** — a `toLocaleString`
+  throw would take down the entire PDF export path. Wrapped in try/catch
+  with English fallback, matching `RamadanHelper.formatShort`.
+- **`PrayerTimeCalculator.calculate`** — Isha interval was measured from
+  pre-temkin maghrib. Latent (no shipped method combines temkin and an
+  interval-based Isha), but moved the temkin block above the Isha block
+  so the invariant holds for any future method.
+- **`HapticHelper`** — header claimed silent-mode suppression but the
+  code only checked the haptics toggle. Corrected the comment; behaviour
+  matches iOS / Android convention (silent ≠ haptics-off).
+- **`PrayerModel`** — dropped `'locked'` from both `status` unions. It
+  had no writer and no handler in `getStatusColor` / `getStatusLabel`.
+- **Dead code** — deleted `BottomNavItem.ets` and `FloatingNavBar.ets`.
+  Neither is referenced anywhere; the latter still carried five emoji and
+  the banned `isSystemDark()` call.
+
+### Added
+
+- **Tests** (`ohosTest/ets/test/TimeUtilities.test.ets`) — invariant-based
+  coverage for Morocco DST, UmmAlQura toHijri/toGregorian boundaries
+  (Ramadan start/end, year boundary, out-of-range fallback, invalid
+  input), and `dateFromUTCHours` output format under extreme longitudes
+  and polar conditions.
+
+### Known limitations (unchanged)
+
+- **Lebanon DST** — uses EU rule. National decrees (e.g. the 2023
+  delayed start) cannot be predicted offline. Documented in
+  `OfflineCityLookup.ets`.
+- **Lord Howe Island** — 30-minute DST edge case for ~400 people.
+  Not modelled.
+- **Bounding-box timezone fallback** — borders can misclassify by a few
+  km. Mitigated by the city-table lookup running first.
+
+### Under the hood
+
+- Rulebook compliance achieved: zero emoji in any UI, zero text-glyph
+  controls, zero dead files.
+- Timezone data corrected for Mexico, Brazil, Afghanistan, Morocco,
+  Australia, and northwestern India.
+- Version bump `3.6.4` → `3.6.5` (`versionCode: 3000650`,
+  `buildVersion: "365"`).
+
 ### [v3.5.6] - 2026-11-02
 
 #### Added

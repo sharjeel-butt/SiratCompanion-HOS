@@ -1,0 +1,202 @@
+{
+  "dua_breaking_the_fast": {
+    "name": "Oruç Açma Duası",
+    "translation": "Susuzluk gitti, damarlar ıslandı ve Allah dilerse mükâfat sabit oldu.",
+    "reference": "Sünen-i Ebû Dâvûd 2357"
+  },
+  "dua_suhoor": {
+    "name": "Oruç Niyeti",
+    "translation": "Ramazan ayında yarınki oruca niyet ettim.",
+    "reference": "Geleneksel niyet"
+  },
+  "dua_laylatul_qadr": {
+    "name": "Kadir Gecesi Duası",
+    "translation": "Allah'ım! Sen çok affedicisin, affetmeyi seversin; beni affet.",
+    "reference": "Câmiu't-Tirmizî 3513; Sünen-i İbn Mâce 3850"
+  },
+  "dua_waking_up": {
+    "name": "Uyanma Duası",
+    "translation": "Bizi öldürdükten sonra dirilten Allah'a hamdolsun; dönüş de O'nadır.",
+    "reference": "Sahih-i Buhârî 6312"
+  },
+  "dua_before_sleeping": {
+    "name": "Uyumadan Önce Duası",
+    "translation": "Allah'ım! Senin adınla ölür ve dirilirim.",
+    "reference": "Sahih-i Buhârî 6324"
+  },
+  "dua_before_eating": {
+    "name": "Yemekten Önce Duası",
+    "translation": "Allah'ın adıyla.",
+    "reference": "Sünen-i Ebû Dâvûd 3767; Câmiu't-Tirmizî 1858"
+  },
+  "dua_after_eating": {
+    "name": "Yemekten Sonra Duası",
+    "translation": "Beni bu yemekle doyuran ve bana hiçbir güç ve kuvvetim olmadan bunu rızık olarak veren Allah'a hamdolsun.",
+    "reference": "Sünen-i Ebû Dâvûd 4023; Câmiu't-Tirmizî 3458"
+  },
+  "dua_leaving_the_home": {
+    "name": "Evden Çıkarken Duası",
+    "translation": "Allah'ın adıyla; Allah'a tevekkül ettim. Güç ve kuvvet ancak Allah'ın yardımıyladır.",
+    "reference": "Sünen-i Ebû Dâvûd 5095; Câmiu't-Tirmizî 3426"
+  },
+  "dua_entering_home": {
+    "name": "Eve Girerken Duası",
+    "translation": "Allah'ın adıyla girdik, Allah'ın adıyla çıktık ve Rabbimize tevekkül ettik.",
+    "reference": "Sünen-i Ebû Dâvûd 5096"
+  },
+  "dua_travel": {
+    "name": "Yolculuk Duası",
+    "translation": "Bunu bizim hizmetimize veren Allah'ı tesbih ederiz; yoksa biz buna güç yetiremezdik. Şüphesiz biz Rabbimize döneceğiz.",
+    "reference": "Sahih-i Müslim 1342"
+  },
+  "dua_after_fajr": {
+    "name": "Sabah Namazından Sonra Duası",
+    "translation": "Allah'ım! Beni ateşten koru.",
+    "reference": "Sünen-i Ebû Dâvûd 5079"
+  },
+  "dua_after_the_adhan": {
+    "name": "Ezan Sonrası Duası",
+    "translation": "Allah'ım! Bu eksiksiz davetin ve kılınacak namazın Rabbi! Muhammed'e vesileyi ve fazileti ver, onu kendisine vaad ettiğin Makâm-ı Mahmûd'a ulaştır.",
+    "reference": "Sahih-i Buhârî 614"
+  },
+  "dua_entering_the_mosque": {
+    "name": "Camiye Girerken Duası",
+    "translation": "Allah'ım! Bana rahmet kapılarını aç.",
+    "reference": "Sahih-i Müslim 713"
+  },
+  "dua_leaving_the_mosque": {
+    "name": "Camiden Çıkarken Duası",
+    "translation": "Allah'ım! Senden lütfundan istiyorum.",
+    "reference": "Sahih-i Müslim 713"
+  },
+  "dua_between_the_two_prostrations": {
+    "name": "İki Secde Arası Duası",
+    "translation": "Rabbim! Beni bağışla; Rabbim! Beni bağışla.",
+    "reference": "Sünen-i Ebû Dâvûd 874"
+  },
+  "dua_after_wudu": {
+    "name": "Abdestten Sonra Duası",
+    "translation": "Allah'tan başka ilah olmadığına, O'nun tek olduğuna ve ortağı bulunmadığına şahitlik ederim. Muhammed'in de O'nun kulu ve Rasûlü olduğuna şahitlik ederim.",
+    "reference": "Sahih-i Müslim 234"
+  },
+  "dua_qunut_witr": {
+    "name": "Vitir Kunut Duası",
+    "translation": "Allah'ım! Hidayet verdiklerinin arasında bana da hidayet ver; afiyet verdiklerinin arasında bana da afiyet ver; dost edindiklerinin arasında beni de dost edin; bana verdiğini bereketli kıl; ve takdir ettiğin kötülükten beni koru. Muhakkak Sen hükmedersin, Sana hükmedilmez. Senin dost edindiğin kimse zelil olmaz. Ey Rabbimiz! Sen yücesin ve mübareksin.",
+    "reference": "Sünen-i Ebû Dâvûd 1425; Câmiu't-Tirmizî 464"
+  },
+  "dua_sayyidul_istighfar": {
+    "name": "Seyyidü'l-İstiğfar",
+    "translation": "Allah'ım! Sen benim Rabbimsin, Senden başka ilah yoktur. Beni Sen yarattın ve ben Senin kulunum. Gücüm yettiğince Sana verdiğim ahd ve vaad üzereyim. Yaptıklarımın şerrinden Sana sığınırım. Üzerimdeki nimetini itiraf ediyorum, günahımı da itiraf ediyorum; beni bağışla; çünkü Senden başka günahları bağışlayacak yoktur.",
+    "reference": "Sahih-i Buhârî 6306"
+  },
+  "dua_guidance_to_the_straight_path": {
+    "name": "Sırat-ı Müstakîm Duası",
+    "translation": "Bizi doğru yola ilet.",
+    "reference": "Kur'ân-ı Kerîm 1:6"
+  },
+  "dua_good_in_this_world_and_the_hereafter": {
+    "name": "Dünya ve Ahiret İyiliği Duası",
+    "translation": "Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver ve bizi ateş azabından koru.",
+    "reference": "Kur'ân-ı Kerîm 2:201"
+  },
+  "dua_protection": {
+    "name": "Koruma Duası",
+    "translation": "Adı anıldığında yerde ve gökte hiçbir şeyin zarar veremeyeceği Allah'ın adıyla; O, her şeyi işitendir, bilendir.",
+    "reference": "Sünen-i Ebû Dâvûd 5088"
+  },
+  "dua_morning": {
+    "name": "Sabah Zikri",
+    "translation": "Sabaha erdik; mülk de Allah'a aittir. Hamd Allah'a mahsustur. Allah'tan başka ilah yoktur; O tektir, ortağı yoktur.",
+    "reference": "Sahih-i Müslim 2723"
+  },
+  "dua_forgiveness_and_mercy": {
+    "name": "Mağfiret ve Rahmet Duası",
+    "translation": "Rabbim! Bağışla ve merhamet et; Sen merhamet edenlerin en hayırlısısın.",
+    "reference": "Kur'ân-ı Kerîm 23:118"
+  },
+  "dua_anxiety": {
+    "name": "Kaygı ve Üzüntü Duası",
+    "translation": "Allah'ım! Kaygı ve üzüntüden, acizlik ve tembellikten, cimrilik ve korkaklıktan, borç yükünden ve insanların baskısından Sana sığınırım.",
+    "reference": "Sahih-i Buhârî 2893"
+  },
+  "dua_difficult_matter": {
+    "name": "Zor Durumlarda Duası",
+    "translation": "Allah'ım! Senin kolay kıldığından başka kolay yoktur; Sen dilersen üzüntüyü de kolaylaştırırsın.",
+    "reference": "Sahih-i İbn Hibbân 974; Elbânî sahih saydı"
+  },
+  "dua_when_afflicted_by_calamity": {
+    "name": "Musibet Anı Duası",
+    "translation": "Muhakkak biz Allah'a aidiz ve muhakkak O'na döneceğiz. Allah'ım! Musibetimde bana ecir ver ve onun yerine bana daha hayırlısını ver.",
+    "reference": "Sahih-i Müslim 918"
+  },
+  "dua_dua_of_yunus_in_distress": {
+    "name": "Yunus'un Sıkıntı Duası",
+    "translation": "Senden başka ilah yoktur. Seni tenzih ederim. Muhakkak ben zalimlerden oldum.",
+    "reference": "Kur'ân-ı Kerîm 21:87"
+  },
+  "dua_mercy_for_parents": {
+    "name": "Anne-Baba için Rahmet Duası",
+    "translation": "Rabbim! Onlar beni küçüklüğümde nasıl büyüttüyse, Sen de onlara merhamet et.",
+    "reference": "Kur'ân-ı Kerîm 17:24"
+  },
+  "dua_righteous_spouses_and_children": {
+    "name": "Salih Eş ve Çocuk Duası",
+    "translation": "Rabbimiz! Bize eşlerimizden ve çocuklarımızdan gözlerimizi aydınlatacak kimseler ver ve bizi takvâ sahiplerine imam kıl.",
+    "reference": "Kur'ân-ı Kerîm 25:74"
+  },
+  "dua_increase_me_in_knowledge": {
+    "name": "İlim Artışı Duası",
+    "translation": "Rabbim! İlmimi artır.",
+    "reference": "Kur'ân-ı Kerîm 20:114"
+  },
+  "dua_for_beneficial_knowledge_and_accepted_deeds": {
+    "name": "Faydalı İlim ve Temiz Rızık Duası",
+    "translation": "Allah'ım! Senden faydalı ilim, temiz rızık ve kabul olmuş amel isterim.",
+    "reference": "Sünen-i İbn Mâce 925"
+  },
+  "dua_steadfast_hearts": {
+    "name": "Kalp Sebatı Duası",
+    "translation": "Rabbimiz! Bizi hidayete erdirdikten sonra kalplerimizi saptırma ve bize katından rahmet bağışla. Muhakkak Sen çok bağışlayansın.",
+    "reference": "Kur'ân-ı Kerîm 3:8"
+  },
+  "dua_steadfast_heart": {
+    "name": "Kalp Sebatı Duası",
+    "translation": "Ey kalpleri evirip çeviren! Kalbimi dinin üzerinde sabit kıl.",
+    "reference": "Câmiu't-Tirmizî 2140"
+  },
+  "dua_do_not_leave_me_to_myself": {
+    "name": "Nefse Bırakılmama Duası",
+    "translation": "Ey Hayy, ey Kayyûm! Rahmetinle yardım istiyorum. Bütün işlerimi düzelt ve beni göz açıp kapayıncaya kadar bile nefsimle baş başa bırakma.",
+    "reference": "El-Müstedrek li'l-Hâkim 1/545; Elbânî sahih saydı"
+  },
+  "dua_for_healing": {
+    "name": "Şifa Duası",
+    "translation": "Allah'ım! İnsanların Rabbi! Sıkıntıyı gider ve şifa ver. Şifa veren yalnız Sensin; Senin şifandan başka şifa yoktur; hiçbir hastalık bırakmayan bir şifa ver.",
+    "reference": "Sahih-i Buhârî 5743; Sahih-i Müslim 2191"
+  },
+  "dua_for_protection_from_harm": {
+    "name": "Her Türlü Zarardan Korunma Duası",
+    "translation": "Yarattığı şeylerin şerrinden Allah'ın eksiksiz kelimelerine sığınırım.",
+    "reference": "Sahih-i Müslim 2708"
+  },
+  "dua_protection_dajjal": {
+    "name": "Deccâl ve Büyük Fitnelerden Korunma Duası",
+    "translation": "Allah'ım! Cehennem azabından, kabir azabından, hayat ve ölüm fitnesinden ve Mesîh-i Deccâl fitnesinin şerrinden Sana sığınırım.",
+    "reference": "Sahih-i Müslim 588"
+  },
+  "dua_istikhara": {
+    "name": "İstihare Duası",
+    "translation": "Allah'ım! İlminle Senden hayır diliyorum, kudretinle Senden güç diliyorum ve Senden büyük lütfundan istiyorum. Sen güç yetirirsin, ben güç yetiremem; Sen bilirsin, ben bilmem; Sen gizlilikleri bilensin. Allah'ım! Eğer bu iş benim dinim, geçimim ve işimin sonu için hayırlı ise onu benim için takdir et, kolaylaştır ve bereketli kıl. Eğer bu iş benim dinim, geçimim ve işimin sonu için şer ise onu benden, beni de ondan uzaklaştır; hayır nerede ise onu benim için takdir et, sonra beni onunla razı et.",
+    "reference": "Sahih-i Buhârî 6382"
+  },
+  "dua_all_good": {
+    "name": "Her Hayrı Kapsayan Dua",
+    "translation": "Allah'ım! Bildiğim ve bilmediğim, peşin ve ertelenmiş her hayır için Senden istiyorum; bildiğim ve bilmediğim, peşin ve ertelenmiş her şerden de Sana sığınırım.",
+    "reference": "Sünen-i İbn Mâce 3846; Elbânî sahih saydı"
+  },
+  "dua_for_well_being_in_both_worlds": {
+    "name": "Dünya ve Ahiret Afiyeti Duası",
+    "translation": "Allah'ım! Senden dünyada ve ahirette af ve afiyet isterim.",
+    "reference": "Sünen-i İbn Mâce 3871; Sünen-i Ebû Dâvûd 5074"
+  }
+}

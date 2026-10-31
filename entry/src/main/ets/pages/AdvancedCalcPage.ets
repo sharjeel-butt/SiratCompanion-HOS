@@ -21,7 +21,7 @@ import {
 import {
   CalculationMethod, HighLatitudeRule
 } from '../prayer/PrayerTimeCalculator';
-import { L } from '../i8n/LocalizationHelper';
+import { L } from '../i18n/LocalizationHelper';
 import { Breakpoints } from '../common/Breakpoints';
 
 type SheetKind = 'none' | 'rounding' | 'midnight' | 'polar'

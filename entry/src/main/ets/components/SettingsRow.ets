@@ -1,7 +1,7 @@
 // entry/src/main/ets/components/SettingsRow.ets
 
 import { ThemeColors } from '../common/Theme';
-import { L } from '../i8n/LocalizationHelper';
+import { L } from '../i18n/LocalizationHelper';
 
 /**
  * A single tappable settings row: title, optional description, a

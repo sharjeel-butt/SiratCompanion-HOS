@@ -21,7 +21,7 @@ import {
 import { CalendarDay, HijriDate } from '../hijricalendar/HijriCalendarModels';
 import { IslamicEvent } from '../models/DateModels';
 import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
-import { L } from '../i8n/LocalizationHelper';
+import { L } from '../i18n/LocalizationHelper';
 import { Breakpoints } from '../common/Breakpoints';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 import { SettingsHelper } from '../helper/SettingsHelper';
@@ -1483,8 +1483,19 @@ export struct HijriCalendarPage {
 
     const locale = this.appLanguage === 'zh' ? 'zh-CN' : (this.appLanguage === 'ar' ? 'ar' : 'en-US');
 
-    const firstMonth = first.toLocaleString(locale, { month: 'short' });
-    const lastMonth = last.toLocaleString(locale, { month: 'short' });
+    let firstMonth: string;
+    let lastMonth: string;
+    try {
+      firstMonth = first.toLocaleString(locale, { month: 'short' });
+      lastMonth = last.toLocaleString(locale, { month: 'short' });
+    } catch (err) {
+      // Rare: runtime has no CLDR data for this locale tag.
+      // Fall back to English month abbreviations so the export
+      // still completes rather than throwing out of the PDF
+      // builder.
+      firstMonth = first.toLocaleString('en-US', { month: 'short' });
+      lastMonth = last.toLocaleString('en-US', { month: 'short' });
+    }
     const year = last.getFullYear();
 
     if (first.getMonth() === last.getMonth() && first.getFullYear() === last.getFullYear()) {

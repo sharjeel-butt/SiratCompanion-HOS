@@ -620,7 +620,21 @@ export class PrayerTimeCalculator {
       maghrib = new Date(sunset);
     }
 
+    // Apply Diyanet Temkin offsets to sunset-side timings FIRST so
+    // that any interval-based Isha (Umm al-Qura, Qatar, custom)
+    // measures from the *adjusted* maghrib. Ordering matters here:
+    // a Turkey-style temkin adds `maghribAdjust` minutes to
+    // maghrib, and Isha should track that shift if the user has
+    // additionally chosen an interval-based method.
+    sunrise.setMinutes(sunrise.getMinutes() + sunriseAdjust);
+    dhuhr.setMinutes(dhuhr.getMinutes() + dhuhrAdjust);
+    asr.setMinutes(asr.getMinutes() + asrAdjust);
+    maghrib.setMinutes(maghrib.getMinutes() + maghribAdjust);
+
     // ---- Isha ----
+    // Now maghrib already carries any temkin adjustment, so
+    // maghrib + interval produces the correct Isha for
+    // interval-based methods.
     let isha: Date;
     if (effectiveIshaInterval > 0) {
       isha = new Date(maghrib.getTime() + effectiveIshaInterval * 60 * 1000);
@@ -640,11 +654,7 @@ export class PrayerTimeCalculator {
       }
     }
 
-    // Apply Diyanet Temkin offsets
-    sunrise.setMinutes(sunrise.getMinutes() + sunriseAdjust);
-    dhuhr.setMinutes(dhuhr.getMinutes() + dhuhrAdjust);
-    asr.setMinutes(asr.getMinutes() + asrAdjust);
-    maghrib.setMinutes(maghrib.getMinutes() + maghribAdjust);
+
 
     // ---- Imsak (Fajr − 10 min) ----
     const imsak = new Date(fajr);
@@ -823,10 +833,16 @@ export class PrayerTimeCalculator {
   }
 
   private static dateFromUTCHours(date: Date, utcHours: number): Date {
-    const hours = Math.floor(utcHours);
-    const minutes = Math.round((utcHours - hours) * 60);
+    // Compute total minutes first so a rounding that lands on a
+    // 60-minute boundary is handled by integer division rather
+    // than by relying on Date.setHours' implicit hour overflow.
+    // utcHours is bounded by the caller to roughly [0, 24], so
+    // totalMinutes is [0, 1440]; setHours(0, N, 0, 0) rolls over
+    // into the next day when N >= 1440, which matches the old
+    // behaviour for the "solar noon spills past midnight" case.
+    const totalMinutes = Math.round(utcHours * 60);
     const result = new Date(date);
-    result.setHours(hours, minutes, 0, 0);
+    result.setHours(0, totalMinutes, 0, 0);
     return result;
   }
 

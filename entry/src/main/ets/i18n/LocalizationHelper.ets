@@ -9,6 +9,10 @@ export enum AppLanguage {
   ENGLISH = 'en',
   CHINESE = 'zh',
   ARABIC = 'ar',
+  INDONESIAN = 'id',
+  URDU = 'ur',
+  TURKISH = 'tr',
+  BENGALI = 'bn',
   SYSTEM = 'system'
 }
 
@@ -65,7 +69,11 @@ export class L {
   static resolveOverride(override: string): string {
     if (override === AppLanguage.ENGLISH
       || override === AppLanguage.CHINESE
-      || override === AppLanguage.ARABIC) {
+      || override === AppLanguage.ARABIC
+      || override === AppLanguage.INDONESIAN
+      || override === AppLanguage.URDU
+      || override === AppLanguage.TURKISH
+      || override === AppLanguage.BENGALI) {
       return override;
     }
     return L.matchSystemLocale();
@@ -96,6 +104,18 @@ export class L {
       if (sysLang === 'en') {
         return AppLanguage.ENGLISH;
       }
+      if (sysLang === 'id' || sysLang === 'in') {
+        return AppLanguage.INDONESIAN;
+      }
+      if (sysLang === 'ur') {
+        return AppLanguage.URDU;
+      }
+      if (sysLang === 'tr') {
+        return AppLanguage.TURKISH;
+      }
+      if (sysLang === 'bn') {
+        return AppLanguage.BENGALI;
+      }
       return L.DEFAULT_LANGUAGE;
     } catch (err) {
       return L.DEFAULT_LANGUAGE;
@@ -118,6 +138,14 @@ export class L {
         sysLang = 'zh';
       } else if (override === AppLanguage.ENGLISH) {
         sysLang = 'en';
+      } else if (override === AppLanguage.INDONESIAN) {
+        sysLang = 'id';
+      } else if (override === AppLanguage.URDU) {
+        sysLang = 'ur';
+      } else if (override === AppLanguage.TURKISH) {
+        sysLang = 'tr';
+      } else if (override === AppLanguage.BENGALI) {
+        sysLang = 'bn';
       }
       i18n.System.setAppPreferredLanguage(sysLang);
       console.info(`[L] App preferred language set to ${sysLang}`);
@@ -140,11 +168,11 @@ export class L {
   }
 
   static isRtl(): boolean {
-    return L.current() === AppLanguage.ARABIC;
+    return L.isRtlLang(L.current());
   }
 
   static isRtlLang(lang: string): boolean {
-    return lang === AppLanguage.ARABIC;
+    return lang === AppLanguage.ARABIC || lang === AppLanguage.URDU;
   }
 
   static getLanguageLabel(lang: string): string {

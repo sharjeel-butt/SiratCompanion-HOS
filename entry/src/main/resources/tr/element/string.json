@@ -1,0 +1,2840 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "Sirat Companion giriş modülü"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "Günlük İslami Yol Arkadaşınız"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "Sirat Companion"
+    },
+    {
+      "name": "location_permission_reason",
+      "value": "Konumunuz için namaz vakitlerini ve kıble yönünü hesaplamak için kullanılır"
+    },
+    {
+      "name": "sensor_permission_reason",
+      "value": "Kıble pusulası için kullanılır"
+    },
+    {
+      "name": "notification_permission_reason",
+      "value": "Size namaz vakti hatırlatıcıları göndermek için"
+    },
+    {
+      "name": "calendar_permission_reason",
+      "value": "Takviminize namaz vakti hatırlatıcıları eklemek için kullanılır"
+    },
+    {
+      "name": "app_name",
+      "value": "Sirat Companion"
+    },
+    {
+      "name": "app_tagline",
+      "value": "Günlük İslami Yol Arkadaşınız"
+    },
+    {
+      "name": "more_languages_coming",
+      "value": "Daha fazla dil yakında"
+    },
+    {
+      "name": "tab_home",
+      "value": "Ana Sayfa"
+    },
+    {
+      "name": "tab_prayers",
+      "value": "Namazlar"
+    },
+    {
+      "name": "tab_calendar",
+      "value": "Hicri Takvim"
+    },
+    {
+      "name": "tab_compass",
+      "value": "Kıble Pusulası"
+    },
+    {
+      "name": "tab_tasbih",
+      "value": "Tesbih"
+    },
+    {
+      "name": "current_prayer",
+      "value": "Şu an"
+    },
+    {
+      "name": "next_prayer",
+      "value": "Sıradaki"
+    },
+    {
+      "name": "todays_prayers",
+      "value": "BUGÜNÜN NAMAZLARI"
+    },
+    {
+      "name": "extra_timings",
+      "value": "EK VAKİTLER"
+    },
+    {
+      "name": "upcoming_islamic_events",
+      "value": "YAKLAŞAN İSLAMİ OLAYLAR"
+    },
+    {
+      "name": "loading_location",
+      "value": "Yükleniyor..."
+    },
+    {
+      "name": "set_manual_location",
+      "value": "Ayarlardan Manuel Konum Belirleyin"
+    },
+    {
+      "name": "online_prayer_times",
+      "value": "Çevrimiçi Namaz Vakitleri"
+    },
+    {
+      "name": "coming_soon",
+      "value": "Yakında"
+    },
+    {
+      "name": "online_switch_hint",
+      "value": "Konumunuz için namaz vakitlerini görmek üzere Ayarlar'dan Yerel Formül'e geri dönün."
+    },
+    {
+      "name": "cancel",
+      "value": "İptal"
+    },
+    {
+      "name": "save",
+      "value": "Kaydet"
+    },
+    {
+      "name": "reset",
+      "value": "Sıfırla"
+    },
+    {
+      "name": "delete",
+      "value": "Sil"
+    },
+    {
+      "name": "edit",
+      "value": "Düzenle"
+    },
+    {
+      "name": "add",
+      "value": "Ekle"
+    },
+    {
+      "name": "back",
+      "value": "Geri"
+    },
+    {
+      "name": "today",
+      "value": "Bugün"
+    },
+    {
+      "name": "exit",
+      "value": "Çıkış"
+    },
+    {
+      "name": "ok",
+      "value": "Tamam"
+    },
+    {
+      "name": "exit_confirm_message",
+      "value": "Sirat Companion'dan çıkmak istediğinizden emin misiniz?"
+    },
+    {
+      "name": "title_settings",
+      "value": "Ayarlar"
+    },
+    {
+      "name": "title_customize",
+      "value": "Özelleştir"
+    },
+    {
+      "name": "category_location",
+      "value": "Konum"
+    },
+    {
+      "name": "category_prayer_times",
+      "value": "Namaz Vakitleri"
+    },
+    {
+      "name": "category_hijri_calendar",
+      "value": "Hicri Takvim"
+    },
+    {
+      "name": "category_ui_customization",
+      "value": "Arayüz Özelleştirme"
+    },
+    {
+      "name": "category_appearance",
+      "value": "Görünüm"
+    },
+    {
+      "name": "category_about",
+      "value": "Hakkında"
+    },
+    {
+      "name": "category_notifications",
+      "value": "Bildirimler"
+    },
+    {
+      "name": "brand_primary",
+      "value": "Sirat"
+    },
+    {
+      "name": "brand_accent",
+      "value": "Companion"
+    },
+    {
+      "name": "convention",
+      "value": "Hesaplama Yöntemi"
+    },
+    {
+      "name": "convention_desc",
+      "value": "Fecr ve Yatsı hesaplamasında kullanılır"
+    },
+    {
+      "name": "madhab",
+      "value": "Mezhep"
+    },
+    {
+      "name": "madhab_desc",
+      "value": "Hesaplamada kullanılan ikindi gölge kuralı"
+    },
+    {
+      "name": "source",
+      "value": "Kaynak"
+    },
+    {
+      "name": "source_desc",
+      "value": "Yerel Formül veya Çevrimiçi"
+    },
+    {
+      "name": "prayer_offsets",
+      "value": "Namaz Vakti Düzeltmeleri"
+    },
+    {
+      "name": "prayer_offsets_desc",
+      "value": "Hesaplanan vakitleri manuel olarak kaydır"
+    },
+    {
+      "name": "offsets_hint",
+      "value": "Vakitleri dakika olarak kaydır (−60 ile +60)"
+    },
+    {
+      "name": "reset_all_offsets",
+      "value": "Tüm Düzeltmeleri Sıfırla"
+    },
+    {
+      "name": "high_latitude",
+      "value": "Yüksek Enlem"
+    },
+    {
+      "name": "high_latitude_desc",
+      "value": "Güneş açıya ulaşmadığında Fecr ve Yatsı için yedek"
+    },
+    {
+      "name": "highlat_none",
+      "value": "Yok"
+    },
+    {
+      "name": "highlat_middle",
+      "value": "Gecenin Ortası"
+    },
+    {
+      "name": "highlat_one_seventh",
+      "value": "Gecenin Yedide Biri"
+    },
+    {
+      "name": "highlat_angle",
+      "value": "Açı Tabanlı"
+    },
+    {
+      "name": "highlat_proportional",
+      "value": "Orantılı Alçalma (Diyanet Takdir)"
+    },
+    {
+      "name": "location",
+      "value": "Konum"
+    },
+    {
+      "name": "location_desc",
+      "value": "Uygulamanın konumunuzu nasıl belirleyeceğini seçin"
+    },
+    {
+      "name": "gps",
+      "value": "GPS"
+    },
+    {
+      "name": "manual_location",
+      "value": "Manuel Konum"
+    },
+    {
+      "name": "current_position",
+      "value": "Mevcut Konum"
+    },
+    {
+      "name": "latitude",
+      "value": "Enlem"
+    },
+    {
+      "name": "longitude",
+      "value": "Boylam"
+    },
+    {
+      "name": "city",
+      "value": "Şehir"
+    },
+    {
+      "name": "last_refreshed",
+      "value": "Son yenileme"
+    },
+    {
+      "name": "save_coordinates",
+      "value": "Koordinatları Kaydet"
+    },
+    {
+      "name": "latitude_hint",
+      "value": "Enlem (−90 ile 90)"
+    },
+    {
+      "name": "longitude_hint",
+      "value": "Boylam (−180 ile 180)"
+    },
+    {
+      "name": "city_name_optional",
+      "value": "Şehir adı (isteğe bağlı)"
+    },
+    {
+      "name": "city_name_placeholder",
+      "value": "Otomatik algılamak için boş bırakın"
+    },
+    {
+      "name": "hijri_offset",
+      "value": "Hicri Tarih ve Takvim Kaydırması"
+    },
+    {
+      "name": "hijri_offset_desc",
+      "value": "İslami tarihi ve takvimi ±3 gün kaydır"
+    },
+    {
+      "name": "matching_standard",
+      "value": "Standart hesaplamayla eşleşiyor"
+    },
+    {
+      "name": "offset_days_ahead",
+      "value": "gün ileri"
+    },
+    {
+      "name": "offset_days_behind",
+      "value": "gün geri"
+    },
+    {
+      "name": "about_version",
+      "value": "Sürüm"
+    },
+    {
+      "name": "about_platform",
+      "value": "Platform"
+    },
+    {
+      "name": "about_platform_value",
+      "value": "HarmonyOS 6+"
+    },
+    {
+      "name": "about_build",
+      "value": "Derleme"
+    },
+    {
+      "name": "about_bundle",
+      "value": "Paket Kimliği"
+    },
+    {
+      "name": "about_copyright",
+      "value": "© 2026"
+    },
+    {
+      "name": "notifications_master",
+      "value": "Bildirimleri Etkinleştir"
+    },
+    {
+      "name": "notifications_master_desc",
+      "value": "Namaz vaktinden önce ve namaz vaktinde hatırlatma alın"
+    },
+    {
+      "name": "notify_before",
+      "value": "Önceden Bildir"
+    },
+    {
+      "name": "notify_before_desc",
+      "value": "İlk hatırlatmanın namazdan kaç dakika önce olacağı"
+    },
+    {
+      "name": "notify_prayers",
+      "value": "Namaz Hatırlatıcıları"
+    },
+    {
+      "name": "notify_prayers_desc",
+      "value": "Hangi namazların hatırlatma göndereceğini seçin"
+    },
+    {
+      "name": "notifications_footer",
+      "value": "Hatırlatıcılar önümüzdeki 3 gün için planlanır ve uygulamayı her açtığınızda yenilenir"
+    },
+    {
+      "name": "notifications_footer_calendar",
+      "value": "Hatırlatıcılar önümüzdeki 3 gün için sistem takviminize eklenir ve uygulamayı her açtığınızda yenilenir"
+    },
+    {
+      "name": "notification_permission_denied",
+      "value": "Hatırlatıcıları etkinleştirmek için bildirim izni gerekli"
+    },
+    {
+      "name": "calendar_permission_denied",
+      "value": "Hatırlatıcıları etkinleştirmek için takvim izni gerekli"
+    },
+    {
+      "name": "notif_before_title",
+      "value": "Namaz Hatırlatıcısı"
+    },
+    {
+      "name": "notif_before_content",
+      "value": "içinde"
+    },
+    {
+      "name": "notif_exact_title",
+      "value": "Namaz Vakti"
+    },
+    {
+      "name": "notif_exact_content",
+      "value": "Şimdi şu namazın vakti:"
+    },
+    {
+      "name": "notif_minutes_suffix",
+      "value": "dk"
+    },
+    {
+      "name": "notif_test_button",
+      "value": "Test Bildirimi Gönder"
+    },
+    {
+      "name": "notif_test_sending",
+      "value": "Test bildirimi gönderiliyor..."
+    },
+    {
+      "name": "notif_test_ok",
+      "value": "Test bildirimi planlandı — yaklaşık 5 saniye içinde görmelisiniz"
+    },
+    {
+      "name": "notif_test_ok_calendar",
+      "value": "Test etkinliği takviminize eklendi — Takvim uygulamasını kontrol edin"
+    },
+    {
+      "name": "notif_test_failed",
+      "value": "Test bildirimi başarısız"
+    },
+    {
+      "name": "notif_dismiss",
+      "value": "Kapat"
+    },
+    {
+      "name": "notif_pray_fajr",
+      "value": "Sabah namazını kıl"
+    },
+    {
+      "name": "notif_pray_dhuhr",
+      "value": "Öğle namazını kıl"
+    },
+    {
+      "name": "notif_pray_asr",
+      "value": "İkindi namazını kıl"
+    },
+    {
+      "name": "notif_pray_maghrib",
+      "value": "Akşam namazını kıl"
+    },
+    {
+      "name": "notif_pray_isha",
+      "value": "Yatsı namazını kıl"
+    },
+    {
+      "name": "hadith_fajr",
+      "value": "Sabah namazını cemaatle kılan, Allah'ın koruması altındadır. — Sahih Müslim 657a"
+    },
+    {
+      "name": "hadith_dhuhr",
+      "value": "Bu, göklerin kapılarının açıldığı bir saattir ve salih bir amelimin bu saatte yükselmesini severim. — Cami' at-Tirmizi 478"
+    },
+    {
+      "name": "hadith_asr",
+      "value": "Kim İkindi namazını (kasten) kaçırırsa, sanki ailesini ve malını kaybetmiş gibidir. — Sahih el-Buhari 552"
+    },
+    {
+      "name": "hadith_maghrib",
+      "value": "Beş vakit namaz... büyük günahlardan kaçınıldığı sürece aralarında işlenen günahlara kefarettir. — Sahih Müslim 233"
+    },
+    {
+      "name": "hadith_isha",
+      "value": "Kim Yatsı namazını cemaatle kılarsa, gece yarısına kadar namaz kılmış gibi olur. — Sahih Müslim 656a"
+    },
+    {
+      "name": "log_view_button",
+      "value": "Tanılama Günlükleri"
+    },
+    {
+      "name": "log_view_desc",
+      "value": "Uygulama günlük dosyasını görüntüleyin, kopyalayın veya temizleyin"
+    },
+    {
+      "name": "log_view_title",
+      "value": "Tanılama Günlükleri"
+    },
+    {
+      "name": "log_copy",
+      "value": "Kopyala"
+    },
+    {
+      "name": "log_clear",
+      "value": "Temizle"
+    },
+    {
+      "name": "log_empty",
+      "value": "Günlük boş."
+    },
+    {
+      "name": "log_copied",
+      "value": "Günlük panoya kopyalandı"
+    },
+    {
+      "name": "log_cleared",
+      "value": "Günlük temizlendi"
+    },
+    {
+      "name": "advanced_calc_title",
+      "value": "Gelişmiş Hesaplama"
+    },
+    {
+      "name": "rounding_method",
+      "value": "Yuvarlama Yöntemi"
+    },
+    {
+      "name": "rounding_method_desc",
+      "value": "Görüntülenen vakitlerin nasıl yuvarlanacağını kontrol eder"
+    },
+    {
+      "name": "midnight_method",
+      "value": "Gece Yarısı Yöntemi"
+    },
+    {
+      "name": "midnight_method_desc",
+      "value": "İslami gece yarısını hangi gece sınırının tanımladığı"
+    },
+    {
+      "name": "polar_resolution",
+      "value": "Kutup Çözümü"
+    },
+    {
+      "name": "polar_resolution_desc",
+      "value": "Güneş bir açıya ulaşmadığında yedek"
+    },
+    {
+      "name": "shafaq",
+      "value": "Şafak"
+    },
+    {
+      "name": "shafaq_desc",
+      "value": "Şafak, Moonsighting Committee yöntemi tarafından Yatsı'yı hangi alacakaranlığın belirleyeceğini tespit etmek için kullanılır."
+    },
+    {
+      "name": "custom_angles",
+      "value": "Özel Açılar"
+    },
+    {
+      "name": "custom_fajr_angle",
+      "value": "Fecr açısı"
+    },
+    {
+      "name": "custom_isha_angle",
+      "value": "Yatsı açısı"
+    },
+    {
+      "name": "custom_isha_interval",
+      "value": "Yatsı aralığı (dk)"
+    },
+    {
+      "name": "custom_isha_interval_hint",
+      "value": "0 = açı kullan. >0 = Akşam'dan sonraki dakikalar."
+    },
+    {
+      "name": "rounding_nearest",
+      "value": "En Yakın"
+    },
+    {
+      "name": "rounding_up",
+      "value": "Yukarı"
+    },
+    {
+      "name": "rounding_none",
+      "value": "Yok"
+    },
+    {
+      "name": "midnight_standard",
+      "value": "Gün Batımından Gün Doğumuna"
+    },
+    {
+      "name": "midnight_standard_desc",
+      "value": "Varsayılan"
+    },
+    {
+      "name": "midnight_jafari",
+      "value": "Gün Batımından Fecr'e"
+    },
+    {
+      "name": "polar_unresolved",
+      "value": "Çözülmemiş"
+    },
+    {
+      "name": "polar_unresolved_desc",
+      "value": "Varsayılan"
+    },
+    {
+      "name": "polar_aqrab_balad",
+      "value": "Aqrab Balad"
+    },
+    {
+      "name": "polar_aqrab_yaum",
+      "value": "Aqrab Yaum"
+    },
+    {
+      "name": "shafaq_general",
+      "value": "Genel"
+    },
+    {
+      "name": "shafaq_general_desc",
+      "value": "Varsayılan"
+    },
+    {
+      "name": "shafaq_ahmer",
+      "value": "Ahmer"
+    },
+    {
+      "name": "shafaq_abyad",
+      "value": "Abyad"
+    },
+    {
+      "name": "show_extra_timings",
+      "value": "Ek Vakitleri Göster"
+    },
+    {
+      "name": "show_extra_timings_desc",
+      "value": "İmsak, Güneş Doğumu, Gün Batımı ve gece vakitleri"
+    },
+    {
+      "name": "show_islamic_events",
+      "value": "İslami Olayları Göster"
+    },
+    {
+      "name": "show_islamic_events_desc",
+      "value": "Ana ekranda yaklaşan İslami olaylar"
+    },
+    {
+      "name": "dark_mode",
+      "value": "Karanlık Mod"
+    },
+    {
+      "name": "dark_mode_desc",
+      "value": "Uygulamanın görünümünü seçin"
+    },
+    {
+      "name": "theme_light",
+      "value": "Açık"
+    },
+    {
+      "name": "theme_dark",
+      "value": "Koyu"
+    },
+    {
+      "name": "theme_system",
+      "value": "Sistem Ayarlarını Kullan"
+    },
+    {
+      "name": "tasbih_render_style",
+      "value": "Tesbih Teması"
+    },
+    {
+      "name": "tasbih_render_style_desc",
+      "value": "Tesbih boncuklarınızın stilini seçin"
+    },
+    {
+      "name": "bead_style_premium",
+      "value": "Premium (3D)"
+    },
+    {
+      "name": "bead_style_classic",
+      "value": "Klasik"
+    },
+    {
+      "name": "language",
+      "value": "Dil"
+    },
+    {
+      "name": "language_desc",
+      "value": "Tercih ettiğiniz dili seçin"
+    },
+    {
+      "name": "lang_en",
+      "value": "İngilizce"
+    },
+    {
+      "name": "lang_zh",
+      "value": "中文 (Çince)"
+    },
+    {
+      "name": "lang_ar",
+      "value": "العربية (Arapça)"
+    },
+    {
+      "name": "haptic_feedback",
+      "value": "Titreşim"
+    },
+    {
+      "name": "haptic_feedback_desc",
+      "value": "Tesbih sayarken titret"
+    },
+    {
+      "name": "sound_feedback",
+      "value": "Ses"
+    },
+    {
+      "name": "sound_feedback_desc",
+      "value": "Tesbih sayarken tıklama sesi çal"
+    },
+    {
+      "name": "sound_style",
+      "value": "Ses Stili"
+    },
+    {
+      "name": "sound_style_desc",
+      "value": "Tıklama sesini seçin"
+    },
+    {
+      "name": "controlled_by_system",
+      "value": "Sistem ayarları tarafından kontrol edilir"
+    },
+    {
+      "name": "sound_glass_tap_name",
+      "value": "Cam Tıkırtısı"
+    },
+    {
+      "name": "sound_glass_tap_desc",
+      "value": "Cam tıkırtısı sesi"
+    },
+    {
+      "name": "sound_light_chime_name",
+      "value": "Hafif Çan"
+    },
+    {
+      "name": "sound_light_chime_desc",
+      "value": "Hafif çan sesi"
+    },
+    {
+      "name": "sound_muted_bead_name",
+      "value": "Sessiz Boncuk"
+    },
+    {
+      "name": "sound_muted_bead_desc",
+      "value": "Sessiz boncuk sesi"
+    },
+    {
+      "name": "sound_soft_click_name",
+      "value": "Yumuşak Tık"
+    },
+    {
+      "name": "sound_soft_click_desc",
+      "value": "Yumuşak tık sesi"
+    },
+    {
+      "name": "sound_warm_knock_name",
+      "value": "Sıcak Vuruş"
+    },
+    {
+      "name": "sound_warm_knock_desc",
+      "value": "Sıcak vuruş sesi"
+    },
+    {
+      "name": "title_tasbih",
+      "value": "Tesbih"
+    },
+    {
+      "name": "my_tasbihs",
+      "value": "Tesbihlerim"
+    },
+    {
+      "name": "select_dhikr",
+      "value": "Zikir Seç"
+    },
+    {
+      "name": "new_tasbih",
+      "value": "Yeni Tesbih"
+    },
+    {
+      "name": "edit_tasbih",
+      "value": "Tesbihi Düzenle"
+    },
+    {
+      "name": "new_dhikr",
+      "value": "Yeni Zikir"
+    },
+    {
+      "name": "edit_dhikr",
+      "value": "Zikri Düzenle"
+    },
+    {
+      "name": "tasbih_name",
+      "value": "Ad"
+    },
+    {
+      "name": "tasbih_name_placeholder",
+      "value": "örn. Akşam Zikirleri"
+    },
+    {
+      "name": "dhikr_arabic",
+      "value": "Arapça"
+    },
+    {
+      "name": "dhikr_transliteration",
+      "value": "Okunuş (isteğe bağlı)"
+    },
+    {
+      "name": "dhikr_transliteration_placeholder",
+      "value": "örn. SubhanAllah"
+    },
+    {
+      "name": "dhikr_translation",
+      "value": "Çeviri (isteğe bağlı)"
+    },
+    {
+      "name": "dhikr_translation_placeholder",
+      "value": "örn. Allah'ı tenzih ederim"
+    },
+    {
+      "name": "target_count",
+      "value": "Hedef sayı"
+    },
+    {
+      "name": "flick_up_to_count",
+      "value": "saymak için yukarı kaydır"
+    },
+    {
+      "name": "flick_hint",
+      "value": "Yukarı kaydır: +1     ·     Aşağı kaydır: −1"
+    },
+    {
+      "name": "total_on_tasbih",
+      "value": "bu tesbihteki toplam"
+    },
+    {
+      "name": "dhikr_count_singular",
+      "value": "zikir"
+    },
+    {
+      "name": "dhikr_count_plural",
+      "value": "zikir"
+    },
+    {
+      "name": "new_tasbih_button",
+      "value": "+ Yeni Tesbih"
+    },
+    {
+      "name": "add_dhikr_button",
+      "value": "+ Zikir Ekle"
+    },
+    {
+      "name": "all_dhikrs_complete",
+      "value": "Tüm zikirler tamamlandı"
+    },
+    {
+      "name": "counter_reset_toast",
+      "value": "Sayaç sıfırlandı"
+    },
+    {
+      "name": "no_dhikr_title",
+      "value": "Bu Tesbihte Zikir Yok"
+    },
+    {
+      "name": "no_dhikr_hint",
+      "value": "Bir tane eklemek için üstteki zikir baloncuğuna dokunun"
+    },
+    {
+      "name": "switch_dhikr",
+      "value": "Zikri değiştir"
+    },
+    {
+      "name": "reset_counter",
+      "value": "Sayacı sıfırla"
+    },
+    {
+      "name": "delete_dhikr",
+      "value": "Zikri sil"
+    },
+    {
+      "name": "add_new_dhikr",
+      "value": "Yeni zikir ekle"
+    },
+    {
+      "name": "reset_all",
+      "value": "Tümünü Sıfırla"
+    },
+    {
+      "name": "reset_all_confirm_title",
+      "value": "Tesbihi Sıfırla"
+    },
+    {
+      "name": "reset_all_confirm_message",
+      "value": "Bu Tesbihteki tüm zikir sayıları sıfırlansın mı?"
+    },
+    {
+      "name": "reset_all_done",
+      "value": "Tesbih sıfırlandı"
+    },
+    {
+      "name": "title_qibla",
+      "value": "Kıble Pusulası"
+    },
+    {
+      "name": "qibla_direction",
+      "value": "Kıble Yönü"
+    },
+    {
+      "name": "device_heading",
+      "value": "Cihaz Yönü"
+    },
+    {
+      "name": "distance_to_kaaba",
+      "value": "Kabe'ye Mesafe"
+    },
+    {
+      "name": "compass_ready",
+      "value": "Pusula hazır. Kabe işareti yukarı bakana kadar cihazınızı döndürün."
+    },
+    {
+      "name": "keep_device_flat",
+      "value": "Doğru okumalar için cihazınızı düz tutun."
+    },
+    {
+      "name": "sensor_unavailable",
+      "value": "Pusula sensörü kullanılamıyor. Lütfen gerçek bir cihazda test edin."
+    },
+    {
+      "name": "location_unavailable",
+      "value": "Konum kullanılamıyor"
+    },
+    {
+      "name": "qibla_calibrate_title",
+      "value": "Pusulayı Kalibre Et"
+    },
+    {
+      "name": "qibla_calibrate_desc",
+      "value": "Pusula doğruluğunu artırmak için telefonunuzu 8 şeklinde hareket ettirin."
+    },
+    {
+      "name": "qibla_calibrate_skip",
+      "value": "Şimdilik atla"
+    },
+    {
+      "name": "qibla_calibrate_hint",
+      "value": "Kalibrasyon doğruluğu artırır"
+    },
+    {
+      "name": "title_hijri_calendar",
+      "value": "Hicri Takvim"
+    },
+    {
+      "name": "important_dates",
+      "value": "ÖNEMLİ TARİHLER"
+    },
+    {
+      "name": "no_events_this_month",
+      "value": "Bu ay büyük İslami olay yok"
+    },
+    {
+      "name": "status_next",
+      "value": "SIRADAKİ"
+    },
+    {
+      "name": "status_pray",
+      "value": "Kıl"
+    },
+    {
+      "name": "status_both",
+      "value": "Kıl  ·  SIRADAKİ"
+    },
+    {
+      "name": "status_prayed",
+      "value": "✓ Kılındı"
+    },
+    {
+      "name": "status_express",
+      "value": "Ekspres"
+    },
+    {
+      "name": "prayer_fajr",
+      "value": "Sabah"
+    },
+    {
+      "name": "prayer_dhuhr",
+      "value": "Öğle"
+    },
+    {
+      "name": "prayer_asr",
+      "value": "İkindi"
+    },
+    {
+      "name": "prayer_maghrib",
+      "value": "Akşam"
+    },
+    {
+      "name": "prayer_isha",
+      "value": "Yatsı"
+    },
+    {
+      "name": "prayer_jummah",
+      "value": "Cuma"
+    },
+    {
+      "name": "timing_imsak",
+      "value": "İmsak"
+    },
+    {
+      "name": "timing_sunrise",
+      "value": "Güneş Doğumu"
+    },
+    {
+      "name": "timing_sunset",
+      "value": "Gün Batımı"
+    },
+    {
+      "name": "timing_first_third",
+      "value": "İlk Üçte Bir"
+    },
+    {
+      "name": "timing_midnight",
+      "value": "Gece Yarısı"
+    },
+    {
+      "name": "timing_last_third",
+      "value": "Son Üçte Bir"
+    },
+    {
+      "name": "event_new_year",
+      "value": "İslami Yeni Yıl"
+    },
+    {
+      "name": "event_ashura",
+      "value": "Aşure Günü"
+    },
+    {
+      "name": "event_mawlid",
+      "value": "Mevlid-i Nebi"
+    },
+    {
+      "name": "event_isra_miraj",
+      "value": "İsra ve Mirac"
+    },
+    {
+      "name": "event_mid_shaban",
+      "value": "Şaban Ortası"
+    },
+    {
+      "name": "event_ramadan_start",
+      "value": "Ramazan"
+    },
+    {
+      "name": "event_eid_fitr",
+      "value": "Ramazan Bayramı"
+    },
+    {
+      "name": "event_arafah",
+      "value": "Arefe Günü"
+    },
+    {
+      "name": "event_eid_adha",
+      "value": "Kurban Bayramı"
+    },
+    {
+      "name": "method_karachi",
+      "value": "İslami Bilimler Üniversitesi, Karaçi"
+    },
+    {
+      "name": "method_jafari",
+      "value": "Şii İsna Aşeri (Leva Enstitüsü, Kum)"
+    },
+    {
+      "name": "method_isna",
+      "value": "Kuzey Amerika İslam Cemiyeti"
+    },
+    {
+      "name": "method_mwl",
+      "value": "Dünya Müslümanlar Birliği"
+    },
+    {
+      "name": "method_umm_al_qura",
+      "value": "Ümmü'l-Kura (Mekke)"
+    },
+    {
+      "name": "method_egyptian",
+      "value": "Mısır Araştırması"
+    },
+    {
+      "name": "method_sunni_iraq",
+      "value": "Sünni Vakıf (Irak)"
+    },
+    {
+      "name": "method_qatar",
+      "value": "Katar Evkafı"
+    },
+    {
+      "name": "method_singapore",
+      "value": "Singapur (MUIS)"
+    },
+    {
+      "name": "method_france",
+      "value": "Fransa (UOIF)"
+    },
+    {
+      "name": "method_turkey",
+      "value": "Türkiye (Diyanet)"
+    },
+    {
+      "name": "method_russia",
+      "value": "Rusya (SAMR)"
+    },
+    {
+      "name": "method_uae",
+      "value": "BAE (GIAE)"
+    },
+    {
+      "name": "method_moonsighting",
+      "value": "Dünya Çapında Hilal Gözlem Komitesi"
+    },
+    {
+      "name": "method_dubai",
+      "value": "Körfez Bölgesi (Dubai)"
+    },
+    {
+      "name": "method_kuwait",
+      "value": "Kuveyt"
+    },
+    {
+      "name": "method_france_15",
+      "value": "Fransa açı 15"
+    },
+    {
+      "name": "method_france_18",
+      "value": "Fransa açı 18"
+    },
+    {
+      "name": "method_turkey_europe",
+      "value": "Diyanet İşleri Başkanlığı, Avrupa"
+    },
+    {
+      "name": "method_tehran",
+      "value": "Şii, Jeofizik Enstitüsü, Tahran Üniversitesi, İran"
+    },
+    {
+      "name": "method_indonesia",
+      "value": "Endonezya Din İşleri Bakanlığı (KEMENAG)"
+    },
+    {
+      "name": "method_algeria",
+      "value": "Cezayir Din İşleri ve Vakıflar Bakanlığı"
+    },
+    {
+      "name": "method_brunei",
+      "value": "Brunei Din İşleri Bakanlığı"
+    },
+    {
+      "name": "method_custom",
+      "value": "Özel"
+    },
+    {
+      "name": "method_short_karachi",
+      "value": "Karaçi"
+    },
+    {
+      "name": "method_short_jafari",
+      "value": "Caferi"
+    },
+    {
+      "name": "method_short_isna",
+      "value": "ISNA"
+    },
+    {
+      "name": "method_short_mwl",
+      "value": "MWL"
+    },
+    {
+      "name": "method_short_umm_al_qura",
+      "value": "Mekke"
+    },
+    {
+      "name": "method_short_egyptian",
+      "value": "Mısır"
+    },
+    {
+      "name": "method_short_sunni_iraq",
+      "value": "Irak"
+    },
+    {
+      "name": "method_short_qatar",
+      "value": "Katar"
+    },
+    {
+      "name": "method_short_singapore",
+      "value": "Singapur"
+    },
+    {
+      "name": "method_short_france",
+      "value": "Fransa"
+    },
+    {
+      "name": "method_short_turkey",
+      "value": "Türkiye"
+    },
+    {
+      "name": "method_short_russia",
+      "value": "Rusya"
+    },
+    {
+      "name": "method_short_uae",
+      "value": "BAE"
+    },
+    {
+      "name": "method_short_moonsighting",
+      "value": "Hilal Gözlem"
+    },
+    {
+      "name": "method_short_dubai",
+      "value": "Dubai"
+    },
+    {
+      "name": "method_short_kuwait",
+      "value": "Kuveyt"
+    },
+    {
+      "name": "method_short_france_15",
+      "value": "Fransa 15°"
+    },
+    {
+      "name": "method_short_france_18",
+      "value": "Fransa 18°"
+    },
+    {
+      "name": "method_short_turkey_europe",
+      "value": "Türkiye AB"
+    },
+    {
+      "name": "method_short_tehran",
+      "value": "Tahran"
+    },
+    {
+      "name": "method_short_indonesia",
+      "value": "KEMENAG"
+    },
+    {
+      "name": "method_short_algeria",
+      "value": "Cezayir"
+    },
+    {
+      "name": "method_short_brunei",
+      "value": "Brunei"
+    },
+    {
+      "name": "method_short_custom",
+      "value": "Özel"
+    },
+    {
+      "name": "asr_standard",
+      "value": "Standart (Şafii / Maliki / Hanbeli)"
+    },
+    {
+      "name": "asr_hanafi",
+      "value": "Hanefi"
+    },
+    {
+      "name": "asr_short_standard",
+      "value": "Standart"
+    },
+    {
+      "name": "asr_short_hanafi",
+      "value": "Hanefi"
+    },
+    {
+      "name": "source_local",
+      "value": "Yerel Formül (Çevrimdışı)"
+    },
+    {
+      "name": "source_api",
+      "value": "API (Çevrimiçi)"
+    },
+    {
+      "name": "source_short_local",
+      "value": "Yerel"
+    },
+    {
+      "name": "source_short_online",
+      "value": "Çevrimiçi"
+    },
+    {
+      "name": "theme_preset",
+      "value": "Uygulama Teması"
+    },
+    {
+      "name": "theme_preset_desc",
+      "value": "Uygulamanın görsel stilini seçin"
+    },
+    {
+      "name": "theme_preset_sirat",
+      "value": "Sirat"
+    },
+    {
+      "name": "theme_preset_sirat_desc",
+      "value": "Modern ve sade — HarmonyOS 7 estetiği"
+    },
+    {
+      "name": "theme_preset_current",
+      "value": "Sirat Klasik"
+    },
+    {
+      "name": "theme_preset_current_desc",
+      "value": "Sıcak krem ve koyu yeşil — orijinal"
+    },
+    {
+      "name": "theme_preset_harmony7",
+      "value": "Noor"
+    },
+    {
+      "name": "theme_preset_harmony7_desc",
+      "value": "Işıltılı menekşe — huzurlu ve modern"
+    },
+    {
+      "name": "theme_preset_harmony6",
+      "value": "Sahar"
+    },
+    {
+      "name": "theme_preset_harmony6_desc",
+      "value": "Altın kehribar — ilk ışığın sakinliği"
+    },
+    {
+      "name": "theme_preset_harmony5",
+      "value": "Bahar"
+    },
+    {
+      "name": "theme_preset_harmony5_desc",
+      "value": "Serin turkuaz — geniş, taze ve berrak"
+    },
+    {
+      "name": "theme_amber",
+      "value": "Kehribar"
+    },
+    {
+      "name": "theme_charcoal",
+      "value": "Kömür"
+    },
+    {
+      "name": "theme_emerald",
+      "value": "Zümrüt"
+    },
+    {
+      "name": "theme_pearl",
+      "value": "İnci"
+    },
+    {
+      "name": "theme_gold",
+      "value": "Altın (Metalik)"
+    },
+    {
+      "name": "theme_white",
+      "value": "Beyaz"
+    },
+    {
+      "name": "theme_sapphire",
+      "value": "Safir"
+    },
+    {
+      "name": "theme_rose",
+      "value": "Gül"
+    },
+    {
+      "name": "theme_silver",
+      "value": "Gümüş"
+    },
+    {
+      "name": "wizard_step",
+      "value": "Adım"
+    },
+    {
+      "name": "wizard_welcome_title",
+      "value": "Sirat Companion'a Hoş Geldiniz"
+    },
+    {
+      "name": "wizard_welcome_desc",
+      "value": "Tercihlerinizi ayarlayalım. Bunları istediğiniz zaman Ayarlar'dan değiştirebilirsiniz."
+    },
+    {
+      "name": "wizard_language_title",
+      "value": "Dilinizi seçin"
+    },
+    {
+      "name": "wizard_language_desc",
+      "value": "Uygulama bu dili tüm ekranlarda kullanacak"
+    },
+    {
+      "name": "wizard_privacy_title",
+      "value": "Gizlilik Politikası"
+    },
+    {
+      "name": "wizard_privacy_desc",
+      "value": "Devam etmeden önce lütfen okuyun ve kabul edin"
+    },
+    {
+      "name": "privacy_agree_label",
+      "value": "Gizlilik Politikasını okudum ve kabul ediyorum"
+    },
+    {
+      "name": "privacy_view_full",
+      "value": "Tam gizlilik politikasını çevrimiçi görüntüle"
+    },
+    {
+      "name": "wizard_theme_title",
+      "value": "Temanızı seçin"
+    },
+    {
+      "name": "wizard_theme_desc",
+      "value": "Bir görsel stil seçin. Bunu istediğiniz zaman Ayarlar'dan değiştirebilirsiniz."
+    },
+    {
+      "name": "wizard_location_title",
+      "value": "Konumunuzu ayarlayın"
+    },
+    {
+      "name": "wizard_location_desc",
+      "value": "Namaz vakitleri ve kıble yönü için kullanılır"
+    },
+    {
+      "name": "wizard_convention_title",
+      "value": "Hesaplama tercihleri"
+    },
+    {
+      "name": "wizard_convention_desc",
+      "value": "Namaz vakitlerinin nasıl hesaplanacağını seçin"
+    },
+    {
+      "name": "wizard_grant_permission",
+      "value": "Konum İzni Ver"
+    },
+    {
+      "name": "wizard_getting_location",
+      "value": "Konumunuz algılanıyor..."
+    },
+    {
+      "name": "wizard_location_ready",
+      "value": "Konum algılandı"
+    },
+    {
+      "name": "wizard_location_failed",
+      "value": "Konum alınamadı"
+    },
+    {
+      "name": "wizard_retry",
+      "value": "Yeniden Dene"
+    },
+    {
+      "name": "wizard_next",
+      "value": "İleri"
+    },
+    {
+      "name": "wizard_finish",
+      "value": "Başla"
+    },
+    {
+      "name": "home_today_progress",
+      "value": "GÜNLÜK NAMAZLAR"
+    },
+    {
+      "name": "home_prayers_completed",
+      "value": "namaz tamamlandı"
+    },
+    {
+      "name": "home_keep_going",
+      "value": "Böyle devam!"
+    },
+    {
+      "name": "home_streak",
+      "value": "Gün Serisi"
+    },
+    {
+      "name": "home_best_streak",
+      "value": "En İyi"
+    },
+    {
+      "name": "home_days",
+      "value": "gün"
+    },
+    {
+      "name": "home_this_week",
+      "value": "BU HAFTA"
+    },
+    {
+      "name": "home_week_summary",
+      "value": "bu hafta namaz"
+    },
+    {
+      "name": "home_this_month",
+      "value": "BU AY"
+    },
+    {
+      "name": "home_month_summary",
+      "value": "bu ay namaz"
+    },
+    {
+      "name": "home_tasbih",
+      "value": "GÜNLÜK TESBİH"
+    },
+    {
+      "name": "home_tasbih_lifetime",
+      "value": "Toplam sayı"
+    },
+    {
+      "name": "home_tasbih_summary",
+      "value": "tesbih"
+    },
+    {
+      "name": "home_dhikrs",
+      "value": "zikir"
+    },
+    {
+      "name": "home_monthly_view",
+      "value": "AYLIK GÖRÜNÜM"
+    },
+    {
+      "name": "home_perfect_days",
+      "value": "Mükemmel günler"
+    },
+    {
+      "name": "home_days_elapsed",
+      "value": "Geçen günler"
+    },
+    {
+      "name": "home_lifetime_1y",
+      "value": "son bir yılda namaz"
+    },
+    {
+      "name": "home_next_event",
+      "value": "SIRADAKİ OLAY"
+    },
+    {
+      "name": "home_event_today",
+      "value": "Bugün!"
+    },
+    {
+      "name": "home_event_tomorrow",
+      "value": "Yarın"
+    },
+    {
+      "name": "ramadan_card_title",
+      "value": "RAMAZAN"
+    },
+    {
+      "name": "ramadan_day_of",
+      "value": "Gün"
+    },
+    {
+      "name": "ramadan_day_of_suffix",
+      "value": "Ramazan ayının"
+    },
+    {
+      "name": "ramadan_days_until",
+      "value": "Ramazan'a kalan"
+    },
+    {
+      "name": "ramadan_fast_start",
+      "value": "Oruç Başlangıcı (İmsak)"
+    },
+    {
+      "name": "ramadan_fast_end",
+      "value": "Oruç Bitişi (Akşam)"
+    },
+    {
+      "name": "ramadan_today_fast",
+      "value": "Bugünün oruç penceresi"
+    },
+    {
+      "name": "ramadan_first_day_fast",
+      "value": "Ramazan'ın ilk günü"
+    },
+    {
+      "name": "ramadan_calendar_start",
+      "value": "Ramazan Başlangıcı"
+    },
+    {
+      "name": "ramadan_calendar_end",
+      "value": "Ramazan Bitişi"
+    },
+    {
+      "name": "ramadan_ashras",
+      "value": "AŞRELER"
+    },
+    {
+      "name": "ramadan_first_ashra",
+      "value": "Birinci Aşr"
+    },
+    {
+      "name": "ramadan_second_ashra",
+      "value": "İkinci Aşr"
+    },
+    {
+      "name": "ramadan_third_ashra",
+      "value": "Üçüncü Aşr"
+    },
+    {
+      "name": "ramadan_first_ashra_significance",
+      "value": "Merhamet Günleri"
+    },
+    {
+      "name": "ramadan_second_ashra_significance",
+      "value": "Bağışlanma Günleri"
+    },
+    {
+      "name": "ramadan_third_ashra_significance",
+      "value": "Cehennemden Kurtuluş"
+    },
+    {
+      "name": "ramadan_laylat_al_qadr",
+      "value": "KADİR GECESİ"
+    },
+    {
+      "name": "ramadan_laylat_al_qadr_desc",
+      "value": "Bin aydan daha hayırlı olan Kadir Gecesi. Son on günün tek gecelerinde arayın."
+    },
+    {
+      "name": "ramadan_jummah_tul_widah",
+      "value": "VEDA CUMASI"
+    },
+    {
+      "name": "ramadan_jummah_tul_widah_desc",
+      "value": "Veda Cuması — Ramazan'ın son Cuması."
+    },
+    {
+      "name": "ramadan_today",
+      "value": "Bu gece!"
+    },
+    {
+      "name": "countdown_fast_ends",
+      "value": "İftara kalan"
+    },
+    {
+      "name": "countdown_fast_starts",
+      "value": "Oruca kalan"
+    },
+    {
+      "name": "countdown_fast_ends_desc",
+      "value": "Orucunuzu açmaya hazırlanın"
+    },
+    {
+      "name": "countdown_fast_starts_desc",
+      "value": "İmsaktan önce sahuru bitirin"
+    },
+    {
+      "name": "dua_iftar_name",
+      "value": "İftar Duası"
+    },
+    {
+      "name": "dua_iftar_translation",
+      "value": "Susuzluk gitti, damarlar ıslandı ve inşallah ecir kesinleşti."
+    },
+    {
+      "name": "dua_suhoor_name",
+      "value": "Oruç Niyeti"
+    },
+    {
+      "name": "dua_suhoor_translation",
+      "value": "Yarın Ramazan ayında oruç tutmaya niyet ettim."
+    },
+    {
+      "name": "sun_path_we_are_here",
+      "value": "Buradayız"
+    },
+    {
+      "name": "mark_all",
+      "value": "Tümünü kılındı olarak işaretle"
+    },
+    {
+      "name": "default_location",
+      "value": "Varsayılan Konum"
+    },
+    {
+      "name": "unknown_location",
+      "value": "Bilinmeyen konum"
+    },
+    {
+      "name": "dialog_gps_off_title",
+      "value": "Konum kapalı"
+    },
+    {
+      "name": "dialog_gps_off_message",
+      "value": "Şehriniz için doğru namaz vakitlerini almak üzere lütfen konum hizmetlerini etkinleştirin."
+    },
+    {
+      "name": "dialog_permission_title",
+      "value": "İzin gerekli"
+    },
+    {
+      "name": "dialog_permission_message",
+      "value": "Şehriniz için namaz vakitlerini göstermek üzere konum izni gerekli.\nLütfen sistem ayarlarından izin verin."
+    },
+    {
+      "name": "error_gps_fetch_failed",
+      "value": "GPS konumu alınamadı"
+    },
+    {
+      "name": "error_gps_off",
+      "value": "Lütfen konum hizmetlerini açın"
+    },
+    {
+      "name": "error_location_permission_denied",
+      "value": "Konum izni reddedildi"
+    },
+    {
+      "name": "time_format",
+      "value": "Saat Biçimi"
+    },
+    {
+      "name": "time_format_desc",
+      "value": "Namaz vakitlerinin nasıl gösterileceği"
+    },
+    {
+      "name": "time_format_system",
+      "value": "Sistem Ayarlarını Kullan"
+    },
+    {
+      "name": "time_format_system_desc",
+      "value": "Cihaz tercihine uy"
+    },
+    {
+      "name": "time_format_12h",
+      "value": "12 saatlik (ÖÖ/ÖS)"
+    },
+    {
+      "name": "time_format_24h",
+      "value": "24 saatlik"
+    },
+    {
+      "name": "hijri_calendar_type",
+      "value": "Takvim Türü"
+    },
+    {
+      "name": "hijri_calendar_type_desc",
+      "value": "Dönüştürme için hangi Hicri takvimin kullanılacağı"
+    },
+    {
+      "name": "hijri_calendar_umm_al_qura",
+      "value": "Ümmü'l-Kura"
+    },
+    {
+      "name": "hijri_calendar_umm_al_qura_desc",
+      "value": "Suudi Arabistan'ın resmi takvimi (1318–1500 H)"
+    },
+    {
+      "name": "hijri_calendar_tabular",
+      "value": "Tablosal (Aritmetik)"
+    },
+    {
+      "name": "hijri_calendar_tabular_desc",
+      "value": "Kuveyt algoritması — tüm yıllar için belirleyici"
+    },
+    {
+      "name": "subsection_home_ui",
+      "value": "Ana Sayfa Arayüzü"
+    },
+    {
+      "name": "subsection_prayer_ui",
+      "value": "Namaz Arayüzü"
+    },
+    {
+      "name": "subsection_feedback",
+      "value": "Ses ve Geri Bildirim"
+    },
+    {
+      "name": "subsection_language",
+      "value": "Dil"
+    },
+    {
+      "name": "event_raghaib",
+      "value": "Regaib Gecesi"
+    },
+    {
+      "name": "countdown_fast_ends_now",
+      "value": "Orucunuzu açma vakti"
+    },
+    {
+      "name": "countdown_fast_starts_now",
+      "value": "Oruç başlama vakti"
+    },
+    {
+      "name": "shafaq_method_unavailable",
+      "value": "Yalnızca Hilal Gözlem Komitesi ile kullanılabilir"
+    },
+    {
+      "name": "event_perspective",
+      "value": "Olay Geleneği"
+    },
+    {
+      "name": "event_perspective_desc",
+      "value": "Ana Sayfa'nın tüm Müslümanların paylaştığı olayları mı, yoksa Sünni ve Şii geleneklerine özgü olayları da mı göstereceğini seçin."
+    },
+    {
+      "name": "event_perspective_universal",
+      "value": "Yalnızca evrensel"
+    },
+    {
+      "name": "event_perspective_sunni",
+      "value": "Sünni + evrensel"
+    },
+    {
+      "name": "event_perspective_shia",
+      "value": "Şii + evrensel"
+    },
+    {
+      "name": "event_perspective_all",
+      "value": "Tümünü göster"
+    },
+    {
+      "name": "event_arbaeen",
+      "value": "Erbain"
+    },
+    {
+      "name": "event_imam_ali_birthday",
+      "value": "İmam Ali'nin Doğumu"
+    },
+    {
+      "name": "event_ghadir",
+      "value": "Gadir Bayramı"
+    },
+    {
+      "name": "event_new_year_desc",
+      "value": "Hicri yılın başlangıcı; Peygamber'in Medine'ye hicretini işaret eder."
+    },
+    {
+      "name": "event_ashura_desc",
+      "value": "İslam dünyasında oruç ve tefekkürle gözlemlenen bir gün."
+    },
+    {
+      "name": "event_arbaeen_desc",
+      "value": "Aşure'den kırk gün sonrasını işaret eder — Şii geleneğinde bir yas dönemi."
+    },
+    {
+      "name": "event_mawlid_desc",
+      "value": "Peygamber Muhammed'in (sallallahu aleyhi ve sellem) doğumu."
+    },
+    {
+      "name": "event_raghaib_desc",
+      "value": "Recep ayının ilk perşembe gecesi — Sünni geleneğinde bir dua gecesi."
+    },
+    {
+      "name": "event_imam_ali_birthday_desc",
+      "value": "İmam Ali bin Ebi Talib'in doğumu; Şii geleneğinde gözlemlenir."
+    },
+    {
+      "name": "event_isra_miraj_desc",
+      "value": "Peygamber'in Kudüs'e gece yolculuğu ve göklere yükselişi."
+    },
+    {
+      "name": "event_mid_shaban_desc",
+      "value": "Şaban'ın on beşinci gecesi — dua ve bağışlanma dileme gecesi."
+    },
+    {
+      "name": "event_ramadan_start_desc",
+      "value": "Hicri yılın dokuzuncu ayı olan oruç ayının başlangıcı."
+    },
+    {
+      "name": "event_eid_fitr_desc",
+      "value": "Ramazan'ın sonunu işaret eden bayram."
+    },
+    {
+      "name": "event_arafah_desc",
+      "value": "Hac yolculuğunun en kutsal günü olan Arafat'ta durma günü."
+    },
+    {
+      "name": "event_eid_adha_desc",
+      "value": "Hz. İbrahim'in bağlılığını anan kurban bayramı."
+    },
+    {
+      "name": "event_ghadir_desc",
+      "value": "Şii geleneğinde Peygamber'in İmam Ali'yi halefi olarak atadığı günü işaret eder."
+    },
+    {
+      "name": "show_extra_timings_list",
+      "value": "Gece Vakitlerini Göster"
+    },
+    {
+      "name": "show_extra_timings_list_desc",
+      "value": "İmsak ve gece bölümleri. Güneş Doğumu ve Gün Batımı her zaman gösterilir."
+    },
+    {
+      "name": "show_extra_timings_sunpath",
+      "value": "Güneş Yolu Kılavuzlarını Göster"
+    },
+    {
+      "name": "show_extra_timings_sunpath_desc",
+      "value": "Güneş yolunda İlk Üçte Bir, Gece Yarısı ve Son Üçte Bir kılavuzları"
+    },
+    {
+      "name": "show_imsak",
+      "value": "İmsak"
+    },
+    {
+      "name": "show_imsak_desc",
+      "value": "Fecr'den on dakika önceki imsak kesme vakti"
+    },
+    {
+      "name": "show_first_third",
+      "value": "İlk Üçte Bir"
+    },
+    {
+      "name": "show_first_third_desc",
+      "value": "Akşam'dan sonra gecenin ilk üçte birinin başlangıcı"
+    },
+    {
+      "name": "show_midnight",
+      "value": "Gece Yarısı"
+    },
+    {
+      "name": "show_midnight_desc",
+      "value": "İslami gece yarısı — gecenin ortası"
+    },
+    {
+      "name": "show_last_third",
+      "value": "Son Üçte Bir"
+    },
+    {
+      "name": "show_last_third_desc",
+      "value": "Gecenin son üçte birinin başlangıcı, kıyam vakti"
+    },
+    {
+      "name": "subsection_prayer_list",
+      "value": "NAMAZ LİSTESİNDE GÖSTER"
+    },
+    {
+      "name": "subsection_sun_path",
+      "value": "GÜNEŞ YOLUNDA GÖSTER"
+    },
+    {
+      "name": "title_prayer_details",
+      "value": "Namaz Ayrıntıları"
+    },
+    {
+      "name": "title_tasbih_details",
+      "value": "Tesbih Ayrıntıları"
+    },
+    {
+      "name": "details_view",
+      "value": "Ayrıntıları Görüntüle"
+    },
+    {
+      "name": "details_period_week",
+      "value": "Hafta"
+    },
+    {
+      "name": "details_period_month",
+      "value": "Ay"
+    },
+    {
+      "name": "details_period_year",
+      "value": "Yıl"
+    },
+    {
+      "name": "details_prayers_completed",
+      "value": "namaz tamamlandı"
+    },
+    {
+      "name": "details_per_prayer",
+      "value": "NAMAZ BAZINDA DAĞILIM"
+    },
+    {
+      "name": "details_per_tasbih",
+      "value": "TESBİH BAZINDA DAĞILIM"
+    },
+    {
+      "name": "details_this_month",
+      "value": "BU AY"
+    },
+    {
+      "name": "details_perfect_days",
+      "value": "Mükemmel günler"
+    },
+    {
+      "name": "details_best_streak",
+      "value": "En İyi"
+    },
+    {
+      "name": "details_days_of",
+      "value": "/"
+    },
+    {
+      "name": "details_tasbih_summary_lifetime",
+      "value": "Toplam sayılar"
+    },
+    {
+      "name": "details_tasbih_summary_tasbihs",
+      "value": "Tesbihler"
+    },
+    {
+      "name": "details_tasbih_summary_dhikrs",
+      "value": "Tamamlanan zikirler"
+    },
+    {
+      "name": "export_pdf",
+      "value": "PDF Olarak Dışa Aktar"
+    },
+    {
+      "name": "export_prayers_title",
+      "value": "Namaz Takvimi"
+    },
+    {
+      "name": "export_calendar_title",
+      "value": "Hicri Takvim"
+    },
+    {
+      "name": "export_ramadan_title",
+      "value": "Ramazan Takvimi"
+    },
+    {
+      "name": "export_print",
+      "value": "Yazdır"
+    },
+    {
+      "name": "export_saving",
+      "value": "PDF oluşturuluyor..."
+    },
+    {
+      "name": "export_success",
+      "value": "PDF başarıyla oluşturuldu"
+    },
+    {
+      "name": "export_failed",
+      "value": "PDF oluşturulamadı"
+    },
+    {
+      "name": "export_sahur",
+      "value": "Sahur"
+    },
+    {
+      "name": "export_iftar",
+      "value": "İftar"
+    },
+    {
+      "name": "export_ramadan_timetable",
+      "value": "Ramazan Takvimi"
+    },
+    {
+      "name": "auto_show_ramadan_view",
+      "value": "Ramazan Görünümünü Otomatik Göster"
+    },
+    {
+      "name": "auto_show_ramadan_view_desc",
+      "value": "60 gün kalana kadar gizle. Kartı her zaman göstermek için kapatın."
+    },
+    {
+      "name": "export_date",
+      "value": "Tarih"
+    },
+    {
+      "name": "hijri_year_suffix",
+      "value": "H"
+    },
+    {
+      "name": "generated_by",
+      "value": "Sirat Companion tarafından oluşturuldu"
+    },
+    {
+      "name": "calendar_read_permission_denied",
+      "value": "Eski hatırlatıcıları temizlemek için Takvim Okuma izni gerekli."
+    },
+    {
+      "name": "calendar_write_permission_denied",
+      "value": "Yeni hatırlatıcıları kaydetmek için Takvim Yazma izni gerekli."
+    },
+    {
+      "name": "next_3_days",
+      "value": "SONRAKİ 3 GÜN"
+    },
+    {
+      "name": "about_developer",
+      "value": "Geliştirici"
+    },
+    {
+      "name": "wizard_use_default_location",
+      "value": "Varsayılan konumu kullan"
+    },
+    {
+      "name": "wizard_location_required_hint",
+      "value": "Devam etmek için bir konum ayarlayın"
+    },
+    {
+      "name": "subsection_language_and_time",
+      "value": "Dil ve Saat Biçimi"
+    },
+    {
+      "name": "madhab_desc_diyanet",
+      "value": "Diyanet takvimi Standart İkindi kuralını kullanır"
+    },
+    {
+      "name": "category_backup_restore",
+      "value": "Yedekle ve Geri Yükle"
+    },
+    {
+      "name": "backup_to_file",
+      "value": "Dosyaya Yedekle"
+    },
+    {
+      "name": "backup_to_file_desc",
+      "value": "Tüm ayarlarınızı, namaz ilerlemenizi ve tesbih verilerinizi saklayabileceğiniz bir dosyaya kaydedin."
+    },
+    {
+      "name": "restore_from_file",
+      "value": "Dosyadan Geri Yükle"
+    },
+    {
+      "name": "restore_from_file_desc",
+      "value": "Önceden kaydedilmiş bir yedeği yükleyin ve mevcut tüm verileri değiştirin."
+    },
+    {
+      "name": "backup_footer",
+      "value": "Yedek, tanılama günlüğünüzü veya cihaza özgü tanımlayıcıları içermez."
+    },
+    {
+      "name": "backup_success",
+      "value": "Yedek kaydedildi"
+    },
+    {
+      "name": "backup_failed",
+      "value": "Yedekleme başarısız"
+    },
+    {
+      "name": "restore_confirm_title",
+      "value": "Yedek Geri Yüklensin mi?"
+    },
+    {
+      "name": "restore_confirm_message",
+      "value": "Bu, mevcut tüm ayarları, namaz ilerlemenizi ve tesbih verilerinizi yedek dosyasının içeriğiyle değiştirecek. Bu işlem geri alınamaz."
+    },
+    {
+      "name": "restore_success",
+      "value": "Yedek geri yüklendi. Uygulama şimdi yenilenecek."
+    },
+    {
+      "name": "restore_failed",
+      "value": "Geri yükleme başarısız"
+    },
+    {
+      "name": "home_days_singular",
+      "value": "gün"
+    },
+    {
+      "name": "home_days_dual",
+      "value": "iki gün"
+    },
+    {
+      "name": "dhikr_count_dual",
+      "value": "iki zikir"
+    },
+    {
+      "name": "title_ramadan_details",
+      "value": "Ramazan Takibi"
+    },
+    {
+      "name": "track_ramadan",
+      "value": "Takip Et"
+    },
+    {
+      "name": "section_fasting",
+      "value": "ORUÇ"
+    },
+    {
+      "name": "fasting_status_fasted",
+      "value": "Tutuldu"
+    },
+    {
+      "name": "fasting_status_missed",
+      "value": "Kaçırıldı"
+    },
+    {
+      "name": "fasting_status_unmarked",
+      "value": "İşaretlenmedi"
+    },
+    {
+      "name": "fasting_summary_fasted",
+      "value": "tutuldu"
+    },
+    {
+      "name": "fasting_summary_missed",
+      "value": "kaçırıldı"
+    },
+    {
+      "name": "fasting_summary_unmarked",
+      "value": "işaretlenmedi"
+    },
+    {
+      "name": "fasting_mark_title",
+      "value": "Orucu İşaretle"
+    },
+    {
+      "name": "fasting_day_label",
+      "value": "Gün"
+    },
+    {
+      "name": "fasting_clear",
+      "value": "İşareti temizle"
+    },
+    {
+      "name": "fasting_reason_title",
+      "value": "Kaçırma Nedeni"
+    },
+    {
+      "name": "fasting_reason_travel",
+      "value": "Yolculuk"
+    },
+    {
+      "name": "fasting_reason_illness",
+      "value": "Hastalık"
+    },
+    {
+      "name": "fasting_reason_menstruation",
+      "value": "Hayız"
+    },
+    {
+      "name": "fasting_reason_pregnancy_nursing",
+      "value": "Hamilelik / emzirme"
+    },
+    {
+      "name": "fasting_reason_forgetfulness",
+      "value": "Unutkanlık"
+    },
+    {
+      "name": "fasting_reason_other",
+      "value": "Diğer"
+    },
+    {
+      "name": "fasting_reason_custom_label",
+      "value": "Lütfen belirtin"
+    },
+    {
+      "name": "fasting_reason_custom_placeholder",
+      "value": "Nedeniniz"
+    },
+    {
+      "name": "ramadan_not_active",
+      "value": "Oruçlarınızı takip etmek için bu sayfayı Ramazan'da açın."
+    },
+    {
+      "name": "section_qada",
+      "value": "KAZA"
+    },
+    {
+      "name": "qada_remaining",
+      "value": "Kalan"
+    },
+    {
+      "name": "qada_total_missed",
+      "value": "Toplam kaçırılan"
+    },
+    {
+      "name": "qada_total_made_up",
+      "value": "Toplam kaza edilen"
+    },
+    {
+      "name": "qada_per_year",
+      "value": "YILA GÖRE"
+    },
+    {
+      "name": "qada_log_button",
+      "value": "Kaza orucu kaydet"
+    },
+    {
+      "name": "qada_log_title",
+      "value": "Kaza Orucu Kaydet"
+    },
+    {
+      "name": "qada_log_desc",
+      "value": "Kaç kaza orucu tuttunuz?"
+    },
+    {
+      "name": "qada_all_done",
+      "value": "Hepsi tamam. Elhamdülillah."
+    },
+    {
+      "name": "qada_no_data",
+      "value": "Henüz kaçırılmış oruç kaydı yok."
+    },
+    {
+      "name": "qada_year_label",
+      "value": "Yıl için"
+    },
+    {
+      "name": "qada_count_label",
+      "value": "Kaç tane"
+    },
+    {
+      "name": "qada_count_suffix",
+      "value": "oruç"
+    },
+    {
+      "name": "qada_row_missed_suffix",
+      "value": "kaçırıldı"
+    },
+    {
+      "name": "qada_row_made_up_suffix",
+      "value": "kaza edildi"
+    },
+    {
+      "name": "section_taraweeh",
+      "value": "TERAVİH"
+    },
+    {
+      "name": "taraweeh_empty",
+      "value": "Takip Ramazan başlayınca başlar."
+    },
+    {
+      "name": "taraweeh_nights_suffix",
+      "value": "gece"
+    },
+    {
+      "name": "qada_not_during_ramadan",
+      "value": "Kaza oruçları Ramazan Bayramı'ndan sonra kaydedilebilir."
+    },
+    {
+      "name": "qada_total_fasted",
+      "value": "Toplam tutulan"
+    },
+    {
+      "name": "qada_total_unmarked",
+      "value": "Toplam işaretlenmeyen"
+    },
+    {
+      "name": "qada_row_fasted_suffix",
+      "value": "tutuldu"
+    },
+    {
+      "name": "qada_row_unmarked_suffix",
+      "value": "işaretlenmedi"
+    },
+    {
+      "name": "section_duas",
+      "value": "DUALAR"
+    },
+    {
+      "name": "eid_card_title",
+      "value": "RAMAZAN BAYRAMI"
+    },
+    {
+      "name": "eid_greeting",
+      "value": "Bayramınız mübarek olsun"
+    },
+    {
+      "name": "eid_greeting_subtitle",
+      "value": "Allah oruçlarınızı ve amellerinizi kabul etsin"
+    },
+    {
+      "name": "eid_zakat_fitr",
+      "value": "FITIR SADAKASI"
+    },
+    {
+      "name": "eid_zakat_fitr_desc",
+      "value": "Hane halkından her kişi için bir sa' (yaklaşık 2,5 kg) yerel temel gıda, bayram namazından önce verilmelidir."
+    },
+    {
+      "name": "eid_takbeer_arabic",
+      "value": "اللّٰهُ أَكْبَرُ، اللّٰهُ أَكْبَرُ، لَا إِلٰهَ إِلَّا اللّٰهُ، وَاللّٰهُ أَكْبَرُ، اللّٰهُ أَكْبَرُ، وَلِلّٰهِ الْحَمْدُ"
+    },
+    {
+      "name": "eid_takbeer_translation",
+      "value": "Allah en büyüktür, Allah en büyüktür. Allah'tan başka ilah yoktur. Allah en büyüktür, Allah en büyüktür ve hamd Allah'a mahsustur."
+    },
+    {
+      "name": "ramadan_about_this_month",
+      "value": "BU RAMAZAN HAKKINDA"
+    },
+    {
+      "name": "eid_card_link",
+      "value": "Ramazan'ı Gözden Geçir"
+    },
+    {
+      "name": "qada_card_link",
+      "value": "Kazayı Yönet"
+    },
+    {
+      "name": "qada_banner_log_action",
+      "value": "Kaydet"
+    },
+    {
+      "name": "qada_banner_singular",
+      "value": "kaza edilecek oruç"
+    },
+    {
+      "name": "qada_banner_plural",
+      "value": "kaza edilecek oruç"
+    },
+    {
+      "name": "qada_banner_dual",
+      "value": "Kaza edilecek iki oruç"
+    },
+    {
+      "name": "qada_year_sheet_title_prefix",
+      "value": "Kaza:"
+    },
+    {
+      "name": "qada_of",
+      "value": "/"
+    },
+    {
+      "name": "qada_made_up_of_total",
+      "value": "kaza edildi"
+    },
+    {
+      "name": "qada_day_mark_made_up",
+      "value": "Kaza edildi olarak işaretle"
+    },
+    {
+      "name": "qada_day_made_up",
+      "value": "Kaza edildi"
+    },
+    {
+      "name": "qada_year_sheet_empty",
+      "value": "Bu yıl için tüm kaçırılan oruçlar kaza edildi. Elhamdülillah."
+    },
+    {
+      "name": "qada_tap_year_hint",
+      "value": "Kazalarını görüntülemek ve yönetmek için bir yıla dokunun."
+    },
+    {
+      "name": "close",
+      "value": "Kapat"
+    },
+    {
+      "name": "lang_system",
+      "value": "Otomatik Algıla"
+    },
+    {
+      "name": "lang_system_desc",
+      "value": "Sistem diliyle eşleşir"
+    },
+    {
+      "name": "lang_supported_hint",
+      "value": "Desteklenen diller: İngilizce, Arapça, Çince, Endonezce, Urduca, Türkçe, Bengalce"
+    },
+    {
+      "name": "tasbih_default_classic_name",
+      "value": "Klasik 33"
+    },
+    {
+      "name": "tasbih_default_tahlil_name",
+      "value": "Tehlil 100"
+    },
+    {
+      "name": "tasbih_default_istighfar_name",
+      "value": "İstiğfar"
+    },
+    {
+      "name": "dhikr_subhanallah_translit",
+      "value": "SubhanAllah"
+    },
+    {
+      "name": "dhikr_subhanallah_trans",
+      "value": "Allah'ı tenzih ederim"
+    },
+    {
+      "name": "dhikr_alhamdulillah_translit",
+      "value": "Alhamdulillah"
+    },
+    {
+      "name": "dhikr_alhamdulillah_trans",
+      "value": "Hamd Allah'a mahsustur"
+    },
+    {
+      "name": "dhikr_allahuakbar_translit",
+      "value": "Allahu Akbar"
+    },
+    {
+      "name": "dhikr_allahuakbar_trans",
+      "value": "Allah en büyüktür"
+    },
+    {
+      "name": "dhikr_tahlil_translit",
+      "value": "La ilaha illallahu wahdahu la sharika lah"
+    },
+    {
+      "name": "dhikr_tahlil_trans",
+      "value": "Allah'tan başka ilah yoktur, tektir, ortağı yoktur"
+    },
+    {
+      "name": "dhikr_istighfar_translit",
+      "value": "Astaghfirullah"
+    },
+    {
+      "name": "dhikr_istighfar_trans",
+      "value": "Allah'tan bağışlanma dilerim"
+    },
+    {
+      "name": "tasbih_active_badge",
+      "value": "Etkin"
+    },
+    {
+      "name": "notif_step_title",
+      "value": "Namaz Hatırlatıcıları"
+    },
+    {
+      "name": "notif_step_desc",
+      "value": "Namaz vakitleri için bildirim almak üzere hatırlatıcıları etkinleştirin. Bu, Takvim izinlerini gerektirir."
+    },
+    {
+      "name": "permission_required",
+      "value": "Takvim İzni Gerekli"
+    },
+    {
+      "name": "calendar_permission_required_msg",
+      "value": "Namaz hatırlatıcıları için hem Takvim Okuma hem de Yazma izinleri gerekir. Devam etmek için lütfen bunları verin."
+    },
+    {
+      "name": "grant",
+      "value": "İzin Ver"
+    },
+    {
+      "name": "category_logs",
+      "value": "Tanılama Günlükleri"
+    },
+    {
+      "name": "jummah_mubarak",
+      "value": "Cuma mübarek olsun"
+    },
+    {
+      "name": "fasting_ends_at",
+      "value": "Oruç bitiş vakti"
+    },
+    {
+      "name": "duas_link",
+      "value": "Dualar"
+    },
+    {
+      "name": "ramadan_laylat_today",
+      "value": "Bu gece: muhtemel Kadir Gecesi"
+    },
+    {
+      "name": "ramadan_taraweeh_quick",
+      "value": "Teravih:"
+    },
+    {
+      "name": "ramadan_fast_nudge",
+      "value": "Bugün oruç tuttunuz mu? İşaretle"
+    },
+    {
+      "name": "bind_to_prayers",
+      "value": "Namazlara Bağla"
+    },
+    {
+      "name": "tasbih_reminder_title",
+      "value": "Bekleyen Tesbih"
+    },
+    {
+      "name": "tasbih_reminder_desc",
+      "value": "namaz kılındı, ancak hâlâ bekleyen Tesbihleriniz var."
+    },
+    {
+      "name": "go_to_tasbih",
+      "value": "Tesbihe Git"
+    },
+    {
+      "name": "dismiss",
+      "value": "Kapat"
+    },
+    {
+      "name": "tasbih_status_completed",
+      "value": "Tamamlandı"
+    },
+    {
+      "name": "tasbih_left",
+      "value": "kaldı"
+    },
+    {
+      "name": "duas",
+      "value": "Dualar"
+    },
+    {
+      "name": "search_duas",
+      "value": "Dualarda ara..."
+    },
+    {
+      "name": "dua_cat_all",
+      "value": "Tümü"
+    },
+    {
+      "name": "dua_cat_favorites",
+      "value": "Favoriler"
+    },
+    {
+      "name": "dua_cat_forgiveness",
+      "value": "Bağışlanma"
+    },
+    {
+      "name": "dua_cat_distress",
+      "value": "Sıkıntı"
+    },
+    {
+      "name": "dua_cat_travel",
+      "value": "Yolculuk"
+    },
+    {
+      "name": "bind_prayer",
+      "value": "Namaza Bağla"
+    },
+    {
+      "name": "home_duas_title",
+      "value": "GÜNÜN DUALARI"
+    },
+    {
+      "name": "view_all",
+      "value": "Tümünü Gör"
+    },
+    {
+      "name": "dua_cat_morning_evening",
+      "value": "Sabah ve Akşam"
+    },
+    {
+      "name": "dua_cat_prayer",
+      "value": "Namaz"
+    },
+    {
+      "name": "dua_cat_protection",
+      "value": "Koruma"
+    },
+    {
+      "name": "dua_cat_guidance",
+      "value": "Hidayet"
+    },
+    {
+      "name": "dua_cat_general",
+      "value": "Genel"
+    },
+    {
+      "name": "dua_cat_worship",
+      "value": "İbadet"
+    },
+    {
+      "name": "dua_cat_repentance",
+      "value": "Tövbe"
+    },
+    {
+      "name": "dua_cat_steadfastness",
+      "value": "Sebat"
+    },
+    {
+      "name": "dua_cat_mercy",
+      "value": "Merhamet"
+    },
+    {
+      "name": "dua_cat_reflection",
+      "value": "Tefekkür"
+    },
+    {
+      "name": "dua_cat_hereafter",
+      "value": "Ahiret"
+    },
+    {
+      "name": "dua_cat_family",
+      "value": "Aile"
+    },
+    {
+      "name": "dua_cat_knowledge",
+      "value": "İlim"
+    },
+    {
+      "name": "dua_cat_healing",
+      "value": "Şifa"
+    },
+    {
+      "name": "dua_cat_need",
+      "value": "İhtiyaç"
+    },
+    {
+      "name": "dua_cat_gratitude",
+      "value": "Şükür"
+    },
+    {
+      "name": "dua_cat_reliance",
+      "value": "Tevekkül"
+    },
+    {
+      "name": "dua_cat_daily",
+      "value": "Günlük Hayat"
+    },
+    {
+      "name": "dua_cat_fasting",
+      "value": "Oruç"
+    },
+    {
+      "name": "dua_cat_weather",
+      "value": "Hava"
+    },
+    {
+      "name": "dua_cat_faith",
+      "value": "İman"
+    },
+    {
+      "name": "dua_cat_purification",
+      "value": "Arınma"
+    },
+    {
+      "name": "dua_cat_provision",
+      "value": "Rızık"
+    },
+    {
+      "name": "dua_cat_funeral",
+      "value": "Cenaze"
+    },
+    {
+      "name": "duas_for",
+      "value": "Şunun için dualar:"
+    },
+    {
+      "name": "home_tasbih_tracker",
+      "value": "BAĞLI TESBİHLER"
+    },
+    {
+      "name": "add_custom_event",
+      "value": "Etkinlik Ekle"
+    },
+    {
+      "name": "event_title_placeholder",
+      "value": "Etkinlik Adı"
+    },
+    {
+      "name": "hijri_date",
+      "value": "Hicri Tarih"
+    },
+    {
+      "name": "gregorian_date",
+      "value": "Miladi Tarih"
+    },
+    {
+      "name": "notify_me",
+      "value": "Bu gün beni bildir"
+    },
+    {
+      "name": "custom_events_title",
+      "value": "ÖZEL ETKİNLİKLER"
+    },
+    {
+      "name": "date_type",
+      "value": "Tarih Türü"
+    },
+    {
+      "name": "event_title",
+      "value": "Etkinlik Başlığı"
+    },
+    {
+      "name": "day",
+      "value": "Gün"
+    },
+    {
+      "name": "month",
+      "value": "Ay"
+    },
+    {
+      "name": "year",
+      "value": "Yıl"
+    },
+    {
+      "name": "notify_me_desc",
+      "value": "08:00'de takvim hatırlatıcısı alın"
+    },
+    {
+      "name": "edit_custom_event",
+      "value": "Etkinliği Düzenle"
+    },
+    {
+      "name": "event_title_required",
+      "value": "Etkinlik başlığı gerekli"
+    },
+    {
+      "name": "invalid_date",
+      "value": "Geçersiz tarih"
+    },
+    {
+      "name": "hijri_equivalent",
+      "value": "Şu şekilde kaydedilecek:"
+    },
+    {
+      "name": "repeats",
+      "value": "Tekrar"
+    },
+    {
+      "name": "recur_none",
+      "value": "Yok"
+    },
+    {
+      "name": "recur_yearly",
+      "value": "Yıllık"
+    },
+    {
+      "name": "recur_monthly",
+      "value": "Aylık"
+    },
+    {
+      "name": "recur_weekly",
+      "value": "Haftalık"
+    },
+    {
+      "name": "show_all",
+      "value": "Tümünü Göster"
+    },
+    {
+      "name": "show_this_month",
+      "value": "Bu Ay"
+    },
+    {
+      "name": "no_custom_events",
+      "value": "Özel etkinlik bulunamadı."
+    },
+    {
+      "name": "upcoming_custom_events",
+      "value": "YAKLAŞAN ETKİNLİKLER"
+    },
+    {
+      "name": "notif_pray_jummah",
+      "value": "Cuma namazını kıl"
+    },
+    {
+      "name": "hadith_jummah",
+      "value": "Beş vakit namaz ve bir Cuma namazından diğerine, büyük günahlardan kaçınıldığı sürece aralarında işlenen günahlara kefarettir. — Sahih Müslim 233"
+    },
+    {
+      "name": "lang_id",
+      "value": "Bahasa Indonesia (Endonezce)"
+    },
+    {
+      "name": "lang_ur",
+      "value": "اردو (Urduca)"
+    },
+    {
+      "name": "lang_tr",
+      "value": "Türkçe"
+    },
+    {
+      "name": "lang_bn",
+      "value": "বাংলা (Bengalce)"
+    }
+  ]
+}

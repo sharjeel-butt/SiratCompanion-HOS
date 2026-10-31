@@ -38,7 +38,7 @@ import {
 } from '../helper/NotificationHelper';
 import { AppLogger } from '../helper/AppLogger';
 import { AppInfoHelper, AppInfoSnapshot } from '../helper/AppInfoHelper';
-import { L } from '../i8n/LocalizationHelper';
+import { L } from '../i18n/LocalizationHelper';
 import { Breakpoints } from '../common/Breakpoints';
 import {
   CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED
@@ -1029,7 +1029,7 @@ struct SettingsPage {
 
             Button({ type: ButtonType.Normal }) {
               Text('+').fontSize(20).fontWeight(FontWeight.Bold)
-                .fontColor(this.hijriOffset >= MAX_HIJRI_OFFSET
+                .fontColor(this.notifBefore >= MAX_BEFORE_MINUTES
                   ? this.colors.textMuted : this.colors.textOnAccent)
             }
             .width(38)

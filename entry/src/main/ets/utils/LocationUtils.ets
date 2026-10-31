@@ -1,7 +1,7 @@
 // entry/src/main/ets/utils/LocationUtils.ets
 
 import { abilityAccessCtrl, bundleManager, Context, PermissionRequestResult, Permissions } from '@kit.AbilityKit';
-import { L } from '../i8n/LocalizationHelper';
+import { L } from '../i18n/LocalizationHelper';
 import { OfflineCityLookup } from './OfflineCityLookup';
 import { geoLocationManager } from '@kit.LocationKit';
 import { promptAction } from '@kit.ArkUI';
