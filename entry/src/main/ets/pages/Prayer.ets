@@ -1651,7 +1651,6 @@ export struct Prayer {
         .width(20)
         .height(20)
         .fillColor(this.colors.textMuted)
-        .opacity(0.85)
         .flexShrink(0)
         .objectFit(ImageFit.Contain)
 

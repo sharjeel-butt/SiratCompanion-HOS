@@ -2835,6 +2835,22 @@
     {
       "name": "lang_bn",
       "value": "بنگلہ (بنگالی)"
+    },
+    {
+      "name": "restore_restart_title",
+      "value": "دوبارہ شروع کرنا ضروری ہے"
+    },
+    {
+      "name": "restore_restart_message",
+      "value": "آپ کا بیک اپ بحال کر دیا گیا ہے۔ تمام ترتیبات اور پیش رفت کو فوری طور پر اپ ڈیٹ کرنے کے لیے ابھی ایپ دوبارہ شروع کریں۔"
+    },
+    {
+      "name": "restore_restart_now",
+      "value": "ابھی دوبارہ شروع کریں"
+    },
+    {
+      "name": "restore_restart_later",
+      "value": "بعد میں"
     }
   ]
 }

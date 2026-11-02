@@ -2835,6 +2835,22 @@
     {
       "name": "lang_bn",
       "value": "বাংলা (孟加拉语)"
+    },
+    {
+      "name": "restore_restart_title",
+      "value": "需要重新启动"
+    },
+    {
+      "name": "restore_restart_message",
+      "value": "您的备份已恢复。请立即重新启动应用，以便所有设置和进度能够立即更新。"
+    },
+    {
+      "name": "restore_restart_now",
+      "value": "立即重启"
+    },
+    {
+      "name": "restore_restart_later",
+      "value": "稍后"
     }
   ]
 }

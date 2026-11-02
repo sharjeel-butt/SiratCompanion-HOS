@@ -60,6 +60,7 @@ import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 import { LocationCache } from '../utils/LocationCache';
 import { TypographyHelper } from '../helper/TypographyHelper';
 import { PageTheme } from '../common/PageTheme';
+import { PrivacyPolicyProvider } from '../data/PrivacyPolicy';
 
 /** How long the splash stays visible, in milliseconds. */
 const SPLASH_DELAY_MS = 1500;
@@ -154,6 +155,7 @@ export default class EntryAbility extends UIAbility {
       AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, resolvedLanguage);
       PreferencesHelper.setString(STORAGE_KEY_LANGUAGE, resolvedLanguage);
       L.applySystemLanguage(savedOverride);
+      PrivacyPolicyProvider.preload(this.context, resolvedLanguage);
 
       // ---- Other Preferences ----
       const tasbihSound = await PreferencesHelper.getString(

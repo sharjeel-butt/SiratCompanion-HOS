@@ -2835,6 +2835,22 @@
     {
       "name": "lang_bn",
       "value": "বাংলা (Bengali)"
+    },
+    {
+      "name": "restore_restart_title",
+      "value": "Perlu Memulai Ulang"
+    },
+    {
+      "name": "restore_restart_message",
+      "value": "Cadangan Anda telah dipulihkan. Mulai ulang aplikasi sekarang agar semua pengaturan dan progres segera diperbarui."
+    },
+    {
+      "name": "restore_restart_now",
+      "value": "Mulai Ulang Sekarang"
+    },
+    {
+      "name": "restore_restart_later",
+      "value": "Nanti"
     }
   ]
 }

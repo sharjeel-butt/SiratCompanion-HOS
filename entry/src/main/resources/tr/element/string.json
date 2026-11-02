@@ -2835,6 +2835,22 @@
     {
       "name": "lang_bn",
       "value": "বাংলা (Bengalce)"
+    },
+    {
+      "name": "restore_restart_title",
+      "value": "Yeniden Başlatma Gerekli"
+    },
+    {
+      "name": "restore_restart_message",
+      "value": "Yedeğiniz geri yüklendi. Tüm ayarların ve ilerlemenin hemen güncellenmesi için uygulamayı şimdi yeniden başlatın."
+    },
+    {
+      "name": "restore_restart_now",
+      "value": "Şimdi Yeniden Başlat"
+    },
+    {
+      "name": "restore_restart_later",
+      "value": "Daha Sonra"
     }
   ]
 }

@@ -2836,6 +2836,22 @@
     {
       "name": "lang_bn",
       "value": "বাংলা (البنغالية)"
+    },
+    {
+      "name": "restore_restart_title",
+      "value": "مطلوب إعادة التشغيل"
+    },
+    {
+      "name": "restore_restart_message",
+      "value": "تمت استعادة النسخة الاحتياطية. أعد تشغيل التطبيق الآن حتى يتم تحديث جميع الإعدادات والتقدم فورًا."
+    },
+    {
+      "name": "restore_restart_now",
+      "value": "إعادة التشغيل الآن"
+    },
+    {
+      "name": "restore_restart_later",
+      "value": "لاحقًا"
     }
   ]
 }

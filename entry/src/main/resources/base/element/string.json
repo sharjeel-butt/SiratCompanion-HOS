@@ -2835,6 +2835,22 @@
     {
       "name": "lang_bn",
       "value": "বাংলা (Bengali)"
+    },
+    {
+      "name": "restore_restart_title",
+      "value": "Restart Required"
+    },
+    {
+      "name": "restore_restart_message",
+      "value": "Your backup has been restored. Restart the app now so all settings and progress update immediately."
+    },
+    {
+      "name": "restore_restart_now",
+      "value": "Restart Now"
+    },
+    {
+      "name": "restore_restart_later",
+      "value": "Later"
     }
   ]
 }

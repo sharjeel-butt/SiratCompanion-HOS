@@ -28,8 +28,8 @@ const TOTAL_STEPS = 6;
 
 interface LanguageOption {
   id: string;
-  nativeName: string;
-  englishName: string;
+  nativeName: string; // language's own name — unchanged across UI languages
+  localizedName: string; // language's name in the current UI language
 }
 
 interface ThemeOption {
@@ -83,18 +83,21 @@ struct WizardPage {
   @State notifMasterEnabled: boolean = false;
   @State notifRequesting: boolean = false;
   @State private notificationPermissionAttempts: number = 0;
+  @State private privacyPolicyText: string = '';
   private static readonly MAX_NOTIF_ATTEMPTS = 3;
 
-  aboutToAppear(): void {
+  async aboutToAppear(): Promise<void> {
     this.currentLanguage = this.appLanguage;
     this.selectedLanguage = this.languageOverride;
     this.selectedTheme = this.appTheme;
     this.colors = PageTheme.compute(this.themeMode);
-    this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
+    this.systemDarkListener = PageTheme.installSystemListener(
+      this.themeMode, (c) => {
       this.colors = c;
-    });
-
+    }
+    );
     this.reloadDefaults();
+    await this.loadPrivacyPolicy();
   }
 
   aboutToDisappear(): void {
@@ -401,7 +404,7 @@ struct WizardPage {
                 .fontSize(18).fontWeight(FontWeight.Bold)
                 .fontColor(this.colors.textWhite)
                 .width('100%')
-              Text(opt.englishName)
+              Text(opt.localizedName)
                 .fontSize(11).fontColor(this.colors.textMuted)
                 .margin({ top: 2 }).width('100%')
             }
@@ -446,7 +449,7 @@ struct WizardPage {
             this.pickLanguage(opt.id);
           })
         }, (opt: LanguageOption) =>
-        `lang-${opt.id}-${opt.id === this.selectedLanguage ? 'sel' : 'un'}`)
+        `lang-${opt.id}-${opt.id === this.selectedLanguage ? 'sel' : 'un'}-${this.currentLanguage}`)
 
         // Supported Languages Hint
         Text(this.tr('lang_supported_hint'))
@@ -475,12 +478,23 @@ struct WizardPage {
     Column() {
       Scroll() {
         Column() {
-          Text(this.getPrivacyPolicyText())
-            .fontSize(13)
-            .fontColor(this.colors.textWhite)
-            .lineHeight(20)
+          if (this.privacyPolicyText.length > 0) {
+            Text(this.privacyPolicyText)
+              .fontSize(13)
+              .fontColor(this.colors.textWhite)
+              .lineHeight(20)
+              .width('100%')
+              .textAlign(TextAlign.Start)
+          } else {
+            Column() {
+              LoadingProgress()
+                .width(32).height(32)
+                .color(this.colors.accentGold)
+            }
             .width('100%')
-            .textAlign(TextAlign.Start)
+            .padding({ top: 40, bottom: 40 })
+            .alignItems(HorizontalAlign.Center)
+          }
         }
         .width('100%')
         .padding(16)
@@ -1267,6 +1281,7 @@ struct WizardPage {
 
   private onLanguageChanged(): void {
     this.currentLanguage = this.appLanguage;
+    this.loadPrivacyPolicy();
     if (this.usedDefaultLocation && this.locationStatus === 'ready') {
       this.detectedCity = this.tr('default_location');
     }
@@ -1332,30 +1347,42 @@ struct WizardPage {
     const system: LanguageOption = {
       id: AppLanguage.SYSTEM,
       nativeName: this.tr('lang_system'),
-      englishName: this.tr('lang_system_desc')
+      localizedName: this.tr('lang_system_desc')
     };
     const en: LanguageOption = {
-      id: AppLanguage.ENGLISH, nativeName: 'English', englishName: 'English'
+      id: AppLanguage.ENGLISH,
+      nativeName: 'English',
+      localizedName: L.get('lang_en', this.currentLanguage)
     };
     const id: LanguageOption = {
       id: AppLanguage.INDONESIAN,
       nativeName: 'Bahasa Indonesia',
-      englishName: 'Indonesian'
+      localizedName: L.get('lang_id', this.currentLanguage)
     };
     const ur: LanguageOption = {
-      id: AppLanguage.URDU, nativeName: 'اردو', englishName: 'Urdu'
+      id: AppLanguage.URDU,
+      nativeName: 'اردو',
+      localizedName: L.get('lang_ur', this.currentLanguage)
     };
     const tr: LanguageOption = {
-      id: AppLanguage.TURKISH, nativeName: 'Türkçe', englishName: 'Turkish'
+      id: AppLanguage.TURKISH,
+      nativeName: 'Türkçe',
+      localizedName: L.get('lang_tr', this.currentLanguage)
     };
     const bn: LanguageOption = {
-      id: AppLanguage.BENGALI, nativeName: 'বাংলা', englishName: 'Bengali'
+      id: AppLanguage.BENGALI,
+      nativeName: 'বাংলা',
+      localizedName: L.get('lang_bn', this.currentLanguage)
     };
     const zh: LanguageOption = {
-      id: AppLanguage.CHINESE, nativeName: '中文', englishName: 'Chinese'
+      id: AppLanguage.CHINESE,
+      nativeName: '中文',
+      localizedName: L.get('lang_zh', this.currentLanguage)
     };
     const ar: LanguageOption = {
-      id: AppLanguage.ARABIC, nativeName: 'العربية', englishName: 'Arabic'
+      id: AppLanguage.ARABIC,
+      nativeName: 'العربية',
+      localizedName: L.get('lang_ar', this.currentLanguage)
     };
     return [system, en, id, ur, tr, bn, zh, ar];
   }
@@ -1427,8 +1454,16 @@ struct WizardPage {
     }
   }
 
-  private getPrivacyPolicyText(): string {
-    return PrivacyPolicyProvider.get(this.currentLanguage);
+  /**
+   * Load the privacy policy for the current language into
+   * `@State`. `PrivacyPolicyProvider.preload` in EntryAbility
+   * usually warms this before the wizard appears, but a direct
+   * `load` here defends against the race where the user opens
+   * the wizard immediately after a cold start.
+   */
+  private async loadPrivacyPolicy(): Promise<void> {
+    const doc = await PrivacyPolicyProvider.load(this.currentLanguage);
+    this.privacyPolicyText = doc.body;
   }
 
   /**

@@ -2835,6 +2835,22 @@
     {
       "name": "lang_bn",
       "value": "বাংলা (বাংলা)"
+    },
+    {
+      "name": "restore_restart_title",
+      "value": "রিস্টার্ট প্রয়োজন"
+    },
+    {
+      "name": "restore_restart_message",
+      "value": "আপনার ব্যাকআপ পুনরুদ্ধার করা হয়েছে। সমস্ত সেটিংস এবং অগ্রগতি তাৎক্ষণিকভাবে আপডেট করতে এখনই অ্যাপটি পুনরায় চালু করুন।"
+    },
+    {
+      "name": "restore_restart_now",
+      "value": "এখনই রিস্টার্ট করুন"
+    },
+    {
+      "name": "restore_restart_later",
+      "value": "পরে"
     }
   ]
 }

@@ -5,6 +5,7 @@ import { common } from '@kit.AbilityKit';
 import { pasteboard } from '@kit.BasicServicesKit';
 import { ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
 import { PageTheme } from '../common/PageTheme';
+import { AppRestartHelper } from '../helper/AppRestartHelper';
 import {
   AsrShadowRule, CalculationMethod
 } from '../prayer/PrayerTimeCalculator';
@@ -2258,19 +2259,88 @@ struct SettingsPage {
         return;
       }
 
-      promptAction.showToast({
-        message: this.tr('restore_success'), duration: 2000
-      });
+      // Restore succeeded. Release the busy flag before showing
+      // the restart prompt so the button under it is not stuck
+      // in a disabled state while the dialog is on screen.
+      this.isBackupBusy = false;
 
-      // Replace SettingsPage with a fresh MainTabs so every tab
-      // renders against the restored state.
-      NavHelper.prepareForward();
-      router.replaceUrl({ url: 'pages/MainTabs' }).catch((err: Error) => {
-        console.error('[SettingsPage] restore navigate failed: ' + err.message);
-      });
+      await this.promptRestartAfterRestore();
     } finally {
       this.isBackupBusy = false;
     }
+  }
+
+  /**
+   * Ask the user whether to restart the app after a successful
+   * manual restore.
+   *
+   * Restart Now — terminates the current ability and re-launches
+   *               the entry ability. The user re-enters the app
+   *               through the normal Wizard-or-MainTabs decision
+   *               against the fully restored preferences.
+   *
+   * Later      — dismisses the dialog and confirms the restore
+   *               succeeded with a toast. The restored preferences
+   *               are already flushed to disk, and every version
+   *               counter bumped inside UserBackupService
+   *               .reloadAllAfterRestore has already fired the
+   *               relevant @StorageLink @Watch handlers on any
+   *               page still mounted. The next visit to each page
+   *               reads the restored data.
+   *
+   * If restart fails while the ability is still alive (rare —
+   * terminateSelf threw), the fallback is a router.replaceUrl to
+   * MainTabs so the user sees the restored state without a hard
+   * restart.
+   */
+  private async promptRestartAfterRestore(): Promise<void> {
+    const ctx = getContext(this) as common.UIAbilityContext;
+
+    let res: promptAction.ShowDialogSuccessResponse;
+    try {
+      res = await promptAction.showDialog({
+        title: this.tr('restore_restart_title'),
+        message: this.tr('restore_restart_message'),
+        buttons: [
+          {
+            text: this.tr('restore_restart_later'),
+            color: this.colors.dialogCancel
+          },
+          {
+            text: this.tr('restore_restart_now'),
+            color: this.colors.accentGold
+          }
+        ]
+      });
+    } catch (err) {
+      console.error('[SettingsPage] restart prompt failed: ' +
+        JSON.stringify(err));
+      return;
+    }
+
+    if (res.index !== 1) {
+      // "Later" — confirm success via toast, leave user where they are.
+      promptAction.showToast({
+        message: this.tr('restore_success'),
+        duration: 2500
+      });
+      return;
+    }
+
+    // "Restart Now" — small delay so the dialog's dismiss animation
+    // completes and the tap ripple is visible before the window
+    // tears down.
+    setTimeout(() => {
+      AppRestartHelper.restart(ctx).catch((err: Error) => {
+        // Reached only when terminateSelf itself failed — the
+        // ability is still alive, so a navigation fallback works.
+        console.error('[SettingsPage] restart failed: ' + err.message);
+        NavHelper.prepareForward();
+        router.replaceUrl({ url: 'pages/MainTabs' }).catch((e: Error) => {
+          console.error('[SettingsPage] fallback navigate failed: ' + e.message);
+        });
+      });
+    }, 250);
   }
 
   private copyLogsToClipboard(): void {
