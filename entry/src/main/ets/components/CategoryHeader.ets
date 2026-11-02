@@ -1,4 +1,4 @@
-import { ThemeColors } from '../common/Theme';
+import { ThemeColors } from '../core/Theme';
 import { L } from '../i18n/LocalizationHelper';
 
 @Component

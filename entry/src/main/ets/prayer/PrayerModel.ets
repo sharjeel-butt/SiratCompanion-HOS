@@ -1,11 +1,11 @@
-// entry/src/main/ets/models/PrayerModel.ets
+// entry/src/main/ets/prayer/PrayerModel.ets
 
 export interface PrayerModel {
   id: string;
   name: string;
   arabicName: string;
   time: string;
-  status: 'next' | 'pray' | 'both' | 'prayed' | 'express' | 'abbreviation';
+  status: 'next' | 'pray' | 'prayed' | 'abbreviation';
   checked?: boolean;
 }
 
@@ -14,6 +14,6 @@ export interface ExtraTiming {
   name: string;
   arabicName: string;
   time: string;
-  status: 'next' | 'pray' | 'both' | 'prayed' | 'express' | 'abbreviation';
+  status: 'next' | 'pray' | 'prayed' | 'abbreviation';
   icon?: Resource;
 }

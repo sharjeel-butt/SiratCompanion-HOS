@@ -1,4 +1,4 @@
-// entry/src/main/ets/models/HijriCalendarModels.ets
+// entry/src/main/ets/hijricalendar/HijriCalendarModels.ets
 
 export interface HijriDate {
   year: number;

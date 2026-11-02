@@ -1,4 +1,4 @@
-// entry/src/main/ets/helper/TasbihCanvasRenderer.ets
+// entry/src/main/ets/tasbih/TasbihCanvasRenderer.ets
 
 import {
   BeadColors, TasbihFinish, TasbihTheme, TasbihThemes

@@ -3,8 +3,8 @@
 import { CalendarDay, HijriDate } from './HijriCalendarModels';
 import {
   EventRecurrence, IslamicEvent
-} from '../models/DateModels';
-import { eventMatchesPerspective, IMPORTANT_ISLAMIC_EVENTS } from '../data/IslamicEvents';
+} from './DateModels';
+import { eventMatchesPerspective, IMPORTANT_ISLAMIC_EVENTS } from './IslamicEvents';
 import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
 
 export const HIJRI_MONTH_NAMES: string[] = [

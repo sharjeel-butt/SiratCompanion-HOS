@@ -1,4 +1,4 @@
-// entry/src/main/ets/common/HijriCalendarType.ets
+// entry/src/main/ets/hijricalendar/HijriCalendarType.ets
 
 /**
  * Which Hijri calendar engine to use for date conversion.

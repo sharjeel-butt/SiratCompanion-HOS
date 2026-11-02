@@ -1,4 +1,4 @@
-// entry/src/main/ets/utils/UmmAlQuraEngine.ets
+// entry/src/main/ets/hijricalendar/UmmAlQuraEngine.ets
 
 import { HijriDate } from './HijriCalendarModels';
 import { HijriCalendarType } from './HijriCalendarType';

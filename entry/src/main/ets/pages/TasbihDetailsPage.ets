@@ -2,8 +2,8 @@
 
 import { mediaquery, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
-import { PageTheme } from '../common/PageTheme';
+import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
+import { PageTheme } from '../core/PageTheme';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -11,9 +11,9 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_TASBIH_STATE_VERSION,
   STORAGE_KEY_THEME_MODE
-} from '../common/StorageKeys';
+} from '../core/StorageKeys';
 import { L } from '../i18n/LocalizationHelper';
-import { Breakpoints } from '../common/Breakpoints';
+import { Breakpoints } from '../core/Breakpoints';
 import { Tasbih } from '../tasbih/TasbihModels';
 import { TasbihManager } from '../tasbih/TasbihManager';
 import { TasbihStorage } from '../tasbih/TasbihStorage';
@@ -23,7 +23,7 @@ import {
   TasbihDhikrProgress,
   TasbihPeriod,
   TasbihProgressRow
-} from '../utils/ProgressHelper';
+} from '../progress/ProgressHelper';
 import { TasbihThemes } from '../tasbih/TasbihThemes';
 
 @Entry

@@ -1,10 +1,10 @@
 import { common } from '@kit.AbilityKit';
-import { ThemeColors, ThemeMode } from '../common/Theme';
-import { PageTheme } from '../common/PageTheme';
+import { ThemeColors, ThemeMode } from '../core/Theme';
+import { PageTheme } from '../core/PageTheme';
 import { L } from '../i18n/LocalizationHelper';
-import { DuaService } from '../helper/DuaService';
-import { CompleteDua } from '../models/DuaModels';
-import { TypographyHelper } from '../helper/TypographyHelper';
+import { DuaService } from '../duas/DuaService';
+import { CompleteDua } from '../duas/DuaModels';
+import { TypographyHelper } from '../core/TypographyHelper';
 import { router } from '@kit.ArkUI';
 
 @Entry

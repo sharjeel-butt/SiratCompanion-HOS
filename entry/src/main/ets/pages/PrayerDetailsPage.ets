@@ -1,8 +1,8 @@
 // entry/src/main/ets/pages/PrayerDetailsPage.ets
 
 import { mediaquery, router } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
-import { PageTheme } from '../common/PageTheme';
+import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
+import { PageTheme } from '../core/PageTheme';
 
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
@@ -11,9 +11,9 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_PRAYER_STATE_VERSION,
   STORAGE_KEY_THEME_MODE
-} from '../common/StorageKeys';
+} from '../core/StorageKeys';
 import { L } from '../i18n/LocalizationHelper';
-import { Breakpoints } from '../common/Breakpoints';
+import { Breakpoints } from '../core/Breakpoints';
 import {
   MonthDayCell,
   PerPrayerCount,
@@ -22,8 +22,8 @@ import {
   WeekDetailCell,
   YearDetailSnapshot,
   YearMonthRow
-} from '../utils/ProgressHelper';
-import { TypographyHelper } from '../helper/TypographyHelper';
+} from '../progress/ProgressHelper';
+import { TypographyHelper } from '../core/TypographyHelper';
 
 type Period = 'week' | 'month' | 'year';
 

@@ -1,10 +1,10 @@
-// entry/src/main/ets/utils/PrayerManager.ets
+// entry/src/main/ets/prayer/PrayerManager.ets
 
 import { ExtraTiming, PrayerModel } from './PrayerModel';
 import { DailyPrayerTimes } from './PrayerTimeCalculator';
-import { PrayerOffsets } from '../helper/SettingsHelper';
-import { PreferencesHelper } from '../helper/PreferencesHelper';
-import { STORAGE_KEY_PRAYER_STATE_VERSION } from '../common/StorageKeys';
+import { PrayerOffsets } from '../settings/SettingsHelper';
+import { PreferencesHelper } from '../core/PreferencesHelper';
+import { STORAGE_KEY_PRAYER_STATE_VERSION } from '../core/StorageKeys';
 
 export interface PrayerCheckState {
   fajr: boolean;
@@ -653,11 +653,6 @@ export class PrayerManager {
       && state.isha === true;
   }
 
-  /** Diagnostic: JSON dump of the entire in-memory state map. */
-  static debugDump(): string {
-    return JSON.stringify(PrayerManager.stateMap);
-  }
-
   // ============================================================
   // HEADER HELPERS
   // ============================================================
@@ -682,24 +677,6 @@ export class PrayerManager {
       return null;
     }
     return prayers[currentIdx];
-  }
-
-  static getNextPrayer(
-    prayers: PrayerModel[],
-    locationOffsetHours?: number
-  ): PrayerModel | null {
-    if (prayers.length === 0) {
-      return null;
-    }
-    const currentMinutes = PrayerManager.getCurrentMinutesInLocation(locationOffsetHours);
-
-    for (let i = 0; i < prayers.length; i++) {
-      const t = PrayerManager.timeToMinutes(prayers[i].time);
-      if (t > currentMinutes) {
-        return prayers[i];
-      }
-    }
-    return null;
   }
 
   private static getCurrentMinutesInLocation(locationOffsetHours?: number): number {

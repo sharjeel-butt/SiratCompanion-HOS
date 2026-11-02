@@ -1,4 +1,4 @@
-// entry/src/main/ets/models/TasbihModels.ets
+// entry/src/main/ets/tasbih/TasbihModels.ets
 
 import { TasbihTheme } from './TasbihThemes';
 

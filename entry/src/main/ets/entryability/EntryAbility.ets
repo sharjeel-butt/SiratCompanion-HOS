@@ -3,12 +3,12 @@
 import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { Configuration } from '@ohos.app.ability.Configuration'; // Direct import fixes fontScale error
 import { window } from '@kit.ArkUI';
-import { CustomEventStorage } from '../helper/CustomEventStorage';
-import { CustomEventNotifier } from '../helper/CustomEventNotifier';
+import { CustomEventStorage } from '../hijricalendar/CustomEventStorage';
+import { CustomEventNotifier } from '../hijricalendar/CustomEventNotifier';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { deviceInfo } from '@kit.BasicServicesKit';
-import { PreferencesHelper } from '../helper/PreferencesHelper';
-import { AppLogger } from '../helper/AppLogger';
+import { PreferencesHelper } from '../core/PreferencesHelper';
+import { AppLogger } from '../core/AppLogger';
 import { AppLanguage, L } from '../i18n/LocalizationHelper';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
@@ -43,24 +43,24 @@ import {
   STORAGE_KEY_TIME_FORMAT,
   STORAGE_KEY_VIBRATION_ENABLED,
   STORAGE_KEY_WIZARD_COMPLETED
-} from '../common/StorageKeys';
-import { SoundHelper } from '../helper/SoundHelper';
-import { SoundOptions } from '../common/SoundOptions';
-import { SystemFeedbackHelper } from '../helper/SystemFeedbackHelper';
-import { ThemeMode, ThemePreset } from '../common/Theme';
+} from '../core/StorageKeys';
+import { SoundHelper } from '../tasbih/SoundHelper';
+import { SoundOptions } from '../tasbih/SoundOptions';
+import { SystemFeedbackHelper } from '../core/SystemFeedbackHelper';
+import { ThemeMode, ThemePreset } from '../core/Theme';
 import { PrayerManager } from '../prayer/PrayerManager';
-import { LayoutHelper } from '../helper/LayoutHelper';
-import { MaterialHelper } from '../helper/MaterialHelper';
-import { SettingsHelper } from '../helper/SettingsHelper';
-import { NotificationHelper } from '../helper/NotificationHelper';
+import { LayoutHelper } from '../core/LayoutHelper';
+import { MaterialHelper } from '../core/MaterialHelper';
+import { SettingsHelper } from '../settings/SettingsHelper';
+import { NotificationHelper } from '../prayer/NotificationHelper';
 import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
-import { CALENDAR_REMINDERS_ENABLED } from '../common/FeatureFlags';
-import { ClockFormat } from '../common/ClockFormat';
+import { CALENDAR_REMINDERS_ENABLED } from '../core/FeatureFlags';
+import { ClockFormat } from '../core/ClockFormat';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
-import { LocationCache } from '../utils/LocationCache';
-import { TypographyHelper } from '../helper/TypographyHelper';
-import { PageTheme } from '../common/PageTheme';
-import { PrivacyPolicyProvider } from '../data/PrivacyPolicy';
+import { LocationCache } from '../location/LocationCache';
+import { TypographyHelper } from '../core/TypographyHelper';
+import { PageTheme } from '../core/PageTheme';
+import { PrivacyPolicyProvider } from '../legal/PrivacyPolicy';
 
 /** How long the splash stays visible, in milliseconds. */
 const SPLASH_DELAY_MS = 1500;

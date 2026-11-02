@@ -14,8 +14,8 @@ import {
   ScrollEffectType,
   SystemMaterialParams
 } from '@kit.UIDesignKit';
-import { ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
-import { PageTheme } from '../common/PageTheme';
+import { ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
+import { PageTheme } from '../core/PageTheme';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -24,17 +24,17 @@ import {
   STORAGE_KEY_HIJRI_CALENDAR_VERSION,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
-} from '../common/StorageKeys';
+} from '../core/StorageKeys';
 import { L } from '../i18n/LocalizationHelper';
-import { NavHelper } from '../helper/NavHelper';
+import { NavHelper } from '../core/NavHelper';
 
 import { HomePage } from './HomePage';
-import { Prayer } from './Prayer';
-import { HijriCalendarPage } from './HijriCalendarPage';
-import { QiblaPage } from './QiblaPage';
-import { TasbihPage } from './TasbihPage';
-import { TypographyHelper } from '../helper/TypographyHelper';
-import { AppLogger } from '../helper/AppLogger';
+import { Prayer } from '../prayer/Prayer';
+import { HijriCalendarPage } from '../hijricalendar/HijriCalendarPage';
+import { QiblaPage } from '../qibla/QiblaPage';
+import { TasbihPage } from '../tasbih/TasbihPage';
+import { TypographyHelper } from '../core/TypographyHelper';
+import { AppLogger } from '../core/AppLogger';
 
 const HDS_MIN_API = 23;
 
@@ -509,48 +509,6 @@ struct MainTabs {
     }
   }
 
-  /**
-   * Menu item. The Row carries an explicit direction so the layout
-   * mirrors in Arabic — icons move to the right, labels to the left.
-   * The Menu system popup does not inherit the page's direction on
-   * every SDK build, so the explicit direction is required.
-   */
-  @Builder
-  HamburgerMenuItem(
-    icon: Resource, label: string, onTap: () => void
-  ) {
-    Row() {
-      Image(icon)
-        .width(20)
-        .height(20)
-        .fillColor(this.colors.textWhite)
-        .objectFit(ImageFit.Contain)
-        .flexShrink(0)
-
-      Text(label)
-        .fontSize(15)
-        .fontColor(this.colors.textWhite)
-        .fontWeight(FontWeight.Medium)
-        .margin(this.isRtl()
-          ? { right: 12 }
-          : { left: 12 })
-        .layoutWeight(1)
-        .maxLines(1)
-        .textOverflow({ overflow: TextOverflow.Ellipsis })
-
-      Blank()
-    }
-    .width('100%')
-    .padding({
-      top: 10,
-      bottom: 10,
-      left: this.isRtl() ? 20 : 14,
-      right: this.isRtl() ? 14 : 20
-    })
-    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
-    .onClick(onTap)
-  }
-
   // ============================================================
   // SHARED TAB CONTENT
   // ============================================================
@@ -784,37 +742,5 @@ struct MainTabs {
     }).catch((err: Error) => {
       console.error('Dialog error:', JSON.stringify(err));
     });
-  }
-
-  // IMPORTANT: destroyWindow() alone does NOT terminate the UIAbility.
-  // On tablet / 2-in-1 (especially Easy-Go routerSplit mode) the window
-  // handle returned by getLastWindow() may not reference the visible
-  // pane, so destroyWindow() resolves without any visible effect. The
-  // only reliable exit is terminateSelf(). Never gate it behind
-  // window-destroy success.
-  private async performExit(
-    ctx: common.UIAbilityContext,
-    isLarge: boolean
-  ): Promise<void> {
-    // Best-effort window cleanup on tablet / 2-in-1. May be a no-op under
-    // Easy-Go routerSplit, which is fine — terminateSelf does the actual exit.
-    if (isLarge) {
-      try {
-        const win = await window.getLastWindow(ctx);
-        await win.destroyWindow();
-      } catch (e) {
-        const err = e as Error;
-        console.warn('[Exit] window destroy failed: ' + err.message);
-      }
-    }
-
-    // Always call terminateSelf — the only API that ends the UIAbility.
-    try {
-      await ctx.terminateSelf();
-      console.info('[Exit] terminateSelf succeeded');
-    } catch (e) {
-      const err = e as Error;
-      console.error('[Exit] terminateSelf failed: ' + err.message);
-    }
   }
 }

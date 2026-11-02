@@ -3,19 +3,19 @@
 import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { pasteboard } from '@kit.BasicServicesKit';
-import { ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
-import { PageTheme } from '../common/PageTheme';
-import { AppRestartHelper } from '../helper/AppRestartHelper';
+import { ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
+import { PageTheme } from '../core/PageTheme';
+import { AppRestartHelper } from '../core/AppRestartHelper';
 import {
   AsrShadowRule, CalculationMethod
 } from '../prayer/PrayerTimeCalculator';
-import { PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
-import { LocationData, LocationHelper } from '../utils/LocationUtils';
-import { LocationCache } from '../utils/LocationCache';
+import { PrayerOffsets, SettingsHelper } from '../settings/SettingsHelper';
+import { LocationData, LocationHelper } from '../location/LocationUtils';
+import { LocationCache } from '../location/LocationCache';
 import { CategoryHeader } from '../components/CategoryHeader';
 import {
   CalculationSource, LocationMode, PickerItem
-} from '../models/SettingsModels';
+} from '../settings/SettingsModels';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -25,9 +25,9 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_SETTINGS_INITIAL_CATEGORY,
   STORAGE_KEY_THEME_MODE
-} from '../common/StorageKeys';
+} from '../core/StorageKeys';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
-import { UserBackupService } from '../utils/UserBackupService';
+import { UserBackupService } from '../backup/UserBackupService';
 import {
   OffsetKey, PrayerOffsetsHelper
 } from '../prayer/PrayerOffsetsHelper';
@@ -36,16 +36,16 @@ import {
   MIN_BEFORE_MINUTES,
   NotificationHelper,
   STEP_BEFORE_MINUTES
-} from '../helper/NotificationHelper';
-import { AppLogger } from '../helper/AppLogger';
-import { AppInfoHelper, AppInfoSnapshot } from '../helper/AppInfoHelper';
+} from '../prayer/NotificationHelper';
+import { AppLogger } from '../core/AppLogger';
+import { AppInfoHelper, AppInfoSnapshot } from '../core/AppInfoHelper';
 import { L } from '../i18n/LocalizationHelper';
-import { Breakpoints } from '../common/Breakpoints';
+import { Breakpoints } from '../core/Breakpoints';
 import {
   CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED
-} from '../common/FeatureFlags';
-import { NavHelper } from '../helper/NavHelper';
-import { SettingsRow } from '../components/SettingsRow';
+} from '../core/FeatureFlags';
+import { NavHelper } from '../core/NavHelper';
+import { SettingsRow } from '../settings/SettingsRow';
 import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
 
 const MAX_HIJRI_OFFSET = 3;
@@ -1107,8 +1107,6 @@ struct SettingsPage {
         })
         .alignItems(VerticalAlign.Top)
       }
-
-      // this.LogAccessRowInternal()
     }
     .width('100%')
     .padding(12)
@@ -1174,40 +1172,6 @@ struct SettingsPage {
     })
     .backgroundColor(this.colors.tintSubtle)
     .borderRadius(12)
-    .onClick(() => {
-      this.openLogViewer();
-    })
-  }
-
-  @Builder
-  LogAccessRow() {
-    Row({ space: 8 }) {
-      Image($r('app.media.ic_log')).width(14).height(14).fillColor(this.colors.accentGold).flexShrink(0)
-      Column() {
-        Text(this.tr('log_view_button'))
-          .fontSize(13).fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium).width('100%')
-        Text(this.tr('log_view_desc'))
-          .fontSize(10).fontColor(this.colors.textMuted)
-          .margin({ top: 2 }).width('100%')
-      }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
-      // Use SVG Image
-      Image($r('app.media.ic_chevron_right'))
-        .width(16)
-        .height(16)
-        .fillColor(this.colors.accentGold)
-        .opacity(0.7)
-        .rotate({ angle: this.isRtl() ? 180 : 0 })
-        .flexShrink(0)
-    }
-    .width('100%')
-    .padding(14)
-    .backgroundColor(this.colors.cardDark)
-    .borderRadius(16)
-    .border({ width: 1, color: this.colors.borderSoft })
-    .margin({ bottom: 12 })
     .onClick(() => {
       this.openLogViewer();
     })

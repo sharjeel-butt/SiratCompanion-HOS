@@ -1,4 +1,4 @@
-// entry/src/main/ets/utils/TabularHijriEngine.ets
+// entry/src/main/ets/hijricalendar/TabularHijriEngine.ets
 
 import { HijriDate } from './HijriCalendarModels';
 import { HijriCalendarType } from './HijriCalendarType';

@@ -1,28 +1,24 @@
 // entry/src/main/ets/pages/AdvancedCalcPage.ets
 
 import { mediaquery, router } from '@kit.ArkUI';
-import { ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
-import { PageTheme } from '../common/PageTheme';
+import { ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
+import { PageTheme } from '../core/PageTheme';
 import {
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
-} from '../common/StorageKeys';
-import { SettingsHelper } from '../helper/SettingsHelper';
-import { PickerItem } from '../models/SettingsModels';
+} from '../core/StorageKeys';
+import { SettingsHelper } from '../settings/SettingsHelper';
+import { PickerItem } from '../settings/SettingsModels';
 import {
-  CustomAngles,
-  MidnightMethod,
-  PolarResolution,
-  RoundingMethod,
-  Shafaq
-} from '../models/AdvancedCalcModels';
+  MidnightMethod, PolarResolution, RoundingMethod, Shafaq
+} from '../prayer/AdvancedCalcModels';
 import {
   CalculationMethod, HighLatitudeRule
 } from '../prayer/PrayerTimeCalculator';
 import { L } from '../i18n/LocalizationHelper';
-import { Breakpoints } from '../common/Breakpoints';
+import { Breakpoints } from '../core/Breakpoints';
 
 type SheetKind = 'none' | 'rounding' | 'midnight' | 'polar'
   | 'shafaq' | 'highlat';
@@ -61,10 +57,6 @@ struct AdvancedCalcPage {
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
 
   @State activeSheet: SheetKind = 'none';
-
-  @State customFajrInput: string = '18';
-  @State customIshaInput: string = '18';
-  @State customIntervalInput: string = '0';
 
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
 
@@ -417,116 +409,6 @@ struct AdvancedCalcPage {
         this.activeSheet = 'shafaq';
       }
     })
-  }
-
-  // ============================================================
-  // CUSTOM ANGLES
-  // ============================================================
-
-  @Builder
-  CustomAnglesBlock() {
-    Column() {
-      Text(this.tr('custom_angles'))
-        .fontSize(11)
-        .fontColor(this.colors.accentGold)
-        .fontWeight(FontWeight.Bold)
-        .letterSpacing(1)
-        .width('100%')
-        .padding({ bottom: 10 })
-
-      Column() {
-        Text(this.tr('custom_fajr_angle')).fontSize(11)
-          .fontColor(this.colors.textMuted)
-          .width('100%').margin({ bottom: 4 })
-        TextInput({ text: this.customFajrInput, placeholder: '18' })
-          .type(InputType.Normal)
-          .inputFilter('[0-9\\.]')
-          .direction(Direction.Ltr)
-          .onChange((v: string) => {
-            this.customFajrInput = v;
-            this.persistCustomAngles();
-          })
-          .fontSize(14)
-          .fontColor(this.colors.textWhite)
-          .placeholderColor(this.colors.placeholder)
-          .caretColor(this.colors.accentGold)
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(8)
-          .padding({
-            left: 12,
-            right: 12,
-            top: 8,
-            bottom: 8
-          })
-      }
-      .width('100%').margin({ bottom: 10 })
-
-      Column() {
-        Text(this.tr('custom_isha_angle')).fontSize(11)
-          .fontColor(this.colors.textMuted)
-          .width('100%').margin({ bottom: 4 })
-        TextInput({ text: this.customIshaInput, placeholder: '18' })
-          .type(InputType.Normal)
-          .inputFilter('[0-9\\.]')
-          .direction(Direction.Ltr)
-          .onChange((v: string) => {
-            this.customIshaInput = v;
-            this.persistCustomAngles();
-          })
-          .fontSize(14)
-          .fontColor(this.colors.textWhite)
-          .placeholderColor(this.colors.placeholder)
-          .caretColor(this.colors.accentGold)
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(8)
-          .padding({
-            left: 12,
-            right: 12,
-            top: 8,
-            bottom: 8
-          })
-      }
-      .width('100%').margin({ bottom: 10 })
-
-      Column() {
-        Text(this.tr('custom_isha_interval')).fontSize(11)
-          .fontColor(this.colors.textMuted)
-          .width('100%').margin({ bottom: 4 })
-        TextInput({ text: this.customIntervalInput, placeholder: '0' })
-          .type(InputType.Normal)
-          .inputFilter('[0-9]')
-          .direction(Direction.Ltr)
-          .onChange((v: string) => {
-            this.customIntervalInput = v;
-            this.persistCustomAngles();
-          })
-          .fontSize(14)
-          .fontColor(this.colors.textWhite)
-          .placeholderColor(this.colors.placeholder)
-          .caretColor(this.colors.accentGold)
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(8)
-          .padding({
-            left: 12,
-            right: 12,
-            top: 8,
-            bottom: 8
-          })
-      }
-      .width('100%').margin({ bottom: 8 })
-
-      Text(this.tr('custom_isha_interval_hint'))
-        .fontSize(10)
-        .fontColor(this.colors.textMuted)
-        .fontStyle(FontStyle.Italic)
-        .width('100%')
-        .margin({ top: 2 })
-    }
-    .width('100%')
-    .padding(14)
-    .backgroundColor(this.colors.tintSubtle)
-    .borderRadius(12)
-    .border({ width: 1, color: this.colors.borderSoft })
   }
 
   // ============================================================
@@ -897,9 +779,6 @@ struct AdvancedCalcPage {
         this.polarResolution = adv.polarResolution;
         this.shafaqValue = adv.shafaq;
 
-        this.customFajrInput = String(adv.customAngles.fajr);
-        this.customIshaInput = String(adv.customAngles.isha);
-        this.customIntervalInput = String(adv.customAngles.ishaInterval);
       })
       .catch((err: Error) => {
         console.error('[AdvancedCalcPage] reload advanced failed: '
@@ -925,19 +804,6 @@ struct AdvancedCalcPage {
       .catch((err: Error) => {
         console.error('[AdvancedCalcPage] reload base failed: ' + err.message);
       });
-  }
-
-  private persistCustomAngles(): void {
-    const fajr = parseFloat(this.customFajrInput);
-    const isha = parseFloat(this.customIshaInput);
-    const interval = parseInt(this.customIntervalInput, 10);
-
-    const angles: CustomAngles = {
-      fajr: isNaN(fajr) ? 18 : fajr,
-      isha: isNaN(isha) ? 18 : isha,
-      ishaInterval: isNaN(interval) ? 0 : interval
-    };
-    SettingsHelper.saveCustomAngles(angles);
   }
 
   private tr(key: string): string {

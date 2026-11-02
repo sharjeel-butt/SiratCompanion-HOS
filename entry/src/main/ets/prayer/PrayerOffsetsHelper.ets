@@ -1,6 +1,6 @@
 // entry/src/main/ets/utils/PrayerOffsetsHelper.ets
 
-import { PrayerOffsets } from '../helper/SettingsHelper';
+import { PrayerOffsets } from '../settings/SettingsHelper';
 
 export type OffsetKey = 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha';
 

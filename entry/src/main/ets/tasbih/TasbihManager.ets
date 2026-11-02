@@ -811,17 +811,6 @@ export class TasbihManager {
 
   // ============================================================
   // PRAYER BINDING
-  // ============================================================
-
-  static isTasbihComplete(tasbih: Tasbih): boolean {
-    if (tasbih.dhikrs.length === 0) {
-      return false;
-    }
-    return tasbih.dhikrs.every((d: Dhikr) => {
-      const total = d.dailyTotal ?? d.count;
-      return total >= d.target;
-    });
-  }
 
   static updateBinding(tasbihs: Tasbih[], id: string, prayerIds: string[]): Tasbih[] {
     return tasbihs.map((t: Tasbih): Tasbih => {

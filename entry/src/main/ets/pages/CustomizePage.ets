@@ -1,10 +1,10 @@
 // entry/src/main/ets/pages/CustomizePage.ets
 
 import { mediaquery, router } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
-import { PageTheme } from '../common/PageTheme';
-import { SettingsHelper } from '../helper/SettingsHelper';
-import { PickerItem } from '../models/SettingsModels';
+import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
+import { PageTheme } from '../core/PageTheme';
+import { SettingsHelper } from '../settings/SettingsHelper';
+import { PickerItem } from '../settings/SettingsModels';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -27,14 +27,14 @@ import {
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_THEME_OVERRIDE,
   STORAGE_KEY_TIME_FORMAT
-} from '../common/StorageKeys';
+} from '../core/StorageKeys';
 import { AppLanguage, L } from '../i18n/LocalizationHelper';
-import { SoundHelper } from '../helper/SoundHelper';
-import { SoundOptions, TASBIH_SOUND_OPTIONS, TasbihSoundOption } from '../common/SoundOptions';
-import { Breakpoints } from '../common/Breakpoints';
-import { ClockFormat } from '../common/ClockFormat';
+import { SoundHelper } from '../tasbih/SoundHelper';
+import { SoundOptions, TASBIH_SOUND_OPTIONS, TasbihSoundOption } from '../tasbih/SoundOptions';
+import { Breakpoints } from '../core/Breakpoints';
+import { ClockFormat } from '../core/ClockFormat';
 import { SubsectionHeader } from '../components/SubsectionHeader';
-import { ExtraTimingToggleRow } from '../components/ExtraTimingToggleRow';
+import { ExtraTimingToggleRow } from '../prayer/ExtraTimingToggleRow';
 import { common } from '@kit.AbilityKit';
 
 @Entry

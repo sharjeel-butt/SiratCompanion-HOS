@@ -1,8 +1,8 @@
 // entry/src/main/ets/prayer/PrayerTimeCalculator.ets
 
-import { TimezoneResolver } from '../utils/TimezoneResolver';
+import { TimezoneResolver } from '../location/TimezoneResolver';
 import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
-import { STORAGE_KEY_HIJRI_OFFSET } from '../common/StorageKeys';
+import { STORAGE_KEY_HIJRI_OFFSET } from '../core/StorageKeys';
 import {
   AdvancedCalcSettings,
   DEFAULT_ADVANCED_CALC,
@@ -10,7 +10,7 @@ import {
   PolarResolution,
   RoundingMethod,
   Shafaq
-} from '../models/AdvancedCalcModels';
+} from './AdvancedCalcModels';
 
 // ---- Enums ----
 
@@ -304,45 +304,6 @@ export class PrayerTimeCalculator {
       default:
         return PrayerTimeCalculator.KARACHI;
     }
-  }
-
-  static getAvailableMethods(): Array<MethodOption> {
-    return [
-      { value: CalculationMethod.MOONSIGHTING_COMMITTEE, label: 'Moonsighting Committee Worldwide' },
-      { value: CalculationMethod.MWL, label: 'Muslim World League (18°/17°)' },
-      { value: CalculationMethod.EGYPTIAN, label: 'Egyptian General Survey Authority (19.5°/17.5°)' },
-      { value: CalculationMethod.KARACHI, label: 'University of Islamic Sciences, Karachi (18°/18°)' },
-      { value: CalculationMethod.UMM_AL_QURA, label: 'Umm al-Qura University, Makkah (18.5° / 90 min)' },
-      { value: CalculationMethod.ISNA, label: 'Islamic Society of North America (15°/15°)' },
-      { value: CalculationMethod.DUBAI, label: 'The Gulf Region (Dubai) (18.2°/18.2°)' },
-      { value: CalculationMethod.KUWAIT, label: 'Kuwait (18°/17.5°)' },
-      { value: CalculationMethod.QATAR, label: 'Qatar (18° / 90 min)' },
-      { value: CalculationMethod.SINGAPORE, label: 'Singapore (MUIS) (20°/18°)' },
-      { value: CalculationMethod.FRANCE, label: 'Union Organization Islamic de France (12°/12°)' },
-      { value: CalculationMethod.FRANCE_15, label: 'France angle 15 (15°/15°)' },
-      { value: CalculationMethod.FRANCE_18, label: 'France angle 18 (18°/18°)' },
-      { value: CalculationMethod.TURKEY, label: 'Diyanet İşleri Başkanlığı, Turkey (18°/17°)' },
-      { value: CalculationMethod.TURKEY_EUROPE, label: 'Diyanet İşleri Başkanlığı, Europe (18°/17°)' },
-      { value: CalculationMethod.RUSSIA, label: 'Spiritual Administration of Muslims of Russia (16°/15°)' },
-      { value: CalculationMethod.JAFARI, label: 'Shia Ithna Ashari, Leva Institute, Qum, Iran (16°/14°)' },
-      {
-        value: CalculationMethod.TEHRAN,
-        label: 'Shia, Institute of Geophysics, University of Tehran, Iran (17.7°/14°)'
-      },
-      { value: CalculationMethod.INDONESIA, label: 'Kementrian Agama Republik Indonesia (KEMENAG) (20°/18°)' },
-      { value: CalculationMethod.ALGERIA, label: 'Ministry of Religious Affairs and Wakfs, Algeria (18°/17°)' },
-      { value: CalculationMethod.BRUNEI, label: 'Kementrian Hal Ehwal Ugama (Brunei Darussalam) (20°/18°)' }
-    ];
-  }
-
-  static getAvailableHighLatRules(): Array<HighLatRuleOption> {
-    return [
-      { value: HighLatitudeRule.NONE, label: 'None' },
-      { value: HighLatitudeRule.MIDDLE_OF_NIGHT, label: 'Middle of Night' },
-      { value: HighLatitudeRule.ONE_SEVENTH, label: 'One Seventh of Night' },
-      { value: HighLatitudeRule.ANGLE_BASED, label: 'Angle Based' },
-      { value: HighLatitudeRule.PROPORTIONAL_DEPRESSION, label: 'Proportional Depression' }
-    ];
   }
 
   private static isAngleReachable(latitude: number, declinationDeg: number, altitudeDeg: number): boolean {

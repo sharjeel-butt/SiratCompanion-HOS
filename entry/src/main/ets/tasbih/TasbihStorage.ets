@@ -2,7 +2,7 @@ import { preferences } from '@kit.ArkData';
 import { common } from '@kit.AbilityKit';
 import { Dhikr, Tasbih } from './TasbihModels';
 import { TasbihManager } from './TasbihManager';
-import { STORAGE_KEY_TASBIH_STATE_VERSION } from '../common/StorageKeys';
+import { STORAGE_KEY_TASBIH_STATE_VERSION } from '../core/StorageKeys';
 
 const PREF_STORE = 'tasbih_prefs';
 const KEY_TASBIHS = 'tasbihs_data';

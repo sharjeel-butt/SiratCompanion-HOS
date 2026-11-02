@@ -3,7 +3,7 @@
 import { calendarManager } from '@kit.CalendarKit';
 import { abilityAccessCtrl, bundleManager, common, Permissions } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { AppLogger } from '../helper/AppLogger';
+import { AppLogger } from '../core/AppLogger';
 
 /**
  * Calendar Kit backend for prayer-time reminders.

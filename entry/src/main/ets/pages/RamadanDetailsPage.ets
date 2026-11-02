@@ -1,8 +1,8 @@
 // entry/src/main/ets/pages/RamadanDetailsPage.ets
 
 import { mediaquery, router } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
-import { PageTheme } from '../common/PageTheme';
+import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
+import { PageTheme } from '../core/PageTheme';
 import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
 import { CalendarDay } from '../hijricalendar/HijriCalendarModels';
 import {
@@ -13,16 +13,16 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_RAMADAN_STATE_VERSION,
   STORAGE_KEY_THEME_MODE
-} from '../common/StorageKeys';
-import { DuaCard } from '../components/DuaCard';
-import { DuaService } from '../helper/DuaService';
-import { CompleteDua } from '../models/DuaModels';
-import { Breakpoints } from '../common/Breakpoints';
+} from '../core/StorageKeys';
+import { DuaCard } from '../duas/DuaCard';
+import { DuaService } from '../duas/DuaService';
+import { CompleteDua } from '../duas/DuaModels';
+import { Breakpoints } from '../core/Breakpoints';
 import { L } from '../i18n/LocalizationHelper';
 import {
   LaylatAlQadrNight, RamadanAshra, RamadanHelper, RamadanInfo
-} from '../helper/RamadanHelper';
-import { RamadanStorage } from '../helper/RamadanStorage';
+} from '../ramadan/RamadanHelper';
+import { RamadanStorage } from '../ramadan/RamadanStorage';
 import {
   FastingDay,
   FastingStatus,
@@ -30,7 +30,7 @@ import {
   QadaSummary,
   QadaYearRow,
   RamadanYearData
-} from '../models/RamadanModels';
+} from '../ramadan/RamadanModels';
 import { common } from '@kit.AbilityKit';
 
 type SheetKind = 'none' | 'mark' | 'reason';

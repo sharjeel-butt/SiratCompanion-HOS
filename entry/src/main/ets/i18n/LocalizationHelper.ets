@@ -2,7 +2,7 @@
 
 import { i18n, resourceManager } from '@kit.LocalizationKit';
 import { common } from '@kit.AbilityKit';
-import { STORAGE_KEY_LANGUAGE } from '../common/StorageKeys';
+import { STORAGE_KEY_LANGUAGE } from '../core/StorageKeys';
 
 
 export enum AppLanguage {

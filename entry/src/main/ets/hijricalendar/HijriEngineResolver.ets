@@ -4,7 +4,7 @@ import { HijriCalendarEngine } from './HijriCalendarEngine';
 import { UmmAlQuraEngine } from './UmmAlQuraEngine';
 import { TabularHijriEngine } from './TabularHijriEngine';
 import { HijriCalendarType } from './HijriCalendarType';
-import { STORAGE_KEY_HIJRI_CALENDAR_TYPE } from '../common/StorageKeys';
+import { STORAGE_KEY_HIJRI_CALENDAR_TYPE } from '../core/StorageKeys';
 
 /**
  * Returns the Hijri calendar engine matching the user's current

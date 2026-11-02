@@ -1,8 +1,8 @@
 // entry/src/main/ets/pages/WizardPage.ets
 
 import { mediaquery, promptAction, router } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
-import { PageTheme } from '../common/PageTheme';
+import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
+import { PageTheme } from '../core/PageTheme';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -10,19 +10,19 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LANGUAGE_OVERRIDE,
   STORAGE_KEY_THEME_MODE
-} from '../common/StorageKeys';
+} from '../core/StorageKeys';
 import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator';
-import { SettingsHelper } from '../helper/SettingsHelper';
-import { LocationData, LocationHelper } from '../utils/LocationUtils';
-import { CalculationSource, LocationMode, PickerItem } from '../models/SettingsModels';
+import { SettingsHelper } from '../settings/SettingsHelper';
+import { LocationData, LocationHelper } from '../location/LocationUtils';
+import { CalculationSource, LocationMode, PickerItem } from '../settings/SettingsModels';
 import { AppLanguage, L } from '../i18n/LocalizationHelper';
-import { NavHelper } from '../helper/NavHelper';
-import { PrivacyPolicyProvider } from '../data/PrivacyPolicy';
-import { Breakpoints } from '../common/Breakpoints';
-import { FALLBACK_LOCATION, LocationCache } from '../utils/LocationCache';
+import { NavHelper } from '../core/NavHelper';
+import { PrivacyPolicyProvider } from '../legal/PrivacyPolicy';
+import { Breakpoints } from '../core/Breakpoints';
+import { FALLBACK_LOCATION, LocationCache } from '../location/LocationCache';
 import { common, Want } from '@kit.AbilityKit';
 import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
-import { NotificationHelper } from '../helper/NotificationHelper';
+import { NotificationHelper } from '../prayer/NotificationHelper';
 
 const TOTAL_STEPS = 6;
 

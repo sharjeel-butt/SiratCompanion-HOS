@@ -1,6 +1,6 @@
 // entry/src/main/ets/components/SubsectionHeader.ets
 
-import { ThemeColors } from '../common/Theme';
+import { ThemeColors } from '../core/Theme';
 import { L } from '../i18n/LocalizationHelper';
 
 /**

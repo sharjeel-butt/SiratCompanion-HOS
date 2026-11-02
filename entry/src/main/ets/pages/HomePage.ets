@@ -2,16 +2,16 @@
 
 import { mediaquery, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../common/Theme';
-import { PageTheme } from '../common/PageTheme';
-import { AppLogger } from '../helper/AppLogger';
-import { PdfExportHelper } from '../utils/PdfExportHelper';
+import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
+import { PageTheme } from '../core/PageTheme';
+import { AppLogger } from '../core/AppLogger';
+import { PdfExportHelper } from '../core/PdfExportHelper';
 import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
-import { DuaService } from '../helper/DuaService';
-import { CompleteDua } from '../models/DuaModels';
-import { CustomEvent } from '../models/CustomEventModels';
-import { CustomEventStorage } from '../helper/CustomEventStorage';
-import { CustomEventNotifier } from '../helper/CustomEventNotifier';
+import { DuaService } from '../duas/DuaService';
+import { CompleteDua } from '../duas/DuaModels';
+import { CustomEvent } from '../hijricalendar/CustomEventModels';
+import { CustomEventStorage } from '../hijricalendar/CustomEventStorage';
+import { CustomEventNotifier } from '../hijricalendar/CustomEventNotifier';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -32,18 +32,18 @@ import {
   STORAGE_KEY_TASBIH_STATE_VERSION,
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
-} from '../common/StorageKeys';
-import { RamadanStorage } from '../helper/RamadanStorage';
-import { EidInfo, FastingStatus, QadaSummary } from '../models/RamadanModels';
-import { ClockFormat, ClockFormatHelper } from '../common/ClockFormat';
-import { DateHelper } from '../utils/DateUtils';
+} from '../core/StorageKeys';
+import { RamadanStorage } from '../ramadan/RamadanStorage';
+import { EidInfo, FastingStatus, QadaSummary } from '../ramadan/RamadanModels';
+import { ClockFormat, ClockFormatHelper } from '../core/ClockFormat';
+import { DateHelper } from '../hijricalendar/DateUtils';
 import { PrayerModel } from '../prayer/PrayerModel';
-import { UpcomingImportantDate } from '../models/DateModels';
-import { LocationData, LocationHelper } from '../utils/LocationUtils';
-import { LocationCache } from '../utils/LocationCache';
-import { HomeController } from '../utils/HomeController';
-import { PrayerOffsets, SettingsHelper } from '../helper/SettingsHelper';
-import { CalculationSource, LocationMode } from '../models/SettingsModels';
+import { UpcomingImportantDate } from '../hijricalendar/DateModels';
+import { LocationData, LocationHelper } from '../location/LocationUtils';
+import { LocationCache } from '../location/LocationCache';
+import { HomeController } from '../prayer/HomeController';
+import { PrayerOffsets, SettingsHelper } from '../settings/SettingsHelper';
+import { CalculationSource, LocationMode } from '../settings/SettingsModels';
 import {
   AsrShadowRule,
   CalculationMethod,
@@ -51,7 +51,7 @@ import {
   PrayerTimeCalculator
 } from '../prayer/PrayerTimeCalculator';
 import { PrayerManager } from '../prayer/PrayerManager';
-import { NavHelper } from '../helper/NavHelper';
+import { NavHelper } from '../core/NavHelper';
 import { L } from '../i18n/LocalizationHelper';
 import {
   MonthDayCell,
@@ -59,18 +59,18 @@ import {
   PrayerProgress,
   ProgressHelper,
   TasbihTodayProgress
-} from '../utils/ProgressHelper';
+} from '../progress/ProgressHelper';
 import { TasbihStorage } from '../tasbih/TasbihStorage';
 import { TasbihManager } from '../tasbih/TasbihManager';
 import { Dhikr, Tasbih } from '../tasbih/TasbihModels';
-import { PageHeader } from '../components/PageHeader';
-import { DuaCard } from '../components/DuaCard';
-import { RamadanAshra, RamadanHelper, RamadanInfo } from '../helper/RamadanHelper';
-import { Breakpoints } from '../common/Breakpoints';
-import { AdvancedCalcSettings, DEFAULT_ADVANCED_CALC } from '../models/AdvancedCalcModels';
+import { PageHeader } from '../prayer/PageHeader';
+import { DuaCard } from '../duas/DuaCard';
+import { RamadanAshra, RamadanHelper, RamadanInfo } from '../ramadan/RamadanHelper';
+import { Breakpoints } from '../core/Breakpoints';
+import { AdvancedCalcSettings, DEFAULT_ADVANCED_CALC } from '../prayer/AdvancedCalcModels';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
-import { EventPerspectiveNotifier } from '../utils/EventPerspectiveNotifier';
-import { TypographyHelper } from '../helper/TypographyHelper';
+import { EventPerspectiveNotifier } from '../hijricalendar/EventPerspectiveNotifier';
+import { TypographyHelper } from '../core/TypographyHelper';
 import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
 
 export interface RamadanTableRow {
