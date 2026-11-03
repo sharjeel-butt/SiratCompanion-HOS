@@ -641,7 +641,7 @@ struct RamadanDetailsPage {
   FastingSection() {
     Column() {
       Row({ space: 8 }) {
-        Image($r('app.media.ic_nav_tasbih')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
+        Image($r('app.media.ic_fast')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
         Text(this.tr('section_fasting'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
@@ -982,7 +982,7 @@ struct RamadanDetailsPage {
   TaraweehSection() {
     Column() {
       Row({ space: 8 }) {
-        Image($r('app.media.ic_ramadan_moon')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
+        Image($r('app.media.ic_taraweeh')).width(20).height(20).fillColor(this.colors.accentGold).flexShrink(0)
         Text(this.tr('section_taraweeh'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
@@ -1340,7 +1340,7 @@ struct RamadanDetailsPage {
 
       Row({ space: 14 }) {
         Row() {
-          Image($r('app.media.ic_nav_tasbih')).width(22).height(22).fillColor(this.colors.accentGold)
+          Image($r('app.media.ic_fast')).width(22).height(22).fillColor(this.colors.accentGold)
         }
         .width(44)
         .height(44)
@@ -1953,7 +1953,7 @@ struct RamadanDetailsPage {
   AshrasContent() {
     Column() {
       Row({ space: 6 }) {
-        Image($r('app.media.ic_book'))
+        Image($r('app.media.ic_ashra'))
           .width(14).height(14)
           .fillColor(this.colors.accentGold)
           .flexShrink(0)

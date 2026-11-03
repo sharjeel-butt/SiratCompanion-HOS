@@ -286,7 +286,7 @@ struct PrayerDetailsPage {
   WeekViewCard() {
     Column() {
       Row({ space: 8 }) {
-        Image($r('app.media.ic_nav_calendar'))
+        Image($r('app.media.ic_weekly_stats'))
           .width(16).height(16)
           .fillColor(this.colors.accentGold)
           .flexShrink(0)

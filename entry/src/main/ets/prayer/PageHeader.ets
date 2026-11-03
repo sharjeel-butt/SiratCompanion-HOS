@@ -119,7 +119,7 @@ export struct PageHeader {
       Column() {
         // Hijri date pill
         Row({ space: 6 }) {
-          Image($r('app.media.ic_ramadan_moon'))
+          Image($r('app.media.ic_nav_calendar'))
             .width(14).height(14)
             .fillColor(this.colors.accentGold)
           Text(this.hijriDateString)
@@ -232,7 +232,7 @@ export struct PageHeader {
       // ============ Row 3: Calc pills or Fasting Window ============
       if (this.isRamadan) {
         Row({ space: 8 }) {
-          Image($r('app.media.ic_ramadan_moon'))
+          Image($r('app.media.ic_fast'))
             .width(16).height(16)
             .fillColor(this.colors.accentGold)
             .flexShrink(0)
@@ -299,7 +299,7 @@ export struct PageHeader {
 
           // Asr rule
           Row({ space: 6 }) {
-            Image($r('app.media.ic_sunrise'))
+            Image($r('app.media.ic_asr_rule'))
               .width(14).height(14)
               .fillColor(this.colors.accentGold)
               .flexShrink(0)

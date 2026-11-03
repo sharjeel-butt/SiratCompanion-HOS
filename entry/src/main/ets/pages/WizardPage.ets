@@ -207,7 +207,7 @@ struct WizardPage {
       if (this.showAsrPicker) {
         this.PickerOverlay(
           this.tr('madhab'),
-          $r('app.media.ic_sunrise'),
+          $r('app.media.ic_asr_rule'),
           SettingsHelper.buildAsrPickerItems(this.asrRule),
           (id: string) => {
             this.pickAsrRule(id);
@@ -220,7 +220,7 @@ struct WizardPage {
       if (this.showSourcePicker) {
         this.PickerOverlay(
           this.tr('source'),
-          $r('app.media.ic_globe'),
+          $r('app.media.ic_language'),
           SettingsHelper.buildSourcePickerItems(this.calcSource),
           (id: string) => {
             this.pickSource(id);

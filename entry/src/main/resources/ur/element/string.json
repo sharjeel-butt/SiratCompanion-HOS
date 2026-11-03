@@ -2851,6 +2851,14 @@
     {
       "name": "restore_restart_later",
       "value": "بعد میں"
+    },
+    {
+      "name": "remind_yearly",
+      "value": "سالانہ یاد دہانی"
+    },
+    {
+      "name": "remind_yearly_desc",
+      "value": "اس ایونٹ کو ہر سال دہرائیں"
     }
   ]
 }

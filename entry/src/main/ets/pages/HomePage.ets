@@ -34,7 +34,9 @@ import {
   STORAGE_KEY_TIME_FORMAT
 } from '../core/StorageKeys';
 import { RamadanStorage } from '../ramadan/RamadanStorage';
-import { EidInfo, FastingStatus, QadaSummary } from '../ramadan/RamadanModels';
+import {
+  EidInfo, FastingStatus, MissedReason, QadaSummary
+} from '../ramadan/RamadanModels';
 import { ClockFormat, ClockFormatHelper } from '../core/ClockFormat';
 import { DateHelper } from '../hijricalendar/DateUtils';
 import { PrayerModel } from '../prayer/PrayerModel';
@@ -197,6 +199,12 @@ export struct HomePage {
   @State pdfRamadanGregSpan: string = '';
   @State pdfRamadanYear: number = 1447;
   @State private todayFastingStatus: FastingStatus = FastingStatus.UNMARKED;
+  @State private todayMissedReason: MissedReason | null = null;
+  @State private todayMissedCustomReason: string = '';
+  @State private showTodayMarkSheet: boolean = false;
+  @State private showTodayReasonSheet: boolean = false;
+  @State private todaySelectedReason: MissedReason | null = null;
+  @State private todayCustomReasonText: string = '';
   @State private showLaylatNote: boolean = false;
   @State private dailyDuas: CompleteDua[] = [];
   @State private iftarDua: CompleteDua | null = null;
@@ -344,24 +352,119 @@ export struct HomePage {
   private async loadTrackerState(): Promise<void> {
     if (this.ramadanInfo === null || !this.ramadanInfo.isRamadanNow) {
       this.todayFastingStatus = FastingStatus.UNMARKED;
+      this.todayMissedReason = null;
+      this.todayMissedCustomReason = '';
       this.showLaylatNote = false;
       return;
     }
 
-    // 1. Laylat al-Qadr Check (Odd nights in the last 10 days: 21, 23, 25, 27, 29)
+    // Laylat al-Qadr note (odd nights in the last 10 days)
     const day = this.ramadanInfo.currentDayNumber;
     this.showLaylatNote = (day >= 21 && day % 2 !== 0);
 
-    // 2. Load Storage
     const store = await RamadanStorage.load();
-    const yearData = store.years.find((y) => y.hijriYear === this.ramadanInfo!.hijriYear);
+    const yearData = store.years.find(
+      (y) => y.hijriYear === this.ramadanInfo!.hijriYear
+    );
 
-    if (yearData) {
-      this.todayFastingStatus = yearData.days[day - 1]?.status ?? FastingStatus.UNMARKED;
+    if (yearData && yearData.days[day - 1]) {
+      const entry = yearData.days[day - 1];
+      this.todayFastingStatus = entry.status ?? FastingStatus.UNMARKED;
+      this.todayMissedReason = entry.reason ?? null;
+      this.todayMissedCustomReason = entry.customReason ?? '';
     } else {
       this.todayFastingStatus = FastingStatus.UNMARKED;
+      this.todayMissedReason = null;
+      this.todayMissedCustomReason = '';
     }
+  }
 
+  private allReasons(): MissedReason[] {
+    return [
+      MissedReason.TRAVEL,
+      MissedReason.ILLNESS,
+      MissedReason.MENSTRUATION,
+      MissedReason.PREGNANCY_NURSING,
+      MissedReason.FORGETFULNESS,
+      MissedReason.OTHER
+    ];
+  }
+
+  private openTodayMarkSheet(): void {
+    this.showTodayMarkSheet = true;
+  }
+
+  private closeTodaySheets(): void {
+    this.showTodayMarkSheet = false;
+    this.showTodayReasonSheet = false;
+    this.todaySelectedReason = null;
+    this.todayCustomReasonText = '';
+  }
+
+  private async markTodayFasted(): Promise<void> {
+    if (this.ramadanInfo === null || !this.ramadanInfo.isRamadanNow) {
+      return;
+    }
+    const year = this.ramadanInfo.hijriYear;
+    const day = this.ramadanInfo.currentDayNumber;
+    this.closeTodaySheets();
+    try {
+      await RamadanStorage.markDay(year, day, FastingStatus.FASTED);
+      // loadTrackerState fires via STORAGE_KEY_RAMADAN_STATE_VERSION
+    } catch (err) {
+      AppLogger.error('HomePage',
+        'markTodayFasted failed: ' + JSON.stringify(err));
+    }
+  }
+
+  private async confirmTodayMissed(): Promise<void> {
+    if (this.ramadanInfo === null || !this.ramadanInfo.isRamadanNow) {
+      return;
+    }
+    if (this.todaySelectedReason === null) {
+      return;
+    }
+    const year = this.ramadanInfo.hijriYear;
+    const day = this.ramadanInfo.currentDayNumber;
+    const reason = this.todaySelectedReason;
+    const custom = reason === MissedReason.OTHER
+      ? this.todayCustomReasonText.trim()
+      : undefined;
+    this.closeTodaySheets();
+    try {
+      await RamadanStorage.markDay(
+        year, day, FastingStatus.MISSED, reason, custom
+      );
+    } catch (err) {
+      AppLogger.error('HomePage',
+        'confirmTodayMissed failed: ' + JSON.stringify(err));
+    }
+  }
+
+  private async clearTodayFast(): Promise<void> {
+    if (this.ramadanInfo === null || !this.ramadanInfo.isRamadanNow) {
+      return;
+    }
+    const year = this.ramadanInfo.hijriYear;
+    const day = this.ramadanInfo.currentDayNumber;
+    this.closeTodaySheets();
+    try {
+      await RamadanStorage.markDay(year, day, FastingStatus.UNMARKED);
+    } catch (err) {
+      AppLogger.error('HomePage',
+        'clearTodayFast failed: ' + JSON.stringify(err));
+    }
+  }
+
+  private todayMissedLabel(): string {
+    if (this.todayMissedReason === null) {
+      return '';
+    }
+    if (this.todayMissedReason === MissedReason.OTHER
+      && this.todayMissedCustomReason.length > 0) {
+      return this.todayMissedCustomReason;
+    }
+    return this.tr('fasting_reason_' + this.todayMissedReason);
   }
 
   private onEventSettingsVersionChanged(): void {
@@ -1441,13 +1544,7 @@ export struct HomePage {
   build() {
     Stack() {
       Column() {
-        // inside the Column, before PageHeader:
-        //   if (deviceInfo.sdkApiVersion < 23) {
-        //     Column().height(72)
-        //   }
-        // Fixed page header — Hijri pill, location, current prayer,
-        // and calc pills. HdsNavigation provides the top offset, so
-        // no spacer is needed.
+
         PageHeader({
           colors: this.colors,
           currentLanguage: this.currentLanguage,
@@ -1500,6 +1597,7 @@ export struct HomePage {
                     } else if (this.ramadanInfo !== null) {
                       this.RamadanCard()
                     }
+                    this.TodayFastCard()
                   }
                   .layoutWeight(1)
                   .alignItems(HorizontalAlign.Start)
@@ -1509,12 +1607,12 @@ export struct HomePage {
                     // --- NEW: Bound Tasbihs Card ---
                     this.BoundTasbihsCard()
                     this.CustomEventsCard()
-                    this.Next3DaysPreview()
-                    this.TodayProgressCard()
                     // ---- Qada (persistent obligation — bottom of column) ----
                     if (this.shouldShowQadaCard()) {
                       this.QadaHomeBanner()
                     }
+                    this.Next3DaysPreview()
+                    this.TodayProgressCard()
                     this.TasbihCard()
 
                   }
@@ -1545,18 +1643,18 @@ export struct HomePage {
                   } else if (this.ramadanInfo !== null) {
                     this.RamadanCard()
                   }
+                  this.TodayFastCard()
                   this.DuasCard()
                   // --- NEW: Bound Tasbihs Card ---
                   this.BoundTasbihsCard()
                   this.CustomEventsCard()
-                  this.Next3DaysPreview()
-                  // ---- Prayers ----
-                  this.TodayProgressCard()
-
                   // ---- Qada (persistent obligation — bottom of page) ----
                   if (this.shouldShowQadaCard()) {
                     this.QadaHomeBanner()
                   }
+                  this.Next3DaysPreview()
+                  // ---- Prayers ----
+                  this.TodayProgressCard()
                   // ---- Tasbih ----
                   this.TasbihCard()
 
@@ -1584,6 +1682,13 @@ export struct HomePage {
         })
       }
       .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
+
+      if (this.showTodayMarkSheet) {
+        this.TodayMarkSheet()
+      }
+      if (this.showTodayReasonSheet) {
+        this.TodayReasonSheet()
+      }
     }
     .width('100%')
     .height('100%')
@@ -1891,7 +1996,7 @@ export struct HomePage {
       Column() {
         // Header (unchanged)
         Row({ space: 8 }) {
-          Image($r('app.media.ic_nav_calendar'))
+          Image($r('app.media.ic_custom_event'))
             .width(16).height(16)
             .fillColor(this.colors.accentGold)
             .flexShrink(0)
@@ -1937,7 +2042,7 @@ export struct HomePage {
 
                 // Hijri date
                 Row({ space: 4 }) {
-                  Image($r('app.media.ic_ramadan_moon'))
+                  Image($r('app.media.ic_custom_event'))
                     .width(10).height(10)
                     .fillColor(this.colors.accentGold)
                     .flexShrink(0)
@@ -2132,6 +2237,542 @@ export struct HomePage {
       })
       .margin({ bottom: 14 })
     }
+  }
+
+  @Builder
+  TodayFastCard() {
+    if (this.ramadanInfo !== null && this.ramadanInfo.isRamadanNow) {
+      Column() {
+        // Header
+        Row({ space: 8 }) {
+          Image($r('app.media.ic_fast'))
+            .width(16).height(16)
+            .fillColor(this.colors.accentGold)
+            .flexShrink(0)
+          Text(this.tr('section_fasting'))
+            .fontSize(12)
+            .fontColor(this.colors.textMuted)
+            .fontWeight(FontWeight.Bold)
+            .letterSpacing(1.2)
+            .layoutWeight(1)
+          Text(`${this.tr('fasting_day_label')} ` +
+            `${this.ramadanInfo!.currentDayNumber} / ${this.ramadanInfo!.totalDays}`)
+            .fontSize(11)
+            .fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Medium)
+            .direction(Direction.Ltr)
+        }
+        .width('100%').padding({ bottom: 14 })
+
+        // Body
+        if (this.todayFastingStatus === FastingStatus.UNMARKED) {
+          Column({ space: 12 }) {
+            Text(this.tr('fasting_mark_title'))
+              .fontSize(14)
+              .fontColor(this.colors.textMuted)
+              .textAlign(TextAlign.Center)
+              .width('100%')
+
+            Row({ space: 10 }) {
+              // Fasted
+              Row({ space: 6 }) {
+                Image($r('app.media.ic_check'))
+                  .width(16).height(16)
+                  .fillColor(this.colors.textOnAccent)
+                  .flexShrink(0)
+                Text(this.tr('fasting_status_fasted'))
+                  .fontSize(14).fontWeight(FontWeight.Medium)
+                  .fontColor(this.colors.textOnAccent)
+                  .maxLines(1)
+              }
+              .layoutWeight(1)
+              .height(46)
+              .backgroundColor(this.colors.accentGold)
+              .borderRadius(12)
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Center)
+              .onClick(() => {
+                this.markTodayFasted();
+              })
+
+              // Missed
+              Row({ space: 6 }) {
+                Image($r('app.media.ic_close'))
+                  .width(16).height(16)
+                  .fillColor(this.colors.textWhite)
+                  .flexShrink(0)
+                Text(this.tr('fasting_status_missed'))
+                  .fontSize(14).fontWeight(FontWeight.Medium)
+                  .fontColor(this.colors.textWhite)
+                  .maxLines(1)
+              }
+              .layoutWeight(1)
+              .height(46)
+              .backgroundColor(this.colors.tintSoft)
+              .borderRadius(12)
+              .border({ width: 1, color: this.colors.borderSoft })
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Center)
+              .onClick(() => {
+                this.todaySelectedReason = null;
+                this.todayCustomReasonText = '';
+                this.showTodayReasonSheet = true;
+              })
+            }
+            .width('100%')
+          }
+          .width('100%')
+        } else if (this.todayFastingStatus === FastingStatus.FASTED) {
+          Row({ space: 12 }) {
+            Image($r('app.media.ic_check'))
+              .width(22).height(22)
+              .fillColor(this.colors.accentGold)
+              .flexShrink(0)
+            Text(this.tr('fasting_status_fasted'))
+              .fontSize(16)
+              .fontWeight(FontWeight.Bold)
+              .fontColor(this.colors.accentGold)
+              .layoutWeight(1)
+              .textAlign(TextAlign.Start)
+              .maxLines(1)
+            Image($r('app.media.ic_edit'))
+              .width(16)
+              .height(16)
+              .fillColor(this.colors.accentGold)
+              .opacity(0.7)
+              .flexShrink(0)
+          }
+          .width('100%')
+          .padding({ top: 6, bottom: 6 })
+          .alignItems(VerticalAlign.Center)
+          .onClick(() => {
+            this.openTodayMarkSheet();
+          })
+        } else {
+          // MISSED
+          Row({ space: 12 }) {
+            Image($r('app.media.ic_close'))
+              .width(22).height(22)
+              .fillColor(this.colors.statusExpress)
+              .flexShrink(0)
+            Column() {
+              Text(this.tr('fasting_status_missed'))
+                .fontSize(16)
+                .fontWeight(FontWeight.Bold)
+                .fontColor(this.colors.statusExpress)
+                .width('100%')
+                .textAlign(TextAlign.Start)
+              if (this.todayMissedLabel().length > 0) {
+                Text(this.todayMissedLabel())
+                  .fontSize(11)
+                  .fontColor(this.colors.accentGold)
+                  .margin({ top: 2 })
+                  .width('100%')
+                  .textAlign(TextAlign.Start)
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+              }
+            }
+            .layoutWeight(1).alignItems(HorizontalAlign.Start)
+
+            Image($r('app.media.ic_edit'))
+              .width(16)
+              .height(16)
+              .fillColor(this.colors.accentGold)
+              .opacity(0.7)
+              .flexShrink(0)
+          }
+          .width('100%')
+          .padding({ top: 6, bottom: 6 })
+          .alignItems(VerticalAlign.Center)
+          .onClick(() => {
+            this.openTodayMarkSheet();
+          })
+        }
+      }
+      .width('100%')
+      .padding(18)
+      .backgroundColor(this.colors.cardDark)
+      .borderRadius(Theme.radiusLarge)
+      .border({
+        width: this.todayFastingStatus === FastingStatus.UNMARKED
+          ? 2 : 1,
+        color: this.todayFastingStatus === FastingStatus.UNMARKED
+          ? this.colors.accentGold
+          : (PageTheme.isDarkFor(this.themeMode)
+            ? 'rgba(255, 255, 255, 0.08)'
+            : this.colors.borderSoft)
+      })
+      .shadow({
+        radius: 12,
+        color: this.colors.shadowCard,
+        offsetX: 0,
+        offsetY: 4
+      })
+      .margin({ bottom: 14 })
+    }
+  }
+
+  @Builder
+  TodayMarkSheet() {
+    // Backdrop
+    Column()
+      .width('100%').height('100%')
+      .backgroundColor(this.colors.overlayDim)
+      .onClick(() => {
+        this.showTodayMarkSheet = false;
+      })
+
+    // Sheet
+    Column() {
+      Row()
+        .width(44)
+        .height(4)
+        .backgroundColor(this.colors.overlayDimSoft)
+        .borderRadius(2)
+        .margin({ top: 10 })
+
+      Row({ space: 14 }) {
+        Row() {
+          Image($r('app.media.ic_nav_mosque'))
+            .width(22).height(22)
+            .fillColor(this.colors.accentGold)
+        }
+        .width(44)
+        .height(44)
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
+        .backgroundColor(this.colors.tintSoft)
+        .borderRadius(12)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .flexShrink(0)
+
+        Column() {
+          Text(this.tr('fasting_mark_title'))
+            .fontSize(18).fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.textWhite)
+          Text(`${this.tr('fasting_day_label')} ` +
+            `${this.ramadanInfo!.currentDayNumber}`)
+            .fontSize(12).fontColor(this.colors.accentGold)
+            .margin({ top: 2 })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+      }
+      .width('100%')
+      .padding({
+        top: 20,
+        bottom: 20,
+        left: this.isRtl() ? 20 : 16,
+        right: this.isRtl() ? 16 : 20
+      })
+
+      Divider().color(this.colors.borderSoft).width('90%')
+
+      Column() {
+        this.TodayMarkOption(
+          $r('app.media.ic_check'),
+          this.tr('fasting_status_fasted'),
+          this.colors.accentGold,
+          (): void => {
+            this.markTodayFasted();
+          }
+        )
+        this.TodayMarkOption(
+          $r('app.media.ic_close'),
+          this.tr('fasting_status_missed'),
+          this.colors.statusExpress,
+          (): void => {
+            this.showTodayMarkSheet = false;
+            this.todaySelectedReason = null;
+            this.todayCustomReasonText = '';
+            this.showTodayReasonSheet = true;
+          }
+        )
+        this.TodayMarkOption(
+          $r('app.media.ic_refresh'),
+          this.tr('fasting_clear'),
+          this.colors.textMuted,
+          (): void => {
+            this.clearTodayFast();
+          }
+        )
+      }
+      .width('100%')
+      .padding({
+        left: 8,
+        right: 8,
+        top: 12,
+        bottom: 12
+      })
+
+      Button(this.tr('cancel'))
+        .width('90%')
+        .height(48)
+        .fontSize(15)
+        .fontWeight(FontWeight.Medium)
+        .fontColor(this.colors.textWhite)
+        .backgroundColor(this.colors.tintSoft)
+        .borderRadius(12)
+        .margin({ top: 8, bottom: 24 })
+        .onClick(() => {
+          this.showTodayMarkSheet = false;
+        })
+    }
+    .width('100%')
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius({ topLeft: 28, topRight: 28 })
+    .shadow({
+      radius: 24,
+      color: this.colors.shadowFloating,
+      offsetX: 0,
+      offsetY: -6
+    })
+    .border({ width: { top: 1 }, color: this.colors.borderSoft })
+    .position({ bottom: 0 })
+  }
+
+  @Builder
+  TodayMarkOption(
+    icon: Resource,
+    label: string,
+    color: string,
+    onTap: () => void
+  ) {
+    Row() {
+      Row() {
+        Image(icon).width(20).height(20).fillColor(color)
+      }
+      .width(40)
+      .height(40)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Center)
+      .backgroundColor(this.colors.tintSoft)
+      .borderRadius(20)
+      .border({ width: 1, color: this.colors.borderSoft })
+
+      Text(label)
+        .fontSize(16)
+        .fontColor(this.colors.textWhite)
+        .fontWeight(FontWeight.Medium)
+        .layoutWeight(1)
+        .margin({
+          left: this.isRtl() ? 0 : 14,
+          right: this.isRtl() ? 14 : 0
+        })
+
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .opacity(0.7)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
+    }
+    .width('100%')
+    .padding({
+      top: 12,
+      bottom: 12,
+      left: this.isRtl() ? 20 : 16,
+      right: this.isRtl() ? 16 : 20
+    })
+    .borderRadius(12)
+    .margin({ bottom: 6 })
+    .onClick(onTap)
+  }
+
+  @Builder
+  TodayReasonSheet() {
+    // Backdrop
+    Column()
+      .width('100%').height('100%')
+      .backgroundColor(this.colors.overlayDim)
+      .onClick(() => {
+        this.showTodayReasonSheet = false;
+      })
+
+    // Sheet
+    Column() {
+      Row()
+        .width(44)
+        .height(4)
+        .backgroundColor(this.colors.overlayDimSoft)
+        .borderRadius(2)
+        .margin({ top: 10 })
+
+      Row({ space: 14 }) {
+        Row() {
+          Image($r('app.media.ic_edit'))
+            .width(22).height(22)
+            .fillColor(this.colors.accentGold)
+        }
+        .width(44)
+        .height(44)
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
+        .backgroundColor(this.colors.tintSoft)
+        .borderRadius(12)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .flexShrink(0)
+
+        Column() {
+          Text(this.tr('fasting_reason_title'))
+            .fontSize(18).fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.textWhite)
+          Text(`${this.tr('fasting_day_label')} ` +
+            `${this.ramadanInfo!.currentDayNumber}`)
+            .fontSize(12).fontColor(this.colors.accentGold)
+            .margin({ top: 2 })
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+      }
+      .width('100%')
+      .padding({
+        top: 20,
+        bottom: 20,
+        left: this.isRtl() ? 20 : 16,
+        right: this.isRtl() ? 16 : 20
+      })
+
+      Divider().color(this.colors.borderSoft).width('90%')
+
+      Scroll() {
+        Column() {
+          ForEach(this.allReasons(), (reason: MissedReason) => {
+            this.TodayReasonRow(reason)
+          }, (reason: MissedReason) => `reason-${reason}`)
+        }
+        .width('100%')
+        .padding({
+          left: 8,
+          right: 8,
+          top: 12,
+          bottom: 12
+        })
+      }
+      .flexShrink(1).width('100%')
+      .scrollBar(BarState.Auto)
+      .edgeEffect(EdgeEffect.Spring)
+
+      if (this.todaySelectedReason === MissedReason.OTHER) {
+        Column() {
+          Text(this.tr('fasting_reason_custom_label'))
+            .fontSize(11).fontColor(this.colors.textMuted)
+            .width('100%').margin({ bottom: 6 })
+          TextInput({
+            text: this.todayCustomReasonText,
+            placeholder: this.tr('fasting_reason_custom_placeholder')
+          })
+            .type(InputType.Normal)
+            .onChange((v: string) => {
+              this.todayCustomReasonText = v;
+            })
+            .fontSize(14)
+            .fontColor(this.colors.textWhite)
+            .placeholderColor(this.colors.placeholder)
+            .caretColor(this.colors.accentGold)
+            .backgroundColor(this.colors.tintSoft)
+            .borderRadius(8)
+            .padding({
+              left: 12,
+              right: 12,
+              top: 8,
+              bottom: 8
+            })
+        }
+        .width('100%')
+        .padding({ left: 16, right: 16, bottom: 12 })
+
+        Button(this.tr('save'))
+          .width('90%')
+          .height(48)
+          .fontSize(15)
+          .fontWeight(FontWeight.Medium)
+          .fontColor(this.colors.textOnAccent)
+          .backgroundColor(this.colors.accentGold)
+          .borderRadius(12)
+          .margin({ top: 8, bottom: 8 })
+          .onClick(() => {
+            this.confirmTodayMissed();
+          })
+      }
+
+      Button(this.tr('cancel'))
+        .width('90%')
+        .height(44)
+        .fontSize(15)
+        .fontWeight(FontWeight.Medium)
+        .fontColor(this.colors.textWhite)
+        .backgroundColor(this.colors.tintSoft)
+        .borderRadius(12)
+        .margin({ top: 4, bottom: 24 })
+        .onClick(() => {
+          this.showTodayReasonSheet = false;
+        })
+    }
+    .width('100%')
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius({ topLeft: 28, topRight: 28 })
+    .shadow({
+      radius: 24,
+      color: this.colors.shadowFloating,
+      offsetX: 0,
+      offsetY: -6
+    })
+    .border({ width: { top: 1 }, color: this.colors.borderSoft })
+    .position({ bottom: 0 })
+  }
+
+  @Builder
+  TodayReasonRow(reason: MissedReason) {
+    Row() {
+      Row() {
+        if (this.todaySelectedReason === reason) {
+          Row().width(10).height(10).borderRadius(5)
+            .backgroundColor(this.colors.accentGold)
+        }
+      }
+      .width(22)
+      .height(22)
+      .borderRadius(11)
+      .border({
+        width: this.todaySelectedReason === reason ? 2 : 1.5,
+        color: this.todaySelectedReason === reason
+          ? this.colors.accentGold
+          : this.colors.borderStrong
+      })
+      .justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Center)
+      .flexShrink(0)
+
+      Text(this.tr('fasting_reason_' + reason))
+        .fontSize(15)
+        .fontColor(this.todaySelectedReason === reason
+          ? this.colors.accentGold
+          : this.colors.textWhite)
+        .fontWeight(this.todaySelectedReason === reason
+          ? FontWeight.Bold : FontWeight.Normal)
+        .layoutWeight(1)
+        .margin({
+          left: this.isRtl() ? 0 : 14,
+          right: this.isRtl() ? 14 : 0
+        })
+    }
+    .width('100%')
+    .padding({
+      top: 14,
+      bottom: 14,
+      left: 16,
+      right: 16
+    })
+    .backgroundColor(this.todaySelectedReason === reason
+      ? this.colors.tintSoft : 'transparent')
+    .borderRadius(12)
+    .margin({ bottom: 4 })
+    .onClick(() => {
+      this.todaySelectedReason = reason;
+      if (reason !== MissedReason.OTHER) {
+        this.confirmTodayMissed();
+      }
+    })
   }
 
   @Builder

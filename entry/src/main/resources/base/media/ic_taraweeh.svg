@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <!-- Mosque outline: uniform 16-unit ring everywhere -->
+    <path fill="currentColor" fill-rule="evenodd" d="
+    M88 416 V240 c0 -71 49 -122 168 -176 c119 54 168 105 168 176 V416 Z
+    M104 400 V256 c0 -71 47 -122 152 -176 c105 54 152 105 152 176 V400 Z"/>
+
+    <!-- Crescent moon inside the dome (proper fill-based arc) -->
+    <path fill="currentColor" d="
+    M256 120
+    a60 60 0 1 0 60 60
+    a55 55 0 0 1 -60 -60
+    Z"/>
+</svg>

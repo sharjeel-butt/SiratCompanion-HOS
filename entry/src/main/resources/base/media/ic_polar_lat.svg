@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <g fill="currentColor" fill-rule="evenodd">
+        <!-- Outer Ring -->
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 2c4.41 0 8 3.59 8 8s-3.59 8-8 8-8-3.59-8-8 3.59-8 8-8z"/>
+
+        <!-- Horizontal Latitude Lines -->
+        <rect x="2.5" y="7" width="19" height="1.2" rx="0.6"/>
+        <rect x="2.5" y="11.4" width="19" height="1.2" rx="0.6"/>
+        <rect x="2.5" y="15.8" width="19" height="1.2" rx="0.6"/>
+
+        <!-- Vertical Meridian -->
+        <rect x="11.4" y="2.5" width="1.2" height="19" rx="0.6"/>
+    </g>
+</svg>

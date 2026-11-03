@@ -573,13 +573,13 @@ struct AdvancedCalcPage {
       case 'rounding':
         return $r('app.media.ic_chart');
       case 'midnight':
-        return $r('app.media.ic_ramadan_moon');
+        return $r('app.media.ic_midnight');
       case 'polar':
-        return $r('app.media.ic_globe');
+        return $r('app.media.ic_polar_lat');
       case 'shafaq':
         return $r('app.media.ic_sunset');
       case 'highlat':
-        return $r('app.media.tab_compass');
+        return $r('app.media.ic_asr_rule');
       default:
         return $r('app.media.ic_settings');
     }

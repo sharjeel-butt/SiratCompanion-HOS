@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <g fill="currentColor" fill-rule="evenodd">
+        <!-- Calendar Body -->
+        <path d="M19 4h-1V3a1 1 0 0 0-2 0v1H8V3a1 1 0 0 0-2 0v1H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+
+        <!-- Bar Chart inside calendar -->
+        <rect x="7" y="13" width="2.5" height="4" rx="0.5"/>
+        <rect x="11" y="11" width="2.5" height="6" rx="0.5"/>
+        <rect x="15" y="10" width="2.5" height="7" rx="0.5"/>
+    </g>
+</svg>

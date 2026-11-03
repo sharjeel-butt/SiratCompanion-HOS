@@ -385,7 +385,7 @@ struct CustomizePage {
       if (this.showLanguagePicker) {
         this.PickerOverlay(
           this.tr('language'),
-          $r('app.media.ic_globe'),
+          $r('app.media.ic_language'),
           this.buildLanguageItems(),
           (id: string) => {
             this.pickLanguage(id);

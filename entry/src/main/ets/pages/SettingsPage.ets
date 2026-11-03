@@ -231,7 +231,7 @@ struct SettingsPage {
 
               CategoryHeader({
                 colors: this.colors,
-                icon: $r('app.media.ic_nav_calendar'),
+                icon: $r('app.media.ic_hijri_type'),
                 titleKey: 'category_hijri_calendar',
                 categoryKey: 'Hijri Calendar',
                 expanded: this.expandedCategory === 'Hijri Calendar',
@@ -1512,7 +1512,7 @@ struct SettingsPage {
       case 'source':
         return $r('app.media.ic_globe');
       case 'hijriType':
-        return $r('app.media.ic_nav_calendar');
+        return $r('app.media.ic_hijri_type');
       default:
         return $r('app.media.ic_settings');
     }
