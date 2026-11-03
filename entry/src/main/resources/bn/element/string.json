@@ -2851,6 +2851,14 @@
     {
       "name": "restore_restart_later",
       "value": "পরে"
+    },
+    {
+      "name": "remind_yearly",
+      "value": "বার্ষিক স্মরণ করান"
+    },
+    {
+      "name": "remind_yearly_desc",
+      "value": "এই ইভেন্টটি প্রতি বছর পুনরাবৃত্তি করুন"
     }
   ]
 }

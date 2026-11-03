@@ -2851,6 +2851,14 @@
     {
       "name": "restore_restart_later",
       "value": "Nanti"
+    },
+    {
+      "name": "remind_yearly",
+      "value": "Ingatkan Setiap Tahun"
+    },
+    {
+      "name": "remind_yearly_desc",
+      "value": "Ulangi acara ini setiap tahun"
     }
   ]
 }

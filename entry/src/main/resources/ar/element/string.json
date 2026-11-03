@@ -2852,6 +2852,14 @@
     {
       "name": "restore_restart_later",
       "value": "لاحقًا"
+    },
+    {
+      "name": "remind_yearly",
+      "value": "تذكير سنوي"
+    },
+    {
+      "name": "remind_yearly_desc",
+      "value": "كرر هذا الحدث كل عام"
     }
   ]
 }

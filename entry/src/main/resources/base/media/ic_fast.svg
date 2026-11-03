@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <g fill="currentColor">
+        <!-- Prohibition ring -->
+        <path fill-rule="evenodd"
+              d="M12 1a11 11 0 1 1 0 22a11 11 0 0 1 0-22z
+         M12 2.6a9.4 9.4 0 1 0 0 18.8a9.4 9.4 0 0 0 0-18.8z"/>
+
+        <!-- Fork: 3 prongs + base + handle -->
+        <rect x="14" y="5" width="0.9" height="6" rx="0.45"/>
+        <rect x="15.55" y="5" width="0.9" height="6" rx="0.45"/>
+        <rect x="17.1" y="5" width="0.9" height="6" rx="0.45"/>
+        <rect x="14" y="10.6" width="4" height="0.9" rx="0.45"/>
+        <rect x="15.55" y="10.6" width="0.9" height="8.4" rx="0.45"/>
+
+        <!-- Spoon: oval bowl + stem -->
+        <ellipse cx="8.2" cy="7.8" rx="1.7" ry="2.3"/>
+        <rect x="7.75" y="9.4" width="0.9" height="9.6" rx="0.45"/>
+
+        <!-- Prohibition slash, drawn on top -->
+        <path d="M2.5 3.5 L20.5 21.5 L19.5 22.5 L1.5 4.5 Z"/>
+    </g>
+</svg>

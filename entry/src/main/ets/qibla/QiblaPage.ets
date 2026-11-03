@@ -419,7 +419,7 @@ export struct QiblaPage {
         }
       } else if (!this.isFlat) {
         Row({ space: 8 }) {
-          Image($r('app.media.ic_edit')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
+          Image($r('app.media.ic_flat_device')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
           Text(this.tr('keep_device_flat')).fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
         }
       } else {

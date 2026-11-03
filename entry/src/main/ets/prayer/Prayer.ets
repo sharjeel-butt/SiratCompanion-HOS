@@ -219,7 +219,7 @@ export struct Prayer {
       arabicName: 'الثلث الأول',
       time: '--:--',
       status: 'abbreviation',
-      icon: $r('app.media.ic_star')
+      icon: $r('app.media.ic_night_first_third')
     },
     {
       id: 'midnight',
@@ -227,7 +227,7 @@ export struct Prayer {
       arabicName: 'منتصف الليل',
       time: '--:--',
       status: 'abbreviation',
-      icon: $r('app.media.ic_star')
+      icon: $r('app.media.ic_midnight')
     },
     {
       id: 'lastThird',
@@ -235,7 +235,7 @@ export struct Prayer {
       arabicName: 'الثلث الأخير',
       time: '--:--',
       status: 'abbreviation',
-      icon: $r('app.media.ic_star')
+      icon: $r('app.media.ic_night_last_third')
     }
   ];
 

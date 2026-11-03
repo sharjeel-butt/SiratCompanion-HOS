@@ -2851,6 +2851,14 @@
     {
       "name": "restore_restart_later",
       "value": "Daha Sonra"
+    },
+    {
+      "name": "remind_yearly",
+      "value": "Yıllık Hatırlat"
+    },
+    {
+      "name": "remind_yearly_desc",
+      "value": "Bu etkinliği her yıl tekrarla"
     }
   ]
 }

@@ -2851,6 +2851,14 @@
     {
       "name": "restore_restart_later",
       "value": "Later"
+    },
+    {
+      "name": "remind_yearly",
+      "value": "Remind Yearly"
+    },
+    {
+      "name": "remind_yearly_desc",
+      "value": "Repeat this event every year"
     }
   ]
 }

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <g fill="currentColor">
+        <!-- Chain: 4 dots + 2 connectors -->
+        <circle cx="256" cy="14" r="13"/>
+        <circle cx="256" cy="50" r="13"/>
+        <circle cx="256" cy="86" r="13"/>
+        <circle cx="256" cy="122" r="13"/>
+        <circle cx="256" cy="152" r="6"/>
+        <circle cx="256" cy="170" r="4"/>
+
+        <!-- Top finial -->
+        <rect x="252" y="176" width="8" height="14" rx="2"/>
+
+        <!-- Top dome (half-ellipse, peak at y=186) -->
+        <path d="M128 258 A128 72 0 0 0 384 258 Z"/>
+
+        <!-- Upper rim -->
+        <rect x="100" y="258" width="312" height="22" rx="3"/>
+
+        <!-- Body with three pointed-arch cutouts -->
+        <path fill-rule="evenodd" d="
+      M116 280 L116 422 L396 422 L396 280 Z
+      M148 418 L148 355 Q163 285 178 275 Q193 285 208 355 L208 418 Z
+      M226 418 L226 348 Q241 275 256 265 Q271 275 286 348 L286 418 Z
+      M304 418 L304 355 Q319 285 334 275 Q349 285 364 355 L364 418 Z"/>
+
+        <!-- Lower rim -->
+        <rect x="100" y="422" width="312" height="22" rx="3"/>
+
+        <!-- Bottom dome (half-ellipse, peak at y=490) -->
+        <path d="M116 444 A140 46 0 0 1 396 444 Z"/>
+
+        <!-- Bottom finial -->
+        <circle cx="256" cy="495" r="5"/>
+    </g>
+</svg>

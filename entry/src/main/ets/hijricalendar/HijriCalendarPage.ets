@@ -766,7 +766,9 @@ export struct HijriCalendarPage {
       if (this.getMonthEvents().length === 0) {
         Text(this.tr('no_events_this_month'))
           .fontSize(13).fontColor(this.colors.textMuted)
-          .width('100%').padding({ top: 4, bottom: 4 })
+          .width('100%')
+          .textAlign(TextAlign.Center) // <-- Centered horizontally
+          .padding({ top: 16, bottom: 16 }) // <-- Centered vertically
       } else {
         ForEach(this.getMonthEvents(), (e: IslamicEvent) => {
           Row({ space: 8 }) {
@@ -781,13 +783,15 @@ export struct HijriCalendarPage {
           }
           .width('100%')
           .padding({
-            bottom: 20,
+            top: 12, // <-- Added top padding
+            bottom: 12, // <-- Changed from 20 to 12
             left: this.isRtl() ? 20 : 16,
             right: this.isRtl() ? 16 : 20
           })
           .borderRadius(8)
           .margin({ bottom: 4 })
           .backgroundColor(this.colors.tintSubtle)
+          .alignItems(VerticalAlign.Center) // <-- Forces vertical centering
         }, (e: IslamicEvent) => `event-${e.month}-${e.day}-${e.name}`)
       }
     }
@@ -810,7 +814,7 @@ export struct HijriCalendarPage {
     if (this.getFilteredCustomEvents().length > 0) {
       Column() {
         Row({ space: 8 }) {
-          Image($r('app.media.ic_nav_calendar'))
+          Image($r('app.media.ic_custom_event')) // (Assuming you updated this icon)
             .width(16).height(16)
             .fillColor(this.colors.accentGold)
             .flexShrink(0)
@@ -880,7 +884,7 @@ export struct HijriCalendarPage {
           .borderRadius(8)
           .margin({ bottom: 4 })
           .backgroundColor(this.colors.tintSubtle)
-          .alignItems(VerticalAlign.Center)
+          .alignItems(VerticalAlign.Center) // <-- Keeps everything perfectly in the middle
         }, (ev: CustomEvent) => `custom-${ev.id}-${ev.title}-${ev.hijriDay}`)
       }
       .width('100%')
@@ -1224,6 +1228,51 @@ export struct HijriCalendarPage {
             Toggle({ type: ToggleType.Switch, isOn: this.formNotify })
               .selectedColor(this.colors.accentGold)
               .onChange(v => this.formNotify = v)
+          }
+          .width('100%')
+          .padding(12)
+          .backgroundColor(this.colors.tintSubtle)
+          .borderRadius(12)
+          .border({ width: 1, color: this.colors.borderSoft })
+
+          // --- NEW: Yearly Reminder Toggle ---
+          Row() {
+            Row() {
+              Image($r('app.media.ic_refresh'))
+                .width(20).height(20)
+                .fillColor(
+                  this.formRecurrence === RecurrenceType.YEARLY ? this.colors.accentGold : this.colors.textMuted)
+            }
+            .width(36)
+            .height(36)
+            .justifyContent(FlexAlign.Center)
+            .backgroundColor(this.colors.tintSoft)
+            .borderRadius(10)
+            .flexShrink(0)
+            .margin({ right: this.isRtl() ? 0 : 12, left: this.isRtl() ? 12 : 0 })
+
+            Column() {
+              Text(this.tr('remind_yearly'))
+                .fontSize(15)
+                .fontColor(this.colors.textWhite)
+                .fontWeight(FontWeight.Medium)
+                .width('100%')
+                .textAlign(TextAlign.Start)
+              Text(this.tr('remind_yearly_desc'))
+                .fontSize(11)
+                .fontColor(this.colors.textMuted)
+                .width('100%')
+                .textAlign(TextAlign.Start)
+                .margin({ top: 2 })
+            }
+            .layoutWeight(1)
+            .alignItems(HorizontalAlign.Start)
+
+            Toggle({ type: ToggleType.Switch, isOn: this.formRecurrence === RecurrenceType.YEARLY })
+              .selectedColor(this.colors.accentGold)
+              .onChange((v: boolean) => {
+                this.formRecurrence = v ? RecurrenceType.YEARLY : RecurrenceType.NONE;
+              })
           }
           .width('100%')
           .padding(12)

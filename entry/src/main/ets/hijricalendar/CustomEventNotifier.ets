@@ -22,7 +22,7 @@ export class CustomEventNotifier {
         continue;
       }
 
-      for (let i = 0; i < 30; i++) {
+      for (let i = 0; i < 366; i++) {
         const testDate = new Date(now);
         testDate.setDate(testDate.getDate() + i);
 

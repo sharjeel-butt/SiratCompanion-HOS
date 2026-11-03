@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <g fill="currentColor">
+        <!-- Mosque body -->
+        <path fill-rule="evenodd" d="
+      M3 23V13
+      C3 9.8 4.6 7.1 7.3 5.4
+      C8.9 4.4 10 3.3 10.8 1.9
+      C11.1 1.4 11.9 1.4 12.2 1.9
+      C13 3.3 14.1 4.4 15.7 5.4
+      C18.4 7.1 20 9.8 20 13
+      V23H3Z
+
+      M4.8 21.2H18.2V13
+      C18.2 10.4 16.9 8.1 14.7 6.7
+      C13.3 5.9 12.1 4.8 11.5 3.7
+      C10.9 4.8 9.7 5.9 8.3 6.7
+      C6.1 8.1 4.8 10.4 4.8 13
+      V21.2Z"/>
+
+        <!-- Mosque middle band -->
+        <rect x="3.8" y="13.2" width="15.4" height="1.6"/>
+
+        <!-- Door arch -->
+        <path fill-rule="evenodd" d="
+      M11.5 16.2
+      C9.9 16.8 8.8 18.7 8.8 21.2
+      H14.2
+      C14.2 18.7 13.1 16.8 11.5 16.2Z
+
+      M11.5 17.9
+      C12.3 18.5 12.8 19.6 12.9 21.2
+      H10.1
+      C10.2 19.6 10.7 18.5 11.5 17.9Z"/>
+
+        <!-- Sun ring -->
+        <path fill-rule="evenodd" d="
+      M18 4.5
+      a2.5 2.5 0 1 1 0 5
+      a2.5 2.5 0 0 1 0-5
+
+      M18 5.8
+      a1.2 1.2 0 1 0 0 2.4
+      a1.2 1.2 0 0 0 0-2.4Z"/>
+
+        <!-- Sun rays -->
+        <rect x="17.5" y="1.0" width="1" height="2.2" rx="0.5"/>
+        <rect x="17.5" y="9.8" width="1" height="2.2" rx="0.5"/>
+        <rect x="21.3" y="5.0" width="2.2" height="1" rx="0.5"/>
+        <rect x="12.5" y="5.0" width="2.2" height="1" rx="0.5"/>
+
+        <rect x="20.2" y="2.0" width="1" height="2.2" rx="0.5"
+              transform="rotate(45 20.7 3.1)"/>
+        <rect x="14.8" y="7.4" width="1" height="2.2" rx="0.5"
+              transform="rotate(45 15.3 8.5)"/>
+        <rect x="20.2" y="7.4" width="1" height="2.2" rx="0.5"
+              transform="rotate(-45 20.7 8.5)"/>
+        <rect x="14.8" y="2.0" width="1" height="2.2" rx="0.5"
+              transform="rotate(-45 15.3 3.1)"/>
+    </g>
+</svg>
