@@ -4,6 +4,19 @@ import { display, mediaquery, promptAction, router, window } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { deviceInfo } from '@kit.BasicServicesKit';
 import {
+  STORAGE_KEY_APP_FOREGROUND_TICK,
+  STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_CALC_SETTINGS_VERSION,
+  STORAGE_KEY_EVENT_SETTINGS_VERSION,
+  STORAGE_KEY_HIJRI_CALENDAR_VERSION,
+  STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_LOCATION_VERSION,
+  STORAGE_KEY_NAV_TARGET_TAB,
+  STORAGE_KEY_THEME_MODE,
+  STORAGE_KEY_TIME_FORMAT
+} from '../core/StorageKeys';
+import {
   HdsBarWidthRangeOptions,
   hdsMaterial,
   HdsNavigation,
@@ -16,15 +29,6 @@ import {
 } from '@kit.UIDesignKit';
 import { ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
 import { PageTheme } from '../core/PageTheme';
-import {
-  STORAGE_KEY_APP_FOREGROUND_TICK,
-  STORAGE_KEY_APP_THEME,
-  STORAGE_KEY_BREAKPOINT,
-  STORAGE_KEY_EVENT_SETTINGS_VERSION,
-  STORAGE_KEY_HIJRI_CALENDAR_VERSION,
-  STORAGE_KEY_LANGUAGE,
-  STORAGE_KEY_THEME_MODE
-} from '../core/StorageKeys';
 import { L } from '../i18n/LocalizationHelper';
 import { NavHelper } from '../core/NavHelper';
 
@@ -35,6 +39,7 @@ import { QiblaPage } from '../qibla/QiblaPage';
 import { TasbihPage } from '../tasbih/TasbihPage';
 import { TypographyHelper } from '../core/TypographyHelper';
 import { AppLogger } from '../core/AppLogger';
+import { WidgetHelper } from '../widgets/WidgetHelper';
 
 const HDS_MIN_API = 23;
 
@@ -55,22 +60,33 @@ struct MainTabs {
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   @Watch('onBreakpointChanged')
   breakpoint: string = 'sm';
-  @StorageLink('nav_target_tab')
+  // NEW watchers — add these
+  @StorageLink(STORAGE_KEY_CALC_SETTINGS_VERSION)
+  @Watch('onCalcSettingsChanged')
+  calcSettingsVersion: number = 0;
+  @StorageLink(STORAGE_KEY_LOCATION_VERSION)
+  @Watch('onLocationVersionChanged')
+  locationVersion: number = 0;
+  @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_VERSION)
+  @Watch('onHijriCalendarVersionChanged')
+  calendarVersion: number = 0;
+  @StorageLink(STORAGE_KEY_NAV_TARGET_TAB)
   @Watch('onNavTargetTabChanged')
   navTargetTab: string = '';
-
+  @StorageLink(STORAGE_KEY_TIME_FORMAT)
+  @Watch('onTimeFormatChanged')
+  timeFormat: string = 'System';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State private currentLanguage: string = 'en';
   @State private currentIndex: number = 0;
   @State private barWidth: number = 340;
   @State private isMenuVisible: boolean = false;
-
   private readonly useHds: boolean =
     deviceInfo.sdkApiVersion >= HDS_MIN_API;
-
   private tabsController: TabsController = new TabsController();
   private hdsController: HdsTabsController = new HdsTabsController();
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
+  @State private isPageVisible: boolean = false;
 
   aboutToAppear(): void {
     this.currentLanguage = this.appLanguage;
@@ -82,49 +98,33 @@ struct MainTabs {
       }
     );
     this.recomputeBarWidth();
-    console.info(
-      `[MainTabs] sdkApiVersion=${deviceInfo.sdkApiVersion}, ` +
-        `hds=${this.useHds}`
-    );
-  }
-
-  private onNavTargetTabChanged(): void {
-    if (!this.navTargetTab || this.navTargetTab.length === 0) {
-      return;
+    try {
+      const context = getContext(this) as common.UIAbilityContext;
+      context.eventHub.on('widget_nav_event', this.onWidgetNavEvent);
+    } catch (e) {
+      console.warn('MainTabs: EventHub listen failed');
     }
-
-    let targetIndex = -1;
-    switch (this.navTargetTab) {
-      case 'home':
-        targetIndex = 0;
-        break;
-      case 'prayers':
-        targetIndex = 1;
-        break;
-      case 'calendar':
-        targetIndex = 2;
-        break;
-      case 'compass':
-        targetIndex = 3;
-        break;
-      case 'tasbih':
-        targetIndex = 4;
-        break;
-    }
-
-    if (targetIndex >= 0) {
-      this.currentIndex = targetIndex;
-      this.hdsController.changeIndex(targetIndex);
-      this.tabsController.changeIndex(targetIndex);
-    }
-
-    AppStorage.setOrCreate('nav_target_tab', '');
   }
 
   aboutToDisappear(): void {
     PageTheme.uninstallSystemListener(this.systemDarkListener);
     this.systemDarkListener = null;
+    // Unregister EventHub listener
+    try {
+      const context = getContext(this) as common.UIAbilityContext;
+      context.eventHub.off('widget_nav_event', this.onWidgetNavEvent);
+    } catch (e) {
+      // ignore
+    }
   }
+
+  private onWidgetNavEvent = (target: string): void => {
+    console.info(`[MainTabs] Received widget_nav_event: '${target}'`);
+    if (target && target.length > 0) {
+      this.applyNavTarget(target, false);
+      AppStorage.setOrCreate(STORAGE_KEY_NAV_TARGET_TAB, '');
+    }
+  };
 
   onPageShow(): void {
     this.currentLanguage = this.appLanguage;
@@ -138,83 +138,25 @@ struct MainTabs {
     // Force Hijri Calendar refresh
     const prevCal = AppStorage.get<number>(STORAGE_KEY_HIJRI_CALENDAR_VERSION);
     const nextCal = (prevCal === undefined ? 0 : prevCal) + 1;
+
+    // Check for pending nav on Warm Start (returning from background)
+    this.applyPendingNavTarget();
     AppStorage.setOrCreate(STORAGE_KEY_HIJRI_CALENDAR_VERSION, nextCal);
     AppLogger.info('MainTabs', `deviceType=${deviceInfo.deviceType}`);
   }
 
-  private onThemeModeChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+  onPageHide(): void {
+    this.isPageVisible = false;
   }
 
-  private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-  }
-
-  private onLanguageChanged(): void {
-    this.currentLanguage = this.appLanguage;
-  }
-
-  private onBreakpointChanged(): void {
-    this.recomputeBarWidth();
-  }
-
-  private recomputeBarWidth(): void {
-    try {
-      const info = display.getDefaultDisplaySync();
-      const screenW = px2vp(info.width);
-      this.barWidth = Math.min(screenW - 32, 560);
-    } catch (err) {
-      this.barWidth = 340;
+  private applyPendingNavTarget(): void {
+    const pendingTarget: string = AppStorage.get<string>(STORAGE_KEY_NAV_TARGET_TAB) ?? '';
+    if (pendingTarget.length > 0) {
+      AppLogger.info('MainTabs', `Applying pending nav target: '${pendingTarget}'`);
+      this.applyNavTarget(pendingTarget, false);
+      AppStorage.setOrCreate(STORAGE_KEY_NAV_TARGET_TAB, '');
     }
   }
-
-  /**
-   * Color for the menu popup's icons and labels.
-   *
-   * The menu popup's background tracks the system theme, not the
-   * app's themeMode setting. So the icon and label colors are picked
-   * from the system state directly, ensuring they always contrast.
-   */
-  private menuIconColor(): string {
-    return PageTheme.isSystemDark()
-      ? '#FFFFFF'
-      : '#1A1A1A';
-  }
-
-  private menuTextColor(): string {
-    return PageTheme.isSystemDark()
-      ? '#FFFFFF'
-      : '#1A1A1A';
-  }
-
-  private currentTabTitle(): string {
-    switch (this.currentIndex) {
-      case 0:
-        return L.get('tab_home', this.currentLanguage);
-      case 1:
-        return L.get('tab_prayers', this.currentLanguage);
-      case 2:
-        return L.get('tab_calendar', this.currentLanguage);
-      case 3:
-        return L.get('tab_compass', this.currentLanguage);
-      case 4:
-        return L.get('tab_tasbih', this.currentLanguage);
-      default:
-        return L.get('app_name', this.currentLanguage);
-    }
-  }
-
-  private toggleMenu(): void {
-    this.isMenuVisible = !this.isMenuVisible;
-  }
-
-  private isRtl(): boolean {
-    return L.isRtlLang(this.currentLanguage);
-  }
-
-  // ============================================================
-  // BUILD
-  // ============================================================
 
   build() {
     if (this.useHds) {
@@ -223,10 +165,6 @@ struct MainTabs {
       this.TabsFallbackHost()
     }
   }
-
-  // ============================================================
-  // HDS HOST
-  // ============================================================
 
   @Builder
   HdsNavigationHost() {
@@ -297,29 +235,6 @@ struct MainTabs {
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
   }
 
-  /**
-   * Build the HDS floating style, or return an empty object so HDS
-   * uses its default tab bar. Guarding prevents a partial parse from
-   * leaving HDS's internal fsTabBarHandler_ undefined, which used to
-   * cause downstream components to crash on access.
-   */
-  private safeFloatingStyle(): HdsTabsFloatingStyle {
-    try {
-      return this.buildHdsFloatingStyle();
-    } catch (err) {
-      AppLogger.warn('MainTabs',
-        `buildHdsFloatingStyle failed: ${(err as Error).message}`);
-      // Return an empty style — HDS will not create the floating
-      // handler, but it will still render a standard tab bar.
-      const empty: HdsTabsFloatingStyle = {};
-      return empty;
-    }
-  }
-
-  // ============================================================
-  // FALLBACK HOST (API 20–22)
-  // ============================================================
-
   @Builder
   TabsFallbackHost() {
     Column() {
@@ -368,17 +283,6 @@ struct MainTabs {
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
   }
-
-  private fallbackBarColor(): string {
-    const dark = PageTheme.isDarkFor(this.themeMode);
-    return dark
-      ? 'rgba(20, 27, 46, 0.55)'
-      : 'rgba(255, 255, 255, 0.55)';
-  }
-
-  // ============================================================
-  // HAMBURGER BUTTON + MENU
-  // ============================================================
 
   @Builder
   HamburgerButton() {
@@ -509,10 +413,6 @@ struct MainTabs {
     }
   }
 
-  // ============================================================
-  // SHARED TAB CONTENT
-  // ============================================================
-
   @Builder
   TabContents() {
     TabContent() {
@@ -540,13 +440,6 @@ struct MainTabs {
     }
     .tabBar(this.TasbihTabBar())
   }
-
-  // ---- Five parameterless tab bar builders ----
-  // Each reads this.currentLanguage and this.currentIndex directly
-  // so the labels and the active state refresh on every parent
-  // render. Passing them as builder parameters would cache the
-  // resolved label at first render and the tab bar would stay in
-  // the language that was active when the app launched.
 
   @Builder
   HomeTabBar() {
@@ -662,6 +555,193 @@ struct MainTabs {
         .textOverflow({ overflow: TextOverflow.Ellipsis })
     }
     .width('100%').height(68).justifyContent(FlexAlign.Center)
+  }
+
+  private onNavTargetTabChanged(): void {
+    if (!this.navTargetTab || this.navTargetTab.length === 0) {
+      return;
+    }
+
+    // If the page is in the background, do nothing.
+    // onPageShow will pick up the pending target when it returns.
+    if (!this.isPageVisible) {
+      return;
+    }
+
+    this.applyNavTarget(this.navTargetTab, false);
+    AppStorage.setOrCreate(STORAGE_KEY_NAV_TARGET_TAB, '');
+  }
+
+  private tabIndexFor(target: string): number {
+    switch (target) {
+      case 'home':
+        return 0;
+      case 'prayers':
+        return 1;
+      case 'calendar':
+        return 2;
+      case 'compass':
+        return 3;
+      case 'tasbih':
+        return 4;
+      default:
+        return -1;
+    }
+  }
+
+  private applyNavTarget(target: string, deferred: boolean): void {
+    const targetIndex: number = this.tabIndexFor(target);
+    if (targetIndex < 0) {
+      return;
+    }
+
+    this.currentIndex = targetIndex;
+
+    // Always delay the controller switch slightly to ensure UI is ready
+    setTimeout((): void => {
+      this.hdsController.changeIndex(targetIndex);
+      this.tabsController.changeIndex(targetIndex);
+    }, 100);
+  }
+
+  private onThemeModeChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  private onAppThemePresetChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  private onCalcSettingsChanged(): void {
+    WidgetHelper.refreshAllDebounced();
+  }
+
+  // ============================================================
+  // BUILD
+  // ============================================================
+
+  private onLocationVersionChanged(): void {
+    WidgetHelper.refreshAllDebounced();
+  }
+
+  // ============================================================
+  // HDS HOST
+  // ============================================================
+
+  private onHijriCalendarVersionChanged(): void {
+    WidgetHelper.refreshAllDebounced();
+  }
+
+  private onTimeFormatChanged(): void {
+    WidgetHelper.refreshAllDebounced();
+  }
+
+  // ============================================================
+  // FALLBACK HOST (API 20–22)
+  // ============================================================
+
+  private onLanguageChanged(): void {
+    this.currentLanguage = this.appLanguage;
+    WidgetHelper.refreshAllDebounced();
+  }
+
+  private onBreakpointChanged(): void {
+    this.recomputeBarWidth();
+  }
+
+  // ============================================================
+  // HAMBURGER BUTTON + MENU
+  // ============================================================
+
+  private recomputeBarWidth(): void {
+    try {
+      const info = display.getDefaultDisplaySync();
+      const screenW = px2vp(info.width);
+      this.barWidth = Math.min(screenW - 32, 560);
+    } catch (err) {
+      this.barWidth = 340;
+    }
+  }
+
+  /**
+   * Color for the menu popup's icons and labels.
+   *
+   * The menu popup's background tracks the system theme, not the
+   * app's themeMode setting. So the icon and label colors are picked
+   * from the system state directly, ensuring they always contrast.
+   */
+  private menuIconColor(): string {
+    return PageTheme.isSystemDark()
+      ? '#FFFFFF'
+      : '#1A1A1A';
+  }
+
+  // ============================================================
+  // SHARED TAB CONTENT
+  // ============================================================
+
+  private menuTextColor(): string {
+    return PageTheme.isSystemDark()
+      ? '#FFFFFF'
+      : '#1A1A1A';
+  }
+
+  // ---- Five parameterless tab bar builders ----
+  // Each reads this.currentLanguage and this.currentIndex directly
+  // so the labels and the active state refresh on every parent
+  // render. Passing them as builder parameters would cache the
+  // resolved label at first render and the tab bar would stay in
+  // the language that was active when the app launched.
+
+  private currentTabTitle(): string {
+    switch (this.currentIndex) {
+      case 0:
+        return L.get('tab_home', this.currentLanguage);
+      case 1:
+        return L.get('tab_prayers', this.currentLanguage);
+      case 2:
+        return L.get('tab_calendar', this.currentLanguage);
+      case 3:
+        return L.get('tab_compass', this.currentLanguage);
+      case 4:
+        return L.get('tab_tasbih', this.currentLanguage);
+      default:
+        return L.get('app_name', this.currentLanguage);
+    }
+  }
+
+  private toggleMenu(): void {
+    this.isMenuVisible = !this.isMenuVisible;
+  }
+
+  private isRtl(): boolean {
+    return L.isRtlLang(this.currentLanguage);
+  }
+
+  /**
+   * Build the HDS floating style, or return an empty object so HDS
+   * uses its default tab bar. Guarding prevents a partial parse from
+   * leaving HDS's internal fsTabBarHandler_ undefined, which used to
+   * cause downstream components to crash on access.
+   */
+  private safeFloatingStyle(): HdsTabsFloatingStyle {
+    try {
+      return this.buildHdsFloatingStyle();
+    } catch (err) {
+      AppLogger.warn('MainTabs',
+        `buildHdsFloatingStyle failed: ${(err as Error).message}`);
+      // Return an empty style — HDS will not create the floating
+      // handler, but it will still render a standard tab bar.
+      const empty: HdsTabsFloatingStyle = {};
+      return empty;
+    }
+  }
+
+  private fallbackBarColor(): string {
+    const dark = PageTheme.isDarkFor(this.themeMode);
+    return dark
+      ? 'rgba(20, 27, 46, 0.55)'
+      : 'rgba(255, 255, 255, 0.55)';
   }
 
   private buildHdsFloatingStyle(): HdsTabsFloatingStyle {

@@ -2859,6 +2859,22 @@
     {
       "name": "remind_yearly_desc",
       "value": "Repeat this event every year"
+    },
+    {
+      "name": "widget_prayer_desc",
+      "value": "Shows the next prayer time and daily schedule"
+    },
+    {
+      "name": "widget_desc",
+      "value": "Sirat Companion Prayer Widget"
+    },
+    {
+      "name": "widget_next_prayer",
+      "value": "NEXT PRAYER"
+    },
+    {
+      "name": "widget_todays_schedule",
+      "value": "TODAY'S SCHEDULE"
     }
   ]
 }

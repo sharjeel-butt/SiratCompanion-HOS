@@ -40,7 +40,7 @@ const FLUSH_DEBOUNCE_MS = 250;
  */
 export class PreferencesHelper {
   private static store: preferences.Preferences | null = null;
-  private static initContext: common.UIAbilityContext | null = null;
+  private static initContext: common.Context | null = null;
 
   private static initResolve: (() => void) | null = null;
   private static initPromise: Promise<void> = new Promise<void>((resolve) => {
@@ -53,7 +53,7 @@ export class PreferencesHelper {
   private static readonly INIT_RETRY_MS = 30_000;
   private static readonly INIT_WAIT_MS = 5_000;
 
-  static async init(context: common.UIAbilityContext): Promise<void> {
+  static async init(context: common.Context): Promise<void> {
     PreferencesHelper.initContext = context;
     if (PreferencesHelper.store) {
       return;
@@ -285,6 +285,22 @@ export class PreferencesHelper {
     if (PreferencesHelper.flushTimerId !== -1) {
       clearTimeout(PreferencesHelper.flushTimerId);
       PreferencesHelper.flushTimerId = -1;
+    }
+  }
+
+  /**
+   * Force the underlying preferences store to re-read from disk.
+   * Necessary when another process (e.g. the widget process) may
+   * have written to the same preferences file since our last read.
+   */
+  static async reloadFromDisk(): Promise<void> {
+    if (!PreferencesHelper.store) {
+      return;
+    }
+    try {
+      await PreferencesHelper.store.getAll();
+    } catch (e) {
+      // swallow
     }
   }
 }

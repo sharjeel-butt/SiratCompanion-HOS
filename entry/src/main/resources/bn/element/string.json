@@ -2859,6 +2859,22 @@
     {
       "name": "remind_yearly_desc",
       "value": "এই ইভেন্টটি প্রতি বছর পুনরাবৃত্তি করুন"
+    },
+    {
+      "name": "widget_prayer_desc",
+      "value": "পরবর্তী নামাজের সময় এবং দৈনিক সময়সূচি দেখায়"
+    },
+    {
+      "name": "widget_desc",
+      "value": "সিরাত কম্প্যানিয়ন নামাজ উইজেট"
+    },
+    {
+      "name": "widget_next_prayer",
+      "value": "পরবর্তী নামাজ"
+    },
+    {
+      "name": "widget_todays_schedule",
+      "value": "আজকের সময়সূচি"
     }
   ]
 }

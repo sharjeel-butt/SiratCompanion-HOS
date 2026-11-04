@@ -18,6 +18,7 @@ import {
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
   STORAGE_KEY_CALC_SETTINGS_VERSION,
+  STORAGE_KEY_CUSTOM_EVENTS_VERSION,
   STORAGE_KEY_DUA_BINDINGS_VERSION,
   STORAGE_KEY_EVENT_PERSPECTIVE,
   STORAGE_KEY_EVENT_SETTINGS_VERSION,
@@ -594,6 +595,7 @@ export class UserBackupService {
     UserBackupService.bumpVersion(STORAGE_KEY_RAMADAN_STATE_VERSION);
     UserBackupService.bumpVersion(STORAGE_KEY_APP_FOREGROUND_TICK);
     UserBackupService.bumpVersion(STORAGE_KEY_DUA_BINDINGS_VERSION);
+    UserBackupService.bumpVersion(STORAGE_KEY_CUSTOM_EVENTS_VERSION);
 
     // 6. Reschedule custom event notifications (unchanged) ...
     try {
@@ -689,6 +691,8 @@ export class UserBackupService {
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH,
       await PreferencesHelper.getBoolean(
         STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH, true));
+
+    AppStorage.setOrCreate(STORAGE_KEY_CUSTOM_EVENTS_VERSION, 0);
   }
 
   private static bumpVersion(key: string): void {
