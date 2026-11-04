@@ -2860,6 +2860,22 @@
     {
       "name": "remind_yearly_desc",
       "value": "كرر هذا الحدث كل عام"
+    },
+    {
+      "name": "widget_prayer_desc",
+      "value": "يعرض وقت الصلاة القادمة والجدول اليومي"
+    },
+    {
+      "name": "widget_desc",
+      "value": "أداة صراط كمبانيون للصلاة"
+    },
+    {
+      "name": "widget_next_prayer",
+      "value": "الصلاة القادمة"
+    },
+    {
+      "name": "widget_todays_schedule",
+      "value": "جدول اليوم"
     }
   ]
 }

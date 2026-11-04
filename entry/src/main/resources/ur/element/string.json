@@ -2859,6 +2859,22 @@
     {
       "name": "remind_yearly_desc",
       "value": "اس ایونٹ کو ہر سال دہرائیں"
+    },
+    {
+      "name": "widget_prayer_desc",
+      "value": "اگلی نماز کا وقت اور روزانہ کا شیڈول دکھاتا ہے"
+    },
+    {
+      "name": "widget_desc",
+      "value": "صراط کمپینین نماز ویجیٹ"
+    },
+    {
+      "name": "widget_next_prayer",
+      "value": "اگلی نماز"
+    },
+    {
+      "name": "widget_todays_schedule",
+      "value": "آج کا شیڈول"
     }
   ]
 }

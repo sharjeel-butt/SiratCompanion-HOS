@@ -40,8 +40,7 @@ export class L {
    * base resource set and every key is guaranteed to be defined.
    */
   static readonly DEFAULT_LANGUAGE = AppLanguage.ENGLISH;
-
-  private static ctx: common.UIAbilityContext | null = null;
+  private static ctx: common.Context | null = null;
   private static readonly overrideCache: Map<string, resourceManager.ResourceManager>
     = new Map<string, resourceManager.ResourceManager>();
 
@@ -50,7 +49,7 @@ export class L {
    * before any page renders. Required — L.get returns the raw key
    * if this has not been called.
    */
-  static init(context: common.UIAbilityContext): void {
+  static init(context: common.Context): void {
     L.ctx = context;
     L.overrideCache.clear();
   }

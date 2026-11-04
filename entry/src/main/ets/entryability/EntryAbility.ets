@@ -2,7 +2,7 @@
 
 import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { Configuration } from '@ohos.app.ability.Configuration'; // Direct import fixes fontScale error
-import { window } from '@kit.ArkUI';
+import { router, window } from '@kit.ArkUI';
 import { CustomEventStorage } from '../hijricalendar/CustomEventStorage';
 import { CustomEventNotifier } from '../hijricalendar/CustomEventNotifier';
 import { hilog } from '@kit.PerformanceAnalysisKit';
@@ -21,6 +21,7 @@ import {
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LANGUAGE_OVERRIDE,
+  STORAGE_KEY_NAV_TARGET_TAB,
   STORAGE_KEY_RAMADAN_STATE_VERSION,
   STORAGE_KEY_SHOW_EXTRA_TIMINGS,
   STORAGE_KEY_SHOW_FIRST_THIRD,
@@ -61,6 +62,7 @@ import { LocationCache } from '../location/LocationCache';
 import { TypographyHelper } from '../core/TypographyHelper';
 import { PageTheme } from '../core/PageTheme';
 import { PrivacyPolicyProvider } from '../legal/PrivacyPolicy';
+import { WidgetHelper } from '../widgets/WidgetHelper';
 
 /** How long the splash stays visible, in milliseconds. */
 const SPLASH_DELAY_MS = 1500;
@@ -71,6 +73,7 @@ const SPLASH_DELAY_2IN1_MS = 400;
 /** Preferred starting window size on 2-in-1 devices, in vp. */
 const PREFERRED_WINDOW_WIDTH_2IN1 = 800;
 const PREFERRED_WINDOW_HEIGHT_2IN1 = 1100;
+
 
 /**
  * AppStorage key for the last-known device timezone offset. Not a
@@ -89,15 +92,65 @@ export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     hilog.info(0x0000, 'Sirat', '%{public}s', 'EntryAbility onCreate');
 
-    // Pre-create AppStorage keys that pages bind to via
-    // @StorageLink + @Watch. If a key does not exist when the
-    // first subscriber attaches, its initial value can be created
-    // without firing a change notification on some SDK builds.
-    // Seeding them here guarantees a stable value from the start.
     AppStorage.setOrCreate(STORAGE_KEY_APP_FOREGROUND_TICK, 0);
     AppStorage.setOrCreate(STORAGE_KEY_EVENT_SETTINGS_VERSION, 0);
     AppStorage.setOrCreate(STORAGE_KEY_CALC_SETTINGS_VERSION, 0);
     AppStorage.setOrCreate(STORAGE_KEY_RAMADAN_STATE_VERSION, 0);
+
+    // NEW: handle widget click navigation (cold start)
+    this.handleWidgetNavWant(want);
+  }
+
+  onNewWant(want: Want, launchParam: AbilityConstant.LaunchParam): void {
+    AppLogger.info('EntryAbility', 'onNewWant fired');
+    this.handleWidgetNavWant(want);
+  }
+
+  private handleWidgetNavWant(want: Want): void {
+    const params: Record<string, Object> | undefined = want.parameters;
+    if (params === undefined) {
+      return;
+    }
+
+    const raw: Object | undefined = params['targetTab'];
+    if (typeof raw !== 'string') {
+      return;
+    }
+    const tabStr: string = raw as string;
+    if (tabStr.length === 0) {
+      return;
+    }
+
+    AppLogger.info('EntryAbility', `Widget nav: targetTab='${tabStr}'`);
+
+    // Just set the value. MainTabs will pick it up.
+    AppStorage.setOrCreate(STORAGE_KEY_NAV_TARGET_TAB, tabStr);
+
+    // If the app is on a pushed page (like Settings), replace it
+    const currentTop: string = this.getCurrentPagePath();
+    if (currentTop !== 'pages/MainTabs' && currentTop.length > 0) {
+      router.replaceUrl({ url: 'pages/MainTabs' }).catch((e: Error) => {
+        AppLogger.warn('EntryAbility', `Widget nav replace failed: ${e.message}`);
+      });
+    }
+  }
+
+  /**
+   * Return the current top-of-stack page path, or '' when the router
+   * isn't ready (cold start) or the state can't be read.
+   */
+  private getCurrentPagePath(): string {
+    try {
+      const stateRaw: Object = router.getState() as Object;
+      const stateRec: Record<string, Object> = stateRaw as Record<string, Object>;
+      const pathRaw: Object | undefined = stateRec['path'];
+      if (typeof pathRaw === 'string') {
+        return pathRaw as string;
+      }
+    } catch (e) {
+      // Router not ready (cold start) or getState unavailable
+    }
+    return '';
   }
 
   // ============================================================
@@ -368,10 +421,13 @@ export default class EntryAbility extends UIAbility {
   // ============================================================
 
   onBackground(): void {
-    // Flush any pending debounced preference write before the
-    // process is suspended. Fire-and-forget.
     PreferencesHelper.flushNow().catch((err: Error) => {
       AppLogger.warn('EntryAbility', `Flush on background failed: ${err.message}`);
+    });
+
+    // NEW: push settings changes to any installed widgets
+    WidgetHelper.refreshAll().catch((): void => {
+      // swallow
     });
   }
 

@@ -195,7 +195,7 @@ export struct Prayer {
       arabicName: 'الإمساك',
       time: '--:--',
       status: 'abbreviation',
-      icon: $r('app.media.ic_ramadan_moon')
+      icon: $r('app.media.ic_imsak')
     },
     {
       id: 'sunrise',

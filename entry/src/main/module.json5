@@ -59,6 +59,30 @@
             "resource": "$profile:backup_config"
           }
         ]
+      },
+      {
+        "name": "EntryFormAbility",
+        "srcEntry": "./ets/entryformability/EntryFormAbility.ets",
+        "description": "$string:widget_desc",
+        "type": "form",
+        "metadata": [
+          {
+            "name": "ohos.extension.form",
+            "resource": "$profile:form_config"
+          }
+        ]
+      },
+      {
+        "name": "PrayerIntentExecutor",
+        "srcEntry": "./ets/entryformability/PrayerIntentExecutor.ets",
+        "type": "insightIntentUI",
+        "exported": true,
+        "metadata": [
+          {
+            "name": "ohos.insightIntent",
+            "resource": "$profile:intent_config"
+          }
+        ]
       }
     ],
     "requestPermissions": [

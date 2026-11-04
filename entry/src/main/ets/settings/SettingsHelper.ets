@@ -897,6 +897,9 @@ export class SettingsHelper {
     AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, resolved);
     PreferencesHelper.setString(STORAGE_KEY_LANGUAGE, resolved);
 
+    PreferencesHelper.flushNow().catch(() => {
+    });
+
     // Tell the system context to adopt this language (fixes native overlays)
     L.applySystemLanguage(lang);
   }

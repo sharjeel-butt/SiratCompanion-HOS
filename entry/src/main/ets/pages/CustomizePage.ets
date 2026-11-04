@@ -36,6 +36,7 @@ import { ClockFormat } from '../core/ClockFormat';
 import { SubsectionHeader } from '../components/SubsectionHeader';
 import { ExtraTimingToggleRow } from '../prayer/ExtraTimingToggleRow';
 import { common } from '@kit.AbilityKit';
+import { WidgetHelper } from '../widgets/WidgetHelper';
 
 @Entry
 @Component
@@ -221,6 +222,9 @@ struct CustomizePage {
     this.ClockFormat = id;
     SettingsHelper.saveClockFormat(id);
     this.showClockFormatPicker = false;
+    WidgetHelper.refreshAll().catch((): void => {
+      // swallow
+    });
   }
 
   private ClockFormatLabel(): string {
@@ -1557,6 +1561,9 @@ struct CustomizePage {
     this.languageOverride = id;
     this.currentLanguage = L.resolveOverride(id);
     this.showLanguagePicker = false;
+    WidgetHelper.refreshAll().catch((): void => {
+      // swallow
+    });
   }
 
   private pickAppTheme(id: string): void {

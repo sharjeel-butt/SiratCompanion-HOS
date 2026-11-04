@@ -47,6 +47,7 @@ import {
 import { NavHelper } from '../core/NavHelper';
 import { SettingsRow } from '../settings/SettingsRow';
 import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
+import { WidgetHelper } from '../widgets/WidgetHelper';
 
 const MAX_HIJRI_OFFSET = 3;
 
@@ -1825,6 +1826,9 @@ struct SettingsPage {
     const storageKey = this.getStorageKeyForOffset(key);
     if (storageKey.length > 0) {
       SettingsHelper.saveOffset(storageKey, next);
+      WidgetHelper.refreshAll().catch((): void => {
+        // swallow
+      });
     }
   }
 
