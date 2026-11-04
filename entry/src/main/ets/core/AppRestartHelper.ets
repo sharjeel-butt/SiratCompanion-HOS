@@ -1,37 +1,33 @@
-// entry/src/main/ets/helper/AppRestartHelper.ets
+// entry/src/main/ets/core/AppRestartHelper.ets
 
 import { common, Want } from '@kit.AbilityKit';
-import { BusinessError } from '@kit.BasicServicesKit';
+import { window } from '@kit.ArkUI';
+import { BusinessError, deviceInfo } from '@kit.BasicServicesKit';
 import { AppLogger } from './AppLogger';
 
 /**
  * Restart the app.
  *
- * HarmonyOS does not expose a single-shot "restart this ability"
- * API that works on every shipped SDK level. The portable pattern
- * used by the platform's own sample apps is:
+ * HarmonyOS has no single "restart this ability" API. The portable
+ * pattern is: queue `startAbility()` targeting our own entry ability,
+ * then tear the current instance down. The system relaunches the app
+ * from the queued intent.
  *
- *   1. Construct a Want targeting the app's entry ability.
- *   2. Call terminateSelf() to tear down the current instance.
- *   3. Call startAbility() with that Want. The system queues the
- *      launch before the ability finishes tearing down, so the
- *      process restarts cleanly on the same device surface.
+ * Ordering is critical:
  *
- * Return contract:
+ *   1. On tablet / 2-in-1, destroy the window first — matches the
+ *      pattern used by MainTabs.exitApp() and is required for
+ *      terminateSelf() to complete cleanly.
  *
- *   true  — terminateSelf() succeeded; the ability is committed
- *           to teardown. Any subsequent startAbility() failure is
- *           logged but does not change the answer, because the
- *           caller can no longer interact with the process.
+ *   2. Fire terminateSelf() WITHOUT awaiting it. If we await, the
+ *      context is torn down before startAbility() runs, and the
+ *      restart silently fails on tablet / PC (works on phone by
+ *      accident of timing).
  *
- *   false — terminateSelf() failed; the ability is still alive.
- *           The caller can safely fall back to router navigation
- *           to present the restored state without a hard restart.
- *
- * No exceptions are thrown. ArkTS's arkts-limited-throw rule
- * forbids throwing values that are not provably Error subclasses,
- * and the boolean result already carries every signal the caller
- * needs.
+ *   3. Fire startAbility() immediately after terminateSelf() is
+ *      queued. The context is still alive for the duration of this
+ *      synchronous block, so the intent makes it into the system
+ *      queue before teardown completes.
  */
 export class AppRestartHelper {
   static async restart(context: common.UIAbilityContext): Promise<boolean> {
@@ -40,29 +36,48 @@ export class AppRestartHelper {
       abilityName: 'EntryAbility'
     };
 
-    try {
-      await context.terminateSelf();
-    } catch (err) {
-      const e = err as BusinessError;
-      AppLogger.warn('AppRestartHelper',
-        `terminateSelf failed: code=${e.code ?? ''} msg=${e.message ?? ''}`);
-      // Ability is still alive — caller may fall back safely.
-      return false;
+    const isLarge = deviceInfo.deviceType === '2in1'
+      || deviceInfo.deviceType === 'tablet';
+
+    AppLogger.info('AppRestartHelper',
+      `restart start (deviceType=${deviceInfo.deviceType}, large=${isLarge})`);
+
+    // 1. Close window first on tablet / PC (mirrors exitApp pattern)
+    if (isLarge) {
+      try {
+        const win = await window.getLastWindow(context);
+        await win.destroyWindow();
+        AppLogger.info('AppRestartHelper', 'window destroyed');
+      } catch (e) {
+        const err = e as Error;
+        AppLogger.warn('AppRestartHelper',
+          `window destroy failed: ${err.message}`);
+      }
     }
 
+    // 2. Fire terminateSelf — DO NOT await. The JS thread must
+    //    continue immediately so startAbility fires while the
+    //    context is still valid.
+    context.terminateSelf().catch((err: BusinessError) => {
+      AppLogger.warn('AppRestartHelper',
+        `terminateSelf failed: code=${err.code ?? ''} msg=${err.message ?? ''}`);
+    });
+
+    // 3. Fire startAbility immediately — the intent is queued in
+    //    the system before the current instance finishes teardown.
     try {
       await context.startAbility(want);
       AppLogger.info('AppRestartHelper', 'restart dispatched');
+      return true;
     } catch (err) {
       const e = err as BusinessError;
       AppLogger.error('AppRestartHelper',
         `startAbility failed: code=${e.code ?? ''} msg=${e.message ?? ''}`);
-      // Ability is already terminating — no fallback possible.
-      // The user relaunches manually and lands on the same state.
+      // Ability is already queued for teardown — return true so
+      // the caller doesn't offer a misleading "restart failed"
+      // dialog. User will land on the restored state on manual
+      // relaunch.
+      return true;
     }
-
-    // terminateSelf succeeded → committed to teardown regardless
-    // of what startAbility did.
-    return true;
   }
 }

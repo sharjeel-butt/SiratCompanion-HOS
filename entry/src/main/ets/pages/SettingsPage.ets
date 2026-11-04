@@ -48,6 +48,7 @@ import { NavHelper } from '../core/NavHelper';
 import { SettingsRow } from '../settings/SettingsRow';
 import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
 import { WidgetHelper } from '../widgets/WidgetHelper';
+import { OfflineCityLookup } from '../location/OfflineCityLookup';
 
 const MAX_HIJRI_OFFSET = 3;
 
@@ -1708,6 +1709,7 @@ struct SettingsPage {
   private onLanguageChanged(): void {
     this.currentLanguage = this.appLanguage;
     this.appInfo = AppInfoHelper.get();
+    this.reload();
   }
 
   private async onAppForegrounded(): Promise<void> {
@@ -1737,17 +1739,17 @@ struct SettingsPage {
     const manual = await SettingsHelper.getManualCoords();
     this.manualLatInput = manual.lat !== 0 ? manual.lat.toString() : '';
     this.manualLngInput = manual.lng !== 0 ? manual.lng.toString() : '';
-    this.manualCityInput = manual.cityName;
 
     if (mode === LocationMode.MANUAL) {
       this.effectiveLat = manual.lat;
       this.effectiveLng = manual.lng;
       if (manual.lat !== 0 || manual.lng !== 0) {
-        const city = manual.cityName.length > 0
-          ? manual.cityName : this.tr('manual_location');
-        this.effectiveCity = `${city} (${this.tr('manual_location')})`;
+        const displayCity = this.getDisplayCity(manual.cityName);
+        this.manualCityInput = displayCity; // Update text field
+        this.effectiveCity = `${displayCity} (${this.tr('manual_location')})`;
       } else {
         this.effectiveCity = '—';
+        this.manualCityInput = '';
       }
       this.lastRefreshTime = manual.refresh;
     } else {
@@ -1755,7 +1757,7 @@ struct SettingsPage {
       if (cached) {
         this.effectiveLat = cached.latitude;
         this.effectiveLng = cached.longitude;
-        this.effectiveCity = cached.cityName;
+        this.effectiveCity = this.getDisplayCity(cached.cityName);
         this.lastRefreshTime = cached.lastRefreshTime;
       } else {
         this.effectiveLat = 0;
@@ -1897,8 +1899,7 @@ struct SettingsPage {
     if (cityName.length === 0) {
       try {
         cityName = await LocationHelper.reverseGeocode(lat, lng);
-      } catch (e) { /* fall through */
-      }
+      } catch (e) { /* fall through */ }
       const unknownLabel = L.get('unknown_location', this.currentLanguage);
       if (cityName === unknownLabel || cityName.length === 0) {
         cityName = `${lat.toFixed(2)}, ${lng.toFixed(2)}`;
@@ -1906,66 +1907,62 @@ struct SettingsPage {
     }
 
     const saved = await SettingsHelper.saveManualCoords(lat, lng, cityName);
+    const displayCity = this.getDisplayCity(saved.cityName);
 
     this.effectiveLat = saved.lat;
     this.effectiveLng = saved.lng;
-    this.effectiveCity = `${saved.cityName} (${this.tr('manual_location')})`;
+    this.manualCityInput = displayCity; // <-- Real-time update for text field
+    this.effectiveCity = `${displayCity} (${this.tr('manual_location')})`;
     this.lastRefreshTime = saved.refresh;
-    this.manualCityInput = saved.cityName;
     this.isRefreshing = false;
 
     promptAction.showToast({
-      message: `${this.tr('save')}: ${saved.cityName}`, duration: 2000
+      message: `${this.tr('save')}: ${displayCity}`, duration: 2000
     });
+
+    WidgetHelper.refreshAll().catch(() => {});
   }
 
   private async refreshLocation(): Promise<void> {
-    if (this.isRefreshing) {
-      return;
-    }
+    if (this.isRefreshing) return;
     this.isRefreshing = true;
 
     if (this.locationMode === LocationMode.MANUAL) {
       const manual = await SettingsHelper.getManualCoords();
       if (manual.lat === 0 && manual.lng === 0) {
-        promptAction.showToast({
-          message: this.tr('location_desc'), duration: 2000
-        });
+        promptAction.showToast({ message: this.tr('location_desc'), duration: 2000 });
         this.isRefreshing = false;
         return;
       }
       let cityName = this.tr('manual_location');
       try {
-        cityName = await LocationHelper.reverseGeocode(
-          manual.lat, manual.lng
-        );
-      } catch (e) { /* fall through */
-      }
-      const saved = await SettingsHelper.saveManualCoords(
-        manual.lat, manual.lng, cityName
-      );
+        cityName = await LocationHelper.reverseGeocode(manual.lat, manual.lng);
+      } catch (e) { /* fall through */ }
+
+      const saved = await SettingsHelper.saveManualCoords(manual.lat, manual.lng, cityName);
+      const displayCity = this.getDisplayCity(saved.cityName);
+
       this.effectiveLat = saved.lat;
       this.effectiveLng = saved.lng;
-      this.effectiveCity = `${saved.cityName} (${this.tr('manual_location')})`;
+      this.manualCityInput = displayCity; // <-- Update text field
+      this.effectiveCity = `${displayCity} (${this.tr('manual_location')})`;
       this.lastRefreshTime = saved.refresh;
-      promptAction.showToast({
-        message: `${this.tr('save')}: ${saved.cityName}`, duration: 2000
-      });
+
+      promptAction.showToast({ message: `${this.tr('save')}: ${displayCity}`, duration: 2000 });
       this.isRefreshing = false;
       return;
     }
 
     try {
-      const data: LocationData =
-        await LocationHelper.fetchLocationData(getContext(this));
+      const data: LocationData = await LocationHelper.fetchLocationData(getContext(this));
       await LocationCache.save(data.latitude, data.longitude, data.cityName);
+
       this.effectiveLat = data.latitude;
       this.effectiveLng = data.longitude;
-      this.effectiveCity = data.cityName;
+      this.effectiveCity = this.getDisplayCity(data.cityName); // <-- Real-time update for GPS
       this.lastRefreshTime = Date.now();
-      promptAction.showToast({
-        message: `GPS: ${data.cityName}`, duration: 2000
-      });
+
+      promptAction.showToast({ message: `GPS: ${this.effectiveCity}`, duration: 2000 });
     } catch (err) {
       const error = err as Error;
       let msgKey = 'error_gps_fetch_failed';
@@ -2346,5 +2343,12 @@ struct SettingsPage {
         duration: 3000
       });
     }
+  }
+
+  private getDisplayCity(rawName: string): string {
+    if (rawName === 'DEFAULT LOCATION' || rawName.length === 0) {
+      return this.tr('default_location');
+    }
+    return OfflineCityLookup.translateCityName(rawName, this.currentLanguage);
   }
 }

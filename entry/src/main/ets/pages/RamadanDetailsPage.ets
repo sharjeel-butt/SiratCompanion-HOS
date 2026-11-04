@@ -547,7 +547,6 @@ struct RamadanDetailsPage {
     .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
-    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
     .bindSheet($$this.showQadaYearSheet, this.QadaYearSheet(), {
       height: 620,
       dragBar: true,

@@ -4,6 +4,7 @@ import { TasbihStorage } from './TasbihStorage';
 import { TasbihManager } from './TasbihManager';
 import { Tasbih } from './TasbihModels';
 import { common } from '@kit.AbilityKit';
+import { AppLogger } from '../core/AppLogger';
 
 @Component
 export struct TasbihIndicator {
@@ -66,10 +67,11 @@ export struct TasbihIndicator {
       .borderRadius(12)
       .border({ width: 1, color: this.colors.borderSoft })
       .onClick(() => {
-        // Navigate to the Tasbih Tab and pass the target context
-        AppStorage.setOrCreate('nav_target_tasbih', this.firstTasbihId);
+        AppLogger.info('TasbihIndicator',
+          `Tapped: tasbih=${this.firstTasbihId} prayer=${this.prayerId} dhikrIdx=${this.firstPendingDhikrIndex}`);
         AppStorage.setOrCreate('nav_target_dhikr', this.firstPendingDhikrIndex);
         AppStorage.setOrCreate('nav_target_prayer', this.prayerId);
+        AppStorage.setOrCreate('nav_target_tasbih', this.firstTasbihId);
         AppStorage.setOrCreate('nav_target_tab', 'tasbih');
       })
     }

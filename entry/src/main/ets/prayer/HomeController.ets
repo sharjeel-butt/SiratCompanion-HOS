@@ -18,6 +18,7 @@ import {
   AdvancedCalcSettings, DEFAULT_ADVANCED_CALC
 } from './AdvancedCalcModels';
 import { AppLogger } from '../core/AppLogger';
+import { OfflineCityLookup } from '../location/OfflineCityLookup';
 
 export interface HomePrayerSnapshot {
   prayers: PrayerModel[];
@@ -313,15 +314,22 @@ export class HomeController {
 
   static async loadLocationForMode(mode: LocationMode): Promise<HomeLocationSnapshot> {
     const manualLabel = L.get('manual_location');
+    const lang = L.current();
 
     if (mode === LocationMode.MANUAL) {
       const coords = await SettingsHelper.getManualCoords();
       if (coords.lat !== 0 || coords.lng !== 0) {
-        const city: string = coords.cityName.length > 0 ? coords.cityName : manualLabel;
+        let rawCity = coords.cityName;
+        if (rawCity === 'DEFAULT LOCATION' || rawCity.length === 0) {
+          rawCity = L.get('default_location');
+        } else {
+          rawCity = OfflineCityLookup.translateCityName(rawCity, lang);
+        }
+
         const snapshot: HomeLocationSnapshot = {
           latitude: coords.lat,
           longitude: coords.lng,
-          displayName: `${city} (${manualLabel})`,
+          displayName: `${rawCity} (${manualLabel})`,
           isManual: true
         };
         return snapshot;
@@ -337,10 +345,17 @@ export class HomeController {
 
     const cached: CachedLocation | null = await LocationCache.load();
     if (cached) {
+      let rawCity = cached.cityName;
+      if (rawCity === 'DEFAULT LOCATION' || rawCity.length === 0) {
+        rawCity = L.get('default_location');
+      } else {
+        rawCity = OfflineCityLookup.translateCityName(rawCity, lang);
+      }
+
       const snapshot: HomeLocationSnapshot = {
         latitude: cached.latitude,
         longitude: cached.longitude,
-        displayName: cached.cityName,
+        displayName: rawCity,
         isManual: false
       };
       return snapshot;

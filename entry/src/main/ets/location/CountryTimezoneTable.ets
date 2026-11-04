@@ -26,7 +26,41 @@ export interface CountryZone {
  */
 
 export const COUNTRY_ZONES: CountryZone[] = [
+  {
+    code: 'GE-W',
+    minLat: 41.50, maxLat: 43.6,
+    minLng: 40.0,  maxLng: 42.5,
+    standardOffset: 4, dstRule: DstRule.NONE
+  },
+  {
+    code: 'GE-E',
+    minLat: 41.40, maxLat: 43.6,
+    minLng: 42.5,  maxLng: 46.8,
+    standardOffset: 4, dstRule: DstRule.NONE
+  },
+  {
+    code: 'AM',
+    minLat: 38.8,
+    maxLat: 41.3,
+    minLng: 43.4,
+    maxLng: 46.7,
+    standardOffset: 4,
+    dstRule: DstRule.NONE
+  },
+  {
+    code: 'AZ',
+    minLat: 38.4,
+    maxLat: 41.9,
+    minLng: 44.8,
+    maxLng: 50.4,
+    standardOffset: 4,
+    dstRule: DstRule.NONE
+  },
+
   // ---- Middle East / Anatolia ----
+  // Now reached only for points that didn't match GE / AM / AZ
+  // above — i.e. genuine Turkish territory, plus the rest of
+  // the Middle East.
   {
     code: 'TR',
     minLat: 35.8,
@@ -252,38 +286,6 @@ export const COUNTRY_ZONES: CountryZone[] = [
     minLng: 16.4,
     maxLng: 32.9,
     standardOffset: 2,
-    dstRule: DstRule.NONE
-  },
-
-  // ---- Caucasus ----
-  // Added so that RU-MSK (Moscow Time) does not incorrectly claim
-  // Georgian, Armenian, or Azerbaijani coordinates. All three
-  // countries use UTC+4 with no DST.
-  {
-    code: 'GE',
-    minLat: 41.0,
-    maxLat: 43.6,
-    minLng: 40.0,
-    maxLng: 46.8,
-    standardOffset: 4,
-    dstRule: DstRule.NONE
-  },
-  {
-    code: 'AM',
-    minLat: 38.8,
-    maxLat: 41.3,
-    minLng: 43.4,
-    maxLng: 46.7,
-    standardOffset: 4,
-    dstRule: DstRule.NONE
-  },
-  {
-    code: 'AZ',
-    minLat: 38.4,
-    maxLat: 41.9,
-    minLng: 44.8,
-    maxLng: 50.4,
-    standardOffset: 4,
     dstRule: DstRule.NONE
   },
 

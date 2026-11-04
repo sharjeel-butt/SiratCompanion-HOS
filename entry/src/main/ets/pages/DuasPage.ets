@@ -6,11 +6,14 @@ import { DuaService } from '../duas/DuaService';
 import { CompleteDua } from '../duas/DuaModels';
 import { TypographyHelper } from '../core/TypographyHelper';
 import { router } from '@kit.ArkUI';
+import { STORAGE_KEY_LANGUAGE } from '../core/StorageKeys';
 
 @Entry
 @Component
 struct DuasPage {
-  @StorageLink('app_language') @Watch('onLangChanged') appLanguage: string = 'en';
+  @StorageLink(STORAGE_KEY_LANGUAGE)
+  @Watch('onLangChanged')
+  appLanguage: string = 'en';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State duas: CompleteDua[] = [];
   @State filteredDuas: CompleteDua[] = [];
@@ -139,13 +142,21 @@ struct DuasPage {
       // ===== Categories Scroll =====
       Scroll() {
         Row({ space: 8 }) {
-          // Active prayer filter pill
+          // Active prayer filter pill — clear button
           if (this.filterPrayer.length > 0) {
             Row({ space: 4 }) {
               Text(`${L.get('duas_for', this.appLanguage)} ${this.getPrayerLabel(this.filterPrayer)}`)
                 .fontSize(TypographyHelper.getFontSize(this.appLanguage, 13))
                 .fontColor(this.colors.textOnAccent)
-              Text('✕').fontSize(12).fontColor(this.colors.textOnAccent).margin({ left: 4 })
+                .maxLines(1)
+                .textOverflow({ overflow: TextOverflow.Ellipsis })
+                .flexShrink(1)
+
+              Image($r('app.media.ic_close'))
+                .width(12)
+                .height(12)
+                .fillColor(this.colors.textOnAccent)
+                .flexShrink(0)
             }
             .backgroundColor(this.colors.accentGold)
             .padding({

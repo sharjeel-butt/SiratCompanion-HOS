@@ -708,6 +708,7 @@ export struct HomePage {
     this.prayerProgress =
       ProgressHelper.getPrayerProgress(this.currentLanguage);
     this.refreshDashboard();
+    this.loadSettingsAndLocation();
   }
 
   private async onLocationVersionChanged(): Promise<void> {
@@ -1566,9 +1567,9 @@ export struct HomePage {
             this.navigateToSettings();
           },
           onNavigateToTasbih: (tasbihId: string, dhikrIndex: number, prayerId: string) => {
-            AppStorage.setOrCreate('nav_target_tasbih', tasbihId);
             AppStorage.setOrCreate('nav_target_dhikr', dhikrIndex);
             AppStorage.setOrCreate('nav_target_prayer', prayerId);
+            AppStorage.setOrCreate('nav_target_tasbih', tasbihId);
             AppStorage.setOrCreate('nav_target_tab', 'tasbih');
           }
         })
@@ -2958,11 +2959,12 @@ export struct HomePage {
     })
     .borderRadius(6)
     .onClick(() => {
-      // Navigate to this specific tasbih, this specific prayer,
-      // and the first dhikr that is still pending for that prayer.
-      AppStorage.setOrCreate('nav_target_tasbih', row.tasbih.id);
+      AppLogger.info('HomePage',
+        `BoundTasbihRow tapped: tasbih=${row.tasbih.id} prayer=${row.prayerId} dhikrIdx=${row.firstPendingDhikrIndex}`);
+      AppStorage.setOrCreate('nav_target_tab', '');
       AppStorage.setOrCreate('nav_target_dhikr', row.firstPendingDhikrIndex);
       AppStorage.setOrCreate('nav_target_prayer', row.prayerId);
+      AppStorage.setOrCreate('nav_target_tasbih', row.tasbih.id);
       AppStorage.setOrCreate('nav_target_tab', 'tasbih');
     })
   }

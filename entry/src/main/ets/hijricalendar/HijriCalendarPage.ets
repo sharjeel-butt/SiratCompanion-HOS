@@ -328,8 +328,24 @@ export struct HijriCalendarPage {
   }
 
   private rebuildFromAnchor(anchor: Date): void {
+    // Pass the user's Event Perspective so the day-cell dots and
+    // the events list below the grid always agree. Without the
+    // 5th argument, buildMonthDays defaults to 'universal', which
+    // hides the dot for every SUNNI-only and SHIA-only event on
+    // the grid while still listing it below.
+    //
+    // Reactivity: this method is re-invoked by onEventSettingsVersionChanged()
+    // and eventPerspectiveListener() when the user changes the
+    // perspective in Customize, so the dots refresh immediately on
+    // the next render pass. The ForEach keys include cell.events.length,
+    // so changing the perspective re-keys the affected cells and
+    // forces ArkUI to redraw their dots.
     this.monthDays = HijriCalendarHelper.buildMonthDays(
-      this.viewingHijriYear, this.viewingHijriMonth, this.offsetDays, anchor
+      this.viewingHijriYear,
+      this.viewingHijriMonth,
+      this.offsetDays,
+      anchor,
+      SettingsHelper.getEventPerspective()
     );
   }
 
@@ -966,15 +982,15 @@ export struct HijriCalendarPage {
       return;
     }
 
-    let hYear = parseInt(this.formHijriYear);
-    let hMonth = parseInt(this.formHijriMonth);
-    let hDay = parseInt(this.formHijriDay);
+    let hYear = parseInt(this.formHijriYear, 10);
+    let hMonth = parseInt(this.formHijriMonth, 10);
+    let hDay = parseInt(this.formHijriDay, 10);
     let gDayOfWeek = 0;
 
     if (this.formDateType === 'gregorian') {
-      const gDay = parseInt(this.formGregDay);
-      const gMonth = parseInt(this.formGregMonth);
-      const gYear = parseInt(this.formGregYear);
+      const gDay = parseInt(this.formGregDay, 10);
+      const gMonth = parseInt(this.formGregMonth, 10);
+      const gYear = parseInt(this.formGregYear, 10);
 
       const gDate = new Date(gYear, gMonth - 1, gDay);
       if (isNaN(gDate.getTime()) || gDate.getDate() !== gDay) {
@@ -1554,9 +1570,9 @@ export struct HijriCalendarPage {
   }
 
   private getHijriPreviewFromGregorian(): string {
-    const gDay = parseInt(this.formGregDay);
-    const gMonth = parseInt(this.formGregMonth);
-    const gYear = parseInt(this.formGregYear);
+    const gDay = parseInt(this.formGregDay, 10);
+    const gMonth = parseInt(this.formGregMonth, 10);
+    const gYear = parseInt(this.formGregYear, 10);
 
     if (isNaN(gDay) || isNaN(gMonth) || isNaN(gYear)) {
       return '';

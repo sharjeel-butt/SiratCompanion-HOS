@@ -20,6 +20,21 @@
       "scheduledUpdateTime": "00:00",
       "formVisibleNotify": true,
       "uiSyntax": "arkts"
+    },
+    {
+      "name": "ramadan_widget",
+      "description": "$string:widget_ramadan_desc",
+      "src": "./ets/widgets/RamadanWidget.ets",
+      "window": { "designWidth": 720 },
+      "colorMode": "auto",
+      "supportDimensions": ["2*2", "2*4"],
+      "defaultDimension": "2*2",
+      "isDefault": false,
+      "updateEnabled": true,
+      "updateDuration": 30,
+      "scheduledUpdateTime": "00:00",
+      "formVisibleNotify": true,
+      "uiSyntax": "arkts"
     }
   ]
 }

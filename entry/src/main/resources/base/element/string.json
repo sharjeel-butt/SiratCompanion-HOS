@@ -2875,6 +2875,19 @@
     {
       "name": "widget_todays_schedule",
       "value": "TODAY'S SCHEDULE"
+    },
+    { "name": "hours_short",      "value": "h" },
+    { "name": "minutes_short",    "value": "m" },
+    { "name": "countdown_prefix", "value": "in" },
+    { "name": "countdown_now",    "value": "now" },
+    { "name": "yesterday",    "value": "Yesterday" },
+    {
+      "name": "widget_ramadan_desc",
+      "value": "Ramadan fasting tracker and countdown"
+    },
+    {
+      "name": "timing_iftar",
+      "value": "Iftar"
     }
   ]
 }

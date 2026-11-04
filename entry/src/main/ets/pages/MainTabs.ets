@@ -561,15 +561,12 @@ struct MainTabs {
     if (!this.navTargetTab || this.navTargetTab.length === 0) {
       return;
     }
-
-    // If the page is in the background, do nothing.
-    // onPageShow will pick up the pending target when it returns.
-    if (!this.isPageVisible) {
-      return;
-    }
+    AppLogger.info('MainTabs', `@Watch fired for nav_target_tab='${this.navTargetTab}'`);
 
     this.applyNavTarget(this.navTargetTab, false);
-    AppStorage.setOrCreate(STORAGE_KEY_NAV_TARGET_TAB, '');
+
+    // ALWAYS clear the key, even if applyNavTarget throws
+    AppStorage.setOrCreate('nav_target_tab', '');
   }
 
   private tabIndexFor(target: string): number {
@@ -592,16 +589,27 @@ struct MainTabs {
   private applyNavTarget(target: string, deferred: boolean): void {
     const targetIndex: number = this.tabIndexFor(target);
     if (targetIndex < 0) {
+      AppLogger.warn('MainTabs', `applyNavTarget: unknown target '${target}'`);
       return;
     }
 
+    AppLogger.info('MainTabs', `applyNavTarget: switching to index ${targetIndex} (deferred=${deferred})`);
     this.currentIndex = targetIndex;
 
-    // Always delay the controller switch slightly to ensure UI is ready
     setTimeout((): void => {
-      this.hdsController.changeIndex(targetIndex);
-      this.tabsController.changeIndex(targetIndex);
-    }, 100);
+      try {
+        // CRITICAL FIX: Only call the controller that exists
+        if (this.useHds) {
+          this.hdsController.changeIndex(targetIndex);
+        } else {
+          this.tabsController.changeIndex(targetIndex);
+        }
+        AppLogger.info('MainTabs', `changeIndex(${targetIndex}) dispatched successfully`);
+      } catch (e) {
+        // Catch the silent exception if the controller is not ready
+        AppLogger.warn('MainTabs', `changeIndex failed: ${(e as Error).message}`);
+      }
+    }, deferred ? 100 : 0);
   }
 
   private onThemeModeChanged(): void {

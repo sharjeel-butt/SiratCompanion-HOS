@@ -1,5 +1,9 @@
 // entry/src/main/ets/utils/OfflineCityLookup.ets
 
+import { common } from '@kit.AbilityKit';
+import { util } from '@kit.ArkTS';
+
+
 /**
  * Offline city lookup with timezone metadata.
  *
@@ -302,6 +306,31 @@ const CITIES: City[] = [
     standardOffset: 3.5,
     dstRule: DstRule.NONE,
     declinationDeg: 5.4
+  },
+  // ---- Caucasus ----
+  {
+    name: 'Tbilisi',
+    lat: 41.6938,
+    lng: 44.8015,
+    standardOffset: 4,
+    dstRule: DstRule.NONE,
+    declinationDeg: 6.5
+  },
+  {
+    name: 'Yerevan',
+    lat: 40.1811,
+    lng: 44.5136,
+    standardOffset: 4,
+    dstRule: DstRule.NONE,
+    declinationDeg: 6.0
+  },
+  {
+    name: 'Batumi',
+    lat: 41.6438,
+    lng: 41.6412,
+    standardOffset: 4,
+    dstRule: DstRule.NONE,
+    declinationDeg: 6.2
   },
   {
     name: 'Istanbul',
@@ -786,6 +815,26 @@ const MAX_TIMEZONE_KM = 200;
 const MAX_DECLINATION_KM = 500;
 
 export class OfflineCityLookup {
+  private static translations: Record<string, Record<string, string>> = {};
+  private static isInitialized: boolean = false;
+
+
+  static async init(context: common.Context): Promise<void> {
+    if (OfflineCityLookup.isInitialized) {
+      return;
+    }
+    try {
+      const mgr = context.resourceManager;
+      const data = await mgr.getRawFileContent('city/city_translations.json');
+      const jsonStr = util.TextDecoder.create('utf-8').decodeToString(data);
+      OfflineCityLookup.translations = JSON.parse(jsonStr) as Record<string, Record<string, string>>;
+      OfflineCityLookup.isInitialized = true;
+      console.info('[OfflineCityLookup] Translations loaded successfully');
+    } catch (e) {
+      console.warn(`[OfflineCityLookup] Failed to load translations: ${JSON.stringify(e)}`);
+    }
+  }
+
   /**
    * Nearest city within the timezone radius. Used by
    * TimezoneResolver.tableOffset and by reverse-geocode display
@@ -827,12 +876,26 @@ export class OfflineCityLookup {
     );
   }
 
+  static translateCityName(name: string, lang: string): string {
+    if (!name || name.length === 0) {
+      return name;
+    }
+    const upperName = name.toUpperCase();
+    const translations = OfflineCityLookup.translations[upperName];
+
+    if (translations && translations[lang]) {
+      return translations[lang];
+    }
+    return name;
+  }
+
   static nearest(
     latitude: number, longitude: number
   ): string | null {
     const city = OfflineCityLookup.nearestCityForTimezone(
       latitude, longitude
     );
+    // Return ONLY the English uppercase name. Do not translate here.
     return city !== null ? city.name.toUpperCase() : null;
   }
 

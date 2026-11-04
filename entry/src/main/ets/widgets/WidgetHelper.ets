@@ -2,10 +2,16 @@ import { formBindingData, formProvider } from '@kit.FormKit';
 import { PreferencesHelper } from '../core/PreferencesHelper';
 import { WidgetDataBuilder } from './WidgetDataBuilder';
 import { AppLogger } from '../core/AppLogger';
+import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_LANGUAGE_OVERRIDE } from '../core/StorageKeys';
+import { L } from '../i18n/LocalizationHelper';
 
 export const STORAGE_KEY_WIDGET_FORM_IDS = 'widget_form_ids';
 
 export const STORAGE_KEY_WIDGET_DIM_PREFIX = 'widget_dim_';
+
+export const STORAGE_KEY_WIDGET_NAME_PREFIX = 'widget_name_';
+
+const DEFAULT_WIDGET_NAME = 'prayer_widget';
 
 const TAG = 'WidgetHelper';
 
@@ -61,8 +67,26 @@ export class WidgetHelper {
       const dim: string = await PreferencesHelper.getString(
         STORAGE_KEY_WIDGET_DIM_PREFIX + formId, '2*2'
       );
-      const lang = AppStorage.get<string>('app_language') ?? 'en';
-      const data: Record<string, Object> = await WidgetDataBuilder.build(dim, lang);
+      const formName: string = await PreferencesHelper.getString(
+        STORAGE_KEY_WIDGET_NAME_PREFIX + formId, 'prayer_widget'
+      );
+
+      // Resolve the language strictly from disk preferences
+      await PreferencesHelper.reloadFromDisk();
+      const override = await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE_OVERRIDE, 'system');
+      let lang = 'en';
+      if (override === 'system') {
+        lang = L.matchSystemLocale();
+      } else if (override.length > 0) {
+        lang = override;
+      } else {
+        lang = await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE, 'en');
+      }
+
+      const data: Record<string, Object> = formName === 'ramadan_widget'
+        ? await WidgetDataBuilder.buildRamadanWidget(dim, lang)
+        : await WidgetDataBuilder.build(dim, lang);
+
       const fb: formBindingData.FormBindingData =
         WidgetDataBuilder.toFormBindingData(data);
       await formProvider.updateForm(formId, fb);

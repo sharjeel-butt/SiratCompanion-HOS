@@ -463,6 +463,7 @@ export struct QiblaPage {
 
   private onLanguageChanged(): void {
     this.currentLanguage = this.appLanguage;
+    this.loadLocation();
   }
 
   private isTablet(): boolean {
@@ -571,8 +572,16 @@ export struct QiblaPage {
       if (coords.lat !== 0 || coords.lng !== 0) {
         this.latitude = coords.lat;
         this.longitude = coords.lng;
-        this.cityName = coords.cityName.length > 0
-          ? `${coords.cityName} (${this.tr('manual_location')})`
+
+        let rawCity = coords.cityName;
+        if (rawCity === 'DEFAULT LOCATION' || rawCity.length === 0) {
+          rawCity = this.tr('default_location');
+        } else {
+          rawCity = OfflineCityLookup.translateCityName(rawCity, this.currentLanguage);
+        }
+
+        this.cityName = rawCity.length > 0
+          ? `${rawCity} (${this.tr('manual_location')})`
           : this.tr('manual_location');
         this.updateQibla();
         return;
@@ -583,7 +592,14 @@ export struct QiblaPage {
     if (cached) {
       this.latitude = cached.latitude;
       this.longitude = cached.longitude;
-      this.cityName = cached.cityName;
+
+      let rawCity = cached.cityName;
+      if (rawCity === 'DEFAULT LOCATION' || rawCity.length === 0) {
+        rawCity = this.tr('default_location');
+      } else {
+        rawCity = OfflineCityLookup.translateCityName(rawCity, this.currentLanguage);
+      }
+      this.cityName = rawCity;
       this.updateQibla();
     } else {
       this.cityName = this.tr('location_unavailable');

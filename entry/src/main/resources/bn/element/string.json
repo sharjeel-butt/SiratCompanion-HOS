@@ -2875,6 +2875,15 @@
     {
       "name": "widget_todays_schedule",
       "value": "আজকের সময়সূচি"
+    },
+    { "name": "hours_short", "value": "ঘ" },
+    { "name": "minutes_short", "value": "মি" },
+    { "name": "countdown_prefix", "value": "আর" },
+    { "name": "countdown_now", "value": "এখন" },
+    { "name": "yesterday", "value": "গতকাল" },
+    {
+      "name": "widget_ramadan_desc",
+      "value": "রমজান রোজা ট্র্যাকার এবং কাউন্টডাউন"
     }
   ]
 }

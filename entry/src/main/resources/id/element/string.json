@@ -2875,6 +2875,15 @@
     {
       "name": "widget_todays_schedule",
       "value": "JADWAL HARI INI"
+    },
+    { "name": "hours_short", "value": "j" },
+    { "name": "minutes_short", "value": "m" },
+    { "name": "countdown_prefix", "value": "lagi" },
+    { "name": "countdown_now", "value": "sekarang" },
+    { "name": "yesterday", "value": "Kemarin" },
+    {
+      "name": "widget_ramadan_desc",
+      "value": "Pelacak puasa dan hitungan mundur Ramadhan"
     }
   ]
 }

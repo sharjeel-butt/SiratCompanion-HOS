@@ -2875,6 +2875,15 @@
     {
       "name": "widget_todays_schedule",
       "value": "BUGÜNKÜ PROGRAM"
+    },
+    { "name": "hours_short", "value": "sa" },
+    { "name": "minutes_short", "value": "dk" },
+    { "name": "countdown_prefix", "value": "kaldı" },
+    { "name": "countdown_now", "value": "şimdi" },
+    { "name": "yesterday", "value": "Dün" },
+    {
+      "name": "widget_ramadan_desc",
+      "value": "Ramazan oruç takibi ve geri sayım"
     }
   ]
 }

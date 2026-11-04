@@ -386,6 +386,7 @@ export struct Prayer {
 
   private async onLanguageChangedInHome(): Promise<void> {
     // Re-render is handled by the @StorageLink.
+    this.loadSettingsAndLocation();
   }
 
   private onHijriOffsetChangedInHome(): void {

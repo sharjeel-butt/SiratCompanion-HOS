@@ -7,15 +7,20 @@ struct PrayerWidget {
   @LocalStorageProp('nextId') nextId: string = '—';
   @LocalStorageProp('nextName') nextName: string = '—';
   @LocalStorageProp('nextTime') nextTime: string = '--:--';
+  @LocalStorageProp('countdown') countdown: string = '';
+
   @LocalStorageProp('currentName') currentName: string = '—';
   @LocalStorageProp('currentTime') currentTime: string = '--:--';
-  @LocalStorageProp('methodLabel') methodLabel: string = '—';
-  @LocalStorageProp('asrLabel') asrLabel: string = '—';
-  @LocalStorageProp('highLatLabel') highLatLabel: string = '—';
-  @LocalStorageProp('roundingLabel') roundingLabel: string = '—';
-  @LocalStorageProp('midnightLabel') midnightLabel: string = '—';
-  @LocalStorageProp('polarLabel') polarLabel: string = '—';
-  @LocalStorageProp('shafaqLabel') shafaqLabel: string = '—';
+  @LocalStorageProp('isCurrentYesterday') isCurrentYesterday: boolean = false;
+  @LocalStorageProp('lblYesterday') lblYesterday: string = 'Yesterday';
+
+  @LocalStorageProp('progressPercent') progressPercent: number = 0;
+
+  @LocalStorageProp('contextLabel1') contextLabel1: string = '—';
+  @LocalStorageProp('contextTime1') contextTime1: string = '--:--';
+  @LocalStorageProp('contextLabel2') contextLabel2: string = '—';
+  @LocalStorageProp('contextTime2') contextTime2: string = '--:--';
+
   @LocalStorageProp('fajrName') fajrName: string = 'Fajr';
   @LocalStorageProp('fajrTime') fajrTime: string = '--:--';
   @LocalStorageProp('dhuhrName') dhuhrName: string = 'Dhuhr';
@@ -26,16 +31,8 @@ struct PrayerWidget {
   @LocalStorageProp('maghribTime') maghribTime: string = '--:--';
   @LocalStorageProp('ishaName') ishaName: string = 'Isha';
   @LocalStorageProp('ishaTime') ishaTime: string = '--:--';
+
   @LocalStorageProp('lang') lang: string = 'en';
-  @LocalStorageProp('lblCurrent') lblCurrent: string = 'CURRENT PRAYER';
-  @LocalStorageProp('lblNext') lblNext: string = 'NEXT PRAYER';
-  @LocalStorageProp('lblMethod') lblMethod: string = 'Method';
-  @LocalStorageProp('lblMadhab') lblMadhab: string = 'Madhab';
-  @LocalStorageProp('lblHighLat') lblHighLat: string = 'High Lat';
-  @LocalStorageProp('lblRounding') lblRounding: string = 'Rounding';
-  @LocalStorageProp('lblMidnight') lblMidnight: string = 'Midnight';
-  @LocalStorageProp('lblPolar') lblPolar: string = 'Polar';
-  @LocalStorageProp('lblShafaq') lblShafaq: string = 'Shafaq';
   @LocalStorageProp('error') error: string = '';
 
   private isRtl(): boolean {
@@ -43,6 +40,7 @@ struct PrayerWidget {
   }
 
   build() {
+    // FORCE LTR ON THE ROOT TO PREVENT OS AUTO-MIRRORING
     Stack() {
       Column() {
         if (this.error.length > 0) {
@@ -55,313 +53,151 @@ struct PrayerWidget {
           // ========== HEADER ==========
           if (this.dimension === '2*2') {
             Column() {
-              Row() {
-                Text(this.hijriDate).fontSize(10).fontColor('#E8A44C').maxLines(1)
-              }.width('100%').justifyContent(FlexAlign.Start)
-
-              Row() {
-                Text(this.city)
-                  .fontSize(12)
-                  .fontWeight(FontWeight.Bold)
-                  .fontColor('#FFFFFF')
-                  .maxLines(1)
-                  .textOverflow({ overflow: TextOverflow.Ellipsis })
-              }.width('100%').justifyContent(FlexAlign.Start).margin({ top: 2 })
+              Text(this.hijriDate).fontSize(10).fontColor('#E8A44C').width('100%').textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT).maxLines(1)
+              Text(this.city).fontSize(12).fontWeight(FontWeight.Bold).fontColor('#FFFFFF').width('100%').textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT).maxLines(1).margin({ top: 2 })
             }
-            .width('100%').margin({ bottom: 8 })
+            .width('100%').alignItems(this.isRtl() ? HorizontalAlign.End : HorizontalAlign.Start).margin({ bottom: 8 })
           } else {
             Row() {
-              Row() {
-                Text(this.city)
-                  .fontSize(12)
-                  .fontWeight(FontWeight.Bold)
-                  .fontColor('#FFFFFF')
-                  .maxLines(1)
-                  .textOverflow({ overflow: TextOverflow.Ellipsis })
-              }.layoutWeight(1).justifyContent(FlexAlign.Start)
-
-              Text(this.hijriDate).fontSize(10).fontColor('#E8A44C').maxLines(1)
+              if (this.isRtl()) {
+                Text(this.hijriDate).fontSize(10).fontColor('#E8A44C').maxLines(1).flexShrink(0)
+                Text(this.city).fontSize(12).fontWeight(FontWeight.Bold).fontColor('#FFFFFF').maxLines(1).layoutWeight(1).textAlign(TextAlign.RIGHT)
+              } else {
+                Text(this.city).fontSize(12).fontWeight(FontWeight.Bold).fontColor('#FFFFFF').maxLines(1).layoutWeight(1).textAlign(TextAlign.LEFT)
+                Text(this.hijriDate).fontSize(10).fontColor('#E8A44C').maxLines(1).flexShrink(0)
+              }
             }
             .width('100%').margin({ bottom: 12 })
+            .direction(Direction.Ltr)
           }
 
           // ========== BODY ==========
           if (this.dimension === '2*2') {
             Column() {
-              Text(this.lblNext)
-                .fontSize(9)
-                .fontColor('#AAAAAA')
-                .width('100%')
-                .textAlign(TextAlign.Start)
-                .letterSpacing(1)
-              Text(this.nextName)
-                .fontSize(22)
-                .fontWeight(FontWeight.Bold)
-                .fontColor('#E8A44C')
-                .width('100%')
-                .textAlign(TextAlign.Start)
-                .margin({ top: 2 })
-                .maxLines(1)
-              Text(this.nextTime)
-                .fontSize(16)
-                .fontColor('#FFFFFF')
-                .width('100%')
-                .textAlign(TextAlign.Start)
-                .margin({ top: 4 })
+              Text(this.nextName).fontSize(18).fontColor('#AAAAAA').width('100%').textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT).letterSpacing(1)
+              Text(this.nextTime).fontSize(26).fontWeight(FontWeight.Bold).fontColor('#E8A44C').width('100%').textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT).margin({ top: 2 })
+              Text(this.countdown).fontSize(14).fontColor('#FFFFFF').width('100%').textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT).margin({ top: 4 }).opacity(0.8)
             }
             .width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
 
           } else if (this.dimension === '2*4') {
-            Row() {
-              // Fajr
-              Column() {
-                Image($r('app.media.ic_prayer_sajdah'))
-                  .width(16)
-                  .height(16)
-                  .fillColor(this.nextId === 'fajr' ? '#E8A44C' : '#A5B8CC')
-                  .margin({ bottom: 6 })
-                Text(this.fajrName)
-                  .fontSize(12)
-                  .fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#A5B8CC')
-                  .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Normal)
-                  .maxLines(1)
-                Text(this.fajrTime)
-                  .fontSize(12)
-                  .fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#FFFFFF')
-                  .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Medium)
-                  .maxLines(1)
-                  .margin({ top: 4 })
-              }.layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
+            Column() {
+              Row() {
+                if (this.isRtl()) {
+                  // RTL: Isha → Fajr (physical left → right)
+                  this.ColIsha()
+                  this.ColMaghrib()
+                  this.ColAsr()
+                  this.ColDhuhr()
+                  this.ColFajr()
+                } else {
+                  // LTR: Fajr → Isha
+                  this.ColFajr()
+                  this.ColDhuhr()
+                  this.ColAsr()
+                  this.ColMaghrib()
+                  this.ColIsha()
+                }
+              }
+              .width('100%').layoutWeight(1).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.SpaceBetween)
+              .direction(Direction.Ltr)
 
-              // Dhuhr
-              Column() {
-                Image($r('app.media.ic_prayer_sajdah'))
-                  .width(16)
-                  .height(16)
-                  .fillColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#A5B8CC')
-                  .margin({ bottom: 6 })
-                Text(this.dhuhrName)
-                  .fontSize(12)
-                  .fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#A5B8CC')
-                  .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Normal)
-                  .maxLines(1)
-                Text(this.dhuhrTime)
-                  .fontSize(12)
-                  .fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#FFFFFF')
-                  .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Medium)
-                  .maxLines(1)
-                  .margin({ top: 4 })
-              }.layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
-
-              // Asr
-              Column() {
-                Image($r('app.media.ic_prayer_sajdah'))
-                  .width(16)
-                  .height(16)
-                  .fillColor(this.nextId === 'asr' ? '#E8A44C' : '#A5B8CC')
-                  .margin({ bottom: 6 })
-                Text(this.asrName)
-                  .fontSize(12)
-                  .fontColor(this.nextId === 'asr' ? '#E8A44C' : '#A5B8CC')
-                  .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Normal)
-                  .maxLines(1)
-                Text(this.asrTime)
-                  .fontSize(12)
-                  .fontColor(this.nextId === 'asr' ? '#E8A44C' : '#FFFFFF')
-                  .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Medium)
-                  .maxLines(1)
-                  .margin({ top: 4 })
-              }.layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
-
-              // Maghrib
-              Column() {
-                Image($r('app.media.ic_prayer_sajdah'))
-                  .width(16)
-                  .height(16)
-                  .fillColor(this.nextId === 'maghrib' ? '#E8A44C' : '#A5B8CC')
-                  .margin({ bottom: 6 })
-                Text(this.maghribName)
-                  .fontSize(12)
-                  .fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#A5B8CC')
-                  .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Normal)
-                  .maxLines(1)
-                Text(this.maghribTime)
-                  .fontSize(12)
-                  .fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#FFFFFF')
-                  .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Medium)
-                  .maxLines(1)
-                  .margin({ top: 4 })
-              }.layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
-
-              // Isha
-              Column() {
-                Image($r('app.media.ic_prayer_sajdah'))
-                  .width(16)
-                  .height(16)
-                  .fillColor(this.nextId === 'isha' ? '#E8A44C' : '#A5B8CC')
-                  .margin({ bottom: 6 })
-                Text(this.ishaName)
-                  .fontSize(12)
-                  .fontColor(this.nextId === 'isha' ? '#E8A44C' : '#A5B8CC')
-                  .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Normal)
-                  .maxLines(1)
-                Text(this.ishaTime)
-                  .fontSize(12)
-                  .fontColor(this.nextId === 'isha' ? '#E8A44C' : '#FFFFFF')
-                  .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Medium)
-                  .maxLines(1)
-                  .margin({ top: 4 })
-              }.layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
+              // Progress Bar
+              Row() {
+                Row()
+                  .width(`${this.progressPercent}%`)
+                  .height('100%')
+                  .backgroundColor('#E8A44C')
+                  .borderRadius(2)
+                  .animation({ duration: 1000, curve: Curve.EaseInOut })
+              }
+              .width('100%').height(4).backgroundColor('#333333').borderRadius(2).margin({ top: 4 })
             }
-            .width('100%').layoutWeight(1).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.SpaceBetween)
+            .width('100%').layoutWeight(1).justifyContent(FlexAlign.SpaceBetween)
 
           } else if (this.dimension === '4*4') {
             Column() {
-              // 1. Top Row: Current & Next
+              // 1. Top Row: Current & Next + Countdown
               Row() {
-                Column() {
-                  Text(this.lblCurrent).fontSize(9).fontColor('#AAAAAA').letterSpacing(1)
-                  Text(this.currentName)
-                    .fontSize(22)
-                    .fontWeight(FontWeight.Bold)
-                    .fontColor('#FFFFFF')
-                    .margin({ top: 2 })
-                  Text(this.currentTime).fontSize(14).fontColor('#A5B8CC').margin({ top: 2 })
-                }.layoutWeight(1).alignItems(HorizontalAlign.Start)
+                if (this.isRtl()) {
+                  // RTL: Next on Left, Current on Right
+                  Column() {
+                    Text(this.nextName).fontSize(18).fontColor('#E8A44C').fontWeight(FontWeight.Bold).textAlign(TextAlign.LEFT)
+                    Text(this.nextTime).fontSize(14).fontColor('#E8A44C').margin({ top: 2 }).textAlign(TextAlign.LEFT)
+                    Text(this.countdown).fontSize(11).fontColor('#FFFFFF').opacity(0.7).margin({ top: 2 }).textAlign(TextAlign.LEFT)
+                  }.layoutWeight(1).alignItems(HorizontalAlign.Start).direction(Direction.Ltr)
 
-                Divider().vertical(true).height(44).color('#333333').margin({ left: 12, right: 12 })
+                  Divider().vertical(true).height(40).color('#333333').margin({ left: 12, right: 12 })
 
-                Column() {
-                  Text(this.lblNext).fontSize(9).fontColor('#AAAAAA').letterSpacing(1)
-                  Text(this.nextName).fontSize(22).fontWeight(FontWeight.Bold).fontColor('#E8A44C').margin({ top: 2 })
-                  Text(this.nextTime).fontSize(14).fontColor('#E8A44C').margin({ top: 2 })
-                }.layoutWeight(1).alignItems(HorizontalAlign.End)
+                  Column() {
+                    Text(this.currentName + (this.isCurrentYesterday ? ` (${this.lblYesterday})` : '')).fontSize(16).fontColor('#FFFFFF').fontWeight(FontWeight.Bold).maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis })
+                    Text(this.currentTime).fontSize(12).fontColor('#A5B8CC').margin({ top: 2 })
+                  }.layoutWeight(1).alignItems(HorizontalAlign.End).direction(Direction.Ltr)
+                } else {
+                  // LTR: Current on Left, Next on Right
+                  Column() {
+                    Text(this.currentName + (this.isCurrentYesterday ? ` (${this.lblYesterday})` : '')).fontSize(16).fontColor('#FFFFFF').fontWeight(FontWeight.Bold).maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis })
+                    Text(this.currentTime).fontSize(12).fontColor('#A5B8CC').margin({ top: 2 })
+                  }.layoutWeight(1).alignItems(HorizontalAlign.Start).direction(Direction.Ltr)
+
+                  Divider().vertical(true).height(40).color('#333333').margin({ left: 12, right: 12 })
+
+                  Column() {
+                    Text(this.nextName).fontSize(18).fontColor('#E8A44C').fontWeight(FontWeight.Bold)
+                    Text(this.nextTime).fontSize(14).fontColor('#E8A44C').margin({ top: 2 })
+                    Text(this.countdown).fontSize(11).fontColor('#FFFFFF').opacity(0.7).margin({ top: 2 })
+                  }.layoutWeight(1).alignItems(HorizontalAlign.End).direction(Direction.Ltr)
+                }
               }
               .width('100%').margin({ bottom: 12 }).alignItems(VerticalAlign.Center)
+              .direction(Direction.Ltr)
 
               Divider().color('#333333').margin({ bottom: 12 })
 
-              // 2. Settings Grid (Exact SettingsRow pattern)
-              Row({ space: 16 }) {
-                Column() {
-                  Row() {
-                    Text(this.lblMethod).fontSize(9).fontColor('#A5B8CC').layoutWeight(1).textAlign(TextAlign.Start)
-                    Text(this.methodLabel).fontSize(9).fontColor('#FFFFFF').maxLines(1).textAlign(TextAlign.End)
-                  }.width('100%').margin({ bottom: 4 })
+              // 2. Contextual Middle Row
+              Row() {
+                if (this.isRtl()) {
+                  Column() {
+                    Text(this.contextLabel1).fontSize(10).fontColor('#A5B8CC').width('100%').textAlign(TextAlign.LEFT)
+                    Text(this.contextTime1).fontSize(14).fontColor('#FFFFFF').fontWeight(FontWeight.Bold).margin({ top: 2 }).width('100%').textAlign(TextAlign.LEFT).direction(Direction.Ltr)
+                  }.layoutWeight(1).alignItems(HorizontalAlign.Start)
 
-                  Row() {
-                    Text(this.lblMadhab).fontSize(9).fontColor('#A5B8CC').layoutWeight(1).textAlign(TextAlign.Start)
-                    Text(this.asrLabel).fontSize(9).fontColor('#FFFFFF').textAlign(TextAlign.End)
-                  }.width('100%').margin({ bottom: 4 })
+                  Column() {
+                    Text(this.contextLabel2).fontSize(10).fontColor('#A5B8CC').width('100%').textAlign(TextAlign.RIGHT)
+                    Text(this.contextTime2).fontSize(14).fontColor('#FFFFFF').fontWeight(FontWeight.Bold).margin({ top: 2 }).width('100%').textAlign(TextAlign.RIGHT).direction(Direction.Ltr)
+                  }.layoutWeight(1).alignItems(HorizontalAlign.End)
+                } else {
+                  Column() {
+                    Text(this.contextLabel1).fontSize(10).fontColor('#A5B8CC').width('100%').textAlign(TextAlign.LEFT)
+                    Text(this.contextTime1).fontSize(14).fontColor('#FFFFFF').fontWeight(FontWeight.Bold).margin({ top: 2 }).width('100%').textAlign(TextAlign.LEFT).direction(Direction.Ltr)
+                  }.layoutWeight(1).alignItems(HorizontalAlign.Start)
 
-                  Row() {
-                    Text(this.lblHighLat).fontSize(9).fontColor('#A5B8CC').layoutWeight(1).textAlign(TextAlign.Start)
-                    Text(this.highLatLabel).fontSize(9).fontColor('#FFFFFF').maxLines(1).textAlign(TextAlign.End)
-                  }.width('100%').margin({ bottom: 4 })
-
-                  Row() {
-                    Text(this.lblRounding).fontSize(9).fontColor('#A5B8CC').layoutWeight(1).textAlign(TextAlign.Start)
-                    Text(this.roundingLabel).fontSize(9).fontColor('#FFFFFF').textAlign(TextAlign.End)
-                  }.width('100%')
-                }.layoutWeight(1)
-
-                Column() {
-                  Row() {
-                    Text(this.lblMidnight).fontSize(9).fontColor('#A5B8CC').layoutWeight(1).textAlign(TextAlign.Start)
-                    Text(this.midnightLabel).fontSize(9).fontColor('#FFFFFF').textAlign(TextAlign.End)
-                  }.width('100%').margin({ bottom: 4 })
-
-                  Row() {
-                    Text(this.lblPolar).fontSize(9).fontColor('#A5B8CC').layoutWeight(1).textAlign(TextAlign.Start)
-                    Text(this.polarLabel).fontSize(9).fontColor('#FFFFFF').maxLines(1).textAlign(TextAlign.End)
-                  }.width('100%').margin({ bottom: 4 })
-
-                  Row() {
-                    Text(this.lblShafaq).fontSize(9).fontColor('#A5B8CC').layoutWeight(1).textAlign(TextAlign.Start)
-                    Text(this.shafaqLabel).fontSize(9).fontColor('#FFFFFF').maxLines(1).textAlign(TextAlign.End)
-                  }.width('100%')
-                }.layoutWeight(1)
+                  Column() {
+                    Text(this.contextLabel2).fontSize(10).fontColor('#A5B8CC').width('100%').textAlign(TextAlign.RIGHT)
+                    Text(this.contextTime2).fontSize(14).fontColor('#FFFFFF').fontWeight(FontWeight.Bold).margin({ top: 2 }).width('100%').textAlign(TextAlign.RIGHT).direction(Direction.Ltr)
+                  }.layoutWeight(1).alignItems(HorizontalAlign.End)
+                }
               }
-              .width('100%').margin({ bottom: 12 })
+              .width('100%').margin({ bottom: 16 })
+              .direction(Direction.Ltr)
 
               Divider().color('#333333').margin({ bottom: 12 })
 
-              // 3. Prayer Timings
+              // 3. Prayer Timings (Fully inlined and using width('50%') for perfect spacing)
               Column() {
-                Row() {
-                  Text(this.fajrName)
-                    .width('50%')
-                    .textAlign(TextAlign.Start)
-                    .fontSize(11)
-                    .fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#A5B8CC')
-                    .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Normal)
-                  Text(this.fajrTime)
-                    .width('50%')
-                    .textAlign(TextAlign.End)
-                    .fontSize(11)
-                    .fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#FFFFFF')
-                    .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Medium)
-                }.width('80%').margin({ bottom: 6 })
-
-                Row() {
-                  Text(this.dhuhrName)
-                    .width('50%')
-                    .textAlign(TextAlign.Start)
-                    .fontSize(11)
-                    .fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#A5B8CC')
-                    .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Normal)
-                  Text(this.dhuhrTime)
-                    .width('50%')
-                    .textAlign(TextAlign.End)
-                    .fontSize(11)
-                    .fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#FFFFFF')
-                    .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Medium)
-                }.width('80%').margin({ bottom: 6 })
-
-                Row() {
-                  Text(this.asrName)
-                    .width('50%')
-                    .textAlign(TextAlign.Start)
-                    .fontSize(11)
-                    .fontColor(this.nextId === 'asr' ? '#E8A44C' : '#A5B8CC')
-                    .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Normal)
-                  Text(this.asrTime)
-                    .width('50%')
-                    .textAlign(TextAlign.End)
-                    .fontSize(11)
-                    .fontColor(this.nextId === 'asr' ? '#E8A44C' : '#FFFFFF')
-                    .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Medium)
-                }.width('80%').margin({ bottom: 6 })
-
-                Row() {
-                  Text(this.maghribName)
-                    .width('50%')
-                    .textAlign(TextAlign.Start)
-                    .fontSize(11)
-                    .fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#A5B8CC')
-                    .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Normal)
-                  Text(this.maghribTime)
-                    .width('50%')
-                    .textAlign(TextAlign.End)
-                    .fontSize(11)
-                    .fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#FFFFFF')
-                    .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Medium)
-                }.width('80%').margin({ bottom: 6 })
-
-                Row() {
-                  Text(this.ishaName)
-                    .width('50%')
-                    .textAlign(TextAlign.Start)
-                    .fontSize(11)
-                    .fontColor(this.nextId === 'isha' ? '#E8A44C' : '#A5B8CC')
-                    .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Normal)
-                  Text(this.ishaTime)
-                    .width('50%')
-                    .textAlign(TextAlign.End)
-                    .fontSize(11)
-                    .fontColor(this.nextId === 'isha' ? '#E8A44C' : '#FFFFFF')
-                    .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Medium)
-                }.width('80%')
+                if (this.isRtl()) {
+                  Row() { Text(this.ishaTime).width('50%').textAlign(TextAlign.LEFT).fontSize(14).fontColor(this.nextId === 'isha' ? '#E8A44C' : '#FFFFFF').fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Medium); Text(this.ishaName).width('50%').textAlign(TextAlign.RIGHT).fontSize(14).fontColor(this.nextId === 'isha' ? '#E8A44C' : '#A5B8CC').fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Normal) }.width('90%').margin({ bottom: 8 }).direction(Direction.Ltr)
+                  Row() { Text(this.maghribTime).width('50%').textAlign(TextAlign.LEFT).fontSize(14).fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#FFFFFF').fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Medium); Text(this.maghribName).width('50%').textAlign(TextAlign.RIGHT).fontSize(14).fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#A5B8CC').fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Normal) }.width('90%').margin({ bottom: 8 }).direction(Direction.Ltr)
+                  Row() { Text(this.asrTime).width('50%').textAlign(TextAlign.LEFT).fontSize(14).fontColor(this.nextId === 'asr' ? '#E8A44C' : '#FFFFFF').fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Medium); Text(this.asrName).width('50%').textAlign(TextAlign.RIGHT).fontSize(14).fontColor(this.nextId === 'asr' ? '#E8A44C' : '#A5B8CC').fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Normal) }.width('90%').margin({ bottom: 8 }).direction(Direction.Ltr)
+                  Row() { Text(this.dhuhrTime).width('50%').textAlign(TextAlign.LEFT).fontSize(14).fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#FFFFFF').fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Medium); Text(this.dhuhrName).width('50%').textAlign(TextAlign.RIGHT).fontSize(14).fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#A5B8CC').fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Normal) }.width('90%').margin({ bottom: 8 }).direction(Direction.Ltr)
+                  Row() { Text(this.fajrTime).width('50%').textAlign(TextAlign.LEFT).fontSize(14).fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#FFFFFF').fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Medium); Text(this.fajrName).width('50%').textAlign(TextAlign.RIGHT).fontSize(14).fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#A5B8CC').fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Normal) }.width('90%').direction(Direction.Ltr)
+                } else {
+                  Row() { Text(this.fajrName).width('50%').textAlign(TextAlign.LEFT).fontSize(14).fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#A5B8CC').fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Normal); Text(this.fajrTime).width('50%').textAlign(TextAlign.RIGHT).fontSize(14).fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#FFFFFF').fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Medium) }.width('90%').margin({ bottom: 8 }).direction(Direction.Ltr)
+                  Row() { Text(this.dhuhrName).width('50%').textAlign(TextAlign.LEFT).fontSize(14).fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#A5B8CC').fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Normal); Text(this.dhuhrTime).width('50%').textAlign(TextAlign.RIGHT).fontSize(14).fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#FFFFFF').fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Medium) }.width('90%').margin({ bottom: 8 }).direction(Direction.Ltr)
+                  Row() { Text(this.asrName).width('50%').textAlign(TextAlign.LEFT).fontSize(14).fontColor(this.nextId === 'asr' ? '#E8A44C' : '#A5B8CC').fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Normal); Text(this.asrTime).width('50%').textAlign(TextAlign.RIGHT).fontSize(14).fontColor(this.nextId === 'asr' ? '#E8A44C' : '#FFFFFF').fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Medium) }.width('90%').margin({ bottom: 8 }).direction(Direction.Ltr)
+                  Row() { Text(this.maghribName).width('50%').textAlign(TextAlign.LEFT).fontSize(14).fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#A5B8CC').fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Normal); Text(this.maghribTime).width('50%').textAlign(TextAlign.RIGHT).fontSize(14).fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#FFFFFF').fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Medium) }.width('90%').margin({ bottom: 8 }).direction(Direction.Ltr)
+                  Row() { Text(this.ishaName).width('50%').textAlign(TextAlign.LEFT).fontSize(14).fontColor(this.nextId === 'isha' ? '#E8A44C' : '#A5B8CC').fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Normal); Text(this.ishaTime).width('50%').textAlign(TextAlign.RIGHT).fontSize(14).fontColor(this.nextId === 'isha' ? '#E8A44C' : '#FFFFFF').fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Medium) }.width('90%').direction(Direction.Ltr)
+                }
               }
               .width('100%').layoutWeight(1).justifyContent(FlexAlign.SpaceEvenly).alignItems(HorizontalAlign.Center)
             }
@@ -369,12 +205,7 @@ struct PrayerWidget {
           }
         }
       }
-      .width('100%')
-      .height('100%')
-      .padding(14)
-      .backgroundColor('#141B2E')
-      .borderRadius(16)
-      .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+      .width('100%').height('100%').padding(14).backgroundColor('#141B2E').borderRadius(16)
       .onClick(() => {
         postCardAction(this, {
           action: 'router',
@@ -384,5 +215,140 @@ struct PrayerWidget {
       })
     }
     .width('100%').height('100%')
+    .direction(Direction.Ltr) // FORCE LTR ON ROOT TO PREVENT SYSTEM DOUBLE-MIRRORING
+  }
+
+  // --- 2×4 Column Builders (parameterless — reactive) ---
+  //
+  // These are @Builder *without* parameters, reading this.nextId
+  // and this.countdown directly. Parameterized @Builder arguments
+  // are snapshotted at first render: `highlight` would stay false
+  // and `count` would stay at its initial value forever, so the
+  // countdown would never tick and the "next prayer" highlight
+  // would never move when the next prayer advanced.
+
+  @Builder
+  ColFajr() {
+    Column() {
+      Image($r('app.media.ic_prayer_sajdah'))
+        .width(16).height(16)
+        .fillColor(this.nextId === 'fajr' ? '#E8A44C' : '#A5B8CC')
+        .margin({ bottom: 6 })
+      Text(this.fajrName)
+        .fontSize(12)
+        .fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#A5B8CC')
+        .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Normal)
+        .maxLines(1)
+      Text(this.fajrTime)
+        .fontSize(12)
+        .fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#FFFFFF')
+        .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Medium)
+        .maxLines(1)
+        .margin({ top: 4 })
+      if (this.nextId === 'fajr') {
+        Text(this.countdown).fontSize(9).fontColor('#E8A44C').margin({ top: 2 })
+      }
+    }
+    .layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
+  }
+
+  @Builder
+  ColDhuhr() {
+    Column() {
+      Image($r('app.media.ic_prayer_sajdah'))
+        .width(16).height(16)
+        .fillColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#A5B8CC')
+        .margin({ bottom: 6 })
+      Text(this.dhuhrName)
+        .fontSize(12)
+        .fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#A5B8CC')
+        .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Normal)
+        .maxLines(1)
+      Text(this.dhuhrTime)
+        .fontSize(12)
+        .fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#FFFFFF')
+        .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Medium)
+        .maxLines(1)
+        .margin({ top: 4 })
+      if (this.nextId === 'dhuhr') {
+        Text(this.countdown).fontSize(9).fontColor('#E8A44C').margin({ top: 2 })
+      }
+    }
+    .layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
+  }
+
+  @Builder
+  ColAsr() {
+    Column() {
+      Image($r('app.media.ic_prayer_sajdah'))
+        .width(16).height(16)
+        .fillColor(this.nextId === 'asr' ? '#E8A44C' : '#A5B8CC')
+        .margin({ bottom: 6 })
+      Text(this.asrName)
+        .fontSize(12)
+        .fontColor(this.nextId === 'asr' ? '#E8A44C' : '#A5B8CC')
+        .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Normal)
+        .maxLines(1)
+      Text(this.asrTime)
+        .fontSize(12)
+        .fontColor(this.nextId === 'asr' ? '#E8A44C' : '#FFFFFF')
+        .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Medium)
+        .maxLines(1)
+        .margin({ top: 4 })
+      if (this.nextId === 'asr') {
+        Text(this.countdown).fontSize(9).fontColor('#E8A44C').margin({ top: 2 })
+      }
+    }
+    .layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
+  }
+
+  @Builder
+  ColMaghrib() {
+    Column() {
+      Image($r('app.media.ic_prayer_sajdah'))
+        .width(16).height(16)
+        .fillColor(this.nextId === 'maghrib' ? '#E8A44C' : '#A5B8CC')
+        .margin({ bottom: 6 })
+      Text(this.maghribName)
+        .fontSize(12)
+        .fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#A5B8CC')
+        .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Normal)
+        .maxLines(1)
+      Text(this.maghribTime)
+        .fontSize(12)
+        .fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#FFFFFF')
+        .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Medium)
+        .maxLines(1)
+        .margin({ top: 4 })
+      if (this.nextId === 'maghrib') {
+        Text(this.countdown).fontSize(9).fontColor('#E8A44C').margin({ top: 2 })
+      }
+    }
+    .layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
+  }
+
+  @Builder
+  ColIsha() {
+    Column() {
+      Image($r('app.media.ic_prayer_sajdah'))
+        .width(16).height(16)
+        .fillColor(this.nextId === 'isha' ? '#E8A44C' : '#A5B8CC')
+        .margin({ bottom: 6 })
+      Text(this.ishaName)
+        .fontSize(12)
+        .fontColor(this.nextId === 'isha' ? '#E8A44C' : '#A5B8CC')
+        .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Normal)
+        .maxLines(1)
+      Text(this.ishaTime)
+        .fontSize(12)
+        .fontColor(this.nextId === 'isha' ? '#E8A44C' : '#FFFFFF')
+        .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Medium)
+        .maxLines(1)
+        .margin({ top: 4 })
+      if (this.nextId === 'isha') {
+        Text(this.countdown).fontSize(9).fontColor('#E8A44C').margin({ top: 2 })
+      }
+    }
+    .layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
   }
 }

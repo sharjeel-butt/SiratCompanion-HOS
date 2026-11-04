@@ -72,7 +72,9 @@ export class LocationHelper {
   }
 
   static async reverseGeocode(latitude: number, longitude: number): Promise<string> {
+
     const offline = OfflineCityLookup.nearest(latitude, longitude);
+
     if (offline !== null) {
       console.info(`[LocationHelper] reverseGeocode offline match: ${offline}`);
       return offline;
