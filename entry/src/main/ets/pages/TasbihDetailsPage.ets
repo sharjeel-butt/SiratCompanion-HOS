@@ -83,63 +83,6 @@ struct TasbihDetailsPage {
     this.reload();
   }
 
-  private async reload(): Promise<void> {
-    const loaded = await TasbihStorage.load(TasbihManager.createDefaults());
-    this.tasbihs = loaded.tasbihs;
-    this.activeId = loaded.activeTasbihId;
-    this.recompute();
-  }
-
-  private recompute(): void {
-    this.snapshot = ProgressHelper.getTasbihDetails(
-      this.tasbihs, this.activeId, this.period, this.appLanguage
-    );
-  }
-
-  private onLanguageChanged(): void {
-    // The snapshot stores resolved label strings. When the user
-    // switches language while the page is mounted (e.g. via a
-    // background Customize open in the split-pane layout), the
-    // already-captured labels would go stale. Recompute so the
-    // resolved text follows the new language immediately.
-    if (this.tasbihs.length > 0) {
-      this.recompute();
-    }
-  }
-
-  private onThemeModeChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-  }
-
-  private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-  }
-
-  private onTasbihStateChanged(): void {
-    this.reload();
-  }
-
-  private async onAppForegrounded(): Promise<void> {
-    await this.reload();
-  }
-
-  private tr(key: string): string {
-    return L.get(key, this.appLanguage);
-  }
-
-  private isRtl(): boolean {
-    return L.isRtlLang(this.appLanguage);
-  }
-
-  private percentForPeriod(): number {
-    if (this.snapshot.totalDaysPossible === 0) {
-      return 0;
-    }
-    return Math.round(
-      this.snapshot.totalDaysCompleted / this.snapshot.totalDaysPossible * 100
-    );
-  }
-
   build() {
     Stack() {
       Column() {
@@ -211,7 +154,8 @@ struct TasbihDetailsPage {
         .layoutWeight(1)
         .textAlign(TextAlign.Start)
     }
-    .width('100%').height(72)
+    .width('100%')
+    .height(72)
     .padding({ left: 16, right: 16 })
     .backgroundColor(this.colors.cardDark)
     .alignItems(VerticalAlign.Center)
@@ -249,16 +193,6 @@ struct TasbihDetailsPage {
         this.period = id as TasbihPeriod;
         this.recompute();
       })
-  }
-
-  private periodLabel(id: string): string {
-    if (id === 'week') {
-      return this.tr('details_period_week');
-    }
-    if (id === 'month') {
-      return this.tr('details_period_month');
-    }
-    return this.tr('details_period_year');
   }
 
   @Builder
@@ -470,5 +404,72 @@ struct TasbihDetailsPage {
       right: 8
     })
     .margin({ bottom: 4 })
+  }
+
+  private async reload(): Promise<void> {
+    const loaded = await TasbihStorage.load(TasbihManager.createDefaults());
+    this.tasbihs = loaded.tasbihs;
+    this.activeId = loaded.activeTasbihId;
+    this.recompute();
+  }
+
+  private recompute(): void {
+    this.snapshot = ProgressHelper.getTasbihDetails(
+      this.tasbihs, this.activeId, this.period, this.appLanguage
+    );
+  }
+
+  private onLanguageChanged(): void {
+    // The snapshot stores resolved label strings. When the user
+    // switches language while the page is mounted (e.g. via a
+    // background Customize open in the split-pane layout), the
+    // already-captured labels would go stale. Recompute so the
+    // resolved text follows the new language immediately.
+    if (this.tasbihs.length > 0) {
+      this.recompute();
+    }
+  }
+
+  private onThemeModeChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  private onAppThemePresetChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  private onTasbihStateChanged(): void {
+    this.reload();
+  }
+
+  private async onAppForegrounded(): Promise<void> {
+    await this.reload();
+  }
+
+  private tr(key: string): string {
+    return L.get(key, this.appLanguage);
+  }
+
+  private isRtl(): boolean {
+    return L.isRtlLang(this.appLanguage);
+  }
+
+  private percentForPeriod(): number {
+    if (this.snapshot.totalDaysPossible === 0) {
+      return 0;
+    }
+    return Math.round(
+      this.snapshot.totalDaysCompleted / this.snapshot.totalDaysPossible * 100
+    );
+  }
+
+  private periodLabel(id: string): string {
+    if (id === 'week') {
+      return this.tr('details_period_week');
+    }
+    if (id === 'month') {
+      return this.tr('details_period_month');
+    }
+    return this.tr('details_period_year');
   }
 }

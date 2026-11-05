@@ -76,7 +76,6 @@ struct SettingsPage {
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
   appThemePreset: string = ThemePreset.SIRAT;
-
   // ---- state ----
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
@@ -100,7 +99,6 @@ struct SettingsPage {
   @State effectiveCity: string = '';
   @State lastRefreshTime: number = 0;
   @State isRefreshing: boolean = false;
-
   @State notifMaster: boolean = false;
   @State notifBefore: number = 10;
   @State notifFajr: boolean = true;
@@ -109,17 +107,13 @@ struct SettingsPage {
   @State notifMaghrib: boolean = true;
   @State notifIsha: boolean = true;
   @State notifDiagnostic: string = '';
-
   @State showLogViewer: boolean = false;
   @State showPickerSheet: boolean = false;
   @State logContents: string = '';
-
   @State expandedCategory: string | null = 'Location';
   @State activePicker: PickerKind = 'none';
-
   @State private currentLanguage: string = 'en';
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
-
   @State private appInfo: AppInfoSnapshot = {
     name: '—',
     versionName: '—',
@@ -489,15 +483,6 @@ struct SettingsPage {
     .alignItems(VerticalAlign.Center)
   }
 
-  private isMadhabLocked(): boolean {
-    return this.calcMethod === CalculationMethod.TURKEY ||
-      this.calcMethod === CalculationMethod.TURKEY_EUROPE;
-  }
-
-  // ============================================================
-  // LOCATION
-  // ============================================================
-
   @Builder
   LocationContent() {
     Column() {
@@ -700,6 +685,10 @@ struct SettingsPage {
     .margin({ bottom: 12 })
   }
 
+  // ============================================================
+  // LOCATION
+  // ============================================================
+
   @Builder
   ModeButton(label: string, mode: LocationMode) {
     Text(label)
@@ -724,10 +713,6 @@ struct SettingsPage {
         this.pickLocationMode(mode);
       })
   }
-
-  // ============================================================
-  // PRAYER TIMES
-  // ============================================================
 
   @Builder
   PrayerTimesContent() {
@@ -795,6 +780,10 @@ struct SettingsPage {
     .border({ width: 1, color: this.colors.borderSoft })
     .margin({ bottom: 12 })
   }
+
+  // ============================================================
+  // PRAYER TIMES
+  // ============================================================
 
   @Builder
   PrayerOffsetsCard() {
@@ -922,10 +911,6 @@ struct SettingsPage {
       right: 8
     })
   }
-
-  // ============================================================
-  // NOTIFICATIONS
-  // ============================================================
 
   @Builder
   NotificationsContent() {
@@ -1118,6 +1103,10 @@ struct SettingsPage {
     .margin({ bottom: 12 })
   }
 
+  // ============================================================
+  // NOTIFICATIONS
+  // ============================================================
+
   @Builder
   NotifPrayerRow(prayerId: string) {
     Row() {
@@ -1178,10 +1167,6 @@ struct SettingsPage {
       this.openLogViewer();
     })
   }
-
-  // ============================================================
-  // HIJRI CALENDAR
-  // ============================================================
 
   @Builder
   HijriCalendarContent() {
@@ -1281,7 +1266,7 @@ struct SettingsPage {
   }
 
   // ============================================================
-  // ABOUT
+  // HIJRI CALENDAR
   // ============================================================
 
   @Builder
@@ -1323,6 +1308,10 @@ struct SettingsPage {
     .margin({ bottom: 12 })
   }
 
+  // ============================================================
+  // ABOUT
+  // ============================================================
+
   @Builder
   AboutRow(label: string, value: string) {
     Row({ space: 16 }) {
@@ -1346,10 +1335,6 @@ struct SettingsPage {
     .margin({ top: 6 })
     .alignItems(VerticalAlign.Center)
   }
-
-  // ============================================================
-  // PICKER OVERLAY — Stack-based, replaces the former bindSheet
-  // ============================================================
 
   @Builder
   PickerOverlay(
@@ -1390,7 +1375,8 @@ struct SettingsPage {
         .flexShrink(0)
 
         Text(title)
-          .fontSize(20).fontWeight(FontWeight.Bold)
+          .fontSize(20)
+          .fontWeight(FontWeight.Bold)
           .fontColor(this.colors.textWhite)
           .layoutWeight(1)
           .textAlign(TextAlign.Start)
@@ -1490,76 +1476,8 @@ struct SettingsPage {
     .position({ bottom: 0 })
   }
 
-  private pickerTitle(): string {
-    switch (this.activePicker) {
-      case 'method':
-        return this.tr('convention');
-      case 'asr':
-        return this.tr('madhab');
-      case 'source':
-        return this.tr('source');
-      case 'hijriType':
-        return this.tr('hijri_calendar_type');
-      default:
-        return '';
-    }
-  }
-
-  private pickerIcon(): Resource {
-    switch (this.activePicker) {
-      case 'method':
-        return $r('app.media.ic_nav_mosque');
-      case 'asr':
-        return $r('app.media.ic_sunrise');
-      case 'source':
-        return $r('app.media.ic_globe');
-      case 'hijriType':
-        return $r('app.media.ic_hijri_type');
-      default:
-        return $r('app.media.ic_settings');
-    }
-  }
-
-  private pickerItems(): PickerItem[] {
-    switch (this.activePicker) {
-      case 'method':
-        return SettingsHelper.buildMethodPickerItems(this.calcMethod);
-      case 'asr':
-        return SettingsHelper.buildAsrPickerItems(this.asrRule);
-      case 'source':
-        return SettingsHelper.buildSourcePickerItems(this.calcSource);
-      case 'hijriType':
-        return SettingsHelper.buildHijriCalendarTypePickerItems(
-          this.hijriCalendarType
-        );
-      default:
-        return [];
-    }
-  }
-
-  private pickItem(id: string): void {
-    switch (this.activePicker) {
-      case 'method':
-        this.pickMethod(id);
-        break;
-      case 'asr':
-        this.pickAsrRule(id);
-        break;
-      case 'source':
-        this.pickSource(id);
-        break;
-      case 'hijriType':
-        this.pickHijriCalendarType(id);
-        break;
-      default:
-        break;
-    }
-    this.showPickerSheet = false;
-    this.activePicker = 'none';
-  }
-
   // ============================================================
-  // LOG VIEWER
+  // PICKER OVERLAY — Stack-based, replaces the former bindSheet
   // ============================================================
 
   @Builder
@@ -1586,9 +1504,9 @@ struct SettingsPage {
         .justifyContent(FlexAlign.Center)
         .alignItems(VerticalAlign.Center)
         .flexShrink(0)
-          .onClick(() => {
-            this.showLogViewer = false;
-          })
+        .onClick(() => {
+          this.showLogViewer = false;
+        })
       }
       .width('100%')
       .padding({
@@ -1684,6 +1602,83 @@ struct SettingsPage {
     .borderRadius(16)
     .border({ width: 1, color: this.colors.borderSoft })
     .margin({ bottom: 12 })
+  }
+
+  private isMadhabLocked(): boolean {
+    return this.calcMethod === CalculationMethod.TURKEY ||
+      this.calcMethod === CalculationMethod.TURKEY_EUROPE;
+  }
+
+  private pickerTitle(): string {
+    switch (this.activePicker) {
+      case 'method':
+        return this.tr('convention');
+      case 'asr':
+        return this.tr('madhab');
+      case 'source':
+        return this.tr('source');
+      case 'hijriType':
+        return this.tr('hijri_calendar_type');
+      default:
+        return '';
+    }
+  }
+
+  private pickerIcon(): Resource {
+    switch (this.activePicker) {
+      case 'method':
+        return $r('app.media.ic_nav_mosque');
+      case 'asr':
+        return $r('app.media.ic_sunrise');
+      case 'source':
+        return $r('app.media.ic_globe');
+      case 'hijriType':
+        return $r('app.media.ic_hijri_type');
+      default:
+        return $r('app.media.ic_settings');
+    }
+  }
+
+  // ============================================================
+  // LOG VIEWER
+  // ============================================================
+
+  private pickerItems(): PickerItem[] {
+    switch (this.activePicker) {
+      case 'method':
+        return SettingsHelper.buildMethodPickerItems(this.calcMethod);
+      case 'asr':
+        return SettingsHelper.buildAsrPickerItems(this.asrRule);
+      case 'source':
+        return SettingsHelper.buildSourcePickerItems(this.calcSource);
+      case 'hijriType':
+        return SettingsHelper.buildHijriCalendarTypePickerItems(
+          this.hijriCalendarType
+        );
+      default:
+        return [];
+    }
+  }
+
+  private pickItem(id: string): void {
+    switch (this.activePicker) {
+      case 'method':
+        this.pickMethod(id);
+        break;
+      case 'asr':
+        this.pickAsrRule(id);
+        break;
+      case 'source':
+        this.pickSource(id);
+        break;
+      case 'hijriType':
+        this.pickHijriCalendarType(id);
+        break;
+      default:
+        break;
+    }
+    this.showPickerSheet = false;
+    this.activePicker = 'none';
   }
 
   // ============================================================
@@ -1899,7 +1894,8 @@ struct SettingsPage {
     if (cityName.length === 0) {
       try {
         cityName = await LocationHelper.reverseGeocode(lat, lng);
-      } catch (e) { /* fall through */ }
+      } catch (e) { /* fall through */
+      }
       const unknownLabel = L.get('unknown_location', this.currentLanguage);
       if (cityName === unknownLabel || cityName.length === 0) {
         cityName = `${lat.toFixed(2)}, ${lng.toFixed(2)}`;
@@ -1920,11 +1916,14 @@ struct SettingsPage {
       message: `${this.tr('save')}: ${displayCity}`, duration: 2000
     });
 
-    WidgetHelper.refreshAll().catch(() => {});
+    WidgetHelper.refreshAll().catch(() => {
+    });
   }
 
   private async refreshLocation(): Promise<void> {
-    if (this.isRefreshing) return;
+    if (this.isRefreshing) {
+      return;
+    }
     this.isRefreshing = true;
 
     if (this.locationMode === LocationMode.MANUAL) {
@@ -1937,7 +1936,8 @@ struct SettingsPage {
       let cityName = this.tr('manual_location');
       try {
         cityName = await LocationHelper.reverseGeocode(manual.lat, manual.lng);
-      } catch (e) { /* fall through */ }
+      } catch (e) { /* fall through */
+      }
 
       const saved = await SettingsHelper.saveManualCoords(manual.lat, manual.lng, cityName);
       const displayCity = this.getDisplayCity(saved.cityName);

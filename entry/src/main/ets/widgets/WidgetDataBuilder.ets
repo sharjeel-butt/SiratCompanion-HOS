@@ -1,4 +1,4 @@
-import { SettingsHelper, LoadedSettings, PrayerOffsets } from '../settings/SettingsHelper';
+import { LoadedSettings, PrayerOffsets, SettingsHelper } from '../settings/SettingsHelper';
 import { LocationCache } from '../location/LocationCache';
 import { AdvancedCalcSettings } from '../prayer/AdvancedCalcModels';
 import { DailyPrayerTimes, HighLatitudeRule, PrayerTimeCalculator } from '../prayer/PrayerTimeCalculator';
@@ -6,7 +6,7 @@ import { PrayerManager } from '../prayer/PrayerManager';
 import { DateHelper } from '../hijricalendar/DateUtils';
 import { RamadanHelper } from '../ramadan/RamadanHelper';
 import { L } from '../i18n/LocalizationHelper';
-import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_HIJRI_OFFSET, STORAGE_KEY_LANGUAGE_OVERRIDE } from '../core/StorageKeys';
+import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_LANGUAGE_OVERRIDE } from '../core/StorageKeys';
 import { ClockFormatHelper } from '../core/ClockFormat';
 import { AppLogger } from '../core/AppLogger';
 import { formBindingData } from '@kit.FormKit';
@@ -14,7 +14,6 @@ import { PreferencesHelper } from '../core/PreferencesHelper';
 import { OfflineCityLookup } from '../location/OfflineCityLookup';
 
 export class WidgetDataBuilder {
-
   static async build(dimension: string, currentLang?: string): Promise<Record<string, Object>> {
     try {
       // ALWAYS reload from disk to get the absolute latest language setting
@@ -133,14 +132,20 @@ export class WidgetDataBuilder {
 
       // Calculate Countdown
       let minsUntil = PrayerManager.timeToMinutes(rawArr[nextIdx]) - nowMin;
-      if (isTomorrow) minsUntil += 1440;
+      if (isTomorrow) {
+        minsUntil += 1440;
+      }
 
       const h = Math.floor(minsUntil / 60);
       const m = minsUntil % 60;
 
       const parts: string[] = [];
-      if (h > 0) parts.push(`${h} ${L.get('hours_short', lang)}`);
-      if (m > 0) parts.push(`${m} ${L.get('minutes_short', lang)}`);
+      if (h > 0) {
+        parts.push(`${h} ${L.get('hours_short', lang)}`);
+      }
+      if (m > 0) {
+        parts.push(`${m} ${L.get('minutes_short', lang)}`);
+      }
 
       const duration = parts.join(' ');
       const countdown = duration.length > 0
@@ -182,11 +187,16 @@ export class WidgetDataBuilder {
       out.lblYesterday = L.get('yesterday', lang);
       out.progressPercent = progress;
 
-      out.fajrName = names[0]; out.fajrTime = fajr;
-      out.dhuhrName = names[1]; out.dhuhrTime = dhuhr;
-      out.asrName = names[2]; out.asrTime = asr;
-      out.maghribName = names[3]; out.maghribTime = maghrib;
-      out.ishaName = names[4]; out.ishaTime = isha;
+      out.fajrName = names[0];
+      out.fajrTime = fajr;
+      out.dhuhrName = names[1];
+      out.dhuhrTime = dhuhr;
+      out.asrName = names[2];
+      out.asrTime = asr;
+      out.maghribName = names[3];
+      out.maghribTime = maghrib;
+      out.ishaName = names[4];
+      out.ishaTime = isha;
 
       // Context Data for 4x4
       out.isRamadan = isRamadan;
@@ -235,12 +245,14 @@ export class WidgetDataBuilder {
 
       if (mode === 'Manual') {
         const manual = await SettingsHelper.getManualCoords();
-        lat = manual.lat; lng = manual.lng;
+        lat = manual.lat;
+        lng = manual.lng;
         city = OfflineCityLookup.translateCityName(manual.cityName || 'DEFAULT LOCATION', lang);
       } else {
         const cached = await LocationCache.load();
         if (cached) {
-          lat = cached.latitude; lng = cached.longitude;
+          lat = cached.latitude;
+          lng = cached.longitude;
           city = OfflineCityLookup.translateCityName(cached.cityName, lang);
         }
       }
@@ -324,12 +336,18 @@ export class WidgetDataBuilder {
       }
 
       let minsUntil = targetMin - nowMin;
-      if (isNextDay) minsUntil += 1440;
+      if (isNextDay) {
+        minsUntil += 1440;
+      }
       const h = Math.floor(minsUntil / 60);
       const m = minsUntil % 60;
       const parts: string[] = [];
-      if (h > 0) parts.push(`${h} ${L.get('hours_short', lang)}`);
-      if (m > 0) parts.push(`${m} ${L.get('minutes_short', lang)}`);
+      if (h > 0) {
+        parts.push(`${h} ${L.get('hours_short', lang)}`);
+      }
+      if (m > 0) {
+        parts.push(`${m} ${L.get('minutes_short', lang)}`);
+      }
       const duration = parts.join(' ');
 
       const countdown = duration.length > 0
@@ -369,15 +387,22 @@ export class WidgetDataBuilder {
     out.lblYesterday = 'Yesterday';
     out.progressPercent = 0;
 
-    out.fajrName = 'Fajr'; out.fajrTime = '--:--';
-    out.dhuhrName = 'Dhuhr'; out.dhuhrTime = '--:--';
-    out.asrName = 'Asr'; out.asrTime = '--:--';
-    out.maghribName = 'Maghrib'; out.maghribTime = '--:--';
-    out.ishaName = 'Isha'; out.ishaTime = '--:--';
+    out.fajrName = 'Fajr';
+    out.fajrTime = '--:--';
+    out.dhuhrName = 'Dhuhr';
+    out.dhuhrTime = '--:--';
+    out.asrName = 'Asr';
+    out.asrTime = '--:--';
+    out.maghribName = 'Maghrib';
+    out.maghribTime = '--:--';
+    out.ishaName = 'Isha';
+    out.ishaTime = '--:--';
 
     out.isRamadan = false;
-    out.contextLabel1 = '—'; out.contextTime1 = '--:--';
-    out.contextLabel2 = '—'; out.contextTime2 = '--:--';
+    out.contextLabel1 = '—';
+    out.contextTime1 = '--:--';
+    out.contextLabel2 = '—';
+    out.contextTime2 = '--:--';
 
     // ---- Ramadan widget ----
     // Every field RamadanWidget declares as @LocalStorageProp must
@@ -391,8 +416,8 @@ export class WidgetDataBuilder {
     out.fajr = '--:--';
     out.targetName = '—';
     out.targetTime = '--:--';
-    out.lblSahur = 'Sahur';   // added by H3
-    out.lblIftar = 'Iftar';   // added by H3
+    out.lblSahur = 'Sahur'; // added by H3
+    out.lblIftar = 'Iftar'; // added by H3
 
     out.error = msg;
     return out;

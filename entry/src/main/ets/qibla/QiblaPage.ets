@@ -45,7 +45,6 @@ export struct QiblaPage {
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
-
   @State declinationDeg: number = 0;
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State qiblaBearing: number = 0;
@@ -53,7 +52,6 @@ export struct QiblaPage {
   @State sensorReady: boolean = false;
   @State isFlat: boolean = false;
   @State sensorAccuracy: SensorAccuracy = SensorAccuracy.HIGH;
-
   /**
    * Calibration overlay visibility.
    *  • Opens automatically when accuracy drops to LOW/UNRELIABLE.

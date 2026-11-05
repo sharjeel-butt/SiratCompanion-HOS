@@ -41,6 +41,7 @@ interface ThemeOption {
 @Entry
 @Component
 struct WizardPage {
+  private static readonly MAX_NOTIF_ATTEMPTS = 3;
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
@@ -58,13 +59,11 @@ struct WizardPage {
   appForegroundTick: number = 0;
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
-
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State step: number = 0;
   @State selectedLanguage: string = AppLanguage.ENGLISH;
   @State privacyAccepted: boolean = false;
   @State selectedTheme: string = ThemePreset.SIRAT;
-  @State private usedDefaultLocation: boolean = false;
   @State locationMode: LocationMode = LocationMode.GPS;
   @State manualLat: string = '';
   @State manualLng: string = '';
@@ -78,13 +77,13 @@ struct WizardPage {
   @State showMethodPicker: boolean = false;
   @State showAsrPicker: boolean = false;
   @State showSourcePicker: boolean = false;
-  @State private currentLanguage: string = AppLanguage.ENGLISH;
-  private systemDarkListener: mediaquery.MediaQueryListener | null = null;
   @State notifMasterEnabled: boolean = false;
   @State notifRequesting: boolean = false;
+  @State private usedDefaultLocation: boolean = false;
+  @State private currentLanguage: string = AppLanguage.ENGLISH;
+  private systemDarkListener: mediaquery.MediaQueryListener | null = null;
   @State private notificationPermissionAttempts: number = 0;
   @State private privacyPolicyText: string = '';
-  private static readonly MAX_NOTIF_ATTEMPTS = 3;
 
   async aboutToAppear(): Promise<void> {
     this.currentLanguage = this.appLanguage;
@@ -120,10 +119,6 @@ struct WizardPage {
       .opacity(0)
     PageTransitionExit({ type: RouteType.Pop, duration: 300, curve: Curve.Friction })
       .opacity(0)
-  }
-
-  private onLanguageOverrideChanged(): void {
-    // No-op — the picker reads languageOverride directly.
   }
 
   build() {
@@ -366,7 +361,8 @@ struct WizardPage {
         Blank()
       }
     }
-    .width('100%').height(72)
+    .width('100%')
+    .height(72)
     .padding({ left: 16, right: 16 })
     .alignItems(VerticalAlign.Center)
     .direction(Direction.Ltr) // Locks the arrow to the left
@@ -582,7 +578,8 @@ struct WizardPage {
                 .width(18).height(18).borderRadius(9)
                 .backgroundColor(this.themePreviewSwatch(opt.id))
             }
-            .width(56).height(56)
+            .width(56)
+            .height(56)
             .borderRadius(10)
             .border({
               width: opt.id === this.selectedTheme ? 2 : 1,
@@ -1164,7 +1161,9 @@ struct WizardPage {
         .flexShrink(0)
 
         Text(title)
-          .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+          .fontSize(20)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.colors.textWhite)
           .layoutWeight(1)
           .textAlign(TextAlign.Start)
       }
@@ -1261,6 +1260,10 @@ struct WizardPage {
     })
     .border({ width: { top: 1 }, color: this.colors.borderSoft })
     .position({ bottom: 0 })
+  }
+
+  private onLanguageOverrideChanged(): void {
+    // No-op — the picker reads languageOverride directly.
   }
 
   private tr(key: string): string {

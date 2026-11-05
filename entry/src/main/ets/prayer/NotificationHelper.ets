@@ -25,7 +25,9 @@ import { CalendarReminderEntry, CalendarReminderHelper } from '../hijricalendar/
 const DAYS_AHEAD = 3;
 
 export const MIN_BEFORE_MINUTES = 0;
+
 export const MAX_BEFORE_MINUTES = 60;
+
 export const STEP_BEFORE_MINUTES = 5;
 
 /** Default debounce for scheduled reschedules, in milliseconds. */
@@ -81,9 +83,26 @@ export interface ScheduleResult {
  * this — if both flags are true, Calendar wins.
  */
 export class NotificationHelper {
-
   // ============================================================
   // BACKEND RESOLUTION
+  // ============================================================
+
+  private static rescheduleDebounceId: number = -1;
+  // ============================================================
+  // PERMISSION
+  // ============================================================
+  /**
+   * Guards against overlapping reschedule calls. If the user taps
+   * the lead-time stepper three times in a row, three calls arrive
+   * in quick succession; without serialization the cancel / schedule
+   * pairs interleave and can leave orphaned events.
+   */
+  private static rescheduleInFlight: boolean = false;
+  /** Set to true if a reschedule was requested while one was running. */
+  private static reschedulePending: boolean = false;
+
+  // ============================================================
+  // CANCEL
   // ============================================================
 
   static resolveBackend(): ReminderBackend {
@@ -97,7 +116,7 @@ export class NotificationHelper {
   }
 
   // ============================================================
-  // PERMISSION
+  // TEST
   // ============================================================
 
   static async requestPermission(
@@ -144,10 +163,6 @@ export class NotificationHelper {
     return false;
   }
 
-  // ============================================================
-  // CANCEL
-  // ============================================================
-
   static async cancelAll(): Promise<void> {
     const backend = NotificationHelper.resolveBackend();
 
@@ -168,7 +183,7 @@ export class NotificationHelper {
   }
 
   // ============================================================
-  // TEST
+  // DEBOUNCED RESCHEDULE
   // ============================================================
 
   static async publishTestNotification(): Promise<ScheduleResult> {
@@ -193,49 +208,6 @@ export class NotificationHelper {
     }
     return NotificationHelper.publishAgentTest(fireAt);
   }
-
-  private static async publishCalendarTest(
-    fireAt: Date
-  ): Promise<ScheduleResult> {
-    const entry: CalendarReminderEntry = {
-      title: NotificationHelper.prayTitle('Fajr'),
-      startTime: fireAt.getTime(),
-      reminderMinutes: [0],
-      description: NotificationHelper.hadithFor('Fajr')
-    };
-    // Non-destructive: publish one test event without cancelling
-    // the user's real prayer reminders. addTestEvent() is the only
-    // path that can safely do this — rescheduleAll() would wipe them.
-    const created = await CalendarReminderHelper.addTestEvent(entry);
-    const result: ScheduleResult = {
-      ok: created > 0,
-      scheduled: created,
-      errorCode: created > 0 ? 0 : -1,
-      errorMessage: created > 0 ? '' : 'calendar addEvent failed'
-    };
-    return result;
-  }
-
-  private static async publishAgentTest(
-    fireAt: Date
-  ): Promise<ScheduleResult> {
-    const detail = await NotificationHelper.publishReminderDetailed(
-      'Fajr', fireAt, -1
-    );
-    const result: ScheduleResult = {
-      ok: detail.ok,
-      scheduled: detail.ok ? 1 : 0,
-      errorCode: detail.errorCode,
-      errorMessage: detail.errorMessage
-    };
-    return result;
-  }
-
-  // ============================================================
-  // DEBOUNCED RESCHEDULE
-  // ============================================================
-
-  private static rescheduleDebounceId: number = -1;
 
   /**
    * Request a reschedule after a short delay. Multiple calls within
@@ -290,16 +262,6 @@ export class NotificationHelper {
   // RESCHEDULE (main entry point)
   // ============================================================
 
-  /**
-   * Guards against overlapping reschedule calls. If the user taps
-   * the lead-time stepper three times in a row, three calls arrive
-   * in quick succession; without serialization the cancel / schedule
-   * pairs interleave and can leave orphaned events.
-   */
-  private static rescheduleInFlight: boolean = false;
-  /** Set to true if a reschedule was requested while one was running. */
-  private static reschedulePending: boolean = false;
-
   static async rescheduleAll(): Promise<ScheduleResult> {
     if (NotificationHelper.rescheduleInFlight) {
       NotificationHelper.reschedulePending = true;
@@ -330,6 +292,43 @@ export class NotificationHelper {
         });
       }
     }
+  }
+
+  private static async publishCalendarTest(
+    fireAt: Date
+  ): Promise<ScheduleResult> {
+    const entry: CalendarReminderEntry = {
+      title: NotificationHelper.prayTitle('Fajr'),
+      startTime: fireAt.getTime(),
+      reminderMinutes: [0],
+      description: NotificationHelper.hadithFor('Fajr')
+    };
+    // Non-destructive: publish one test event without cancelling
+    // the user's real prayer reminders. addTestEvent() is the only
+    // path that can safely do this — rescheduleAll() would wipe them.
+    const created = await CalendarReminderHelper.addTestEvent(entry);
+    const result: ScheduleResult = {
+      ok: created > 0,
+      scheduled: created,
+      errorCode: created > 0 ? 0 : -1,
+      errorMessage: created > 0 ? '' : 'calendar addEvent failed'
+    };
+    return result;
+  }
+
+  private static async publishAgentTest(
+    fireAt: Date
+  ): Promise<ScheduleResult> {
+    const detail = await NotificationHelper.publishReminderDetailed(
+      'Fajr', fireAt, -1
+    );
+    const result: ScheduleResult = {
+      ok: detail.ok,
+      scheduled: detail.ok ? 1 : 0,
+      errorCode: detail.errorCode,
+      errorMessage: detail.errorMessage
+    };
+    return result;
   }
 
   private static async doRescheduleAll(): Promise<ScheduleResult> {

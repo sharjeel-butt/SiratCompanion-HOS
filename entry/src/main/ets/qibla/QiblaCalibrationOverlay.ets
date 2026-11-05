@@ -34,7 +34,6 @@ export struct QiblaCalibrationOverlay {
   private animTimerId: number = -1;
   private graceTimerId: number = -1;
   private startTime: number = 0;
-
   // ============================================================
   // LIFECYCLE
   // ============================================================

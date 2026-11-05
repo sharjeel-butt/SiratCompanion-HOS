@@ -84,12 +84,6 @@ export class PageTheme {
     }
   }
 
-  /** Reads the current preset from AppStorage on every call. */
-  private static currentPreset(): string {
-    const v = AppStorage.get<string>(STORAGE_KEY_APP_THEME);
-    return (v !== undefined && v.length > 0) ? v : ThemePreset.SIRAT;
-  }
-
   /**
    * Applies the selected color mode to the system context.
    * This forces native overlays (bindSheet, Menu, etc.) to adapt.
@@ -111,5 +105,11 @@ export class PageTheme {
     } catch (err) {
       console.warn(`[PageTheme] Failed to set colorMode: ${JSON.stringify(err)}`);
     }
+  }
+
+  /** Reads the current preset from AppStorage on every call. */
+  private static currentPreset(): string {
+    const v = AppStorage.get<string>(STORAGE_KEY_APP_THEME);
+    return (v !== undefined && v.length > 0) ? v : ThemePreset.SIRAT;
   }
 }

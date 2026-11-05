@@ -6,13 +6,13 @@ import {
 import { TasbihThemes } from './TasbihThemes';
 
 export const MAX_TOP_BEADS = 5;
+
 export const MAX_BOTTOM_BEADS = 5;
 
 /** Rolling history window. Covers a full quarter. */
 export const HISTORY_MAX_DAYS = 90;
 
 export class TasbihManager {
-
   /** Today's date key, matching ProgressHelper.getDateKey format. */
   static todayKey(): string {
     const d = new Date();
@@ -646,6 +646,75 @@ export class TasbihManager {
   // INTERNAL
   // ============================================================
 
+  static updateBinding(tasbihs: Tasbih[], id: string, prayerIds: string[]): Tasbih[] {
+    return tasbihs.map((t: Tasbih): Tasbih => {
+      if (t.id !== id) {
+        return t;
+      }
+      return {
+        id: t.id,
+        name: t.name,
+        nameKey: t.nameKey,
+        dhikrs: t.dhikrs,
+        createdAt: t.createdAt,
+        lifetimeCount: t.lifetimeCount,
+        theme: t.theme,
+        themePresetId: t.themePresetId,
+        history: t.history,
+        boundPrayerIds: prayerIds,
+        prayerCompletions: t.prayerCompletions
+      };
+    });
+  }
+
+  static isTasbihCompleteForPrayer(tasbih: Tasbih, prayerId: string, dateKey: string): boolean {
+    if (!tasbih.prayerCompletions) {
+      return false;
+    }
+    return tasbih.prayerCompletions[prayerId] === dateKey;
+  }
+
+  static markPrayerComplete(tasbihs: Tasbih[], id: string, prayerId: string, dateKey: string): Tasbih[] {
+    return tasbihs.map((t: Tasbih): Tasbih => {
+      if (t.id !== id) {
+        return t;
+      }
+
+      // 1. Safely copy without spread operator
+      const pc: Record<string, string> = {};
+      if (t.prayerCompletions) {
+        const keys = Object.keys(t.prayerCompletions);
+        for (let i = 0; i < keys.length; i++) {
+          const k = keys[i];
+          pc[k] = t.prayerCompletions[k];
+        }
+      }
+
+      // 2. Set the new completion
+      pc[prayerId] = dateKey;
+
+      // 3. Explicitly construct the new Tasbih object
+      const updated: Tasbih = {
+        id: t.id,
+        name: t.name,
+        nameKey: t.nameKey,
+        dhikrs: t.dhikrs,
+        createdAt: t.createdAt,
+        lifetimeCount: t.lifetimeCount,
+        theme: t.theme,
+        themePresetId: t.themePresetId,
+        history: t.history,
+        boundPrayerIds: t.boundPrayerIds,
+        prayerCompletions: pc
+      };
+
+      return updated;
+    });
+  }
+
+  // ============================================================
+  // PRAYER BINDING
+
   private static mutateDhikr(
     tasbihs: Tasbih[],
     activeId: string,
@@ -807,74 +876,5 @@ export class TasbihManager {
       }
     );
     return sorted.slice(0, HISTORY_MAX_DAYS);
-  }
-
-  // ============================================================
-  // PRAYER BINDING
-
-  static updateBinding(tasbihs: Tasbih[], id: string, prayerIds: string[]): Tasbih[] {
-    return tasbihs.map((t: Tasbih): Tasbih => {
-      if (t.id !== id) {
-        return t;
-      }
-      return {
-        id: t.id,
-        name: t.name,
-        nameKey: t.nameKey,
-        dhikrs: t.dhikrs,
-        createdAt: t.createdAt,
-        lifetimeCount: t.lifetimeCount,
-        theme: t.theme,
-        themePresetId: t.themePresetId,
-        history: t.history,
-        boundPrayerIds: prayerIds,
-        prayerCompletions: t.prayerCompletions
-      };
-    });
-  }
-
-  static isTasbihCompleteForPrayer(tasbih: Tasbih, prayerId: string, dateKey: string): boolean {
-    if (!tasbih.prayerCompletions) {
-      return false;
-    }
-    return tasbih.prayerCompletions[prayerId] === dateKey;
-  }
-
-  static markPrayerComplete(tasbihs: Tasbih[], id: string, prayerId: string, dateKey: string): Tasbih[] {
-    return tasbihs.map((t: Tasbih): Tasbih => {
-      if (t.id !== id) {
-        return t;
-      }
-
-      // 1. Safely copy without spread operator
-      const pc: Record<string, string> = {};
-      if (t.prayerCompletions) {
-        const keys = Object.keys(t.prayerCompletions);
-        for (let i = 0; i < keys.length; i++) {
-          const k = keys[i];
-          pc[k] = t.prayerCompletions[k];
-        }
-      }
-
-      // 2. Set the new completion
-      pc[prayerId] = dateKey;
-
-      // 3. Explicitly construct the new Tasbih object
-      const updated: Tasbih = {
-        id: t.id,
-        name: t.name,
-        nameKey: t.nameKey,
-        dhikrs: t.dhikrs,
-        createdAt: t.createdAt,
-        lifetimeCount: t.lifetimeCount,
-        theme: t.theme,
-        themePresetId: t.themePresetId,
-        history: t.history,
-        boundPrayerIds: t.boundPrayerIds,
-        prayerCompletions: pc
-      };
-
-      return updated;
-    });
   }
 }

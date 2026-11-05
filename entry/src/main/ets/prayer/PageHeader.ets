@@ -42,75 +42,20 @@ export struct PageHeader {
   @Prop showCalcPills: boolean = true;
   @StorageLink(STORAGE_KEY_THEME_MODE)
   themeMode: string = ThemeMode.SYSTEM;
-  onNavigateToTasbih: (tasbihId: string, dhikrIndex: number, prayerId: string) => void = () => {
-  };
-
   @StorageLink(STORAGE_KEY_TIME_FORMAT)
   @Watch('onClockFormatChanged')
   clockFormat: string = ClockFormat.SYSTEM;
+  @Prop isRamadan: boolean = false;
+  @Prop fastingEndTime: string = '';
+  onNavigateToTasbih: (tasbihId: string, dhikrIndex: number, prayerId: string) => void = () => {
+  };
   onOpenLocationSettings: () => void = () => {
   };
   onOpenSettings: () => void = () => {
   };
-  @Prop isRamadan: boolean = false;
-  @Prop fastingEndTime: string = '';
 
   // ============================================================
   // HELPERS
-  // ============================================================
-
-  private tr(key: string): string {
-    return L.get(key, this.currentLanguage);
-  }
-
-  private dt(t: string): string {
-    if (this.clockFormat.length === 0) {
-      return t;
-    }
-    return ClockFormatHelper.reformat(t);
-  }
-
-  private onClockFormatChanged(): void {
-    // Re-render is handled by the @StorageLink.
-  }
-
-  private isRtl(): boolean {
-    return L.isRtlLang(this.currentLanguage);
-  }
-
-  private translateEventName(raw: string): string {
-    switch (raw) {
-      case 'Fajr':
-        return this.tr('prayer_fajr');
-      case 'Dhuhr':
-        return this.tr('prayer_dhuhr');
-      case 'Asr':
-        return this.tr('prayer_asr');
-      case 'Maghrib':
-        return this.tr('prayer_maghrib');
-      case 'Isha':
-        return this.tr('prayer_isha');
-      case 'Jummah':
-        return this.tr('prayer_jummah');
-      case 'Imsak':
-        return this.tr('timing_imsak');
-      case 'Sunrise':
-        return this.tr('timing_sunrise');
-      case 'Sunset':
-        return this.tr('timing_sunset');
-      case 'First Third':
-        return this.tr('timing_first_third');
-      case 'Midnight':
-        return this.tr('timing_midnight');
-      case 'Last Third':
-        return this.tr('timing_last_third');
-      default:
-        return raw;
-    }
-  }
-
-  // ============================================================
-  // BUILD
   // ============================================================
 
   build() {
@@ -355,5 +300,59 @@ export struct PageHeader {
     .width('100%')
     .padding({ left: 16, right: 16 })
     .backgroundColor(this.colors.primaryGreen)
+  }
+
+  private tr(key: string): string {
+    return L.get(key, this.currentLanguage);
+  }
+
+  private dt(t: string): string {
+    if (this.clockFormat.length === 0) {
+      return t;
+    }
+    return ClockFormatHelper.reformat(t);
+  }
+
+  private onClockFormatChanged(): void {
+    // Re-render is handled by the @StorageLink.
+  }
+
+  private isRtl(): boolean {
+    return L.isRtlLang(this.currentLanguage);
+  }
+
+  // ============================================================
+  // BUILD
+  // ============================================================
+
+  private translateEventName(raw: string): string {
+    switch (raw) {
+      case 'Fajr':
+        return this.tr('prayer_fajr');
+      case 'Dhuhr':
+        return this.tr('prayer_dhuhr');
+      case 'Asr':
+        return this.tr('prayer_asr');
+      case 'Maghrib':
+        return this.tr('prayer_maghrib');
+      case 'Isha':
+        return this.tr('prayer_isha');
+      case 'Jummah':
+        return this.tr('prayer_jummah');
+      case 'Imsak':
+        return this.tr('timing_imsak');
+      case 'Sunrise':
+        return this.tr('timing_sunrise');
+      case 'Sunset':
+        return this.tr('timing_sunset');
+      case 'First Third':
+        return this.tr('timing_first_third');
+      case 'Midnight':
+        return this.tr('timing_midnight');
+      case 'Last Third':
+        return this.tr('timing_last_third');
+      default:
+        return raw;
+    }
   }
 }

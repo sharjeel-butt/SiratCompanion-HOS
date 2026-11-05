@@ -2876,11 +2876,26 @@
       "name": "widget_todays_schedule",
       "value": "今日日程"
     },
-    { "name": "hours_short", "value": "小时" },
-    { "name": "minutes_short", "value": "分钟" },
-    { "name": "countdown_prefix", "value": "后" },
-    { "name": "countdown_now", "value": "现在" },
-    { "name": "yesterday", "value": "昨天" },
+    {
+      "name": "hours_short",
+      "value": "小时"
+    },
+    {
+      "name": "minutes_short",
+      "value": "分钟"
+    },
+    {
+      "name": "countdown_prefix",
+      "value": "剩余"
+    },
+    {
+      "name": "countdown_now",
+      "value": "现在"
+    },
+    {
+      "name": "yesterday",
+      "value": "昨天"
+    },
     {
       "name": "widget_ramadan_desc",
       "value": "斋月封斋追踪与倒计时"

@@ -6,7 +6,6 @@ struct RamadanWidget {
   @LocalStorageProp('hijriDate') hijriDate: string = '—';
   @LocalStorageProp('lang') lang: string = 'en';
   @LocalStorageProp('error') error: string = '';
-
   @LocalStorageProp('imsak') imsak: string = '--:--';
   @LocalStorageProp('iftar') iftar: string = '--:--';
   @LocalStorageProp('fajr') fajr: string = '--:--';
@@ -14,13 +13,8 @@ struct RamadanWidget {
   @LocalStorageProp('targetTime') targetTime: string = '--:--';
   @LocalStorageProp('countdown') countdown: string = '';
   @LocalStorageProp('isRamadan') isRamadan: boolean = false;
-
   @LocalStorageProp('lblSahur') lblSahur: string = 'Sahur';
   @LocalStorageProp('lblIftar') lblIftar: string = 'Iftar';
-
-  private isRtl(): boolean {
-    return this.lang === 'ar' || this.lang === 'ur';
-  }
 
   build() {
     // FORCE LTR ON THE ROOT TO PREVENT OS AUTO-MIRRORING
@@ -36,17 +30,41 @@ struct RamadanWidget {
           /// ========== HEADER ==========
           if (this.dimension === '2*2') {
             Column() {
-              Text(this.hijriDate).fontSize(10).fontColor('#E8A44C').width('100%').textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT).maxLines(1)
-              Text(this.city).fontSize(12).fontWeight(FontWeight.Bold).fontColor('#FFFFFF').width('100%').textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT).maxLines(1).margin({ top: 2 })
+              Text(this.hijriDate)
+                .fontSize(10)
+                .fontColor('#E8A44C')
+                .width('100%')
+                .textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT)
+                .maxLines(1)
+              Text(this.city)
+                .fontSize(12)
+                .fontWeight(FontWeight.Bold)
+                .fontColor('#FFFFFF')
+                .width('100%')
+                .textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT)
+                .maxLines(1)
+                .margin({ top: 2 })
             }
             .width('100%').alignItems(this.isRtl() ? HorizontalAlign.End : HorizontalAlign.Start).margin({ bottom: 8 })
           } else {
             Row() {
               if (this.isRtl()) {
                 Text(this.hijriDate).fontSize(10).fontColor('#E8A44C').maxLines(1).flexShrink(0)
-                Text(this.city).fontSize(12).fontWeight(FontWeight.Bold).fontColor('#FFFFFF').maxLines(1).layoutWeight(1).textAlign(TextAlign.RIGHT)
+                Text(this.city)
+                  .fontSize(12)
+                  .fontWeight(FontWeight.Bold)
+                  .fontColor('#FFFFFF')
+                  .maxLines(1)
+                  .layoutWeight(1)
+                  .textAlign(TextAlign.RIGHT)
               } else {
-                Text(this.city).fontSize(12).fontWeight(FontWeight.Bold).fontColor('#FFFFFF').maxLines(1).layoutWeight(1).textAlign(TextAlign.LEFT)
+                Text(this.city)
+                  .fontSize(12)
+                  .fontWeight(FontWeight.Bold)
+                  .fontColor('#FFFFFF')
+                  .maxLines(1)
+                  .layoutWeight(1)
+                  .textAlign(TextAlign.LEFT)
                 Text(this.hijriDate).fontSize(10).fontColor('#E8A44C').maxLines(1).flexShrink(0)
               }
             }
@@ -66,9 +84,26 @@ struct RamadanWidget {
 
           } else if (this.dimension === '2*2') {
             Column() {
-              Text(this.targetName).fontSize(18).fontColor('#AAAAAA').width('100%').textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT).letterSpacing(1)
-              Text(this.targetTime).fontSize(26).fontWeight(FontWeight.Bold).fontColor('#E8A44C').width('100%').textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT).margin({ top: 2 })
-              Text(this.countdown).fontSize(14).fontColor('#FFFFFF').width('100%').textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT).margin({ top: 4 }).opacity(0.8)
+              Text(this.targetName)
+                .fontSize(18)
+                .fontColor('#AAAAAA')
+                .width('100%')
+                .textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT)
+                .letterSpacing(1)
+              Text(this.targetTime)
+                .fontSize(26)
+                .fontWeight(FontWeight.Bold)
+                .fontColor('#E8A44C')
+                .width('100%')
+                .textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT)
+                .margin({ top: 2 })
+              Text(this.countdown)
+                .fontSize(14)
+                .fontColor('#FFFFFF')
+                .width('100%')
+                .textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT)
+                .margin({ top: 4 })
+                .opacity(0.8)
             }
             .width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
 
@@ -117,7 +152,11 @@ struct RamadanWidget {
           }
         }
       }
-      .width('100%').height('100%').padding(14).backgroundColor('#141B2E').borderRadius(16)
+      .width('100%')
+      .height('100%')
+      .padding(14)
+      .backgroundColor('#141B2E')
+      .borderRadius(16)
       .onClick(() => {
         postCardAction(this, {
           action: 'router',
@@ -128,5 +167,9 @@ struct RamadanWidget {
     }
     .width('100%').height('100%')
     .direction(Direction.Ltr) // FORCE LTR ON ROOT TO PREVENT SYSTEM DOUBLE-MIRRORING
+  }
+
+  private isRtl(): boolean {
+    return this.lang === 'ar' || this.lang === 'ur';
   }
 }

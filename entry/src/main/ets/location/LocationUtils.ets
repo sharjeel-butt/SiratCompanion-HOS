@@ -38,39 +38,6 @@ export class LocationHelper {
     }
   }
 
-  /**
-   * Check the location permission state without prompting the user.
-   * Returns true only when both APPROXIMATELY_LOCATION and LOCATION
-   * are currently granted. Used by silent refreshes so background
-   * fetches never trigger a permission dialog.
-   */
-  private static async checkLocationPermission(): Promise<boolean> {
-    try {
-      const bundleInfo = bundleManager.getBundleInfoForSelfSync(
-        bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION
-      );
-      const tokenId = bundleInfo.appInfo.accessTokenId;
-
-      const atManager = abilityAccessCtrl.createAtManager();
-      const status1 = await atManager.checkAccessToken(
-        tokenId, 'ohos.permission.APPROXIMATELY_LOCATION'
-      );
-      const status2 = await atManager.checkAccessToken(
-        tokenId, 'ohos.permission.LOCATION'
-      );
-
-      return status1 === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED
-        && status2 === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED;
-    } catch (err) {
-      const error = err as BusinessError;
-      console.warn(
-        `[LocationHelper] checkLocationPermission failed: ` +
-          `${error.code} ${error.message}`
-      );
-      return false;
-    }
-  }
-
   static async reverseGeocode(latitude: number, longitude: number): Promise<string> {
 
     const offline = OfflineCityLookup.nearest(latitude, longitude);
@@ -182,6 +149,39 @@ export class LocationHelper {
     } catch (err) {
       const error = err as BusinessError;
       console.error(`Dialog error: ${error.code}, ${error.message}`);
+    }
+  }
+
+  /**
+   * Check the location permission state without prompting the user.
+   * Returns true only when both APPROXIMATELY_LOCATION and LOCATION
+   * are currently granted. Used by silent refreshes so background
+   * fetches never trigger a permission dialog.
+   */
+  private static async checkLocationPermission(): Promise<boolean> {
+    try {
+      const bundleInfo = bundleManager.getBundleInfoForSelfSync(
+        bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION
+      );
+      const tokenId = bundleInfo.appInfo.accessTokenId;
+
+      const atManager = abilityAccessCtrl.createAtManager();
+      const status1 = await atManager.checkAccessToken(
+        tokenId, 'ohos.permission.APPROXIMATELY_LOCATION'
+      );
+      const status2 = await atManager.checkAccessToken(
+        tokenId, 'ohos.permission.LOCATION'
+      );
+
+      return status1 === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED
+        && status2 === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED;
+    } catch (err) {
+      const error = err as BusinessError;
+      console.warn(
+        `[LocationHelper] checkLocationPermission failed: ` +
+          `${error.code} ${error.message}`
+      );
+      return false;
     }
   }
 

@@ -136,7 +136,6 @@ export class SettingsHelper {
   static readonly EVENT_PERSPECTIVE_SHIA = 'shia';
   static readonly EVENT_PERSPECTIVE_ALL = 'all';
 
-
   // ============================================================
   // HIGH-LATITUDE RULE
   // ============================================================
@@ -216,12 +215,6 @@ export class SettingsHelper {
     PreferencesHelper.setBoolean(STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW, value);
   }
 
-  private static bumpCalcSettingsVersion(): void {
-    const prev = AppStorage.get<number>(STORAGE_KEY_CALC_SETTINGS_VERSION);
-    const next = (prev === undefined ? 0 : prev) + 1;
-    AppStorage.setOrCreate(STORAGE_KEY_CALC_SETTINGS_VERSION, next);
-  }
-
   static async getHighLatRule(): Promise<HighLatitudeRule> {
     const stored = await PreferencesHelper.getString(
       STORAGE_KEY_HIGH_LAT_RULE, HighLatitudeRule.NONE
@@ -243,10 +236,6 @@ export class SettingsHelper {
     SettingsHelper.bumpCalcSettingsVersion();
   }
 
-  // ============================================================
-  // TIME FORMAT
-  // ============================================================
-
   static getClockFormat(): string {
     const cached = AppStorage.get<string>(STORAGE_KEY_TIME_FORMAT);
     if (cached !== undefined && cached.length > 0) {
@@ -254,6 +243,10 @@ export class SettingsHelper {
     }
     return ClockFormat.SYSTEM;
   }
+
+  // ============================================================
+  // TIME FORMAT
+  // ============================================================
 
   static saveClockFormat(format: string): void {
     AppStorage.setOrCreate(STORAGE_KEY_TIME_FORMAT, format);
@@ -287,10 +280,6 @@ export class SettingsHelper {
     return out;
   }
 
-  // ============================================================
-  // APP THEME PRESET
-  // ============================================================
-
   static getHighLatRuleLabel(
     rule: HighLatitudeRule, lang?: string
   ): string {
@@ -309,6 +298,10 @@ export class SettingsHelper {
         return L.get('highlat_none', lang);
     }
   }
+
+  // ============================================================
+  // APP THEME PRESET
+  // ============================================================
 
   static async getAppTheme(): Promise<string> {
     const cached = AppStorage.get<string>(STORAGE_KEY_APP_THEME);
@@ -361,10 +354,6 @@ export class SettingsHelper {
     });
   }
 
-  // ============================================================
-  // NOTIFICATIONS
-  // ============================================================
-
   static buildHighLatPickerItems(current: HighLatitudeRule): PickerItem[] {
     const rules = [
       HighLatitudeRule.NONE,
@@ -381,6 +370,10 @@ export class SettingsHelper {
       return item;
     });
   }
+
+  // ============================================================
+  // NOTIFICATIONS
+  // ============================================================
 
   static async getNotificationSettings(): Promise<NotificationsSettings> {
     const master = await PreferencesHelper.getBoolean(STORAGE_KEY_NOTIF_MASTER, false);
@@ -507,10 +500,6 @@ export class SettingsHelper {
     PreferencesHelper.setBoolean(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH, value);
   }
 
-  // ============================================================
-  // PRAYER OFFSETS
-  // ============================================================
-
   static async getPrayerOffsets(): Promise<PrayerOffsets> {
     const fajr = await PreferencesHelper.getNumber(KEY_OFFSET_FAJR, 0);
     const dhuhr = await PreferencesHelper.getNumber(KEY_OFFSET_DHUHR, 0);
@@ -527,6 +516,10 @@ export class SettingsHelper {
     };
   }
 
+  // ============================================================
+  // PRAYER OFFSETS
+  // ============================================================
+
   static saveOffset(key: string, minutes: number): void {
     PreferencesHelper.setNumber(key, minutes);
     SettingsHelper.bumpCalcSettingsVersion();
@@ -541,10 +534,6 @@ export class SettingsHelper {
     SettingsHelper.bumpCalcSettingsVersion();
   }
 
-  // ============================================================
-  // LOCATION SETTINGS
-  // ============================================================
-
   static async getLocationMode(): Promise<LocationMode> {
     const stored = await PreferencesHelper.getString(KEY_LOCATION_MODE, LocationMode.GPS);
     if (stored === LocationMode.MANUAL) {
@@ -552,6 +541,10 @@ export class SettingsHelper {
     }
     return LocationMode.GPS;
   }
+
+  // ============================================================
+  // LOCATION SETTINGS
+  // ============================================================
 
   static saveLocationMode(mode: LocationMode): void {
     PreferencesHelper.setString(KEY_LOCATION_MODE, mode);
@@ -641,10 +634,6 @@ export class SettingsHelper {
     }
   }
 
-  // ============================================================
-  // LABELS
-  // ============================================================
-
   static getAsrRuleLabel(rule: AsrShadowRule): string {
     switch (rule) {
       case AsrShadowRule.STANDARD:
@@ -655,6 +644,10 @@ export class SettingsHelper {
         return L.get('asr_standard');
     }
   }
+
+  // ============================================================
+  // LABELS
+  // ============================================================
 
   static getCalcSourceLabel(source: CalculationSource): string {
     switch (source) {
@@ -788,10 +781,6 @@ export class SettingsHelper {
     }));
   }
 
-  // ============================================================
-  // PICKER ITEM BUILDERS
-  // ============================================================
-
   static buildAsrPickerItems(current: AsrShadowRule): PickerItem[] {
     return [AsrShadowRule.STANDARD, AsrShadowRule.HANAFI]
       .map((r): PickerItem => ({
@@ -800,6 +789,10 @@ export class SettingsHelper {
         selected: r === current
       }));
   }
+
+  // ============================================================
+  // PICKER ITEM BUILDERS
+  // ============================================================
 
   static buildSourcePickerItems(current: CalculationSource): PickerItem[] {
     return [CalculationSource.LOCAL, CalculationSource.API]
@@ -838,14 +831,14 @@ export class SettingsHelper {
     return loaded;
   }
 
-  // ============================================================
-  // HIJRI OFFSET
-  // ============================================================
-
   static saveHijriOffset(days: number): void {
     AppStorage.setOrCreate(STORAGE_KEY_HIJRI_OFFSET, days);
     PreferencesHelper.setNumber(STORAGE_KEY_HIJRI_OFFSET, days);
   }
+
+  // ============================================================
+  // HIJRI OFFSET
+  // ============================================================
 
   static async getLanguage(): Promise<string> {
     const cached = AppStorage.get<string>(STORAGE_KEY_LANGUAGE);
@@ -876,10 +869,6 @@ export class SettingsHelper {
     return loaded;
   }
 
-  // ============================================================
-  // LANGUAGE
-  // ============================================================
-
   /**
    * Persist the user's language pick. Callers pass the raw override
    * value ('system' | 'en' | 'zh' | 'ar') — this method stores it
@@ -904,17 +893,21 @@ export class SettingsHelper {
     L.applySystemLanguage(lang);
   }
 
+  // ============================================================
+  // LANGUAGE
+  // ============================================================
+
   static async isWizardCompleted(): Promise<boolean> {
     return PreferencesHelper.getBoolean(STORAGE_KEY_WIZARD_COMPLETED, false);
+  }
+
+  static markWizardCompleted(): void {
+    PreferencesHelper.setBoolean(STORAGE_KEY_WIZARD_COMPLETED, true);
   }
 
   // ============================================================
   // WIZARD
   // ============================================================
-
-  static markWizardCompleted(): void {
-    PreferencesHelper.setBoolean(STORAGE_KEY_WIZARD_COMPLETED, true);
-  }
 
   static resetWizard(): void {
     PreferencesHelper.setBoolean(STORAGE_KEY_WIZARD_COMPLETED, false);
@@ -925,14 +918,14 @@ export class SettingsHelper {
     return cached === undefined ? true : cached;
   }
 
-  // ============================================================
-  // SOUND
-  // ============================================================
-
   static saveSoundEnabled(value: boolean): void {
     AppStorage.setOrCreate(STORAGE_KEY_SOUND_ENABLED, value);
     PreferencesHelper.setBoolean(STORAGE_KEY_SOUND_ENABLED, value);
   }
+
+  // ============================================================
+  // SOUND
+  // ============================================================
 
   static getTasbihSound(): string {
     const cached = AppStorage.get<string>(STORAGE_KEY_TASBIH_SOUND);
@@ -942,40 +935,40 @@ export class SettingsHelper {
     return SoundOptions.DEFAULT_ID;
   }
 
-  // ============================================================
-  // TASBIH SOUND SELECTION
-  // ============================================================
-
   static saveTasbihSound(id: string): void {
     AppStorage.setOrCreate(STORAGE_KEY_TASBIH_SOUND, id);
     PreferencesHelper.setString(STORAGE_KEY_TASBIH_SOUND, id);
   }
+
+  // ============================================================
+  // TASBIH SOUND SELECTION
+  // ============================================================
 
   static getVibrationEnabled(): boolean {
     const cached = AppStorage.get<boolean>(STORAGE_KEY_VIBRATION_ENABLED);
     return cached === undefined ? true : cached;
   }
 
-  // ============================================================
-  // VIBRATION
-  // ============================================================
-
   static saveVibrationEnabled(value: boolean): void {
     AppStorage.setOrCreate(STORAGE_KEY_VIBRATION_ENABLED, value);
     PreferencesHelper.setBoolean(STORAGE_KEY_VIBRATION_ENABLED, value);
   }
 
+  // ============================================================
+  // VIBRATION
+  // ============================================================
+
   static async getTasbihRenderStyle(): Promise<string> {
     return PreferencesHelper.getString(STORAGE_KEY_TASBIH_RENDER_STYLE, 'premium');
+  }
+
+  static saveTasbihRenderStyle(style: string): void {
+    PreferencesHelper.setString(STORAGE_KEY_TASBIH_RENDER_STYLE, style);
   }
 
   // ============================================================
   // TASBIH RENDER STYLE (premium / classic)
   // ============================================================
-
-  static saveTasbihRenderStyle(style: string): void {
-    PreferencesHelper.setString(STORAGE_KEY_TASBIH_RENDER_STYLE, style);
-  }
 
   static async getTasbihThemePreset(): Promise<string> {
     return PreferencesHelper.getString(
@@ -984,28 +977,13 @@ export class SettingsHelper {
     );
   }
 
-  // ============================================================
-  // TASBIH THEME PRESET (global default)
-  // ============================================================
-
   static saveTasbihThemePreset(presetId: string): void {
     PreferencesHelper.setString(STORAGE_KEY_TASBIH_THEME_PRESET, presetId);
   }
 
-  private static bumpLocationVersion(): void {
-    const prev = AppStorage.get<number>('location_version');
-    const next = (prev === undefined ? 0 : prev) + 1;
-    AppStorage.setOrCreate('location_version', next);
-  }
-
   // ============================================================
-  // ADVANCED CALCULATION SETTINGS
+  // TASBIH THEME PRESET (global default)
   // ============================================================
-  //
-  // The CustomAngles block below is retained for forward
-  // compatibility with existing stored data. The Custom method
-  // itself has been removed from CalculationMethod, so no current
-  // code path writes these values — they are always the defaults.
 
   static async getAdvancedCalcSettings(): Promise<AdvancedCalcSettings> {
     const rounding = await PreferencesHelper.getString(
@@ -1035,6 +1013,15 @@ export class SettingsHelper {
     SettingsHelper.bumpCalcSettingsVersion();
   }
 
+  // ============================================================
+  // ADVANCED CALCULATION SETTINGS
+  // ============================================================
+  //
+  // The CustomAngles block below is retained for forward
+  // compatibility with existing stored data. The Custom method
+  // itself has been removed from CalculationMethod, so no current
+  // code path writes these values — they are always the defaults.
+
   static saveMidnight(m: MidnightMethod): void {
     PreferencesHelper.setString(STORAGE_KEY_MIDNIGHT_METHOD, m);
     SettingsHelper.bumpCalcSettingsVersion();
@@ -1049,10 +1036,6 @@ export class SettingsHelper {
     PreferencesHelper.setString(STORAGE_KEY_SHAFAQ, s);
     SettingsHelper.bumpCalcSettingsVersion();
   }
-
-  // ============================================================
-  // HIJRI CALENDAR TYPE
-  // ============================================================
 
   static getHijriCalendarType(): string {
     const cached = AppStorage.get<string>(STORAGE_KEY_HIJRI_CALENDAR_TYPE);
@@ -1070,6 +1053,10 @@ export class SettingsHelper {
     const next = (prev === undefined ? 0 : prev) + 1;
     AppStorage.setOrCreate(STORAGE_KEY_HIJRI_CALENDAR_VERSION, next);
   }
+
+  // ============================================================
+  // HIJRI CALENDAR TYPE
+  // ============================================================
 
   static getHijriCalendarTypeLabel(type: string, lang?: string): string {
     if (type === HijriCalendarType.TABULAR) {
@@ -1098,11 +1085,6 @@ export class SettingsHelper {
     return out;
   }
 
-  // ============================================================
-  // EVENT PERSPECTIVE
-  // ============================================================
-
-
   static getEventPerspective(): string {
     const cached = AppStorage.get<string>(STORAGE_KEY_EVENT_PERSPECTIVE);
     if (cached !== undefined && cached.length > 0) {
@@ -1124,6 +1106,10 @@ export class SettingsHelper {
     EventPerspectiveNotifier.notify();
   }
 
+  // ============================================================
+  // EVENT PERSPECTIVE
+  // ============================================================
+
   static getEventPerspectiveLabel(value: string, lang?: string): string {
     switch (value) {
       case SettingsHelper.EVENT_PERSPECTIVE_SUNNI:
@@ -1138,7 +1124,6 @@ export class SettingsHelper {
     }
   }
 
-
   static buildEventPerspectivePickerItems(current: string): PickerItem[] {
     return [
       SettingsHelper.EVENT_PERSPECTIVE_UNIVERSAL,
@@ -1150,5 +1135,17 @@ export class SettingsHelper {
       label: SettingsHelper.getEventPerspectiveLabel(v),
       selected: v === current
     }));
+  }
+
+  private static bumpCalcSettingsVersion(): void {
+    const prev = AppStorage.get<number>(STORAGE_KEY_CALC_SETTINGS_VERSION);
+    const next = (prev === undefined ? 0 : prev) + 1;
+    AppStorage.setOrCreate(STORAGE_KEY_CALC_SETTINGS_VERSION, next);
+  }
+
+  private static bumpLocationVersion(): void {
+    const prev = AppStorage.get<number>('location_version');
+    const next = (prev === undefined ? 0 : prev) + 1;
+    AppStorage.setOrCreate('location_version', next);
   }
 }

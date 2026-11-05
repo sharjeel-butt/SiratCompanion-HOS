@@ -12,6 +12,8 @@ export enum ClockFormat {
 }
 
 export class ClockFormatHelper {
+  private static hourCycleLogged: boolean = false;
+
   /** Current preference as stored by the user. */
   static current(): ClockFormat {
     const v = AppStorage.get<string>(STORAGE_KEY_TIME_FORMAT);
@@ -53,24 +55,6 @@ export class ClockFormatHelper {
     return ClockFormatHelper.formatMinutes(minutes);
   }
 
-  /** Format a minutes-since-midnight value in the user's preferred format. */
-  static formatMinutes(totalMinutes: number): string {
-    const clamped: number = ((totalMinutes % 1440) + 1440) % 1440;
-    const h: number = Math.floor(clamped / 60);
-    const m: number = clamped % 60;
-    const mm: string = m.toString().padStart(2, '0');
-
-    if (ClockFormatHelper.use24Hour()) {
-      return `${h.toString().padStart(2, '0')}:${mm}`;
-    }
-    const period: string = h >= 12 ? 'PM' : 'AM';
-    let dh: number = h % 12;
-    if (dh === 0) {
-      dh = 12;
-    }
-    return `${dh}:${mm} ${period}`;
-  }
-
   // ============================================================
   // SYSTEM HOUR-CYCLE DETECTION
   // ============================================================
@@ -96,7 +80,23 @@ export class ClockFormatHelper {
   // once at startup. That is what the OS reports, and it is what
   // the rest of the app will follow.
 
-  private static hourCycleLogged: boolean = false;
+  /** Format a minutes-since-midnight value in the user's preferred format. */
+  static formatMinutes(totalMinutes: number): string {
+    const clamped: number = ((totalMinutes % 1440) + 1440) % 1440;
+    const h: number = Math.floor(clamped / 60);
+    const m: number = clamped % 60;
+    const mm: string = m.toString().padStart(2, '0');
+
+    if (ClockFormatHelper.use24Hour()) {
+      return `${h.toString().padStart(2, '0')}:${mm}`;
+    }
+    const period: string = h >= 12 ? 'PM' : 'AM';
+    let dh: number = h % 12;
+    if (dh === 0) {
+      dh = 12;
+    }
+    return `${dh}:${mm} ${period}`;
+  }
 
   private static isSystem24Hour(): boolean {
     // ---- Layer 1: i18n.System.is24HourClock() (authoritative) ----

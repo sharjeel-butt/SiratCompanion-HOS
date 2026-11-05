@@ -29,21 +29,16 @@ struct AdvancedCalcPage {
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
-
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = 'en';
-
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
   appThemePreset: string = ThemePreset.SIRAT;
-
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
-
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State currentLanguage: string = 'en';
-
   @State roundingMethod: RoundingMethod = RoundingMethod.NEAREST;
   @State midnightMethod: MidnightMethod = MidnightMethod.STANDARD;
   @State polarResolution: PolarResolution = PolarResolution.UNRESOLVED;
@@ -55,9 +50,7 @@ struct AdvancedCalcPage {
    * lives in Settings → Prayer Times.
    */
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
-
   @State activeSheet: SheetKind = 'none';
-
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
 
   aboutToAppear(): void {
@@ -143,15 +136,6 @@ struct AdvancedCalcPage {
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 
-  private isMidnightLocked(): boolean {
-    return this.calcMethod === CalculationMethod.JAFARI ||
-      this.calcMethod === CalculationMethod.TEHRAN;
-  }
-
-  // ============================================================
-  // TOP BAR
-  // ============================================================
-
   @Builder
   TopBar() {
     Row({ space: 16 }) {
@@ -188,10 +172,7 @@ struct AdvancedCalcPage {
   }
 
   // ============================================================
-  // ROWS — each is its own parameterless @Builder so ArkUI
-  // correctly re-renders the label whenever the backing @State
-  // changes. Passing computed values into a @Builder with
-  // parameters causes the value to be snapshotted once.
+  // TOP BAR
   // ============================================================
 
   @Builder
@@ -231,6 +212,13 @@ struct AdvancedCalcPage {
       this.activeSheet = 'rounding';
     })
   }
+
+  // ============================================================
+  // ROWS — each is its own parameterless @Builder so ArkUI
+  // correctly re-renders the label whenever the backing @State
+  // changes. Passing computed values into a @Builder with
+  // parameters causes the value to be snapshotted once.
+  // ============================================================
 
   @Builder
   MidnightRow() {
@@ -411,10 +399,6 @@ struct AdvancedCalcPage {
     })
   }
 
-  // ============================================================
-  // PICKER OVERLAY
-  // ============================================================
-
   @Builder
   PickerOverlay(
     title: string,
@@ -545,6 +529,15 @@ struct AdvancedCalcPage {
     .border({ width: { top: 1 }, color: this.colors.borderSoft })
     .constraintSize({ maxHeight: '85%' })
     .position({ bottom: 0 })
+  }
+
+  // ============================================================
+  // PICKER OVERLAY
+  // ============================================================
+
+  private isMidnightLocked(): boolean {
+    return this.calcMethod === CalculationMethod.JAFARI ||
+      this.calcMethod === CalculationMethod.TEHRAN;
   }
 
   // ============================================================

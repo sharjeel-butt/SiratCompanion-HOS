@@ -818,7 +818,6 @@ export class OfflineCityLookup {
   private static translations: Record<string, Record<string, string>> = {};
   private static isInitialized: boolean = false;
 
-
   static async init(context: common.Context): Promise<void> {
     if (OfflineCityLookup.isInitialized) {
       return;

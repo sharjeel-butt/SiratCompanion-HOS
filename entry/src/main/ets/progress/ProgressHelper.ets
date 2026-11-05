@@ -320,17 +320,6 @@ export class ProgressHelper {
   // PRAYER DETAILS — WEEK / MONTH / YEAR
   // ============================================================
 
-  private static emptyPerPrayer(): PerPrayerCount {
-    const out: PerPrayerCount = {
-      fajr: 0,
-      dhuhr: 0,
-      asr: 0,
-      maghrib: 0,
-      isha: 0
-    };
-    return out;
-  }
-
   static getPrayerDetails(): PrayerDetailsSnapshot {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -477,10 +466,6 @@ export class ProgressHelper {
     return out;
   }
 
-  // ============================================================
-  // TASBIH DETAILS — WEEK / MONTH / YEAR
-  // ============================================================
-
   /**
    * Per-tasbih, per-dhikr progress for the given period.
    *
@@ -588,27 +573,8 @@ export class ProgressHelper {
     return out;
   }
 
-  private static historyCountFor(
-    t: Tasbih, dateKey: string, dhikrId: string
-  ): number {
-    if (t.history === undefined) {
-      return 0;
-    }
-    for (const log of t.history) {
-      if (log.dateKey !== dateKey) {
-        continue;
-      }
-      for (const dc of log.dhikrCounts) {
-        if (dc.dhikrId === dhikrId) {
-          return dc.count;
-        }
-      }
-    }
-    return 0;
-  }
-
   // ============================================================
-  // MONTHLY VIEW
+  // TASBIH DETAILS — WEEK / MONTH / YEAR
   // ============================================================
 
   /**
@@ -735,6 +701,10 @@ export class ProgressHelper {
     }
   }
 
+  // ============================================================
+  // MONTHLY VIEW
+  // ============================================================
+
   /** Seven days ending today. */
   static getWeekDetail(): WeekDetailCell[] {
     const today = new Date();
@@ -806,5 +776,35 @@ export class ProgressHelper {
       totalCompleted: totalCompleted
     };
     return out;
+  }
+
+  private static emptyPerPrayer(): PerPrayerCount {
+    const out: PerPrayerCount = {
+      fajr: 0,
+      dhuhr: 0,
+      asr: 0,
+      maghrib: 0,
+      isha: 0
+    };
+    return out;
+  }
+
+  private static historyCountFor(
+    t: Tasbih, dateKey: string, dhikrId: string
+  ): number {
+    if (t.history === undefined) {
+      return 0;
+    }
+    for (const log of t.history) {
+      if (log.dateKey !== dateKey) {
+        continue;
+      }
+      for (const dc of log.dhikrCounts) {
+        if (dc.dhikrId === dhikrId) {
+          return dc.count;
+        }
+      }
+    }
+    return 0;
   }
 }

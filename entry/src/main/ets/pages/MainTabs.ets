@@ -118,14 +118,6 @@ struct MainTabs {
     }
   }
 
-  private onWidgetNavEvent = (target: string): void => {
-    console.info(`[MainTabs] Received widget_nav_event: '${target}'`);
-    if (target && target.length > 0) {
-      this.applyNavTarget(target, false);
-      AppStorage.setOrCreate(STORAGE_KEY_NAV_TARGET_TAB, '');
-    }
-  };
-
   onPageShow(): void {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
@@ -147,15 +139,6 @@ struct MainTabs {
 
   onPageHide(): void {
     this.isPageVisible = false;
-  }
-
-  private applyPendingNavTarget(): void {
-    const pendingTarget: string = AppStorage.get<string>(STORAGE_KEY_NAV_TARGET_TAB) ?? '';
-    if (pendingTarget.length > 0) {
-      AppLogger.info('MainTabs', `Applying pending nav target: '${pendingTarget}'`);
-      this.applyNavTarget(pendingTarget, false);
-      AppStorage.setOrCreate(STORAGE_KEY_NAV_TARGET_TAB, '');
-    }
   }
 
   build() {
@@ -555,6 +538,23 @@ struct MainTabs {
         .textOverflow({ overflow: TextOverflow.Ellipsis })
     }
     .width('100%').height(68).justifyContent(FlexAlign.Center)
+  }
+
+  private onWidgetNavEvent = (target: string): void => {
+    console.info(`[MainTabs] Received widget_nav_event: '${target}'`);
+    if (target && target.length > 0) {
+      this.applyNavTarget(target, false);
+      AppStorage.setOrCreate(STORAGE_KEY_NAV_TARGET_TAB, '');
+    }
+  };
+
+  private applyPendingNavTarget(): void {
+    const pendingTarget: string = AppStorage.get<string>(STORAGE_KEY_NAV_TARGET_TAB) ?? '';
+    if (pendingTarget.length > 0) {
+      AppLogger.info('MainTabs', `Applying pending nav target: '${pendingTarget}'`);
+      this.applyNavTarget(pendingTarget, false);
+      AppStorage.setOrCreate(STORAGE_KEY_NAV_TARGET_TAB, '');
+    }
   }
 
   private onNavTargetTabChanged(): void {

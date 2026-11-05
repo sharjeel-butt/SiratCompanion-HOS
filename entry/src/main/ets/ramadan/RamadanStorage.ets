@@ -60,23 +60,6 @@ export class RamadanStorage {
    */
   private static queue: Promise<void> = Promise.resolve();
 
-  private static enqueue<T>(fn: () => Promise<T>): Promise<T> {
-    const result = RamadanStorage.queue.then((): Promise<T> => fn());
-    // Swallow rejection on the chain continuation so a failed
-    // write cannot permanently block subsequent writes.
-    RamadanStorage.queue = result.then(
-      (): void => { /* noop */
-      },
-      (): void => { /* noop */
-      }
-    );
-    return result;
-  }
-
-  // ============================================================
-  // PUBLIC READ
-  // ============================================================
-
   /**
    * Load the entire store. Never throws — malformed JSON or a
    * missing key both yield an empty store. A corrupt file therefore
@@ -85,6 +68,10 @@ export class RamadanStorage {
   static async load(): Promise<RamadanLogStore> {
     return RamadanStorage.doLoad();
   }
+
+  // ============================================================
+  // PUBLIC READ
+  // ============================================================
 
   /**
    * Return the entry for a Hijri year, creating it (and persisting
@@ -143,10 +130,6 @@ export class RamadanStorage {
     }
     return null;
   }
-
-  // ============================================================
-  // PUBLIC WRITES
-  // ============================================================
 
   /**
    * Set a single day's fasting status.
@@ -219,6 +202,10 @@ export class RamadanStorage {
     });
   }
 
+  // ============================================================
+  // PUBLIC WRITES
+  // ============================================================
+
   /** Flip one night's taraweeh toggle. */
   static async toggleTaraweeh(
     hijriYear: number,
@@ -280,10 +267,6 @@ export class RamadanStorage {
       await RamadanStorage.doSave(store);
     });
   }
-
-  // ============================================================
-  // PURE COMPUTATION — testable in isolation
-  // ============================================================
 
   /**
    * Compute the Qada summary across every year in the store.
@@ -347,6 +330,10 @@ export class RamadanStorage {
     return summary;
   }
 
+  // ============================================================
+  // PURE COMPUTATION — testable in isolation
+  // ============================================================
+
   /** Count MISSED days in a year. Pure. */
   static countMissed(year: RamadanYearData): number {
     let count = 0;
@@ -389,6 +376,19 @@ export class RamadanStorage {
       }
     }
     return count;
+  }
+
+  private static enqueue<T>(fn: () => Promise<T>): Promise<T> {
+    const result = RamadanStorage.queue.then((): Promise<T> => fn());
+    // Swallow rejection on the chain continuation so a failed
+    // write cannot permanently block subsequent writes.
+    RamadanStorage.queue = result.then(
+      (): void => { /* noop */
+      },
+      (): void => { /* noop */
+      }
+    );
+    return result;
   }
 
   // ============================================================

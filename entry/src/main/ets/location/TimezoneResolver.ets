@@ -7,6 +7,7 @@ import { STORAGE_KEY_HIJRI_OFFSET } from '../core/StorageKeys';
 
 
 const MS_PER_DAY = 86400000;
+
 /**
  * Resolves the effective UTC offset (hours) for a location on a
  * given date, including DST where applicable.

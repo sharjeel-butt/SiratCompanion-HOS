@@ -53,7 +53,6 @@ const TICKER_WRAP_MS = 2400;
 
 @Component
 export struct PrayerSunPath {
-
   @Prop @Watch('onVisualChanged') colors: ThemeColors;
   @Prop @Watch('onPrayersChanged') prayers: PrayerModel[] = [];
   @Prop @Watch('onVisualChanged') sunriseTime: string = '--:--';
@@ -68,23 +67,19 @@ export struct PrayerSunPath {
   @Prop @Watch('onVisualChanged') showFirstThirdGuide: boolean = true;
   @Prop @Watch('onVisualChanged') showMidnightGuide: boolean = true;
   @Prop @Watch('onVisualChanged') showLastThirdGuide: boolean = true;
-
   @StorageLink(STORAGE_KEY_TIME_FORMAT)
   @Watch('onVisualChanged')
   clockFormat: string = ClockFormat.SYSTEM;
-
   private ctx: CanvasRenderingContext2D =
     new CanvasRenderingContext2D(new RenderingContextSettings(true));
   private canvasWidth: number = 340;
   private canvasHeight: number = CANVAS_HEIGHT;
   private canvasReady: boolean = false;
-
   private tickerTimerId: number = -1;
   private tickerMonotonicMinute: number = -1;
   private tickerWrapStartMs: number = -1;
   private tickerWrapFromMinute: number = -1;
   private tickerWasWrapping: boolean = false;
-
   // Starfield cache
   private stars: Star[] = [];
   private canvasWidthForStars: number = 0;
@@ -101,6 +96,50 @@ export struct PrayerSunPath {
     }
   }
 
+  build() {
+    Column() {
+      Canvas(this.ctx)
+        .width('100%')
+        .height(this.canvasHeight)
+        .onReady(() => {
+          this.canvasReady = true;
+          const w: number = this.ctx.width;
+          const h: number = this.ctx.height;
+          if (w > 0) {
+            this.canvasWidth = w;
+            if (h > 0) {
+              this.canvasHeight = h;
+            }
+          }
+          this.redraw();
+        })
+        .onAreaChange((oldArea: Area, newArea: Area) => {
+          const w: number = parseFloat(String(newArea.width));
+          const h: number = parseFloat(String(newArea.height));
+          if (!isNaN(w) && w > 0 && w !== this.canvasWidth) {
+            this.canvasWidth = w;
+            if (!isNaN(h) && h > 0) {
+              this.canvasHeight = h;
+            }
+            this.redraw();
+          }
+        })
+    }
+    .width('100%')
+    // .padding({ top: 4, bottom: 4 })
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(20)
+    .border({ width: 1, color: this.colors.borderSoft })
+    .clip(true) // <--- CRITICAL: Ensures the sky background doesn't bleed out of the rounded corners
+    .shadow({
+      radius: 12,
+      color: this.colors.shadowCard,
+      offsetX: 0,
+      offsetY: 4
+    })
+    .margin({ bottom: 14 })
+  }
+
   private onPrayersChanged(_propName: string): void {
     this.redraw();
   }
@@ -115,13 +154,20 @@ export struct PrayerSunPath {
 
   private translatePrayerName(raw: string): string {
     switch (raw) {
-      case 'Fajr': return L.get('prayer_fajr', this.currentLanguage);
-      case 'Dhuhr': return L.get('prayer_dhuhr', this.currentLanguage);
-      case 'Jummah': return L.get('prayer_jummah', this.currentLanguage);
-      case 'Asr': return L.get('prayer_asr', this.currentLanguage);
-      case 'Maghrib': return L.get('prayer_maghrib', this.currentLanguage);
-      case 'Isha': return L.get('prayer_isha', this.currentLanguage);
-      default: return raw;
+      case 'Fajr':
+        return L.get('prayer_fajr', this.currentLanguage);
+      case 'Dhuhr':
+        return L.get('prayer_dhuhr', this.currentLanguage);
+      case 'Jummah':
+        return L.get('prayer_jummah', this.currentLanguage);
+      case 'Asr':
+        return L.get('prayer_asr', this.currentLanguage);
+      case 'Maghrib':
+        return L.get('prayer_maghrib', this.currentLanguage);
+      case 'Isha':
+        return L.get('prayer_isha', this.currentLanguage);
+      default:
+        return raw;
     }
   }
 
@@ -182,8 +228,12 @@ export struct PrayerSunPath {
   }
 
   private ensureStars(W: number, H: number): void {
-    if (this.canvasWidthForStars === W && this.stars.length > 0) return;
-    if (W <= 0 || H <= 0) return;
+    if (this.canvasWidthForStars === W && this.stars.length > 0) {
+      return;
+    }
+    if (W <= 0 || H <= 0) {
+      return;
+    }
 
     this.canvasWidthForStars = W;
     this.stars = [];
@@ -242,54 +292,16 @@ export struct PrayerSunPath {
     }
   }
 
-  build() {
-    Column() {
-      Canvas(this.ctx)
-        .width('100%')
-        .height(this.canvasHeight)
-        .onReady(() => {
-          this.canvasReady = true;
-          const w: number = this.ctx.width;
-          const h: number = this.ctx.height;
-          if (w > 0) {
-            this.canvasWidth = w;
-            if (h > 0) {
-              this.canvasHeight = h;
-            }
-          }
-          this.redraw();
-        })
-        .onAreaChange((oldArea: Area, newArea: Area) => {
-          const w: number = parseFloat(String(newArea.width));
-          const h: number = parseFloat(String(newArea.height));
-          if (!isNaN(w) && w > 0 && w !== this.canvasWidth) {
-            this.canvasWidth = w;
-            if (!isNaN(h) && h > 0) {
-              this.canvasHeight = h;
-            }
-            this.redraw();
-          }
-        })
-    }
-    .width('100%')
-    // .padding({ top: 4, bottom: 4 })
-    .backgroundColor(this.colors.cardDark)
-    .borderRadius(20)
-    .border({ width: 1, color: this.colors.borderSoft })
-    .clip(true) // <--- CRITICAL: Ensures the sky background doesn't bleed out of the rounded corners
-    .shadow({
-      radius: 12,
-      color: this.colors.shadowCard,
-      offsetX: 0,
-      offsetY: 4
-    })
-    .margin({ bottom: 14 })
-  }
-
   private redraw(): void {
-    if (!this.canvasReady) return;
-    if (this.canvasWidth <= 0) return;
-    if (this.prayers.length < 5) return;
+    if (!this.canvasReady) {
+      return;
+    }
+    if (this.canvasWidth <= 0) {
+      return;
+    }
+    if (this.prayers.length < 5) {
+      return;
+    }
 
     const ctx = this.ctx;
     const W = this.canvasWidth;
@@ -388,8 +400,11 @@ export struct PrayerSunPath {
       const lx = arcStartX + (arcW * i / SAMPLES);
       const ly = yForX(lx);
       const x = px(lx);
-      if (i === 0) ctx.moveTo(x, ly);
-      else ctx.lineTo(x, ly);
+      if (i === 0) {
+        ctx.moveTo(x, ly);
+      } else {
+        ctx.lineTo(x, ly);
+      }
     }
     ctx.strokeStyle = solidColor;
     ctx.lineWidth = 3;
@@ -439,10 +454,18 @@ export struct PrayerSunPath {
       ctx.restore();
     };
 
-    if (imsakX >= 0) drawExtraLine(imsakX);
-    if (firstThirdX >= 0) drawExtraLine(firstThirdX);
-    if (midnightX >= 0) drawExtraLine(midnightX);
-    if (lastThirdX >= 0) drawExtraLine(lastThirdX);
+    if (imsakX >= 0) {
+      drawExtraLine(imsakX);
+    }
+    if (firstThirdX >= 0) {
+      drawExtraLine(firstThirdX);
+    }
+    if (midnightX >= 0) {
+      drawExtraLine(midnightX);
+    }
+    if (lastThirdX >= 0) {
+      drawExtraLine(lastThirdX);
+    }
 
     const drawExtraLabel = (x: number, label: string, time: string): void => {
       ctx.textAlign = 'center';
@@ -455,10 +478,20 @@ export struct PrayerSunPath {
       ctx.fillText(ClockFormatHelper.reformat(time), x, EXTRA_TIME_Y);
     };
 
-    if (imsakX >= 0) drawExtraLabel(imsakX, L.get('timing_imsak', this.currentLanguage), this.imsakTime);
-    if (firstThirdX >= 0) drawExtraLabel(firstThirdX, L.get('timing_first_third', this.currentLanguage), this.firstThirdTime);
-    if (midnightX >= 0) drawExtraLabel(midnightX, L.get('timing_midnight', this.currentLanguage), this.midnightTime);
-    if (lastThirdX >= 0) drawExtraLabel(lastThirdX, L.get('timing_last_third', this.currentLanguage), this.lastThirdTime);
+    if (imsakX >= 0) {
+      drawExtraLabel(imsakX, L.get('timing_imsak', this.currentLanguage), this.imsakTime);
+    }
+    if (firstThirdX >= 0) {
+      drawExtraLabel(firstThirdX, L.get('timing_first_third', this.currentLanguage),
+        this.firstThirdTime);
+    }
+    if (midnightX >= 0) {
+      drawExtraLabel(midnightX, L.get('timing_midnight', this.currentLanguage), this.midnightTime);
+    }
+    if (lastThirdX >= 0) {
+      drawExtraLabel(lastThirdX, L.get('timing_last_third', this.currentLanguage),
+        this.lastThirdTime);
+    }
 
     // ---- Current prayer index ----
     const now = new Date();
@@ -590,8 +623,14 @@ export struct PrayerSunPath {
       ctx.fillText(ClockFormatHelper.reformat(time), sx, SUN_TIME_Y);
     };
 
-    if (hasSunrise) drawHorizonMarker(timeToHour(this.sunriseTime), L.get('timing_sunrise', this.currentLanguage), this.sunriseTime);
-    if (hasSunset) drawHorizonMarker(timeToHour(this.sunsetTime), L.get('timing_sunset', this.currentLanguage), this.sunsetTime);
+    if (hasSunrise) {
+      drawHorizonMarker(timeToHour(this.sunriseTime), L.get('timing_sunrise', this.currentLanguage),
+        this.sunriseTime);
+    }
+    if (hasSunset) {
+      drawHorizonMarker(timeToHour(this.sunsetTime), L.get('timing_sunset', this.currentLanguage),
+        this.sunsetTime);
+    }
 
     // ---- Ticker ----
     this.drawTicker(ctx, tickerColor, tickerX, tickerY);

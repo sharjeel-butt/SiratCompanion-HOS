@@ -58,49 +58,6 @@ export class DateHelper {
   }
 
   /**
-   * Find the next Gregorian date on which an event occurs, honouring
-   * the user's Hijri offset and calendar-type setting.
-   *
-   * FIXED events scan for a specific Hijri (month, day).
-   *
-   * FIRST_THURSDAY_NIGHT events scan for the first Gregorian
-   * Thursday whose visible Hijri date falls within the first seven
-   * days of the target Hijri month.
-   */
-  private static findNextGregorianForEvent(
-    event: IslamicEvent,
-    startDate: Date,
-    offsetDays: number
-  ): Date | null {
-    if (event.recurrence === EventRecurrence.FIXED) {
-      return DateHelper.findGregorianDateForHijri(
-        event.month, event.day, startDate, offsetDays
-      );
-    }
-
-    const engine = HijriEngineResolver.current();
-
-    for (let i = 0; i < 366; i++) {
-      const testDate = new Date(startDate.getTime() + i * MS_PER_DAY);
-
-      // Thursday = 4 (Sunday = 0).
-      if (testDate.getDay() !== 4) {
-        continue;
-      }
-
-      const shifted = new Date(testDate);
-      shifted.setDate(shifted.getDate() + offsetDays);
-
-      const h = engine.toHijri(shifted);
-      if (h !== null && h.month === event.month &&
-        h.day >= 1 && h.day <= 7) {
-        return testDate;
-      }
-    }
-    return null;
-  }
-
-  /**
    * Next 3 upcoming events with a `daysUntil` countdown, honouring
    * the user's Hijri calendar offset and calendar-type setting.
    *
@@ -192,5 +149,48 @@ export class DateHelper {
     const monthName = months[h.month - 1] || '';
 
     return `${h.day} ${monthName} ${h.year}`;
+  }
+
+  /**
+   * Find the next Gregorian date on which an event occurs, honouring
+   * the user's Hijri offset and calendar-type setting.
+   *
+   * FIXED events scan for a specific Hijri (month, day).
+   *
+   * FIRST_THURSDAY_NIGHT events scan for the first Gregorian
+   * Thursday whose visible Hijri date falls within the first seven
+   * days of the target Hijri month.
+   */
+  private static findNextGregorianForEvent(
+    event: IslamicEvent,
+    startDate: Date,
+    offsetDays: number
+  ): Date | null {
+    if (event.recurrence === EventRecurrence.FIXED) {
+      return DateHelper.findGregorianDateForHijri(
+        event.month, event.day, startDate, offsetDays
+      );
+    }
+
+    const engine = HijriEngineResolver.current();
+
+    for (let i = 0; i < 366; i++) {
+      const testDate = new Date(startDate.getTime() + i * MS_PER_DAY);
+
+      // Thursday = 4 (Sunday = 0).
+      if (testDate.getDay() !== 4) {
+        continue;
+      }
+
+      const shifted = new Date(testDate);
+      shifted.setDate(shifted.getDate() + offsetDays);
+
+      const h = engine.toHijri(shifted);
+      if (h !== null && h.month === event.month &&
+        h.day >= 1 && h.day <= 7) {
+        return testDate;
+      }
+    }
+    return null;
   }
 }

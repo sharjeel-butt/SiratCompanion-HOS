@@ -129,37 +129,12 @@ export class PrayerManager {
     return `${y}-${m}-${day}`;
   }
 
-  /**
-   * Reconstruct a local-midnight Date from a 'YYYY-MM-DD' key.
-   * Used to derive the day-of-week for Jummah naming when a
-   * caller passes a key without a matching Date.
-   */
-  private static dateFromKey(dateKey: string): Date {
-    const parts = dateKey.split('-');
-    if (parts.length !== 3) {
-      return new Date();
-    }
-    const y = parseInt(parts[0], 10);
-    const m = parseInt(parts[1], 10) - 1;
-    const d = parseInt(parts[2], 10);
-    if (isNaN(y) || isNaN(m) || isNaN(d)) {
-      return new Date();
-    }
-    const result = new Date(y, m, d);
-    result.setHours(0, 0, 0, 0);
-    return result;
-  }
-
-  // ============================================================
-  // FRIDAY NAMING
-  // ============================================================
-
   static getDateKey(): string {
     return PrayerManager.getDateKeyForDate(new Date());
   }
 
   // ============================================================
-  // APPLY TIMES + OFFSETS
+  // FRIDAY NAMING
   // ============================================================
 
   static isPrayerCheckable(
@@ -210,6 +185,10 @@ export class PrayerManager {
     return prayerMinutes <= currentMinutes;
   }
 
+  // ============================================================
+  // APPLY TIMES + OFFSETS
+  // ============================================================
+
   static applyDayNames(prayers: PrayerModel[], date?: Date): PrayerModel[] {
     const ref = date ? new Date(date) : new Date();
     const isFriday = ref.getDay() === 5;
@@ -228,10 +207,6 @@ export class PrayerManager {
       return p;
     });
   }
-
-  // ============================================================
-  // STATUS RECALCULATION (date-aware, time-only)
-  // ============================================================
 
   static applyTimesToPrayers(
     prayers: PrayerModel[],
@@ -282,15 +257,8 @@ export class PrayerManager {
   }
 
   // ============================================================
-  // PERSISTENCE — module static map + AppStorage mirror + disk
+  // STATUS RECALCULATION (date-aware, time-only)
   // ============================================================
-  //
-  // A single source of truth keyed by date:
-  //   { "2026-10-01": "{\"fajr\":true,\"dhuhr\":false,...}", ... }
-  //
-  // Lives as a module-level static, so it survives page destruction
-  // and recreation. Mirrored to AppStorage for @StorageLink watchers.
-  // Persisted to disk via PreferencesHelper so it survives restarts.
 
   static applyTimesToExtraTimings(
     timings: ExtraTiming[],
@@ -340,6 +308,17 @@ export class PrayerManager {
       } as ExtraTiming;
     });
   }
+
+  // ============================================================
+  // PERSISTENCE — module static map + AppStorage mirror + disk
+  // ============================================================
+  //
+  // A single source of truth keyed by date:
+  //   { "2026-10-01": "{\"fajr\":true,\"dhuhr\":false,...}", ... }
+  //
+  // Lives as a module-level static, so it survives page destruction
+  // and recreation. Mirrored to AppStorage for @StorageLink watchers.
+  // Persisted to disk via PreferencesHelper so it survives restarts.
 
   static updateStatuses(
     prayers: PrayerModel[],
@@ -653,10 +632,6 @@ export class PrayerManager {
       && state.isha === true;
   }
 
-  // ============================================================
-  // HEADER HELPERS
-  // ============================================================
-
   static getCurrentPrayer(
     prayers: PrayerModel[],
     locationOffsetHours?: number
@@ -677,6 +652,31 @@ export class PrayerManager {
       return null;
     }
     return prayers[currentIdx];
+  }
+
+  // ============================================================
+  // HEADER HELPERS
+  // ============================================================
+
+  /**
+   * Reconstruct a local-midnight Date from a 'YYYY-MM-DD' key.
+   * Used to derive the day-of-week for Jummah naming when a
+   * caller passes a key without a matching Date.
+   */
+  private static dateFromKey(dateKey: string): Date {
+    const parts = dateKey.split('-');
+    if (parts.length !== 3) {
+      return new Date();
+    }
+    const y = parseInt(parts[0], 10);
+    const m = parseInt(parts[1], 10) - 1;
+    const d = parseInt(parts[2], 10);
+    if (isNaN(y) || isNaN(m) || isNaN(d)) {
+      return new Date();
+    }
+    const result = new Date(y, m, d);
+    result.setHours(0, 0, 0, 0);
+    return result;
   }
 
   private static getCurrentMinutesInLocation(locationOffsetHours?: number): number {

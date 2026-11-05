@@ -82,14 +82,14 @@ struct RamadanDetailsPage {
   @State selectedDay: number = 0;
   @State selectedReason: MissedReason | null = null;
   @State customReasonText: string = '';
-  @State private suhoorDua: CompleteDua | null = null;
-  @State private iftarDua: CompleteDua | null = null;
   // ---- Qada ----
   @State qadaSummary: QadaSummary | null = null;
   // Year-detail sheet (per-day marking)
   @State showQadaYearSheet: boolean = false;
   @State activeQadaYear: number = 0;
   @State qadaYearDays: QadaDayEntry[] = [];
+  @State private suhoorDua: CompleteDua | null = null;
+  @State private iftarDua: CompleteDua | null = null;
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
   private scrollController: Scroller = new Scroller();
 
@@ -132,373 +132,6 @@ struct RamadanDetailsPage {
 
   // ============================================================
   // DATA LOADING
-  // ============================================================
-
-  private async loadRamadanInfo(): Promise<void> {
-    this.isLoadingInfo = true;
-    try {
-      const info = RamadanHelper.getRamadanInfo(this.hijriOffset);
-      this.ramadanInfo = info;
-      if (info !== null && info.isRamadanNow) {
-        this.currentYear = await RamadanStorage.getOrCreateYear(
-          info.hijriYear, info.totalDays
-        );
-      } else {
-        this.currentYear = null;
-      }
-      // Qada summary is loaded regardless of whether Ramadan is
-      // currently active — the section is always visible so the
-      // user can review and log make-ups year-round.
-      await this.reloadQadaSummary();
-    } finally {
-      this.isLoadingInfo = false;
-    }
-  }
-
-  private async loadDuasForSection(): Promise<void> {
-    try {
-      const ctx = getContext(this) as common.UIAbilityContext;
-      const all = await DuaService.loadDuas(ctx, this.currentLanguage);
-      this.suhoorDua = all.find((d: CompleteDua) => d.id === 'dua_suhoor') ?? null;
-      this.iftarDua = all.find((d: CompleteDua) => d.id === 'dua_breaking_the_fast') ?? null;
-    } catch (e) {
-      console.error('[RamadanDetailsPage] loadDuasForSection failed', e);
-    }
-  }
-
-  private async reloadQadaSummary(): Promise<void> {
-    const store = await RamadanStorage.load();
-    this.qadaSummary = RamadanStorage.computeQadaSummary(store);
-  }
-
-  private async reloadCurrentYear(): Promise<void> {
-    if (this.ramadanInfo === null) {
-      return;
-    }
-    this.currentYear = await RamadanStorage.getOrCreateYear(
-      this.ramadanInfo.hijriYear, this.ramadanInfo.totalDays
-    );
-  }
-
-  // ============================================================
-  // WATCHERS
-  // ============================================================
-
-  private onThemeModeChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-  }
-
-  private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-  }
-
-  private onLanguageChanged(): void {
-    this.currentLanguage = this.appLanguage;
-  }
-
-  private onHijriOffsetChanged(): void {
-    this.loadRamadanInfo();
-  }
-
-  private onAppForegrounded(): void {
-    this.loadRamadanInfo();
-  }
-
-  private onRamadanStateChanged(): void {
-    // The version counter is bumped by every RamadanStorage write.
-    // Reload currentYear so the heatmap re-renders with the new
-    // state. This is the only reliable refresh signal across the
-    // sheet → page transition (the sheet closes before the async
-    // write completes, so the caller cannot await the reload).
-    this.reloadCurrentYear();
-    this.reloadQadaSummary();
-  }
-
-  // ============================================================
-  // HELPERS
-  // ============================================================
-
-  private tr(key: string): string {
-    return L.get(key, this.currentLanguage);
-  }
-
-  private isRtl(): boolean {
-    return L.isRtlLang(this.currentLanguage);
-  }
-
-  private ramadanSubtitle(): string {
-    if (this.ramadanInfo === null) {
-      return '';
-    }
-    const yearSuffix = this.tr('hijri_year_suffix');
-    if (!this.ramadanInfo.isRamadanNow) {
-      return `${this.ramadanInfo.hijriYear} ${yearSuffix}`;
-    }
-    return `${this.ramadanInfo.hijriYear} ${yearSuffix} · ` +
-      `${this.ramadanInfo.currentDayNumber} / ${this.ramadanInfo.totalDays}`;
-  }
-
-  private countFasted(): number {
-    if (this.currentYear === null) {
-      return 0;
-    }
-    let n = 0;
-    for (const d of this.currentYear.days) {
-      if (d.status === FastingStatus.FASTED) {
-        n++;
-      }
-    }
-    return n;
-  }
-
-  private countMissed(): number {
-    if (this.currentYear === null) {
-      return 0;
-    }
-    return RamadanStorage.countMissed(this.currentYear);
-  }
-
-  private countUnmarked(): number {
-    if (this.currentYear === null) {
-      return 0;
-    }
-    return this.currentYear.totalDays
-      - this.countFasted() - this.countMissed();
-  }
-
-  private allReasons(): MissedReason[] {
-    return [
-      MissedReason.TRAVEL,
-      MissedReason.ILLNESS,
-      MissedReason.MENSTRUATION,
-      MissedReason.PREGNANCY_NURSING,
-      MissedReason.FORGETFULNESS,
-      MissedReason.OTHER
-    ];
-  }
-
-  // ============================================================
-  // QADA HELPERS
-  // ============================================================
-
-  /** Years with at least one missed fast. Used by the audit table. */
-  private auditYears(): QadaYearRow[] {
-    if (this.qadaSummary === null) {
-      return [];
-    }
-    const out: QadaYearRow[] = [];
-    for (const row of this.qadaSummary.perYear) {
-      if (row.missed > 0) {
-        out.push(row);
-      }
-    }
-    return out;
-  }
-
-  private async openQadaYearSheet(year: number): Promise<void> {
-    const yearData = await RamadanStorage.getYear(year);
-    if (yearData === null) {
-      return;
-    }
-
-    // Reconstruct the Gregorian dates for this Hijri month so each
-    // row can show "Day 5 · Mar 15".
-    let monthDays: CalendarDay[] = [];
-    try {
-      monthDays = HijriCalendarHelper.buildMonthDays(
-        year, 9, this.hijriOffset, new Date()
-      );
-    } catch (err) {
-      monthDays = [];
-    }
-
-    const entries: QadaDayEntry[] = [];
-    for (const d of monthDays) {
-      const dayData = yearData.days[d.hijri.day - 1];
-      if (dayData === undefined) {
-        continue;
-      }
-      if (dayData.status !== FastingStatus.MISSED) {
-        continue;
-      }
-      entries.push({
-        dayNumber: d.hijri.day,
-        gregorianDate: d.gregorianDate,
-        reason: dayData.reason !== undefined ? dayData.reason : null,
-        madeUp: dayData.madeUp === true
-      });
-    }
-
-    this.qadaYearDays = entries;
-    this.activeQadaYear = year;
-    this.showQadaYearSheet = true;
-  }
-
-  private closeQadaYearSheet(): void {
-    this.showQadaYearSheet = false;
-    this.activeQadaYear = 0;
-    this.qadaYearDays = [];
-  }
-
-  private async toggleDayMadeUp(day: number): Promise<void> {
-    if (this.activeQadaYear === 0) {
-      return;
-    }
-    if (this.ramadanInfo !== null && this.ramadanInfo.isRamadanNow) {
-      return;
-    }
-    try {
-      await RamadanStorage.toggleDayMadeUp(this.activeQadaYear, day);
-      // Refresh both the sheet list and the summary.
-      await this.openQadaYearSheet(this.activeQadaYear);
-      await this.reloadQadaSummary();
-    } catch (err) {
-      console.error('[RamadanDetailsPage] toggleDayMadeUp failed: ' +
-        JSON.stringify(err));
-    }
-  }
-
-  private countMadeUpInActiveYear(): number {
-    let n = 0;
-    for (const e of this.qadaYearDays) {
-      if (e.madeUp) {
-        n++;
-      }
-    }
-    return n;
-  }
-
-  // ============================================================
-  // TARAWEEH HELPERS
-  // ============================================================
-
-  private countTaraweeh(): number {
-    if (this.currentYear === null) {
-      return 0;
-    }
-    let n = 0;
-    for (const on of this.currentYear.taraweehNights) {
-      if (on) {
-        n++;
-      }
-    }
-    return n;
-  }
-
-  private async toggleTaraweehNight(night: number): Promise<void> {
-    if (this.ramadanInfo === null) {
-      return;
-    }
-    try {
-      await RamadanStorage.toggleTaraweeh(
-        this.ramadanInfo.hijriYear, night
-      );
-    } catch (err) {
-      console.error('[RamadanDetailsPage] toggleTaraweeh failed: ' +
-        JSON.stringify(err));
-    }
-  }
-
-  /** True when this night is in the past or is today. */
-  private isTaraweehToggleable(idx: number): boolean {
-    if (this.ramadanInfo === null) {
-      return false;
-    }
-    return (idx + 1) <= this.ramadanInfo.currentDayNumber;
-  }
-
-  // ============================================================
-  // ASHRA HELPERS
-  // ============================================================
-
-  private currentAshra(): RamadanAshra | null {
-    if (this.ramadanInfo === null || !this.ramadanInfo.isRamadanNow) {
-      return null;
-    }
-    const day = this.ramadanInfo.currentDayNumber;
-    for (const a of this.ramadanInfo.ashras) {
-      if (day >= a.startHijriDay && day <= a.endHijriDay) {
-        return a;
-      }
-    }
-    return null;
-  }
-
-  private isCurrentAshra(a: RamadanAshra): boolean {
-    const cur = this.currentAshra();
-    return cur !== null && cur.number === a.number;
-  }
-
-  // ============================================================
-  // MARK / CLEAR HANDLERS
-  // ============================================================
-
-  private openMarkSheet(day: number): void {
-    this.selectedDay = day;
-    this.selectedReason = null;
-    this.customReasonText = '';
-    this.activeSheet = 'mark';
-  }
-
-  private closeSheet(): void {
-    this.activeSheet = 'none';
-    this.selectedReason = null;
-    this.customReasonText = '';
-  }
-
-  private async markFasted(): Promise<void> {
-    if (this.ramadanInfo === null) {
-      return;
-    }
-    const year = this.ramadanInfo.hijriYear;
-    const day = this.selectedDay;
-    this.closeSheet();
-    try {
-      await RamadanStorage.markDay(year, day, FastingStatus.FASTED);
-    } catch (err) {
-      console.error('[RamadanDetailsPage] markFasted failed: ' +
-        JSON.stringify(err));
-    }
-  }
-
-  private async clearDay(): Promise<void> {
-    if (this.ramadanInfo === null) {
-      return;
-    }
-    const year = this.ramadanInfo.hijriYear;
-    const day = this.selectedDay;
-    this.closeSheet();
-    try {
-      await RamadanStorage.markDay(year, day, FastingStatus.UNMARKED);
-    } catch (err) {
-      console.error('[RamadanDetailsPage] clearDay failed: ' +
-        JSON.stringify(err));
-    }
-  }
-
-  private async confirmMissed(): Promise<void> {
-    if (this.ramadanInfo === null || this.selectedReason === null) {
-      return;
-    }
-    const year = this.ramadanInfo.hijriYear;
-    const day = this.selectedDay;
-    const reason = this.selectedReason;
-    const custom = reason === MissedReason.OTHER
-      ? this.customReasonText.trim()
-      : undefined;
-    this.closeSheet();
-    try {
-      await RamadanStorage.markDay(
-        year, day, FastingStatus.MISSED, reason, custom
-      );
-    } catch (err) {
-      console.error('[RamadanDetailsPage] confirmMissed failed: ' +
-        JSON.stringify(err));
-    }
-  }
-
-  // ============================================================
-  // BUILD
   // ============================================================
 
   build() {
@@ -562,10 +195,6 @@ struct RamadanDetailsPage {
       [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 
-  // ============================================================
-  // TOP BAR
-  // ============================================================
-
   @Builder
   TopBar() {
     Row({ space: 16 }) {
@@ -618,24 +247,6 @@ struct RamadanDetailsPage {
     // Removed .direction(Direction.Ltr) so the system naturally flips it
   }
 
-  private cellBorderColor(idx: number): string {
-    if (!this.isToday(idx)) {
-      return 'transparent';
-    }
-    if (this.currentYear === null) {
-      return this.colors.accentGold;
-    }
-    const entry: FastingDay = this.currentYear.days[idx];
-    if (entry.status === FastingStatus.MISSED) {
-      return this.colors.statusExpress;
-    }
-    return this.colors.accentGold;
-  }
-
-  // ============================================================
-  // FASTING SECTION
-  // ============================================================
-
   @Builder
   FastingSection() {
     Column() {
@@ -686,10 +297,6 @@ struct RamadanDetailsPage {
     .margin({ bottom: 14 })
   }
 
-  // ============================================================
-  // QADA SECTION
-  // ============================================================
-
   @Builder
   QadaSection() {
     Column() {
@@ -732,6 +339,10 @@ struct RamadanDetailsPage {
     })
     .margin({ bottom: 14 })
   }
+
+  // ============================================================
+  // WATCHERS
+  // ============================================================
 
   @Builder
   QadaEmptyState() {
@@ -974,7 +585,7 @@ struct RamadanDetailsPage {
   }
 
   // ============================================================
-  // TARAWEEH SECTION
+  // HELPERS
   // ============================================================
 
   @Builder
@@ -1088,28 +699,6 @@ struct RamadanDetailsPage {
     })
   }
 
-  private taraweehBgColor(idx: number): string {
-    if (this.currentYear === null) {
-      return this.colors.tintSubtle;
-    }
-    return this.currentYear.taraweehNights[idx]
-      ? this.colors.accentGold
-      : this.colors.tintSubtle;
-  }
-
-  private taraweehTextColor(idx: number): string {
-    if (this.currentYear === null) {
-      return this.colors.textMuted;
-    }
-    if (this.currentYear.taraweehNights[idx]) {
-      return this.colors.textOnAccent;
-    }
-    if (this.isToday(idx)) {
-      return this.colors.accentGold;
-    }
-    return this.colors.textMuted;
-  }
-
   @Builder
   LoadingState() {
     Column() {
@@ -1137,10 +726,6 @@ struct RamadanDetailsPage {
     .padding({ top: 24, bottom: 24 })
     .alignItems(HorizontalAlign.Center)
   }
-
-  // ============================================================
-  // HEATMAP
-  // ============================================================
 
   @Builder
   FastingHeatmap() {
@@ -1201,82 +786,8 @@ struct RamadanDetailsPage {
     })
   }
 
-  private rowIndices(): number[] {
-    const out: number[] = [];
-    for (let i = 0; i < 6; i++) {
-      out.push(i);
-    }
-    return out;
-  }
-
-  private colIndices(): number[] {
-    const out: number[] = [];
-    for (let i = 0; i < 5; i++) {
-      out.push(i);
-    }
-    return out;
-  }
-
-  private cellSize(): number {
-    if (this.breakpoint === Breakpoints.LG) {
-      return 48;
-    }
-    if (this.breakpoint === Breakpoints.MD) {
-      return 44;
-    }
-    return 38; // Was 48 for the 5-column layout
-  }
-
-  private isToday(idx: number): boolean {
-    if (this.currentYear === null || this.ramadanInfo === null) {
-      return false;
-    }
-    return (idx + 1) === this.ramadanInfo.currentDayNumber;
-  }
-
-  private isFuture(idx: number): boolean {
-    if (this.ramadanInfo === null) {
-      return false;
-    }
-    return (idx + 1) > this.ramadanInfo.currentDayNumber;
-  }
-
-  private cellBg(idx: number): string {
-    if (this.currentYear === null) {
-      return this.colors.tintSubtle;
-    }
-    const entry: FastingDay = this.currentYear.days[idx];
-    if (this.isToday(idx) && entry.status === FastingStatus.UNMARKED) {
-      return this.colors.tintSoft;
-    }
-    if (entry.status === FastingStatus.FASTED) {
-      return this.colors.accentGold;
-    }
-    if (entry.status === FastingStatus.MISSED) {
-      return this.colors.statusExpress;
-    }
-    return this.colors.tintSubtle;
-  }
-
-  private cellTextColor(idx: number): string {
-    if (this.currentYear === null) {
-      return this.colors.textMuted;
-    }
-    const entry: FastingDay = this.currentYear.days[idx];
-    if (entry.status === FastingStatus.FASTED) {
-      return this.colors.textOnAccent;
-    }
-    if (entry.status === FastingStatus.MISSED) {
-      return '#FFFFFF';
-    }
-    if (this.isToday(idx)) {
-      return this.colors.accentGold;
-    }
-    return this.colors.textMuted;
-  }
-
   // ============================================================
-  // SUMMARY ROW
+  // QADA HELPERS
   // ============================================================
 
   @Builder
@@ -1316,10 +827,6 @@ struct RamadanDetailsPage {
     .padding({ top: 16, bottom: 4 })
   }
 
-  // ============================================================
-  // MARK SHEET
-  // ============================================================
-
   @Builder
   MarkSheet() {
     Column()
@@ -1345,10 +852,10 @@ struct RamadanDetailsPage {
         .height(44)
         .justifyContent(FlexAlign.Center)
         .alignItems(VerticalAlign.Center)
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(12)
-          .border({ width: 1, color: this.colors.borderSoft })
-          .flexShrink(0)
+        .backgroundColor(this.colors.tintSoft)
+        .borderRadius(12)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .flexShrink(0)
 
         Column() {
           Text(this.tr('fasting_mark_title'))
@@ -1475,10 +982,6 @@ struct RamadanDetailsPage {
     .margin({ bottom: 6 })
     .onClick(onTap)
   }
-
-  // ============================================================
-  // REASON SHEET
-  // ============================================================
 
   @Builder
   ReasonSheet() {
@@ -1678,7 +1181,7 @@ struct RamadanDetailsPage {
   }
 
   // ============================================================
-  // QADA YEAR SHEET — per-day made-up marking
+  // TARAWEEH HELPERS
   // ============================================================
 
   @Builder
@@ -1699,10 +1202,10 @@ struct RamadanDetailsPage {
         .height(44)
         .justifyContent(FlexAlign.Center)
         .alignItems(VerticalAlign.Center)
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(12)
-          .border({ width: 1, color: this.colors.borderSoft })
-          .flexShrink(0)
+        .backgroundColor(this.colors.tintSoft)
+        .borderRadius(12)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .flexShrink(0)
 
         Column() {
           Text(`${this.tr('qada_year_sheet_title_prefix')} ` +
@@ -1781,13 +1284,6 @@ struct RamadanDetailsPage {
     }
     .width('100%').constraintSize({ maxHeight: '85%' })
     .backgroundColor(this.colors.cardDark)
-  }
-
-  private qadaYearSheetSubtitle(): string {
-    const total = this.qadaYearDays.length;
-    const done = this.countMadeUpInActiveYear();
-    return `${done} ${this.tr('qada_of')} ${total} ` +
-      `${this.tr('qada_made_up_of_total')}`;
   }
 
   @Builder
@@ -1876,24 +1372,6 @@ struct RamadanDetailsPage {
     })
   }
 
-  private isQadaToggleAllowed(): boolean {
-    if (this.ramadanInfo !== null && this.ramadanInfo.isRamadanNow) {
-      return false;
-    }
-    return true;
-  }
-
-  // ============================================================
-  // ABOUT THIS RAMADAN — grouped wrapper
-  // ============================================================
-  //
-  // Ashras, Laylat al-Qadr, and Jummah tul Widah share one card
-  // shell. Previously each occupied its own card, which gave the
-  // page five near-identical visual blocks during Ramadan. Grouping
-  // them under a single heading clarifies the hierarchy: primary
-  // tracking (Fasting, Taraweeh) sits above; context/reference
-  // (this group) sits below.
-
   @Builder
   AboutRamadanSection() {
     Column() {
@@ -1946,7 +1424,9 @@ struct RamadanDetailsPage {
     .margin({ bottom: 14 })
   }
 
-  // ---- Ashras content (no outer card) ----
+  // ============================================================
+  // ASHRA HELPERS
+  // ============================================================
 
   @Builder
   AshrasContent() {
@@ -1982,8 +1462,6 @@ struct RamadanDetailsPage {
     .alignItems(HorizontalAlign.Start)
   }
 
-  // ---- Laylat al-Qadr content (no outer card) ----
-
   @Builder
   LaylatAlQadrContent() {
     Column() {
@@ -2018,7 +1496,9 @@ struct RamadanDetailsPage {
     .alignItems(HorizontalAlign.Start)
   }
 
-  // ---- Jummah tul Widah content (no outer card) ----
+  // ============================================================
+  // MARK / CLEAR HANDLERS
+  // ============================================================
 
   @Builder
   JummahTulWidahContent() {
@@ -2138,10 +1618,6 @@ struct RamadanDetailsPage {
     .alignItems(HorizontalAlign.Center)
   }
 
-  // ============================================================
-  // DUAS SECTION
-  // ============================================================
-
   @Builder
   DuasSection() {
     Column() {
@@ -2205,6 +1681,530 @@ struct RamadanDetailsPage {
       offsetY: 4
     })
     .margin({ bottom: 14 })
+  }
+
+  private async loadRamadanInfo(): Promise<void> {
+    this.isLoadingInfo = true;
+    try {
+      const info = RamadanHelper.getRamadanInfo(this.hijriOffset);
+      this.ramadanInfo = info;
+      if (info !== null && info.isRamadanNow) {
+        this.currentYear = await RamadanStorage.getOrCreateYear(
+          info.hijriYear, info.totalDays
+        );
+      } else {
+        this.currentYear = null;
+      }
+      // Qada summary is loaded regardless of whether Ramadan is
+      // currently active — the section is always visible so the
+      // user can review and log make-ups year-round.
+      await this.reloadQadaSummary();
+    } finally {
+      this.isLoadingInfo = false;
+    }
+  }
+
+  // ============================================================
+  // BUILD
+  // ============================================================
+
+  private async loadDuasForSection(): Promise<void> {
+    try {
+      const ctx = getContext(this) as common.UIAbilityContext;
+      const all = await DuaService.loadDuas(ctx, this.currentLanguage);
+      this.suhoorDua = all.find((d: CompleteDua) => d.id === 'dua_suhoor') ?? null;
+      this.iftarDua = all.find((d: CompleteDua) => d.id === 'dua_breaking_the_fast') ?? null;
+    } catch (e) {
+      console.error('[RamadanDetailsPage] loadDuasForSection failed', e);
+    }
+  }
+
+  // ============================================================
+  // TOP BAR
+  // ============================================================
+
+  private async reloadQadaSummary(): Promise<void> {
+    const store = await RamadanStorage.load();
+    this.qadaSummary = RamadanStorage.computeQadaSummary(store);
+  }
+
+  private async reloadCurrentYear(): Promise<void> {
+    if (this.ramadanInfo === null) {
+      return;
+    }
+    this.currentYear = await RamadanStorage.getOrCreateYear(
+      this.ramadanInfo.hijriYear, this.ramadanInfo.totalDays
+    );
+  }
+
+  // ============================================================
+  // FASTING SECTION
+  // ============================================================
+
+  private onThemeModeChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  // ============================================================
+  // QADA SECTION
+  // ============================================================
+
+  private onAppThemePresetChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  private onLanguageChanged(): void {
+    this.currentLanguage = this.appLanguage;
+  }
+
+  private onHijriOffsetChanged(): void {
+    this.loadRamadanInfo();
+  }
+
+  private onAppForegrounded(): void {
+    this.loadRamadanInfo();
+  }
+
+  private onRamadanStateChanged(): void {
+    // The version counter is bumped by every RamadanStorage write.
+    // Reload currentYear so the heatmap re-renders with the new
+    // state. This is the only reliable refresh signal across the
+    // sheet → page transition (the sheet closes before the async
+    // write completes, so the caller cannot await the reload).
+    this.reloadCurrentYear();
+    this.reloadQadaSummary();
+  }
+
+  private tr(key: string): string {
+    return L.get(key, this.currentLanguage);
+  }
+
+  private isRtl(): boolean {
+    return L.isRtlLang(this.currentLanguage);
+  }
+
+  // ============================================================
+  // TARAWEEH SECTION
+  // ============================================================
+
+  private ramadanSubtitle(): string {
+    if (this.ramadanInfo === null) {
+      return '';
+    }
+    const yearSuffix = this.tr('hijri_year_suffix');
+    if (!this.ramadanInfo.isRamadanNow) {
+      return `${this.ramadanInfo.hijriYear} ${yearSuffix}`;
+    }
+    return `${this.ramadanInfo.hijriYear} ${yearSuffix} · ` +
+      `${this.ramadanInfo.currentDayNumber} / ${this.ramadanInfo.totalDays}`;
+  }
+
+  private countFasted(): number {
+    if (this.currentYear === null) {
+      return 0;
+    }
+    let n = 0;
+    for (const d of this.currentYear.days) {
+      if (d.status === FastingStatus.FASTED) {
+        n++;
+      }
+    }
+    return n;
+  }
+
+  private countMissed(): number {
+    if (this.currentYear === null) {
+      return 0;
+    }
+    return RamadanStorage.countMissed(this.currentYear);
+  }
+
+  private countUnmarked(): number {
+    if (this.currentYear === null) {
+      return 0;
+    }
+    return this.currentYear.totalDays
+      - this.countFasted() - this.countMissed();
+  }
+
+  private allReasons(): MissedReason[] {
+    return [
+      MissedReason.TRAVEL,
+      MissedReason.ILLNESS,
+      MissedReason.MENSTRUATION,
+      MissedReason.PREGNANCY_NURSING,
+      MissedReason.FORGETFULNESS,
+      MissedReason.OTHER
+    ];
+  }
+
+  /** Years with at least one missed fast. Used by the audit table. */
+  private auditYears(): QadaYearRow[] {
+    if (this.qadaSummary === null) {
+      return [];
+    }
+    const out: QadaYearRow[] = [];
+    for (const row of this.qadaSummary.perYear) {
+      if (row.missed > 0) {
+        out.push(row);
+      }
+    }
+    return out;
+  }
+
+  private async openQadaYearSheet(year: number): Promise<void> {
+    const yearData = await RamadanStorage.getYear(year);
+    if (yearData === null) {
+      return;
+    }
+
+    // Reconstruct the Gregorian dates for this Hijri month so each
+    // row can show "Day 5 · Mar 15".
+    let monthDays: CalendarDay[] = [];
+    try {
+      monthDays = HijriCalendarHelper.buildMonthDays(
+        year, 9, this.hijriOffset, new Date()
+      );
+    } catch (err) {
+      monthDays = [];
+    }
+
+    const entries: QadaDayEntry[] = [];
+    for (const d of monthDays) {
+      const dayData = yearData.days[d.hijri.day - 1];
+      if (dayData === undefined) {
+        continue;
+      }
+      if (dayData.status !== FastingStatus.MISSED) {
+        continue;
+      }
+      entries.push({
+        dayNumber: d.hijri.day,
+        gregorianDate: d.gregorianDate,
+        reason: dayData.reason !== undefined ? dayData.reason : null,
+        madeUp: dayData.madeUp === true
+      });
+    }
+
+    this.qadaYearDays = entries;
+    this.activeQadaYear = year;
+    this.showQadaYearSheet = true;
+  }
+
+  // ============================================================
+  // HEATMAP
+  // ============================================================
+
+  private closeQadaYearSheet(): void {
+    this.showQadaYearSheet = false;
+    this.activeQadaYear = 0;
+    this.qadaYearDays = [];
+  }
+
+  private async toggleDayMadeUp(day: number): Promise<void> {
+    if (this.activeQadaYear === 0) {
+      return;
+    }
+    if (this.ramadanInfo !== null && this.ramadanInfo.isRamadanNow) {
+      return;
+    }
+    try {
+      await RamadanStorage.toggleDayMadeUp(this.activeQadaYear, day);
+      // Refresh both the sheet list and the summary.
+      await this.openQadaYearSheet(this.activeQadaYear);
+      await this.reloadQadaSummary();
+    } catch (err) {
+      console.error('[RamadanDetailsPage] toggleDayMadeUp failed: ' +
+        JSON.stringify(err));
+    }
+  }
+
+  private countMadeUpInActiveYear(): number {
+    let n = 0;
+    for (const e of this.qadaYearDays) {
+      if (e.madeUp) {
+        n++;
+      }
+    }
+    return n;
+  }
+
+  private countTaraweeh(): number {
+    if (this.currentYear === null) {
+      return 0;
+    }
+    let n = 0;
+    for (const on of this.currentYear.taraweehNights) {
+      if (on) {
+        n++;
+      }
+    }
+    return n;
+  }
+
+  private async toggleTaraweehNight(night: number): Promise<void> {
+    if (this.ramadanInfo === null) {
+      return;
+    }
+    try {
+      await RamadanStorage.toggleTaraweeh(
+        this.ramadanInfo.hijriYear, night
+      );
+    } catch (err) {
+      console.error('[RamadanDetailsPage] toggleTaraweeh failed: ' +
+        JSON.stringify(err));
+    }
+  }
+
+  /** True when this night is in the past or is today. */
+  private isTaraweehToggleable(idx: number): boolean {
+    if (this.ramadanInfo === null) {
+      return false;
+    }
+    return (idx + 1) <= this.ramadanInfo.currentDayNumber;
+  }
+
+  private currentAshra(): RamadanAshra | null {
+    if (this.ramadanInfo === null || !this.ramadanInfo.isRamadanNow) {
+      return null;
+    }
+    const day = this.ramadanInfo.currentDayNumber;
+    for (const a of this.ramadanInfo.ashras) {
+      if (day >= a.startHijriDay && day <= a.endHijriDay) {
+        return a;
+      }
+    }
+    return null;
+  }
+
+  private isCurrentAshra(a: RamadanAshra): boolean {
+    const cur = this.currentAshra();
+    return cur !== null && cur.number === a.number;
+  }
+
+  private openMarkSheet(day: number): void {
+    this.selectedDay = day;
+    this.selectedReason = null;
+    this.customReasonText = '';
+    this.activeSheet = 'mark';
+  }
+
+  // ============================================================
+  // SUMMARY ROW
+  // ============================================================
+
+  private closeSheet(): void {
+    this.activeSheet = 'none';
+    this.selectedReason = null;
+    this.customReasonText = '';
+  }
+
+  // ============================================================
+  // MARK SHEET
+  // ============================================================
+
+  private async markFasted(): Promise<void> {
+    if (this.ramadanInfo === null) {
+      return;
+    }
+    const year = this.ramadanInfo.hijriYear;
+    const day = this.selectedDay;
+    this.closeSheet();
+    try {
+      await RamadanStorage.markDay(year, day, FastingStatus.FASTED);
+    } catch (err) {
+      console.error('[RamadanDetailsPage] markFasted failed: ' +
+        JSON.stringify(err));
+    }
+  }
+
+  private async clearDay(): Promise<void> {
+    if (this.ramadanInfo === null) {
+      return;
+    }
+    const year = this.ramadanInfo.hijriYear;
+    const day = this.selectedDay;
+    this.closeSheet();
+    try {
+      await RamadanStorage.markDay(year, day, FastingStatus.UNMARKED);
+    } catch (err) {
+      console.error('[RamadanDetailsPage] clearDay failed: ' +
+        JSON.stringify(err));
+    }
+  }
+
+  // ============================================================
+  // REASON SHEET
+  // ============================================================
+
+  private async confirmMissed(): Promise<void> {
+    if (this.ramadanInfo === null || this.selectedReason === null) {
+      return;
+    }
+    const year = this.ramadanInfo.hijriYear;
+    const day = this.selectedDay;
+    const reason = this.selectedReason;
+    const custom = reason === MissedReason.OTHER
+      ? this.customReasonText.trim()
+      : undefined;
+    this.closeSheet();
+    try {
+      await RamadanStorage.markDay(
+        year, day, FastingStatus.MISSED, reason, custom
+      );
+    } catch (err) {
+      console.error('[RamadanDetailsPage] confirmMissed failed: ' +
+        JSON.stringify(err));
+    }
+  }
+
+  private cellBorderColor(idx: number): string {
+    if (!this.isToday(idx)) {
+      return 'transparent';
+    }
+    if (this.currentYear === null) {
+      return this.colors.accentGold;
+    }
+    const entry: FastingDay = this.currentYear.days[idx];
+    if (entry.status === FastingStatus.MISSED) {
+      return this.colors.statusExpress;
+    }
+    return this.colors.accentGold;
+  }
+
+  // ============================================================
+  // QADA YEAR SHEET — per-day made-up marking
+  // ============================================================
+
+  private taraweehBgColor(idx: number): string {
+    if (this.currentYear === null) {
+      return this.colors.tintSubtle;
+    }
+    return this.currentYear.taraweehNights[idx]
+      ? this.colors.accentGold
+      : this.colors.tintSubtle;
+  }
+
+  private taraweehTextColor(idx: number): string {
+    if (this.currentYear === null) {
+      return this.colors.textMuted;
+    }
+    if (this.currentYear.taraweehNights[idx]) {
+      return this.colors.textOnAccent;
+    }
+    if (this.isToday(idx)) {
+      return this.colors.accentGold;
+    }
+    return this.colors.textMuted;
+  }
+
+  private rowIndices(): number[] {
+    const out: number[] = [];
+    for (let i = 0; i < 6; i++) {
+      out.push(i);
+    }
+    return out;
+  }
+
+  private colIndices(): number[] {
+    const out: number[] = [];
+    for (let i = 0; i < 5; i++) {
+      out.push(i);
+    }
+    return out;
+  }
+
+  // ============================================================
+  // ABOUT THIS RAMADAN — grouped wrapper
+  // ============================================================
+  //
+  // Ashras, Laylat al-Qadr, and Jummah tul Widah share one card
+  // shell. Previously each occupied its own card, which gave the
+  // page five near-identical visual blocks during Ramadan. Grouping
+  // them under a single heading clarifies the hierarchy: primary
+  // tracking (Fasting, Taraweeh) sits above; context/reference
+  // (this group) sits below.
+
+  private cellSize(): number {
+    if (this.breakpoint === Breakpoints.LG) {
+      return 48;
+    }
+    if (this.breakpoint === Breakpoints.MD) {
+      return 44;
+    }
+    return 38; // Was 48 for the 5-column layout
+  }
+
+  // ---- Ashras content (no outer card) ----
+
+  private isToday(idx: number): boolean {
+    if (this.currentYear === null || this.ramadanInfo === null) {
+      return false;
+    }
+    return (idx + 1) === this.ramadanInfo.currentDayNumber;
+  }
+
+  // ---- Laylat al-Qadr content (no outer card) ----
+
+  private isFuture(idx: number): boolean {
+    if (this.ramadanInfo === null) {
+      return false;
+    }
+    return (idx + 1) > this.ramadanInfo.currentDayNumber;
+  }
+
+  // ---- Jummah tul Widah content (no outer card) ----
+
+  private cellBg(idx: number): string {
+    if (this.currentYear === null) {
+      return this.colors.tintSubtle;
+    }
+    const entry: FastingDay = this.currentYear.days[idx];
+    if (this.isToday(idx) && entry.status === FastingStatus.UNMARKED) {
+      return this.colors.tintSoft;
+    }
+    if (entry.status === FastingStatus.FASTED) {
+      return this.colors.accentGold;
+    }
+    if (entry.status === FastingStatus.MISSED) {
+      return this.colors.statusExpress;
+    }
+    return this.colors.tintSubtle;
+  }
+
+  private cellTextColor(idx: number): string {
+    if (this.currentYear === null) {
+      return this.colors.textMuted;
+    }
+    const entry: FastingDay = this.currentYear.days[idx];
+    if (entry.status === FastingStatus.FASTED) {
+      return this.colors.textOnAccent;
+    }
+    if (entry.status === FastingStatus.MISSED) {
+      return '#FFFFFF';
+    }
+    if (this.isToday(idx)) {
+      return this.colors.accentGold;
+    }
+    return this.colors.textMuted;
+  }
+
+  private qadaYearSheetSubtitle(): string {
+    const total = this.qadaYearDays.length;
+    const done = this.countMadeUpInActiveYear();
+    return `${done} ${this.tr('qada_of')} ${total} ` +
+      `${this.tr('qada_made_up_of_total')}`;
+  }
+
+  // ============================================================
+  // DUAS SECTION
+  // ============================================================
+
+  private isQadaToggleAllowed(): boolean {
+    if (this.ramadanInfo !== null && this.ramadanInfo.isRamadanNow) {
+      return false;
+    }
+    return true;
   }
 
   private buildWeeks(): number[][] {

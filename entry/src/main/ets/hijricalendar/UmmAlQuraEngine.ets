@@ -44,7 +44,6 @@ import { TabularHijriEngine } from './TabularHijriEngine';
  * engine so that conversion remains computable everywhere.
  */
 export class UmmAlQuraEngine implements HijriCalendarEngine {
-  readonly type: HijriCalendarType = HijriCalendarType.UMM_AL_QURA;
   private static readonly MIN_YEAR = 1318;
   private static readonly MAX_YEAR = 1500;
   /** JDN of 1 Muharram 1318 AH (30 April 1900 CE). */
@@ -92,9 +91,96 @@ export class UmmAlQuraEngine implements HijriCalendarEngine {
    */
   private static readonly YEAR_START_JDN: number[] =
     UmmAlQuraEngine.initYearStarts();
+  readonly type: HijriCalendarType = HijriCalendarType.UMM_AL_QURA;
 
   // ============================================================
   // PUBLIC API
+  // ============================================================
+
+  /**
+   * Binary-search `YEAR_START_JDN` for the year index whose start
+   * is <= jdn and whose *next* year's start is > jdn. Returns the
+   * 0-based index; caller adds `MIN_YEAR`.
+   */
+  private static findYearIndexForJdn(jdn: number): number {
+    const arr = UmmAlQuraEngine.YEAR_START_JDN;
+    let lo = 0;
+    let hi = arr.length - 2; // last valid year index
+    while (lo <= hi) {
+      const mid = Math.floor((lo + hi) / 2);
+      if (arr[mid] <= jdn) {
+        lo = mid + 1;
+      } else {
+        hi = mid - 1;
+      }
+    }
+    return hi;
+  }
+
+  private static staticDaysInMonth(year: number, month: number): number {
+    const flags = UmmAlQuraEngine.MONTH_LENGTH_FLAGS[
+    year - UmmAlQuraEngine.MIN_YEAR
+    ];
+    const bitIndex = month - 1;
+    const isThirty = ((flags >> bitIndex) & 1) === 1;
+    return isThirty ? 30 : 29;
+  }
+
+  private static initYearStarts(): number[] {
+    const out: number[] = [];
+    let jdn = UmmAlQuraEngine.EPOCH_JDN;
+    out.push(jdn);
+    for (let y = UmmAlQuraEngine.MIN_YEAR;
+      y <= UmmAlQuraEngine.MAX_YEAR; y++) {
+      let yearDays = 0;
+      for (let m = 1; m <= 12; m++) {
+        yearDays += UmmAlQuraEngine.staticDaysInMonth(y, m);
+      }
+      jdn += yearDays;
+      out.push(jdn);
+    }
+    return out;
+  }
+
+  /** Gregorian date → JDN using the Fliegel–Van Flandern formula. */
+  private static gregorianToJDN(date: Date): number {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    const a = Math.floor((14 - month) / 12);
+    const y = year + 4800 - a;
+    const m = month + 12 * a - 3;
+
+    return day
+      + Math.floor((153 * m + 2) / 5)
+      + 365 * y
+      + Math.floor(y / 4)
+      - Math.floor(y / 100)
+      + Math.floor(y / 400)
+      - 32045;
+  }
+
+  /** JDN → Gregorian date at local midnight. */
+  private static jdnToGregorian(jdn: number): Date {
+    const a = jdn + 32044;
+    const b = Math.floor((4 * a + 3) / 146097);
+    const c = a - Math.floor((146097 * b) / 4);
+    const d = Math.floor((4 * c + 3) / 1461);
+    const e = c - Math.floor((1461 * d) / 4);
+    const m = Math.floor((5 * e + 2) / 153);
+
+    const day = e - Math.floor((153 * m + 2) / 5) + 1;
+    const month = m + 3 - 12 * Math.floor(m / 10);
+    const year = 100 * b + d - 4800 + Math.floor(m / 10);
+
+    const result = new Date(year, month - 1, day);
+    result.setHours(0, 0, 0, 0);
+    return result;
+  }
+
+  // ============================================================
+  // INTERNAL
   // ============================================================
 
   isLeapYear(year: number): boolean {
@@ -119,6 +205,10 @@ export class UmmAlQuraEngine implements HijriCalendarEngine {
     }
     return UmmAlQuraEngine.staticDaysInMonth(year, month);
   }
+
+  // ============================================================
+  // JULIAN DAY NUMBER (integer, noon-based)
+  // ============================================================
 
   toHijri(gregorian: Date): HijriDate | null {
     if (gregorian === null || gregorian === undefined) {
@@ -162,26 +252,6 @@ export class UmmAlQuraEngine implements HijriCalendarEngine {
     return result;
   }
 
-  /**
-   * Binary-search `YEAR_START_JDN` for the year index whose start
-   * is <= jdn and whose *next* year's start is > jdn. Returns the
-   * 0-based index; caller adds `MIN_YEAR`.
-   */
-  private static findYearIndexForJdn(jdn: number): number {
-    const arr = UmmAlQuraEngine.YEAR_START_JDN;
-    let lo = 0;
-    let hi = arr.length - 2; // last valid year index
-    while (lo <= hi) {
-      const mid = Math.floor((lo + hi) / 2);
-      if (arr[mid] <= jdn) {
-        lo = mid + 1;
-      } else {
-        hi = mid - 1;
-      }
-    }
-    return hi;
-  }
-
   toGregorian(hijri: HijriDate): Date | null {
     if (hijri === null || hijri === undefined) {
       return null;
@@ -212,75 +282,5 @@ export class UmmAlQuraEngine implements HijriCalendarEngine {
     jdn += hijri.day - 1;
 
     return UmmAlQuraEngine.jdnToGregorian(jdn);
-  }
-
-  // ============================================================
-  // INTERNAL
-  // ============================================================
-
-  private static staticDaysInMonth(year: number, month: number): number {
-    const flags = UmmAlQuraEngine.MONTH_LENGTH_FLAGS[
-    year - UmmAlQuraEngine.MIN_YEAR
-    ];
-    const bitIndex = month - 1;
-    const isThirty = ((flags >> bitIndex) & 1) === 1;
-    return isThirty ? 30 : 29;
-  }
-
-  private static initYearStarts(): number[] {
-    const out: number[] = [];
-    let jdn = UmmAlQuraEngine.EPOCH_JDN;
-    out.push(jdn);
-    for (let y = UmmAlQuraEngine.MIN_YEAR;
-      y <= UmmAlQuraEngine.MAX_YEAR; y++) {
-      let yearDays = 0;
-      for (let m = 1; m <= 12; m++) {
-        yearDays += UmmAlQuraEngine.staticDaysInMonth(y, m);
-      }
-      jdn += yearDays;
-      out.push(jdn);
-    }
-    return out;
-  }
-
-  // ============================================================
-  // JULIAN DAY NUMBER (integer, noon-based)
-  // ============================================================
-
-  /** Gregorian date → JDN using the Fliegel–Van Flandern formula. */
-  private static gregorianToJDN(date: Date): number {
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-
-    const a = Math.floor((14 - month) / 12);
-    const y = year + 4800 - a;
-    const m = month + 12 * a - 3;
-
-    return day
-      + Math.floor((153 * m + 2) / 5)
-      + 365 * y
-      + Math.floor(y / 4)
-      - Math.floor(y / 100)
-      + Math.floor(y / 400)
-      - 32045;
-  }
-
-  /** JDN → Gregorian date at local midnight. */
-  private static jdnToGregorian(jdn: number): Date {
-    const a = jdn + 32044;
-    const b = Math.floor((4 * a + 3) / 146097);
-    const c = a - Math.floor((146097 * b) / 4);
-    const d = Math.floor((4 * c + 3) / 1461);
-    const e = c - Math.floor((1461 * d) / 4);
-    const m = Math.floor((5 * e + 2) / 153);
-
-    const day = e - Math.floor((153 * m + 2) / 5) + 1;
-    const month = m + 3 - 12 * Math.floor(m / 10);
-    const year = 100 * b + d - 4800 + Math.floor(m / 10);
-
-    const result = new Date(year, month - 1, day);
-    result.setHours(0, 0, 0, 0);
-    return result;
   }
 }
