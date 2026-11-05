@@ -104,6 +104,10 @@ struct MainTabs {
     } catch (e) {
       console.warn('MainTabs: EventHub listen failed');
     }
+    setTimeout(() => {
+      this.applyPendingNavTarget();
+    }, 150);
+    this.handleWidgetIntent();
   }
 
   aboutToDisappear(): void {
@@ -117,14 +121,6 @@ struct MainTabs {
       // ignore
     }
   }
-
-  private onWidgetNavEvent = (target: string): void => {
-    console.info(`[MainTabs] Received widget_nav_event: '${target}'`);
-    if (target && target.length > 0) {
-      this.applyNavTarget(target, false);
-      AppStorage.setOrCreate(STORAGE_KEY_NAV_TARGET_TAB, '');
-    }
-  };
 
   onPageShow(): void {
     this.currentLanguage = this.appLanguage;
@@ -143,18 +139,35 @@ struct MainTabs {
     this.applyPendingNavTarget();
     AppStorage.setOrCreate(STORAGE_KEY_HIJRI_CALENDAR_VERSION, nextCal);
     AppLogger.info('MainTabs', `deviceType=${deviceInfo.deviceType}`);
+    this.handleWidgetIntent();
   }
 
   onPageHide(): void {
     this.isPageVisible = false;
   }
 
-  private applyPendingNavTarget(): void {
-    const pendingTarget: string = AppStorage.get<string>(STORAGE_KEY_NAV_TARGET_TAB) ?? '';
-    if (pendingTarget.length > 0) {
-      AppLogger.info('MainTabs', `Applying pending nav target: '${pendingTarget}'`);
-      this.applyNavTarget(pendingTarget, false);
-      AppStorage.setOrCreate(STORAGE_KEY_NAV_TARGET_TAB, '');
+  private handleWidgetIntent(): void {
+    // 1. Handle specific pages (e.g., RamadanDetailsPage)
+    const targetPage = AppStorage.get<string>('widget_target_page');
+    if (targetPage && targetPage.length > 0) {
+      AppStorage.setOrCreate('widget_target_page', '');
+      // Delay slightly to ensure router is ready on this page during cold start
+      setTimeout(() => {
+        NavHelper.prepareForward();
+        router.pushUrl({ url: targetPage }).catch((e: Error) => {
+          AppLogger.warn('MainTabs', `Widget page nav failed: ${e.message}`);
+        });
+      }, 200);
+      return;
+    }
+
+    // 2. Handle specific tabs (e.g., Prayer widget -> Prayers tab)
+    const targetTab = AppStorage.get<string>('widget_target_tab');
+    if (targetTab && targetTab.length > 0) {
+      AppStorage.setOrCreate('widget_target_tab', '');
+      setTimeout(() => {
+        this.applyNavTarget(targetTab, true);
+      }, 200);
     }
   }
 
@@ -555,6 +568,23 @@ struct MainTabs {
         .textOverflow({ overflow: TextOverflow.Ellipsis })
     }
     .width('100%').height(68).justifyContent(FlexAlign.Center)
+  }
+
+  private onWidgetNavEvent = (target: string): void => {
+    console.info(`[MainTabs] Received widget_nav_event: '${target}'`);
+    if (target && target.length > 0) {
+      this.applyNavTarget(target, false);
+      AppStorage.setOrCreate(STORAGE_KEY_NAV_TARGET_TAB, '');
+    }
+  };
+
+  private applyPendingNavTarget(): void {
+    const pendingTarget: string = AppStorage.get<string>(STORAGE_KEY_NAV_TARGET_TAB) ?? '';
+    if (pendingTarget.length > 0) {
+      AppLogger.info('MainTabs', `Applying pending nav target: '${pendingTarget}'`);
+      this.applyNavTarget(pendingTarget, false);
+      AppStorage.setOrCreate(STORAGE_KEY_NAV_TARGET_TAB, '');
+    }
   }
 
   private onNavTargetTabChanged(): void {

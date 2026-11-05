@@ -21,7 +21,6 @@ import {
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LANGUAGE_OVERRIDE,
-  STORAGE_KEY_NAV_TARGET_TAB,
   STORAGE_KEY_RAMADAN_STATE_VERSION,
   STORAGE_KEY_SHOW_EXTRA_TIMINGS,
   STORAGE_KEY_SHOW_FIRST_THIRD,
@@ -322,19 +321,23 @@ export default class EntryAbility extends UIAbility {
         setTimeout(() => {
           windowStage.loadContent(startPage, (err) => {
             if (err.code) {
-              hilog.error(0x0000, 'Sirat',
-                'Failed to load content: %{public}s', JSON.stringify(err));
+              hilog.error(0x0000, 'Sirat', 'Failed to load content: %{public}s', JSON.stringify(err));
               return;
             }
             hilog.info(0x0000, 'Sirat', 'Loaded %{public}s', startPage);
-
-            // Resize AFTER the initial page has painted. Doing this
-            // here (instead of at the top of onWindowStageCreate)
-            // prevents the routerSplit evaluator from seeing a wide
-            // window with a pending navigation event — which on some
-            // 2-in-1 hardware briefly shows a split view with an
-            // empty secondary pane before MainTabs renders.
             this.resizeWindowFor2in1(windowStage);
+
+            // --- ADD THIS BLOCK ---
+            const targetPage = AppStorage.get<string>('nav_target_page');
+            if (targetPage && targetPage.length > 0) {
+              if (targetPage === 'pages/RamadanDetailsPage') {
+                router.pushUrl({ url: targetPage }).catch((e: Error) => {
+                  AppLogger.warn('EntryAbility', `Cold start page nav failed: ${e.message}`);
+                });
+              }
+              AppStorage.setOrCreate('nav_target_page', '');
+            }
+            // ----------------------
           });
         }, splashMs);
       }).catch((err: Error) => {
@@ -403,40 +406,30 @@ export default class EntryAbility extends UIAbility {
       return;
     }
 
-    const pageRaw: Object | undefined = params['targetPage'];
-    const tabRaw: Object | undefined = params['targetTab'];
+    let hasTarget = false;
+    const pageRaw = params['targetPage'];
+    const tabRaw = params['targetTab'];
 
-    // 1. Handle specific page routing (e.g., RamadanDetailsPage from the Ramadan widget)
-    if (typeof pageRaw === 'string') {
-      const pageStr: string = pageRaw as string;
-      if (pageStr.length > 0) {
-        AppLogger.info('EntryAbility', `Widget nav: targetPage='${pageStr}'`);
-        const currentTop: string = this.getCurrentPagePath();
-
-        if (currentTop !== pageStr) {
-          // We are either cold-starting or on a different page.
-          // Push the requested page.
-          router.pushUrl({ url: pageStr }).catch((e: Error) => {
-            AppLogger.warn('EntryAbility', `Widget page nav failed: ${e.message}`);
-          });
-        }
-        return; // Handled, do not process tab routing
+    if (typeof pageRaw === 'string' && pageRaw.length > 0) {
+      if (pageRaw === 'pages/RamadanDetailsPage') {
+        AppStorage.setOrCreate('widget_target_page', pageRaw);
+        hasTarget = true;
       }
     }
 
-    // 2. Handle tab switching (from the Prayer widget)
-    if (typeof tabRaw === 'string') {
-      const tabStr: string = tabRaw as string;
-      if (tabStr.length > 0) {
-        AppLogger.info('EntryAbility', `Widget nav: targetTab='${tabStr}'`);
-        AppStorage.setOrCreate(STORAGE_KEY_NAV_TARGET_TAB, tabStr);
+    if (typeof tabRaw === 'string' && tabRaw.length > 0) {
+      AppStorage.setOrCreate('widget_target_tab', tabRaw);
+      hasTarget = true;
+    }
 
-        const currentTop: string = this.getCurrentPagePath();
-        if (currentTop !== 'pages/MainTabs' && currentTop.length > 0) {
-          router.replaceUrl({ url: 'pages/MainTabs' }).catch((e: Error) => {
-            AppLogger.warn('EntryAbility', `Widget tab nav replace failed: ${e.message}`);
-          });
-        }
+    // If the app is warm-started and sitting on Settings (or another page),
+    // force the router back to MainTabs so it can process the intent.
+    if (hasTarget) {
+      const currentTop = this.getCurrentPagePath();
+      if (currentTop !== 'pages/MainTabs' && currentTop.length > 0) {
+        router.replaceUrl({ url: 'pages/MainTabs' }).catch((e: Error) => {
+          AppLogger.warn('EntryAbility', `Widget nav replace failed: ${e.message}`);
+        });
       }
     }
   }

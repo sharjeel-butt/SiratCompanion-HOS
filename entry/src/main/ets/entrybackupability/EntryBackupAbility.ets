@@ -160,6 +160,210 @@ const TASBIH_SPECS: PrefSpec[] = [
  * accepted on restore; the header is only used to detect truncation.
  */
 export default class EntryBackupAbility extends BackupExtensionAbility {
+  /**
+   * Read a key's value and percent-encode it for the file format.
+   *
+   * Returns:
+   *   null   — the key is not present in the store (skip it)
+   *   string — the encoded value; may be empty ('') if the key is
+   *            present with an empty-string value
+   *
+   * The null vs empty-string distinction matters: an absent key must
+   * be skipped on backup so restore falls back to the default. A
+   * present-but-empty value must be written so the empty state
+   * survives the round-trip.
+   */
+  private static async readAsString(
+    store: preferences.Preferences, spec: PrefSpec
+  ): Promise<string | null> {
+    try {
+      const exists: boolean = await store.has(spec.key);
+      if (!exists) {
+        return null;
+      }
+      if (spec.type === TYPE_STRING) {
+        const v = await store.get(spec.key, '');
+        return encodeURIComponent(String(v));
+      }
+      if (spec.type === TYPE_NUMBER) {
+        const v = await store.get(spec.key, 0);
+        return String(v);
+      }
+      const v = await store.get(spec.key, false);
+      return String(v);
+    } catch (err) {
+      hilog.warn(DOMAIN, TAG,
+        'read failed for %{public}s', spec.key);
+      return null;
+    }
+  }
+
+  /**
+   * Parse and apply one data line.
+   *
+   * @returns the key that was written, or '' on failure. Callers use
+   *          the non-empty return value to track successful restores.
+   */
+  private static async applyLine(
+    store: preferences.Preferences, line: string
+  ): Promise<string> {
+    const parts: string[] = line.split('\t');
+    if (parts.length < 3) {
+      hilog.warn(DOMAIN, TAG,
+        'applyLine: malformed line (expected ≥3 fields, got %{public}d)',
+        parts.length);
+      return '';
+    }
+
+    const type: string = parts[0];
+    const key: string = parts[1];
+
+    // Percent-encoded string values can never contain a raw tab. If
+    // one is present, the line was corrupted in transit. Reconstruct
+    // the full value rather than dropping the remainder.
+    if (parts.length > 3) {
+      hilog.warn(DOMAIN, TAG,
+        'applyLine: value for key %{public}s contains a raw tab; corruption?',
+        key);
+    }
+    const raw: string = parts.slice(2).join('\t');
+
+    try {
+      if (type === TYPE_STRING) {
+        await store.put(key, decodeURIComponent(raw));
+        return key;
+      }
+      if (type === TYPE_NUMBER) {
+        const num: number = Number(raw);
+        if (Number.isNaN(num)) {
+          hilog.warn(DOMAIN, TAG,
+            'applyLine: invalid number for key %{public}s', key);
+          return '';
+        }
+        await store.put(key, num);
+        return key;
+      }
+      if (type === TYPE_BOOLEAN) {
+        await store.put(key, raw === 'true');
+        return key;
+      }
+      hilog.warn(DOMAIN, TAG,
+        'applyLine: unknown type "%{public}s" for key %{public}s',
+        type, key);
+    } catch (err) {
+      hilog.warn(DOMAIN, TAG,
+        'applyLine failed for %{public}s', key);
+    }
+    return '';
+  }
+
+  // ============================================================
+  // BACKUP
+  // ============================================================
+
+  private static async openPrefs(
+    context: common.Context, storeName: string
+  ): Promise<preferences.Preferences | null> {
+    try {
+      return await preferences.getPreferences(context, storeName);
+    } catch (err) {
+      return null;
+    }
+  }
+
+  private static async clearPrefs(
+    store: preferences.Preferences
+  ): Promise<boolean> {
+    try {
+      await store.clear();
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  // ============================================================
+  // RESTORE
+  // ============================================================
+
+  private static async flushPrefs(
+    store: preferences.Preferences
+  ): Promise<boolean> {
+    try {
+      await store.flush();
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  private static writeTextFile(path: string, content: string): boolean {
+    let file: fs.File | null = null;
+    try {
+      file = fs.openSync(
+        path,
+        fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE | fs.OpenMode.TRUNC
+      );
+    } catch (err) {
+      return false;
+    }
+
+    try {
+      fs.writeSync(file.fd, content);
+    } catch (err) {
+      EntryBackupAbility.closeFile(file);
+      return false;
+    }
+
+    return EntryBackupAbility.closeFile(file);
+  }
+
+  // ============================================================
+  // GUARDED WRAPPERS
+  // ============================================================
+
+  private static readTextFile(path: string): string {
+    let stat: fs.Stat;
+    try {
+      stat = fs.statSync(path);
+    } catch (err) {
+      return '';
+    }
+    if (stat.size === 0) {
+      return '';
+    }
+
+    let file: fs.File | null = null;
+    try {
+      file = fs.openSync(path, fs.OpenMode.READ_ONLY);
+    } catch (err) {
+      return '';
+    }
+
+    let text: string = '';
+    try {
+      const buf = new ArrayBuffer(stat.size);
+      const opts: ReadOptions = { offset: 0, length: stat.size };
+      const bytesRead: number = fs.readSync(file.fd, buf, opts);
+      const u8 = new Uint8Array(buf, 0, bytesRead);
+      text = buffer.from(u8).toString('utf8');
+    } catch (err) {
+      text = '';
+    }
+
+    EntryBackupAbility.closeFile(file);
+    return text;
+  }
+
+  private static closeFile(file: fs.File): boolean {
+    try {
+      fs.closeSync(file);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
   async onBackup(): Promise<void> {
     hilog.info(DOMAIN, TAG, 'onBackup start');
     const backupDir: string = this.safeBackupDir();
@@ -189,10 +393,6 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
     await this.restoreStore(STORE_TASBIH, backupDir);
     hilog.info(DOMAIN, TAG, 'onRestore complete');
   }
-
-  // ============================================================
-  // BACKUP
-  // ============================================================
 
   private async backupStore(
     storeName: string, specs: PrefSpec[], backupDir: string
@@ -239,48 +439,6 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
         'Write failed for %{public}s', storeName);
     }
   }
-
-  /**
-   * Read a key's value and percent-encode it for the file format.
-   *
-   * Returns:
-   *   null   — the key is not present in the store (skip it)
-   *   string — the encoded value; may be empty ('') if the key is
-   *            present with an empty-string value
-   *
-   * The null vs empty-string distinction matters: an absent key must
-   * be skipped on backup so restore falls back to the default. A
-   * present-but-empty value must be written so the empty state
-   * survives the round-trip.
-   */
-  private static async readAsString(
-    store: preferences.Preferences, spec: PrefSpec
-  ): Promise<string | null> {
-    try {
-      const exists: boolean = await store.has(spec.key);
-      if (!exists) {
-        return null;
-      }
-      if (spec.type === TYPE_STRING) {
-        const v = await store.get(spec.key, '');
-        return encodeURIComponent(String(v));
-      }
-      if (spec.type === TYPE_NUMBER) {
-        const v = await store.get(spec.key, 0);
-        return String(v);
-      }
-      const v = await store.get(spec.key, false);
-      return String(v);
-    } catch (err) {
-      hilog.warn(DOMAIN, TAG,
-        'read failed for %{public}s', spec.key);
-      return null;
-    }
-  }
-
-  // ============================================================
-  // RESTORE
-  // ============================================================
 
   private async restoreStore(
     storeName: string, backupDir: string
@@ -428,169 +586,11 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
       storeName, restored);
   }
 
-  /**
-   * Parse and apply one data line.
-   *
-   * @returns the key that was written, or '' on failure. Callers use
-   *          the non-empty return value to track successful restores.
-   */
-  private static async applyLine(
-    store: preferences.Preferences, line: string
-  ): Promise<string> {
-    const parts: string[] = line.split('\t');
-    if (parts.length < 3) {
-      hilog.warn(DOMAIN, TAG,
-        'applyLine: malformed line (expected ≥3 fields, got %{public}d)',
-        parts.length);
-      return '';
-    }
-
-    const type: string = parts[0];
-    const key: string = parts[1];
-
-    // Percent-encoded string values can never contain a raw tab. If
-    // one is present, the line was corrupted in transit. Reconstruct
-    // the full value rather than dropping the remainder.
-    if (parts.length > 3) {
-      hilog.warn(DOMAIN, TAG,
-        'applyLine: value for key %{public}s contains a raw tab; corruption?',
-        key);
-    }
-    const raw: string = parts.slice(2).join('\t');
-
-    try {
-      if (type === TYPE_STRING) {
-        await store.put(key, decodeURIComponent(raw));
-        return key;
-      }
-      if (type === TYPE_NUMBER) {
-        const num: number = Number(raw);
-        if (Number.isNaN(num)) {
-          hilog.warn(DOMAIN, TAG,
-            'applyLine: invalid number for key %{public}s', key);
-          return '';
-        }
-        await store.put(key, num);
-        return key;
-      }
-      if (type === TYPE_BOOLEAN) {
-        await store.put(key, raw === 'true');
-        return key;
-      }
-      hilog.warn(DOMAIN, TAG,
-        'applyLine: unknown type "%{public}s" for key %{public}s',
-        type, key);
-    } catch (err) {
-      hilog.warn(DOMAIN, TAG,
-        'applyLine failed for %{public}s', key);
-    }
-    return '';
-  }
-
-  // ============================================================
-  // GUARDED WRAPPERS
-  // ============================================================
-
   private safeBackupDir(): string {
     try {
       return this.context.backupDir;
     } catch (err) {
       return '';
-    }
-  }
-
-  private static async openPrefs(
-    context: common.Context, storeName: string
-  ): Promise<preferences.Preferences | null> {
-    try {
-      return await preferences.getPreferences(context, storeName);
-    } catch (err) {
-      return null;
-    }
-  }
-
-  private static async clearPrefs(
-    store: preferences.Preferences
-  ): Promise<boolean> {
-    try {
-      await store.clear();
-      return true;
-    } catch (err) {
-      return false;
-    }
-  }
-
-  private static async flushPrefs(
-    store: preferences.Preferences
-  ): Promise<boolean> {
-    try {
-      await store.flush();
-      return true;
-    } catch (err) {
-      return false;
-    }
-  }
-
-  private static writeTextFile(path: string, content: string): boolean {
-    let file: fs.File | null = null;
-    try {
-      file = fs.openSync(
-        path,
-        fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE | fs.OpenMode.TRUNC
-      );
-    } catch (err) {
-      return false;
-    }
-
-    try {
-      fs.writeSync(file.fd, content);
-    } catch (err) {
-      EntryBackupAbility.closeFile(file);
-      return false;
-    }
-
-    return EntryBackupAbility.closeFile(file);
-  }
-
-  private static readTextFile(path: string): string {
-    let stat: fs.Stat;
-    try {
-      stat = fs.statSync(path);
-    } catch (err) {
-      return '';
-    }
-    if (stat.size === 0) {
-      return '';
-    }
-
-    let file: fs.File | null = null;
-    try {
-      file = fs.openSync(path, fs.OpenMode.READ_ONLY);
-    } catch (err) {
-      return '';
-    }
-
-    let text: string = '';
-    try {
-      const buf = new ArrayBuffer(stat.size);
-      const opts: ReadOptions = { offset: 0, length: stat.size };
-      const bytesRead: number = fs.readSync(file.fd, buf, opts);
-      const u8 = new Uint8Array(buf, 0, bytesRead);
-      text = buffer.from(u8).toString('utf8');
-    } catch (err) {
-      text = '';
-    }
-
-    EntryBackupAbility.closeFile(file);
-    return text;
-  }
-
-  private static closeFile(file: fs.File): boolean {
-    try {
-      fs.closeSync(file);
-      return true;
-    } catch (err) {
-      return false;
     }
   }
 }

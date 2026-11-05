@@ -109,7 +109,6 @@ class Astronomy {
 // ---- Main Calculator ----
 
 export class PrayerTimeCalculator {
-
   // ============================================================
   // PREDEFINED METHODS (Conventions)
   // ============================================================
@@ -305,91 +304,6 @@ export class PrayerTimeCalculator {
         return PrayerTimeCalculator.KARACHI;
     }
   }
-
-  private static isAngleReachable(latitude: number, declinationDeg: number, altitudeDeg: number): boolean {
-    const rad = Math.PI / 180;
-    const cosHA = (Math.sin(altitudeDeg * rad) - Math.sin(latitude * rad) * Math.sin(declinationDeg * rad)) /
-      (Math.cos(latitude * rad) * Math.cos(declinationDeg * rad));
-    return cosHA >= -1 && cosHA <= 1;
-  }
-
-  private static applyHighLatFallback(base: Date, nightMs: number, angle: number, rule: HighLatitudeRule,
-    goBackward: boolean): Date {
-    let factor = 0;
-    if (rule === HighLatitudeRule.MIDDLE_OF_NIGHT) {
-      factor = 1 / 2;
-    } else if (rule ===
-      HighLatitudeRule.ONE_SEVENTH) {
-      factor = 1 / 7;
-    } else if (rule === HighLatitudeRule.ANGLE_BASED ||
-      rule === HighLatitudeRule.PROPORTIONAL_DEPRESSION) {
-      factor = angle / 60;
-    }
-
-    const portionMs = nightMs * factor;
-    return new Date(base.getTime() + (goBackward ? -portionMs : portionMs));
-  }
-
-  // ============================================================
-  // POLAR RESOLUTION
-  // ============================================================
-
-  private static calculateAtAqrabBaladLatitude(
-    date: Date, latitude: number, longitude: number, targetAltitudeDeg: number,
-    isAfternoon: boolean, declinationDeg: number, equationOfTimeMinutes: number
-  ): number | null {
-    if (!PrayerTimeCalculator.isAngleReachable(0, declinationDeg, targetAltitudeDeg)) {
-      return null;
-    }
-
-    const equatorward = latitude >= 0 ? 1 : -1;
-    const STEP = 0.5;
-    for (let refLat = latitude - equatorward * STEP; Math.abs(refLat) > 0.001; refLat -= equatorward * STEP) {
-      if (PrayerTimeCalculator.isAngleReachable(refLat, declinationDeg, targetAltitudeDeg)) {
-        return PrayerTimeCalculator.calculateTimeForAltitude(
-          date, refLat, longitude, declinationDeg, equationOfTimeMinutes, targetAltitudeDeg, isAfternoon
-        );
-      }
-    }
-    return null;
-  }
-
-  private static calculateAtAqrabYaum(
-    date: Date, latitude: number, longitude: number, targetAltitudeDeg: number, isAfternoon: boolean
-  ): number | null {
-    const MS_PER_DAY = 86400000;
-    const MAX_DAYS = 183;
-    for (let offset = 1; offset <= MAX_DAYS; offset++) {
-      for (const direction of [1, -1]) {
-        const probe = new Date(date.getTime() + direction * offset * MS_PER_DAY);
-        const solar = PrayerTimeCalculator.getSolarPosition(probe);
-        if (PrayerTimeCalculator.isAngleReachable(latitude, solar.declination, targetAltitudeDeg)) {
-          return PrayerTimeCalculator.calculateTimeForAltitude(
-            probe, latitude, longitude, solar.declination, solar.equationOfTime, targetAltitudeDeg, isAfternoon
-          );
-        }
-      }
-    }
-    return null;
-  }
-
-  private static calculatePolarFallback(
-    date: Date, latitude: number, longitude: number, targetAltitudeDeg: number,
-    isAfternoon: boolean, declinationDeg: number, equationOfTimeMinutes: number, polarResolution: PolarResolution
-  ): number | null {
-    if (polarResolution === PolarResolution.AQRAB_BALAD) {
-      return PrayerTimeCalculator.calculateAtAqrabBaladLatitude(date, latitude, longitude, targetAltitudeDeg,
-        isAfternoon, declinationDeg, equationOfTimeMinutes);
-    }
-    if (polarResolution === PolarResolution.AQRAB_YAUM) {
-      return PrayerTimeCalculator.calculateAtAqrabYaum(date, latitude, longitude, targetAltitudeDeg, isAfternoon);
-    }
-    return null;
-  }
-
-  // ============================================================
-  // MAIN CALCULATION
-  // ============================================================
 
   static calculate(
     date: Date,
@@ -616,7 +530,6 @@ export class PrayerTimeCalculator {
     }
 
 
-
     // ---- Imsak (Fajr − 10 min) ----
     const imsak = new Date(fajr);
     imsak.setMinutes(imsak.getMinutes() - 10);
@@ -669,6 +582,91 @@ export class PrayerTimeCalculator {
     const effectiveOffset = TimezoneResolver.effectiveOffsetForLocation(latitude, longitude, date);
     return PrayerTimeCalculator.calculate(date, latitude, longitude, effectiveOffset, method, asrRule, highLatRule,
       advanced);
+  }
+
+  // ============================================================
+  // POLAR RESOLUTION
+  // ============================================================
+
+  private static isAngleReachable(latitude: number, declinationDeg: number, altitudeDeg: number): boolean {
+    const rad = Math.PI / 180;
+    const cosHA = (Math.sin(altitudeDeg * rad) - Math.sin(latitude * rad) * Math.sin(declinationDeg * rad)) /
+      (Math.cos(latitude * rad) * Math.cos(declinationDeg * rad));
+    return cosHA >= -1 && cosHA <= 1;
+  }
+
+  private static applyHighLatFallback(base: Date, nightMs: number, angle: number, rule: HighLatitudeRule,
+    goBackward: boolean): Date {
+    let factor = 0;
+    if (rule === HighLatitudeRule.MIDDLE_OF_NIGHT) {
+      factor = 1 / 2;
+    } else if (rule ===
+      HighLatitudeRule.ONE_SEVENTH) {
+      factor = 1 / 7;
+    } else if (rule === HighLatitudeRule.ANGLE_BASED ||
+      rule === HighLatitudeRule.PROPORTIONAL_DEPRESSION) {
+      factor = angle / 60;
+    }
+
+    const portionMs = nightMs * factor;
+    return new Date(base.getTime() + (goBackward ? -portionMs : portionMs));
+  }
+
+  private static calculateAtAqrabBaladLatitude(
+    date: Date, latitude: number, longitude: number, targetAltitudeDeg: number,
+    isAfternoon: boolean, declinationDeg: number, equationOfTimeMinutes: number
+  ): number | null {
+    if (!PrayerTimeCalculator.isAngleReachable(0, declinationDeg, targetAltitudeDeg)) {
+      return null;
+    }
+
+    const equatorward = latitude >= 0 ? 1 : -1;
+    const STEP = 0.5;
+    for (let refLat = latitude - equatorward * STEP; Math.abs(refLat) > 0.001; refLat -= equatorward * STEP) {
+      if (PrayerTimeCalculator.isAngleReachable(refLat, declinationDeg, targetAltitudeDeg)) {
+        return PrayerTimeCalculator.calculateTimeForAltitude(
+          date, refLat, longitude, declinationDeg, equationOfTimeMinutes, targetAltitudeDeg, isAfternoon
+        );
+      }
+    }
+    return null;
+  }
+
+  // ============================================================
+  // MAIN CALCULATION
+  // ============================================================
+
+  private static calculateAtAqrabYaum(
+    date: Date, latitude: number, longitude: number, targetAltitudeDeg: number, isAfternoon: boolean
+  ): number | null {
+    const MS_PER_DAY = 86400000;
+    const MAX_DAYS = 183;
+    for (let offset = 1; offset <= MAX_DAYS; offset++) {
+      for (const direction of [1, -1]) {
+        const probe = new Date(date.getTime() + direction * offset * MS_PER_DAY);
+        const solar = PrayerTimeCalculator.getSolarPosition(probe);
+        if (PrayerTimeCalculator.isAngleReachable(latitude, solar.declination, targetAltitudeDeg)) {
+          return PrayerTimeCalculator.calculateTimeForAltitude(
+            probe, latitude, longitude, solar.declination, solar.equationOfTime, targetAltitudeDeg, isAfternoon
+          );
+        }
+      }
+    }
+    return null;
+  }
+
+  private static calculatePolarFallback(
+    date: Date, latitude: number, longitude: number, targetAltitudeDeg: number,
+    isAfternoon: boolean, declinationDeg: number, equationOfTimeMinutes: number, polarResolution: PolarResolution
+  ): number | null {
+    if (polarResolution === PolarResolution.AQRAB_BALAD) {
+      return PrayerTimeCalculator.calculateAtAqrabBaladLatitude(date, latitude, longitude, targetAltitudeDeg,
+        isAfternoon, declinationDeg, equationOfTimeMinutes);
+    }
+    if (polarResolution === PolarResolution.AQRAB_YAUM) {
+      return PrayerTimeCalculator.calculateAtAqrabYaum(date, latitude, longitude, targetAltitudeDeg, isAfternoon);
+    }
+    return null;
   }
 
   // ============================================================

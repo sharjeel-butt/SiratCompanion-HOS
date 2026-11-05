@@ -242,7 +242,8 @@ struct DuasPage {
           .layoutWeight(1)
 
         Image($r('app.media.ic_heart'))
-          .width(20).height(20)
+          .width(20)
+          .height(20)
           .fillColor(dua.isFavorite ? this.colors.statusExpress : this.colors.textMuted)
           .flexShrink(0)
           .onClick(async () => {

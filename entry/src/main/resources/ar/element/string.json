@@ -464,7 +464,6 @@
       "name": "hadith_fajr",
       "value": "مَنْ صَلَّى الصُّبْحَ فَهُوَ فِي ذِمَّةِ اللَّهِ — صحيح مسلم ٦٥٧"
     },
-
     {
       "name": "hadith_dhuhr",
       "value": "إِنَّهَا سَاعَةٌ تُفْتَحُ فِيهَا أَبْوَابُ السَّمَاءِ فَأُحِبُّ أَنْ يَصْعَدَ لِي فِيهَا عَمَلٌ صَالِحٌ — جامع الترمذي ٤٧٨"
@@ -2877,11 +2876,26 @@
       "name": "widget_todays_schedule",
       "value": "جدول اليوم"
     },
-    { "name": "hours_short", "value": "س" },
-    { "name": "minutes_short", "value": "د" },
-    { "name": "countdown_prefix", "value": "بعد" },
-    { "name": "countdown_now", "value": "الآن" },
-    { "name": "yesterday", "value": "أمس" },
+    {
+      "name": "hours_short",
+      "value": "س"
+    },
+    {
+      "name": "minutes_short",
+      "value": "د"
+    },
+    {
+      "name": "countdown_prefix",
+      "value": "متبقي"
+    },
+    {
+      "name": "countdown_now",
+      "value": "الآن"
+    },
+    {
+      "name": "yesterday",
+      "value": "أمس"
+    },
     {
       "name": "widget_ramadan_desc",
       "value": "تتبع الصيام والعد التنازلي لرمضان"

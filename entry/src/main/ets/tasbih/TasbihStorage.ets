@@ -16,11 +16,11 @@ export interface TasbihLoadResult {
 }
 
 export class TasbihStorage {
-  private static store: preferences.Preferences | null = null;
   // ADD MEMORY CACHE to prevent UI freeze on fast flicking
   public static cachedTasbihs: Tasbih[] | null = null;
   public static cachedActiveTasbihId: string = '';
   public static cachedActiveDhikrIndex: number = 0;
+  private static store: preferences.Preferences | null = null;
 
   static async init(context: common.UIAbilityContext): Promise<void> {
     if (TasbihStorage.store) {

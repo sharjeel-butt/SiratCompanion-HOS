@@ -17,12 +17,49 @@ import { HijriCalendarEngine } from './HijriCalendarEngine';
  * The Julian Day Number of this epoch is 1948440 (at noon).
  */
 export class TabularHijriEngine implements HijriCalendarEngine {
-  readonly type: HijriCalendarType = HijriCalendarType.TABULAR;
   /** JDN of 1 Muharram 1 AH (civil epoch). */
   private static readonly EPOCH_JDN = 1948440;
   private static readonly LEAP_YEARS_IN_CYCLE: number[] = [
     2, 5, 7, 10, 13, 16, 18, 21, 24, 26, 29
   ];
+  readonly type: HijriCalendarType = HijriCalendarType.TABULAR;
+
+  /** Gregorian date → JDN using the Fliegel–Van Flandern formula. */
+  private static gregorianToJDN(date: Date): number {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    const a = Math.floor((14 - month) / 12);
+    const y = year + 4800 - a;
+    const m = month + 12 * a - 3;
+
+    return day
+      + Math.floor((153 * m + 2) / 5)
+      + 365 * y
+      + Math.floor(y / 4)
+      - Math.floor(y / 100)
+      + Math.floor(y / 400)
+      - 32045;
+  }
+
+  /** JDN → Gregorian date at local midnight. */
+  private static jdnToGregorian(jdn: number): Date {
+    const a = jdn + 32044;
+    const b = Math.floor((4 * a + 3) / 146097);
+    const c = a - Math.floor((146097 * b) / 4);
+    const d = Math.floor((4 * c + 3) / 1461);
+    const e = c - Math.floor((1461 * d) / 4);
+    const m = Math.floor((5 * e + 2) / 153);
+
+    const day = e - Math.floor((153 * m + 2) / 5) + 1;
+    const month = m + 3 - 12 * Math.floor(m / 10);
+    const year = 100 * b + d - 4800 + Math.floor(m / 10);
+
+    const result = new Date(year, month - 1, day);
+    result.setHours(0, 0, 0, 0);
+    return result;
+  }
 
   isLeapYear(year: number): boolean {
     const mod = ((year % 30) + 30) % 30;
@@ -50,6 +87,10 @@ export class TabularHijriEngine implements HijriCalendarEngine {
     return 29;
   }
 
+  // ============================================================
+  // CORE CONVERSION
+  // ============================================================
+
   toHijri(gregorian: Date): HijriDate | null {
     if (gregorian === null || gregorian === undefined) {
       return null;
@@ -71,10 +112,6 @@ export class TabularHijriEngine implements HijriCalendarEngine {
     }
     return TabularHijriEngine.jdnToGregorian(jdn);
   }
-
-  // ============================================================
-  // CORE CONVERSION
-  // ============================================================
 
   private jdnToHijri(jdn: number): HijriDate {
     const daysSinceEpoch = jdn - TabularHijriEngine.EPOCH_JDN;
@@ -117,6 +154,10 @@ export class TabularHijriEngine implements HijriCalendarEngine {
     return result;
   }
 
+  // ============================================================
+  // JULIAN DAY NUMBER
+  // ============================================================
+
   private hijriToJDN(hijri: HijriDate): number {
     const year = hijri.year;
     const cycle = Math.floor((year - 1) / 30);
@@ -145,46 +186,5 @@ export class TabularHijriEngine implements HijriCalendarEngine {
       }
     }
     return false;
-  }
-
-  // ============================================================
-  // JULIAN DAY NUMBER
-  // ============================================================
-
-  /** Gregorian date → JDN using the Fliegel–Van Flandern formula. */
-  private static gregorianToJDN(date: Date): number {
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-
-    const a = Math.floor((14 - month) / 12);
-    const y = year + 4800 - a;
-    const m = month + 12 * a - 3;
-
-    return day
-      + Math.floor((153 * m + 2) / 5)
-      + 365 * y
-      + Math.floor(y / 4)
-      - Math.floor(y / 100)
-      + Math.floor(y / 400)
-      - 32045;
-  }
-
-  /** JDN → Gregorian date at local midnight. */
-  private static jdnToGregorian(jdn: number): Date {
-    const a = jdn + 32044;
-    const b = Math.floor((4 * a + 3) / 146097);
-    const c = a - Math.floor((146097 * b) / 4);
-    const d = Math.floor((4 * c + 3) / 1461);
-    const e = c - Math.floor((1461 * d) / 4);
-    const m = Math.floor((5 * e + 2) / 153);
-
-    const day = e - Math.floor((153 * m + 2) / 5) + 1;
-    const month = m + 3 - 12 * Math.floor(m / 10);
-    const year = 100 * b + d - 4800 + Math.floor(m / 10);
-
-    const result = new Date(year, month - 1, day);
-    result.setHours(0, 0, 0, 0);
-    return result;
   }
 }

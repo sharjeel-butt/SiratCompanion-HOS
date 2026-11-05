@@ -29,7 +29,6 @@ export const DAYS_OF_WEEK_SHORT: string[] = [
 const MS_PER_DAY = 86400000;
 
 export class HijriCalendarHelper {
-
   /**
    * Return the Hijri date for a given Gregorian date, after applying
    * the user's offset (in days). Positive offset moves the Hijri date
@@ -109,33 +108,6 @@ export class HijriCalendarHelper {
       }
     }
     return null;
-  }
-
-  /**
-   * Estimate the maximum number of days between the anchor and the
-   * target Hijri date, with 60 days of slack for offset drift.
-   */
-  private static safeSearchRange(
-    year: number,
-    month: number,
-    day: number,
-    offsetDays: number,
-    anchor: Date
-  ): number {
-    try {
-      const anchorShifted = new Date(anchor.getTime());
-      anchorShifted.setDate(anchorShifted.getDate() + offsetDays);
-      const anchorH = HijriEngineResolver.current().toHijri(anchorShifted);
-      if (anchorH === null) {
-        return 60;
-      }
-      const yearDiff = Math.abs(year - anchorH.year);
-      const monthDiff = Math.abs(month - anchorH.month);
-      const estimated = yearDiff * 355 + monthDiff * 30 + 60;
-      return Math.max(60, estimated);
-    } catch (err) {
-      return 60;
-    }
   }
 
   /**
@@ -289,5 +261,32 @@ export class HijriCalendarHelper {
     }
     return `${monthShort(first)} ${first.getDate()} – ` +
       `${monthShort(last)} ${last.getDate()}, ${year}`;
+  }
+
+  /**
+   * Estimate the maximum number of days between the anchor and the
+   * target Hijri date, with 60 days of slack for offset drift.
+   */
+  private static safeSearchRange(
+    year: number,
+    month: number,
+    day: number,
+    offsetDays: number,
+    anchor: Date
+  ): number {
+    try {
+      const anchorShifted = new Date(anchor.getTime());
+      anchorShifted.setDate(anchorShifted.getDate() + offsetDays);
+      const anchorH = HijriEngineResolver.current().toHijri(anchorShifted);
+      if (anchorH === null) {
+        return 60;
+      }
+      const yearDiff = Math.abs(year - anchorH.year);
+      const monthDiff = Math.abs(month - anchorH.month);
+      const estimated = yearDiff * 355 + monthDiff * 30 + 60;
+      return Math.max(60, estimated);
+    } catch (err) {
+      return 60;
+    }
   }
 }

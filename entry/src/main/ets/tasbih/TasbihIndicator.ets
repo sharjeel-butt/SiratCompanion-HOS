@@ -72,7 +72,11 @@ export struct TasbihIndicator {
         AppStorage.setOrCreate('nav_target_dhikr', this.firstPendingDhikrIndex);
         AppStorage.setOrCreate('nav_target_prayer', this.prayerId);
         AppStorage.setOrCreate('nav_target_tasbih', this.firstTasbihId);
-        AppStorage.setOrCreate('nav_target_tab', 'tasbih');
+
+        // Bypass @StorageLink watch batching by emitting directly
+        const ctx = getContext(this) as common.UIAbilityContext;
+        ctx.eventHub.emit('widget_nav_event', 'tasbih');
+        AppStorage.setOrCreate('nav_target_tab', '');
       })
     }
   }

@@ -10,7 +10,6 @@ import { L } from '../i18n/LocalizationHelper';
 import { AppLogger } from './AppLogger';
 
 export class PdfExportHelper {
-
   static async exportBuilderToPdf(
     context: common.UIAbilityContext,
     uiContext: UIContext,

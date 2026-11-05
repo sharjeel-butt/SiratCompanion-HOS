@@ -117,122 +117,6 @@ struct PrayerDetailsPage {
     this.reload();
   }
 
-  private reload(): void {
-    this.snapshot = ProgressHelper.getPrayerDetails();
-    this.weekDetail = ProgressHelper.getWeekDetail();
-    this.yearDetail = ProgressHelper.getYearDetail();
-  }
-
-  private onThemeModeChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-  }
-
-  private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-  }
-
-  private onAppForegrounded(): void {
-    this.reload();
-  }
-
-  private onPrayerStateChanged(): void {
-    this.reload();
-  }
-
-  private tr(key: string): string {
-    return L.get(key, this.appLanguage);
-  }
-
-  private isRtl(): boolean {
-    return L.isRtlLang(this.appLanguage);
-  }
-
-  private perPrayerForPeriod(): PerPrayerCount {
-    if (this.period === 'month') {
-      return this.snapshot.monthPerPrayer;
-    }
-    if (this.period === 'year') {
-      return this.snapshot.yearPerPrayer;
-    }
-    return this.snapshot.weekPerPrayer;
-  }
-
-  private totalForPeriod(): number {
-    if (this.period === 'month') {
-      return this.snapshot.monthTotal;
-    }
-    if (this.period === 'year') {
-      return this.snapshot.yearTotal;
-    }
-    return this.snapshot.weekTotal;
-  }
-
-  private possibleForPeriod(): number {
-    if (this.period === 'month') {
-      return this.snapshot.monthPossible;
-    }
-    if (this.period === 'year') {
-      return this.snapshot.yearPossible;
-    }
-    return this.snapshot.weekPossible;
-  }
-
-  private percentForPeriod(): number {
-    const possible = this.possibleForPeriod();
-    if (possible === 0) {
-      return 0;
-    }
-    return Math.round(this.totalForPeriod() / possible * 100);
-  }
-
-  private prayerLabel(id: string): string {
-    if (id === 'fajr') {
-      return this.tr('prayer_fajr');
-    }
-    if (id === 'dhuhr') {
-      return this.tr('prayer_dhuhr');
-    }
-    if (id === 'asr') {
-      return this.tr('prayer_asr');
-    }
-    if (id === 'maghrib') {
-      return this.tr('prayer_maghrib');
-    }
-    return this.tr('prayer_isha');
-  }
-
-  private cellBg(cell: MonthDayCell): string {
-    if (cell.isPadding || cell.isFuture) {
-      return 'transparent';
-    }
-    if (cell.completed === 5) {
-      return this.colors.accentGold;
-    }
-    if (cell.completed >= 3) {
-      return this.colors.tintMedium;
-    }
-    if (cell.completed >= 1) {
-      return this.colors.tintSubtle;
-    }
-    return 'transparent';
-  }
-
-  private cellTextColor(cell: MonthDayCell): string {
-    if (cell.isFuture) {
-      return this.colors.textMuted;
-    }
-    if (cell.completed === 5) {
-      return this.colors.textOnAccent;
-    }
-    if (cell.isToday) {
-      return this.colors.accentGold;
-    }
-    if (cell.completed > 0) {
-      return this.colors.accentGold;
-    }
-    return this.colors.textMuted;
-  }
-
   build() {
     Stack() {
       Column() {
@@ -380,37 +264,6 @@ struct PrayerDetailsPage {
     .alignItems(HorizontalAlign.Center)
   }
 
-  private weekdayShort(dow: number): string {
-    const labels = L.getArray('days_of_week_short', this.appLanguage);
-    return labels[dow];
-  }
-
-  private weekCellBg(cell: WeekDetailCell): string {
-    if (cell.completed === 5) {
-      return this.colors.accentGold;
-    }
-    if (cell.completed >= 3) {
-      return this.colors.tintMedium;
-    }
-    if (cell.completed >= 1) {
-      return this.colors.tintSubtle;
-    }
-    return 'transparent';
-  }
-
-  private weekCellTextColor(cell: WeekDetailCell): string {
-    if (cell.completed === 5) {
-      return this.colors.textOnAccent;
-    }
-    if (cell.completed > 0) {
-      return this.colors.accentGold;
-    }
-    if (cell.isToday) {
-      return this.colors.accentGold;
-    }
-    return this.colors.textWhite;
-  }
-
   @Builder
   YearViewCard() {
     Column() {
@@ -502,43 +355,6 @@ struct PrayerDetailsPage {
     .alignItems(VerticalAlign.Center)
   }
 
-  private yearCellBg(completed: number): string {
-    if (completed < 0) {
-      // Future days — leave transparent so they are visually
-      // distinct from past days with 1–2 completions (which also
-      // use tintSubtle). Prevents the year view from claiming
-      // "not yet happened" looks identical to "happened but
-      // low progress".
-      return 'transparent';
-    }
-    if (completed === 5) {
-      return this.colors.accentGold;
-    }
-    if (completed >= 3) {
-      return this.colors.tintMedium;
-    }
-    if (completed >= 1) {
-      return this.colors.tintSubtle;
-    }
-    return this.colors.tintSoft;
-  }
-
-  private monthShortLabel(monthIndex: number): string {
-    const locale = this.appLanguage === 'zh' ? 'zh-CN'
-      : this.appLanguage === 'ar' ? 'ar'
-        : 'en-US';
-    try {
-      const fmt = new Intl.DateTimeFormat(locale, { month: 'short' });
-      return fmt.format(new Date(this.yearDetail.year, monthIndex, 1));
-    } catch (err) {
-      const fallback: string[] = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-      ];
-      return fallback[monthIndex];
-    }
-  }
-
   @Builder
   TopBar() {
     Row({ space: 16 }) {
@@ -568,7 +384,8 @@ struct PrayerDetailsPage {
         .layoutWeight(1)
         .textAlign(TextAlign.Start)
     }
-    .width('100%').height(72)
+    .width('100%')
+    .height(72)
     .padding({ left: 16, right: 16 })
     .backgroundColor(this.colors.cardDark)
     .alignItems(VerticalAlign.Center)
@@ -605,16 +422,6 @@ struct PrayerDetailsPage {
       .onClick(() => {
         this.period = id as Period;
       })
-  }
-
-  private periodLabel(id: string): string {
-    if (id === 'week') {
-      return this.tr('details_period_week');
-    }
-    if (id === 'month') {
-      return this.tr('details_period_month');
-    }
-    return this.tr('details_period_year');
   }
 
   @Builder
@@ -809,16 +616,6 @@ struct PrayerDetailsPage {
     .margin({ bottom: 12 })
   }
 
-  private periodPossible(): number {
-    if (this.period === 'month') {
-      return this.snapshot.monthProgress.daysElapsed;
-    }
-    if (this.period === 'year') {
-      return Math.max(1, Math.round(this.snapshot.yearPossible / 5));
-    }
-    return 7;
-  }
-
   @Builder
   MonthHeatmapCard() {
     Column() {
@@ -856,6 +653,7 @@ struct PrayerDetailsPage {
         .width('100%')
         .margin({ bottom: 8 })
         .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+
         ForEach(this.snapshot.monthProgress.weeks, (week: MonthDayCell[], wi: number) => {
           Row() {
             ForEach(week, (cell: MonthDayCell, di: number) => {
@@ -925,5 +723,209 @@ struct PrayerDetailsPage {
       offsetX: 0,
       offsetY: 6
     })
+  }
+
+  private reload(): void {
+    this.snapshot = ProgressHelper.getPrayerDetails();
+    this.weekDetail = ProgressHelper.getWeekDetail();
+    this.yearDetail = ProgressHelper.getYearDetail();
+  }
+
+  private onThemeModeChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  private onAppThemePresetChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+  }
+
+  private onAppForegrounded(): void {
+    this.reload();
+  }
+
+  private onPrayerStateChanged(): void {
+    this.reload();
+  }
+
+  private tr(key: string): string {
+    return L.get(key, this.appLanguage);
+  }
+
+  private isRtl(): boolean {
+    return L.isRtlLang(this.appLanguage);
+  }
+
+  private perPrayerForPeriod(): PerPrayerCount {
+    if (this.period === 'month') {
+      return this.snapshot.monthPerPrayer;
+    }
+    if (this.period === 'year') {
+      return this.snapshot.yearPerPrayer;
+    }
+    return this.snapshot.weekPerPrayer;
+  }
+
+  private totalForPeriod(): number {
+    if (this.period === 'month') {
+      return this.snapshot.monthTotal;
+    }
+    if (this.period === 'year') {
+      return this.snapshot.yearTotal;
+    }
+    return this.snapshot.weekTotal;
+  }
+
+  private possibleForPeriod(): number {
+    if (this.period === 'month') {
+      return this.snapshot.monthPossible;
+    }
+    if (this.period === 'year') {
+      return this.snapshot.yearPossible;
+    }
+    return this.snapshot.weekPossible;
+  }
+
+  private percentForPeriod(): number {
+    const possible = this.possibleForPeriod();
+    if (possible === 0) {
+      return 0;
+    }
+    return Math.round(this.totalForPeriod() / possible * 100);
+  }
+
+  private prayerLabel(id: string): string {
+    if (id === 'fajr') {
+      return this.tr('prayer_fajr');
+    }
+    if (id === 'dhuhr') {
+      return this.tr('prayer_dhuhr');
+    }
+    if (id === 'asr') {
+      return this.tr('prayer_asr');
+    }
+    if (id === 'maghrib') {
+      return this.tr('prayer_maghrib');
+    }
+    return this.tr('prayer_isha');
+  }
+
+  private cellBg(cell: MonthDayCell): string {
+    if (cell.isPadding || cell.isFuture) {
+      return 'transparent';
+    }
+    if (cell.completed === 5) {
+      return this.colors.accentGold;
+    }
+    if (cell.completed >= 3) {
+      return this.colors.tintMedium;
+    }
+    if (cell.completed >= 1) {
+      return this.colors.tintSubtle;
+    }
+    return 'transparent';
+  }
+
+  private cellTextColor(cell: MonthDayCell): string {
+    if (cell.isFuture) {
+      return this.colors.textMuted;
+    }
+    if (cell.completed === 5) {
+      return this.colors.textOnAccent;
+    }
+    if (cell.isToday) {
+      return this.colors.accentGold;
+    }
+    if (cell.completed > 0) {
+      return this.colors.accentGold;
+    }
+    return this.colors.textMuted;
+  }
+
+  private weekdayShort(dow: number): string {
+    const labels = L.getArray('days_of_week_short', this.appLanguage);
+    return labels[dow];
+  }
+
+  private weekCellBg(cell: WeekDetailCell): string {
+    if (cell.completed === 5) {
+      return this.colors.accentGold;
+    }
+    if (cell.completed >= 3) {
+      return this.colors.tintMedium;
+    }
+    if (cell.completed >= 1) {
+      return this.colors.tintSubtle;
+    }
+    return 'transparent';
+  }
+
+  private weekCellTextColor(cell: WeekDetailCell): string {
+    if (cell.completed === 5) {
+      return this.colors.textOnAccent;
+    }
+    if (cell.completed > 0) {
+      return this.colors.accentGold;
+    }
+    if (cell.isToday) {
+      return this.colors.accentGold;
+    }
+    return this.colors.textWhite;
+  }
+
+  private yearCellBg(completed: number): string {
+    if (completed < 0) {
+      // Future days — leave transparent so they are visually
+      // distinct from past days with 1–2 completions (which also
+      // use tintSubtle). Prevents the year view from claiming
+      // "not yet happened" looks identical to "happened but
+      // low progress".
+      return 'transparent';
+    }
+    if (completed === 5) {
+      return this.colors.accentGold;
+    }
+    if (completed >= 3) {
+      return this.colors.tintMedium;
+    }
+    if (completed >= 1) {
+      return this.colors.tintSubtle;
+    }
+    return this.colors.tintSoft;
+  }
+
+  private monthShortLabel(monthIndex: number): string {
+    const locale = this.appLanguage === 'zh' ? 'zh-CN'
+      : this.appLanguage === 'ar' ? 'ar'
+        : 'en-US';
+    try {
+      const fmt = new Intl.DateTimeFormat(locale, { month: 'short' });
+      return fmt.format(new Date(this.yearDetail.year, monthIndex, 1));
+    } catch (err) {
+      const fallback: string[] = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      ];
+      return fallback[monthIndex];
+    }
+  }
+
+  private periodLabel(id: string): string {
+    if (id === 'week') {
+      return this.tr('details_period_week');
+    }
+    if (id === 'month') {
+      return this.tr('details_period_month');
+    }
+    return this.tr('details_period_year');
+  }
+
+  private periodPossible(): number {
+    if (this.period === 'month') {
+      return this.snapshot.monthProgress.daysElapsed;
+    }
+    if (this.period === 'year') {
+      return Math.max(1, Math.round(this.snapshot.yearPossible / 5));
+    }
+    return 7;
   }
 }

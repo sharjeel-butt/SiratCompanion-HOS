@@ -97,67 +97,6 @@ export class DuaService {
     }
   }
 
-  /**
-   * Read a string[] from preferences. Returns [] on any failure —
-   * missing key, malformed JSON, non-array value, or null. Isolating
-   * this parse from the main loadDuas try/catch means a single
-   * corrupt favorites file no longer wipes every dua from the app.
-   *
-   * No any/unknown: uses Object + Array.isArray + a type assertion,
-   * which is the ArkTS-legal pattern for defensive JSON handling.
-   */
-  private static async safeLoadStringArray(key: string): Promise<string[]> {
-    try {
-      const raw = await PreferencesHelper.getString(key, '[]');
-      if (raw.length === 0) {
-        return [];
-      }
-      const parsed: Object = JSON.parse(raw);
-      // Array.isArray returns false for null, primitives, and
-      // plain objects — all of which we must reject here.
-      if (!Array.isArray(parsed)) {
-        console.warn(`[DuaService] ${key} is not an array — ignoring`);
-        return [];
-      }
-      return parsed as string[];
-    } catch (e) {
-      const err = e as Error;
-      console.warn(`[DuaService] ${key} parse failed: ${err.message}`);
-      return [];
-    }
-  }
-
-  /**
-   * Read a Record<string, string[]> from preferences. Returns {} on
-   * any failure — missing key, malformed JSON, array value, null, or
-   * primitive. Same isolation rationale as safeLoadStringArray.
-   */
-  private static async safeLoadRecord(key: string): Promise<Record<string, string[]>> {
-    try {
-      const raw = await PreferencesHelper.getString(key, '{}');
-      if (raw.length === 0) {
-        return {};
-      }
-      const parsed: Object = JSON.parse(raw);
-      if (Array.isArray(parsed)) {
-        console.warn(`[DuaService] ${key} is not an object — ignoring`);
-        return {};
-      }
-      const rec = parsed as Record<string, string[]>;
-      // Object.keys throws on null — that routes us into the
-      // catch below and returns {}. Primitive values (string,
-      // number, boolean) don't throw here and are harmless
-      // downstream: bindings[id] returns undefined, which
-      // loadDuas maps to [] via `bindings[base.id] || []`.
-      Object.keys(rec);
-      return rec;
-    } catch (e) {
-      const err = e as Error;
-      console.warn(`[DuaService] ${key} parse failed: ${err.message}`);
-      return {};
-    }
-  }
-
   static async toggleFavorite(id: string, currentFavs: string[]): Promise<string[]> {
     // Replace array spread with concat
     const newFavs: string[] = currentFavs.includes(id)
@@ -273,5 +212,66 @@ export class DuaService {
     }
 
     return result;
+  }
+
+  /**
+   * Read a string[] from preferences. Returns [] on any failure —
+   * missing key, malformed JSON, non-array value, or null. Isolating
+   * this parse from the main loadDuas try/catch means a single
+   * corrupt favorites file no longer wipes every dua from the app.
+   *
+   * No any/unknown: uses Object + Array.isArray + a type assertion,
+   * which is the ArkTS-legal pattern for defensive JSON handling.
+   */
+  private static async safeLoadStringArray(key: string): Promise<string[]> {
+    try {
+      const raw = await PreferencesHelper.getString(key, '[]');
+      if (raw.length === 0) {
+        return [];
+      }
+      const parsed: Object = JSON.parse(raw);
+      // Array.isArray returns false for null, primitives, and
+      // plain objects — all of which we must reject here.
+      if (!Array.isArray(parsed)) {
+        console.warn(`[DuaService] ${key} is not an array — ignoring`);
+        return [];
+      }
+      return parsed as string[];
+    } catch (e) {
+      const err = e as Error;
+      console.warn(`[DuaService] ${key} parse failed: ${err.message}`);
+      return [];
+    }
+  }
+
+  /**
+   * Read a Record<string, string[]> from preferences. Returns {} on
+   * any failure — missing key, malformed JSON, array value, null, or
+   * primitive. Same isolation rationale as safeLoadStringArray.
+   */
+  private static async safeLoadRecord(key: string): Promise<Record<string, string[]>> {
+    try {
+      const raw = await PreferencesHelper.getString(key, '{}');
+      if (raw.length === 0) {
+        return {};
+      }
+      const parsed: Object = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        console.warn(`[DuaService] ${key} is not an object — ignoring`);
+        return {};
+      }
+      const rec = parsed as Record<string, string[]>;
+      // Object.keys throws on null — that routes us into the
+      // catch below and returns {}. Primitive values (string,
+      // number, boolean) don't throw here and are harmless
+      // downstream: bindings[id] returns undefined, which
+      // loadDuas maps to [] via `bindings[base.id] || []`.
+      Object.keys(rec);
+      return rec;
+    } catch (e) {
+      const err = e as Error;
+      console.warn(`[DuaService] ${key} parse failed: ${err.message}`);
+      return {};
+    }
   }
 }

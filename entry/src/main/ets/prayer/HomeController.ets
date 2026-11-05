@@ -52,7 +52,6 @@ interface TimelineEvent {
 const MS_PER_DAY = 86400000;
 
 export class HomeController {
-
   // ============================================================
   // PRAYER TIME COMPUTATION
   // ============================================================
@@ -209,60 +208,6 @@ export class HomeController {
     }
   }
 
-  /**
-   * Before Fajr, the app has no current prayer for today. The
-   * correct display is the previous day's Isha — its window runs
-   * from Maghrib through the next Fajr.
-   *
-   * Returns a minimal PrayerModel carrying only the fields the
-   * header needs. The result is not added to any persistent state.
-   *
-   * Note: we do NOT call getLocationAnchor() before passing
-   * `yesterday` to calculateWithDeviceTimezone. Doing so shifted
-   * yesterday by the offset delta, then let calculateWithDeviceTimezone
-   * re-resolve the offset from the shifted date — a double-shift
-   * that could flap across a DST boundary on manual-location users.
-   * The calculator already resolves its own offset from the
-   * (date + coords) pair, so we hand it yesterday unmodified.
-   */
-  private static buildPreviousIsha(
-    today: Date,
-    latitude: number,
-    longitude: number,
-    method: CalculationMethod,
-    asrRule: AsrShadowRule,
-    highLatRule: HighLatitudeRule,
-    offsets: PrayerOffsets,
-    advanced: AdvancedCalcSettings
-  ): PrayerModel | null {
-    const yesterday = new Date(today.getTime() - MS_PER_DAY);
-
-    try {
-      const yTimes: DailyPrayerTimes =
-        PrayerTimeCalculator.calculateWithDeviceTimezone(
-          yesterday, latitude, longitude, method, asrRule, highLatRule,
-          advanced
-        );
-      const yIsha = PrayerManager.offsetTime(yTimes.isha, offsets.isha);
-
-      const result: PrayerModel = {
-        id: 'isha',
-        name: 'Isha',
-        arabicName: 'العشاء',
-        time: yIsha,
-        status: 'pray',
-        checked: false
-      };
-      return result;
-    } catch (err) {
-      return null;
-    }
-  }
-
-  // ============================================================
-  // TIMELINE — next event including extras after Isha
-  // ============================================================
-
   static computeNextEvent(
     now: Date,
     latitude: number,
@@ -311,6 +256,10 @@ export class HomeController {
     }
     return null;
   }
+
+  // ============================================================
+  // TIMELINE — next event including extras after Isha
+  // ============================================================
 
   static async loadLocationForMode(mode: LocationMode): Promise<HomeLocationSnapshot> {
     const manualLabel = L.get('manual_location');
@@ -367,6 +316,56 @@ export class HomeController {
       isManual: false
     };
     return fallback;
+  }
+
+  /**
+   * Before Fajr, the app has no current prayer for today. The
+   * correct display is the previous day's Isha — its window runs
+   * from Maghrib through the next Fajr.
+   *
+   * Returns a minimal PrayerModel carrying only the fields the
+   * header needs. The result is not added to any persistent state.
+   *
+   * Note: we do NOT call getLocationAnchor() before passing
+   * `yesterday` to calculateWithDeviceTimezone. Doing so shifted
+   * yesterday by the offset delta, then let calculateWithDeviceTimezone
+   * re-resolve the offset from the shifted date — a double-shift
+   * that could flap across a DST boundary on manual-location users.
+   * The calculator already resolves its own offset from the
+   * (date + coords) pair, so we hand it yesterday unmodified.
+   */
+  private static buildPreviousIsha(
+    today: Date,
+    latitude: number,
+    longitude: number,
+    method: CalculationMethod,
+    asrRule: AsrShadowRule,
+    highLatRule: HighLatitudeRule,
+    offsets: PrayerOffsets,
+    advanced: AdvancedCalcSettings
+  ): PrayerModel | null {
+    const yesterday = new Date(today.getTime() - MS_PER_DAY);
+
+    try {
+      const yTimes: DailyPrayerTimes =
+        PrayerTimeCalculator.calculateWithDeviceTimezone(
+          yesterday, latitude, longitude, method, asrRule, highLatRule,
+          advanced
+        );
+      const yIsha = PrayerManager.offsetTime(yTimes.isha, offsets.isha);
+
+      const result: PrayerModel = {
+        id: 'isha',
+        name: 'Isha',
+        arabicName: 'العشاء',
+        time: yIsha,
+        status: 'pray',
+        checked: false
+      };
+      return result;
+    } catch (err) {
+      return null;
+    }
   }
 
   private static appendDayEvents(

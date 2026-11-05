@@ -82,40 +82,31 @@ const NIGHT_EXTRA_IDS: string[] = ['firstThird', 'midnight', 'lastThird'];
 
 @Component
 export struct Prayer {
-
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
-
   @StorageLink(STORAGE_KEY_LOCATION_VERSION)
   @Watch('onLocationVersionChanged')
   locationVersion: number = 0;
-
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
   appThemePreset: string = ThemePreset.SIRAT;
-
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChangedInHome')
   appLanguage: string = 'en';
-
   @StorageLink(STORAGE_KEY_PRAYER_STATE_VERSION)
   prayerStateVersion: number = 0;
-
   @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
   @Watch('onHijriOffsetChangedInHome')
   hijriOffset: number = 0;
   @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_TYPE)
   @Watch('onHijriCalendarTypeChanged')
   hijriCalendarType: string = HijriCalendarType.UMM_AL_QURA;
-
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
-
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
-
   @StorageLink(STORAGE_KEY_TIME_FORMAT)
   @Watch('onClockFormatChanged')
   clockFormat: string = ClockFormat.SYSTEM;
@@ -151,21 +142,16 @@ export struct Prayer {
   @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_VERSION)
   @Watch('onHijriCalendarVersionChanged')
   calendarVersion: number = 0;
-
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
-  private systemDarkListener: mediaquery.MediaQueryListener | null = null;
-
   @State currentLocation: string = 'Loading...';
   @State isLoadingLocation: boolean = true;
   @State latitude: number = 0;
   @State longitude: number = 0;
-
   @State hijriDateString: string = '';
   @State todayCurrentPrayerName: string = '—';
   @State todayCurrentPrayerTime: string = '--:--';
   @State todayNextPrayerName: string = '—';
   @State todayNextPrayerTime: string = '--:--';
-
   @State dateOffset: number = 0;
   @State viewingDate: Date = new Date();
   @State viewingDateKey: string = '';
@@ -179,15 +165,48 @@ export struct Prayer {
   @State pdfHijriYear: number = 1447;
   @State pdfHijriSpan: string = '';
   @State upcomingImportantDates: UpcomingImportantDate[] = [];
-
   @State prayers: PrayerModel[] = [
-    { id: 'fajr',    name: 'Fajr',    arabicName: 'الفجر',   time: '--:--', status: 'abbreviation', checked: false },
-    { id: 'dhuhr',   name: 'Dhuhr',   arabicName: 'الظهر',   time: '--:--', status: 'abbreviation', checked: false },
-    { id: 'asr',     name: 'Asr',     arabicName: 'العصر',   time: '--:--', status: 'abbreviation', checked: false },
-    { id: 'maghrib', name: 'Maghrib', arabicName: 'المغرب',  time: '--:--', status: 'abbreviation', checked: false },
-    { id: 'isha',    name: 'Isha',    arabicName: 'العشاء',  time: '--:--', status: 'abbreviation', checked: false }
+    {
+      id: 'fajr',
+      name: 'Fajr',
+      arabicName: 'الفجر',
+      time: '--:--',
+      status: 'abbreviation',
+      checked: false
+    },
+    {
+      id: 'dhuhr',
+      name: 'Dhuhr',
+      arabicName: 'الظهر',
+      time: '--:--',
+      status: 'abbreviation',
+      checked: false
+    },
+    {
+      id: 'asr',
+      name: 'Asr',
+      arabicName: 'العصر',
+      time: '--:--',
+      status: 'abbreviation',
+      checked: false
+    },
+    {
+      id: 'maghrib',
+      name: 'Maghrib',
+      arabicName: 'المغرب',
+      time: '--:--',
+      status: 'abbreviation',
+      checked: false
+    },
+    {
+      id: 'isha',
+      name: 'Isha',
+      arabicName: 'العشاء',
+      time: '--:--',
+      status: 'abbreviation',
+      checked: false
+    }
   ];
-
   @State extraTimings: ExtraTiming[] = [
     {
       id: 'imsak',
@@ -238,22 +257,751 @@ export struct Prayer {
       icon: $r('app.media.ic_night_last_third')
     }
   ];
-
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
   @State asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
   @State calcSource: CalculationSource = CalculationSource.LOCAL;
   @State locationMode: LocationMode = LocationMode.GPS;
-  @State offsets: PrayerOffsets = { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 };
-  private advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC;
-
-  @State private isRefreshingHome: boolean = false;
+  @State offsets: PrayerOffsets = {
+    fajr: 0,
+    dhuhr: 0,
+    asr: 0,
+    maghrib: 0,
+    isha: 0
+  };
   @State highLatRule: HighLatitudeRule = HighLatitudeRule.NONE;
-
+  private systemDarkListener: mediaquery.MediaQueryListener | null = null;
+  private advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC;
+  @State private isRefreshingHome: boolean = false;
   private statusTimerId: number = -1;
-
   private settingsLoaded: boolean = false;
   private settingsLoading: boolean = false;
   private settingsPending: boolean = false;
+
+  aboutToAppear(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+    this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
+      this.colors = c;
+    });
+
+    EventPerspectiveNotifier.subscribe(this.eventPerspectiveListener);
+
+    this.refreshHijriDates();
+    this.upcomingImportantDates = DateHelper.getUpcomingImportantDates(
+      this.hijriOffset,
+      SettingsHelper.getEventPerspective()
+    );
+
+    this.refreshViewingDate(true);
+    this.initialize();
+    this.startStatusTimer();
+
+    this.refreshLocationSilently();
+  }
+
+  aboutToDisappear(): void {
+    PageTheme.uninstallSystemListener(this.systemDarkListener);
+    this.systemDarkListener = null;
+    EventPerspectiveNotifier.unsubscribe(this.eventPerspectiveListener);
+    if (this.statusTimerId !== -1) {
+      clearInterval(this.statusTimerId);
+      this.statusTimerId = -1;
+    }
+  }
+
+  onPageShow(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+    this.syncViewingDateIfStale();
+
+    this.prayers = PrayerManager.loadStateForDate(
+      this.viewingDateKey, this.prayers, this.viewingDate
+    );
+    this.prayers = PrayerManager.updateStatuses(
+      this.prayers, this.viewingDate, this.getLocationOffsetHours()
+    );
+
+    this.loadSettingsAndLocation();
+    this.updateTodayHeaderData();
+    this.refreshHijriDates();
+  }
+
+  build() {
+    Stack() {
+      Column() {
+        PageHeader({
+          colors: this.colors,
+          currentLanguage: this.appLanguage,
+          hijriDateString: this.hijriDateString,
+          currentLocation: this.currentLocation,
+          isLoadingLocation: this.isLoadingLocation,
+          todayCurrentPrayerName: this.todayCurrentPrayerName,
+          todayCurrentPrayerTime: this.todayCurrentPrayerTime,
+          calcMethod: this.calcMethod,
+          asrRule: this.asrRule,
+          calcSource: this.calcSource,
+          showCalcPills: true,
+          isRamadan: false,
+          fastingEndTime: this.getSunsetTime(),
+          onOpenLocationSettings: () => {
+            this.navigateToLocationSettings();
+          },
+          onOpenSettings: () => {
+            this.navigateToSettings();
+          }
+        })
+
+        Refresh({ refreshing: $$this.isRefreshingHome }) {
+          Scroll() {
+            Column() {
+              if (this.isTablet()) {
+                Row({ space: 16 }) {
+                  Column() {
+                    this.NextPrayerSection()
+                    if (this.calcSource === CalculationSource.LOCAL) {
+                      this.TimelineSection()
+                    } else {
+                      this.ComingSoonCard()
+                    }
+                  }
+                  .layoutWeight(1)
+                  .alignItems(HorizontalAlign.Start)
+
+                  Column() {
+                    PrayerSunPath({
+                      colors: this.colors,
+                      prayers: this.prayers,
+                      sunriseTime: this.getSunriseTime(),
+                      sunsetTime: this.getSunsetTime(),
+                      imsakTime: this.getImsakTime(),
+                      firstThirdTime: this.getFirstThirdTime(),
+                      midnightTime: this.getMidnightTime(),
+                      lastThirdTime: this.getLastThirdTime(),
+                      currentLanguage: this.appLanguage,
+                      isDarkMode: this.isDarkMode(),
+                      showImsakGuide: this.showImsakSunpath,
+                      showFirstThirdGuide: this.showFirstThirdSunpath,
+                      showMidnightGuide: this.showMidnightSunpath,
+                      showLastThirdGuide: this.showLastThirdSunpath
+                    })
+                  }
+                  .layoutWeight(1)
+                  .alignItems(HorizontalAlign.Start)
+                }
+                .width('100%')
+                .alignItems(VerticalAlign.Top)
+                .padding({ left: 24, right: 24 })
+              } else {
+                Column() {
+                  this.NextPrayerSection()
+
+                  Column() {
+                    PrayerSunPath({
+                      colors: this.colors,
+                      prayers: this.prayers,
+                      sunriseTime: this.getSunriseTime(),
+                      sunsetTime: this.getSunsetTime(),
+                      imsakTime: this.getImsakTime(),
+                      firstThirdTime: this.getFirstThirdTime(),
+                      midnightTime: this.getMidnightTime(),
+                      lastThirdTime: this.getLastThirdTime(),
+                      currentLanguage: this.appLanguage,
+                      isDarkMode: this.isDarkMode(),
+                      showImsakGuide: this.showImsakSunpath,
+                      showFirstThirdGuide: this.showFirstThirdSunpath,
+                      showMidnightGuide: this.showMidnightSunpath,
+                      showLastThirdGuide: this.showLastThirdSunpath
+                    })
+                  }
+                  .width('100%')
+                  .padding({ left: 16, right: 16 })
+
+                  if (this.calcSource === CalculationSource.LOCAL) {
+                    this.TimelineSection()
+                  } else {
+                    this.ComingSoonCard()
+                  }
+                }
+                .width('100%')
+              }
+
+              Column().height(180)
+            }
+            .width('100%')
+          }
+          .width('100%')
+          .backgroundColor(this.colors.primaryGreen)
+          .scrollable(ScrollDirection.Vertical)
+          .scrollBar(BarState.Auto)
+          .edgeEffect(EdgeEffect.Spring)
+        }
+        .layoutWeight(1)
+        .width('100%')
+        .backgroundColor(this.colors.primaryGreen)
+        .onRefreshing(() => {
+          this.handleHomeRefresh();
+        })
+      }
+      .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
+    }
+    .width('100%')
+    .height('100%')
+    .backgroundColor(this.colors.primaryGreen)
+    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+  }
+
+  @Builder
+  PrayerExportLayout() {
+    Column() {
+      // Header
+      Row({ space: 12 }) { // <-- Replaced margin({ right: 12 })
+        Image($r('app.media.foreground'))
+          .syncLoad(true)
+          .width(36)
+          .height(36)
+          .borderRadius(8)
+          .flexShrink(0)
+
+        Column() {
+          Text(`${this.pdfHijriMonthName} ${this.pdfHijriYear} ${this.tr('hijri_year_suffix')}`)
+            .fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.pdfColors.textWhite)
+            .width('100%')
+
+          Text(`${this.pdfMonthName} · ${this.currentLocation}`)
+            .fontSize(10).fontColor(this.pdfColors.accentGold).margin({ top: 4 })
+            .width('100%')
+        }
+        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+        Text(this.tr('generated_by'))
+          .fontSize(8).fontColor(this.pdfColors.textMuted).alignSelf(ItemAlign.Start)
+      }
+      .width('100%')
+      .padding({
+        top: 15,
+        bottom: 10,
+        left: 20,
+        right: 20
+      })
+      .backgroundColor(this.pdfColors.cardDark)
+      .alignItems(VerticalAlign.Center)
+
+      Row().width('100%').height(3).backgroundColor(this.pdfColors.accentGold)
+
+      // Table Headers
+      Row() {
+        Text(this.tr('export_date'))
+          .layoutWeight(1.8)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+          .textAlign(TextAlign.Start)
+          .width('100%')
+        Text(this.tr('prayer_fajr'))
+          .layoutWeight(1)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+          .textAlign(TextAlign.Center) // <-- Center aligned
+        Text(this.tr('prayer_dhuhr'))
+          .layoutWeight(1)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+          .textAlign(TextAlign.Center)
+        Text(this.tr('prayer_asr'))
+          .layoutWeight(1)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+          .textAlign(TextAlign.Center)
+        Text(this.tr('prayer_maghrib'))
+          .layoutWeight(1)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+          .textAlign(TextAlign.Center)
+        Text(this.tr('prayer_isha'))
+          .layoutWeight(1)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(9)
+          .fontColor(this.pdfColors.accentGold)
+          .textAlign(TextAlign.Center)
+      }
+      .width('100%')
+      .padding({
+        top: 6,
+        bottom: 6,
+        left: 20,
+        right: 20
+      })
+      .backgroundColor(this.pdfColors.tintSoft)
+
+      // Table Rows
+      Column() {
+        ForEach(this.pdfPrayerDays, (row: PrayerTableRow, index: number) => {
+          Row() {
+            Column() {
+              Text(row.hijriDate)
+                .fontSize(9)
+                .lineHeight(11)
+                .fontWeight(FontWeight.Medium)
+                .fontColor(this.pdfColors.textWhite)
+                .width('100%')
+                .textAlign(TextAlign.Start) // <-- Forces text to the right in RTL
+              Text(row.gregorianDate)
+                .fontSize(7)
+                .lineHeight(9)
+                .fontColor(this.pdfColors.textMuted)
+                .margin({ top: 0 })
+                .width('100%')
+                .textAlign(TextAlign.Start) // <-- Forces text to the right in RTL
+            }
+            .layoutWeight(1.8)
+            .alignItems(HorizontalAlign.Start)
+
+            Text(row.fajr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
+            Text(row.dhuhr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
+            Text(row.asr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
+            Text(row.maghrib)
+              .layoutWeight(1)
+              .fontSize(8)
+              .fontColor(this.pdfColors.textWhite)
+              .textAlign(TextAlign.Center)
+            Text(row.isha).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
+          }
+          .width('100%')
+          .padding({
+            top: 2,
+            bottom: 2,
+            left: 20,
+            right: 20
+          })
+          .backgroundColor(index % 2 === 0 ? 'transparent' : this.pdfColors.tintSubtle)
+          .alignItems(VerticalAlign.Center)
+        })
+      }
+      .width('100%')
+
+    }
+    .width(595).height(842).backgroundColor(this.pdfColors.primaryGreen)
+    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr) // <-- ADDED
+  }
+
+  @Builder
+  NextPrayerSection() {
+    Column() {
+      // Card surface — inset by the wrapper below, so its left/right
+      // edges land at exactly x=16 like PrayerSunPath and the card
+      // inside TimelineSection.
+      Column({ space: 2 }) {
+        Text(this.tr('next_prayer'))
+          .fontSize(10)
+          .fontColor(this.colors.textMuted)
+          .letterSpacing(0.5)
+          .fontWeight(FontWeight.Medium)
+          .width('100%')
+          .textAlign(TextAlign.Start)
+
+        Row() {
+          Text(this.translateEventName(this.todayNextPrayerName))
+            .fontSize(16)
+            .fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Bold)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .layoutWeight(1)
+            .textAlign(TextAlign.Start)
+
+          Text(this.dt(this.todayNextPrayerTime))
+            .fontSize(28)
+            .fontColor(this.colors.textWhite)
+            .fontWeight(FontWeight.Bold)
+            .fontFeature('"tnum" 1')
+            .maxLines(1)
+            .flexShrink(0)
+        }
+        .width('100%')
+        .alignItems(VerticalAlign.Center)
+      }
+      .width('100%')
+      .padding({
+        left: 16,
+        right: 16,
+        top: 8,
+        bottom: 8
+      })
+      .backgroundColor(this.colors.cardDark)
+      .borderRadius(19)
+      .border({ width: 1, color: this.colors.borderSoft })
+      .alignItems(HorizontalAlign.Start)
+    }
+    .width('100%')
+    .padding({ left: 16, right: 16 })
+    .margin({ top: 4, bottom: 12 })
+  }
+
+  @Builder
+  TimelineSection() {
+    Column() {
+      Row() {
+        Text(this.tr('todays_prayers'))
+          .fontSize(14)
+          .fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Bold)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+        Text(`${this.prayers.filter(p => p.checked).length} / ${this.prayers.length}`)
+          .fontSize(14)
+          .fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Bold)
+          .direction(Direction.Ltr)
+          .margin({ left: 8 })
+
+        Blank()
+
+        // --- Export PDF Button ---
+        if (this.isExporting) {
+          LoadingProgress()
+            .width(24).height(24)
+            .color(this.colors.accentGold)
+            .margin({ right: this.isRtl() ? 0 : 8, left: this.isRtl() ? 8 : 0 })
+        } else {
+          Row() {
+            Image($r('app.media.ic_printer'))
+              .width(16).height(16)
+              .fillColor(this.colors.accentGold)
+          }
+          .width(32)
+          .height(32)
+          .justifyContent(FlexAlign.Center)
+          .alignItems(VerticalAlign.Center)
+          .borderRadius(16)
+          .backgroundColor(this.colors.cardDark)
+          .border({ width: 1, color: this.colors.borderSoft })
+          .margin({ right: this.isRtl() ? 0 : 8, left: this.isRtl() ? 8 : 0 })
+          .onClick(() => {
+            this.handleExportPdf();
+          })
+        }
+
+        Row({ space: 4 }) {
+          Image($r('app.media.ic_check'))
+            .width(12).height(12)
+            .fillColor(this.colors.accentGold)
+            .flexShrink(0)
+          Text(this.tr('mark_all'))
+            .fontSize(11).fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Medium).maxLines(1)
+        }
+        .padding({
+          left: 10,
+          right: 10,
+          top: 5,
+          bottom: 5
+        })
+        .backgroundColor(this.colors.cardDark)
+        .borderRadius(12)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .opacity(this.hasUncheckedCheckablePrayers() ? 1.0 : 0.4)
+        .onClick(() => {
+          this.markAllPrayed();
+        })
+      }
+      .width('100%').padding({ bottom: 8 })
+      .alignItems(VerticalAlign.Center)
+
+      Row() {
+        // Previous Day: Points Right (▶) in RTL, Left (◀) in LTR
+        Row() {
+          Image($r('app.media.ic_chevron_right'))
+            .width(16).height(16)
+            .fillColor(this.colors.accentGold)
+            // FIXED: Points left in LTR (180), right in RTL (0)
+            .rotate({ angle: this.isRtl() ? 0 : 180 })
+        }
+        .width(36)
+        .height(36)
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
+        .borderRadius(18)
+        .backgroundColor(this.colors.cardDark)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .onClick(() => {
+          this.goToPreviousDay();
+        })
+
+        Text(this.viewingHijriDate)
+          .fontSize(13)
+          .fontColor(this.colors.accentGold)
+          .fontWeight(FontWeight.Medium)
+          .layoutWeight(1)
+          .textAlign(TextAlign.Center)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+
+        Row() {
+          Image($r('app.media.ic_chevron_right'))
+            .width(16).height(16)
+            .fillColor(this.colors.accentGold)
+            // FIXED: Points right in LTR (0), left in RTL (180)
+            .rotate({ angle: this.isRtl() ? 180 : 0 })
+        }
+        .width(36)
+        .height(36)
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
+        .borderRadius(18)
+        .backgroundColor(this.colors.cardDark)
+        .border({ width: 1, color: this.colors.borderSoft })
+        .onClick(() => {
+          this.goToNextDay();
+        })
+
+        if (this.dateOffset !== 0) {
+          Text(this.tr('today'))
+            .fontSize(11)
+            .fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Medium)
+            .padding({
+              left: 12,
+              right: 12,
+              top: 9,
+              bottom: 9
+            })
+            .backgroundColor(this.colors.cardDark)
+            .borderRadius(18)
+            .border({ width: 1, color: this.colors.borderSoft })
+            // Use logical margins for RTL
+            .margin({
+              left: this.isRtl() ? 0 : 8,
+              right: this.isRtl() ? 8 : 0
+            })
+            .onClick(() => {
+              this.goToToday();
+            })
+        }
+      }
+      .width('100%').padding({ bottom: 12 })
+      .alignItems(VerticalAlign.Center)
+
+      Column() {
+        ForEach(this.buildCombinedTimeline(), (row: TimelineRow) => {
+          if (row.prayerRef !== null) {
+            this.PrayerItem(row.prayerRef)
+          } else if (row.extraRef !== null) {
+            this.ExtraTimingRow(row.extraRef)
+          }
+        }, (row: TimelineRow) => {
+          const checkedPart = row.prayerRef !== null
+            ? (row.prayerRef.checked ? 'c' : 'u') : 'x';
+          return `${this.viewingDateKey}-${row.kind}-${row.id}-${row.time}-${row.sortMinutes}-${checkedPart}-${this.clockFormat}`;
+        })
+      }
+      .width('100%')
+      .backgroundColor(this.colors.cardDark)
+      .borderRadius(Theme.radiusMedium)
+      .border({ width: 1, color: this.colors.borderSoft })
+      .padding({
+        left: 4,
+        right: 4,
+        top: 4,
+        bottom: 4
+      })
+    }
+    .width('100%').padding({ left: 16, right: 16 })
+    .alignItems(HorizontalAlign.Start)
+    .margin({ bottom: 12 })
+  }
+
+  @Builder
+  PrayerItem(prayer: PrayerModel) {
+    Row({ space: 12 }) {
+      Stack() {
+        if (prayer.checked) {
+          Image($r('app.media.ic_check'))
+            .width(14)
+            .height(14)
+            .fillColor(this.colors.textOnAccent)
+        }
+      }
+      .width(22)
+      .height(22)
+      .borderRadius(5)
+      .backgroundColor(prayer.checked
+        ? this.colors.accentGold : 'transparent')
+      .border({
+        width: 1.5,
+        color: prayer.checked
+          ? this.colors.accentGold : this.colors.borderStrong
+      })
+      .opacity(PrayerManager.isPrayerCheckable(
+        prayer, this.viewingDate, this.getLocationOffsetHours()
+      ) ? 1.0 : 0.4)
+      .flexShrink(0) // <-- Prevents squishing
+      .onClick(() => {
+        if (PrayerManager.isPrayerCheckable(
+          prayer, this.viewingDate, this.getLocationOffsetHours()
+        )) {
+          this.setPrayerChecked(prayer.id, !prayer.checked);
+        }
+      })
+
+      Column() {
+        Row() {
+          Text(this.translatePrayerName(prayer.name))
+            .fontSize(16)
+            .fontColor(this.colors.textWhite)
+            .fontWeight(prayer.checked
+              ? FontWeight.Normal : FontWeight.Medium)
+            .opacity(prayer.checked ? 0.5 : 1.0)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+
+          // Conditionally render to prevent double text in Arabic
+          if (this.appLanguage !== 'ar') {
+            Text('  ')
+            Text(prayer.arabicName)
+              .fontSize(14).fontColor(this.colors.textMuted)
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+          }
+        }
+        .width('100%') // <-- CRITICAL: Fills the column so text aligns to the Start (Right in RTL)
+
+        Text(this.getStatusLabel(prayer.status))
+          .fontSize(11)
+          .fontColor(this.getStatusColor(prayer.status))
+          .letterSpacing(1)
+          .margin({ top: 2 })
+          .width('100%')
+      }
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+
+      // --- NEW: Indicators (Tasbih & Dua) ---
+      Row({ space: 6 }) {
+        TasbihIndicator({
+          colors: this.colors,
+          prayerId: prayer.id,
+          currentLanguage: this.appLanguage
+        })
+
+        DuaIndicator({
+          colors: this.colors,
+          prayerId: prayer.id,
+          currentLanguage: this.appLanguage
+        })
+      }
+      .flexShrink(0)
+
+      Text(this.dt(prayer.time)).fontSize(16)
+        .fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+    }
+    .width('100%')
+    .padding({
+      top: 10,
+      bottom: 10,
+      left: 12,
+      right: 12
+    })
+    .alignItems(VerticalAlign.Center)
+    .borderRadius(Theme.radiusSmall)
+    .backgroundColor(prayer.checked
+      ? this.colors.tintSoft : 'transparent')
+    .margin({ bottom: 4 })
+  }
+
+  @Builder
+  ExtraTimingRow(timing: ExtraTiming) {
+    Row({ space: 12 }) {
+      Image(timing.icon ?? $r('app.media.ic_clock'))
+        .width(20)
+        .height(20)
+        .fillColor(this.colors.textMuted)
+        .flexShrink(0)
+        .objectFit(ImageFit.Contain)
+
+      Column() {
+        Row() {
+          Text(this.translateTimingName(timing.name))
+            .fontSize(14)
+            .fontColor(this.colors.textMuted)
+            .fontStyle(FontStyle.Italic)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+
+          // Conditionally render to prevent double text in Arabic
+          if (this.appLanguage !== 'ar') {
+            Text('  ')
+            Text(timing.arabicName)
+              .fontSize(12)
+              .fontColor(this.colors.textMuted)
+              .opacity(0.65)
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+          }
+        }
+        .width('100%') // <-- CRITICAL: Fills the column
+      }
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+
+      Text(this.dt(timing.time)).fontSize(14)
+        .fontColor(this.colors.textMuted).fontStyle(FontStyle.Italic)
+    }
+    .width('100%')
+    .padding({
+      top: 8,
+      bottom: 8,
+      left: 12,
+      right: 12
+    })
+    .alignItems(VerticalAlign.Center)
+    .borderRadius(Theme.radiusSmall)
+    .backgroundColor(this.colors.tintSubtle)
+    .margin({ bottom: 4 })
+  }
+
+  @Builder
+  ComingSoonCard() {
+    Column() {
+      Image($r('app.media.ic_globe')).width(56).height(56).fillColor(this.colors.accentGold).margin({ bottom: 12 })
+      Text(this.tr('online_prayer_times'))
+        .fontSize(18).fontWeight(FontWeight.Bold)
+        .fontColor(this.colors.textWhite)
+      Text(this.tr('coming_soon'))
+        .fontSize(13).fontColor(this.colors.accentGold)
+        .letterSpacing(1).margin({ top: 4 })
+      Divider().width('60%').color(this.colors.borderSoft)
+        .margin({ top: 16, bottom: 16 })
+      Text(this.tr('online_switch_hint'))
+        .fontSize(12)
+        .fontColor(this.colors.textMuted)
+        .textAlign(TextAlign.Center)
+        .lineHeight(18)
+        .maxLines(4)
+    }
+    .width('92%')
+    .padding(28)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(Theme.radiusLarge)
+    .border({
+      width: 1,
+      color: PageTheme.isDarkFor(this.themeMode)
+        ? 'rgba(255, 255, 255, 0.08)'
+        : this.colors.borderSoft
+    })
+    .shadow({
+      radius: 16,
+      color: PageTheme.isDarkFor(this.themeMode)
+        ? 'rgba(0, 0, 0, 0.35)'
+        : 'rgba(0, 0, 0, 0.08)',
+      offsetX: 0,
+      offsetY: 6
+    })
+    .margin({ top: 4, bottom: 24 })
+    .alignItems(HorizontalAlign.Center)
+  }
+
   private eventPerspectiveListener: () => void = (): void => {
     this.upcomingImportantDates = DateHelper.getUpcomingImportantDates(
       this.hijriOffset,
@@ -315,31 +1063,47 @@ export struct Prayer {
 
   private translatePrayerName(raw: string): string {
     switch (raw) {
-      case 'Fajr':    return this.tr('prayer_fajr');
-      case 'Dhuhr':   return this.tr('prayer_dhuhr');
-      case 'Asr':     return this.tr('prayer_asr');
-      case 'Maghrib': return this.tr('prayer_maghrib');
-      case 'Isha':    return this.tr('prayer_isha');
-      case 'Jummah':  return this.tr('prayer_jummah');
-      default:        return raw;
+      case 'Fajr':
+        return this.tr('prayer_fajr');
+      case 'Dhuhr':
+        return this.tr('prayer_dhuhr');
+      case 'Asr':
+        return this.tr('prayer_asr');
+      case 'Maghrib':
+        return this.tr('prayer_maghrib');
+      case 'Isha':
+        return this.tr('prayer_isha');
+      case 'Jummah':
+        return this.tr('prayer_jummah');
+      default:
+        return raw;
     }
   }
 
   private translateTimingName(raw: string): string {
     switch (raw) {
-      case 'Imsak':       return this.tr('timing_imsak');
-      case 'Sunrise':     return this.tr('timing_sunrise');
-      case 'Sunset':      return this.tr('timing_sunset');
-      case 'First Third': return this.tr('timing_first_third');
-      case 'Midnight':    return this.tr('timing_midnight');
-      case 'Last Third':  return this.tr('timing_last_third');
-      default:            return raw;
+      case 'Imsak':
+        return this.tr('timing_imsak');
+      case 'Sunrise':
+        return this.tr('timing_sunrise');
+      case 'Sunset':
+        return this.tr('timing_sunset');
+      case 'First Third':
+        return this.tr('timing_first_third');
+      case 'Midnight':
+        return this.tr('timing_midnight');
+      case 'Last Third':
+        return this.tr('timing_last_third');
+      default:
+        return raw;
     }
   }
 
   private translateEventName(raw: string): string {
     const asPrayer = this.translatePrayerName(raw);
-    if (asPrayer !== raw) return asPrayer;
+    if (asPrayer !== raw) {
+      return asPrayer;
+    }
     return this.translateTimingName(raw);
   }
 
@@ -424,53 +1188,6 @@ export struct Prayer {
     this.refreshLocationSilently();
   }
 
-  aboutToAppear(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-    this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
-      this.colors = c;
-    });
-
-    EventPerspectiveNotifier.subscribe(this.eventPerspectiveListener);
-
-    this.refreshHijriDates();
-    this.upcomingImportantDates = DateHelper.getUpcomingImportantDates(
-      this.hijriOffset,
-      SettingsHelper.getEventPerspective()
-    );
-
-    this.refreshViewingDate(true);
-    this.initialize();
-    this.startStatusTimer();
-
-    this.refreshLocationSilently();
-  }
-
-  aboutToDisappear(): void {
-    PageTheme.uninstallSystemListener(this.systemDarkListener);
-    this.systemDarkListener = null;
-    EventPerspectiveNotifier.unsubscribe(this.eventPerspectiveListener);
-    if (this.statusTimerId !== -1) {
-      clearInterval(this.statusTimerId);
-      this.statusTimerId = -1;
-    }
-  }
-
-  onPageShow(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-    this.syncViewingDateIfStale();
-
-    this.prayers = PrayerManager.loadStateForDate(
-      this.viewingDateKey, this.prayers, this.viewingDate
-    );
-    this.prayers = PrayerManager.updateStatuses(
-      this.prayers, this.viewingDate, this.getLocationOffsetHours()
-    );
-
-    this.loadSettingsAndLocation();
-    this.updateTodayHeaderData();
-    this.refreshHijriDates();
-  }
-
   private syncViewingDateIfStale(): void {
     if (this.dateOffset !== 0) {
       return;
@@ -516,7 +1233,9 @@ export struct Prayer {
   }
 
   private getLocationOffsetHours(): number {
-    if (this.latitude === 0 && this.longitude === 0) return 0;
+    if (this.latitude === 0 && this.longitude === 0) {
+      return 0;
+    }
     return TimezoneResolver.effectiveOffsetForLocation(
       this.latitude, this.longitude, new Date()
     );
@@ -573,7 +1292,7 @@ export struct Prayer {
       const mode = await SettingsHelper.getLocationMode();
 
       this.calcMethod = data.method;
-      this.asrRule    = data.asr;
+      this.asrRule = data.asr;
       this.calcSource = data.source;
       this.locationMode = mode;
       this.offsets = await SettingsHelper.getPrayerOffsets();
@@ -603,14 +1322,18 @@ export struct Prayer {
   }
 
   private refreshPrayerTimes(): void {
-    if (this.calcSource !== CalculationSource.LOCAL) return;
+    if (this.calcSource !== CalculationSource.LOCAL) {
+      return;
+    }
 
     const snap = HomeController.buildPrayersForDate(
       this.viewingDate, this.latitude, this.longitude,
       this.calcMethod, this.asrRule, this.highLatRule,
       this.offsets, this.prayers, this.advanced
     );
-    if (snap) this.prayers = snap.prayers;
+    if (snap) {
+      this.prayers = snap.prayers;
+    }
 
     this.extraTimings = HomeController.buildExtraTimings(
       this.viewingDate, this.latitude, this.longitude,
@@ -620,12 +1343,16 @@ export struct Prayer {
   }
 
   private updateTodayHeaderData(): void {
-    if (this.calcSource !== CalculationSource.LOCAL) return;
+    if (this.calcSource !== CalculationSource.LOCAL) {
+      return;
+    }
     const hdr = HomeController.buildTodayHeader(
       this.latitude, this.longitude, this.calcMethod, this.asrRule,
       this.highLatRule, this.offsets, this.prayers, this.advanced
     );
-    if (!hdr) return;
+    if (!hdr) {
+      return;
+    }
     this.todayCurrentPrayerName = hdr.currentName;
     this.todayCurrentPrayerTime = hdr.currentTime;
     this.todayNextPrayerName = hdr.nextName;
@@ -748,7 +1475,9 @@ export struct Prayer {
   }
 
   private async refreshLocation(): Promise<void> {
-    if (this.isLoadingLocation) return;
+    if (this.isLoadingLocation) {
+      return;
+    }
     this.isLoadingLocation = true;
 
     if (this.locationMode === LocationMode.MANUAL) {
@@ -1042,19 +1771,27 @@ export struct Prayer {
 
   private getStatusColor(status: string): string {
     switch (status) {
-      case 'next':    return this.colors.accentGold;
-      case 'pray':    return this.colors.statusPray;
-      case 'prayed':  return this.colors.accentGoldLight;
-      default:        return this.colors.textMuted;
+      case 'next':
+        return this.colors.accentGold;
+      case 'pray':
+        return this.colors.statusPray;
+      case 'prayed':
+        return this.colors.accentGoldLight;
+      default:
+        return this.colors.textMuted;
     }
   }
 
   private getStatusLabel(status: string): string {
     switch (status) {
-      case 'next':    return this.tr('status_next');
-      case 'pray':    return this.tr('status_pray');
-      case 'prayed':  return this.tr('status_prayed');
-      default:        return '';
+      case 'next':
+        return this.tr('status_next');
+      case 'pray':
+        return this.tr('status_pray');
+      case 'prayed':
+        return this.tr('status_prayed');
+      default:
+        return '';
     }
   }
 
@@ -1089,642 +1826,5 @@ export struct Prayer {
 
   private getLastThirdTime(): string {
     return this.getExtraTimeById('lastThird');
-  }
-
-  build() {
-    Stack() {
-      Column() {
-        PageHeader({
-          colors: this.colors,
-          currentLanguage: this.appLanguage,
-          hijriDateString: this.hijriDateString,
-          currentLocation: this.currentLocation,
-          isLoadingLocation: this.isLoadingLocation,
-          todayCurrentPrayerName: this.todayCurrentPrayerName,
-          todayCurrentPrayerTime: this.todayCurrentPrayerTime,
-          calcMethod: this.calcMethod,
-          asrRule: this.asrRule,
-          calcSource: this.calcSource,
-          showCalcPills: true,
-          isRamadan: false,
-          fastingEndTime: this.getSunsetTime(),
-          onOpenLocationSettings: () => {
-            this.navigateToLocationSettings();
-          },
-          onOpenSettings: () => {
-            this.navigateToSettings();
-          }
-        })
-
-        Refresh({ refreshing: $$this.isRefreshingHome }) {
-          Scroll() {
-            Column() {
-              if (this.isTablet()) {
-                Row({ space: 16 }) {
-                  Column() {
-                    this.NextPrayerSection()
-                    if (this.calcSource === CalculationSource.LOCAL) {
-                      this.TimelineSection()
-                    } else {
-                      this.ComingSoonCard()
-                    }
-                  }
-                  .layoutWeight(1)
-                  .alignItems(HorizontalAlign.Start)
-
-                  Column() {
-                    PrayerSunPath({
-                      colors: this.colors,
-                      prayers: this.prayers,
-                      sunriseTime: this.getSunriseTime(),
-                      sunsetTime: this.getSunsetTime(),
-                      imsakTime: this.getImsakTime(),
-                      firstThirdTime: this.getFirstThirdTime(),
-                      midnightTime: this.getMidnightTime(),
-                      lastThirdTime: this.getLastThirdTime(),
-                      currentLanguage: this.appLanguage,
-                      isDarkMode: this.isDarkMode(),
-                      showImsakGuide: this.showImsakSunpath,
-                      showFirstThirdGuide: this.showFirstThirdSunpath,
-                      showMidnightGuide: this.showMidnightSunpath,
-                      showLastThirdGuide: this.showLastThirdSunpath
-                    })
-                  }
-                  .layoutWeight(1)
-                  .alignItems(HorizontalAlign.Start)
-                }
-                .width('100%')
-                .alignItems(VerticalAlign.Top)
-                .padding({ left: 24, right: 24 })
-              } else {
-                Column() {
-                  this.NextPrayerSection()
-
-                  Column() {
-                    PrayerSunPath({
-                      colors: this.colors,
-                      prayers: this.prayers,
-                      sunriseTime: this.getSunriseTime(),
-                      sunsetTime: this.getSunsetTime(),
-                      imsakTime: this.getImsakTime(),
-                      firstThirdTime: this.getFirstThirdTime(),
-                      midnightTime: this.getMidnightTime(),
-                      lastThirdTime: this.getLastThirdTime(),
-                      currentLanguage: this.appLanguage,
-                      isDarkMode: this.isDarkMode(),
-                      showImsakGuide: this.showImsakSunpath,
-                      showFirstThirdGuide: this.showFirstThirdSunpath,
-                      showMidnightGuide: this.showMidnightSunpath,
-                      showLastThirdGuide: this.showLastThirdSunpath
-                    })
-                  }
-                  .width('100%')
-                  .padding({ left: 16, right: 16 })
-
-                  if (this.calcSource === CalculationSource.LOCAL) {
-                    this.TimelineSection()
-                  } else {
-                    this.ComingSoonCard()
-                  }
-                }
-                .width('100%')
-              }
-
-              Column().height(180)
-            }
-            .width('100%')
-          }
-          .width('100%')
-          .backgroundColor(this.colors.primaryGreen)
-          .scrollable(ScrollDirection.Vertical)
-          .scrollBar(BarState.Auto)
-          .edgeEffect(EdgeEffect.Spring)
-        }
-        .layoutWeight(1)
-        .width('100%')
-        .backgroundColor(this.colors.primaryGreen)
-        .onRefreshing(() => { this.handleHomeRefresh(); })
-      }
-      .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
-    }
-    .width('100%')
-    .height('100%')
-    .backgroundColor(this.colors.primaryGreen)
-    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
-  }
-
-  @Builder
-  PrayerExportLayout() {
-    Column() {
-      // Header
-      Row({ space: 12 }) { // <-- Replaced margin({ right: 12 })
-        Image($r('app.media.foreground'))
-          .syncLoad(true)
-          .width(36)
-          .height(36)
-          .borderRadius(8)
-          .flexShrink(0)
-
-        Column() {
-          Text(`${this.pdfHijriMonthName} ${this.pdfHijriYear} ${this.tr('hijri_year_suffix')}`)
-            .fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.pdfColors.textWhite)
-            .width('100%')
-
-          Text(`${this.pdfMonthName} · ${this.currentLocation}`)
-            .fontSize(10).fontColor(this.pdfColors.accentGold).margin({ top: 4 })
-            .width('100%')
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-
-        Text(this.tr('generated_by'))
-          .fontSize(8).fontColor(this.pdfColors.textMuted).alignSelf(ItemAlign.Start)
-      }
-      .width('100%')
-      .padding({ top: 15, bottom: 10, left: 20, right: 20 })
-      .backgroundColor(this.pdfColors.cardDark)
-      .alignItems(VerticalAlign.Center)
-
-      Row().width('100%').height(3).backgroundColor(this.pdfColors.accentGold)
-
-      // Table Headers
-      Row() {
-        Text(this.tr('export_date'))
-          .layoutWeight(1.8)
-          .fontWeight(FontWeight.Bold)
-          .fontSize(9)
-          .fontColor(this.pdfColors.accentGold)
-          .textAlign(TextAlign.Start)
-          .width('100%')
-        Text(this.tr('prayer_fajr'))
-          .layoutWeight(1)
-          .fontWeight(FontWeight.Bold)
-          .fontSize(9)
-          .fontColor(this.pdfColors.accentGold)
-          .textAlign(TextAlign.Center) // <-- Center aligned
-        Text(this.tr('prayer_dhuhr'))
-          .layoutWeight(1)
-          .fontWeight(FontWeight.Bold)
-          .fontSize(9)
-          .fontColor(this.pdfColors.accentGold)
-          .textAlign(TextAlign.Center)
-        Text(this.tr('prayer_asr'))
-          .layoutWeight(1)
-          .fontWeight(FontWeight.Bold)
-          .fontSize(9)
-          .fontColor(this.pdfColors.accentGold)
-          .textAlign(TextAlign.Center)
-        Text(this.tr('prayer_maghrib'))
-          .layoutWeight(1)
-          .fontWeight(FontWeight.Bold)
-          .fontSize(9)
-          .fontColor(this.pdfColors.accentGold)
-          .textAlign(TextAlign.Center)
-        Text(this.tr('prayer_isha'))
-          .layoutWeight(1)
-          .fontWeight(FontWeight.Bold)
-          .fontSize(9)
-          .fontColor(this.pdfColors.accentGold)
-          .textAlign(TextAlign.Center)
-      }
-      .width('100%')
-      .padding({ top: 6, bottom: 6, left: 20, right: 20 })
-      .backgroundColor(this.pdfColors.tintSoft)
-
-      // Table Rows
-      Column() {
-        ForEach(this.pdfPrayerDays, (row: PrayerTableRow, index: number) => {
-          Row() {
-            Column() {
-              Text(row.hijriDate)
-                .fontSize(9)
-                .lineHeight(11)
-                .fontWeight(FontWeight.Medium)
-                .fontColor(this.pdfColors.textWhite)
-                .width('100%')
-                .textAlign(TextAlign.Start) // <-- Forces text to the right in RTL
-              Text(row.gregorianDate)
-                .fontSize(7)
-                .lineHeight(9)
-                .fontColor(this.pdfColors.textMuted)
-                .margin({ top: 0 })
-                .width('100%')
-                .textAlign(TextAlign.Start) // <-- Forces text to the right in RTL
-            }
-            .layoutWeight(1.8)
-            .alignItems(HorizontalAlign.Start)
-            Text(row.fajr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
-            Text(row.dhuhr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
-            Text(row.asr).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
-            Text(row.maghrib).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
-            Text(row.isha).layoutWeight(1).fontSize(8).fontColor(this.pdfColors.textWhite).textAlign(TextAlign.Center)
-          }
-          .width('100%')
-          .padding({ top: 2, bottom: 2, left: 20, right: 20 })
-          .backgroundColor(index % 2 === 0 ? 'transparent' : this.pdfColors.tintSubtle)
-          .alignItems(VerticalAlign.Center)
-        })
-      }
-      .width('100%')
-
-    }
-    .width(595).height(842).backgroundColor(this.pdfColors.primaryGreen)
-    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr) // <-- ADDED
-  }
-
-  @Builder
-  NextPrayerSection() {
-    Column() {
-      // Card surface — inset by the wrapper below, so its left/right
-      // edges land at exactly x=16 like PrayerSunPath and the card
-      // inside TimelineSection.
-      Column({ space: 2 }) {
-        Text(this.tr('next_prayer'))
-          .fontSize(10)
-          .fontColor(this.colors.textMuted)
-          .letterSpacing(0.5)
-          .fontWeight(FontWeight.Medium)
-          .width('100%')
-          .textAlign(TextAlign.Start)
-
-        Row() {
-          Text(this.translateEventName(this.todayNextPrayerName))
-            .fontSize(16)
-            .fontColor(this.colors.accentGold)
-            .fontWeight(FontWeight.Bold)
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .layoutWeight(1)
-            .textAlign(TextAlign.Start)
-
-          Text(this.dt(this.todayNextPrayerTime))
-            .fontSize(28)
-            .fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Bold)
-            .fontFeature('"tnum" 1')
-            .maxLines(1)
-            .flexShrink(0)
-        }
-        .width('100%')
-        .alignItems(VerticalAlign.Center)
-      }
-      .width('100%')
-      .padding({
-        left: 16,
-        right: 16,
-        top: 8,
-        bottom: 8
-      })
-      .backgroundColor(this.colors.cardDark)
-      .borderRadius(19)
-      .border({ width: 1, color: this.colors.borderSoft })
-      .alignItems(HorizontalAlign.Start)
-    }
-    .width('100%')
-    .padding({ left: 16, right: 16 })
-    .margin({ top: 4, bottom: 12 })
-  }
-
-  @Builder
-  TimelineSection() {
-    Column() {
-      Row() {
-        Text(this.tr('todays_prayers'))
-          .fontSize(14)
-          .fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Bold)
-          .maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis })
-        Text(`${this.prayers.filter(p => p.checked).length} / ${this.prayers.length}`)
-          .fontSize(14)
-          .fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Bold)
-          .direction(Direction.Ltr)
-          .margin({ left: 8 })
-
-        Blank()
-
-        // --- Export PDF Button ---
-        if (this.isExporting) {
-          LoadingProgress()
-            .width(24).height(24)
-            .color(this.colors.accentGold)
-            .margin({ right: this.isRtl() ? 0 : 8, left: this.isRtl() ? 8 : 0 })
-        } else {
-          Row() {
-            Image($r('app.media.ic_printer'))
-              .width(16).height(16)
-              .fillColor(this.colors.accentGold)
-          }
-          .width(32)
-          .height(32)
-          .justifyContent(FlexAlign.Center)
-          .alignItems(VerticalAlign.Center)
-          .borderRadius(16)
-          .backgroundColor(this.colors.cardDark)
-          .border({ width: 1, color: this.colors.borderSoft })
-          .margin({ right: this.isRtl() ? 0 : 8, left: this.isRtl() ? 8 : 0 })
-          .onClick(() => {
-            this.handleExportPdf();
-          })
-        }
-
-        Row({ space: 4 }) {
-          Image($r('app.media.ic_check'))
-            .width(12).height(12)
-            .fillColor(this.colors.accentGold)
-            .flexShrink(0)
-          Text(this.tr('mark_all'))
-            .fontSize(11).fontColor(this.colors.accentGold)
-            .fontWeight(FontWeight.Medium).maxLines(1)
-        }
-        .padding({
-          left: 10,
-          right: 10,
-          top: 5,
-          bottom: 5
-        })
-        .backgroundColor(this.colors.cardDark)
-        .borderRadius(12)
-        .border({ width: 1, color: this.colors.borderSoft })
-        .opacity(this.hasUncheckedCheckablePrayers() ? 1.0 : 0.4)
-        .onClick(() => {
-          this.markAllPrayed();
-        })
-      }
-      .width('100%').padding({ bottom: 8 })
-      .alignItems(VerticalAlign.Center)
-
-      Row() {
-        // Previous Day: Points Right (▶) in RTL, Left (◀) in LTR
-        Row() {
-          Image($r('app.media.ic_chevron_right'))
-            .width(16).height(16)
-            .fillColor(this.colors.accentGold)
-            // FIXED: Points left in LTR (180), right in RTL (0)
-            .rotate({ angle: this.isRtl() ? 0 : 180 })
-        }
-        .width(36)
-        .height(36)
-        .justifyContent(FlexAlign.Center)
-        .alignItems(VerticalAlign.Center)
-        .borderRadius(18)
-        .backgroundColor(this.colors.cardDark)
-        .border({ width: 1, color: this.colors.borderSoft })
-        .onClick(() => {
-          this.goToPreviousDay();
-        })
-
-        Text(this.viewingHijriDate)
-          .fontSize(13)
-          .fontColor(this.colors.accentGold)
-          .fontWeight(FontWeight.Medium)
-          .layoutWeight(1).textAlign(TextAlign.Center).maxLines(1)
-          .textOverflow({ overflow: TextOverflow.Ellipsis })
-
-        Row() {
-          Image($r('app.media.ic_chevron_right'))
-            .width(16).height(16)
-            .fillColor(this.colors.accentGold)
-            // FIXED: Points right in LTR (0), left in RTL (180)
-            .rotate({ angle: this.isRtl() ? 180 : 0 })
-        }
-        .width(36)
-        .height(36)
-        .justifyContent(FlexAlign.Center)
-        .alignItems(VerticalAlign.Center)
-        .borderRadius(18)
-        .backgroundColor(this.colors.cardDark)
-        .border({ width: 1, color: this.colors.borderSoft })
-        .onClick(() => {
-          this.goToNextDay();
-        })
-
-        if (this.dateOffset !== 0) {
-          Text(this.tr('today'))
-            .fontSize(11)
-            .fontColor(this.colors.accentGold)
-            .fontWeight(FontWeight.Medium)
-            .padding({
-              left: 12, right: 12, top: 9, bottom: 9
-            })
-            .backgroundColor(this.colors.cardDark)
-            .borderRadius(18)
-            .border({ width: 1, color: this.colors.borderSoft })
-            // Use logical margins for RTL
-            .margin({
-              left: this.isRtl() ? 0 : 8,
-              right: this.isRtl() ? 8 : 0
-            })
-            .onClick(() => {
-              this.goToToday();
-            })
-        }
-      }
-      .width('100%').padding({ bottom: 12 })
-      .alignItems(VerticalAlign.Center)
-
-      Column() {
-        ForEach(this.buildCombinedTimeline(), (row: TimelineRow) => {
-          if (row.prayerRef !== null) {
-            this.PrayerItem(row.prayerRef)
-          } else if (row.extraRef !== null) {
-            this.ExtraTimingRow(row.extraRef)
-          }
-        }, (row: TimelineRow) => {
-          const checkedPart = row.prayerRef !== null
-            ? (row.prayerRef.checked ? 'c' : 'u') : 'x';
-          return `${this.viewingDateKey}-${row.kind}-${row.id}-${row.time}-${row.sortMinutes}-${checkedPart}-${this.clockFormat}`;
-        })
-      }
-      .width('100%')
-      .backgroundColor(this.colors.cardDark)
-      .borderRadius(Theme.radiusMedium)
-      .border({ width: 1, color: this.colors.borderSoft })
-      .padding({ left: 4, right: 4, top: 4, bottom: 4 })
-    }
-    .width('100%').padding({ left: 16, right: 16 })
-    .alignItems(HorizontalAlign.Start)
-    .margin({ bottom: 12 })
-  }
-
-  @Builder
-  PrayerItem(prayer: PrayerModel) {
-    Row({ space: 12 }) {
-      Stack() {
-        if (prayer.checked) {
-          Image($r('app.media.ic_check'))
-            .width(14)
-            .height(14)
-            .fillColor(this.colors.textOnAccent)
-        }
-      }
-      .width(22)
-      .height(22)
-      .borderRadius(5)
-      .backgroundColor(prayer.checked
-        ? this.colors.accentGold : 'transparent')
-      .border({
-        width: 1.5,
-        color: prayer.checked
-          ? this.colors.accentGold : this.colors.borderStrong
-      })
-      .opacity(PrayerManager.isPrayerCheckable(
-        prayer, this.viewingDate, this.getLocationOffsetHours()
-      ) ? 1.0 : 0.4)
-      .flexShrink(0) // <-- Prevents squishing
-      .onClick(() => {
-        if (PrayerManager.isPrayerCheckable(
-          prayer, this.viewingDate, this.getLocationOffsetHours()
-        )) {
-          this.setPrayerChecked(prayer.id, !prayer.checked);
-        }
-      })
-
-      Column() {
-        Row() {
-          Text(this.translatePrayerName(prayer.name))
-            .fontSize(16).fontColor(this.colors.textWhite)
-            .fontWeight(prayer.checked
-              ? FontWeight.Normal : FontWeight.Medium)
-            .opacity(prayer.checked ? 0.5 : 1.0)
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-
-          // Conditionally render to prevent double text in Arabic
-          if (this.appLanguage !== 'ar') {
-            Text('  ')
-            Text(prayer.arabicName)
-              .fontSize(14).fontColor(this.colors.textMuted)
-              .maxLines(1)
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-          }
-        }
-        .width('100%') // <-- CRITICAL: Fills the column so text aligns to the Start (Right in RTL)
-
-        Text(this.getStatusLabel(prayer.status))
-          .fontSize(11).fontColor(this.getStatusColor(prayer.status))
-          .letterSpacing(1).margin({ top: 2 })
-          .width('100%')
-      }
-      .alignItems(HorizontalAlign.Start)
-      .layoutWeight(1)
-
-      // --- NEW: Indicators (Tasbih & Dua) ---
-      Row({ space: 6 }) {
-        TasbihIndicator({
-          colors: this.colors,
-          prayerId: prayer.id,
-          currentLanguage: this.appLanguage
-        })
-
-        DuaIndicator({
-          colors: this.colors,
-          prayerId: prayer.id,
-          currentLanguage: this.appLanguage
-        })
-      }
-      .flexShrink(0)
-
-      Text(this.dt(prayer.time)).fontSize(16)
-        .fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-    }
-    .width('100%')
-    .padding({
-      top: 10,
-      bottom: 10,
-      left: 12,
-      right: 12
-    })
-    .alignItems(VerticalAlign.Center)
-    .borderRadius(Theme.radiusSmall)
-    .backgroundColor(prayer.checked
-      ? this.colors.tintSoft : 'transparent')
-    .margin({ bottom: 4 })
-  }
-
-  @Builder
-  ExtraTimingRow(timing: ExtraTiming) {
-    Row({ space: 12 }) {
-      Image(timing.icon ?? $r('app.media.ic_clock'))
-        .width(20)
-        .height(20)
-        .fillColor(this.colors.textMuted)
-        .flexShrink(0)
-        .objectFit(ImageFit.Contain)
-
-      Column() {
-        Row() {
-          Text(this.translateTimingName(timing.name))
-            .fontSize(14).fontColor(this.colors.textMuted)
-            .fontStyle(FontStyle.Italic)
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-
-          // Conditionally render to prevent double text in Arabic
-          if (this.appLanguage !== 'ar') {
-            Text('  ')
-            Text(timing.arabicName)
-              .fontSize(12).fontColor(this.colors.textMuted).opacity(0.65)
-              .maxLines(1)
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-          }
-        }
-        .width('100%') // <-- CRITICAL: Fills the column
-      }
-      .alignItems(HorizontalAlign.Start)
-      .layoutWeight(1)
-
-      Text(this.dt(timing.time)).fontSize(14)
-        .fontColor(this.colors.textMuted).fontStyle(FontStyle.Italic)
-    }
-    .width('100%')
-    .padding({
-      top: 8,
-      bottom: 8,
-      left: 12,
-      right: 12
-    })
-    .alignItems(VerticalAlign.Center)
-    .borderRadius(Theme.radiusSmall)
-    .backgroundColor(this.colors.tintSubtle)
-    .margin({ bottom: 4 })
-  }
-
-  @Builder
-  ComingSoonCard() {
-    Column() {
-      Image($r('app.media.ic_globe')).width(56).height(56).fillColor(this.colors.accentGold).margin({ bottom: 12 })
-      Text(this.tr('online_prayer_times'))
-        .fontSize(18).fontWeight(FontWeight.Bold)
-        .fontColor(this.colors.textWhite)
-      Text(this.tr('coming_soon'))
-        .fontSize(13).fontColor(this.colors.accentGold)
-        .letterSpacing(1).margin({ top: 4 })
-      Divider().width('60%').color(this.colors.borderSoft)
-        .margin({ top: 16, bottom: 16 })
-      Text(this.tr('online_switch_hint'))
-        .fontSize(12)
-        .fontColor(this.colors.textMuted)
-        .textAlign(TextAlign.Center)
-        .lineHeight(18)
-        .maxLines(4)
-    }
-    .width('92%').padding(28).backgroundColor(this.colors.cardDark)
-    .borderRadius(Theme.radiusLarge)
-    .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
-    })
-    .shadow({
-      radius: 16,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(0, 0, 0, 0.35)'
-        : 'rgba(0, 0, 0, 0.08)',
-      offsetX: 0,
-      offsetY: 6
-    })
-    .margin({ top: 4, bottom: 24 })
-    .alignItems(HorizontalAlign.Center)
   }
 }

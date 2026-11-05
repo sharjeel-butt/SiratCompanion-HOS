@@ -48,6 +48,7 @@ export interface UpcomingImportantDate {
   name: string;
   hijriDate: string;
   gregorianDate: Date;
+
   /** Calendar days from today. 0 = today, 1 = tomorrow, etc. */
   daysUntil: number;
 }

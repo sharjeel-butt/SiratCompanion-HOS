@@ -217,7 +217,6 @@ const TASBIH_SPECS: PrefSpec[] = [
 // ============================================================
 
 export class UserBackupService {
-
   // ============================================================
   // BACKUP
   // ============================================================
@@ -250,6 +249,51 @@ export class UserBackupService {
       const e = err as BusinessError;
       AppLogger.error('UserBackupService',
         `backupToFile failed: ${e.code ?? ''} ${e.message ?? ''}`);
+      return { ok: false, message: e.message ?? 'unknown_error' };
+    }
+  }
+
+  static async restoreFromFile(
+    context: common.UIAbilityContext
+  ): Promise<RestoreResult> {
+    try {
+      const uri = await UserBackupService.pickOpenLocation(context);
+      if (uri.length === 0) {
+        return { ok: false, message: 'cancelled' };
+      }
+
+      const content = UserBackupService.readTextFromUri(uri);
+      if (content.length === 0) {
+        return { ok: false, message: 'read_failed' };
+      }
+
+      let backup: BackupFileShape;
+      try {
+        backup = JSON.parse(content) as BackupFileShape;
+      } catch {
+        return { ok: false, message: 'invalid_json' };
+      }
+
+      const validation = UserBackupService.validateBackup(backup);
+      if (!validation.ok) {
+        return { ok: false, message: validation.message };
+      }
+
+      await UserBackupService.applyBackup(context, backup);
+      await UserBackupService.reloadAllAfterRestore(context);
+
+      AppLogger.info('UserBackupService',
+        `Restore complete: backup from v${backup.backupVersion} ` +
+          `created ${backup.createdAt}`);
+      return {
+        ok: true,
+        message: 'restored',
+        backedUpVersion: backup.backupVersion
+      };
+    } catch (err) {
+      const e = err as BusinessError;
+      AppLogger.error('UserBackupService',
+        `restoreFromFile failed: ${e.code ?? ''} ${e.message ?? ''}`);
       return { ok: false, message: e.message ?? 'unknown_error' };
     }
   }
@@ -332,6 +376,10 @@ export class UserBackupService {
     }
   }
 
+  // ============================================================
+  // RESTORE
+  // ============================================================
+
   private static writeTextToUri(uri: string, content: string): boolean {
     let file: fs.File | null = null;
     try {
@@ -358,55 +406,6 @@ export class UserBackupService {
       } catch (ignore) {
       }
       return false;
-    }
-  }
-
-  // ============================================================
-  // RESTORE
-  // ============================================================
-
-  static async restoreFromFile(
-    context: common.UIAbilityContext
-  ): Promise<RestoreResult> {
-    try {
-      const uri = await UserBackupService.pickOpenLocation(context);
-      if (uri.length === 0) {
-        return { ok: false, message: 'cancelled' };
-      }
-
-      const content = UserBackupService.readTextFromUri(uri);
-      if (content.length === 0) {
-        return { ok: false, message: 'read_failed' };
-      }
-
-      let backup: BackupFileShape;
-      try {
-        backup = JSON.parse(content) as BackupFileShape;
-      } catch {
-        return { ok: false, message: 'invalid_json' };
-      }
-
-      const validation = UserBackupService.validateBackup(backup);
-      if (!validation.ok) {
-        return { ok: false, message: validation.message };
-      }
-
-      await UserBackupService.applyBackup(context, backup);
-      await UserBackupService.reloadAllAfterRestore(context);
-
-      AppLogger.info('UserBackupService',
-        `Restore complete: backup from v${backup.backupVersion} ` +
-          `created ${backup.createdAt}`);
-      return {
-        ok: true,
-        message: 'restored',
-        backedUpVersion: backup.backupVersion
-      };
-    } catch (err) {
-      const e = err as BusinessError;
-      AppLogger.error('UserBackupService',
-        `restoreFromFile failed: ${e.code ?? ''} ${e.message ?? ''}`);
-      return { ok: false, message: e.message ?? 'unknown_error' };
     }
   }
 

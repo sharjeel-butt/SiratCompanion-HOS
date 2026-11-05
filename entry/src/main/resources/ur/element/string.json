@@ -2876,11 +2876,26 @@
       "name": "widget_todays_schedule",
       "value": "آج کا شیڈول"
     },
-    { "name": "hours_short", "value": "گ" },
-    { "name": "minutes_short", "value": "م" },
-    { "name": "countdown_prefix", "value": "میں" },
-    { "name": "countdown_now", "value": "ابھی" },
-    { "name": "yesterday", "value": "کل" },
+    {
+      "name": "hours_short",
+      "value": "گ"
+    },
+    {
+      "name": "minutes_short",
+      "value": "م"
+    },
+    {
+      "name": "countdown_prefix",
+      "value": "باقی"
+    },
+    {
+      "name": "countdown_now",
+      "value": "ابھی"
+    },
+    {
+      "name": "yesterday",
+      "value": "کل"
+    },
     {
       "name": "widget_ramadan_desc",
       "value": "رمضان روزہ ٹریکر اور کاؤنٹ ڈاؤن"

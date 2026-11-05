@@ -41,7 +41,6 @@ const FLUSH_DEBOUNCE_MS = 250;
 export class PreferencesHelper {
   private static store: preferences.Preferences | null = null;
   private static initContext: common.Context | null = null;
-
   private static initResolve: (() => void) | null = null;
   private static initPromise: Promise<void> = new Promise<void>((resolve) => {
     PreferencesHelper.initResolve = resolve;
@@ -86,35 +85,6 @@ export class PreferencesHelper {
     }
   }
 
-  private static async ensureReady(): Promise<void> {
-    if (PreferencesHelper.store) {
-      return;
-    }
-
-    // Wait up to INIT_WAIT_MS for the in-flight init to succeed.
-    if (PreferencesHelper.initResolve !== null) {
-      await Promise.race([
-        PreferencesHelper.initPromise,
-        new Promise<void>((r) => setTimeout(r, PreferencesHelper.INIT_WAIT_MS))
-      ]);
-    }
-
-    if (PreferencesHelper.store) {
-      return;
-    }
-
-    // Retry once per INIT_RETRY_MS if we have a context.
-    if (PreferencesHelper.initContext !== null &&
-      Date.now() - PreferencesHelper.lastInitAttemptMs > PreferencesHelper.INIT_RETRY_MS) {
-      await PreferencesHelper.init(PreferencesHelper.initContext);
-    }
-  }
-
-
-  // ============================================================
-  // READS
-  // ============================================================
-
   static async getString(key: string, def: string): Promise<string> {
     await PreferencesHelper.ensureReady();
     if (!PreferencesHelper.store) {
@@ -129,6 +99,11 @@ export class PreferencesHelper {
       return def;
     }
   }
+
+
+  // ============================================================
+  // READS
+  // ============================================================
 
   static async getNumber(key: string, def: number): Promise<number> {
     await PreferencesHelper.ensureReady();
@@ -160,10 +135,6 @@ export class PreferencesHelper {
     }
   }
 
-  // ============================================================
-  // WRITES — put immediately, flush debounced
-  // ============================================================
-
   static async setString(key: string, value: string): Promise<void> {
     await PreferencesHelper.ensureReady();
     if (!PreferencesHelper.store) {
@@ -181,6 +152,10 @@ export class PreferencesHelper {
       );
     }
   }
+
+  // ============================================================
+  // WRITES — put immediately, flush debounced
+  // ============================================================
 
   static async setNumber(key: string, value: number): Promise<void> {
     await PreferencesHelper.ensureReady();
@@ -236,10 +211,6 @@ export class PreferencesHelper {
     }
   }
 
-  // ============================================================
-  // FLUSH
-  // ============================================================
-
   /**
    * Force an immediate flush to disk and cancel any pending
    * debounced flush.
@@ -268,8 +239,52 @@ export class PreferencesHelper {
   }
 
   // ============================================================
+  // FLUSH
+  // ============================================================
+
+  /**
+   * Force the underlying preferences store to re-read from disk.
+   * Necessary when another process (e.g. the widget process) may
+   * have written to the same preferences file since our last read.
+   */
+  static async reloadFromDisk(): Promise<void> {
+    if (!PreferencesHelper.store) {
+      return;
+    }
+    try {
+      await PreferencesHelper.store.getAll();
+    } catch (e) {
+      // swallow
+    }
+  }
+
+  // ============================================================
   // INTERNALS
   // ============================================================
+
+  private static async ensureReady(): Promise<void> {
+    if (PreferencesHelper.store) {
+      return;
+    }
+
+    // Wait up to INIT_WAIT_MS for the in-flight init to succeed.
+    if (PreferencesHelper.initResolve !== null) {
+      await Promise.race([
+        PreferencesHelper.initPromise,
+        new Promise<void>((r) => setTimeout(r, PreferencesHelper.INIT_WAIT_MS))
+      ]);
+    }
+
+    if (PreferencesHelper.store) {
+      return;
+    }
+
+    // Retry once per INIT_RETRY_MS if we have a context.
+    if (PreferencesHelper.initContext !== null &&
+      Date.now() - PreferencesHelper.lastInitAttemptMs > PreferencesHelper.INIT_RETRY_MS) {
+      await PreferencesHelper.init(PreferencesHelper.initContext);
+    }
+  }
 
   private static scheduleFlush(): void {
     if (PreferencesHelper.flushTimerId !== -1) {
@@ -285,22 +300,6 @@ export class PreferencesHelper {
     if (PreferencesHelper.flushTimerId !== -1) {
       clearTimeout(PreferencesHelper.flushTimerId);
       PreferencesHelper.flushTimerId = -1;
-    }
-  }
-
-  /**
-   * Force the underlying preferences store to re-read from disk.
-   * Necessary when another process (e.g. the widget process) may
-   * have written to the same preferences file since our last read.
-   */
-  static async reloadFromDisk(): Promise<void> {
-    if (!PreferencesHelper.store) {
-      return;
-    }
-    try {
-      await PreferencesHelper.store.getAll();
-    } catch (e) {
-      // swallow
     }
   }
 }

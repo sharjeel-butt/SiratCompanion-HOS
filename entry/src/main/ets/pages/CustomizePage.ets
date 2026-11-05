@@ -57,39 +57,29 @@ struct CustomizePage {
   @StorageLink(STORAGE_KEY_THEME_OVERRIDE)
   @Watch('onThemeOverrideChanged')
   themeOverride: string = ThemeMode.SYSTEM;
-
-
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = AppLanguage.ENGLISH;
-
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
   appTheme: string = ThemePreset.CURRENT;
-
   @StorageLink(STORAGE_KEY_SYSTEM_SOUND_ENABLED)
   @Watch('onSystemFeedbackChanged')
   systemSoundEnabled: boolean = true;
-
   @StorageLink(STORAGE_KEY_SYSTEM_HAPTICS_ENABLED)
   @Watch('onSystemFeedbackChanged')
   systemHapticsEnabled: boolean = true;
-
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
-
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
-
   @StorageLink(STORAGE_KEY_TIME_FORMAT)
   @Watch('onClockFormatChanged')
   ClockFormat: string = ClockFormat.SYSTEM;
-
   @StorageLink(STORAGE_KEY_SHOW_ISLAMIC_EVENTS)
   @Watch('onShowIslamicEventsChanged')
   showIslamicEvents: boolean = true;
-
   @StorageLink(STORAGE_KEY_EVENT_PERSPECTIVE)
   @Watch('onEventPerspectiveChanged')
   eventPerspective: string = 'universal';
@@ -119,7 +109,6 @@ struct CustomizePage {
   @StorageLink(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH)
   @Watch('onShowLastThirdSunpathChanged')
   showLastThirdSunpath: boolean = true;
-
   // ============================================================
   // UI STATE
   // ============================================================
@@ -136,7 +125,6 @@ struct CustomizePage {
   @State showSoundPicker: boolean = false;
   @State showEventPerspectivePicker: boolean = false;
   @State showThemePicker: boolean = false;
-
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
 
   // ============================================================
@@ -167,85 +155,6 @@ struct CustomizePage {
 
   // ============================================================
   // WATCHERS
-  // ============================================================
-
-  private onClockFormatChanged(): void {
-    // No state to update — the @StorageLink re-render is enough.
-  }
-
-  private onThemeOverrideChanged(): void {
-    // UI updates automatically via the themeOverride state binding
-  }
-
-  private onLanguageOverrideChanged(): void {
-    // No-op — the picker reads languageOverride directly, and the
-    // resolved language auto-syncs via appLanguage (STORAGE_KEY_LANGUAGE).
-  }
-
-  private onShowIslamicEventsChanged(): void {
-    // Re-render is handled by the @StorageLink.
-  }
-
-  private onEventPerspectiveChanged(): void {
-    // Re-render is handled by the @StorageLink.
-  }
-
-  private onShowImsakListChanged(): void {
-  }
-
-  private onAutoShowRamadanViewChanged(): void {
-    // Re-render is handled by the @StorageLink.
-  }
-
-  private onShowFirstThirdListChanged(): void {
-  }
-
-  private onShowMidnightListChanged(): void {
-  }
-
-  private onShowLastThirdListChanged(): void {
-  }
-
-  private onShowImsakSunpathChanged(): void {
-  }
-
-  private onShowFirstThirdSunpathChanged(): void {
-  }
-
-  private onShowMidnightSunpathChanged(): void {
-  }
-
-  private onShowLastThirdSunpathChanged(): void {
-  }
-
-  private pickClockFormat(id: string): void {
-    this.ClockFormat = id;
-    SettingsHelper.saveClockFormat(id);
-    this.showClockFormatPicker = false;
-    WidgetHelper.refreshAll().catch((): void => {
-      // swallow
-    });
-  }
-
-  private ClockFormatLabel(): string {
-    switch (this.ClockFormat) {
-      case ClockFormat.TWELVE_HOUR:
-        return this.tr('time_format_12h');
-      case ClockFormat.TWENTY_FOUR_HOUR:
-        return this.tr('time_format_24h');
-      default:
-        return this.tr('time_format_system');
-    }
-  }
-
-  private pickEventPerspective(id: string): void {
-    this.eventPerspective = id;
-    SettingsHelper.saveEventPerspective(id);
-    this.showEventPerspectivePicker = false;
-  }
-
-  // ============================================================
-  // BUILD
   // ============================================================
 
   build() {
@@ -457,7 +366,6 @@ struct CustomizePage {
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 
-
   @Builder
   TopBar() {
     Row({ space: 16 }) {
@@ -605,10 +513,6 @@ struct CustomizePage {
     .margin({ bottom: 12 })
   }
 
-  // ---- Each toggle is its own parameterless builder so it re-reads
-  // state on every parent render. Passing the value as a builder
-  // parameter would freeze it at first render.
-
   @Builder
   ShowIslamicEventsRow() {
     Row() {
@@ -688,8 +592,6 @@ struct CustomizePage {
     })
   }
 
-  // ---- Per-timing visibility — prayer list ----
-
   @Builder
   ShowImsakListRow() {
     ExtraTimingToggleRow({
@@ -738,8 +640,6 @@ struct CustomizePage {
     })
   }
 
-  // ---- Per-timing visibility — sun path ----
-
   @Builder
   ShowImsakSunpathRow() {
     ExtraTimingToggleRow({
@@ -787,8 +687,6 @@ struct CustomizePage {
       onToggle: (isOn: boolean) => this.toggleShowLastThirdSunpath(isOn)
     })
   }
-
-  // ---- Sound & feedback ----
 
   @Builder
   VibrationRow() {
@@ -908,6 +806,10 @@ struct CustomizePage {
       })
     }
   }
+
+  // ============================================================
+  // BUILD
+  // ============================================================
 
   @Builder
   LanguageRow() {
@@ -1339,6 +1241,10 @@ struct CustomizePage {
     .position({ bottom: 0 })
   }
 
+  // ---- Each toggle is its own parameterless builder so it re-reads
+  // state on every parent render. Passing the value as a builder
+  // parameter would freeze it at first render.
+
   @Builder
   PickerOverlay(
     title: string,
@@ -1421,7 +1327,6 @@ struct CustomizePage {
                 .maxLines(2)
                 .textOverflow({ overflow: TextOverflow.Ellipsis })
             }
-
             .width('100%')
             .padding({
               top: 16,
@@ -1510,6 +1415,87 @@ struct CustomizePage {
     .backgroundColor(this.colors.tintSubtle)
     .borderRadius(12)
     .margin({ bottom: 8 })
+  }
+
+  // ---- Per-timing visibility — prayer list ----
+
+  private onClockFormatChanged(): void {
+    // No state to update — the @StorageLink re-render is enough.
+  }
+
+  private onThemeOverrideChanged(): void {
+    // UI updates automatically via the themeOverride state binding
+  }
+
+  private onLanguageOverrideChanged(): void {
+    // No-op — the picker reads languageOverride directly, and the
+    // resolved language auto-syncs via appLanguage (STORAGE_KEY_LANGUAGE).
+  }
+
+  private onShowIslamicEventsChanged(): void {
+    // Re-render is handled by the @StorageLink.
+  }
+
+  // ---- Per-timing visibility — sun path ----
+
+  private onEventPerspectiveChanged(): void {
+    // Re-render is handled by the @StorageLink.
+  }
+
+  private onShowImsakListChanged(): void {
+  }
+
+  private onAutoShowRamadanViewChanged(): void {
+    // Re-render is handled by the @StorageLink.
+  }
+
+  private onShowFirstThirdListChanged(): void {
+  }
+
+  // ---- Sound & feedback ----
+
+  private onShowMidnightListChanged(): void {
+  }
+
+  private onShowLastThirdListChanged(): void {
+  }
+
+  private onShowImsakSunpathChanged(): void {
+  }
+
+  private onShowFirstThirdSunpathChanged(): void {
+  }
+
+  private onShowMidnightSunpathChanged(): void {
+  }
+
+  private onShowLastThirdSunpathChanged(): void {
+  }
+
+  private pickClockFormat(id: string): void {
+    this.ClockFormat = id;
+    SettingsHelper.saveClockFormat(id);
+    this.showClockFormatPicker = false;
+    WidgetHelper.refreshAll().catch((): void => {
+      // swallow
+    });
+  }
+
+  private ClockFormatLabel(): string {
+    switch (this.ClockFormat) {
+      case ClockFormat.TWELVE_HOUR:
+        return this.tr('time_format_12h');
+      case ClockFormat.TWENTY_FOUR_HOUR:
+        return this.tr('time_format_24h');
+      default:
+        return this.tr('time_format_system');
+    }
+  }
+
+  private pickEventPerspective(id: string): void {
+    this.eventPerspective = id;
+    SettingsHelper.saveEventPerspective(id);
+    this.showEventPerspectivePicker = false;
   }
 
   // ============================================================

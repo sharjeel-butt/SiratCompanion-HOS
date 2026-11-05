@@ -28,15 +28,21 @@ export interface CountryZone {
 export const COUNTRY_ZONES: CountryZone[] = [
   {
     code: 'GE-W',
-    minLat: 41.50, maxLat: 43.6,
-    minLng: 40.0,  maxLng: 42.5,
-    standardOffset: 4, dstRule: DstRule.NONE
+    minLat: 41.50,
+    maxLat: 43.6,
+    minLng: 40.0,
+    maxLng: 42.5,
+    standardOffset: 4,
+    dstRule: DstRule.NONE
   },
   {
     code: 'GE-E',
-    minLat: 41.40, maxLat: 43.6,
-    minLng: 42.5,  maxLng: 46.8,
-    standardOffset: 4, dstRule: DstRule.NONE
+    minLat: 41.40,
+    maxLat: 43.6,
+    minLng: 42.5,
+    maxLng: 46.8,
+    standardOffset: 4,
+    dstRule: DstRule.NONE
   },
   {
     code: 'AM',
