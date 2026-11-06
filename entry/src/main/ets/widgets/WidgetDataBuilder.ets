@@ -97,9 +97,15 @@ export class WidgetDataBuilder {
 
       const nowMin: number = new Date().getHours() * 60 + new Date().getMinutes();
       const ids: string[] = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
+      // --- APPLY JUMMAH ALTERNATE ---
+      const isFriday = new Date().getDay() === 5;
+      const dhuhrKey = isFriday ? 'prayer_jummah' : 'prayer_dhuhr';
       const names: string[] = [
-        L.get('prayer_fajr', lang), L.get('prayer_dhuhr', lang),
-        L.get('prayer_asr', lang), L.get('prayer_maghrib', lang), L.get('prayer_isha', lang)
+        L.get('prayer_fajr', lang),
+        L.get(dhuhrKey, lang),
+        L.get('prayer_asr', lang),
+        L.get('prayer_maghrib', lang),
+        L.get('prayer_isha', lang)
       ];
       const rawArr: string[] = [fajrRaw, dhuhrRaw, asrRaw, maghribRaw, ishaRaw];
       const timeArr: string[] = [fajr, dhuhr, asr, maghrib, isha];
