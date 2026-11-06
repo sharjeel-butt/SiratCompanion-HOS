@@ -5,6 +5,7 @@ import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
 import { PageTheme } from '../core/PageTheme';
 import { SettingsHelper } from '../settings/SettingsHelper';
 import { PickerItem } from '../settings/SettingsModels';
+import { NotificationHelper } from '../prayer/NotificationHelper';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -1550,6 +1551,7 @@ struct CustomizePage {
     WidgetHelper.refreshAll().catch((): void => {
       // swallow
     });
+    NotificationHelper.scheduleRescheduleNow();
   }
 
   private pickAppTheme(id: string): void {

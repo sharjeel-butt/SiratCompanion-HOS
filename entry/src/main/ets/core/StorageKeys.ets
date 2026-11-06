@@ -212,3 +212,5 @@ export const STORAGE_KEY_DUA_BINDINGS_VERSION = 'dua_bindings_version';
 export const STORAGE_KEY_CUSTOM_EVENTS_VERSION = 'custom_events_version';
 
 export const STORAGE_KEY_NAV_TARGET_TAB = 'nav_target_tab';
+
+export const STORAGE_KEY_DISMISSED_PRAYERS = 'dismissed_prayers';

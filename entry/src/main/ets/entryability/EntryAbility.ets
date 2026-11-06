@@ -481,6 +481,7 @@ export default class EntryAbility extends UIAbility {
       AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, resolved);
       PreferencesHelper.setString(STORAGE_KEY_LANGUAGE, resolved);
       L.applySystemLanguage(override);
+      NotificationHelper.scheduleRescheduleNow();
     }
   }
 

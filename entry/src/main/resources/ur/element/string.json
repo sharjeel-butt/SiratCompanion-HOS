@@ -2899,6 +2899,137 @@
     {
       "name": "widget_ramadan_desc",
       "value": "رمضان روزہ ٹریکر اور کاؤنٹ ڈاؤن"
+    },
+    {
+      "name": "prayer_prompt_title",
+      "value": "کیا آپ نے نماز ادا کر لی ہے؟"
+    },
+    {
+      "name": "surah_recommendations",
+      "value": "تلاوت رہنمائی"
+    },
+    {
+      "name": "ayahs",
+      "value": "آیات"
+    },
+    {
+      "name": "occasion_morning_evening",
+      "value": "صبح و شام"
+    },
+    {
+      "name": "occasion_bedtime",
+      "value": "سونے سے پہلے"
+    },
+    {
+      "name": "occasion_night",
+      "value": "رات"
+    },
+    {
+      "name": "occasion_friday",
+      "value": "جمعہ"
+    },
+    {
+      "name": "occasion_friday_fajr",
+      "value": "جمعہ فجر"
+    },
+    {
+      "name": "occasion_friday_prayer",
+      "value": "جمعہ کی نماز"
+    },
+    {
+      "name": "occasion_friday_sermon",
+      "value": "جمعہ خطبہ"
+    },
+    {
+      "name": "occasion_illness_ruqyah",
+      "value": "شفا اور رقیہ"
+    },
+    {
+      "name": "occasion_home_protection",
+      "value": "گھر کی حفاظت"
+    },
+    {
+      "name": "occasion_protection_dajjal",
+      "value": "دجال سے حفاظت"
+    },
+    {
+      "name": "occasion_eid_prayer",
+      "value": "نمازِ عید"
+    },
+    {
+      "name": "occasion_fajr_sunnah",
+      "value": "فجر کی سنت"
+    },
+    {
+      "name": "occasion_general_virtue",
+      "value": "عمومی فضیلت"
+    },
+    {
+      "name": "quran_full_title",
+      "value": "قرآن مجید"
+    },
+    {
+      "name": "quran_full_desc",
+      "value": "تمام 114 سورتیں ترجموں کے ساتھ پڑھیں۔"
+    },
+    {
+      "name": "search_surahs",
+      "value": "سورت تلاش کریں..."
+    },
+    {
+      "name": "translation_unavailable",
+      "value": "اس زبان کے لیے ترجمہ دستیاب نہیں ہے۔"
+    },
+    {
+      "name": "licenses_title",
+      "value": "ڈیٹا ذرائع اور لائسنس"
+    },
+    {
+      "name": "licenses_intro",
+      "value": "اس ایپ میں استعمال ہونے والا قرآنِ کریم کا متن، تراجم اور رسم الخط درج ذیل لائسنسز کے تحت فراہم کیے جاتے ہیں۔ براہِ کرم اس ایپ یا اس کے ڈیٹا کو شیئر کرتے وقت ماخذ کا حوالہ برقرار رکھیں۔"
+    },
+    {
+      "name": "license_section_dataset",
+      "value": "ڈیٹا سیٹ"
+    },
+    {
+      "name": "license_section_scripts",
+      "value": "عربی رسم الخط"
+    },
+    {
+      "name": "license_section_translations",
+      "value": "تراجم"
+    },
+    {
+      "name": "license_source_label",
+      "value": "ماخذ:"
+    },
+    {
+      "name": "license_license_label",
+      "value": "لائسنس:"
+    },{
+      "name": "mode_translation",
+      "value": "ترجمہ"
+    },
+    {
+      "name": "mode_reading",
+      "value": "مطالعہ"
+    },
+    {
+      "name": "mode_mushaf",
+      "value": "مصحف"
+    },
+    {
+      "name": "previous_surah",
+      "value": "پچھلی"
+    },
+    {
+      "name": "next_surah",
+      "value": "اگلی"
+    },
+    {
+      "name": "juz_label",
+      "value": "جز"
     }
   ]
 }

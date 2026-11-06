@@ -2899,6 +2899,137 @@
     {
       "name": "widget_ramadan_desc",
       "value": "斋月封斋追踪与倒计时"
+    },
+    {
+      "name": "prayer_prompt_title",
+      "value": "您已经礼拜了吗？"
+    },
+    {
+      "name": "surah_recommendations",
+      "value": "诵读指南"
+    },
+    {
+      "name": "ayahs",
+      "value": "经文节"
+    },
+    {
+      "name": "occasion_morning_evening",
+      "value": "晨夕诵读"
+    },
+    {
+      "name": "occasion_bedtime",
+      "value": "睡前"
+    },
+    {
+      "name": "occasion_night",
+      "value": "夜间"
+    },
+    {
+      "name": "occasion_friday",
+      "value": "星期五"
+    },
+    {
+      "name": "occasion_friday_fajr",
+      "value": "星期五晨礼"
+    },
+    {
+      "name": "occasion_friday_prayer",
+      "value": "主麻聚礼"
+    },
+    {
+      "name": "occasion_friday_sermon",
+      "value": "主麻演讲"
+    },
+    {
+      "name": "occasion_illness_ruqyah",
+      "value": "治愈与鲁格亚"
+    },
+    {
+      "name": "occasion_home_protection",
+      "value": "家庭保护"
+    },
+    {
+      "name": "occasion_protection_dajjal",
+      "value": "防护达贾勒"
+    },
+    {
+      "name": "occasion_eid_prayer",
+      "value": "开斋节礼拜"
+    },
+    {
+      "name": "occasion_fajr_sunnah",
+      "value": "晨礼圣行"
+    },
+    {
+      "name": "occasion_general_virtue",
+      "value": "一般功德"
+    },
+    {
+      "name": "quran_full_title",
+      "value": "《古兰经》"
+    },
+    {
+      "name": "quran_full_desc",
+      "value": "阅读全部114章经文及其翻译。"
+    },
+    {
+      "name": "search_surahs",
+      "value": "搜索章节..."
+    },
+    {
+      "name": "translation_unavailable",
+      "value": "此语言暂无翻译。"
+    },
+    {
+      "name": "licenses_title",
+      "value": "数据来源与许可证"
+    },
+    {
+      "name": "licenses_intro",
+      "value": "本应用使用的《古兰经》文本、翻译和文字脚本均依据以下许可证发布。分享本应用或其数据时，请保留来源说明。"
+    },
+    {
+      "name": "license_section_dataset",
+      "value": "数据集"
+    },
+    {
+      "name": "license_section_scripts",
+      "value": "阿拉伯文文本"
+    },
+    {
+      "name": "license_section_translations",
+      "value": "翻译"
+    },
+    {
+      "name": "license_source_label",
+      "value": "来源："
+    },
+    {
+      "name": "license_license_label",
+      "value": "许可证："
+    },{
+      "name": "mode_translation",
+      "value": "翻译"
+    },
+    {
+      "name": "mode_reading",
+      "value": "阅读"
+    },
+    {
+      "name": "mode_mushaf",
+      "value": "穆斯哈夫"
+    },
+    {
+      "name": "previous_surah",
+      "value": "上一章"
+    },
+    {
+      "name": "next_surah",
+      "value": "下一章"
+    },
+    {
+      "name": "juz_label",
+      "value": "卷"
     }
   ]
 }

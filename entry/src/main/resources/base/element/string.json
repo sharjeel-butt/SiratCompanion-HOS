@@ -2903,6 +2903,139 @@
     {
       "name": "timing_iftar",
       "value": "Iftar"
+    },
+    {
+      "name": "prayer_prompt_title",
+      "value": "Have you prayed yet?"
+    },
+    {
+      "name": "surah_recommendations",
+      "value": "Recitation Guide"
+    },
+    {
+      "name": "ayahs",
+      "value": "Ayahs"
+    },
+    {
+      "name": "occasion_morning_evening",
+      "value": "Morning & Evening"
+    },
+    {
+      "name": "occasion_bedtime",
+      "value": "Before Sleep"
+    },
+    {
+      "name": "occasion_night",
+      "value": "Night"
+    },
+    {
+      "name": "occasion_friday",
+      "value": "Friday"
+    },
+    {
+      "name": "occasion_friday_fajr",
+      "value": "Friday Fajr"
+    },
+    {
+      "name": "occasion_friday_prayer",
+      "value": "Friday Jumu'ah"
+    },
+    {
+      "name": "occasion_friday_sermon",
+      "value": "Friday Sermon"
+    },
+    {
+      "name": "occasion_illness_ruqyah",
+      "value": "Healing & Ruqyah"
+    },
+    {
+      "name": "occasion_home_protection",
+      "value": "Home Protection"
+    },
+    {
+      "name": "occasion_protection_dajjal",
+      "value": "Protection from Dajjal"
+    },
+    {
+      "name": "occasion_eid_prayer",
+      "value": "Eid Prayer"
+    },
+    {
+      "name": "occasion_fajr_sunnah",
+      "value": "Fajr Sunnah"
+    },
+    {
+      "name": "occasion_general_virtue",
+      "value": "General Virtue"
+    },
+    {
+      "name": "quran_full_title",
+      "value": "The Holy Quran"
+    },
+    {
+      "name": "quran_full_desc",
+      "value": "Read all 114 Surahs with translations."
+    },
+    {
+      "name": "search_surahs",
+      "value": "Search Surahs..."
+    },
+    {
+      "name": "translation_unavailable",
+      "value": "Translation not available for this language."
+    },
+    {
+      "name": "licenses_title",
+      "value": "Data Sources & Licenses"
+    },
+    {
+      "name": "licenses_intro",
+      "value": "The Quran text, translations and scripts used in this app are distributed under the following licenses. Please retain attribution when sharing this app or its data."
+    },
+    {
+      "name": "license_section_dataset",
+      "value": "Dataset"
+    },
+    {
+      "name": "license_section_scripts",
+      "value": "Arabic Scripts"
+    },
+    {
+      "name": "license_section_translations",
+      "value": "Translations"
+    },
+    {
+      "name": "license_source_label",
+      "value": "Source:"
+    },
+    {
+      "name": "license_license_label",
+      "value": "License:"
+    },
+    {
+      "name": "mode_translation",
+      "value": "Translation"
+    },
+    {
+      "name": "mode_reading",
+      "value": "Reading"
+    },
+    {
+      "name": "mode_mushaf",
+      "value": "Mushaf"
+    },
+    {
+      "name": "previous_surah",
+      "value": "Previous"
+    },
+    {
+      "name": "next_surah",
+      "value": "Next"
+    },
+    {
+      "name": "juz_label",
+      "value": "Juz"
     }
+
   ]
 }

@@ -72,8 +72,15 @@ export class DateHelper {
 
     const engine = HijriEngineResolver.current();
     const found: UpcomingImportantDate[] = [];
-    const allEvents = IslamicEventService.getEvents(perspective);
-    for (const event of allEvents) {
+    const seenKeys = new Set<string>(); // <-- ADD THIS: Track unique events
+
+    const events = IslamicEventService.getEvents(perspective);
+
+    for (const event of events) {
+      // 1. Skip if we already processed this event key
+      if (seenKeys.has(event.key)) {
+        continue;
+      }
 
       const gregorianDate = DateHelper.findNextGregorianForEvent(
         event, now, offsetDays
@@ -85,7 +92,6 @@ export class DateHelper {
       const eventMidnight = new Date(gregorianDate);
       eventMidnight.setHours(0, 0, 0, 0);
 
-      // Skip events that already passed (today counts as "not passed").
       if (eventMidnight.getTime() < todayMidnight.getTime()) {
         continue;
       }
@@ -94,8 +100,6 @@ export class DateHelper {
         (eventMidnight.getTime() - todayMidnight.getTime()) / MS_PER_DAY
       );
 
-      // Displayed Hijri string must also reflect the offset and the
-      // selected engine so it matches the Home header / calendar.
       const shiftedForDisplay = new Date(gregorianDate);
       shiftedForDisplay.setDate(
         shiftedForDisplay.getDate() + offsetDays
@@ -117,7 +121,9 @@ export class DateHelper {
         gregorianDate: gregorianDate,
         daysUntil: daysUntil
       };
+
       found.push(entry);
+      seenKeys.add(event.key); // <-- ADD THIS: Mark as processed
     }
 
     found.sort(
@@ -184,7 +190,7 @@ export class DateHelper {
 
       const h = engine.toHijri(shifted);
       if (h !== null && h.month === event.month &&
-        h.day >= 1 && h.day <= 7) {
+        h.day >= 1 && h.day <= 6) {
         return testDate;
       }
     }

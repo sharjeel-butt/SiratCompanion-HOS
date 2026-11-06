@@ -2899,6 +2899,137 @@
     {
       "name": "widget_ramadan_desc",
       "value": "Ramazan oruç takibi ve geri sayım"
+    },
+    {
+      "name": "prayer_prompt_title",
+      "value": "Namazınızı kıldınız mı?"
+    },
+    {
+      "name": "surah_recommendations",
+      "value": "Tilavet Rehberi"
+    },
+    {
+      "name": "ayahs",
+      "value": "Ayetler"
+    },
+    {
+      "name": "occasion_morning_evening",
+      "value": "Sabah ve Akşam"
+    },
+    {
+      "name": "occasion_bedtime",
+      "value": "Uyumadan Önce"
+    },
+    {
+      "name": "occasion_night",
+      "value": "Gece"
+    },
+    {
+      "name": "occasion_friday",
+      "value": "Cuma"
+    },
+    {
+      "name": "occasion_friday_fajr",
+      "value": "Cuma Sabah Namazı"
+    },
+    {
+      "name": "occasion_friday_prayer",
+      "value": "Cuma Namazı"
+    },
+    {
+      "name": "occasion_friday_sermon",
+      "value": "Cuma Hutbesi"
+    },
+    {
+      "name": "occasion_illness_ruqyah",
+      "value": "Şifa ve Rukye"
+    },
+    {
+      "name": "occasion_home_protection",
+      "value": "Ev Koruması"
+    },
+    {
+      "name": "occasion_protection_dajjal",
+      "value": "Deccal'den Korunma"
+    },
+    {
+      "name": "occasion_eid_prayer",
+      "value": "Bayram Namazı"
+    },
+    {
+      "name": "occasion_fajr_sunnah",
+      "value": "Sabah Namazı Sünneti"
+    },
+    {
+      "name": "occasion_general_virtue",
+      "value": "Genel Fazilet"
+    },
+    {
+      "name": "quran_full_title",
+      "value": "Kur'an-ı Kerim"
+    },
+    {
+      "name": "quran_full_desc",
+      "value": "114 surenin tamamını çevirileriyle birlikte okuyun."
+    },
+    {
+      "name": "search_surahs",
+      "value": "Sure Ara..."
+    },
+    {
+      "name": "translation_unavailable",
+      "value": "Bu dil için çeviri mevcut değil."
+    },
+    {
+      "name": "licenses_title",
+      "value": "Veri Kaynakları ve Lisanslar"
+    },
+    {
+      "name": "licenses_intro",
+      "value": "Bu uygulamada kullanılan Kur'an metni, çeviriler ve yazı sistemleri aşağıdaki lisanslar kapsamında dağıtılmaktadır. Bu uygulamayı veya verilerini paylaşırken lütfen kaynak bilgisini koruyun."
+    },
+    {
+      "name": "license_section_dataset",
+      "value": "Veri Seti"
+    },
+    {
+      "name": "license_section_scripts",
+      "value": "Arapça Yazı Sistemleri"
+    },
+    {
+      "name": "license_section_translations",
+      "value": "Çeviriler"
+    },
+    {
+      "name": "license_source_label",
+      "value": "Kaynak:"
+    },
+    {
+      "name": "license_license_label",
+      "value": "Lisans:"
+    },{
+      "name": "mode_translation",
+      "value": "Çeviri"
+    },
+    {
+      "name": "mode_reading",
+      "value": "Okuma"
+    },
+    {
+      "name": "mode_mushaf",
+      "value": "Mushaf"
+    },
+    {
+      "name": "previous_surah",
+      "value": "Önceki"
+    },
+    {
+      "name": "next_surah",
+      "value": "Sonraki"
+    },
+    {
+      "name": "juz_label",
+      "value": "Cüz"
     }
   ]
 }

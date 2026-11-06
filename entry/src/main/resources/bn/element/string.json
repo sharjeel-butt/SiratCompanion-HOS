@@ -2899,6 +2899,137 @@
     {
       "name": "widget_ramadan_desc",
       "value": "রমজান রোজা ট্র্যাকার এবং কাউন্টডাউন"
+    },
+    {
+      "name": "prayer_prompt_title",
+      "value": "আপনি কি নামাজ আদায় করেছেন?"
+    },
+    {
+      "name": "surah_recommendations",
+      "value": "তিলাওয়াত নির্দেশিকা"
+    },
+    {
+      "name": "ayahs",
+      "value": "আয়াতসমূহ"
+    },
+    {
+      "name": "occasion_morning_evening",
+      "value": "সকাল ও সন্ধ্যা"
+    },
+    {
+      "name": "occasion_bedtime",
+      "value": "ঘুমানোর আগে"
+    },
+    {
+      "name": "occasion_night",
+      "value": "রাত"
+    },
+    {
+      "name": "occasion_friday",
+      "value": "জুমার দিন"
+    },
+    {
+      "name": "occasion_friday_fajr",
+      "value": "জুমার ফজর"
+    },
+    {
+      "name": "occasion_friday_prayer",
+      "value": "জুমার সালাত"
+    },
+    {
+      "name": "occasion_friday_sermon",
+      "value": "জুমার খুতবা"
+    },
+    {
+      "name": "occasion_illness_ruqyah",
+      "value": "শিফা ও রুকইয়াহ"
+    },
+    {
+      "name": "occasion_home_protection",
+      "value": "বাড়ির সুরক্ষা"
+    },
+    {
+      "name": "occasion_protection_dajjal",
+      "value": "দাজ্জাল থেকে সুরক্ষা"
+    },
+    {
+      "name": "occasion_eid_prayer",
+      "value": "ঈদের সালাত"
+    },
+    {
+      "name": "occasion_fajr_sunnah",
+      "value": "ফজরের সুন্নাত"
+    },
+    {
+      "name": "occasion_general_virtue",
+      "value": "সাধারণ ফজিলত"
+    },
+    {
+      "name": "quran_full_title",
+      "value": "পবিত্র কুরআন"
+    },
+    {
+      "name": "quran_full_desc",
+      "value": "অনুবাদসহ সব ১১৪টি সূরা পড়ুন।"
+    },
+    {
+      "name": "search_surahs",
+      "value": "সূরা অনুসন্ধান করুন..."
+    },
+    {
+      "name": "translation_unavailable",
+      "value": "এই ভাষার জন্য অনুবাদ উপলভ্য নয়।"
+    },
+    {
+      "name": "licenses_title",
+      "value": "ডেটা উৎস ও লাইসেন্স"
+    },
+    {
+      "name": "licenses_intro",
+      "value": "এই অ্যাপে ব্যবহৃত কুরআনের পাঠ, অনুবাদ এবং আরবি লিপি নিম্নোক্ত লাইসেন্সের অধীনে বিতরণ করা হয়েছে। এই অ্যাপ বা এর ডেটা শেয়ার করার সময় অনুগ্রহ করে উৎসের স্বীকৃতি বজায় রাখুন।"
+    },
+    {
+      "name": "license_section_dataset",
+      "value": "ডেটাসেট"
+    },
+    {
+      "name": "license_section_scripts",
+      "value": "আরবি লিপি"
+    },
+    {
+      "name": "license_section_translations",
+      "value": "অনুবাদসমূহ"
+    },
+    {
+      "name": "license_source_label",
+      "value": "উৎস:"
+    },
+    {
+      "name": "license_license_label",
+      "value": "লাইসেন্স:"
+    },{
+      "name": "mode_translation",
+      "value": "অনুবাদ"
+    },
+    {
+      "name": "mode_reading",
+      "value": "পাঠ"
+    },
+    {
+      "name": "mode_mushaf",
+      "value": "মুসহাফ"
+    },
+    {
+      "name": "previous_surah",
+      "value": "পূর্ববর্তী"
+    },
+    {
+      "name": "next_surah",
+      "value": "পরবর্তী"
+    },
+    {
+      "name": "juz_label",
+      "value": "পারা"
     }
   ]
 }

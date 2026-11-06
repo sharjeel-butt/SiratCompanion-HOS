@@ -1,0 +1,182 @@
+{
+  "recitation_surah_112_morning_evening": {
+    "name": "Al-Ikhlas for Morning and Evening",
+    "notes": "Recite with the other two protection surahs three times at dawn and dusk.",
+    "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575"
+  },
+  "recitation_surah_113_morning_evening": {
+    "name": "Al-Falaq for Morning and Evening",
+    "notes": "Recite with the other two protection surahs three times at dawn and dusk.",
+    "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575"
+  },
+  "recitation_surah_114_morning_evening": {
+    "name": "An-Nas for Morning and Evening",
+    "notes": "Recite with the other two protection surahs three times at dawn and dusk.",
+    "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575"
+  },
+  "recitation_surah_112_bedtime": {
+    "name": "Al-Ikhlas Before Sleep",
+    "notes": "Cup the hands, recite the three surahs, blow into the hands, and wipe the body; repeat three times.",
+    "reference": "Sahih al-Bukhari 5017"
+  },
+  "recitation_surah_113_bedtime": {
+    "name": "Al-Falaq Before Sleep",
+    "notes": "Cup the hands, recite the three surahs, blow into the hands, and wipe the body; repeat three times.",
+    "reference": "Sahih al-Bukhari 5017"
+  },
+  "recitation_surah_114_bedtime": {
+    "name": "An-Nas Before Sleep",
+    "notes": "Cup the hands, recite the three surahs, blow into the hands, and wipe the body; repeat three times.",
+    "reference": "Sahih al-Bukhari 5017"
+  },
+  "recitation_surah_112_illness": {
+    "name": "Al-Ikhlas for Illness and Ruqyah",
+    "notes": "Recite as ruqyah and blow over the body.",
+    "reference": "Sahih al-Bukhari 5748"
+  },
+  "recitation_surah_113_illness": {
+    "name": "Al-Falaq for Illness and Ruqyah",
+    "notes": "Recite as ruqyah and blow over the body.",
+    "reference": "Sahih al-Bukhari 5748"
+  },
+  "recitation_surah_114_illness": {
+    "name": "An-Nas for Illness and Ruqyah",
+    "notes": "Recite as ruqyah and blow over the body.",
+    "reference": "Sahih al-Bukhari 5748"
+  },
+  "recitation_ayat_al_kursi_bedtime": {
+    "name": "Ayat al-Kursi Before Sleep",
+    "notes": "Recite the full verse before sleep.",
+    "reference": "Sahih al-Bukhari 5010"
+  },
+  "recitation_baqarah_285_286_night": {
+    "name": "Last Two Verses of Al-Baqarah at Night",
+    "notes": "The hadith states that they suffice the reciter for the night.",
+    "reference": "Sahih al-Bukhari 5009; Sahih al-Bukhari 5040"
+  },
+  "recitation_baqarah_home": {
+    "name": "Surah Al-Baqarah in the Home",
+    "notes": "No fixed daily frequency is stated in the cited hadith.",
+    "reference": "Sahih Muslim 780; Jami at-Tirmidhi 2877"
+  },
+  "recitation_kahf_friday": {
+    "name": "Surah Al-Kahf on Friday",
+    "notes": "Included as Hasan evidence, not labelled Sahih.",
+    "reference": "Mishkat al-Masabih 2175; Al-Bayhaqi, al-Daawat al-Kabir"
+  },
+  "recitation_kahf_first_ten_dajjal": {
+    "name": "First Ten Verses of Al-Kahf for Protection from the Dajjal",
+    "notes": "Memorise or recite the first ten verses as stated in the narration.",
+    "reference": "Sahih Muslim 809a"
+  },
+  "recitation_kahf_last_ten_dajjal": {
+    "name": "Last Ten Verses of Al-Kahf for Protection from the Dajjal",
+    "notes": "A variant narration specifies the last ten verses.",
+    "reference": "Sahih Muslim 809b"
+  },
+  "recitation_sajdah_friday_fajr": {
+    "name": "As-Sajdah in Friday Fajr, First Rak‘ah",
+    "notes": "",
+    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a"
+  },
+  "recitation_insan_friday_fajr": {
+    "name": "Al-Insan in Friday Fajr, Second Rak‘ah",
+    "notes": "",
+    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a"
+  },
+  "recitation_jumuah_friday_prayer": {
+    "name": "Al-Jumu‘ah in Friday Prayer, First Rak‘ah",
+    "notes": "",
+    "reference": "Sahih Muslim 879a; Sunan an-Nasa’i 1421"
+  },
+  "recitation_munafiqun_friday_prayer": {
+    "name": "Al-Munafiqun in Friday Prayer, Second Rak‘ah",
+    "notes": "",
+    "reference": "Sahih Muslim 879a; Sunan an-Nasa’i 1421"
+  },
+  "recitation_ala_eid_prayer": {
+    "name": "Al-A‘la in the First Rak‘ah",
+    "notes": "",
+    "reference": "Sahih Muslim 878a"
+  },
+  "recitation_ghashiyah_eid_prayer": {
+    "name": "Al-Ghashiyah in the Second Rak‘ah",
+    "notes": "",
+    "reference": "Sahih Muslim 878a"
+  },
+  "recitation_ala_friday_prayer": {
+    "name": "Al-A‘la in the First Rak‘ah",
+    "notes": "",
+    "reference": "Sahih Muslim 878a"
+  },
+  "recitation_ghashiyah_friday_prayer": {
+    "name": "Al-Ghashiyah in the Second Rak‘ah",
+    "notes": "",
+    "reference": "Sahih Muslim 878a"
+  },
+  "recitation_kafirun_fajr_sunnah": {
+    "name": "Al-Kafirun in the First Sunnah Rak‘ah Before Fajr",
+    "notes": "",
+    "reference": "Sahih Muslim 726; Riyad as-Salihin 1108"
+  },
+  "recitation_ikhlas_fajr_sunnah": {
+    "name": "Al-Ikhlas in the Second Sunnah Rak‘ah Before Fajr",
+    "notes": "",
+    "reference": "Sahih Muslim 726; Riyad as-Salihin 1108"
+  },
+  "recitation_baqarah_136_fajr_sunnah": {
+    "name": "Al-Baqarah 2:136 in the First Sunnah Rak‘ah Before Fajr",
+    "notes": "",
+    "reference": "Sahih Muslim 727; Riyad as-Salihin 1107"
+  },
+  "recitation_al_imran_52_or_64_fajr_sunnah": {
+    "name": "Aal ‘Imran 3:52 or 3:64 in the Second Sunnah Rak‘ah Before Fajr",
+    "notes": "The narrations mention 3:52 and, in another wording, 3:64. This record points to alternatives, not the entire range.",
+    "reference": "Sahih Muslim 727; Riyad as-Salihin 1107"
+  },
+  "recitation_mulk_general_virtue": {
+    "name": "Surah Al-Mulk: General Virtue of Intercession",
+    "notes": "The Hasan report establishes intercession and forgiveness, but does not prescribe a specific day or bedtime schedule.",
+    "reference": "Jami at-Tirmidhi 2891"
+  },
+  "recitation_fatihah_ruqyah": {
+    "name": "Al-Fatihah for Ruqyah",
+    "notes": "Recite Al-Fatihah as ruqyah. The reports describe its use for a poisonous bite or sting; they do not prescribe a fixed repetition count.",
+    "reference": "Sahih al-Bukhari 5736; Sahih al-Bukhari 5749"
+  },
+  "recitation_qaf_fajr": {
+    "name": "Surah Qaf in Fajr Prayer",
+    "notes": "An established recitation in the obligatory Fajr prayer. The report does not assign a fixed daily schedule.",
+    "reference": "Sahih Muslim 458a; Sahih Muslim 458b"
+  },
+  "recitation_qaf_friday_sermon": {
+    "name": "Surah Qaf in the Friday Sermon",
+    "notes": "This is a sermon-context practice, not a personal Friday recitation schedule.",
+    "reference": "Sahih Muslim 872a; Sahih Muslim 872b"
+  },
+  "recitation_qaf_eid_prayer": {
+    "name": "Surah Qaf in the First Eid Rak‘ah",
+    "notes": "An established alternative pair for the Eid prayer.",
+    "reference": "Sahih Muslim 891a; Sahih Muslim 891b"
+  },
+  "recitation_qamar_eid_prayer": {
+    "name": "Surah Al-Qamar in the Second Eid Rak‘ah",
+    "notes": "An established alternative pair for the Eid prayer.",
+    "reference": "Sahih Muslim 891a; Sahih Muslim 891b"
+  },
+  "recitation_tur_maghrib": {
+    "name": "Surah At-Tur in Maghrib Prayer",
+    "notes": "An authenticated instance of the Prophet reciting this surah in Maghrib; it is not presented as mandatory for every Maghrib.",
+    "reference": "Sahih al-Bukhari 765; Sahih al-Bukhari 4854"
+  },
+  "recitation_mursalat_maghrib": {
+    "name": "Surah Al-Mursalat in Maghrib Prayer",
+    "notes": "An authenticated instance of this surah being recited in Maghrib; no fixed recurring frequency is stated.",
+    "reference": "Sahih al-Bukhari 763"
+  },
+  "recitation_dukhan_maghrib": {
+    "name": "Surah Ad-Dukhan in Maghrib Prayer",
+    "notes": "An authenticated instance of this surah being recited in Maghrib. The weak report about Friday-night recitation is not used.",
+    "reference": "Sunan an-Nasa’i 988"
+  }
+}

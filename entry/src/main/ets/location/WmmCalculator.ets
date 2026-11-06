@@ -16,7 +16,6 @@ export class WmmCalculator {
   private static readonly A4 = WmmCalculator.A2 * WmmCalculator.A2;
   private static readonly B4 = WmmCalculator.B2 * WmmCalculator.B2;
   private static readonly C4 = WmmCalculator.A4 - WmmCalculator.B4;
-
   // WMM2025 Coefficients (Degree/Order 12)
   // Format: [n, m, g, h, gdot, hdot]
   private static readonly COEFFS: number[][] = [
@@ -155,8 +154,8 @@ export class WmmCalculator {
     const By: MagField = { val: 0 };
     const Bz: MagField = { val: 0 };
 
-    const P = new Array<number>( (N + 1) * (N + 1) ).fill(0);
-    const dP = new Array<number>( (N + 1) * (N + 1) ).fill(0);
+    const P = new Array<number>((N + 1) * (N + 1)).fill(0);
+    const dP = new Array<number>((N + 1) * (N + 1)).fill(0);
 
     P[0] = 1.0;
     dP[0] = 0.0;
@@ -201,7 +200,10 @@ export class WmmCalculator {
         for (let c = 0; c < WmmCalculator.COEFFS.length; c++) {
           const co = WmmCalculator.COEFFS[c];
           if (co[0] === n && co[1] === m) {
-            g = co[2]; h = co[3]; gdot = co[4]; hdot = co[5];
+            g = co[2];
+            h = co[3];
+            gdot = co[4];
+            hdot = co[5];
             break;
           }
         }

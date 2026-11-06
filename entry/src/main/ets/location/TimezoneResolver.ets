@@ -82,7 +82,9 @@ export class TimezoneResolver {
       const start = TimezoneResolver.nthSunday(year, startMonth, 1);
       return t >= start.getTime();
     }
-    if (m <= 2) return true; // Jan, Feb, Mar
+    if (m <= 2) {
+      return true;
+    } // Jan, Feb, Mar
     if (m === 3) {
       const end = TimezoneResolver.nthSunday(year, 4, 1); // 1st Sun Apr
       return t < end.getTime();
@@ -129,7 +131,9 @@ export class TimezoneResolver {
     const last = new Date(Date.UTC(year, month, 0));
     const lastDow = last.getUTCDay();
     let delta = lastDow - weekday;
-    if (delta < 0) delta += 7;
+    if (delta < 0) {
+      delta += 7;
+    }
     return new Date(Date.UTC(year, month - 1, last.getUTCDate() - delta));
   }
 

@@ -1,0 +1,182 @@
+{
+  "recitation_surah_112_morning_evening": {
+    "name": "晨昏诵读忠诚章",
+    "notes": "晨昏与另外两章一起诵读三遍。",
+    "reference": "《艾布·达伍德圣训集》 5082; 《提尔密济圣训集》 3575"
+  },
+  "recitation_surah_113_morning_evening": {
+    "name": "晨昏诵读曙光章",
+    "notes": "晨昏与另外两章一起诵读三遍。",
+    "reference": "《艾布·达伍德圣训集》 5082; 《提尔密济圣训集》 3575"
+  },
+  "recitation_surah_114_morning_evening": {
+    "name": "晨昏诵读世人章",
+    "notes": "晨昏与另外两章一起诵读三遍。",
+    "reference": "《艾布·达伍德圣训集》 5082; 《提尔密济圣训集》 3575"
+  },
+  "recitation_surah_112_bedtime": {
+    "name": "睡前诵读忠诚章",
+    "notes": "双手合拢诵读三章，吹气后擦拭身体，共三遍。",
+    "reference": "《布哈里圣训实录》 5017"
+  },
+  "recitation_surah_113_bedtime": {
+    "name": "睡前诵读曙光章",
+    "notes": "双手合拢诵读三章，吹气后擦拭身体，共三遍。",
+    "reference": "《布哈里圣训实录》 5017"
+  },
+  "recitation_surah_114_bedtime": {
+    "name": "睡前诵读世人章",
+    "notes": "双手合拢诵读三章，吹气后擦拭身体，共三遍。",
+    "reference": "《布哈里圣训实录》 5017"
+  },
+  "recitation_surah_112_illness": {
+    "name": "患病与鲁格雅时诵读忠诚章",
+    "notes": "作为鲁格雅诵读并向身体吹气。",
+    "reference": "《布哈里圣训实录》 5748"
+  },
+  "recitation_surah_113_illness": {
+    "name": "患病与鲁格雅时诵读曙光章",
+    "notes": "作为鲁格雅诵读并向身体吹气。",
+    "reference": "《布哈里圣训实录》 5748"
+  },
+  "recitation_surah_114_illness": {
+    "name": "患病与鲁格雅时诵读世人章",
+    "notes": "作为鲁格雅诵读并向身体吹气。",
+    "reference": "《布哈里圣训实录》 5748"
+  },
+  "recitation_ayat_al_kursi_bedtime": {
+    "name": "睡前诵读宝座经文",
+    "notes": "睡前完整诵读该节。",
+    "reference": "《布哈里圣训实录》 5010"
+  },
+  "recitation_baqarah_285_286_night": {
+    "name": "夜间诵读黄牛章最后两节",
+    "notes": "圣训说明，这两节足以护佑诵读者一夜。",
+    "reference": "《布哈里圣训实录》 5009; 《布哈里圣训实录》 5040"
+  },
+  "recitation_baqarah_home": {
+    "name": "家中诵读黄牛章",
+    "notes": "所引圣训未规定每日固定次数。",
+    "reference": "《穆斯林圣训实录》 780; 《提尔密济圣训集》 2877"
+  },
+  "recitation_kahf_friday": {
+    "name": "主麻日诵读山洞章",
+    "notes": "依据良好级圣训收录，不标为可靠级。",
+    "reference": "《明灯龛》 2175; Al-Bayhaqi, al-Daawat al-Kabir"
+  },
+  "recitation_kahf_first_ten_dajjal": {
+    "name": "山洞章前十节防达加勒",
+    "notes": "按圣训记载背诵或诵读前十节。",
+    "reference": "《穆斯林圣训实录》 809a"
+  },
+  "recitation_kahf_last_ten_dajjal": {
+    "name": "山洞章后十节防达加勒",
+    "notes": "另一传述指定后十节。",
+    "reference": "《穆斯林圣训实录》 809b"
+  },
+  "recitation_sajdah_friday_fajr": {
+    "name": "主麻日晨礼第一拜诵叩头章",
+    "notes": "",
+    "reference": "《布哈里圣训实录》 891; 《穆斯林圣训实录》 879a"
+  },
+  "recitation_insan_friday_fajr": {
+    "name": "主麻日晨礼第二拜诵人章",
+    "notes": "",
+    "reference": "《布哈里圣训实录》 891; 《穆斯林圣训实录》 879a"
+  },
+  "recitation_jumuah_friday_prayer": {
+    "name": "主麻拜第一拜诵聚礼章",
+    "notes": "",
+    "reference": "《穆斯林圣训实录》 879a; 《奈萨仪圣训集》 1421"
+  },
+  "recitation_munafiqun_friday_prayer": {
+    "name": "主麻拜第二拜诵伪信者章",
+    "notes": "",
+    "reference": "《穆斯林圣训实录》 879a; 《奈萨仪圣训集》 1421"
+  },
+  "recitation_ala_eid_prayer": {
+    "name": "第一拜诵至尊章",
+    "notes": "",
+    "reference": "《穆斯林圣训实录》 878a"
+  },
+  "recitation_ghashiyah_eid_prayer": {
+    "name": "第二拜诵大灾章",
+    "notes": "",
+    "reference": "《穆斯林圣训实录》 878a"
+  },
+  "recitation_ala_friday_prayer": {
+    "name": "第一拜诵至尊章",
+    "notes": "",
+    "reference": "《穆斯林圣训实录》 878a"
+  },
+  "recitation_ghashiyah_friday_prayer": {
+    "name": "第二拜诵大灾章",
+    "notes": "",
+    "reference": "《穆斯林圣训实录》 878a"
+  },
+  "recitation_kafirun_fajr_sunnah": {
+    "name": "晨礼前圣行拜第一拜诵不信道者章",
+    "notes": "",
+    "reference": "《穆斯林圣训实录》 726; 《清廉者的花园》 1108"
+  },
+  "recitation_ikhlas_fajr_sunnah": {
+    "name": "晨礼前圣行拜第二拜诵忠诚章",
+    "notes": "",
+    "reference": "《穆斯林圣训实录》 726; 《清廉者的花园》 1108"
+  },
+  "recitation_baqarah_136_fajr_sunnah": {
+    "name": "晨礼前圣行拜第一拜诵黄牛章136节",
+    "notes": "",
+    "reference": "《穆斯林圣训实录》 727; 《清廉者的花园》 1107"
+  },
+  "recitation_al_imran_52_or_64_fajr_sunnah": {
+    "name": "晨礼前圣行拜第二拜诵仪姆兰家属章52或64节",
+    "notes": "传述提到第52节，另一版本提到第64节；并非诵读两者之间的全部经文。",
+    "reference": "《穆斯林圣训实录》 727; 《清廉者的花园》 1107"
+  },
+  "recitation_mulk_general_virtue": {
+    "name": "国权章：代求的普遍功德",
+    "notes": "良好级传述确立其代求与获恕功德，但未规定特定日期或睡前时段。",
+    "reference": "《提尔密济圣训集》 2891"
+  },
+  "recitation_fatihah_ruqyah": {
+    "name": "开端章用于鲁格雅",
+    "notes": "诵读开端章作鲁格雅。传述描述其用于毒咬或蜇伤，但未规定固定重复次数。",
+    "reference": "《布哈里圣训实录》 5736; 《布哈里圣训实录》 5749"
+  },
+  "recitation_qaf_fajr": {
+    "name": "晨礼中诵读戛弗章",
+    "notes": "可靠传述记载在晨礼中诵读，但未规定每天固定采用。",
+    "reference": "《穆斯林圣训实录》 458a; 《穆斯林圣训实录》 458b"
+  },
+  "recitation_qaf_friday_sermon": {
+    "name": "主麻日演讲中诵读戛弗章",
+    "notes": "这是主麻日演讲情境中的做法，不是个人主麻日固定诵读安排。",
+    "reference": "《穆斯林圣训实录》 872a; 《穆斯林圣训实录》 872b"
+  },
+  "recitation_qaf_eid_prayer": {
+    "name": "会礼第一拜诵读戛弗章",
+    "notes": "这是会礼中有可靠依据的一组替代诵读。",
+    "reference": "《穆斯林圣训实录》 891a; 《穆斯林圣训实录》 891b"
+  },
+  "recitation_qamar_eid_prayer": {
+    "name": "会礼第二拜诵读月亮章",
+    "notes": "这是会礼中有可靠依据的一组替代诵读。",
+    "reference": "《穆斯林圣训实录》 891a; 《穆斯林圣训实录》 891b"
+  },
+  "recitation_tur_maghrib": {
+    "name": "昏礼中诵读山岳章",
+    "notes": "可靠传述记载先知曾在昏礼中诵读此章，但不表示每次昏礼都必须诵读。",
+    "reference": "《布哈里圣训实录》 765; 《布哈里圣训实录》 4854"
+  },
+  "recitation_mursalat_maghrib": {
+    "name": "昏礼中诵读天使章",
+    "notes": "可靠传述记载在昏礼中诵读此章，但未规定固定频率。",
+    "reference": "《布哈里圣训实录》 763"
+  },
+  "recitation_dukhan_maghrib": {
+    "name": "昏礼中诵读烟雾章",
+    "notes": "可靠传述记载在昏礼中诵读此章。未采用关于主麻夜诵读的弱传述。",
+    "reference": "《奈萨仪圣训集》 988"
+  }
+}

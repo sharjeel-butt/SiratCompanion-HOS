@@ -2899,6 +2899,137 @@
     {
       "name": "widget_ramadan_desc",
       "value": "Pelacak puasa dan hitungan mundur Ramadhan"
+    },
+    {
+      "name": "prayer_prompt_title",
+      "value": "Apakah Anda sudah salat?"
+    },
+    {
+      "name": "surah_recommendations",
+      "value": "Panduan Tilawah"
+    },
+    {
+      "name": "ayahs",
+      "value": "Ayat"
+    },
+    {
+      "name": "occasion_morning_evening",
+      "value": "Pagi & Petang"
+    },
+    {
+      "name": "occasion_bedtime",
+      "value": "Sebelum Tidur"
+    },
+    {
+      "name": "occasion_night",
+      "value": "Malam"
+    },
+    {
+      "name": "occasion_friday",
+      "value": "Jumat"
+    },
+    {
+      "name": "occasion_friday_fajr",
+      "value": "Subuh Jumat"
+    },
+    {
+      "name": "occasion_friday_prayer",
+      "value": "Salat Jumat"
+    },
+    {
+      "name": "occasion_friday_sermon",
+      "value": "Khutbah Jumat"
+    },
+    {
+      "name": "occasion_illness_ruqyah",
+      "value": "Penyembuhan & Ruqyah"
+    },
+    {
+      "name": "occasion_home_protection",
+      "value": "Perlindungan Rumah"
+    },
+    {
+      "name": "occasion_protection_dajjal",
+      "value": "Perlindungan dari Dajjal"
+    },
+    {
+      "name": "occasion_eid_prayer",
+      "value": "Salat Id"
+    },
+    {
+      "name": "occasion_fajr_sunnah",
+      "value": "Sunnah Subuh"
+    },
+    {
+      "name": "occasion_general_virtue",
+      "value": "Keutamaan Umum"
+    },
+    {
+      "name": "quran_full_title",
+      "value": "Al-Qur'an Al-Karim"
+    },
+    {
+      "name": "quran_full_desc",
+      "value": "Baca seluruh 114 surah beserta terjemahannya."
+    },
+    {
+      "name": "search_surahs",
+      "value": "Cari Surah..."
+    },
+    {
+      "name": "translation_unavailable",
+      "value": "Terjemahan tidak tersedia untuk bahasa ini."
+    },
+    {
+      "name": "licenses_title",
+      "value": "Sumber Data & Lisensi"
+    },
+    {
+      "name": "licenses_intro",
+      "value": "Teks Al-Qur'an, terjemahan, dan skrip yang digunakan dalam aplikasi ini didistribusikan berdasarkan lisensi berikut. Harap pertahankan atribusi saat membagikan aplikasi ini atau datanya."
+    },
+    {
+      "name": "license_section_dataset",
+      "value": "Dataset"
+    },
+    {
+      "name": "license_section_scripts",
+      "value": "Skrip Arab"
+    },
+    {
+      "name": "license_section_translations",
+      "value": "Terjemahan"
+    },
+    {
+      "name": "license_source_label",
+      "value": "Sumber:"
+    },
+    {
+      "name": "license_license_label",
+      "value": "Lisensi:"
+    },{
+      "name": "mode_translation",
+      "value": "Terjemahan"
+    },
+    {
+      "name": "mode_reading",
+      "value": "Membaca"
+    },
+    {
+      "name": "mode_mushaf",
+      "value": "Mushaf"
+    },
+    {
+      "name": "previous_surah",
+      "value": "Sebelumnya"
+    },
+    {
+      "name": "next_surah",
+      "value": "Berikutnya"
+    },
+    {
+      "name": "juz_label",
+      "value": "Juz"
     }
   ]
 }

@@ -146,31 +146,6 @@ struct MainTabs {
     this.isPageVisible = false;
   }
 
-  private handleWidgetIntent(): void {
-    // 1. Handle specific pages (e.g., RamadanDetailsPage)
-    const targetPage = AppStorage.get<string>('widget_target_page');
-    if (targetPage && targetPage.length > 0) {
-      AppStorage.setOrCreate('widget_target_page', '');
-      // Delay slightly to ensure router is ready on this page during cold start
-      setTimeout(() => {
-        NavHelper.prepareForward();
-        router.pushUrl({ url: targetPage }).catch((e: Error) => {
-          AppLogger.warn('MainTabs', `Widget page nav failed: ${e.message}`);
-        });
-      }, 200);
-      return;
-    }
-
-    // 2. Handle specific tabs (e.g., Prayer widget -> Prayers tab)
-    const targetTab = AppStorage.get<string>('widget_target_tab');
-    if (targetTab && targetTab.length > 0) {
-      AppStorage.setOrCreate('widget_target_tab', '');
-      setTimeout(() => {
-        this.applyNavTarget(targetTab, true);
-      }, 200);
-    }
-  }
-
   build() {
     if (this.useHds) {
       this.HdsNavigationHost()
@@ -568,6 +543,31 @@ struct MainTabs {
         .textOverflow({ overflow: TextOverflow.Ellipsis })
     }
     .width('100%').height(68).justifyContent(FlexAlign.Center)
+  }
+
+  private handleWidgetIntent(): void {
+    // 1. Handle specific pages (e.g., RamadanDetailsPage)
+    const targetPage = AppStorage.get<string>('widget_target_page');
+    if (targetPage && targetPage.length > 0) {
+      AppStorage.setOrCreate('widget_target_page', '');
+      // Delay slightly to ensure router is ready on this page during cold start
+      setTimeout(() => {
+        NavHelper.prepareForward();
+        router.pushUrl({ url: targetPage }).catch((e: Error) => {
+          AppLogger.warn('MainTabs', `Widget page nav failed: ${e.message}`);
+        });
+      }, 200);
+      return;
+    }
+
+    // 2. Handle specific tabs (e.g., Prayer widget -> Prayers tab)
+    const targetTab = AppStorage.get<string>('widget_target_tab');
+    if (targetTab && targetTab.length > 0) {
+      AppStorage.setOrCreate('widget_target_tab', '');
+      setTimeout(() => {
+        this.applyNavTarget(targetTab, true);
+      }, 200);
+    }
   }
 
   private onWidgetNavEvent = (target: string): void => {

@@ -4,6 +4,9 @@ import { BaseDua, CompleteDua, TranslatedDua } from './DuaModels';
 import { PreferencesHelper } from '../core/PreferencesHelper';
 import { RamadanInfo } from '../ramadan/RamadanHelper';
 import { STORAGE_KEY_DUA_BINDINGS_VERSION } from '../core/StorageKeys';
+import { CustomEventKeywordHelper } from './CustomEventKeywordHelper';
+import { UpcomingCustomEvent } from '../pages/HomePage';
+import { UpcomingImportantDate } from '../hijricalendar/DateModels';
 
 const KEY_DUA_FAVORITES = 'dua_favorites';
 const KEY_DUA_BINDINGS = 'dua_bindings';
@@ -169,30 +172,57 @@ export class DuaService {
   static getDailyDuas(
     allDuas: CompleteDua[],
     ramadanInfo: RamadanInfo | null,
-    isFriday: boolean
+    isFriday: boolean,
+    activeIslamicEvent: UpcomingImportantDate | null,
+    upcomingCustomEvents: UpcomingCustomEvent[],
+    lang: string // Add lang parameter
   ): CompleteDua[] {
     const result: CompleteDua[] = [];
     const idsToFind: string[] = [];
 
-    // 1. Contextual based on Ramadan
+    // 1. Priority: Ramadan & Friday context
     if (ramadanInfo && ramadanInfo.isRamadanNow) {
       idsToFind.push('dua_breaking_the_fast');
       if (ramadanInfo.currentDayNumber >= 21) {
         idsToFind.push('dua_laylatul_qadr');
       }
     }
-
-    // 2. Contextual based on Friday
     if (isFriday) {
       idsToFind.push('dua_after_the_adhan');
-      idsToFind.push('dua_opening_supplication_in_prayer');
     }
 
-    // 3. General Day-to-Day
-    idsToFind.push('dua_morning'); // Morning
-    idsToFind.push('dua_before_sleeping'); // Night
-    idsToFind.push('dua_travel'); // Travel
-    idsToFind.push('dua_guidance_to_the_straight_path'); // Core
+    // 2. Islamic Event Context
+    if (activeIslamicEvent) {
+      switch (activeIslamicEvent.key) {
+        case 'ashura':
+        case 'arafah':
+          idsToFind.push('dua_fasting');
+          break;
+        case 'ramadan_start':
+          idsToFind.push('dua_moon_sighting');
+          break;
+        case 'eid_fitr':
+        case 'eid_adha':
+          idsToFind.push('dua_eid');
+          break;
+        case 'isra_miraj':
+          idsToFind.push('dua_isra_miraj');
+          break;
+      }
+    }
+
+    // 3. Custom Event Keyword Scanning (JSON based)
+    for (const ce of upcomingCustomEvents) {
+      const mappedIds = CustomEventKeywordHelper.getDuaIdsForText(ce.ev.title, lang);
+      for (const id of mappedIds) {
+        idsToFind.push(id);
+      }
+    }
+
+    // 4. Fallbacks
+    idsToFind.push('dua_morning');
+    idsToFind.push('dua_before_sleeping');
+    idsToFind.push('dua_guidance_to_the_straight_path');
 
     // Deduplicate and limit to 3
     const seen = new Set<string>();

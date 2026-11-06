@@ -1397,6 +1397,7 @@ struct WizardPage {
     // Update local display language for wizard translations.
     this.currentLanguage = L.resolveOverride(id);
     // appLanguage auto-syncs via @StorageLink(STORAGE_KEY_LANGUAGE).
+    NotificationHelper.scheduleRescheduleNow();
   }
 
   private async toggleNotifications(isOn: boolean): Promise<void> {

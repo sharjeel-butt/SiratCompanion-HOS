@@ -13,7 +13,6 @@ import {
   STORAGE_KEY_THEME_MODE
 } from '../core/StorageKeys';
 import { L } from '../i18n/LocalizationHelper';
-import { Breakpoints } from '../core/Breakpoints';
 import {
   MonthDayCell,
   PerPrayerCount,
@@ -23,6 +22,7 @@ import {
   YearDetailSnapshot,
   YearMonthRow
 } from '../progress/ProgressHelper';
+import { Breakpoints } from '../core/Breakpoints';
 import { TypographyHelper } from '../core/TypographyHelper';
 
 type Period = 'week' | 'month' | 'year';

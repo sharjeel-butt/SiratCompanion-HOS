@@ -1,6 +1,8 @@
 // entry/src/main/ets/pages/HomePage.ets
 
 import { mediaquery, router } from '@kit.ArkUI';
+import { QuranService } from '../quran/QuranService';
+import { RecitationTask } from '../quran/QuranSurahModels';
 import { common } from '@kit.AbilityKit';
 import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
 import { PageTheme } from '../core/PageTheme';
@@ -12,7 +14,6 @@ import { CompleteDua } from '../duas/DuaModels';
 import { CustomEvent } from '../hijricalendar/CustomEventModels';
 import { CustomEventStorage } from '../hijricalendar/CustomEventStorage';
 import { CustomEventNotifier } from '../hijricalendar/CustomEventNotifier';
-
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -20,6 +21,7 @@ import {
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_CALC_SETTINGS_VERSION,
   STORAGE_KEY_CUSTOM_EVENTS_VERSION,
+  STORAGE_KEY_DISMISSED_PRAYERS,
   STORAGE_KEY_EVENT_SETTINGS_VERSION,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_CALENDAR_VERSION,
@@ -44,7 +46,7 @@ import { PrayerModel } from '../prayer/PrayerModel';
 import { UpcomingImportantDate } from '../hijricalendar/DateModels';
 import { LocationData, LocationHelper } from '../location/LocationUtils';
 import { LocationCache } from '../location/LocationCache';
-import { HomeController } from '../prayer/HomeController';
+import { HomeController, HomePrayerSnapshot } from '../prayer/HomeController';
 import { PrayerOffsets, SettingsHelper } from '../settings/SettingsHelper';
 import { CalculationSource, LocationMode } from '../settings/SettingsModels';
 import {
@@ -76,6 +78,9 @@ import { EventPerspectiveNotifier } from '../hijricalendar/EventPerspectiveNotif
 import { TypographyHelper } from '../core/TypographyHelper';
 import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
 import { IslamicEventService } from '../hijricalendar/IslamicEventService';
+import { CustomEventKeywordHelper } from '../duas/CustomEventKeywordHelper';
+import { PreferencesHelper } from '../core/PreferencesHelper';
+import { NotificationHelper } from '../prayer/NotificationHelper';
 
 export interface RamadanTableRow {
   hijriDate: string;
@@ -211,6 +216,7 @@ export struct HomePage {
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
   @State asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
   @State calcSource: CalculationSource = CalculationSource.LOCAL;
+  @State private recommendedRecitations: RecitationTask[] = [];
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
   @State private todayFastingStatus: FastingStatus = FastingStatus.UNMARKED;
   @State private todayMissedReason: MissedReason | null = null;
@@ -256,6 +262,8 @@ export struct HomePage {
   @State private currentLanguage: string = 'en';
   @State private isRefreshing: boolean = false;
   @State private boundTasbihs: Tasbih[] = [];
+  @State private pendingPrayerPrompts: PrayerModel[] = [];
+  private dismissedPrayers: string[] = [];
   private highLatRule: HighLatitudeRule = HighLatitudeRule.NONE;
   private offsets: PrayerOffsets = {
     fajr: 0,
@@ -282,6 +290,7 @@ export struct HomePage {
 
     const ctx = getContext(this) as common.UIAbilityContext;
     await TasbihStorage.init(ctx);
+    await CustomEventKeywordHelper.init(ctx);
 
     this.refreshHijriDate();
     this.refreshRamadan();
@@ -368,6 +377,9 @@ export struct HomePage {
                       this.CountdownCard()
                     }
                     this.LiveCountdownBanner()
+                    this.PrayerPromptCard()
+                    this.FullQuranAnchorCard()
+                    this.RecommendedRecitationsCard()
                     if (this.eidInfo !== null) {
                       this.EidCard()
                     } else if (this.ramadanInfo !== null) {
@@ -414,6 +426,9 @@ export struct HomePage {
                     this.CountdownCard()
                   }
                   this.LiveCountdownBanner()
+                  this.PrayerPromptCard()
+                  this.FullQuranAnchorCard()
+                  this.RecommendedRecitationsCard()
                   if (this.eidInfo !== null) {
                     this.EidCard()
                   } else if (this.ramadanInfo !== null) {
@@ -470,6 +485,269 @@ export struct HomePage {
     .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+  }
+
+  @Builder
+  RecommendedRecitationsCard() {
+    if (this.recommendedRecitations.length > 0) {
+      Column() {
+        Row({ space: 8 }) {
+          Image($r('app.media.ic_book')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
+          Text(this.tr('surah_recommendations'))
+            .fontSize(12)
+            .fontColor(this.colors.textMuted)
+            .fontWeight(FontWeight.Bold)
+            .letterSpacing(1.2)
+            .layoutWeight(1)
+
+          Row({ space: 2 }) {
+            Text(this.tr('view_all'))
+              .fontSize(11).fontColor(this.colors.accentGold)
+              .fontWeight(FontWeight.Medium)
+            Image($r('app.media.ic_chevron_right'))
+              .width(12).height(12)
+              .fillColor(this.colors.accentGold)
+              .rotate({ angle: this.isRtl() ? 180 : 0 })
+          }
+          .onClick(() => {
+            NavHelper.prepareForward();
+            router.pushUrl({ url: 'pages/RecitationsPage' })
+              .catch((e: Error) => console.error(JSON.stringify(e)));
+          })
+        }
+        .width('100%').padding({ bottom: 14 })
+
+        Column({ space: 10 }) {
+          ForEach(this.recommendedRecitations.slice(0, 3), (task: RecitationTask) => {
+            Row() {
+              Column() {
+                Text(task.name)
+                  .fontSize(15)
+                  .fontWeight(FontWeight.Bold)
+                  .fontColor(this.colors.textWhite)
+                  .maxLines(2)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+
+                if (task.notes.length > 0) {
+                  Text(task.notes)
+                    .fontSize(11)
+                    .fontColor(this.colors.textMuted)
+                    .margin({ top: 4 })
+                    .maxLines(2)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+                }
+
+                Row({ space: 8 }) {
+                  Text(`${task.repeatCount > 1 ? `${task.repeatCount}x ` : ''}${this.tr('occasion_' + task.occasion)}`)
+                    .fontSize(11).fontColor(this.colors.accentGold)
+
+                  if (task.authenticity) {
+                    Text(task.authenticity.toUpperCase())
+                      .fontSize(9)
+                      .fontColor(this.colors.textOnAccent)
+                      .backgroundColor(this.colors.statusExpress)
+                      .padding({
+                        left: 4,
+                        right: 4,
+                        top: 1,
+                        bottom: 1
+                      })
+                      .borderRadius(4)
+                  }
+                }
+                .margin({ top: 6 })
+              }
+              .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+              Column() {
+                Text(task.surahNameArabic)
+                  .fontSize(20)
+                  .fontFamily(TypographyHelper.getQuranFont(this.currentLanguage))
+                  .fontColor(this.colors.accentGold)
+                Image($r('app.media.ic_chevron_right'))
+                  .width(14)
+                  .height(14)
+                  .fillColor(this.colors.accentGold)
+                  .opacity(0.6)
+                  .margin({ top: 4 })
+                  .rotate({ angle: this.isRtl() ? 180 : 0 })
+              }
+              .alignItems(HorizontalAlign.End).margin({ left: 12 })
+            }
+            .width('100%')
+            .padding(12)
+            .backgroundColor(this.colors.tintSubtle)
+            .borderRadius(12)
+            .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+            .onClick(() => {
+              NavHelper.prepareForward();
+              router.pushUrl({
+                url: 'pages/SurahDetailsPage',
+                params: {
+                  surahId: task.surahNumber,
+                  startVerse: task.startVerse,
+                  endVerse: task.endVerse,
+                  taskId: task.id
+                }
+              }).catch((e: Error) => console.error('Navigation failed', e));
+            })
+          }, (task: RecitationTask) => `rec-${task.id}-${task.name}-${task.notes}`)
+        }
+      }
+      .width('100%')
+      .padding(18)
+      .backgroundColor(this.colors.cardDark)
+      .borderRadius(Theme.radiusLarge)
+      .border({ width: 1, color: this.colors.borderSoft })
+      .margin({ bottom: 14 })
+    }
+  }
+
+  @Builder
+  FullQuranAnchorCard() {
+    Row() {
+      Column() {
+        Image($r('app.media.ic_book'))
+          .width(24).height(24)
+          .fillColor(this.colors.accentGold)
+      }
+      .width(44)
+      .height(44)
+      .borderRadius(12)
+      .backgroundColor(this.colors.tintSoft)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(HorizontalAlign.Center)
+      .flexShrink(0)
+
+      Column() {
+        Text(this.tr('quran_full_title'))
+          .fontSize(16).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+        Text(this.tr('quran_full_desc'))
+          .fontSize(11)
+          .fontColor(this.colors.textMuted)
+          .margin({ top: 4 })
+          .maxLines(2)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1).padding({ left: 12, right: 12 })
+
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
+        .flexShrink(0)
+    }
+    .width('100%')
+    .padding(16)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(Theme.radiusLarge)
+    .border({ width: 1, color: this.colors.borderSoft })
+    .margin({ bottom: 14 })
+    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+    .onClick(() => {
+      NavHelper.prepareForward();
+      router.pushUrl({ url: 'pages/QuranPage' })
+        .catch((e: Error) => console.error(JSON.stringify(e)));
+    })
+  }
+
+  @Builder
+  PrayerPromptCard() {
+    if (this.pendingPrayerPrompts.length > 0) {
+      Column() {
+        // Header
+        Row({ space: 8 }) {
+          Image($r('app.media.ic_bell'))
+            .width(16).height(16)
+            .fillColor(this.colors.accentGold)
+            .flexShrink(0)
+          Text(this.tr('prayer_prompt_title'))
+            .fontSize(12)
+            .fontColor(this.colors.textMuted)
+            .fontWeight(FontWeight.Bold)
+            .letterSpacing(1.2)
+            .layoutWeight(1)
+        }
+        .width('100%').padding({ bottom: 12 })
+
+        // List of pending prayers
+        Column({ space: 8 }) {
+          ForEach(this.pendingPrayerPrompts, (prayer: PrayerModel) => {
+            Row() {
+              // Prayer Info
+              Column() {
+                Text(this.translatePrayerName(prayer.name))
+                  .fontSize(15)
+                  .fontWeight(FontWeight.Medium)
+                  .fontColor(this.colors.textWhite)
+                Text(this.dt(prayer.time))
+                  .fontSize(11)
+                  .fontColor(this.colors.accentGold)
+                  .margin({ top: 2 })
+              }
+              .alignItems(HorizontalAlign.Start)
+              .layoutWeight(1)
+
+              // Action Buttons
+              Row({ space: 8 }) {
+                // 1. Mark as Prayed (Check Icon Only)
+                Row() {
+                  Image($r('app.media.ic_check'))
+                    .width(16).height(16)
+                    .fillColor(this.colors.textOnAccent)
+                }
+                .width(32)
+                .height(32)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(VerticalAlign.Center)
+                .backgroundColor(this.colors.accentGold)
+                .borderRadius(16) // Perfect circle
+                .onClick(() => {
+                  this.markPromptAsPrayed(prayer.id);
+                })
+
+                // 2. Dismiss (Close Icon Only)
+                Row() {
+                  Image($r('app.media.ic_close'))
+                    .width(16).height(16)
+                    .fillColor(this.colors.textMuted)
+                }
+                .width(32)
+                .height(32)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(VerticalAlign.Center)
+                .backgroundColor(this.colors.tintSoft)
+                .borderRadius(16) // Perfect circle
+                .onClick(() => {
+                  this.dismissPrompt(prayer.id);
+                })
+              }
+              .flexShrink(0)
+            }
+            .width('100%')
+            .padding(12)
+            .backgroundColor(this.colors.tintSubtle)
+            .borderRadius(12)
+            .alignItems(VerticalAlign.Center)
+            .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+          }, (prayer: PrayerModel) => `prompt-${prayer.id}`)
+        }
+        .width('100%')
+      }
+      .width('100%')
+      .padding(18)
+      .backgroundColor(this.colors.cardDark)
+      .borderRadius(Theme.radiusLarge)
+      .border({ width: 1, color: this.colors.accentGold })
+      .shadow({
+        radius: 12,
+        color: this.colors.shadowCard,
+        offsetX: 0,
+        offsetY: 4
+      })
+      .margin({ bottom: 14 })
+    }
   }
 
   @Builder
@@ -1812,7 +2090,7 @@ export struct HomePage {
         .fillColor(this.colors.accentGold)
         .opacity(0.75)
         .flexShrink(0)
-      Text(IslamicEventService.getEventName(this.upcomingEvents[0].key, this.currentLanguage))
+      Text(IslamicEventService.getEventName(this.upcomingEvents[index].key, this.currentLanguage))
         .fontSize(13)
         .fontColor(this.colors.textWhite)
         .fontWeight(FontWeight.Medium)
@@ -2708,6 +2986,214 @@ export struct HomePage {
     }
   }
 
+  private async checkPendingPrayers(): Promise<void> {
+    if (this.calcSource !== CalculationSource.LOCAL) {
+      this.pendingPrayerPrompts = [];
+      return;
+    }
+
+    const dismissJson = await PreferencesHelper.getString(STORAGE_KEY_DISMISSED_PRAYERS, '[]');
+    try {
+      this.dismissedPrayers = JSON.parse(dismissJson) as string[];
+    } catch (err) {
+      this.dismissedPrayers = [];
+    }
+
+    const template: PrayerModel[] = [
+      {
+        id: 'fajr',
+        name: 'Fajr',
+        arabicName: 'الفجر',
+        time: '--:--',
+        status: 'abbreviation',
+        checked: false
+      },
+      {
+        id: 'dhuhr',
+        name: 'Dhuhr',
+        arabicName: 'الظهر',
+        time: '--:--',
+        status: 'abbreviation',
+        checked: false
+      },
+      {
+        id: 'asr',
+        name: 'Asr',
+        arabicName: 'العصر',
+        time: '--:--',
+        status: 'abbreviation',
+        checked: false
+      },
+      {
+        id: 'maghrib',
+        name: 'Maghrib',
+        arabicName: 'المغرب',
+        time: '--:--',
+        status: 'abbreviation',
+        checked: false
+      },
+      {
+        id: 'isha',
+        name: 'Isha',
+        arabicName: 'العشاء',
+        time: '--:--',
+        status: 'abbreviation',
+        checked: false
+      }
+    ];
+
+    const today = new Date();
+    const todayKey = PrayerManager.getDateKeyForDate(today);
+
+    const snap: HomePrayerSnapshot | null = HomeController.buildPrayersForDate(
+      today, this.latitude, this.longitude, this.calcMethod,
+      this.asrRule, this.highLatRule, this.offsets, template, this.advanced
+    );
+
+    if (!snap) {
+      this.pendingPrayerPrompts = [];
+      return;
+    }
+
+    // --- CRITICAL FIX: Fetch the actual saved state ---
+    const currentState = PrayerManager.getCheckState(todayKey);
+
+    const nowMin = today.getHours() * 60 + today.getMinutes();
+    const pending: PrayerModel[] = [];
+
+    for (const p of snap.prayers) {
+      // Determine if checked from the persistent state, not the template
+      let isChecked = false;
+      if (p.id === 'fajr') {
+        isChecked = currentState.fajr;
+      } else if (p.id === 'dhuhr') {
+        isChecked =
+          currentState.dhuhr;
+      } else if (p.id === 'asr') {
+        isChecked = currentState.asr;
+      } else if (p.id ===
+        'maghrib') {
+        isChecked = currentState.maghrib;
+      } else if (p.id === 'isha') {
+        isChecked = currentState.isha;
+      }
+
+      // 1. Skip if already prayed
+      if (isChecked) {
+        continue;
+      }
+
+      // 2. Skip if dismissed
+      const dismissId = `${todayKey}-${p.id}`;
+      if (this.dismissedPrayers.includes(dismissId)) {
+        continue;
+      }
+
+      // 3. Check if prayer time has passed
+      const prayerMin = PrayerManager.timeToMinutes(p.time);
+      if (prayerMin > 0 && nowMin >= prayerMin) {
+        // Keep the snapshot's time and status, but ensure checked is accurate
+        const pendingPrayer: PrayerModel = {
+          id: p.id,
+          name: p.name,
+          arabicName: p.arabicName,
+          time: p.time,
+          status: p.status,
+          checked: isChecked
+        };
+        pending.push(pendingPrayer);
+      }
+    }
+
+    this.pendingPrayerPrompts = pending;
+  }
+
+  private async markPromptAsPrayed(prayerId: string): Promise<void> {
+    const todayKey = PrayerManager.getDateKeyForDate(new Date());
+
+    // 1. Get current state
+    const currentState = PrayerManager.getCheckState(todayKey);
+    if (prayerId === 'fajr') {
+      currentState.fajr = true;
+    } else if (prayerId === 'dhuhr') {
+      currentState.dhuhr =
+        true;
+    } else if (prayerId === 'asr') {
+      currentState.asr = true;
+    } else if (prayerId ===
+      'maghrib') {
+      currentState.maghrib = true;
+    } else if (prayerId === 'isha') {
+      currentState.isha = true;
+    }
+
+    // 2. Build explicit template (Fixing arkts-no-spread)
+    const template: PrayerModel[] = [
+      {
+        id: 'fajr',
+        name: 'Fajr',
+        arabicName: 'الفجر',
+        time: '--:--',
+        status: 'abbreviation',
+        checked: currentState.fajr
+      },
+      {
+        id: 'dhuhr',
+        name: 'Dhuhr',
+        arabicName: 'الظهر',
+        time: '--:--',
+        status: 'abbreviation',
+        checked: currentState.dhuhr
+      },
+      {
+        id: 'asr',
+        name: 'Asr',
+        arabicName: 'العصر',
+        time: '--:--',
+        status: 'abbreviation',
+        checked: currentState.asr
+      },
+      {
+        id: 'maghrib',
+        name: 'Maghrib',
+        arabicName: 'المغرب',
+        time: '--:--',
+        status: 'abbreviation',
+        checked: currentState.maghrib
+      },
+      {
+        id: 'isha',
+        name: 'Isha',
+        arabicName: 'العشاء',
+        time: '--:--',
+        status: 'abbreviation',
+        checked: currentState.isha
+      }
+    ];
+
+    // 3. Save state (triggers version bump & disk write)
+    PrayerManager.saveStateForDate(todayKey, template);
+    NotificationHelper.scheduleReschedule();
+
+    // 4. Update UI
+    this.pendingPrayerPrompts = this.pendingPrayerPrompts.filter(p => p.id !== prayerId);
+
+    // 5. Refresh Dashboard instead of non-existent updateProgress
+    this.refreshDashboard();
+  }
+
+  private async dismissPrompt(prayerId: string): Promise<void> {
+    const todayKey = PrayerManager.getDateKeyForDate(new Date());
+    const dismissId = `${todayKey}-${prayerId}`;
+
+    if (!this.dismissedPrayers.includes(dismissId)) {
+      this.dismissedPrayers.push(dismissId);
+      await PreferencesHelper.setString(STORAGE_KEY_DISMISSED_PRAYERS, JSON.stringify(this.dismissedPrayers));
+    }
+
+    this.pendingPrayerPrompts = this.pendingPrayerPrompts.filter(p => p.id !== prayerId);
+  }
+
   private onShowIslamicEventsChanged(): void {
     // Re-render is handled by the @StorageLink.
   }
@@ -2918,12 +3404,32 @@ export struct HomePage {
     this.monthProgress = ProgressHelper.getMonthProgress();
 
     await this.refreshTasbihData();
+    await this.checkPendingPrayers();
 
-    // FETCH CONTEXTUAL DUAS
+    try {
+      const ctx = getContext(this) as common.UIAbilityContext;
+      this.recommendedRecitations = await QuranService.getRecommendedRecitations(
+        ctx, this.currentLanguage, this.isFriday, this.upcomingCustomEvents
+      );
+    } catch (e) {
+      console.error('Failed to load daily quran surahs', e);
+    }
+
     try {
       const ctx = getContext(this) as common.UIAbilityContext;
       const allDuas = await DuaService.loadDuas(ctx, this.currentLanguage);
-      this.dailyDuas = DuaService.getDailyDuas(allDuas, this.ramadanInfo, this.isFriday);
+
+      const activeEvent = this.upcomingEvents.length > 0 ? this.upcomingEvents[0] : null;
+
+      this.dailyDuas = DuaService.getDailyDuas(
+        allDuas,
+        this.ramadanInfo,
+        this.isFriday,
+        activeEvent,
+        this.upcomingCustomEvents,
+        this.currentLanguage // Pass the language
+      );
+
       this.iftarDua = allDuas.find((d: CompleteDua) => d.id === 'dua_breaking_the_fast') ?? null;
       this.suhoorDua = allDuas.find((d: CompleteDua) => d.id === 'dua_suhoor') ?? null;
     } catch (e) {
@@ -2931,7 +3437,6 @@ export struct HomePage {
     }
 
     await this.reloadCustomEvents();
-
     this.refreshHeader();
     this.refreshFastingWindow();
   }
@@ -3109,12 +3614,14 @@ export struct HomePage {
     this.colors = PageTheme.compute(this.themeMode);
   }
 
-  private onLanguageChanged(): void {
+  private async onLanguageChanged(): Promise<void> {
     this.currentLanguage = this.appLanguage;
     this.refreshNext3Days();
-    this.prayerProgress =
-      ProgressHelper.getPrayerProgress(this.currentLanguage);
-    this.refreshDashboard();
+    this.prayerProgress = ProgressHelper.getPrayerProgress(this.currentLanguage);
+
+    // Add await here
+    await this.refreshDashboard();
+
     this.loadSettingsAndLocation();
   }
 
