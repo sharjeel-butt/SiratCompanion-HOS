@@ -1,820 +1,37 @@
-// entry/src/main/ets/utils/OfflineCityLookup.ets
+// entry/src/main/ets/location/OfflineCityLookup.ets
 
 import { common } from '@kit.AbilityKit';
 import { util } from '@kit.ArkTS';
-
-
-/**
- * Offline city lookup with timezone metadata.
- *
- * Matching rule: the closest city within MAX_MATCH_KM wins.
- * Beyond that, callers fall back to a longitude estimate.
- */
+import { AppLogger } from '../core/AppLogger';
 
 export enum DstRule {
-  NONE = 'NONE', // No DST
-  US = 'US', // 2nd Sun March → 1st Sun November
-  EU = 'EU', // Last Sun March → Last Sun October
-  AU = 'AU', // Southern hemisphere AU: 1st Sun Oct → 1st Sun April
-  NZ = 'NZ', // Southern hemisphere NZ: last Sun Sep → 1st Sun April
-  EGYPT = 'EGYPT', // Last Fri April → Last Thu October
-  MOROCCO = 'MOROCCO' // Year-round UTC+0 baseline + 1h "DST" except during Ramadan
+  NONE = 'NONE',
+  US = 'US',
+  EU = 'EU',
+  AU = 'AU',
+  NZ = 'NZ',
+  EGYPT = 'EGYPT',
+  MOROCCO = 'MOROCCO',
+  PALESTINE = 'PALESTINE',
+  CHILE = 'CHILE',
+  LORD_HOWE = 'LORD_HOWE'
 }
 
 export interface City {
   name: string;
+  countryCode: string;
+  timezoneId: string;
   lat: number;
   lng: number;
-  standardOffset: number; // hours east of UTC (may be fractional)
+  standardOffsetMinutes: number;
   dstRule: DstRule;
-
-  /**
-   * Magnetic declination in degrees for 2024, East positive.
-   * Applied on top of the magnetic heading reported by the sensor
-   * to obtain true north.
-   */
-  declinationDeg: number;
 }
 
-const MAX_MATCH_KM_TIMEZONE = 200; // tighter — country box is a good fallback
-const MAX_MATCH_KM_DECLINATION = 400; // looser — no declination fallback table
-const MAX_MATCH_KM_NAME = 300; // unchanged for reverse-geocode display
-
-const CITIES: City[] = [
-  {
-    name: 'Karachi',
-    lat: 24.8607,
-    lng: 67.0011,
-    standardOffset: 5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 1.6
-  },
-  {
-    name: 'Lahore',
-    lat: 31.5204,
-    lng: 74.3587,
-    standardOffset: 5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 1.8
-  },
-  {
-    name: 'Islamabad',
-    lat: 33.6844,
-    lng: 73.0479,
-    standardOffset: 5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 1.9
-  },
-  {
-    name: 'Rawalpindi',
-    lat: 33.5651,
-    lng: 73.0169,
-    standardOffset: 5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 1.9
-  },
-  {
-    name: 'Faisalabad',
-    lat: 31.4180,
-    lng: 73.0790,
-    standardOffset: 5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 1.8
-  },
-  {
-    name: 'Multan',
-    lat: 30.1575,
-    lng: 71.5249,
-    standardOffset: 5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 1.7
-  },
-  {
-    name: 'Peshawar',
-    lat: 34.0151,
-    lng: 71.5249,
-    standardOffset: 5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 1.9
-  },
-  {
-    name: 'Quetta',
-    lat: 30.1798,
-    lng: 66.9750,
-    standardOffset: 5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 1.6
-  },
-  {
-    name: 'Gwadar',
-    lat: 25.1264,
-    lng: 62.3225,
-    standardOffset: 5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 1.4
-  },
-
-  {
-    name: 'Delhi',
-    lat: 28.6139,
-    lng: 77.2090,
-    standardOffset: 5.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 0.5
-  },
-  {
-    name: 'Mumbai',
-    lat: 19.0760,
-    lng: 72.8777,
-    standardOffset: 5.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: -0.2
-  },
-  {
-    name: 'Bangalore',
-    lat: 12.9716,
-    lng: 77.5946,
-    standardOffset: 5.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: -0.5
-  },
-  {
-    name: 'Hyderabad',
-    lat: 17.3850,
-    lng: 78.4867,
-    standardOffset: 5.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: -0.1
-  },
-  {
-    name: 'Chennai',
-    lat: 13.0827,
-    lng: 80.2707,
-    standardOffset: 5.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: -0.7
-  },
-  {
-    name: 'Kolkata',
-    lat: 22.5726,
-    lng: 88.3639,
-    standardOffset: 5.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 0.3
-  },
-  {
-    name: 'Jaisalmer',
-    lat: 26.9157,
-    lng: 70.9083,
-    standardOffset: 5.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 0.9
-  },
-  {
-    name: 'Jodhpur',
-    lat: 26.2389,
-    lng: 73.0243,
-    standardOffset: 5.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 0.7
-  },
-  {
-    name: 'Jaipur',
-    lat: 26.9124,
-    lng: 75.7873,
-    standardOffset: 5.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 0.5
-  },
-  {
-    name: 'Ahmedabad',
-    lat: 23.0225,
-    lng: 72.5714,
-    standardOffset: 5.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 0.1
-  },
-  {
-    name: 'Amritsar',
-    lat: 31.6340,
-    lng: 74.8723,
-    standardOffset: 5.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 1.2
-  },
-
-  {
-    name: 'Makkah',
-    lat: 21.4225,
-    lng: 39.8262,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 3.1
-  },
-  {
-    name: 'Madinah',
-    lat: 24.5247,
-    lng: 39.5692,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 3.5
-  },
-  {
-    name: 'Riyadh',
-    lat: 24.7136,
-    lng: 46.6753,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 3.3
-  },
-  {
-    name: 'Jeddah',
-    lat: 21.4858,
-    lng: 39.1925,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 3.2
-  },
-  {
-    name: 'Dubai',
-    lat: 25.2048,
-    lng: 55.2708,
-    standardOffset: 4,
-    dstRule: DstRule.NONE,
-    declinationDeg: 2.2
-  },
-  {
-    name: 'Abu Dhabi',
-    lat: 24.4539,
-    lng: 54.3773,
-    standardOffset: 4,
-    dstRule: DstRule.NONE,
-    declinationDeg: 2.1
-  },
-  {
-    name: 'Doha',
-    lat: 25.2854,
-    lng: 51.5310,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 2.6
-  },
-  {
-    name: 'Kuwait City',
-    lat: 29.3759,
-    lng: 47.9774,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 3.3
-  },
-  {
-    name: 'Muscat',
-    lat: 23.5880,
-    lng: 58.3829,
-    standardOffset: 4,
-    dstRule: DstRule.NONE,
-    declinationDeg: 2.1
-  },
-  {
-    name: 'Tehran',
-    lat: 35.6892,
-    lng: 51.3890,
-    standardOffset: 3.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 5.1
-  },
-  {
-    name: 'Mashhad',
-    lat: 36.2605,
-    lng: 59.6168,
-    standardOffset: 3.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 4.8
-  },
-  {
-    name: 'Isfahan',
-    lat: 32.6546,
-    lng: 51.6680,
-    standardOffset: 3.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 4.2
-  },
-  {
-    name: 'Tabriz',
-    lat: 38.0962,
-    lng: 46.2738,
-    standardOffset: 3.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 5.4
-  },
-  // ---- Caucasus ----
-  {
-    name: 'Tbilisi',
-    lat: 41.6938,
-    lng: 44.8015,
-    standardOffset: 4,
-    dstRule: DstRule.NONE,
-    declinationDeg: 6.5
-  },
-  {
-    name: 'Yerevan',
-    lat: 40.1811,
-    lng: 44.5136,
-    standardOffset: 4,
-    dstRule: DstRule.NONE,
-    declinationDeg: 6.0
-  },
-  {
-    name: 'Batumi',
-    lat: 41.6438,
-    lng: 41.6412,
-    standardOffset: 4,
-    dstRule: DstRule.NONE,
-    declinationDeg: 6.2
-  },
-  {
-    name: 'Istanbul',
-    lat: 41.0082,
-    lng: 28.9784,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 5.5
-  },
-  {
-    name: 'Ankara',
-    lat: 39.9334,
-    lng: 32.8597,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 5.2
-  },
-  {
-    name: 'Çankaya',
-    lat: 39.9208,
-    lng: 32.8541,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 5.2
-  },
-  {
-    name: 'Izmir',
-    lat: 38.4237,
-    lng: 27.1428,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 5.0
-  },
-  {
-    name: 'Antalya',
-    lat: 36.8969,
-    lng: 30.7133,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 4.8
-  },
-  {
-    name: 'Bursa',
-    lat: 40.1826,
-    lng: 29.0665,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 5.3
-  },
-  {
-    name: 'Adana',
-    lat: 37.0000,
-    lng: 35.3213,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 4.6
-  },
-  {
-    name: 'Gaziantep',
-    lat: 37.0662,
-    lng: 37.3833,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 4.4
-  },
-  {
-    name: 'Konya',
-    lat: 37.8746,
-    lng: 32.4932,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 5.0
-  },
-  {
-    name: 'Baghdad',
-    lat: 33.3152,
-    lng: 44.3661,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 4.5
-  },
-  {
-    name: 'Amman',
-    lat: 31.9454,
-    lng: 35.9284,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 4.5
-  },
-  {
-    name: 'Beirut',
-    lat: 33.8938,
-    lng: 35.5018,
-    standardOffset: 2,
-    dstRule: DstRule.EU,
-    declinationDeg: 4.5
-  },
-  {
-    name: 'Cairo',
-    lat: 30.0444,
-    lng: 31.2357,
-    standardOffset: 2,
-    dstRule: DstRule.EGYPT,
-    declinationDeg: 4.5
-  },
-
-  {
-    name: 'Shanghai',
-    lat: 31.2304,
-    lng: 121.4737,
-    standardOffset: 8,
-    dstRule: DstRule.NONE,
-    declinationDeg: -5.5
-  },
-  {
-    name: 'Beijing',
-    lat: 39.9042,
-    lng: 116.4074,
-    standardOffset: 8,
-    dstRule: DstRule.NONE,
-    declinationDeg: -6.8
-  },
-  {
-    name: 'Guangzhou',
-    lat: 23.1291,
-    lng: 113.2644,
-    standardOffset: 8,
-    dstRule: DstRule.NONE,
-    declinationDeg: -3.3
-  },
-  {
-    name: 'Shenzhen',
-    lat: 22.5431,
-    lng: 114.0579,
-    standardOffset: 8,
-    dstRule: DstRule.NONE,
-    declinationDeg: -3.2
-  },
-  {
-    name: 'Hong Kong',
-    lat: 22.3193,
-    lng: 114.1694,
-    standardOffset: 8,
-    dstRule: DstRule.NONE,
-    declinationDeg: -3.2
-  },
-  {
-    name: 'Tokyo',
-    lat: 35.6762,
-    lng: 139.6503,
-    standardOffset: 9,
-    dstRule: DstRule.NONE,
-    declinationDeg: -7.5
-  },
-  {
-    name: 'Seoul',
-    lat: 37.5665,
-    lng: 126.9780,
-    standardOffset: 9,
-    dstRule: DstRule.NONE,
-    declinationDeg: -8.3
-  },
-  {
-    name: 'Singapore',
-    lat: 1.3521,
-    lng: 103.8198,
-    standardOffset: 8,
-    dstRule: DstRule.NONE,
-    declinationDeg: 0.2
-  },
-  {
-    name: 'Kuala Lumpur',
-    lat: 3.1390,
-    lng: 101.6869,
-    standardOffset: 8,
-    dstRule: DstRule.NONE,
-    declinationDeg: -0.1
-  },
-  {
-    name: 'Jakarta',
-    lat: -6.2088,
-    lng: 106.8456,
-    standardOffset: 7,
-    dstRule: DstRule.NONE,
-    declinationDeg: 0.8
-  },
-  {
-    name: 'Bangkok',
-    lat: 13.7563,
-    lng: 100.5018,
-    standardOffset: 7,
-    dstRule: DstRule.NONE,
-    declinationDeg: -0.4
-  },
-  {
-    name: 'Hanoi',
-    lat: 21.0285,
-    lng: 105.8542,
-    standardOffset: 7,
-    dstRule: DstRule.NONE,
-    declinationDeg: -2.1
-  },
-  {
-    name: 'Manila',
-    lat: 14.5995,
-    lng: 120.9842,
-    standardOffset: 8,
-    dstRule: DstRule.NONE,
-    declinationDeg: -1.6
-  },
-  {
-    name: 'Dhaka',
-    lat: 23.8103,
-    lng: 90.4125,
-    standardOffset: 6,
-    dstRule: DstRule.NONE,
-    declinationDeg: -0.5
-  },
-  {
-    name: 'Chittagong',
-    lat: 22.3569,
-    lng: 91.7832,
-    standardOffset: 6,
-    dstRule: DstRule.NONE,
-    declinationDeg: -0.7
-  },
-  {
-    name: 'Kathmandu',
-    lat: 27.7172,
-    lng: 85.3240,
-    standardOffset: 5.75,
-    dstRule: DstRule.NONE,
-    declinationDeg: 0.4
-  },
-  {
-    name: 'Colombo',
-    lat: 6.9271,
-    lng: 79.8612,
-    standardOffset: 5.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: -1.8
-  },
-  {
-    name: 'Kabul',
-    lat: 34.5553,
-    lng: 69.2075,
-    standardOffset: 4.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 2.4
-  },
-  {
-    name: 'Kandahar',
-    lat: 31.6133,
-    lng: 65.7167,
-    standardOffset: 4.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 2.6
-  },
-  {
-    name: 'Herat',
-    lat: 34.3419,
-    lng: 62.2031,
-    standardOffset: 4.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 3.1
-  },
-  {
-    name: 'Jalalabad',
-    lat: 34.4302,
-    lng: 70.4515,
-    standardOffset: 4.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 2.4
-  },
-  {
-    name: 'Mazar-i-Sharif',
-    lat: 36.7069,
-    lng: 67.1108,
-    standardOffset: 4.5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 3.2
-  },
-
-  {
-    name: 'London',
-    lat: 51.5074,
-    lng: -0.1278,
-    standardOffset: 0,
-    dstRule: DstRule.EU,
-    declinationDeg: 0.5
-  },
-  {
-    name: 'Paris',
-    lat: 48.8566,
-    lng: 2.3522,
-    standardOffset: 1,
-    dstRule: DstRule.EU,
-    declinationDeg: 1.5
-  },
-  {
-    name: 'Berlin',
-    lat: 52.5200,
-    lng: 13.4050,
-    standardOffset: 1,
-    dstRule: DstRule.EU,
-    declinationDeg: 4.0
-  },
-  {
-    name: 'Madrid',
-    lat: 40.4168,
-    lng: -3.7038,
-    standardOffset: 1,
-    dstRule: DstRule.EU,
-    declinationDeg: -1.5
-  },
-  {
-    name: 'Rome',
-    lat: 41.9028,
-    lng: 12.4964,
-    standardOffset: 1,
-    dstRule: DstRule.EU,
-    declinationDeg: 2.5
-  },
-  {
-    name: 'Amsterdam',
-    lat: 52.3676,
-    lng: 4.9041,
-    standardOffset: 1,
-    dstRule: DstRule.EU,
-    declinationDeg: 2.0
-  },
-  {
-    name: 'Moscow',
-    lat: 55.7558,
-    lng: 37.6173,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 10.5
-  },
-  {
-    name: 'Tashkent',
-    lat: 41.2995,
-    lng: 69.2401,
-    standardOffset: 5,
-    dstRule: DstRule.NONE,
-    declinationDeg: 3.6
-  },
-
-  {
-    name: 'Lagos',
-    lat: 6.5244,
-    lng: 3.3792,
-    standardOffset: 1,
-    dstRule: DstRule.NONE,
-    declinationDeg: -1.5
-  },
-  {
-    name: 'Nairobi',
-    lat: -1.2921,
-    lng: 36.8219,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 0.5
-  },
-  {
-    name: 'Addis Ababa',
-    lat: 9.0320,
-    lng: 38.7469,
-    standardOffset: 3,
-    dstRule: DstRule.NONE,
-    declinationDeg: 1.4
-  },
-  {
-    name: 'Khartoum',
-    lat: 15.5007,
-    lng: 32.5599,
-    standardOffset: 2,
-    dstRule: DstRule.NONE,
-    declinationDeg: 2.6
-  },
-  {
-    name: 'Cape Town',
-    lat: -33.9249,
-    lng: 18.4241,
-    standardOffset: 2,
-    dstRule: DstRule.NONE,
-    declinationDeg: -24.0
-  },
-  {
-    name: 'Casablanca',
-    lat: 33.5731,
-    lng: -7.5898,
-    standardOffset: 0, // was 1
-    dstRule: DstRule.MOROCCO, // was DstRule.NONE
-    declinationDeg: -4.0
-  },
-
-  {
-    name: 'New York',
-    lat: 40.7128,
-    lng: -74.0060,
-    standardOffset: -5,
-    dstRule: DstRule.US,
-    declinationDeg: -13.0
-  },
-  {
-    name: 'Chicago',
-    lat: 41.8781,
-    lng: -87.6298,
-    standardOffset: -6,
-    dstRule: DstRule.US,
-    declinationDeg: -4.0
-  },
-  {
-    name: 'Los Angeles',
-    lat: 34.0522,
-    lng: -118.2437,
-    standardOffset: -8,
-    dstRule: DstRule.US,
-    declinationDeg: 12.0
-  },
-  {
-    name: 'Toronto',
-    lat: 43.6532,
-    lng: -79.3832,
-    standardOffset: -5,
-    dstRule: DstRule.US,
-    declinationDeg: -11.0
-  },
-  {
-    name: 'Vancouver',
-    lat: 49.2827,
-    lng: -123.1207,
-    standardOffset: -8,
-    dstRule: DstRule.US,
-    declinationDeg: 15.0
-  },
-  {
-    name: 'Mexico City',
-    lat: 19.4326,
-    lng: -99.1332,
-    standardOffset: -6,
-    dstRule: DstRule.NONE,
-    declinationDeg: 5.0
-  },
-  {
-    name: 'São Paulo',
-    lat: -23.5505,
-    lng: -46.6333,
-    standardOffset: -3,
-    dstRule: DstRule.NONE,
-    declinationDeg: -21.0
-  },
-
-  {
-    name: 'Sydney',
-    lat: -33.8688,
-    lng: 151.2093,
-    standardOffset: 10,
-    dstRule: DstRule.AU,
-    declinationDeg: 12.0
-  },
-  {
-    name: 'Melbourne',
-    lat: -37.8136,
-    lng: 144.9631,
-    standardOffset: 10,
-    dstRule: DstRule.AU,
-    declinationDeg: 11.0
-  },
-  {
-    name: 'Auckland',
-    lat: -36.8485,
-    lng: 174.7633,
-    standardOffset: 12,
-    dstRule: DstRule.NZ, // was: DstRule.AU
-    declinationDeg: 19.0
-  }
-];
-
-const MAX_TIMEZONE_KM = 200;
-const MAX_DECLINATION_KM = 500;
+const MAX_MATCH_KM_TIMEZONE = 200; // Tighter match for timezones
+const MAX_MATCH_KM_NAME = 300; // Looser match for reverse-geocode display
 
 export class OfflineCityLookup {
+  private static cities: City[] = [];
   private static translations: Record<string, Record<string, string>> = {};
   private static isInitialized: boolean = false;
 
@@ -824,55 +41,22 @@ export class OfflineCityLookup {
     }
     try {
       const mgr = context.resourceManager;
-      const data = await mgr.getRawFileContent('city/city_translations.json');
-      const jsonStr = util.TextDecoder.create('utf-8').decodeToString(data);
-      OfflineCityLookup.translations = JSON.parse(jsonStr) as Record<string, Record<string, string>>;
+
+      // 1. Load the new 6,000+ city dataset
+      const cityData = await mgr.getRawFileContent('locations/offline-cities.json');
+      const cityJsonStr = util.TextDecoder.create('utf-8').decodeToString(cityData);
+      OfflineCityLookup.cities = JSON.parse(cityJsonStr) as City[];
+
+      // 2. Load city translations
+      const transData = await mgr.getRawFileContent('locations/city_translations.json');
+      const transJsonStr = util.TextDecoder.create('utf-8').decodeToString(transData);
+      OfflineCityLookup.translations = JSON.parse(transJsonStr) as Record<string, Record<string, string>>;
+
       OfflineCityLookup.isInitialized = true;
-      console.info('[OfflineCityLookup] Translations loaded successfully');
+      AppLogger.info('OfflineCityLookup', `Loaded ${OfflineCityLookup.cities.length} cities and translations`);
     } catch (e) {
-      console.warn(`[OfflineCityLookup] Failed to load translations: ${JSON.stringify(e)}`);
+      AppLogger.error('OfflineCityLookup', `Failed to load city dataset: ${JSON.stringify(e)}`);
     }
-  }
-
-  /**
-   * Nearest city within the timezone radius. Used by
-   * TimezoneResolver.tableOffset and by reverse-geocode display
-   * so a user near a border does not inherit a neighbouring
-   * country's offset.
-   */
-  static nearestCityForTimezone(
-    latitude: number, longitude: number
-  ): City | null {
-    return OfflineCityLookup.within(
-      latitude, longitude, MAX_TIMEZONE_KM
-    );
-  }
-
-  /**
-   * Nearest city within the declination radius. Larger radius
-   * because magnetic declination is a smooth field — a 500 km
-   * match is more accurate than the previous "return 0 on miss"
-   * fallback (which could produce a 25° Qibla error at extreme
-   * longitudes).
-   */
-  static nearestCityForDeclination(
-    latitude: number, longitude: number
-  ): City | null {
-    return OfflineCityLookup.within(
-      latitude, longitude, MAX_DECLINATION_KM
-    );
-  }
-
-  /**
-   * Retained for callers that want the timezone radius —
-   * nearestCity() historically served both purposes.
-   */
-  static nearestCity(
-    latitude: number, longitude: number
-  ): City | null {
-    return OfflineCityLookup.nearestCityForTimezone(
-      latitude, longitude
-    );
   }
 
   static translateCityName(name: string, lang: string): string {
@@ -888,41 +72,36 @@ export class OfflineCityLookup {
     return name;
   }
 
-  static nearest(
-    latitude: number, longitude: number
-  ): string | null {
-    const city = OfflineCityLookup.nearestCityForTimezone(
-      latitude, longitude
-    );
-    // Return ONLY the English uppercase name. Do not translate here.
+  /**
+   * Returns the English uppercase name of the nearest city for reverse-geocoding.
+   */
+  static nearest(latitude: number, longitude: number): string | null {
+    const city = OfflineCityLookup.findNearest(latitude, longitude, MAX_MATCH_KM_NAME);
     return city !== null ? city.name.toUpperCase() : null;
   }
 
-  static declinationFor(
-    latitude: number, longitude: number
-  ): number {
-    const city = OfflineCityLookup.nearestCityForDeclination(
-      latitude, longitude
-    );
-    // Behaviour change: previously returned 0 on miss, which made
-    // the Qibla compass treat the magnetic heading as true north.
-    // A declination of 0 is only correct along the agonic line; a
-    // 500 km radius covers essentially every populated landmass,
-    // so a miss now truly means "open ocean / polar region", where
-    // falling back to 0 is acceptable.
-    return city !== null ? city.declinationDeg : 0;
+  /**
+   * Returns the exact city object for timezone resolution.
+   */
+  static nearestCityForTimezone(latitude: number, longitude: number): City | null {
+    return OfflineCityLookup.findNearest(latitude, longitude, MAX_MATCH_KM_TIMEZONE);
   }
 
-  private static within(
-    latitude: number, longitude: number, maxKm: number
-  ): City | null {
+  /**
+   * High-performance nearest-neighbor search.
+   * For 6,000-8,000 cities, a single loop with haversine is extremely fast (<2ms)
+   * and avoids the complexity of maintaining an R-Tree or spatial grid in ArkTS.
+   */
+  private static findNearest(latitude: number, longitude: number, maxKm: number): City | null {
+    if (OfflineCityLookup.cities.length === 0) {
+      return null;
+    }
+
     let best: City | null = null;
     let bestDist = Number.MAX_VALUE;
 
-    for (const city of CITIES) {
-      const d = OfflineCityLookup.haversineKm(
-        latitude, longitude, city.lat, city.lng
-      );
+    for (const city of OfflineCityLookup.cities) {
+      const d = OfflineCityLookup.haversineKm(latitude, longitude, city.lat, city.lng);
       if (d < bestDist) {
         bestDist = d;
         best = city;
@@ -935,10 +114,7 @@ export class OfflineCityLookup {
     return null;
   }
 
-  private static haversineKm(
-    lat1: number, lng1: number,
-    lat2: number, lng2: number
-  ): number {
+  private static haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
     const R = 6371;
     const toRad = Math.PI / 180;
     const dLat = (lat2 - lat1) * toRad;
