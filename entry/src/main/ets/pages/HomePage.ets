@@ -75,6 +75,7 @@ import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 import { EventPerspectiveNotifier } from '../hijricalendar/EventPerspectiveNotifier';
 import { TypographyHelper } from '../core/TypographyHelper';
 import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
+import { IslamicEventService } from '../hijricalendar/IslamicEventService';
 
 export interface RamadanTableRow {
   hijriDate: string;
@@ -1768,7 +1769,7 @@ export struct HomePage {
       .alignItems(HorizontalAlign.Center)
 
       Column() {
-        Text(this.translateUpcomingEventName(this.upcomingEvents[0]))
+        Text(IslamicEventService.getEventName(this.upcomingEvents[0].key, this.currentLanguage))
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .fontColor(this.colors.textWhite)
@@ -1784,8 +1785,8 @@ export struct HomePage {
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .width('100%')
 
-        if (this.translateEventSignificance(this.upcomingEvents[0].key).length > 0) {
-          Text(this.translateEventSignificance(this.upcomingEvents[0].key))
+        if (IslamicEventService.getEventDesc(this.upcomingEvents[0].key, this.currentLanguage).length > 0) {
+          Text(IslamicEventService.getEventDesc(this.upcomingEvents[0].key, this.currentLanguage))
             .fontSize(11)
             .fontColor(this.colors.textMuted)
             .lineHeight(16)
@@ -1811,7 +1812,7 @@ export struct HomePage {
         .fillColor(this.colors.accentGold)
         .opacity(0.75)
         .flexShrink(0)
-      Text(this.translateUpcomingEventName(this.upcomingEvents[index]))
+      Text(IslamicEventService.getEventName(this.upcomingEvents[0].key, this.currentLanguage))
         .fontSize(13)
         .fontColor(this.colors.textWhite)
         .fontWeight(FontWeight.Medium)
@@ -3102,24 +3103,6 @@ export struct HomePage {
       default:
         return raw;
     }
-  }
-
-  private translateUpcomingEventName(e: UpcomingImportantDate): string {
-    if (e.key && e.key.length > 0) {
-      const translated = this.tr('event_' + e.key);
-      if (translated !== 'event_' + e.key) {
-        return translated;
-      }
-    }
-    return e.name;
-  }
-
-  private translateEventSignificance(key: string): string {
-    const descKey = 'event_' + key + '_desc';
-    const translated = this.tr(descKey);
-    // L.get falls back to the key itself when missing. Return an
-    // empty string in that case so the layout collapses cleanly.
-    return translated === descKey ? '' : translated;
   }
 
   private onThemeModeChanged(): void {

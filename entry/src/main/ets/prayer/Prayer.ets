@@ -1107,16 +1107,6 @@ export struct Prayer {
     return this.translateTimingName(raw);
   }
 
-  private translateUpcomingEventName(e: UpcomingImportantDate): string {
-    if (e.key && e.key.length > 0) {
-      const translated = this.tr('event_' + e.key);
-      if (translated !== 'event_' + e.key) {
-        return translated;
-      }
-    }
-    return e.name;
-  }
-
   private onThemeModeChanged(): void {
     this.colors = PageTheme.compute(this.themeMode);
   }

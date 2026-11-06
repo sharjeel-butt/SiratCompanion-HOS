@@ -4,8 +4,8 @@ import { CalendarDay, HijriDate } from './HijriCalendarModels';
 import {
   EventRecurrence, IslamicEvent
 } from './DateModels';
-import { eventMatchesPerspective, IMPORTANT_ISLAMIC_EVENTS } from './IslamicEvents';
 import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
+import { IslamicEventService } from './IslamicEventService';
 
 export const HIJRI_MONTH_NAMES: string[] = [
   'Muharram',
@@ -178,10 +178,8 @@ export class HijriCalendarHelper {
     perspective: string = 'universal'
   ): string[] {
     const out: string[] = [];
-    for (const e of IMPORTANT_ISLAMIC_EVENTS) {
-      if (!eventMatchesPerspective(e, perspective)) {
-        continue;
-      }
+    const allEvents = IslamicEventService.getEvents(perspective);
+    for (const e of allEvents) {
       if (e.recurrence === EventRecurrence.FIRST_THURSDAY_NIGHT) {
         // Thursday = 4. The event fires on the Thursday whose
         // next day (Friday) is within the first seven days of
@@ -214,10 +212,8 @@ export class HijriCalendarHelper {
     perspective: string = 'universal'
   ): IslamicEvent[] {
     const out: IslamicEvent[] = [];
-    for (const e of IMPORTANT_ISLAMIC_EVENTS) {
-      if (!eventMatchesPerspective(e, perspective)) {
-        continue;
-      }
+    const allEvents = IslamicEventService.getEvents(perspective);
+    for (const e of allEvents) {
       if (e.month === hijriMonth) {
         out.push(e);
       }

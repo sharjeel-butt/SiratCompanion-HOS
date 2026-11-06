@@ -63,6 +63,7 @@ import { PageTheme } from '../core/PageTheme';
 import { PrivacyPolicyProvider } from '../legal/PrivacyPolicy';
 import { WidgetHelper } from '../widgets/WidgetHelper';
 import { OfflineCityLookup } from '../location/OfflineCityLookup';
+import { IslamicEventService } from '../hijricalendar/IslamicEventService';
 
 /** How long the splash stays visible, in milliseconds. */
 const SPLASH_DELAY_MS = 1500;
@@ -110,6 +111,7 @@ export default class EntryAbility extends UIAbility {
     L.init(this.context);
     LayoutHelper.install();
     TypographyHelper.init();
+
     OfflineCityLookup.init(this.context).then(() => {
       PreferencesHelper.init(this.context).then(async () => {
         // ========================================================
@@ -120,6 +122,7 @@ export default class EntryAbility extends UIAbility {
         let savedThemeOverride = await PreferencesHelper.getString(
           STORAGE_KEY_THEME_OVERRIDE, ''
         );
+        await IslamicEventService.init(this.context);
         if (savedThemeOverride.length === 0) {
           // Migrate from previous versions (which only had THEME_MODE)
           const legacyTheme = await PreferencesHelper.getString(

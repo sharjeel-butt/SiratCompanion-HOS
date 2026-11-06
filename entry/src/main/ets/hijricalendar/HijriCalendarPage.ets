@@ -27,6 +27,7 @@ import { HijriCalendarType } from './HijriCalendarType';
 import { SettingsHelper } from '../settings/SettingsHelper';
 import { PdfExportHelper } from '../core/PdfExportHelper';
 import { EventPerspectiveNotifier } from './EventPerspectiveNotifier';
+import { IslamicEventService } from './IslamicEventService';
 
 // Interface for PDF Export
 export interface CalendarExportDay {
@@ -481,7 +482,7 @@ export struct HijriCalendarPage {
               .width(36)
               .textAlign(TextAlign.Center)
               .flexShrink(0)
-            Text(this.translateEventName(e))
+            Text(IslamicEventService.getEventName(e.key, this.currentLanguage))
               .fontSize(14).fontColor(this.colors.textWhite).layoutWeight(1)
           }
           .width('100%')
@@ -1036,7 +1037,7 @@ export struct HijriCalendarPage {
                 .flexShrink(0)
 
               Column() {
-                Text(this.translateEventName(e))
+                Text(IslamicEventService.getEventName(e.key, this.currentLanguage))
                   .fontSize(11)
                   .fontWeight(FontWeight.Medium)
                   .fontColor(this.pdfColors.textWhite)
@@ -1309,22 +1310,6 @@ export struct HijriCalendarPage {
 
   private getLocalizedDaysOfWeek(): string[] {
     return this.trArray('days_of_week');
-  }
-
-  private translateEventName(e: IslamicEvent): string {
-    if (e.key.startsWith('custom_')) {
-      const id = e.key.replace('custom_', '');
-      const custom = this.customEvents.find(c => c.id === id);
-      return custom ? custom.title : 'Custom Event';
-    }
-
-    if (e.key && e.key.length > 0) {
-      const translated = this.tr('event_' + e.key);
-      if (translated !== 'event_' + e.key) {
-        return translated;
-      }
-    }
-    return e.name;
   }
 
   private buildPaddedWeeks(): Array<Array<CalendarDay | null>> {

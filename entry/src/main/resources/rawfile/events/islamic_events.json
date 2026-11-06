@@ -1,0 +1,483 @@
+[
+  {
+    "key": "new_year",
+    "month": 1,
+    "day": 1,
+    "recurrence": "fixed",
+    "sect": "universal",
+    "translations": {
+      "en": {
+        "name": "Islamic New Year",
+        "desc": "The first day of the Islamic year."
+      },
+      "ar": {
+        "name": "رأس السنة الهجرية",
+        "desc": "أول يوم في السنة الهجرية."
+      },
+      "ur": {
+        "name": "اسلامی نیا سال",
+        "desc": "اسلامی سال کا پہلا دن۔"
+      },
+      "tr": {
+        "name": "Hicri Yılbaşı",
+        "desc": "Hicri yılın ilk günü."
+      },
+      "id": {
+        "name": "Tahun Baru Islam",
+        "desc": "Hari pertama tahun Hijriah."
+      },
+      "bn": {
+        "name": "ইসলামী নববর্ষ",
+        "desc": "হিজরি বছরের প্রথম দিন।"
+      },
+      "zh": {
+        "name": "伊斯兰新年",
+        "desc": "伊斯兰历的第一天。"
+      }
+    }
+  },
+  {
+    "key": "ashura",
+    "month": 1,
+    "day": 10,
+    "recurrence": "fixed",
+    "sect": "universal",
+    "translations": {
+      "en": {
+        "name": "Day of Ashura",
+        "desc": "The 10th day of Muharram."
+      },
+      "ar": {
+        "name": "يوم عاشوراء",
+        "desc": "اليوم العاشر من شهر محرم."
+      },
+      "ur": {
+        "name": "یوم عاشوراء",
+        "desc": "محرم کا دسواں دن۔"
+      },
+      "tr": {
+        "name": "Aşure Günü",
+        "desc": "Muharrem ayının onuncu günü."
+      },
+      "id": {
+        "name": "Hari Asyura",
+        "desc": "Hari ke-10 bulan Muharram."
+      },
+      "bn": {
+        "name": "আশুরা",
+        "desc": "মুহাররম মাসের ১০ম দিন।"
+      },
+      "zh": {
+        "name": "阿舒拉日",
+        "desc": "穆哈兰姆月的第十天。"
+      }
+    }
+  },
+  {
+    "key": "arbaeen",
+    "month": 2,
+    "day": 20,
+    "recurrence": "fixed",
+    "sect": "shia",
+    "translations": {
+      "en": {
+        "name": "Arbaeen",
+        "desc": "40 days after Ashura."
+      },
+      "ar": {
+        "name": "الأربعين",
+        "desc": "مرور أربعين يوماً على استشهاد الإمام الحسين."
+      },
+      "ur": {
+        "name": "اربعین",
+        "desc": "عاشوراء کے چالیس دن بعد۔"
+      },
+      "tr": {
+        "name": "Erbain",
+        "desc": "Aşure'den 40 gün sonra."
+      },
+      "id": {
+        "name": "Arbain",
+        "desc": "40 hari setelah Asyura."
+      },
+      "bn": {
+        "name": "আরবাইন",
+        "desc": "আশুরার ৪০ দিন পর।"
+      },
+      "zh": {
+        "name": "阿尔巴因节",
+        "desc": "阿舒拉日后的第四十天。"
+      }
+    }
+  },
+  {
+    "key": "mawlid",
+    "month": 3,
+    "day": 12,
+    "recurrence": "fixed",
+    "sect": "universal",
+    "translations": {
+      "en": {
+        "name": "Mawlid al-Nabi",
+        "desc": "The birth of Prophet Muhammad."
+      },
+      "ar": {
+        "name": "المولد النبوي",
+        "desc": "ذكرى مولد النبي محمد صلى الله عليه وسلم."
+      },
+      "ur": {
+        "name": "عید میلاد النبی",
+        "desc": "نبی کریم صلی اللہ علیہ وسلم کی ولادت۔"
+      },
+      "tr": {
+        "name": "Mevlid Kandili",
+        "desc": "Peygamber Efendimizin doğumu."
+      },
+      "id": {
+        "name": "Maulid Nabi",
+        "desc": "Kelahiran Nabi Muhammad."
+      },
+      "bn": {
+        "name": "ঈদে মিলাদুন্নবী",
+        "desc": "মহানবী (সা.)-এর জন্মদিন।"
+      },
+      "zh": {
+        "name": "圣纪节",
+        "desc": "先知穆罕默德的诞辰。"
+      }
+    }
+  },
+  {
+    "key": "raghaib",
+    "month": 7,
+    "day": 1,
+    "recurrence": "firstThursdayNight",
+    "sect": "sunni",
+    "translations": {
+      "en": {
+        "name": "Laylat al-Raghaib",
+        "desc": "The first Thursday night of Rajab."
+      },
+      "ar": {
+        "name": "ليلة الرغائب",
+        "desc": "أول ليلة جمعة من شهر رجب."
+      },
+      "ur": {
+        "name": "شب رغائب",
+        "desc": "رجب کی پہلی جمعرات کی رات۔"
+      },
+      "tr": {
+        "name": "Regaib Kandili",
+        "desc": "Recep ayının ilk perşembe gecesi."
+      },
+      "id": {
+        "name": "Malam Raghaib",
+        "desc": "Kamis malam pertama bulan Rajab."
+      },
+      "bn": {
+        "name": "শবে রাগাইব",
+        "desc": "রজব মাসের প্রথম বৃহস্পতিবার রাত।"
+      },
+      "zh": {
+        "name": "登霄节前奏",
+        "desc": "赖哲卜月的第一个星期四夜晚。"
+      }
+    }
+  },
+  {
+    "key": "imam_ali_birthday",
+    "month": 7,
+    "day": 13,
+    "recurrence": "fixed",
+    "sect": "shia",
+    "translations": {
+      "en": {
+        "name": "Birthday of Imam Ali",
+        "desc": "Birth of Ali ibn Abi Talib."
+      },
+      "ar": {
+        "name": "مولد الإمام علي",
+        "desc": "ذكرى مولد الإمام علي بن أبي طالب."
+      },
+      "ur": {
+        "name": "امام علی کی ولادت",
+        "desc": "حضرت علی بن ابی طالب کی ولادت۔"
+      },
+      "tr": {
+        "name": "Hz. Ali'nin Doğumu",
+        "desc": "Ali bin Ebu Talib'in doğumu."
+      },
+      "id": {
+        "name": "Kelahiran Imam Ali",
+        "desc": "Kelahiran Ali bin Abi Thalib."
+      },
+      "bn": {
+        "name": "ইমাম আলীর জন্মদিন",
+        "desc": "আলী ইবনে আবী তালিবের জন্ম।"
+      },
+      "zh": {
+        "name": "伊玛目阿里诞辰",
+        "desc": "阿里·本·阿比·塔利卜的诞辰。"
+      }
+    }
+  },
+  {
+    "key": "isra_miraj",
+    "month": 7,
+    "day": 27,
+    "recurrence": "fixed",
+    "sect": "universal",
+    "translations": {
+      "en": {
+        "name": "Isra and Mi'raj",
+        "desc": "The night journey of Prophet Muhammad."
+      },
+      "ar": {
+        "name": "الإسراء والمعراج",
+        "desc": "رحلة الإسراء والمعراج."
+      },
+      "ur": {
+        "name": "اسراء و معراج",
+        "desc": "نبی کریم صلی اللہ علیہ وسلم کا معراج کا سفر۔"
+      },
+      "tr": {
+        "name": "Miraç Kandili",
+        "desc": "Peygamber Efendimizin miracı."
+      },
+      "id": {
+        "name": "Isra Mi'raj",
+        "desc": "Perjalanan malam Nabi Muhammad."
+      },
+      "bn": {
+        "name": "শবে মিরাজ",
+        "desc": "মহানবী (সা.)-এর মিরাজ।"
+      },
+      "zh": {
+        "name": "登霄节",
+        "desc": "先知穆罕默德的夜行登霄。"
+      }
+    }
+  },
+  {
+    "key": "mid_shaban",
+    "month": 8,
+    "day": 15,
+    "recurrence": "fixed",
+    "sect": "universal",
+    "translations": {
+      "en": {
+        "name": "Mid-Sha'ban",
+        "desc": "The 15th night of Sha'ban."
+      },
+      "ar": {
+        "name": "ليلة النصف من شعبان",
+        "desc": "الليلة الخامسة عشرة من شهر شعبان."
+      },
+      "ur": {
+        "name": "شب برات",
+        "desc": "شعبان کی پندرہویں رات۔"
+      },
+      "tr": {
+        "name": "Berat Kandili",
+        "desc": "Şaban ayının on beşinci gecesi."
+      },
+      "id": {
+        "name": "Nisfu Sya'ban",
+        "desc": "Malam ke-15 bulan Sya'ban."
+      },
+      "bn": {
+        "name": "শবে বরাত",
+        "desc": "শাবান মাসের ১৫তম রাত।"
+      },
+      "zh": {
+        "name": "拜拉特夜",
+        "desc": "舍尔邦月的第十五夜。"
+      }
+    }
+  },
+  {
+    "key": "ramadan_start",
+    "month": 9,
+    "day": 1,
+    "recurrence": "fixed",
+    "sect": "universal",
+    "translations": {
+      "en": {
+        "name": "Ramadan Start",
+        "desc": "The first day of Ramadan."
+      },
+      "ar": {
+        "name": "بداية رمضان",
+        "desc": "أول يوم من شهر رمضان المبارك."
+      },
+      "ur": {
+        "name": "رمضان کا آغاز",
+        "desc": "رمضان المبارک کا پہلا دن۔"
+      },
+      "tr": {
+        "name": "Ramazan Başlangıcı",
+        "desc": "Ramazan ayının ilk günü."
+      },
+      "id": {
+        "name": "Awal Ramadan",
+        "desc": "Hari pertama bulan Ramadan."
+      },
+      "bn": {
+        "name": "রমজান শুরু",
+        "desc": "রমজান মাসের প্রথম দিন।"
+      },
+      "zh": {
+        "name": "斋月开始",
+        "desc": "斋月的第一天。"
+      }
+    }
+  },
+  {
+    "key": "eid_fitr",
+    "month": 10,
+    "day": 1,
+    "recurrence": "fixed",
+    "sect": "universal",
+    "translations": {
+      "en": {
+        "name": "Eid al-Fitr",
+        "desc": "The festival of breaking the fast."
+      },
+      "ar": {
+        "name": "عيد الفطر",
+        "desc": "عيد الفطر المبارك."
+      },
+      "ur": {
+        "name": "عید الفطر",
+        "desc": "عید الفطر کی خوشیاں۔"
+      },
+      "tr": {
+        "name": "Ramazan Bayramı",
+        "desc": "Ramazan Bayramı."
+      },
+      "id": {
+        "name": "Idul Fitri",
+        "desc": "Hari raya setelah bulan Ramadan."
+      },
+      "bn": {
+        "name": "ঈদুল ফিতর",
+        "desc": "রোজার ঈদ।"
+      },
+      "zh": {
+        "name": "开斋节",
+        "desc": "庆祝斋月结束的节日。"
+      }
+    }
+  },
+  {
+    "key": "arafah",
+    "month": 12,
+    "day": 9,
+    "recurrence": "fixed",
+    "sect": "universal",
+    "translations": {
+      "en": {
+        "name": "Day of Arafah",
+        "desc": "The 9th day of Dhul-Hijjah."
+      },
+      "ar": {
+        "name": "يوم عرفة",
+        "desc": "اليوم التاسع من ذي الحجة."
+      },
+      "ur": {
+        "name": "یوم عرفہ",
+        "desc": "ذی الحجہ کا نواں دن۔"
+      },
+      "tr": {
+        "name": "Arefe Günü",
+        "desc": "Zilhicce ayının dokuzuncu günü."
+      },
+      "id": {
+        "name": "Hari Arafah",
+        "desc": "Hari ke-9 bulan Dzulhijjah."
+      },
+      "bn": {
+        "name": "আরাফার দিন",
+        "desc": "জিলহজ মাসের ৯ম দিন।"
+      },
+      "zh": {
+        "name": "阿拉法特日",
+        "desc": "朝觐月的第九天。"
+      }
+    }
+  },
+  {
+    "key": "eid_adha",
+    "month": 12,
+    "day": 10,
+    "recurrence": "fixed",
+    "sect": "universal",
+    "translations": {
+      "en": {
+        "name": "Eid al-Adha",
+        "desc": "The festival of sacrifice."
+      },
+      "ar": {
+        "name": "عيد الأضحى",
+        "desc": "عيد الأضحى المبارك."
+      },
+      "ur": {
+        "name": "عید الاضحی",
+        "desc": "عید الاضحیٰ کی خوشیاں۔"
+      },
+      "tr": {
+        "name": "Kurban Bayramı",
+        "desc": "Kurban Bayramı."
+      },
+      "id": {
+        "name": "Idul Adha",
+        "desc": "Hari raya kurban."
+      },
+      "bn": {
+        "name": "ঈদুল আজহা",
+        "desc": "কুরবানির ঈদ।"
+      },
+      "zh": {
+        "name": "宰牲节",
+        "desc": "献牲的节日。"
+      }
+    }
+  },
+  {
+    "key": "ghadir",
+    "month": 12,
+    "day": 18,
+    "recurrence": "fixed",
+    "sect": "shia",
+    "translations": {
+      "en": {
+        "name": "Eid al-Ghadir",
+        "desc": "The day of Ghadir Khumm."
+      },
+      "ar": {
+        "name": "عيد الغدير",
+        "desc": "عيد الغدير."
+      },
+      "ur": {
+        "name": "عید غدیر",
+        "desc": "عید غدیر خم۔"
+      },
+      "tr": {
+        "name": "Gadir Hum Bayramı",
+        "desc": "Gadir Hum olayı."
+      },
+      "id": {
+        "name": "Idul Ghadir",
+        "desc": "Hari Ghadir Khum."
+      },
+      "bn": {
+        "name": "ঈদে গাদীর",
+        "desc": "গাদীর খুমের দিন।"
+      },
+      "zh": {
+        "name": "加迪尔节",
+        "desc": "加迪尔·胡姆日。"
+      }
+    }
+  }
+]

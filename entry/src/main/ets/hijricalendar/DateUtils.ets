@@ -1,11 +1,10 @@
 // entry/src/main/ets/utils/DateUtils.ets
 
-import { eventMatchesPerspective, IMPORTANT_ISLAMIC_EVENTS } from './IslamicEvents';
-import {
-  EventRecurrence, IslamicEvent, UpcomingImportantDate
-} from './DateModels';
+import { EventRecurrence, IslamicEvent, UpcomingImportantDate } from './DateModels';
 import { HijriEngineResolver } from './HijriEngineResolver';
 import { L } from '../i18n/LocalizationHelper';
+import { IslamicEventService } from './IslamicEventService';
+
 
 const MS_PER_DAY = 86400000;
 
@@ -73,11 +72,9 @@ export class DateHelper {
 
     const engine = HijriEngineResolver.current();
     const found: UpcomingImportantDate[] = [];
+    const allEvents = IslamicEventService.getEvents(perspective);
+    for (const event of allEvents) {
 
-    for (const event of IMPORTANT_ISLAMIC_EVENTS) {
-      if (!eventMatchesPerspective(event, perspective)) {
-        continue;
-      }
       const gregorianDate = DateHelper.findNextGregorianForEvent(
         event, now, offsetDays
       );
