@@ -24,6 +24,7 @@ import { NavHelper } from '../core/NavHelper';
 import { L } from '../i18n/LocalizationHelper';
 import { OfflineCityLookup } from '../location/OfflineCityLookup';
 import { Breakpoints } from '../core/Breakpoints';
+import { WmmCalculator } from '../location/WmmCalculator';
 
 const SENSOR_INTERVAL_MS = 100;
 const ROTATION_ANIM_MS = 90;
@@ -615,13 +616,17 @@ export struct QiblaPage {
       this.latitude, this.longitude
     );
 
-    const decl = OfflineCityLookup.declinationFor(
-      this.latitude, this.longitude
-    );
-    // `null` means no city within 400 km — fall back to 0 so the
-    // needle still points somewhere usable. The compass's built-in
-    // calibration overlay will prompt the user to correct it.
-    this.declinationDeg = decl ?? 0;
+    try {
+      this.declinationDeg = WmmCalculator.getDeclination(
+        this.latitude,
+        this.longitude,
+        0, // Sea level
+        new Date()
+      );
+    } catch (e) {
+      console.error('WMM calculation failed', e);
+      this.declinationDeg = 0; // Fallback
+    }
 
     const trueHeading = this.smoothedHeading + this.declinationDeg;
     const targetNeedle = this.qiblaBearing - trueHeading;
