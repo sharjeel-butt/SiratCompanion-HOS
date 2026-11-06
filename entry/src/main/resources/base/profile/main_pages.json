@@ -8,6 +8,10 @@
     "pages/PrayerDetailsPage",
     "pages/TasbihDetailsPage",
     "pages/RamadanDetailsPage",
-    "pages/DuasPage"
+    "pages/DuasPage",
+    "pages/SurahDetailsPage",
+    "pages/RecitationsPage",
+    "pages/QuranPage",
+    "pages/LicensesPage"
   ]
 }

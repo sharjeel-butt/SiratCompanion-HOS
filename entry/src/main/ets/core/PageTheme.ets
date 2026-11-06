@@ -2,8 +2,8 @@
 
 import { mediaquery } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode, ThemePreset } from './Theme';
-import { STORAGE_KEY_APP_THEME, STORAGE_KEY_THEME_MODE } from './StorageKeys';
 import { common, ConfigurationConstant } from '@kit.AbilityKit';
+import { STORAGE_KEY_APP_THEME, STORAGE_KEY_THEME_MODE } from './StorageKeys';
 
 export class PageTheme {
   /**

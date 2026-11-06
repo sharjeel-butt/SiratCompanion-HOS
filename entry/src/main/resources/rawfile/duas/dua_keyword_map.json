@@ -1,0 +1,715 @@
+[
+  {
+    "category": "work",
+    "duaId": "dua_for_knowledge",
+    "keywords": {
+      "en": [
+        "work",
+        "focus",
+        "productivity",
+        "meeting",
+        "team",
+        "deadline",
+        "client",
+        "project",
+        "career",
+        "job",
+        "interview",
+        "review",
+        "priority",
+        "block",
+        "sync"
+      ],
+      "ar": [
+        "عمل",
+        "تركيز",
+        "اجتماع",
+        "فريق",
+        "موعد نهائي",
+        "عميل",
+        "مشروع",
+        "وظيفة",
+        "مقابلة",
+        "مراجعة",
+        "أولوية"
+      ],
+      "ur": [
+        "کام",
+        "میٹنگ",
+        "ٹیم",
+        "ڈیڈ لائن",
+        "کلائنٹ",
+        "پروجیکٹ",
+        "نوکری",
+        "انٹرویو",
+        "جائزہ",
+        "ترجیح"
+      ],
+      "tr": [
+        "iş",
+        "odak",
+        "toplantı",
+        "ekip",
+        "son tarih",
+        "müşteri",
+        "proje",
+        "kariyer",
+        "iş görüşmesi",
+        "inceleme",
+        "öncelik"
+      ],
+      "id": [
+        "kerja",
+        "fokus",
+        "produktivitas",
+        "rapat",
+        "tim",
+        "tenggat",
+        "klien",
+        "proyek",
+        "karier",
+        "wawancara",
+        "tinjauan",
+        "prioritas"
+      ],
+      "bn": [
+        "কাজ",
+        "ফোকাস",
+        "মিটিং",
+        "দল",
+        "সময়সীমা",
+        "ক্লায়েন্ট",
+        "প্রজেক্ট",
+        "ক্যারিয়ার",
+        "ইন্টারভিউ",
+        "পর্যালোচনা",
+        "অগ্রাধিকার"
+      ],
+      "zh": [
+        "工作",
+        "专注",
+        "生产力",
+        "会议",
+        "团队",
+        "截止日期",
+        "客户",
+        "项目",
+        "职业",
+        "面试",
+        "回顾",
+        "优先"
+      ]
+    }
+  },
+  {
+    "category": "education",
+    "duaId": "dua_for_knowledge",
+    "keywords": {
+      "en": [
+        "education",
+        "school",
+        "study",
+        "exam",
+        "course",
+        "assignment",
+        "submission",
+        "test",
+        "learning",
+        "class"
+      ],
+      "ar": [
+        "تعليم",
+        "مدرسة",
+        "دراسة",
+        "امتحان",
+        "دورة",
+        "واجب",
+        "تسليم",
+        "اختبار",
+        "تعلم",
+        "فصل"
+      ],
+      "ur": [
+        "تعلیم",
+        "اسکول",
+        "مطالعہ",
+        "امتحان",
+        "کورس",
+        "اسائنمنٹ",
+        "جمع کرانا",
+        "ٹیسٹ",
+        "سیکھنا",
+        "کلاس"
+      ],
+      "tr": [
+        "eğitim",
+        "okul",
+        "çalışma",
+        "sınav",
+        "kurs",
+        "ödev",
+        "teslim",
+        "test",
+        "öğrenme",
+        "sınıf"
+      ],
+      "id": [
+        "pendidikan",
+        "sekolah",
+        "belajar",
+        "ujian",
+        "kursus",
+        "tugas",
+        "pengumpulan",
+        "tes",
+        "pembelajaran",
+        "kelas"
+      ],
+      "bn": [
+        "শিক্ষা",
+        "স্কুল",
+        "পড়াশোনা",
+        "পরীক্ষা",
+        "কোর্স",
+        "অ্যাসাইনমেন্ট",
+        "জমা",
+        "টেস্ট",
+        "শেখা",
+        "ক্লাস"
+      ],
+      "zh": [
+        "教育",
+        "学校",
+        "学习",
+        "考试",
+        "课程",
+        "作业",
+        "提交",
+        "测试",
+        "学习",
+        "班级"
+      ]
+    }
+  },
+  {
+    "category": "health",
+    "duaId": "dua_for_healing",
+    "keywords": {
+      "en": [
+        "health",
+        "fitness",
+        "workout",
+        "medical",
+        "doctor",
+        "medication",
+        "therapy",
+        "sick",
+        "illness",
+        "healing",
+        "gym"
+      ],
+      "ar": [
+        "صحة",
+        "لياقة",
+        "تمرين",
+        "طبي",
+        "طبيب",
+        "دواء",
+        "علاج",
+        "مريض",
+        "مرض",
+        "شفاء",
+        "صالة رياضية"
+      ],
+      "ur": [
+        "صحت",
+        "فٹنس",
+        "ورزش",
+        "طبی",
+        "ڈاکٹر",
+        "دوا",
+        "تھراپی",
+        "بیمار",
+        "بیماری",
+        "شفا",
+        "جم"
+      ],
+      "tr": [
+        "sağlık",
+        "fitnes",
+        "egzersiz",
+        "tıbbi",
+        "doktor",
+        "ilaç",
+        "terapi",
+        "hasta",
+        "hastalık",
+        "şifa",
+        "spor salonu"
+      ],
+      "id": [
+        "kesehatan",
+        "kebugaran",
+        "olahraga",
+        "medis",
+        "dokter",
+        "obat",
+        "terapi",
+        "sakit",
+        "penyakit",
+        "penyembuhan",
+        "gym"
+      ],
+      "bn": [
+        "স্বাস্থ্য",
+        "ফিটনেস",
+        "ওয়ার্কআউট",
+        "মেডিকেল",
+        "ডাক্তার",
+        "ওষুধ",
+        "থেরাপি",
+        "অসুস্থ",
+        "রোগ",
+        "নিরাময়",
+        "জিম"
+      ],
+      "zh": [
+        "健康",
+        "健身",
+        "锻炼",
+        "医疗",
+        "医生",
+        "药物",
+        "治疗",
+        "生病",
+        "疾病",
+        "康复",
+        "健身房"
+      ]
+    }
+  },
+  {
+    "category": "travel",
+    "duaId": "dua_travel",
+    "keywords": {
+      "en": [
+        "travel",
+        "trip",
+        "flight",
+        "booking",
+        "hotel",
+        "packing",
+        "journey",
+        "airport",
+        "vacation",
+        "buffer"
+      ],
+      "ar": [
+        "سفر",
+        "رحلة",
+        "طيران",
+        "حجز",
+        "فندق",
+        "تعبئة",
+        "مطار",
+        "عطلة",
+        "احتياطي"
+      ],
+      "ur": [
+        "سفر",
+        "سفر نامہ",
+        "پرواز",
+        "بکنگ",
+        "ہوٹل",
+        "پیکنگ",
+        "سفر",
+        "ایئرپورٹ",
+        "چھٹی"
+      ],
+      "tr": [
+        "seyahat",
+        "gezi",
+        "uçuş",
+        "rezervasyon",
+        "otel",
+        "paketleme",
+        "yolculuk",
+        "havalimanı",
+        "tatil"
+      ],
+      "id": [
+        "perjalanan",
+        "liburan",
+        "penerbangan",
+        "pemesanan",
+        "hotel",
+        "pengepakan",
+        "bandara",
+        "liburan"
+      ],
+      "bn": [
+        "ভ্রমণ",
+        "ট্রিপ",
+        "ফ্লাইট",
+        "বুকিং",
+        "হোটেল",
+        "প্যাকিং",
+        "যাত্রা",
+        "এয়ারপোর্ট",
+        "ছুটি"
+      ],
+      "zh": [
+        "旅行",
+        "旅程",
+        "航班",
+        "预订",
+        "酒店",
+        "打包",
+        "旅行",
+        "机场",
+        "度假"
+      ]
+    }
+  },
+  {
+    "category": "finance",
+    "duaId": "dua_for_rizq",
+    "keywords": {
+      "en": [
+        "finance",
+        "budget",
+        "bill",
+        "payment",
+        "salary",
+        "tax",
+        "insurance",
+        "subscription",
+        "due",
+        "income"
+      ],
+      "ar": [
+        "مالية",
+        "ميزانية",
+        "فاتورة",
+        "دفع",
+        "راتب",
+        "ضريبة",
+        "تأمين",
+        "اشتراك",
+        "دخل"
+      ],
+      "ur": [
+        "مالیات",
+        "بجٹ",
+        "بل",
+        "ادائیگی",
+        "تنخواہ",
+        "ٹیکس",
+        "انشورنس",
+        "سبسکرپشن",
+        "آمدنی"
+      ],
+      "tr": [
+        "finans",
+        "bütçe",
+        "fatura",
+        "ödeme",
+        "maaş",
+        "vergi",
+        "sigorta",
+        "abonelik",
+        "gelir"
+      ],
+      "id": [
+        "keuangan",
+        "anggaran",
+        "tagihan",
+        "pembayaran",
+        "gaji",
+        "pajak",
+        "asuransi",
+        "langganan",
+        "pendapatan"
+      ],
+      "bn": [
+        "অর্থ",
+        "বাজেট",
+        "বিল",
+        "পেমেন্ট",
+        "বেতন",
+        "কর",
+        "বীমা",
+        "সাবস্ক্রিপশন",
+        "আয়"
+      ],
+      "zh": [
+        "财务",
+        "预算",
+        "账单",
+        "付款",
+        "工资",
+        "税收",
+        "保险",
+        "订阅",
+        "收入"
+      ]
+    }
+  },
+  {
+    "category": "family_social",
+    "duaId": "dua_for_family",
+    "keywords": {
+      "en": [
+        "family",
+        "birthday",
+        "anniversary",
+        "date",
+        "dinner",
+        "friend",
+        "social",
+        "catch-up",
+        "celebration",
+        "relationship"
+      ],
+      "ar": [
+        "عائلة",
+        "عيد ميلاد",
+        "ذكرى سنوية",
+        "موعد",
+        "عشاء",
+        "صديق",
+        "اجتماعي",
+        "احتفال",
+        "علاقة"
+      ],
+      "ur": [
+        "خاندان",
+        "سالگرہ",
+        "شادی کی سالگرہ",
+        "ڈیٹ",
+        "رات کا کھانا",
+        "دوست",
+        "سماجی",
+        "جشن",
+        "رشتہ"
+      ],
+      "tr": [
+        "aile",
+        "doğum günü",
+        "yıl dönümü",
+        "randevu",
+        "akşam yemeği",
+        "arkadaş",
+        "sosyal",
+        "kutlama",
+        "ilişki"
+      ],
+      "id": [
+        "keluarga",
+        "ulang tahun",
+        "hari jadi",
+        "kencan",
+        "makan malam",
+        "teman",
+        "sosial",
+        "perayaan",
+        "hubungan"
+      ],
+      "bn": [
+        "পরিবার",
+        "জন্মদিন",
+        "বার্ষিকী",
+        "ডেট",
+        "রাতের খাবার",
+        "বন্ধু",
+        "সামাজিক",
+        "উদযাপন",
+        "সম্পর্ক"
+      ],
+      "zh": [
+        "家庭",
+        "生日",
+        "纪念日",
+        "约会",
+        "晚餐",
+        "朋友",
+        "社交",
+        "庆祝",
+        "关系"
+      ]
+    }
+  },
+  {
+    "category": "wellness",
+    "duaId": "dua_for_anxiety",
+    "keywords": {
+      "en": [
+        "anxiety",
+        "stress",
+        "worry",
+        "sad",
+        "mental-health",
+        "wellness",
+        "mindfulness",
+        "meditation",
+        "rest",
+        "habit"
+      ],
+      "ar": [
+        "قلق",
+        "توتر",
+        "قلق",
+        "حزين",
+        "صحة نفسية",
+        "عافية",
+        "يقظة",
+        "تأمل",
+        "راحة",
+        "عادة"
+      ],
+      "ur": [
+        "بے چینی",
+        "ذہنی دباؤ",
+        "پریشانی",
+        "اداس",
+        "ذہنی صحت",
+        "تندرستی",
+        "سوچ",
+        "مراقبہ",
+        "آرام",
+        "عادت"
+      ],
+      "tr": [
+        "anksiyete",
+        "stres",
+        "endişe",
+        "üzgün",
+        "ruh sağlığı",
+        "esenlik",
+        "farkındalık",
+        "meditasyon",
+        "dinlenme",
+        "alışkanlık"
+      ],
+      "id": [
+        "kecemasan",
+        "stres",
+        "khawatir",
+        "sedih",
+        "kesehatan mental",
+        "kebugaran",
+        "kesadaran",
+        "meditasi",
+        "istirahat",
+        "kebiasaan"
+      ],
+      "bn": [
+        "উদ্বেগ",
+        "চাপ",
+        "দুশ্চিন্তা",
+        "দুঃখিত",
+        "মানসিক স্বাস্থ্য",
+        "সুস্থতা",
+        "সচেতনতা",
+        "ধ্যান",
+        "বিশ্রাম",
+        "অভ্যাস"
+      ],
+      "zh": [
+        "焦虑",
+        "压力",
+        "担忧",
+        "悲伤",
+        "心理健康",
+        "健康",
+        "正念",
+        "冥想",
+        "休息",
+        "习惯"
+      ]
+    }
+  },
+  {
+    "category": "household",
+    "duaId": "dua_for_daily_life",
+    "keywords": {
+      "en": [
+        "household",
+        "chores",
+        "cleaning",
+        "laundry",
+        "maintenance",
+        "repair",
+        "errand",
+        "shopping",
+        "grocery"
+      ],
+      "ar": [
+        "منزل",
+        "أعمال منزلية",
+        "تنظيف",
+        "غسيل",
+        "صيانة",
+        "إصلاح",
+        "مشوار",
+        "تسوق",
+        "بقالة"
+      ],
+      "ur": [
+        "گھریلو",
+        "گھر کے کام",
+        "صفائی",
+        "کپڑے دھونا",
+        "دیکھ بھال",
+        "مرمت",
+        "کام",
+        "خریداری",
+        "گروسری"
+      ],
+      "tr": [
+        "ev",
+        "ev işleri",
+        "temizlik",
+        "çamaşır",
+        "bakım",
+        "tamir",
+        "iş",
+        "alışveriş",
+        "market"
+      ],
+      "id": [
+        "rumah tangga",
+        "pekerjaan rumah",
+        "pembersihan",
+        "cucian",
+        "pemeliharaan",
+        "perbaikan",
+        "urusan",
+        "belanja",
+        "kelontong"
+      ],
+      "bn": [
+        "পরিবার",
+        "গৃহস্থালির কাজ",
+        "পরিষ্কার",
+        "কাপড় ধোয়া",
+        "রক্ষণাবেক্ষণ",
+        "মেরামত",
+        "কাজ",
+        "কেনাকাটা",
+        "মুদি"
+      ],
+      "zh": [
+        "家庭",
+        "家务",
+        "清洁",
+        "洗衣",
+        "维护",
+        "修理",
+        "差事",
+        "购物",
+        "杂货"
+      ]
+    }
+  }
+]

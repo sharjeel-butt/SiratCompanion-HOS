@@ -1,0 +1,202 @@
+{
+  "recitation_surah_112_morning_evening": {
+    "name": "Surah Al-Ikhlas untuk Pagi dan Petang",
+    "notes": "Baca bersama dua surah perlindungan lainnya, tiga kali pada pagi dan petang.",
+    "reference": "Sunan Abu Dawud 5082; Jami at-Tirmidzi 3575"
+  },
+  "recitation_surah_113_morning_evening": {
+    "name": "Surah Al-Falaq untuk Pagi dan Petang",
+    "notes": "Baca bersama dua surah perlindungan lainnya, tiga kali pada pagi dan petang.",
+    "reference": "Sunan Abu Dawud 5082; Jami at-Tirmidzi 3575"
+  },
+  "recitation_surah_114_morning_evening": {
+    "name": "Surah An-Nas untuk Pagi dan Petang",
+    "notes": "Baca bersama dua surah perlindungan lainnya, tiga kali pada pagi dan petang.",
+    "reference": "Sunan Abu Dawud 5082; Jami at-Tirmidzi 3575"
+  },
+  "recitation_surah_112_bedtime": {
+    "name": "Surah Al-Ikhlas Sebelum Tidur",
+    "notes": "Satukan kedua telapak tangan, baca ketiga surah, tiupkan ke tangan, lalu usapkan ke tubuh; ulangi tiga kali.",
+    "reference": "Sahih al-Bukhari 5017"
+  },
+  "recitation_surah_113_bedtime": {
+    "name": "Surah Al-Falaq Sebelum Tidur",
+    "notes": "Satukan kedua telapak tangan, baca ketiga surah, tiupkan ke tangan, lalu usapkan ke tubuh; ulangi tiga kali.",
+    "reference": "Sahih al-Bukhari 5017"
+  },
+  "recitation_surah_114_bedtime": {
+    "name": "Surah An-Nas Sebelum Tidur",
+    "notes": "Satukan kedua telapak tangan, baca ketiga surah, tiupkan ke tangan, lalu usapkan ke tubuh; ulangi tiga kali.",
+    "reference": "Sahih al-Bukhari 5017"
+  },
+  "recitation_surah_112_illness": {
+    "name": "Surah Al-Ikhlas untuk Sakit dan Ruqyah",
+    "notes": "Baca sebagai ruqyah dan tiupkan ke tubuh.",
+    "reference": "Sahih al-Bukhari 5748"
+  },
+  "recitation_surah_113_illness": {
+    "name": "Surah Al-Falaq untuk Sakit dan Ruqyah",
+    "notes": "Baca sebagai ruqyah dan tiupkan ke tubuh.",
+    "reference": "Sahih al-Bukhari 5748"
+  },
+  "recitation_surah_114_illness": {
+    "name": "Surah An-Nas untuk Sakit dan Ruqyah",
+    "notes": "Baca sebagai ruqyah dan tiupkan ke tubuh.",
+    "reference": "Sahih al-Bukhari 5748"
+  },
+  "recitation_ayat_al_kursi_bedtime": {
+    "name": "Ayat Kursi Sebelum Tidur",
+    "notes": "Baca ayat lengkap sebelum tidur.",
+    "reference": "Sahih al-Bukhari 5010"
+  },
+  "recitation_baqarah_285_286_night": {
+    "name": "Dua Ayat Terakhir Al-Baqarah pada Malam Hari",
+    "notes": "Hadis menyatakan bahwa kedua ayat ini mencukupi pembacanya untuk malam tersebut.",
+    "reference": "Sahih al-Bukhari 5009; Sahih al-Bukhari 5040"
+  },
+  "recitation_baqarah_home": {
+    "name": "Surah Al-Baqarah di Rumah",
+    "notes": "Hadis yang dirujuk tidak menyebutkan frekuensi harian yang tetap.",
+    "reference": "Sahih Muslim 780; Jami at-Tirmidzi 2877"
+  },
+  "recitation_kahf_friday": {
+    "name": "Surah Al-Kahf pada Hari Jumat",
+    "notes": "Disertakan berdasarkan dalil berderajat Hasan, bukan dilabeli Sahih.",
+    "reference": "Mishkat al-Masabih 2175; Al-Baihaqi, ad-Da‘awat al-Kabir"
+  },
+  "recitation_kahf_first_ten_dajjal": {
+    "name": "Sepuluh Ayat Pertama Al-Kahf untuk Perlindungan dari Dajjal",
+    "notes": "Hafalkan atau baca sepuluh ayat pertama sebagaimana disebutkan dalam riwayat.",
+    "reference": "Sahih Muslim 809a"
+  },
+  "recitation_kahf_last_ten_dajjal": {
+    "name": "Sepuluh Ayat Terakhir Al-Kahf untuk Perlindungan dari Dajjal",
+    "notes": "Riwayat lain menyebutkan sepuluh ayat terakhir.",
+    "reference": "Sahih Muslim 809b"
+  },
+  "recitation_sajdah_friday_fajr": {
+    "name": "Surah As-Sajdah pada Rakaat Pertama Subuh Jumat",
+    "notes": "",
+    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a"
+  },
+  "recitation_insan_friday_fajr": {
+    "name": "Surah Al-Insan pada Rakaat Kedua Subuh Jumat",
+    "notes": "",
+    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a"
+  },
+  "recitation_jumuah_friday_prayer": {
+    "name": "Surah Al-Jumu’ah pada Rakaat Pertama Salat Jumat",
+    "notes": "",
+    "reference": "Sahih Muslim 879a; Sunan an-Nasa’i 1421"
+  },
+  "recitation_munafiqun_friday_prayer": {
+    "name": "Surah Al-Munafiqun pada Rakaat Kedua Salat Jumat",
+    "notes": "",
+    "reference": "Sahih Muslim 879a; Sunan an-Nasa’i 1421"
+  },
+  "recitation_ala_eid_prayer": {
+    "name": "Surah Al-A’la pada Rakaat Pertama Salat Id",
+    "notes": "",
+    "reference": "Sahih Muslim 878a"
+  },
+  "recitation_ghashiyah_eid_prayer": {
+    "name": "Surah Al-Ghasyiyah pada Rakaat Kedua Salat Id",
+    "notes": "",
+    "reference": "Sahih Muslim 878a"
+  },
+  "recitation_ala_friday_prayer": {
+    "name": "Surah Al-A’la pada Rakaat Pertama Salat Jumat",
+    "notes": "",
+    "reference": "Sahih Muslim 878a"
+  },
+  "recitation_ghashiyah_friday_prayer": {
+    "name": "Surah Al-Ghasyiyah pada Rakaat Kedua Salat Jumat",
+    "notes": "",
+    "reference": "Sahih Muslim 878a"
+  },
+  "recitation_kafirun_fajr_sunnah": {
+    "name": "Surah Al-Kafirun pada Rakaat Pertama Sunnah Fajar",
+    "notes": "",
+    "reference": "Sahih Muslim 726; Riyadhus Shalihin 1108"
+  },
+  "recitation_ikhlas_fajr_sunnah": {
+    "name": "Surah Al-Ikhlas pada Rakaat Kedua Sunnah Fajar",
+    "notes": "",
+    "reference": "Sahih Muslim 726; Riyadhus Shalihin 1108"
+  },
+  "recitation_baqarah_136_fajr_sunnah": {
+    "name": "Al-Baqarah 2:136 pada Rakaat Pertama Sunnah Fajar",
+    "notes": "",
+    "reference": "Sahih Muslim 727; Riyadhus Shalihin 1107"
+  },
+  "recitation_al_imran_52_or_64_fajr_sunnah": {
+    "name": "Ali Imran 3:52 atau 3:64 pada Rakaat Kedua Sunnah Fajar",
+    "notes": "Riwayat menyebut 3:52 dan dalam redaksi lain 3:64. Entri ini menunjukkan pilihan ayat, bukan seluruh rentang.",
+    "reference": "Sahih Muslim 727; Riyadhus Shalihin 1107"
+  },
+  "recitation_mulk_general_virtue": {
+    "name": "Surah Al-Mulk: Keutamaan Syafaat",
+    "notes": "Riwayat Hasan menetapkan keutamaan syafaat dan ampunan, tetapi tidak menentukan hari tertentu atau jadwal sebelum tidur.",
+    "reference": "Jami at-Tirmidzi 2891"
+  },
+  "recitation_fatihah_ruqyah": {
+    "name": "Surah Al-Fatihah untuk Ruqyah",
+    "notes": "Baca Al-Fatihah sebagai ruqyah. Riwayat menyebut penggunaannya untuk gigitan atau sengatan berbisa; tidak ada jumlah pengulangan tetap.",
+    "reference": "Sahih al-Bukhari 5736; Sahih al-Bukhari 5749"
+  },
+  "recitation_qaf_fajr": {
+    "name": "Surah Qaf dalam Salat Subuh",
+    "notes": "Bacaan ini ditetapkan dalam salat Subuh wajib. Riwayat tidak menentukan jadwal harian tetap.",
+    "reference": "Sahih Muslim 458a; Sahih Muslim 458b"
+  },
+  "recitation_qaf_friday_sermon": {
+    "name": "Surah Qaf dalam Khutbah Jumat",
+    "notes": "Ini adalah amalan dalam konteks khutbah, bukan jadwal bacaan pribadi pada hari Jumat.",
+    "reference": "Sahih Muslim 872a; Sahih Muslim 872b"
+  },
+  "recitation_qaf_eid_prayer": {
+    "name": "Surah Qaf pada Rakaat Pertama Salat Id",
+    "notes": "Ini adalah pasangan surah alternatif yang ditetapkan untuk salat Id.",
+    "reference": "Sahih Muslim 891a; Sahih Muslim 891b"
+  },
+  "recitation_qamar_eid_prayer": {
+    "name": "Surah Al-Qamar pada Rakaat Kedua Salat Id",
+    "notes": "Ini adalah pasangan surah alternatif yang ditetapkan untuk salat Id.",
+    "reference": "Sahih Muslim 891a; Sahih Muslim 891b"
+  },
+  "recitation_tur_maghrib": {
+    "name": "Surah At-Tur dalam Salat Magrib",
+    "notes": "Ini adalah riwayat sahih bahwa Nabi membaca surah ini dalam salat Magrib; bukan kewajiban untuk setiap Magrib.",
+    "reference": "Sahih al-Bukhari 765; Sahih al-Bukhari 4854"
+  },
+  "recitation_mursalat_maghrib": {
+    "name": "Surah Al-Mursalat dalam Salat Magrib",
+    "notes": "Ini adalah riwayat sahih tentang pembacaan surah ini dalam Magrib; tidak disebutkan frekuensi tetap.",
+    "reference": "Sahih al-Bukhari 763"
+  },
+  "recitation_dukhan_maghrib": {
+    "name": "Surah Ad-Dukhan dalam Salat Magrib",
+    "notes": "Ini adalah riwayat sahih tentang pembacaan surah ini dalam Magrib. Riwayat lemah tentang membacanya pada malam Jumat tidak digunakan.",
+    "reference": "Sunan an-Nasa’i 988"
+  },
+  "recitation_fatihah_every_rakah": {
+    "name": "Surah Al-Fatihah dalam Setiap Rakaat",
+    "notes": "Al-Fatihah dibaca dalam setiap rakaat. Ini adalah ketentuan inti salat, bukan jadwal pengingat opsional.",
+    "reference": "Sahih Muslim 396c"
+  },
+  "recitation_ala_witr": {
+    "name": "Surah Al-A’la pada Rakaat Pertama Witir",
+    "notes": "Riwayat ini menjelaskan urutan tiga surah untuk Witir tiga rakaat.",
+    "reference": "Sunan an-Nasa’i 1703"
+  },
+  "recitation_kafirun_witr": {
+    "name": "Surah Al-Kafirun pada Rakaat Kedua Witir",
+    "notes": "Riwayat ini menjelaskan urutan tiga surah untuk Witir tiga rakaat.",
+    "reference": "Sunan an-Nasa’i 1703"
+  },
+  "recitation_ikhlas_witr": {
+    "name": "Surah Al-Ikhlas pada Rakaat Ketiga Witir",
+    "notes": "Riwayat ini menjelaskan urutan tiga surah untuk Witir tiga rakaat.",
+    "reference": "Sunan an-Nasa’i 1703"
+  }
+}

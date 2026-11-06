@@ -1293,6 +1293,25 @@ struct SettingsPage {
         this.AboutRow(this.tr('about_platform'),
           this.tr('about_platform_value'))
         this.AboutRow(this.tr('about_copyright'), this.appInfo.name)
+        Divider().color(this.colors.borderSoft).width('80%').margin({ top: 14, bottom: 14 })
+
+        Row({ space: 8 }) {
+          Image($r('app.media.ic_info'))
+            .width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
+          Text(this.tr('licenses_title'))
+            .fontSize(14).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
+            .layoutWeight(1)
+          Image($r('app.media.ic_chevron_right'))
+            .width(14).height(14).fillColor(this.colors.accentGold)
+            .rotate({ angle: this.isRtl() ? 180 : 0 })
+        }
+        .width('100%')
+        .padding({ top: 8, bottom: 8 })
+        .onClick(() => {
+          NavHelper.prepareForward();
+          router.pushUrl({ url: 'pages/LicensesPage' })
+            .catch((e: Error) => console.error(e.message));
+        })
       }
       .width('100%')
       .padding(20)

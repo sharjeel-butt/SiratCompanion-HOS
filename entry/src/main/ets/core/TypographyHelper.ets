@@ -111,6 +111,14 @@ export class TypographyHelper {
       font.registerFont({ familyName: 'Outfit-Bold', familySrc: $rawfile('fonts/Outfit-Bold.ttf') });
       font.registerFont({ familyName: 'Amiri', familySrc: $rawfile('fonts/Amiri-Regular.ttf') });
       font.registerFont({ familyName: 'Amiri-Bold', familySrc: $rawfile('fonts/Amiri-Bold.ttf') });
+
+      font.registerFont({ familyName: 'NotoNastaliqUrdu', familySrc: $rawfile('fonts/NotoNastaliqUrdu-Regular.ttf') });
+      font.registerFont({ familyName: 'AmiriQuran', familySrc: $rawfile('fonts/AmiriQuran-Regular.ttf') });
+      font.registerFont({ familyName: 'LPMQIsepMisbah', familySrc: $rawfile('fonts/LPMQ-Regular.ttf') });
+      font.registerFont({ familyName: 'KFGQPCWarsh', familySrc: $rawfile('fonts/KFGQPC-Regular.ttf') });
+      font.registerFont({ familyName: 'NotoSansBengali', familySrc: $rawfile('fonts/NotoSansBengali-Regular.ttf') });
+      font.registerFont({ familyName: 'NotoSansSC', familySrc: $rawfile('fonts/NotoSansSC-Regular.ttf') });
+
     } catch (err) {
       console.error('[TypographyHelper] Font registration failed:', JSON.stringify(err));
     }
@@ -205,5 +213,38 @@ export class TypographyHelper {
   /** All languages with a tuned baseline. */
   static supportedBaselines(): string[] {
     return Object.keys(LANGUAGE_METRICS);
+  }
+
+  /**
+   * Returns the appropriate Quran font family based on the UI language.
+   */
+  static getQuranFont(lang: string): string {
+    switch (lang) {
+      case 'ar':
+        return 'AmiriQuran, Amiri, sans-serif'; // Uthmani
+      case 'id':
+        return 'LPMQIsepMisbah, Amiri, sans-serif'; // Kemenag
+      case 'ur':
+        return 'NotoNastaliqUrdu, Amiri, sans-serif'; // IndoPak
+      default:
+      // Default to IndoPak as requested
+        return 'NotoNastaliqUrdu, Amiri, sans-serif';
+    }
+  }
+
+  /**
+   * Returns the appropriate font for translation text.
+   */
+  static getTranslationFont(lang: string): string {
+    switch (lang) {
+      case 'bn':
+        return 'NotoSansBengali, sans-serif';
+      case 'zh':
+        return 'NotoSansSC, sans-serif';
+      case 'ur':
+        return 'NotoNastaliqUrdu, sans-serif';
+      default:
+        return 'Outfit, sans-serif'; // Default for Latin scripts
+    }
   }
 }

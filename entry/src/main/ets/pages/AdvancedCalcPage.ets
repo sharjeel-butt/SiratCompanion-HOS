@@ -9,7 +9,6 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
 } from '../core/StorageKeys';
-import { SettingsHelper } from '../settings/SettingsHelper';
 import { PickerItem } from '../settings/SettingsModels';
 import {
   MidnightMethod, PolarResolution, RoundingMethod, Shafaq
@@ -17,8 +16,9 @@ import {
 import {
   CalculationMethod, HighLatitudeRule
 } from '../prayer/PrayerTimeCalculator';
-import { L } from '../i18n/LocalizationHelper';
 import { Breakpoints } from '../core/Breakpoints';
+import { SettingsHelper } from '../settings/SettingsHelper';
+import { L } from '../i18n/LocalizationHelper';
 
 type SheetKind = 'none' | 'rounding' | 'midnight' | 'polar'
   | 'shafaq' | 'highlat';

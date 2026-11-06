@@ -2899,6 +2899,114 @@
     {
       "name": "widget_ramadan_desc",
       "value": "تتبع الصيام والعد التنازلي لرمضان"
+    },
+    {
+      "name": "prayer_prompt_title",
+      "value": "هل صليت بالفعل؟"
+    },
+    {
+      "name": "surah_recommendations",
+      "value": "دليل التلاوة"
+    },
+    {
+      "name": "ayahs",
+      "value": "الآيات"
+    },
+    {
+      "name": "occasion_morning_evening",
+      "value": "الصباح والمساء"
+    },
+    {
+      "name": "occasion_bedtime",
+      "value": "قبل النوم"
+    },
+    {
+      "name": "occasion_night",
+      "value": "الليل"
+    },
+    {
+      "name": "occasion_friday",
+      "value": "يوم الجمعة"
+    },
+    {
+      "name": "occasion_friday_fajr",
+      "value": "فجر الجمعة"
+    },
+    {
+      "name": "occasion_friday_prayer",
+      "value": "صلاة الجمعة"
+    },
+    {
+      "name": "occasion_friday_sermon",
+      "value": "خطبة الجمعة"
+    },
+    {
+      "name": "occasion_illness_ruqyah",
+      "value": "الشفاء والرقية"
+    },
+    {
+      "name": "occasion_home_protection",
+      "value": "حماية المنزل"
+    },
+    {
+      "name": "occasion_protection_dajjal",
+      "value": "الحماية من الدجال"
+    },
+    {
+      "name": "occasion_eid_prayer",
+      "value": "صلاة العيد"
+    },
+    {
+      "name": "occasion_fajr_sunnah",
+      "value": "سنة الفجر"
+    },
+    {
+      "name": "occasion_general_virtue",
+      "value": "فضائل عامة"
+    },
+    {
+      "name": "quran_full_title",
+      "value": "القرآن الكريم"
+    },
+    {
+      "name": "quran_full_desc",
+      "value": "اقرأ جميع السور الـ 114 مع الترجمات."
+    },
+    {
+      "name": "search_surahs",
+      "value": "ابحث عن سورة..."
+    },
+    {
+      "name": "translation_unavailable",
+      "value": "الترجمة غير متوفرة لهذه اللغة."
+    },
+    {
+      "name": "licenses_title",
+      "value": "مصادر البيانات والتراخيص"
+    },
+    {
+      "name": "licenses_intro",
+      "value": "يتم توزيع نص القرآن الكريم والترجمات والخطوط المستخدمة في هذا التطبيق بموجب التراخيص التالية. يرجى الحفاظ على نسب المصدر عند مشاركة هذا التطبيق أو بياناته."
+    },
+    {
+      "name": "license_section_dataset",
+      "value": "مجموعة البيانات"
+    },
+    {
+      "name": "license_section_scripts",
+      "value": "النصوص العربية"
+    },
+    {
+      "name": "license_section_translations",
+      "value": "الترجمات"
+    },
+    {
+      "name": "license_source_label",
+      "value": "المصدر:"
+    },
+    {
+      "name": "license_license_label",
+      "value": "الترخيص:"
     }
   ]
 }
