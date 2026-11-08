@@ -4,8 +4,7 @@ import { common } from '@kit.AbilityKit';
 import { util } from '@kit.ArkTS';
 import { AppLogger } from '../core/AppLogger';
 import {
-  CompleteSurah,
-  LocalizedRecitationInfo, RawRecitationTask, RecitationTask,
+  CompleteSurah, LocalizedRecitationInfo, RawRecitationTask, RecitationTask,
 } from './QuranSurahModels';
 import { UpcomingCustomEvent } from '../pages/HomePage';
 
@@ -39,7 +38,8 @@ export class QuranService {
     context: common.UIAbilityContext,
     lang: string,
     isFriday: boolean,
-    customEvents: UpcomingCustomEvent[]
+    customEvents: UpcomingCustomEvent[],
+    showAll: boolean = false // <--- NEW PARAMETER
   ): Promise<RecitationTask[]> {
     const mgr = context.resourceManager;
 
@@ -86,11 +86,12 @@ export class QuranService {
 
       for (const ce of customEvents) {
         const title = ce.ev.title.toLowerCase();
-        if (title.includes('sick') || title.includes('illness') || title.includes('fever')) {
+        if (title.includes('sick') || title.includes('illness')) {
           activeOccasions.push('illness_ruqyah');
         }
         if (title.includes('protect') || title.includes('safe')) {
-          activeOccasions.push('home_protection', 'protection_dajjal');
+          activeOccasions.push('home_protection',
+            'protection_dajjal');
         }
         if (title.includes('eid')) {
           activeOccasions.push('eid_prayer');
@@ -102,7 +103,8 @@ export class QuranService {
       const allSurahs = await QuranService.loadSurahs(context, lang);
 
       for (const task of rawTasks) {
-        if (activeOccasions.includes(task.occasion)) {
+        // NEW: If showAll is true, we skip the occasion filter
+        if (showAll || activeOccasions.includes(task.occasion)) {
           if (task.groupId) {
             if (seenGroups.has(task.groupId)) {
               continue;
@@ -126,9 +128,11 @@ export class QuranService {
             reference: task.reference,
             groupId: task.groupId,
             rakAh: task.rakAh,
+            evidence: task.evidence,
+            verseSelections: task.verseSelections,
 
             name: trans ? trans.name : `Surah ${task.surahNumber}`,
-            notes: trans ? trans.notes : '',
+            notes: trans ? trans.notes : (task.notes || ''),
             localizedReference: trans ? trans.reference : task.reference,
 
             surahNameTransliteration: surah ? surah.nameTransliteration : `Surah ${task.surahNumber}`,
@@ -144,6 +148,10 @@ export class QuranService {
       AppLogger.error('QuranService', `Failed to get recommendations: ${JSON.stringify(e)}`);
       return [];
     }
+  }
+
+  public static getCachedSurahs(): CompleteSurah[] {
+    return QuranService.cachedSurahs;
   }
 
   private static getScriptForLanguage(lang: string): string {

@@ -22,7 +22,7 @@ struct RamadanWidget {
       Column() {
         if (this.error.length > 0) {
           Column() {
-            Text(this.error).fontSize(14).fontColor('#FF6B6B').textAlign(TextAlign.Center).width('100%')
+            Text(this.error).fontSize('14vp').fontColor('#FF6B6B').textAlign(TextAlign.Center).width('100%')
           }
           .width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
         } else {
@@ -31,13 +31,13 @@ struct RamadanWidget {
           if (this.dimension === '2*2') {
             Column() {
               Text(this.hijriDate)
-                .fontSize(10)
+                .fontSize('10vp')
                 .fontColor('#E8A44C')
                 .width('100%')
                 .textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT)
                 .maxLines(1)
               Text(this.city)
-                .fontSize(12)
+                .fontSize('12vp')
                 .fontWeight(FontWeight.Bold)
                 .fontColor('#FFFFFF')
                 .width('100%')
@@ -49,9 +49,9 @@ struct RamadanWidget {
           } else {
             Row() {
               if (this.isRtl()) {
-                Text(this.hijriDate).fontSize(10).fontColor('#E8A44C').maxLines(1).flexShrink(0)
+                Text(this.hijriDate).fontSize('10vp').fontColor('#E8A44C').maxLines(1).flexShrink(0)
                 Text(this.city)
-                  .fontSize(12)
+                  .fontSize('12vp')
                   .fontWeight(FontWeight.Bold)
                   .fontColor('#FFFFFF')
                   .maxLines(1)
@@ -59,13 +59,13 @@ struct RamadanWidget {
                   .textAlign(TextAlign.RIGHT)
               } else {
                 Text(this.city)
-                  .fontSize(12)
+                  .fontSize('12vp')
                   .fontWeight(FontWeight.Bold)
                   .fontColor('#FFFFFF')
                   .maxLines(1)
                   .layoutWeight(1)
                   .textAlign(TextAlign.LEFT)
-                Text(this.hijriDate).fontSize(10).fontColor('#E8A44C').maxLines(1).flexShrink(0)
+                Text(this.hijriDate).fontSize('10vp').fontColor('#E8A44C').maxLines(1).flexShrink(0)
               }
             }
             .width('100%').margin({ bottom: 12 })
@@ -77,28 +77,28 @@ struct RamadanWidget {
             // NOTIFICATION STATE (Not Ramadan)
             Column() {
               Image($r('app.media.ic_ramadan_moon')).width(32).height(32).fillColor('#E8A44C').margin({ bottom: 8 })
-              Text(this.targetName).fontSize(16).fontWeight(FontWeight.Bold).fontColor('#FFFFFF').maxLines(1)
-              Text(this.countdown).fontSize(14).fontColor('#E8A44C').margin({ top: 4 }).maxLines(1)
+              Text(this.targetName).fontSize('16vp').fontWeight(FontWeight.Bold).fontColor('#FFFFFF').maxLines(1)
+              Text(this.countdown).fontSize('14vp').fontColor('#E8A44C').margin({ top: 4 }).maxLines(1)
             }
             .width('100%').layoutWeight(1).justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center)
 
           } else if (this.dimension === '2*2') {
             Column() {
               Text(this.targetName)
-                .fontSize(18)
+                .fontSize('18vp')
                 .fontColor('#AAAAAA')
                 .width('100%')
                 .textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT)
                 .letterSpacing(1)
               Text(this.targetTime)
-                .fontSize(26)
+                .fontSize('26vp')
                 .fontWeight(FontWeight.Bold)
                 .fontColor('#E8A44C')
                 .width('100%')
                 .textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT)
                 .margin({ top: 2 })
               Text(this.countdown)
-                .fontSize(14)
+                .fontSize('14vp')
                 .fontColor('#FFFFFF')
                 .width('100%')
                 .textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT)
@@ -113,37 +113,45 @@ struct RamadanWidget {
                 // RTL: Iftar on Left (End of day), Imsak on Right (Start of day)
                 Column() {
                   Image($r('app.media.ic_iftaar')).width(20).height(20).fillColor('#E8A44C').margin({ bottom: 6 })
-                  Text(this.lblIftar).fontSize(12).fontColor('#E8A44C').maxLines(1)
-                  Text(this.iftar).fontSize(16).fontColor('#FFFFFF').fontWeight(FontWeight.Bold).margin({ top: 4 })
+                  Text(this.lblIftar).fontSize('12vp').fontColor('#E8A44C').maxLines(1)
+                  Text(this.iftar).fontSize('16vp').fontColor('#FFFFFF').fontWeight(FontWeight.Bold).margin({ top: 4 })
                 }.layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
 
                 Column() {
-                  Text(this.targetName).fontSize(11).fontColor('#E8A44C').maxLines(1)
-                  Text(this.countdown).fontSize(16).fontColor('#FFFFFF').fontWeight(FontWeight.Bold).margin({ top: 4 })
+                  Text(this.targetName).fontSize('11vp').fontColor('#E8A44C').maxLines(1)
+                  Text(this.countdown)
+                    .fontSize('16vp')
+                    .fontColor('#FFFFFF')
+                    .fontWeight(FontWeight.Bold)
+                    .margin({ top: 4 })
                 }.layoutWeight(1.5).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
 
                 Column() {
                   Image($r('app.media.ic_sahur')).width(20).height(20).fillColor('#A5B8CC').margin({ bottom: 6 })
-                  Text(this.lblSahur).fontSize(12).fontColor('#A5B8CC').maxLines(1)
-                  Text(this.imsak).fontSize(16).fontColor('#FFFFFF').fontWeight(FontWeight.Bold).margin({ top: 4 })
+                  Text(this.lblSahur).fontSize('12vp').fontColor('#A5B8CC').maxLines(1)
+                  Text(this.imsak).fontSize('16vp').fontColor('#FFFFFF').fontWeight(FontWeight.Bold).margin({ top: 4 })
                 }.layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
               } else {
                 // LTR: Imsak on Left (Start of day), Iftar on Right (End of day)
                 Column() {
                   Image($r('app.media.ic_sahur')).width(20).height(20).fillColor('#A5B8CC').margin({ bottom: 6 })
-                  Text(this.lblSahur).fontSize(12).fontColor('#A5B8CC').maxLines(1)
-                  Text(this.imsak).fontSize(16).fontColor('#FFFFFF').fontWeight(FontWeight.Bold).margin({ top: 4 })
+                  Text(this.lblSahur).fontSize('12vp').fontColor('#A5B8CC').maxLines(1)
+                  Text(this.imsak).fontSize('16vp').fontColor('#FFFFFF').fontWeight(FontWeight.Bold).margin({ top: 4 })
                 }.layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
 
                 Column() {
-                  Text(this.targetName).fontSize(11).fontColor('#E8A44C').maxLines(1)
-                  Text(this.countdown).fontSize(16).fontColor('#FFFFFF').fontWeight(FontWeight.Bold).margin({ top: 4 })
+                  Text(this.targetName).fontSize('11vp').fontColor('#E8A44C').maxLines(1)
+                  Text(this.countdown)
+                    .fontSize('16vp')
+                    .fontColor('#FFFFFF')
+                    .fontWeight(FontWeight.Bold)
+                    .margin({ top: 4 })
                 }.layoutWeight(1.5).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
 
                 Column() {
                   Image($r('app.media.ic_iftaar')).width(20).height(20).fillColor('#E8A44C').margin({ bottom: 6 })
-                  Text(this.lblIftar).fontSize(12).fontColor('#E8A44C').maxLines(1)
-                  Text(this.iftar).fontSize(16).fontColor('#FFFFFF').fontWeight(FontWeight.Bold).margin({ top: 4 })
+                  Text(this.lblIftar).fontSize('12vp').fontColor('#E8A44C').maxLines(1)
+                  Text(this.iftar).fontSize('16vp').fontColor('#FFFFFF').fontWeight(FontWeight.Bold).margin({ top: 4 })
                 }.layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
               }
             }

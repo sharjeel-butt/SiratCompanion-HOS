@@ -2,181 +2,758 @@
   "recitation_surah_112_morning_evening": {
     "name": "سورة الإخلاص في الصباح والمساء",
     "notes": "تقرأ مع السورتين الأخريين ثلاث مرات صباحاً ومساءً.",
-    "reference": "سنن أبي داود 5082; جامع الترمذي 3575"
+    "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575",
+    "evidence": [
+      {
+        "collection": "Sunan Abi Dawud",
+        "hadithNumber": "5082",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "3575",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "hasan_sahih"
   },
   "recitation_surah_113_morning_evening": {
     "name": "سورة الفلق في الصباح والمساء",
     "notes": "تقرأ مع السورتين الأخريين ثلاث مرات صباحاً ومساءً.",
-    "reference": "سنن أبي داود 5082; جامع الترمذي 3575"
+    "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575",
+    "evidence": [
+      {
+        "collection": "Sunan Abi Dawud",
+        "hadithNumber": "5082",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "3575",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "hasan_sahih"
   },
   "recitation_surah_114_morning_evening": {
     "name": "سورة الناس في الصباح والمساء",
     "notes": "تقرأ مع السورتين الأخريين ثلاث مرات صباحاً ومساءً.",
-    "reference": "سنن أبي داود 5082; جامع الترمذي 3575"
+    "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575",
+    "evidence": [
+      {
+        "collection": "Sunan Abi Dawud",
+        "hadithNumber": "5082",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "3575",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "hasan_sahih"
   },
   "recitation_surah_112_bedtime": {
     "name": "سورة الإخلاص قبل النوم",
     "notes": "تجمع الكفين وتقرأ السور الثلاث مع النفث ومسح الجسد ثلاث مرات.",
-    "reference": "صحيح البخاري 5017"
+    "reference": "Sahih al-Bukhari 5017",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5017",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_113_bedtime": {
     "name": "سورة الفلق قبل النوم",
     "notes": "تجمع الكفين وتقرأ السور الثلاث مع النفث ومسح الجسد ثلاث مرات.",
-    "reference": "صحيح البخاري 5017"
+    "reference": "Sahih al-Bukhari 5017",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5017",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_114_bedtime": {
     "name": "سورة الناس قبل النوم",
     "notes": "تجمع الكفين وتقرأ السور الثلاث مع النفث ومسح الجسد ثلاث مرات.",
-    "reference": "صحيح البخاري 5017"
+    "reference": "Sahih al-Bukhari 5017",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5017",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_112_illness": {
     "name": "سورة الإخلاص للمرض والرقية",
     "notes": "تقرأ للرقية مع النفث على الجسد.",
-    "reference": "صحيح البخاري 5748"
+    "reference": "Sahih al-Bukhari 5016; Sahih al-Bukhari 5735; Sahih al-Bukhari 5748",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5016",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5735",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5748",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_113_illness": {
     "name": "سورة الفلق للمرض والرقية",
     "notes": "تقرأ للرقية مع النفث على الجسد.",
-    "reference": "صحيح البخاري 5748"
+    "reference": "Sahih al-Bukhari 5016; Sahih al-Bukhari 5735; Sahih al-Bukhari 5748",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5016",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5735",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5748",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_114_illness": {
     "name": "سورة الناس للمرض والرقية",
     "notes": "تقرأ للرقية مع النفث على الجسد.",
-    "reference": "صحيح البخاري 5748"
+    "reference": "Sahih al-Bukhari 5016; Sahih al-Bukhari 5735; Sahih al-Bukhari 5748",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5016",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5735",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5748",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ayat_al_kursi_bedtime": {
     "name": "آية الكرسي قبل النوم",
     "notes": "تقرأ الآية كاملة قبل النوم.",
-    "reference": "صحيح البخاري 5010"
+    "reference": "Sahih al-Bukhari 2311; Sahih al-Bukhari 5010",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "2311",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5010",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_baqarah_285_286_night": {
     "name": "آخر آيتين من البقرة في الليل",
     "notes": "ورد أنهما تكفيان قارئهما في ليلته.",
-    "reference": "صحيح البخاري 5009; صحيح البخاري 5040"
+    "reference": "Sahih al-Bukhari 5009; Sahih al-Bukhari 5040; Sunan Ibn Majah 1369",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5009",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5040",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan Ibn Majah",
+        "hadithNumber": "1369",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_baqarah_home": {
     "name": "سورة البقرة في البيت",
     "notes": "لم يرد في الحديث المذكور تكرار يومي محدد.",
-    "reference": "صحيح مسلم 780; جامع الترمذي 2877"
+    "reference": "Sahih Muslim 780; Jami at-Tirmidhi 2877",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "780",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "2877",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_kahf_friday": {
     "name": "سورة الكهف يوم الجمعة",
     "notes": "أدرج لثبوت الحديث بدرجة حسن، لا صحيح.",
-    "reference": "مشكاة المصابيح 2175; Al-Bayhaqi, al-Daawat al-Kabir"
+    "reference": "Mishkat al-Masabih 2175",
+    "evidence": [
+      {
+        "collection": "Mishkat al-Masabih",
+        "hadithNumber": "2175",
+        "grade": "hasan",
+        "evidenceType": "prophetic_practice",
+        "note": "Cites Al-Bayhaqi, al-Daawat al-Kabir"
+      }
+    ],
+    "authenticity": "hasan"
   },
   "recitation_kahf_first_ten_dajjal": {
     "name": "أول عشر آيات من الكهف للعصمة من الدجال",
     "notes": "تحفظ أو تقرأ أول عشر آيات كما ورد في الحديث.",
-    "reference": "صحيح مسلم 809a"
+    "reference": "Sahih Muslim 809a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "809a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_kahf_last_ten_dajjal": {
     "name": "آخر عشر آيات من الكهف للعصمة من الدجال",
     "notes": "وردت رواية بآخر عشر آيات.",
-    "reference": "صحيح مسلم 809b"
+    "reference": "Sahih Muslim 809b",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "809b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_sajdah_friday_fajr": {
     "name": "سورة السجدة في الركعة الأولى من فجر الجمعة",
     "notes": "",
-    "reference": "صحيح البخاري 891; صحيح مسلم 879a"
+    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a; Sunan an-Nasa’i 1421",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "891",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_insan_friday_fajr": {
     "name": "سورة الإنسان في الركعة الثانية من فجر الجمعة",
     "notes": "",
-    "reference": "صحيح البخاري 891; صحيح مسلم 879a"
+    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a; Sunan an-Nasa’i 1421",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "891",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_jumuah_friday_prayer": {
     "name": "سورة الجمعة في الركعة الأولى من صلاة الجمعة",
     "notes": "",
-    "reference": "صحيح مسلم 879a; سنن النسائي 1421"
+    "reference": "Sahih Muslim 879a; Sunan an-Nasa’i 1421",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_munafiqun_friday_prayer": {
     "name": "سورة المنافقون في الركعة الثانية من صلاة الجمعة",
     "notes": "",
-    "reference": "صحيح مسلم 879a; سنن النسائي 1421"
+    "reference": "Sahih Muslim 879a; Sunan an-Nasa’i 1421",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ala_eid_prayer": {
     "name": "سورة الأعلى في الركعة الأولى",
     "notes": "",
-    "reference": "صحيح مسلم 878a"
+    "reference": "Sahih Muslim 878a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ghashiyah_eid_prayer": {
     "name": "سورة الغاشية في الركعة الثانية",
     "notes": "",
-    "reference": "صحيح مسلم 878a"
+    "reference": "Sahih Muslim 878a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ala_friday_prayer": {
     "name": "سورة الأعلى في الركعة الأولى",
     "notes": "",
-    "reference": "صحيح مسلم 878a"
+    "reference": "Sahih Muslim 878a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ghashiyah_friday_prayer": {
     "name": "سورة الغاشية في الركعة الثانية",
     "notes": "",
-    "reference": "صحيح مسلم 878a"
+    "reference": "Sahih Muslim 878a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_kafirun_fajr_sunnah": {
     "name": "سورة الكافرون في الركعة الأولى من سنة الفجر",
     "notes": "",
-    "reference": "صحيح مسلم 726; رياض الصالحين 1108"
+    "reference": "Sahih Muslim 726",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "726",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ikhlas_fajr_sunnah": {
     "name": "سورة الإخلاص في الركعة الثانية من سنة الفجر",
     "notes": "",
-    "reference": "صحيح مسلم 726; رياض الصالحين 1108"
+    "reference": "Sahih Muslim 726",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "726",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_baqarah_136_fajr_sunnah": {
     "name": "البقرة 136 في الركعة الأولى من سنة الفجر",
     "notes": "",
-    "reference": "صحيح مسلم 727; رياض الصالحين 1107"
+    "reference": "Sahih Muslim 727",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "727",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_al_imran_52_or_64_fajr_sunnah": {
     "name": "آل عمران 52 أو 64 في الركعة الثانية من سنة الفجر",
     "notes": "وردت الآية 52 وفي رواية الآية 64، وليس المقصود قراءة جميع ما بينهما.",
-    "reference": "صحيح مسلم 727; رياض الصالحين 1107"
+    "reference": "Sahih Muslim 727",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "727",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih",
+    "verseSelections": [
+      {
+        "surahNumber": 3,
+        "startVerse": 52,
+        "endVerse": 52
+      },
+      {
+        "surahNumber": 3,
+        "startVerse": 64,
+        "endVerse": 64
+      }
+    ]
   },
   "recitation_mulk_general_virtue": {
     "name": "سورة الملك: فضل الشفاعة",
     "notes": "يثبت الحديث الحسن فضل الشفاعة والمغفرة دون وقت يومي أو قبل النوم.",
-    "reference": "جامع الترمذي 2891"
+    "reference": "Jami at-Tirmidhi 2891",
+    "evidence": [
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "2891",
+        "grade": "hasan",
+        "evidenceType": "general_virtue"
+      }
+    ],
+    "authenticity": "hasan"
   },
   "recitation_fatihah_ruqyah": {
     "name": "سورة الفاتحة للرقية",
     "notes": "تقرأ الفاتحة للرقية. تصف الروايات استعمالها للديغ أو اللسعة، ولم تحدد عدداً ثابتاً للتكرار.",
-    "reference": "صحيح البخاري 5736; صحيح البخاري 5749"
+    "reference": "Sahih al-Bukhari 5736; Sahih al-Bukhari 5737; Sahih al-Bukhari 5749",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5736",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5737",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5749",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_qaf_fajr": {
     "name": "سورة ق في صلاة الفجر",
     "notes": "ثبتت قراءتها في صلاة الفجر، ولا تحدد الرواية التزاماً يومياً ثابتاً.",
-    "reference": "صحيح مسلم 458a; صحيح مسلم 458b"
+    "reference": "Sahih Muslim 458a; Sahih Muslim 458b; Sunan an-Nasa’i 949",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "458a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "458b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "949",
+        "grade": "hasan",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_qaf_friday_sermon": {
     "name": "سورة ق في خطبة الجمعة",
     "notes": "هذه سنة متعلقة بسياق الخطبة، وليست ورداً شخصياً ليوم الجمعة.",
-    "reference": "صحيح مسلم 872a; صحيح مسلم 872b"
+    "reference": "Sahih Muslim 872a; Sahih Muslim 872b; Sunan an-Nasa’i 1411",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "872a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "872b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1411",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_qaf_eid_prayer": {
     "name": "سورة ق في الركعة الأولى من صلاة العيد",
     "notes": "زوج ثابت بديل للقراءة في صلاة العيد.",
-    "reference": "صحيح مسلم 891a; صحيح مسلم 891b"
+    "reference": "Sahih Muslim 891a; Sahih Muslim 891b",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_qamar_eid_prayer": {
     "name": "سورة القمر في الركعة الثانية من صلاة العيد",
     "notes": "زوج ثابت بديل للقراءة في صلاة العيد.",
-    "reference": "صحيح مسلم 891a; صحيح مسلم 891b"
+    "reference": "Sahih Muslim 891a; Sahih Muslim 891b",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_tur_maghrib": {
     "name": "سورة الطور في صلاة المغرب",
     "notes": "ثبتت قراءتها في المغرب، ولا تعرض على أنها لازمة في كل صلاة مغرب.",
-    "reference": "صحيح البخاري 765; صحيح البخاري 4854"
+    "reference": "Sahih al-Bukhari 765; Sahih al-Bukhari 4854",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "765",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "4854",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_mursalat_maghrib": {
     "name": "سورة المرسلات في صلاة المغرب",
     "notes": "ثبتت قراءتها في المغرب، ولم يرد تكرار دوري محدد.",
-    "reference": "صحيح البخاري 763"
+    "reference": "Sahih al-Bukhari 763",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "763",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_dukhan_maghrib": {
     "name": "سورة الدخان في صلاة المغرب",
     "notes": "ثبتت قراءتها في المغرب. ولم تعتمد الرواية الضعيفة في قراءتها ليلة الجمعة.",
-    "reference": "سنن النسائي 988"
+    "reference": "Sunan an-Nasa’i 988",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "988",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
+  },
+  "recitation_fatihah_every_rakah": {
+    "name": "سورة الفاتحة في كل ركعة",
+    "notes": "تقرأ الفاتحة في كل ركعة، وهذا من أصل الصلاة وليس جدول تذكير اختياري.",
+    "reference": "Sahih Muslim 396c",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "396c",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
+  },
+  "recitation_ala_witr": {
+    "name": "سورة الأعلى في الركعة الأولى من الوتر",
+    "notes": "تصف الرواية ترتيب السور في وتر من ثلاث ركعات.",
+    "reference": "Sunan an-Nasa’i 1703",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1703",
+        "grade": "sahih",
+        "evidenceType": "companion_practice",
+        "grader": "Darussalam",
+        "note": "Practice of Ibn Abbas"
+      }
+    ],
+    "authenticity": "sahih",
+    "evidenceType": "companion_practice"
+  },
+  "recitation_kafirun_witr": {
+    "name": "سورة الكافرون في الركعة الثانية من الوتر",
+    "notes": "تصف الرواية ترتيب السور في وتر من ثلاث ركعات.",
+    "reference": "Sunan an-Nasa’i 1703",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1703",
+        "grade": "sahih",
+        "evidenceType": "companion_practice",
+        "grader": "Darussalam",
+        "note": "Practice of Ibn Abbas"
+      }
+    ],
+    "authenticity": "sahih",
+    "evidenceType": "companion_practice"
+  },
+  "recitation_ikhlas_witr": {
+    "name": "سورة الإخلاص في الركعة الثالثة من الوتر",
+    "notes": "تصف الرواية ترتيب السور في وتر من ثلاث ركعات.",
+    "reference": "Sunan an-Nasa’i 1703",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1703",
+        "grade": "sahih",
+        "evidenceType": "companion_practice",
+        "grader": "Darussalam",
+        "note": "Practice of Ibn Abbas"
+      }
+    ],
+    "authenticity": "sahih",
+    "evidenceType": "companion_practice"
   }
 }

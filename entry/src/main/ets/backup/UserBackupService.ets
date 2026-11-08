@@ -203,7 +203,11 @@ const SETTINGS_SPECS: PrefSpec[] = [
   { key: 'dua_bindings', type: 'string' },
 
   // ---- Custom Calendar Events ----
-  { key: 'custom_events', type: 'string' }
+  { key: 'custom_events', type: 'string' },
+
+  // ---- Quran & Prayer Prompts (NEW) ----
+  { key: 'active_quran_script', type: 'string' },
+  { key: 'dismissed_prayers', type: 'string' }
 ];
 
 const TASBIH_SPECS: PrefSpec[] = [
@@ -660,6 +664,12 @@ export class UserBackupService {
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
       await PreferencesHelper.getBoolean(
         STORAGE_KEY_SHOW_ISLAMIC_EVENTS, true));
+
+    AppStorage.setOrCreate('active_quran_script',
+      await PreferencesHelper.getString('active_quran_script', 'indopak'));
+
+    AppStorage.setOrCreate('dismissed_prayers',
+      await PreferencesHelper.getString('dismissed_prayers', '[]'));
 
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_IMSAK_LIST,
       await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_IMSAK_LIST, true));

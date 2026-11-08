@@ -3030,6 +3030,22 @@
     {
       "name": "juz_label",
       "value": "পারা"
+    },
+    {
+      "name": "occasion_fajr_prayer",
+      "value": "ফজরের নামাজ"
+    },
+    {
+      "name": "hasan_sahih",
+      "value": "হাসান সহিহ"
+    },
+    {
+      "name": "occasion_every_prayer_rakah",
+      "value": "প্রত্যেক নামাজের রাকাত"
+    },
+    {
+      "name": "occasion_witr_prayer",
+      "value": "বিতরের সালাত"
     }
   ]
 }

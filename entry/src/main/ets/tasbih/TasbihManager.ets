@@ -671,6 +671,12 @@ export class TasbihManager {
     if (!tasbih.prayerCompletions) {
       return false;
     }
+    for (const d of tasbih.dhikrs) {
+      const count = d.liveCounts ? (d.liveCounts[prayerId] || 0) : 0;
+      if (count < d.target) {
+        return false;
+      }
+    }
     return tasbih.prayerCompletions[prayerId] === dateKey;
   }
 

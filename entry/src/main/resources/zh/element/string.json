@@ -3030,6 +3030,14 @@
     {
       "name": "juz_label",
       "value": "卷"
+    },
+    {
+      "name": "occasion_every_prayer_rakah",
+      "value": "每一拜"
+    },
+    {
+      "name": "occasion_witr_prayer",
+      "value": "维特尔拜"
     }
   ]
 }

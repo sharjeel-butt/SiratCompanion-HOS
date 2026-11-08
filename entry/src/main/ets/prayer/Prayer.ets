@@ -35,6 +35,7 @@ import {
   STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH,
   STORAGE_KEY_SHOW_MIDNIGHT_LIST,
   STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH,
+  STORAGE_KEY_TAB_REFRESH_TICK,
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
 } from '../core/StorageKeys';
@@ -142,6 +143,9 @@ export struct Prayer {
   @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_VERSION)
   @Watch('onHijriCalendarVersionChanged')
   calendarVersion: number = 0;
+  @StorageLink(STORAGE_KEY_TAB_REFRESH_TICK)
+  @Watch('onTabRefreshed')
+  tabRefreshTick: number = 0;
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State currentLocation: string = 'Loading...';
   @State isLoadingLocation: boolean = true;
@@ -296,6 +300,16 @@ export struct Prayer {
     this.startStatusTimer();
 
     this.refreshLocationSilently();
+  }
+
+  private onTabRefreshed(): void {
+    if (this.dateOffset === 0) {
+      // Refresh the timeline statuses (prayer becomes 'next'/'prayed')
+      this.prayers = PrayerManager.updateStatuses(
+        this.prayers, this.viewingDate, this.getLocationOffsetHours()
+      );
+      this.updateTodayHeaderData();
+    }
   }
 
   aboutToDisappear(): void {

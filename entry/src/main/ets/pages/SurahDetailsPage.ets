@@ -27,6 +27,9 @@ struct SurahDetailsPage {
 
   @State readingMode: ReadingMode = 'translation';
   @State isLoading: boolean = true;
+  @State mushafCurrentPage: number = 1;
+  @State currentMushafSurahName: string = '';
+  private allPages: number[] = [];
 
   private startVerse: number = 1;
   private endVerse: number | null = null;
@@ -45,16 +48,26 @@ struct SurahDetailsPage {
     const params = router.getParams() as Record<string, Object>;
 
     const targetId = params ? (params['surahId'] as number || 1) : 1;
-    this.startVerse = params ? (params['startVerse'] as number || 1) : 1;
-    this.endVerse = params ? (params['endVerse'] as number || null) : null;
+
+    // Safely parse nulls (for Recitation Guide tasks like Al-Imran 52 or 64)
+    const paramStart = params ? params['startVerse'] : null;
+    const paramEnd = params ? params['endVerse'] : null;
+
+    this.startVerse = typeof paramStart === 'number' ? paramStart : 1;
+    this.endVerse = typeof paramEnd === 'number' ? paramEnd : null;
 
     const ctx = getContext(this) as common.UIAbilityContext;
+
+    // Load all Surahs from the JSON file
     this.allSurahs = await QuranService.loadSurahs(ctx, this.appLanguage);
 
+    // Find the requested Surah
     const idx = this.allSurahs.findIndex((s: CompleteSurah): boolean => s.id === targetId);
     this.currentIndex = idx >= 0 ? idx : 0;
 
+    // Process the verses for the current Surah
     this.processCurrentSurah(true);
+
     this.isLoading = false;
   }
 
@@ -63,18 +76,19 @@ struct SurahDetailsPage {
 
     this.surah = this.allSurahs[this.currentIndex];
 
+    // Reset verse limits if paging to a new Surah manually
     if (!isInitial) {
       this.startVerse = 1;
       this.endVerse = null;
     }
 
-    // Filter verses based on startVerse and endVerse
+    // Filter verses based on startVerse and endVerse (for Recitation Guide)
     if (this.startVerse > 1 || this.endVerse !== null) {
       const end = this.endVerse !== null ? this.endVerse : this.surah.ayahCount;
       this.displayVerses = this.surah.verses.filter(v => v.ayah >= this.startVerse && v.ayah <= end);
     } else {
-      // NEW: If reading normally, and it's Surah 1, skip verse 1 (Bismillah)
-      // because we show it as a standalone header just like other Surahs
+      // Standard full Surah reading
+      // If it's Surah 1 (Al-Fatihah), hide verse 1 (Bismillah) because it's shown as a header
       if (this.surah.id === 1) {
         this.displayVerses = this.surah.verses.filter(v => v.ayah !== 1);
       } else {
@@ -129,14 +143,20 @@ struct SurahDetailsPage {
         .onClick(() => router.back())
 
         Column() {
-          // FIXED: Use getSurahTitle()
-          Text(this.isLoading ? '...' : this.getSurahTitle())
+          Text(this.isLoading ? '...' :
+            (this.readingMode === 'mushaf' ? this.currentMushafSurahName : this.getSurahTitle()))
             .fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
             .maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis })
             .fontFamily(this.appLanguage === 'ar' ? TypographyHelper.getQuranFontByScript(this.activeScript) : 'Outfit')
 
-          Text(this.isLoading ? '' : `${this.tr('juz_label')} ${Math.ceil(this.surah!.id / 2)} · ${this.surah!.revelationPlace} · ${this.surah!.ayahCount} ${this.tr('ayahs')}`)
-            .fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
+          if (this.readingMode === 'mushaf') {
+            Text(`Page ${this.mushafCurrentPage} / 604`)
+              .fontSize(10).fontColor(this.colors.accentGold).margin({ top: 2 })
+          } else {
+            Text(this.isLoading ? '' : `${this.tr('juz_label')} ${Math.ceil(
+              this.surah!.id / 2)} · ${this.surah!.revelationPlace} · ${this.surah!.ayahCount} ${this.tr('ayahs')}`)
+              .fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
+          }
         }
         .alignItems(HorizontalAlign.Center)
         .layoutWeight(1)
@@ -316,24 +336,22 @@ struct SurahDetailsPage {
   MushafView() {
     Scroll() {
       Column() {
-        // Ornate Header (Surah Name)
+        // Ornate Header
         Stack() {
           Column()
             .width('100%').height(50)
             .border({ width: 1, color: this.colors.accentGold })
             .borderRadius(8)
             .backgroundColor(this.colors.tintSubtle)
-
-          // Use getSurahTitle() here too
-          Text(this.getSurahTitle())
+          Text(this.surah?.nameArabic || '')
             .fontSize(TypographyHelper.getArabicFontSize(22))
-            .fontFamily(this.appLanguage === 'ar' ? TypographyHelper.getQuranFontByScript(this.activeScript) : 'Outfit')
+            .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
             .fontColor(this.colors.accentGold)
         }
         .width('95%').margin({ top: 16, bottom: 24 })
 
         // Bismillah (Show for ALL surahs except Surah 9)
-        if (this.surah!.id !== 9) {
+        if (this.surah && this.surah.id !== 9) {
           Text("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ")
             .fontSize(TypographyHelper.getArabicFontSize(26))
             .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
@@ -348,8 +366,8 @@ struct SurahDetailsPage {
           .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
           .fontColor(this.colors.textWhite)
           .lineHeight(TypographyHelper.getArabicLineHeight(60))
-          .textAlign(TextAlign.Start)
-          .direction(Direction.Rtl)
+          .textAlign(TextAlign.Start) // Aligns to the Right in RTL
+          .direction(Direction.Rtl)   // Forces RTL layout
           .width('100%').padding({ left: 20, right: 20 })
 
         Column().height(40)
@@ -365,16 +383,17 @@ struct SurahDetailsPage {
   }
 
   private buildMushafText(): string {
-    if (!this.surah) return '';
+    if (!this.surah || this.displayVerses.length === 0) {
+      return '';
+    }
     let text = '';
     for (const v of this.displayVerses) {
+      // Remove the embedded Arabic numbers from the JSON text
       const cleanArabic = this.stripTrailingArabicNumber(v.arabic);
       const arabicNum = this.toArabicNumerals(v.ayah);
 
-      // FIX: Use the Rub el Hizb star ۞ (U+06DE) followed by the number.
-      // We wrap it in non-breaking spaces (\u00A0) to ensure the layout engine
-      // doesn't stretch or collapse the gap between the star and the text.
-      const marker = `\u00A0۞ ${arabicNum}\u00A0`;
+      // Add the Rub el Hizb star with non-breaking spaces
+      const marker = `\u00A0\u200F۞ ${arabicNum}\u200F\u00A0`;
 
       text += cleanArabic + marker;
     }

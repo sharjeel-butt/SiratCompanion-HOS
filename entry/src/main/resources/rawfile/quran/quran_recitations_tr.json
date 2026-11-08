@@ -2,201 +2,758 @@
   "recitation_surah_112_morning_evening": {
     "name": "Sabah ve Akşam için İhlâs Suresi",
     "notes": "Diğer iki koruyucu sureyle birlikte sabah ve akşam üçer defa okuyun.",
-    "reference": "Sünen-i Ebû Dâvûd 5082; Câmi‘ et-Tirmizî 3575"
+    "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575",
+    "evidence": [
+      {
+        "collection": "Sunan Abi Dawud",
+        "hadithNumber": "5082",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "3575",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "hasan_sahih"
   },
   "recitation_surah_113_morning_evening": {
     "name": "Sabah ve Akşam için Felak Suresi",
     "notes": "Diğer iki koruyucu sureyle birlikte sabah ve akşam üçer defa okuyun.",
-    "reference": "Sünen-i Ebû Dâvûd 5082; Câmi‘ et-Tirmizî 3575"
+    "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575",
+    "evidence": [
+      {
+        "collection": "Sunan Abi Dawud",
+        "hadithNumber": "5082",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "3575",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "hasan_sahih"
   },
   "recitation_surah_114_morning_evening": {
     "name": "Sabah ve Akşam için Nâs Suresi",
     "notes": "Diğer iki koruyucu sureyle birlikte sabah ve akşam üçer defa okuyun.",
-    "reference": "Sünen-i Ebû Dâvûd 5082; Câmi‘ et-Tirmizî 3575"
+    "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575",
+    "evidence": [
+      {
+        "collection": "Sunan Abi Dawud",
+        "hadithNumber": "5082",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "3575",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "hasan_sahih"
   },
   "recitation_surah_112_bedtime": {
     "name": "Uyumadan Önce İhlâs Suresi",
     "notes": "Elleri birleştirin, üç sureyi okuyup ellere üfleyin ve bedeni mesh edin; bunu üç kez tekrarlayın.",
-    "reference": "Sahih-i Buhârî 5017"
+    "reference": "Sahih al-Bukhari 5017",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5017",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_113_bedtime": {
     "name": "Uyumadan Önce Felak Suresi",
     "notes": "Elleri birleştirin, üç sureyi okuyup ellere üfleyin ve bedeni mesh edin; bunu üç kez tekrarlayın.",
-    "reference": "Sahih-i Buhârî 5017"
+    "reference": "Sahih al-Bukhari 5017",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5017",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_114_bedtime": {
     "name": "Uyumadan Önce Nâs Suresi",
     "notes": "Elleri birleştirin, üç sureyi okuyup ellere üfleyin ve bedeni mesh edin; bunu üç kez tekrarlayın.",
-    "reference": "Sahih-i Buhârî 5017"
+    "reference": "Sahih al-Bukhari 5017",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5017",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_112_illness": {
     "name": "Hastalık ve Rukye için İhlâs Suresi",
     "notes": "Rukye olarak okuyun ve bedene üfleyin.",
-    "reference": "Sahih-i Buhârî 5748"
+    "reference": "Sahih al-Bukhari 5016; Sahih al-Bukhari 5735; Sahih al-Bukhari 5748",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5016",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5735",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5748",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_113_illness": {
     "name": "Hastalık ve Rukye için Felak Suresi",
     "notes": "Rukye olarak okuyun ve bedene üfleyin.",
-    "reference": "Sahih-i Buhârî 5748"
+    "reference": "Sahih al-Bukhari 5016; Sahih al-Bukhari 5735; Sahih al-Bukhari 5748",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5016",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5735",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5748",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_114_illness": {
     "name": "Hastalık ve Rukye için Nâs Suresi",
     "notes": "Rukye olarak okuyun ve bedene üfleyin.",
-    "reference": "Sahih-i Buhârî 5748"
+    "reference": "Sahih al-Bukhari 5016; Sahih al-Bukhari 5735; Sahih al-Bukhari 5748",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5016",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5735",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5748",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ayat_al_kursi_bedtime": {
     "name": "Uyumadan Önce Âyetel Kürsî",
     "notes": "Uyumadan önce âyetin tamamını okuyun.",
-    "reference": "Sahih-i Buhârî 5010"
+    "reference": "Sahih al-Bukhari 2311; Sahih al-Bukhari 5010",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "2311",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5010",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_baqarah_285_286_night": {
     "name": "Gece Bakara Suresinin Son İki Âyeti",
     "notes": "Hadis, bu iki âyetin okuyana gece boyunca yeterli olacağını bildirir.",
-    "reference": "Sahih-i Buhârî 5009; Sahih-i Buhârî 5040"
+    "reference": "Sahih al-Bukhari 5009; Sahih al-Bukhari 5040; Sunan Ibn Majah 1369",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5009",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5040",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan Ibn Majah",
+        "hadithNumber": "1369",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_baqarah_home": {
     "name": "Evde Bakara Suresi",
     "notes": "Kaynak gösterilen hadiste sabit bir günlük tekrar sayısı belirtilmemiştir.",
-    "reference": "Sahih-i Müslim 780; Câmi‘ et-Tirmizî 2877"
+    "reference": "Sahih Muslim 780; Jami at-Tirmidhi 2877",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "780",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "2877",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_kahf_friday": {
     "name": "Cuma Günü Kehf Suresi",
     "notes": "Hasen delile dayanarak eklenmiştir; sahih olarak etiketlenmemiştir.",
-    "reference": "Mişkâtü’l-Mesâbîh 2175; Beyhakî, ed-Deavâtü’l-Kebîr"
+    "reference": "Mishkat al-Masabih 2175",
+    "evidence": [
+      {
+        "collection": "Mishkat al-Masabih",
+        "hadithNumber": "2175",
+        "grade": "hasan",
+        "evidenceType": "prophetic_practice",
+        "note": "Cites Al-Bayhaqi, al-Daawat al-Kabir"
+      }
+    ],
+    "authenticity": "hasan"
   },
   "recitation_kahf_first_ten_dajjal": {
     "name": "Deccâlden Korunmak için Kehf Suresinin İlk On Âyeti",
     "notes": "Rivayette belirtildiği üzere ilk on âyeti ezberleyin veya okuyun.",
-    "reference": "Sahih-i Müslim 809a"
+    "reference": "Sahih Muslim 809a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "809a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_kahf_last_ten_dajjal": {
     "name": "Deccâlden Korunmak için Kehf Suresinin Son On Âyeti",
     "notes": "Rivayetin bir varyantında son on âyet belirtilmiştir.",
-    "reference": "Sahih-i Müslim 809b"
+    "reference": "Sahih Muslim 809b",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "809b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_sajdah_friday_fajr": {
     "name": "Cuma Sabah Namazının Birinci Rekâtında Secde Suresi",
     "notes": "",
-    "reference": "Sahih-i Buhârî 891; Sahih-i Müslim 879a"
+    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a; Sunan an-Nasa’i 1421",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "891",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_insan_friday_fajr": {
     "name": "Cuma Sabah Namazının İkinci Rekâtında İnsan Suresi",
     "notes": "",
-    "reference": "Sahih-i Buhârî 891; Sahih-i Müslim 879a"
+    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a; Sunan an-Nasa’i 1421",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "891",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_jumuah_friday_prayer": {
     "name": "Cuma Namazının Birinci Rekâtında Cuma Suresi",
     "notes": "",
-    "reference": "Sahih-i Müslim 879a; Sünen-i Nesâî 1421"
+    "reference": "Sahih Muslim 879a; Sunan an-Nasa’i 1421",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_munafiqun_friday_prayer": {
     "name": "Cuma Namazının İkinci Rekâtında Münâfikûn Suresi",
     "notes": "",
-    "reference": "Sahih-i Müslim 879a; Sünen-i Nesâî 1421"
+    "reference": "Sahih Muslim 879a; Sunan an-Nasa’i 1421",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ala_eid_prayer": {
     "name": "Bayram Namazının Birinci Rekâtında A‘lâ Suresi",
     "notes": "",
-    "reference": "Sahih-i Müslim 878a"
+    "reference": "Sahih Muslim 878a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ghashiyah_eid_prayer": {
     "name": "Bayram Namazının İkinci Rekâtında Gâşiye Suresi",
     "notes": "",
-    "reference": "Sahih-i Müslim 878a"
+    "reference": "Sahih Muslim 878a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ala_friday_prayer": {
     "name": "Cuma Namazının Birinci Rekâtında A‘lâ Suresi",
     "notes": "",
-    "reference": "Sahih-i Müslim 878a"
+    "reference": "Sahih Muslim 878a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ghashiyah_friday_prayer": {
     "name": "Cuma Namazının İkinci Rekâtında Gâşiye Suresi",
     "notes": "",
-    "reference": "Sahih-i Müslim 878a"
+    "reference": "Sahih Muslim 878a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_kafirun_fajr_sunnah": {
     "name": "Sabah Namazı Sünnetinin Birinci Rekâtında Kâfirûn Suresi",
     "notes": "",
-    "reference": "Sahih-i Müslim 726; Riyâzü’s-Sâlihîn 1108"
+    "reference": "Sahih Muslim 726",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "726",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ikhlas_fajr_sunnah": {
     "name": "Sabah Namazı Sünnetinin İkinci Rekâtında İhlâs Suresi",
     "notes": "",
-    "reference": "Sahih-i Müslim 726; Riyâzü’s-Sâlihîn 1108"
+    "reference": "Sahih Muslim 726",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "726",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_baqarah_136_fajr_sunnah": {
     "name": "Sabah Namazı Sünnetinin Birinci Rekâtında Bakara 2:136",
     "notes": "",
-    "reference": "Sahih-i Müslim 727; Riyâzü’s-Sâlihîn 1107"
+    "reference": "Sahih Muslim 727",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "727",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_al_imran_52_or_64_fajr_sunnah": {
     "name": "Sabah Namazı Sünnetinin İkinci Rekâtında Âl-i İmrân 3:52 veya 3:64",
     "notes": "Rivayetlerde 3:52, başka bir lafızda ise 3:64 geçer. Bu kayıt bütün aralığı değil, alternatif âyetleri gösterir.",
-    "reference": "Sahih-i Müslim 727; Riyâzü’s-Sâlihîn 1107"
+    "reference": "Sahih Muslim 727",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "727",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih",
+    "verseSelections": [
+      {
+        "surahNumber": 3,
+        "startVerse": 52,
+        "endVerse": 52
+      },
+      {
+        "surahNumber": 3,
+        "startVerse": 64,
+        "endVerse": 64
+      }
+    ]
   },
   "recitation_mulk_general_virtue": {
     "name": "Mülk Suresi: Şefaat Fazileti",
     "notes": "Hasen rivayet şefaat ve bağışlanma faziletini bildirir; belirli bir gün veya uyku öncesi programı belirlemez.",
-    "reference": "Câmi‘ et-Tirmizî 2891"
+    "reference": "Jami at-Tirmidhi 2891",
+    "evidence": [
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "2891",
+        "grade": "hasan",
+        "evidenceType": "general_virtue"
+      }
+    ],
+    "authenticity": "hasan"
   },
   "recitation_fatihah_ruqyah": {
     "name": "Rukye için Fâtiha Suresi",
     "notes": "Fâtiha’yı rukye olarak okuyun. Rivayetlerde zehirli ısırık veya sokma için kullanıldığı anlatılır; sabit bir tekrar sayısı belirtilmez.",
-    "reference": "Sahih-i Buhârî 5736; Sahih-i Buhârî 5749"
+    "reference": "Sahih al-Bukhari 5736; Sahih al-Bukhari 5737; Sahih al-Bukhari 5749",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5736",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5737",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5749",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_qaf_fajr": {
     "name": "Sabah Namazında Kâf Suresi",
     "notes": "Farz sabah namazında sabit olan bir kıraattir. Rivayet günlük sabit bir program belirlemez.",
-    "reference": "Sahih-i Müslim 458a; Sahih-i Müslim 458b"
+    "reference": "Sahih Muslim 458a; Sahih Muslim 458b; Sunan an-Nasa’i 949",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "458a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "458b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "949",
+        "grade": "hasan",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_qaf_friday_sermon": {
     "name": "Cuma Hutbesinde Kâf Suresi",
     "notes": "Bu, hutbe bağlamındaki bir uygulamadır; kişisel Cuma okuma programı değildir.",
-    "reference": "Sahih-i Müslim 872a; Sahih-i Müslim 872b"
+    "reference": "Sahih Muslim 872a; Sahih Muslim 872b; Sunan an-Nasa’i 1411",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "872a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "872b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1411",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_qaf_eid_prayer": {
     "name": "Bayram Namazının Birinci Rekâtında Kâf Suresi",
     "notes": "Bayram namazı için sabit olan alternatif bir sure çiftidir.",
-    "reference": "Sahih-i Müslim 891a; Sahih-i Müslim 891b"
+    "reference": "Sahih Muslim 891a; Sahih Muslim 891b",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_qamar_eid_prayer": {
     "name": "Bayram Namazının İkinci Rekâtında Kamer Suresi",
     "notes": "Bayram namazı için sabit olan alternatif bir sure çiftidir.",
-    "reference": "Sahih-i Müslim 891a; Sahih-i Müslim 891b"
+    "reference": "Sahih Muslim 891a; Sahih Muslim 891b",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_tur_maghrib": {
     "name": "Akşam Namazında Tûr Suresi",
     "notes": "Peygamberimizin bu sureyi akşam namazında okuduğu sahih bir örnektir; her akşam namazı için zorunlu olarak sunulmaz.",
-    "reference": "Sahih-i Buhârî 765; Sahih-i Buhârî 4854"
+    "reference": "Sahih al-Bukhari 765; Sahih al-Bukhari 4854",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "765",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "4854",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_mursalat_maghrib": {
     "name": "Akşam Namazında Mürselât Suresi",
     "notes": "Bu surenin akşam namazında okunduğuna dair sahih bir örnektir; sabit bir tekrar sıklığı belirtilmemiştir.",
-    "reference": "Sahih-i Buhârî 763"
+    "reference": "Sahih al-Bukhari 763",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "763",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_dukhan_maghrib": {
     "name": "Akşam Namazında Duhân Suresi",
     "notes": "Bu surenin akşam namazında okunduğuna dair sahih bir örnektir. Cuma gecesi okunmasına ilişkin zayıf rivayet kullanılmamıştır.",
-    "reference": "Sünen-i Nesâî 988"
+    "reference": "Sunan an-Nasa’i 988",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "988",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_fatihah_every_rakah": {
     "name": "Her Rekâtta Fâtiha Suresi",
     "notes": "Fâtiha her rekâtta okunur. Bu, namazın temel gereğidir; isteğe bağlı bir hatırlatma programı değildir.",
-    "reference": "Sahih-i Müslim 396c"
+    "reference": "Sahih Muslim 396c",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "396c",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ala_witr": {
     "name": "Vitir Namazının Birinci Rekâtında A‘lâ Suresi",
     "notes": "Bu rivayet, üç rekâtlık vitir namazındaki üç sure sıralamasını açıklar.",
-    "reference": "Sünen-i Nesâî 1703"
+    "reference": "Sunan an-Nasa’i 1703",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1703",
+        "grade": "sahih",
+        "evidenceType": "companion_practice",
+        "grader": "Darussalam",
+        "note": "Practice of Ibn Abbas"
+      }
+    ],
+    "authenticity": "sahih",
+    "evidenceType": "companion_practice"
   },
   "recitation_kafirun_witr": {
     "name": "Vitir Namazının İkinci Rekâtında Kâfirûn Suresi",
     "notes": "Bu rivayet, üç rekâtlık vitir namazındaki üç sure sıralamasını açıklar.",
-    "reference": "Sünen-i Nesâî 1703"
+    "reference": "Sunan an-Nasa’i 1703",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1703",
+        "grade": "sahih",
+        "evidenceType": "companion_practice",
+        "grader": "Darussalam",
+        "note": "Practice of Ibn Abbas"
+      }
+    ],
+    "authenticity": "sahih",
+    "evidenceType": "companion_practice"
   },
   "recitation_ikhlas_witr": {
     "name": "Vitir Namazının Üçüncü Rekâtında İhlâs Suresi",
     "notes": "Bu rivayet, üç rekâtlık vitir namazındaki üç sure sıralamasını açıklar.",
-    "reference": "Sünen-i Nesâî 1703"
+    "reference": "Sunan an-Nasa’i 1703",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1703",
+        "grade": "sahih",
+        "evidenceType": "companion_practice",
+        "grader": "Darussalam",
+        "note": "Practice of Ibn Abbas"
+      }
+    ],
+    "authenticity": "sahih",
+    "evidenceType": "companion_practice"
   }
 }

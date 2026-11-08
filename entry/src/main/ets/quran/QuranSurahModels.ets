@@ -16,21 +16,37 @@ export interface CompleteSurah {
   isFavorite: boolean;
 }
 
-// --- Recitation Models ---
+export interface EvidenceItem {
+  collection: string;
+  hadithNumber: string;
+  grade: string;
+  evidenceType: string;
+  grader?: string;
+  note?: string;
+}
+
+export interface VerseSelection {
+  surahNumber: number;
+  startVerse: number;
+  endVerse: number;
+}
 
 export interface RawRecitationTask {
   id: string;
   contentType: 'surah' | 'verse_range';
   surahNumber: number;
-  startVerse: number;
+  startVerse: number | null;
   endVerse: number | null;
   occasion: string;
-  recitationContext: 'personal' | 'household' | 'prayer' | 'sermon';
+  recitationContext: string;
   repeatCount: number;
   authenticity: string;
   reference: string;
+  evidence?: EvidenceItem[];
   groupId?: string;
   rakAh?: number;
+  verseSelections?: VerseSelection[];
+  notes?: string;
 }
 
 export interface LocalizedRecitationInfo {
@@ -43,15 +59,17 @@ export interface RecitationTask {
   id: string;
   contentType: 'surah' | 'verse_range';
   surahNumber: number;
-  startVerse: number;
+  startVerse: number | null;
   endVerse: number | null;
   occasion: string;
   recitationContext: string;
   repeatCount: number;
   authenticity: string;
   reference: string;
+  evidence?: EvidenceItem[];
   groupId?: string;
   rakAh?: number;
+  verseSelections?: VerseSelection[];
 
   // Merged Localization
   name: string;
