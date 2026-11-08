@@ -74,7 +74,7 @@
       },
       {
         "name": "PrayerIntentExecutor",
-        "srcEntry": "./ets/entryformability/PrayerIntentExecutor.ets",
+        "srcEntry": "./ets/entryformability/SiratIntentExecutor.ets",
         "type": "insightIntentUI",
         "exported": true,
         "metadata": [
