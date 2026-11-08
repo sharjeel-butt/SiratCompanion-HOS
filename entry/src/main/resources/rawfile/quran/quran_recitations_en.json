@@ -2,181 +2,758 @@
   "recitation_surah_112_morning_evening": {
     "name": "Al-Ikhlas for Morning and Evening",
     "notes": "Recite with the other two protection surahs three times at dawn and dusk.",
-    "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575"
+    "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575",
+    "evidence": [
+      {
+        "collection": "Sunan Abi Dawud",
+        "hadithNumber": "5082",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "3575",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "hasan_sahih"
   },
   "recitation_surah_113_morning_evening": {
     "name": "Al-Falaq for Morning and Evening",
     "notes": "Recite with the other two protection surahs three times at dawn and dusk.",
-    "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575"
+    "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575",
+    "evidence": [
+      {
+        "collection": "Sunan Abi Dawud",
+        "hadithNumber": "5082",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "3575",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "hasan_sahih"
   },
   "recitation_surah_114_morning_evening": {
     "name": "An-Nas for Morning and Evening",
     "notes": "Recite with the other two protection surahs three times at dawn and dusk.",
-    "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575"
+    "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575",
+    "evidence": [
+      {
+        "collection": "Sunan Abi Dawud",
+        "hadithNumber": "5082",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "3575",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "hasan_sahih"
   },
   "recitation_surah_112_bedtime": {
     "name": "Al-Ikhlas Before Sleep",
     "notes": "Cup the hands, recite the three surahs, blow into the hands, and wipe the body; repeat three times.",
-    "reference": "Sahih al-Bukhari 5017"
+    "reference": "Sahih al-Bukhari 5017",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5017",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_113_bedtime": {
     "name": "Al-Falaq Before Sleep",
     "notes": "Cup the hands, recite the three surahs, blow into the hands, and wipe the body; repeat three times.",
-    "reference": "Sahih al-Bukhari 5017"
+    "reference": "Sahih al-Bukhari 5017",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5017",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_114_bedtime": {
     "name": "An-Nas Before Sleep",
     "notes": "Cup the hands, recite the three surahs, blow into the hands, and wipe the body; repeat three times.",
-    "reference": "Sahih al-Bukhari 5017"
+    "reference": "Sahih al-Bukhari 5017",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5017",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_112_illness": {
     "name": "Al-Ikhlas for Illness and Ruqyah",
     "notes": "Recite as ruqyah and blow over the body.",
-    "reference": "Sahih al-Bukhari 5748"
+    "reference": "Sahih al-Bukhari 5016; Sahih al-Bukhari 5735; Sahih al-Bukhari 5748",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5016",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5735",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5748",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_113_illness": {
     "name": "Al-Falaq for Illness and Ruqyah",
     "notes": "Recite as ruqyah and blow over the body.",
-    "reference": "Sahih al-Bukhari 5748"
+    "reference": "Sahih al-Bukhari 5016; Sahih al-Bukhari 5735; Sahih al-Bukhari 5748",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5016",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5735",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5748",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_114_illness": {
     "name": "An-Nas for Illness and Ruqyah",
     "notes": "Recite as ruqyah and blow over the body.",
-    "reference": "Sahih al-Bukhari 5748"
+    "reference": "Sahih al-Bukhari 5016; Sahih al-Bukhari 5735; Sahih al-Bukhari 5748",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5016",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5735",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5748",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ayat_al_kursi_bedtime": {
     "name": "Ayat al-Kursi Before Sleep",
     "notes": "Recite the full verse before sleep.",
-    "reference": "Sahih al-Bukhari 5010"
+    "reference": "Sahih al-Bukhari 2311; Sahih al-Bukhari 5010",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "2311",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5010",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_baqarah_285_286_night": {
     "name": "Last Two Verses of Al-Baqarah at Night",
     "notes": "The hadith states that they suffice the reciter for the night.",
-    "reference": "Sahih al-Bukhari 5009; Sahih al-Bukhari 5040"
+    "reference": "Sahih al-Bukhari 5009; Sahih al-Bukhari 5040; Sunan Ibn Majah 1369",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5009",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5040",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan Ibn Majah",
+        "hadithNumber": "1369",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_baqarah_home": {
     "name": "Surah Al-Baqarah in the Home",
     "notes": "No fixed daily frequency is stated in the cited hadith.",
-    "reference": "Sahih Muslim 780; Jami at-Tirmidhi 2877"
+    "reference": "Sahih Muslim 780; Jami at-Tirmidhi 2877",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "780",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "2877",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_kahf_friday": {
     "name": "Surah Al-Kahf on Friday",
     "notes": "Included as Hasan evidence, not labelled Sahih.",
-    "reference": "Mishkat al-Masabih 2175; Al-Bayhaqi, al-Daawat al-Kabir"
+    "reference": "Mishkat al-Masabih 2175",
+    "evidence": [
+      {
+        "collection": "Mishkat al-Masabih",
+        "hadithNumber": "2175",
+        "grade": "hasan",
+        "evidenceType": "prophetic_practice",
+        "note": "Cites Al-Bayhaqi, al-Daawat al-Kabir"
+      }
+    ],
+    "authenticity": "hasan"
   },
   "recitation_kahf_first_ten_dajjal": {
     "name": "First Ten Verses of Al-Kahf for Protection from the Dajjal",
     "notes": "Memorise or recite the first ten verses as stated in the narration.",
-    "reference": "Sahih Muslim 809a"
+    "reference": "Sahih Muslim 809a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "809a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_kahf_last_ten_dajjal": {
     "name": "Last Ten Verses of Al-Kahf for Protection from the Dajjal",
     "notes": "A variant narration specifies the last ten verses.",
-    "reference": "Sahih Muslim 809b"
+    "reference": "Sahih Muslim 809b",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "809b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_sajdah_friday_fajr": {
     "name": "As-Sajdah in Friday Fajr, First Rak‘ah",
     "notes": "",
-    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a"
+    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a; Sunan an-Nasa’i 1421",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "891",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_insan_friday_fajr": {
     "name": "Al-Insan in Friday Fajr, Second Rak‘ah",
     "notes": "",
-    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a"
+    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a; Sunan an-Nasa’i 1421",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "891",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_jumuah_friday_prayer": {
     "name": "Al-Jumu‘ah in Friday Prayer, First Rak‘ah",
     "notes": "",
-    "reference": "Sahih Muslim 879a; Sunan an-Nasa’i 1421"
+    "reference": "Sahih Muslim 879a; Sunan an-Nasa’i 1421",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_munafiqun_friday_prayer": {
     "name": "Al-Munafiqun in Friday Prayer, Second Rak‘ah",
     "notes": "",
-    "reference": "Sahih Muslim 879a; Sunan an-Nasa’i 1421"
+    "reference": "Sahih Muslim 879a; Sunan an-Nasa’i 1421",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ala_eid_prayer": {
     "name": "Al-A‘la in the First Rak‘ah",
     "notes": "",
-    "reference": "Sahih Muslim 878a"
+    "reference": "Sahih Muslim 878a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ghashiyah_eid_prayer": {
     "name": "Al-Ghashiyah in the Second Rak‘ah",
     "notes": "",
-    "reference": "Sahih Muslim 878a"
+    "reference": "Sahih Muslim 878a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ala_friday_prayer": {
     "name": "Al-A‘la in the First Rak‘ah",
     "notes": "",
-    "reference": "Sahih Muslim 878a"
+    "reference": "Sahih Muslim 878a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ghashiyah_friday_prayer": {
     "name": "Al-Ghashiyah in the Second Rak‘ah",
     "notes": "",
-    "reference": "Sahih Muslim 878a"
+    "reference": "Sahih Muslim 878a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_kafirun_fajr_sunnah": {
     "name": "Al-Kafirun in the First Sunnah Rak‘ah Before Fajr",
     "notes": "",
-    "reference": "Sahih Muslim 726; Riyad as-Salihin 1108"
+    "reference": "Sahih Muslim 726",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "726",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ikhlas_fajr_sunnah": {
     "name": "Al-Ikhlas in the Second Sunnah Rak‘ah Before Fajr",
     "notes": "",
-    "reference": "Sahih Muslim 726; Riyad as-Salihin 1108"
+    "reference": "Sahih Muslim 726",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "726",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_baqarah_136_fajr_sunnah": {
     "name": "Al-Baqarah 2:136 in the First Sunnah Rak‘ah Before Fajr",
     "notes": "",
-    "reference": "Sahih Muslim 727; Riyad as-Salihin 1107"
+    "reference": "Sahih Muslim 727",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "727",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_al_imran_52_or_64_fajr_sunnah": {
     "name": "Aal ‘Imran 3:52 or 3:64 in the Second Sunnah Rak‘ah Before Fajr",
     "notes": "The narrations mention 3:52 and, in another wording, 3:64. This record points to alternatives, not the entire range.",
-    "reference": "Sahih Muslim 727; Riyad as-Salihin 1107"
+    "reference": "Sahih Muslim 727",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "727",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih",
+    "verseSelections": [
+      {
+        "surahNumber": 3,
+        "startVerse": 52,
+        "endVerse": 52
+      },
+      {
+        "surahNumber": 3,
+        "startVerse": 64,
+        "endVerse": 64
+      }
+    ]
   },
   "recitation_mulk_general_virtue": {
     "name": "Surah Al-Mulk: General Virtue of Intercession",
     "notes": "The Hasan report establishes intercession and forgiveness, but does not prescribe a specific day or bedtime schedule.",
-    "reference": "Jami at-Tirmidhi 2891"
+    "reference": "Jami at-Tirmidhi 2891",
+    "evidence": [
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "2891",
+        "grade": "hasan",
+        "evidenceType": "general_virtue"
+      }
+    ],
+    "authenticity": "hasan"
   },
   "recitation_fatihah_ruqyah": {
     "name": "Al-Fatihah for Ruqyah",
     "notes": "Recite Al-Fatihah as ruqyah. The reports describe its use for a poisonous bite or sting; they do not prescribe a fixed repetition count.",
-    "reference": "Sahih al-Bukhari 5736; Sahih al-Bukhari 5749"
+    "reference": "Sahih al-Bukhari 5736; Sahih al-Bukhari 5737; Sahih al-Bukhari 5749",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5736",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5737",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5749",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_qaf_fajr": {
     "name": "Surah Qaf in Fajr Prayer",
     "notes": "An established recitation in the obligatory Fajr prayer. The report does not assign a fixed daily schedule.",
-    "reference": "Sahih Muslim 458a; Sahih Muslim 458b"
+    "reference": "Sahih Muslim 458a; Sahih Muslim 458b; Sunan an-Nasa’i 949",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "458a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "458b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "949",
+        "grade": "hasan",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_qaf_friday_sermon": {
     "name": "Surah Qaf in the Friday Sermon",
     "notes": "This is a sermon-context practice, not a personal Friday recitation schedule.",
-    "reference": "Sahih Muslim 872a; Sahih Muslim 872b"
+    "reference": "Sahih Muslim 872a; Sahih Muslim 872b; Sunan an-Nasa’i 1411",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "872a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "872b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1411",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_qaf_eid_prayer": {
     "name": "Surah Qaf in the First Eid Rak‘ah",
     "notes": "An established alternative pair for the Eid prayer.",
-    "reference": "Sahih Muslim 891a; Sahih Muslim 891b"
+    "reference": "Sahih Muslim 891a; Sahih Muslim 891b",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_qamar_eid_prayer": {
     "name": "Surah Al-Qamar in the Second Eid Rak‘ah",
     "notes": "An established alternative pair for the Eid prayer.",
-    "reference": "Sahih Muslim 891a; Sahih Muslim 891b"
+    "reference": "Sahih Muslim 891a; Sahih Muslim 891b",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_tur_maghrib": {
     "name": "Surah At-Tur in Maghrib Prayer",
     "notes": "An authenticated instance of the Prophet reciting this surah in Maghrib; it is not presented as mandatory for every Maghrib.",
-    "reference": "Sahih al-Bukhari 765; Sahih al-Bukhari 4854"
+    "reference": "Sahih al-Bukhari 765; Sahih al-Bukhari 4854",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "765",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "4854",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_mursalat_maghrib": {
     "name": "Surah Al-Mursalat in Maghrib Prayer",
     "notes": "An authenticated instance of this surah being recited in Maghrib; no fixed recurring frequency is stated.",
-    "reference": "Sahih al-Bukhari 763"
+    "reference": "Sahih al-Bukhari 763",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "763",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_dukhan_maghrib": {
     "name": "Surah Ad-Dukhan in Maghrib Prayer",
     "notes": "An authenticated instance of this surah being recited in Maghrib. The weak report about Friday-night recitation is not used.",
-    "reference": "Sunan an-Nasa’i 988"
+    "reference": "Sunan an-Nasa’i 988",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "988",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
+  },
+  "recitation_fatihah_every_rakah": {
+    "name": "Al-Fatihah in Every Rak‘ah",
+    "notes": "Al-Fatihah is recited in every rak‘ah. This is a core prayer requirement, not an optional reminder schedule.",
+    "reference": "Sahih Muslim 396c",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "396c",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
+  },
+  "recitation_ala_witr": {
+    "name": "Al-A‘la in the First Witr Rak‘ah",
+    "notes": "This report describes the three-surah sequence practiced by Ibn Abbas for a three-rak‘ah Witr.",
+    "reference": "Sunan an-Nasa’i 1703",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1703",
+        "grade": "sahih",
+        "evidenceType": "companion_practice",
+        "grader": "Darussalam",
+        "note": "Practice of Ibn Abbas"
+      }
+    ],
+    "authenticity": "sahih",
+    "evidenceType": "companion_practice"
+  },
+  "recitation_kafirun_witr": {
+    "name": "Al-Kafirun in the Second Witr Rak‘ah",
+    "notes": "This report describes the three-surah sequence practiced by Ibn Abbas for a three-rak‘ah Witr.",
+    "reference": "Sunan an-Nasa’i 1703",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1703",
+        "grade": "sahih",
+        "evidenceType": "companion_practice",
+        "grader": "Darussalam",
+        "note": "Practice of Ibn Abbas"
+      }
+    ],
+    "authenticity": "sahih",
+    "evidenceType": "companion_practice"
+  },
+  "recitation_ikhlas_witr": {
+    "name": "Al-Ikhlas in the Third Witr Rak‘ah",
+    "notes": "This report describes the three-surah sequence practiced by Ibn Abbas for a three-rak‘ah Witr.",
+    "reference": "Sunan an-Nasa’i 1703",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1703",
+        "grade": "sahih",
+        "evidenceType": "companion_practice",
+        "grader": "Darussalam",
+        "note": "Practice of Ibn Abbas"
+      }
+    ],
+    "authenticity": "sahih",
+    "evidenceType": "companion_practice"
   }
 }

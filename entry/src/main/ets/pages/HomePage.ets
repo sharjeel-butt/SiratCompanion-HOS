@@ -1,6 +1,6 @@
 // entry/src/main/ets/pages/HomePage.ets
 
-import { mediaquery, router } from '@kit.ArkUI';
+import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { QuranService } from '../quran/QuranService';
 import { RecitationTask } from '../quran/QuranSurahModels';
 import { common } from '@kit.AbilityKit';
@@ -32,6 +32,7 @@ import {
   STORAGE_KEY_RAMADAN_STATE_VERSION,
   STORAGE_KEY_SETTINGS_INITIAL_CATEGORY,
   STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
+  STORAGE_KEY_TAB_REFRESH_TICK,
   STORAGE_KEY_TASBIH_STATE_VERSION,
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
@@ -179,6 +180,10 @@ export struct HomePage {
   @StorageLink(STORAGE_KEY_RAMADAN_STATE_VERSION)
   @Watch('onRamadanStateVersionChanged')
   ramadanStateVersion: number = 0;
+  @StorageLink(STORAGE_KEY_TAB_REFRESH_TICK)
+  @Watch('onTabRefreshed')
+  tabRefreshTick: number = 0;
+  private minuteTimerId: number = -1;
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State currentLocation: string = 'Loading...';
   @State isLoadingLocation: boolean = true;
@@ -301,6 +306,7 @@ export struct HomePage {
     this.refreshLocationSilently();
     EventPerspectiveNotifier.subscribe(this.eventPerspectiveListener);
     await this.refreshQadaStatus();
+    this.startMinuteTimer();
   }
 
   aboutToDisappear(): void {
@@ -309,6 +315,7 @@ export struct HomePage {
     this.systemDarkListener = null;
     this.stopCountdownTimer();
     EventPerspectiveNotifier.unsubscribe(this.eventPerspectiveListener);
+    this.stopMinuteTimer();
   }
 
   async onPageShow(): Promise<void> {
@@ -324,6 +331,32 @@ export struct HomePage {
 
   onPageHide(): void {
     this.stopCountdownTimer();
+  }
+
+  private startMinuteTimer(): void {
+    if (this.minuteTimerId !== -1) {
+      return;
+    }
+    this.minuteTimerId = setInterval(() => {
+      this.refreshHeader();
+      this.checkPendingPrayers();
+      if (this.ramadanInfo && this.ramadanInfo.isRamadanNow) {
+        this.refreshFastingWindow();
+      }
+    }, 60000);
+  }
+
+  private stopMinuteTimer(): void {
+    if (this.minuteTimerId !== -1) {
+      clearInterval(this.minuteTimerId);
+      this.minuteTimerId = -1;
+    }
+  }
+
+  private onTabRefreshed(): void {
+    // Refresh the header and check if a new prayer time has passed
+    this.refreshHeader();
+    this.checkPendingPrayers();
   }
 
   build() {
@@ -553,6 +586,22 @@ export struct HomePage {
                         bottom: 1
                       })
                       .borderRadius(4)
+                      .onClick(() => {
+                        let evidenceText = task.reference;
+                        if (task.evidence && task.evidence.length > 0) {
+                          // Explicit mapping (ArkTS safe)
+                          const parts: string[] = [];
+                          for (const e of task.evidence) {
+                            parts.push(`${e.collection} ${e.hadithNumber} (${e.grade})`);
+                          }
+                          evidenceText = parts.join('\n');
+                        }
+                        promptAction.showDialog({
+                          title: 'Hadith Evidence',
+                          message: evidenceText,
+                          buttons: [{ text: 'OK', color: this.colors.accentGold }]
+                        });
+                      })
                   }
                 }
                 .margin({ top: 6 })
@@ -580,13 +629,23 @@ export struct HomePage {
             .borderRadius(12)
             .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
             .onClick(() => {
+              // Determine the correct verse range
+              let startV = task.startVerse;
+              let endV = task.endVerse;
+
+              // If startVerse is null, check for alternative selections
+              if (startV === null && task.verseSelections && task.verseSelections.length > 0) {
+                startV = task.verseSelections[0].startVerse;
+                endV = task.verseSelections[0].endVerse;
+              }
+
               NavHelper.prepareForward();
               router.pushUrl({
                 url: 'pages/SurahDetailsPage',
                 params: {
                   surahId: task.surahNumber,
-                  startVerse: task.startVerse,
-                  endVerse: task.endVerse,
+                  startVerse: startV,
+                  endVerse: endV,
                   taskId: task.id
                 }
               }).catch((e: Error) => console.error('Navigation failed', e));

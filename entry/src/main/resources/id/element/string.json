@@ -3030,6 +3030,22 @@
     {
       "name": "juz_label",
       "value": "Juz"
+    },
+    {
+      "name": "occasion_fajr_prayer",
+      "value": "Salat Subuh"
+    },
+    {
+      "name": "hasan_sahih",
+      "value": "Hasan Sahih"
+    },
+    {
+      "name": "occasion_every_prayer_rakah",
+      "value": "Setiap Rakaat Salat"
+    },
+    {
+      "name": "occasion_witr_prayer",
+      "value": "Salat Witir"
     }
   ]
 }

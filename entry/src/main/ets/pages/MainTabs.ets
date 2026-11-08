@@ -13,6 +13,7 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
   STORAGE_KEY_NAV_TARGET_TAB,
+  STORAGE_KEY_TAB_REFRESH_TICK,
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
 } from '../core/StorageKeys';
@@ -174,6 +175,8 @@ struct MainTabs {
         .scrollable(false)
         .onChange((index: number) => {
           this.currentIndex = index;
+          const prev = AppStorage.get<number>(STORAGE_KEY_TAB_REFRESH_TICK) ?? 0;
+          AppStorage.setOrCreate(STORAGE_KEY_TAB_REFRESH_TICK, prev + 1);
         })
         .width('100%')
         .height('100%')

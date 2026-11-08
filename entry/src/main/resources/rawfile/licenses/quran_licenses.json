@@ -1,16 +1,16 @@
 {
-  "datasetVersion": "2025-11",
+  "datasetVersion": "2025-QUL-v1",
   "sections": [
     {
       "id": "dataset",
       "items": [
         {
-          "name": "Quran JSON Dataset",
-          "source": "Risan Bagja Pradana",
-          "sourceUrl": "https://quran-json.risanb.com",
-          "license": "CC BY-SA 4.0",
-          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-          "attribution": "Data compiled and distributed by quran-json.risanb.com"
+          "name": "Quranic Universal Library (QUL)",
+          "source": "Tarteel",
+          "sourceUrl": "https://qul.tarteel.ai",
+          "license": "Open Source / Various Data Licenses",
+          "licenseUrl": "https://github.com/TarteelAI/quranic-universal-library",
+          "attribution": "Curated and distributed by QUL (Tarteel). Data sourced from Tanzil, KFGQPC, and QuranEnc."
         }
       ]
     },
@@ -18,44 +18,11 @@
       "id": "scripts",
       "items": [
         {
-          "name": "Uthmani / Uthmani-Min / Simple / Simple-Min / Simple-Plain / Simple-Clean",
-          "source": "Tanzil.net",
-          "sourceUrl": "https://tanzil.net",
-          "license": "CC BY 3.0",
-          "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
-          "attribution": "Verbatim reproduction only. Notice embedded in every chapter file."
-        },
-        {
-          "name": "KFGQPC Hafs / Hafs-Nastaliq / Warsh / Qalun / Duri / Shubah / Susi",
-          "source": "Quranpedia.net (KFGQPC editions)",
-          "sourceUrl": "https://quranpedia.net",
-          "license": "Republish with credit and dump version",
-          "licenseUrl": "",
-          "attribution": "King Fahd Glorious Quran Printing Complex editions, distributed via Quranpedia.net."
-        },
-        {
-          "name": "IndoPak (DigitalKhatt)",
-          "source": "DigitalKhatt",
-          "sourceUrl": "https://digitalkhatt.org",
-          "license": "MIT",
-          "licenseUrl": "https://opensource.org/licenses/MIT",
-          "attribution": "IndoPak script edition."
-        },
-        {
-          "name": "Kemenag (Mushaf Standar Indonesia)",
-          "source": "Qur'an Kemenag",
-          "sourceUrl": "https://quran.kemenag.go.id",
-          "license": "No copyright on mushaf text (PMA 44/2016, Pasal 8)",
-          "licenseUrl": "",
-          "attribution": "Indonesian Ministry of Religious Affairs."
-        },
-        {
-          "name": "QPC-Hafs",
-          "source": "Quranpedia.net (KFGQPC)",
-          "sourceUrl": "https://quranpedia.net",
-          "license": "Republish with credit and dump version",
-          "licenseUrl": "",
-          "attribution": "King Fahd Glorious Quran Printing Complex, via Quranpedia.net."
+          "name": "QPC Hafs (Uthmani / IndoPak)",
+          "source": "King Fahd Glorious Quran Printing Complex (KFGQPC)",
+          "sourceUrl": "https://fonts.qurancomplex.gov.sa",
+          "license": "Free for distribution",
+          "attribution": "Distributed via QUL."
         }
       ]
     },
@@ -68,47 +35,7 @@
           "sourceUrl": "https://quranenc.com",
           "license": "QuranEnc 7-condition republication",
           "licenseUrl": "https://quranenc.com/en/home/api",
-          "attribution": "English translation by Saheeh International, distributed via QuranEnc.com. Version 1.0.19."
-        },
-        {
-          "name": "Junagarhi (Urdu)",
-          "source": "QuranEnc.com",
-          "sourceUrl": "https://quranenc.com",
-          "license": "QuranEnc 7-condition republication",
-          "licenseUrl": "https://quranenc.com/en/home/api",
-          "attribution": "Urdu translation by Muhammad Junagarhi, distributed via QuranEnc.com."
-        },
-        {
-          "name": "Sabiq (Indonesian)",
-          "source": "QuranEnc.com",
-          "sourceUrl": "https://quranenc.com",
-          "license": "QuranEnc 7-condition republication",
-          "licenseUrl": "https://quranenc.com/en/home/api",
-          "attribution": "Indonesian translation distributed via QuranEnc.com."
-        },
-        {
-          "name": "Rowwad (Turkish)",
-          "source": "QuranEnc.com",
-          "sourceUrl": "https://quranenc.com",
-          "license": "QuranEnc 7-condition republication",
-          "licenseUrl": "https://quranenc.com/en/home/api",
-          "attribution": "Turkish translation by Rowwad Translation Center, via QuranEnc.com. Version 1.0.19."
-        },
-        {
-          "name": "Zakaria (Bengali)",
-          "source": "QuranEnc.com",
-          "sourceUrl": "https://quranenc.com",
-          "license": "QuranEnc 7-condition republication",
-          "licenseUrl": "https://quranenc.com/en/home/api",
-          "attribution": "Bengali translation distributed via QuranEnc.com."
-        },
-        {
-          "name": "Suliman (Chinese)",
-          "source": "QuranEnc.com",
-          "sourceUrl": "https://quranenc.com",
-          "license": "QuranEnc 7-condition republication",
-          "licenseUrl": "https://quranenc.com/en/home/api",
-          "attribution": "Chinese translation distributed via QuranEnc.com."
+          "attribution": "Distributed via QUL."
         }
       ]
     }

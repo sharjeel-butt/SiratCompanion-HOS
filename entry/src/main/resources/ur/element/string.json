@@ -3030,6 +3030,22 @@
     {
       "name": "juz_label",
       "value": "جز"
+    },
+    {
+      "name": "occasion_fajr_prayer",
+      "value": "فجر کی نماز"
+    },
+    {
+      "name": "hasan_sahih",
+      "value": "حسن صحیح"
+    },
+    {
+      "name": "occasion_every_prayer_rakah",
+      "value": "نماز کی ہر رکعت"
+    },
+    {
+      "name": "occasion_witr_prayer",
+      "value": "نمازِ وتر"
     }
   ]
 }

@@ -9,6 +9,20 @@
     "recitationContext": "personal",
     "repeatCount": 3,
     "authenticity": "hasan_sahih",
+    "evidence": [
+      {
+        "collection": "Sunan Abi Dawud",
+        "hadithNumber": "5082",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "3575",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
     "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575",
     "groupId": "three_quls_morning_evening"
   },
@@ -22,6 +36,20 @@
     "recitationContext": "personal",
     "repeatCount": 3,
     "authenticity": "hasan_sahih",
+    "evidence": [
+      {
+        "collection": "Sunan Abi Dawud",
+        "hadithNumber": "5082",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "3575",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
     "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575",
     "groupId": "three_quls_morning_evening"
   },
@@ -35,6 +63,20 @@
     "recitationContext": "personal",
     "repeatCount": 3,
     "authenticity": "hasan_sahih",
+    "evidence": [
+      {
+        "collection": "Sunan Abi Dawud",
+        "hadithNumber": "5082",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "3575",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
     "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575",
     "groupId": "three_quls_morning_evening"
   },
@@ -48,6 +90,14 @@
     "recitationContext": "personal",
     "repeatCount": 3,
     "authenticity": "sahih",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5017",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
     "reference": "Sahih al-Bukhari 5017",
     "groupId": "three_quls_bedtime"
   },
@@ -61,6 +111,14 @@
     "recitationContext": "personal",
     "repeatCount": 3,
     "authenticity": "sahih",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5017",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
     "reference": "Sahih al-Bukhari 5017",
     "groupId": "three_quls_bedtime"
   },
@@ -74,6 +132,14 @@
     "recitationContext": "personal",
     "repeatCount": 3,
     "authenticity": "sahih",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5017",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
     "reference": "Sahih al-Bukhari 5017",
     "groupId": "three_quls_bedtime"
   },
@@ -87,7 +153,27 @@
     "recitationContext": "personal",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sahih al-Bukhari 5748",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5016",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5735",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5748",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "reference": "Sahih al-Bukhari 5016; Sahih al-Bukhari 5735; Sahih al-Bukhari 5748",
     "groupId": "three_quls_illness"
   },
   {
@@ -100,7 +186,27 @@
     "recitationContext": "personal",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sahih al-Bukhari 5748",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5016",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5735",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5748",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "reference": "Sahih al-Bukhari 5016; Sahih al-Bukhari 5735; Sahih al-Bukhari 5748",
     "groupId": "three_quls_illness"
   },
   {
@@ -113,7 +219,27 @@
     "recitationContext": "personal",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sahih al-Bukhari 5748",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5016",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5735",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5748",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "reference": "Sahih al-Bukhari 5016; Sahih al-Bukhari 5735; Sahih al-Bukhari 5748",
     "groupId": "three_quls_illness"
   },
   {
@@ -126,7 +252,21 @@
     "recitationContext": "personal",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sahih al-Bukhari 5010"
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "2311",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5010",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "reference": "Sahih al-Bukhari 2311; Sahih al-Bukhari 5010"
   },
   {
     "id": "recitation_baqarah_285_286_night",
@@ -138,7 +278,27 @@
     "recitationContext": "personal",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sahih al-Bukhari 5009; Sahih al-Bukhari 5040"
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5009",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5040",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan Ibn Majah",
+        "hadithNumber": "1369",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "reference": "Sahih al-Bukhari 5009; Sahih al-Bukhari 5040; Sunan Ibn Majah 1369"
   },
   {
     "id": "recitation_baqarah_home",
@@ -150,7 +310,22 @@
     "recitationContext": "household",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sahih Muslim 780; Jami at-Tirmidhi 2877"
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "780",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "2877",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "reference": "Sahih Muslim 780; Jami at-Tirmidhi 2877",
+    "notes": "No fixed daily frequency is stated."
   },
   {
     "id": "recitation_kahf_friday",
@@ -162,7 +337,16 @@
     "recitationContext": "personal",
     "repeatCount": 1,
     "authenticity": "hasan",
-    "reference": "Mishkat al-Masabih 2175; Al-Bayhaqi, al-Daawat al-Kabir"
+    "evidence": [
+      {
+        "collection": "Mishkat al-Masabih",
+        "hadithNumber": "2175",
+        "grade": "hasan",
+        "evidenceType": "prophetic_practice",
+        "note": "Cites Al-Bayhaqi, al-Daawat al-Kabir"
+      }
+    ],
+    "reference": "Mishkat al-Masabih 2175"
   },
   {
     "id": "recitation_kahf_first_ten_dajjal",
@@ -174,6 +358,14 @@
     "recitationContext": "personal",
     "repeatCount": 1,
     "authenticity": "sahih",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "809a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
     "reference": "Sahih Muslim 809a"
   },
   {
@@ -186,7 +378,16 @@
     "recitationContext": "personal",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sahih Muslim 809b"
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "809b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "reference": "Sahih Muslim 809b",
+    "notes": "Variant transmission specifies the last ten verses."
   },
   {
     "id": "recitation_sajdah_friday_fajr",
@@ -198,7 +399,28 @@
     "recitationContext": "prayer",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "891",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a; Sunan an-Nasa’i 1421",
     "rakAh": 1,
     "groupId": "friday_fajr_pair"
   },
@@ -212,7 +434,28 @@
     "recitationContext": "prayer",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "891",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a; Sunan an-Nasa’i 1421",
     "rakAh": 2,
     "groupId": "friday_fajr_pair"
   },
@@ -226,6 +469,21 @@
     "recitationContext": "prayer",
     "repeatCount": 1,
     "authenticity": "sahih",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
     "reference": "Sahih Muslim 879a; Sunan an-Nasa’i 1421",
     "rakAh": 1,
     "groupId": "jumuah_pair"
@@ -240,6 +498,21 @@
     "recitationContext": "prayer",
     "repeatCount": 1,
     "authenticity": "sahih",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
     "reference": "Sahih Muslim 879a; Sunan an-Nasa’i 1421",
     "rakAh": 2,
     "groupId": "jumuah_pair"
@@ -254,6 +527,14 @@
     "recitationContext": "prayer",
     "repeatCount": 1,
     "authenticity": "sahih",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
     "reference": "Sahih Muslim 878a",
     "rakAh": 1,
     "groupId": "ala_ghashiyah_eid_prayer"
@@ -268,6 +549,14 @@
     "recitationContext": "prayer",
     "repeatCount": 1,
     "authenticity": "sahih",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
     "reference": "Sahih Muslim 878a",
     "rakAh": 2,
     "groupId": "ala_ghashiyah_eid_prayer"
@@ -282,6 +571,14 @@
     "recitationContext": "prayer",
     "repeatCount": 1,
     "authenticity": "sahih",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
     "reference": "Sahih Muslim 878a",
     "rakAh": 1,
     "groupId": "ala_ghashiyah_friday_prayer"
@@ -296,6 +593,14 @@
     "recitationContext": "prayer",
     "repeatCount": 1,
     "authenticity": "sahih",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
     "reference": "Sahih Muslim 878a",
     "rakAh": 2,
     "groupId": "ala_ghashiyah_friday_prayer"
@@ -310,7 +615,15 @@
     "recitationContext": "prayer",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sahih Muslim 726; Riyad as-Salihin 1108",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "726",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "reference": "Sahih Muslim 726",
     "rakAh": 1,
     "groupId": "fajr_sunnah_pair"
   },
@@ -324,7 +637,15 @@
     "recitationContext": "prayer",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sahih Muslim 726; Riyad as-Salihin 1108",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "726",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "reference": "Sahih Muslim 726",
     "rakAh": 2,
     "groupId": "fajr_sunnah_pair"
   },
@@ -338,7 +659,15 @@
     "recitationContext": "prayer",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sahih Muslim 727; Riyad as-Salihin 1107",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "727",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "reference": "Sahih Muslim 727",
     "rakAh": 1,
     "groupId": "fajr_sunnah_verse_pair"
   },
@@ -346,15 +675,36 @@
     "id": "recitation_al_imran_52_or_64_fajr_sunnah",
     "contentType": "verse_range",
     "surahNumber": 3,
-    "startVerse": 52,
-    "endVerse": 64,
+    "startVerse": null,
+    "endVerse": null,
     "occasion": "fajr_sunnah",
     "recitationContext": "prayer",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sahih Muslim 727; Riyad as-Salihin 1107",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "727",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "reference": "Sahih Muslim 727",
     "rakAh": 2,
-    "groupId": "fajr_sunnah_verse_pair"
+    "groupId": "fajr_sunnah_verse_pair",
+    "notes": "Alternative selections, not a continuous range.",
+    "verseSelections": [
+      {
+        "surahNumber": 3,
+        "startVerse": 52,
+        "endVerse": 52
+      },
+      {
+        "surahNumber": 3,
+        "startVerse": 64,
+        "endVerse": 64
+      }
+    ]
   },
   {
     "id": "recitation_mulk_general_virtue",
@@ -366,7 +716,16 @@
     "recitationContext": "personal",
     "repeatCount": 1,
     "authenticity": "hasan",
-    "reference": "Jami at-Tirmidhi 2891"
+    "evidence": [
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "2891",
+        "grade": "hasan",
+        "evidenceType": "general_virtue"
+      }
+    ],
+    "reference": "Jami at-Tirmidhi 2891",
+    "notes": "No specific day or bedtime schedule is established by this report."
   },
   {
     "id": "recitation_fatihah_ruqyah",
@@ -378,7 +737,27 @@
     "recitationContext": "personal",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sahih al-Bukhari 5736; Sahih al-Bukhari 5749"
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5736",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5737",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5749",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "reference": "Sahih al-Bukhari 5736; Sahih al-Bukhari 5737; Sahih al-Bukhari 5749"
   },
   {
     "id": "recitation_qaf_fajr",
@@ -390,7 +769,29 @@
     "recitationContext": "prayer",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sahih Muslim 458a; Sahih Muslim 458b"
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "458a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "458b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "949",
+        "grade": "hasan",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "reference": "Sahih Muslim 458a; Sahih Muslim 458b; Sunan an-Nasa’i 949",
+    "notes": "Authenticated prayer-recitation practice; no fixed daily schedule is assigned."
   },
   {
     "id": "recitation_qaf_friday_sermon",
@@ -402,7 +803,28 @@
     "recitationContext": "sermon",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sahih Muslim 872a; Sahih Muslim 872b"
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "872a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "872b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1411",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "reference": "Sahih Muslim 872a; Sahih Muslim 872b; Sunan an-Nasa’i 1411"
   },
   {
     "id": "recitation_qaf_eid_prayer",
@@ -414,6 +836,20 @@
     "recitationContext": "prayer",
     "repeatCount": 1,
     "authenticity": "sahih",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
     "reference": "Sahih Muslim 891a; Sahih Muslim 891b",
     "rakAh": 1,
     "groupId": "qaf_qamar_eid_pair"
@@ -428,6 +864,20 @@
     "recitationContext": "prayer",
     "repeatCount": 1,
     "authenticity": "sahih",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
     "reference": "Sahih Muslim 891a; Sahih Muslim 891b",
     "rakAh": 2,
     "groupId": "qaf_qamar_eid_pair"
@@ -442,7 +892,22 @@
     "recitationContext": "prayer",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sahih al-Bukhari 765; Sahih al-Bukhari 4854"
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "765",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "4854",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "reference": "Sahih al-Bukhari 765; Sahih al-Bukhari 4854",
+    "notes": "Authenticated instance; not mandatory for every Maghrib."
   },
   {
     "id": "recitation_mursalat_maghrib",
@@ -454,7 +919,16 @@
     "recitationContext": "prayer",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sahih al-Bukhari 763"
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "763",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "reference": "Sahih al-Bukhari 763",
+    "notes": "Authenticated instance; no fixed recurring frequency stated."
   },
   {
     "id": "recitation_dukhan_maghrib",
@@ -466,6 +940,108 @@
     "recitationContext": "prayer",
     "repeatCount": 1,
     "authenticity": "sahih",
-    "reference": "Sunan an-Nasa’i 988"
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "988",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "reference": "Sunan an-Nasa’i 988",
+    "notes": "The weak Friday-night report is not used."
+  },
+  {
+    "id": "recitation_fatihah_every_rakah",
+    "contentType": "surah",
+    "surahNumber": 1,
+    "startVerse": 1,
+    "endVerse": null,
+    "occasion": "every_prayer_rakah",
+    "recitationContext": "prayer",
+    "repeatCount": 1,
+    "authenticity": "sahih",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "396c",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "reference": "Sahih Muslim 396c"
+  },
+  {
+    "id": "recitation_ala_witr",
+    "contentType": "surah",
+    "surahNumber": 87,
+    "startVerse": 1,
+    "endVerse": null,
+    "occasion": "witr_prayer",
+    "recitationContext": "prayer",
+    "repeatCount": 1,
+    "authenticity": "sahih",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1703",
+        "grade": "sahih",
+        "evidenceType": "companion_practice",
+        "grader": "Darussalam",
+        "note": "Practice of Ibn Abbas"
+      }
+    ],
+    "reference": "Sunan an-Nasa’i 1703",
+    "rakAh": 1,
+    "groupId": "witr_three_surahs"
+  },
+  {
+    "id": "recitation_kafirun_witr",
+    "contentType": "surah",
+    "surahNumber": 109,
+    "startVerse": 1,
+    "endVerse": null,
+    "occasion": "witr_prayer",
+    "recitationContext": "prayer",
+    "repeatCount": 1,
+    "authenticity": "sahih",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1703",
+        "grade": "sahih",
+        "evidenceType": "companion_practice",
+        "grader": "Darussalam",
+        "note": "Practice of Ibn Abbas"
+      }
+    ],
+    "reference": "Sunan an-Nasa’i 1703",
+    "rakAh": 2,
+    "groupId": "witr_three_surahs"
+  },
+  {
+    "id": "recitation_ikhlas_witr",
+    "contentType": "surah",
+    "surahNumber": 112,
+    "startVerse": 1,
+    "endVerse": null,
+    "occasion": "witr_prayer",
+    "recitationContext": "prayer",
+    "repeatCount": 1,
+    "authenticity": "sahih",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1703",
+        "grade": "sahih",
+        "evidenceType": "companion_practice",
+        "grader": "Darussalam",
+        "note": "Practice of Ibn Abbas"
+      }
+    ],
+    "reference": "Sunan an-Nasa’i 1703",
+    "rakAh": 3,
+    "groupId": "witr_three_surahs"
   }
 ]

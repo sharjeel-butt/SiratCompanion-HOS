@@ -3031,6 +3031,22 @@
     {
       "name": "juz_label",
       "value": "الجزء"
+    },
+    {
+      "name": "occasion_fajr_prayer",
+      "value": "صلاة الفجر"
+    },
+    {
+      "name": "hasan_sahih",
+      "value": "حسن صحيح"
+    },
+    {
+      "name": "occasion_every_prayer_rakah",
+      "value": "كل ركعة من الصلاة"
+    },
+    {
+      "name": "occasion_witr_prayer",
+      "value": "صلاة الوتر"
     }
   ]
 }

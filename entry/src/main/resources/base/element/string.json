@@ -3035,6 +3035,22 @@
     {
       "name": "juz_label",
       "value": "Juz"
+    },
+    {
+      "name": "occasion_fajr_prayer",
+      "value": "Fajr Prayer"
+    },
+    {
+      "name": "hasan_sahih",
+      "value": "Hasan Sahih"
+    },
+    {
+      "name": "occasion_every_prayer_rakah",
+      "value": "Every Prayer Rak'ah"
+    },
+    {
+      "name": "occasion_witr_prayer",
+      "value": "Witr Prayer"
     }
 
   ]

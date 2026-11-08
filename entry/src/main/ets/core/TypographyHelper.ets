@@ -122,8 +122,10 @@ export class TypographyHelper {
       const chinese: font.FontOptions = { familyName: 'NotoSansSC', familySrc: $rawfile('fonts/NotoSansSC-Regular.ttf') };
 
       const hafsArabic: font.FontOptions = {familyName: 'HafsArabic', familySrc: $rawfile('fonts/HafsArabic-Regular.ttf') };
-      const jameelNoori: font.FontOptions = {familyName: 'JameelNoori', familySrc: $rawfile('fonts/JameelNooriNastaleeq.ttf')
-      };
+      const jameelNoori: font.FontOptions =
+        { familyName: 'JameelNoori', familySrc: $rawfile('fonts/JameelNooriNastaleeq.ttf') };
+      const qpcHafs: font.FontOptions = { familyName: 'QPC_Hafs', familySrc: $rawfile('fonts/QPC-Hafs.ttf') };
+      font.registerFont(qpcHafs);
       font.registerFont(jameelNoori);
       font.registerFont(hafsArabic);
       font.registerFont(outfit);
@@ -265,6 +267,7 @@ export class TypographyHelper {
       case 'uthmani':
       case 'uthmani-min':
       case 'qpc-hafs':
+        return 'QPC_Hafs, AmiriQuran, sans-serif';
       default:
         return 'HafsArabic, AmiriQuran, sans-serif';
     }

@@ -9,13 +9,14 @@ import { L } from '../i18n/LocalizationHelper';
 import { STORAGE_KEY_LANGUAGE } from '../core/StorageKeys';
 import { AppLogger } from '../core/AppLogger';
 
+// 🚨 FIX: Make optional fields optional in the interface
 interface LicenseItem {
   name: string;
   source: string;
   sourceUrl: string;
   license: string;
-  licenseUrl: string;
-  attribution: string;
+  licenseUrl?: string;
+  attribution?: string;
 }
 
 interface LicenseSection {
@@ -51,12 +52,26 @@ struct LicensesPage {
       const ctx = getContext(this) as common.UIAbilityContext;
       const data = await ctx.resourceManager.getRawFileContent('licenses/quran_licenses.json');
       const parsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(data)) as LicenseFile;
-      this.sections = parsed.sections;
-      this.datasetVersion = parsed.datasetVersion;
+
+      if (parsed && parsed.sections) {
+        this.sections = parsed.sections;
+        this.datasetVersion = parsed.datasetVersion || 'Unknown';
+      } else {
+        this.sections = [];
+      }
     } catch (e) {
       AppLogger.error('LicensesPage', `Failed to load: ${JSON.stringify(e)}`);
+      this.sections = [];
     }
     this.isLoading = false;
+  }
+
+  private tr(key: string): string {
+    return L.get(key, this.appLanguage);
+  }
+
+  private isRtl(): boolean {
+    return L.isRtlLang(this.appLanguage);
   }
 
   build() {
@@ -87,6 +102,9 @@ struct LicensesPage {
 
       if (this.isLoading) {
         LoadingProgress().width(40).height(40).color(this.colors.accentGold).margin({ top: 40 })
+      } else if (this.sections.length === 0) {
+        Text('No license information available.')
+          .fontSize(14).fontColor(this.colors.textMuted).margin({ top: 40 })
       } else {
         Scroll() {
           Column({ space: 14 }) {
@@ -164,7 +182,8 @@ struct LicensesPage {
           .fontSize(11).fontColor(this.colors.accentGold).layoutWeight(1)
       }.width('100%')
 
-      if (item.attribution.length > 0) {
+      // 🚨 FIX: Check if attribution exists and has length
+      if (item.attribution !== undefined && item.attribution.length > 0) {
         Text(item.attribution)
           .fontSize(10)
           .fontColor(this.colors.textMuted)
@@ -174,8 +193,8 @@ struct LicensesPage {
           .margin({ top: 4 })
       }
 
-      // License link (if present)
-      if (item.licenseUrl.length > 0) {
+      // 🚨 FIX: Check if licenseUrl exists and has length
+      if (item.licenseUrl !== undefined && item.licenseUrl.length > 0) {
         Row({ space: 4 }) {
           Image($r('app.media.ic_globe')).width(10).height(10).fillColor(this.colors.accentGold)
           Text(item.licenseUrl)
@@ -201,13 +220,5 @@ struct LicensesPage {
     .backgroundColor(this.colors.tintSubtle)
     .borderRadius(10)
     .alignItems(HorizontalAlign.Start)
-  }
-
-  private tr(key: string): string {
-    return L.get(key, this.appLanguage);
-  }
-
-  private isRtl(): boolean {
-    return L.isRtlLang(this.appLanguage);
   }
 }

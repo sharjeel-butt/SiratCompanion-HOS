@@ -126,7 +126,11 @@ const SETTINGS_SPECS: PrefSpec[] = [
   { key: 'dua_bindings', type: TYPE_STRING },
 
   // ---- Custom Calendar Events ----
-  { key: 'custom_events', type: TYPE_STRING }
+  { key: 'custom_events', type: TYPE_STRING },
+
+  // ---- Quran & Prayer Prompts (NEW) ----
+  { key: 'active_quran_script', type: TYPE_STRING },
+  { key: 'dismissed_prayers', type: TYPE_STRING }
 ];
 
 /**

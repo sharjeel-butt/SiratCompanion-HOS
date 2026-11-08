@@ -2,201 +2,758 @@
   "recitation_surah_112_morning_evening": {
     "name": "Surah Al-Ikhlas untuk Pagi dan Petang",
     "notes": "Baca bersama dua surah perlindungan lainnya, tiga kali pada pagi dan petang.",
-    "reference": "Sunan Abu Dawud 5082; Jami at-Tirmidzi 3575"
+    "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575",
+    "evidence": [
+      {
+        "collection": "Sunan Abi Dawud",
+        "hadithNumber": "5082",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "3575",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "hasan_sahih"
   },
   "recitation_surah_113_morning_evening": {
     "name": "Surah Al-Falaq untuk Pagi dan Petang",
     "notes": "Baca bersama dua surah perlindungan lainnya, tiga kali pada pagi dan petang.",
-    "reference": "Sunan Abu Dawud 5082; Jami at-Tirmidzi 3575"
+    "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575",
+    "evidence": [
+      {
+        "collection": "Sunan Abi Dawud",
+        "hadithNumber": "5082",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "3575",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "hasan_sahih"
   },
   "recitation_surah_114_morning_evening": {
     "name": "Surah An-Nas untuk Pagi dan Petang",
     "notes": "Baca bersama dua surah perlindungan lainnya, tiga kali pada pagi dan petang.",
-    "reference": "Sunan Abu Dawud 5082; Jami at-Tirmidzi 3575"
+    "reference": "Sunan Abi Dawud 5082; Jami at-Tirmidhi 3575",
+    "evidence": [
+      {
+        "collection": "Sunan Abi Dawud",
+        "hadithNumber": "5082",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "3575",
+        "grade": "hasan_sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "hasan_sahih"
   },
   "recitation_surah_112_bedtime": {
     "name": "Surah Al-Ikhlas Sebelum Tidur",
     "notes": "Satukan kedua telapak tangan, baca ketiga surah, tiupkan ke tangan, lalu usapkan ke tubuh; ulangi tiga kali.",
-    "reference": "Sahih al-Bukhari 5017"
+    "reference": "Sahih al-Bukhari 5017",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5017",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_113_bedtime": {
     "name": "Surah Al-Falaq Sebelum Tidur",
     "notes": "Satukan kedua telapak tangan, baca ketiga surah, tiupkan ke tangan, lalu usapkan ke tubuh; ulangi tiga kali.",
-    "reference": "Sahih al-Bukhari 5017"
+    "reference": "Sahih al-Bukhari 5017",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5017",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_114_bedtime": {
     "name": "Surah An-Nas Sebelum Tidur",
     "notes": "Satukan kedua telapak tangan, baca ketiga surah, tiupkan ke tangan, lalu usapkan ke tubuh; ulangi tiga kali.",
-    "reference": "Sahih al-Bukhari 5017"
+    "reference": "Sahih al-Bukhari 5017",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5017",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_112_illness": {
     "name": "Surah Al-Ikhlas untuk Sakit dan Ruqyah",
     "notes": "Baca sebagai ruqyah dan tiupkan ke tubuh.",
-    "reference": "Sahih al-Bukhari 5748"
+    "reference": "Sahih al-Bukhari 5016; Sahih al-Bukhari 5735; Sahih al-Bukhari 5748",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5016",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5735",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5748",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_113_illness": {
     "name": "Surah Al-Falaq untuk Sakit dan Ruqyah",
     "notes": "Baca sebagai ruqyah dan tiupkan ke tubuh.",
-    "reference": "Sahih al-Bukhari 5748"
+    "reference": "Sahih al-Bukhari 5016; Sahih al-Bukhari 5735; Sahih al-Bukhari 5748",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5016",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5735",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5748",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_surah_114_illness": {
     "name": "Surah An-Nas untuk Sakit dan Ruqyah",
     "notes": "Baca sebagai ruqyah dan tiupkan ke tubuh.",
-    "reference": "Sahih al-Bukhari 5748"
+    "reference": "Sahih al-Bukhari 5016; Sahih al-Bukhari 5735; Sahih al-Bukhari 5748",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5016",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5735",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5748",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ayat_al_kursi_bedtime": {
     "name": "Ayat Kursi Sebelum Tidur",
     "notes": "Baca ayat lengkap sebelum tidur.",
-    "reference": "Sahih al-Bukhari 5010"
+    "reference": "Sahih al-Bukhari 2311; Sahih al-Bukhari 5010",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "2311",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5010",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_baqarah_285_286_night": {
     "name": "Dua Ayat Terakhir Al-Baqarah pada Malam Hari",
     "notes": "Hadis menyatakan bahwa kedua ayat ini mencukupi pembacanya untuk malam tersebut.",
-    "reference": "Sahih al-Bukhari 5009; Sahih al-Bukhari 5040"
+    "reference": "Sahih al-Bukhari 5009; Sahih al-Bukhari 5040; Sunan Ibn Majah 1369",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5009",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5040",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan Ibn Majah",
+        "hadithNumber": "1369",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_baqarah_home": {
     "name": "Surah Al-Baqarah di Rumah",
     "notes": "Hadis yang dirujuk tidak menyebutkan frekuensi harian yang tetap.",
-    "reference": "Sahih Muslim 780; Jami at-Tirmidzi 2877"
+    "reference": "Sahih Muslim 780; Jami at-Tirmidhi 2877",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "780",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "2877",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_kahf_friday": {
     "name": "Surah Al-Kahf pada Hari Jumat",
     "notes": "Disertakan berdasarkan dalil berderajat Hasan, bukan dilabeli Sahih.",
-    "reference": "Mishkat al-Masabih 2175; Al-Baihaqi, ad-Da‘awat al-Kabir"
+    "reference": "Mishkat al-Masabih 2175",
+    "evidence": [
+      {
+        "collection": "Mishkat al-Masabih",
+        "hadithNumber": "2175",
+        "grade": "hasan",
+        "evidenceType": "prophetic_practice",
+        "note": "Cites Al-Bayhaqi, al-Daawat al-Kabir"
+      }
+    ],
+    "authenticity": "hasan"
   },
   "recitation_kahf_first_ten_dajjal": {
     "name": "Sepuluh Ayat Pertama Al-Kahf untuk Perlindungan dari Dajjal",
     "notes": "Hafalkan atau baca sepuluh ayat pertama sebagaimana disebutkan dalam riwayat.",
-    "reference": "Sahih Muslim 809a"
+    "reference": "Sahih Muslim 809a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "809a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_kahf_last_ten_dajjal": {
     "name": "Sepuluh Ayat Terakhir Al-Kahf untuk Perlindungan dari Dajjal",
     "notes": "Riwayat lain menyebutkan sepuluh ayat terakhir.",
-    "reference": "Sahih Muslim 809b"
+    "reference": "Sahih Muslim 809b",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "809b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_sajdah_friday_fajr": {
     "name": "Surah As-Sajdah pada Rakaat Pertama Subuh Jumat",
     "notes": "",
-    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a"
+    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a; Sunan an-Nasa’i 1421",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "891",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_insan_friday_fajr": {
     "name": "Surah Al-Insan pada Rakaat Kedua Subuh Jumat",
     "notes": "",
-    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a"
+    "reference": "Sahih al-Bukhari 891; Sahih Muslim 879a; Sunan an-Nasa’i 1421",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "891",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_jumuah_friday_prayer": {
     "name": "Surah Al-Jumu’ah pada Rakaat Pertama Salat Jumat",
     "notes": "",
-    "reference": "Sahih Muslim 879a; Sunan an-Nasa’i 1421"
+    "reference": "Sahih Muslim 879a; Sunan an-Nasa’i 1421",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_munafiqun_friday_prayer": {
     "name": "Surah Al-Munafiqun pada Rakaat Kedua Salat Jumat",
     "notes": "",
-    "reference": "Sahih Muslim 879a; Sunan an-Nasa’i 1421"
+    "reference": "Sahih Muslim 879a; Sunan an-Nasa’i 1421",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "879a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1421",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ala_eid_prayer": {
     "name": "Surah Al-A’la pada Rakaat Pertama Salat Id",
     "notes": "",
-    "reference": "Sahih Muslim 878a"
+    "reference": "Sahih Muslim 878a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ghashiyah_eid_prayer": {
     "name": "Surah Al-Ghasyiyah pada Rakaat Kedua Salat Id",
     "notes": "",
-    "reference": "Sahih Muslim 878a"
+    "reference": "Sahih Muslim 878a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ala_friday_prayer": {
     "name": "Surah Al-A’la pada Rakaat Pertama Salat Jumat",
     "notes": "",
-    "reference": "Sahih Muslim 878a"
+    "reference": "Sahih Muslim 878a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ghashiyah_friday_prayer": {
     "name": "Surah Al-Ghasyiyah pada Rakaat Kedua Salat Jumat",
     "notes": "",
-    "reference": "Sahih Muslim 878a"
+    "reference": "Sahih Muslim 878a",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "878a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_kafirun_fajr_sunnah": {
     "name": "Surah Al-Kafirun pada Rakaat Pertama Sunnah Fajar",
     "notes": "",
-    "reference": "Sahih Muslim 726; Riyadhus Shalihin 1108"
+    "reference": "Sahih Muslim 726",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "726",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ikhlas_fajr_sunnah": {
     "name": "Surah Al-Ikhlas pada Rakaat Kedua Sunnah Fajar",
     "notes": "",
-    "reference": "Sahih Muslim 726; Riyadhus Shalihin 1108"
+    "reference": "Sahih Muslim 726",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "726",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_baqarah_136_fajr_sunnah": {
     "name": "Al-Baqarah 2:136 pada Rakaat Pertama Sunnah Fajar",
     "notes": "",
-    "reference": "Sahih Muslim 727; Riyadhus Shalihin 1107"
+    "reference": "Sahih Muslim 727",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "727",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_al_imran_52_or_64_fajr_sunnah": {
     "name": "Ali Imran 3:52 atau 3:64 pada Rakaat Kedua Sunnah Fajar",
     "notes": "Riwayat menyebut 3:52 dan dalam redaksi lain 3:64. Entri ini menunjukkan pilihan ayat, bukan seluruh rentang.",
-    "reference": "Sahih Muslim 727; Riyadhus Shalihin 1107"
+    "reference": "Sahih Muslim 727",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "727",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih",
+    "verseSelections": [
+      {
+        "surahNumber": 3,
+        "startVerse": 52,
+        "endVerse": 52
+      },
+      {
+        "surahNumber": 3,
+        "startVerse": 64,
+        "endVerse": 64
+      }
+    ]
   },
   "recitation_mulk_general_virtue": {
     "name": "Surah Al-Mulk: Keutamaan Syafaat",
     "notes": "Riwayat Hasan menetapkan keutamaan syafaat dan ampunan, tetapi tidak menentukan hari tertentu atau jadwal sebelum tidur.",
-    "reference": "Jami at-Tirmidzi 2891"
+    "reference": "Jami at-Tirmidhi 2891",
+    "evidence": [
+      {
+        "collection": "Jami at-Tirmidhi",
+        "hadithNumber": "2891",
+        "grade": "hasan",
+        "evidenceType": "general_virtue"
+      }
+    ],
+    "authenticity": "hasan"
   },
   "recitation_fatihah_ruqyah": {
     "name": "Surah Al-Fatihah untuk Ruqyah",
     "notes": "Baca Al-Fatihah sebagai ruqyah. Riwayat menyebut penggunaannya untuk gigitan atau sengatan berbisa; tidak ada jumlah pengulangan tetap.",
-    "reference": "Sahih al-Bukhari 5736; Sahih al-Bukhari 5749"
+    "reference": "Sahih al-Bukhari 5736; Sahih al-Bukhari 5737; Sahih al-Bukhari 5749",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5736",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5737",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "5749",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_qaf_fajr": {
     "name": "Surah Qaf dalam Salat Subuh",
     "notes": "Bacaan ini ditetapkan dalam salat Subuh wajib. Riwayat tidak menentukan jadwal harian tetap.",
-    "reference": "Sahih Muslim 458a; Sahih Muslim 458b"
+    "reference": "Sahih Muslim 458a; Sahih Muslim 458b; Sunan an-Nasa’i 949",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "458a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "458b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "949",
+        "grade": "hasan",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_qaf_friday_sermon": {
     "name": "Surah Qaf dalam Khutbah Jumat",
     "notes": "Ini adalah amalan dalam konteks khutbah, bukan jadwal bacaan pribadi pada hari Jumat.",
-    "reference": "Sahih Muslim 872a; Sahih Muslim 872b"
+    "reference": "Sahih Muslim 872a; Sahih Muslim 872b; Sunan an-Nasa’i 1411",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "872a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "872b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1411",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_qaf_eid_prayer": {
     "name": "Surah Qaf pada Rakaat Pertama Salat Id",
     "notes": "Ini adalah pasangan surah alternatif yang ditetapkan untuk salat Id.",
-    "reference": "Sahih Muslim 891a; Sahih Muslim 891b"
+    "reference": "Sahih Muslim 891a; Sahih Muslim 891b",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_qamar_eid_prayer": {
     "name": "Surah Al-Qamar pada Rakaat Kedua Salat Id",
     "notes": "Ini adalah pasangan surah alternatif yang ditetapkan untuk salat Id.",
-    "reference": "Sahih Muslim 891a; Sahih Muslim 891b"
+    "reference": "Sahih Muslim 891a; Sahih Muslim 891b",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891a",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "891b",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_tur_maghrib": {
     "name": "Surah At-Tur dalam Salat Magrib",
     "notes": "Ini adalah riwayat sahih bahwa Nabi membaca surah ini dalam salat Magrib; bukan kewajiban untuk setiap Magrib.",
-    "reference": "Sahih al-Bukhari 765; Sahih al-Bukhari 4854"
+    "reference": "Sahih al-Bukhari 765; Sahih al-Bukhari 4854",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "765",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      },
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "4854",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_mursalat_maghrib": {
     "name": "Surah Al-Mursalat dalam Salat Magrib",
     "notes": "Ini adalah riwayat sahih tentang pembacaan surah ini dalam Magrib; tidak disebutkan frekuensi tetap.",
-    "reference": "Sahih al-Bukhari 763"
+    "reference": "Sahih al-Bukhari 763",
+    "evidence": [
+      {
+        "collection": "Sahih al-Bukhari",
+        "hadithNumber": "763",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_dukhan_maghrib": {
     "name": "Surah Ad-Dukhan dalam Salat Magrib",
     "notes": "Ini adalah riwayat sahih tentang pembacaan surah ini dalam Magrib. Riwayat lemah tentang membacanya pada malam Jumat tidak digunakan.",
-    "reference": "Sunan an-Nasa’i 988"
+    "reference": "Sunan an-Nasa’i 988",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "988",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice",
+        "grader": "Darussalam"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_fatihah_every_rakah": {
     "name": "Surah Al-Fatihah dalam Setiap Rakaat",
     "notes": "Al-Fatihah dibaca dalam setiap rakaat. Ini adalah ketentuan inti salat, bukan jadwal pengingat opsional.",
-    "reference": "Sahih Muslim 396c"
+    "reference": "Sahih Muslim 396c",
+    "evidence": [
+      {
+        "collection": "Sahih Muslim",
+        "hadithNumber": "396c",
+        "grade": "sahih",
+        "evidenceType": "prophetic_practice"
+      }
+    ],
+    "authenticity": "sahih"
   },
   "recitation_ala_witr": {
     "name": "Surah Al-A’la pada Rakaat Pertama Witir",
     "notes": "Riwayat ini menjelaskan urutan tiga surah untuk Witir tiga rakaat.",
-    "reference": "Sunan an-Nasa’i 1703"
+    "reference": "Sunan an-Nasa’i 1703",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1703",
+        "grade": "sahih",
+        "evidenceType": "companion_practice",
+        "grader": "Darussalam",
+        "note": "Practice of Ibn Abbas"
+      }
+    ],
+    "authenticity": "sahih",
+    "evidenceType": "companion_practice"
   },
   "recitation_kafirun_witr": {
     "name": "Surah Al-Kafirun pada Rakaat Kedua Witir",
     "notes": "Riwayat ini menjelaskan urutan tiga surah untuk Witir tiga rakaat.",
-    "reference": "Sunan an-Nasa’i 1703"
+    "reference": "Sunan an-Nasa’i 1703",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1703",
+        "grade": "sahih",
+        "evidenceType": "companion_practice",
+        "grader": "Darussalam",
+        "note": "Practice of Ibn Abbas"
+      }
+    ],
+    "authenticity": "sahih",
+    "evidenceType": "companion_practice"
   },
   "recitation_ikhlas_witr": {
     "name": "Surah Al-Ikhlas pada Rakaat Ketiga Witir",
     "notes": "Riwayat ini menjelaskan urutan tiga surah untuk Witir tiga rakaat.",
-    "reference": "Sunan an-Nasa’i 1703"
+    "reference": "Sunan an-Nasa’i 1703",
+    "evidence": [
+      {
+        "collection": "Sunan an-Nasa’i",
+        "hadithNumber": "1703",
+        "grade": "sahih",
+        "evidenceType": "companion_practice",
+        "grader": "Darussalam",
+        "note": "Practice of Ibn Abbas"
+      }
+    ],
+    "authenticity": "sahih",
+    "evidenceType": "companion_practice"
   }
 }

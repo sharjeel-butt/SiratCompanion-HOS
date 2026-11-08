@@ -3030,6 +3030,22 @@
     {
       "name": "juz_label",
       "value": "Cüz"
+    },
+    {
+      "name": "occasion_fajr_prayer",
+      "value": "Sabah Namazı"
+    },
+    {
+      "name": "hasan_sahih",
+      "value": "Hasen Sahih"
+    },
+    {
+      "name": "occasion_every_prayer_rakah",
+      "value": "Her Namaz Rekâtı"
+    },
+    {
+      "name": "occasion_witr_prayer",
+      "value": "Vitir Namazı"
     }
   ]
 }

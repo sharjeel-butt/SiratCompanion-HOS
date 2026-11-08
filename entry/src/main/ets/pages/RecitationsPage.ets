@@ -47,8 +47,9 @@ struct RecitationsPage {
       }
     }
 
+    // Pass `true` to show ALL recitations
     this.tasks = await QuranService.getRecommendedRecitations(
-      ctx, this.appLanguage, isFriday, upcomingCustomEvents
+      ctx, this.appLanguage, isFriday, upcomingCustomEvents, true
     );
 
     this.isLoading = false;
@@ -146,13 +147,23 @@ struct RecitationsPage {
               .border({ width: 1, color: this.colors.borderSoft })
               .direction(L.isRtlLang(this.appLanguage) ? Direction.Rtl : Direction.Ltr)
               .onClick(() => {
+                // Determine the correct verse range
+                let startV = task.startVerse;
+                let endV = task.endVerse;
+
+                // If startVerse is null, check for alternative selections
+                if (startV === null && task.verseSelections && task.verseSelections.length > 0) {
+                  startV = task.verseSelections[0].startVerse;
+                  endV = task.verseSelections[0].endVerse;
+                }
+
                 NavHelper.prepareForward();
                 router.pushUrl({
                   url: 'pages/SurahDetailsPage',
                   params: {
                     surahId: task.surahNumber,
-                    startVerse: task.startVerse,
-                    endVerse: task.endVerse,
+                    startVerse: startV,
+                    endVerse: endV,
                     taskId: task.id
                   }
                 }).catch((e: Error) => console.error('Navigation failed', e));

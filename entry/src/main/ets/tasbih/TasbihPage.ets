@@ -1859,6 +1859,8 @@ export struct TasbihPage {
     animator.play();
   }
 
+  // entry/src/main/ets/tasbih/TasbihPage.ets
+
   private increment(): void {
     if (this.advanceLock) {
       return;
@@ -1914,18 +1916,35 @@ export struct TasbihPage {
     }
 
     if (isComplete && !hasNext) {
-      HapticHelper.complete();
-      this.getUIContext().getPromptAction().showToast({
-        message: this.tr('all_dhikrs_complete'), duration: 1800
-      });
-
-      const tasbih = this.getActiveTasbih();
-      if (this.activePrayerId && tasbih) {
-        this.tasbihs = TasbihManager.markPrayerComplete(
-          this.tasbihs, tasbih.id, this.activePrayerId, TasbihManager.todayKey()
-        );
-        this.persist();
+      // 🚨 FIX: Check if ALL dhikrs are completed, not just the last one
+      let allCompleted = true;
+      if (tasbih) {
+        for (const d of tasbih.dhikrs) {
+          if (d.count < d.target) {
+            allCompleted = false;
+            break;
+          }
+        }
       }
+
+      if (allCompleted) {
+        HapticHelper.complete();
+        this.getUIContext().getPromptAction().showToast({
+          message: this.tr('all_dhikrs_complete'), duration: 1800
+        });
+
+        if (this.activePrayerId && tasbih) {
+          this.tasbihs = TasbihManager.markPrayerComplete(
+            this.tasbihs, tasbih.id, this.activePrayerId, TasbihManager.todayKey()
+          );
+        }
+      } else {
+        // If they finished the last dhikr but missed earlier ones, just give a standard confirm haptic
+        HapticHelper.confirm();
+      }
+
+      this.persist();
+      return;
     }
 
     this.persist();
