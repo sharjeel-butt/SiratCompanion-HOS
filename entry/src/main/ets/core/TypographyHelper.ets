@@ -37,6 +37,7 @@ interface LanguageMetrics {
   fontSizeScale: number;
 }
 
+
 const LANGUAGE_METRICS: Record<string, LanguageMetrics> = {
   // ---- Latin / Cyrillic / Greek (baseline) ----
   'en': { lineHeightScale: 1.00, fontSizeScale: 1.00 },
@@ -88,6 +89,7 @@ const LANGUAGE_METRICS: Record<string, LanguageMetrics> = {
   'km': { lineHeightScale: 1.25, fontSizeScale: 1.00 },
 };
 
+
 const DEFAULT_METRICS: LanguageMetrics = {
   lineHeightScale: 1.00,
   fontSizeScale: 1.00
@@ -103,6 +105,20 @@ const ARABIC_METRICS: LanguageMetrics = {
 };
 
 export class TypographyHelper {
+  /** Font size for verse-by-verse text (Reading/Translation modes). */
+  static readonly QURAN_FONT_SIZE_VERSE: number = 26;
+  /** Base line height for verse-by-verse text. */
+  static readonly QURAN_LINE_HEIGHT_VERSE: number = 60;
+  /** Font size for continuous Mushaf text (Increased for readability). */
+  static readonly QURAN_FONT_SIZE_MUSHAF: number = 32;
+  /** Base line height for continuous Mushaf text. */
+  static readonly QURAN_LINE_HEIGHT_MUSHAF: number = 75;
+  /** Font size for the Bismillah header. */
+  static readonly BISMILLAH_FONT_SIZE: number = 26;
+  /** Base line height for the Bismillah header. */
+  static readonly BISMILLAH_LINE_HEIGHT: number = 60;
+  /** Font size for the Surah header ornament in Mushaf view. */
+  static readonly SURAH_HEADER_FONT_SIZE: number = 22;
   /**
    * Register custom fonts. Call this once in EntryAbility.
    */

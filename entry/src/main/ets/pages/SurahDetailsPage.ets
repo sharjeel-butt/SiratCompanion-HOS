@@ -41,6 +41,7 @@ struct SurahDetailsPage {
   // reader and 'indopak' (JameelNoori Nastaliq) in the surah list.
   private activeScript: string = AppStorage.get<string>('active_quran_script') ?? 'indopak';
 
+
   async aboutToAppear() {
     await this.loadInitialData();
   }
@@ -82,6 +83,11 @@ struct SurahDetailsPage {
 
     this.surah = this.allSurahs[this.currentIndex];
 
+    // FIX: Assign the Mushaf title so the top bar isn't blank in Mushaf mode
+    this.currentMushafSurahName = this.appLanguage === 'ar'
+      ? `سورة ${this.surah.nameArabic}`
+      : this.surah.nameTransliteration;
+
     // Reset verse limits if paging to a new Surah manually
     if (!isInitial) {
       this.startVerse = 1;
@@ -118,8 +124,11 @@ struct SurahDetailsPage {
   }
 
   private stripTrailingArabicNumber(text: string): string {
-    // Matches any Arabic-Indic digits (٠-٩) at the end of the string, along with spaces
-    return text.replace(/[\u0660-\u0669]+$/, '').trim();
+    return text
+      .replace(/[\u0660-\u0669]+$/, '') // Remove Arabic numbers
+      .replace(/[\r\n]+/g, ' ')         // Remove hidden newlines
+      .replace(/\s+/g, ' ')             // Collapse multiple spaces
+      .trim();
   }
 
   private toArabicNumerals(num: number): string {
@@ -253,29 +262,65 @@ struct SurahDetailsPage {
 
   @Builder
   VerseByVerseView() {
-    List() {
-      // Bismillah Header (Show for ALL surahs except Surah 9)
-      if (this.surah!.id !== 9) {
-        ListItem() {
+    Scroll() {
+      Column() {
+        // 1. Bismillah Header (Show for ALL surahs except Surah 9)
+        if (this.surah!.id !== 9) {
           Text("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ")
-            .fontSize(TypographyHelper.getArabicFontSize(24))
+            .fontSize(TypographyHelper.getArabicFontSize(26))
             .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
             .fontColor(this.colors.accentGold)
             .textAlign(TextAlign.Center)
             .width('100%').padding({ top: 20, bottom: 20 })
         }
+
+        // 2. Verses
+        ForEach(this.displayVerses, (verse: Verse, index: number) => {
+          Column() {
+            // Arabic Text
+            Text(this.getFormattedVerseForReading(verse))
+              .fontSize(TypographyHelper.getArabicFontSize(26))
+              .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
+              .fontColor(this.colors.textWhite)
+              .lineHeight(TypographyHelper.getArabicLineHeight(60))
+              .textAlign(TextAlign.Start) // Aligns to Right in RTL
+              .direction(Direction.Rtl)   // Forces RTL layout
+              .width('100%')
+              .padding({ top: 12, bottom: 12 })
+
+            // Translation (Only in 'translation' mode)
+            if (this.readingMode === 'translation' && this.getTranslationForVerse(verse).trim().length > 0) {
+              Text(this.getTranslationForVerse(verse))
+                .fontSize(15)
+                .fontFamily(TypographyHelper.getTranslationFont(this.appLanguage))
+                .fontColor(this.colors.textMuted)
+                .lineHeight(22)
+                .textAlign(TextAlign.Center)
+                .width('100%')
+                .padding({ top: 4, bottom: 20 })
+            }
+          }
+          .width('100%')
+        }, (verse: Verse) => `v-${verse.ayah}`)
+
+        Column().height(40)
       }
-
-      // Verses
-      ForEach(this.displayVerses, (verse: Verse, index: number) => {
-        ListItem() {
-          this.VerseItem(verse, index)
-        }
-      }, (verse: Verse) => `v-${verse.ayah}`)
-
-      ListItem() { Column().height(20) }
+      .width('100%')
+      .padding({ left: 20, right: 20 })
     }
-    .width('100%').layoutWeight(1).scrollBar(BarState.Auto)
+    .layoutWeight(1)
+    .scrollBar(BarState.Auto)
+  }
+
+  private getFormattedVerseForReading(verse: Verse): string {
+    // 1. Clean the Arabic text
+    const cleanArabic = this.stripTrailingArabicNumber(verse.arabic);
+    const arabicNum = this.toArabicNumerals(verse.ayah);
+
+    // 2. Add the Rub el Hizb star with non-breaking spaces (Exactly like Mushaf)
+    const marker = `\u00A0\u200F۞`;
+
+    return cleanArabic + marker;
   }
 
   @Builder
@@ -285,8 +330,25 @@ struct SurahDetailsPage {
         Divider().color(this.colors.borderSoft).margin({ top: 16, bottom: 16 })
       }
 
-      Row({ space: 16 }) {
-        // Left: Verse Number Circle
+      // Use Stack to overlay the number circle, while giving the Text 100% width.
+      // This is the EXACT same layout logic used in the Mushaf view.
+      Stack({ alignContent: Alignment.TopStart }) {
+
+        // 1. Arabic Text (Exact properties as MushafView)
+        Text(this.stripTrailingArabicNumber(verse.arabic))
+          .fontSize(TypographyHelper.getArabicFontSize(
+            TypographyHelper.QURAN_FONT_SIZE_VERSE))
+          .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
+          .fontColor(this.colors.textWhite)
+          .lineHeight(TypographyHelper.getArabicLineHeight(
+            TypographyHelper.QURAN_LINE_HEIGHT_VERSE))
+          .textAlign(TextAlign.Start) // Aligns to Right in RTL
+          .direction(Direction.Rtl)   // Forces RTL layout
+          .width('100%')
+          // Add padding on the left so the text doesn't overlap the circle
+          .padding({ left: 48, right: 0 })
+
+        // 2. Verse Number Circle (Floating on the left)
         Stack({ alignContent: Alignment.Center }) {
           Circle()
             .width(28).height(28)
@@ -302,23 +364,11 @@ struct SurahDetailsPage {
             .translate({ y: -1.5 })
         }
         .width(28).height(28)
-        .margin({ top: 8 })
-        .flexShrink(0)
-
-        // Right: Arabic Text
-        Text(this.stripTrailingArabicNumber(verse.arabic))
-          .fontSize(TypographyHelper.getArabicFontSize(26))
-          .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
-          .fontColor(this.colors.textWhite)
-          .lineHeight(TypographyHelper.getArabicLineHeight(45))
-          .textAlign(TextAlign.RIGHT)
-          .direction(Direction.Rtl)
-          .layoutWeight(1)
+        .margin({ top: 8, left: 8 }) // Position on the left
       }
-      .width('100%').alignItems(VerticalAlign.Top)
-      .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+      .width('100%')
 
-      // Translation (Only in 'translation' mode)
+      // 3. Translation (Only in 'translation' mode)
       if (this.readingMode === 'translation' && this.getTranslationForVerse(verse).trim().length > 0) {
         Text(this.getTranslationForVerse(verse))
           .fontSize(15)
@@ -350,7 +400,7 @@ struct SurahDetailsPage {
             .borderRadius(8)
             .backgroundColor(this.colors.tintSubtle)
           Text(this.surah?.nameArabic || '')
-            .fontSize(TypographyHelper.getArabicFontSize(22))
+            .fontSize(TypographyHelper.getArabicFontSize(TypographyHelper.SURAH_HEADER_FONT_SIZE))
             .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
             .fontColor(this.colors.accentGold)
         }
@@ -359,8 +409,9 @@ struct SurahDetailsPage {
         // Bismillah (Show for ALL surahs except Surah 9)
         if (this.surah && this.surah.id !== 9) {
           Text("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ")
-            .fontSize(TypographyHelper.getArabicFontSize(26))
+            .fontSize(TypographyHelper.getArabicFontSize(TypographyHelper.BISMILLAH_FONT_SIZE))
             .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
+            .lineHeight(TypographyHelper.getArabicLineHeight(TypographyHelper.BISMILLAH_LINE_HEIGHT))
             .fontColor(this.colors.textWhite)
             .textAlign(TextAlign.Center)
             .width('100%').margin({ bottom: 24 })
@@ -368,10 +419,11 @@ struct SurahDetailsPage {
 
         // Continuous Text
         Text(this.buildMushafText())
-          .fontSize(TypographyHelper.getArabicFontSize(26))
+        // FIX: Uses the new increased MUSHAF font size and line height
+          .fontSize(TypographyHelper.getArabicFontSize(TypographyHelper.QURAN_FONT_SIZE_MUSHAF))
           .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
           .fontColor(this.colors.textWhite)
-          .lineHeight(TypographyHelper.getArabicLineHeight(60))
+          .lineHeight(TypographyHelper.getArabicLineHeight(TypographyHelper.QURAN_LINE_HEIGHT_MUSHAF))
           .textAlign(TextAlign.Start) // Aligns to the Right in RTL
           .direction(Direction.Rtl)   // Forces RTL layout
           .width('100%').padding({ left: 20, right: 20 })
