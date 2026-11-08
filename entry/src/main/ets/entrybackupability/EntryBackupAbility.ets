@@ -385,8 +385,22 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
       'onRestore start: %{public}s', JSON.stringify(bundleVersion));
 
     // The backup version is logged so we have a record of what was
-    // restored. (The minCompatibleVersionCode in app.json5 prevents
-    // restoring from an older, incompatible version.)
+    // restored. Two layers protect cross-version restore:
+    //
+    //   1. Install-time. app.json5's minCompatibleVersionCode blocks
+    //      installation of this build on system images older than
+    //      v3.8.0, which means the only backups that can arrive at
+    //      onRestore() were produced by v3.8.0 or newer.
+    //
+    //   2. Restore-time. Each store file begins with a `#v1\t<count>`
+    //      header (v3.4.3+) or has no header at all (legacy). The
+    //      parser below handles both formats, and the truncation
+    //      detector at the bottom of restoreStore() catches partial
+    //      writes regardless of source version.
+    //
+    // Neither layer alone is sufficient. `minCompatibleVersionCode`
+    // enforces *which* versions can restore; the `#v1` header + legacy
+    // fallback enforce *how* a file within that range is parsed.
 
     const backupDir: string = this.safeBackupDir();
     if (backupDir.length === 0) {

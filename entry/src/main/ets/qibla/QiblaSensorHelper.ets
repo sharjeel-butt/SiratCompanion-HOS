@@ -78,10 +78,14 @@ export class QiblaSensorHelper {
       sensor.on(sensor.SensorId.MAGNETIC_FIELD, (data: sensor.MagneticFieldResponse) => {
         let heading = Math.atan2(data.y, data.x) * 180 / Math.PI;
         heading = (heading + 360) % 360;
-        // The raw magnetometer reports no accuracy — assume HIGH so
-        // the calibration overlay doesn't appear on devices without
-        // an orientation sensor.
-        onReading({ heading, isFlat: true, accuracy: SensorAccuracy.HIGH });
+        // The raw magnetometer reports no accuracy field. Report
+        // MEDIUM rather than HIGH so that QiblaPage.evaluateCalibrationNeed()
+        // does not auto-open the calibration overlay (MEDIUM is
+        // treated as acceptable) but the manual "Calibrate" link in
+        // StatusCard remains tappable if the user perceives bad
+        // readings. Reporting HIGH previously suppressed every path
+        // to calibration on fallback devices.
+        onReading({ heading, isFlat: true, accuracy: SensorAccuracy.MEDIUM });
       }, { interval: 100_000_000 });
       return true;
     } catch (err) {

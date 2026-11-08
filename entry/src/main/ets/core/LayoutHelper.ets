@@ -21,6 +21,7 @@ export class LayoutHelper {
   private static smListener: mediaquery.MediaQueryListener | null = null;
   private static mdListener: mediaquery.MediaQueryListener | null = null;
   private static lgListener: mediaquery.MediaQueryListener | null = null;
+  private static splitMode: boolean = false;
 
   /** Install once at app startup. */
   static install(): void {
@@ -85,5 +86,33 @@ export class LayoutHelper {
 
     AppStorage.setOrCreate(STORAGE_KEY_BREAKPOINT, bp);
     console.info(`[LayoutHelper] breakpoint = ${bp}`);
+  }
+
+  /**
+   * True when the OS has placed this window into a split-screen
+   * arrangement (the app is sharing the display with another app,
+   * or an internal routerSplit has produced a two-pane view).
+   *
+   * Affects whether pages should expand top safe area. In split
+   * mode, both panes share one status-bar band; expanding top in
+   * both can produce misaligned headers on some builds.
+   *
+   * Read-only from page code. Updated by EntryAbility via
+   * setSplitMode() on window-status change and on foreground.
+   */
+  static isSplitMode(): boolean {
+    return LayoutHelper.splitMode;
+  }
+
+  /**
+   * Set the split-mode flag. Called by EntryAbility. Idempotent —
+   * only logs on transition.
+   */
+  static setSplitMode(isSplit: boolean): void {
+    if (LayoutHelper.splitMode === isSplit) {
+      return;
+    }
+    LayoutHelper.splitMode = isSplit;
+    console.info(`[LayoutHelper] splitMode = ${isSplit}`);
   }
 }

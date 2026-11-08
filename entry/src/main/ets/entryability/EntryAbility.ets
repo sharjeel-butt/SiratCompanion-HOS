@@ -85,6 +85,29 @@ const PREFERRED_WINDOW_HEIGHT_2IN1 = 1100;
 const APP_STORAGE_LAST_TZ_OFFSET = 'last_device_tz_offset';
 
 export default class EntryAbility extends UIAbility {
+  /**
+   * Whitelist of pages that widgets may deep-link into via
+   * targetPage. Anything else is ignored with a warning — this
+   * prevents a misconfigured postCardAction from opening an
+   * unexpected page in a cold-start context, where the router stack
+   * is empty and there is no back button to escape.
+   *
+   * Extend this list when a new widget needs a new destination.
+   */
+  private static readonly WIDGET_TARGET_PAGES: string[] = [
+    'pages/RamadanDetailsPage',
+    'pages/QuranPage',
+    'pages/SurahDetailsPage',
+    'pages/DuasPage',
+    'pages/PrayerDetailsPage',
+    'pages/TasbihDetailsPage',
+    'pages/SettingsPage',
+    'pages/CustomizePage',
+    'pages/AdvancedCalcPage',
+    'pages/RecitationsPage',
+    'pages/LicensesPage'
+  ];
+
   // ============================================================
   // LIFECYCLE — onCreate
   // ============================================================
@@ -219,6 +242,11 @@ export default class EntryAbility extends UIAbility {
         );
         AppStorage.setOrCreate(STORAGE_KEY_TIME_FORMAT, savedTimeFormat);
 
+        const savedQuranScript = await PreferencesHelper.getString(
+          'active_quran_script', 'indopak'
+        );
+        AppStorage.setOrCreate('active_quran_script', savedQuranScript);
+
         // ========================================================
         // PER-TIMING VISIBILITY — MIGRATION
         // ========================================================
@@ -328,6 +356,8 @@ export default class EntryAbility extends UIAbility {
               return;
             }
             hilog.info(0x0000, 'Sirat', 'Loaded %{public}s', startPage);
+            this.installSplitModeListener(windowStage);
+
             this.resizeWindowFor2in1(windowStage);
 
             // --- ADD THIS BLOCK ---
@@ -358,6 +388,43 @@ export default class EntryAbility extends UIAbility {
         this.resizeWindowFor2in1(windowStage);
       });
     });
+  }
+
+  /**
+   * Track whether the current window is in a split arrangement and
+   * mirror that into LayoutHelper so pages can consult it.
+   *
+   * Called once after loadContent succeeds. Queries the initial
+   * window status and subscribes to future status changes. Non-fatal
+   * — a failure here only means pages cannot distinguish split from
+   * full-screen, which is the current (pre-fix) behaviour.
+   */
+  private installSplitModeListener(windowStage: window.WindowStage): void {
+    windowStage.getMainWindow()
+      .then((win: window.Window) => {
+        // Initial state.
+        try {
+          const status: window.WindowStatusType = win.getWindowStatus();
+          LayoutHelper.setSplitMode(status === window.WindowStatusType.SPLIT_SCREEN);
+        } catch (e) {
+          // getWindowStatus unavailable on some SDK builds — fall
+          // through to the change listener below.
+        }
+
+        // Future changes.
+        try {
+          win.on('windowStatusChange', (status: window.WindowStatusType) => {
+            LayoutHelper.setSplitMode(status === window.WindowStatusType.SPLIT_SCREEN);
+          });
+        } catch (e) {
+          AppLogger.warn('EntryAbility',
+            `windowStatusChange listener failed: ${(e as Error).message}`);
+        }
+      })
+      .catch((err: Error) => {
+        AppLogger.warn('EntryAbility',
+          `installSplitModeListener: getMainWindow failed: ${err.message}`);
+      });
   }
 
   onForeground(): void {
@@ -414,9 +481,12 @@ export default class EntryAbility extends UIAbility {
     const tabRaw = params['targetTab'];
 
     if (typeof pageRaw === 'string' && pageRaw.length > 0) {
-      if (pageRaw === 'pages/RamadanDetailsPage') {
+      if (EntryAbility.WIDGET_TARGET_PAGES.indexOf(pageRaw) !== -1) {
         AppStorage.setOrCreate('widget_target_page', pageRaw);
         hasTarget = true;
+      } else {
+        AppLogger.warn('EntryAbility',
+          `handleWidgetNavWant: targetPage '${pageRaw}' is not in the whitelist — ignoring`);
       }
     }
 

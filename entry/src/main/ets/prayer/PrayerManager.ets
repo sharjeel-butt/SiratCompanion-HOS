@@ -433,9 +433,6 @@ export class PrayerManager {
       let status: string;
       if (p.checked) {
         status = 'prayed';
-      } else if (i === actualPrayIndex && i === actualNextIndex) {
-        status =
-          'both';
       } else if (i === actualPrayIndex) {
         status = 'pray';
       } else if (i === actualNextIndex) {

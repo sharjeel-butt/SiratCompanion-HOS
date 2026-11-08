@@ -33,7 +33,13 @@ struct SurahDetailsPage {
 
   private startVerse: number = 1;
   private endVerse: number | null = null;
-  private activeScript: string = AppStorage.get<string>('active_quran_script') ?? 'uthmani';
+  // Aligned with the canonical default used everywhere else in the
+  // app — QuranPage falls back to 'indopak' for the same field, and
+  // UserBackupService.seedAppStorageFromPrefs() uses 'indopak' as the
+  // default when re-seeding after a restore. Before this change the
+  // cold-start experience showed 'uthmani' (QPC Hafs) in the verse
+  // reader and 'indopak' (JameelNoori Nastaliq) in the surah list.
+  private activeScript: string = AppStorage.get<string>('active_quran_script') ?? 'indopak';
 
   async aboutToAppear() {
     await this.loadInitialData();
