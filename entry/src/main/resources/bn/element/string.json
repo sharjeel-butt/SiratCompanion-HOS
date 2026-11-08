@@ -3046,6 +3046,10 @@
     {
       "name": "occasion_witr_prayer",
       "value": "বিতরের সালাত"
+    },
+    {
+      "name": "occasion_maghrib_prayer",
+      "value": "মাগরিবের সালাত"
     }
   ]
 }

@@ -2,6 +2,12 @@
   "dataType": "User content",
   "dataLabels": [
     {
+      "label": "Approximate location (last known / manually entered)",
+      "purposes": [
+        "App functionality"
+      ]
+    },
+    {
       "label": "Prayer completion history",
       "purposes": [
         "App functionality"
@@ -45,6 +51,12 @@
     },
     {
       "label": "Custom calendar events",
+      "purposes": [
+        "App functionality"
+      ]
+    },
+    {
+      "label": "Calendar events (Sirat-created prayer reminders)",
       "purposes": [
         "App functionality"
       ]

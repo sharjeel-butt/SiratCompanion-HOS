@@ -3046,6 +3046,10 @@
     {
       "name": "occasion_witr_prayer",
       "value": "Vitir Namazı"
+    },
+    {
+      "name": "occasion_maghrib_prayer",
+      "value": "Akşam Namazı"
     }
   ]
 }

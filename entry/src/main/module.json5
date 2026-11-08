@@ -119,6 +119,16 @@
           "when": "inuse"
         }
       },
+      {
+        "name": "ohos.permission.GYROSCOPE",
+        "reason": "$string:sensor_permission_reason",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility"
+          ],
+          "when": "inuse"
+        }
+      },
       // ---- Calendar Kit backend ----
       // Used while CALENDAR_REMINDERS_ENABLED = true in FeatureFlags.ets.
       // Comment these out when the Agent-Powered Reminder capability

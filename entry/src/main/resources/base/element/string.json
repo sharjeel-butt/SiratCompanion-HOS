@@ -2901,10 +2901,6 @@
       "value": "Ramadan fasting tracker and countdown"
     },
     {
-      "name": "timing_iftar",
-      "value": "Iftar"
-    },
-    {
       "name": "prayer_prompt_title",
       "value": "Have you prayed yet?"
     },
@@ -3051,6 +3047,10 @@
     {
       "name": "occasion_witr_prayer",
       "value": "Witr Prayer"
+    },
+    {
+      "name": "occasion_maghrib_prayer",
+      "value": "Maghrib Prayer"
     }
 
   ]

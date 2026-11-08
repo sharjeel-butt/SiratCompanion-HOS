@@ -189,7 +189,7 @@ struct DuasPage {
                 this.activeCategory = cat;
                 this.applyFilters();
               })
-          })
+          }, (cat: string) => `cat-${cat}-${this.activeCategory}-${this.appLanguage}`)
         }
         .padding({ left: 16, right: 16 })
       }
@@ -206,7 +206,7 @@ struct DuasPage {
             ListItem() {
               this.DuaCard(dua)
             }
-          })
+          }, (dua: CompleteDua) => `dua-${dua.id}-${dua.isFavorite}-${this.appLanguage}`)
         }
         .width('100%')
         .layoutWeight(1)

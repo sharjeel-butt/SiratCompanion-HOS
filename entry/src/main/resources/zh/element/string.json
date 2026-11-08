@@ -3038,6 +3038,18 @@
     {
       "name": "occasion_witr_prayer",
       "value": "维特尔拜"
+    },
+    {
+      "name": "occasion_maghrib_prayer",
+      "value": "昏礼"
+    },
+    {
+      "name": "occasion_fajr_prayer",
+      "value": "晨礼"
+    },
+    {
+      "name": "hasan_sahih",
+      "value": "优良可靠"
     }
   ]
 }

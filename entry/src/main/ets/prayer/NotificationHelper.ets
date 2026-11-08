@@ -106,6 +106,13 @@ export class NotificationHelper {
   // ============================================================
 
   static resolveBackend(): ReminderBackend {
+    if (CALENDAR_REMINDERS_ENABLED && NOTIFICATIONS_ENABLED) {
+      AppLogger.warn('NotificationHelper',
+        'Both CALENDAR_REMINDERS_ENABLED and NOTIFICATIONS_ENABLED are true ' +
+          'in FeatureFlags.ets. Calendar backend takes precedence; the ' +
+          'agent backend is inactive. This is almost certainly a ' +
+          'misconfiguration — exactly one of the two must be true.');
+    }
     if (CALENDAR_REMINDERS_ENABLED) {
       return 'calendar';
     }

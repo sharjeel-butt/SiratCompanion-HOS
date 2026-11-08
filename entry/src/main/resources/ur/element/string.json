@@ -3046,6 +3046,10 @@
     {
       "name": "occasion_witr_prayer",
       "value": "نمازِ وتر"
+    },
+    {
+      "name": "occasion_maghrib_prayer",
+      "value": "نمازِ مغرب"
     }
   ]
 }
