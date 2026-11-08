@@ -20,6 +20,24 @@ export class TasbihStorage {
   public static cachedTasbihs: Tasbih[] | null = null;
   public static cachedActiveTasbihId: string = '';
   public static cachedActiveDhikrIndex: number = 0;
+  /**
+   * The YYYY-MM-DD key on which rollOverStaleCounts() last completed
+   * for the current cache. Empty string means "never run this
+   * session" — the next load() always scans.
+   *
+   * rollOverStaleCounts is O(tasbihs × dhikrs × history) and only
+   * has work to do once per calendar day. Without this gate, every
+   * TasbihStorage.load() call — including the one fired by
+   * TasbihIndicator on every count increment — re-walks the entire
+   * state tree. On a heavy user this is hundreds of thousands of
+   * discarded objects per counting session.
+   *
+   * Also invalidated implicitly by date comparison: if the clock
+   * crosses midnight (or the device clock is changed), the next
+   * todayKey() will differ from this and the scan re-runs.
+   */
+  private static lastRolloverDateKey: string = '';
+
   private static store: preferences.Preferences | null = null;
 
   static async init(context: common.UIAbilityContext): Promise<void> {
@@ -34,15 +52,25 @@ export class TasbihStorage {
   }
 
   static async load(defaults: Tasbih[]): Promise<TasbihLoadResult> {
-    // 1. Return from cache instantly (but check for midnight rollover first)
+    const today = TasbihManager.todayKey();
+    const needsRollover = TasbihStorage.lastRolloverDateKey !== today;
+
+    // 1. Return from cache instantly
     if (TasbihStorage.cachedTasbihs) {
-      const rolled = TasbihManager.rollOverStaleCounts(TasbihStorage.cachedTasbihs);
-      if (rolled !== TasbihStorage.cachedTasbihs) {
-        TasbihStorage.cachedTasbihs = rolled;
-        // Save in background to bump version and persist the reset
-        TasbihStorage.save(rolled, TasbihStorage.cachedActiveTasbihId, TasbihStorage.cachedActiveDhikrIndex)
-          .catch(() => {
+      if (needsRollover) {
+        const rolled = TasbihManager.rollOverStaleCounts(
+          TasbihStorage.cachedTasbihs
+        );
+        TasbihStorage.lastRolloverDateKey = today;
+        if (rolled !== TasbihStorage.cachedTasbihs) {
+          TasbihStorage.cachedTasbihs = rolled;
+          TasbihStorage.save(
+            rolled,
+            TasbihStorage.cachedActiveTasbihId,
+            TasbihStorage.cachedActiveDhikrIndex
+          ).catch(() => {
           });
+        }
       }
       return {
         tasbihs: TasbihStorage.cachedTasbihs,
@@ -147,10 +175,12 @@ export class TasbihStorage {
         };
       });
 
-      const rolled = TasbihManager.rollOverStaleCounts(tasbihs);
-      const rolloverHappened = rolled !== tasbihs;
-      if (rolloverHappened) {
-        tasbihs = rolled;
+      if (needsRollover) {
+        const rolled = TasbihManager.rollOverStaleCounts(tasbihs);
+        if (rolled !== tasbihs) {
+          tasbihs = rolled;
+        }
+        TasbihStorage.lastRolloverDateKey = today;
       }
 
       const activeId = await TasbihStorage.store.get(KEY_ACTIVE, '') as string;
@@ -167,9 +197,13 @@ export class TasbihStorage {
       TasbihStorage.cachedActiveTasbihId = activeTasbihId;
       TasbihStorage.cachedActiveDhikrIndex = activeDhikrIndex;
 
-      if (rolloverHappened) {
-        TasbihStorage.save(tasbihs, activeTasbihId, activeDhikrIndex).catch(() => {
-        });
+      if (needsRollover) {
+        // Cold load always persists the (possibly rolled) state so
+        // migrations from older builds take effect even if the
+        // user does nothing else today.
+        TasbihStorage.save(tasbihs, activeTasbihId, activeDhikrIndex)
+          .catch(() => {
+          });
       }
 
       return { tasbihs, activeTasbihId, activeDhikrIndex };

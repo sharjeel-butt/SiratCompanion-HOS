@@ -6,7 +6,7 @@
       "intentVersion": "1.0.0",
       "srcEntry": "./ets/entryformability/PrayerIntentExecutor.ets",
       "displayName": "Get Prayer Times",
-      "displayDescription": "Get the next prayer time and today's schedule",
+      "displayDescription": "Get the next prayer time",
       "uiAbility": {
         "ability": "EntryAbility",
         "executeMode": [

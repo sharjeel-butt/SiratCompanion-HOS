@@ -36,7 +36,7 @@
       "defaultDimension": "2*2",
       "isDefault": false,
       "updateEnabled": true,
-      "updateDuration": 30,
+      "updateDuration": 240,
       "scheduledUpdateTime": "00:00",
       "formVisibleNotify": true,
       "uiSyntax": "arkts"

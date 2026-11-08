@@ -45,11 +45,6 @@ export class MaterialHelper {
     return false;
   }
 
-  /** Always null in this build. */
-  static getGlobalLevel(): null {
-    return null;
-  }
-
   /** True when the current device could use explicit uiMaterial. */
   static shouldUseSystemMaterial(): boolean {
     return false;
