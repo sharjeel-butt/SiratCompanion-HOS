@@ -412,6 +412,7 @@ export struct HomePage {
                     this.LiveCountdownBanner()
                     this.PrayerPromptCard()
                     this.FullQuranAnchorCard()
+                    this.MosqueFinderAnchorCard()
                     this.RecommendedRecitationsCard()
                     if (this.eidInfo !== null) {
                       this.EidCard()
@@ -461,6 +462,7 @@ export struct HomePage {
                   this.LiveCountdownBanner()
                   this.PrayerPromptCard()
                   this.FullQuranAnchorCard()
+                  this.MosqueFinderAnchorCard()
                   this.RecommendedRecitationsCard()
                   if (this.eidInfo !== null) {
                     this.EidCard()
@@ -3760,6 +3762,55 @@ export struct HomePage {
         this.loadSettingsAndLocation();
       }
     }
+  }
+
+  @Builder
+  MosqueFinderAnchorCard() {
+    Row() {
+      Column() {
+        Image($r('app.media.ic_nav_mosque')) // Use existing mosque icon
+          .width(24).height(24)
+          .fillColor(this.colors.accentGold)
+      }
+      .width(44)
+      .height(44)
+      .borderRadius(12)
+      .backgroundColor(this.colors.tintSoft)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(HorizontalAlign.Center)
+      .flexShrink(0)
+
+      Column() {
+        Text(this.tr('mosque_finder_title'))
+          .fontSize(16).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+        Text(this.tr('mosque_finder_desc'))
+          .fontSize(11)
+          .fontColor(this.colors.textMuted)
+          .margin({ top: 4 })
+          .maxLines(2)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1).padding({ left: 12, right: 12 })
+
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
+        .flexShrink(0)
+    }
+    .width('100%')
+    .padding(16)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(Theme.radiusLarge)
+    .border({ width: 1, color: this.colors.borderSoft })
+    .margin({ bottom: 14 })
+    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+    .onClick(() => {
+      NavHelper.prepareForward();
+      router.pushUrl({ url: 'pages/MosqueFinderPage' })
+        .catch((e: Error) => console.error(JSON.stringify(e)));
+    })
   }
 
   private async refreshTasbihData(): Promise<void> {

@@ -3050,6 +3050,18 @@
     {
       "name": "occasion_maghrib_prayer",
       "value": "মাগরিবের সালাত"
+    },
+    {
+      "name": "mosque_finder_title",
+      "value": "মসজিদ অনুসন্ধানকারী"
+    },
+    {
+      "name": "mosque_finder_desc",
+      "value": "অফলাইনে নিকটবর্তী মসজিদ খুঁজুন।"
+    },
+    {
+      "name": "no_mosques_found",
+      "value": "কাছাকাছি কোনো মসজিদ পাওয়া যায়নি।"
     }
   ]
 }

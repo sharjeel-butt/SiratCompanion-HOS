@@ -3051,6 +3051,18 @@
     {
       "name": "occasion_maghrib_prayer",
       "value": "Maghrib Prayer"
+    },
+    {
+      "name": "mosque_finder_title",
+      "value": "Mosque Finder"
+    },
+    {
+      "name": "mosque_finder_desc",
+      "value": "Find nearby mosques offline."
+    },
+    {
+      "name": "no_mosques_found",
+      "value": "No mosques found nearby."
     }
 
   ]

@@ -3050,6 +3050,18 @@
     {
       "name": "occasion_maghrib_prayer",
       "value": "Salat Magrib"
+    },
+    {
+      "name": "mosque_finder_title",
+      "value": "Pencari Masjid"
+    },
+    {
+      "name": "mosque_finder_desc",
+      "value": "Temukan masjid terdekat secara offline."
+    },
+    {
+      "name": "no_mosques_found",
+      "value": "Tidak ada masjid yang ditemukan di sekitar."
     }
   ]
 }

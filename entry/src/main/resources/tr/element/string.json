@@ -3050,6 +3050,18 @@
     {
       "name": "occasion_maghrib_prayer",
       "value": "Akşam Namazı"
+    },
+    {
+      "name": "mosque_finder_title",
+      "value": "Cami Bulucu"
+    },
+    {
+      "name": "mosque_finder_desc",
+      "value": "Yakındaki camileri çevrimdışı bulun."
+    },
+    {
+      "name": "no_mosques_found",
+      "value": "Yakında cami bulunamadı."
     }
   ]
 }

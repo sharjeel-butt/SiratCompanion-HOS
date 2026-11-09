@@ -3051,6 +3051,18 @@
     {
       "name": "occasion_maghrib_prayer",
       "value": "صلاة المغرب"
+    },
+    {
+      "name": "mosque_finder_title",
+      "value": "الباحث عن المساجد"
+    },
+    {
+      "name": "mosque_finder_desc",
+      "value": "اعثر على المساجد القريبة دون اتصال بالإنترنت."
+    },
+    {
+      "name": "no_mosques_found",
+      "value": "لم يتم العثور على مساجد قريبة."
     }
   ]
 }

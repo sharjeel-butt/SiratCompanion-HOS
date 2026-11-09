@@ -12,6 +12,7 @@
     "pages/SurahDetailsPage",
     "pages/RecitationsPage",
     "pages/QuranPage",
-    "pages/LicensesPage"
+    "pages/LicensesPage",
+    "pages/MosqueFinderPage"
   ]
 }

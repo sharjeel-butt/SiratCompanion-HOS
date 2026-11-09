@@ -3050,6 +3050,18 @@
     {
       "name": "occasion_maghrib_prayer",
       "value": "نمازِ مغرب"
+    },
+    {
+      "name": "mosque_finder_title",
+      "value": "مسجد تلاش کنندہ"
+    },
+    {
+      "name": "mosque_finder_desc",
+      "value": "قریبی مساجد آف لائن تلاش کریں۔"
+    },
+    {
+      "name": "no_mosques_found",
+      "value": "قریب میں کوئی مسجد نہیں ملی۔"
     }
   ]
 }
