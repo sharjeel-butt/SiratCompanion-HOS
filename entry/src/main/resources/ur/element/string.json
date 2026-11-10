@@ -3078,6 +3078,10 @@
     {
       "name": "km_away",
       "value": "کلومیٹر دور"
+    },
+    {
+      "name": "privacy_step_title",
+      "value": "رازداری کی پالیسی"
     }
   ]
 }

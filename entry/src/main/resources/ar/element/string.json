@@ -3079,6 +3079,10 @@
     {
       "name": "km_away",
       "value": "كم بعيد"
+    },
+    {
+      "name": "privacy_step_title",
+      "value": "سياسة الخصوصية"
     }
   ]
 }

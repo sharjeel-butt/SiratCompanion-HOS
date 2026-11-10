@@ -3078,6 +3078,10 @@
     {
       "name": "km_away",
       "value": "km jauhnya"
+    },
+    {
+      "name": "privacy_step_title",
+      "value": "Kebijakan Privasi"
     }
   ]
 }
