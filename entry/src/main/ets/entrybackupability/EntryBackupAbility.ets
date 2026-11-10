@@ -130,7 +130,10 @@ const SETTINGS_SPECS: PrefSpec[] = [
 
   // ---- Quran & Prayer Prompts (NEW) ----
   { key: 'active_quran_script', type: TYPE_STRING },
-  { key: 'dismissed_prayers', type: TYPE_STRING }
+  { key: 'dismissed_prayers', type: TYPE_STRING },
+
+  // ---- Custom Mosques Data ----
+  { key: 'custom_mosques_data', type: TYPE_STRING }
 ];
 
 /**

@@ -3062,6 +3062,22 @@
     {
       "name": "no_mosques_found",
       "value": "Tidak ada masjid yang ditemukan di sekitar."
+    },
+    {
+      "name": "mosque_directions",
+      "value": "Dapatkan Petunjuk Arah"
+    },
+    {
+      "name": "mosque_visit_website",
+      "value": "Kunjungi Situs Web"
+    },
+    {
+      "name": "mosque_call",
+      "value": "Hubungi"
+    },
+    {
+      "name": "km_away",
+      "value": "km jauhnya"
     }
   ]
 }

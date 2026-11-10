@@ -60,6 +60,18 @@
       "purposes": [
         "App functionality"
       ]
+    },
+    {
+      "label": "Downloaded Offline Mosque Data",
+      "purposes": [
+        "App functionality"
+      ]
+    },
+    {
+      "label": "Custom user-defined locations (Mosques)",
+      "purposes": [
+        "App functionality"
+      ]
     }
   ]
 }

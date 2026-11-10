@@ -3063,6 +3063,22 @@
     {
       "name": "no_mosques_found",
       "value": "لم يتم العثور على مساجد قريبة."
+    },
+    {
+      "name": "mosque_directions",
+      "value": "الحصول على الاتجاهات"
+    },
+    {
+      "name": "mosque_visit_website",
+      "value": "زيارة الموقع الإلكتروني"
+    },
+    {
+      "name": "mosque_call",
+      "value": "اتصال"
+    },
+    {
+      "name": "km_away",
+      "value": "كم بعيد"
     }
   ]
 }

@@ -3062,6 +3062,22 @@
     {
       "name": "no_mosques_found",
       "value": "قریب میں کوئی مسجد نہیں ملی۔"
+    },
+    {
+      "name": "mosque_directions",
+      "value": "راستہ حاصل کریں"
+    },
+    {
+      "name": "mosque_visit_website",
+      "value": "ویب سائٹ ملاحظہ کریں"
+    },
+    {
+      "name": "mosque_call",
+      "value": "کال کریں"
+    },
+    {
+      "name": "km_away",
+      "value": "کلومیٹر دور"
     }
   ]
 }

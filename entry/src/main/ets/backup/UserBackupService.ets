@@ -207,7 +207,10 @@ const SETTINGS_SPECS: PrefSpec[] = [
 
   // ---- Quran & Prayer Prompts (NEW) ----
   { key: 'active_quran_script', type: 'string' },
-  { key: 'dismissed_prayers', type: 'string' }
+  { key: 'dismissed_prayers', type: 'string' },
+
+  // ---- Custom Mosques ----
+  { key: 'custom_mosques_data', type: 'string' }
 ];
 
 const TASBIH_SPECS: PrefSpec[] = [

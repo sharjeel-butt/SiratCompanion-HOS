@@ -27,6 +27,7 @@ export interface WeekDetailCell {
   dayOfWeek: number; // 0 = Sunday
   dayOfMonth: number;
   isToday: boolean;
+  isFuture: boolean; // NEW
   completed: number; // 0–5
 }
 
@@ -111,6 +112,9 @@ export interface PrayerDetailsSnapshot {
   currentStreak: number;
   bestStreak: number;
   monthProgress: MonthProgress;
+  currentWeekNumber: number;
+  weekStartDate: Date;
+  weekEndDate: Date;
 }
 
 // ============================================================
@@ -155,6 +159,7 @@ export interface TasbihDetailsSnapshot {
   totalDaysPossible: number;
   totalCountInPeriod: number;
   daysInPeriod: number;
+  currentWeekNumber: number;
 }
 
 export class ProgressHelper {
@@ -316,22 +321,26 @@ export class ProgressHelper {
     return progress;
   }
 
-  // ============================================================
-  // PRAYER DETAILS — WEEK / MONTH / YEAR
-  // ============================================================
-
   static getPrayerDetails(): PrayerDetailsSnapshot {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    const currentYear = today.getFullYear();
+
+    // ==========================================
+    // 1. WEEK LOGIC (Sliced from Year Start)
+    // ==========================================
+    const yearStart = new Date(currentYear, 0, 1);
+    const dayOfYear = Math.floor((today.getTime() - yearStart.getTime()) / 86400000) + 1;
+    const currentWeekNumber = Math.ceil(dayOfYear / 7);
+
+    const weekStartDate = new Date(currentYear, 0, 1 + (currentWeekNumber - 1) * 7);
+    const weekEndDate = new Date(currentYear, 0, 1 + (currentWeekNumber - 1) * 7 + 6);
 
     const weekPerPrayer = ProgressHelper.emptyPerPrayer();
-    const monthPerPrayer = ProgressHelper.emptyPerPrayer();
-    const yearPerPrayer = ProgressHelper.emptyPerPrayer();
 
-    // ---- Week: last 7 days, inclusive of today ----
     for (let i = 0; i < 7; i++) {
-      const d = new Date(today);
-      d.setDate(d.getDate() - i);
+      const d = new Date(weekStartDate.getTime() + i * 86400000);
+      d.setHours(0, 0, 0, 0);
       const st = ProgressHelper.readState(ProgressHelper.getDateKey(d));
       if (st.fajr) {
         weekPerPrayer.fajr++;
@@ -350,13 +359,17 @@ export class ProgressHelper {
       }
     }
 
-    // ---- Month: current calendar month, elapsed days only ----
-    const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-    const cursorM = new Date(monthStart);
-    while (cursorM.getTime() <= today.getTime()) {
-      const st = ProgressHelper.readState(
-        ProgressHelper.getDateKey(cursorM)
-      );
+    // ==========================================
+    // 2. MONTH LOGIC (Whole Month)
+    // ==========================================
+    const monthPerPrayer = ProgressHelper.emptyPerPrayer();
+    const daysInMonth = new Date(currentYear, today.getMonth() + 1, 0).getDate();
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = new Date(currentYear, today.getMonth(), d);
+      date.setHours(0, 0, 0, 0);
+
+      const st = ProgressHelper.readState(ProgressHelper.getDateKey(date));
       if (st.fajr) {
         monthPerPrayer.fajr++;
       }
@@ -372,62 +385,69 @@ export class ProgressHelper {
       if (st.isha) {
         monthPerPrayer.isha++;
       }
-      cursorM.setDate(cursorM.getDate() + 1);
     }
 
-    // ---- Year: current calendar year, elapsed days only ----
-    const yearStart = new Date(today.getFullYear(), 0, 1);
-    const cursorY = new Date(yearStart);
-    while (cursorY.getTime() <= today.getTime()) {
-      const st = ProgressHelper.readState(
-        ProgressHelper.getDateKey(cursorY)
-      );
-      if (st.fajr) {
-        yearPerPrayer.fajr++;
+    // ==========================================
+    // 3. YEAR LOGIC (Whole Year)
+    // ==========================================
+    const yearPerPrayer = ProgressHelper.emptyPerPrayer();
+    for (let m = 0; m < 12; m++) {
+      const daysInM = new Date(currentYear, m + 1, 0).getDate();
+      for (let d = 1; d <= daysInM; d++) {
+        const date = new Date(currentYear, m, d);
+        date.setHours(0, 0, 0, 0); // Safe from DST shifts
+
+        // NOTE: We do NOT use 'break' here. We count all recorded data.
+        const st = ProgressHelper.readState(ProgressHelper.getDateKey(date));
+        if (st.fajr) {
+          yearPerPrayer.fajr++;
+        }
+        if (st.dhuhr) {
+          yearPerPrayer.dhuhr++;
+        }
+        if (st.asr) {
+          yearPerPrayer.asr++;
+        }
+        if (st.maghrib) {
+          yearPerPrayer.maghrib++;
+        }
+        if (st.isha) {
+          yearPerPrayer.isha++;
+        }
       }
-      if (st.dhuhr) {
-        yearPerPrayer.dhuhr++;
-      }
-      if (st.asr) {
-        yearPerPrayer.asr++;
-      }
-      if (st.maghrib) {
-        yearPerPrayer.maghrib++;
-      }
-      if (st.isha) {
-        yearPerPrayer.isha++;
-      }
-      cursorY.setDate(cursorY.getDate() + 1);
     }
 
-    const weekTotal = weekPerPrayer.fajr + weekPerPrayer.dhuhr
-      + weekPerPrayer.asr + weekPerPrayer.maghrib + weekPerPrayer.isha;
-    const monthTotal = monthPerPrayer.fajr + monthPerPrayer.dhuhr
-      + monthPerPrayer.asr + monthPerPrayer.maghrib + monthPerPrayer.isha;
-    const yearTotal = yearPerPrayer.fajr + yearPerPrayer.dhuhr
-      + yearPerPrayer.asr + yearPerPrayer.maghrib + yearPerPrayer.isha;
-
-    const daysElapsedMonth = today.getDate();
-    const daysElapsedYear = Math.floor(
-      (today.getTime() - yearStart.getTime()) / 86400000
-    ) + 1;
+    // ==========================================
+    // TOTALS & RETURN
+    // ==========================================
+    const weekTotal =
+      weekPerPrayer.fajr + weekPerPrayer.dhuhr + weekPerPrayer.asr + weekPerPrayer.maghrib + weekPerPrayer.isha;
+    const monthTotal =
+      monthPerPrayer.fajr + monthPerPrayer.dhuhr + monthPerPrayer.asr + monthPerPrayer.maghrib + monthPerPrayer.isha;
+    const yearTotal =
+      yearPerPrayer.fajr + yearPerPrayer.dhuhr + yearPerPrayer.asr + yearPerPrayer.maghrib + yearPerPrayer.isha;
 
     const base = ProgressHelper.getPrayerProgress();
-    const snapshot: PrayerDetailsSnapshot = {
-      weekPerPrayer,
-      monthPerPrayer,
-      yearPerPrayer,
-      weekTotal,
+
+    // CRITICAL FIX: Ensure we map the correct objects to the correct keys.
+    // If you accidentally map weekPerPrayer to yearPerPrayer, both will show '6'.
+    return {
+      weekPerPrayer: weekPerPrayer,
+      monthPerPrayer: monthPerPrayer,
+      yearPerPrayer: yearPerPrayer,
+      weekTotal: weekTotal,
       weekPossible: 7 * 5,
-      monthTotal,
-      monthPossible: daysElapsedMonth * 5,
-      yearTotal,
-      yearPossible: daysElapsedYear * 5,
+      monthTotal: monthTotal,
+      monthPossible: daysInMonth * 5,
+      yearTotal: yearTotal,
+      yearPossible: 365 * 5,
       currentStreak: base.currentStreak,
       bestStreak: base.bestStreak,
-      monthProgress: ProgressHelper.getMonthProgress()
+      monthProgress: ProgressHelper.getMonthProgress(),
+      currentWeekNumber: currentWeekNumber,
+      weekStartDate: weekStartDate,
+      weekEndDate: weekEndDate
     };
-    return snapshot;
   }
 
   /**
@@ -481,30 +501,43 @@ export class ProgressHelper {
   ): TasbihDetailsSnapshot {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
+    const currentYear = today.getFullYear();
     const dateKeys: string[] = [];
+    let fullPeriodDays = 0;
+    let currentWeekNumber = 1;
 
     if (period === 'week') {
-      for (let i = 6; i >= 0; i--) {
-        const d = new Date(today);
-        d.setDate(d.getDate() - i);
+      const yearStart = new Date(currentYear, 0, 1);
+      const dayOfYear = Math.floor((today.getTime() - yearStart.getTime()) / 86400000) + 1;
+      currentWeekNumber = Math.ceil(dayOfYear / 7);
+      fullPeriodDays = 7;
+
+      const weekStart = new Date(yearStart.getTime() + (currentWeekNumber - 1) * 7 * 86400000);
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(weekStart.getTime() + i * 86400000);
+        d.setHours(0, 0, 0, 0);
         dateKeys.push(ProgressHelper.getDateKey(d));
       }
     } else if (period === 'month') {
-      const cur = new Date(today.getFullYear(), today.getMonth(), 1);
-      while (cur.getTime() <= today.getTime()) {
-        dateKeys.push(ProgressHelper.getDateKey(cur));
-        cur.setDate(cur.getDate() + 1);
+      const daysInMonth = new Date(currentYear, today.getMonth() + 1, 0).getDate();
+      fullPeriodDays = daysInMonth;
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const date = new Date(currentYear, today.getMonth(), d);
+        date.setHours(0, 0, 0, 0);
+        dateKeys.push(ProgressHelper.getDateKey(date));
       }
     } else {
-      const cur = new Date(today.getFullYear(), 0, 1);
-      while (cur.getTime() <= today.getTime()) {
-        dateKeys.push(ProgressHelper.getDateKey(cur));
-        cur.setDate(cur.getDate() + 1);
+      fullPeriodDays = 365;
+      for (let m = 0; m < 12; m++) {
+        const daysInM = new Date(currentYear, m + 1, 0).getDate();
+        for (let d = 1; d <= daysInM; d++) {
+          const date = new Date(currentYear, m, d);
+          date.setHours(0, 0, 0, 0);
+          dateKeys.push(ProgressHelper.getDateKey(date)); // No break!
+        }
       }
     }
-
-    const daysInPeriod = dateKeys.length;
 
     const rows: TasbihProgressRow[] = [];
     let totalDaysCompleted = 0;
@@ -531,46 +564,42 @@ export class ProgressHelper {
           ? L.get(d.transliterationKey, lang)
           : (d.transliteration.length > 0 ? d.transliteration : d.arabic);
 
-        const row: TasbihDhikrProgress = {
+        perDhikr.push({
           dhikrId: d.id,
           dhikrLabel: label,
           target: d.target,
           daysCompleted: daysCompleted,
-          daysInPeriod: daysInPeriod,
+          daysInPeriod: fullPeriodDays,
           totalCount: countSum
-        };
-        perDhikr.push(row);
+        });
         tasbihDaysCompleted += daysCompleted;
         totalCount += countSum;
       }
 
-      const possible = t.dhikrs.length * daysInPeriod;
-      const tasbihName = (t.nameKey && t.nameKey.length > 0)
-        ? L.get(t.nameKey, lang)
-        : t.name;
-      const tasbihRow: TasbihProgressRow = {
+      const possible = t.dhikrs.length * fullPeriodDays;
+      const tasbihName = (t.nameKey && t.nameKey.length > 0) ? L.get(t.nameKey, lang) : t.name;
+
+      rows.push({
         tasbihId: t.id,
         tasbihName: tasbihName,
-        themePresetId: t.themePresetId !== undefined
-          ? t.themePresetId : '',
+        themePresetId: t.themePresetId !== undefined ? t.themePresetId : '',
         isActive: t.id === activeId,
         perDhikr: perDhikr,
         totalDaysCompleted: tasbihDaysCompleted,
         totalDaysPossible: possible
-      };
-      rows.push(tasbihRow);
+      });
       totalDaysCompleted += tasbihDaysCompleted;
       totalDaysPossible += possible;
     }
 
-    const out: TasbihDetailsSnapshot = {
+    return {
       rows: rows,
       totalDaysCompleted: totalDaysCompleted,
       totalDaysPossible: totalDaysPossible,
       totalCountInPeriod: totalCount,
-      daysInPeriod: daysInPeriod
+      daysInPeriod: fullPeriodDays,
+      currentWeekNumber: currentWeekNumber
     };
-    return out;
   }
 
   // ============================================================
@@ -709,20 +738,26 @@ export class ProgressHelper {
   static getWeekDetail(): WeekDetailCell[] {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const out: WeekDetailCell[] = [];
+    const msPerDay = 86400000;
+    const yearStart = new Date(today.getFullYear(), 0, 1);
 
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date(today);
-      d.setDate(d.getDate() - i);
+    const dayOfYear = Math.floor((today.getTime() - yearStart.getTime()) / msPerDay) + 1;
+    const currentWeekNumber = Math.ceil(dayOfYear / 7);
+    const weekStart = new Date(yearStart.getTime() + (currentWeekNumber - 1) * 7 * msPerDay);
+
+    const out: WeekDetailCell[] = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(weekStart.getTime() + i * msPerDay);
       const st = ProgressHelper.readState(ProgressHelper.getDateKey(d));
-      const cell: WeekDetailCell = {
+
+      out.push({
         dateKey: ProgressHelper.getDateKey(d),
         dayOfWeek: d.getDay(),
         dayOfMonth: d.getDate(),
-        isToday: i === 0,
+        isToday: d.getTime() === today.getTime(),
+        isFuture: d.getTime() > today.getTime(),
         completed: ProgressHelper.countCompleted(st)
-      };
-      out.push(cell);
+      });
     }
     return out;
   }

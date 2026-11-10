@@ -53,7 +53,8 @@ struct TasbihDetailsPage {
     totalDaysCompleted: 0,
     totalDaysPossible: 0,
     totalCountInPeriod: 0,
-    daysInPeriod: 7
+    daysInPeriod: 7,
+    currentWeekNumber: 1 // NEW
   };
   private tasbihs: Tasbih[] = [];
   private activeId: string = '';
@@ -178,21 +179,30 @@ struct TasbihDetailsPage {
 
   @Builder
   PeriodChip(id: string) {
-    Text(this.periodLabel(id))
-      .fontSize(13)
-      .fontWeight(this.period === id ? FontWeight.Bold : FontWeight.Normal)
-      .fontColor(this.period === id
-        ? this.colors.textOnAccent : this.colors.textWhite)
-      .backgroundColor(this.period === id
-        ? this.colors.accentGold : Color.Transparent)
-      .textAlign(TextAlign.Center)
-      .height(38)
-      .layoutWeight(1)
-      .borderRadius(9)
-      .onClick(() => {
-        this.period = id as TasbihPeriod;
-        this.recompute();
-      })
+    Column() {
+      Text(this.periodLabel(id))
+        .fontSize(13)
+        .fontWeight(this.period === id ? FontWeight.Bold : FontWeight.Normal)
+        .fontColor(this.period === id ? this.colors.textOnAccent : this.colors.textWhite)
+
+      // Show Week Number only for the 'week' chip
+      if (id === 'week' && this.period === 'week') {
+        Text(`Week ${this.snapshot.currentWeekNumber}`)
+          .fontSize(9)
+          .fontColor(this.colors.textOnAccent)
+          .opacity(0.8)
+      }
+    }
+    .justifyContent(FlexAlign.Center)
+    .alignItems(HorizontalAlign.Center)
+    .height(38)
+    .layoutWeight(1)
+    .backgroundColor(this.period === id ? this.colors.accentGold : Color.Transparent)
+    .borderRadius(9)
+    .onClick(() => {
+      this.period = id as TasbihPeriod;
+      this.recompute();
+    })
   }
 
   @Builder

@@ -3062,6 +3062,22 @@
     {
       "name": "no_mosques_found",
       "value": "附近未找到清真寺。"
+    },
+    {
+      "name": "mosque_directions",
+      "value": "获取路线"
+    },
+    {
+      "name": "mosque_visit_website",
+      "value": "访问网站"
+    },
+    {
+      "name": "mosque_call",
+      "value": "拨打电话"
+    },
+    {
+      "name": "km_away",
+      "value": "公里外"
     }
   ]
 }

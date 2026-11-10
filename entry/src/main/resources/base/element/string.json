@@ -3063,7 +3063,22 @@
     {
       "name": "no_mosques_found",
       "value": "No mosques found nearby."
+    },
+    {
+      "name": "mosque_directions",
+      "value": "Get Directions"
+    },
+    {
+      "name": "mosque_visit_website",
+      "value": "Visit Website"
+    },
+    {
+      "name": "mosque_call",
+      "value": "Call"
+    },
+    {
+      "name": "km_away",
+      "value": "km away"
     }
-
   ]
 }
