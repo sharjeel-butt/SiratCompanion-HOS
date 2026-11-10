@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang }}"
+      dir="{% if page.lang == 'ar' or page.lang == 'ur' %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ site.title }}</title>
+    <meta name="description" content="{{ site.description }}">
+    <link rel="stylesheet" href="{{ '/assets/css/privacy.css' | relative_url }}">
+    {% case page.lang %}
+    {% when 'ar' %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600&display=swap">
+    {% when 'ur' %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600&display=swap">
+    {% when 'bn' %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600&display=swap">
+    {% endcase %}
+</head>
+<body class="privacy-page lang-{{ page.lang }}">
+
+<nav class="lang-nav" aria-label="Language">
+    {% for l in site.languages %}
+    <a href="{{ l.permalink | relative_url }}"
+       lang="{{ l.code }}"
+       {% if l.code== page.lang %}aria-current="page" {% endif %}>{{ l.name }}</a>
+    {% endfor %}
+</nav>
+
+<main class="container">
+    <header class="policy-header">
+        <h1 id="page-title">{{ site.title }}</h1>
+    </header>
+
+    <div id="loader" class="loader" role="status" aria-live="polite">
+        <span class="spinner" aria-hidden="true"></span>
+        <span>Loading…</span>
+    </div>
+
+    <div id="error" class="error" hidden>
+        <p><strong>Could not load the policy right now.</strong></p>
+        <p>You can still read it directly:</p>
+        <p><a id="raw-link" href="#" target="_blank" rel="noopener">Open the raw privacy JSON</a></p>
+    </div>
+
+    <article id="policy" class="policy" aria-live="polite"></article>
+
+    <footer class="policy-footer">
+        <p>
+            <a href="https://github.com/sharjeel-butt/SiratCompanion-HOS"
+               target="_blank" rel="noopener">Sirat Companion on GitHub</a>
+        </p>
+    </footer>
+</main>
+
+<noscript>
+    <p class="error">
+        This page needs JavaScript to display the privacy policy.
+        You can also
+        <a href="https://raw.githubusercontent.com/sharjeel-butt/SiratCompanion-HOS/master/entry/src/main/resources/rawfile/privacy/privacy_{{ page.lang }}.json">
+            read the raw JSON</a>.
+    </p>
+</noscript>
+
+<script>
+    (function () {
+      const RAW  = 'https://raw.githubusercontent.com/sharjeel-butt/SiratCompanion-HOS/master/entry/src/main/resources/rawfile/privacy';
+      const LANG = '{{ page.lang }}';
+      const url  = `${RAW}/privacy_${LANG}.json`;
+
+      const loader  = document.getElementById('loader');
+      const errorEl = document.getElementById('error');
+      const rawLink = document.getElementById('raw-link');
+      const titleEl = document.getElementById('page-title');
+      const article = document.getElementById('policy');
+
+      rawLink.href = url;
+
+      function renderBody(el, body) {
+        const blocks = body.split(/\n{2,}/);
+        // Block 0 is the title (already shown as <h1>).
+        // Block 1 is the metadata line — rendered inline below.
+        const frag = document.createDocumentFragment();
+        for (let i = 1; i < blocks.length; i++) {
+          const raw = blocks[i].trim();
+          if (!raw) continue;
+          const lines = raw.split('\n');
+          const allBullets = lines.every(l => l.startsWith('- '));
+
+          if (allBullets) {
+            const ul = document.createElement('ul');
+            for (const l of lines) {
+              const li = document.createElement('li');
+              li.textContent = l.slice(2);
+              ul.appendChild(li);
+            }
+            frag.appendChild(ul);
+          } else if (lines.length === 1) {
+            const h = document.createElement('h2');
+            h.textContent = raw;
+            frag.appendChild(h);
+          } else {
+            const p = document.createElement('p');
+            lines.forEach((l, idx) => {
+              if (idx) p.appendChild(document.createElement('br'));
+              p.appendChild(document.createTextNode(l));
+            });
+            frag.appendChild(p);
+          }
+        }
+        el.replaceChildren(frag);
+      }
+
+      fetch(url, { cache: 'default' })
+        .then(r => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          return r.json();
+        })
+        .then(data => {
+          const m = data.metadata || {};
+          if (m.title) {
+            document.title = m.title;
+            titleEl.textContent = m.title;
+          }
+          renderBody(article, data.body || '');
+          loader.hidden = true;
+        })
+        .catch(err => {
+          console.error('[privacy] load failed', err);
+          loader.hidden = true;
+          errorEl.hidden = false;
+        });
+    })();
+</script>
+</body>
+</html>

@@ -301,7 +301,7 @@ struct SurahDetailsPage {
             }
           }
           .width('100%')
-        }, (verse: Verse) => `v-${verse.ayah}`)
+        }, (verse: Verse) => `v-${this.surah?.id}-${verse.ayah}`)
 
         Column().height(40)
       }

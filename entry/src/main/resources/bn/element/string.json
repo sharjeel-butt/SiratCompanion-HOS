@@ -3062,6 +3062,22 @@
     {
       "name": "no_mosques_found",
       "value": "কাছাকাছি কোনো মসজিদ পাওয়া যায়নি।"
+    },
+    {
+      "name": "mosque_directions",
+      "value": "দিকনির্দেশনা পান"
+    },
+    {
+      "name": "mosque_visit_website",
+      "value": "ওয়েবসাইট দেখুন"
+    },
+    {
+      "name": "mosque_call",
+      "value": "কল করুন"
+    },
+    {
+      "name": "km_away",
+      "value": "কিমি দূরে"
     }
   ]
 }

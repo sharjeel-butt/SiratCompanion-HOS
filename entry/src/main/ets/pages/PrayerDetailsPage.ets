@@ -87,7 +87,10 @@ struct PrayerDetailsPage {
       perfectDays: 0,
       daysElapsed: 0,
       daysInMonth: 0
-    }
+    },
+    currentWeekNumber: 1,
+    weekStartDate: new Date(),
+    weekEndDate: new Date()
   };
   @State weekDetail: WeekDetailCell[] = [];
   @State yearDetail: YearDetailSnapshot = {
@@ -174,12 +177,15 @@ struct PrayerDetailsPage {
           .width(16).height(16)
           .fillColor(this.colors.accentGold)
           .flexShrink(0)
-        Text(this.tr('details_period_week'))
+
+        // FIX: Show the Week Number in the heading
+        Text(`${this.tr('details_period_week')} ${this.snapshot.currentWeekNumber}`)
           .fontSize(12)
           .fontColor(this.colors.textMuted)
           .fontWeight(FontWeight.Bold)
           .letterSpacing(1.2)
           .layoutWeight(1)
+
         Text(`${this.snapshot.weekTotal} / ${this.snapshot.weekPossible}`)
           .fontSize(12)
           .fontColor(this.colors.accentGold)
@@ -245,6 +251,7 @@ struct PrayerDetailsPage {
           .fontColor(this.weekCellTextColor(cell))
       }
       .width('100%')
+      .opacity(cell.isFuture ? 0.45 : 1.0)
       .height(44)
       .justifyContent(FlexAlign.Center)
       .alignItems(HorizontalAlign.Center)
@@ -259,6 +266,7 @@ struct PrayerDetailsPage {
         .fontSize(9).fontColor(this.colors.textMuted)
         .margin({ top: 4 })
         .direction(Direction.Ltr)
+        .opacity(cell.isFuture ? 0.45 : 1.0)
     }
     .layoutWeight(1)
     .alignItems(HorizontalAlign.Center)
@@ -344,7 +352,8 @@ struct PrayerDetailsPage {
             .backgroundColor(this.yearCellBg(c))
             .borderRadius(2)
             .margin({ left: 1, right: 1 })
-        }, (c: number, i: number) => `yc-${m.monthIndex}-${i}-${c}`)
+            .opacity(c < 0 ? 0.2 : 1.0) // Make future days faded but visible
+        }, (c: number, i: number) => `yc-${m.monthIndex}-${i}`) // FIX: Removed 'c' from the key
       }
       .layoutWeight(1)
       .alignItems(VerticalAlign.Center)
@@ -556,11 +565,42 @@ struct PrayerDetailsPage {
         .width('100%')
         .padding({ bottom: 12 })
 
-      this.PrayerRow('fajr', this.perPrayerForPeriod().fajr)
-      this.PrayerRow('dhuhr', this.perPrayerForPeriod().dhuhr)
-      this.PrayerRow('asr', this.perPrayerForPeriod().asr)
-      this.PrayerRow('maghrib', this.perPrayerForPeriod().maghrib)
-      this.PrayerRow('isha', this.perPrayerForPeriod().isha)
+      // Use the new reactive component instead of the cached @Builder
+      PrayerRowView({
+        colors: this.colors,
+        prayerId: 'fajr',
+        count: this.perPrayerForPeriod().fajr,
+        possible: this.periodPossible(),
+        currentLanguage: this.appLanguage
+      })
+      PrayerRowView({
+        colors: this.colors,
+        prayerId: 'dhuhr',
+        count: this.perPrayerForPeriod().dhuhr,
+        possible: this.periodPossible(),
+        currentLanguage: this.appLanguage
+      })
+      PrayerRowView({
+        colors: this.colors,
+        prayerId: 'asr',
+        count: this.perPrayerForPeriod().asr,
+        possible: this.periodPossible(),
+        currentLanguage: this.appLanguage
+      })
+      PrayerRowView({
+        colors: this.colors,
+        prayerId: 'maghrib',
+        count: this.perPrayerForPeriod().maghrib,
+        possible: this.periodPossible(),
+        currentLanguage: this.appLanguage
+      })
+      PrayerRowView({
+        colors: this.colors,
+        prayerId: 'isha',
+        count: this.perPrayerForPeriod().isha,
+        possible: this.periodPossible(),
+        currentLanguage: this.appLanguage
+      })
     }
     .width('100%')
     .padding(18)
@@ -755,15 +795,9 @@ struct PrayerDetailsPage {
     return L.isRtlLang(this.appLanguage);
   }
 
-  private perPrayerForPeriod(): PerPrayerCount {
-    if (this.period === 'month') {
-      return this.snapshot.monthPerPrayer;
-    }
-    if (this.period === 'year') {
-      return this.snapshot.yearPerPrayer;
-    }
-    return this.snapshot.weekPerPrayer;
-  }
+  // ============================================================
+  // PERIOD HELPERS
+  // ============================================================
 
   private totalForPeriod(): number {
     if (this.period === 'month') {
@@ -791,6 +825,27 @@ struct PrayerDetailsPage {
       return 0;
     }
     return Math.round(this.totalForPeriod() / possible * 100);
+  }
+
+  private perPrayerForPeriod(): PerPrayerCount {
+    if (this.period === 'month') {
+      return this.snapshot.monthPerPrayer;
+    }
+    if (this.period === 'year') {
+      return this.snapshot.yearPerPrayer;
+    }
+    return this.snapshot.weekPerPrayer;
+  }
+
+  private periodPossible(): number {
+    // Returns the number of days in the period (7, 30/31, or 365)
+    if (this.period === 'month') {
+      return Math.max(1, Math.round(this.snapshot.monthPossible / 5));
+    }
+    if (this.period === 'year') {
+      return Math.max(1, Math.round(this.snapshot.yearPossible / 5));
+    }
+    return 7; // Week
   }
 
   private prayerLabel(id: string): string {
@@ -874,12 +929,8 @@ struct PrayerDetailsPage {
 
   private yearCellBg(completed: number): string {
     if (completed < 0) {
-      // Future days — leave transparent so they are visually
-      // distinct from past days with 1–2 completions (which also
-      // use tintSubtle). Prevents the year view from claiming
-      // "not yet happened" looks identical to "happened but
-      // low progress".
-      return 'transparent';
+      // FIX: Return a faint color instead of transparent so the box takes up space
+      return this.colors.tintSubtle;
     }
     if (completed === 5) {
       return this.colors.accentGold;
@@ -918,14 +969,60 @@ struct PrayerDetailsPage {
     }
     return this.tr('details_period_year');
   }
+}
 
-  private periodPossible(): number {
-    if (this.period === 'month') {
-      return this.snapshot.monthProgress.daysElapsed;
+@Component
+struct PrayerRowView {
+  @Prop colors: ThemeColors;
+  @Prop prayerId: string = '';
+  @Prop count: number = 0;
+  @Prop possible: number = 365;
+  @Prop currentLanguage: string = 'en';
+
+  build() {
+    Column() {
+      Row() {
+        Text(this.getLabel(this.prayerId))
+          .fontSize(14).fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Medium)
+          .layoutWeight(1)
+        Text(`${this.count} / ${this.possible}`)
+          .fontSize(13).fontColor(this.colors.accentGold)
+          .fontWeight(FontWeight.Bold)
+          .direction(Direction.Ltr)
+      }
+      .width('100%')
+
+      Row() {
+        Row()
+          .width(`${this.possible > 0 ? Math.round(this.count / this.possible * 100) : 0}%`)
+          .height(6)
+          .backgroundColor(this.colors.accentGold)
+          .borderRadius(3)
+      }
+      .width('100%')
+      .height(6)
+      .backgroundColor(this.colors.tintMedium)
+      .borderRadius(3)
+      .margin({ top: 6 })
     }
-    if (this.period === 'year') {
-      return Math.max(1, Math.round(this.snapshot.yearPossible / 5));
+    .width('100%')
+    .margin({ bottom: 12 })
+  }
+
+  private getLabel(id: string): string {
+    if (id === 'fajr') {
+      return L.get('prayer_fajr', this.currentLanguage);
     }
-    return 7;
+    if (id === 'dhuhr') {
+      return L.get('prayer_dhuhr', this.currentLanguage);
+    }
+    if (id === 'asr') {
+      return L.get('prayer_asr', this.currentLanguage);
+    }
+    if (id === 'maghrib') {
+      return L.get('prayer_maghrib', this.currentLanguage);
+    }
+    return L.get('prayer_isha', this.currentLanguage);
   }
 }

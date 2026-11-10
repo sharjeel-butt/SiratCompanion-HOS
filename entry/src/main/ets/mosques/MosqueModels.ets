@@ -21,8 +21,8 @@ export interface ManifestData {
 }
 
 export interface MosqueModel {
-  id: number;
-  osmId: string;
+  id: number; // For custom mosques, this will be a timestamp
+  osmId: string; // For custom mosques, this will be "custom_<timestamp>"
   name: string;
   nameAr: string;
   nameUr: string;
@@ -34,5 +34,8 @@ export interface MosqueModel {
   lng: number;
   cityName: string;
   address: string;
+  phone: string;
+  website: string;
   distanceKm: number;
+  isCustom: boolean; // NEW: Distinguishes user-added vs OSM data
 }

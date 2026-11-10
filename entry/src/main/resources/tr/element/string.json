@@ -3062,6 +3062,22 @@
     {
       "name": "no_mosques_found",
       "value": "Yakında cami bulunamadı."
+    },
+    {
+      "name": "mosque_directions",
+      "value": "Yol Tarifi Al"
+    },
+    {
+      "name": "mosque_visit_website",
+      "value": "Web Sitesini Ziyaret Et"
+    },
+    {
+      "name": "mosque_call",
+      "value": "Ara"
+    },
+    {
+      "name": "km_away",
+      "value": "km uzaklıkta"
     }
   ]
 }

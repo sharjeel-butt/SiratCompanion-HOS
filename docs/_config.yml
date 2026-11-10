@@ -2,3 +2,15 @@ title: Sirat Companion — Privacy Policy
 description: Privacy Policy for Sirat Companion, an Islamic companion app for HarmonyOS
 theme: jekyll-theme-cayman
 lang: en
+
+languages:
+  - { code: en, name: English,           permalink: / }
+  - { code: ar, name: العربية,           permalink: /ar/ }
+  - { code: bn, name: বাংলা,             permalink: /bn/ }
+  - { code: id, name: Bahasa Indonesia,  permalink: /id/ }
+  - { code: tr, name: Türkçe,            permalink: /tr/ }
+  - { code: ur, name: اردو,              permalink: /ur/ }
+  - { code: zh, name: 中文,              permalink: /zh/ }
+
+exclude:
+  - README.md

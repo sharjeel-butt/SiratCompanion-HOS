@@ -7,7 +7,6 @@ export class MosqueDbHelper {
   private static currentCountry: string = '';
 
   static async openDatabase(context: common.Context, countryCode: string): Promise<boolean> {
-    // Use the class name instead of 'this'
     if (MosqueDbHelper.store !== null && MosqueDbHelper.currentCountry === countryCode) {
       return true;
     }
@@ -19,7 +18,8 @@ export class MosqueDbHelper {
       const config: relationalStore.StoreConfig = {
         name: dbPath,
         securityLevel: relationalStore.SecurityLevel.S1,
-        customDir: 'mosques'
+        customDir: 'mosques',
+        isReadOnly: true // Prevents SQLite from modifying the downloaded file
       };
 
       MosqueDbHelper.store = await relationalStore.getRdbStore(context, config);
@@ -46,10 +46,31 @@ export class MosqueDbHelper {
   }
 
   static isDownloaded(context: common.Context, countryCode: string): boolean {
-    const path = `${context.databaseDir}/mosques/${countryCode}.db`;
+    // ✅ CORRECTED PATH
+    const path = `${context.databaseDir}/rdb/mosques/${countryCode}.db`;
     try {
-      // Use the imported fs module
-      return fs.accessSync(path);
+      if (!fs.accessSync(path)) {
+        return false;
+      }
+
+      const stat = fs.statSync(path);
+      if (stat.size < 10240) {
+        console.warn(`[MosqueDbHelper] ${countryCode}.db is corrupted (${stat.size} bytes). Deleting.`);
+        try {
+          fs.unlinkSync(path);
+        } catch (e) {
+        }
+        try {
+          fs.unlinkSync(`${path}-wal`);
+        } catch (e) {
+        }
+        try {
+          fs.unlinkSync(`${path}-shm`);
+        } catch (e) {
+        }
+        return false;
+      }
+      return true;
     } catch (err) {
       return false;
     }
