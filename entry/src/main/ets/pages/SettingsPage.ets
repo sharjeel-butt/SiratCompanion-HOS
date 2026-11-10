@@ -1,21 +1,17 @@
 // entry/src/main/ets/pages/SettingsPage.ets
 
 import { mediaquery, promptAction, router } from '@kit.ArkUI';
-import { common } from '@kit.AbilityKit';
+import { common, Want } from '@kit.AbilityKit';
 import { pasteboard } from '@kit.BasicServicesKit';
 import { ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
 import { PageTheme } from '../core/PageTheme';
 import { AppRestartHelper } from '../core/AppRestartHelper';
-import {
-  AsrShadowRule, CalculationMethod
-} from '../prayer/PrayerTimeCalculator';
+import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator';
 import { PrayerOffsets, SettingsHelper } from '../settings/SettingsHelper';
 import { LocationData, LocationHelper } from '../location/LocationUtils';
 import { LocationCache } from '../location/LocationCache';
 import { CategoryHeader } from '../components/CategoryHeader';
-import {
-  CalculationSource, LocationMode, PickerItem
-} from '../settings/SettingsModels';
+import { CalculationSource, LocationMode, PickerItem } from '../settings/SettingsModels';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -28,9 +24,7 @@ import {
 } from '../core/StorageKeys';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 import { UserBackupService } from '../backup/UserBackupService';
-import {
-  OffsetKey, PrayerOffsetsHelper
-} from '../prayer/PrayerOffsetsHelper';
+import { OffsetKey, PrayerOffsetsHelper } from '../prayer/PrayerOffsetsHelper';
 import {
   MAX_BEFORE_MINUTES,
   MIN_BEFORE_MINUTES,
@@ -41,14 +35,13 @@ import { AppLogger } from '../core/AppLogger';
 import { AppInfoHelper, AppInfoSnapshot } from '../core/AppInfoHelper';
 import { L } from '../i18n/LocalizationHelper';
 import { Breakpoints } from '../core/Breakpoints';
-import {
-  CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED
-} from '../core/FeatureFlags';
+import { CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED } from '../core/FeatureFlags';
 import { NavHelper } from '../core/NavHelper';
 import { SettingsRow } from '../settings/SettingsRow';
 import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
 import { WidgetHelper } from '../widgets/WidgetHelper';
 import { OfflineCityLookup } from '../location/OfflineCityLookup';
+import { PrivacyPolicyProvider } from '../legal/PrivacyPolicy';
 
 const MAX_HIJRI_OFFSET = 3;
 
@@ -1295,6 +1288,28 @@ struct SettingsPage {
         this.AboutRow(this.tr('about_copyright'), this.appInfo.name)
         Divider().color(this.colors.borderSoft).width('80%').margin({ top: 14, bottom: 14 })
 
+        // --- Privacy Policy Row ---
+        Row({ space: 8 }) {
+          Image($r('app.media.ic_info'))
+            .width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
+          Text(this.tr('privacy_step_title')) // Uses the existing wizard string for "Privacy Policy"
+            .fontSize(14)
+            .fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Medium)
+            .layoutWeight(1)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+          Image($r('app.media.ic_chevron_right'))
+            .width(14).height(14).fillColor(this.colors.accentGold)
+            .rotate({ angle: this.isRtl() ? 180 : 0 })
+        }
+        .width('100%')
+        .padding({ top: 8, bottom: 8 })
+        .onClick(() => {
+          this.openPrivacyPolicy();
+        })
+
+        // --- Licenses Row (existing) ---
         Row({ space: 8 }) {
           Image($r('app.media.ic_info'))
             .width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
@@ -1729,6 +1744,31 @@ struct SettingsPage {
   private async onAppForegrounded(): Promise<void> {
     this.appInfo = AppInfoHelper.get();
     await this.reload();
+  }
+
+  private async openPrivacyPolicy(): Promise<void> {
+    const context = getContext(this) as common.UIAbilityContext;
+
+    // Uses the dynamic URL logic (e.g., adds /ar/ or /zh/ automatically)
+    const targetUrl = PrivacyPolicyProvider.getFullUrl(this.currentLanguage);
+
+    const want: Want = {
+      action: 'ohos.want.action.viewData',
+      entities: ['entity.system.browsable'],
+      uri: targetUrl
+    };
+
+    try {
+      await context.startAbility(want);
+    } catch (err) {
+      const e = err as Error;
+      console.warn('[SettingsPage] openPrivacyPolicy failed: ' + e.message);
+      // Fallback: Show the URL in a toast if no browser is found
+      this.getUIContext().getPromptAction().showToast({
+        message: targetUrl,
+        duration: 4000
+      });
+    }
   }
 
   private async reload(): Promise<void> {
