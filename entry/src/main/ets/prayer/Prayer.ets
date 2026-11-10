@@ -96,6 +96,7 @@ export struct Prayer {
   @Watch('onLanguageChangedInHome')
   appLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_PRAYER_STATE_VERSION)
+  @Watch('onPrayerStateChanged')
   prayerStateVersion: number = 0;
   @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
   @Watch('onHijriOffsetChangedInHome')
@@ -302,9 +303,26 @@ export struct Prayer {
     this.refreshLocationSilently();
   }
 
+  private onPrayerStateChanged(): void {
+    this.prayers = PrayerManager.loadStateForDate(
+      this.viewingDateKey, this.prayers, this.viewingDate
+    );
+    this.prayers = PrayerManager.updateStatuses(
+      this.prayers, this.viewingDate, this.getLocationOffsetHours()
+    );
+    if (this.dateOffset === 0) {
+      this.updateTodayHeaderData();
+    }
+  }
+
   private onTabRefreshed(): void {
     if (this.dateOffset === 0) {
-      // Refresh the timeline statuses (prayer becomes 'next'/'prayed')
+      // 1. Reload the actual checked states from the manager
+      this.prayers = PrayerManager.loadStateForDate(
+        this.viewingDateKey, this.prayers, this.viewingDate
+      );
+
+      // 2. Recalculate the "Next" / "Prayed" statuses
       this.prayers = PrayerManager.updateStatuses(
         this.prayers, this.viewingDate, this.getLocationOffsetHours()
       );

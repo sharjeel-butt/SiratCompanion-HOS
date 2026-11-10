@@ -43,7 +43,7 @@ export interface PrivacyPolicyDocument {
  * `rawfile/privacy/` and append the code to SUPPORTED below.
  */
 export class PrivacyPolicyProvider {
-  static readonly FULL_URL =
+  static readonly BASE_URL =
     'https://sharjeel-butt.github.io/SiratCompanion-HOS/';
   static readonly LAST_UPDATED = 'October 27, 2026';
   static readonly APPLIES_TO = '3.5.0 and later';
@@ -76,6 +76,19 @@ export class PrivacyPolicyProvider {
           `preload(en) failed: ${e.message}`);
       });
     }
+  }
+
+  /**
+   * Dynamically resolves the localized Privacy Policy URL.
+   * English is at the root. Other languages use subdirectories (e.g., /ar/).
+   */
+  static getFullUrl(lang: string): string {
+    if (!lang || lang === 'en' || lang === 'system') {
+      return PrivacyPolicyProvider.BASE_URL;
+    }
+    // Extract primary language code (e.g., 'zh-CN' -> 'zh')
+    const cleanLang = lang.split('-')[0].toLowerCase();
+    return `${PrivacyPolicyProvider.BASE_URL}${cleanLang}/`;
   }
 
   /**
@@ -172,6 +185,27 @@ export class PrivacyPolicyProvider {
     }
   }
 
+  // NEW: Map the current app language to the correct GitHub Pages URL
+  static getUrlForLanguage(lang: string): string {
+    switch (lang) {
+      case 'ar':
+        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/ar/';
+      case 'bn':
+        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/bn/';
+      case 'id':
+        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/id/';
+      case 'tr':
+        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/tr/';
+      case 'ur':
+        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/ur/';
+      case 'zh':
+        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/zh/';
+      case 'en':
+      default:
+        return PrivacyPolicyProvider.BASE_URL;
+    }
+  }
+
   private static normalize(
     doc: PrivacyPolicyDocument
   ): PrivacyPolicyDocument {
@@ -206,7 +240,7 @@ export class PrivacyPolicyProvider {
       lastUpdated: PrivacyPolicyProvider.LAST_UPDATED,
       effectiveDate: PrivacyPolicyProvider.LAST_UPDATED,
       appliesTo: PrivacyPolicyProvider.APPLIES_TO,
-      fullUrl: PrivacyPolicyProvider.FULL_URL
+      fullUrl: PrivacyPolicyProvider.BASE_URL
     };
     return result;
   }

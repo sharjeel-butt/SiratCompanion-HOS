@@ -1483,10 +1483,14 @@ struct WizardPage {
    */
   private async openPrivacyPolicyInBrowser(): Promise<void> {
     const context = getContext(this) as common.UIAbilityContext;
+
+    // Dynamically resolve the URL based on the currently selected language
+    const targetUrl = PrivacyPolicyProvider.getFullUrl(this.currentLanguage);
+
     const want: Want = {
       action: 'ohos.want.action.viewData',
       entities: ['entity.system.browsable'],
-      uri: PrivacyPolicyProvider.FULL_URL
+      uri: targetUrl
     };
 
     try {
@@ -1497,7 +1501,7 @@ struct WizardPage {
         '[WizardPage] openPrivacyPolicyInBrowser failed: ' + e.message
       );
       this.getUIContext().getPromptAction().showToast({
-        message: PrivacyPolicyProvider.FULL_URL,
+        message: targetUrl, // Show the correct localized URL in the fallback
         duration: 4000
       });
     }
