@@ -1,8 +1,7 @@
 // entry/src/main/ets/core/AppRestartHelper.ets
 
 import { common, Want } from '@kit.AbilityKit';
-import { window } from '@kit.ArkUI';
-import { BusinessError, deviceInfo } from '@kit.BasicServicesKit';
+import { BusinessError } from '@kit.BasicServicesKit';
 import { AppLogger } from './AppLogger';
 
 /**
@@ -36,35 +35,18 @@ export class AppRestartHelper {
       abilityName: 'EntryAbility'
     };
 
-    const isLarge = deviceInfo.deviceType === '2in1'
-      || deviceInfo.deviceType === 'tablet';
+    AppLogger.info('AppRestartHelper', 'restart start');
 
-    AppLogger.info('AppRestartHelper',
-      `restart start (deviceType=${deviceInfo.deviceType}, large=${isLarge})`);
-
-    // 1. Close window first on tablet / PC (mirrors exitApp pattern)
-    if (isLarge) {
-      try {
-        const win = await window.getLastWindow(context);
-        await win.destroyWindow();
-        AppLogger.info('AppRestartHelper', 'window destroyed');
-      } catch (e) {
-        const err = e as Error;
-        AppLogger.warn('AppRestartHelper',
-          `window destroy failed: ${err.message}`);
-      }
-    }
-
-    // 2. Fire terminateSelf — DO NOT await. The JS thread must
-    //    continue immediately so startAbility fires while the
-    //    context is still valid.
+    // Fire terminateSelf — DO NOT await. The JS thread must
+    // continue immediately so startAbility fires while the
+    // context is still valid.
     context.terminateSelf().catch((err: BusinessError) => {
       AppLogger.warn('AppRestartHelper',
         `terminateSelf failed: code=${err.code ?? ''} msg=${err.message ?? ''}`);
     });
 
-    // 3. Fire startAbility immediately — the intent is queued in
-    //    the system before the current instance finishes teardown.
+    // Fire startAbility immediately — the intent is queued in
+    // the system before the current instance finishes teardown.
     try {
       await context.startAbility(want);
       AppLogger.info('AppRestartHelper', 'restart dispatched');
@@ -73,10 +55,6 @@ export class AppRestartHelper {
       const e = err as BusinessError;
       AppLogger.error('AppRestartHelper',
         `startAbility failed: code=${e.code ?? ''} msg=${e.message ?? ''}`);
-      // Ability is already queued for teardown — return true so
-      // the caller doesn't offer a misleading "restart failed"
-      // dialog. User will land on the restored state on manual
-      // relaunch.
       return true;
     }
   }

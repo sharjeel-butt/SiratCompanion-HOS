@@ -58,6 +58,14 @@ export default class EntryFormAbility extends FormExtensionAbility {
 
       if (formName === 'ramadan_widget') {
         widgetData = await WidgetDataBuilder.buildRamadanWidget(dimension, savedLang);
+      } else if (formName === 'hijri_date_widget') {
+        widgetData = await WidgetDataBuilder.buildDateWidget(ctx, dimension, savedLang); // <-- Pass ctx
+      } else if (formName === 'event_widget') {
+        widgetData = await WidgetDataBuilder.buildEventWidget(ctx, dimension, savedLang); // <-- Pass ctx
+      } else if (formName === 'adhkar_widget') {
+        widgetData = await WidgetDataBuilder.buildAdhkarWidget(ctx, dimension, savedLang); // <-- Pass ctx
+      } else if (formName === 'tracker_widget') {
+        widgetData = await WidgetDataBuilder.buildTrackerWidget(ctx, dimension, savedLang);
       } else {
         widgetData = await WidgetDataBuilder.build(dimension, savedLang);
       }

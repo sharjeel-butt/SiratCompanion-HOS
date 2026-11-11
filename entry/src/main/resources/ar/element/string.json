@@ -3083,6 +3083,30 @@
     {
       "name": "privacy_step_title",
       "value": "سياسة الخصوصية"
+    },
+    {
+      "name": "widget_date_desc",
+      "value": "أداة التاريخ الهجري"
+    },
+    {
+      "name": "widget_event_desc",
+      "value": "حدث إسلامي قادم"
+    },
+    {
+      "name": "widget_adhkar_desc",
+      "value": "أذكار يومية"
+    },
+    {
+      "name": "widget_tracker_desc",
+      "value": "متابعة العبادات اليومية"
+    },
+    {
+      "name": "widget_contextual_desc",
+      "value": "المهمة اليومية الحالية"
+    },
+    {
+      "name": "widget_daily_faith_title",
+      "value": "العبادات اليومية"
     }
   ]
 }

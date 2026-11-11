@@ -3082,6 +3082,30 @@
     {
       "name": "privacy_step_title",
       "value": "رازداری کی پالیسی"
+    },
+    {
+      "name": "widget_date_desc",
+      "value": "ہجری تاریخ ویجیٹ"
+    },
+    {
+      "name": "widget_event_desc",
+      "value": "آنے والا اسلامی موقع"
+    },
+    {
+      "name": "widget_adhkar_desc",
+      "value": "روزانہ اذکار"
+    },
+    {
+      "name": "widget_tracker_desc",
+      "value": "روزانہ ایمان ٹریکر"
+    },
+    {
+      "name": "widget_contextual_desc",
+      "value": "سیاق و سباق کے مطابق روزانہ کام"
+    },
+    {
+      "name": "widget_daily_faith_title",
+      "value": "روزمرہ عبادات"
     }
   ]
 }

@@ -12,6 +12,22 @@ import { AppLogger } from '../core/AppLogger';
 import { formBindingData } from '@kit.FormKit';
 import { PreferencesHelper } from '../core/PreferencesHelper';
 import { OfflineCityLookup } from '../location/OfflineCityLookup';
+import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
+import { IslamicEventService } from '../hijricalendar/IslamicEventService';
+import { common } from '@kit.AbilityKit';
+import { BaseDua } from '../duas/DuaModels';
+import { util } from '@kit.ArkTS';
+import { RecurrenceType } from '../hijricalendar/CustomEventModels';
+import { CustomEventStorage } from '../hijricalendar/CustomEventStorage';
+import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
+
+
+export interface WidgetCalendarDay {
+  dayText: string;
+  hasEvent: boolean;
+  isToday: boolean;
+  isPadding: boolean;
+}
 
 export class WidgetDataBuilder {
   static async build(dimension: string, currentLang?: string): Promise<Record<string, Object>> {
@@ -227,6 +243,236 @@ export class WidgetDataBuilder {
     }
   }
 
+  static async buildDateWidget(context: common.Context, dimension: string,
+    currentLang?: string): Promise<Record<string, Object>> {
+    try {
+      await IslamicEventService.init(context);
+      const lang = currentLang || 'en';
+      const now = new Date();
+
+      const hijriOffset = await SettingsHelper.getHijriOffset();
+      const shifted = new Date(now);
+      shifted.setDate(shifted.getDate() + hijriOffset);
+
+      const h = HijriEngineResolver.current().toHijri(shifted);
+      const hijriMonths = L.getArray('hijri_months', lang);
+      const weekdays = L.getArray('days_of_week', lang);
+
+      let gregDate = '';
+      try {
+        const locale = lang === 'ar' ? 'ar' : (lang === 'zh' ? 'zh-CN' : 'en-US');
+        gregDate = now.toLocaleDateString(locale, { day: 'numeric', month: 'short' });
+      } catch (e) {
+        gregDate = `${now.getDate()}`;
+      }
+
+      const out: Record<string, Object> = {};
+      out.dimension = dimension;
+      out.hijriDay = h ? `${h.day}` : '—';
+      out.hijriMonth = h ? hijriMonths[h.month - 1] : '—';
+      out.gregDate = gregDate;
+      out.dayOfWeek = weekdays[now.getDay()] || '';
+      out.isRtl = L.isRtlLang(lang); // CRITICAL for widget layout
+      out.lang = lang;
+      out.lblNoEvents = L.get('no_events_this_month', lang);
+
+      // ==========================================
+      // 4x4 CALENDAR GRID LOGIC
+      // ==========================================
+      if (dimension === '4*4' && h) {
+        out.headerTitle = `${hijriMonths[h.month - 1]} ${h.year}`;
+
+        let shortWeekdays = L.getArray('days_of_week_short', lang);
+        const monthDays =
+          HijriCalendarHelper.buildMonthDays(h.year, h.month, hijriOffset, now, SettingsHelper.getEventPerspective());
+
+        const flatDays: WidgetCalendarDay[] = [];
+
+        // 1. Add empty padding cells for the first week
+        if (monthDays.length > 0) {
+          const firstDow = monthDays[0].gregorianDate.getDay(); // 0 = Sunday
+          for (let i = 0; i < firstDow; i++) {
+            flatDays.push({
+              dayText: '',
+              hasEvent: false,
+              isToday: false,
+              isPadding: true
+            });
+          }
+        }
+
+        // 2. Add the actual days
+        const cEvents = await CustomEventStorage.load();
+        for (const d of monthDays) {
+          let hasEvent = d.events.length > 0;
+
+          // Check custom events
+          if (!hasEvent) {
+            for (const ce of cEvents) {
+              if (ce.recurrence === RecurrenceType.NONE && ce.hijriMonth === h.month && ce.hijriYear === h.year &&
+                ce.hijriDay === d.hijri.day) {
+                hasEvent = true;
+                break;
+              } else if (ce.recurrence === RecurrenceType.YEARLY && ce.hijriMonth === h.month &&
+                ce.hijriDay === d.hijri.day) {
+                hasEvent = true;
+                break;
+              }
+            }
+          }
+
+          flatDays.push({
+            dayText: `${d.hijri.day}`,
+            hasEvent: hasEvent,
+            isToday: d.isToday,
+            isPadding: false
+          });
+        }
+
+        // 3. Handle RTL by reversing the arrays so the UI renders perfectly Left-to-Right physically
+        let finalDays = flatDays;
+        if (out.isRtl) {
+          shortWeekdays = shortWeekdays.slice().reverse();
+
+          finalDays = [];
+          for (let i = 0; i < flatDays.length; i += 7) {
+            const week = flatDays.slice(i, i + 7);
+            // Pad the end of the week to make it exactly 7
+            while (week.length < 7) {
+              week.push({
+                dayText: '',
+                hasEvent: false,
+                isToday: false,
+                isPadding: true
+              });
+            }
+            finalDays.push(...week.reverse());
+          }
+        } else {
+          // For LTR, pad the end to make it exactly 7
+          while (finalDays.length % 7 !== 0) {
+            finalDays.push({
+              dayText: '',
+              hasEvent: false,
+              isToday: false,
+              isPadding: true
+            });
+          }
+        }
+
+        out.weekdays = shortWeekdays;
+        out.calendarDays = finalDays;
+      }
+
+      out.error = '';
+      return out; // Single return statement
+
+    } catch (e) {
+      return WidgetDataBuilder.errorData(dimension, 'Error');
+    }
+  }
+
+  static async buildEventWidget(context: common.Context, dimension: string,
+    currentLang?: string): Promise<Record<string, Object>> {
+    try {
+      await IslamicEventService.init(context);
+      const lang = currentLang || 'en';
+      const hijriOffset = await SettingsHelper.getHijriOffset();
+      const events = DateHelper.getUpcomingImportantDates(hijriOffset, SettingsHelper.getEventPerspective());
+
+      const out: Record<string, Object> = {};
+      out.dimension = dimension;
+      out.lang = lang;
+
+      // FIX: Pass localized labels for the UI
+      out.lblUpcoming = L.get('home_next_event', lang);
+      out.lblDays = L.get('home_days', lang);
+      out.lblViewCal = L.get('details_view', lang);
+      out.isRtl = L.isRtlLang(lang);
+
+      if (events.length > 0) {
+        const ev = events[0];
+        out.eventName = IslamicEventService.getEventName(ev.key, lang);
+        out.eventDays = `${ev.daysUntil}`;
+        out.eventDate = ev.hijriDate;
+        out.eventDesc = IslamicEventService.getEventDesc(ev.key, lang);
+
+        // NEW: Calculate raw Hijri numbers for deep-linking
+        const hijriDate = HijriCalendarHelper.getHijriDate(ev.gregorianDate, hijriOffset);
+        out.eventHijriYear = hijriDate.year;
+        out.eventHijriMonth = hijriDate.month;
+        out.eventHijriDay = hijriDate.day;
+
+      } else {
+        out.eventName = L.get('no_events_this_month', lang);
+        out.eventDays = '—';
+        out.eventDate = '';
+        out.eventDesc = '';
+        out.eventHijriYear = 0;
+        out.eventHijriMonth = 0;
+        out.eventHijriDay = 0;
+      }
+      return out;
+    } catch (e) {
+      return WidgetDataBuilder.errorData(dimension, 'Error');
+    }
+  }
+
+  static async buildAdhkarWidget(context: common.Context, dimension: string,
+    currentLang?: string): Promise<Record<string, Object>> {
+    try {
+      const lang = currentLang || 'en';
+      const out: Record<string, Object> = {};
+      out.dimension = dimension;
+      out.lang = lang;
+      out.isRtl = L.isRtlLang(lang);
+      out.lblHeader = L.get('section_duas', lang);
+      out.lblReadMore = L.get('view_all', lang);
+
+      if (!context) {
+        throw new Error('Context missing');
+      }
+
+      const mgr = context.resourceManager;
+      const data = await mgr.getRawFileContent('duas/duas_base.json');
+      const jsonStr = util.TextDecoder.create('utf-8').decodeToString(data);
+
+      const safeContext = context || PreferencesHelper.getContext();
+      if (!safeContext) {
+        throw new Error('Context unavailable');
+      }
+
+      // Defensive parsing
+      let duas: BaseDua[] = [];
+      try {
+        duas = JSON.parse(jsonStr) as BaseDua[];
+      } catch (jsonErr) {
+        throw new Error('JSON Parse Failed');
+      }
+
+      const now = new Date();
+      const start = new Date(now.getFullYear(), 0, 0);
+      const diff = now.getTime() - start.getTime();
+      const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+      if (duas && duas.length > 0) {
+        const selected = duas[dayOfYear % duas.length];
+        out.arabicText = selected.arabic;
+        out.source = selected.reference || '';
+      } else {
+        out.arabicText = 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ';
+        out.source = 'Hadith';
+      }
+
+      out.error = '';
+      return out;
+    } catch (e) {
+      const err = e as Error;
+      // Return the exact error so the widget shows it
+      return WidgetDataBuilder.errorData(dimension, `Err: ${err.message}`);
+    }
+  }
+
   static async buildRamadanWidget(dimension: string, currentLang?: string): Promise<Record<string, Object>> {
     try {
       await PreferencesHelper.reloadFromDisk();
@@ -427,6 +673,92 @@ export class WidgetDataBuilder {
 
     out.error = msg;
     return out;
+  }
+
+  static async buildTrackerWidget(context: common.Context, dimension: string,
+    currentLang?: string): Promise<Record<string, Object>> {
+    try {
+      const lang = currentLang || 'en';
+      const isRtl = L.isRtlLang(lang);
+      const out: Record<string, Object> = {};
+      out.dimension = dimension;
+      out.isRtl = isRtl;
+      out.lang = lang;
+      out.error = '';
+
+      // 1. Localized Strings
+      out.lblTitle = L.get('widget_daily_faith_title', lang); // "Today's Progress"
+      out.taskQuran = L.get('quran_full_title', lang);
+      out.taskDua = L.get('section_duas', lang);
+      out.taskRecitations = L.get('surah_recommendations', lang);
+      out.taskTasbih = L.get('tab_tasbih', lang);
+      // "Recitations"
+      out
+      // 2. Fetch Prayer Check States
+      const today = new Date();
+      const dateKey = PrayerManager.getDateKeyForDate(today);
+      const checkState = PrayerManager.getCheckState(dateKey);
+
+      // 3. Fetch Prayer Times
+      const cache = await LocationCache.load();
+      let times: DailyPrayerTimes | null = null; // <-- FIX: Explicitly typed
+
+      if (cache) {
+        const settings = await SettingsHelper.loadAll();
+        const highLat = await SettingsHelper.getHighLatRule();
+        const adv = await SettingsHelper.getAdvancedCalcSettings();
+        times =
+          PrayerTimeCalculator.calculateWithDeviceTimezone(today, cache.latitude, cache.longitude, settings.method,
+            settings.asr, highLat, adv);
+      }
+
+      // Helper to format time to short string (e.g., "05:00")
+      const fmtTime = (t: string): string => {
+        if (!t || t === '--:--') {
+          return '--:--';
+        }
+        const parts = t.split(' ');
+        if (parts.length !== 2) {
+          return t;
+        }
+        let h = parseInt(parts[0].split(':')[0], 10);
+        const m = parts[0].split(':')[1];
+        const ampm = parts[1];
+        if (ampm === 'PM' && h !== 12) {
+          h += 12;
+        }
+        if (ampm === 'AM' && h === 12) {
+          h = 0;
+        }
+        return `${h.toString().padStart(2, '0')}:${m}`;
+      };
+
+      // 4. Map Prayers to Flat Variables (Rulebook §G)
+      out.p1Name = L.get('prayer_fajr', lang);
+      out.p1Time = fmtTime(times?.fajr || '');
+      out.p1Checked = checkState.fajr;
+      out.p2Name = L.get('prayer_dhuhr', lang);
+      out.p2Time = fmtTime(times?.dhuhr || '');
+      out.p2Checked = checkState.dhuhr;
+      out.p3Name = L.get('prayer_asr', lang);
+      out.p3Time = fmtTime(times?.asr || '');
+      out.p3Checked = checkState.asr;
+      out.p4Name = L.get('prayer_maghrib', lang);
+      out.p4Time = fmtTime(times?.maghrib || '');
+      out.p4Checked = checkState.maghrib;
+      out.p5Name = L.get('prayer_isha', lang);
+      out.p5Time = fmtTime(times?.isha || '');
+      out.p5Checked = checkState.isha;
+
+      // 5. Additional Tasks (Quran & Duas)
+      // We'll just link these as actions, not tracking completion, to match Athkar style
+      out.taskQuran = L.get('quran_full_title', lang);
+      out.taskDua = L.get('duas', lang);
+
+      return out;
+    } catch (e) {
+      return WidgetDataBuilder.errorData(dimension, 'Error');
+    }
   }
 
   static toFormBindingData(data: Record<string, Object>): formBindingData.FormBindingData {

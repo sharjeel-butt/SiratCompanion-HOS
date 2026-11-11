@@ -3082,6 +3082,30 @@
     {
       "name": "privacy_step_title",
       "value": "Gizlilik Politikası"
+    },
+    {
+      "name": "widget_date_desc",
+      "value": "Hicri Tarih Widget'ı"
+    },
+    {
+      "name": "widget_event_desc",
+      "value": "Yaklaşan İslami Etkinlik"
+    },
+    {
+      "name": "widget_adhkar_desc",
+      "value": "Günlük Zikirler"
+    },
+    {
+      "name": "widget_tracker_desc",
+      "value": "Günlük İman Takipçisi"
+    },
+    {
+      "name": "widget_contextual_desc",
+      "value": "Bağlamsal Günlük Görev"
+    },
+    {
+      "name": "widget_daily_faith_title",
+      "value": "Günlük İbadetler"
     }
   ]
 }

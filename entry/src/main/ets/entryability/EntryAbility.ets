@@ -484,9 +484,6 @@ export default class EntryAbility extends UIAbility {
       if (EntryAbility.WIDGET_TARGET_PAGES.indexOf(pageRaw) !== -1) {
         AppStorage.setOrCreate('widget_target_page', pageRaw);
         hasTarget = true;
-      } else {
-        AppLogger.warn('EntryAbility',
-          `handleWidgetNavWant: targetPage '${pageRaw}' is not in the whitelist — ignoring`);
       }
     }
 
@@ -495,8 +492,25 @@ export default class EntryAbility extends UIAbility {
       hasTarget = true;
     }
 
-    // If the app is warm-started and sitting on Settings (or another page),
-    // force the router back to MainTabs so it can process the intent.
+    // NEW: Handle deep-linking to a specific Hijri date
+    const targetHijriYear = params['targetHijriYear'];
+    const targetHijriMonth = params['targetHijriMonth'];
+    const targetHijriDay = params['targetHijriDay'];
+
+    if (typeof targetHijriYear === 'number' && targetHijriYear > 0 &&
+      typeof targetHijriMonth === 'number' && targetHijriMonth > 0 &&
+      typeof targetHijriDay === 'number' && targetHijriDay > 0) {
+
+      // Clear old targets first to ensure @Watch fires
+      AppStorage.setOrCreate('nav_target_hijri_year', 0);
+      AppStorage.setOrCreate('nav_target_hijri_month', 0);
+      AppStorage.setOrCreate('nav_target_hijri_day', 0);
+
+      AppStorage.setOrCreate('nav_target_hijri_year', targetHijriYear);
+      AppStorage.setOrCreate('nav_target_hijri_month', targetHijriMonth);
+      AppStorage.setOrCreate('nav_target_hijri_day', targetHijriDay);
+    }
+
     if (hasTarget) {
       const currentTop = this.getCurrentPagePath();
       if (currentTop !== 'pages/MainTabs' && currentTop.length > 0) {

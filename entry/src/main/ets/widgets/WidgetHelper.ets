@@ -4,6 +4,7 @@ import { WidgetDataBuilder } from './WidgetDataBuilder';
 import { AppLogger } from '../core/AppLogger';
 import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_LANGUAGE_OVERRIDE } from '../core/StorageKeys';
 import { L } from '../i18n/LocalizationHelper';
+import { common } from '@kit.AbilityKit';
 
 export const STORAGE_KEY_WIDGET_FORM_IDS = 'widget_form_ids';
 
@@ -83,9 +84,23 @@ export class WidgetHelper {
         lang = await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE, 'en');
       }
 
-      const data: Record<string, Object> = formName === 'ramadan_widget'
-        ? await WidgetDataBuilder.buildRamadanWidget(dim, lang)
-        : await WidgetDataBuilder.build(dim, lang);
+      let data: Record<string, Object>;
+
+      const ctx = getContext() as common.Context;
+      if (formName === 'ramadan_widget') {
+        data = await WidgetDataBuilder.buildRamadanWidget(dim, lang);
+      } else if (formName === 'hijri_date_widget') {
+        data = await WidgetDataBuilder.buildDateWidget(ctx, dim, lang); // <-- Pass ctx
+      } else if (formName === 'event_widget') {
+        data = await WidgetDataBuilder.buildEventWidget(ctx, dim, lang); // <-- Pass ctx
+      } else if (formName === 'adhkar_widget') {
+        const ctx = getContext() as common.Context || PreferencesHelper.getContext();
+        data = await WidgetDataBuilder.buildAdhkarWidget(ctx, dim, lang);
+      } else if (formName === 'tracker_widget') {
+        data = await WidgetDataBuilder.buildTrackerWidget(ctx, dim, lang);
+      } else {
+        data = await WidgetDataBuilder.build(dim, lang);
+      }
 
       const fb: formBindingData.FormBindingData =
         WidgetDataBuilder.toFormBindingData(data);

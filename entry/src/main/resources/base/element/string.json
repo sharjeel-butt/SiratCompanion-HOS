@@ -3082,7 +3082,31 @@
     },
     {
       "name": "privacy_step_title",
-      "value": "Privact Policy"
+      "value": "Privacy Policy"
+    },
+    {
+      "name": "widget_date_desc",
+      "value": "Hijri Date Widget"
+    },
+    {
+      "name": "widget_event_desc",
+      "value": "Upcoming Islamic Event"
+    },
+    {
+      "name": "widget_adhkar_desc",
+      "value": "Daily Adhkar"
+    },
+    {
+      "name": "widget_tracker_desc",
+      "value": "Daily Faith Tracker"
+    },
+    {
+      "name": "widget_contextual_desc",
+      "value": "Contextual Daily Task"
+    },
+    {
+      "name": "widget_daily_faith_title",
+      "value": "Daily Faith"
     }
   ]
 }

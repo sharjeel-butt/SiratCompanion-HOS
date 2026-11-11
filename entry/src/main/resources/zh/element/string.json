@@ -3078,6 +3078,34 @@
     {
       "name": "km_away",
       "value": "公里外"
+    },
+    {
+      "name": "widget_date_desc",
+      "value": "回历日期小组件"
+    },
+    {
+      "name": "widget_event_desc",
+      "value": "即将到来的伊斯兰活动"
+    },
+    {
+      "name": "widget_adhkar_desc",
+      "value": "每日记主词"
+    },
+    {
+      "name": "widget_tracker_desc",
+      "value": "每日功修追踪"
+    },
+    {
+      "name": "widget_contextual_desc",
+      "value": "每日当前任务"
+    },
+    {
+      "name": "widget_daily_faith_title",
+      "value": "每日信仰"
+    },
+    {
+      "name": "privacy_step_title",
+      "value": "隐私政策"
     }
   ]
 }

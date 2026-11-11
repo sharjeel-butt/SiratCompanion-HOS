@@ -302,4 +302,8 @@ export class PreferencesHelper {
       PreferencesHelper.flushTimerId = -1;
     }
   }
+
+  static getContext(): common.Context | null {
+    return PreferencesHelper.initContext;
+  }
 }

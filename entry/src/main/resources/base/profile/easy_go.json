@@ -5,7 +5,7 @@
       "squareWindowMode": "routerSplit",
       "routerSplitOptions": {
         "homePage": "pages/MainTabs",
-        "relatedPage": "pages/SettingsPage,pages/CustomizePage,pages/AdvancedCalcPage,pages/PrayerDetailsPage,pages/RamadanDetailsPage,pages/TasbihDetailsPage,pages/DuasPage,pages/QuranPage,pages/SurahDetailsPage,pages/RecitationsPage,pages/LicensesPage,pages/MosqueFinderPage"
+        "relatedPage": "pages/SettingsPage,pages/CustomizePage,pages/AdvancedCalcPage,pages/PrayerProgressPage,pages/RamadanDetailsPage,pages/TasbihProgressPage,pages/DuasPage,pages/QuranPage,pages/SurahDetailsPage,pages/RecitationsPage,pages/LicensesPage,pages/MosqueFinderPage"
       }
     }
   }

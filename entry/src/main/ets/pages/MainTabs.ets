@@ -1,6 +1,6 @@
 // entry/src/main/ets/pages/MainTabs.ets
 
-import { display, mediaquery, promptAction, router, window } from '@kit.ArkUI';
+import { display, mediaquery, promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { deviceInfo } from '@kit.BasicServicesKit';
 import {
@@ -838,21 +838,10 @@ struct MainTabs {
 
         // Delay slightly to allow the dialog dismiss animation to finish.
         setTimeout(async () => {
-          const isPC = deviceInfo.deviceType === '2in1' || deviceInfo.deviceType === 'tablet';
-
-          if (isPC) {
-            // On PC/2-in-1, explicitly destroy the window BEFORE terminating.
-            // If destroyWindow fails (e.g., app running in split screen),
-            // we STILL call terminateSelf unconditionally.
-            try {
-              const win = await window.getLastWindow(ctx);
-              await win.destroyWindow();
-            } catch (e) {
-              console.warn('[Exit] window destroy failed: ' + (e as Error).message);
-            }
-          }
-
           try {
+            // FIX: Removed the window.destroyWindow() logic.
+            // terminateSelf() automatically destroys the window and the ability.
+            // Calling destroyWindow() first causes the app to hang on 2-in-1 devices.
             await ctx.terminateSelf();
             console.info('[Exit] terminateSelf succeeded');
           } catch (e) {

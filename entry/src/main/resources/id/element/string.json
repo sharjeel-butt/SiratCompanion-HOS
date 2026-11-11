@@ -3082,6 +3082,30 @@
     {
       "name": "privacy_step_title",
       "value": "Kebijakan Privasi"
+    },
+    {
+      "name": "widget_date_desc",
+      "value": "Widget Tanggal Hijriah"
+    },
+    {
+      "name": "widget_event_desc",
+      "value": "Acara Islam Mendatang"
+    },
+    {
+      "name": "widget_adhkar_desc",
+      "value": "Zikir Harian"
+    },
+    {
+      "name": "widget_tracker_desc",
+      "value": "Pelacak Iman Harian"
+    },
+    {
+      "name": "widget_contextual_desc",
+      "value": "Tugas Harian Kontekstual"
+    },
+    {
+      "name": "widget_daily_faith_title",
+      "value": "Ibadah Harian"
     }
   ]
 }

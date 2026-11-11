@@ -3082,6 +3082,30 @@
     {
       "name": "privacy_step_title",
       "value": "গোপনীয়তা নীতি"
+    },
+    {
+      "name": "widget_date_desc",
+      "value": "হিজরি তারিখ উইজেট"
+    },
+    {
+      "name": "widget_event_desc",
+      "value": "আসন্ন ইসলামিক অনুষ্ঠান"
+    },
+    {
+      "name": "widget_adhkar_desc",
+      "value": "দৈনিক আযকার"
+    },
+    {
+      "name": "widget_tracker_desc",
+      "value": "দৈনিক ঈমান ট্র্যাকার"
+    },
+    {
+      "name": "widget_contextual_desc",
+      "value": "প্রাসঙ্গিক দৈনিক কাজ"
+    },
+    {
+      "name": "widget_daily_faith_title",
+      "value": "দৈনন্দিন ইবাদত"
     }
   ]
 }

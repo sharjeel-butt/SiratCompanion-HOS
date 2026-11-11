@@ -24,6 +24,7 @@ struct MosqueFinderPage {
   @State currentCountryName: string = '';
   @State downloadSizeMb: number = 0;
   @State isDownloading: boolean = false;
+  @State isCountryAvailable: boolean = false;
   @State selectedMosque: MosqueModel | null = null;
   @State showDetailsSheet: boolean = false;
   @State showFormSheet: boolean = false;
@@ -48,6 +49,7 @@ struct MosqueFinderPage {
 
   async initLocationAndData() {
     this.isLoading = true;
+    this.isCountryAvailable = false;
     try {
       const cache = await LocationCache.load();
       if (!cache) {
@@ -155,25 +157,34 @@ struct MosqueFinderPage {
           // Download Prompt
           Column() {
             Text(this.statusText)
-              .fontSize(16).fontColor(this.colors.textWhite)
-              .textAlign(TextAlign.Center).margin({ bottom: 8 })
+              .fontSize(16)
+              .fontColor(this.colors.textWhite)
+              .textAlign(TextAlign.Center)
+              .margin({ bottom: 8 })
 
-            if (this.downloadSizeMb > 0) {
+            if (this.downloadSizeMb > 0 && this.isCountryAvailable) {
               Text(`Size: ${this.downloadSizeMb.toFixed(2)} MB`)
                 .fontSize(12).fontColor(this.colors.textMuted)
                 .margin({ bottom: 20 })
             }
 
             Button(
-              this.isDownloading ? 'Downloading...' : `Download ${this.currentCountryName || this.currentCountry} Pack`)
+              this.isDownloading
+                ? 'Downloading...'
+                : (this.isCountryAvailable ? `Download ${this.currentCountryName || this.currentCountry} Pack` :
+                'Data Pack Unavailable')
+            )
               .width('80%')
               .height(48)
-              .backgroundColor(this.colors.accentGold)
-              .fontColor(this.colors.textOnAccent)
-              .enabled(!this.isDownloading)
+              // FIX: Change background color to grey if unavailable
+              .backgroundColor(this.isCountryAvailable ? this.colors.accentGold : this.colors.tintMedium)
+              // FIX: Change text color to muted if unavailable
+              .fontColor(this.isCountryAvailable ? this.colors.textOnAccent : this.colors.textMuted)
+              // FIX: Disable the button if country not available or currently downloading
+              .enabled(this.isCountryAvailable && !this.isDownloading)
               .onClick(() => this.downloadCurrentCountry())
-          }.width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
-
+          }
+          .width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
         } else {
           // List
           List({ space: 12 }) {

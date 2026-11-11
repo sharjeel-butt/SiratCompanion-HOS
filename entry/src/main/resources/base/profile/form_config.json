@@ -40,6 +40,86 @@
       "scheduledUpdateTime": "00:00",
       "formVisibleNotify": true,
       "uiSyntax": "arkts"
+    },
+    {
+      "name": "hijri_date_widget",
+      "description": "$string:widget_date_desc",
+      "src": "./ets/widgets/HijriDateWidget.ets",
+      "window": {
+        "designWidth": 720
+      },
+      "colorMode": "auto",
+      "supportDimensions": [
+        "2*2",
+        "4*4"
+      ],
+      "defaultDimension": "2*2",
+      "isDefault": false,
+      "updateEnabled": true,
+      "updateDuration": 60,
+      "scheduledUpdateTime": "00:00",
+      "formVisibleNotify": true,
+      "uiSyntax": "arkts"
+    },
+    {
+      "name": "adhkar_widget",
+      "description": "$string:widget_adhkar_desc",
+      "src": "./ets/widgets/AdhkarWidget.ets",
+      "window": {
+        "designWidth": 720
+      },
+      "colorMode": "auto",
+      "supportDimensions": [
+        "2*4",
+        "4*4"
+      ],
+      "defaultDimension": "2*4",
+      "isDefault": false,
+      "updateEnabled": true,
+      "updateDuration": 240,
+      "scheduledUpdateTime": "00:00",
+      "formVisibleNotify": true,
+      "uiSyntax": "arkts"
+    },
+    {
+      "name": "event_widget",
+      "description": "$string:widget_event_desc",
+      "src": "./ets/widgets/EventWidget.ets",
+      "window": {
+        "designWidth": 720
+      },
+      "colorMode": "auto",
+      "supportDimensions": [
+        "2*2",
+        "2*4"
+      ],
+      "defaultDimension": "2*2",
+      "isDefault": false,
+      "updateEnabled": true,
+      "updateDuration": 1440,
+      "scheduledUpdateTime": "00:00",
+      "formVisibleNotify": true,
+      "uiSyntax": "arkts"
+    },
+    {
+      "name": "tracker_widget",
+      "description": "$string:widget_tracker_desc",
+      "src": "./ets/widgets/TrackerWidget.ets",
+      "window": {
+        "designWidth": 720
+      },
+      "colorMode": "auto",
+      "supportDimensions": [
+        "2*4",
+        "4*4"
+      ],
+      "defaultDimension": "4*4",
+      "isDefault": false,
+      "updateEnabled": true,
+      "updateDuration": 30,
+      "scheduledUpdateTime": "00:00",
+      "formVisibleNotify": true,
+      "uiSyntax": "arkts"
     }
   ]
 }

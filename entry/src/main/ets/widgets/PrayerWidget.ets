@@ -31,7 +31,6 @@ struct PrayerWidget {
   @LocalStorageProp('error') error: string = '';
 
   build() {
-    // FORCE LTR ON THE ROOT TO PREVENT OS AUTO-MIRRORING
     Stack() {
       Column() {
         if (this.error.length > 0) {
@@ -82,8 +81,7 @@ struct PrayerWidget {
                 Text(this.hijriDate).fontSize('10vp').fontColor('#E8A44C').maxLines(1).flexShrink(0)
               }
             }
-            .width('100%').margin({ bottom: 12 })
-            .direction(Direction.Ltr)
+            .width('100%').margin({ bottom: 12 }).direction(Direction.Ltr)
           }
 
           // ========== BODY ==========
@@ -117,28 +115,260 @@ struct PrayerWidget {
 
           } else if (this.dimension === '2*4') {
             Column() {
-              Row() {
+              Row({ space: 6 }) {
                 if (this.isRtl()) {
-                  // RTL: Isha → Fajr (physical left → right)
-                  this.ColIsha()
-                  this.ColMaghrib()
-                  this.ColAsr()
-                  this.ColDhuhr()
-                  this.ColFajr()
+                  Column() {
+                    Image($r('app.media.ic_prayer_sajdah'))
+                      .width('16vp')
+                      .height('16vp')
+                      .fillColor(this.nextId === 'isha' ? '#E8A44C' : '#A5B8CC')
+                      .margin({ bottom: 4 })
+                    Text(this.ishaName)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'isha' ? '#E8A44C' : '#A5B8CC')
+                      .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Normal)
+                      .maxLines(1)
+                      .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    Text(this.ishaTime)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'isha' ? '#E8A44C' : '#FFFFFF')
+                      .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Medium)
+                      .maxLines(1)
+                      .margin({ top: 2 })
+                  }
+                  .layoutWeight(1)
+                  .height('100%')
+                  .justifyContent(FlexAlign.Center)
+                  .backgroundColor(this.nextId === 'isha' ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
+
+                  Column() {
+                    Image($r('app.media.ic_prayer_sajdah'))
+                      .width('16vp')
+                      .height('16vp')
+                      .fillColor(this.nextId === 'maghrib' ? '#E8A44C' : '#A5B8CC')
+                      .margin({ bottom: 4 })
+                    Text(this.maghribName)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#A5B8CC')
+                      .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Normal)
+                      .maxLines(1)
+                      .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    Text(this.maghribTime)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#FFFFFF')
+                      .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Medium)
+                      .maxLines(1)
+                      .margin({ top: 2 })
+                  }
+                  .layoutWeight(1)
+                  .height('100%')
+                  .justifyContent(FlexAlign.Center)
+                  .backgroundColor(this.nextId === 'maghrib' ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
+
+                  Column() {
+                    Image($r('app.media.ic_prayer_sajdah'))
+                      .width('16vp')
+                      .height('16vp')
+                      .fillColor(this.nextId === 'asr' ? '#E8A44C' : '#A5B8CC')
+                      .margin({ bottom: 4 })
+                    Text(this.asrName)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'asr' ? '#E8A44C' : '#A5B8CC')
+                      .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Normal)
+                      .maxLines(1)
+                      .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    Text(this.asrTime)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'asr' ? '#E8A44C' : '#FFFFFF')
+                      .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Medium)
+                      .maxLines(1)
+                      .margin({ top: 2 })
+                  }
+                  .layoutWeight(1)
+                  .height('100%')
+                  .justifyContent(FlexAlign.Center)
+                  .backgroundColor(this.nextId === 'asr' ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
+
+                  Column() {
+                    Image($r('app.media.ic_prayer_sajdah'))
+                      .width('16vp')
+                      .height('16vp')
+                      .fillColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#A5B8CC')
+                      .margin({ bottom: 4 })
+                    Text(this.dhuhrName)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#A5B8CC')
+                      .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Normal)
+                      .maxLines(1)
+                      .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    Text(this.dhuhrTime)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#FFFFFF')
+                      .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Medium)
+                      .maxLines(1)
+                      .margin({ top: 2 })
+                  }
+                  .layoutWeight(1)
+                  .height('100%')
+                  .justifyContent(FlexAlign.Center)
+                  .backgroundColor(this.nextId === 'dhuhr' ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
+
+                  Column() {
+                    Image($r('app.media.ic_prayer_sajdah'))
+                      .width('16vp')
+                      .height('16vp')
+                      .fillColor(this.nextId === 'fajr' ? '#E8A44C' : '#A5B8CC')
+                      .margin({ bottom: 4 })
+                    Text(this.fajrName)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#A5B8CC')
+                      .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Normal)
+                      .maxLines(1)
+                      .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    Text(this.fajrTime)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#FFFFFF')
+                      .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Medium)
+                      .maxLines(1)
+                      .margin({ top: 2 })
+                  }
+                  .layoutWeight(1)
+                  .height('100%')
+                  .justifyContent(FlexAlign.Center)
+                  .backgroundColor(this.nextId === 'fajr' ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
                 } else {
-                  // LTR: Fajr → Isha
-                  this.ColFajr()
-                  this.ColDhuhr()
-                  this.ColAsr()
-                  this.ColMaghrib()
-                  this.ColIsha()
+                  Column() {
+                    Image($r('app.media.ic_prayer_sajdah'))
+                      .width('16vp')
+                      .height('16vp')
+                      .fillColor(this.nextId === 'fajr' ? '#E8A44C' : '#A5B8CC')
+                      .margin({ bottom: 4 })
+                    Text(this.fajrName)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#A5B8CC')
+                      .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Normal)
+                      .maxLines(1)
+                      .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    Text(this.fajrTime)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#FFFFFF')
+                      .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Medium)
+                      .maxLines(1)
+                      .margin({ top: 2 })
+                  }
+                  .layoutWeight(1)
+                  .height('100%')
+                  .justifyContent(FlexAlign.Center)
+                  .backgroundColor(this.nextId === 'fajr' ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
+
+                  Column() {
+                    Image($r('app.media.ic_prayer_sajdah'))
+                      .width('16vp')
+                      .height('16vp')
+                      .fillColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#A5B8CC')
+                      .margin({ bottom: 4 })
+                    Text(this.dhuhrName)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#A5B8CC')
+                      .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Normal)
+                      .maxLines(1)
+                      .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    Text(this.dhuhrTime)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#FFFFFF')
+                      .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Medium)
+                      .maxLines(1)
+                      .margin({ top: 2 })
+                  }
+                  .layoutWeight(1)
+                  .height('100%')
+                  .justifyContent(FlexAlign.Center)
+                  .backgroundColor(this.nextId === 'dhuhr' ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
+
+                  Column() {
+                    Image($r('app.media.ic_prayer_sajdah'))
+                      .width('16vp')
+                      .height('16vp')
+                      .fillColor(this.nextId === 'asr' ? '#E8A44C' : '#A5B8CC')
+                      .margin({ bottom: 4 })
+                    Text(this.asrName)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'asr' ? '#E8A44C' : '#A5B8CC')
+                      .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Normal)
+                      .maxLines(1)
+                      .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    Text(this.asrTime)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'asr' ? '#E8A44C' : '#FFFFFF')
+                      .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Medium)
+                      .maxLines(1)
+                      .margin({ top: 2 })
+                  }
+                  .layoutWeight(1)
+                  .height('100%')
+                  .justifyContent(FlexAlign.Center)
+                  .backgroundColor(this.nextId === 'asr' ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
+
+                  Column() {
+                    Image($r('app.media.ic_prayer_sajdah'))
+                      .width('16vp')
+                      .height('16vp')
+                      .fillColor(this.nextId === 'maghrib' ? '#E8A44C' : '#A5B8CC')
+                      .margin({ bottom: 4 })
+                    Text(this.maghribName)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#A5B8CC')
+                      .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Normal)
+                      .maxLines(1)
+                      .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    Text(this.maghribTime)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#FFFFFF')
+                      .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Medium)
+                      .maxLines(1)
+                      .margin({ top: 2 })
+                  }
+                  .layoutWeight(1)
+                  .height('100%')
+                  .justifyContent(FlexAlign.Center)
+                  .backgroundColor(this.nextId === 'maghrib' ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
+
+                  Column() {
+                    Image($r('app.media.ic_prayer_sajdah'))
+                      .width('16vp')
+                      .height('16vp')
+                      .fillColor(this.nextId === 'isha' ? '#E8A44C' : '#A5B8CC')
+                      .margin({ bottom: 4 })
+                    Text(this.ishaName)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'isha' ? '#E8A44C' : '#A5B8CC')
+                      .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Normal)
+                      .maxLines(1)
+                      .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    Text(this.ishaTime)
+                      .fontSize('10vp')
+                      .fontColor(this.nextId === 'isha' ? '#E8A44C' : '#FFFFFF')
+                      .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Medium)
+                      .maxLines(1)
+                      .margin({ top: 2 })
+                  }
+                  .layoutWeight(1)
+                  .height('100%')
+                  .justifyContent(FlexAlign.Center)
+                  .backgroundColor(this.nextId === 'isha' ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
                 }
               }
-              .width('100%')
-              .layoutWeight(1)
-              .alignItems(VerticalAlign.Center)
-              .justifyContent(FlexAlign.SpaceBetween)
-              .direction(Direction.Ltr)
+              .width('100%').layoutWeight(1).direction(Direction.Ltr)
 
               // Progress Bar
               Row() {
@@ -153,37 +383,39 @@ struct PrayerWidget {
               .height(4)
               .backgroundColor('#333333')
               .borderRadius(2)
-              .margin({ top: 4 })
+              .margin({ top: 8 })
+              .direction(Direction.Ltr)
+              .justifyContent(this.isRtl() ? FlexAlign.End : FlexAlign.Start)
             }
             .width('100%').layoutWeight(1).justifyContent(FlexAlign.SpaceBetween)
 
           } else if (this.dimension === '4*4') {
             Column() {
-              // 1. Top Row: Current & Next + Countdown
+              // 1. Top Row
               Row() {
                 if (this.isRtl()) {
-                  // RTL: Next on Left, Current on Right
                   Column() {
                     Text(this.nextName)
                       .fontSize('18vp')
                       .fontColor('#E8A44C')
                       .fontWeight(FontWeight.Bold)
                       .textAlign(TextAlign.LEFT)
+                      .maxLines(1)
                     Text(this.nextTime)
                       .fontSize('14vp')
                       .fontColor('#E8A44C')
                       .margin({ top: 2 })
                       .textAlign(TextAlign.LEFT)
+                      .maxLines(1)
                     Text(this.countdown)
                       .fontSize('11vp')
                       .fontColor('#FFFFFF')
                       .opacity(0.7)
                       .margin({ top: 2 })
                       .textAlign(TextAlign.LEFT)
+                      .maxLines(1)
                   }.layoutWeight(1).alignItems(HorizontalAlign.Start).direction(Direction.Ltr)
-
                   Divider().vertical(true).height(40).color('#333333').margin({ left: 12, right: 12 })
-
                   Column() {
                     Text(this.currentName + (this.isCurrentYesterday ? ` (${this.lblYesterday})` : ''))
                       .fontSize('16vp')
@@ -191,10 +423,9 @@ struct PrayerWidget {
                       .fontWeight(FontWeight.Bold)
                       .maxLines(1)
                       .textOverflow({ overflow: TextOverflow.Ellipsis })
-                    Text(this.currentTime).fontSize('12vp').fontColor('#A5B8CC').margin({ top: 2 })
+                    Text(this.currentTime).fontSize('12vp').fontColor('#A5B8CC').margin({ top: 2 }).maxLines(1)
                   }.layoutWeight(1).alignItems(HorizontalAlign.End).direction(Direction.Ltr)
                 } else {
-                  // LTR: Current on Left, Next on Right
                   Column() {
                     Text(this.currentName + (this.isCurrentYesterday ? ` (${this.lblYesterday})` : ''))
                       .fontSize('16vp')
@@ -202,24 +433,25 @@ struct PrayerWidget {
                       .fontWeight(FontWeight.Bold)
                       .maxLines(1)
                       .textOverflow({ overflow: TextOverflow.Ellipsis })
-                    Text(this.currentTime).fontSize('12vp').fontColor('#A5B8CC').margin({ top: 2 })
+                    Text(this.currentTime).fontSize('12vp').fontColor('#A5B8CC').margin({ top: 2 }).maxLines(1)
                   }.layoutWeight(1).alignItems(HorizontalAlign.Start).direction(Direction.Ltr)
-
                   Divider().vertical(true).height(40).color('#333333').margin({ left: 12, right: 12 })
-
                   Column() {
-                    Text(this.nextName).fontSize('18vp').fontColor('#E8A44C').fontWeight(FontWeight.Bold)
-                    Text(this.nextTime).fontSize('14vp').fontColor('#E8A44C').margin({ top: 2 })
-                    Text(this.countdown).fontSize('11vp').fontColor('#FFFFFF').opacity(0.7).margin({ top: 2 })
+                    Text(this.nextName).fontSize('18vp').fontColor('#E8A44C').fontWeight(FontWeight.Bold).maxLines(1)
+                    Text(this.nextTime).fontSize('14vp').fontColor('#E8A44C').margin({ top: 2 }).maxLines(1)
+                    Text(this.countdown)
+                      .fontSize('11vp')
+                      .fontColor('#FFFFFF')
+                      .opacity(0.7)
+                      .margin({ top: 2 })
+                      .maxLines(1)
                   }.layoutWeight(1).alignItems(HorizontalAlign.End).direction(Direction.Ltr)
                 }
-              }
-              .width('100%').margin({ bottom: 12 }).alignItems(VerticalAlign.Center)
-              .direction(Direction.Ltr)
+              }.width('100%').margin({ bottom: 12 }).alignItems(VerticalAlign.Center).direction(Direction.Ltr)
 
               Divider().color('#333333').margin({ bottom: 12 })
 
-              // 2. Contextual Middle Row
+              // 2. Contextual Row
               Row() {
                 if (this.isRtl()) {
                   Column() {
@@ -228,6 +460,7 @@ struct PrayerWidget {
                       .fontColor('#A5B8CC')
                       .width('100%')
                       .textAlign(TextAlign.LEFT)
+                      .maxLines(1)
                     Text(this.contextTime1)
                       .fontSize('14vp')
                       .fontColor('#FFFFFF')
@@ -236,14 +469,15 @@ struct PrayerWidget {
                       .width('100%')
                       .textAlign(TextAlign.LEFT)
                       .direction(Direction.Ltr)
+                      .maxLines(1)
                   }.layoutWeight(1).alignItems(HorizontalAlign.Start)
-
                   Column() {
                     Text(this.contextLabel2)
                       .fontSize('10vp')
                       .fontColor('#A5B8CC')
                       .width('100%')
                       .textAlign(TextAlign.RIGHT)
+                      .maxLines(1)
                     Text(this.contextTime2)
                       .fontSize('14vp')
                       .fontColor('#FFFFFF')
@@ -252,6 +486,7 @@ struct PrayerWidget {
                       .width('100%')
                       .textAlign(TextAlign.RIGHT)
                       .direction(Direction.Ltr)
+                      .maxLines(1)
                   }.layoutWeight(1).alignItems(HorizontalAlign.End)
                 } else {
                   Column() {
@@ -260,6 +495,7 @@ struct PrayerWidget {
                       .fontColor('#A5B8CC')
                       .width('100%')
                       .textAlign(TextAlign.LEFT)
+                      .maxLines(1)
                     Text(this.contextTime1)
                       .fontSize('14vp')
                       .fontColor('#FFFFFF')
@@ -268,14 +504,15 @@ struct PrayerWidget {
                       .width('100%')
                       .textAlign(TextAlign.LEFT)
                       .direction(Direction.Ltr)
+                      .maxLines(1)
                   }.layoutWeight(1).alignItems(HorizontalAlign.Start)
-
                   Column() {
                     Text(this.contextLabel2)
                       .fontSize('10vp')
                       .fontColor('#A5B8CC')
                       .width('100%')
                       .textAlign(TextAlign.RIGHT)
+                      .maxLines(1)
                     Text(this.contextTime2)
                       .fontSize('14vp')
                       .fontColor('#FFFFFF')
@@ -284,16 +521,15 @@ struct PrayerWidget {
                       .width('100%')
                       .textAlign(TextAlign.RIGHT)
                       .direction(Direction.Ltr)
+                      .maxLines(1)
                   }.layoutWeight(1).alignItems(HorizontalAlign.End)
                 }
-              }
-              .width('100%').margin({ bottom: 16 })
-              .direction(Direction.Ltr)
+              }.width('100%').margin({ bottom: 16 }).direction(Direction.Ltr)
 
               Divider().color('#333333').margin({ bottom: 12 })
 
-              // 3. Prayer Timings (Fully inlined and using width('50%') for perfect spacing)
-              Column() {
+              // 3. Prayer Timings (Compact, using Column space, no clipping)
+              Column({ space: 4 }) {
                 if (this.isRtl()) {
                   Row() {
                     Text(this.ishaTime)
@@ -301,14 +537,22 @@ struct PrayerWidget {
                       .textAlign(TextAlign.LEFT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'isha' ? '#E8A44C' : '#FFFFFF')
-                      .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Medium);
+                      .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Medium)
+                      .maxLines(1);
                     Text(this.ishaName)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'isha' ? '#E8A44C' : '#A5B8CC')
                       .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Normal)
-                  }.width('90%').margin({ bottom: 8 }).direction(Direction.Ltr)
+                      .maxLines(1)
+                  }
+                  .width('100%')
+                  .height(28)
+                  .padding({ left: 12, right: 12 })
+                  .backgroundColor('rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
+                  .direction(Direction.Ltr)
 
                   Row() {
                     Text(this.maghribTime)
@@ -316,14 +560,22 @@ struct PrayerWidget {
                       .textAlign(TextAlign.LEFT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#FFFFFF')
-                      .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Medium);
+                      .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Medium)
+                      .maxLines(1);
                     Text(this.maghribName)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#A5B8CC')
                       .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Normal)
-                  }.width('90%').margin({ bottom: 8 }).direction(Direction.Ltr)
+                      .maxLines(1)
+                  }
+                  .width('100%')
+                  .height(28)
+                  .padding({ left: 12, right: 12 })
+                  .backgroundColor('rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
+                  .direction(Direction.Ltr)
 
                   Row() {
                     Text(this.asrTime)
@@ -331,14 +583,22 @@ struct PrayerWidget {
                       .textAlign(TextAlign.LEFT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'asr' ? '#E8A44C' : '#FFFFFF')
-                      .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Medium);
+                      .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Medium)
+                      .maxLines(1);
                     Text(this.asrName)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'asr' ? '#E8A44C' : '#A5B8CC')
                       .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Normal)
-                  }.width('90%').margin({ bottom: 8 }).direction(Direction.Ltr)
+                      .maxLines(1)
+                  }
+                  .width('100%')
+                  .height(28)
+                  .padding({ left: 12, right: 12 })
+                  .backgroundColor('rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
+                  .direction(Direction.Ltr)
 
                   Row() {
                     Text(this.dhuhrTime)
@@ -346,14 +606,22 @@ struct PrayerWidget {
                       .textAlign(TextAlign.LEFT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#FFFFFF')
-                      .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Medium);
+                      .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Medium)
+                      .maxLines(1);
                     Text(this.dhuhrName)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#A5B8CC')
                       .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Normal)
-                  }.width('90%').margin({ bottom: 8 }).direction(Direction.Ltr)
+                      .maxLines(1)
+                  }
+                  .width('100%')
+                  .height(28)
+                  .padding({ left: 12, right: 12 })
+                  .backgroundColor('rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
+                  .direction(Direction.Ltr)
 
                   Row() {
                     Text(this.fajrTime)
@@ -361,14 +629,22 @@ struct PrayerWidget {
                       .textAlign(TextAlign.LEFT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#FFFFFF')
-                      .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Medium);
+                      .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Medium)
+                      .maxLines(1);
                     Text(this.fajrName)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#A5B8CC')
                       .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Normal)
-                  }.width('90%').direction(Direction.Ltr)
+                      .maxLines(1)
+                  }
+                  .width('100%')
+                  .height(28)
+                  .padding({ left: 12, right: 12 })
+                  .backgroundColor('rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
+                  .direction(Direction.Ltr)
                 } else {
                   Row() {
                     Text(this.fajrName)
@@ -376,14 +652,22 @@ struct PrayerWidget {
                       .textAlign(TextAlign.LEFT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#A5B8CC')
-                      .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Normal);
+                      .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Normal)
+                      .maxLines(1);
                     Text(this.fajrTime)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#FFFFFF')
                       .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Medium)
-                  }.width('90%').margin({ bottom: 8 }).direction(Direction.Ltr)
+                      .maxLines(1)
+                  }
+                  .width('100%')
+                  .height(28)
+                  .padding({ left: 12, right: 12 })
+                  .backgroundColor('rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
+                  .direction(Direction.Ltr)
 
                   Row() {
                     Text(this.dhuhrName)
@@ -391,14 +675,22 @@ struct PrayerWidget {
                       .textAlign(TextAlign.LEFT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#A5B8CC')
-                      .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Normal);
+                      .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Normal)
+                      .maxLines(1);
                     Text(this.dhuhrTime)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#FFFFFF')
                       .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Medium)
-                  }.width('90%').margin({ bottom: 8 }).direction(Direction.Ltr)
+                      .maxLines(1)
+                  }
+                  .width('100%')
+                  .height(28)
+                  .padding({ left: 12, right: 12 })
+                  .backgroundColor('rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
+                  .direction(Direction.Ltr)
 
                   Row() {
                     Text(this.asrName)
@@ -406,14 +698,22 @@ struct PrayerWidget {
                       .textAlign(TextAlign.LEFT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'asr' ? '#E8A44C' : '#A5B8CC')
-                      .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Normal);
+                      .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Normal)
+                      .maxLines(1);
                     Text(this.asrTime)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'asr' ? '#E8A44C' : '#FFFFFF')
                       .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Medium)
-                  }.width('90%').margin({ bottom: 8 }).direction(Direction.Ltr)
+                      .maxLines(1)
+                  }
+                  .width('100%')
+                  .height(28)
+                  .padding({ left: 12, right: 12 })
+                  .backgroundColor('rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
+                  .direction(Direction.Ltr)
 
                   Row() {
                     Text(this.maghribName)
@@ -421,14 +721,22 @@ struct PrayerWidget {
                       .textAlign(TextAlign.LEFT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#A5B8CC')
-                      .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Normal);
+                      .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Normal)
+                      .maxLines(1);
                     Text(this.maghribTime)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#FFFFFF')
                       .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Medium)
-                  }.width('90%').margin({ bottom: 8 }).direction(Direction.Ltr)
+                      .maxLines(1)
+                  }
+                  .width('100%')
+                  .height(28)
+                  .padding({ left: 12, right: 12 })
+                  .backgroundColor('rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
+                  .direction(Direction.Ltr)
 
                   Row() {
                     Text(this.ishaName)
@@ -436,17 +744,25 @@ struct PrayerWidget {
                       .textAlign(TextAlign.LEFT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'isha' ? '#E8A44C' : '#A5B8CC')
-                      .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Normal);
+                      .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Normal)
+                      .maxLines(1);
                     Text(this.ishaTime)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'isha' ? '#E8A44C' : '#FFFFFF')
                       .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Medium)
-                  }.width('90%').direction(Direction.Ltr)
+                      .maxLines(1)
+                  }
+                  .width('100%')
+                  .height(28)
+                  .padding({ left: 12, right: 12 })
+                  .backgroundColor('rgba(255, 255, 255, 0.05)')
+                  .borderRadius(8)
+                  .direction(Direction.Ltr)
                 }
               }
-              .width('100%').layoutWeight(1).justifyContent(FlexAlign.SpaceEvenly).alignItems(HorizontalAlign.Center)
+              .width('100%').layoutWeight(1).justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center)
             }
             .width('100%').layoutWeight(1)
           }
@@ -466,142 +782,7 @@ struct PrayerWidget {
         });
       })
     }
-    .width('100%').height('100%')
-    .direction(Direction.Ltr) // FORCE LTR ON ROOT TO PREVENT SYSTEM DOUBLE-MIRRORING
-  }
-
-  @Builder
-  ColFajr() {
-    Column() {
-      Image($r('app.media.ic_prayer_sajdah'))
-        .width('16vp').height('16vp')
-        .fillColor(this.nextId === 'fajr' ? '#E8A44C' : '#A5B8CC')
-        .margin({ bottom: 6 })
-      Text(this.fajrName)
-        .fontSize('12vp')
-        .fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#A5B8CC')
-        .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Normal)
-        .maxLines(1)
-      Text(this.fajrTime)
-        .fontSize('12vp')
-        .fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#FFFFFF')
-        .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Medium)
-        .maxLines(1)
-        .margin({ top: 4 })
-      if (this.nextId === 'fajr') {
-        Text(this.countdown).fontSize('9vp').fontColor('#E8A44C').margin({ top: 2 }).maxLines(1)
-      }
-    }
-    .layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
-  }
-
-  // --- 2×4 Column Builders (parameterless — reactive) ---
-  //
-  // These are @Builder *without* parameters, reading this.nextId
-  // and this.countdown directly. Parameterized @Builder arguments
-  // are snapshotted at first render: `highlight` would stay false
-  // and `count` would stay at its initial value forever, so the
-  // countdown would never tick and the "next prayer" highlight
-  // would never move when the next prayer advanced.
-
-  @Builder
-  ColDhuhr() {
-    Column() {
-      Image($r('app.media.ic_prayer_sajdah'))
-        .width('16vp').height('16vp')
-        .fillColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#A5B8CC')
-        .margin({ bottom: 6 })
-      Text(this.dhuhrName)
-        .fontSize('12vp')
-        .fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#A5B8CC')
-        .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Normal)
-        .maxLines(1)
-      Text(this.dhuhrTime)
-        .fontSize('12vp')
-        .fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#FFFFFF')
-        .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Medium)
-        .maxLines(1)
-        .margin({ top: 4 })
-      if (this.nextId === 'dhuhr') {
-        Text(this.countdown).fontSize('9vp').fontColor('#E8A44C').margin({ top: 2 }).maxLines(1)
-      }
-    }
-    .layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
-  }
-
-  @Builder
-  ColAsr() {
-    Column() {
-      Image($r('app.media.ic_prayer_sajdah'))
-        .width('16vp').height('16vp')
-        .fillColor(this.nextId === 'asr' ? '#E8A44C' : '#A5B8CC')
-        .margin({ bottom: 6 })
-      Text(this.asrName)
-        .fontSize('12vp')
-        .fontColor(this.nextId === 'asr' ? '#E8A44C' : '#A5B8CC')
-        .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Normal)
-        .maxLines(1)
-      Text(this.asrTime)
-        .fontSize('12vp')
-        .fontColor(this.nextId === 'asr' ? '#E8A44C' : '#FFFFFF')
-        .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Medium)
-        .maxLines(1)
-        .margin({ top: 4 })
-      if (this.nextId === 'asr') {
-        Text(this.countdown).fontSize('9vp').fontColor('#E8A44C').margin({ top: 2 }).maxLines(1)
-      }
-    }
-    .layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
-  }
-
-  @Builder
-  ColMaghrib() {
-    Column() {
-      Image($r('app.media.ic_prayer_sajdah'))
-        .width('16vp').height('16vp')
-        .fillColor(this.nextId === 'maghrib' ? '#E8A44C' : '#A5B8CC')
-        .margin({ bottom: 6 })
-      Text(this.maghribName)
-        .fontSize('12vp')
-        .fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#A5B8CC')
-        .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Normal)
-        .maxLines(1)
-      Text(this.maghribTime)
-        .fontSize('12vp')
-        .fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#FFFFFF')
-        .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Medium)
-        .maxLines(1)
-        .margin({ top: 4 })
-      if (this.nextId === 'maghrib') {
-        Text(this.countdown).fontSize('9vp').fontColor('#E8A44C').margin({ top: 2 }).maxLines(1)
-      }
-    }
-    .layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
-  }
-
-  @Builder
-  ColIsha() {
-    Column() {
-      Image($r('app.media.ic_prayer_sajdah'))
-        .width('16vp').height('16vp')
-        .fillColor(this.nextId === 'isha' ? '#E8A44C' : '#A5B8CC')
-        .margin({ bottom: 6 })
-      Text(this.ishaName)
-        .fontSize('12vp')
-        .fontColor(this.nextId === 'isha' ? '#E8A44C' : '#A5B8CC')
-        .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Normal)
-        .maxLines(1)
-      Text(this.ishaTime)
-        .fontSize('12vp')
-        .fontColor(this.nextId === 'isha' ? '#E8A44C' : '#FFFFFF')
-        .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Medium)
-        .maxLines(1)
-        .margin({ top: 4 })
-      if (this.nextId === 'isha') {
-        Text(this.countdown).fontSize('9vp').fontColor('#E8A44C').margin({ top: 2 }).maxLines(1)
-      }
-    }
-    .layoutWeight(1).alignItems(HorizontalAlign.Center).justifyContent(FlexAlign.Center)
+    .width('100%').height('100%').direction(Direction.Ltr)
   }
 
   private isRtl(): boolean {
