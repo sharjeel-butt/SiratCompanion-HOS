@@ -42,9 +42,9 @@ export class DateHelper {
     const engine = HijriEngineResolver.current();
 
     for (let i = 0; i < 366; i++) {
-      const testDate = new Date(startDate.getTime() + i * MS_PER_DAY);
-
-      // Apply the user's Hijri offset before reading the Hijri day.
+      const testDate = new Date(startDate);
+      testDate.setDate(testDate.getDate() + i);
+      testDate.setHours(0, 0, 0, 0);
       const shifted = new Date(testDate);
       shifted.setDate(shifted.getDate() + offsetDays);
 
@@ -178,9 +178,9 @@ export class DateHelper {
     const engine = HijriEngineResolver.current();
 
     for (let i = 0; i < 366; i++) {
-      const testDate = new Date(startDate.getTime() + i * MS_PER_DAY);
-
-      // Thursday = 4 (Sunday = 0).
+      const testDate = new Date(startDate);
+      testDate.setDate(testDate.getDate() + i);
+      testDate.setHours(0, 0, 0, 0);
       if (testDate.getDay() !== 4) {
         continue;
       }

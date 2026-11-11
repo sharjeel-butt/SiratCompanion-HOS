@@ -330,16 +330,24 @@ export class ProgressHelper {
     // 1. WEEK LOGIC (Sliced from Year Start)
     // ==========================================
     const yearStart = new Date(currentYear, 0, 1);
-    const dayOfYear = Math.floor((today.getTime() - yearStart.getTime()) / 86400000) + 1;
+    yearStart.setHours(0, 0, 0, 0);
+
+    // Round (not floor) so a 23-hour or 25-hour day across DST does not
+    // shift the computed day-of-year by one.
+    const dayOfYear =
+      Math.round((today.getTime() - yearStart.getTime()) / 86400000) + 1;
     const currentWeekNumber = Math.ceil(dayOfYear / 7);
 
     const weekStartDate = new Date(currentYear, 0, 1 + (currentWeekNumber - 1) * 7);
+    weekStartDate.setHours(0, 0, 0, 0);
     const weekEndDate = new Date(currentYear, 0, 1 + (currentWeekNumber - 1) * 7 + 6);
+    weekEndDate.setHours(0, 0, 0, 0);
 
     const weekPerPrayer = ProgressHelper.emptyPerPrayer();
 
     for (let i = 0; i < 7; i++) {
-      const d = new Date(weekStartDate.getTime() + i * 86400000);
+      const d = new Date(weekStartDate);
+      d.setDate(d.getDate() + i);
       d.setHours(0, 0, 0, 0);
       const st = ProgressHelper.readState(ProgressHelper.getDateKey(d));
       if (st.fajr) {
@@ -440,7 +448,7 @@ export class ProgressHelper {
       monthTotal: monthTotal,
       monthPossible: daysInMonth * 5,
       yearTotal: yearTotal,
-      yearPossible: 365 * 5,
+      yearPossible: ProgressHelper.daysInYear(currentYear) * 5,
       currentStreak: base.currentStreak,
       bestStreak: base.bestStreak,
       monthProgress: ProgressHelper.getMonthProgress(),
@@ -508,13 +516,20 @@ export class ProgressHelper {
 
     if (period === 'week') {
       const yearStart = new Date(currentYear, 0, 1);
-      const dayOfYear = Math.floor((today.getTime() - yearStart.getTime()) / 86400000) + 1;
+      yearStart.setHours(0, 0, 0, 0);
+
+      const dayOfYear =
+        Math.round((today.getTime() - yearStart.getTime()) / 86400000) + 1;
       currentWeekNumber = Math.ceil(dayOfYear / 7);
       fullPeriodDays = 7;
 
-      const weekStart = new Date(yearStart.getTime() + (currentWeekNumber - 1) * 7 * 86400000);
+      const weekStart = new Date(yearStart);
+      weekStart.setDate(weekStart.getDate() + (currentWeekNumber - 1) * 7);
+      weekStart.setHours(0, 0, 0, 0);
+
       for (let i = 0; i < 7; i++) {
-        const d = new Date(weekStart.getTime() + i * 86400000);
+        const d = new Date(weekStart);
+        d.setDate(d.getDate() + i);
         d.setHours(0, 0, 0, 0);
         dateKeys.push(ProgressHelper.getDateKey(d));
       }
@@ -528,13 +543,13 @@ export class ProgressHelper {
         dateKeys.push(ProgressHelper.getDateKey(date));
       }
     } else {
-      fullPeriodDays = 365;
+      fullPeriodDays = ProgressHelper.daysInYear(currentYear);
       for (let m = 0; m < 12; m++) {
         const daysInM = new Date(currentYear, m + 1, 0).getDate();
         for (let d = 1; d <= daysInM; d++) {
           const date = new Date(currentYear, m, d);
           date.setHours(0, 0, 0, 0);
-          dateKeys.push(ProgressHelper.getDateKey(date)); // No break!
+          dateKeys.push(ProgressHelper.getDateKey(date));
         }
       }
     }
@@ -738,16 +753,22 @@ export class ProgressHelper {
   static getWeekDetail(): WeekDetailCell[] {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const msPerDay = 86400000;
     const yearStart = new Date(today.getFullYear(), 0, 1);
+    yearStart.setHours(0, 0, 0, 0);
 
-    const dayOfYear = Math.floor((today.getTime() - yearStart.getTime()) / msPerDay) + 1;
+    const dayOfYear =
+      Math.round((today.getTime() - yearStart.getTime()) / 86400000) + 1;
     const currentWeekNumber = Math.ceil(dayOfYear / 7);
-    const weekStart = new Date(yearStart.getTime() + (currentWeekNumber - 1) * 7 * msPerDay);
+
+    const weekStart = new Date(yearStart);
+    weekStart.setDate(weekStart.getDate() + (currentWeekNumber - 1) * 7);
+    weekStart.setHours(0, 0, 0, 0);
 
     const out: WeekDetailCell[] = [];
     for (let i = 0; i < 7; i++) {
-      const d = new Date(weekStart.getTime() + i * msPerDay);
+      const d = new Date(weekStart);
+      d.setDate(d.getDate() + i);
+      d.setHours(0, 0, 0, 0);
       const st = ProgressHelper.readState(ProgressHelper.getDateKey(d));
 
       out.push({
@@ -841,5 +862,12 @@ export class ProgressHelper {
       }
     }
     return 0;
+  }
+
+  /** Number of calendar days in a Gregorian year. */
+  private static daysInYear(year: number): number {
+    const isLeap =
+      (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+    return isLeap ? 366 : 365;
   }
 }

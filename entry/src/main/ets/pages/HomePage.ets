@@ -2587,7 +2587,7 @@ export struct HomePage {
             .rotate({ angle: this.isRtl() ? 180 : 0 })
         }
         .onClick(() => {
-          router.pushUrl({ url: 'pages/PrayerDetailsPage' })
+          router.pushUrl({ url: 'pages/PrayerProgressPage' })
             .catch((e: Error) => console.error('Nav fail', e));
         })
       }
@@ -2836,7 +2836,7 @@ export struct HomePage {
             .rotate({ angle: this.isRtl() ? 180 : 0 })
         }
         .onClick(() => {
-          router.pushUrl({ url: 'pages/TasbihDetailsPage' })
+          router.pushUrl({ url: 'pages/TasbihProgressPage' })
             .catch((e: Error) => console.error('Nav fail', e));
         })
       }
@@ -3152,7 +3152,7 @@ export struct HomePage {
 
       // 3. Check if prayer time has passed
       const prayerMin = PrayerManager.timeToMinutes(p.time);
-      if (prayerMin > 0 && nowMin >= prayerMin) {
+      if (nowMin >= prayerMin) {
         // Keep the snapshot's time and status, but ensure checked is accurate
         const pendingPrayer: PrayerModel = {
           id: p.id,
@@ -3444,6 +3444,7 @@ export struct HomePage {
       this.hijriOffset,
       SettingsHelper.getEventPerspective()
     );
+    this.refreshDashboard();
   }
 
   private onHijriCalendarVersionChanged(): void {

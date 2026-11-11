@@ -31,7 +31,15 @@ export default class EntryFormAbility extends FormExtensionAbility {
     formName: string // Added parameter
   ): Promise<void> {
     try {
-      await PreferencesHelper.init(ctx);
+      let safeCtx = ctx;
+      if (!safeCtx) {
+        safeCtx = PreferencesHelper.getContext() as common.Context;
+      }
+      if (!safeCtx) {
+        console.error(`[${TAG}] doAsyncRefresh: no valid context available`);
+        return;
+      }
+      await PreferencesHelper.init(safeCtx);
 
       const savedOverride: string = await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE_OVERRIDE, 'system');
       const savedLang: string = await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE, 'en');
@@ -41,9 +49,9 @@ export default class EntryFormAbility extends FormExtensionAbility {
       AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, savedLang);
       AppStorage.setOrCreate(STORAGE_KEY_TIME_FORMAT, savedFormat);
 
-      L.init(ctx);
+      L.init(safeCtx);
       L.applySystemLanguage(savedOverride);
-      await OfflineCityLookup.init(ctx);
+      await OfflineCityLookup.init(safeCtx);
 
       if (formId.length === 0) {
         return;
@@ -59,13 +67,11 @@ export default class EntryFormAbility extends FormExtensionAbility {
       if (formName === 'ramadan_widget') {
         widgetData = await WidgetDataBuilder.buildRamadanWidget(dimension, savedLang);
       } else if (formName === 'hijri_date_widget') {
-        widgetData = await WidgetDataBuilder.buildDateWidget(ctx, dimension, savedLang); // <-- Pass ctx
+        widgetData = await WidgetDataBuilder.buildDateWidget(safeCtx, dimension, savedLang); // <-- Pass ctx
       } else if (formName === 'event_widget') {
-        widgetData = await WidgetDataBuilder.buildEventWidget(ctx, dimension, savedLang); // <-- Pass ctx
+        widgetData = await WidgetDataBuilder.buildEventWidget(safeCtx, dimension, savedLang); // <-- Pass ctx
       } else if (formName === 'adhkar_widget') {
-        widgetData = await WidgetDataBuilder.buildAdhkarWidget(ctx, dimension, savedLang); // <-- Pass ctx
-      } else if (formName === 'tracker_widget') {
-        widgetData = await WidgetDataBuilder.buildTrackerWidget(ctx, dimension, savedLang);
+        widgetData = await WidgetDataBuilder.buildAdhkarWidget(safeCtx, dimension, savedLang); // <-- Pass ctx
       } else {
         widgetData = await WidgetDataBuilder.build(dimension, savedLang);
       }

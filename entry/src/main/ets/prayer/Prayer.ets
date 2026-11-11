@@ -635,7 +635,7 @@ export struct Prayer {
 
         Row() {
           Text(this.translateEventName(this.todayNextPrayerName))
-            .fontSize(16)
+            .fontSize(28)
             .fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Bold)
             .maxLines(1)

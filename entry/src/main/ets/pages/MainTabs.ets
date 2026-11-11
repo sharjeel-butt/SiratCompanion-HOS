@@ -264,6 +264,9 @@ struct MainTabs {
       .scrollable(false)
       .onChange((index: number) => {
         this.currentIndex = index;
+        // FIX: Bump the tick so child pages refresh
+        const prev = AppStorage.get<number>(STORAGE_KEY_TAB_REFRESH_TICK) ?? 0;
+        AppStorage.setOrCreate(STORAGE_KEY_TAB_REFRESH_TICK, prev + 1);
       })
       .layoutWeight(1)
       .width('100%')

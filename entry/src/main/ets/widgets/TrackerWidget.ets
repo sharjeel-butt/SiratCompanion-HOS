@@ -5,21 +5,22 @@ struct TrackerWidget {
   @LocalStorageProp('isRtl') isRtl: boolean = false;
   @LocalStorageProp('error') error: string = '';
   @LocalStorageProp('lblTitle') lblTitle: string = "Daily Faith";
-  @LocalStorageProp('p1Name') p1Name: string = 'Fajr';
-  @LocalStorageProp('p1Time') p1Time: string = '05:00';
+  @LocalStorageProp('fajrName') p1Name: string = 'Fajr';
+  @LocalStorageProp('fajrTime24') p1Time: string = '--:--';
   @LocalStorageProp('p1Checked') p1Checked: boolean = false;
-  @LocalStorageProp('p2Name') p2Name: string = 'Dhuhr';
-  @LocalStorageProp('p2Time') p2Time: string = '12:00';
+  @LocalStorageProp('dhuhrName') p2Name: string = 'Dhuhr';
+  @LocalStorageProp('dhuhrTime24') p2Time: string = '--:--';
   @LocalStorageProp('p2Checked') p2Checked: boolean = false;
-  @LocalStorageProp('p3Name') p3Name: string = 'Asr';
-  @LocalStorageProp('p3Time') p3Time: string = '15:00';
+  @LocalStorageProp('asrName') p3Name: string = 'Asr';
+  @LocalStorageProp('asrTime24') p3Time: string = '--:--';
   @LocalStorageProp('p3Checked') p3Checked: boolean = false;
-  @LocalStorageProp('p4Name') p4Name: string = 'Maghrib';
-  @LocalStorageProp('p4Time') p4Time: string = '18:00';
+  @LocalStorageProp('maghribName') p4Name: string = 'Maghrib';
+  @LocalStorageProp('maghribTime24') p4Time: string = '--:--';
   @LocalStorageProp('p4Checked') p4Checked: boolean = false;
-  @LocalStorageProp('p5Name') p5Name: string = 'Isha';
-  @LocalStorageProp('p5Time') p5Time: string = '19:30';
+  @LocalStorageProp('ishaName') p5Name: string = 'Isha';
+  @LocalStorageProp('ishaTime24') p5Time: string = '--:--';
   @LocalStorageProp('p5Checked') p5Checked: boolean = false;
+
   @LocalStorageProp('taskQuran') taskQuran: string = 'Quran';
   @LocalStorageProp('taskDua') taskDua: string = 'Duas';
   @LocalStorageProp('taskRecitations') taskRecitations: string = 'Recitations';
@@ -71,17 +72,255 @@ struct TrackerWidget {
           // Prayer Grid
           Row({ space: 6 }) {
             if (this.isRtl) {
-              this.PrayerCellInline(this.p5Name, this.p5Time, this.p5Checked)
-              this.PrayerCellInline(this.p4Name, this.p4Time, this.p4Checked)
-              this.PrayerCellInline(this.p3Name, this.p3Time, this.p3Checked)
-              this.PrayerCellInline(this.p2Name, this.p2Time, this.p2Checked)
-              this.PrayerCellInline(this.p1Name, this.p1Time, this.p1Checked)
+              Column() {
+                Image(this.p5Checked ? $r('app.media.ic_check') : $r('app.media.ic_prayer_sajdah'))
+                  .width('24vp')
+                  .height('24vp')
+                  .fillColor(this.p5Checked ? '#E8A44C' : '#A5B8CC')
+                  .margin({ bottom: 4 })
+                Text(this.p5Name)
+                  .fontSize('12vp')
+                  .fontWeight(this.p5Checked ? FontWeight.Bold : FontWeight.Medium)
+                  .fontColor(this.p5Checked ? '#E8A44C' : '#FFFFFF')
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+                Text(this.p5Time)
+                  .fontSize('10vp')
+                  .fontColor('#A5B8CC')
+                  .margin({ top: 2 })
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+              }
+              .layoutWeight(1)
+              .height('100%')
+              .justifyContent(FlexAlign.Center)
+              .backgroundColor(this.p5Checked ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+              .borderRadius(10)
+
+              Column() {
+                Image(this.p4Checked ? $r('app.media.ic_check') : $r('app.media.ic_prayer_sajdah'))
+                  .width('24vp')
+                  .height('24vp')
+                  .fillColor(this.p4Checked ? '#E8A44C' : '#A5B8CC')
+                  .margin({ bottom: 4 })
+                Text(this.p4Name)
+                  .fontSize('12vp')
+                  .fontWeight(this.p4Checked ? FontWeight.Bold : FontWeight.Medium)
+                  .fontColor(this.p4Checked ? '#E8A44C' : '#FFFFFF')
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+                Text(this.p4Time)
+                  .fontSize('10vp')
+                  .fontColor('#A5B8CC')
+                  .margin({ top: 2 })
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+              }
+              .layoutWeight(1)
+              .height('100%')
+              .justifyContent(FlexAlign.Center)
+              .backgroundColor(this.p4Checked ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+              .borderRadius(10)
+
+              Column() {
+                Image(this.p3Checked ? $r('app.media.ic_check') : $r('app.media.ic_prayer_sajdah'))
+                  .width('24vp')
+                  .height('24vp')
+                  .fillColor(this.p3Checked ? '#E8A44C' : '#A5B8CC')
+                  .margin({ bottom: 4 })
+                Text(this.p3Name)
+                  .fontSize('12vp')
+                  .fontWeight(this.p3Checked ? FontWeight.Bold : FontWeight.Medium)
+                  .fontColor(this.p3Checked ? '#E8A44C' : '#FFFFFF')
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+                Text(this.p3Time)
+                  .fontSize('10vp')
+                  .fontColor('#A5B8CC')
+                  .margin({ top: 2 })
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+              }
+              .layoutWeight(1)
+              .height('100%')
+              .justifyContent(FlexAlign.Center)
+              .backgroundColor(this.p3Checked ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+              .borderRadius(10)
+
+              Column() {
+                Image(this.p2Checked ? $r('app.media.ic_check') : $r('app.media.ic_prayer_sajdah'))
+                  .width('24vp')
+                  .height('24vp')
+                  .fillColor(this.p2Checked ? '#E8A44C' : '#A5B8CC')
+                  .margin({ bottom: 4 })
+                Text(this.p2Name)
+                  .fontSize('12vp')
+                  .fontWeight(this.p2Checked ? FontWeight.Bold : FontWeight.Medium)
+                  .fontColor(this.p2Checked ? '#E8A44C' : '#FFFFFF')
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+                Text(this.p2Time)
+                  .fontSize('10vp')
+                  .fontColor('#A5B8CC')
+                  .margin({ top: 2 })
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+              }
+              .layoutWeight(1)
+              .height('100%')
+              .justifyContent(FlexAlign.Center)
+              .backgroundColor(this.p2Checked ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+              .borderRadius(10)
+
+              Column() {
+                Image(this.p1Checked ? $r('app.media.ic_check') : $r('app.media.ic_prayer_sajdah'))
+                  .width('24vp')
+                  .height('24vp')
+                  .fillColor(this.p1Checked ? '#E8A44C' : '#A5B8CC')
+                  .margin({ bottom: 4 })
+                Text(this.p1Name)
+                  .fontSize('12vp')
+                  .fontWeight(this.p1Checked ? FontWeight.Bold : FontWeight.Medium)
+                  .fontColor(this.p1Checked ? '#E8A44C' : '#FFFFFF')
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+                Text(this.p1Time)
+                  .fontSize('10vp')
+                  .fontColor('#A5B8CC')
+                  .margin({ top: 2 })
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+              }
+              .layoutWeight(1)
+              .height('100%')
+              .justifyContent(FlexAlign.Center)
+              .backgroundColor(this.p1Checked ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+              .borderRadius(10)
             } else {
-              this.PrayerCellInline(this.p1Name, this.p1Time, this.p1Checked)
-              this.PrayerCellInline(this.p2Name, this.p2Time, this.p2Checked)
-              this.PrayerCellInline(this.p3Name, this.p3Time, this.p3Checked)
-              this.PrayerCellInline(this.p4Name, this.p4Time, this.p4Checked)
-              this.PrayerCellInline(this.p5Name, this.p5Time, this.p5Checked)
+              Column() {
+                Image(this.p1Checked ? $r('app.media.ic_check') : $r('app.media.ic_prayer_sajdah'))
+                  .width('24vp')
+                  .height('24vp')
+                  .fillColor(this.p1Checked ? '#E8A44C' : '#A5B8CC')
+                  .margin({ bottom: 4 })
+                Text(this.p1Name)
+                  .fontSize('12vp')
+                  .fontWeight(this.p1Checked ? FontWeight.Bold : FontWeight.Medium)
+                  .fontColor(this.p1Checked ? '#E8A44C' : '#FFFFFF')
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+                Text(this.p1Time)
+                  .fontSize('10vp')
+                  .fontColor('#A5B8CC')
+                  .margin({ top: 2 })
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+              }
+              .layoutWeight(1)
+              .height('100%')
+              .justifyContent(FlexAlign.Center)
+              .backgroundColor(this.p1Checked ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+              .borderRadius(10)
+
+              Column() {
+                Image(this.p2Checked ? $r('app.media.ic_check') : $r('app.media.ic_prayer_sajdah'))
+                  .width('24vp')
+                  .height('24vp')
+                  .fillColor(this.p2Checked ? '#E8A44C' : '#A5B8CC')
+                  .margin({ bottom: 4 })
+                Text(this.p2Name)
+                  .fontSize('12vp')
+                  .fontWeight(this.p2Checked ? FontWeight.Bold : FontWeight.Medium)
+                  .fontColor(this.p2Checked ? '#E8A44C' : '#FFFFFF')
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+                Text(this.p2Time)
+                  .fontSize('10vp')
+                  .fontColor('#A5B8CC')
+                  .margin({ top: 2 })
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+              }
+              .layoutWeight(1)
+              .height('100%')
+              .justifyContent(FlexAlign.Center)
+              .backgroundColor(this.p2Checked ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+              .borderRadius(10)
+
+              Column() {
+                Image(this.p3Checked ? $r('app.media.ic_check') : $r('app.media.ic_prayer_sajdah'))
+                  .width('24vp')
+                  .height('24vp')
+                  .fillColor(this.p3Checked ? '#E8A44C' : '#A5B8CC')
+                  .margin({ bottom: 4 })
+                Text(this.p3Name)
+                  .fontSize('12vp')
+                  .fontWeight(this.p3Checked ? FontWeight.Bold : FontWeight.Medium)
+                  .fontColor(this.p3Checked ? '#E8A44C' : '#FFFFFF')
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+                Text(this.p3Time)
+                  .fontSize('10vp')
+                  .fontColor('#A5B8CC')
+                  .margin({ top: 2 })
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+              }
+              .layoutWeight(1)
+              .height('100%')
+              .justifyContent(FlexAlign.Center)
+              .backgroundColor(this.p3Checked ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+              .borderRadius(10)
+
+              Column() {
+                Image(this.p4Checked ? $r('app.media.ic_check') : $r('app.media.ic_prayer_sajdah'))
+                  .width('24vp')
+                  .height('24vp')
+                  .fillColor(this.p4Checked ? '#E8A44C' : '#A5B8CC')
+                  .margin({ bottom: 4 })
+                Text(this.p4Name)
+                  .fontSize('12vp')
+                  .fontWeight(this.p4Checked ? FontWeight.Bold : FontWeight.Medium)
+                  .fontColor(this.p4Checked ? '#E8A44C' : '#FFFFFF')
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+                Text(this.p4Time)
+                  .fontSize('10vp')
+                  .fontColor('#A5B8CC')
+                  .margin({ top: 2 })
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+              }
+              .layoutWeight(1)
+              .height('100%')
+              .justifyContent(FlexAlign.Center)
+              .backgroundColor(this.p4Checked ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+              .borderRadius(10)
+
+              Column() {
+                Image(this.p5Checked ? $r('app.media.ic_check') : $r('app.media.ic_prayer_sajdah'))
+                  .width('24vp')
+                  .height('24vp')
+                  .fillColor(this.p5Checked ? '#E8A44C' : '#A5B8CC')
+                  .margin({ bottom: 4 })
+                Text(this.p5Name)
+                  .fontSize('12vp')
+                  .fontWeight(this.p5Checked ? FontWeight.Bold : FontWeight.Medium)
+                  .fontColor(this.p5Checked ? '#E8A44C' : '#FFFFFF')
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+                Text(this.p5Time)
+                  .fontSize('10vp')
+                  .fontColor('#A5B8CC')
+                  .margin({ top: 2 })
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+              }
+              .layoutWeight(1)
+              .height('100%')
+              .justifyContent(FlexAlign.Center)
+              .backgroundColor(this.p5Checked ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
+              .borderRadius(10)
             }
           }.width('100%').height(72).direction(Direction.Ltr)
 
@@ -294,34 +533,5 @@ struct TrackerWidget {
         params: { targetPage: 'pages/MainTabs', targetTab: 'prayers' }
       });
     })
-  }
-
-  @Builder
-  PrayerCellInline(name: string, time: string, checked: boolean) {
-    Column() {
-      Image(checked ? $r('app.media.ic_check') : $r('app.media.ic_prayer_sajdah'))
-        .width('24vp').height('24vp')
-        .fillColor(checked ? '#E8A44C' : '#A5B8CC')
-        .margin({ bottom: 4 })
-
-      Text(name)
-        .fontSize('12vp')
-        .fontWeight(checked ? FontWeight.Bold : FontWeight.Medium)
-        .fontColor(checked ? '#E8A44C' : '#FFFFFF')
-        .maxLines(1)
-        .textOverflow({ overflow: TextOverflow.Ellipsis })
-
-      Text(time)
-        .fontSize('10vp')
-        .fontColor('#A5B8CC')
-        .margin({ top: 2 })
-        .maxLines(1)
-        .textOverflow({ overflow: TextOverflow.Ellipsis })
-    }
-    .layoutWeight(1)
-    .height('100%')
-    .justifyContent(FlexAlign.Center)
-    .backgroundColor(checked ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
-    .borderRadius(10)
   }
 }

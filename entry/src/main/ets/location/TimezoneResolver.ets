@@ -45,8 +45,9 @@ export class TimezoneResolver {
     switch (rule) {
       case DstRule.US:
       case DstRule.EU:
-      case DstRule.CHILE:
         return TimezoneResolver.isNorthernDst(date, year) ? 60 : 0;
+      case DstRule.CHILE:
+        return TimezoneResolver.isSouthernDst(DstRule.CHILE, date, year) ? 60 : 0;
       // Note: CHILE is southern hemisphere, see isSouthernDst below.
       case DstRule.AU:
       case DstRule.NZ:

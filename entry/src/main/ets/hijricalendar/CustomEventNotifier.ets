@@ -22,7 +22,32 @@ export class CustomEventNotifier {
         continue;
       }
 
-      for (let i = 0; i < 366; i++) {
+      // How many future occurrences to schedule per event type.
+      let remaining: number;
+      let maxDays: number;
+      switch (ev.recurrence) {
+        case RecurrenceType.WEEKLY:
+          remaining = 4; // next 4 weeks
+          maxDays = 35;
+          break;
+        case RecurrenceType.MONTHLY:
+          remaining = 3; // next 3 Hijri months
+          maxDays = 120;
+          break;
+        case RecurrenceType.YEARLY:
+          remaining = 2; // this year + next
+          maxDays = 731;
+          break;
+        case RecurrenceType.NONE:
+        default:
+          remaining = 1;
+          maxDays = 366;
+          break;
+      }
+
+      let scheduled = 0;
+
+      for (let i = 0; i < maxDays && scheduled < remaining; i++) {
         const testDate = new Date(now);
         testDate.setDate(testDate.getDate() + i);
 
@@ -36,7 +61,10 @@ export class CustomEventNotifier {
           } else if (ev.recurrence === RecurrenceType.YEARLY) {
             matches = h.month === ev.hijriMonth && h.day === ev.hijriDay;
           } else {
-            matches = h.year === ev.hijriYear && h.month === ev.hijriMonth && h.day === ev.hijriDay;
+            matches =
+              h.year === ev.hijriYear &&
+                h.month === ev.hijriMonth &&
+                h.day === ev.hijriDay;
           }
         }
 
@@ -50,11 +78,22 @@ export class CustomEventNotifier {
               reminderMinutes: [0],
               description: CalendarReminderHelper.CUSTOM_EVENT_DESCRIPTION
             });
+            scheduled++;
           }
-          if (ev.recurrence !== RecurrenceType.NONE) {
+
+          // One-off events have exactly one valid match — stop looking.
+          // Recurring events keep scanning until `scheduled === remaining`
+          // (the loop condition handles that).
+          if (ev.recurrence === RecurrenceType.NONE) {
             break;
           }
         }
+      }
+
+      if (scheduled < remaining) {
+        AppLogger.info('CustomEventNotifier',
+          `"${ev.title}" (${ev.recurrence}): only scheduled ` +
+            `${scheduled} of ${remaining} expected occurrence(s)`);
       }
     }
 

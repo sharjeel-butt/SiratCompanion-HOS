@@ -200,7 +200,10 @@ export struct QiblaCalibrationOverlay {
             ? 'rgba(255, 193, 7, 0.75)'
             : 'rgba(255, 255, 255, 0.18)')
           .translate({ x: pt.x, y: pt.y })
-      }, (pt: GhostPoint, i: number) => `pt-${i}`)
+      }, (pt: GhostPoint, i: number) =>
+      // FIX: Include pathProgress so the component rebuilds when the animation ticks
+      `pt-${i}-${Math.floor(this.pathProgress * 48)}`
+      )
     }
     .width(QiblaCalibrationOverlay.TRACE_W)
     .height(QiblaCalibrationOverlay.TRACE_H)

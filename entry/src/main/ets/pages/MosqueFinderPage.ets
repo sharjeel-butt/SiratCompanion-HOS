@@ -73,6 +73,7 @@ struct MosqueFinderPage {
         if (manifest && manifest.countries && manifest.countries[this.currentCountry]) {
           const item = manifest.countries[this.currentCountry];
           this.currentCountryName = item.country;
+          this.isCountryAvailable = true;
           this.downloadSizeMb = item.size_mb;
           this.statusText = `Data pack for ${item.country} is required.`;
         } else {
@@ -260,7 +261,14 @@ struct MosqueFinderPage {
                   }
                 } : undefined
               })
-            }, (mosque: MosqueModel) => `mosque-${mosque.id}-${mosque.isCustom}`)
+              .onClick(() => {
+                this.selectedMosque = mosque;
+                this.showDetailsSheet = true;
+              })
+            }, (mosque: MosqueModel) =>
+            // FIX: Include language and name
+            `mosque-${mosque.id}-${mosque.isCustom}-${this.appLanguage}-${mosque.name}`
+            )
           }
           .width('100%')
           .layoutWeight(1)
@@ -583,7 +591,13 @@ struct MosqueFinderPage {
 
     const lat = parseFloat(this.formLat);
     const lng = parseFloat(this.formLng);
-    if (isNaN(lat) || isNaN(lng)) {
+    // FIX: Validate coordinate boundaries
+    if (isNaN(lat) || lat < -90 || lat > 90) {
+      promptAction.showToast({ message: 'Invalid Latitude' });
+      return;
+    }
+    if (isNaN(lng) || lng < -180 || lng > 180) {
+      promptAction.showToast({ message: 'Invalid Longitude' });
       return;
     }
 

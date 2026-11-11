@@ -1497,6 +1497,9 @@ struct CustomizePage {
     this.eventPerspective = id;
     SettingsHelper.saveEventPerspective(id);
     this.showEventPerspectivePicker = false;
+    WidgetHelper.refreshAll().catch((): void => {
+      // swallow
+    });
   }
 
   // ============================================================

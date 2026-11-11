@@ -16,6 +16,8 @@ const MAX_READ_BYTES = 128 * 1024; // 128 KB
 export class AppLogger {
   private static logPath: string = '';
   private static initialized: boolean = false;
+  private static bytesSinceLastTrim: number = 0;
+  private static readonly TRIM_CHECK_INTERVAL = 10240; // 10 KB
 
   static init(context: common.UIAbilityContext): void {
     if (AppLogger.initialized) {
@@ -106,6 +108,7 @@ export class AppLogger {
         fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE | fs.OpenMode.TRUNC
       );
       fs.closeSync(file);
+      AppLogger.bytesSinceLastTrim = 0;
       AppLogger.info('AppLogger', 'Log file cleared');
     } catch (err) {
       console.warn(`[AppLogger] clear failed: ${JSON.stringify(err)}`);
@@ -128,7 +131,12 @@ export class AppLogger {
       fs.writeSync(file.fd, line + '\n');
       fs.closeSync(file);
 
-      AppLogger.trimIfNeeded();
+      // 👇 FIX L4: Only run statSync after 10 KB of writes
+      AppLogger.bytesSinceLastTrim += line.length + 1;
+      if (AppLogger.bytesSinceLastTrim >= AppLogger.TRIM_CHECK_INTERVAL) {
+        AppLogger.bytesSinceLastTrim = 0;
+        AppLogger.trimIfNeeded();
+      }
     } catch (err) {
       console.warn(`[AppLogger] write failed: ${JSON.stringify(err)}`);
     }
@@ -168,6 +176,7 @@ export class AppLogger {
         `--- log trimmed at ${AppLogger.timestamp()} ---\n${text}`
       );
       fs.closeSync(writeFile);
+      AppLogger.bytesSinceLastTrim = 0;
     } catch (err) {
       // Silently skip.
     }

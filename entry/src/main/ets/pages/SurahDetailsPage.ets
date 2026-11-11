@@ -39,7 +39,7 @@ struct SurahDetailsPage {
   // default when re-seeding after a restore. Before this change the
   // cold-start experience showed 'uthmani' (QPC Hafs) in the verse
   // reader and 'indopak' (JameelNoori Nastaliq) in the surah list.
-  private activeScript: string = AppStorage.get<string>('active_quran_script') ?? 'indopak';
+  @StorageLink('active_quran_script') activeScript: string = 'indopak';
 
 
   async aboutToAppear() {

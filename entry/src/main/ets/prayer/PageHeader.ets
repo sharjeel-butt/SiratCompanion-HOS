@@ -137,7 +137,7 @@ export struct PageHeader {
 
         Row() {
           Text(this.translateEventName(this.todayCurrentPrayerName))
-            .fontSize(16)
+            .fontSize(28)
             .fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Bold)
             .maxLines(1)

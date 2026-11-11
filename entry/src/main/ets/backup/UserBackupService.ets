@@ -88,6 +88,7 @@ type PrefType = 'string' | 'number' | 'boolean';
 interface PrefSpec {
   key: string;
   type: PrefType;
+  defaultValue: BackupValue;
 }
 
 interface BackupFileShape {
@@ -122,101 +123,101 @@ const STORE_TASBIH = 'tasbih_prefs';
 
 const SETTINGS_SPECS: PrefSpec[] = [
   // ---- Calculation & Location ----
-  { key: 'calc_method', type: 'string' },
-  { key: 'asr_rule', type: 'number' },
-  { key: 'calc_source', type: 'string' },
-  { key: 'location_mode', type: 'string' },
-  { key: 'manual_lat', type: 'number' },
-  { key: 'manual_lng', type: 'number' },
-  { key: 'manual_refresh', type: 'number' },
-  { key: 'manual_city', type: 'string' },
-  { key: 'high_lat_rule', type: 'string' },
-  { key: 'calc_rounding_method', type: 'string' },
-  { key: 'calc_midnight_method', type: 'string' },
-  { key: 'calc_polar_resolution', type: 'string' },
-  { key: 'calc_shafaq', type: 'string' },
-  { key: 'offset_fajr', type: 'number' },
-  { key: 'offset_dhuhr', type: 'number' },
-  { key: 'offset_asr', type: 'number' },
-  { key: 'offset_maghrib', type: 'number' },
-  { key: 'offset_isha', type: 'number' },
+  { key: 'calc_method', type: 'string', defaultValue: 'Karachi' },
+  { key: 'asr_rule', type: 'number', defaultValue: 1 }, // 1 = STANDARD
+  { key: 'calc_source', type: 'string', defaultValue: 'Local' },
+  { key: 'location_mode', type: 'string', defaultValue: 'GPS' },
+  { key: 'manual_lat', type: 'number', defaultValue: 0 },
+  { key: 'manual_lng', type: 'number', defaultValue: 0 },
+  { key: 'manual_refresh', type: 'number', defaultValue: 0 },
+  { key: 'manual_city', type: 'string', defaultValue: '' },
+  { key: 'high_lat_rule', type: 'string', defaultValue: 'None' },
+  { key: 'calc_rounding_method', type: 'string', defaultValue: 'Nearest' },
+  { key: 'calc_midnight_method', type: 'string', defaultValue: 'Standard' },
+  { key: 'calc_polar_resolution', type: 'string', defaultValue: 'Unresolved' },
+  { key: 'calc_shafaq', type: 'string', defaultValue: 'General' },
+  { key: 'offset_fajr', type: 'number', defaultValue: 0 },
+  { key: 'offset_dhuhr', type: 'number', defaultValue: 0 },
+  { key: 'offset_asr', type: 'number', defaultValue: 0 },
+  { key: 'offset_maghrib', type: 'number', defaultValue: 0 },
+  { key: 'offset_isha', type: 'number', defaultValue: 0 },
 
   // ---- GPS Cache ----
-  { key: 'gps_lat', type: 'number' },
-  { key: 'gps_lng', type: 'number' },
-  { key: 'gps_city', type: 'string' },
-  { key: 'gps_refresh', type: 'number' },
+  { key: 'gps_lat', type: 'number', defaultValue: 0 },
+  { key: 'gps_lng', type: 'number', defaultValue: 0 },
+  { key: 'gps_city', type: 'string', defaultValue: '' },
+  { key: 'gps_refresh', type: 'number', defaultValue: 0 },
 
   // ---- App Settings ----
-  { key: 'theme_mode', type: 'string' },
-  { key: 'theme_mode_override', type: 'string' },
-  { key: 'app_theme_preset', type: 'string' },
-  { key: 'app_language', type: 'string' },
-  { key: 'app_language_override', type: 'string' },
-  { key: 'time_format', type: 'string' },
-  { key: 'wizard_completed', type: 'boolean' },
-  { key: 'hijri_offset', type: 'number' },
-  { key: 'hijri_calendar_type', type: 'string' },
-  { key: 'event_perspective', type: 'string' },
-  { key: 'auto_show_ramadan_view', type: 'boolean' },
-  { key: 'show_islamic_events', type: 'boolean' },
+  { key: 'theme_mode', type: 'string', defaultValue: 'System' },
+  { key: 'theme_mode_override', type: 'string', defaultValue: 'System' },
+  { key: 'app_theme_preset', type: 'string', defaultValue: 'Sirat' },
+  { key: 'app_language', type: 'string', defaultValue: 'en' },
+  { key: 'app_language_override', type: 'string', defaultValue: 'system' },
+  { key: 'time_format', type: 'string', defaultValue: 'System' },
+  { key: 'wizard_completed', type: 'boolean', defaultValue: false },
+  { key: 'hijri_offset', type: 'number', defaultValue: 0 },
+  { key: 'hijri_calendar_type', type: 'string', defaultValue: 'UmmAlQura' },
+  { key: 'event_perspective', type: 'string', defaultValue: 'universal' },
+  { key: 'auto_show_ramadan_view', type: 'boolean', defaultValue: true },
+  { key: 'show_islamic_events', type: 'boolean', defaultValue: true },
 
   // ---- Extra Timings (Legacy & Current) ----
-  { key: 'show_extra_timings', type: 'boolean' },
-  { key: 'show_extra_timings_list', type: 'boolean' },
-  { key: 'show_extra_timings_sunpath', type: 'boolean' },
-  { key: 'show_imsak', type: 'boolean' },
-  { key: 'show_first_third', type: 'boolean' },
-  { key: 'show_midnight', type: 'boolean' },
-  { key: 'show_last_third', type: 'boolean' },
-  { key: 'show_imsak_list', type: 'boolean' },
-  { key: 'show_first_third_list', type: 'boolean' },
-  { key: 'show_midnight_list', type: 'boolean' },
-  { key: 'show_last_third_list', type: 'boolean' },
-  { key: 'show_imsak_sunpath', type: 'boolean' },
-  { key: 'show_first_third_sunpath', type: 'boolean' },
-  { key: 'show_midnight_sunpath', type: 'boolean' },
-  { key: 'show_last_third_sunpath', type: 'boolean' },
+  { key: 'show_extra_timings', type: 'boolean', defaultValue: true },
+  { key: 'show_extra_timings_list', type: 'boolean', defaultValue: true },
+  { key: 'show_extra_timings_sunpath', type: 'boolean', defaultValue: true },
+  { key: 'show_imsak', type: 'boolean', defaultValue: true },
+  { key: 'show_first_third', type: 'boolean', defaultValue: true },
+  { key: 'show_midnight', type: 'boolean', defaultValue: true },
+  { key: 'show_last_third', type: 'boolean', defaultValue: true },
+  { key: 'show_imsak_list', type: 'boolean', defaultValue: true },
+  { key: 'show_first_third_list', type: 'boolean', defaultValue: true },
+  { key: 'show_midnight_list', type: 'boolean', defaultValue: true },
+  { key: 'show_last_third_list', type: 'boolean', defaultValue: true },
+  { key: 'show_imsak_sunpath', type: 'boolean', defaultValue: true },
+  { key: 'show_first_third_sunpath', type: 'boolean', defaultValue: true },
+  { key: 'show_midnight_sunpath', type: 'boolean', defaultValue: true },
+  { key: 'show_last_third_sunpath', type: 'boolean', defaultValue: true },
 
   // ---- Notifications ----
-  { key: 'notif_master_enabled', type: 'boolean' },
-  { key: 'notif_before_minutes', type: 'number' },
-  { key: 'notif_fajr', type: 'boolean' },
-  { key: 'notif_dhuhr', type: 'boolean' },
-  { key: 'notif_asr', type: 'boolean' },
-  { key: 'notif_maghrib', type: 'boolean' },
-  { key: 'notif_isha', type: 'boolean' },
+  { key: 'notif_master_enabled', type: 'boolean', defaultValue: false },
+  { key: 'notif_before_minutes', type: 'number', defaultValue: 10 },
+  { key: 'notif_fajr', type: 'boolean', defaultValue: true },
+  { key: 'notif_dhuhr', type: 'boolean', defaultValue: true },
+  { key: 'notif_asr', type: 'boolean', defaultValue: true },
+  { key: 'notif_maghrib', type: 'boolean', defaultValue: true },
+  { key: 'notif_isha', type: 'boolean', defaultValue: true },
 
   // ---- Sound & Haptics ----
-  { key: 'vibration_enabled', type: 'boolean' },
-  { key: 'sound_enabled', type: 'boolean' },
-  { key: 'tasbih_sound', type: 'string' },
-  { key: 'tasbih_render_style', type: 'string' },
-  { key: 'tasbih_theme_preset', type: 'string' },
+  { key: 'vibration_enabled', type: 'boolean', defaultValue: true },
+  { key: 'sound_enabled', type: 'boolean', defaultValue: true },
+  { key: 'tasbih_sound', type: 'string', defaultValue: 'soft_click' },
+  { key: 'tasbih_render_style', type: 'string', defaultValue: 'premium' },
+  { key: 'tasbih_theme_preset', type: 'string', defaultValue: 'amber' },
 
   // ---- Progress & Logs ----
-  { key: 'prayer_state_map', type: 'string' },
-  { key: 'ramadan_log', type: 'string' },
+  { key: 'prayer_state_map', type: 'string', defaultValue: '{}' },
+  { key: 'ramadan_log', type: 'string', defaultValue: '{"years":[]}' },
 
   // ---- Duas ----
-  { key: 'dua_favorites', type: 'string' },
-  { key: 'dua_bindings', type: 'string' },
+  { key: 'dua_favorites', type: 'string', defaultValue: '[]' },
+  { key: 'dua_bindings', type: 'string', defaultValue: '{}' },
 
   // ---- Custom Calendar Events ----
-  { key: 'custom_events', type: 'string' },
+  { key: 'custom_events', type: 'string', defaultValue: '[]' },
 
-  // ---- Quran & Prayer Prompts (NEW) ----
-  { key: 'active_quran_script', type: 'string' },
-  { key: 'dismissed_prayers', type: 'string' },
+  // ---- Quran & Prayer Prompts ----
+  { key: 'active_quran_script', type: 'string', defaultValue: 'indopak' },
+  { key: 'dismissed_prayers', type: 'string', defaultValue: '[]' },
 
   // ---- Custom Mosques ----
-  { key: 'custom_mosques_data', type: 'string' }
+  { key: 'custom_mosques_data', type: 'string', defaultValue: '[]' }
 ];
 
 const TASBIH_SPECS: PrefSpec[] = [
-  { key: 'tasbihs_data', type: 'string' },
-  { key: 'tasbih_active_id', type: 'string' },
-  { key: 'tasbih_active_dhikr', type: 'number' }
+  { key: 'tasbihs_data', type: 'string', defaultValue: '[]' },
+  { key: 'tasbih_active_id', type: 'string', defaultValue: '' },
+  { key: 'tasbih_active_dhikr', type: 'number', defaultValue: 0 }
 ];
 
 // ============================================================
@@ -515,57 +516,28 @@ export class UserBackupService {
     const store = await preferences.getPreferences(context, storeName);
     await store.clear();
 
-    let applied = 0;
-    let dropped = 0;
-
     for (const spec of specs) {
       const value: BackupValue | undefined = data[spec.key];
-      if (value === undefined) {
-        continue;
+
+      // FIX: If the key is missing from the backup (e.g. it's from an older version),
+      // apply the default value instead of leaving it wiped.
+      let finalValue = value;
+      if (finalValue === undefined) {
+        finalValue = spec.defaultValue;
       }
 
-      let ok = false;
       try {
-        if (spec.type === 'string' && typeof value === 'string') {
-          await store.put(spec.key, value);
-          ok = true;
-        } else if (spec.type === 'number' && typeof value === 'number') {
-          await store.put(spec.key, value);
-          ok = true;
-        } else if (spec.type === 'boolean' && typeof value === 'boolean') {
-          await store.put(spec.key, value);
-          ok = true;
-        } else {
-          AppLogger.warn('UserBackupService',
-            `${storeName}.${spec.key}: type mismatch (expected ${spec.type}), dropped`);
+        if (spec.type === 'string' && typeof finalValue === 'string') {
+          await store.put(spec.key, finalValue);
+        } else if (spec.type === 'number' && typeof finalValue === 'number') {
+          await store.put(spec.key, finalValue);
+        } else if (spec.type === 'boolean' && typeof finalValue === 'boolean') {
+          await store.put(spec.key, finalValue);
         }
-      } catch (err) {
-        AppLogger.warn('UserBackupService',
-          `${storeName}.${spec.key}: put failed, dropped`);
-      }
-
-      if (ok) {
-        applied++;
-      } else {
-        dropped++;
+      } catch (err) { /* ... */
       }
     }
-
-    const knownKeys = new Set<string>();
-    for (const spec of specs) {
-      knownKeys.add(spec.key);
-    }
-    for (const key of Object.keys(data)) {
-      if (!knownKeys.has(key)) {
-        dropped++;
-        AppLogger.warn('UserBackupService',
-          `${storeName}.${key}: unknown key in backup, dropped`);
-      }
-    }
-
     await store.flush();
-    AppLogger.info('UserBackupService',
-      `${storeName}: applied ${applied}, dropped ${dropped}`);
   }
 
   // ============================================================

@@ -48,6 +48,6 @@ export class Breakpoints {
     if (bp === Breakpoints.MD) {
       return 720;
     }
-    return 100000;
+    return Number.MAX_SAFE_INTEGER;
   }
 }

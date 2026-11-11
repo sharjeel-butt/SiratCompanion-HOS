@@ -1,4 +1,4 @@
-// entry/src/main/ets/pages/TasbihDetailsPage.ets
+// entry/src/main/ets/pages/TasbihProgressPage.ets
 
 import { mediaquery, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';

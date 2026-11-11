@@ -86,7 +86,14 @@ export class WidgetHelper {
 
       let data: Record<string, Object>;
 
-      const ctx = getContext() as common.Context;
+      let ctx = getContext() as common.Context;
+      if (!ctx) {
+        ctx = PreferencesHelper.getContext() as common.Context;
+      }
+      if (!ctx) {
+        return false; // Cannot build widget without context
+      }
+
       if (formName === 'ramadan_widget') {
         data = await WidgetDataBuilder.buildRamadanWidget(dim, lang);
       } else if (formName === 'hijri_date_widget') {
@@ -96,8 +103,6 @@ export class WidgetHelper {
       } else if (formName === 'adhkar_widget') {
         const ctx = getContext() as common.Context || PreferencesHelper.getContext();
         data = await WidgetDataBuilder.buildAdhkarWidget(ctx, dim, lang);
-      } else if (formName === 'tracker_widget') {
-        data = await WidgetDataBuilder.buildTrackerWidget(ctx, dim, lang);
       } else {
         data = await WidgetDataBuilder.build(dim, lang);
       }

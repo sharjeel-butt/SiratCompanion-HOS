@@ -4,8 +4,12 @@
     "files/*.pdf",
     "files/*.jpg",
     "files/*.jpeg",
-    "files/sirat_log.txt.bak",
+    "files/*.png",
+    "files/sirat_log.txt",
     "cache/*",
-    "temp/*"
+    "temp/*",
+    "databases/rdb/mosques/*.db",
+    "databases/rdb/mosques/*.db-wal",
+    "databases/rdb/mosques/*.db-shm"
   ]
 }

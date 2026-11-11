@@ -126,6 +126,7 @@ export class WidgetDataBuilder {
       const rawArr: string[] = [fajrRaw, dhuhrRaw, asrRaw, maghribRaw, ishaRaw];
       const timeArr: string[] = [fajr, dhuhr, asr, maghrib, isha];
 
+
       // Determine Next & Current Prayer
       let nextIdx: number = -1;
       let currentIdx: number = 4; // Default to Isha if before Fajr
@@ -233,6 +234,52 @@ export class WidgetDataBuilder {
         out.contextLabel2 = L.get('timing_sunset', lang);
         out.contextTime2 = sunset;
       }
+
+      // --- TRACKER WIDGET DATA ---
+      out.isRtl = L.isRtlLang(lang);
+
+      out.lblTitle = L.get('widget_daily_faith_title', lang);
+      out.taskQuran = L.get('quran_full_title', lang);
+      out.taskDua = L.get('section_duas', lang);
+      out.taskRecitations = L.get('surah_recommendations', lang);
+      out.taskTasbih = L.get('tab_tasbih', lang);
+
+      const today = new Date();
+      const dateKey = PrayerManager.getDateKeyForDate(today);
+      const checkState = PrayerManager.getCheckState(dateKey);
+
+      out.p1Checked = checkState.fajr;
+      out.p2Checked = checkState.dhuhr;
+      out.p3Checked = checkState.asr;
+      out.p4Checked = checkState.maghrib;
+      out.p5Checked = checkState.isha;
+
+      // Format 24h strings specifically for the Tracker Widget's narrow cells
+      const fmt24 = (t: string): string => {
+        if (!t || t === '--:--') {
+          return '--:--';
+        }
+        const parts = t.split(' ');
+        if (parts.length !== 2) {
+          const tParts = t.split(':');
+          return tParts.length === 2 ? `${tParts[0].padStart(2, '0')}:${tParts[1]}` : t;
+        }
+        let h = parseInt(parts[0].split(':')[0], 10);
+        const m = parts[0].split(':')[1];
+        if (parts[1] === 'PM' && h !== 12) {
+          h += 12;
+        }
+        if (parts[1] === 'AM' && h === 12) {
+          h = 0;
+        }
+        return `${h.toString().padStart(2, '0')}:${m}`;
+      };
+
+      out.fajrTime24 = fmt24(fajr);
+      out.dhuhrTime24 = fmt24(dhuhr);
+      out.asrTime24 = fmt24(asr);
+      out.maghribTime24 = fmt24(maghrib);
+      out.ishaTime24 = fmt24(isha);
 
       out.error = '';
       return out;
@@ -671,94 +718,26 @@ export class WidgetDataBuilder {
     out.lblSahur = 'Sahur'; // added by H3
     out.lblIftar = 'Iftar'; // added by H3
 
+    // ---- Tracker widget ----
+    out.isRtl = false;
+    out.lblTitle = 'Daily Faith';
+    out.taskQuran = 'Quran';
+    out.taskDua = 'Duas';
+    out.taskRecitations = 'Recitations';
+    out.taskTasbih = 'Tasbih';
+    out.p1Checked = false;
+    out.p2Checked = false;
+    out.p3Checked = false;
+    out.p4Checked = false;
+    out.p5Checked = false;
+    out.fajrTime24 = '--:--';
+    out.dhuhrTime24 = '--:--';
+    out.asrTime24 = '--:--';
+    out.maghribTime24 = '--:--';
+    out.ishaTime24 = '--:--';
+
     out.error = msg;
     return out;
-  }
-
-  static async buildTrackerWidget(context: common.Context, dimension: string,
-    currentLang?: string): Promise<Record<string, Object>> {
-    try {
-      const lang = currentLang || 'en';
-      const isRtl = L.isRtlLang(lang);
-      const out: Record<string, Object> = {};
-      out.dimension = dimension;
-      out.isRtl = isRtl;
-      out.lang = lang;
-      out.error = '';
-
-      // 1. Localized Strings
-      out.lblTitle = L.get('widget_daily_faith_title', lang); // "Today's Progress"
-      out.taskQuran = L.get('quran_full_title', lang);
-      out.taskDua = L.get('section_duas', lang);
-      out.taskRecitations = L.get('surah_recommendations', lang);
-      out.taskTasbih = L.get('tab_tasbih', lang);
-      // "Recitations"
-      out
-      // 2. Fetch Prayer Check States
-      const today = new Date();
-      const dateKey = PrayerManager.getDateKeyForDate(today);
-      const checkState = PrayerManager.getCheckState(dateKey);
-
-      // 3. Fetch Prayer Times
-      const cache = await LocationCache.load();
-      let times: DailyPrayerTimes | null = null; // <-- FIX: Explicitly typed
-
-      if (cache) {
-        const settings = await SettingsHelper.loadAll();
-        const highLat = await SettingsHelper.getHighLatRule();
-        const adv = await SettingsHelper.getAdvancedCalcSettings();
-        times =
-          PrayerTimeCalculator.calculateWithDeviceTimezone(today, cache.latitude, cache.longitude, settings.method,
-            settings.asr, highLat, adv);
-      }
-
-      // Helper to format time to short string (e.g., "05:00")
-      const fmtTime = (t: string): string => {
-        if (!t || t === '--:--') {
-          return '--:--';
-        }
-        const parts = t.split(' ');
-        if (parts.length !== 2) {
-          return t;
-        }
-        let h = parseInt(parts[0].split(':')[0], 10);
-        const m = parts[0].split(':')[1];
-        const ampm = parts[1];
-        if (ampm === 'PM' && h !== 12) {
-          h += 12;
-        }
-        if (ampm === 'AM' && h === 12) {
-          h = 0;
-        }
-        return `${h.toString().padStart(2, '0')}:${m}`;
-      };
-
-      // 4. Map Prayers to Flat Variables (Rulebook §G)
-      out.p1Name = L.get('prayer_fajr', lang);
-      out.p1Time = fmtTime(times?.fajr || '');
-      out.p1Checked = checkState.fajr;
-      out.p2Name = L.get('prayer_dhuhr', lang);
-      out.p2Time = fmtTime(times?.dhuhr || '');
-      out.p2Checked = checkState.dhuhr;
-      out.p3Name = L.get('prayer_asr', lang);
-      out.p3Time = fmtTime(times?.asr || '');
-      out.p3Checked = checkState.asr;
-      out.p4Name = L.get('prayer_maghrib', lang);
-      out.p4Time = fmtTime(times?.maghrib || '');
-      out.p4Checked = checkState.maghrib;
-      out.p5Name = L.get('prayer_isha', lang);
-      out.p5Time = fmtTime(times?.isha || '');
-      out.p5Checked = checkState.isha;
-
-      // 5. Additional Tasks (Quran & Duas)
-      // We'll just link these as actions, not tracking completion, to match Athkar style
-      out.taskQuran = L.get('quran_full_title', lang);
-      out.taskDua = L.get('duas', lang);
-
-      return out;
-    } catch (e) {
-      return WidgetDataBuilder.errorData(dimension, 'Error');
-    }
   }
 
   static toFormBindingData(data: Record<string, Object>): formBindingData.FormBindingData {

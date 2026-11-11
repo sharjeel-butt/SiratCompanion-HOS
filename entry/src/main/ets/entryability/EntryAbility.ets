@@ -99,8 +99,8 @@ export default class EntryAbility extends UIAbility {
     'pages/QuranPage',
     'pages/SurahDetailsPage',
     'pages/DuasPage',
-    'pages/PrayerDetailsPage',
-    'pages/TasbihDetailsPage',
+    'pages/PrayerProgressPage',
+    'pages/TasbihProgressPage',
     'pages/SettingsPage',
     'pages/CustomizePage',
     'pages/AdvancedCalcPage',
@@ -514,9 +514,13 @@ export default class EntryAbility extends UIAbility {
     if (hasTarget) {
       const currentTop = this.getCurrentPagePath();
       if (currentTop !== 'pages/MainTabs' && currentTop.length > 0) {
-        router.replaceUrl({ url: 'pages/MainTabs' }).catch((e: Error) => {
-          AppLogger.warn('EntryAbility', `Widget nav replace failed: ${e.message}`);
-        });
+        // FIX: router.back() returns void, so we wrap it in try/catch instead of .catch()
+        try {
+          router.back({ url: 'pages/MainTabs' });
+        } catch (e) {
+          const err = e as Error;
+          AppLogger.warn('EntryAbility', `Widget nav back failed: ${err.message}`);
+        }
       }
     }
   }

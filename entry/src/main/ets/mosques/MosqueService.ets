@@ -6,6 +6,7 @@ import { AppLogger } from '../core/AppLogger';
 import { ManifestData, MosqueModel } from './MosqueModels';
 import { MosqueDbHelper } from './MosqueDbHelper';
 import { MosqueStorage } from './MosqueStorage';
+import { buffer } from '@kit.ArkTS';
 
 export class MosqueService {
   private static readonly CDN_BASE_URL =
@@ -75,21 +76,59 @@ export class MosqueService {
         fs.closeSync(file);
         file = null;
 
-        // 4. Validate size and SQLite header
+        // 4a. Validate size
         const stat = fs.statSync(filePath);
         if (stat.size < 10240) {
-          AppLogger.error('MosqueService', `File too small (${stat.size} bytes).`);
+          AppLogger.error('MosqueService',
+            `File too small (${stat.size} bytes). Deleting.`);
           try {
             fs.unlinkSync(filePath);
-          } catch (err) {
+          } catch (err) { /* ignore */
           }
           return false;
         }
 
-        // (Header validation logic from previous step remains the same)
-        // ...
+        // 4b. Validate SQLite header — first 16 bytes must be "SQLite format 3\0"
+        let headerOk = false;
+        try {
+          const headerFile = fs.openSync(filePath, fs.OpenMode.READ_ONLY);
+          const headerBuf = new ArrayBuffer(16);
+          fs.readSync(headerFile.fd, headerBuf);
+          fs.closeSync(headerFile);
+          const headerStr = buffer
+            .from(new Uint8Array(headerBuf))
+            .toString('utf8');
+          // The magic is exactly "SQLite format 3\0"
+          headerOk = headerStr === 'SQLite format 3\u0000';
+          if (!headerOk) {
+            AppLogger.error('MosqueService',
+              `Invalid SQLite header (got "${headerStr.slice(0, 16)}"). ` +
+                `Deleting ${countryCode}.db.`);
+          }
+        } catch (readErr) {
+          AppLogger.error('MosqueService',
+            `Header read failed for ${countryCode}.db: ${JSON.stringify(readErr)}`);
+          headerOk = false;
+        }
 
-        AppLogger.info('MosqueService', `Successfully downloaded and verified ${countryCode}.db`);
+        if (!headerOk) {
+          try {
+            fs.unlinkSync(filePath);
+          } catch (err) { /* ignore */
+          }
+          try {
+            fs.unlinkSync(`${filePath}-wal`);
+          } catch (err) { /* ignore */
+          }
+          try {
+            fs.unlinkSync(`${filePath}-shm`);
+          } catch (err) { /* ignore */
+          }
+          return false;
+        }
+
+        AppLogger.info('MosqueService',
+          `Successfully downloaded and verified ${countryCode}.db`);
         return true;
       }
       return false;

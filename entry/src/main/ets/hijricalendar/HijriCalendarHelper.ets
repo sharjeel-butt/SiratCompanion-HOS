@@ -99,9 +99,10 @@ export class HijriCalendarHelper {
       );
     }
 
-    const anchorMs = anchor.getTime();
     for (let i = -effectiveRange; i <= effectiveRange; i++) {
-      const candidate = new Date(anchorMs + i * MS_PER_DAY);
+      const candidate = new Date(anchor);
+      candidate.setDate(candidate.getDate() + i);
+      candidate.setHours(0, 0, 0, 0);
       const h = HijriCalendarHelper.getHijriDate(candidate, offsetDays);
       if (h.year === year && h.month === month && h.day === day) {
         return candidate;
@@ -133,7 +134,9 @@ export class HijriCalendarHelper {
 
     const out: CalendarDay[] = [];
     for (let i = 0; i < 31; i++) {
-      const g = new Date(firstGreg.getTime() + i * MS_PER_DAY);
+      const g = new Date(firstGreg);
+      g.setDate(g.getDate() + i);
+      g.setHours(0, 0, 0, 0);
       const h = HijriCalendarHelper.getHijriDate(g, offsetDays);
       if (h.year !== year || h.month !== month) {
         break;

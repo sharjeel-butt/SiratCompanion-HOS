@@ -58,7 +58,6 @@ export class PreferencesHelper {
       return;
     }
 
-    // Debounce: if we just tried, don't hammer the API.
     const now = Date.now();
     if (now - PreferencesHelper.lastInitAttemptMs < 100) {
       return;
@@ -70,8 +69,6 @@ export class PreferencesHelper {
         context, PREF_STORE_NAME
       );
       console.info('[PreferencesHelper] Store initialized');
-      // Resolve ONLY on success. A failed init leaves initPromise
-      // pending, which lets ensureReady() retry after the interval.
       if (PreferencesHelper.initResolve) {
         PreferencesHelper.initResolve();
         PreferencesHelper.initResolve = null;
@@ -80,8 +77,15 @@ export class PreferencesHelper {
       console.error(
         `[PreferencesHelper] Init failed: ${JSON.stringify(err)}`
       );
-      // Do NOT resolve initPromise — callers will wait up to
-      // INIT_WAIT_MS, then retry via ensureReady().
+      // Release waiters IMMEDIATELY so their calls return default
+      // values instead of blocking 5 s in ensureReady()'s race.
+      // The next ensureReady() call will retry after INIT_RETRY_MS
+      // because initResolve is now null — it skips the wait-race
+      // branch entirely.
+      if (PreferencesHelper.initResolve) {
+        PreferencesHelper.initResolve();
+        PreferencesHelper.initResolve = null;
+      }
     }
   }
 

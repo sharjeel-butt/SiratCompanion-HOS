@@ -47,6 +47,7 @@ const BOTTOM_FLY_MS = 500;
 
 const BEAD_COLUMN_TOP_PADDING = 16;
 
+
 const SHADE_DONE_HI = '#A7F3C0';
 const SHADE_DONE_BASE = '#4ADE80';
 const SHADE_DONE_LO = '#1E7A4E';
@@ -132,6 +133,7 @@ export struct TasbihPage {
   private shiftFadeProgress: number = 0;
   private bottomPopProgress: number = 0;
   private bottomFlyAnimator: AnimatorResult | null = null;
+  private advanceTimerId: number = -1;
 
   // ============================================================
   // LIFECYCLE
@@ -212,6 +214,10 @@ export struct TasbihPage {
     if (this.dateCheckTimer !== -1) {
       clearInterval(this.dateCheckTimer);
       this.dateCheckTimer = -1;
+    }
+    if (this.advanceTimerId !== -1) {
+      clearTimeout(this.advanceTimerId);
+      this.advanceTimerId = -1;
     }
   }
 
@@ -572,7 +578,8 @@ export struct TasbihPage {
           .translate({ y: -this.topShiftProgress * BEAD_STEP })
           .opacity((i === 0 && this.topShiftProgress > 0)
             ? 1 - this.topShiftProgress : 1)
-        }, (i: number) => `top-${i}-${this.currentThemeColor()}`)
+        }, (i: number) => `top-${i}-${this.activeThemePresetId}`
+        )
 
         if (this.topShiftActive) {
           Column() {
@@ -1077,6 +1084,7 @@ export struct TasbihPage {
                     .height(36)
                     .borderRadius(18)
                     .backgroundColor(preset.swatch)
+                    .border({ width: 1, color: 'rgba(0,0,0,0.20)' })
                     .shadow({
                       radius: 3,
                       color: 'rgba(0,0,0,0.35)',
@@ -1906,11 +1914,15 @@ export struct TasbihPage {
       this.advanceLock = true;
       HapticHelper.confirm();
 
-      setTimeout(() => {
+      this.advanceLock = true;
+      HapticHelper.confirm();
+
+      this.advanceTimerId = setTimeout(() => {
         this.activeDhikrIndex = this.activeDhikrIndex + 1;
         this.refreshBeadView();
         this.advanceLock = false;
         this.persist();
+        this.advanceTimerId = -1;
       }, 400);
       return;
     }

@@ -1309,7 +1309,8 @@ export struct HijriCalendarPage {
   }
 
   private getLocalizedDaysOfWeek(): string[] {
-    return this.trArray('days_of_week');
+    // FIX: Use short names (Sun, Mon) so they fit the 7-column grid
+    return this.trArray('days_of_week_short');
   }
 
   private buildPaddedWeeks(): Array<Array<CalendarDay | null>> {

@@ -1,4 +1,4 @@
-// entry/src/main/ets/pages/PrayerDetailsPage.ets
+// entry/src/main/ets/pages/PrayerProgressPage.ets
 
 import { mediaquery, router } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
@@ -352,8 +352,11 @@ struct PrayerDetailsPage {
             .backgroundColor(this.yearCellBg(c))
             .borderRadius(2)
             .margin({ left: 1, right: 1 })
-            .opacity(c < 0 ? 0.2 : 1.0) // Make future days faded but visible
-        }, (c: number, i: number) => `yc-${m.monthIndex}-${i}`) // FIX: Removed 'c' from the key
+            .opacity(c < 0 ? 0.2 : 1.0)
+        }, (c: number, i: number) =>
+        // FIX: Include `c` so the cell re-renders when the count changes
+        `yc-${m.monthIndex}-${i}-${c}`
+        )
       }
       .layoutWeight(1)
       .alignItems(VerticalAlign.Center)
