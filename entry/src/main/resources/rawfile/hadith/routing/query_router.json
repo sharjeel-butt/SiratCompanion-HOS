@@ -1,0 +1,380 @@
+{
+  "contexts": {
+    "financial_stress": [
+      "debt",
+      "loan",
+      "money",
+      "poor",
+      "poverty",
+      "income",
+      "expenses",
+      "struggling financially",
+      "financial problem",
+      "bills",
+      "unemployment"
+    ],
+    "debt_management": [
+      "debt",
+      "loan",
+      "borrowed money",
+      "repayment",
+      "credit"
+    ],
+    "grief": [
+      "death",
+      "loss",
+      "grief",
+      "mourning",
+      "bereavement",
+      "lost someone",
+      "lost my mother",
+      "lost my father",
+      "lost my child"
+    ],
+    "illness": [
+      "ill",
+      "sick",
+      "hospital",
+      "disease",
+      "health",
+      "medical",
+      "treatment"
+    ],
+    "repentance": [
+      "sin",
+      "repent",
+      "tawbah",
+      "forgiveness",
+      "forgive me",
+      "regret"
+    ],
+    "marriage": [
+      "marriage",
+      "nikah",
+      "husband",
+      "wife",
+      "spouse"
+    ],
+    "newly_married": [
+      "newly married",
+      "just married"
+    ],
+    "parenting": [
+      "children",
+      "child",
+      "son",
+      "daughter",
+      "mother",
+      "father",
+      "parents",
+      "parenting"
+    ],
+    "raising_children": [
+      "raising children",
+      "raising kids",
+      "discipline child"
+    ],
+    "travel": [
+      "travel",
+      "trip",
+      "journey",
+      "travelling",
+      "traveling"
+    ],
+    "hajj": [
+      "hajj",
+      "pilgrimage"
+    ],
+    "umrah": [
+      "umrah"
+    ],
+    "ramadan": [
+      "ramadan",
+      "fasting",
+      "sawm"
+    ],
+    "taraweeh": [
+      "taraweeh"
+    ],
+    "laylat_al_qadr": [
+      "laylat al qadr",
+      "night of power",
+      "night of decree"
+    ],
+    "prayer": [
+      "prayer",
+      "salah",
+      "salat",
+      "namaz"
+    ],
+    "tahajjud": [
+      "tahajjud",
+      "night prayer"
+    ],
+    "spiritual_growth": [
+      "faith",
+      "iman",
+      "taqwa",
+      "spiritual",
+      "closer to allah"
+    ],
+    "seeking_knowledge": [
+      "knowledge",
+      "learn islam",
+      "study islam",
+      "education",
+      "ilm"
+    ],
+    "charity": [
+      "charity",
+      "sadaqah",
+      "sadaqa",
+      "zakat",
+      "donation"
+    ],
+    "character_building": [
+      "character",
+      "akhlaq",
+      "ethics",
+      "good manners"
+    ],
+    "social_etiquette": [
+      "adab",
+      "etiquette",
+      "greetings",
+      "manners"
+    ],
+    "leadership": [
+      "leader",
+      "leadership",
+      "governance"
+    ],
+    "community_service": [
+      "community",
+      "help people",
+      "serve others"
+    ],
+    "justice": [
+      "justice",
+      "court",
+      "rights",
+      "oppression"
+    ],
+    "end_times": [
+      "mahdi",
+      "dajjal",
+      "end times",
+      "fitan",
+      "last day"
+    ]
+  },
+  "topics": {
+    "salah": [
+      "prayer",
+      "salah",
+      "salat",
+      "namaz"
+    ],
+    "charity": [
+      "charity",
+      "zakat",
+      "sadaqah"
+    ],
+    "business": [
+      "trade",
+      "business",
+      "finance"
+    ],
+    "marriage": [
+      "marriage",
+      "nikah"
+    ],
+    "divorce": [
+      "divorce",
+      "talaq"
+    ],
+    "parents": [
+      "parents",
+      "mother",
+      "father"
+    ],
+    "children": [
+      "children",
+      "child"
+    ],
+    "travel": [
+      "travel",
+      "journey"
+    ],
+    "ramadan": [
+      "ramadan",
+      "fasting"
+    ],
+    "hajj": [
+      "hajj",
+      "pilgrimage"
+    ],
+    "akhirah": [
+      "afterlife",
+      "death",
+      "judgement day"
+    ],
+    "dua": [
+      "dua",
+      "supplication"
+    ],
+    "dhikr": [
+      "dhikr",
+      "remembrance"
+    ]
+  },
+  "context_lookup": {
+    "debt": "debt_management",
+    "loan": "debt_management",
+    "money": "financial_stress",
+    "poor": "financial_stress",
+    "poverty": "financial_stress",
+    "income": "financial_stress",
+    "expenses": "financial_stress",
+    "struggling financially": "financial_stress",
+    "financial problem": "financial_stress",
+    "bills": "financial_stress",
+    "unemployment": "financial_stress",
+    "borrowed money": "debt_management",
+    "repayment": "debt_management",
+    "credit": "debt_management",
+    "death": "grief",
+    "loss": "grief",
+    "grief": "grief",
+    "mourning": "grief",
+    "bereavement": "grief",
+    "lost someone": "grief",
+    "lost my mother": "grief",
+    "lost my father": "grief",
+    "lost my child": "grief",
+    "ill": "illness",
+    "sick": "illness",
+    "hospital": "illness",
+    "disease": "illness",
+    "health": "illness",
+    "medical": "illness",
+    "treatment": "illness",
+    "sin": "repentance",
+    "repent": "repentance",
+    "tawbah": "repentance",
+    "forgiveness": "repentance",
+    "forgive me": "repentance",
+    "regret": "repentance",
+    "marriage": "marriage",
+    "nikah": "marriage",
+    "husband": "marriage",
+    "wife": "marriage",
+    "spouse": "marriage",
+    "newly married": "newly_married",
+    "just married": "newly_married",
+    "children": "parenting",
+    "child": "parenting",
+    "son": "parenting",
+    "daughter": "parenting",
+    "mother": "parenting",
+    "father": "parenting",
+    "parents": "parenting",
+    "parenting": "parenting",
+    "raising children": "raising_children",
+    "raising kids": "raising_children",
+    "discipline child": "raising_children",
+    "travel": "travel",
+    "trip": "travel",
+    "journey": "travel",
+    "travelling": "travel",
+    "traveling": "travel",
+    "hajj": "hajj",
+    "pilgrimage": "hajj",
+    "umrah": "umrah",
+    "ramadan": "ramadan",
+    "fasting": "ramadan",
+    "sawm": "ramadan",
+    "taraweeh": "taraweeh",
+    "laylat al qadr": "laylat_al_qadr",
+    "night of power": "laylat_al_qadr",
+    "night of decree": "laylat_al_qadr",
+    "prayer": "prayer",
+    "salah": "prayer",
+    "salat": "prayer",
+    "namaz": "prayer",
+    "tahajjud": "tahajjud",
+    "night prayer": "tahajjud",
+    "faith": "spiritual_growth",
+    "iman": "spiritual_growth",
+    "taqwa": "spiritual_growth",
+    "spiritual": "spiritual_growth",
+    "closer to allah": "spiritual_growth",
+    "knowledge": "seeking_knowledge",
+    "learn islam": "seeking_knowledge",
+    "study islam": "seeking_knowledge",
+    "education": "seeking_knowledge",
+    "ilm": "seeking_knowledge",
+    "charity": "charity",
+    "sadaqah": "charity",
+    "sadaqa": "charity",
+    "zakat": "charity",
+    "donation": "charity",
+    "character": "character_building",
+    "akhlaq": "character_building",
+    "ethics": "character_building",
+    "good manners": "character_building",
+    "adab": "social_etiquette",
+    "etiquette": "social_etiquette",
+    "greetings": "social_etiquette",
+    "manners": "social_etiquette",
+    "leader": "leadership",
+    "leadership": "leadership",
+    "governance": "leadership",
+    "community": "community_service",
+    "help people": "community_service",
+    "serve others": "community_service",
+    "justice": "justice",
+    "court": "justice",
+    "rights": "justice",
+    "oppression": "justice",
+    "mahdi": "end_times",
+    "dajjal": "end_times",
+    "end times": "end_times",
+    "fitan": "end_times",
+    "last day": "end_times"
+  },
+  "topic_lookup": {
+    "prayer": "salah",
+    "salah": "salah",
+    "salat": "salah",
+    "namaz": "salah",
+    "charity": "charity",
+    "zakat": "charity",
+    "sadaqah": "charity",
+    "trade": "business",
+    "business": "business",
+    "finance": "business",
+    "marriage": "marriage",
+    "nikah": "marriage",
+    "divorce": "divorce",
+    "talaq": "divorce",
+    "parents": "parents",
+    "mother": "parents",
+    "father": "parents",
+    "children": "children",
+    "child": "children",
+    "travel": "travel",
+    "journey": "travel",
+    "ramadan": "ramadan",
+    "fasting": "ramadan",
+    "hajj": "hajj",
+    "pilgrimage": "hajj",
+    "afterlife": "akhirah",
+    "death": "akhirah",
+    "judgement day": "akhirah",
+    "dua": "dua",
+    "supplication": "dua",
+    "dhikr": "dhikr",
+    "remembrance": "dhikr"
+  }
+}

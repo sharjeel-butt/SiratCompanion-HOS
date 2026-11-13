@@ -50,15 +50,44 @@ struct LicensesPage {
     this.isLoading = true;
     try {
       const ctx = getContext(this) as common.UIAbilityContext;
-      const data = await ctx.resourceManager.getRawFileContent('licenses/quran_licenses.json');
-      const parsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(data)) as LicenseFile;
 
-      if (parsed && parsed.sections) {
-        this.sections = parsed.sections;
-        this.datasetVersion = parsed.datasetVersion || 'Unknown';
-      } else {
-        this.sections = [];
+      let quranSections: LicenseSection[] = [];
+      let quranVersion = '';
+
+      let hadithSections: LicenseSection[] = [];
+      let hadithVersion = '';
+
+      // 1. Load Quran Licenses
+      try {
+        const qData = await ctx.resourceManager.getRawFileContent('licenses/quran_licenses.json');
+        const qParsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(qData)) as LicenseFile;
+        if (qParsed && qParsed.sections) {
+          quranSections = qParsed.sections;
+          quranVersion = qParsed.datasetVersion || '1.0';
+        }
+      } catch (e) {
+        AppLogger.warn('LicensesPage', 'Quran licenses not found');
       }
+
+      // 2. Load Hadith Licenses
+      try {
+        const hData = await ctx.resourceManager.getRawFileContent('licenses/hadith_licenses.json');
+        const hParsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(hData)) as LicenseFile;
+        if (hParsed && hParsed.sections) {
+          hadithSections = hParsed.sections;
+          hadithVersion = hParsed.datasetVersion || '1.0';
+        }
+      } catch (e) {
+        AppLogger.warn('LicensesPage', 'Hadith licenses not found');
+      }
+
+      // 3. Merge them
+      this.sections = quranSections.concat(hadithSections);
+
+      // 4. Set dynamic version label
+      const vLabel = this.tr('licenses_version_label');
+      this.datasetVersion = `${vLabel}Quran v${quranVersion}, Hadith v${hadithVersion}`;
+
     } catch (e) {
       AppLogger.error('LicensesPage', `Failed to load: ${JSON.stringify(e)}`);
       this.sections = [];
@@ -113,7 +142,7 @@ struct LicensesPage {
               .fontSize(13).fontColor(this.colors.textMuted).lineHeight(20)
               .width('100%')
 
-            Text(`Dataset version: ${this.datasetVersion}`)
+            Text(this.datasetVersion)
               .fontSize(11).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
               .width('100%')
 

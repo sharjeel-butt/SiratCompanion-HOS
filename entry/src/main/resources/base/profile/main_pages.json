@@ -13,6 +13,10 @@
     "pages/RecitationsPage",
     "pages/QuranPage",
     "pages/LicensesPage",
-    "pages/MosqueFinderPage"
+    "pages/MosqueFinderPage",
+    "pages/HadithHomePage",
+    "pages/HadithDetailsPage",
+    "pages/HadithBrowsePage",
+    "pages/PrivacyPolicyPage"
   ]
 }

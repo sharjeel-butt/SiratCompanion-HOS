@@ -3106,6 +3106,106 @@
     {
       "name": "widget_daily_faith_title",
       "value": "Günlük İbadetler"
+    },
+    {
+      "name": "hadith_title",
+      "value": "Hadis Koleksiyonu"
+    },
+    {
+      "name": "hadith_featured",
+      "value": "Öne Çıkan Hadisler"
+    },
+    {
+      "name": "hadith_search_results",
+      "value": "Arama Sonuçları"
+    },
+    {
+      "name": "hadith_search_hint",
+      "value": "Konular, bağlamlar veya metin içinde ara..."
+    },
+    {
+      "name": "hadith_searching",
+      "value": "Aranıyor..."
+    },
+    {
+      "name": "hadith_no_results",
+      "value": "Sonuç bulunamadı."
+    },
+    {
+      "name": "hadith_translation",
+      "value": "Çeviri"
+    },
+    {
+      "name": "hadith_sanad",
+      "value": "Sened (Rivayet Zinciri)"
+    },
+    {
+      "name": "hadith_title_desc",
+      "value": "Binlerce sahih hadisi keşfedin"
+    },
+    {
+      "name": "hadith_label",
+      "value": "Hadis"
+    },
+    {
+      "name": "collection_bukhari",
+      "value": "Sahih Buhari"
+    },
+    {
+      "name": "collection_muslim",
+      "value": "Sahih Müslim"
+    },
+    {
+      "name": "collection_abudawud",
+      "value": "Sünen Ebu Davud"
+    },
+    {
+      "name": "collection_tirmidhi",
+      "value": "Câmiu't-Tirmizî"
+    },
+    {
+      "name": "collection_nasai",
+      "value": "Sünen Nesâî"
+    },
+    {
+      "name": "collection_ibnmajah",
+      "value": "Sünen İbn Mâce"
+    },
+    {
+      "name": "collection_malik",
+      "value": "Muvatta Malik"
+    },
+    {
+      "name": "hadith_books",
+      "value": "Kitaplar"
+    },
+    {
+      "name": "hadith_contexts",
+      "value": "Yaşam Bağlamları"
+    },
+    {
+      "name": "hadith_topics",
+      "value": "Konular"
+    },
+    {
+      "name": "load_more",
+      "value": "Daha Fazla Yükle"
+    },
+    {
+      "name": "license_section_hadith_data",
+      "value": "Hadis Veri Seti"
+    },
+    {
+      "name": "licenses_version_label",
+      "value": "Veri Setleri: "
+    },
+    {
+      "name": "privacy_title",
+      "value": "Gizlilik Politikası"
+    },
+    {
+      "name": "privacy_view_online",
+      "value": "Tam Çevrimiçi Politikayı Görüntüle"
     }
   ]
 }

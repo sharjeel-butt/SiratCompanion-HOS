@@ -3106,6 +3106,106 @@
     {
       "name": "widget_daily_faith_title",
       "value": "روزمرہ عبادات"
+    },
+    {
+      "name": "hadith_title",
+      "value": "حدیث کا مجموعہ"
+    },
+    {
+      "name": "hadith_featured",
+      "value": "نمایاں احادیث"
+    },
+    {
+      "name": "hadith_search_results",
+      "value": "تلاش کے نتائج"
+    },
+    {
+      "name": "hadith_search_hint",
+      "value": "موضوعات، سیاق و سباق، یا متن تلاش کریں..."
+    },
+    {
+      "name": "hadith_searching",
+      "value": "تلاش جاری ہے..."
+    },
+    {
+      "name": "hadith_no_results",
+      "value": "کوئی نتیجہ نہیں ملا۔"
+    },
+    {
+      "name": "hadith_translation",
+      "value": "ترجمہ"
+    },
+    {
+      "name": "hadith_sanad",
+      "value": "سند (راویوں کا سلسلہ)"
+    },
+    {
+      "name": "hadith_title_desc",
+      "value": "ہزاروں مستند احادیث دریافت کریں"
+    },
+    {
+      "name": "hadith_label",
+      "value": "حدیث"
+    },
+    {
+      "name": "collection_bukhari",
+      "value": "صحیح البخاری"
+    },
+    {
+      "name": "collection_muslim",
+      "value": "صحیح مسلم"
+    },
+    {
+      "name": "collection_abudawud",
+      "value": "سنن ابی داؤد"
+    },
+    {
+      "name": "collection_tirmidhi",
+      "value": "جامع ترمذی"
+    },
+    {
+      "name": "collection_nasai",
+      "value": "سنن نسائی"
+    },
+    {
+      "name": "collection_ibnmajah",
+      "value": "سنن ابن ماجہ"
+    },
+    {
+      "name": "collection_malik",
+      "value": "موطا امام مالک"
+    },
+    {
+      "name": "hadith_books",
+      "value": "کتابیں"
+    },
+    {
+      "name": "hadith_contexts",
+      "value": "زندگی کے سیاق و سباق"
+    },
+    {
+      "name": "hadith_topics",
+      "value": "موضوعات"
+    },
+    {
+      "name": "load_more",
+      "value": "مزید لوڈ کریں"
+    },
+    {
+      "name": "license_section_hadith_data",
+      "value": "حدیث ڈیٹاسیٹ"
+    },
+    {
+      "name": "licenses_version_label",
+      "value": "ڈیٹاسیٹس: "
+    },
+    {
+      "name": "privacy_title",
+      "value": "رازداری کی پالیسی"
+    },
+    {
+      "name": "privacy_view_online",
+      "value": "مکمل آن لائن پالیسی دیکھیں"
     }
   ]
 }

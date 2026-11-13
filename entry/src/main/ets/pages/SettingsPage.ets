@@ -1747,28 +1747,10 @@ struct SettingsPage {
   }
 
   private async openPrivacyPolicy(): Promise<void> {
-    const context = getContext(this) as common.UIAbilityContext;
-
-    // Uses the dynamic URL logic (e.g., adds /ar/ or /zh/ automatically)
-    const targetUrl = PrivacyPolicyProvider.getFullUrl(this.currentLanguage);
-
-    const want: Want = {
-      action: 'ohos.want.action.viewData',
-      entities: ['entity.system.browsable'],
-      uri: targetUrl
-    };
-
-    try {
-      await context.startAbility(want);
-    } catch (err) {
-      const e = err as Error;
-      console.warn('[SettingsPage] openPrivacyPolicy failed: ' + e.message);
-      // Fallback: Show the URL in a toast if no browser is found
-      this.getUIContext().getPromptAction().showToast({
-        message: targetUrl,
-        duration: 4000
-      });
-    }
+    // 👇 FIX: Open the local page instead of the browser
+    NavHelper.prepareForward();
+    router.pushUrl({ url: 'pages/PrivacyPolicyPage' })
+      .catch((e: Error) => console.error(e.message));
   }
 
   private async reload(): Promise<void> {

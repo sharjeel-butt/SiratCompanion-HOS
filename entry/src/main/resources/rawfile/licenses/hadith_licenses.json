@@ -1,0 +1,32 @@
+{
+  "datasetVersion": "2.0.0",
+  "sections": [
+    {
+      "id": "hadith_data",
+      "items": [
+        {
+          "name": "Fawaz Ahmed Hadith API",
+          "source": "Multilingual Hadith Translations (English, Urdu, Bengali, Indonesian, Turkish)",
+          "sourceUrl": "https://github.com/fawazahmed0/hadith-api",
+          "license": "Public Domain / Unlicense",
+          "licenseUrl": "https://github.com/fawazahmed0/hadith-api/blob/main/LICENSE",
+          "attribution": "Translations provided by Fawaz Ahmed (fawazahmed0)."
+        },
+        {
+          "name": "Original Arabic Corpus",
+          "source": "Sahih al-Bukhari, Sahih Muslim, Sunan Abu Dawud, etc.",
+          "sourceUrl": "https://sunnah.com",
+          "license": "Public Domain",
+          "attribution": "Original Arabic texts sourced from standard Islamic collections."
+        },
+        {
+          "name": "Ontology & Metadata",
+          "source": "Sirat Companion Data Pipeline v2",
+          "sourceUrl": "https://github.com/sharjeel-butt/SiratCompanion-HOS",
+          "license": "MIT License",
+          "attribution": "Context mapping and recommendation indexes built by the Sirat Companion team."
+        }
+      ]
+    }
+  ]
+}

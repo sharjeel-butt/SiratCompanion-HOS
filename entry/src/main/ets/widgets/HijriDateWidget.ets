@@ -33,7 +33,7 @@ struct HijriDateWidget {
 
       // Watermark
       Stack() {
-        Image($r('app.media.ic_ramadan_moon'))
+        Image($r('app.media.ic_nav_calendar'))
           .width(120)
           .height(120)
           .fillColor('#FFFFFF')

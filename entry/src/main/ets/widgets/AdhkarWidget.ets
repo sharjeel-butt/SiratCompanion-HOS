@@ -44,7 +44,7 @@ struct AdhkarWidget {
             .textOverflow({ overflow: TextOverflow.Ellipsis })
         } else {
 
-          // Header Row (Reference + Label)
+          // Header Row
           Row() {
             if (this.isRtl) {
               Image($r('app.media.ic_dua')).width('12vp').height('12vp').fillColor('#E8A44C')
@@ -86,26 +86,23 @@ struct AdhkarWidget {
           }
           .width('100%').direction(Direction.Ltr).margin({ bottom: 4 })
 
-          Blank() // Spacer
-
-          // Arabic Text
+          // Arabic Text (Flexible Container)
+          // FIX: Adjusted font size and line height for 2*4 to prevent overlap
           Column() {
             Text(this.arabicText)
-              .fontSize('22vp')
+              .fontSize(this.dimension === '4*4' ? '22vp' : '16vp')
               .fontFamily('AmiriQuran, sans-serif')
               .fontColor('#FFFFFF')
-              .lineHeight('36vp')
+              .lineHeight(this.dimension === '4*4' ? '36vp' : '24vp')
               .textAlign(TextAlign.Center)
               .direction(Direction.Rtl)
               .width('100%')
-              .maxLines(this.dimension === '4*4' ? 5 : 4)
+              .maxLines(this.dimension === '4*4' ? 5 : 3)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
           }
           .width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
 
-          Blank() // Spacer
-
-          // Footer Section (Matched to EventWidget Pattern)
+          // Footer Section
           Column() {
             Divider().color('rgba(255, 255, 255, 0.08)').margin({ bottom: 8 })
             Row() {
@@ -152,7 +149,8 @@ struct AdhkarWidget {
         left: 14,
         right: 14
       })
-      .justifyContent(FlexAlign.Start)
+      // FIX: Replaced Blank() with SpaceBetween to prevent overflows pushing the footer out
+      .justifyContent(FlexAlign.SpaceBetween)
       .alignItems(HorizontalAlign.Center)
     }
     .width('100%').height('100%')

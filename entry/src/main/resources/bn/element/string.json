@@ -3106,6 +3106,107 @@
     {
       "name": "widget_daily_faith_title",
       "value": "দৈনন্দিন ইবাদত"
+    },
+    {
+      "name": "hadith_title",
+      "value": "হাদিস সংগ্রহ"
+    },
+    {
+      "name": "hadith_featured",
+      "value": "নির্বাচিত হাদিস"
+    },
+    {
+      "name": "hadith_search_results",
+      "value": "অনুসন্ধানের ফলাফল"
+    },
+    {
+      "name": "hadith_search_hint",
+      "value": "বিষয়, প্রেক্ষাপট বা লেখা অনুসন্ধান করুন..."
+    },
+    {
+      "name": "hadith_searching",
+      "value": "অনুসন্ধান চলছে..."
+    },
+    {
+      "name": "hadith_no_results",
+      "value": "কোনো ফলাফল পাওয়া যায়নি।"
+    },
+    {
+      "name": "hadith_translation",
+      "value": "অনুবাদ"
+    },
+    {
+      "name": "hadith_sanad",
+      "value": "সানাদ (বর্ণনাকারীদের শৃঙ্খল)"
+    },
+    {
+      "name": "hadith_title_desc",
+      "value": "হাজারো সহীহ হাদিস অন্বেষণ করুন"
+    },
+    {
+      "name": "hadith_label",
+      "value": "হাদিস"
+    },
+    {
+      "name": "collection_bukhari",
+      "value": "সহীহ বুখারী"
+    },
+    {
+      "name": "collection_muslim",
+      "value": "সহীহ মুসলিম"
+    },
+    {
+      "name": "collection_abudawud",
+      "value": "সুনানে আবু দাউদ"
+    },
+    {
+      "name": "collection_tirmidhi",
+      "value": "জামি' আত-তিরমিযী"
+    },
+    {
+      "name": "collection_nasai",
+      "value": "সুনানে নাসাঈ"
+    },
+    {
+      "name": "collection_ibnmajah",
+      "value": "সুনানে ইবনে মাজাহ"
+    },
+    {
+      "name": "collection_malik",
+      "value": "মুয়াত্তা মালিক"
+    },
+    {
+      "name": "hadith_books",
+      "value": "বইসমূহ"
+    },
+    {
+      "name": "hadith_contexts",
+      "value": "জীবনের প্রেক্ষাপট"
+    },
+    {
+      "name": "hadith_topics",
+      "value": "বিষয়সমূহ"
+    },
+    {
+      "name": "load_more",
+      "value": "আরও লোড করুন"
+    },
+    {
+      "name": "license_section_hadith_data",
+      "value": "হাদিস ডেটাসেট"
+    },
+    {
+      "name": "licenses_version_label",
+      "value": "ডেটাসেটসমূহ: "
+    },
+    {
+      "name": "privacy_title",
+      "value": "গোপনীয়তা নীতি"
+    },
+    {
+      "name": "privacy_view_online",
+      "value": "সম্পূর্ণ অনলাইন নীতি দেখুন"
     }
   ]
+
 }

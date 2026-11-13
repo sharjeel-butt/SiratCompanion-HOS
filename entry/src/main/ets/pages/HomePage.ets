@@ -281,6 +281,7 @@ export struct HomePage {
   private settingsLoading: boolean = false;
   private settingsPending: boolean = false;
   private countdownTimerId: number = -1;
+  private locationUpdateTimerId: number = -1;
 
   async aboutToAppear(): Promise<void> {
     this.currentLanguage = this.appLanguage;
@@ -307,6 +308,7 @@ export struct HomePage {
     EventPerspectiveNotifier.subscribe(this.eventPerspectiveListener);
     await this.refreshQadaStatus();
     this.startMinuteTimer();
+    this.startLocationUpdateTimer();
   }
 
   aboutToDisappear(): void {
@@ -316,6 +318,25 @@ export struct HomePage {
     this.stopCountdownTimer();
     EventPerspectiveNotifier.unsubscribe(this.eventPerspectiveListener);
     this.stopMinuteTimer();
+    if (this.locationUpdateTimerId !== -1) {
+      clearInterval(this.locationUpdateTimerId);
+      this.locationUpdateTimerId = -1;
+    }
+  }
+
+  private startLocationUpdateTimer(): void {
+    if (this.locationUpdateTimerId !== -1) {
+      return;
+    }
+
+    // Check every 30 minutes (30 * 60 * 1000)
+    this.locationUpdateTimerId = setInterval(() => {
+      // Only auto-update if the user is using GPS mode (not Manual)
+      if (this.locationMode === LocationMode.GPS) {
+        AppLogger.info('HomePage', 'Auto-refreshing location via 30-min timer...');
+        this.refreshLocationSilently();
+      }
+    }, 15 * 60 * 1000);
   }
 
   async onPageShow(): Promise<void> {
@@ -412,6 +433,7 @@ export struct HomePage {
                     this.LiveCountdownBanner()
                     this.PrayerPromptCard()
                     this.FullQuranAnchorCard()
+                    this.HadithAnchorCard()
                     this.MosqueFinderAnchorCard()
                     this.RecommendedRecitationsCard()
                     if (this.eidInfo !== null) {
@@ -462,6 +484,7 @@ export struct HomePage {
                   this.LiveCountdownBanner()
                   this.PrayerPromptCard()
                   this.FullQuranAnchorCard()
+                  this.HadithAnchorCard()
                   this.MosqueFinderAnchorCard()
                   this.RecommendedRecitationsCard()
                   if (this.eidInfo !== null) {
@@ -668,7 +691,7 @@ export struct HomePage {
   FullQuranAnchorCard() {
     Row() {
       Column() {
-        Image($r('app.media.ic_book'))
+        Image($r('app.media.ic_quran'))
           .width(24).height(24)
           .fillColor(this.colors.accentGold)
       }
@@ -709,6 +732,49 @@ export struct HomePage {
     .onClick(() => {
       NavHelper.prepareForward();
       router.pushUrl({ url: 'pages/QuranPage' })
+        .catch((e: Error) => console.error(JSON.stringify(e)));
+    })
+  }
+
+  @Builder
+  HadithAnchorCard() {
+    Row() {
+      Column() {
+        Image($r('app.media.ic_hadith_book')) // Use the book icon
+          .width(24).height(24).fillColor(this.colors.accentGold)
+      }
+      .width(44)
+      .height(44)
+      .borderRadius(12)
+      .backgroundColor(this.colors.tintSoft)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(HorizontalAlign.Center)
+      .flexShrink(0)
+
+      Column() {
+        Text(this.tr("hadith_title"))
+          .fontSize(16).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+        Text(this.tr("hadith_title_desc"))
+          .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 4 }).maxLines(2)
+      }.alignItems(HorizontalAlign.Start).layoutWeight(1).padding({ left: 12, right: 12 })
+
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
+        .flexShrink(0)
+    }
+    .width('100%')
+    .padding(16)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(Theme.radiusLarge)
+    .border({ width: 1, color: this.colors.borderSoft })
+    .margin({ bottom: 14 })
+    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+    .onClick(() => {
+      NavHelper.prepareForward();
+      router.pushUrl({ url: 'pages/HadithHomePage' })
         .catch((e: Error) => console.error(JSON.stringify(e)));
     })
   }

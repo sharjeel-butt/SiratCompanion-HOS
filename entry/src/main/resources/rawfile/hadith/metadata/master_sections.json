@@ -1,0 +1,1712 @@
+{
+  "(Statements made under) Coercion": {
+    "ar": "الإكراه",
+    "bn": "জবরদস্তি",
+    "id": "Pemaksaan",
+    "tr": "Zorlama"
+  },
+  "Ablutions (Wudu')": {
+    "ar": "الوضوء",
+    "bn": "ওজু",
+    "id": "Wudu",
+    "tr": "Abdest"
+  },
+  "Accepting Information Given by a Truthful Person": {
+    "ar": "قبول خبر الصادق",
+    "bn": "সত্যবাদীর দেওয়া তথ্য গ্রহণ",
+    "id": "Menerima Informasi dari Orang yang Jujur",
+    "tr": "Doğru Sözlü Kişinin Verdiği Bilgiyi Kabul Etmek"
+  },
+  "Actions while Praying": {
+    "ar": "الأفعال في الصلاة",
+    "bn": "নামাজের মধ্যে কাজ",
+    "id": "Perbuatan dalam Salat",
+    "tr": "Namazda Yapılan Fiiller"
+  },
+  "Afflictions and the End of the World": {
+    "ar": "الفتن وأشراط الساعة",
+    "bn": "ফিতনা ও কিয়ামতের আলামত",
+    "id": "Fitnah dan Tanda Akhir Zaman",
+    "tr": "Fitneler ve Kıyamet Alametleri"
+  },
+  "Agriculture": {
+    "ar": "الزراعة",
+    "bn": "কৃষি",
+    "id": "Pertanian",
+    "tr": "Tarım"
+  },
+  "Al-Adha Festival Sacrifice (Adaahi)": {
+    "ar": "أضحية العيد",
+    "bn": "কুরবানি",
+    "id": "Kurban Idul Adha",
+    "tr": "Kurban Bayramı Kurbanı"
+  },
+  "Apostates": {
+    "ar": "المرتدون",
+    "bn": "মুরতাদ",
+    "id": "Orang Murtad",
+    "tr": "Dinden Dönenler"
+  },
+  "Asking Permission": {
+    "ar": "الاستئذان",
+    "bn": "অনুমতি চাওয়া",
+    "id": "Meminta Izin",
+    "tr": "İzin İstemek"
+  },
+  "Asking for Rain": {
+    "ar": "الاستسقاء",
+    "bn": "বৃষ্টির জন্য প্রার্থনা",
+    "id": "Meminta Hujan",
+    "tr": "Yağmur Duası"
+  },
+  "Bathing (Ghusl)": {
+    "ar": "الغسل",
+    "bn": "গোসল",
+    "id": "Ghusl",
+    "tr": "Gusül"
+  },
+  "Battles (Kitab Al-Malahim)": {
+    "ar": "كتاب الملاحم",
+    "bn": "যুদ্ধ ও মহাযুদ্ধ",
+    "id": "Kitab Peperangan Besar",
+    "tr": "Kitap el-Melahim"
+  },
+  "Beginning of Creation": {
+    "ar": "بدء الخلق",
+    "bn": "সৃষ্টির সূচনা",
+    "id": "Awal Penciptaan",
+    "tr": "Yaratılışın Başlangıcı"
+  },
+  "Belief": {
+    "ar": "الإيمان",
+    "bn": "ঈমান",
+    "id": "Iman",
+    "tr": "İman"
+  },
+  "Blood Money (Ad-Diyat)": {
+    "ar": "الديات",
+    "bn": "দিয়াত",
+    "id": "Diyat",
+    "tr": "Diyet"
+  },
+  "Burials": {
+    "ar": "الجنائز",
+    "bn": "দাফন-কাফন",
+    "id": "Pemakaman",
+    "tr": "Cenazeler"
+  },
+  "Business Transactions": {
+    "ar": "البيوع",
+    "bn": "ব্যবসায়িক লেনদেন",
+    "id": "Transaksi Bisnis",
+    "tr": "Ticari İşlemler"
+  },
+  "Call to Prayers (Adhaan)": {
+    "ar": "الأذان",
+    "bn": "আজান",
+    "id": "Azan",
+    "tr": "Ezan"
+  },
+  "Chapters On Al-Fitan": {
+    "ar": "أبواب الفتن",
+    "bn": "ফিতনা অধ্যায়",
+    "id": "Bab-bab Fitnah",
+    "tr": "Fitneler Bölümleri"
+  },
+  "Chapters On Al-Qadar": {
+    "ar": "أبواب القدر",
+    "bn": "তাকদির অধ্যায়",
+    "id": "Bab-bab Takdir",
+    "tr": "Kader Bölümleri"
+  },
+  "Chapters On Dreams": {
+    "ar": "أبواب الرؤيا",
+    "bn": "স্বপ্ন অধ্যায়",
+    "id": "Bab-bab Mimpi",
+    "tr": "Rüyalar Bölümleri"
+  },
+  "Chapters On Wala' And Gifts": {
+    "ar": "أبواب الولاء والهبة",
+    "bn": "ওয়ালা ও হেবা অধ্যায়",
+    "id": "Bab Wala dan Hibah",
+    "tr": "Velâ ve Hibeler Bölümleri"
+  },
+  "Chapters On Wasaya (Wills and Testament)": {
+    "ar": "أبواب الوصايا",
+    "bn": "ওসিয়ত অধ্যায়",
+    "id": "Bab Wasiat",
+    "tr": "Vasiyetler Bölümleri"
+  },
+  "Chapters On Witnesses": {
+    "ar": "أبواب الشهادات",
+    "bn": "সাক্ষ্য অধ্যায়",
+    "id": "Bab Persaksian",
+    "tr": "Şahitlikler Bölümleri"
+  },
+  "Chapters On Zuhd": {
+    "ar": "أبواب الزهد",
+    "bn": "জুহদ অধ্যায়",
+    "id": "Bab Zuhud",
+    "tr": "Zühd Bölümleri"
+  },
+  "Chapters Regarding Funerals": {
+    "ar": "أبواب الجنائز",
+    "bn": "জানাজার অধ্যায়",
+    "id": "Bab Jenazah",
+    "tr": "Cenaze Bölümleri"
+  },
+  "Chapters on Dress": {
+    "ar": "أبواب اللباس",
+    "bn": "পোশাক অধ্যায়",
+    "id": "Bab Pakaian",
+    "tr": "Giyim Bölümleri"
+  },
+  "Chapters on Drinks": {
+    "ar": "أبواب الأشربة",
+    "bn": "পানীয় অধ্যায়",
+    "id": "Bab Minuman",
+    "tr": "İçecekler Bölümleri"
+  },
+  "Chapters on Food": {
+    "ar": "أبواب الأطعمة",
+    "bn": "খাদ্য অধ্যায়",
+    "id": "Bab Makanan",
+    "tr": "Yiyecekler Bölümleri"
+  },
+  "Chapters on Hajj Rituals": {
+    "ar": "أبواب المناسك",
+    "bn": "হজের আহকাম অধ্যায়",
+    "id": "Bab Manasik Haji",
+    "tr": "Hac Menasiki Bölümleri"
+  },
+  "Chapters on Hunting": {
+    "ar": "أبواب الصيد",
+    "bn": "শিকার অধ্যায়",
+    "id": "Bab Berburu",
+    "tr": "Avcılık Bölümleri"
+  },
+  "Chapters on Medicine": {
+    "ar": "أبواب الطب",
+    "bn": "চিকিৎসা অধ্যায়",
+    "id": "Bab Pengobatan",
+    "tr": "Tıp Bölümleri"
+  },
+  "Chapters on Parables": {
+    "ar": "أبواب الأمثال",
+    "bn": "উপমা অধ্যায়",
+    "id": "Bab Perumpamaan",
+    "tr": "Misaller Bölümleri"
+  },
+  "Chapters on Recitation": {
+    "ar": "أبواب التلاوة",
+    "bn": "তিলাওয়াত অধ্যায়",
+    "id": "Bab Tilawah",
+    "tr": "Kıraat Bölümleri"
+  },
+  "Chapters on Righteousness And Maintaining Good Relations With Relatives": {
+    "ar": "أبواب البر والصلة",
+    "bn": "সদাচরণ ও আত্মীয়তা অধ্যায়",
+    "id": "Bab Kebaikan dan Silaturahmi",
+    "tr": "İyilik ve Akrabalık Bölümleri"
+  },
+  "Chapters on Sacrifices": {
+    "ar": "أبواب الأضاحي",
+    "bn": "কুরবানি অধ্যায়",
+    "id": "Bab Kurban",
+    "tr": "Kurbanlar Bölümleri"
+  },
+  "Chapters on Slaughtering": {
+    "ar": "أبواب الذبائح",
+    "bn": "জবাই অধ্যায়",
+    "id": "Bab Penyembelihan",
+    "tr": "Kesimler Bölümleri"
+  },
+  "Chapters on Tafsir": {
+    "ar": "أبواب التفسير",
+    "bn": "তাফসির অধ্যায়",
+    "id": "Bab Tafsir",
+    "tr": "Tefsir Bölümleri"
+  },
+  "Chapters on The Virtues of the Qur'an": {
+    "ar": "أبواب فضائل القرآن",
+    "bn": "কুরআনের فضিলত অধ্যায়",
+    "id": "Bab Keutamaan Al-Qur'an",
+    "tr": "Kur'an'ın Faziletleri Bölümleri"
+  },
+  "Chapters on Virtues": {
+    "ar": "أبواب الفضائل",
+    "bn": "فضিলত অধ্যায়",
+    "id": "Bab Keutamaan",
+    "tr": "Faziletler Bölümleri"
+  },
+  "Chapters on the description of Paradise": {
+    "ar": "أبواب صفة الجنة",
+    "bn": "জান্নাতের বর্ণনা অধ্যায়",
+    "id": "Bab Sifat Surga",
+    "tr": "Cennet Tasviri Bölümleri"
+  },
+  "Chapters on the description of the Day of Judgement, Ar-Riqaq, and Al-Wara'": {
+    "ar": "أبواب صفة القيامة والرقائق والورع",
+    "bn": "কিয়ামত, রিকাক ও ওয়ারা অধ্যায়",
+    "id": "Bab Hari Kiamat, Riqaq, dan Wara'",
+    "tr": "Kıyamet, Rikak ve Vera Bölümleri"
+  },
+  "Characteristics of The Hypocrites And Rulings Concerning Them": {
+    "ar": "صفات المنافقين وأحكامهم",
+    "bn": "মুনাফিকদের বৈশিষ্ট্য ও বিধান",
+    "id": "Ciri Munafik dan Hukumnya",
+    "tr": "Münafıkların Özellikleri ve Hükümleri"
+  },
+  "Characteristics of the Day of Judgment, Paradise, and Hell": {
+    "ar": "صفات يوم القيامة والجنة والنار",
+    "bn": "কিয়ামত, জান্নাত ও জাহান্নামের বৈশিষ্ট্য",
+    "id": "Ciri Hari Kiamat, Surga, dan Neraka",
+    "tr": "Kıyamet, Cennet ve Cehennemin Özellikleri"
+  },
+  "Clothing (Kitab Al-Libas)": {
+    "ar": "كتاب اللباس",
+    "bn": "পোশাক পর্ব",
+    "id": "Kitab Pakaian",
+    "tr": "Kitap el-Libas"
+  },
+  "Combing the Hair (Kitab Al-Tarajjul)": {
+    "ar": "كتاب الترجل",
+    "bn": "চুল আঁচড়ানো পর্ব",
+    "id": "Kitab Menyisir Rambut",
+    "tr": "Kitap et-Teraccül"
+  },
+  "Commercial Transactions (Kitab Al-Buyu)": {
+    "ar": "كتاب البيوع",
+    "bn": "ব্যবসা পর্ব",
+    "id": "Kitab Jual Beli",
+    "tr": "Kitap el-Buyu"
+  },
+  "Companions of the Prophet": {
+    "ar": "فضائل الصحابة",
+    "bn": "সাহাবীদের فضিলত",
+    "id": "Para Sahabat Nabi",
+    "tr": "Peygamber'in Sahabeleri"
+  },
+  "Conditions": {
+    "ar": "الشروط",
+    "bn": "শর্তাবলি",
+    "id": "Syarat-syarat",
+    "tr": "Şartlar"
+  },
+  "Dialects and Readings of the Qur'an (Kitab Al-Huruf Wa Al-Qira'at)": {
+    "ar": "كتاب الحروف والقراءات",
+    "bn": "কুরআনের হরফ ও কিরাআত পর্ব",
+    "id": "Kitab Huruf dan Qira'at",
+    "tr": "Kitap el-Huruf ve'l-Kıraat"
+  },
+  "Distribution of Water": {
+    "ar": "قسمة الماء",
+    "bn": "পানি বণ্টন",
+    "id": "Pembagian Air",
+    "tr": "Su Dağıtımı"
+  },
+  "Divination and Omens (Kitab Al-Kahanah Wa Al-Tatayyur)": {
+    "ar": "كتاب الكهانة والتطير",
+    "bn": "গণক ও কুলক্ষণ পর্ব",
+    "id": "Kitab Perdukunan dan Tathayyur",
+    "tr": "Kitap el-Kehanet ve't-Tatayyur"
+  },
+  "Divine Will (Al-Qadar)": {
+    "ar": "القدر",
+    "bn": "তাকদির",
+    "id": "Takdir",
+    "tr": "Kader"
+  },
+  "Divorce": {
+    "ar": "الطلاق",
+    "bn": "তালাক",
+    "id": "Perceraian",
+    "tr": "Talak"
+  },
+  "Dress": {
+    "ar": "اللباس",
+    "bn": "পোশাক",
+    "id": "Pakaian",
+    "tr": "Giyim"
+  },
+  "Drinks": {
+    "ar": "الأشربة",
+    "bn": "পানীয়",
+    "id": "Minuman",
+    "tr": "İçecekler"
+  },
+  "Eclipses": {
+    "ar": "الكسوف",
+    "bn": "সূর্যগ্রহণ ও চন্দ্রগ্রহণ",
+    "id": "Gerhana",
+    "tr": "Güneş ve Ay Tutulması"
+  },
+  "Establishing the Prayer and the Sunnah Regarding Them": {
+    "ar": "إقامة الصلاة والسنة فيها",
+    "bn": "নামাজ প্রতিষ্ঠা ও তৎসংশ্লিষ্ট সুন্নাহ",
+    "id": "Mendirikan Salat dan Sunnahnya",
+    "tr": "Namazı İkame ve İlgili Sünnetler"
+  },
+  "Expiation for Unfulfilled Oaths": {
+    "ar": "كفارة الأيمان",
+    "bn": "অপূর্ণ কসমের কাফফারা",
+    "id": "Kafarat Sumpah yang Belum Ditunaikan",
+    "tr": "Yerine Getirilmeyen Yeminlerin Kefareti"
+  },
+  "Fasting": {
+    "ar": "الصيام",
+    "bn": "রোজা",
+    "id": "Puasa",
+    "tr": "Oruç"
+  },
+  "Fear Prayer": {
+    "ar": "صلاة الخوف",
+    "bn": "ভয়ের নামাজ",
+    "id": "Salat Khauf",
+    "tr": "Korku Namazı"
+  },
+  "Food, Meals": {
+    "ar": "الأطعمة والأشربة",
+    "bn": "খাদ্য ও খাবার",
+    "id": "Makanan dan Jamuan",
+    "tr": "Yiyecekler ve Sofralar"
+  },
+  "Forgetfulness in Prayer": {
+    "ar": "السهو في الصلاة",
+    "bn": "নামাজে ভুল",
+    "id": "Lupa dalam Salat",
+    "tr": "Namazda Yanılma"
+  },
+  "Forty Hadith Qudsi": {
+    "ar": "الأربعون القدسية",
+    "bn": "চল্লিশটি কুদসি হাদিস",
+    "id": "Empat Puluh Hadis Qudsi",
+    "tr": "Kırk Kudsî Hadis"
+  },
+  "Forty Hadith of Shah Waliullah Dehlawi": {
+    "ar": "الأربعون لشاه ولي الله الدهلوي",
+    "bn": "শাহ ওয়ালিউল্লাহ দেহলভীর চল্লিশ হাদিস",
+    "id": "Empat Puluh Hadis Shah Waliullah Dehlawi",
+    "tr": "Şah Veliyyullah Dehlevî'nin Kırk Hadisi"
+  },
+  "Forty Hadith of an-Nawawi": {
+    "ar": "الأربعون النووية",
+    "bn": "ইমাম নববীর চল্লিশ হাদিস",
+    "id": "Empat Puluh Hadis an-Nawawi",
+    "tr": "İmam Nevevî'nin Kırk Hadisi"
+  },
+  "Friday Prayer": {
+    "ar": "صلاة الجمعة",
+    "bn": "জুমার নামাজ",
+    "id": "Salat Jumat",
+    "tr": "Cuma Namazı"
+  },
+  "Game": {
+    "ar": "الصيد",
+    "bn": "শিকার",
+    "id": "Perburuan",
+    "tr": "Av"
+  },
+  "General Subjects": {
+    "ar": "مواضيع عامة",
+    "bn": "সাধারণ বিষয়",
+    "id": "Pokok-pokok Umum",
+    "tr": "Genel Konular"
+  },
+  "Gifts": {
+    "ar": "الهبات",
+    "bn": "হেবা",
+    "id": "Hibah",
+    "tr": "Hibeler"
+  },
+  "Good Character": {
+    "ar": "حسن الخلق",
+    "bn": "উত্তম চরিত্র",
+    "id": "Akhlak Mulia",
+    "tr": "Güzel Ahlak"
+  },
+  "Greetings": {
+    "ar": "السلام",
+    "bn": "সালাম",
+    "id": "Salam",
+    "tr": "Selam"
+  },
+  "Hair": {
+    "ar": "الشعر",
+    "bn": "চুল",
+    "id": "Rambut",
+    "tr": "Saç"
+  },
+  "Hajj": {
+    "ar": "الحج",
+    "bn": "হজ",
+    "id": "Haji",
+    "tr": "Hac"
+  },
+  "Hiring": {
+    "ar": "الإجارة",
+    "bn": "ভাড়া ও মজুরি",
+    "id": "Sewa-menyewa",
+    "tr": "İcare"
+  },
+  "Holding Fast to the Qur'an and Sunnah": {
+    "ar": "الاعتصام بالكتاب والسنة",
+    "bn": "কুরআন ও সুন্নাহকে আঁকড়ে ধরা",
+    "id": "Berpegang pada Al-Qur'an dan Sunnah",
+    "tr": "Kur'an ve Sünnete Sarılmak"
+  },
+  "Hot Baths (Kitab Al-Hammam)": {
+    "ar": "كتاب الحمام",
+    "bn": "গোসলখানা পর্ব",
+    "id": "Kitab Pemandian",
+    "tr": "Kitap el-Hammam"
+  },
+  "Hudud": {
+    "ar": "الحدود",
+    "bn": "হুদুদ",
+    "id": "Hudud",
+    "tr": "Hudud"
+  },
+  "Hunting, Slaughtering": {
+    "ar": "الصيد والذبائح",
+    "bn": "শিকার ও জবাই",
+    "id": "Berburu dan Menyembelih",
+    "tr": "Avlanma ve Kesim"
+  },
+  "I'tikaf in Ramadan": {
+    "ar": "الاعتكاف في رمضان",
+    "bn": "রমজানে ইতিকাফ",
+    "id": "I'tikaf di Ramadan",
+    "tr": "Ramazan'da İtikaf"
+  },
+  "Inheritance": {
+    "ar": "الميراث",
+    "bn": "উত্তরাধিকার",
+    "id": "Warisan",
+    "tr": "Miras"
+  },
+  "Interpretation of Dreams": {
+    "ar": "تعبير الرؤيا",
+    "bn": "স্বপ্নের ব্যাখ্যা",
+    "id": "Tafsir Mimpi",
+    "tr": "Rüya Tabiri"
+  },
+  "Introduction": {
+    "ar": "المقدمة",
+    "bn": "ভূমিকা",
+    "id": "Pendahuluan",
+    "tr": "Giriş"
+  },
+  "Invoking Allah for Rain (Istisqaa)": {
+    "ar": "الاستسقاء",
+    "bn": "বৃষ্টির জন্য দোয়া",
+    "id": "Istisqa",
+    "tr": "İstiska"
+  },
+  "Jahannam": {
+    "ar": "جهنم",
+    "bn": "জাহান্নাম",
+    "id": "Jahannam",
+    "tr": "Cehennem"
+  },
+  "Jihad": {
+    "ar": "الجهاد",
+    "bn": "জিহাদ",
+    "id": "Jihad",
+    "tr": "Cihad"
+  },
+  "Jizyah and Mawaada'ah": {
+    "ar": "الجزية والموادعة",
+    "bn": "জিজিয়া ও সন্ধি",
+    "id": "Jizyah dan Perjanjian",
+    "tr": "Cizye ve Muahede"
+  },
+  "Judgements": {
+    "ar": "الأحكام",
+    "bn": "বিচার-ফয়সালা",
+    "id": "Hukum-hukum",
+    "tr": "Hükümler"
+  },
+  "Judgments (Ahkaam)": {
+    "ar": "الأحكام",
+    "bn": "আহকাম",
+    "id": "Ahkam",
+    "tr": "Ahkâm"
+  },
+  "Jumu'a": {
+    "ar": "الجمعة",
+    "bn": "জুমা",
+    "id": "Cuma",
+    "tr": "Cuma"
+  },
+  "Kafalah": {
+    "ar": "الكفالة",
+    "bn": "কাফালা",
+    "id": "Kafalah",
+    "tr": "Kefalet"
+  },
+  "Khusoomaat": {
+    "ar": "الخصومات",
+    "bn": "বিবাদ-মামলা",
+    "id": "Sengketa",
+    "tr": "Davalar"
+  },
+  "Knowledge": {
+    "ar": "العلم",
+    "bn": "জ্ঞান",
+    "id": "Ilmu",
+    "tr": "İlim"
+  },
+  "Limits and Punishments set by Allah (Hudood)": {
+    "ar": "الحدود",
+    "bn": "আল্লাহর নির্ধারিত সীমা ও শাস্তি",
+    "id": "Hudud Allah",
+    "tr": "Allah'ın Belirlediği Hudud"
+  },
+  "Loans, Payment of Loans, Freezing of Property, Bankruptcy": {
+    "ar": "الديون وقضاؤها والحجر والإفلاس",
+    "bn": "ঋণ, ঋণ পরিশোধ, সম্পত্তি বন্ধক ও দেউলিয়া",
+    "id": "Utang, Pembayaran Utang, Penyitaan Harta, dan Bangkrut",
+    "tr": "Borçlar, Borç Ödeme, Malın Haczi ve İflas"
+  },
+  "Lost Things Picked up by Someone (Luqatah)": {
+    "ar": "اللقطة",
+    "bn": "কুড়িয়ে পাওয়া বস্তু",
+    "id": "Barang Temuan",
+    "tr": "Buluntu Mal"
+  },
+  "Madina": {
+    "ar": "المدينة",
+    "bn": "মদিনা",
+    "id": "Madinah",
+    "tr": "Medine"
+  },
+  "Makaatib": {
+    "ar": "المكاتب",
+    "bn": "মুকাতাব",
+    "id": "Mukatab",
+    "tr": "Mükateb"
+  },
+  "Manners": {
+    "ar": "الأدب",
+    "bn": "আদব",
+    "id": "Adab",
+    "tr": "Edep"
+  },
+  "Manumission of Slaves": {
+    "ar": "العتق",
+    "bn": "দাসমুক্তি",
+    "id": "Pembebasan Budak",
+    "tr": "Köle Azadı"
+  },
+  "Marriage": {
+    "ar": "النكاح",
+    "bn": "বিবাহ",
+    "id": "Pernikahan",
+    "tr": "Nikâh"
+  },
+  "Medicine": {
+    "ar": "الطب",
+    "bn": "চিকিৎসা",
+    "id": "Pengobatan",
+    "tr": "Tıp"
+  },
+  "Menstrual Periods": {
+    "ar": "الحيض",
+    "bn": "হায়েজ",
+    "id": "Haid",
+    "tr": "Hayız"
+  },
+  "Merits of the Helpers in Madinah (Ansaar)": {
+    "ar": "فضائل الأنصار",
+    "bn": "আনসারদের فضিলত",
+    "id": "Keutamaan Anshar",
+    "tr": "Ensar'ın Faziletleri"
+  },
+  "Military Expeditions led by the Prophet (pbuh) (Al-Maghaazi)": {
+    "ar": "المغازي",
+    "bn": "নবীজির যুদ্ধাভিযান",
+    "id": "Peperangan Nabi",
+    "tr": "Peygamber'in Gazveleri"
+  },
+  "Model Behavior of the Prophet (Kitab Al-Sunnah)": {
+    "ar": "كتاب السنة",
+    "bn": "নবীজির আদর্শ পর্ব",
+    "id": "Kitab Sunnah",
+    "tr": "Kitap es-Sünne"
+  },
+  "Mortgaging": {
+    "ar": "الرهن",
+    "bn": "বন্ধক",
+    "id": "Rahn",
+    "tr": "Rehin"
+  },
+  "Oaths and Vows": {
+    "ar": "الأيمان والنذور",
+    "bn": "কসম ও মানত",
+    "id": "Sumpah dan Nadzar",
+    "tr": "Yeminler ve Adaklar"
+  },
+  "Obligatory Charity Tax (Zakat)": {
+    "ar": "الزكاة",
+    "bn": "যাকাত",
+    "id": "Zakat",
+    "tr": "Zekât"
+  },
+  "One-fifth of Booty to the Cause of Allah (Khumus)": {
+    "ar": "الخمس",
+    "bn": "খুমুস",
+    "id": "Khumus",
+    "tr": "Humus"
+  },
+  "Oneness, Uniqueness of Allah (Tawheed)": {
+    "ar": "التوحيد",
+    "bn": "তাওহিদ",
+    "id": "Tauhid",
+    "tr": "Tevhid"
+  },
+  "Oppressions": {
+    "ar": "المظالم",
+    "bn": "জুলুম",
+    "id": "Kezaliman",
+    "tr": "Zulümler"
+  },
+  "Partnership": {
+    "ar": "الشركة",
+    "bn": "অংশীদারি",
+    "id": "Persekutuan",
+    "tr": "Ortaklık"
+  },
+  "Patients": {
+    "ar": "المرضى",
+    "bn": "রোগী",
+    "id": "Orang Sakit",
+    "tr": "Hastalar"
+  },
+  "Peacemaking": {
+    "ar": "الصلح",
+    "bn": "সন্ধি ও মীমাংসা",
+    "id": "Perdamaian",
+    "tr": "Barıştırma"
+  },
+  "Penalty of Hunting while on Pilgrimage": {
+    "ar": "جزاء الصيد في الحج",
+    "bn": "হজে শিকারের শাস্তি",
+    "id": "Denda Berburu saat Ihram",
+    "tr": "Hacda Avlanma Cezası"
+  },
+  "Pilgrims Prevented from Completing the Pilgrimage": {
+    "ar": "الإحصار",
+    "bn": "হজ সম্পন্ন করতে বাধা",
+    "id": "Terhalang Menyelesaikan Haji",
+    "tr": "Haccın Tamamlanmasına Engel Olunma"
+  },
+  "Prayer": {
+    "ar": "الصلاة",
+    "bn": "সালাত",
+    "id": "Salat",
+    "tr": "Namaz"
+  },
+  "Prayer (Kitab Al-Salat): Detailed Injunctions about Ramadan": {
+    "ar": "كتاب الصلاة: تفصيل أحكام رمضان",
+    "bn": "নামাজ পর্ব: রমজানের বিস্তারিত বিধান",
+    "id": "Kitab Salat: Hukum Rinci Ramadan",
+    "tr": "Kitap es-Salat: Ramazan Hükümleri Detayı"
+  },
+  "Prayer (Kitab Al-Salat): Detailed Rules of Law about the Prayer during Journey": {
+    "ar": "كتاب الصلاة: تفصيل أحكام صلاة السفر",
+    "bn": "নামাজ পর্ব: সফরের নামাজের বিস্তারিত বিধান",
+    "id": "Kitab Salat: Hukum Rinci Salat Safar",
+    "tr": "Kitap es-Salat: Yolculuk Namazı Hükümleri"
+  },
+  "Prayer (Kitab Al-Salat): Prostration while reciting the Qur'an": {
+    "ar": "كتاب الصلاة: سجود التلاوة",
+    "bn": "নামাজ পর্ব: তিলাওয়াতের সিজদা",
+    "id": "Kitab Salat: Sujud Tilawah",
+    "tr": "Kitap es-Salat: Tilavet Secdesi"
+  },
+  "Prayer (Kitab Al-Salat): Voluntary Prayers": {
+    "ar": "كتاب الصلاة: صلاة التطوع",
+    "bn": "নামাজ পর্ব: নফল নামাজ",
+    "id": "Kitab Salat: Salat Sunnah",
+    "tr": "Kitap es-Salat: Nafile Namazlar"
+  },
+  "Prayer at Night (Tahajjud)": {
+    "ar": "صلاة التهجد",
+    "bn": "রাতের নামাজ",
+    "id": "Salat Tahajud",
+    "tr": "Teheccüd Namazı"
+  },
+  "Prayer in Congregation": {
+    "ar": "صلاة الجماعة",
+    "bn": "জামাতে নামাজ",
+    "id": "Salat Berjamaah",
+    "tr": "Cemaatle Namaz"
+  },
+  "Prayer in Ramadan": {
+    "ar": "صلاة رمضان",
+    "bn": "রমজানের নামাজ",
+    "id": "Salat Ramadan",
+    "tr": "Ramazan Namazı"
+  },
+  "Praying at Night in Ramadaan (Taraweeh)": {
+    "ar": "صلاة التراويح",
+    "bn": "তারাবির নামাজ",
+    "id": "Salat Tarawih",
+    "tr": "Teravih Namazı"
+  },
+  "Pre-emption in Property": {
+    "ar": "الشفعة",
+    "bn": "শুফআ",
+    "id": "Syuf'ah",
+    "tr": "Şuf'a"
+  },
+  "Prescribed Punishments (Kitab Al-Hudud)": {
+    "ar": "كتاب الحدود",
+    "bn": "হুদুদ পর্ব",
+    "id": "Kitab Hudud",
+    "tr": "Kitap el-Hudud"
+  },
+  "Prophetic Commentary on the Qur'an (Tafseer of the Prophet (pbuh))": {
+    "ar": "تفسير النبي",
+    "bn": "নবীজির তাফসির",
+    "id": "Tafsir Nabi",
+    "tr": "Peygamber'in Tefsiri"
+  },
+  "Prophets": {
+    "ar": "الأنبياء",
+    "bn": "নবীগণ",
+    "id": "Para Nabi",
+    "tr": "Peygamberler"
+  },
+  "Prostration During Recital of Qur'an": {
+    "ar": "سجود التلاوة",
+    "bn": "তিলাওয়াতের সিজদা",
+    "id": "Sujud Tilawah",
+    "tr": "Tilavet Secdesi"
+  },
+  "Purification": {
+    "ar": "الطهارة",
+    "bn": "পবিত্রতা",
+    "id": "Taharah",
+    "tr": "Taharet"
+  },
+  "Qirad": {
+    "ar": "القراض",
+    "bn": "কিরাদ",
+    "id": "Qirad",
+    "tr": "Kırad"
+  },
+  "Renting Land": {
+    "ar": "إيجار الأرض",
+    "bn": "জমি ভাড়া",
+    "id": "Menyewakan Tanah",
+    "tr": "Arazi Kirası"
+  },
+  "Representation, Authorization, Business by Proxy": {
+    "ar": "الوكالة",
+    "bn": "প্রতিনিধিত্ব ও ওকালতি",
+    "id": "Perwakilan dan Wakalah",
+    "tr": "Vekâlet"
+  },
+  "Retiring to a Mosque for Remembrance of Allah (I'tikaf)": {
+    "ar": "الاعتكاف",
+    "bn": "ইতিকাফ",
+    "id": "I'tikaf",
+    "tr": "İtikaf"
+  },
+  "Revelation": {
+    "ar": "الوحي",
+    "bn": "ওহী",
+    "id": "Wahyu",
+    "tr": "Vahiy"
+  },
+  "Rubbing hands and feet with dust (Tayammum)": {
+    "ar": "التيمم",
+    "bn": "তায়াম্মুম",
+    "id": "Tayamum",
+    "tr": "Teyemmüm"
+  },
+  "Sacrifice on Occasion of Birth (`Aqiqa)": {
+    "ar": "العقيقة",
+    "bn": "আকিকা",
+    "id": "Akikah",
+    "tr": "Akika"
+  },
+  "Sacrificial Animals": {
+    "ar": "الأضاحي",
+    "bn": "কুরবানির পশু",
+    "id": "Hewan Kurban",
+    "tr": "Kurbanlık Hayvanlar"
+  },
+  "Sadaqa": {
+    "ar": "الصدقة",
+    "bn": "সদকা",
+    "id": "Sedekah",
+    "tr": "Sadaka"
+  },
+  "Sales and Trade": {
+    "ar": "البيوع والتجارة",
+    "bn": "ক্রয়-বিক্রয় ও ব্যবসা",
+    "id": "Jual Beli dan Perdagangan",
+    "tr": "Alışveriş ve Ticaret"
+  },
+  "Sales in which a Price is paid for Goods to be Delivered Later (As-Salam)": {
+    "ar": "السلم",
+    "bn": "অগ্রিম ক্রয়-বিক্রয়",
+    "id": "Salam",
+    "tr": "Selem"
+  },
+  "Setting Free and Wala'": {
+    "ar": "العتق والولاء",
+    "bn": "আজাদ ও ওয়ালা",
+    "id": "Pembebasan dan Wala",
+    "tr": "Azat ve Velâ"
+  },
+  "Sharecropping": {
+    "ar": "المزارعة",
+    "bn": "মুজারাআ",
+    "id": "Muzara'ah",
+    "tr": "Müzaraa"
+  },
+  "Shortening the Prayer": {
+    "ar": "قصر الصلاة",
+    "bn": "নামাজ কসর",
+    "id": "Qashar Salat",
+    "tr": "Namazın Kısaltılması"
+  },
+  "Shortening the Prayers (At-Taqseer)": {
+    "ar": "قصر الصلاة",
+    "bn": "নামাজ কসর",
+    "id": "Qashar Salat",
+    "tr": "Namazların Kısaltılması"
+  },
+  "Shuf'a": {
+    "ar": "الشفعة",
+    "bn": "শুফআ",
+    "id": "Syuf'ah",
+    "tr": "Şuf'a"
+  },
+  "Signet-Rings (Kitab Al-Khatam)": {
+    "ar": "كتاب الخاتم",
+    "bn": "আংটি পর্ব",
+    "id": "Kitab Cincin",
+    "tr": "Kitap el-Hatem"
+  },
+  "Slaughtering Animals": {
+    "ar": "الذبائح",
+    "bn": "পশু জবাই",
+    "id": "Penyembelihan Hewan",
+    "tr": "Hayvan Kesimi"
+  },
+  "Speech": {
+    "ar": "الكلام",
+    "bn": "বক্তব্য",
+    "id": "Ucapan",
+    "tr": "Konuşma"
+  },
+  "Suckling": {
+    "ar": "الرضاع",
+    "bn": "দুধপান",
+    "id": "Persusuan",
+    "tr": "Emzirme"
+  },
+  "Supplication": {
+    "ar": "الدعاء",
+    "bn": "দোয়া",
+    "id": "Doa",
+    "tr": "Dua"
+  },
+  "Supporting the Family": {
+    "ar": "النفقة على الأهل",
+    "bn": "পরিবারের ভরণপোষণ",
+    "id": "Menafkahi Keluarga",
+    "tr": "Aileye Nafaka"
+  },
+  "Tahajjud": {
+    "ar": "التهجد",
+    "bn": "তাহাজ্জুদ",
+    "id": "Tahajud",
+    "tr": "Teheccüd"
+  },
+  "The 'Aqiqa": {
+    "ar": "العقيقة",
+    "bn": "আকিকা",
+    "id": "Akikah",
+    "tr": "Akika"
+  },
+  "The Book Concerning the Use of Correct Words": {
+    "ar": "كتاب الأدب",
+    "bn": "সঠিক শব্দ ব্যবহার পর্ব",
+    "id": "Kitab Penggunaan Kata yang Benar",
+    "tr": "Doğru Söz Kullanımı Kitabı"
+  },
+  "The Book Of The Prayer For Rain (Kitab al-Istisqa')": {
+    "ar": "كتاب الاستسقاء",
+    "bn": "বৃষ্টির নামাজ পর্ব",
+    "id": "Kitab Salat Istisqa",
+    "tr": "İstiska Kitabı"
+  },
+  "The Book On The Mosques And The Congregations": {
+    "ar": "كتاب المساجد والجماعات",
+    "bn": "মসজিদ ও জামাত পর্ব",
+    "id": "Kitab Masjid dan Jamaah",
+    "tr": "Mescidler ve Cemaatler Kitabı"
+  },
+  "The Book Pertaining to the Remembrance of Allah, Supplication, Repentance and Seeking Forgiveness": {
+    "ar": "كتاب الذكر والدعاء والتوبة والاستغفار",
+    "bn": "যিকর, দোয়া, তাওবা ও ইস্তিগফার পর্ব",
+    "id": "Kitab Zikir, Doa, Taubat, dan Istigfar",
+    "tr": "Zikir, Dua, Tevbe ve İstiğfar Kitabı"
+  },
+  "The Book of 'Umra": {
+    "ar": "كتاب العمرة",
+    "bn": "উমরা পর্ব",
+    "id": "Kitab Umrah",
+    "tr": "Umre Kitabı"
+  },
+  "The Book of Adornment": {
+    "ar": "كتاب الزينة",
+    "bn": "সাজসজ্জা পর্ব",
+    "id": "Kitab Perhiasan",
+    "tr": "Ziynet Kitabı"
+  },
+  "The Book of Clothes and Adornment": {
+    "ar": "كتاب اللباس والزينة",
+    "bn": "পোশাক ও সাজসজ্জা পর্ব",
+    "id": "Kitab Pakaian dan Perhiasan",
+    "tr": "Giyim ve Ziynet Kitabı"
+  },
+  "The Book of Cutting off the Hand of the Thief": {
+    "ar": "كتاب قطع يد السارق",
+    "bn": "চোরের হাত কাটার বিধান পর্ব",
+    "id": "Kitab Pemotongan Tangan Pencuri",
+    "tr": "Hırsızın Elinin Kesilmesi Kitabı"
+  },
+  "The Book of Destiny": {
+    "ar": "كتاب القدر",
+    "bn": "তাকদির পর্ব",
+    "id": "Kitab Takdir",
+    "tr": "Kader Kitabı"
+  },
+  "The Book of Distribution of Al-Fay'": {
+    "ar": "كتاب قسم الفيء",
+    "bn": "ফাই বণ্টন পর্ব",
+    "id": "Kitab Pembagian Fa'i",
+    "tr": "Fey Dağıtımı Kitabı"
+  },
+  "The Book of Emancipating Slaves": {
+    "ar": "كتاب العتق",
+    "bn": "দাসমুক্তি পর্ব",
+    "id": "Kitab Pembebasan Budak",
+    "tr": "Köle Azadı Kitabı"
+  },
+  "The Book of Endowments": {
+    "ar": "كتاب الوقف",
+    "bn": "ওয়াকফ পর্ব",
+    "id": "Kitab Wakaf",
+    "tr": "Vakıf Kitabı"
+  },
+  "The Book of Fighting [The Prohibition of Bloodshed]": {
+    "ar": "كتاب الجهاد",
+    "bn": "যুদ্ধ ও রক্তপাত নিষেধ পর্ব",
+    "id": "Kitab Jihad",
+    "tr": "Cihad Kitabı"
+  },
+  "The Book of Forgetfulness (In Prayer)": {
+    "ar": "كتاب السهو",
+    "bn": "নামাজে ভুল পর্ব",
+    "id": "Kitab Lupa dalam Salat",
+    "tr": "Namazda Yanılma Kitabı"
+  },
+  "The Book of Heart-Melting Traditions": {
+    "ar": "كتاب الرقائق",
+    "bn": "হৃদয় softening হাদিস পর্ব",
+    "id": "Kitab Riqaq",
+    "tr": "Rikak Kitabı"
+  },
+  "The Book of Horses, Races and Shooting": {
+    "ar": "كتاب الخيل والسباق والرمي",
+    "bn": "ঘোড়া, দৌড় ও তীরন্দাজি পর্ব",
+    "id": "Kitab Kuda, Pacuan, dan Panahan",
+    "tr": "Atlar, Yarışlar ve Atıcılık Kitabı"
+  },
+  "The Book of Hunting, Slaughter, and what may be Eaten": {
+    "ar": "كتاب الصيد والذبائح وما يؤكل",
+    "bn": "শিকার, জবাই ও খাদ্য পর্ব",
+    "id": "Kitab Berburu, Penyembelihan, dan Makanan",
+    "tr": "Av, Kesim ve Yenilebilenler Kitabı"
+  },
+  "The Book of I'tikaf": {
+    "ar": "كتاب الاعتكاف",
+    "bn": "ইতিকাফ পর্ব",
+    "id": "Kitab I'tikaf",
+    "tr": "İtikaf Kitabı"
+  },
+  "The Book of Invoking Curses": {
+    "ar": "كتاب اللعان",
+    "bn": "লিআন পর্ব",
+    "id": "Kitab Li'an",
+    "tr": "Liân Kitabı"
+  },
+  "The Book of Jihad and Expeditions": {
+    "ar": "كتاب الجهاد والسير",
+    "bn": "জিহাদ ও অভিযান পর্ব",
+    "id": "Kitab Jihad dan Ekspedisi",
+    "tr": "Cihad ve Seferler Kitabı"
+  },
+  "The Book of Judicial Decisions": {
+    "ar": "كتاب الأحكام",
+    "bn": "বিচারিক ফয়সালা পর্ব",
+    "id": "Kitab Keputusan Hukum",
+    "tr": "Hükümler Kitabı"
+  },
+  "The Book of Legal Punishments": {
+    "ar": "كتاب الحدود",
+    "bn": "হুদুদ পর্ব",
+    "id": "Kitab Hukuman Hudud",
+    "tr": "Hudud Cezaları Kitabı"
+  },
+  "The Book of Lost Property": {
+    "ar": "كتاب اللقطة",
+    "bn": "হারানো বস্তু পর্ব",
+    "id": "Kitab Barang Temuan",
+    "tr": "Buluntu Mal Kitabı"
+  },
+  "The Book of Lost and Found Items": {
+    "ar": "كتاب اللقطة",
+    "bn": "হারানো ও প্রাপ্ত বস্তু পর্ব",
+    "id": "Kitab Barang Hilang dan Temuan",
+    "tr": "Kayıp ve Bulunan Eşya Kitabı"
+  },
+  "The Book of Manners and Etiquette": {
+    "ar": "كتاب الأدب",
+    "bn": "আদব ও শিষ্টাচার পর্ব",
+    "id": "Kitab Adab dan Etika",
+    "tr": "Edep ve Âdâb Kitabı"
+  },
+  "The Book of Menstruation": {
+    "ar": "كتاب الحيض",
+    "bn": "হায়েজ পর্ব",
+    "id": "Kitab Haid",
+    "tr": "Hayız Kitabı"
+  },
+  "The Book of Menstruation and Istihadah": {
+    "ar": "كتاب الحيض والاستحاضة",
+    "bn": "হায়েজ ও ইস্তিহাদা পর্ব",
+    "id": "Kitab Haid dan Istihadah",
+    "tr": "Hayız ve İstihaze Kitabı"
+  },
+  "The Book of Mosques and Places of Prayer": {
+    "ar": "كتاب المساجد ومواضع الصلاة",
+    "bn": "মসজিদ ও নামাজের স্থান পর্ব",
+    "id": "Kitab Masjid dan Tempat Salat",
+    "tr": "Mescidler ve Namaz Yerleri Kitabı"
+  },
+  "The Book of Musaqah": {
+    "ar": "كتاب المساقاة",
+    "bn": "মুসাকাত পর্ব",
+    "id": "Kitab Musaqah",
+    "tr": "Müsakat Kitabı"
+  },
+  "The Book of Oaths": {
+    "ar": "كتاب الأيمان",
+    "bn": "কসম পর্ব",
+    "id": "Kitab Sumpah",
+    "tr": "Yeminler Kitabı"
+  },
+  "The Book of Oaths (qasamah), Retaliation and Blood Money": {
+    "ar": "كتاب القسامة والقصاص والديات",
+    "bn": "কাসামা, কিসাস ও দিয়াত পর্ব",
+    "id": "Kitab Qasamah, Qisas, dan Diyat",
+    "tr": "Kasame, Kısas ve Diyet Kitabı"
+  },
+  "The Book of Oaths, Muharibin, Qasas (Retaliation), and Diyat (Blood Money)": {
+    "ar": "كتاب الأيمان والمحاربين والقصاص والديات",
+    "bn": "কসম, মুহারিব, কিসাস ও দিয়াত পর্ব",
+    "id": "Kitab Sumpah, Muharibin, Qisas, dan Diyat",
+    "tr": "Yeminler, Muharibler, Kısas ve Diyet Kitabı"
+  },
+  "The Book of Paradise, its Description, its Bounties and its Inhabitants": {
+    "ar": "كتاب الجنة وصفة نعيمها وأهلها",
+    "bn": "জান্নাত, তার বর্ণনা, নিয়ামত ও অধিবাসী পর্ব",
+    "id": "Kitab Surga, Sifat, Kenikmatan, dan Penghuninya",
+    "tr": "Cennet, Tasviri, Nimetleri ve Halkı Kitabı"
+  },
+  "The Book of Poetry": {
+    "ar": "كتاب الشعر",
+    "bn": "কবিতা পর্ব",
+    "id": "Kitab Syair",
+    "tr": "Şiir Kitabı"
+  },
+  "The Book of Prayer - Eclipses": {
+    "ar": "كتاب الصلاة: الكسوف",
+    "bn": "নামাজ: গ্রহণ পর্ব",
+    "id": "Kitab Salat: Gerhana",
+    "tr": "Namaz: Tutulma Kitabı"
+  },
+  "The Book of Prayer - Friday": {
+    "ar": "كتاب الصلاة: الجمعة",
+    "bn": "নামাজ: জুমা পর্ব",
+    "id": "Kitab Salat: Jumat",
+    "tr": "Namaz: Cuma Kitabı"
+  },
+  "The Book of Prayer - Funerals": {
+    "ar": "كتاب الصلاة: الجنائز",
+    "bn": "নামাজ: জানাজা পর্ব",
+    "id": "Kitab Salat: Jenazah",
+    "tr": "Namaz: Cenaze Kitabı"
+  },
+  "The Book of Prayer - Travellers": {
+    "ar": "كتاب الصلاة: صلاة المسافرين",
+    "bn": "নামাজ: মুসাফির পর্ব",
+    "id": "Kitab Salat: Musafir",
+    "tr": "Namaz: Yolcu Kitabı"
+  },
+  "The Book of Prayer - Two Eids": {
+    "ar": "كتاب الصلاة: العيدين",
+    "bn": "নামাজ: দুই ঈদ পর্ব",
+    "id": "Kitab Salat: Dua Id",
+    "tr": "Namaz: İki Bayram Kitabı"
+  },
+  "The Book of Presents": {
+    "ar": "كتاب الهبات",
+    "bn": "হেবা পর্ব",
+    "id": "Kitab Hibah",
+    "tr": "Hibeler Kitabı"
+  },
+  "The Book of Qiyam Al-Lail (The Night Prayer) and Voluntary Prayers During the Day": {
+    "ar": "كتاب قيام الليل وصلاة النهار التطوعية",
+    "bn": "রাতের নামাজ ও দিনের নফল নামাজ পর্ব",
+    "id": "Kitab Qiyamul Lail dan Salat Sunnah Siang",
+    "tr": "Gece Namazı ve Gündüz Nafile Namazları Kitabı"
+  },
+  "The Book of Repentance": {
+    "ar": "كتاب التوبة",
+    "bn": "তাওবা পর্ব",
+    "id": "Kitab Taubat",
+    "tr": "Tevbe Kitabı"
+  },
+  "The Book of Seeking Refuge with Allah": {
+    "ar": "كتاب الاستعاذة",
+    "bn": "আল্লাহর আশ্রয় প্রার্থনা পর্ব",
+    "id": "Kitab Berlindung kepada Allah",
+    "tr": "Allah'a Sığınma Kitabı"
+  },
+  "The Book of Shortening the Prayer When Traveling": {
+    "ar": "كتاب قصر الصلاة في السفر",
+    "bn": "সফরে নামাজ কসর পর্ব",
+    "id": "Kitab Qashar Salat dalam Safar",
+    "tr": "Yolculukta Namazı Kısaltma Kitabı"
+  },
+  "The Book of The At-Tatbiq (Clasping One's Hands Together)": {
+    "ar": "كتاب التطبيق",
+    "bn": "তাতবিক পর্ব",
+    "id": "Kitab Tatbiq",
+    "tr": "Tatbik Kitabı"
+  },
+  "The Book of Transactions": {
+    "ar": "كتاب البيوع",
+    "bn": "লেনদেন পর্ব",
+    "id": "Kitab Transaksi",
+    "tr": "Ticaret Kitabı"
+  },
+  "The Book of Tribulations and Portents of the Last Hour": {
+    "ar": "كتاب الفتن وأشراط الساعة",
+    "bn": "ফিতনা ও কিয়ামতের আলামত পর্ব",
+    "id": "Kitab Fitnah dan Tanda Kiamat",
+    "tr": "Fitneler ve Kıyamet Alametleri Kitabı"
+  },
+  "The Book of Virtue, Enjoining Good Manners, and Joining of the Ties of Kinship": {
+    "ar": "كتاب البر والصلة والآداب",
+    "bn": "সদাচরণ, ভালো আচরণ ও আত্মীয়তা পর্ব",
+    "id": "Kitab Kebaikan, Adab, dan Silaturahmi",
+    "tr": "İyilik, Güzel Ahlak ve Akrabalık Kitabı"
+  },
+  "The Book of Vows": {
+    "ar": "كتاب النذور",
+    "bn": "মানত পর্ব",
+    "id": "Kitab Nadzar",
+    "tr": "Adaklar Kitabı"
+  },
+  "The Book of Water": {
+    "ar": "كتاب الماء",
+    "bn": "পানি পর্ব",
+    "id": "Kitab Air",
+    "tr": "Su Kitabı"
+  },
+  "The Book of Wills": {
+    "ar": "كتاب الوصايا",
+    "bn": "ওসিয়ত পর্ব",
+    "id": "Kitab Wasiat",
+    "tr": "Vasiyetler Kitabı"
+  },
+  "The Book of Zuhd and Softening of Hearts": {
+    "ar": "كتاب الزهد والرقائق",
+    "bn": "জুহদ ও হৃদয় softening পর্ব",
+    "id": "Kitab Zuhud dan Riqaq",
+    "tr": "Zühd ve Rikak Kitabı"
+  },
+  "The Book of ad-Dahaya (Sacrifices)": {
+    "ar": "كتاب الأضاحي",
+    "bn": "কুরবানি পর্ব",
+    "id": "Kitab Kurban",
+    "tr": "Kurbanlar Kitabı"
+  },
+  "The Book of al-'Aqiqah": {
+    "ar": "كتاب العقيقة",
+    "bn": "আকিকা পর্ব",
+    "id": "Kitab Akikah",
+    "tr": "Akika Kitabı"
+  },
+  "The Book of al-Bay'ah": {
+    "ar": "كتاب البيعة",
+    "bn": "বাইআত পর্ব",
+    "id": "Kitab Bai'ah",
+    "tr": "Biat Kitabı"
+  },
+  "The Book of al-Fara' and al-'Atirah": {
+    "ar": "كتاب الفرع والعتيرة",
+    "bn": "ফারা ও আতিরা পর্ব",
+    "id": "Kitab Fara' dan Atirah",
+    "tr": "Fera ve Atire Kitabı"
+  },
+  "The Book of ar-Ruqba": {
+    "ar": "كتاب الرقبى",
+    "bn": "রুকবা পর্ব",
+    "id": "Kitab Ruqba",
+    "tr": "Rukba Kitabı"
+  },
+  "The Book of the Adhan (The Call to Prayer)": {
+    "ar": "كتاب الأذان",
+    "bn": "আজান পর্ব",
+    "id": "Kitab Azan",
+    "tr": "Ezan Kitabı"
+  },
+  "The Book of the Adhan and the Sunnah Regarding It": {
+    "ar": "كتاب الأذان والسنة فيه",
+    "bn": "আজান ও তার সুন্নাহ পর্ব",
+    "id": "Kitab Azan dan Sunnahnya",
+    "tr": "Ezan ve Sünneti Kitabı"
+  },
+  "The Book of the Commencement of the Prayer": {
+    "ar": "كتاب افتتاح الصلاة",
+    "bn": "নামাজ শুরু পর্ব",
+    "id": "Kitab Permulaan Salat",
+    "tr": "Namaza Başlangıç Kitabı"
+  },
+  "The Book of the Etiquette of Judges": {
+    "ar": "كتاب أدب القضاة",
+    "bn": "বিচারকের শিষ্টাচার পর্ব",
+    "id": "Kitab Adab Hakim",
+    "tr": "Hâkimlerin Edebi Kitabı"
+  },
+  "The Book of the Kind Treatment of Women": {
+    "ar": "كتاب حسن معاشرة النساء",
+    "bn": "নারীদের সঙ্গে সদাচরণ পর্ব",
+    "id": "Kitab Perlakuan Baik terhadap Wanita",
+    "tr": "Kadınlara İyi Muamele Kitabı"
+  },
+  "The Book of the Masjids": {
+    "ar": "كتاب المساجد",
+    "bn": "মসজিদ পর্ব",
+    "id": "Kitab Masjid",
+    "tr": "Mescidler Kitabı"
+  },
+  "The Book of the Merits of the Companions": {
+    "ar": "كتاب فضائل الصحابة",
+    "bn": "সাহাবীদের فضিলত পর্ব",
+    "id": "Kitab Keutamaan Sahabat",
+    "tr": "Sahabelerin Faziletleri Kitabı"
+  },
+  "The Book of the Prayer for the Two 'Eids": {
+    "ar": "كتاب صلاة العيدين",
+    "bn": "দুই ঈদের নামাজ পর্ব",
+    "id": "Kitab Salat Dua Id",
+    "tr": "İki Bayram Namazı Kitabı"
+  },
+  "The Book of the Qiblah": {
+    "ar": "كتاب القبلة",
+    "bn": "কিবলা পর্ব",
+    "id": "Kitab Kiblat",
+    "tr": "Kıble Kitabı"
+  },
+  "The Book of the Sunnah": {
+    "ar": "كتاب السنة",
+    "bn": "সুন্নাহ পর্ব",
+    "id": "Kitab Sunnah",
+    "tr": "Sünnet Kitabı"
+  },
+  "The Book of the Times (of Prayer)": {
+    "ar": "كتاب المواقيت",
+    "bn": "নামাজের সময় পর্ব",
+    "id": "Kitab Waktu Salat",
+    "tr": "Namaz Vakitleri Kitabı"
+  },
+  "The Book on Al-Witr": {
+    "ar": "كتاب الوتر",
+    "bn": "বিতর পর্ব",
+    "id": "Kitab Witir",
+    "tr": "Vitir Kitabı"
+  },
+  "The Book on Business": {
+    "ar": "كتاب البيوع",
+    "bn": "ব্যবসা পর্ব",
+    "id": "Kitab Bisnis",
+    "tr": "Ticaret Kitabı"
+  },
+  "The Book on Faith": {
+    "ar": "كتاب الإيمان",
+    "bn": "ঈমান পর্ব",
+    "id": "Kitab Iman",
+    "tr": "İman Kitabı"
+  },
+  "The Book on Government": {
+    "ar": "كتاب الإمارة",
+    "bn": "শাসন পর্ব",
+    "id": "Kitab Pemerintahan",
+    "tr": "Yönetim Kitabı"
+  },
+  "The Book on Jana''iz (Funerals)": {
+    "ar": "كتاب الجنائز",
+    "bn": "জানাজা পর্ব",
+    "id": "Kitab Jenazah",
+    "tr": "Cenazeler Kitabı"
+  },
+  "The Book on Military Expeditions": {
+    "ar": "كتاب الجهاد والسير",
+    "bn": "সামরিক অভিযান পর্ব",
+    "id": "Kitab Ekspedisi Militer",
+    "tr": "Askeri Seferler Kitabı"
+  },
+  "The Book on Traveling": {
+    "ar": "كتاب السفر",
+    "bn": "সফর পর্ব",
+    "id": "Kitab Safar",
+    "tr": "Yolculuk Kitabı"
+  },
+  "The Book on Virtues of Jihad": {
+    "ar": "كتاب فضائل الجهاد",
+    "bn": "জিহাদের فضিলত পর্ব",
+    "id": "Kitab Keutamaan Jihad",
+    "tr": "Cihadın Faziletleri Kitabı"
+  },
+  "The Book on the Day of Friday": {
+    "ar": "كتاب يوم الجمعة",
+    "bn": "জুমার দিন পর্ব",
+    "id": "Kitab Hari Jumat",
+    "tr": "Cuma Günü Kitabı"
+  },
+  "The Book on the Description of Hellfire": {
+    "ar": "كتاب صفة جهنم",
+    "bn": "জাহান্নামের বর্ণনা পর্ব",
+    "id": "Kitab Sifat Neraka",
+    "tr": "Cehennem Tasviri Kitabı"
+  },
+  "The Book on the Two Eids": {
+    "ar": "كتاب العيدين",
+    "bn": "দুই ঈদ পর্ব",
+    "id": "Kitab Dua Id",
+    "tr": "İki Bayram Kitabı"
+  },
+  "The Chapters On Judgements From The Messenger of Allah": {
+    "ar": "أبواب الأحكام عن رسول الله",
+    "bn": "রাসূলুল্লাহর বিচার-ফয়সালা অধ্যায়",
+    "id": "Bab Hukum dari Rasulullah",
+    "tr": "Rasûlullah'tan Hükümler Bölümleri"
+  },
+  "The Chapters Regarding Zakat": {
+    "ar": "أبواب الزكاة",
+    "bn": "যাকাত অধ্যায়",
+    "id": "Bab Zakat",
+    "tr": "Zekât Bölümleri"
+  },
+  "The Chapters on Charity": {
+    "ar": "أبواب الصدقة",
+    "bn": "সদকা অধ্যায়",
+    "id": "Bab Sedekah",
+    "tr": "Sadaka Bölümleri"
+  },
+  "The Chapters on Expiation": {
+    "ar": "أبواب الكفارات",
+    "bn": "কাফফারা অধ্যায়",
+    "id": "Bab Kafarat",
+    "tr": "Kefaretler Bölümleri"
+  },
+  "The Chapters on Gifts": {
+    "ar": "أبواب الهبات",
+    "bn": "হেবা অধ্যায়",
+    "id": "Bab Hibah",
+    "tr": "Hibeler Bölümleri"
+  },
+  "The Chapters on Manumission (of Slaves)": {
+    "ar": "أبواب العتق",
+    "bn": "দাসমুক্তি অধ্যায়",
+    "id": "Bab Pembebasan Budak",
+    "tr": "Köle Azadı Bölümleri"
+  },
+  "The Chapters on Pawning": {
+    "ar": "أبواب الرهن",
+    "bn": "বন্ধক অধ্যায়",
+    "id": "Bab Rahn",
+    "tr": "Rehin Bölümleri"
+  },
+  "The Chapters on Pre-emption": {
+    "ar": "أبواب الشفعة",
+    "bn": "শুফআ অধ্যায়",
+    "id": "Bab Syuf'ah",
+    "tr": "Şuf'a Bölümleri"
+  },
+  "The Chapters on Rulings": {
+    "ar": "أبواب الأحكام",
+    "bn": "আহকাম অধ্যায়",
+    "id": "Bab Hukum",
+    "tr": "Hükümler Bölümleri"
+  },
+  "The Chapters on Wills": {
+    "ar": "أبواب الوصايا",
+    "bn": "ওসিয়ত অধ্যায়",
+    "id": "Bab Wasiat",
+    "tr": "Vasiyetler Bölümleri"
+  },
+  "The Decree": {
+    "ar": "القدر",
+    "bn": "তাকদির",
+    "id": "Takdir",
+    "tr": "Kader"
+  },
+  "The Description of the Prophet, may Allah Bless Him and Grant Him Peace": {
+    "ar": "صفة النبي صلى الله عليه وسلم",
+    "bn": "নবীজির বর্ণনা",
+    "id": "Deskripsi Nabi",
+    "tr": "Peygamber'in Tasviri"
+  },
+  "The Eclipse Prayer": {
+    "ar": "صلاة الكسوف",
+    "bn": "গ্রহণের নামاز",
+    "id": "Salat Gerhana",
+    "tr": "Güneş Tutulması Namazı"
+  },
+  "The Evil Eye": {
+    "ar": "العين",
+    "bn": "কুদৃষ্টি",
+    "id": "Ain",
+    "tr": "Nazar"
+  },
+  "The Fear Prayer": {
+    "ar": "صلاة الخوف",
+    "bn": "ভয়ের নামাজ",
+    "id": "Salat Khauf",
+    "tr": "Korku Namazı"
+  },
+  "The Mudabbar": {
+    "ar": "المدبر",
+    "bn": "মুদাব্বার",
+    "id": "Mudabbar",
+    "tr": "Müdebber"
+  },
+  "The Mukatab": {
+    "ar": "المكاتب",
+    "bn": "মুকাতাব",
+    "id": "Mukatab",
+    "tr": "Mükateb"
+  },
+  "The Names of the Prophet, may Allah Bless Him and Grant Him Peace": {
+    "ar": "أسماء النبي صلى الله عليه وسلم",
+    "bn": "নবীজির নামসমূহ",
+    "id": "Nama-nama Nabi",
+    "tr": "Peygamber'in İsimleri"
+  },
+  "The Oath of Allegiance": {
+    "ar": "البيعة",
+    "bn": "বাইআত",
+    "id": "Bai'ah",
+    "tr": "Biat"
+  },
+  "The Oath of Qasama": {
+    "ar": "القسامة",
+    "bn": "কাসামা",
+    "id": "Qasamah",
+    "tr": "Kasame"
+  },
+  "The Office of the Judge (Kitab Al-Aqdiyah)": {
+    "ar": "كتاب الأقضية",
+    "bn": "বিচারকের দপ্তর পর্ব",
+    "id": "Kitab Peradilan",
+    "tr": "Kadılık Kitabı"
+  },
+  "The Promised Deliverer (Kitab Al-Mahdi)": {
+    "ar": "كتاب المهدي",
+    "bn": "মাহদি পর্ব",
+    "id": "Kitab Mahdi",
+    "tr": "Mehdi Kitabı"
+  },
+  "The Qibla": {
+    "ar": "القبلة",
+    "bn": "কিবলা",
+    "id": "Kiblat",
+    "tr": "Kıble"
+  },
+  "The Qur'an": {
+    "ar": "القرآن",
+    "bn": "কুরআন",
+    "id": "Al-Qur'an",
+    "tr": "Kur'an"
+  },
+  "The Rites of Hajj (Kitab Al-Manasik Wa'l-Hajj)": {
+    "ar": "كتاب المناسك والحج",
+    "bn": "হজের আহকাম পর্ব",
+    "id": "Kitab Manasik dan Haji",
+    "tr": "Hac Menasiki Kitabı"
+  },
+  "The Supplication of the Unjustly Wronged": {
+    "ar": "دعاء المظلوم",
+    "bn": "মজলুমের দোয়া",
+    "id": "Doa Orang Terzalimi",
+    "tr": "Mazlumun Duası"
+  },
+  "The Times of Prayer": {
+    "ar": "مواقيت الصلاة",
+    "bn": "নামাজের সময়",
+    "id": "Waktu-waktu Salat",
+    "tr": "Namaz Vakitleri"
+  },
+  "The Two 'Ids": {
+    "ar": "العيدان",
+    "bn": "দুই ঈদ",
+    "id": "Dua Id",
+    "tr": "İki Bayram"
+  },
+  "The Two Festivals (Eids)": {
+    "ar": "العيدان",
+    "bn": "দুই উৎসব",
+    "id": "Dua Hari Raya",
+    "tr": "İki Bayram"
+  },
+  "Times of the Prayers": {
+    "ar": "مواقيت الصلاة",
+    "bn": "নামাজের সময়",
+    "id": "Waktu Salat",
+    "tr": "Namaz Vakitleri"
+  },
+  "To make the Heart Tender (Ar-Riqaq)": {
+    "ar": "الرقائق",
+    "bn": "হৃদয় softening",
+    "id": "Riqaq",
+    "tr": "Rikak"
+  },
+  "Transferance of a Debt from One Person to Another (Al-Hawaala)": {
+    "ar": "الحوالة",
+    "bn": "ঋণ হস্তান্তর",
+    "id": "Hawalah",
+    "tr": "Havale"
+  },
+  "Trials and Fierce Battles (Kitab Al-Fitan Wa Al-Malahim)": {
+    "ar": "كتاب الفتن والملاحم",
+    "bn": "ফিতনা ও মহাযুদ্ধ পর্ব",
+    "id": "Kitab Fitnah dan Malahim",
+    "tr": "Fitneler ve Melahim Kitabı"
+  },
+  "Tribulations": {
+    "ar": "الفتن",
+    "bn": "ফিতনা",
+    "id": "Fitnah",
+    "tr": "Fitneler"
+  },
+  "Tribute, Spoils, and Rulership (Kitab Al-Kharaj, Wal-Fai' Wal-Imarah)": {
+    "ar": "كتاب الخراج والفيء والإمارة",
+    "bn": "খারাজ, ফাই ও আমিরাত পর্ব",
+    "id": "Kitab Kharaj, Fa'i, dan Imarah",
+    "tr": "Harac, Fey ve İmaret Kitabı"
+  },
+  "Tricks": {
+    "ar": "الحيل",
+    "bn": "কৌশল",
+    "id": "Tipu Daya",
+    "tr": "Hileler"
+  },
+  "Types of Blood-Wit (Kitab Al-Diyat)": {
+    "ar": "كتاب الديات",
+    "bn": "দিয়াতের প্রকার পর্ব",
+    "id": "Kitab Diyat",
+    "tr": "Diyet Türleri Kitabı"
+  },
+  "Virtues and Merits of the Prophet (pbuh) and his Companions": {
+    "ar": "فضائل النبي صلى الله عليه وسلم وأصحابه",
+    "bn": "নবীজি ও সাহাবীদের فضিলত",
+    "id": "Keutamaan Nabi dan Sahabat",
+    "tr": "Peygamber ve Sahabelerinin Faziletleri"
+  },
+  "Virtues of Madinah": {
+    "ar": "فضائل المدينة",
+    "bn": "মদিনার فضিলত",
+    "id": "Keutamaan Madinah",
+    "tr": "Medine'nin Faziletleri"
+  },
+  "Virtues of Prayer at Masjid Makkah and Madinah": {
+    "ar": "فضائل الصلاة في مسجدي مكة والمدينة",
+    "bn": "মক্কা ও মদিনার মসজিদে নামাজের فضিলত",
+    "id": "Keutamaan Salat di Masjid Makkah dan Madinah",
+    "tr": "Mekke ve Medine Mescidlerinde Namazın Fazileti"
+  },
+  "Virtues of the Night of Qadr": {
+    "ar": "فضائل ليلة القدر",
+    "bn": "কদরের রাতের فضিলত",
+    "id": "Keutamaan Malam Qadar",
+    "tr": "Kadir Gecesi'nin Faziletleri"
+  },
+  "Virtues of the Qur'an": {
+    "ar": "فضائل القرآن",
+    "bn": "কুরআনের فضিলত",
+    "id": "Keutamaan Al-Qur'an",
+    "tr": "Kur'an'ın Faziletleri"
+  },
+  "Visions": {
+    "ar": "الرؤيا",
+    "bn": "স্বপ্ন",
+    "id": "Ru'ya",
+    "tr": "Rüyalar"
+  },
+  "Vows and Oaths": {
+    "ar": "النذور والأيمان",
+    "bn": "মানত ও কসম",
+    "id": "Nadzar dan Sumpah",
+    "tr": "Adaklar ve Yeminler"
+  },
+  "Wages (Kitab Al-Ijarah)": {
+    "ar": "كتاب الإجارة",
+    "bn": "মজুরি পর্ব",
+    "id": "Kitab Ijarah",
+    "tr": "İcare Kitabı"
+  },
+  "Wills and Testaments": {
+    "ar": "الوصايا",
+    "bn": "ওসিয়ত",
+    "id": "Wasiat",
+    "tr": "Vasiyetler"
+  },
+  "Wishes": {
+    "ar": "التمني",
+    "bn": "আকাঙ্ক্ষা",
+    "id": "Keinginan",
+    "tr": "Dilekler"
+  },
+  "Witr Prayer": {
+    "ar": "صلاة الوتر",
+    "bn": "বিতর নামাজ",
+    "id": "Salat Witir",
+    "tr": "Vitir Namazı"
+  },
+  "Zakat": {
+    "ar": "الزكاة",
+    "bn": "যাকাত",
+    "id": "Zakat",
+    "tr": "Zekât"
+  },
+  "`Umrah (Minor pilgrimage)": {
+    "ar": "العمرة",
+    "bn": "উমরা",
+    "id": "Umrah",
+    "tr": "Umre"
+  }
+}

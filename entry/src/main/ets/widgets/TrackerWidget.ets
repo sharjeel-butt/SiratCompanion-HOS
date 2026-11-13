@@ -25,15 +25,28 @@ struct TrackerWidget {
   @LocalStorageProp('taskDua') taskDua: string = 'Duas';
   @LocalStorageProp('taskRecitations') taskRecitations: string = 'Recitations';
   @LocalStorageProp('taskTasbih') taskTasbih: string = 'Tasbih';
+  @LocalStorageProp('taskHadith') taskHadith: string = 'Hadith';
 
   build() {
     Stack() {
+      // 👇 NEW: Background Layer
       Column()
         .width('100%')
         .height('100%')
         .linearGradient({ angle: 145, colors: [['#1A2235', 0], ['#0F1522', 1]] })
         .borderRadius(24)
         .border({ width: 1, color: 'rgba(255, 255, 255, 0.15)' })
+
+      // 👇 NEW: Watermark Layer
+      Stack() {
+        Image($r('app.media.ic_trophy'))
+          .width(120)
+          .height(120)
+          .fillColor('#FFFFFF')
+          .opacity(0.03)
+          .position({ x: '60%', y: '-10%' })
+      }
+      .width('100%').height('100%').clip(true).borderRadius(24)
 
       Column() {
         if (this.error.length > 0) {
@@ -325,13 +338,43 @@ struct TrackerWidget {
           }.width('100%').height(72).direction(Direction.Ltr)
 
           // Bottom Actions
+          // Bottom Actions
           if (this.dimension === '4*4') {
             Column({ space: 8 }) {
+
+              // 👇 ROW 1: QURAN (Full Width)
+              Row() {
+                Row({ space: 8 }) {
+                  Image($r('app.media.ic_quran')).width('18vp').height('18vp').fillColor('#E8A44C')
+                  Text(this.taskQuran)
+                    .fontSize('12vp')
+                    .fontColor('#FFFFFF')
+                    .fontWeight(FontWeight.Medium)
+                    .maxLines(1)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+                }
+                .width('100%') // Full width
+                .height('40vp')
+                .backgroundColor('rgba(232, 164, 76, 0.15)') // Highlight the primary action
+                .borderRadius(10)
+                .justifyContent(FlexAlign.Center)
+                .onClick(() => {
+                  postCardAction(this, {
+                    action: 'router',
+                    bundleName: 'com.siratcompanion.hos.app',
+                    abilityName: 'EntryAbility',
+                    params: { targetPage: 'pages/QuranPage' }
+                  });
+                })
+              }.width('100%').direction(Direction.Ltr)
+
+              // 👇 ROW 2: HADITH & RECITATIONS
               Row({ space: 8 }) {
                 if (this.isRtl) {
+                  // RTL: Recitations on Left, Hadith on Right
                   Row({ space: 8 }) {
-                    Image($r('app.media.ic_nav_tasbih')).width('18vp').height('18vp').fillColor('#E8A44C')
-                    Text(this.taskTasbih)
+                    Image($r('app.media.ic_book')).width('18vp').height('18vp').fillColor('#E8A44C')
+                    Text(this.taskRecitations)
                       .fontSize('12vp')
                       .fontColor('#FFFFFF')
                       .fontWeight(FontWeight.Medium)
@@ -348,13 +391,13 @@ struct TrackerWidget {
                       action: 'router',
                       bundleName: 'com.siratcompanion.hos.app',
                       abilityName: 'EntryAbility',
-                      params: { targetPage: 'pages/MainTabs', targetTab: 'tasbih' }
+                      params: { targetPage: 'pages/RecitationsPage' }
                     });
                   })
 
                   Row({ space: 8 }) {
-                    Image($r('app.media.ic_book')).width('18vp').height('18vp').fillColor('#E8A44C')
-                    Text(this.taskQuran)
+                    Image($r('app.media.ic_hadith_book')).width('18vp').height('18vp').fillColor('#E8A44C')
+                    Text(this.taskHadith)
                       .fontSize('12vp')
                       .fontColor('#FFFFFF')
                       .fontWeight(FontWeight.Medium)
@@ -371,13 +414,14 @@ struct TrackerWidget {
                       action: 'router',
                       bundleName: 'com.siratcompanion.hos.app',
                       abilityName: 'EntryAbility',
-                      params: { targetPage: 'pages/QuranPage' }
+                      params: { targetPage: 'pages/HadithHomePage' }
                     });
                   })
                 } else {
+                  // LTR: Hadith on Left, Recitations on Right
                   Row({ space: 8 }) {
-                    Image($r('app.media.ic_book')).width('18vp').height('18vp').fillColor('#E8A44C')
-                    Text(this.taskQuran)
+                    Image($r('app.media.ic_hadith_book')).width('18vp').height('18vp').fillColor('#E8A44C')
+                    Text(this.taskHadith)
                       .fontSize('12vp')
                       .fontColor('#FFFFFF')
                       .fontWeight(FontWeight.Medium)
@@ -394,13 +438,13 @@ struct TrackerWidget {
                       action: 'router',
                       bundleName: 'com.siratcompanion.hos.app',
                       abilityName: 'EntryAbility',
-                      params: { targetPage: 'pages/QuranPage' }
+                      params: { targetPage: 'pages/HadithHomePage' }
                     });
                   })
 
                   Row({ space: 8 }) {
-                    Image($r('app.media.ic_nav_tasbih')).width('18vp').height('18vp').fillColor('#E8A44C')
-                    Text(this.taskTasbih)
+                    Image($r('app.media.ic_book')).width('18vp').height('18vp').fillColor('#E8A44C')
+                    Text(this.taskRecitations)
                       .fontSize('12vp')
                       .fontColor('#FFFFFF')
                       .fontWeight(FontWeight.Medium)
@@ -417,14 +461,39 @@ struct TrackerWidget {
                       action: 'router',
                       bundleName: 'com.siratcompanion.hos.app',
                       abilityName: 'EntryAbility',
-                      params: { targetPage: 'pages/MainTabs', targetTab: 'tasbih' }
+                      params: { targetPage: 'pages/RecitationsPage' }
                     });
                   })
                 }
               }.width('100%').direction(Direction.Ltr)
 
+              // 👇 ROW 3: DUAS & TASBIH
               Row({ space: 8 }) {
                 if (this.isRtl) {
+                  // RTL: Tasbih on Left, Duas on Right
+                  Row({ space: 8 }) {
+                    Image($r('app.media.ic_nav_tasbih')).width('18vp').height('18vp').fillColor('#E8A44C')
+                    Text(this.taskTasbih)
+                      .fontSize('12vp')
+                      .fontColor('#FFFFFF')
+                      .fontWeight(FontWeight.Medium)
+                      .maxLines(1)
+                      .textOverflow({ overflow: TextOverflow.Ellipsis })
+                  }
+                  .width('48%')
+                  .height('40vp')
+                  .backgroundColor('rgba(255,255,255,0.08)')
+                  .borderRadius(10)
+                  .justifyContent(FlexAlign.Center)
+                  .onClick(() => {
+                    postCardAction(this, {
+                      action: 'router',
+                      bundleName: 'com.siratcompanion.hos.app',
+                      abilityName: 'EntryAbility',
+                      params: { targetPage: 'pages/MainTabs', targetTab: 'tasbih' }
+                    });
+                  })
+
                   Row({ space: 8 }) {
                     Image($r('app.media.ic_dua')).width('18vp').height('18vp').fillColor('#E8A44C')
                     Text(this.taskDua)
@@ -445,55 +514,10 @@ struct TrackerWidget {
                       bundleName: 'com.siratcompanion.hos.app',
                       abilityName: 'EntryAbility',
                       params: { targetPage: 'pages/DuasPage' }
-                    });
-                  })
-
-                  Row({ space: 8 }) {
-                    Image($r('app.media.ic_sound')).width('18vp').height('18vp').fillColor('#E8A44C')
-                    Text(this.taskRecitations)
-                      .fontSize('12vp')
-                      .fontColor('#FFFFFF')
-                      .fontWeight(FontWeight.Medium)
-                      .maxLines(1)
-                      .textOverflow({ overflow: TextOverflow.Ellipsis })
-                  }
-                  .width('48%')
-                  .height('40vp')
-                  .backgroundColor('rgba(255,255,255,0.08)')
-                  .borderRadius(10)
-                  .justifyContent(FlexAlign.Center)
-                  .onClick(() => {
-                    postCardAction(this, {
-                      action: 'router',
-                      bundleName: 'com.siratcompanion.hos.app',
-                      abilityName: 'EntryAbility',
-                      params: { targetPage: 'pages/RecitationsPage' }
                     });
                   })
                 } else {
-                  Row({ space: 8 }) {
-                    Image($r('app.media.ic_sound')).width('18vp').height('18vp').fillColor('#E8A44C')
-                    Text(this.taskRecitations)
-                      .fontSize('12vp')
-                      .fontColor('#FFFFFF')
-                      .fontWeight(FontWeight.Medium)
-                      .maxLines(1)
-                      .textOverflow({ overflow: TextOverflow.Ellipsis })
-                  }
-                  .width('48%')
-                  .height('40vp')
-                  .backgroundColor('rgba(255,255,255,0.08)')
-                  .borderRadius(10)
-                  .justifyContent(FlexAlign.Center)
-                  .onClick(() => {
-                    postCardAction(this, {
-                      action: 'router',
-                      bundleName: 'com.siratcompanion.hos.app',
-                      abilityName: 'EntryAbility',
-                      params: { targetPage: 'pages/RecitationsPage' }
-                    });
-                  })
-
+                  // LTR: Duas on Left, Tasbih on Right
                   Row({ space: 8 }) {
                     Image($r('app.media.ic_dua')).width('18vp').height('18vp').fillColor('#E8A44C')
                     Text(this.taskDua)
@@ -514,6 +538,29 @@ struct TrackerWidget {
                       bundleName: 'com.siratcompanion.hos.app',
                       abilityName: 'EntryAbility',
                       params: { targetPage: 'pages/DuasPage' }
+                    });
+                  })
+
+                  Row({ space: 8 }) {
+                    Image($r('app.media.ic_nav_tasbih')).width('18vp').height('18vp').fillColor('#E8A44C')
+                    Text(this.taskTasbih)
+                      .fontSize('12vp')
+                      .fontColor('#FFFFFF')
+                      .fontWeight(FontWeight.Medium)
+                      .maxLines(1)
+                      .textOverflow({ overflow: TextOverflow.Ellipsis })
+                  }
+                  .width('48%')
+                  .height('40vp')
+                  .backgroundColor('rgba(255,255,255,0.08)')
+                  .borderRadius(10)
+                  .justifyContent(FlexAlign.Center)
+                  .onClick(() => {
+                    postCardAction(this, {
+                      action: 'router',
+                      bundleName: 'com.siratcompanion.hos.app',
+                      abilityName: 'EntryAbility',
+                      params: { targetPage: 'pages/MainTabs', targetTab: 'tasbih' }
                     });
                   })
                 }

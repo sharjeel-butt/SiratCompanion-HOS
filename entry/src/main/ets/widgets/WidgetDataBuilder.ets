@@ -280,6 +280,7 @@ export class WidgetDataBuilder {
       out.asrTime24 = fmt24(asr);
       out.maghribTime24 = fmt24(maghrib);
       out.ishaTime24 = fmt24(isha);
+      out.taskHadith = L.get('hadith_title', lang);
 
       out.error = '';
       return out;
@@ -735,7 +736,7 @@ export class WidgetDataBuilder {
     out.asrTime24 = '--:--';
     out.maghribTime24 = '--:--';
     out.ishaTime24 = '--:--';
-
+    out.taskHadith = 'Hadith';
     out.error = msg;
     return out;
   }

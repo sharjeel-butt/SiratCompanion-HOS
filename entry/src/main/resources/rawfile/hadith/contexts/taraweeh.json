@@ -1,0 +1,92 @@
+[
+  {
+    "id": "bukhari:2008",
+    "collection": "bukhari",
+    "section": "Praying at Night in Ramadaan (Taraweeh)",
+    "hadith_number": 2008,
+    "topics": [
+      "ramadan"
+    ],
+    "life_contexts": [
+      "ramadan",
+      "taraweeh"
+    ],
+    "recommendation_tier": "featured",
+    "importance_score": 25
+  },
+  {
+    "id": "bukhari:2009",
+    "collection": "bukhari",
+    "section": "Praying at Night in Ramadaan (Taraweeh)",
+    "hadith_number": 2009,
+    "topics": [
+      "ramadan"
+    ],
+    "life_contexts": [
+      "ramadan",
+      "taraweeh"
+    ],
+    "recommendation_tier": "featured",
+    "importance_score": 25
+  },
+  {
+    "id": "bukhari:2010",
+    "collection": "bukhari",
+    "section": "Praying at Night in Ramadaan (Taraweeh)",
+    "hadith_number": 2010,
+    "topics": [
+      "ramadan"
+    ],
+    "life_contexts": [
+      "ramadan",
+      "taraweeh"
+    ],
+    "recommendation_tier": "featured",
+    "importance_score": 25
+  },
+  {
+    "id": "bukhari:2011",
+    "collection": "bukhari",
+    "section": "Praying at Night in Ramadaan (Taraweeh)",
+    "hadith_number": 2011,
+    "topics": [
+      "ramadan"
+    ],
+    "life_contexts": [
+      "ramadan",
+      "taraweeh"
+    ],
+    "recommendation_tier": "featured",
+    "importance_score": 25
+  },
+  {
+    "id": "bukhari:2012",
+    "collection": "bukhari",
+    "section": "Praying at Night in Ramadaan (Taraweeh)",
+    "hadith_number": 2012,
+    "topics": [
+      "ramadan"
+    ],
+    "life_contexts": [
+      "ramadan",
+      "taraweeh"
+    ],
+    "recommendation_tier": "featured",
+    "importance_score": 25
+  },
+  {
+    "id": "bukhari:2013",
+    "collection": "bukhari",
+    "section": "Praying at Night in Ramadaan (Taraweeh)",
+    "hadith_number": 2013,
+    "topics": [
+      "ramadan"
+    ],
+    "life_contexts": [
+      "ramadan",
+      "taraweeh"
+    ],
+    "recommendation_tier": "featured",
+    "importance_score": 25
+  }
+]

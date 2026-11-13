@@ -10,6 +10,8 @@ import { MosqueDbHelper } from '../mosques/MosqueDbHelper';
 import { LocationCache } from '../location/LocationCache';
 import { OfflineCityLookup } from '../location/OfflineCityLookup';
 import { MosqueStorage } from '../mosques/MosqueStorage';
+import { LocationHelper } from '../location/LocationUtils';
+import { AppLogger } from '../core/AppLogger';
 
 @Entry
 @Component
@@ -34,6 +36,10 @@ struct MosqueFinderPage {
   @State formAddress: string = '';
   @State formLat: string = '';
   @State formLng: string = '';
+  @State locationStatus: string = '';
+  @State renderTick: number = 0;
+
+  @State isFetchingLocation: boolean = false;
 
   async aboutToAppear() {
     this.colors = PageTheme.compute(this.themeMode);
@@ -295,6 +301,14 @@ struct MosqueFinderPage {
       .alignItems(VerticalAlign.Center)
       .margin({ right: 24, bottom: 24 })
       .onClick(() => this.openAddForm())
+      .bindSheet($$this.showFormSheet, this.AddEditMosqueSheet(), {
+        height: SheetSize.FIT_CONTENT,
+        dragBar: true,
+        backgroundColor: this.colors.cardDark,
+        onDisappear: () => {
+          this.showFormSheet = false;
+        }
+      })
     }
     .width('100%')
     .height('100%')
@@ -312,15 +326,46 @@ struct MosqueFinderPage {
     .backgroundColor(this.colors.primaryGreen)
     .direction(L.isRtlLang(this.appLanguage) ? Direction.Rtl : Direction.Ltr)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
-    .bindSheet($$this.showFormSheet, this.AddEditMosqueSheet(), {
-      height: SheetSize.FIT_CONTENT,
-      dragBar: true,
-      backgroundColor: this.colors.cardDark,
-      onDisappear: () => {
-        this.showFormSheet = false;
-      }
-    })
 
+  }
+
+  private async handleLocationFetch() {
+    if (this.isFetchingLocation) {
+      return;
+    }
+    this.isFetchingLocation = true;
+    this.locationStatus = 'Starting GPS...';
+    this.renderTick++; // 👈 Force UI update
+
+    try {
+      const ctx = this.getUIContext().getHostContext() as common.UIAbilityContext;
+      const data = await LocationHelper.fetchLocationData(ctx, 'interactive');
+
+      this.formLat = data.latitude.toFixed(6);
+      this.formLng = data.longitude.toFixed(6);
+      this.locationStatus = `Success: ${data.latitude.toFixed(4)}, ${data.longitude.toFixed(4)}`;
+
+      this.getUIContext().getPromptAction().showToast({ message: "Location fetched!" });
+    } catch (err) {
+      const error = err as Error;
+      this.locationStatus = `ERROR: ${error.message}`;
+
+      if (error.message === 'GPS_OFF') {
+        await LocationHelper.showLocationDisabledDialog(this.colors.accentGold);
+      } else if (error.message === 'PERMISSION_DENIED') {
+        await LocationHelper.showPermissionDeniedDialog(this.colors.accentGold);
+      }
+
+      const cache = await LocationCache.load();
+      if (cache) {
+        this.formLat = cache.latitude.toFixed(6);
+        this.formLng = cache.longitude.toFixed(6);
+        this.locationStatus += ' (Used Cache)';
+      }
+    } finally {
+      this.isFetchingLocation = false;
+      this.renderTick++; // 👈 Force UI update
+    }
   }
 
   @Builder
@@ -371,45 +416,71 @@ struct MosqueFinderPage {
 
       Scroll() {
         Column({ space: 16 }) {
+          // --- Name Input ---
           TextInput({ text: this.formName, placeholder: 'Mosque Name *' })
             .onChange(v => this.formName = v)
             .backgroundColor(this.colors.tintSoft).fontColor(this.colors.textWhite)
 
+          // --- Address Input ---
           TextInput({ text: this.formAddress, placeholder: 'Address (Optional)' })
             .onChange(v => this.formAddress = v)
             .backgroundColor(this.colors.tintSoft).fontColor(this.colors.textWhite)
 
+          // --- Lat / Lng Inputs ---
           Row({ space: 12 }) {
-            TextInput({ text: this.formLat, placeholder: 'Latitude' })
-              .onChange(v => this.formLat = v)
+            // 👇 FIX: Use $$ binding so they update when handleLocationFetch changes the state
+            TextInput({ text: $$this.formLat, placeholder: 'Latitude' })
               .type(InputType.Normal)
               .backgroundColor(this.colors.tintSoft)
               .fontColor(this.colors.textWhite)
               .layoutWeight(1)
 
-            TextInput({ text: this.formLng, placeholder: 'Longitude' })
-              .onChange(v => this.formLng = v)
+            TextInput({ text: $$this.formLng, placeholder: 'Longitude' })
               .type(InputType.Normal)
               .backgroundColor(this.colors.tintSoft)
               .fontColor(this.colors.textWhite)
               .layoutWeight(1)
           }
 
-          Button('Use Current Location')
-            .width('100%')
-            .height(40)
-            .backgroundColor(this.colors.tintSubtle)
-            .fontColor(this.colors.accentGold)
-            .onClick(async () => {
-              const cache = await LocationCache.load();
-              if (cache) {
-                this.formLat = cache.latitude.toFixed(6);
-                this.formLng = cache.longitude.toFixed(6);
+          // --- Use Current Location Button ---
+          Row() {
+            if (this.isFetchingLocation) {
+              Row({ space: 8 }) {
+                LoadingProgress().width(16).height(16).color(this.colors.accentGold)
+                Text('Fetching...').fontSize(14).fontColor(this.colors.accentGold)
               }
-            })
+            } else {
+              Text('Use Current Location').fontSize(14).fontColor(this.colors.accentGold)
+            }
+          }
+          .width('100%')
+          .height(44)
+          .justifyContent(FlexAlign.Center)
+          .alignItems(VerticalAlign.Center)
+          .backgroundColor(this.colors.tintSubtle)
+          .borderRadius(8)
+          .border({ width: 1, color: this.colors.borderSoft })
+          .onClick(() => {
+            this.handleLocationFetch();
+          })
+
+          // 👇 Debug Status Text
+          if (this.locationStatus.length > 0) {
+            Text(this.locationStatus)
+              .fontSize(12)
+              .fontWeight(FontWeight.Bold)
+              .fontColor('#FFFFFF')
+              .backgroundColor(this.locationStatus.startsWith('ERROR') ? '#FF0000' : '#00AA00')
+              .width('100%')
+              .textAlign(TextAlign.Center)
+              .padding(8)
+              .borderRadius(8)
+          }
         }
       }
+      .key(this.renderTick.toString()) // 👈 FORCE the Sheet to redraw when tick changes
 
+      // --- Action Buttons (Cancel / Save) ---
       Row({ space: 12 }) {
         Button('Cancel')
           .layoutWeight(1)
@@ -497,20 +568,103 @@ struct MosqueFinderPage {
         // 4. Action Buttons
         Column({ space: 12 }) {
           // Directions Button (Always available)
-          Button() {
-            Row({ space: 8 }) {
-              Image($r('app.media.ic_compass')) // or a dedicated directions icon
-                .width(18).height(18).fillColor(this.colors.textOnAccent)
-              Text('Get Directions')
-                .fontSize(15).fontWeight(FontWeight.Medium).fontColor(this.colors.textOnAccent)
+          // 👇 FIX: Use a Row with a TapGesture. This bypasses the Button-in-Scroll bug.
+          Row() {
+            if (this.isFetchingLocation) {
+              Row({ space: 8 }) {
+                LoadingProgress().width(16).height(16).color(this.colors.accentGold)
+                Text('Fetching...').fontSize(14).fontColor(this.colors.accentGold)
+              }
+            } else {
+              Text('Use Current Location').fontSize(14).fontColor(this.colors.accentGold)
             }
           }
           .width('100%')
-          .height(48)
-          .backgroundColor(this.colors.accentGold)
-          .borderRadius(12)
-          .onClick(() => this.openMaps(this.selectedMosque!))
+          .height(44)
+          .justifyContent(FlexAlign.Center)
+          .alignItems(VerticalAlign.Center)
+          .backgroundColor(this.colors.tintSubtle)
+          .borderRadius(8)
+          .border({ width: 1, color: this.colors.borderSoft })
+          // 👇 USE TapGesture INSTEAD OF onClick
+          .gesture(
+            TapGesture().onAction(async () => {
+              console.info('MOSQUE_DEBUG: TAP GESTURE FIRED!');
 
+              if (this.isFetchingLocation) {
+                return;
+              }
+              this.isFetchingLocation = true;
+              this.locationStatus = 'BUTTON CLICKED. STARTING GPS...';
+
+              // Try to show a toast immediately to prove UI updates work
+              this.getUIContext().getPromptAction().showToast({ message: "Fetching location...", duration: 2000 });
+
+              try {
+                let ctx: common.UIAbilityContext;
+                try {
+                  ctx = getContext(this) as common.UIAbilityContext;
+                  if (!ctx) {
+                    throw new Error("getContext returned null");
+                  }
+                } catch (e) {
+                  ctx = this.getUIContext().getHostContext() as common.UIAbilityContext;
+                }
+
+                console.info('MOSQUE_DEBUG: Fetching location...');
+                const data = await LocationHelper.fetchLocationData(ctx, 'interactive');
+
+                console.info('MOSQUE_DEBUG: GPS SUCCESS! ' + JSON.stringify(data));
+
+                this.formLat = data.latitude.toFixed(6);
+                this.formLng = data.longitude.toFixed(6);
+                this.locationStatus = `Success: ${data.latitude.toFixed(4)}, ${data.longitude.toFixed(4)}`;
+
+                this.getUIContext().getPromptAction().showToast({ message: "Location fetched!" });
+
+              } catch (err) {
+                const error = err as Error;
+                console.error('MOSQUE_DEBUG: ERROR! ' + error.message);
+
+                this.locationStatus = `ERROR: ${error.message}`;
+
+                if (error.message === 'GPS_OFF') {
+                  await LocationHelper.showLocationDisabledDialog(this.colors.accentGold);
+                } else if (error.message === 'PERMISSION_DENIED') {
+                  await LocationHelper.showPermissionDeniedDialog(this.colors.accentGold);
+                }
+
+                try {
+                  const cache = await LocationCache.load();
+                  if (cache) {
+                    this.formLat = cache.latitude.toFixed(6);
+                    this.formLng = cache.longitude.toFixed(6);
+                    this.locationStatus += ' (Used Cache)';
+                  }
+                } catch (cacheErr) {
+                  console.error('MOSQUE_DEBUG: Cache load failed');
+                }
+              } finally {
+                console.info('MOSQUE_DEBUG: FINISHED.');
+                this.isFetchingLocation = false;
+              }
+            })
+          )
+
+          // 👇 Debug Text
+          if (this.locationStatus.length > 0) {
+            Text(this.locationStatus)
+              .fontSize(14)
+              .fontWeight(FontWeight.Bold)
+              .fontColor('#FFFFFF')
+              .backgroundColor(
+                this.locationStatus.startsWith('ERROR') ? '#FF0000' : '#00AA00') // Red for error, Green for success
+              .width('100%')
+              .textAlign(TextAlign.Center)
+              .padding(10)
+              .borderRadius(8)
+              .margin({ top: 10 })
+          }
           // Phone Button (Conditional)
           if (this.selectedMosque.phone && this.selectedMosque.phone.length > 0) {
             Button() {
@@ -555,6 +709,9 @@ struct MosqueFinderPage {
       }
       .width('100%').backgroundColor(this.colors.cardDark)
       .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+    } else {
+      // Fallback just in case
+      Column().width('100%').height(100).backgroundColor(this.colors.cardDark)
     }
   }
 

@@ -281,6 +281,7 @@ export struct Prayer {
   private settingsLoaded: boolean = false;
   private settingsLoading: boolean = false;
   private settingsPending: boolean = false;
+  private locationUpdateTimerId: number = -1;
 
   aboutToAppear(): void {
     this.colors = PageTheme.compute(this.themeMode);
@@ -301,6 +302,13 @@ export struct Prayer {
     this.startStatusTimer();
 
     this.refreshLocationSilently();
+
+    this.locationUpdateTimerId = setInterval(() => {
+      if (this.locationMode === LocationMode.GPS) {
+        AppLogger.info('Prayer', 'Auto-refreshing location via 30-min timer...');
+        this.refreshLocationSilently();
+      }
+    }, 15 * 60 * 1000);
   }
 
   private onPrayerStateChanged(): void {
@@ -337,6 +345,10 @@ export struct Prayer {
     if (this.statusTimerId !== -1) {
       clearInterval(this.statusTimerId);
       this.statusTimerId = -1;
+    }
+    if (this.locationUpdateTimerId !== -1) {
+      clearInterval(this.locationUpdateTimerId);
+      this.locationUpdateTimerId = -1;
     }
   }
 

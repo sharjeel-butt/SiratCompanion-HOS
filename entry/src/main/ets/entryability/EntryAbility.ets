@@ -105,7 +105,9 @@ export default class EntryAbility extends UIAbility {
     'pages/CustomizePage',
     'pages/AdvancedCalcPage',
     'pages/RecitationsPage',
-    'pages/LicensesPage'
+    'pages/LicensesPage',
+    'pages/HadithHomePage',
+    'pages/HadithBrowsePage'
   ];
 
   // ============================================================

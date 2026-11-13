@@ -3106,6 +3106,106 @@
     {
       "name": "privacy_step_title",
       "value": "隐私政策"
+    },
+    {
+      "name": "hadith_title",
+      "value": "圣训集"
+    },
+    {
+      "name": "hadith_featured",
+      "value": "精选圣训"
+    },
+    {
+      "name": "hadith_search_results",
+      "value": "搜索结果"
+    },
+    {
+      "name": "hadith_search_hint",
+      "value": "搜索主题、场景或文本..."
+    },
+    {
+      "name": "hadith_searching",
+      "value": "搜索中..."
+    },
+    {
+      "name": "hadith_no_results",
+      "value": "未找到结果。"
+    },
+    {
+      "name": "hadith_translation",
+      "value": "译文"
+    },
+    {
+      "name": "hadith_sanad",
+      "value": "传述链（Sanad）"
+    },
+    {
+      "name": "hadith_title_desc",
+      "value": "探索数千条真实可靠的圣训"
+    },
+    {
+      "name": "hadith_label",
+      "value": "圣训"
+    },
+    {
+      "name": "collection_bukhari",
+      "value": "布哈里圣训实录"
+    },
+    {
+      "name": "collection_muslim",
+      "value": "穆斯林圣训实录"
+    },
+    {
+      "name": "collection_abudawud",
+      "value": "艾布·达伍德圣训集"
+    },
+    {
+      "name": "collection_tirmidhi",
+      "value": "提尔密济圣训集"
+    },
+    {
+      "name": "collection_nasai",
+      "value": "奈萨仪圣训集"
+    },
+    {
+      "name": "collection_ibnmajah",
+      "value": "伊本·马哲圣训集"
+    },
+    {
+      "name": "collection_malik",
+      "value": "马立克圣训集"
+    },
+    {
+      "name": "hadith_books",
+      "value": "书籍"
+    },
+    {
+      "name": "hadith_contexts",
+      "value": "生活情境"
+    },
+    {
+      "name": "hadith_topics",
+      "value": "主题"
+    },
+    {
+      "name": "load_more",
+      "value": "加载更多"
+    },
+    {
+      "name": "license_section_hadith_data",
+      "value": "圣训数据集"
+    },
+    {
+      "name": "licenses_version_label",
+      "value": "数据集："
+    },
+    {
+      "name": "privacy_title",
+      "value": "隐私政策"
+    },
+    {
+      "name": "privacy_view_online",
+      "value": "查看完整在线政策"
     }
   ]
 }

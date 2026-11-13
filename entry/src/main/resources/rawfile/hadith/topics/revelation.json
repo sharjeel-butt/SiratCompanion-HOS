@@ -1,0 +1,86 @@
+[
+  {
+    "id": "bukhari:1",
+    "collection": "bukhari",
+    "section": "Revelation",
+    "hadith_number": 1,
+    "topics": [
+      "revelation"
+    ],
+    "life_contexts": [],
+    "recommendation_tier": "low",
+    "importance_score": 3
+  },
+  {
+    "id": "bukhari:2",
+    "collection": "bukhari",
+    "section": "Revelation",
+    "hadith_number": 2,
+    "topics": [
+      "revelation"
+    ],
+    "life_contexts": [],
+    "recommendation_tier": "low",
+    "importance_score": 3
+  },
+  {
+    "id": "bukhari:3",
+    "collection": "bukhari",
+    "section": "Revelation",
+    "hadith_number": 3,
+    "topics": [
+      "revelation"
+    ],
+    "life_contexts": [],
+    "recommendation_tier": "low",
+    "importance_score": 3
+  },
+  {
+    "id": "bukhari:4",
+    "collection": "bukhari",
+    "section": "Revelation",
+    "hadith_number": 4,
+    "topics": [
+      "revelation"
+    ],
+    "life_contexts": [],
+    "recommendation_tier": "low",
+    "importance_score": 3
+  },
+  {
+    "id": "bukhari:5",
+    "collection": "bukhari",
+    "section": "Revelation",
+    "hadith_number": 5,
+    "topics": [
+      "revelation"
+    ],
+    "life_contexts": [],
+    "recommendation_tier": "low",
+    "importance_score": 3
+  },
+  {
+    "id": "bukhari:6",
+    "collection": "bukhari",
+    "section": "Revelation",
+    "hadith_number": 6,
+    "topics": [
+      "revelation"
+    ],
+    "life_contexts": [],
+    "recommendation_tier": "low",
+    "importance_score": 3
+  },
+  {
+    "id": "bukhari:7",
+    "collection": "bukhari",
+    "section": "Revelation",
+    "hadith_number": 7,
+    "topics": [
+      "revelation"
+    ],
+    "life_contexts": [],
+    "recommendation_tier": "low",
+    "importance_score": 3
+  }
+]

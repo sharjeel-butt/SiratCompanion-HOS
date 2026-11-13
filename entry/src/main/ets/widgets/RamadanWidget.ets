@@ -19,6 +19,21 @@ struct RamadanWidget {
   build() {
     // FORCE LTR ON THE ROOT TO PREVENT OS AUTO-MIRRORING
     Stack() {
+      Column()
+        .width('100%').height('100%')
+        .backgroundColor('#141B2E')
+        .borderRadius(16)
+
+      // 👇 NEW: Watermark Layer
+      Stack() {
+        Image($r('app.media.ic_ramadan_moon'))
+          .width(120)
+          .height(120)
+          .fillColor('#FFFFFF')
+          .opacity(0.03)
+          .position({ x: '60%', y: '-10%' })
+      }
+      .width('100%').height('100%').clip(true).borderRadius(16)
       Column() {
         if (this.error.length > 0) {
           Column() {
@@ -163,8 +178,6 @@ struct RamadanWidget {
       .width('100%')
       .height('100%')
       .padding(14)
-      .backgroundColor('#141B2E')
-      .borderRadius(16)
       .onClick(() => {
         postCardAction(this, {
           action: 'router',

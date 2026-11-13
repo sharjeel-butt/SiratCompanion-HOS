@@ -3107,6 +3107,106 @@
     {
       "name": "widget_daily_faith_title",
       "value": "Daily Faith"
+    },
+    {
+      "name": "hadith_title",
+      "value": "Hadith Collection"
+    },
+    {
+      "name": "hadith_featured",
+      "value": "Featured Hadiths"
+    },
+    {
+      "name": "hadith_search_results",
+      "value": "Search Results"
+    },
+    {
+      "name": "hadith_search_hint",
+      "value": "Search topics, contexts, or text..."
+    },
+    {
+      "name": "hadith_searching",
+      "value": "Searching..."
+    },
+    {
+      "name": "hadith_no_results",
+      "value": "No results found."
+    },
+    {
+      "name": "hadith_translation",
+      "value": "Translation"
+    },
+    {
+      "name": "hadith_sanad",
+      "value": "Sanad (Chain of Narration)"
+    },
+    {
+      "name": "hadith_title_desc",
+      "value": "Explore thousands of authentic hadiths"
+    },
+    {
+      "name": "hadith_label",
+      "value": "Hadith"
+    },
+    {
+      "name": "collection_bukhari",
+      "value": "Sahih al-Bukhari"
+    },
+    {
+      "name": "collection_muslim",
+      "value": "Sahih Muslim"
+    },
+    {
+      "name": "collection_abudawud",
+      "value": "Sunan Abu Dawud"
+    },
+    {
+      "name": "collection_tirmidhi",
+      "value": "Jami' at-Tirmidhi"
+    },
+    {
+      "name": "collection_nasai",
+      "value": "Sunan an-Nasa'i"
+    },
+    {
+      "name": "collection_ibnmajah",
+      "value": "Sunan Ibn Majah"
+    },
+    {
+      "name": "collection_malik",
+      "value": "Muwatta Malik"
+    },
+    {
+      "name": "hadith_books",
+      "value": "Books"
+    },
+    {
+      "name": "hadith_contexts",
+      "value": "Life Contexts"
+    },
+    {
+      "name": "hadith_topics",
+      "value": "Topics"
+    },
+    {
+      "name": "load_more",
+      "value": "Load More"
+    },
+    {
+      "name": "license_section_hadith_data",
+      "value": "Hadith Dataset"
+    },
+    {
+      "name": "licenses_version_label",
+      "value": "Datasets: "
+    },
+    {
+      "name": "privacy_title",
+      "value": "Privacy Policy"
+    },
+    {
+      "name": "privacy_view_online",
+      "value": "View Full Online Policy"
     }
   ]
 }

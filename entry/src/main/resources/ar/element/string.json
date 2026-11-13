@@ -3107,6 +3107,108 @@
     {
       "name": "widget_daily_faith_title",
       "value": "العبادات اليومية"
+    },
+    {
+      "name": "hadith_title",
+      "value": "مجموعة الأحاديث"
+    },
+    {
+      "name": "hadith_featured",
+      "value": "أحاديث مميزة"
+    },
+    {
+      "name": "hadith_search_results",
+      "value": "نتائج البحث"
+    },
+    {
+      "name": "hadith_search_hint",
+      "value": "ابحث في المواضيع أو السياقات أو النصوص..."
+    },
+    {
+      "name": "hadith_searching",
+      "value": "جاري البحث..."
+    },
+    {
+      "name": "hadith_no_results",
+      "value": "لم يتم العثور على نتائج."
+    },
+    {
+      "name": "hadith_translation",
+      "value": "الترجمة"
+    },
+    {
+      "name": "hadith_sanad",
+      "value": "السند (سلسلة الرواة)"
+    },
+    {
+      "name": "hadith_title_desc",
+      "value": "استكشف آلاف الأحاديث الصحيحة"
+    },
+    {
+      "name": "hadith_label",
+      "value": "حديث"
+    },
+    {
+      "name": "collection_bukhari",
+      "value": "صحيح البخاري"
+    },
+    {
+      "name": "collection_muslim",
+      "value": "صحيح مسلم"
+    },
+    {
+      "name": "collection_abudawud",
+      "value": "سنن أبي داود"
+    },
+    {
+      "name": "collection_tirmidhi",
+      "value": "جامع الترمذي"
+    },
+    {
+      "name": "collection_nasai",
+      "value": "سنن النسائي"
+    },
+    {
+      "name": "collection_ibnmajah",
+      "value": "سنن ابن ماجه"
+    },
+    {
+      "name": "collection_malik",
+      "value": "موطأ مالك"
+    },
+    {
+      "name": "hadith_books",
+      "value": "الكتب"
+    },
+    {
+      "name": "hadith_contexts",
+      "value": "سياقات الحياة"
+    },
+    {
+      "name": "hadith_topics",
+      "value": "الموضوعات"
+    },
+    {
+      "name": "load_more",
+      "value": "تحميل المزيد"
+    },
+    {
+      "name": "license_section_hadith_data",
+      "value": "مجموعة بيانات الحديث"
+    },
+    {
+      "name": "licenses_version_label",
+      "value": "مجموعات البيانات: "
+    },
+    {
+      "name": "privacy_title",
+      "value": "سياسة الخصوصية"
+    },
+    {
+      "name": "privacy_view_online",
+      "value": "عرض السياسة الكاملة عبر الإنترنت"
     }
+
+
   ]
 }
