@@ -37,6 +37,7 @@ struct MosqueFinderPage {
   @State formLng: string = '';
   @State locationStatus: string = '';
   @State renderTick: number = 0;
+  @State activeFilter: string = 'all';
 
   @State isFetchingLocation: boolean = false;
 
@@ -192,92 +193,115 @@ struct MosqueFinderPage {
           }
           .width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
         } else {
-          // List
-          List({ space: 12 }) {
-            ForEach(this.mosques, (mosque: MosqueModel) => {
-              ListItem() {
-                Column() {
-                  // 1. Name and Badge Row
-                  Row() {
-                    Text(MosqueService.getLocalizedName(mosque, this.appLanguage))
-                      .fontSize(16)
-                      .fontWeight(FontWeight.Bold)
-                      .fontColor(this.colors.textWhite)
-                      .maxLines(1)
-                      .textOverflow({ overflow: TextOverflow.Ellipsis })
-                      .layoutWeight(1) // Takes up remaining space
+          // Filter chip row — direct child of the outer Column, same
+          // layout context as the original top bar.
+          Row({ space: 8 }) {
+            this.FilterChip('all')
+            this.FilterChip('default')
+            this.FilterChip('custom')
+          }
+          .width('100%')
+          .padding({
+            left: 16,
+            right: 16,
+            top: 12,
+            bottom: 4
+          })
 
-                    if (mosque.isCustom) {
-                      Text('Custom')
-                        .fontSize(9)
-                        .fontColor(this.colors.textOnAccent)
-                        .backgroundColor(this.colors.accentGold)
-                        .padding({
-                          left: 6,
-                          right: 6,
-                          top: 2,
-                          bottom: 2
-                        })
-                        .borderRadius(4)
-                        .margin({ left: 8 })
-                        .flexShrink(0) // FIX 1: Prevents the badge from being squished or cut off
+          // List or empty state — also direct child, so layoutWeight(1)
+          // resolves against the outer Column (identical to how the
+          // original list sized itself).
+          if (this.filteredMosques().length === 0) {
+            this.EmptyFilterState()
+          } else {
+            List({ space: 12 }) {
+              ForEach(this.filteredMosques(), (mosque: MosqueModel) => {
+                ListItem() {
+                  Column() {
+                    // ---- mosque card body — unchanged from current file ----
+                    Row() {
+                      Text(MosqueService.getLocalizedName(mosque, this.appLanguage))
+                        .fontSize(16)
+                        .fontWeight(FontWeight.Bold)
+                        .fontColor(this.colors.textWhite)
+                        .maxLines(1)
+                        .textOverflow({ overflow: TextOverflow.Ellipsis })
+                        .layoutWeight(1)
+
+                      if (mosque.isCustom) {
+                        Text('Custom')
+                          .fontSize(9)
+                          .fontColor(this.colors.textOnAccent)
+                          .backgroundColor(this.colors.accentGold)
+                          .padding({
+                            left: 6,
+                            right: 6,
+                            top: 2,
+                            bottom: 2
+                          })
+                          .borderRadius(4)
+                          .margin({ left: 8 })
+                          .flexShrink(0)
+                      }
+                    }
+                    .width('100%')
+                    .alignItems(VerticalAlign.Center)
+                    .margin({ bottom: 4 })
+
+                    Text(`${mosque.distanceKm.toFixed(1)} ${L.get('km_away', this.appLanguage)} (direct)`)
+                      .fontSize(12)
+                      .fontColor(this.colors.accentGold)
+                      .width('100%')
+                      .textAlign(TextAlign.Start)
+
+                    if (mosque.address && mosque.address.length > 0) {
+                      Text(mosque.address)
+                        .fontSize(12)
+                        .fontColor(this.colors.textMuted)
+                        .margin({ top: 4 })
+                        .width('100%')
+                        .textAlign(TextAlign.Start)
+                        .maxLines(2)
+                        .textOverflow({ overflow: TextOverflow.Ellipsis })
                     }
                   }
                   .width('100%')
-                  .alignItems(VerticalAlign.Center)
-                  .margin({ bottom: 4 }) // Added spacing between title and distance
-
-                  // 2. Distance
-                  Text(`${mosque.distanceKm.toFixed(1)} ${L.get('km_away', this.appLanguage)} (direct)`)
-                    .fontSize(12)
-                    .fontColor(this.colors.accentGold)
-                    .width('100%')
-                    .textAlign(TextAlign.Start)
-
-                  // 3. Address (If available)
-                  if (mosque.address && mosque.address.length > 0) {
-                    Text(mosque.address)
-                      .fontSize(12)
-                      .fontColor(this.colors.textMuted)
-                      .margin({ top: 4 })
-                      .width('100%')
-                      .textAlign(TextAlign.Start)
-                      .maxLines(2)
-                      .textOverflow({ overflow: TextOverflow.Ellipsis })
-                  }
+                  .padding(16)
+                  .backgroundColor(this.colors.cardDark)
+                  .borderRadius(12)
+                  .border({ width: 1, color: this.colors.borderSoft })
+                  .clip(true)
                 }
                 .width('100%')
-                .padding(16)
-                .backgroundColor(this.colors.cardDark)
-                .borderRadius(12)
-                .border({ width: 1, color: this.colors.borderSoft })
-                .clip(true) // FIX 2: Clips any overflowing content to the rounded corners
-              }
-              .width('100%')
-              .swipeAction({
-                start: mosque.isCustom ? {
-                  builder: () => {
-                    this.SwipeEditAction(mosque)
-                  }
-                } : undefined,
-                end: mosque.isCustom ? {
-                  builder: () => {
-                    this.SwipeDeleteAction(mosque)
-                  }
-                } : undefined
-              })
-              .onClick(() => {
-                this.selectedMosque = mosque;
-                this.showDetailsSheet = true;
-              })
-            }, (mosque: MosqueModel) =>
-            // FIX: Include language and name
-            `mosque-${mosque.id}-${mosque.isCustom}-${this.appLanguage}-${mosque.name}`
-            )
+                .swipeAction({
+                  start: mosque.isCustom ? {
+                    builder: () => {
+                      this.SwipeEditAction(mosque)
+                    }
+                  } : undefined,
+                  end: mosque.isCustom ? {
+                    builder: () => {
+                      this.SwipeDeleteAction(mosque)
+                    }
+                  } : undefined
+                })
+                .onClick(() => {
+                  this.selectedMosque = mosque;
+                  this.showDetailsSheet = true;
+                })
+              }, (mosque: MosqueModel) =>
+              `mosque-${mosque.id}-${mosque.isCustom}-${this.activeFilter}-${this.appLanguage}-${mosque.name}`
+              )
+            }
+            .width('100%')
+            .layoutWeight(1)
+            .padding({
+              left: 16,
+              right: 16,
+              top: 12,
+              bottom: 16
+            })
           }
-          .width('100%')
-          .layoutWeight(1)
-          .padding(16)
         }
       }
 
@@ -405,6 +429,112 @@ struct MosqueFinderPage {
     })
   }
 
+  /**
+   * One filter pill. Reads `this.activeFilter` directly inside the
+   * builder — build() re-runs on every @State change, so the builder
+   * is re-invoked with fresh state and the selected/hover styling
+   * updates automatically.
+   *
+   * The `(N)` suffix is the count for that filter, so the user can
+   * tell the difference between "no custom mosques added yet" and
+   * "custom mosques exist but are filtered out of the current view".
+   */
+  @Builder
+  FilterChip(id: string) {
+    Text(`${this.filterLabel(id)} (${this.filterCount(id)})`)
+      .fontSize(13)
+      .fontWeight(this.activeFilter === id ? FontWeight.Bold : FontWeight.Normal)
+      .fontColor(this.activeFilter === id
+        ? this.colors.textOnAccent
+        : this.colors.textMuted)
+      .backgroundColor(this.activeFilter === id
+        ? this.colors.accentGold
+        : this.colors.cardDark)
+      .padding({
+        left: 14,
+        right: 14,
+        top: 8,
+        bottom: 8
+      })
+      .borderRadius(16)
+      .border({
+        width: 1,
+        color: this.activeFilter === id
+          ? this.colors.accentGold
+          : this.colors.borderSoft
+      })
+      .maxLines(1)
+      .onClick(() => {
+        if (this.activeFilter !== id) {
+          this.activeFilter = id;
+        }
+      })
+  }
+
+  /**
+   * Shown when the current filter yields zero results.
+   *
+   * Three distinct messages so the user understands *why* the list
+   * is empty:
+   *   • custom-empty  → "You haven't added any custom mosques yet"
+   *                     plus a CTA to open the add form
+   *   • default-empty → "No downloaded mosques found nearby"
+   *   • all-empty     → "No mosques found nearby"
+   */
+  @Builder
+  EmptyFilterState() {
+    Column() {
+      Image($r('app.media.ic_nav_mosque'))
+        .width(48)
+        .height(48)
+        .fillColor(this.colors.textMuted)
+        .opacity(0.45)
+        .margin({ bottom: 16 })
+
+      Text(L.get(this.emptyMessageKey(), this.appLanguage))
+        .fontSize(14)
+        .fontColor(this.colors.textMuted)
+        .textAlign(TextAlign.Center)
+        .lineHeight(20)
+        .padding({ left: 32, right: 32 })
+        .maxLines(3)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+
+      if (this.activeFilter === 'custom') {
+        Button() {
+          Row({ space: 6 }) {
+            Image($r('app.media.ic_add'))
+              .width(16)
+              .height(16)
+              .fillColor(this.colors.textOnAccent)
+            Text(L.get('mosque_add_custom_cta', this.appLanguage))
+              .fontSize(14)
+              .fontWeight(FontWeight.Medium)
+              .fontColor(this.colors.textOnAccent)
+          }
+        }
+        .height(44)
+        .padding({ left: 20, right: 20 })
+        .backgroundColor(this.colors.accentGold)
+        .borderRadius(12)
+        .margin({ top: 20 })
+        .onClick(() => {
+          this.openAddForm();
+        })
+      }
+    }
+    .width('100%')
+    .layoutWeight(1)
+    .justifyContent(FlexAlign.Center)
+    .alignItems(HorizontalAlign.Center)
+    .padding({
+      left: 16,
+      right: 16,
+      top: 40,
+      bottom: 40
+    })
+  }
+
   @Builder
   AddEditMosqueSheet() {
     Column() {
@@ -450,7 +580,7 @@ struct MosqueFinderPage {
                   .fontSize(14).fontColor(this.colors.accentGold)
               }
             } else {
-              Text(L.get('use_current_location', this.appLanguage))
+              Text(L.get('wizard_location_title', this.appLanguage))
                 .fontSize(14).fontColor(this.colors.accentGold)
             }
           }
@@ -736,7 +866,9 @@ struct MosqueFinderPage {
 
     await MosqueStorage.addOrUpdate(newMosque);
     this.showFormSheet = false;
-    await this.initLocationAndData(); // Refresh list
+    this.activeFilter = 'custom';
+
+    await this.initLocationAndData();
   }
 
   async deleteCustomMosque(mosque: MosqueModel) {
@@ -797,5 +929,73 @@ struct MosqueFinderPage {
 
   private isRtl(): boolean {
     return L.isRtlLang(this.appLanguage);
+  }
+
+  /**
+   * Return the filtered subset of `this.mosques` matching the
+   * current `activeFilter`. Called from build() for both the length
+   * check and the ForEach — cheap enough at typical list sizes
+   * (usually < 25 mosques) that recomputing is preferable to a
+   * cached @State field that could go stale.
+   */
+  private filteredMosques(): MosqueModel[] {
+    if (this.activeFilter === 'custom') {
+      return this.mosques.filter((m: MosqueModel): boolean => m.isCustom);
+    }
+    if (this.activeFilter === 'default') {
+      return this.mosques.filter((m: MosqueModel): boolean => !m.isCustom);
+    }
+    return this.mosques;
+  }
+
+  /** Number of mosques in the given filter category. */
+  private filterCount(filter: string): number {
+    if (filter === 'all') {
+      return this.mosques.length;
+    }
+    if (filter === 'custom') {
+      let n = 0;
+      for (const m of this.mosques) {
+        if (m.isCustom) {
+          n++;
+        }
+      }
+      return n;
+    }
+    if (filter === 'default') {
+      let n = 0;
+      for (const m of this.mosques) {
+        if (!m.isCustom) {
+          n++;
+        }
+      }
+      return n;
+    }
+    return 0;
+  }
+
+  /** Localized label for the given filter chip. */
+  private filterLabel(filter: string): string {
+    if (filter === 'all') {
+      return L.get('filter_all', this.appLanguage);
+    }
+    if (filter === 'custom') {
+      return L.get('filter_custom', this.appLanguage);
+    }
+    if (filter === 'default') {
+      return L.get('filter_default', this.appLanguage);
+    }
+    return filter;
+  }
+
+  /** Localized empty-state message key for the current filter. */
+  private emptyMessageKey(): string {
+    if (this.activeFilter === 'custom') {
+      return 'mosque_filter_empty_custom';
+    }
+    if (this.activeFilter === 'default') {
+      return 'mosque_filter_empty_default';
+    }
+    return 'mosque_filter_empty_all';
   }
 }

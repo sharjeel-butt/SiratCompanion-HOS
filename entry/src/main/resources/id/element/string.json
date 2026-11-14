@@ -3218,6 +3218,38 @@
     {
       "name": "no_contact_info",
       "value": "Tidak ada informasi kontak yang tersedia untuk masjid ini."
+    },
+    {
+      "name": "hadith_arabic_missing",
+      "value": "Teks Arab tidak tersedia untuk hadis ini."
+    },
+    {
+      "name": "filter_all",
+      "value": "Semua"
+    },
+    {
+      "name": "filter_default",
+      "value": "Bawaan"
+    },
+    {
+      "name": "filter_custom",
+      "value": "Kustom"
+    },
+    {
+      "name": "mosque_filter_empty_all",
+      "value": "Tidak ada masjid di dekat sini."
+    },
+    {
+      "name": "mosque_filter_empty_default",
+      "value": "Tidak ada masjid yang diunduh di dekat sini."
+    },
+    {
+      "name": "mosque_filter_empty_custom",
+      "value": "Anda belum menambahkan masjid kustom apa pun."
+    },
+    {
+      "name": "mosque_add_custom_cta",
+      "value": "Tambah Masjid Kustom"
     }
 
   ]

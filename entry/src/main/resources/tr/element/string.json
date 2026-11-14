@@ -3218,6 +3218,38 @@
     {
       "name": "no_contact_info",
       "value": "Bu cami için iletişim bilgisi mevcut değil."
+    },
+    {
+      "name": "hadith_arabic_missing",
+      "value": "Bu hadis için Arapça metin mevcut değil."
+    },
+    {
+      "name": "filter_all",
+      "value": "Tümü"
+    },
+    {
+      "name": "filter_default",
+      "value": "Varsayılan"
+    },
+    {
+      "name": "filter_custom",
+      "value": "Özel"
+    },
+    {
+      "name": "mosque_filter_empty_all",
+      "value": "Yakında cami bulunamadı."
+    },
+    {
+      "name": "mosque_filter_empty_default",
+      "value": "Yakında indirilmiş cami bulunamadı."
+    },
+    {
+      "name": "mosque_filter_empty_custom",
+      "value": "Henüz özel cami eklemediniz."
+    },
+    {
+      "name": "mosque_add_custom_cta",
+      "value": "Özel Cami Ekle"
     }
   ]
 }

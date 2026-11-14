@@ -1254,6 +1254,35 @@ export struct Prayer {
       this.statusTimerId = -1;
     }
     this.statusTimerId = setInterval(() => {
+      // Midnight rollover guard.
+      //
+      // viewingDate/viewingDateKey are set once on page entry and only
+      // refreshed by onPageShow or onAppForegrounded. If the page stays
+      // open across midnight, viewingDateKey still points at yesterday
+      // and any prayer marked after midnight is saved under the wrong
+      // date key — silent data corruption with no user-visible warning.
+      //
+      // syncViewingDateIfStale() is a no-op when dateOffset !== 0 (user
+      // explicitly chose a past/future day; their choice wins). For
+      // dateOffset === 0 it resyncs to the current device date.
+      //
+      // If the date key actually changed, we must also reload the
+      // prayer state and recalculate times — the previous day's checked
+      // flags and times are no longer valid for the new day.
+      const prevKey = this.viewingDateKey;
+      this.syncViewingDateIfStale();
+      const rolledOver = this.viewingDateKey !== prevKey;
+
+      if (rolledOver) {
+        AppLogger.info('Prayer',
+          `Midnight rollover: ${prevKey} -> ${this.viewingDateKey}`);
+        this.prayers = PrayerManager.loadStateForDate(
+          this.viewingDateKey, this.prayers, this.viewingDate
+        );
+        this.refreshPrayerTimes();
+        this.refreshHijriDates();
+      }
+
       if (this.dateOffset === 0) {
         this.prayers = PrayerManager.updateStatuses(
           this.prayers, this.viewingDate, this.getLocationOffsetHours()

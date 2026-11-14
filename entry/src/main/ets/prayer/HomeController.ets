@@ -79,8 +79,29 @@ export class HomeController {
           anchor, latitude, longitude, method, asrRule, highLatRule,
           advanced
         );
+
+      // M-N1: pick the day-of-week source for applyDayNames.
+      //
+      //   • "Today" (device day) → use `anchor` so the Jummah label
+      //     reflects the location's current Gregorian day, not the
+      //     device's. Fixes the cross-timezone label bug (Karachi
+      //     device Friday morning + NYC location still Thursday
+      //     showed "Jummah" one day early).
+      //
+      //   • Explicit past/future date → use `date` unchanged so the
+      //     user's date selection wins. Shifting it through the tz
+      //     delta can silently roll into the previous Gregorian day,
+      //     which the user did not pick.
+      const todayMidnight = new Date();
+      todayMidnight.setHours(0, 0, 0, 0);
+      const dateMidnight = new Date(date);
+      dateMidnight.setHours(0, 0, 0, 0);
+      const isViewingToday =
+        dateMidnight.getTime() === todayMidnight.getTime();
+      const dayNameSource = isViewingToday ? anchor : date;
+
       const withOffsets: PrayerModel[] = PrayerManager.applyTimesToPrayers(
-        template, times, offsets, date
+        template, times, offsets, dayNameSource
       );
       const offsetHours: number = TimezoneResolver.effectiveOffsetForLocation(
         latitude, longitude, date
@@ -153,8 +174,15 @@ export class HomeController {
           anchor, latitude, longitude, method, asrRule, highLatRule,
           advanced
         );
+      // Pass the location anchor, not the device `today`. applyDayNames
+      // reads getDay() to decide Jummah vs Dhuhr. In a cross-timezone
+      // setup the device and location can be on different Gregorian
+      // days — e.g. Karachi device Tuesday 01:00, NYC location still
+      // Monday 20:00. Using `today` labels Dhuhr as Jummah one day
+      // early for the NYC user. Using `anchor` reflects what day it
+      // actually is at the location.
       const withOffsets: PrayerModel[] = PrayerManager.applyTimesToPrayers(
-        template, times, offsets, today
+        template, times, offsets, anchor
       );
       const offsetHours: number = TimezoneResolver.effectiveOffsetForLocation(
         latitude, longitude, today
@@ -208,6 +236,41 @@ export class HomeController {
     }
   }
 
+  /**
+   * Return the next upcoming prayer or timing relative to `now`.
+   *
+   * ## Timezone handling (critical)
+   *
+   * Event times produced by `appendDayEvents` / `parseToDate` are in
+   * the **location's wall-clock space** — they carry the raw hours and
+   * minutes that a clock on the wall in the location would show, but
+   * their `Date` object holds those values against the **device's**
+   * epoch. This is by design: the rest of the codebase (PrayerManager
+   * statuses, PrayerTimeCalculator offsets) also works in this shifted
+   * space, so everything compares consistently.
+   *
+   * For the "is this event in the future?" test to work, `now` must be
+   * shifted into the same space before comparison. Comparing raw
+   * `now.getTime()` against the shifted event times silently returns
+   * the wrong answer whenever the device and the location are in
+   * different timezones.
+   *
+   * Concretely: a Karachi device (UTC+5) with a New York manual
+   * location (UTC−5) at Monday 07:00 UTC is 02:00 AM in NY. Correct
+   * next prayer is Fajr 5:30 AM. Before this fix, the comparison
+   * treated Fajr and Dhuhr (Monday 00:30 and 05:00 UTC) as already
+   * past — returning Asr instead. Confirmed in the bug report.
+   *
+   * ## Reference points
+   *
+   * `nowShifted` = `now` in the location's wall-clock space. Used
+   *   for the future-comparison.
+   *
+   * `anchor` = midnight of "today" in the location's wall clock.
+   *   Used to build the -1 / 0 / +1 day grid. Derived from `nowShifted`
+   *   so both values agree on which day counts as "today" in the
+   *   location's clock.
+   */
   static computeNextEvent(
     now: Date,
     latitude: number,
@@ -220,7 +283,14 @@ export class HomeController {
   ): NextEventInfo | null {
     const events: TimelineEvent[] = [];
 
-    const anchor = HomeController.getLocationAnchor(latitude, longitude, now);
+    // Shift "now" into the location's wall clock, then take midnight
+    // of that day for the -1/0/+1 grid. Same-timezone users get a
+    // byte-identical `nowShifted` and `anchor` as before — no
+    // behavioural change for the common case.
+    const nowShifted = HomeController.getLocationAnchor(
+      latitude, longitude, now
+    );
+    const anchor = new Date(nowShifted.getTime());
     anchor.setHours(0, 0, 0, 0);
 
     for (let delta = -1; delta <= 1; delta++) {
@@ -243,7 +313,10 @@ export class HomeController {
     a.time.getTime() - b.time.getTime()
     );
 
-    const nowMs: number = now.getTime();
+    // Compare against the shifted "now", not the raw device time.
+    // Both sides of the comparison are now in the location's
+    // wall-clock space.
+    const nowMs: number = nowShifted.getTime();
     for (let i = 0; i < events.length; i++) {
       const e: TimelineEvent = events[i];
       if (e.time.getTime() > nowMs) {

@@ -13,6 +13,7 @@ import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_LANGUAGE_OVERRIDE, STORAGE_KEY_TIME_F
 import { AppLanguage, L } from '../i18n/LocalizationHelper';
 import { OfflineCityLookup } from '../location/OfflineCityLookup';
 import { AppLogger } from '../core/AppLogger';
+import { PrayerManager } from '../prayer/PrayerManager';
 
 const FORM_DIM_KEY = 'ohos.extra.param.key.form_dimension';
 const FORM_NAME_KEY = 'ohos.extra.param.key.form_name'; // NEW
@@ -24,11 +25,12 @@ const FORM_ID_KEYS: string[] = [
 const TAG = 'EntryFormAbility';
 
 export default class EntryFormAbility extends FormExtensionAbility {
+
   private static async doAsyncRefresh(
     ctx: common.Context,
     formId: string,
     dimension: string,
-    formName: string // Added parameter
+    formName: string
   ): Promise<void> {
     try {
       let safeCtx = ctx;
@@ -39,7 +41,42 @@ export default class EntryFormAbility extends FormExtensionAbility {
         console.error(`[${TAG}] doAsyncRefresh: no valid context available`);
         return;
       }
-      await PreferencesHelper.init(safeCtx);
+      try {
+        await PrayerManager.primeStateMap();
+        AppLogger.info(TAG, 'primeStateMap refreshed');
+      } catch (e) {
+        AppLogger.warn(TAG,
+          `primeStateMap failed: ${(e as Error).message}`);
+      }
+
+      // ---- Prime the prayer-state map ----
+      //
+      // PrayerManager keeps an in-memory `stateMap` cache populated
+      // by primeStateMap(). WidgetDataBuilder.build() reads it via
+      // PrayerManager.getCheckState(dateKey) to populate the Tracker
+      // widget's p1Checked..p5Checked fields.
+      //
+      // EntryAbility primes this in the main app process. The widget
+      // process is a SEPARATE process with its OWN module instance,
+      // so its stateMap stays empty unless we prime it here too.
+      //
+      // Without this call, getCheckState() returns an all-false
+      // PrayerCheckState on every widget build, and the Tracker
+      // widget renders every prayer as unchecked — even when the
+      // user has marked them prayed on the main app.
+      //
+      // primeStateMap() is idempotent and cheap (one preferences read
+      // + JSON.parse). Safe to call on every refresh — it re-reads
+      // from disk each time, which also picks up any state the main
+      // app wrote since the last refresh.
+      try {
+        await PrayerManager.primeStateMap();
+      } catch (e) {
+        // Non-fatal — the widget will still render, just with stale
+        // checked state. Log so the diagnostic path exists.
+        AppLogger.warn(TAG,
+          `primeStateMap failed: ${(e as Error).message}`);
+      }
 
       const savedOverride: string = await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE_OVERRIDE, 'system');
       const savedLang: string = await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE, 'en');

@@ -3219,6 +3219,38 @@
     {
       "name": "no_contact_info",
       "value": "لا تتوفر معلومات اتصال لهذا المسجد."
+    },
+    {
+      "name": "hadith_arabic_missing",
+      "value": "النص العربي غير متوفر لهذا الحديث."
+    },
+    {
+      "name": "filter_all",
+      "value": "الكل"
+    },
+    {
+      "name": "filter_default",
+      "value": "افتراضي"
+    },
+    {
+      "name": "filter_custom",
+      "value": "مخصص"
+    },
+    {
+      "name": "mosque_filter_empty_all",
+      "value": "لم يتم العثور على مساجد قريبة."
+    },
+    {
+      "name": "mosque_filter_empty_default",
+      "value": "لم يتم العثور على مساجد محملة قريبة."
+    },
+    {
+      "name": "mosque_filter_empty_custom",
+      "value": "لم تقم بإضافة أي مساجد مخصصة بعد."
+    },
+    {
+      "name": "mosque_add_custom_cta",
+      "value": "إضافة مسجد مخصص"
     }
 
 

@@ -6,6 +6,7 @@ import { zlib } from '@kit.BasicServicesKit'; // Rule §C: Native modules import
 import { BilingualHadith, HadithDbRecord } from './HadithModels';
 import { AppLogger } from '../core/AppLogger';
 import { L } from '../i18n/LocalizationHelper';
+import { PreferencesHelper } from '../core/PreferencesHelper';
 
 export class HadithDbHelper {
   private static store: relationalStore.RdbStore | null = null;
@@ -27,26 +28,51 @@ export class HadithDbHelper {
     try {
       const dirPath: string = `${context.databaseDir}/rdb/hadith_v2`;
       const dbPath: string = `${dirPath}/${lang}.db`;
+      const tmpPath: string = `${dirPath}/${lang}.db.extracttmp`;
 
       if (!fs.accessSync(dirPath)) {
         fs.mkdirSync(dirPath, true);
       }
 
-      let needsCopy = true;
+      // ---- M-N2: read bundle version + tracked version ----
+      const bundledVersion = await HadithDbHelper.readBundledVersion(context);
+      const versionKey = HadithDbHelper.versionKeyFor(lang);
+      const storedVersion = await PreferencesHelper.getString(versionKey, '0');
+      const versionMatches = (storedVersion === bundledVersion);
+
+      // ---- Decide whether extraction is required ----
+      let hasValidExisting: boolean = false;
       if (fs.accessSync(dbPath)) {
         const stat = fs.statSync(dbPath);
         if (stat.size > 10240) {
-          // Rule §M: Size validation for existing file
-          needsCopy = false;
+          hasValidExisting = true;
         }
       }
 
-      if (needsCopy) {
-        AppLogger.info('HadithDbHelper', `Decompressing ${lang}.db.gz to sandbox...`);
+      const needsExtract: boolean = !hasValidExisting || !versionMatches;
+
+      if (needsExtract) {
+        if (hasValidExisting && !versionMatches) {
+          AppLogger.info('HadithDbHelper',
+            `Re-extracting ${lang}.db: bundle version ` +
+              `${storedVersion} -> ${bundledVersion}`);
+        } else {
+          AppLogger.info('HadithDbHelper',
+            `Extracting ${lang}.db.gz to sandbox...`);
+        }
+
         const rawfilePath = `hadith/database/${lang}/hadith.db.gz`;
         const tempGzPath = `${context.cacheDir}/${lang}.db.gz`;
 
         try {
+          // Clean any leftover temp file from a previous failed run.
+          if (fs.accessSync(tmpPath)) {
+            try {
+              fs.unlinkSync(tmpPath);
+            } catch (e) { /* ignore */
+            }
+          }
+
           // 1. Copy .gz from rawfile to cacheDir
           const rawData: Uint8Array = await context.resourceManager.getRawFileContent(rawfilePath);
           const file: fs.File =
@@ -57,20 +83,50 @@ export class HadithDbHelper {
           fs.writeSync(file.fd, buffer);
           fs.closeSync(file);
 
-          // 2. Decompress to the databaseDir
-          // Note: If API < 12 throws an error for .gz, replace the next line with:
-          // await zlib.uncompressFile(tempGzPath, dbPath);
-          await zlib.decompressFile(tempGzPath, dbPath);
+          // 2. Decompress .gz to a TEMP path using the GZip stream API.
+          //
+          // zlib.decompressFile is for .zip archives — it parses the
+          // ZIP header and rejects .gz with error 900002/900003.
+          // zlib.uncompressFile does not exist in HarmonyOS.
+          // The GZip stream API is the correct path for .gz:
+          //   createGZipSync() -> gzopen('rb') -> gzread loop -> gzclose()
+          //
+          // Writing to a temp path (not dbPath) ensures a mid-stream
+          // failure cannot corrupt a previously-working DB.
+          const gzip = zlib.createGZipSync();
+          const dbFile = fs.openSync(
+            tmpPath,
+            fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC
+          );
+          try {
+            await gzip.gzopen(tempGzPath, 'rb');
+            const bufSize = 65536; // 64 KB chunks
+            while (true) {
+              const chunk = new ArrayBuffer(bufSize);
+              const readLen = await gzip.gzread(chunk);
+              if (readLen <= 0) {
+                break;
+              }
+              const out = new Uint8Array(chunk, 0, readLen);
+              fs.writeSync(dbFile.fd, out.buffer);
+            }
+          } finally {
+            await gzip.gzclose().catch((e: Error) => {
+              AppLogger.warn('HadithDbHelper',
+                `gzclose failed for ${lang}: ${e.message}`);
+            });
+            fs.closeSync(dbFile);
+          }
 
-          // 3. Rule §M: Download Validation (Size)
-          const stat = fs.statSync(dbPath);
+          // 3. Rule §M: Download Validation (Size) — on the temp file
+          const stat = fs.statSync(tmpPath);
           if (stat.size <= 10240) {
             throw new Error(`Decompressed database too small: ${stat.size} bytes`);
           }
 
-          // 4. Rule §M: Download Validation (Header)
+          // 4. Rule §M: Download Validation (Header) — on the temp file
           const headerBuffer = new ArrayBuffer(16);
-          const readFile = fs.openSync(dbPath, fs.OpenMode.READ_ONLY);
+          const readFile = fs.openSync(tmpPath, fs.OpenMode.READ_ONLY);
           fs.readSync(readFile.fd, headerBuffer);
           fs.closeSync(readFile);
 
@@ -83,15 +139,53 @@ export class HadithDbHelper {
           if (!headerString.startsWith('SQLite format 3')) {
             throw new Error('Invalid SQLite header');
           }
+
+          // 5. Commit: replace live dbPath with validated temp file.
+          if (fs.accessSync(dbPath)) {
+            try {
+              fs.unlinkSync(dbPath);
+            } catch (e) { /* ignore */
+            }
+          }
+          fs.renameSync(tmpPath, dbPath);
+
+          // 6. Version persisted only on full success.
+          await PreferencesHelper.setString(versionKey, bundledVersion);
+          await PreferencesHelper.flushNow();
+          AppLogger.info('HadithDbHelper',
+            `Extracted ${lang}.db at bundle version ${bundledVersion}`);
+
+        } catch (extractErr) {
+          const e = extractErr as Error;
+          AppLogger.warn('HadithDbHelper',
+            `Extraction failed for ${lang}: ${e.message}`);
+
+          // Clean temp file — live dbPath is untouched.
+          if (fs.accessSync(tmpPath)) {
+            try {
+              fs.unlinkSync(tmpPath);
+            } catch (cleanupErr) { /* ignore */
+            }
+          }
+
+          if (!hasValidExisting) {
+            throw e;
+          }
+          // Fall through: old dbPath is still valid.
+          AppLogger.info('HadithDbHelper',
+            `Using existing ${lang}.db (version ${storedVersion})`);
         } finally {
-          // 5. Cleanup temp .gz file regardless of success or failure
+          // Always clean temp .gz.
           if (fs.accessSync(tempGzPath)) {
-            fs.unlinkSync(tempGzPath);
+            try {
+              fs.unlinkSync(tempGzPath);
+            } catch (cleanupErr) { /* ignore */
+            }
           }
         }
       }
 
-      // Rule §M: SQLite Read-Only
+      // ---- Open the DB ----
       const config: relationalStore.StoreConfig = {
         name: `${lang}.db`,
         securityLevel: relationalStore.SecurityLevel.S1,
@@ -102,11 +196,13 @@ export class HadithDbHelper {
       HadithDbHelper.store = await relationalStore.getRdbStore(context, config);
       HadithDbHelper.currentLang = lang;
 
-      // 👇 Discover the schema for this specific database file
       await HadithDbHelper.discoverSchema();
-
       await HadithDbHelper.loadMetadata(context, lang);
+
+      AppLogger.info('HadithDbHelper',
+        `Opened ${lang}.db (version ${bundledVersion})`);
       return true;
+
     } catch (error) {
       const err: Error = error as Error;
       AppLogger.error('HadithDbHelper', `Failed to open ${lang} db: ${err.message}`);
@@ -484,5 +580,40 @@ export class HadithDbHelper {
       console.error(`[HadithDbHelper] Count failed for ${collectionId}: ${JSON.stringify(error)}`);
       return 0;
     }
+  }
+
+  /**
+   * Read the bundled hadith-data version from the rawfile manifest.
+   * Returns "0" if the manifest is absent — that's the pre-4.1.0
+   * behaviour, which relies only on file-size validation.
+   *
+   * The manifest is a plain text file containing a single integer.
+   * Pipeline bumps it whenever hadith content changes; apps ship the
+   * new manifest alongside the new DBs.
+   */
+  private static async readBundledVersion(
+    context: common.Context
+  ): Promise<string> {
+    try {
+      const data: Uint8Array = await context.resourceManager.getRawFileContent(
+        'hadith/database/VERSION'
+      );
+      const version = util.TextDecoder.create('utf-8')
+        .decodeToString(data)
+        .trim();
+      return version.length > 0 ? version : '0';
+    } catch (e) {
+      return '0';
+    }
+  }
+
+  /**
+   * Preference key for one language's last-extracted bundle version.
+   * Per-language tracking means a language the user never opens is
+   * never re-extracted — only what they actually use costs the disk
+   * I/O of the re-extract.
+   */
+  private static versionKeyFor(lang: string): string {
+    return `hadith_db_version_${lang}`;
   }
 }

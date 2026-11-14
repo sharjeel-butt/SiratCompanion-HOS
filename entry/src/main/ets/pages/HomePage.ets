@@ -282,6 +282,7 @@ export struct HomePage {
   private settingsPending: boolean = false;
   private countdownTimerId: number = -1;
   private locationUpdateTimerId: number = -1;
+  private lastKnownDayKey: string = '';
 
   async aboutToAppear(): Promise<void> {
     this.currentLanguage = this.appLanguage;
@@ -358,7 +359,27 @@ export struct HomePage {
     if (this.minuteTimerId !== -1) {
       return;
     }
+    // Seed the rollover tracker with the current day.
+    this.lastKnownDayKey = PrayerManager.getDateKey();
+
     this.minuteTimerId = setInterval(() => {
+      // Midnight rollover: refresh the data that gates Eid card,
+      // Ramadan card, upcoming-event countdown, and custom-event
+      // list. Without this, a user who leaves Home open from Shawwal
+      // 3 into Shawwal 4 keeps seeing the Eid card for an extra day,
+      // and the Qada banner stays suppressed incorrectly.
+      const currentDayKey = PrayerManager.getDateKey();
+      if (currentDayKey !== this.lastKnownDayKey) {
+        this.lastKnownDayKey = currentDayKey;
+        this.refreshHijriDate();
+        this.refreshRamadan(); // refreshes both ramadanInfo and eidInfo
+        this.upcomingEvents = DateHelper.getUpcomingImportantDates(
+          this.hijriOffset, SettingsHelper.getEventPerspective()
+        );
+        this.reloadCustomEvents();
+        this.refreshNext3Days();
+      }
+
       this.refreshHeader();
       this.checkPendingPrayers();
       if (this.ramadanInfo && this.ramadanInfo.isRamadanNow) {

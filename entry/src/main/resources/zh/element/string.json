@@ -3218,6 +3218,38 @@
     {
       "name": "no_contact_info",
       "value": "此清真寺暂无联系信息。"
+    },
+    {
+      "name": "hadith_arabic_missing",
+      "value": "此圣训的阿拉伯文不可用。"
+    },
+    {
+      "name": "filter_all",
+      "value": "全部"
+    },
+    {
+      "name": "filter_default",
+      "value": "默认"
+    },
+    {
+      "name": "filter_custom",
+      "value": "自定义"
+    },
+    {
+      "name": "mosque_filter_empty_all",
+      "value": "附近未找到清真寺。"
+    },
+    {
+      "name": "mosque_filter_empty_default",
+      "value": "附近未找到已下载的清真寺。"
+    },
+    {
+      "name": "mosque_filter_empty_custom",
+      "value": "您还没有添加任何自定义清真寺。"
+    },
+    {
+      "name": "mosque_add_custom_cta",
+      "value": "添加自定义清真寺"
     }
   ]
 }

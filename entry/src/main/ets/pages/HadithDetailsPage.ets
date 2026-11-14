@@ -231,10 +231,14 @@ struct HadithDetailsPage {
               .border({ width: 1, color: this.colors.borderSoft })
               .margin({ bottom: 20 })
             } else {
-              // Debug Fallback if Arabic is missing
-              Text(`[Debug] Arabic missing for ID: ${this.hadith.id}`)
+              // The DB entry exists but the Arabic column is empty. This is
+              // rare — the pipeline guarantees Arabic for every row — but if
+              // it happens, show a localized placeholder rather than leaking
+              // the internal ID to the user.
+              Text(this.tr('hadith_arabic_missing'))
                 .fontSize(14)
-                .fontColor(this.colors.statusExpress)
+                .fontColor(this.colors.textMuted)
+                .fontStyle(FontStyle.Italic)
                 .width('100%')
                 .margin({ bottom: 20, top: 10 })
                 .textAlign(TextAlign.Center)

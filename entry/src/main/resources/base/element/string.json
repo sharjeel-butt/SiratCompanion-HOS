@@ -3219,6 +3219,38 @@
     {
       "name": "no_contact_info",
       "value": "No contact information available for this mosque."
+    },
+    {
+      "name": "hadith_arabic_missing",
+      "value": "Arabic text is unavailable for this hadith."
+    },
+    {
+      "name": "filter_all",
+      "value": "All"
+    },
+    {
+      "name": "filter_default",
+      "value": "Default"
+    },
+    {
+      "name": "filter_custom",
+      "value": "Custom"
+    },
+    {
+      "name": "mosque_filter_empty_all",
+      "value": "No mosques found nearby."
+    },
+    {
+      "name": "mosque_filter_empty_default",
+      "value": "No downloaded mosques found nearby."
+    },
+    {
+      "name": "mosque_filter_empty_custom",
+      "value": "You haven't added any custom mosques yet."
+    },
+    {
+      "name": "mosque_add_custom_cta",
+      "value": "Add Custom Mosque"
     }
   ]
 }

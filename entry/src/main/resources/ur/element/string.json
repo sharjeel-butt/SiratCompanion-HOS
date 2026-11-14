@@ -3218,6 +3218,38 @@
     {
       "name": "no_contact_info",
       "value": "اس مسجد کے لیے کوئی رابطہ معلومات دستیاب نہیں ہیں۔"
+    },
+    {
+      "name": "hadith_arabic_missing",
+      "value": "اس حدیث کے لیے عربی متن دستیاب نہیں ہے۔"
+    },
+    {
+      "name": "filter_all",
+      "value": "سب"
+    },
+    {
+      "name": "filter_default",
+      "value": "ڈیفالٹ"
+    },
+    {
+      "name": "filter_custom",
+      "value": "حسب ضرورت"
+    },
+    {
+      "name": "mosque_filter_empty_all",
+      "value": "قریب کوئی مسجد نہیں ملی۔"
+    },
+    {
+      "name": "mosque_filter_empty_default",
+      "value": "قریب کوئی ڈاؤن لوڈ شدہ مسجد نہیں ملی۔"
+    },
+    {
+      "name": "mosque_filter_empty_custom",
+      "value": "آپ نے ابھی تک کوئی حسب ضرورت مسجد شامل نہیں کی۔"
+    },
+    {
+      "name": "mosque_add_custom_cta",
+      "value": "حسب ضرورت مسجد شامل کریں"
     }
   ]
 }

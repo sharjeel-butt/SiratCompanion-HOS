@@ -3218,6 +3218,38 @@
     {
       "name": "no_contact_info",
       "value": "এই মসজিদের জন্য কোনো যোগাযোগের তথ্য পাওয়া যায় না।"
+    },
+    {
+      "name": "hadith_arabic_missing",
+      "value": "এই হাদিসের জন্য আরবি পাঠ্য উপলব্ধ নেই।"
+    },
+    {
+      "name": "filter_all",
+      "value": "সব"
+    },
+    {
+      "name": "filter_default",
+      "value": "ডিফল্ট"
+    },
+    {
+      "name": "filter_custom",
+      "value": "কাস্টম"
+    },
+    {
+      "name": "mosque_filter_empty_all",
+      "value": "কাছাকাছি কোনো মসজিদ পাওয়া যায়নি।"
+    },
+    {
+      "name": "mosque_filter_empty_default",
+      "value": "কাছাকাছি কোনো ডাউনলোড করা মসজিদ পাওয়া যায়নি।"
+    },
+    {
+      "name": "mosque_filter_empty_custom",
+      "value": "আপনি এখনও কোনো কাস্টম মসজিদ যোগ করেননি।"
+    },
+    {
+      "name": "mosque_add_custom_cta",
+      "value": "কাস্টম মসজিদ যোগ করুন"
     }
   ]
 
