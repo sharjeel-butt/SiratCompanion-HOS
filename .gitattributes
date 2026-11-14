@@ -1,0 +1,1 @@
+entry/src/main/resources/rawfile/hadith/database/**/*.db filter=lfs diff=lfs merge=lfs -text

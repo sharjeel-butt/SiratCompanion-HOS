@@ -3206,6 +3206,18 @@
     {
       "name": "privacy_view_online",
       "value": "Lihat Kebijakan Online Lengkap"
+    },
+    {
+      "name": "get_directions",
+      "value": "Dapatkan Petunjuk Arah"
+    },
+    {
+      "name": "visit_website",
+      "value": "Kunjungi Situs Web"
+    },
+    {
+      "name": "no_contact_info",
+      "value": "Tidak ada informasi kontak yang tersedia untuk masjid ini."
     }
 
   ]

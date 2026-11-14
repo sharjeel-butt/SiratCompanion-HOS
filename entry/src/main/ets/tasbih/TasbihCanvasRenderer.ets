@@ -417,8 +417,8 @@ export class TasbihCanvasRenderer {
     ctx.fill();
 
     let usedConic = false;
+    ctx.save();
     try {
-      ctx.save();
       ctx.beginPath();
       ctx.arc(cx, cy, r, 0, Math.PI * 2);
       ctx.clip();
@@ -436,10 +436,14 @@ export class TasbihCanvasRenderer {
 
       ctx.fillStyle = conic;
       ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
-      ctx.restore();
       usedConic = true;
     } catch (e) {
+      // createConicGradient can throw on older SDK builds or after a
+      // GPU reset. Fall through to the radial-gradient path below.
       usedConic = false;
+    } finally {
+      // Always pop the save() so no clip leaks into subsequent draws.
+      ctx.restore();
     }
 
     if (!usedConic) {

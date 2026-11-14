@@ -3206,6 +3206,18 @@
     {
       "name": "privacy_view_online",
       "value": "مکمل آن لائن پالیسی دیکھیں"
+    },
+    {
+      "name": "get_directions",
+      "value": "راستہ حاصل کریں"
+    },
+    {
+      "name": "visit_website",
+      "value": "ویب سائٹ دیکھیں"
+    },
+    {
+      "name": "no_contact_info",
+      "value": "اس مسجد کے لیے کوئی رابطہ معلومات دستیاب نہیں ہیں۔"
     }
   ]
 }

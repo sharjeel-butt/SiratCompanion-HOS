@@ -404,12 +404,6 @@ export struct HomePage {
           onOpenSettings: () => {
             this.navigateToSettings();
           },
-          onNavigateToTasbih: (tasbihId: string, dhikrIndex: number, prayerId: string) => {
-            AppStorage.setOrCreate('nav_target_dhikr', dhikrIndex);
-            AppStorage.setOrCreate('nav_target_prayer', prayerId);
-            AppStorage.setOrCreate('nav_target_tasbih', tasbihId);
-            AppStorage.setOrCreate('nav_target_tab', 'tasbih');
-          }
         })
 
         Refresh({ refreshing: $$this.isRefreshing }) {
@@ -4123,11 +4117,17 @@ export struct HomePage {
   }
 
   private refreshRamadan(): void {
+    // Always refresh eidInfo — it is independent of ramadanInfo and
+    // gates the Home EidCard. Must run before the ramadanInfo early-
+    // return below, or the Eid card stays hidden when ramadanInfo
+    // is null (which is exactly the case during Shawwal 1-3).
+    this.eidInfo = RamadanHelper.getEidInfo(this.hijriOffset);
+
     const info = RamadanHelper.getRamadanInfo(this.hijriOffset);
     if (!info) {
       this.ramadanInfo = null;
       this.refreshFastingWindow();
-      this.loadTrackerState(); // Clears tracker states
+      this.loadTrackerState();
       return;
     }
 
@@ -4142,7 +4142,7 @@ export struct HomePage {
     }
 
     this.refreshFastingWindow();
-    this.loadTrackerState(); // Loads tracker states
+    this.loadTrackerState();
   }
 
   private currentAshra(): RamadanAshra | null {

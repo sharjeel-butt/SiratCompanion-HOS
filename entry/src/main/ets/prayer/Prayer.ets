@@ -911,12 +911,21 @@ export struct Prayer {
         }
         .width('100%') // <-- CRITICAL: Fills the column so text aligns to the Start (Right in RTL)
 
-        Text(this.getStatusLabel(prayer.status))
-          .fontSize(11)
-          .fontColor(this.getStatusColor(prayer.status))
-          .letterSpacing(1)
-          .margin({ top: 2 })
-          .width('100%')
+        Row({ space: 6 }) {
+          Text(this.getStatusLabel(prayer.status))
+            .fontSize(11)
+            .fontColor(this.getStatusColor(prayer.status))
+            .letterSpacing(1)
+          if (prayer.status === 'prayed' && this.markedAtSuffix(prayer.id).length > 0) {
+            Text(this.markedAtSuffix(prayer.id))
+              .fontSize(10)
+              .fontColor(this.colors.textMuted)
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+          }
+        }
+        .width('100%')
+        .margin({ top: 2 })
       }
       .alignItems(HorizontalAlign.Start)
       .layoutWeight(1)
@@ -1827,6 +1836,22 @@ export struct Prayer {
       default:
         return '';
     }
+  }
+
+  /**
+   * Return "· HH:MM" (or "· HH:MM AM/PM") for the given prayer's saved
+   * mark time, or '' when the timestamp is unavailable.
+   *
+   * The clock format follows the user's 12h / 24h preference via
+   * ClockFormatHelper, which is already imported in this file.
+   */
+  private markedAtSuffix(prayerId: string): string {
+    const ms = PrayerManager.getMarkedAt(this.viewingDateKey, prayerId);
+    if (ms === undefined || ms <= 0) {
+      return '';
+    }
+    const d = new Date(ms);
+    return `· ${ClockFormatHelper.formatMinutes(d.getHours() * 60 + d.getMinutes())}`;
   }
 
   private getExtraTimeById(id: string): string {

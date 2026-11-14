@@ -2,7 +2,8 @@ import { relationalStore } from '@kit.ArkData';
 import { common } from '@kit.AbilityKit';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { util } from '@kit.ArkTS';
-import { HadithDbRecord, BilingualHadith } from './HadithModels';
+import { zlib } from '@kit.BasicServicesKit'; // Rule §C: Native modules imported at top
+import { BilingualHadith, HadithDbRecord } from './HadithModels';
 import { AppLogger } from '../core/AppLogger';
 import { L } from '../i18n/LocalizationHelper';
 
@@ -35,22 +36,62 @@ export class HadithDbHelper {
       if (fs.accessSync(dbPath)) {
         const stat = fs.statSync(dbPath);
         if (stat.size > 10240) {
+          // Rule §M: Size validation for existing file
           needsCopy = false;
         }
       }
 
       if (needsCopy) {
-        AppLogger.info('HadithDbHelper', `Copying ${lang}.db to sandbox...`);
-        const rawData: Uint8Array =
-          await context.resourceManager.getRawFileContent(`hadith/database/${lang}/hadith.db`);
-        const file: fs.File = fs.openSync(dbPath, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC);
-        const buffer = new ArrayBuffer(rawData.length);
-        const view = new Uint8Array(buffer);
-        view.set(rawData);
-        fs.writeSync(file.fd, buffer);
-        fs.closeSync(file);
+        AppLogger.info('HadithDbHelper', `Decompressing ${lang}.db.gz to sandbox...`);
+        const rawfilePath = `hadith/database/${lang}/hadith.db.gz`;
+        const tempGzPath = `${context.cacheDir}/${lang}.db.gz`;
+
+        try {
+          // 1. Copy .gz from rawfile to cacheDir
+          const rawData: Uint8Array = await context.resourceManager.getRawFileContent(rawfilePath);
+          const file: fs.File =
+            fs.openSync(tempGzPath, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC);
+          const buffer = new ArrayBuffer(rawData.length);
+          const view = new Uint8Array(buffer);
+          view.set(rawData);
+          fs.writeSync(file.fd, buffer);
+          fs.closeSync(file);
+
+          // 2. Decompress to the databaseDir
+          // Note: If API < 12 throws an error for .gz, replace the next line with:
+          // await zlib.uncompressFile(tempGzPath, dbPath);
+          await zlib.decompressFile(tempGzPath, dbPath);
+
+          // 3. Rule §M: Download Validation (Size)
+          const stat = fs.statSync(dbPath);
+          if (stat.size <= 10240) {
+            throw new Error(`Decompressed database too small: ${stat.size} bytes`);
+          }
+
+          // 4. Rule §M: Download Validation (Header)
+          const headerBuffer = new ArrayBuffer(16);
+          const readFile = fs.openSync(dbPath, fs.OpenMode.READ_ONLY);
+          fs.readSync(readFile.fd, headerBuffer);
+          fs.closeSync(readFile);
+
+          const headerBytes = new Uint8Array(headerBuffer);
+          let headerString = '';
+          for (let i = 0; i < headerBytes.length; i++) {
+            headerString += String.fromCharCode(headerBytes[i]);
+          }
+
+          if (!headerString.startsWith('SQLite format 3')) {
+            throw new Error('Invalid SQLite header');
+          }
+        } finally {
+          // 5. Cleanup temp .gz file regardless of success or failure
+          if (fs.accessSync(tempGzPath)) {
+            fs.unlinkSync(tempGzPath);
+          }
+        }
       }
 
+      // Rule §M: SQLite Read-Only
       const config: relationalStore.StoreConfig = {
         name: `${lang}.db`,
         securityLevel: relationalStore.SecurityLevel.S1,

@@ -3,6 +3,7 @@
 import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
 import { DateHelper } from '../hijricalendar/DateUtils';
 import { HijriDate } from '../hijricalendar/HijriCalendarModels';
+import { EidInfo } from './RamadanModels';
 
 /** One of the three ten-day periods of Ramadan. */
 export interface RamadanAshra {
@@ -225,5 +226,58 @@ export class RamadanHelper {
     } catch (err) {
       return date.toDateString();
     }
+  }
+
+  /**
+   * Detect the Eid al-Fitr period (Shawwal days 1–3).
+   *
+   * Returns null outside that window, so callers can treat the
+   * presence of a non-null value as "show the Eid card" without any
+   * additional date math on their side.
+   *
+   * Mirrors getRamadanInfo's approach: converts today to Hijri
+   * (honouring the user offset), gates on Shawwal days 1-3, and
+   * resolves the Gregorian date of 1 Shawwal for display. The
+   * resolved Eid date lets the Home card show "Eid al-Fitr 1447"
+   * with the correct year even when the user is mid-period on day 2
+   * or day 3.
+   *
+   * Per the EidInfo interface contract in RamadanModels.ets:
+   *   - isEidPeriod is always true when the object is returned
+   *   - eidDay is 1, 2, or 3
+   *   - eidDate is midnight of Shawwal 1
+   */
+  static getEidInfo(offsetDays: number): EidInfo | null {
+    const now = new Date();
+    const todayHijri: HijriDate = HijriCalendarHelper.getHijriDate(now, offsetDays);
+
+    // Shawwal is month 10. Days 1-3 are the Eid period.
+    if (todayHijri.month !== 10
+      || todayHijri.day < 1
+      || todayHijri.day > 3) {
+      return null;
+    }
+
+    // Resolve 1 Shawwal in Gregorian for the same Hijri year.
+    // Anchor on `now`; the default search range (±60 days) easily
+    // covers the 0-2 day gap between Shawwal 1 and today.
+    const eidDate = HijriCalendarHelper.findGregorianForHijri(
+      todayHijri.year, 10, 1, offsetDays, now
+    );
+    if (eidDate === null) {
+      // Defensive: if the engine can't resolve Shawwal 1 for a year
+      // we're actively in, treat it as "no Eid period" rather than
+      // surfacing a broken card.
+      return null;
+    }
+    eidDate.setHours(0, 0, 0, 0);
+
+    const info: EidInfo = {
+      isEidPeriod: true,
+      eidDay: todayHijri.day,
+      hijriYear: todayHijri.year,
+      eidDate: eidDate
+    };
+    return info;
   }
 }

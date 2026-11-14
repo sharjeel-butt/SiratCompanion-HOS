@@ -74,23 +74,56 @@ export class TimezoneResolver {
     return t >= start.getTime() && t < end.getTime();
   }
 
+  /**
+   * DST detection for Southern Hemisphere regions.
+   *
+   * Hemisphere summer runs roughly September → April, with the
+   * exact DST boundaries varying by country:
+   *
+   *   NZ          : last Sunday of September → first Sunday of April
+   *   AU / Lord H.: first Sunday of October → first Sunday of April
+   *   Chile       : first Sunday of September → first Sunday of April
+   *                 (approximation; Chile's real rule tracks a
+   *                 Saturday-night transition, but the ±1-day
+   *                 difference is immaterial for prayer times.)
+   *
+   * `date.getUTCMonth()` is 0-indexed (Jan=0, Dec=11), so it is
+   * converted to 1-indexed `monthNum` before comparisons. The
+   * earlier code compared the 0-indexed value against a 1-indexed
+   * `startMonth`, which silently skipped the entire start month.
+   */
   private static isSouthernDst(rule: DstRule, date: Date, year: number): boolean {
-    const m = date.getUTCMonth();
+    const m = date.getUTCMonth(); // 0-indexed (Jan=0, Dec=11)
     const t = date.getTime();
-    const startMonth = rule === DstRule.NZ ? 9 : 10; // Oct (NZ is Sep)
+    const monthNum = m + 1; // 1-indexed, matching startMonth below
 
-    if (m >= startMonth) {
-      const start = TimezoneResolver.nthSunday(year, startMonth, 1);
-      return t >= start.getTime();
-    }
-    if (m <= 2) {
+    // Jan / Feb / Mar — always DST in the Southern Hemisphere.
+    if (monthNum >= 1 && monthNum <= 3) {
       return true;
-    } // Jan, Feb, Mar
-    if (m === 3) {
-      const end = TimezoneResolver.nthSunday(year, 4, 1); // 1st Sun Apr
+    }
+
+    // April — DST ends on the first Sunday of April.
+    if (monthNum === 4) {
+      const end = TimezoneResolver.nthSunday(year, 4, 1);
       return t < end.getTime();
     }
-    return false;
+
+    // May / Jun / Jul / Aug — never DST in the Southern Hemisphere.
+    if (monthNum >= 5 && monthNum <= 8) {
+      return false;
+    }
+
+    // Sep / Oct / Nov / Dec — DST from the region's start date.
+    let start: Date;
+    if (rule === DstRule.NZ) {
+      start = TimezoneResolver.lastWeekdayOfMonth(year, 9, 0); // last Sunday of Sept
+    } else if (rule === DstRule.CHILE) {
+      start = TimezoneResolver.nthSunday(year, 9, 1); // first Sunday of Sept (approx.)
+    } else {
+      // Australia, Lord Howe.
+      start = TimezoneResolver.nthSunday(year, 10, 1); // first Sunday of Oct
+    }
+    return t >= start.getTime();
   }
 
   private static isEgyptDst(date: Date, year: number): boolean {

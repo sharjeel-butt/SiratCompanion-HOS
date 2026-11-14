@@ -47,8 +47,7 @@ export struct PageHeader {
   clockFormat: string = ClockFormat.SYSTEM;
   @Prop isRamadan: boolean = false;
   @Prop fastingEndTime: string = '';
-  onNavigateToTasbih: (tasbihId: string, dhikrIndex: number, prayerId: string) => void = () => {
-  };
+
   onOpenLocationSettings: () => void = () => {
   };
   onOpenSettings: () => void = () => {

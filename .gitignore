@@ -33,3 +33,4 @@ build-profile.json5
 /.clang-tidy
 **/.test
 /.appanalyzer
+scripts/

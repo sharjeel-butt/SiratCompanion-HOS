@@ -3207,6 +3207,18 @@
     {
       "name": "privacy_view_online",
       "value": "View Full Online Policy"
+    },
+    {
+      "name": "get_directions",
+      "value": "Get Directions"
+    },
+    {
+      "name": "visit_website",
+      "value": "Visit Website"
+    },
+    {
+      "name": "no_contact_info",
+      "value": "No contact information available for this mosque."
     }
   ]
 }

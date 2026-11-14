@@ -10,6 +10,9 @@
     "temp/*",
     "databases/rdb/mosques/*.db",
     "databases/rdb/mosques/*.db-wal",
-    "databases/rdb/mosques/*.db-shm"
+    "databases/rdb/mosques/*.db-shm",
+    "databases/rdb/hadith_v2/*.db",
+    "databases/rdb/hadith_v2/*.db-wal",
+    "databases/rdb/hadith_v2/*.db-shm"
   ]
 }

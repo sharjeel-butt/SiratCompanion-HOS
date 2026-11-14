@@ -3206,6 +3206,18 @@
     {
       "name": "privacy_view_online",
       "value": "查看完整在线政策"
+    },
+    {
+      "name": "get_directions",
+      "value": "获取路线"
+    },
+    {
+      "name": "visit_website",
+      "value": "访问网站"
+    },
+    {
+      "name": "no_contact_info",
+      "value": "此清真寺暂无联系信息。"
     }
   ]
 }

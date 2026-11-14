@@ -3207,6 +3207,18 @@
     {
       "name": "privacy_view_online",
       "value": "عرض السياسة الكاملة عبر الإنترنت"
+    },
+    {
+      "name": "get_directions",
+      "value": "الحصول على الاتجاهات"
+    },
+    {
+      "name": "visit_website",
+      "value": "زيارة الموقع الإلكتروني"
+    },
+    {
+      "name": "no_contact_info",
+      "value": "لا تتوفر معلومات اتصال لهذا المسجد."
     }
 
 

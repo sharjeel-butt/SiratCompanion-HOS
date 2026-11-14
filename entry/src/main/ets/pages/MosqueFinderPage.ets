@@ -11,7 +11,6 @@ import { LocationCache } from '../location/LocationCache';
 import { OfflineCityLookup } from '../location/OfflineCityLookup';
 import { MosqueStorage } from '../mosques/MosqueStorage';
 import { LocationHelper } from '../location/LocationUtils';
-import { AppLogger } from '../core/AppLogger';
 
 @Entry
 @Component
@@ -447,10 +446,12 @@ struct MosqueFinderPage {
             if (this.isFetchingLocation) {
               Row({ space: 8 }) {
                 LoadingProgress().width(16).height(16).color(this.colors.accentGold)
-                Text('Fetching...').fontSize(14).fontColor(this.colors.accentGold)
+                Text(L.get('fetching', this.appLanguage))
+                  .fontSize(14).fontColor(this.colors.accentGold)
               }
             } else {
-              Text('Use Current Location').fontSize(14).fontColor(this.colors.accentGold)
+              Text(L.get('use_current_location', this.appLanguage))
+                .fontSize(14).fontColor(this.colors.accentGold)
             }
           }
           .width('100%')
@@ -460,9 +461,11 @@ struct MosqueFinderPage {
           .backgroundColor(this.colors.tintSubtle)
           .borderRadius(8)
           .border({ width: 1, color: this.colors.borderSoft })
-          .onClick(() => {
-            this.handleLocationFetch();
-          })
+          .parallelGesture(
+            TapGesture().onAction(() => {
+              this.handleLocationFetch();
+            })
+          )
 
           // 👇 Debug Status Text
           if (this.locationStatus.length > 0) {
@@ -505,7 +508,7 @@ struct MosqueFinderPage {
   MosqueDetailsSheet() {
     if (this.selectedMosque) {
       Column() {
-        // 1. Drag Bar (Auto-handled by bindSheet, but good for visual spacing)
+        // 1. Drag Bar
         Row().height(8)
 
         // 2. Header (Name and Distance)
@@ -548,7 +551,10 @@ struct MosqueFinderPage {
         // 3. Address (If available)
         if (this.selectedMosque.address && this.selectedMosque.address.length > 0) {
           Row({ space: 12 }) {
-            Image($r('app.media.ic_pin')).width(16).height(16).fillColor(this.colors.accentGold).margin({ top: 2 })
+            Image($r('app.media.ic_pin'))
+              .width(16).height(16)
+              .fillColor(this.colors.accentGold)
+              .margin({ top: 2 })
             Text(this.selectedMosque.address)
               .fontSize(14).fontColor(this.colors.textMuted).lineHeight(20)
               .layoutWeight(1)
@@ -567,136 +573,86 @@ struct MosqueFinderPage {
 
         // 4. Action Buttons
         Column({ space: 12 }) {
-          // Directions Button (Always available)
-          // 👇 FIX: Use a Row with a TapGesture. This bypasses the Button-in-Scroll bug.
-          Row() {
-            if (this.isFetchingLocation) {
-              Row({ space: 8 }) {
-                LoadingProgress().width(16).height(16).color(this.colors.accentGold)
-                Text('Fetching...').fontSize(14).fontColor(this.colors.accentGold)
-              }
-            } else {
-              Text('Use Current Location').fontSize(14).fontColor(this.colors.accentGold)
+          // ---- Get Directions — always shown ----
+          Button() {
+            Row({ space: 8 }) {
+              Image($r('app.media.ic_compass'))
+                .width(18).height(18)
+                .fillColor(this.colors.textOnAccent)
+              Text(L.get('get_directions', this.appLanguage))
+                .fontSize(15).fontWeight(FontWeight.Medium)
+                .fontColor(this.colors.textOnAccent)
             }
           }
           .width('100%')
-          .height(44)
-          .justifyContent(FlexAlign.Center)
-          .alignItems(VerticalAlign.Center)
-          .backgroundColor(this.colors.tintSubtle)
-          .borderRadius(8)
-          .border({ width: 1, color: this.colors.borderSoft })
-          // 👇 USE TapGesture INSTEAD OF onClick
-          .gesture(
-            TapGesture().onAction(async () => {
-              console.info('MOSQUE_DEBUG: TAP GESTURE FIRED!');
+          .height(48)
+          .backgroundColor(this.colors.accentGold)
+          .borderRadius(12)
+          .onClick(() => {
+            if (this.selectedMosque) {
+              this.openMaps(this.selectedMosque);
+            }
+          })
 
-              if (this.isFetchingLocation) {
-                return;
-              }
-              this.isFetchingLocation = true;
-              this.locationStatus = 'BUTTON CLICKED. STARTING GPS...';
-
-              // Try to show a toast immediately to prove UI updates work
-              this.getUIContext().getPromptAction().showToast({ message: "Fetching location...", duration: 2000 });
-
-              try {
-                let ctx: common.UIAbilityContext;
-                try {
-                  ctx = getContext(this) as common.UIAbilityContext;
-                  if (!ctx) {
-                    throw new Error("getContext returned null");
-                  }
-                } catch (e) {
-                  ctx = this.getUIContext().getHostContext() as common.UIAbilityContext;
-                }
-
-                console.info('MOSQUE_DEBUG: Fetching location...');
-                const data = await LocationHelper.fetchLocationData(ctx, 'interactive');
-
-                console.info('MOSQUE_DEBUG: GPS SUCCESS! ' + JSON.stringify(data));
-
-                this.formLat = data.latitude.toFixed(6);
-                this.formLng = data.longitude.toFixed(6);
-                this.locationStatus = `Success: ${data.latitude.toFixed(4)}, ${data.longitude.toFixed(4)}`;
-
-                this.getUIContext().getPromptAction().showToast({ message: "Location fetched!" });
-
-              } catch (err) {
-                const error = err as Error;
-                console.error('MOSQUE_DEBUG: ERROR! ' + error.message);
-
-                this.locationStatus = `ERROR: ${error.message}`;
-
-                if (error.message === 'GPS_OFF') {
-                  await LocationHelper.showLocationDisabledDialog(this.colors.accentGold);
-                } else if (error.message === 'PERMISSION_DENIED') {
-                  await LocationHelper.showPermissionDeniedDialog(this.colors.accentGold);
-                }
-
-                try {
-                  const cache = await LocationCache.load();
-                  if (cache) {
-                    this.formLat = cache.latitude.toFixed(6);
-                    this.formLng = cache.longitude.toFixed(6);
-                    this.locationStatus += ' (Used Cache)';
-                  }
-                } catch (cacheErr) {
-                  console.error('MOSQUE_DEBUG: Cache load failed');
-                }
-              } finally {
-                console.info('MOSQUE_DEBUG: FINISHED.');
-                this.isFetchingLocation = false;
-              }
-            })
-          )
-
-          // 👇 Debug Text
-          if (this.locationStatus.length > 0) {
-            Text(this.locationStatus)
-              .fontSize(14)
-              .fontWeight(FontWeight.Bold)
-              .fontColor('#FFFFFF')
-              .backgroundColor(
-                this.locationStatus.startsWith('ERROR') ? '#FF0000' : '#00AA00') // Red for error, Green for success
-              .width('100%')
-              .textAlign(TextAlign.Center)
-              .padding(10)
-              .borderRadius(8)
-              .margin({ top: 10 })
-          }
-          // Phone Button (Conditional)
+          // ---- Phone — conditional ----
           if (this.selectedMosque.phone && this.selectedMosque.phone.length > 0) {
             Button() {
               Row({ space: 8 }) {
-                Image($r('app.media.ic_phone')) // Replace with ic_phone if you have it
+                Image($r('app.media.ic_phone'))
                   .width(18).height(18).fillColor(this.colors.textWhite)
                 Text(this.selectedMosque.phone)
-                  .fontSize(15).fontWeight(FontWeight.Medium).fontColor(this.colors.textWhite)
+                  .fontSize(15)
+                  .fontWeight(FontWeight.Medium)
+                  .fontColor(this.colors.textWhite)
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+                  .layoutWeight(1)
+                  .textAlign(TextAlign.Center)
               }
             }
             .width('100%')
             .height(48)
             .backgroundColor(this.colors.tintSoft)
             .borderRadius(12)
-            .onClick(() => this.openDialer(this.selectedMosque!.phone))
+            .onClick(() => {
+              if (this.selectedMosque) {
+                this.openDialer(this.selectedMosque.phone);
+              }
+            })
           }
 
-          // Website Button (Conditional)
+          // ---- Website — conditional ----
           if (this.selectedMosque.website && this.selectedMosque.website.length > 0) {
             Button() {
               Row({ space: 8 }) {
                 Image($r('app.media.ic_globe'))
                   .width(18).height(18).fillColor(this.colors.textWhite)
-                Text('Visit Website')
-                  .fontSize(15).fontWeight(FontWeight.Medium).fontColor(this.colors.textWhite)
+                Text(L.get('visit_website', this.appLanguage))
+                  .fontSize(15).fontWeight(FontWeight.Medium)
+                  .fontColor(this.colors.textWhite)
               }
             }
             .width('100%')
             .height(48)
             .backgroundColor(this.colors.tintSoft)
             .borderRadius(12)
-            .onClick(() => this.openWebsite(this.selectedMosque!.website))
+            .onClick(() => {
+              if (this.selectedMosque) {
+                this.openWebsite(this.selectedMosque.website);
+              }
+            })
+          }
+
+          // ---- No-contact hint ----
+          if ((!this.selectedMosque.phone || this.selectedMosque.phone.length === 0) &&
+            (!this.selectedMosque.website || this.selectedMosque.website.length === 0)) {
+            Text(L.get('no_contact_info', this.appLanguage))
+              .fontSize(12)
+              .fontColor(this.colors.textMuted)
+              .fontStyle(FontStyle.Italic)
+              .textAlign(TextAlign.Center)
+              .width('100%')
+              .padding({ top: 4 })
           }
         }
         .width('100%')
@@ -710,7 +666,7 @@ struct MosqueFinderPage {
       .width('100%').backgroundColor(this.colors.cardDark)
       .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
     } else {
-      // Fallback just in case
+      // Fallback
       Column().width('100%').height(100).backgroundColor(this.colors.cardDark)
     }
   }

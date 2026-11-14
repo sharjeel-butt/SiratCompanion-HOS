@@ -3206,6 +3206,18 @@
     {
       "name": "privacy_view_online",
       "value": "সম্পূর্ণ অনলাইন নীতি দেখুন"
+    },
+    {
+      "name": "get_directions",
+      "value": "দিকনির্দেশনা পান"
+    },
+    {
+      "name": "visit_website",
+      "value": "ওয়েবসাইট দেখুন"
+    },
+    {
+      "name": "no_contact_info",
+      "value": "এই মসজিদের জন্য কোনো যোগাযোগের তথ্য পাওয়া যায় না।"
     }
   ]
 

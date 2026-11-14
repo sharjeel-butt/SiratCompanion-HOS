@@ -12,6 +12,11 @@ export interface PrayerCheckState {
   asr: boolean;
   maghrib: boolean;
   isha: boolean;
+  fajrAt?: number;
+  dhuhrAt?: number;
+  asrAt?: number;
+  maghribAt?: number;
+  ishaAt?: number;
 }
 
 const DEFAULT_OFFSETS: PrayerOffsets = {
@@ -483,31 +488,47 @@ export class PrayerManager {
   }
 
   static saveStateForDate(dateKey: string, prayers: PrayerModel[]): void {
+    const now = Date.now();
+    const prev = PrayerManager.getCheckState(dateKey);
+
     const state: PrayerCheckState = {
       fajr: false,
       dhuhr: false,
       asr: false,
       maghrib: false,
-      isha: false
+      isha: false,
+      fajrAt: undefined,
+      dhuhrAt: undefined,
+      asrAt: undefined,
+      maghribAt: undefined,
+      ishaAt: undefined
     };
 
     for (const p of prayers) {
       const checked = p.checked === true;
+      // Preserve previous timestamp when re-saving an already-checked
+      // prayer. Stamp `now` the moment a prayer transitions from
+      // unchecked → checked. Clear on uncheck.
       switch (p.id) {
         case 'fajr':
           state.fajr = checked;
+          state.fajrAt = checked ? (prev.fajr ? prev.fajrAt : now) : undefined;
           break;
         case 'dhuhr':
           state.dhuhr = checked;
+          state.dhuhrAt = checked ? (prev.dhuhr ? prev.dhuhrAt : now) : undefined;
           break;
         case 'asr':
           state.asr = checked;
+          state.asrAt = checked ? (prev.asr ? prev.asrAt : now) : undefined;
           break;
         case 'maghrib':
           state.maghrib = checked;
+          state.maghribAt = checked ? (prev.maghrib ? prev.maghribAt : now) : undefined;
           break;
         case 'isha':
           state.isha = checked;
+          state.ishaAt = checked ? (prev.isha ? prev.ishaAt : now) : undefined;
           break;
       }
     }
@@ -526,11 +547,9 @@ export class PrayerManager {
       );
 
     // Bump the version counter so any page observing it re-reads state.
-    // Pages inside a Tabs host do not receive onPageShow() on tab
-    // switches, so this is the only reliable cross-tab refresh signal.
-    const prev = AppStorage.get<number>(STORAGE_KEY_PRAYER_STATE_VERSION);
-    const next = (prev === undefined ? 0 : prev) + 1;
-    AppStorage.setOrCreate(STORAGE_KEY_PRAYER_STATE_VERSION, next);
+    const prevVer = AppStorage.get<number>(STORAGE_KEY_PRAYER_STATE_VERSION);
+    const nextVer = (prevVer === undefined ? 0 : prevVer) + 1;
+    AppStorage.setOrCreate(STORAGE_KEY_PRAYER_STATE_VERSION, nextVer);
   }
 
   static loadStateForDate(
@@ -601,7 +620,12 @@ export class PrayerManager {
       dhuhr: false,
       asr: false,
       maghrib: false,
-      isha: false
+      isha: false,
+      fajrAt: undefined,
+      dhuhrAt: undefined,
+      asrAt: undefined,
+      maghribAt: undefined,
+      ishaAt: undefined
     };
     if (!json || json === '') {
       return empty;
@@ -685,5 +709,31 @@ export class PrayerManager {
     const deltaMinutes = Math.round((locationOffsetHours - deviceOffset) * 60);
     const deviceMinutes = now.getHours() * 60 + now.getMinutes();
     return (((deviceMinutes + deltaMinutes) % 1440) + 1440) % 1440;
+  }
+
+  /**
+   * Return the epoch-ms timestamp at which a specific prayer was marked
+   * checked for a given date. Returns undefined when the prayer is not
+   * marked, or when the record predates v4.0.7 (no *At fields yet).
+   *
+   * Synchronous. Reads through getCheckState() so the caller never has
+   * to know about the stateMap layout.
+   */
+  static getMarkedAt(dateKey: string, prayerId: string): number | undefined {
+    const state = PrayerManager.getCheckState(dateKey);
+    switch (prayerId) {
+      case 'fajr':
+        return state.fajrAt;
+      case 'dhuhr':
+        return state.dhuhrAt;
+      case 'asr':
+        return state.asrAt;
+      case 'maghrib':
+        return state.maghribAt;
+      case 'isha':
+        return state.ishaAt;
+      default:
+        return undefined;
+    }
   }
 }

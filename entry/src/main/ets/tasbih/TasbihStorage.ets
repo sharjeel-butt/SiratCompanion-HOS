@@ -213,12 +213,30 @@ export class TasbihStorage {
   }
 
   static async save(tasbihs: Tasbih[], activeTasbihId: string, activeDhikrIndex: number): Promise<void> {
-    // 1. Update cache immediately so UI is fluid
+    // 1. Update the in-memory cache — this is the source of truth for
+    //    every UI subscriber that reads through TasbihStorage.load().
     TasbihStorage.cachedTasbihs = tasbihs;
     TasbihStorage.cachedActiveTasbihId = activeTasbihId;
     TasbihStorage.cachedActiveDhikrIndex = activeDhikrIndex;
 
-    // 2. Save to disk in background
+    // 2. Bump the version counter BEFORE the disk write.
+    //
+    //    The counter signals every @StorageLink(STORAGE_KEY_TASBIH_
+    //    STATE_VERSION) subscriber (HomePage BoundTasbihsCard,
+    //    TasbihIndicator) to re-read from the cache. It must fire
+    //    even if the subsequent disk write fails — the UI is already
+    //    showing the new state (from the cache), and a silent
+    //    divergence between UI and any disk state is worse than a
+    //    logged write failure.
+    //
+    //    This also runs when `store` is null (init failed) for the
+    //    same reason — the cache updated above is authoritative for
+    //    the current session.
+    const prev = AppStorage.get<number>(STORAGE_KEY_TASBIH_STATE_VERSION);
+    const next = (prev === undefined ? 0 : prev) + 1;
+    AppStorage.setOrCreate(STORAGE_KEY_TASBIH_STATE_VERSION, next);
+
+    // 3. Persist to disk in the background.
     if (!TasbihStorage.store) {
       return;
     }
@@ -227,12 +245,8 @@ export class TasbihStorage {
       await TasbihStorage.store.put(KEY_ACTIVE, activeTasbihId);
       await TasbihStorage.store.put(KEY_ACTIVE_DHK, activeDhikrIndex);
       await TasbihStorage.store.flush();
-
-      const prev = AppStorage.get<number>(STORAGE_KEY_TASBIH_STATE_VERSION);
-      const next = (prev === undefined ? 0 : prev) + 1;
-      AppStorage.setOrCreate(STORAGE_KEY_TASBIH_STATE_VERSION, next);
     } catch (err) {
-      console.warn('[TasbihStorage] save failed');
+      console.warn('[TasbihStorage] save failed — cache/disk may diverge');
     }
   }
 }

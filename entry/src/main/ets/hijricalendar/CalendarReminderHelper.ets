@@ -4,6 +4,7 @@ import { calendarManager } from '@kit.CalendarKit';
 import { abilityAccessCtrl, bundleManager, common, Permissions } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { AppLogger } from '../core/AppLogger';
+import { PreferencesHelper } from '../core/PreferencesHelper';
 
 /**
  * Calendar Kit backend for prayer-time reminders.
@@ -78,6 +79,8 @@ export class CalendarReminderHelper {
   private static calendar: calendarManager.Calendar | null = null;
   private static initializing: boolean = false;
   private static ready: boolean = false;
+  private static readonly KEY_PRAYER_EVENT_IDS = 'calendar_prayer_event_ids';
+  private static readonly KEY_CUSTOM_EVENT_IDS = 'calendar_custom_event_ids';
 
   // ============================================================
   // INIT
@@ -261,111 +264,149 @@ export class CalendarReminderHelper {
       return 0;
     }
 
-    // Clear old events first so we don't accumulate duplicates.
+    // Clears existing events AND the prayer-ID registry.
     await CalendarReminderHelper.cancelAll();
 
-    let created = 0;
+    // Create fresh events, tracking each returned ID.
+    const newIds: number[] = [];
     for (const entry of entries) {
-      const ok = await CalendarReminderHelper.publishEvent(entry);
-      if (ok) {
-        created++;
+      const id = await CalendarReminderHelper.publishEvent(entry);
+      if (id > 0) {
+        newIds.push(id);
       }
     }
 
+    // Persist tracking. Done AFTER the loop so a mid-loop failure
+    // still leaves a consistent registry — we track exactly what
+    // we successfully created, nothing more.
+    await CalendarReminderHelper.writeEventIds(
+      CalendarReminderHelper.KEY_PRAYER_EVENT_IDS, newIds
+    );
+
     AppLogger.info('CalendarReminderHelper',
-      `Scheduled ${created} calendar event(s)`);
-    return created;
+      `Scheduled ${newIds.length} calendar event(s), IDs tracked`);
+    return newIds.length;
   }
 
   // ============================================================
   // SCHEDULING
   // ============================================================
 
-  /**
-   * Delete every Sirat event from the app's calendar account.
-   *
-   * Three layers of safety, all applied:
-   *
-   *   1. The calendar object is scoped to the app's own account
-   *      (obtained via getCalendar with the SiratCompanionCalendar
-   *      account name). Events in other accounts cannot be reached.
-   *
-   *   2. An EventFilter.filterByTitle restricts the result set to
-   *      events whose title contains the app's EVENT_TITLE_PREFIX.
-   *      This guarantees that even if the underlying account ever
-   *      contained a non-Sirat event, it would not appear in the
-   *      query results.
-   *
-   *   3. Each event is re-checked with isOurs() before its delete
-   *      call, so a filter that returned a superset cannot cause a
-   *      wrong deletion.
-   *
-   * Called by NotificationHelper.doRescheduleAll() before scheduling,
-   * so that a change to the lead time, prayer toggles, location, or
-   * calculation method always produces a clean slate for the events
-   * that belong to us.
-   *
-   * Individual deletions retry once. A failure is logged but not
-   * fatal — the next reschedule will attempt the delete again.
-   */
   static async cancelAll(): Promise<void> {
     if (!CalendarReminderHelper.ready ||
       CalendarReminderHelper.calendar === null) {
+      // Loud log instead of silent return. If this fires when the user
+      // has toggled reminders off, events remain on the device until
+      // permissions are re-granted and a reschedule runs — the user
+      // needs to be able to see WHY cancellation didn't happen.
+      AppLogger.warn('CalendarReminderHelper',
+        'cancelAll skipped — backend not ready. Existing events, if any, ' +
+          'remain in the calendar until permission is re-granted.');
       return;
     }
 
+    // ---- Phase 1: Delete by tracked IDs (primary path) ----
+    //
+    // Fast, semantic-free, immune to any future changes in
+    // EventFilter semantics. deleteWithRetry() already handles
+    // "event not found" gracefully — the ID is simply dropped.
+    const trackedIds = await CalendarReminderHelper.readEventIds(
+      CalendarReminderHelper.KEY_PRAYER_EVENT_IDS
+    );
+
+    let deletedById = 0;
+    const survivingIds: number[] = [];
+    for (const id of trackedIds) {
+      const ok = await CalendarReminderHelper.deleteWithRetry(id);
+      if (ok) {
+        deletedById++;
+      } else {
+        // Delete failed twice — assume the event is gone anyway
+        // (typical cause: user manually deleted it from the
+        // Calendar app). The filter sweep below is the safety net.
+        survivingIds.push(id);
+      }
+    }
+
+    // ---- Phase 2: Filter sweep (safety net) ----
+    //
+    // Catches:
+    //   1. Events created by v4.0.6 or earlier, before ID tracking
+    //   2. Events whose tracking write failed in a prior reschedule
+    //   3. Events whose ID lookup in phase 1 errored out
+    //
+    // Skips tracked IDs that phase 1 already tried — avoids a third
+    // delete attempt per event in the same cycle. If phase 1's
+    // failures still exist, they're caught on the NEXT cycle's sweep.
+    let sweptByFilter = 0;
     try {
-      // Layer 2 — title filter. Combined with the account-scoped
-      // calendar object, this guarantees we only see our own events.
-      const filter = calendarManager.EventFilter.filterByTitle(
-        CalendarReminderHelper.EVENT_TITLE_PREFIX
+      const now = Date.now();
+      const dayMs = 86400000;
+      const filter = calendarManager.EventFilter.filterByTime(
+        now - 7 * dayMs,
+        now + 10 * 365 * dayMs
       );
       const events =
         await CalendarReminderHelper.calendar.getEvents(filter);
-
-      AppLogger.info('CalendarReminderHelper',
-        `cancelAll: found ${events.length} event(s) to delete`);
-
-      let deleted = 0;
-      let failed = 0;
 
       for (const ev of events) {
         if (ev.id === undefined) {
           continue;
         }
-
-        // Layer 3 — per-event title re-check.
         if (!CalendarReminderHelper.isOurs(ev)) {
-          AppLogger.warn('CalendarReminderHelper',
-            `cancelAll: skipping non-Sirat event id=${ev.id} ` +
-              `title="${ev.title ?? ''}"`);
           continue;
         }
-
-        // Layer 4 — skip custom-event reminders. These are managed by
-        // CustomEventNotifier and must NOT be wiped by a prayer-reminder
-        // reschedule.
         if (ev.description === CalendarReminderHelper.CUSTOM_EVENT_DESCRIPTION) {
+          // Custom-event reminders are managed separately.
           continue;
         }
-
+        if (survivingIds.indexOf(ev.id) >= 0) {
+          // Already tried in phase 1 — skip.
+          continue;
+        }
         const ok = await CalendarReminderHelper.deleteWithRetry(ev.id);
         if (ok) {
-          deleted++;
-        } else {
-          failed++;
+          sweptByFilter++;
         }
       }
-
-      AppLogger.info('CalendarReminderHelper',
-        `cancelAll: deleted ${deleted}, failed ${failed}`);
     } catch (err) {
       const e = err as BusinessError;
       AppLogger.warn('CalendarReminderHelper',
-        `cancelAll failed: ${e.code} ${e.message}`);
+        `cancelAll filter sweep failed: ${e.code} ${e.message}`);
     }
+
+    // ---- Phase 3: Clear the prayer-ID registry ----
+    //
+    // Everything prayer-related should be gone now. If a small
+    // number of deletes failed, the registry is cleared anyway —
+    // the next cycle's filter sweep will pick up any stragglers.
+    await CalendarReminderHelper.writeEventIds(
+      CalendarReminderHelper.KEY_PRAYER_EVENT_IDS, []
+    );
+
+    AppLogger.info('CalendarReminderHelper',
+      `cancelAll: deleted ${deletedById} by ID, ` +
+        `${sweptByFilter} by filter sweep`);
   }
 
+  /**
+   * Schedule a single event. Returns 1 on success, 0 on failure.
+   *
+   * Two callers use this method with different intents:
+   *
+   *   CustomEventNotifier.reschedule()
+   *     → Real custom-event reminders. Description is set to
+   *       CUSTOM_EVENT_DESCRIPTION. These SHOULD be tracked so
+   *       cancelCustomEventReminders() can delete them by ID.
+   *
+   *   NotificationHelper.publishCalendarTest()
+   *     → A one-off test event for the user to confirm their
+   *       notifications work. Description is the hadith text.
+   *       These are ephemeral — not tracked. cancelAll() will
+   *       pick them up on the next prayer-reschedule sweep.
+   *
+   * The description field is the discriminator.
+   */
   static async addTestEvent(
     entry: CalendarReminderEntry
   ): Promise<number> {
@@ -373,14 +414,32 @@ export class CalendarReminderHelper {
       CalendarReminderHelper.calendar === null) {
       return 0;
     }
-    const ok = await CalendarReminderHelper.publishEvent(entry);
-    if (ok) {
-      AppLogger.info('CalendarReminderHelper',
-        `Test event scheduled: "${entry.title}" at ` +
-          `${new Date(entry.startTime).toISOString()}`);
-      return 1;
+
+    const id = await CalendarReminderHelper.publishEvent(entry);
+    if (id <= 0) {
+      return 0;
     }
-    return 0;
+
+    // Track only real custom events.
+    if (entry.description === CalendarReminderHelper.CUSTOM_EVENT_DESCRIPTION) {
+      try {
+        const existing = await CalendarReminderHelper.readEventIds(
+          CalendarReminderHelper.KEY_CUSTOM_EVENT_IDS
+        );
+        existing.push(id);
+        await CalendarReminderHelper.writeEventIds(
+          CalendarReminderHelper.KEY_CUSTOM_EVENT_IDS, existing
+        );
+      } catch (e) {
+        // Tracking failure — the filter sweep in
+        // cancelCustomEventReminders will catch it next cycle.
+      }
+    }
+
+    AppLogger.info('CalendarReminderHelper',
+      `Test event scheduled: "${entry.title}" at ` +
+        `${new Date(entry.startTime).toISOString()}`);
+    return 1;
   }
 
   // ============================================================
@@ -402,18 +461,39 @@ export class CalendarReminderHelper {
   static async cancelCustomEventReminders(): Promise<void> {
     if (!CalendarReminderHelper.ready ||
       CalendarReminderHelper.calendar === null) {
+      AppLogger.warn('CalendarReminderHelper',
+        'cancelCustomEventReminders skipped — backend not ready. Existing ' +
+          'custom-event reminders, if any, remain in the calendar.');
       return;
     }
 
+    // ---- Phase 1: Delete by tracked IDs ----
+    const trackedIds = await CalendarReminderHelper.readEventIds(
+      CalendarReminderHelper.KEY_CUSTOM_EVENT_IDS
+    );
+
+    let deletedById = 0;
+    const survivingIds: number[] = [];
+    for (const id of trackedIds) {
+      const ok = await CalendarReminderHelper.deleteWithRetry(id);
+      if (ok) {
+        deletedById++;
+      } else {
+        survivingIds.push(id);
+      }
+    }
+
+    // ---- Phase 2: Filter sweep ----
+    let sweptByFilter = 0;
     try {
-      const filter = calendarManager.EventFilter.filterByTitle(
-        CalendarReminderHelper.EVENT_TITLE_PREFIX
+      const now = Date.now();
+      const dayMs = 86400000;
+      const filter = calendarManager.EventFilter.filterByTime(
+        now - 7 * dayMs,
+        now + 10 * 365 * dayMs
       );
       const events =
         await CalendarReminderHelper.calendar.getEvents(filter);
-
-      let deleted = 0;
-      let failed = 0;
 
       for (const ev of events) {
         if (ev.id === undefined) {
@@ -426,21 +506,28 @@ export class CalendarReminderHelper {
           // Prayer reminder — leave it alone.
           continue;
         }
+        if (survivingIds.indexOf(ev.id) >= 0) {
+          continue;
+        }
         const ok = await CalendarReminderHelper.deleteWithRetry(ev.id);
         if (ok) {
-          deleted++;
-        } else {
-          failed++;
+          sweptByFilter++;
         }
       }
-
-      AppLogger.info('CalendarReminderHelper',
-        `cancelCustomEventReminders: deleted ${deleted}, failed ${failed}`);
     } catch (err) {
       const e = err as BusinessError;
       AppLogger.warn('CalendarReminderHelper',
-        `cancelCustomEventReminders failed: ${e.code} ${e.message}`);
+        `cancelCustomEventReminders filter sweep failed: ${e.code} ${e.message}`);
     }
+
+    // ---- Phase 3: Clear the custom-event registry ----
+    await CalendarReminderHelper.writeEventIds(
+      CalendarReminderHelper.KEY_CUSTOM_EVENT_IDS, []
+    );
+
+    AppLogger.info('CalendarReminderHelper',
+      `cancelCustomEventReminders: deleted ${deletedById} by ID, ` +
+        `${sweptByFilter} by filter sweep`);
   }
 
   /**
@@ -487,12 +574,16 @@ export class CalendarReminderHelper {
 
   /**
    * Create one calendar event with the given reminder offsets.
+   *
+   * Returns the created event ID (> 0) on success, or -1 on failure.
+   * Callers that need to track the ID should capture the return value;
+   * callers that only care about success/failure should test `> 0`.
    */
   private static async publishEvent(
     entry: CalendarReminderEntry
-  ): Promise<boolean> {
+  ): Promise<number> {
     if (CalendarReminderHelper.calendar === null) {
-      return false;
+      return -1;
     }
 
     const event: calendarManager.Event = {
@@ -505,13 +596,19 @@ export class CalendarReminderHelper {
     };
 
     try {
-      await CalendarReminderHelper.calendar.addEvent(event);
-      return true;
+      const id = await CalendarReminderHelper.calendar.addEvent(event);
+      if (typeof id === 'number' && id > 0) {
+        return id;
+      }
+      // Defensive: addEvent is documented to return a positive ID, but
+      // treat any unexpected value as a failure so we never accidentally
+      // track `0` or `undefined` as an event ID.
+      return -1;
     } catch (err) {
       const e = err as BusinessError;
       AppLogger.warn('CalendarReminderHelper',
         `addEvent failed for "${entry.title}": ${e.code} ${e.message}`);
-      return false;
+      return -1;
     }
   }
 
@@ -572,6 +669,45 @@ export class CalendarReminderHelper {
       await new Promise<void>((resolve) => setTimeout(resolve, 50));
     }
     return CalendarReminderHelper.ready;
+  }
+
+  /**
+   * Read a tracked event-ID list. Returns only positive, finite
+   * numbers — anything else (stale string, negative, NaN) is dropped
+   * silently so a corrupt preferences write cannot poison deletion.
+   */
+  private static async readEventIds(key: string): Promise<number[]> {
+    try {
+      const json = await PreferencesHelper.getString(key, '[]');
+      const parsed: Object = JSON.parse(json);
+      if (!Array.isArray(parsed)) {
+        return [];
+      }
+      const out: number[] = [];
+      for (const v of parsed as Object[]) {
+        if (typeof v === 'number' && !isNaN(v) && v > 0) {
+          out.push(v);
+        }
+      }
+      return out;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  /** Persist the tracked event-ID list. Fire-and-forget; failures
+   *  are logged but do not break the caller (the filter sweep will
+   *  catch anything that falls through the tracking cracks). */
+  private static async writeEventIds(
+    key: string, ids: number[]
+  ): Promise<void> {
+    try {
+      await PreferencesHelper.setString(key, JSON.stringify(ids));
+    } catch (e) {
+      const err = e as Error;
+      AppLogger.warn('CalendarReminderHelper',
+        `writeEventIds(${key}) failed: ${err.message}`);
+    }
   }
 }
 

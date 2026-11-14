@@ -3206,6 +3206,18 @@
     {
       "name": "privacy_view_online",
       "value": "Tam Çevrimiçi Politikayı Görüntüle"
+    },
+    {
+      "name": "get_directions",
+      "value": "Yol Tarifi Al"
+    },
+    {
+      "name": "visit_website",
+      "value": "Web Sitesini Ziyaret Et"
+    },
+    {
+      "name": "no_contact_info",
+      "value": "Bu cami için iletişim bilgisi mevcut değil."
     }
   ]
 }

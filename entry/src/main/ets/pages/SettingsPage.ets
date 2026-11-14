@@ -1,7 +1,7 @@
 // entry/src/main/ets/pages/SettingsPage.ets
 
 import { mediaquery, promptAction, router } from '@kit.ArkUI';
-import { common, Want } from '@kit.AbilityKit';
+import { common } from '@kit.AbilityKit';
 import { pasteboard } from '@kit.BasicServicesKit';
 import { ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
 import { PageTheme } from '../core/PageTheme';
@@ -41,7 +41,6 @@ import { SettingsRow } from '../settings/SettingsRow';
 import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
 import { WidgetHelper } from '../widgets/WidgetHelper';
 import { OfflineCityLookup } from '../location/OfflineCityLookup';
-import { PrivacyPolicyProvider } from '../legal/PrivacyPolicy';
 
 const MAX_HIJRI_OFFSET = 3;
 
@@ -2109,16 +2108,36 @@ struct SettingsPage {
   }
 
   private async toggleNotifMaster(value: boolean): Promise<void> {
+    const ctx = getContext(this) as common.UIAbilityContext;
+
     if (value) {
-      const ctx = getContext(this) as common.UIAbilityContext;
       const granted = await NotificationHelper.requestPermission(ctx);
       if (!granted) {
         this.notifMaster = false;
         this.showPermissionError();
         return;
       }
-      await CalendarReminderHelper.init(ctx, false); // <-- Added this
+      await CalendarReminderHelper.init(ctx, false);
+    } else {
+      // Turning OFF. We still need the backend ready to DELETE the
+      // existing events — otherwise rescheduleAll() will hit the
+      // "backend not ready" guard and return before cancelAll() runs.
+      //
+      // This is a silent init: no permission prompt. If permissions
+      // are still granted (typical case), the calendar handle is
+      // obtained and cleanup can proceed. If permissions were
+      // revoked since the last session, init fails and we can only
+      // log — which we do below, so this case is diagnosable.
+      if (!CalendarReminderHelper.isReady()) {
+        try {
+          await CalendarReminderHelper.init(ctx, false);
+        } catch (e) {
+          // Swallow — the reschedule call below will log if it
+          // can't cancel because the backend is unavailable.
+        }
+      }
     }
+
     this.notifMaster = value;
     await SettingsHelper.saveNotifMaster(value);
     await NotificationHelper.rescheduleAll();

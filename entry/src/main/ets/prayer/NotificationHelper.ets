@@ -357,8 +357,15 @@ export class NotificationHelper {
 
     if (backend === 'calendar') {
       if (!CalendarReminderHelper.isReady()) {
+        // If master is disabled we came here specifically to CANCEL
+        // reminders — returning before cancelAll() leaves events on
+        // the device. Log at WARN with the intent so this is
+        // diagnosable.
+        const settings = await SettingsHelper.getNotificationSettings();
+        const intent = settings.masterEnabled ? 'schedule' : 'cancel';
         AppLogger.warn('NotificationHelper',
-          'Calendar backend not ready — init failed or not attempted');
+          `Calendar backend not ready — cannot ${intent}. ` +
+            `Events may be orphaned until permission is re-granted.`);
         return {
           ok: false,
           scheduled: 0,
