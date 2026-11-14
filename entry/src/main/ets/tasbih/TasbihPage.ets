@@ -155,7 +155,7 @@ export struct TasbihPage {
     await TasbihStorage.init(ctx);
 
     // REPLACED WITH METHOD CALL
-    await this.reloadTasbihs();
+    await this.reloadTasbihs(true);
 
     // ADDED: Midnight Timer
     this.dateCheckTimer = setInterval(() => {
@@ -1340,26 +1340,57 @@ export struct TasbihPage {
     .width('100%').height('100%')
   }
 
-  private async reloadTasbihs(): Promise<void> {
+  /**
+   * Load tasbih state from storage and initialise the view.
+   *
+   * @param resetToFirstPending
+  *   When true AND no nav target is pending, override the persisted
+   *   activeDhikrIndex with the first dhikr that has not yet reached
+   *   its target today. Only pass true from aboutToAppear — the
+   *   first-mount path. Do NOT pass true from onAppForegrounded or
+   *   onPageShow: the user may be mid-dhikr and expects to resume
+   *   exactly where they left off.
+   */
+  private async reloadTasbihs(
+    resetToFirstPending: boolean = false
+  ): Promise<void> {
     const loaded = await TasbihStorage.load(TasbihManager.createDefaults());
     this.tasbihs = loaded.tasbihs;
     this.activeTasbihId = loaded.activeTasbihId;
     this.activeDhikrIndex = loaded.activeDhikrIndex;
 
-    // Re-read nav target AFTER the await — the value may have been
-    // set (or cleared) while we were waiting on storage.
     const targetTasbih: string = AppStorage.get<string>('nav_target_tasbih') ?? '';
     if (targetTasbih.length > 0) {
+      // Nav target wins — caller knows the exact dhikr they want.
       const targetDhikr: number = AppStorage.get<number>('nav_target_dhikr') ?? 0;
       const targetPrayer: string = AppStorage.get<string>('nav_target_prayer') ?? '';
       AppLogger.info('TasbihPage',
         `reloadTasbihs: applying nav tasbih='${targetTasbih}' prayer='${targetPrayer}' dhikr=${targetDhikr}`);
       this.applyTasbihNavTarget(targetTasbih, targetDhikr, targetPrayer);
-    } else {
-      this.resolveActiveTheme();
-      this.ensureActivePrayer();
-      this.refreshBeadView();
+      return;
     }
+
+    this.resolveActiveTheme();
+    this.ensureActivePrayer();
+
+    if (resetToFirstPending) {
+      // The user opened the Tasbih tab fresh. Land on the first dhikr
+      // that isn't complete yet for today, not on whatever index the
+      // previous session happened to leave behind.
+      const active = this.getActiveTasbih();
+      const pendingIdx = TasbihManager.findFirstPendingDhikrIndex(
+        active, this.activePrayerId
+      );
+      if (pendingIdx !== this.activeDhikrIndex) {
+        AppLogger.info('TasbihPage',
+          `resetToFirstPending: ${this.activeDhikrIndex} -> ${pendingIdx}`);
+        this.activeDhikrIndex = pendingIdx;
+        // Persist so the reset survives across storage reads.
+        this.persist();
+      }
+    }
+
+    this.refreshBeadView();
   }
 
   // ============================================================

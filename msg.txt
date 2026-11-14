@@ -1,0 +1,73 @@
+release: v4.0.7 — bug fixes, prayer timestamps, backup hygiene
+
+Version: 4.0.6 -> 4.0.7  (code 4000007, build 407)
+
+Seven high-severity fixes, prayer mark timestamps, and ~215 MB of
+system-backup waste eliminated. No user action required; all
+migrations run automatically on first launch.
+
+FIXES
+  H1/H2  TimezoneResolver: Southern Hemisphere DST was off by one
+         month (0-vs-1-indexed comparison) and Chile used the wrong
+         start month. Fixed both; AU/NZ/Chile/Lord Howe now correct.
+  H3     HomePage Eid card was dead — eidInfo never populated.
+         Added RamadanHelper.getEidInfo() and wired it into
+         refreshRamadan(). Eid card now shows on Shawwal 1-3.
+  H4     TasbihCanvasRenderer: ctx.restore() leaked on conic-gradient
+         failure, corrupting subsequent canvas draws. Wrapped in
+         try/finally.
+  H5     TasbihStorage.save: version counter was skipped on disk-write
+         failure, leaving @StorageLink subscribers stale. Bumped before
+         the write now.
+  H6     MosqueDetailsSheet showed a fake GPS-fetch button instead of
+         Get Directions; phone/website silently hidden; debug text
+         visible. Replaced with working Get Directions + no-contact
+         hint; all strings localized.
+  H7     Calendar events not deleted on prayer mark or master toggle.
+         Root cause: filterByTitle does exact-match on HarmonyOS, so
+         filterByTitle('Sirat · ') matched zero events. Switched to
+         filterByTime; hardened master-off path with silent re-init;
+         added WARN logs for backend-not-ready.
+
+FEATURES
+  F1     Per-prayer mark timestamps. PrayerCheckState gains five
+         optional *At fields; saveStateForDate() stamps newly-checked
+         prayers and preserves existing ones. Prayer list shows
+         "PRAYED · HH:MM" (12h/24h via ClockFormatHelper). No new
+         PrayerModel fields — timestamps read from PrayerCheckState.
+
+CHORES
+  -      backup_config.json: exclude databases/rdb/hadith_v2/*.db*
+         (~215 MB per device when all six languages are extracted).
+         DBs re-extract from rawfile on first Hadith open, so exclusion
+         costs nothing at restore time.
+  -      Version bump in AppScope/app.json5.
+
+BACKUP IMPACT
+  UserBackupService.ets     : unchanged
+  EntryBackupAbility.ets    : unchanged
+  backup_config.json        : 3 Hadith DB excludes added
+  prayer_state_map payload grows ~185 B per fully-marked day; format
+  and key are unchanged so cross-version backup stays compatible.
+
+MIGRATION
+  Automatic on first launch.
+  - Old prayer records without *At render as "PRAYED" only; first
+    re-mark stamps fresh timestamps.
+  - Orphaned calendar events from v4.0.6 are swept on the first
+    reschedule after upgrade.
+  - Hadith DBs stop being backed up on the next backup cycle.
+
+TESTING HIGHLIGHTS
+  - Sydney Oct 1 vs Oct 15: Fajr differs by exactly 1 h.
+  - System date to Shawwal 1/2/3/4: Eid card for 1-3, gone on 4.
+  - Mark one of five prayers: only that event disappears.
+  - Toggle notifications OFF: prayer events gone, custom events stay.
+  - 4.0.6 backup -> 4.0.7 restore: state preserved, no timestamps.
+
+CLOSES
+  H1 H2 H3 H4 H5 H6 H7 F1 + Hadith DB backup exclusion
+
+  Follow-ups for v4.1.0: calendar event ID tracking, gzip-compressed
+  Hadith DBs (~230 MB -> ~120 MB HAP), TasbihIndicator liveCounts
+  alignment, NavHelper cleanup, audit items M1-M18.

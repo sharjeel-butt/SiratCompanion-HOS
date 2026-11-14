@@ -883,4 +883,51 @@ export class TasbihManager {
     );
     return sorted.slice(0, HISTORY_MAX_DAYS);
   }
+
+  /**
+   * Return the index of the first dhikr that has not yet reached its
+   * target for today. Returns 0 when:
+   *   • the tasbih is null or has no dhikrs
+   *   • every dhikr has already reached its target today
+   * (In the "all complete" case, index 0 is a reasonable resting
+   * point — the user can start a new round from the top.)
+   *
+   * Completion is evaluated against two possible counters:
+   *
+   *   Prayer-bound (prayerId set AND tasbih has prayerId in
+   *   boundPrayerIds): use liveCounts[prayerId], so completion is
+   *   per-prayer. This matches how BoundTasbihRowView and
+   *   TasbihIndicator decide what counts as "pending" for a prayer.
+   *
+   *   Free tasbih: use dailyTotal ?? count, matching the day-rollover
+   *   logic in TasbihManager.rollOverStaleCounts.
+   *
+   * The distinction matters because a prayer-bound tasbih can be
+   * "complete for Fajr" but "pending for Dhuhr" — using dailyTotal
+   * in that case would collapse the two states and give the wrong
+   * answer for both prayers.
+   */
+  static findFirstPendingDhikrIndex(
+    tasbih: Tasbih | null,
+    prayerId: string
+  ): number {
+    if (!tasbih || tasbih.dhikrs.length === 0) {
+      return 0;
+    }
+
+    const isBound = prayerId.length > 0
+      && tasbih.boundPrayerIds !== undefined
+      && tasbih.boundPrayerIds.indexOf(prayerId) >= 0;
+
+    for (let i = 0; i < tasbih.dhikrs.length; i++) {
+      const d = tasbih.dhikrs[i];
+      const current = isBound
+        ? (d.liveCounts ? (d.liveCounts[prayerId] ?? 0) : 0)
+        : (d.dailyTotal ?? d.count);
+      if (current < d.target) {
+        return i;
+      }
+    }
+    return 0;
+  }
 }
