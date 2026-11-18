@@ -2986,7 +2986,7 @@
     },
     {
       "name": "licenses_intro",
-      "value": "اس ایپ میں استعمال ہونے والا قرآنِ کریم کا متن، تراجم اور رسم الخط درج ذیل لائسنسز کے تحت فراہم کیے جاتے ہیں۔ براہِ کرم اس ایپ یا اس کے ڈیٹا کو شیئر کرتے وقت ماخذ کا حوالہ برقرار رکھیں۔"
+      "value": "قرآن/حدیث کا متن، تراجم اور اس ایپ میں استعمال ہونے والے اسکرپٹس درج ذیل لائسنسز کے تحت تقسیم کیے جاتے ہیں۔ براہِ کرم اس ایپ یا اس کے ڈیٹا کو شیئر کرتے وقت انتساب (attribution) برقرار رکھیں۔"
     },
     {
       "name": "license_section_dataset",
@@ -3007,7 +3007,8 @@
     {
       "name": "license_license_label",
       "value": "لائسنس:"
-    },{
+    },
+    {
       "name": "mode_translation",
       "value": "ترجمہ"
     },
@@ -3250,6 +3251,94 @@
     {
       "name": "mosque_add_custom_cta",
       "value": "حسب ضرورت مسجد شامل کریں"
+    },
+    {
+      "name": "sanad_title",
+      "value": "روایت کا سلسلہ"
+    },
+    {
+      "name": "sanad_confidence_high",
+      "value": "اعلیٰ"
+    },
+    {
+      "name": "sanad_confidence_medium",
+      "value": "جزوی"
+    },
+    {
+      "name": "sanad_confidence_athar",
+      "value": "اثر"
+    },
+    {
+      "name": "hadith_grade_title",
+      "value": "درجہ بندی"
+    },
+    {
+      "name": "hadith_grade_unverified",
+      "value": "درجہ متعین نہیں"
+    },
+    {
+      "name": "grade_sahih",
+      "value": "صحیح"
+    },
+    {
+      "name": "grade_hasan",
+      "value": "حسن"
+    },
+    {
+      "name": "grade_daif",
+      "value": "ضعیف"
+    },
+    {
+      "name": "grade_mawdu",
+      "value": "موضوع"
+    },
+    {
+      "name": "grade_hasan_sahih",
+      "value": "حسن صحیح"
+    },
+    {
+      "name": "quran_translation_lang",
+      "value": "قرآن کا ترجمہ"
+    },
+    {
+      "name": "quran_translation_lang_desc",
+      "value": "قرآن کے لیے ترجمے کی زبان منتخب کریں"
+    },
+    {
+      "name": "hadith_translation_lang",
+      "value": "حدیث کا ترجمہ"
+    },
+    {
+      "name": "hadith_translation_lang_desc",
+      "value": "حدیث کے لیے ترجمے کی زبان منتخب کریں"
+    },
+    {
+      "name": "lang_app_default",
+      "value": "ایپ کی زبان (پہلے سے طے شدہ)"
+    },
+    {
+      "name": "dua_translation_lang",
+      "value": "دعا کا ترجمہ"
+    },
+    {
+      "name": "dua_translation_lang_des",
+      "value": "دعاؤں کے لیے ترجمے کی زبان منتخب کریں"
+    },
+    {
+      "name": "telegram_channel",
+      "value": "ٹیلیگرام چینل"
+    },
+    {
+      "name": "telegram_channel_link",
+      "value": "https://t.me/siratcompanionhos"
+    },
+    {
+      "name": "feature_issues",
+      "value": "مسائل رپورٹ کریں / نئی خصوصیات تجویز کریں"
+    },
+    {
+      "name": "feature_issues_link",
+      "value": "https://github.com/sharjeel-butt/SiratCompanion-HOS/issues"
     }
   ]
 }

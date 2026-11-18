@@ -7,8 +7,10 @@ import {
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
   STORAGE_KEY_CALC_SETTINGS_VERSION,
+  STORAGE_KEY_DUA_TRANSLATION_LANG,
   STORAGE_KEY_EVENT_PERSPECTIVE,
   STORAGE_KEY_EVENT_SETTINGS_VERSION,
+  STORAGE_KEY_HADITH_TRANSLATION_LANG,
   STORAGE_KEY_HIGH_LAT_RULE,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_CALENDAR_VERSION,
@@ -24,6 +26,7 @@ import {
   STORAGE_KEY_NOTIF_MAGHRIB,
   STORAGE_KEY_NOTIF_MASTER,
   STORAGE_KEY_POLAR_RESOLUTION,
+  STORAGE_KEY_QURAN_TRANSLATION_LANG,
   STORAGE_KEY_ROUNDING_METHOD,
   STORAGE_KEY_SHAFAQ,
   STORAGE_KEY_SHOW_EXTRA_TIMINGS_LIST,
@@ -1135,6 +1138,33 @@ export class SettingsHelper {
       label: SettingsHelper.getEventPerspectiveLabel(v),
       selected: v === current
     }));
+  }
+
+  static getQuranTranslationLang(): string {
+    return AppStorage.get<string>(STORAGE_KEY_QURAN_TRANSLATION_LANG) ?? 'default';
+  }
+
+  static saveQuranTranslationLang(lang: string): void {
+    AppStorage.setOrCreate(STORAGE_KEY_QURAN_TRANSLATION_LANG, lang);
+    PreferencesHelper.setString(STORAGE_KEY_QURAN_TRANSLATION_LANG, lang);
+  }
+
+  static getHadithTranslationLang(): string {
+    return AppStorage.get<string>(STORAGE_KEY_HADITH_TRANSLATION_LANG) ?? 'default';
+  }
+
+  static saveHadithTranslationLang(lang: string): void {
+    AppStorage.setOrCreate(STORAGE_KEY_HADITH_TRANSLATION_LANG, lang);
+    PreferencesHelper.setString(STORAGE_KEY_HADITH_TRANSLATION_LANG, lang);
+  }
+
+  static getDuaTranslationLang(): string {
+    return AppStorage.get<string>(STORAGE_KEY_DUA_TRANSLATION_LANG) ?? 'default';
+  }
+
+  static saveDuaTranslationLang(lang: string): void {
+    AppStorage.setOrCreate(STORAGE_KEY_DUA_TRANSLATION_LANG, lang);
+    PreferencesHelper.setString(STORAGE_KEY_DUA_TRANSLATION_LANG, lang);
   }
 
   private static bumpCalcSettingsVersion(): void {

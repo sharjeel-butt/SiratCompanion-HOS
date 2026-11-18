@@ -352,45 +352,6 @@ struct MosqueFinderPage {
 
   }
 
-  private async handleLocationFetch() {
-    if (this.isFetchingLocation) {
-      return;
-    }
-    this.isFetchingLocation = true;
-    this.locationStatus = 'Starting GPS...';
-    this.renderTick++; // 👈 Force UI update
-
-    try {
-      const ctx = this.getUIContext().getHostContext() as common.UIAbilityContext;
-      const data = await LocationHelper.fetchLocationData(ctx, 'interactive');
-
-      this.formLat = data.latitude.toFixed(6);
-      this.formLng = data.longitude.toFixed(6);
-      this.locationStatus = `Success: ${data.latitude.toFixed(4)}, ${data.longitude.toFixed(4)}`;
-
-      this.getUIContext().getPromptAction().showToast({ message: "Location fetched!" });
-    } catch (err) {
-      const error = err as Error;
-      this.locationStatus = `ERROR: ${error.message}`;
-
-      if (error.message === 'GPS_OFF') {
-        await LocationHelper.showLocationDisabledDialog(this.colors.accentGold);
-      } else if (error.message === 'PERMISSION_DENIED') {
-        await LocationHelper.showPermissionDeniedDialog(this.colors.accentGold);
-      }
-
-      const cache = await LocationCache.load();
-      if (cache) {
-        this.formLat = cache.latitude.toFixed(6);
-        this.formLng = cache.longitude.toFixed(6);
-        this.locationStatus += ' (Used Cache)';
-      }
-    } finally {
-      this.isFetchingLocation = false;
-      this.renderTick++; // 👈 Force UI update
-    }
-  }
-
   @Builder
   SwipeEditAction(mosque: MosqueModel) {
     Row() {
@@ -925,6 +886,45 @@ struct MosqueFinderPage {
       entities: ['entity.system.browsable'],
       uri: finalUrl
     }).catch((e: Error) => console.error('Browser failed', e.message));
+  }
+
+  private async handleLocationFetch() {
+    if (this.isFetchingLocation) {
+      return;
+    }
+    this.isFetchingLocation = true;
+    this.locationStatus = 'Starting GPS...';
+    this.renderTick++; // 👈 Force UI update
+
+    try {
+      const ctx = this.getUIContext().getHostContext() as common.UIAbilityContext;
+      const data = await LocationHelper.fetchLocationData(ctx, 'interactive');
+
+      this.formLat = data.latitude.toFixed(6);
+      this.formLng = data.longitude.toFixed(6);
+      this.locationStatus = `Success: ${data.latitude.toFixed(4)}, ${data.longitude.toFixed(4)}`;
+
+      this.getUIContext().getPromptAction().showToast({ message: "Location fetched!" });
+    } catch (err) {
+      const error = err as Error;
+      this.locationStatus = `ERROR: ${error.message}`;
+
+      if (error.message === 'GPS_OFF') {
+        await LocationHelper.showLocationDisabledDialog(this.colors.accentGold);
+      } else if (error.message === 'PERMISSION_DENIED') {
+        await LocationHelper.showPermissionDeniedDialog(this.colors.accentGold);
+      }
+
+      const cache = await LocationCache.load();
+      if (cache) {
+        this.formLat = cache.latitude.toFixed(6);
+        this.formLng = cache.longitude.toFixed(6);
+        this.locationStatus += ' (Used Cache)';
+      }
+    } finally {
+      this.isFetchingLocation = false;
+      this.renderTick++; // 👈 Force UI update
+    }
   }
 
   private isRtl(): boolean {

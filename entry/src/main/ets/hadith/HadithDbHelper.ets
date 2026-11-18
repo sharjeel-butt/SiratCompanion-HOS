@@ -7,6 +7,7 @@ import { BilingualHadith, HadithDbRecord } from './HadithModels';
 import { AppLogger } from '../core/AppLogger';
 import { L } from '../i18n/LocalizationHelper';
 import { PreferencesHelper } from '../core/PreferencesHelper';
+import { RawPaths } from '../core/RawPaths';
 
 export class HadithDbHelper {
   private static store: relationalStore.RdbStore | null = null;
@@ -61,7 +62,7 @@ export class HadithDbHelper {
             `Extracting ${lang}.db.gz to sandbox...`);
         }
 
-        const rawfilePath = `hadith/database/${lang}/hadith.db.gz`;
+        const rawfilePath = RawPaths.hadithDb(lang);
         const tempGzPath = `${context.cacheDir}/${lang}.db.gz`;
 
         try {
@@ -211,143 +212,12 @@ export class HadithDbHelper {
     }
   }
 
-  // 👇 Dynamically find whether the DB uses 'id' or 'hadith_id'
-  private static async discoverSchema(): Promise<void> {
-    if (HadithDbHelper.store === null) {
-      return;
-    }
-    try {
-      const resultSet = await HadithDbHelper.store.querySql('PRAGMA table_info(hadiths)');
-      while (resultSet.goToNextRow()) {
-        const colName = resultSet.getString(1);
-        if (colName === 'id' || colName === 'hadith_id') {
-          HadithDbHelper.idCol = colName;
-        } else if (colName === 'text' || colName === 'arabic_text' || colName === 'raw_text') {
-          HadithDbHelper.textCol = colName;
-        }
-      }
-      resultSet.close();
-      AppLogger.info('HadithDbHelper',
-        `Schema mapped: idCol=${HadithDbHelper.idCol}, textCol=${HadithDbHelper.textCol}`);
-    } catch (e) {
-      AppLogger.warn('HadithDbHelper', `Schema discovery failed, using defaults.`);
-    }
-  }
-
   static closeDatabase(): void {
     if (HadithDbHelper.store !== null) {
       HadithDbHelper.store.close();
       HadithDbHelper.store = null;
       HadithDbHelper.currentLang = '';
     }
-  }
-
-  private static async loadMetadata(ctx: common.Context, lang: string): Promise<void> {
-    try {
-      if (HadithDbHelper.sectionAliases === null) {
-        const data: Uint8Array = await ctx.resourceManager.getRawFileContent('hadith/metadata/section_aliases_v2.json');
-        const str: string = util.TextDecoder.create('utf-8').decodeToString(data);
-        HadithDbHelper.sectionAliases = JSON.parse(str) as Record<string, string>;
-      }
-
-      // 👇 FIX: Only load from disk if not already in the Map
-      if (!HadithDbHelper.localizedSectionsMap.has(lang)) {
-        let langFile: string = `${lang}_sections.json`;
-        try {
-          const langData: Uint8Array = await ctx.resourceManager.getRawFileContent(`hadith/metadata/${langFile}`);
-          const langStr: string = util.TextDecoder.create('utf-8').decodeToString(langData);
-          HadithDbHelper.localizedSectionsMap.set(lang, JSON.parse(langStr) as Record<string, string>);
-        } catch (e) {
-          if (lang !== 'en') {
-            const masterData: Uint8Array =
-              await ctx.resourceManager.getRawFileContent('hadith/metadata/master_sections.json');
-            const masterStr: string = util.TextDecoder.create('utf-8').decodeToString(masterData);
-            HadithDbHelper.localizedSectionsMap.set(lang, JSON.parse(masterStr) as Record<string, string>);
-          }
-        }
-      }
-    } catch (error) {
-      const err: Error = error as Error;
-      console.warn(`[HadithDbHelper] Metadata load failed for ${lang}: ${err.message}`);
-    }
-  }
-
-  private static expandCollectionAlias(baseId: string): string {
-    const parts = baseId.split(':');
-    if (parts.length !== 2) {
-      return baseId;
-    }
-    const col = parts[0].toLowerCase();
-    const num = parts[1];
-
-    if (col === 'bukh') {
-      return `bukhari:${num}`;
-    }
-    if (col === 'musl') {
-      return `muslim:${num}`;
-    }
-    if (col === 'abud') {
-      return `abudawud:${num}`;
-    }
-    if (col === 'tirm') {
-      return `tirmidhi:${num}`;
-    }
-    if (col === 'nasa') {
-      return `nasai:${num}`;
-    }
-    if (col === 'ibnm') {
-      return `ibnmajah:${num}`;
-    }
-    if (col === 'mali') {
-      return `malik:${num}`;
-    }
-    return baseId;
-  }
-
-  private static getIdVariants(rawId: string, lang: string): string[] {
-    const variants: string[] = [];
-    variants.push(rawId);
-
-    let baseId = rawId;
-    if (rawId.includes('-')) {
-      baseId = rawId.substring(rawId.indexOf('-') + 1);
-    }
-    if (baseId !== rawId) {
-      variants.push(baseId);
-    }
-
-    const expandedId = HadithDbHelper.expandCollectionAlias(baseId);
-    if (expandedId !== baseId) {
-      variants.push(expandedId);
-    }
-
-    let prefix = '';
-    if (lang === 'ar') {
-      prefix = 'ara-';
-    } else if (lang === 'ur') {
-      prefix = 'urd-';
-    } else if (lang === 'en') {
-      prefix =
-        'eng-';
-    } else if (lang === 'bn') {
-      prefix = 'ben-';
-    } else if (lang === 'tr') {
-      prefix = 'tur-';
-    } else if (lang ===
-      'id') {
-      prefix = 'ind-';
-    }
-
-    if (prefix) {
-      if (!rawId.startsWith(prefix)) {
-        variants.push(prefix + baseId);
-      }
-      if (!expandedId.startsWith(prefix) && expandedId !== baseId) {
-        variants.push(prefix + expandedId);
-      }
-    }
-
-    return variants;
   }
 
   static async getById(id: string): Promise<HadithDbRecord | null> {
@@ -379,15 +249,16 @@ export class HadithDbHelper {
     }
   }
 
-  static async getBilingualById(ctx: common.Context, id: string, targetLang: string): Promise<BilingualHadith | null> {
+  static async getBilingualById(ctx: common.Context, id: string, transLang: string,
+    uiLang: string): Promise<BilingualHadith | null> {
     try {
-      const transVariants = HadithDbHelper.getIdVariants(id, targetLang);
+      const transVariants = HadithDbHelper.getIdVariants(id, transLang);
       const arVariants = HadithDbHelper.getIdVariants(id, 'ar');
 
       // 1. Fetch Translation
       let transRecord: HadithDbRecord | null = null;
-      if (targetLang !== 'ar') {
-        await HadithDbHelper.openDatabase(ctx, targetLang);
+      if (transLang !== 'ar') {
+        await HadithDbHelper.openDatabase(ctx, transLang);
         for (const v of transVariants) {
           transRecord = await HadithDbHelper.getById(v);
           if (transRecord !== null) {
@@ -410,7 +281,7 @@ export class HadithDbHelper {
         return null;
       }
 
-      const metaSource: HadithDbRecord | null = (targetLang !== 'ar' && transRecord !== null) ? transRecord : arRecord;
+      const metaSource: HadithDbRecord | null = (transLang !== 'ar' && transRecord !== null) ? transRecord : arRecord;
 
       let rawCollection: string = metaSource ? metaSource.collection : '';
       let baseCol = rawCollection.toLowerCase();
@@ -422,7 +293,7 @@ export class HadithDbHelper {
       baseCol = HadithDbHelper.expandCollectionAlias(baseCol + ':1').split(':')[0];
 
       const locKey = 'collection_' + baseCol;
-      const translated = L.get(locKey, targetLang);
+      const translated = L.get(locKey, uiLang); // 👈 FIX: Use uiLang for collection name
 
       let localizedCollection: string;
       if (translated !== locKey) {
@@ -438,8 +309,8 @@ export class HadithDbHelper {
         section_localized: '',
         hadith_number: metaSource ? metaSource.hadith_number : '',
         arabic_text: arRecord ? arRecord.text : '',
-        translated_text: (targetLang !== 'ar' && transRecord) ? transRecord.text : '',
-        translated_language: targetLang
+        translated_text: (transLang !== 'ar' && transRecord) ? transRecord.text : '',
+        translated_language: transLang
       };
 
       return result;
@@ -582,6 +453,136 @@ export class HadithDbHelper {
     }
   }
 
+  // 👇 Dynamically find whether the DB uses 'id' or 'hadith_id'
+  private static async discoverSchema(): Promise<void> {
+    if (HadithDbHelper.store === null) {
+      return;
+    }
+    try {
+      const resultSet = await HadithDbHelper.store.querySql('PRAGMA table_info(hadiths)');
+      while (resultSet.goToNextRow()) {
+        const colName = resultSet.getString(1);
+        if (colName === 'id' || colName === 'hadith_id') {
+          HadithDbHelper.idCol = colName;
+        } else if (colName === 'text' || colName === 'arabic_text' || colName === 'raw_text') {
+          HadithDbHelper.textCol = colName;
+        }
+      }
+      resultSet.close();
+      AppLogger.info('HadithDbHelper',
+        `Schema mapped: idCol=${HadithDbHelper.idCol}, textCol=${HadithDbHelper.textCol}`);
+    } catch (e) {
+      AppLogger.warn('HadithDbHelper', `Schema discovery failed, using defaults.`);
+    }
+  }
+
+  private static async loadMetadata(ctx: common.Context, lang: string): Promise<void> {
+    try {
+      if (HadithDbHelper.sectionAliases === null) {
+        const data: Uint8Array = await ctx.resourceManager.getRawFileContent(RawPaths.SECTION_ALIASES);
+        const str: string = util.TextDecoder.create('utf-8').decodeToString(data);
+        HadithDbHelper.sectionAliases = JSON.parse(str) as Record<string, string>;
+      }
+
+      // 👇 FIX: Only load from disk if not already in the Map
+      if (!HadithDbHelper.localizedSectionsMap.has(lang)) {
+        try {
+          const langData: Uint8Array = await ctx.resourceManager.getRawFileContent(RawPaths.langSections(lang));
+          const langStr: string = util.TextDecoder.create('utf-8').decodeToString(langData);
+          HadithDbHelper.localizedSectionsMap.set(lang, JSON.parse(langStr) as Record<string, string>);
+        } catch (e) {
+          if (lang !== 'en') {
+            const masterData: Uint8Array =
+              await ctx.resourceManager.getRawFileContent(RawPaths.MASTER_SECTIONS);
+            const masterStr: string = util.TextDecoder.create('utf-8').decodeToString(masterData);
+            HadithDbHelper.localizedSectionsMap.set(lang, JSON.parse(masterStr) as Record<string, string>);
+          }
+        }
+      }
+    } catch (error) {
+      const err: Error = error as Error;
+      console.warn(`[HadithDbHelper] Metadata load failed for ${lang}: ${err.message}`);
+    }
+  }
+
+  private static expandCollectionAlias(baseId: string): string {
+    const parts = baseId.split(':');
+    if (parts.length !== 2) {
+      return baseId;
+    }
+    const col = parts[0].toLowerCase();
+    const num = parts[1];
+
+    if (col === 'bukh') {
+      return `bukhari:${num}`;
+    }
+    if (col === 'musl') {
+      return `muslim:${num}`;
+    }
+    if (col === 'abud') {
+      return `abudawud:${num}`;
+    }
+    if (col === 'tirm') {
+      return `tirmidhi:${num}`;
+    }
+    if (col === 'nasa') {
+      return `nasai:${num}`;
+    }
+    if (col === 'ibnm') {
+      return `ibnmajah:${num}`;
+    }
+    if (col === 'mali') {
+      return `malik:${num}`;
+    }
+    return baseId;
+  }
+
+  private static getIdVariants(rawId: string, lang: string): string[] {
+    const variants: string[] = [];
+    variants.push(rawId);
+
+    let baseId = rawId;
+    if (rawId.includes('-')) {
+      baseId = rawId.substring(rawId.indexOf('-') + 1);
+    }
+    if (baseId !== rawId) {
+      variants.push(baseId);
+    }
+
+    const expandedId = HadithDbHelper.expandCollectionAlias(baseId);
+    if (expandedId !== baseId) {
+      variants.push(expandedId);
+    }
+
+    let prefix = '';
+    if (lang === 'ar') {
+      prefix = 'ara-';
+    } else if (lang === 'ur') {
+      prefix = 'urd-';
+    } else if (lang === 'en') {
+      prefix =
+        'eng-';
+    } else if (lang === 'bn') {
+      prefix = 'ben-';
+    } else if (lang === 'tr') {
+      prefix = 'tur-';
+    } else if (lang ===
+      'id') {
+      prefix = 'ind-';
+    }
+
+    if (prefix) {
+      if (!rawId.startsWith(prefix)) {
+        variants.push(prefix + baseId);
+      }
+      if (!expandedId.startsWith(prefix) && expandedId !== baseId) {
+        variants.push(prefix + expandedId);
+      }
+    }
+
+    return variants;
+  }
+
   /**
    * Read the bundled hadith-data version from the rawfile manifest.
    * Returns "0" if the manifest is absent — that's the pre-4.1.0
@@ -595,9 +596,7 @@ export class HadithDbHelper {
     context: common.Context
   ): Promise<string> {
     try {
-      const data: Uint8Array = await context.resourceManager.getRawFileContent(
-        'hadith/database/VERSION'
-      );
+      const data: Uint8Array = await context.resourceManager.getRawFileContent(RawPaths.DATABASE_VERSION);
       const version = util.TextDecoder.create('utf-8')
         .decodeToString(data)
         .trim();

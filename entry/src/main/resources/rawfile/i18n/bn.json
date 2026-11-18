@@ -1,0 +1,1230 @@
+[
+  {
+    "name": "collection_abudawud",
+    "value": "সুনান আবু দাউদ"
+  },
+  {
+    "name": "collection_bukhari",
+    "value": "সহিহ বুখারি"
+  },
+  {
+    "name": "collection_dehlawi",
+    "value": "শাহ ওয়ালিউল্লাহর ৪০ হাদিস"
+  },
+  {
+    "name": "collection_ibnmajah",
+    "value": "সুনান ইবনে মাজাহ"
+  },
+  {
+    "name": "collection_malik",
+    "value": "মুয়াত্তা মালিক"
+  },
+  {
+    "name": "collection_muslim",
+    "value": "সহিহ মুসলিম"
+  },
+  {
+    "name": "collection_nasai",
+    "value": "সুনান আন-নাসাই"
+  },
+  {
+    "name": "collection_nawawi",
+    "value": "ইমাম নববীর ৪০ হাদিস"
+  },
+  {
+    "name": "collection_qudsi",
+    "value": "৪০ হাদিসে কুদসি"
+  },
+  {
+    "name": "collection_tirmidhi",
+    "value": "জামি আত-তিরমিজি"
+  },
+  {
+    "name": "topic_adhan",
+    "value": "আজান"
+  },
+  {
+    "name": "topic_agriculture",
+    "value": "কৃষি"
+  },
+  {
+    "name": "topic_akhirah",
+    "value": "আখিরাত"
+  },
+  {
+    "name": "topic_angels",
+    "value": "ফেরেশতা"
+  },
+  {
+    "name": "topic_appearance",
+    "value": "বাহ্যিক রূপ"
+  },
+  {
+    "name": "topic_aqidah",
+    "value": "আকিদা"
+  },
+  {
+    "name": "topic_arafah",
+    "value": "আরাফাহ"
+  },
+  {
+    "name": "topic_arafah_fast",
+    "value": "আরাফাহর রোজা"
+  },
+  {
+    "name": "topic_ashura",
+    "value": "আশুরা"
+  },
+  {
+    "name": "topic_barzakh",
+    "value": "বারযাখ"
+  },
+  {
+    "name": "topic_books",
+    "value": "বই"
+  },
+  {
+    "name": "topic_business",
+    "value": "ব্যবসা"
+  },
+  {
+    "name": "topic_character",
+    "value": "চরিত্র"
+  },
+  {
+    "name": "topic_charity",
+    "value": "দান"
+  },
+  {
+    "name": "topic_children",
+    "value": "শিশু"
+  },
+  {
+    "name": "topic_companions",
+    "value": "সাহাবিগণ"
+  },
+  {
+    "name": "topic_contracts",
+    "value": "চুক্তি"
+  },
+  {
+    "name": "topic_creation",
+    "value": "সৃষ্টি"
+  },
+  {
+    "name": "topic_daily_life",
+    "value": "দৈনন্দিন জীবন"
+  },
+  {
+    "name": "topic_day_of_judgment",
+    "value": "বিচার দিবস"
+  },
+  {
+    "name": "topic_death",
+    "value": "মৃত্যু"
+  },
+  {
+    "name": "topic_debt",
+    "value": "ঋণ"
+  },
+  {
+    "name": "topic_dhikr",
+    "value": "যিকির"
+  },
+  {
+    "name": "topic_divorce",
+    "value": "তালাক"
+  },
+  {
+    "name": "topic_dreams",
+    "value": "স্বপ্ন"
+  },
+  {
+    "name": "topic_drinks",
+    "value": "পানীয়"
+  },
+  {
+    "name": "topic_dua",
+    "value": "দুআ"
+  },
+  {
+    "name": "topic_eclipse_prayer",
+    "value": "চন্দ্র-সূর্য গ্রহণের নামাজ"
+  },
+  {
+    "name": "topic_eid",
+    "value": "ঈদ"
+  },
+  {
+    "name": "topic_endowment",
+    "value": "ওয়াকফ"
+  },
+  {
+    "name": "topic_ethics",
+    "value": "নৈতিকতা"
+  },
+  {
+    "name": "topic_etiquette",
+    "value": "আদব"
+  },
+  {
+    "name": "topic_evil_eye",
+    "value": "বদনজর"
+  },
+  {
+    "name": "topic_family_law",
+    "value": "পারিবারিক আইন"
+  },
+  {
+    "name": "topic_fasting",
+    "value": "রোজা"
+  },
+  {
+    "name": "topic_father",
+    "value": "পিতা"
+  },
+  {
+    "name": "topic_fay",
+    "value": "ফাই"
+  },
+  {
+    "name": "topic_finance",
+    "value": "অর্থ"
+  },
+  {
+    "name": "topic_fiqh",
+    "value": "ফিকহ"
+  },
+  {
+    "name": "topic_fitan",
+    "value": "ফিতনা"
+  },
+  {
+    "name": "topic_forgiveness",
+    "value": "ক্ষমা"
+  },
+  {
+    "name": "topic_gift_giving",
+    "value": "উপহার দেওয়া"
+  },
+  {
+    "name": "topic_governance",
+    "value": "শাসন"
+  },
+  {
+    "name": "topic_gratitude",
+    "value": "কৃতজ্ঞতা"
+  },
+  {
+    "name": "topic_hadith_qudsi",
+    "value": "হাদিসে কুদসি"
+  },
+  {
+    "name": "topic_hajj",
+    "value": "হজ"
+  },
+  {
+    "name": "topic_halal_food",
+    "value": "হালাল খাবার"
+  },
+  {
+    "name": "topic_health",
+    "value": "স্বাস্থ্য"
+  },
+  {
+    "name": "topic_honesty",
+    "value": "সততা"
+  },
+  {
+    "name": "topic_horses",
+    "value": "ঘোড়া"
+  },
+  {
+    "name": "topic_humility",
+    "value": "বিনয়"
+  },
+  {
+    "name": "topic_hunting",
+    "value": "শিকার"
+  },
+  {
+    "name": "topic_hypocrites",
+    "value": "মুনাফিক"
+  },
+  {
+    "name": "topic_ihsan",
+    "value": "ইহসান"
+  },
+  {
+    "name": "topic_iman",
+    "value": "ইমান"
+  },
+  {
+    "name": "topic_inheritance",
+    "value": "উত্তরাধিকার"
+  },
+  {
+    "name": "topic_istiadhah",
+    "value": "ইস্তিয়াযাহ"
+  },
+  {
+    "name": "topic_istighfar",
+    "value": "ইস্তিগফার"
+  },
+  {
+    "name": "topic_istisqa",
+    "value": "ইস্তিসকা"
+  },
+  {
+    "name": "topic_itikaf",
+    "value": "ইতিকাফ"
+  },
+  {
+    "name": "topic_jahannam",
+    "value": "জাহান্নাম"
+  },
+  {
+    "name": "topic_jamaah",
+    "value": "জামাত"
+  },
+  {
+    "name": "topic_jannah",
+    "value": "জান্নাত"
+  },
+  {
+    "name": "topic_jihad",
+    "value": "জিহাদ"
+  },
+  {
+    "name": "topic_jizyah",
+    "value": "জিজিয়া"
+  },
+  {
+    "name": "topic_jumuah",
+    "value": "জুমআ"
+  },
+  {
+    "name": "topic_justice",
+    "value": "ন্যায়বিচার"
+  },
+  {
+    "name": "topic_kaffarah",
+    "value": "কাফফারা"
+  },
+  {
+    "name": "topic_khumus",
+    "value": "খুমুস"
+  },
+  {
+    "name": "topic_khushu",
+    "value": "খুশু"
+  },
+  {
+    "name": "topic_kindness",
+    "value": "দয়া"
+  },
+  {
+    "name": "topic_knowledge",
+    "value": "জ্ঞান"
+  },
+  {
+    "name": "topic_learning",
+    "value": "শিক্ষা"
+  },
+  {
+    "name": "topic_li_an",
+    "value": "লিআন"
+  },
+  {
+    "name": "topic_literature",
+    "value": "সাহিত্য"
+  },
+  {
+    "name": "topic_lost_property",
+    "value": "হারানো সম্পদ"
+  },
+  {
+    "name": "topic_malahim",
+    "value": "মালাহিম"
+  },
+  {
+    "name": "topic_marriage",
+    "value": "বিবাহ"
+  },
+  {
+    "name": "topic_medicine",
+    "value": "চিকিৎসা"
+  },
+  {
+    "name": "topic_memorization",
+    "value": "মুখস্থ"
+  },
+  {
+    "name": "topic_mercy",
+    "value": "রহমত"
+  },
+  {
+    "name": "topic_modesty",
+    "value": "লজ্জা"
+  },
+  {
+    "name": "topic_mosque",
+    "value": "মসজিদ"
+  },
+  {
+    "name": "topic_mother",
+    "value": "মা"
+  },
+  {
+    "name": "topic_oaths_vows",
+    "value": "শপথ ও মানত"
+  },
+  {
+    "name": "topic_omens",
+    "value": "কুলক্ষণ"
+  },
+  {
+    "name": "topic_parables",
+    "value": "উপমা"
+  },
+  {
+    "name": "topic_parents",
+    "value": "পিতামাতা"
+  },
+  {
+    "name": "topic_patience",
+    "value": "ধৈর্য"
+  },
+  {
+    "name": "topic_permission",
+    "value": "অনুমতি"
+  },
+  {
+    "name": "topic_property_law",
+    "value": "সম্পত্তি আইন"
+  },
+  {
+    "name": "topic_prophets",
+    "value": "নবীগণ"
+  },
+  {
+    "name": "topic_protection",
+    "value": "সুরক্ষা"
+  },
+  {
+    "name": "topic_purification",
+    "value": "পবিত্রতা"
+  },
+  {
+    "name": "topic_qadr",
+    "value": "তাকদির"
+  },
+  {
+    "name": "topic_qiblah",
+    "value": "কিবলা"
+  },
+  {
+    "name": "topic_quran",
+    "value": "কুরআন"
+  },
+  {
+    "name": "topic_qurbani",
+    "value": "কুরবানি"
+  },
+  {
+    "name": "topic_ramadan",
+    "value": "রমজান"
+  },
+  {
+    "name": "topic_recitation",
+    "value": "তিলাওয়াত"
+  },
+  {
+    "name": "topic_reconciliation",
+    "value": "পুনর্মিলন"
+  },
+  {
+    "name": "topic_reflection",
+    "value": "প্রতিফলন"
+  },
+  {
+    "name": "topic_relatives",
+    "value": "আত্মীয়"
+  },
+  {
+    "name": "topic_revelation",
+    "value": "ওহি"
+  },
+  {
+    "name": "topic_rings",
+    "value": "আংটি"
+  },
+  {
+    "name": "topic_sadaqah",
+    "value": "সদকা"
+  },
+  {
+    "name": "topic_salah",
+    "value": "নামাজ"
+  },
+  {
+    "name": "topic_scholarship",
+    "value": "পাণ্ডিত্য"
+  },
+  {
+    "name": "topic_seerah",
+    "value": "সিরাত"
+  },
+  {
+    "name": "topic_sickness",
+    "value": "অসুস্থতা"
+  },
+  {
+    "name": "topic_sincerity",
+    "value": "ইখলাস"
+  },
+  {
+    "name": "topic_social_justice",
+    "value": "সামাজিক ন্যায়"
+  },
+  {
+    "name": "topic_speech_etiquette",
+    "value": "কথাবার্তার আদব"
+  },
+  {
+    "name": "topic_sports",
+    "value": "খেলাধুলা"
+  },
+  {
+    "name": "topic_spouse",
+    "value": "স্বামী/স্ত্রী"
+  },
+  {
+    "name": "topic_sunnah",
+    "value": "সুন্নাহ"
+  },
+  {
+    "name": "topic_tafsir",
+    "value": "তাফসির"
+  },
+  {
+    "name": "topic_tahajjud",
+    "value": "তাহাজ্জুদ"
+  },
+  {
+    "name": "topic_tawbah",
+    "value": "তাওবা"
+  },
+  {
+    "name": "topic_tawhid",
+    "value": "তাওহিদ"
+  },
+  {
+    "name": "topic_teaching",
+    "value": "শিক্ষাদান"
+  },
+  {
+    "name": "topic_trade",
+    "value": "বাণিজ্য"
+  },
+  {
+    "name": "topic_travel",
+    "value": "ভ্রমণ"
+  },
+  {
+    "name": "topic_trustworthiness",
+    "value": "আমানতদারি"
+  },
+  {
+    "name": "topic_umrah",
+    "value": "উমরাহ"
+  },
+  {
+    "name": "topic_virtues",
+    "value": "গুণাবলি"
+  },
+  {
+    "name": "topic_voluntary_fasting",
+    "value": "নফল রোজা"
+  },
+  {
+    "name": "topic_vows_curses",
+    "value": "মানত ও অভিশাপ"
+  },
+  {
+    "name": "topic_war_booty",
+    "value": "যুদ্ধলব্ধ সম্পদ"
+  },
+  {
+    "name": "topic_water",
+    "value": "পানি"
+  },
+  {
+    "name": "topic_wills",
+    "value": "ওসিয়ত"
+  },
+  {
+    "name": "topic_witr",
+    "value": "বিতর"
+  },
+  {
+    "name": "topic_women",
+    "value": "নারী"
+  },
+  {
+    "name": "topic_wudu",
+    "value": "ওজু"
+  },
+  {
+    "name": "topic_zakat",
+    "value": "যাকাত"
+  },
+  {
+    "name": "topic_zuhd",
+    "value": "জুহদ"
+  },
+  {
+    "name": "context_after_asr",
+    "value": "আসরের পর"
+  },
+  {
+    "name": "context_after_fajr",
+    "value": "ফজরের পর"
+  },
+  {
+    "name": "context_after_maghrib",
+    "value": "মাগরিবের পর"
+  },
+  {
+    "name": "context_afternoon",
+    "value": "বিকেল"
+  },
+  {
+    "name": "context_anger",
+    "value": "রাগ"
+  },
+  {
+    "name": "context_anxiety",
+    "value": "উদ্বেগ"
+  },
+  {
+    "name": "context_aqiqah",
+    "value": "আকিকা"
+  },
+  {
+    "name": "context_ashura",
+    "value": "আশুরা"
+  },
+  {
+    "name": "context_before_fajr",
+    "value": "ফজরের আগে"
+  },
+  {
+    "name": "context_before_salah",
+    "value": "নামাজের আগে"
+  },
+  {
+    "name": "context_before_sleep",
+    "value": "ঘুমের আগে"
+  },
+  {
+    "name": "context_burnout",
+    "value": "ক্লান্তি"
+  },
+  {
+    "name": "context_business_decision",
+    "value": "ব্যবসায়িক সিদ্ধান্ত"
+  },
+  {
+    "name": "context_business_launch",
+    "value": "ব্যবসা শুরু"
+  },
+  {
+    "name": "context_career_growth",
+    "value": "কর্মজীবনের উন্নতি"
+  },
+  {
+    "name": "context_character_building",
+    "value": "চরিত্র গঠন"
+  },
+  {
+    "name": "context_charity",
+    "value": "দান"
+  },
+  {
+    "name": "context_children",
+    "value": "শিশু"
+  },
+  {
+    "name": "context_community_service",
+    "value": "সমাজসেবা"
+  },
+  {
+    "name": "context_commuting",
+    "value": "যাতায়াত"
+  },
+  {
+    "name": "context_contentment",
+    "value": "সন্তুষ্টি"
+  },
+  {
+    "name": "context_daily_life",
+    "value": "দৈনন্দিন জীবন"
+  },
+  {
+    "name": "context_daily_prayer",
+    "value": "দৈনিক নামাজ"
+  },
+  {
+    "name": "context_day_of_arafah",
+    "value": "আরাফাহর দিন"
+  },
+  {
+    "name": "context_death_in_family",
+    "value": "পরিবারে মৃত্যু"
+  },
+  {
+    "name": "context_dhikr",
+    "value": "যিকির"
+  },
+  {
+    "name": "context_dhul_hijjah",
+    "value": "জিলহজ"
+  },
+  {
+    "name": "context_dressing",
+    "value": "পোশাক"
+  },
+  {
+    "name": "context_dua",
+    "value": "দুআ"
+  },
+  {
+    "name": "context_eating",
+    "value": "খাওয়া"
+  },
+  {
+    "name": "context_eid_al_adha",
+    "value": "ঈদুল আজহা"
+  },
+  {
+    "name": "context_eid_al_fitr",
+    "value": "ঈদুল ফিতর"
+  },
+  {
+    "name": "context_end_times",
+    "value": "শেষ সময়"
+  },
+  {
+    "name": "context_engagement",
+    "value": "বাগদান"
+  },
+  {
+    "name": "context_entering_home",
+    "value": "বাড়িতে প্রবেশ"
+  },
+  {
+    "name": "context_entering_mosque",
+    "value": "মসজিদে প্রবেশ"
+  },
+  {
+    "name": "context_envy",
+    "value": "হিংসা"
+  },
+  {
+    "name": "context_exam",
+    "value": "পরীক্ষা"
+  },
+  {
+    "name": "context_extended_family",
+    "value": "বড় পরিবার"
+  },
+  {
+    "name": "context_family_conflict",
+    "value": "পারিবারিক দ্বন্দ্ব"
+  },
+  {
+    "name": "context_family_time",
+    "value": "পারিবারিক সময়"
+  },
+  {
+    "name": "context_father",
+    "value": "পিতা"
+  },
+  {
+    "name": "context_fear",
+    "value": "ভয়"
+  },
+  {
+    "name": "context_financial_decisions",
+    "value": "আর্থিক সিদ্ধান্ত"
+  },
+  {
+    "name": "context_financial_stress",
+    "value": "আর্থিক চাপ"
+  },
+  {
+    "name": "context_first_10_days_dhul_hijjah",
+    "value": "জিলহজের প্রথম ১০ দিন"
+  },
+  {
+    "name": "context_first_ashra",
+    "value": "প্রথম আশরা"
+  },
+  {
+    "name": "context_forgiveness",
+    "value": "ক্ষমা"
+  },
+  {
+    "name": "context_friday",
+    "value": "শুক্রবার"
+  },
+  {
+    "name": "context_funeral",
+    "value": "জানাজা"
+  },
+  {
+    "name": "context_governance",
+    "value": "শাসন"
+  },
+  {
+    "name": "context_graduation",
+    "value": "স্নাতক"
+  },
+  {
+    "name": "context_grandparents",
+    "value": "দাদা-দাদি/নানা-নানি"
+  },
+  {
+    "name": "context_gratitude",
+    "value": "কৃতজ্ঞতা"
+  },
+  {
+    "name": "context_grief",
+    "value": "শোক"
+  },
+  {
+    "name": "context_hajj",
+    "value": "হজ"
+  },
+  {
+    "name": "context_happiness",
+    "value": "সুখ"
+  },
+  {
+    "name": "context_hope",
+    "value": "আশা"
+  },
+  {
+    "name": "context_hospital_visit",
+    "value": "হাসপাতালে দেখা"
+  },
+  {
+    "name": "context_illness",
+    "value": "অসুস্থতা"
+  },
+  {
+    "name": "context_islamic_law",
+    "value": "ইসলামি আইন"
+  },
+  {
+    "name": "context_isra_miraj",
+    "value": "ইসরা ও মিরাজ"
+  },
+  {
+    "name": "context_itikaf",
+    "value": "ইতিকাফ"
+  },
+  {
+    "name": "context_jamaah",
+    "value": "জামাত"
+  },
+  {
+    "name": "context_jealousy",
+    "value": "ঈর্ষা"
+  },
+  {
+    "name": "context_job_interview",
+    "value": "চাকরির ইন্টারভিউ"
+  },
+  {
+    "name": "context_job_loss",
+    "value": "চাকরি হারানো"
+  },
+  {
+    "name": "context_justice",
+    "value": "ন্যায়বিচার"
+  },
+  {
+    "name": "context_last_ten_nights",
+    "value": "শেষ দশ রাত"
+  },
+  {
+    "name": "context_laylat_al_qadr",
+    "value": "লাইলাতুল কদর"
+  },
+  {
+    "name": "context_leadership",
+    "value": "নেতৃত্ব"
+  },
+  {
+    "name": "context_learning",
+    "value": "শিক্ষা"
+  },
+  {
+    "name": "context_leaving_home",
+    "value": "বাড়ি ছাড়া"
+  },
+  {
+    "name": "context_leaving_mosque",
+    "value": "মসজিদ থেকে বের হওয়া"
+  },
+  {
+    "name": "context_loneliness",
+    "value": "একাকিত্ব"
+  },
+  {
+    "name": "context_marketplace",
+    "value": "বাজার"
+  },
+  {
+    "name": "context_marriage",
+    "value": "বিবাহ"
+  },
+  {
+    "name": "context_morning",
+    "value": "সকাল"
+  },
+  {
+    "name": "context_mother",
+    "value": "মা"
+  },
+  {
+    "name": "context_muharram",
+    "value": "মুহাররম"
+  },
+  {
+    "name": "context_new_baby",
+    "value": "নবজাতক"
+  },
+  {
+    "name": "context_new_job",
+    "value": "নতুন চাকরি"
+  },
+  {
+    "name": "context_new_marriage",
+    "value": "নতুন বিবাহ"
+  },
+  {
+    "name": "context_night_21",
+    "value": "২১তম রাত"
+  },
+  {
+    "name": "context_night_23",
+    "value": "২৩তম রাত"
+  },
+  {
+    "name": "context_night_25",
+    "value": "২৫তম রাত"
+  },
+  {
+    "name": "context_night_27",
+    "value": "২৭তম রাত"
+  },
+  {
+    "name": "context_night_29",
+    "value": "২৯তম রাত"
+  },
+  {
+    "name": "context_nikah",
+    "value": "নিকাহ"
+  },
+  {
+    "name": "context_parenting",
+    "value": "সন্তান পালন"
+  },
+  {
+    "name": "context_parents",
+    "value": "পিতামাতা"
+  },
+  {
+    "name": "context_patience",
+    "value": "ধৈর্য"
+  },
+  {
+    "name": "context_pledges",
+    "value": "অঙ্গীকার"
+  },
+  {
+    "name": "context_prayer",
+    "value": "নামাজ"
+  },
+  {
+    "name": "context_pregnancy",
+    "value": "গর্ভাবস্থা"
+  },
+  {
+    "name": "context_promotion",
+    "value": "পদোন্নতি"
+  },
+  {
+    "name": "context_quran",
+    "value": "কুরআন"
+  },
+  {
+    "name": "context_rabi_al_awwal",
+    "value": "রবিউল আউয়াল"
+  },
+  {
+    "name": "context_raising_children",
+    "value": "সন্তান লালন-পালন"
+  },
+  {
+    "name": "context_rajab",
+    "value": "রজব"
+  },
+  {
+    "name": "context_ramadan",
+    "value": "রমজান"
+  },
+  {
+    "name": "context_relationships",
+    "value": "সম্পর্ক"
+  },
+  {
+    "name": "context_repentance",
+    "value": "তাওবা"
+  },
+  {
+    "name": "context_retirement",
+    "value": "অবসর"
+  },
+  {
+    "name": "context_return_home",
+    "value": "বাড়ি ফেরা"
+  },
+  {
+    "name": "context_sadness",
+    "value": "দুঃখ"
+  },
+  {
+    "name": "context_salary_day",
+    "value": "বেতন দিবস"
+  },
+  {
+    "name": "context_second_ashra",
+    "value": "দ্বিতীয় আশরা"
+  },
+  {
+    "name": "context_seeking_knowledge",
+    "value": "জ্ঞান অন্বেষণ"
+  },
+  {
+    "name": "context_self_improvement",
+    "value": "আত্মউন্নয়ন"
+  },
+  {
+    "name": "context_shaban",
+    "value": "শাবান"
+  },
+  {
+    "name": "context_siblings",
+    "value": "ভাইবোন"
+  },
+  {
+    "name": "context_sincerity",
+    "value": "ইখলাস"
+  },
+  {
+    "name": "context_social_etiquette",
+    "value": "সামাজিক আদব"
+  },
+  {
+    "name": "context_social_interactions",
+    "value": "সামাজিক মিথস্ক্রিয়া"
+  },
+  {
+    "name": "context_spiritual_growth",
+    "value": "আধ্যাত্মিক বৃদ্ধি"
+  },
+  {
+    "name": "context_spouse",
+    "value": "স্বামী/স্ত্রী"
+  },
+  {
+    "name": "context_stress",
+    "value": "চাপ"
+  },
+  {
+    "name": "context_student",
+    "value": "শিক্ষার্থী"
+  },
+  {
+    "name": "context_study",
+    "value": "পড়াশোনা"
+  },
+  {
+    "name": "context_tahajjud",
+    "value": "তাহাজ্জুদ"
+  },
+  {
+    "name": "context_taqwa",
+    "value": "তাকওয়া"
+  },
+  {
+    "name": "context_taraweeh",
+    "value": "তারাবিহ"
+  },
+  {
+    "name": "context_tashreeq_days",
+    "value": "তাশরিকের দিন"
+  },
+  {
+    "name": "context_tawbah",
+    "value": "তাওবা"
+  },
+  {
+    "name": "context_teaching",
+    "value": "শিক্ষাদান"
+  },
+  {
+    "name": "context_third_ashra",
+    "value": "তৃতীয় আশরা"
+  },
+  {
+    "name": "context_times_of_trials",
+    "value": "পরীক্ষার সময়"
+  },
+  {
+    "name": "context_travel",
+    "value": "ভ্রমণ"
+  },
+  {
+    "name": "context_trust_in_allah",
+    "value": "আল্লাহর উপর ভরসা"
+  },
+  {
+    "name": "context_umrah",
+    "value": "উমরাহ"
+  },
+  {
+    "name": "context_wake_up",
+    "value": "জাগ্রত হওয়া"
+  },
+  {
+    "name": "context_witr",
+    "value": "বিতর"
+  },
+  {
+    "name": "context_work",
+    "value": "কাজ"
+  },
+  {
+    "name": "category_daily",
+    "value": "দৈনন্দিন"
+  },
+  {
+    "name": "category_distress",
+    "value": "কষ্ট"
+  },
+  {
+    "name": "category_faith",
+    "value": "ঈমান"
+  },
+  {
+    "name": "category_family",
+    "value": "পরিবার"
+  },
+  {
+    "name": "category_fasting",
+    "value": "রোজা"
+  },
+  {
+    "name": "category_forgiveness",
+    "value": "ক্ষমা"
+  },
+  {
+    "name": "category_funeral",
+    "value": "জানাজা"
+  },
+  {
+    "name": "category_general",
+    "value": "সাধারণ"
+  },
+  {
+    "name": "category_gratitude",
+    "value": "কৃতজ্ঞতা"
+  },
+  {
+    "name": "category_guidance",
+    "value": "হেদায়েত"
+  },
+  {
+    "name": "category_healing",
+    "value": "নিরাময়"
+  },
+  {
+    "name": "category_hereafter",
+    "value": "আখিরাত"
+  },
+  {
+    "name": "category_knowledge",
+    "value": "জ্ঞান"
+  },
+  {
+    "name": "category_mercy",
+    "value": "রহমত"
+  },
+  {
+    "name": "category_morning_evening",
+    "value": "সকাল ও সন্ধ্যা"
+  },
+  {
+    "name": "category_need",
+    "value": "প্রয়োজন"
+  },
+  {
+    "name": "category_prayer",
+    "value": "নামাজ"
+  },
+  {
+    "name": "category_protection",
+    "value": "সুরক্ষা"
+  },
+  {
+    "name": "category_provision",
+    "value": "রিজিক"
+  },
+  {
+    "name": "category_purification",
+    "value": "পবিত্রতা"
+  },
+  {
+    "name": "category_reflection",
+    "value": "চিন্তা"
+  },
+  {
+    "name": "category_reliance",
+    "value": "তাওয়াক্কুল"
+  },
+  {
+    "name": "category_repentance",
+    "value": "তাওবা"
+  },
+  {
+    "name": "category_steadfastness",
+    "value": "অবিচলতা"
+  },
+  {
+    "name": "category_travel",
+    "value": "ভ্রমণ"
+  },
+  {
+    "name": "category_weather",
+    "value": "আবহাওয়া"
+  },
+  {
+    "name": "category_worship",
+    "value": "ইবাদত"
+  }
+]

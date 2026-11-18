@@ -311,33 +311,6 @@ export struct Prayer {
     }, 15 * 60 * 1000);
   }
 
-  private onPrayerStateChanged(): void {
-    this.prayers = PrayerManager.loadStateForDate(
-      this.viewingDateKey, this.prayers, this.viewingDate
-    );
-    this.prayers = PrayerManager.updateStatuses(
-      this.prayers, this.viewingDate, this.getLocationOffsetHours()
-    );
-    if (this.dateOffset === 0) {
-      this.updateTodayHeaderData();
-    }
-  }
-
-  private onTabRefreshed(): void {
-    if (this.dateOffset === 0) {
-      // 1. Reload the actual checked states from the manager
-      this.prayers = PrayerManager.loadStateForDate(
-        this.viewingDateKey, this.prayers, this.viewingDate
-      );
-
-      // 2. Recalculate the "Next" / "Prayed" statuses
-      this.prayers = PrayerManager.updateStatuses(
-        this.prayers, this.viewingDate, this.getLocationOffsetHours()
-      );
-      this.updateTodayHeaderData();
-    }
-  }
-
   aboutToDisappear(): void {
     PageTheme.uninstallSystemListener(this.systemDarkListener);
     this.systemDarkListener = null;
@@ -1053,6 +1026,33 @@ export struct Prayer {
     })
     .margin({ top: 4, bottom: 24 })
     .alignItems(HorizontalAlign.Center)
+  }
+
+  private onPrayerStateChanged(): void {
+    this.prayers = PrayerManager.loadStateForDate(
+      this.viewingDateKey, this.prayers, this.viewingDate
+    );
+    this.prayers = PrayerManager.updateStatuses(
+      this.prayers, this.viewingDate, this.getLocationOffsetHours()
+    );
+    if (this.dateOffset === 0) {
+      this.updateTodayHeaderData();
+    }
+  }
+
+  private onTabRefreshed(): void {
+    if (this.dateOffset === 0) {
+      // 1. Reload the actual checked states from the manager
+      this.prayers = PrayerManager.loadStateForDate(
+        this.viewingDateKey, this.prayers, this.viewingDate
+      );
+
+      // 2. Recalculate the "Next" / "Prayed" statuses
+      this.prayers = PrayerManager.updateStatuses(
+        this.prayers, this.viewingDate, this.getLocationOffsetHours()
+      );
+      this.updateTodayHeaderData();
+    }
   }
 
   private eventPerspectiveListener: () => void = (): void => {

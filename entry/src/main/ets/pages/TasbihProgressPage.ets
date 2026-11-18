@@ -185,17 +185,14 @@ struct TasbihDetailsPage {
         .fontWeight(this.period === id ? FontWeight.Bold : FontWeight.Normal)
         .fontColor(this.period === id ? this.colors.textOnAccent : this.colors.textWhite)
 
-      // Show Week Number only for the 'week' chip
-      if (id === 'week' && this.period === 'week') {
-        Text(`Week ${this.snapshot.currentWeekNumber}`)
-          .fontSize(9)
-          .fontColor(this.colors.textOnAccent)
-          .opacity(0.8)
-      }
+      Text(this.getPillNumberLabel(id))
+        .fontSize(10)
+        .fontColor(this.period === id ? this.colors.textOnAccent : this.colors.textMuted)
+        .margin({ top: 2 })
     }
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
-    .height(38)
+    .height(44) // Matches the PrayerDetailsPage
     .layoutWeight(1)
     .backgroundColor(this.period === id ? this.colors.accentGold : Color.Transparent)
     .borderRadius(9)
@@ -414,6 +411,18 @@ struct TasbihDetailsPage {
       right: 8
     })
     .margin({ bottom: 4 })
+  }
+
+  private getPillNumberLabel(id: string): string {
+    if (id === 'week') {
+      return `#${this.snapshot.currentWeekNumber}`;
+    }
+    if (id === 'month') {
+      // TasbihDetailsSnapshot doesn't store the month/year explicitly,
+      // so we derive it from the current date since the period is always "current".
+      return `#${new Date().getMonth() + 1}`;
+    }
+    return `#${new Date().getFullYear()}`;
   }
 
   private async reload(): Promise<void> {

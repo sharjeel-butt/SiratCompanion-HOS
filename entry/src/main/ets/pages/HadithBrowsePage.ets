@@ -3,18 +3,20 @@ import { router } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode } from '../core/Theme';
 import { PageTheme } from '../core/PageTheme';
 import { L } from '../i18n/LocalizationHelper';
-import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../core/StorageKeys';
-import { BilingualHadith, HadithDbRecord, HadithRef } from '../hadith/HadithModels';
+import { STORAGE_KEY_HADITH_TRANSLATION_LANG, STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../core/StorageKeys';
+import { BilingualHadith, HadithRef } from '../hadith/HadithModels';
 import { HadithSearchService } from '../hadith/HadithSearchService';
 import { HadithDbHelper } from '../hadith/HadithDbHelper';
 import { NavHelper } from '../core/NavHelper';
 import { util } from '@kit.ArkTS';
+import { RawPaths } from '../core/RawPaths';
 
 @Entry
 @Component
 struct HadithBrowsePage {
   @StorageLink(STORAGE_KEY_THEME_MODE) @Watch('onThemeModeChanged') themeMode: string = ThemeMode.SYSTEM;
   @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLangChanged') appLanguage: string = 'en';
+  @StorageLink(STORAGE_KEY_HADITH_TRANSLATION_LANG) @Watch('onLangChanged') hadithTransLang: string = 'default';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
 
   @State hadiths: BilingualHadith[] = [];
@@ -63,8 +65,9 @@ struct HadithBrowsePage {
 
   async loadData() {
     this.isLoading = true;
+    const targetLang = this.getHadithTranslationLang();
     const ctx = getContext(this) as common.UIAbilityContext;
-    await HadithSearchService.setLanguage(ctx, this.appLanguage);
+    await HadithSearchService.setLanguage(ctx, targetLang, this.appLanguage);
 
     this.hadiths = [];
     this.pageOffset = 0;
@@ -72,16 +75,19 @@ struct HadithBrowsePage {
     if (this.browseType === 'book') {
       const recs = await HadithDbHelper.getByCollection(this.browseId, this.PAGE_SIZE, this.pageOffset);
       for (const r of recs) {
-        const bi = await HadithDbHelper.getBilingualById(ctx, r.hadith_id, this.appLanguage);
+        const bi = await HadithDbHelper.getBilingualById(ctx, r.hadith_id, targetLang, this.appLanguage);
         if (bi) {
           this.hadiths.push(bi);
         }
       }
       this.pageOffset += this.PAGE_SIZE;
     } else {
-      const fileType = this.browseType === 'context' ? 'contexts' : 'topics';
       try {
-        const data = await ctx.resourceManager.getRawFileContent(`hadith/${fileType}/${this.browseId}.json`);
+        const filePath = this.browseType === 'context'
+          ? RawPaths.context(this.browseId)
+          : RawPaths.topic(this.browseId);
+
+        const data = await ctx.resourceManager.getRawFileContent(filePath);
         const parsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(data)) as HadithRef[];
 
         this.allIds = parsed.map((p: HadithRef) => p.id);
@@ -93,7 +99,7 @@ struct HadithBrowsePage {
         this.pageTitle = `${baseTitle} (${this.allIds.length})`;
 
         for (let i = 0; i < Math.min(this.allIds.length, this.PAGE_SIZE); i++) {
-          const bi = await HadithDbHelper.getBilingualById(ctx, this.allIds[i], this.appLanguage);
+          const bi = await HadithDbHelper.getBilingualById(ctx, this.allIds[i], targetLang, this.appLanguage);
           if (bi) {
             bi.section = HadithDbHelper.translateSection(parsed[i].section || '', this.appLanguage);
             bi.life_contexts = parsed[i].life_contexts;
@@ -119,26 +125,30 @@ struct HadithBrowsePage {
     } // Disable load more while searching
 
     this.isLoading = true;
+    const targetLang = this.getHadithTranslationLang();
     const ctx = getContext(this) as common.UIAbilityContext;
 
     if (this.browseType === 'book') {
       const recs = await HadithDbHelper.getByCollection(this.browseId, this.PAGE_SIZE, this.pageOffset);
       for (const r of recs) {
-        const bi = await HadithDbHelper.getBilingualById(ctx, r.hadith_id, this.appLanguage);
+        const bi = await HadithDbHelper.getBilingualById(ctx, r.hadith_id, targetLang, this.appLanguage);
         if (bi) {
           this.hadiths.push(bi);
         }
       }
       this.pageOffset += this.PAGE_SIZE;
     } else {
-      const fileType = this.browseType === 'context' ? 'contexts' : 'topics';
       try {
         // Reload JSON to get the metadata (could be cached, but this is safe)
-        const data = await ctx.resourceManager.getRawFileContent(`hadith/${fileType}/${this.browseId}.json`);
+        const filePath = this.browseType === 'context'
+          ? RawPaths.context(this.browseId)
+          : RawPaths.topic(this.browseId);
+
+        const data = await ctx.resourceManager.getRawFileContent(filePath);
         const parsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(data)) as HadithRef[];
 
         for (let i = this.pageOffset; i < Math.min(this.allIds.length, this.pageOffset + this.PAGE_SIZE); i++) {
-          const bi = await HadithDbHelper.getBilingualById(ctx, this.allIds[i], this.appLanguage);
+          const bi = await HadithDbHelper.getBilingualById(ctx, this.allIds[i], targetLang, this.appLanguage);
           if (bi) {
             bi.section = HadithDbHelper.translateSection(parsed[i].section || '', this.appLanguage);
             bi.life_contexts = parsed[i].life_contexts;
@@ -153,20 +163,6 @@ struct HadithBrowsePage {
 
     this.applyFilter();
     this.isLoading = false;
-  }
-
-  private applyFilter() {
-    if (this.searchQuery.trim().length === 0) {
-      this.filteredHadiths = this.hadiths;
-    } else {
-      const q = this.searchQuery.toLowerCase();
-      this.filteredHadiths = this.hadiths.filter((h: BilingualHadith) =>
-      h.arabic_text.includes(q) ||
-        h.translated_text.toLowerCase().includes(q) ||
-        h.section.toLowerCase().includes(q) ||
-        h.hadith_number.includes(q)
-      );
-    }
   }
 
   build() {
@@ -315,5 +311,26 @@ struct HadithBrowsePage {
     }
     .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
+  }
+
+  private applyFilter() {
+    if (this.searchQuery.trim().length === 0) {
+      this.filteredHadiths = this.hadiths;
+    } else {
+      const q = this.searchQuery.toLowerCase();
+      this.filteredHadiths = this.hadiths.filter((h: BilingualHadith) =>
+      h.arabic_text.includes(q) ||
+        h.translated_text.toLowerCase().includes(q) ||
+        h.section.toLowerCase().includes(q) ||
+        h.hadith_number.includes(q)
+      );
+    }
+  }
+
+  private getHadithTranslationLang(): string {
+    if (this.hadithTransLang === 'default' || this.hadithTransLang === '') {
+      return this.appLanguage;
+    }
+    return this.hadithTransLang;
   }
 }

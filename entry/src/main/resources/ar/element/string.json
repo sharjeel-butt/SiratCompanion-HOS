@@ -2986,7 +2986,7 @@
     },
     {
       "name": "licenses_intro",
-      "value": "يتم توزيع نص القرآن الكريم والترجمات والخطوط المستخدمة في هذا التطبيق بموجب التراخيص التالية. يرجى الحفاظ على نسب المصدر عند مشاركة هذا التطبيق أو بياناته."
+      "value": "يتم توزيع نصوص القرآن/الحديث والترجمات والبرامج النصية المستخدمة في هذا التطبيق بموجب التراخيص التالية. يُرجى الحفاظ على نسبة المصدر (الإسناد) عند مشاركة هذا التطبيق أو بياناته."
     },
     {
       "name": "license_section_dataset",
@@ -3251,8 +3251,94 @@
     {
       "name": "mosque_add_custom_cta",
       "value": "إضافة مسجد مخصص"
+    },
+    {
+      "name": "sanad_title",
+      "value": "سلسلة الإسناد"
+    },
+    {
+      "name": "sanad_confidence_high",
+      "value": "عالية"
+    },
+    {
+      "name": "sanad_confidence_medium",
+      "value": "جزئي"
+    },
+    {
+      "name": "sanad_confidence_athar",
+      "value": "الأثر"
+    },
+    {
+      "name": "hadith_grade_title",
+      "value": "درجة الحديث"
+    },
+    {
+      "name": "hadith_grade_unverified",
+      "value": "الدرجة غير محددة"
+    },
+    {
+      "name": "grade_sahih",
+      "value": "صحيح"
+    },
+    {
+      "name": "grade_hasan",
+      "value": "حسن"
+    },
+    {
+      "name": "grade_daif",
+      "value": "ضعيف"
+    },
+    {
+      "name": "grade_mawdu",
+      "value": "موضوع"
+    },
+    {
+      "name": "grade_hasan_sahih",
+      "value": "حسن صحيح"
+    },
+    {
+      "name": "quran_translation_lang",
+      "value": "ترجمة القرآن"
+    },
+    {
+      "name": "quran_translation_lang_desc",
+      "value": "اختر لغة ترجمة القرآن"
+    },
+    {
+      "name": "hadith_translation_lang",
+      "value": "ترجمة الحديث"
+    },
+    {
+      "name": "hadith_translation_lang_desc",
+      "value": "اختر لغة ترجمة الحديث"
+    },
+    {
+      "name": "lang_app_default",
+      "value": "لغة التطبيق (الافتراضية)"
+    },
+    {
+      "name": "dua_translation_lang",
+      "value": "ترجمة الدعاء"
+    },
+    {
+      "name": "dua_translation_lang_des",
+      "value": "اختر لغة ترجمة الأدعية"
+    },
+    {
+      "name": "telegram_channel",
+      "value": "قناة تيليجرام"
+    },
+    {
+      "name": "telegram_channel_link",
+      "value": "https://t.me/siratcompanionhos"
+    },
+    {
+      "name": "feature_issues",
+      "value": "الإبلاغ عن المشاكل / طلب ميزات جديدة"
+    },
+    {
+      "name": "feature_issues_link",
+      "value": "https://github.com/sharjeel-butt/SiratCompanion-HOS/issues"
     }
-
-
   ]
 }

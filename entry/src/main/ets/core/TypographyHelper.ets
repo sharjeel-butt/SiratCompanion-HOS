@@ -119,6 +119,7 @@ export class TypographyHelper {
   static readonly BISMILLAH_LINE_HEIGHT: number = 60;
   /** Font size for the Surah header ornament in Mushaf view. */
   static readonly SURAH_HEADER_FONT_SIZE: number = 22;
+
   /**
    * Register custom fonts. Call this once in EntryAbility.
    */
@@ -130,14 +131,20 @@ export class TypographyHelper {
       const amiri: font.FontOptions = { familyName: 'Amiri', familySrc: $rawfile('fonts/Amiri-Regular.ttf') };
       const amiriBold: font.FontOptions = { familyName: 'Amiri-Bold', familySrc: $rawfile('fonts/Amiri-Bold.ttf') };
 
-      const nastaliq: font.FontOptions = { familyName: 'NotoNastaliqUrdu', familySrc: $rawfile('fonts/NotoNastaliqUrdu-Regular.ttf') };
-      const amiriQuran: font.FontOptions = { familyName: 'AmiriQuran', familySrc: $rawfile('fonts/AmiriQuran-Regular.ttf') };
+      const nastaliq: font.FontOptions =
+        { familyName: 'NotoNastaliqUrdu', familySrc: $rawfile('fonts/NotoNastaliqUrdu-Regular.ttf') };
+      const amiriQuran: font.FontOptions =
+        { familyName: 'AmiriQuran', familySrc: $rawfile('fonts/AmiriQuran-Regular.ttf') };
       const kemenag: font.FontOptions = { familyName: 'LPMQIsepMisbah', familySrc: $rawfile('fonts/LPMQ-Regular.ttf') };
-      const kfgqpcWarsh: font.FontOptions = { familyName: 'KFGQPCWarsh', familySrc: $rawfile('fonts/KFGQPC-Regular.ttf') };
-      const bengali: font.FontOptions = { familyName: 'NotoSansBengali', familySrc: $rawfile('fonts/NotoSansBengali-Regular.ttf') };
-      const chinese: font.FontOptions = { familyName: 'NotoSansSC', familySrc: $rawfile('fonts/NotoSansSC-Regular.ttf') };
+      const kfgqpcWarsh: font.FontOptions =
+        { familyName: 'KFGQPCWarsh', familySrc: $rawfile('fonts/KFGQPC-Regular.ttf') };
+      const bengali: font.FontOptions =
+        { familyName: 'NotoSansBengali', familySrc: $rawfile('fonts/NotoSansBengali-Regular.ttf') };
+      const chinese: font.FontOptions =
+        { familyName: 'NotoSansSC', familySrc: $rawfile('fonts/NotoSansSC-Regular.ttf') };
 
-      const hafsArabic: font.FontOptions = {familyName: 'HafsArabic', familySrc: $rawfile('fonts/HafsArabic-Regular.ttf') };
+      const hafsArabic: font.FontOptions =
+        { familyName: 'HafsArabic', familySrc: $rawfile('fonts/HafsArabic-Regular.ttf') };
       const jameelNoori: font.FontOptions =
         { familyName: 'JameelNoori', familySrc: $rawfile('fonts/JameelNooriNastaleeq.ttf') };
       const qpcHafs: font.FontOptions = { familyName: 'QPC_Hafs', familySrc: $rawfile('fonts/QPC-Hafs.ttf') };
@@ -293,8 +300,12 @@ export class TypographyHelper {
    * Fallback if the active script isn't explicitly loaded in AppStorage.
    */
   static getQuranFont(lang: string): string {
-    if (lang === 'id') return 'LPMQIsepMisbah, sans-serif';
-    if (lang === 'ur') return 'JameelNoori, NotoNastaliqUrdu, sans-serif';
+    if (lang === 'id') {
+      return 'LPMQIsepMisbah, sans-serif';
+    }
+    if (lang === 'ur') {
+      return 'JameelNoori, NotoNastaliqUrdu, sans-serif';
+    }
     return 'HafsArabic, AmiriQuran, sans-serif';
   }
 
@@ -303,10 +314,14 @@ export class TypographyHelper {
    */
   static getTranslationFont(lang: string): string {
     switch (lang) {
-      case 'bn': return 'NotoSansBengali, sans-serif';
-      case 'zh': return 'NotoSansSC, sans-serif';
-      case 'ur': return 'NotoNastaliqUrdu, sans-serif';
-      default: return 'Outfit, sans-serif';
+      case 'bn':
+        return 'NotoSansBengali, sans-serif';
+      case 'zh':
+        return 'NotoSansSC, sans-serif';
+      case 'ur':
+        return 'NotoNastaliqUrdu, sans-serif';
+      default:
+        return 'Outfit, sans-serif';
     }
   }
 }

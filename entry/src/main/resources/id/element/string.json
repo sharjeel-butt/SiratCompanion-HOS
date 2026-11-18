@@ -2986,7 +2986,7 @@
     },
     {
       "name": "licenses_intro",
-      "value": "Teks Al-Qur'an, terjemahan, dan skrip yang digunakan dalam aplikasi ini didistribusikan berdasarkan lisensi berikut. Harap pertahankan atribusi saat membagikan aplikasi ini atau datanya."
+      "value": "Teks Al-Qur'an/Hadis, terjemahan, dan skrip yang digunakan dalam aplikasi ini didistribusikan di bawah lisensi berikut. Harap tetap mencantumkan atribusi saat membagikan aplikasi ini atau datanya."
     },
     {
       "name": "license_section_dataset",
@@ -3007,7 +3007,8 @@
     {
       "name": "license_license_label",
       "value": "Lisensi:"
-    },{
+    },
+    {
       "name": "mode_translation",
       "value": "Terjemahan"
     },
@@ -3250,7 +3251,94 @@
     {
       "name": "mosque_add_custom_cta",
       "value": "Tambah Masjid Kustom"
+    },
+    {
+      "name": "sanad_title",
+      "value": "Rantai periwayatan"
+    },
+    {
+      "name": "sanad_confidence_high",
+      "value": "Tinggi"
+    },
+    {
+      "name": "sanad_confidence_medium",
+      "value": "Parsial"
+    },
+    {
+      "name": "sanad_confidence_athar",
+      "value": "Atsar"
+    },
+    {
+      "name": "hadith_grade_title",
+      "value": "Penilaian"
+    },
+    {
+      "name": "hadith_grade_unverified",
+      "value": "Derajat belum ditetapkan"
+    },
+    {
+      "name": "grade_sahih",
+      "value": "Sahih"
+    },
+    {
+      "name": "grade_hasan",
+      "value": "Hasan"
+    },
+    {
+      "name": "grade_daif",
+      "value": "Daif"
+    },
+    {
+      "name": "grade_mawdu",
+      "value": "Maudu"
+    },
+    {
+      "name": "grade_hasan_sahih",
+      "value": "Hasan Sahih"
+    },
+    {
+      "name": "quran_translation_lang",
+      "value": "Terjemahan Al-Qur'an"
+    },
+    {
+      "name": "quran_translation_lang_desc",
+      "value": "Pilih bahasa terjemahan untuk Al-Qur'an"
+    },
+    {
+      "name": "hadith_translation_lang",
+      "value": "Terjemahan Hadis"
+    },
+    {
+      "name": "hadith_translation_lang_desc",
+      "value": "Pilih bahasa terjemahan untuk Hadis"
+    },
+    {
+      "name": "lang_app_default",
+      "value": "Bahasa Aplikasi (Bawaan)"
+    },
+    {
+      "name": "dua_translation_lang",
+      "value": "Terjemahan Doa"
+    },
+    {
+      "name": "dua_translation_lang_des",
+      "value": "Pilih bahasa terjemahan untuk doa"
+    },
+    {
+      "name": "telegram_channel",
+      "value": "Saluran Telegram"
+    },
+    {
+      "name": "telegram_channel_link",
+      "value": "https://t.me/siratcompanionhos"
+    },
+    {
+      "name": "feature_issues",
+      "value": "Laporkan Masalah / Fitur Baru"
+    },
+    {
+      "name": "feature_issues_link",
+      "value": "https://github.com/sharjeel-butt/SiratCompanion-HOS/issues"
     }
-
   ]
 }

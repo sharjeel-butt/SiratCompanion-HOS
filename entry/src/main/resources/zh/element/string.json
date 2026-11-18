@@ -3007,7 +3007,8 @@
     {
       "name": "license_license_label",
       "value": "许可证："
-    },{
+    },
+    {
       "name": "mode_translation",
       "value": "翻译"
     },
@@ -3250,6 +3251,94 @@
     {
       "name": "mosque_add_custom_cta",
       "value": "添加自定义清真寺"
+    },
+    {
+      "name": "sanad_title",
+      "value": "传述链"
+    },
+    {
+      "name": "sanad_confidence_high",
+      "value": "高"
+    },
+    {
+      "name": "sanad_confidence_medium",
+      "value": "部分"
+    },
+    {
+      "name": "sanad_confidence_athar",
+      "value": "阿萨尔"
+    },
+    {
+      "name": "hadith_grade_title",
+      "value": "等级"
+    },
+    {
+      "name": "hadith_grade_unverified",
+      "value": "等级未确定"
+    },
+    {
+      "name": "grade_sahih",
+      "value": "健全"
+    },
+    {
+      "name": "grade_hasan",
+      "value": "良好"
+    },
+    {
+      "name": "grade_daif",
+      "value": "弱"
+    },
+    {
+      "name": "grade_mawdu",
+      "value": "伪造"
+    },
+    {
+      "name": "grade_hasan_sahih",
+      "value": "优良且可靠"
+    },
+    {
+      "name": "quran_translation_lang",
+      "value": "《古兰经》译文"
+    },
+    {
+      "name": "quran_translation_lang_desc",
+      "value": "选择《古兰经》译文语言"
+    },
+    {
+      "name": "hadith_translation_lang",
+      "value": "圣训译文"
+    },
+    {
+      "name": "hadith_translation_lang_desc",
+      "value": "选择圣训译文语言"
+    },
+    {
+      "name": "lang_app_default",
+      "value": "应用语言（默认）"
+    },
+    {
+      "name": "dua_translation_lang",
+      "value": "祈祷词译文"
+    },
+    {
+      "name": "dua_translation_lang_des",
+      "value": "选择祈祷词的翻译语言"
+    },
+    {
+      "name": "telegram_channel",
+      "value": "Telegram 频道"
+    },
+    {
+      "name": "telegram_channel_link",
+      "value": "https://t.me/siratcompanionhos"
+    },
+    {
+      "name": "feature_issues",
+      "value": "报告问题 / 请求新功能"
+    },
+    {
+      "name": "feature_issues_link",
+      "value": "https://github.com/sharjeel-butt/SiratCompanion-HOS/issues"
     }
   ]
 }

@@ -12,6 +12,18 @@ export interface TranslatedDua {
   name: string;
   translation: string;
   reference: string;
+  sources?: DuaSource[];
+  reference_display?: string;
+  migration_status?: string;
+}
+
+export interface DuaSource {
+  type: 'hadith' | 'quran' | 'external';
+  id?: string;
+  surah?: number;
+  ayah?: number;
+  display?: string;
+  role: 'primary' | 'supporting';
 }
 
 export interface CompleteDua extends BaseDua {
@@ -20,4 +32,7 @@ export interface CompleteDua extends BaseDua {
   translatedReference: string;
   isFavorite: boolean;
   boundPrayerIds: string[];
+  sources?: DuaSource[];
+  reference_display?: string;
+  migration_status?: string;
 }

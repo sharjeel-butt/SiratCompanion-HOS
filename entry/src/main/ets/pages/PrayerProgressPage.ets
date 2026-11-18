@@ -263,7 +263,8 @@ struct PrayerDetailsPage {
       })
 
       Text(`${cell.completed}/5`)
-        .fontSize(9).fontColor(this.colors.textMuted)
+        .fontSize(9)
+        .fontColor(this.colors.textMuted)
         .margin({ top: 4 })
         .direction(Direction.Ltr)
         .opacity(cell.isFuture ? 0.45 : 1.0)
@@ -420,20 +421,29 @@ struct PrayerDetailsPage {
 
   @Builder
   PeriodChip(id: string) {
-    Text(this.periodLabel(id))
-      .fontSize(13)
-      .fontWeight(this.period === id ? FontWeight.Bold : FontWeight.Normal)
-      .fontColor(this.period === id
-        ? this.colors.textOnAccent : this.colors.textWhite)
-      .backgroundColor(this.period === id
-        ? this.colors.accentGold : Color.Transparent)
-      .textAlign(TextAlign.Center)
-      .height(38)
-      .layoutWeight(1)
-      .borderRadius(9)
-      .onClick(() => {
-        this.period = id as Period;
-      })
+    Column() {
+      Text(this.periodLabel(id))
+        .fontSize(13)
+        .fontWeight(this.period === id ? FontWeight.Bold : FontWeight.Normal)
+        .fontColor(this.period === id
+          ? this.colors.textOnAccent : this.colors.textWhite)
+
+      Text(this.getPillNumberLabel(id))
+        .fontSize(10)
+        .fontColor(this.period === id
+          ? this.colors.textOnAccent : this.colors.textMuted)
+        .margin({ top: 2 })
+    }
+    .justifyContent(FlexAlign.Center)
+    .alignItems(HorizontalAlign.Center)
+    .height(44) // Slightly increased height to fit two lines
+    .layoutWeight(1)
+    .backgroundColor(this.period === id
+      ? this.colors.accentGold : Color.Transparent)
+    .borderRadius(9)
+    .onClick(() => {
+      this.period = id as Period;
+    })
   }
 
   @Builder
@@ -766,6 +776,17 @@ struct PrayerDetailsPage {
       offsetX: 0,
       offsetY: 6
     })
+  }
+
+  private getPillNumberLabel(id: string): string {
+    if (id === 'week') {
+      return `#${this.snapshot.currentWeekNumber}`;
+    }
+    if (id === 'month') {
+      // monthIndex is 0-based, so we add 1
+      return `#${this.snapshot.monthProgress.monthIndex + 1}`;
+    }
+    return `#${this.snapshot.monthProgress.year}`;
   }
 
   private reload(): void {

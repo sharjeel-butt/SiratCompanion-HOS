@@ -70,25 +70,6 @@ export class LayoutHelper {
   }
 
   /**
-   * Re-evaluate the current breakpoint from the cached listeners.
-   * Called at install time and whenever a threshold crosses.
-   */
-  private static evaluate(): void {
-    let bp = Breakpoints.XS;
-
-    if (LayoutHelper.lgListener !== null && LayoutHelper.lgListener.matches) {
-      bp = Breakpoints.LG;
-    } else if (LayoutHelper.mdListener !== null && LayoutHelper.mdListener.matches) {
-      bp = Breakpoints.MD;
-    } else if (LayoutHelper.smListener !== null && LayoutHelper.smListener.matches) {
-      bp = Breakpoints.SM;
-    }
-
-    AppStorage.setOrCreate(STORAGE_KEY_BREAKPOINT, bp);
-    console.info(`[LayoutHelper] breakpoint = ${bp}`);
-  }
-
-  /**
    * True when the OS has placed this window into a split-screen
    * arrangement (the app is sharing the display with another app,
    * or an internal routerSplit has produced a two-pane view).
@@ -114,5 +95,24 @@ export class LayoutHelper {
     }
     LayoutHelper.splitMode = isSplit;
     console.info(`[LayoutHelper] splitMode = ${isSplit}`);
+  }
+
+  /**
+   * Re-evaluate the current breakpoint from the cached listeners.
+   * Called at install time and whenever a threshold crosses.
+   */
+  private static evaluate(): void {
+    let bp = Breakpoints.XS;
+
+    if (LayoutHelper.lgListener !== null && LayoutHelper.lgListener.matches) {
+      bp = Breakpoints.LG;
+    } else if (LayoutHelper.mdListener !== null && LayoutHelper.mdListener.matches) {
+      bp = Breakpoints.MD;
+    } else if (LayoutHelper.smListener !== null && LayoutHelper.smListener.matches) {
+      bp = Breakpoints.SM;
+    }
+
+    AppStorage.setOrCreate(STORAGE_KEY_BREAKPOINT, bp);
+    console.info(`[LayoutHelper] breakpoint = ${bp}`);
   }
 }

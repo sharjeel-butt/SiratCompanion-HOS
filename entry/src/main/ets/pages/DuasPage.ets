@@ -1,16 +1,17 @@
-import { common } from '@kit.AbilityKit';
 import { ThemeColors, ThemeMode } from '../core/Theme';
 import { PageTheme } from '../core/PageTheme';
-import { L } from '../i18n/LocalizationHelper';
-import { DuaService } from '../duas/DuaService';
 import { CompleteDua } from '../duas/DuaModels';
-import { TypographyHelper } from '../core/TypographyHelper';
-import { router } from '@kit.ArkUI';
-import { STORAGE_KEY_LANGUAGE } from '../core/StorageKeys';
+import { STORAGE_KEY_DUA_TRANSLATION_LANG, STORAGE_KEY_LANGUAGE } from '../core/StorageKeys';
+
+interface CategoryEntry {
+  name: string;
+  count: number;
+}
 
 @Entry
 @Component
 struct DuasPage {
+  @StorageLink(STORAGE_KEY_DUA_TRANSLATION_LANG) @Watch('onLangChanged') duaTransLang: string = 'default';
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLangChanged')
   appLanguage: string = 'en';
@@ -23,6 +24,7 @@ struct DuasPage {
   @State filterPrayer: string = '';
   @State filterCategory: string = '';
   private categories: string[] = ['all', 'favorites', 'forgiveness', 'distress', 'travel'];
+  @State private categoryChips: CategoryEntry[] = [];
 
   async aboutToAppear() {
     this.colors = PageTheme.compute(ThemeMode.SYSTEM);
@@ -43,21 +45,53 @@ struct DuasPage {
     this.loadData();
   }
 
-  async loadData() {
+  async loadData(): Promise<void> {
     this.isLoading = true;
     const ctx = getContext(this) as common.UIAbilityContext;
-    this.duas = await DuaService.loadDuas(ctx, this.appLanguage);
 
-    // Dynamic categories — extract all unique categories from JSON
-    const uniqueCategories = new Set<string>();
-    uniqueCategories.add('all');
-    uniqueCategories.add('favorites');
+    // 1. Load duas
+    this.duas = await DuaService.loadDuas(ctx, this.getDuaTranslationLang(), this.appLanguage);
 
-    this.duas.forEach((d: CompleteDua) => {
-      uniqueCategories.add(d.category);
-    });
+    // 2. Load canonical categories (for stable ordering)
+    let canonical: string[] = [];
+    try {
+      const bytes = await ctx.resourceManager.getRawFileContent(RawPaths.DUA_CATEGORIES);
+      const parsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(bytes)) as CategoryEntry[];
+      for (const c of parsed) {
+        canonical.push(c.name);
+      }
+    } catch (e) {
+      AppLogger.warn('DuasPage', 'categories.json not found');
+    }
 
-    this.categories = Array.from(uniqueCategories);
+    // 3. Build per-language counts from actual duas
+    const actualCounts: Record<string, number> = {};
+    for (const d of this.duas) {
+      actualCounts[d.category] = (actualCounts[d.category] || 0) + 1;
+    }
+
+    // 4. Ensure HadithSearchService i18n is loaded for category labels
+    await HadithSearchService.loadI18n(ctx, this.appLanguage);
+
+    // 5. Build chips — canonical order, filter to non-empty
+    const chips: CategoryEntry[] = [];
+    // Always show "all" and "favorites" first
+    chips.push({ name: 'all', count: this.duas.length });
+    chips.push({ name: 'favorites', count: this.duas.filter(d => d.isFavorite).length });
+    for (const cat of canonical) {
+      const cnt = actualCounts[cat] || 0;
+      if (cnt > 0) {
+        chips.push({ name: cat, count: cnt });
+      }
+    }
+    this.categoryChips = chips;
+
+    // 6. Restore active filter if still valid
+    if (this.activeCategory !== 'all' && this.activeCategory !== 'favorites') {
+      if (!canonical.includes(this.activeCategory)) {
+        this.activeCategory = 'all';
+      }
+    }
 
     this.applyFilters();
     this.isLoading = false;
@@ -173,11 +207,13 @@ struct DuasPage {
           }
 
           // Category chips
-          ForEach(this.categories, (cat: string) => {
-            Text(L.get('dua_cat_' + cat, this.appLanguage))
+          ForEach(this.categoryChips, (chip: CategoryEntry) => {
+            Text(`${this.categoryLabel(chip.name)} (${chip.count})`)
               .fontSize(TypographyHelper.getFontSize(this.appLanguage, 13))
-              .fontColor(this.activeCategory === cat ? this.colors.textOnAccent : this.colors.textMuted)
-              .backgroundColor(this.activeCategory === cat ? this.colors.accentGold : this.colors.cardDark)
+              .fontColor(this.activeCategory === chip.name
+                ? this.colors.textOnAccent : this.colors.textMuted)
+              .backgroundColor(this.activeCategory === chip.name
+                ? this.colors.accentGold : this.colors.cardDark)
               .padding({
                 left: 16,
                 right: 16,
@@ -186,10 +222,11 @@ struct DuasPage {
               })
               .borderRadius(16)
               .onClick(() => {
-                this.activeCategory = cat;
+                this.activeCategory = chip.name;
                 this.applyFilters();
               })
-          }, (cat: string) => `cat-${cat}-${this.activeCategory}-${this.appLanguage}`)
+          }, (chip: CategoryEntry) =>
+          `cat-${chip.name}-${chip.count}-${this.activeCategory}-${this.appLanguage}`)
         }
         .padding({ left: 16, right: 16 })
       }
@@ -309,14 +346,24 @@ struct DuasPage {
     .shadow({ radius: 8, color: 'rgba(0,0,0,0.05)', offsetY: 4 })
   }
 
-  // ============================================================
-  // Prayer bindings
-  // ============================================================
-
   async toggleBind(dua: CompleteDua, prayerId: string) {
     const isBound = dua.boundPrayerIds.includes(prayerId);
     await DuaService.bindToPrayer(dua.id, prayerId, !isBound);
     this.loadData();
+  }
+
+  // ============================================================
+  // Prayer bindings
+  // ============================================================
+
+  private categoryLabel(cat: string): string {
+    if (cat === 'all') {
+      return L.get('dua_cat_all', this.appLanguage);
+    }
+    if (cat === 'favorites') {
+      return L.get('dua_cat_favorites', this.appLanguage);
+    }
+    return HadithSearchService.translate('category_' + cat, this.appLanguage);
   }
 
   private isFriday(): boolean {
@@ -347,5 +394,12 @@ struct DuasPage {
       };
       return item;
     });
+  }
+
+  private getDuaTranslationLang(): string {
+    if (this.duaTransLang === 'default' || this.duaTransLang === '') {
+      return this.appLanguage;
+    }
+    return this.duaTransLang;
   }
 }

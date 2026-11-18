@@ -1,6 +1,6 @@
 // entry/src/main/ets/hijricalendar/HijriCalendarEngine.ets
 
-import { mediaquery, promptAction } from '@kit.ArkUI';
+import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
 import { PageTheme } from '../core/PageTheme';
@@ -19,7 +19,7 @@ import {
   STORAGE_KEY_THEME_MODE
 } from '../core/StorageKeys';
 import { CalendarDay, HijriDate } from './HijriCalendarModels';
-import { IslamicEvent } from './DateModels';
+import { IslamicEvent, IslamicEventSource } from './DateModels';
 import { HijriCalendarHelper } from './HijriCalendarHelper';
 import { L } from '../i18n/LocalizationHelper';
 import { Breakpoints } from '../core/Breakpoints';
@@ -28,6 +28,7 @@ import { SettingsHelper } from '../settings/SettingsHelper';
 import { PdfExportHelper } from '../core/PdfExportHelper';
 import { EventPerspectiveNotifier } from './EventPerspectiveNotifier';
 import { IslamicEventService } from './IslamicEventService';
+import { NavHelper } from '../core/NavHelper';
 
 // Interface for PDF Export
 export interface CalendarExportDay {
@@ -474,29 +475,62 @@ export struct HijriCalendarPage {
           .padding({ top: 16, bottom: 16 }) // <-- Centered vertically
       } else {
         ForEach(this.getMonthEvents(), (e: IslamicEvent) => {
-          Row({ space: 8 }) {
-            Text(`${e.day}`)
-              .fontSize(16)
-              .fontWeight(FontWeight.Bold)
-              .fontColor(this.colors.accentGold)
-              .width(36)
-              .textAlign(TextAlign.Center)
-              .flexShrink(0)
-            Text(IslamicEventService.getEventName(e.key, this.currentLanguage))
-              .fontSize(14).fontColor(this.colors.textWhite).layoutWeight(1)
+          Column() {
+            Row({ space: 8 }) {
+              Text(`${e.day}`)
+                .fontSize(16)
+                .fontWeight(FontWeight.Bold)
+                .fontColor(this.colors.accentGold)
+                .width(36)
+                .textAlign(TextAlign.Center)
+                .flexShrink(0)
+              Text(IslamicEventService.getEventName(e.key, this.currentLanguage))
+                .fontSize(14)
+                .fontColor(this.colors.textWhite)
+                .layoutWeight(1)
+            }
+            .width('100%')
+            .alignItems(VerticalAlign.Center)
+
+            // Citations — hidden when no_sources
+            if (e.migrationStatus !== 'no_sources' && e.sources && e.sources.length > 0) {
+              Flex({ wrap: FlexWrap.Wrap }) {
+                ForEach(e.sources, (src: IslamicEventSource, i: number) => {
+                  Text(this.sourceLabel(src))
+                    .fontSize(10)
+                    .fontColor(this.colors.accentGold)
+                    .backgroundColor(this.colors.tintSoft)
+                    .padding({
+                      left: 8,
+                      right: 8,
+                      top: 3,
+                      bottom: 3
+                    })
+                    .borderRadius(4)
+                    .margin({ right: 4, top: 4 })
+                    .maxLines(1)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    .onClick(() => this.onSourceTap(src))
+                }, (src: IslamicEventSource, i: number) =>
+                `${e.key}-src-${i}-${src.type}`)
+              }
+              .width('100%')
+              .margin({ left: 44, top: 4 })
+            }
           }
           .width('100%')
           .padding({
-            top: 12, // <-- Added top padding
-            bottom: 12, // <-- Changed from 20 to 12
+            top: 12,
+            bottom: 12,
             left: this.isRtl() ? 20 : 16,
             right: this.isRtl() ? 16 : 20
           })
           .borderRadius(8)
           .margin({ bottom: 4 })
           .backgroundColor(this.colors.tintSubtle)
-          .alignItems(VerticalAlign.Center) // <-- Forces vertical centering
-        }, (e: IslamicEvent) => `event-${e.month}-${e.day}-${e.name}`)
+          .alignItems(HorizontalAlign.Start)
+        }, (e: IslamicEvent) =>
+        `event-${e.month}-${e.day}-${e.key}-${e.sources?.length ?? 0}-${this.currentLanguage}`)
       }
     }
     .width('100%')
@@ -1632,5 +1666,35 @@ export struct HijriCalendarPage {
       return weekdays[ev.gregorianDayOfWeek] || `${ev.hijriDay}`;
     }
     return `${ev.hijriDay}`;
+  }
+
+  private sourceLabel(src: IslamicEventSource): string {
+    if (src.type === 'external') {
+      return src.display ?? '';
+    }
+    if (src.type === 'quran') {
+      return `Quran ${src.surah}:${src.ayah}`;
+    }
+    // hadith
+    return src.id ?? '';
+  }
+
+  private onSourceTap(src: IslamicEventSource): void {
+    if (src.type === 'external') {
+      return;
+    }
+    if (src.type === 'quran' && src.surah !== undefined && src.ayah !== undefined) {
+      NavHelper.prepareForward();
+      router.pushUrl({
+        url: 'pages/SurahDetailsPage',
+        params: { surahId: src.surah, startVerse: src.ayah, endVerse: src.ayah }
+      }).catch((e: Error) => console.error(JSON.stringify(e)));
+    } else if (src.type === 'hadith' && src.id !== undefined) {
+      NavHelper.prepareForward();
+      router.pushUrl({
+        url: 'pages/HadithDetailsPage',
+        params: { id: src.id }
+      }).catch((e: Error) => console.error(JSON.stringify(e)));
+    }
   }
 }

@@ -28,31 +28,6 @@ import {
  * main app takes effect on the very next intent.
  */
 export default class PrayerIntentExecutor extends InsightIntentExecutor {
-  async onExecuteInUIAbilityForegroundMode(
-    name: string,
-    param: Record<string, Object>,
-    pageLoader: window.WindowStage
-  ): Promise<insightIntent.ExecuteResult> {
-    if (name === 'GetPrayerTimes') {
-      return PrayerIntentExecutor.handleGetPrayerTimes();
-    }
-    if (name === 'GetRamadanStatus') {
-      return PrayerIntentExecutor.handleGetRamadanStatus();
-    }
-    // Fallback for unknown intents
-    const defaultResult: insightIntent.ExecuteResult = {
-      code: -1,
-      result: {
-        message: 'Unknown intent'
-      }
-    };
-    return defaultResult;
-  }
-
-  // ============================================================
-  // GetPrayerTimes
-  // ============================================================
-
   private static async handleGetPrayerTimes(): Promise<insightIntent.ExecuteResult> {
     try {
       // WidgetDataBuilder.build() resolves location + calculates
@@ -84,7 +59,7 @@ export default class PrayerIntentExecutor extends InsightIntentExecutor {
   }
 
   // ============================================================
-  // GetRamadanStatus
+  // GetPrayerTimes
   // ============================================================
 
   private static async handleGetRamadanStatus(): Promise<insightIntent.ExecuteResult> {
@@ -134,7 +109,7 @@ export default class PrayerIntentExecutor extends InsightIntentExecutor {
   }
 
   // ============================================================
-  // RESPONSE BUILDER
+  // GetRamadanStatus
   // ============================================================
 
   private static async buildRamadanMessage(
@@ -197,7 +172,7 @@ export default class PrayerIntentExecutor extends InsightIntentExecutor {
   }
 
   // ============================================================
-  // HELPERS
+  // RESPONSE BUILDER
   // ============================================================
 
   /**
@@ -222,6 +197,10 @@ export default class PrayerIntentExecutor extends InsightIntentExecutor {
     }
     return PreferencesHelper.getString(STORAGE_KEY_LANGUAGE, 'en');
   }
+
+  // ============================================================
+  // HELPERS
+  // ============================================================
 
   /**
    * Locale-aware long Gregorian date, e.g. "March 1, 2026".
@@ -248,5 +227,26 @@ export default class PrayerIntentExecutor extends InsightIntentExecutor {
     } catch (err) {
       return date.toDateString();
     }
+  }
+
+  async onExecuteInUIAbilityForegroundMode(
+    name: string,
+    param: Record<string, Object>,
+    pageLoader: window.WindowStage
+  ): Promise<insightIntent.ExecuteResult> {
+    if (name === 'GetPrayerTimes') {
+      return PrayerIntentExecutor.handleGetPrayerTimes();
+    }
+    if (name === 'GetRamadanStatus') {
+      return PrayerIntentExecutor.handleGetRamadanStatus();
+    }
+    // Fallback for unknown intents
+    const defaultResult: insightIntent.ExecuteResult = {
+      code: -1,
+      result: {
+        message: 'Unknown intent'
+      }
+    };
+    return defaultResult;
   }
 }

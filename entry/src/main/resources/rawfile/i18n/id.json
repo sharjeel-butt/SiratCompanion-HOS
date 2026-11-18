@@ -1,0 +1,1230 @@
+[
+  {
+    "name": "collection_abudawud",
+    "value": "Sunan Abu Dawud"
+  },
+  {
+    "name": "collection_bukhari",
+    "value": "Sahih al-Bukhari"
+  },
+  {
+    "name": "collection_dehlawi",
+    "value": "40 Hadis Shah Waliullah"
+  },
+  {
+    "name": "collection_ibnmajah",
+    "value": "Sunan Ibn Majah"
+  },
+  {
+    "name": "collection_malik",
+    "value": "Muwatta Malik"
+  },
+  {
+    "name": "collection_muslim",
+    "value": "Sahih Muslim"
+  },
+  {
+    "name": "collection_nasai",
+    "value": "Sunan an-Nasai"
+  },
+  {
+    "name": "collection_nawawi",
+    "value": "40 Hadis an-Nawawi"
+  },
+  {
+    "name": "collection_qudsi",
+    "value": "40 Hadis Qudsi"
+  },
+  {
+    "name": "collection_tirmidhi",
+    "value": "Jami at-Tirmidhi"
+  },
+  {
+    "name": "topic_adhan",
+    "value": "Azan"
+  },
+  {
+    "name": "topic_agriculture",
+    "value": "Pertanian"
+  },
+  {
+    "name": "topic_akhirah",
+    "value": "Akhirat"
+  },
+  {
+    "name": "topic_angels",
+    "value": "Malaikat"
+  },
+  {
+    "name": "topic_appearance",
+    "value": "Penampilan"
+  },
+  {
+    "name": "topic_aqidah",
+    "value": "Akidah"
+  },
+  {
+    "name": "topic_arafah",
+    "value": "Arafah"
+  },
+  {
+    "name": "topic_arafah_fast",
+    "value": "Puasa Arafah"
+  },
+  {
+    "name": "topic_ashura",
+    "value": "Asyura"
+  },
+  {
+    "name": "topic_barzakh",
+    "value": "Barzakh"
+  },
+  {
+    "name": "topic_books",
+    "value": "Buku"
+  },
+  {
+    "name": "topic_business",
+    "value": "Bisnis"
+  },
+  {
+    "name": "topic_character",
+    "value": "Karakter"
+  },
+  {
+    "name": "topic_charity",
+    "value": "Sedekah"
+  },
+  {
+    "name": "topic_children",
+    "value": "Anak-anak"
+  },
+  {
+    "name": "topic_companions",
+    "value": "Sahabat"
+  },
+  {
+    "name": "topic_contracts",
+    "value": "Kontrak"
+  },
+  {
+    "name": "topic_creation",
+    "value": "Penciptaan"
+  },
+  {
+    "name": "topic_daily_life",
+    "value": "Kehidupan Sehari-hari"
+  },
+  {
+    "name": "topic_day_of_judgment",
+    "value": "Hari Kiamat"
+  },
+  {
+    "name": "topic_death",
+    "value": "Kematian"
+  },
+  {
+    "name": "topic_debt",
+    "value": "Utang"
+  },
+  {
+    "name": "topic_dhikr",
+    "value": "Zikir"
+  },
+  {
+    "name": "topic_divorce",
+    "value": "Perceraian"
+  },
+  {
+    "name": "topic_dreams",
+    "value": "Mimpi"
+  },
+  {
+    "name": "topic_drinks",
+    "value": "Minuman"
+  },
+  {
+    "name": "topic_dua",
+    "value": "Doa"
+  },
+  {
+    "name": "topic_eclipse_prayer",
+    "value": "Salat Gerhana"
+  },
+  {
+    "name": "topic_eid",
+    "value": "Idul"
+  },
+  {
+    "name": "topic_endowment",
+    "value": "Wakaf"
+  },
+  {
+    "name": "topic_ethics",
+    "value": "Etika"
+  },
+  {
+    "name": "topic_etiquette",
+    "value": "Adab"
+  },
+  {
+    "name": "topic_evil_eye",
+    "value": "Mata Jahat"
+  },
+  {
+    "name": "topic_family_law",
+    "value": "Hukum Keluarga"
+  },
+  {
+    "name": "topic_fasting",
+    "value": "Puasa"
+  },
+  {
+    "name": "topic_father",
+    "value": "Ayah"
+  },
+  {
+    "name": "topic_fay",
+    "value": "Fai"
+  },
+  {
+    "name": "topic_finance",
+    "value": "Keuangan"
+  },
+  {
+    "name": "topic_fiqh",
+    "value": "Fikih"
+  },
+  {
+    "name": "topic_fitan",
+    "value": "Fitnah"
+  },
+  {
+    "name": "topic_forgiveness",
+    "value": "Pengampunan"
+  },
+  {
+    "name": "topic_gift_giving",
+    "value": "Memberi Hadiah"
+  },
+  {
+    "name": "topic_governance",
+    "value": "Pemerintahan"
+  },
+  {
+    "name": "topic_gratitude",
+    "value": "Rasa Syukur"
+  },
+  {
+    "name": "topic_hadith_qudsi",
+    "value": "Hadis Qudsi"
+  },
+  {
+    "name": "topic_hajj",
+    "value": "Haji"
+  },
+  {
+    "name": "topic_halal_food",
+    "value": "Makanan Halal"
+  },
+  {
+    "name": "topic_health",
+    "value": "Kesehatan"
+  },
+  {
+    "name": "topic_honesty",
+    "value": "Kejujuran"
+  },
+  {
+    "name": "topic_horses",
+    "value": "Kuda"
+  },
+  {
+    "name": "topic_humility",
+    "value": "Kerendahan Hati"
+  },
+  {
+    "name": "topic_hunting",
+    "value": "Berburu"
+  },
+  {
+    "name": "topic_hypocrites",
+    "value": "Munafik"
+  },
+  {
+    "name": "topic_ihsan",
+    "value": "Ihsan"
+  },
+  {
+    "name": "topic_iman",
+    "value": "Iman"
+  },
+  {
+    "name": "topic_inheritance",
+    "value": "Waris"
+  },
+  {
+    "name": "topic_istiadhah",
+    "value": "Isti'azah"
+  },
+  {
+    "name": "topic_istighfar",
+    "value": "Istigfar"
+  },
+  {
+    "name": "topic_istisqa",
+    "value": "Istisqa"
+  },
+  {
+    "name": "topic_itikaf",
+    "value": "Itikaf"
+  },
+  {
+    "name": "topic_jahannam",
+    "value": "Jahanam"
+  },
+  {
+    "name": "topic_jamaah",
+    "value": "Jamaah"
+  },
+  {
+    "name": "topic_jannah",
+    "value": "Surga"
+  },
+  {
+    "name": "topic_jihad",
+    "value": "Jihad"
+  },
+  {
+    "name": "topic_jizyah",
+    "value": "Jizyah"
+  },
+  {
+    "name": "topic_jumuah",
+    "value": "Jumat"
+  },
+  {
+    "name": "topic_justice",
+    "value": "Keadilan"
+  },
+  {
+    "name": "topic_kaffarah",
+    "value": "Kafarat"
+  },
+  {
+    "name": "topic_khumus",
+    "value": "Khumus"
+  },
+  {
+    "name": "topic_khushu",
+    "value": "Khusyuk"
+  },
+  {
+    "name": "topic_kindness",
+    "value": "Kebaikan"
+  },
+  {
+    "name": "topic_knowledge",
+    "value": "Pengetahuan"
+  },
+  {
+    "name": "topic_learning",
+    "value": "Pembelajaran"
+  },
+  {
+    "name": "topic_li_an",
+    "value": "Li'an"
+  },
+  {
+    "name": "topic_literature",
+    "value": "Sastra"
+  },
+  {
+    "name": "topic_lost_property",
+    "value": "Barang Hilang"
+  },
+  {
+    "name": "topic_malahim",
+    "value": "Malahim"
+  },
+  {
+    "name": "topic_marriage",
+    "value": "Pernikahan"
+  },
+  {
+    "name": "topic_medicine",
+    "value": "Kedokteran"
+  },
+  {
+    "name": "topic_memorization",
+    "value": "Hafalan"
+  },
+  {
+    "name": "topic_mercy",
+    "value": "Rahmat"
+  },
+  {
+    "name": "topic_modesty",
+    "value": "Kesopanan"
+  },
+  {
+    "name": "topic_mosque",
+    "value": "Masjid"
+  },
+  {
+    "name": "topic_mother",
+    "value": "Ibu"
+  },
+  {
+    "name": "topic_oaths_vows",
+    "value": "Sumpah dan Nadzar"
+  },
+  {
+    "name": "topic_omens",
+    "value": "Tanda Buruk"
+  },
+  {
+    "name": "topic_parables",
+    "value": "Perumpamaan"
+  },
+  {
+    "name": "topic_parents",
+    "value": "Orang Tua"
+  },
+  {
+    "name": "topic_patience",
+    "value": "Kesabaran"
+  },
+  {
+    "name": "topic_permission",
+    "value": "Izin"
+  },
+  {
+    "name": "topic_property_law",
+    "value": "Hukum Properti"
+  },
+  {
+    "name": "topic_prophets",
+    "value": "Para Nabi"
+  },
+  {
+    "name": "topic_protection",
+    "value": "Perlindungan"
+  },
+  {
+    "name": "topic_purification",
+    "value": "Penyucian"
+  },
+  {
+    "name": "topic_qadr",
+    "value": "Qadar"
+  },
+  {
+    "name": "topic_qiblah",
+    "value": "Kiblat"
+  },
+  {
+    "name": "topic_quran",
+    "value": "Al-Qur'an"
+  },
+  {
+    "name": "topic_qurbani",
+    "value": "Kurban"
+  },
+  {
+    "name": "topic_ramadan",
+    "value": "Ramadan"
+  },
+  {
+    "name": "topic_recitation",
+    "value": "Tilawah"
+  },
+  {
+    "name": "topic_reconciliation",
+    "value": "Rekonsiliasi"
+  },
+  {
+    "name": "topic_reflection",
+    "value": "Refleksi"
+  },
+  {
+    "name": "topic_relatives",
+    "value": "Kerabat"
+  },
+  {
+    "name": "topic_revelation",
+    "value": "Wahyu"
+  },
+  {
+    "name": "topic_rings",
+    "value": "Cincin"
+  },
+  {
+    "name": "topic_sadaqah",
+    "value": "Sedekah"
+  },
+  {
+    "name": "topic_salah",
+    "value": "Salat"
+  },
+  {
+    "name": "topic_scholarship",
+    "value": "Keilmuan"
+  },
+  {
+    "name": "topic_seerah",
+    "value": "Sirah"
+  },
+  {
+    "name": "topic_sickness",
+    "value": "Penyakit"
+  },
+  {
+    "name": "topic_sincerity",
+    "value": "Keikhlasan"
+  },
+  {
+    "name": "topic_social_justice",
+    "value": "Keadilan Sosial"
+  },
+  {
+    "name": "topic_speech_etiquette",
+    "value": "Adab Bicara"
+  },
+  {
+    "name": "topic_sports",
+    "value": "Olahraga"
+  },
+  {
+    "name": "topic_spouse",
+    "value": "Pasangan"
+  },
+  {
+    "name": "topic_sunnah",
+    "value": "Sunnah"
+  },
+  {
+    "name": "topic_tafsir",
+    "value": "Tafsir"
+  },
+  {
+    "name": "topic_tahajjud",
+    "value": "Tahajud"
+  },
+  {
+    "name": "topic_tawbah",
+    "value": "Taubat"
+  },
+  {
+    "name": "topic_tawhid",
+    "value": "Tauhid"
+  },
+  {
+    "name": "topic_teaching",
+    "value": "Pengajaran"
+  },
+  {
+    "name": "topic_trade",
+    "value": "Perdagangan"
+  },
+  {
+    "name": "topic_travel",
+    "value": "Perjalanan"
+  },
+  {
+    "name": "topic_trustworthiness",
+    "value": "Amanah"
+  },
+  {
+    "name": "topic_umrah",
+    "value": "Umrah"
+  },
+  {
+    "name": "topic_virtues",
+    "value": "Keutamaan"
+  },
+  {
+    "name": "topic_voluntary_fasting",
+    "value": "Puasa Sunnah"
+  },
+  {
+    "name": "topic_vows_curses",
+    "value": "Nadzar dan Laknat"
+  },
+  {
+    "name": "topic_war_booty",
+    "value": "Harta Rampasan Perang"
+  },
+  {
+    "name": "topic_water",
+    "value": "Air"
+  },
+  {
+    "name": "topic_wills",
+    "value": "Wasiat"
+  },
+  {
+    "name": "topic_witr",
+    "value": "Witir"
+  },
+  {
+    "name": "topic_women",
+    "value": "Perempuan"
+  },
+  {
+    "name": "topic_wudu",
+    "value": "Wudu"
+  },
+  {
+    "name": "topic_zakat",
+    "value": "Zakat"
+  },
+  {
+    "name": "topic_zuhd",
+    "value": "Zuhud"
+  },
+  {
+    "name": "context_after_asr",
+    "value": "Setelah Asar"
+  },
+  {
+    "name": "context_after_fajr",
+    "value": "Setelah Subuh"
+  },
+  {
+    "name": "context_after_maghrib",
+    "value": "Setelah Magrib"
+  },
+  {
+    "name": "context_afternoon",
+    "value": "Sore"
+  },
+  {
+    "name": "context_anger",
+    "value": "Marah"
+  },
+  {
+    "name": "context_anxiety",
+    "value": "Kecemasan"
+  },
+  {
+    "name": "context_aqiqah",
+    "value": "Aqiqah"
+  },
+  {
+    "name": "context_ashura",
+    "value": "Asyura"
+  },
+  {
+    "name": "context_before_fajr",
+    "value": "Sebelum Subuh"
+  },
+  {
+    "name": "context_before_salah",
+    "value": "Sebelum Salat"
+  },
+  {
+    "name": "context_before_sleep",
+    "value": "Sebelum Tidur"
+  },
+  {
+    "name": "context_burnout",
+    "value": "Kelelahan"
+  },
+  {
+    "name": "context_business_decision",
+    "value": "Keputusan Bisnis"
+  },
+  {
+    "name": "context_business_launch",
+    "value": "Peluncuran Bisnis"
+  },
+  {
+    "name": "context_career_growth",
+    "value": "Pertumbuhan Karier"
+  },
+  {
+    "name": "context_character_building",
+    "value": "Pembentukan Karakter"
+  },
+  {
+    "name": "context_charity",
+    "value": "Sedekah"
+  },
+  {
+    "name": "context_children",
+    "value": "Anak-anak"
+  },
+  {
+    "name": "context_community_service",
+    "value": "Pelayanan Masyarakat"
+  },
+  {
+    "name": "context_commuting",
+    "value": "Perjalanan Pulang-Pergi"
+  },
+  {
+    "name": "context_contentment",
+    "value": "Kepuasan"
+  },
+  {
+    "name": "context_daily_life",
+    "value": "Kehidupan Sehari-hari"
+  },
+  {
+    "name": "context_daily_prayer",
+    "value": "Salat Harian"
+  },
+  {
+    "name": "context_day_of_arafah",
+    "value": "Hari Arafah"
+  },
+  {
+    "name": "context_death_in_family",
+    "value": "Kematian dalam Keluarga"
+  },
+  {
+    "name": "context_dhikr",
+    "value": "Zikir"
+  },
+  {
+    "name": "context_dhul_hijjah",
+    "value": "Zulhijah"
+  },
+  {
+    "name": "context_dressing",
+    "value": "Berpakaian"
+  },
+  {
+    "name": "context_dua",
+    "value": "Doa"
+  },
+  {
+    "name": "context_eating",
+    "value": "Makan"
+  },
+  {
+    "name": "context_eid_al_adha",
+    "value": "Idul Adha"
+  },
+  {
+    "name": "context_eid_al_fitr",
+    "value": "Idul Fitri"
+  },
+  {
+    "name": "context_end_times",
+    "value": "Akhir Zaman"
+  },
+  {
+    "name": "context_engagement",
+    "value": "Pertunangan"
+  },
+  {
+    "name": "context_entering_home",
+    "value": "Masuk Rumah"
+  },
+  {
+    "name": "context_entering_mosque",
+    "value": "Masuk Masjid"
+  },
+  {
+    "name": "context_envy",
+    "value": "Dengki"
+  },
+  {
+    "name": "context_exam",
+    "value": "Ujian"
+  },
+  {
+    "name": "context_extended_family",
+    "value": "Keluarga Besar"
+  },
+  {
+    "name": "context_family_conflict",
+    "value": "Konflik Keluarga"
+  },
+  {
+    "name": "context_family_time",
+    "value": "Waktu Keluarga"
+  },
+  {
+    "name": "context_father",
+    "value": "Ayah"
+  },
+  {
+    "name": "context_fear",
+    "value": "Rasa Takut"
+  },
+  {
+    "name": "context_financial_decisions",
+    "value": "Keputusan Keuangan"
+  },
+  {
+    "name": "context_financial_stress",
+    "value": "Stres Keuangan"
+  },
+  {
+    "name": "context_first_10_days_dhul_hijjah",
+    "value": "10 Hari Pertama Zulhijah"
+  },
+  {
+    "name": "context_first_ashra",
+    "value": "Asyra Pertama"
+  },
+  {
+    "name": "context_forgiveness",
+    "value": "Pengampunan"
+  },
+  {
+    "name": "context_friday",
+    "value": "Jumat"
+  },
+  {
+    "name": "context_funeral",
+    "value": "Pemakaman"
+  },
+  {
+    "name": "context_governance",
+    "value": "Pemerintahan"
+  },
+  {
+    "name": "context_graduation",
+    "value": "Kelulusan"
+  },
+  {
+    "name": "context_grandparents",
+    "value": "Kakek-Nenek"
+  },
+  {
+    "name": "context_gratitude",
+    "value": "Rasa Syukur"
+  },
+  {
+    "name": "context_grief",
+    "value": "Duka"
+  },
+  {
+    "name": "context_hajj",
+    "value": "Haji"
+  },
+  {
+    "name": "context_happiness",
+    "value": "Kebahagiaan"
+  },
+  {
+    "name": "context_hope",
+    "value": "Harapan"
+  },
+  {
+    "name": "context_hospital_visit",
+    "value": "Menjenguk Rumah Sakit"
+  },
+  {
+    "name": "context_illness",
+    "value": "Penyakit"
+  },
+  {
+    "name": "context_islamic_law",
+    "value": "Hukum Islam"
+  },
+  {
+    "name": "context_isra_miraj",
+    "value": "Isra dan Mikraj"
+  },
+  {
+    "name": "context_itikaf",
+    "value": "Itikaf"
+  },
+  {
+    "name": "context_jamaah",
+    "value": "Jamaah"
+  },
+  {
+    "name": "context_jealousy",
+    "value": "Cemburu"
+  },
+  {
+    "name": "context_job_interview",
+    "value": "Wawancara Kerja"
+  },
+  {
+    "name": "context_job_loss",
+    "value": "Kehilangan Pekerjaan"
+  },
+  {
+    "name": "context_justice",
+    "value": "Keadilan"
+  },
+  {
+    "name": "context_last_ten_nights",
+    "value": "Sepuluh Malam Terakhir"
+  },
+  {
+    "name": "context_laylat_al_qadr",
+    "value": "Lailatul Qadar"
+  },
+  {
+    "name": "context_leadership",
+    "value": "Kepemimpinan"
+  },
+  {
+    "name": "context_learning",
+    "value": "Pembelajaran"
+  },
+  {
+    "name": "context_leaving_home",
+    "value": "Meninggalkan Rumah"
+  },
+  {
+    "name": "context_leaving_mosque",
+    "value": "Meninggalkan Masjid"
+  },
+  {
+    "name": "context_loneliness",
+    "value": "Kesepian"
+  },
+  {
+    "name": "context_marketplace",
+    "value": "Pasar"
+  },
+  {
+    "name": "context_marriage",
+    "value": "Pernikahan"
+  },
+  {
+    "name": "context_morning",
+    "value": "Pagi"
+  },
+  {
+    "name": "context_mother",
+    "value": "Ibu"
+  },
+  {
+    "name": "context_muharram",
+    "value": "Muharam"
+  },
+  {
+    "name": "context_new_baby",
+    "value": "Bayi Baru"
+  },
+  {
+    "name": "context_new_job",
+    "value": "Pekerjaan Baru"
+  },
+  {
+    "name": "context_new_marriage",
+    "value": "Pernikahan Baru"
+  },
+  {
+    "name": "context_night_21",
+    "value": "Malam 21"
+  },
+  {
+    "name": "context_night_23",
+    "value": "Malam 23"
+  },
+  {
+    "name": "context_night_25",
+    "value": "Malam 25"
+  },
+  {
+    "name": "context_night_27",
+    "value": "Malam 27"
+  },
+  {
+    "name": "context_night_29",
+    "value": "Malam 29"
+  },
+  {
+    "name": "context_nikah",
+    "value": "Nikah"
+  },
+  {
+    "name": "context_parenting",
+    "value": "Pengasuhan"
+  },
+  {
+    "name": "context_parents",
+    "value": "Orang Tua"
+  },
+  {
+    "name": "context_patience",
+    "value": "Kesabaran"
+  },
+  {
+    "name": "context_pledges",
+    "value": "Janji"
+  },
+  {
+    "name": "context_prayer",
+    "value": "Salat"
+  },
+  {
+    "name": "context_pregnancy",
+    "value": "Kehamilan"
+  },
+  {
+    "name": "context_promotion",
+    "value": "Promosi"
+  },
+  {
+    "name": "context_quran",
+    "value": "Al-Qur'an"
+  },
+  {
+    "name": "context_rabi_al_awwal",
+    "value": "Rabiul Awal"
+  },
+  {
+    "name": "context_raising_children",
+    "value": "Membesarkan Anak"
+  },
+  {
+    "name": "context_rajab",
+    "value": "Rajab"
+  },
+  {
+    "name": "context_ramadan",
+    "value": "Ramadan"
+  },
+  {
+    "name": "context_relationships",
+    "value": "Hubungan"
+  },
+  {
+    "name": "context_repentance",
+    "value": "Taubat"
+  },
+  {
+    "name": "context_retirement",
+    "value": "Pensiun"
+  },
+  {
+    "name": "context_return_home",
+    "value": "Pulang ke Rumah"
+  },
+  {
+    "name": "context_sadness",
+    "value": "Kesedihan"
+  },
+  {
+    "name": "context_salary_day",
+    "value": "Hari Gajian"
+  },
+  {
+    "name": "context_second_ashra",
+    "value": "Asyra Kedua"
+  },
+  {
+    "name": "context_seeking_knowledge",
+    "value": "Mencari Ilmu"
+  },
+  {
+    "name": "context_self_improvement",
+    "value": "Pengembangan Diri"
+  },
+  {
+    "name": "context_shaban",
+    "value": "Syaban"
+  },
+  {
+    "name": "context_siblings",
+    "value": "Saudara Kandung"
+  },
+  {
+    "name": "context_sincerity",
+    "value": "Keikhlasan"
+  },
+  {
+    "name": "context_social_etiquette",
+    "value": "Adab Sosial"
+  },
+  {
+    "name": "context_social_interactions",
+    "value": "Interaksi Sosial"
+  },
+  {
+    "name": "context_spiritual_growth",
+    "value": "Pertumbuhan Spiritual"
+  },
+  {
+    "name": "context_spouse",
+    "value": "Pasangan"
+  },
+  {
+    "name": "context_stress",
+    "value": "Stres"
+  },
+  {
+    "name": "context_student",
+    "value": "Pelajar"
+  },
+  {
+    "name": "context_study",
+    "value": "Belajar"
+  },
+  {
+    "name": "context_tahajjud",
+    "value": "Tahajud"
+  },
+  {
+    "name": "context_taqwa",
+    "value": "Takwa"
+  },
+  {
+    "name": "context_taraweeh",
+    "value": "Tarawih"
+  },
+  {
+    "name": "context_tashreeq_days",
+    "value": "Hari Tasyrik"
+  },
+  {
+    "name": "context_tawbah",
+    "value": "Taubat"
+  },
+  {
+    "name": "context_teaching",
+    "value": "Pengajaran"
+  },
+  {
+    "name": "context_third_ashra",
+    "value": "Asyra Ketiga"
+  },
+  {
+    "name": "context_times_of_trials",
+    "value": "Masa Ujian"
+  },
+  {
+    "name": "context_travel",
+    "value": "Perjalanan"
+  },
+  {
+    "name": "context_trust_in_allah",
+    "value": "Tawakal kepada Allah"
+  },
+  {
+    "name": "context_umrah",
+    "value": "Umrah"
+  },
+  {
+    "name": "context_wake_up",
+    "value": "Bangun Tidur"
+  },
+  {
+    "name": "context_witr",
+    "value": "Witir"
+  },
+  {
+    "name": "context_work",
+    "value": "Pekerjaan"
+  },
+  {
+    "name": "category_daily",
+    "value": "Harian"
+  },
+  {
+    "name": "category_distress",
+    "value": "Kesulitan"
+  },
+  {
+    "name": "category_faith",
+    "value": "Iman"
+  },
+  {
+    "name": "category_family",
+    "value": "Keluarga"
+  },
+  {
+    "name": "category_fasting",
+    "value": "Puasa"
+  },
+  {
+    "name": "category_forgiveness",
+    "value": "Ampunan"
+  },
+  {
+    "name": "category_funeral",
+    "value": "Pemakaman"
+  },
+  {
+    "name": "category_general",
+    "value": "Umum"
+  },
+  {
+    "name": "category_gratitude",
+    "value": "Syukur"
+  },
+  {
+    "name": "category_guidance",
+    "value": "Petunjuk"
+  },
+  {
+    "name": "category_healing",
+    "value": "Penyembuhan"
+  },
+  {
+    "name": "category_hereafter",
+    "value": "Akhirat"
+  },
+  {
+    "name": "category_knowledge",
+    "value": "Ilmu"
+  },
+  {
+    "name": "category_mercy",
+    "value": "Rahmat"
+  },
+  {
+    "name": "category_morning_evening",
+    "value": "Pagi & Petang"
+  },
+  {
+    "name": "category_need",
+    "value": "Kebutuhan"
+  },
+  {
+    "name": "category_prayer",
+    "value": "Salat"
+  },
+  {
+    "name": "category_protection",
+    "value": "Perlindungan"
+  },
+  {
+    "name": "category_provision",
+    "value": "Rezeki"
+  },
+  {
+    "name": "category_purification",
+    "value": "Bersuci"
+  },
+  {
+    "name": "category_reflection",
+    "value": "Refleksi"
+  },
+  {
+    "name": "category_reliance",
+    "value": "Tawakal"
+  },
+  {
+    "name": "category_repentance",
+    "value": "Taubat"
+  },
+  {
+    "name": "category_steadfastness",
+    "value": "Keteguhan"
+  },
+  {
+    "name": "category_travel",
+    "value": "Perjalanan"
+  },
+  {
+    "name": "category_weather",
+    "value": "Cuaca"
+  },
+  {
+    "name": "category_worship",
+    "value": "Ibadah"
+  }
+]

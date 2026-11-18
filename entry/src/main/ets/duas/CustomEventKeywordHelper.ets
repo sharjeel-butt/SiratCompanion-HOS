@@ -3,6 +3,7 @@
 import { common } from '@kit.AbilityKit';
 import { util } from '@kit.ArkTS';
 import { AppLogger } from '../core/AppLogger';
+import { RawPaths } from '../core/RawPaths';
 
 interface KeywordMap {
   category: string;
@@ -21,7 +22,7 @@ export class CustomEventKeywordHelper {
 
     try {
       const mgr = context.resourceManager;
-      const data = await mgr.getRawFileContent('duas/dua_keyword_map.json');
+      const data = await mgr.getRawFileContent(RawPaths.DUA_KEYWORD_MAP);
       const jsonStr = util.TextDecoder.create('utf-8').decodeToString(data);
       CustomEventKeywordHelper.mappings = JSON.parse(jsonStr) as KeywordMap[];
       CustomEventKeywordHelper.isLoaded = true;

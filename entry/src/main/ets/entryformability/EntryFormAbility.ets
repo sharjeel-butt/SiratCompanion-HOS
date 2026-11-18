@@ -25,7 +25,6 @@ const FORM_ID_KEYS: string[] = [
 const TAG = 'EntryFormAbility';
 
 export default class EntryFormAbility extends FormExtensionAbility {
-
   private static async doAsyncRefresh(
     ctx: common.Context,
     formId: string,
@@ -206,7 +205,8 @@ export default class EntryFormAbility extends FormExtensionAbility {
   }
 
   private static placeholderData(dimension: string): Record<string, Object> {
-    return WidgetDataBuilder.errorData(dimension, '');
+    const savedOverride: string = AppStorage.get<string>(STORAGE_KEY_LANGUAGE_OVERRIDE) ?? 'system';
+    return WidgetDataBuilder.errorData(dimension, '', savedOverride);
   }
 
   // ----------------------------------------------------------

@@ -3,18 +3,20 @@ import { router } from '@kit.ArkUI';
 import { Theme, ThemeColors, ThemeMode } from '../core/Theme';
 import { PageTheme } from '../core/PageTheme';
 import { L } from '../i18n/LocalizationHelper';
-import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../core/StorageKeys';
-// 👇 Added CatalogItem to imports
-import { BilingualHadith, Catalog, CatalogItem, HadithDbRecord, HadithRef } from '../hadith/HadithModels';
+import { STORAGE_KEY_HADITH_TRANSLATION_LANG, STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../core/StorageKeys';
+import { BilingualHadith, Catalog, HadithDbRecord, HadithRef } from '../hadith/HadithModels';
 import { HadithSearchService } from '../hadith/HadithSearchService';
 import { HadithDbHelper } from '../hadith/HadithDbHelper';
 import { NavHelper } from '../core/NavHelper';
 import { util } from '@kit.ArkTS';
+import { RawPaths } from '../core/RawPaths';
+import { AppLogger } from '../core/AppLogger';
 
 @Entry
 @Component
 struct HadithHomePage {
   @StorageLink(STORAGE_KEY_THEME_MODE) @Watch('onThemeModeChanged') themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_HADITH_TRANSLATION_LANG) @Watch('onLangChanged') hadithTransLang: string = 'default';
   @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLangChanged') appLanguage: string = 'en';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State featuredHadiths: BilingualHadith[] = [];
@@ -38,16 +40,12 @@ struct HadithHomePage {
     this.colors = PageTheme.compute(this.themeMode);
   }
 
-  private tr(key: string): string {
-    return L.get(key, this.appLanguage);
-  }
-
   async loadData(): Promise<void> {
     this.isLoading = true;
     this.errorMsg = '';
     const ctx = getContext(this) as common.UIAbilityContext;
-
-    const dbSuccess: boolean = await HadithSearchService.setLanguage(ctx, this.appLanguage);
+    const targetLang = this.getHadithTranslationLang();
+    const dbSuccess: boolean = await HadithSearchService.setLanguage(ctx, targetLang, this.appLanguage);
     if (!dbSuccess) {
       this.errorMsg = "Failed to open the database.";
       this.isLoading = false;
@@ -56,9 +54,10 @@ struct HadithHomePage {
 
     // Load Catalog for browsing
     try {
-      const data = await ctx.resourceManager.getRawFileContent('hadith/lookup/catalog.json');
+      const data = await ctx.resourceManager.getRawFileContent(RawPaths.CATALOG);
       this.catalog = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(data)) as Catalog;
     } catch (e) {
+      AppLogger.warn('HadithHomePage', `Failed to load catalog: ${JSON.stringify(e)}`);
     }
 
     const featuredRefs: HadithRef[] = await HadithSearchService.getFeatured(ctx);
@@ -75,7 +74,8 @@ struct HadithHomePage {
     if (featuredRefs.length > 0) {
       for (let i: number = 0; i < Math.min(featuredRefs.length, 30); i++) {
         const ref = featuredRefs[i];
-        const rec: BilingualHadith | null = await HadithDbHelper.getBilingualById(ctx, ref.id, this.appLanguage);
+        const rec: BilingualHadith | null =
+          await HadithDbHelper.getBilingualById(ctx, ref.id, targetLang, this.appLanguage);
 
         if (rec !== null) {
           rec.section = HadithDbHelper.translateSection(ref.section || '', this.appLanguage);
@@ -89,9 +89,10 @@ struct HadithHomePage {
     // Fallback
     if (this.featuredHadiths.length === 0) {
       const fallbackRecs: HadithDbRecord[] = await HadithDbHelper.getAnyFeatured(30);
+      const targetLang = this.getHadithTranslationLang();
       for (let i: number = 0; i < fallbackRecs.length; i++) {
         const biRec: BilingualHadith | null =
-          await HadithDbHelper.getBilingualById(ctx, fallbackRecs[i].hadith_id, this.appLanguage);
+          await HadithDbHelper.getBilingualById(ctx, fallbackRecs[i].hadith_id, targetLang, this.appLanguage);
         if (biRec !== null) {
           this.featuredHadiths.push(biRec);
         }
@@ -113,15 +114,16 @@ struct HadithHomePage {
     this.isLoading = true;
     this.hasSearched = true;
     const ctx = getContext(this) as common.UIAbilityContext;
+    const targetLang = this.getHadithTranslationLang();
 
     const searchRefs: HadithRef[] = await HadithSearchService.search(ctx, this.searchQuery);
     this.searchResults = [];
-
     for (let i: number = 0; i < searchRefs.length; i++) {
       const ref = searchRefs[i];
-      const rec: BilingualHadith | null = await HadithDbHelper.getBilingualById(ctx, ref.id, this.appLanguage);
+      const rec: BilingualHadith | null =
+        await HadithDbHelper.getBilingualById(ctx, ref.id, targetLang, this.appLanguage);
       if (rec !== null) {
-        rec.section = HadithDbHelper.translateSection(ref.section || '', this.appLanguage);
+        rec.section = HadithDbHelper.translateSection(ref.section || '', targetLang);
         rec.life_contexts = ref.life_contexts;
         rec.topics = ref.topics;
         this.searchResults.push(rec);
@@ -434,6 +436,10 @@ struct HadithHomePage {
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
   }
 
+  private tr(key: string): string {
+    return L.get(key, this.appLanguage);
+  }
+
   private navigateToBrowse(type: string, id: string) {
     NavHelper.prepareForward();
 
@@ -442,5 +448,12 @@ struct HadithHomePage {
     params['id'] = id;
 
     router.pushUrl({ url: 'pages/HadithBrowsePage', params: params });
+  }
+
+  private getHadithTranslationLang(): string {
+    if (this.hadithTransLang === 'default' || this.hadithTransLang === '') {
+      return this.appLanguage;
+    }
+    return this.hadithTransLang;
   }
 }
