@@ -1,153 +1,253 @@
 # Sirat Companion
 
-**Your Daily Islamic Companion** — a lightweight, offline-first Islamic app for HarmonyOS.
+**Sirat Companion** is a comprehensive, offline-first Islamic companion application for HarmonyOS.
 
-Prayer times, Qibla compass, Tasbih, and Hijri calendar — all in one calm, modern app that respects your settings and
-your battery.
+The application combines prayer times, Quran, Hadith, Duas, Qibla, Tasbih, Hijri calendar, Islamic events, widgets,
+reminders, and multilingual Islamic content into a single integrated experience designed for phones, tablets, foldables,
+and HarmonyOS 2‑in‑1 devices.
 
-## Changelog
+Unlike most Islamic applications, Sirat Companion does not rely on continuous internet connectivity. Core features,
+calculations, Islamic content, translations, prayer schedules, and supporting metadata operate entirely offline.
 
-## [3.6.5] — 2026-10-31
+---
 
-Batch O+P — one cycle of audits and fixes covering code quality, timezone
-accuracy, and rulebook compliance. All 3 HIGH, 8 MEDIUM, and 8 LOW
-findings raised during the audit are closed.
+## Highlights
 
-### Fixed — HIGH
+### Prayer Times Engine
 
-- **Settings** — the "notify before" `+` stepper rendered as disabled
-  whenever the Hijri offset was at +3, even though the lead time could
-  still be increased. The colour was reading the wrong state variable.
-- **Tasbih** — `resolveActivePrayer()` was defined but never invoked.
-  Opening a tasbih bound to prayers left no active prayer selected until
-  the user tapped a pill manually, which suppressed per-prayer tracking.
-  Wired into every load path: initial mount, tab-switch, midnight
-  rollover, tasbih switch, tasbih delete.
-- **Qibla / Timezone** — Mexico's Baja California peninsula inherited the
-  mainland −6 offset (2 h error for Mexicali, 1 h for La Paz and Cabo
-  San Lucas) whenever the location was >300 km from the Los Angeles
-  city-table entry. Added `MX-BC` (−8, US DST) and `MX-BCS` (−7, no
-  DST) zones ahead of the mainland `MX` box.
+- 24 calculation methods
+- Standard and Hanafi Asr rules
+- Advanced high-latitude handling
+- Polar region support
+- Per-prayer offsets
+- Diyanet, Umm al-Qura, Jafari, ISNA, MWL, Egypt, Qatar, Indonesia and many additional conventions
+- Advanced calculation controls
+- Timezone-aware calculations
+- Offline operation
 
-### Fixed — MEDIUM
+### Quran Platform
 
-- **Brazil** — Mato Grosso, Mato Grosso do Sul, Rondônia, and Roraima
-  fell through the `BR-AM` box and landed on `BR` (−3 instead of −4).
-  Split the UTC−4 zone into five state-level boxes.
-- **Afghanistan** — the `AF` bounding box was listed *after* `PK` and
-  `IN`, so Kabul, Kandahar, and every rural Afghan location resolved to
-  +5 or +5.5 instead of +4.5. Reordered `AF` first. Added Jaisalmer,
-  Jodhpur, Jaipur, Ahmedabad, Amritsar to the city table so
-  India–Pakistan border overlaps resolve correctly.
-- **Morocco** — the hard-coded Ramadan table stopped at 2029, producing
-  a 1-hour error every Ramadan from 2030 onward. Dakhla (23.68°N) fell
-  outside both the Morocco special-case box and the `MA` country box,
-  landing on the longitude estimate (2-hour error). Introduced
-  `DstRule.MOROCCO` backed by the actual Hijri conversion engine
-  (honours the user's offset), extended the `MA` box south to 20.7°N.
-- **Qibla declination** — `declinationFor()` returned `0` when no table
-  city was within 300 km, producing a Qibla error up to 25° at extreme
-  longitudes. Split into `MAX_TIMEZONE_KM = 200` and
-  `MAX_DECLINATION_KM = 500`; declination matches now cover essentially
-  every populated landmass.
-- **Extra timings** — six emoji icons (`🌙 🌅 🌇 🌃 🌌 🌠`) rendered as
-  `Text` instead of themeable SVGs. Migrated `ExtraTiming.icon` to
-  `Resource | undefined` and switched `ExtraTimingRow` to `Image`.
-- **UI** — hamburger menu (`☰`), dhikr picker (`▼`), and five checkbox
-  indicators (`✓`) used text glyphs. Replaced with `ic_menu.svg`,
-  `ic_chevron_down`, `ic_check`.
+- Integrated Quran reader
+- Multiple translation support
+- Independent translation language selection
+- Improved typography and reading experience
+- Offline content delivery
 
-### Fixed — LOW
+### Hadith Platform
 
-- **Australia** — Broken Hill (far-western NSW) observes SA time but
-  fell into `AU-E` (+10 DST instead of +9:30 DST). Added `AU-BH` box.
-- **`dateFromUTCHours`** — relied on `Date.setHours(h, 60, …)` implicit
-  rollover. Rewrote using `totalMinutes` first so the invariant is
-  explicit. No behaviour change (verified across all boundary cases).
-- **`HijriCalendarPage.getLocalizedGregorianSpan`** — a `toLocaleString`
-  throw would take down the entire PDF export path. Wrapped in try/catch
-  with English fallback, matching `RamadanHelper.formatShort`.
-- **`PrayerTimeCalculator.calculate`** — Isha interval was measured from
-  pre-temkin maghrib. Latent (no shipped method combines temkin and an
-  interval-based Isha), but moved the temkin block above the Isha block
-  so the invariant holds for any future method.
-- **`HapticHelper`** — header claimed silent-mode suppression but the
-  code only checked the haptics toggle. Corrected the comment; behaviour
-  matches iOS / Android convention (silent ≠ haptics-off).
-- **`PrayerModel`** — dropped `'locked'` from both `status` unions. It
-  had no writer and no handler in `getStatusColor` / `getStatusLabel`.
-- **Dead code** — deleted `BottomNavItem.ets` and `FloatingNavBar.ets`.
-  Neither is referenced anywhere; the latter still carried five emoji and
-  the banned `isSystemDark()` call.
+- Fully offline Hadith database
+- Canonical database architecture
+- Independent translation selection
+- Multi-language support
+- Translation review workflow
+- Metadata-driven content delivery
 
-### Added
+### Dua Platform
 
-- **Tests** (`ohosTest/ets/test/TimeUtilities.test.ets`) — invariant-based
-  coverage for Morocco DST, UmmAlQura toHijri/toGregorian boundaries
-  (Ramadan start/end, year boundary, out-of-range fallback, invalid
-  input), and `dateFromUTCHours` output format under extreme longitudes
-  and polar conditions.
+- Built-in Dua library
+- Independent translation language selection
+- Offline access
+- Multilingual support
 
-### Known limitations (unchanged)
+### Tasbih System
 
-- **Lebanon DST** — uses EU rule. National decrees (e.g. the 2023
-  delayed start) cannot be predicted offline. Documented in
-  `OfflineCityLookup.ets`.
-- **Lord Howe Island** — 30-minute DST edge case for ~400 people.
-  Not modelled.
-- **Bounding-box timezone fallback** — borders can misclassify by a few
-  km. Mitigated by the city-table lookup running first.
+- Multiple Tasbih collections
+- Prayer-linked Tasbih tracking
+- Independent prayer progress
+- Statistics and streaks
+- Daily targets
+- Lifetime tracking
 
-### Under the hood
+### Qibla System
 
-- Rulebook compliance achieved: zero emoji in any UI, zero text-glyph
-  controls, zero dead files.
-- Timezone data corrected for Mexico, Brazil, Afghanistan, Morocco,
-  Australia, and northwestern India.
-- Version bump `3.6.4` → `3.6.5` (`versionCode: 3000650`,
-  `buildVersion: "365"`).
+- Real-time Qibla compass
+- Magnetic declination support
+- Distance-to-Makkah calculations
+- Calibration guidance
+- Sensor-fusion improvements
 
-### [v3.5.6] - 2026-11-02
+### Hijri Calendar
 
-#### Added
+- Umm al-Qura engine
+- Tabular engine
+- Islamic event support
+- Event tradition filtering
+- Adjustable Hijri offset
+- Localized month names
 
-- **Tasbih-Prayer Binding:** Users can now associate Tasbihs with specific prayers (Fajr, Dhuhr, Asr, etc.). Live counts
-  are tracked independently per prayer.
-- **Tasbih Pill:** A contextual pill in the Home and Prayer headers displaying pending Tasbihs for the current or next
-  prayer.
-- **Tasbih Popup:** Tapping the pill opens a scrollable sheet showing detailed Dhikr progress (e.g., 1/33).
-- **Anchor Navigation:** Tapping a Dhikr in the popup instantly navigates to the Tasbih tab with the exact Tasbih,
-  Dhikr, and Prayer context pre-selected.
+### Widgets
 
-#### Fixed
+- Prayer widgets
+- Progress widgets
+- Home screen integrations
+- Widget navigation support
+- Widget stability improvements
 
-- **Tasbih Details:** Fixed the progress bars not filling correctly.
-- **2-in-1 View:** Removed forced `routerSplit` on launch; the app now opens in a clean full-screen window on
-  PCs/Tablets.
-- **PDF Export:** Fixed a silent failure where the success toast appeared even if the file failed to save.
-- **Test Notifications:** Fixed a critical data-loss bug where sending a test notification would delete real prayer
-  reminders.
-- **RTL Compliance:** Replaced text-based back arrows with rotated SVGs across all pages for perfect bidirectional
-  layout.
+### Offline Mosque Finder
 
-### [v3.4.3] - 2026-10-20
+- Offline mosque discovery and lookup
+- Integrated Islamic location support
 
-#### Fixed
+### Backup & Restore
 
-- **Calculation Accuracy:** Implemented official Diyanet (Turkey) Temkin offsets and forced Standard Asr to exactly
-  match the government calendar.
-- **Calculation Accuracy:** Added Jafari/Tehran Maghrib rule (-4° below horizon) and forced Jafari Midnight method.
-- **Calculation Accuracy:** Added Umm al-Qura Ramadan rule (+30 minutes to Isha during Ramadan).
-- **AppGallery Fix:** Resolved an issue on 2-in-1 (PC) devices where the app would not fully close when selecting "
-  Exit".
-- **AppGallery Fix:** Enforced GUI constraints to prevent invalid combinations (e.g., locking the Madhab selector to
-  Standard when Diyanet is selected).
+- System backup integration
+- Tasbih preservation
+- Settings migration
+- Cross-version compatibility support
 
-> On HarmonyOS 7 (API 26+) the bottom navigation bar uses the native immersive system material. On earlier releases it
-> falls back to a translucent blurred bar with identical behaviour.
+---
 
-> Prayer reminders currently ship via the **Calendar Kit** backend (calendar events with system reminders) while the
-> Agent-Powered Reminder capability is pending AGC approval. The two backends are switchable at compile time.
+## Independent Translation System
+
+Sirat Companion supports independent content languages.
+
+Users may select separate languages for:
+
+- Quran translations
+- Hadith translations
+- Dua translations
+
+This allows combinations such as:
+
+| UI Language | Quran   | Hadith | Duas    |
+|-------------|---------|--------|---------|
+| Urdu        | English | Arabic | Urdu    |
+| Arabic      | Turkish | Arabic | Arabic  |
+| English     | Bengali | Urdu   | English |
+
+Content language selection is completely independent from the application's user interface language.
+
+---
+
+## Supported Content Languages
+
+Current supported content languages include:
+
+- Arabic
+- English
+- Urdu
+- Bengali
+- Indonesian
+- Turkish
+- Chinese
+
+Additional languages can be added through the translation pipeline and canonical database generation process.
+
+---
+
+## Canonical Islamic Content Platform
+
+Beginning with the v4.x series, Sirat Companion migrated from static content resources to a unified canonical data
+platform.
+
+The platform provides:
+
+- Canonical database generation
+- Metadata generation
+- Localization generation
+- Translation validation
+- Translation publication workflow
+- Language-specific database generation
+- HarmonyOS asset packaging
+- Offline deployment bundles
+
+This architecture allows future expansion without requiring application redesign.
+
+---
+
+## Recent Major Releases
+
+### v4.1.0
+
+**Data Platform Migration, Sanad UI & Independent Translations**
+
+- Canonical Islamic data platform
+- Independent translation architecture
+- Multi-language Hadith platform
+- Translation review workflow
+- Enhanced localization system
+- Database-driven content delivery
+
+### v4.0.8
+
+**Maintenance and Stability Release**
+
+- Platform refinements
+- Stability improvements
+- Bug fixes
+
+### v4.0.7
+
+**Database Compression & Reliability**
+
+- GZip database compression
+- Prayer timestamp improvements
+- Backup hygiene fixes
+- Widget enhancements
+
+### v4.0.6
+
+**Offline Hadith Engine**
+
+- New offline Hadith architecture
+- Widget upgrades
+- Critical fixes
+
+### v4.0.4
+
+**Offline Mosque Finder**
+
+- Mosque Finder
+- Expanded widget ecosystem
+- Core platform improvements
+
+### v4.0.0
+
+**QUL Quran Reader & Global Timezone Engine**
+
+- New Quran reader
+- Global timezone engine
+- Widget stability improvements
+
+### v3.8.x
+
+**Widget Ecosystem Era**
+
+- Complete widget ecosystem
+- AI intents
+- Domain reorganization
+- Navigation improvements
+
+---
+
+## Design Philosophy
+
+Sirat Companion is built around five principles:
+
+1. **Offline First**
+    - Essential Islamic functionality should work without internet access.
+
+2. **Privacy First**
+    - User data remains on the device.
+
+3. **Localization First**
+    - Islamic content should be available in the user's preferred language.
+
+4. **Accuracy First**
+    - Prayer calculations, Hijri conversions, and Qibla direction should prioritize correctness.
+
+5. **HarmonyOS Native**
+    - The application follows HarmonyOS design patterns and platform capabilities rather than acting as a cross-platform
+      port.
+
+---
+
+## Current Version
+
+**Version:** 4.1.0  
+**Platform:** HarmonyOS  
+**Architecture:** Offline Canonical Data Platform  
+**Database Generation:** Second Generation Content Pipeline
 
 ---
 

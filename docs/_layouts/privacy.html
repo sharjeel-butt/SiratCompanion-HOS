@@ -56,50 +56,74 @@
         <h1 id="page-title">{{ site.title }}</h1>
     </header>
 
-    <div id="loader" class="loader" role="status" aria-live="polite">
+    <div id="loader"
+         class="loader"
+         role="status"
+         aria-live="polite">
         <span class="spinner" aria-hidden="true"></span>
         <span>Loading...</span>
     </div>
 
     <div id="error" class="error" hidden>
         <p><strong>Could not load the privacy policy.</strong></p>
+        <p>You can still view the raw source file.</p>
         <p>
-            <a id="raw-link" href="#" target="_blank" rel="noopener">
+            <a id="raw-link"
+               href="#"
+               target="_blank"
+               rel="noopener">
                 Open Privacy JSON
             </a>
         </p>
     </div>
 
-    <article id="policy" class="policy" aria-live="polite"></article>
+    <article id="policy"
+             class="policy"
+             aria-live="polite">
+    </article>
 
     <footer class="policy-footer">
-        <a href="https://github.com/sharjeel-butt/SiratCompanion-HOS"
-           target="_blank"
-           rel="noopener">
-            Sirat Companion on GitHub
-        </a>
+        <p>
+            <a href="https://github.com/sharjeel-butt/SiratCompanion-HOS"
+               target="_blank"
+               rel="noopener">
+                Sirat Companion on GitHub
+            </a>
+        </p>
     </footer>
 
 </main>
 
+<noscript>
+    <div class="error">
+        This page requires JavaScript.
+
+        <br>
+
+        <a href="https://raw.githubusercontent.com/sharjeel-butt/SiratCompanion-HOS/master/entry/src/main/resources/rawfile/privacy/privacy_{{ page.lang }}.json">
+            Open raw privacy policy
+        </a>
+    </div>
+</noscript>
+
 <script>
     (function () {
         const RAW_BASE =
-            "https://raw.githubusercontent.com/sharjeel-butt/SiratCompanion-HOS/master/entry/src/main/resources/rawfile/privacy";
+            'https://raw.githubusercontent.com/sharjeel-butt/SiratCompanion-HOS/master/entry/src/main/resources/rawfile/privacy';
 
-        const LANG = "{{ page.lang }}";
+        const LANG = '{{ page.lang }}';
         const URL = `${RAW_BASE}/privacy_${LANG}.json`;
 
-        const loader = document.getElementById("loader");
-        const errorEl = document.getElementById("error");
-        const rawLink = document.getElementById("raw-link");
-        const article = document.getElementById("policy");
-        const titleEl = document.getElementById("page-title");
+        const loader = document.getElementById('loader');
+        const errorEl = document.getElementById('error');
+        const rawLink = document.getElementById('raw-link');
+        const article = document.getElementById('policy');
+        const titleEl = document.getElementById('page-title');
 
         rawLink.href = URL;
 
-        function render(body) {
-            article.innerHTML = "";
+        function renderPolicy(body) {
+            article.innerHTML = '';
 
             const sections = body.split(/\n\s*\n/);
 
@@ -116,12 +140,12 @@
                     return;
                 }
 
-                if (text.startsWith("- ")) {
-                    const ul = document.createElement("ul");
+                if (text.startsWith('- ')) {
+                    const ul = document.createElement('ul');
 
-                    text.split("\n").forEach(line => {
-                        const li = document.createElement("li");
-                        li.textContent = line.replace(/^- /, "");
+                    text.split('\n').forEach(line => {
+                        const li = document.createElement('li');
+                        li.textContent = line.replace(/^- /, '');
                         ul.appendChild(li);
                     });
 
@@ -129,25 +153,26 @@
                     return;
                 }
 
-                const lines = text.split("\n");
+                const lines = text.split('\n');
 
                 if (lines.length === 1 && text.length < 120) {
-                    const h2 = document.createElement("h2");
+                    const h2 = document.createElement('h2');
                     h2.textContent = text;
                     article.appendChild(h2);
-                } else {
-                    const p = document.createElement("p");
-
-                    lines.forEach((line, idx) => {
-                        if (idx > 0) {
-                            p.appendChild(document.createElement("br"));
-                        }
-
-                        p.appendChild(document.createTextNode(line));
-                    });
-
-                    article.appendChild(p);
+                    return;
                 }
+
+                const p = document.createElement('p');
+
+                lines.forEach((line, idx) => {
+                    if (idx > 0) {
+                        p.appendChild(document.createElement('br'));
+                    }
+
+                    p.appendChild(document.createTextNode(line));
+                });
+
+                article.appendChild(p);
             });
         }
 
@@ -160,11 +185,18 @@
                 return response.json();
             })
             .then(data => {
-                render(data.body || "");
+                const metadata = data.metadata || {};
+
+                if (metadata.title) {
+                    document.title = metadata.title;
+                    titleEl.textContent = metadata.title;
+                }
+
+                renderPolicy(data.body || '');
                 loader.hidden = true;
             })
             .catch(error => {
-                console.error(error);
+                console.error('[privacy]', error);
                 loader.hidden = true;
                 errorEl.hidden = false;
             });
