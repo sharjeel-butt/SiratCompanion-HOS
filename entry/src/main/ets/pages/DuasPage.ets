@@ -2,6 +2,15 @@ import { ThemeColors, ThemeMode } from '../core/Theme';
 import { PageTheme } from '../core/PageTheme';
 import { CompleteDua } from '../duas/DuaModels';
 import { STORAGE_KEY_DUA_TRANSLATION_LANG, STORAGE_KEY_LANGUAGE } from '../core/StorageKeys';
+import { RawPaths } from '../core/RawPaths';
+import { util } from '@kit.ArkTS';
+import { AppLogger } from '../core/AppLogger';
+import { router } from '@kit.ArkUI';
+import { common } from '@kit.AbilityKit';
+import { DuaService } from '../duas/DuaService';
+import { HadithSearchService } from '../hadith/HadithSearchService';
+import { L } from '../i18n/LocalizationHelper';
+import { TypographyHelper } from '../core/TypographyHelper';
 
 interface CategoryEntry {
   name: string;
