@@ -3,6 +3,7 @@
 import { common } from '@kit.AbilityKit';
 import { util } from '@kit.ArkTS';
 import { AppLogger } from '../core/AppLogger';
+import { RawPaths } from '../core/RawPaths';
 
 export interface PrivacyPolicyMetadata {
   title: string;
@@ -137,6 +138,27 @@ export class PrivacyPolicyProvider {
   // INTERNALS
   // ============================================================
 
+  // NEW: Map the current app language to the correct GitHub Pages URL
+  static getUrlForLanguage(lang: string): string {
+    switch (lang) {
+      case 'ar':
+        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/ar/';
+      case 'bn':
+        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/bn/';
+      case 'id':
+        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/id/';
+      case 'tr':
+        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/tr/';
+      case 'ur':
+        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/ur/';
+      case 'zh':
+        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/zh/';
+      case 'en':
+      default:
+        return PrivacyPolicyProvider.BASE_URL;
+    }
+  }
+
   private static lookup(lang: string): PrivacyPolicyDocument | null {
     const direct = PrivacyPolicyProvider.cache.get(lang);
     if (direct !== undefined) {
@@ -157,7 +179,7 @@ export class PrivacyPolicyProvider {
     try {
       const mgr = PrivacyPolicyProvider.ctx.resourceManager;
       const rawData = await mgr.getRawFileContent(
-        `privacy/privacy_${effective}.json`
+        RawPaths.privacy(effective)
       );
       const jsonStr = util.TextDecoder.create('utf-8')
         .decodeToString(rawData);
@@ -170,7 +192,7 @@ export class PrivacyPolicyProvider {
         try {
           const mgr = PrivacyPolicyProvider.ctx.resourceManager;
           const rawData = await mgr.getRawFileContent(
-            'privacy/privacy_en.json'
+            RawPaths.privacy('en')
           );
           const jsonStr = util.TextDecoder.create('utf-8')
             .decodeToString(rawData);
@@ -182,27 +204,6 @@ export class PrivacyPolicyProvider {
         }
       }
       return PrivacyPolicyProvider.emptyDoc();
-    }
-  }
-
-  // NEW: Map the current app language to the correct GitHub Pages URL
-  static getUrlForLanguage(lang: string): string {
-    switch (lang) {
-      case 'ar':
-        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/ar/';
-      case 'bn':
-        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/bn/';
-      case 'id':
-        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/id/';
-      case 'tr':
-        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/tr/';
-      case 'ur':
-        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/ur/';
-      case 'zh':
-        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/zh/';
-      case 'en':
-      default:
-        return PrivacyPolicyProvider.BASE_URL;
     }
   }
 

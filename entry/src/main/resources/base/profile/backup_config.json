@@ -13,6 +13,12 @@
     "databases/rdb/mosques/*.db-shm",
     "databases/rdb/hadith_v2/*.db",
     "databases/rdb/hadith_v2/*.db-wal",
-    "databases/rdb/hadith_v2/*.db-shm"
+    "databases/rdb/hadith_v2/*.db-shm",
+    "databases/rdb/core/*.db",
+    "databases/rdb/core/*.db-wal",
+    "databases/rdb/core/*.db-shm",
+    "databases/rdb/quran/*.db",
+    "databases/rdb/quran/*.db-wal",
+    "databases/rdb/quran/*.db-shm"
   ]
 }

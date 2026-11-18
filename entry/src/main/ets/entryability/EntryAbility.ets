@@ -10,17 +10,21 @@ import { deviceInfo } from '@kit.BasicServicesKit';
 import { PreferencesHelper } from '../core/PreferencesHelper';
 import { AppLogger } from '../core/AppLogger';
 import { AppLanguage, L } from '../i18n/LocalizationHelper';
+import { BundleBootstrap } from '../bootstrap/BundleBootstrap';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
   STORAGE_KEY_CALC_SETTINGS_VERSION,
+  STORAGE_KEY_DUA_TRANSLATION_LANG,
   STORAGE_KEY_EVENT_PERSPECTIVE,
   STORAGE_KEY_EVENT_SETTINGS_VERSION,
+  STORAGE_KEY_HADITH_TRANSLATION_LANG,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LANGUAGE_OVERRIDE,
+  STORAGE_KEY_QURAN_TRANSLATION_LANG,
   STORAGE_KEY_RAMADAN_STATE_VERSION,
   STORAGE_KEY_SHOW_EXTRA_TIMINGS,
   STORAGE_KEY_SHOW_FIRST_THIRD,
@@ -147,6 +151,7 @@ export default class EntryAbility extends UIAbility {
         let savedThemeOverride = await PreferencesHelper.getString(
           STORAGE_KEY_THEME_OVERRIDE, ''
         );
+        await BundleBootstrap.init(this.context);
         await IslamicEventService.init(this.context);
         if (savedThemeOverride.length === 0) {
           // Migrate from previous versions (which only had THEME_MODE)
@@ -201,6 +206,15 @@ export default class EntryAbility extends UIAbility {
           STORAGE_KEY_APP_THEME, ThemePreset.SIRAT
         );
         AppStorage.setOrCreate(STORAGE_KEY_APP_THEME, savedAppTheme);
+
+        const savedQuranLang = await PreferencesHelper.getString(STORAGE_KEY_QURAN_TRANSLATION_LANG, 'default');
+        AppStorage.setOrCreate(STORAGE_KEY_QURAN_TRANSLATION_LANG, savedQuranLang);
+
+        const savedHadithLang = await PreferencesHelper.getString(STORAGE_KEY_HADITH_TRANSLATION_LANG, 'default');
+        AppStorage.setOrCreate(STORAGE_KEY_HADITH_TRANSLATION_LANG, savedHadithLang);
+
+        const savedDuaLang = await PreferencesHelper.getString(STORAGE_KEY_DUA_TRANSLATION_LANG, 'default');
+        AppStorage.setOrCreate(STORAGE_KEY_DUA_TRANSLATION_LANG, savedDuaLang);
 
         const savedHijriOffset = await PreferencesHelper.getNumber(
           STORAGE_KEY_HIJRI_OFFSET, 0
@@ -392,6 +406,45 @@ export default class EntryAbility extends UIAbility {
     });
   }
 
+  onForeground(): void {
+    const prev = AppStorage.get<number>(STORAGE_KEY_APP_FOREGROUND_TICK);
+    const next = (prev === undefined ? 0 : prev) + 1;
+    AppStorage.set(STORAGE_KEY_APP_FOREGROUND_TICK, next);
+
+    SystemFeedbackHelper.refresh();
+    LayoutHelper.install(); // re-install if needed (idempotent)
+
+    this.checkTimezoneChange();
+    this.reResolveSystemLanguage();
+
+    hilog.info(0x0000, 'Sirat', 'onForeground tick=%{public}d', next);
+  }
+
+  onBackground(): void {
+    PreferencesHelper.flushNow().catch((err: Error) => {
+      AppLogger.warn('EntryAbility', `Flush on background failed: ${err.message}`);
+    });
+
+    // NEW: push settings changes to any installed widgets
+    WidgetHelper.refreshAll().catch((): void => {
+      // swallow
+    });
+  }
+
+  // ============================================================
+  // LIFECYCLE — onWindowStageCreate
+  // ============================================================
+
+  onConfigurationUpdate(newConfig: Configuration): void {
+    AppLogger.info('EntryAbility', 'onConfigurationUpdate fired');
+    this.reResolveSystemLanguage();
+  }
+
+
+  // ============================================================
+  // LIFECYCLE — onForeground
+  // ============================================================
+
   /**
    * Track whether the current window is in a split arrangement and
    * mirror that into LayoutHelper so pages can consult it.
@@ -427,45 +480,6 @@ export default class EntryAbility extends UIAbility {
         AppLogger.warn('EntryAbility',
           `installSplitModeListener: getMainWindow failed: ${err.message}`);
       });
-  }
-
-  onForeground(): void {
-    const prev = AppStorage.get<number>(STORAGE_KEY_APP_FOREGROUND_TICK);
-    const next = (prev === undefined ? 0 : prev) + 1;
-    AppStorage.set(STORAGE_KEY_APP_FOREGROUND_TICK, next);
-
-    SystemFeedbackHelper.refresh();
-    LayoutHelper.install(); // re-install if needed (idempotent)
-
-    this.checkTimezoneChange();
-    this.reResolveSystemLanguage();
-
-    hilog.info(0x0000, 'Sirat', 'onForeground tick=%{public}d', next);
-  }
-
-  // ============================================================
-  // LIFECYCLE — onWindowStageCreate
-  // ============================================================
-
-  onBackground(): void {
-    PreferencesHelper.flushNow().catch((err: Error) => {
-      AppLogger.warn('EntryAbility', `Flush on background failed: ${err.message}`);
-    });
-
-    // NEW: push settings changes to any installed widgets
-    WidgetHelper.refreshAll().catch((): void => {
-      // swallow
-    });
-  }
-
-
-  // ============================================================
-  // LIFECYCLE — onForeground
-  // ============================================================
-
-  onConfigurationUpdate(newConfig: Configuration): void {
-    AppLogger.info('EntryAbility', 'onConfigurationUpdate fired');
-    this.reResolveSystemLanguage();
   }
 
   // ============================================================

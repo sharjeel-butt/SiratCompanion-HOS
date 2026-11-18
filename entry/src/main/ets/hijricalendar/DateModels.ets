@@ -21,25 +21,28 @@ export enum EventSect {
   SHIA = 'shia'
 }
 
+export interface IslamicEventSource {
+  type: 'hadith' | 'quran' | 'external';
+  id?: string;
+  surah?: number;
+  ayah?: number;
+  display?: string;
+  role: 'primary' | 'supporting';
+}
+
 export interface IslamicEvent {
-  /** Stable identifier used for localisation — e.g. 'ashura' → event_ashura */
   key: string;
   name: string;
-
-  /** Hijri month (1 = Muharram, 12 = Dhul-Hijjah). */
   month: number;
-
-  /** Hijri day (1–30) for FIXED events. Ignored otherwise. */
   day: number;
-
-  /** How the event recurs within the month. */
   recurrence: EventRecurrence;
-
-  /**
-   * Which tradition observes this event. Used by the Home screen's
-   * Event Perspective filter.
-   */
   sect: EventSect;
+
+  // v4.1.0 additions (optional for backward compat)
+  sources?: IslamicEventSource[];
+  duas?: string[];
+  recitations?: string[];
+  migrationStatus?: string;
 }
 
 export interface UpcomingImportantDate {

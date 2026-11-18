@@ -3,18 +3,24 @@ import { router } from '@kit.ArkUI';
 import { ThemeColors, ThemeMode } from '../core/Theme';
 import { PageTheme } from '../core/PageTheme';
 import { L } from '../i18n/LocalizationHelper';
-import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../core/StorageKeys';
-import { BilingualHadith } from '../hadith/HadithModels';
+import { STORAGE_KEY_HADITH_TRANSLATION_LANG, STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../core/StorageKeys';
+import { BilingualHadith, HadithGrading, Sanad } from '../hadith/HadithModels';
 import { HadithDbHelper } from '../hadith/HadithDbHelper';
 import { HadithSearchService } from '../hadith/HadithSearchService';
+import { HadithCoreDbHelper } from '../hadith/HadithCoreDbHelper';
+import { SanadTimeline } from '../hadith/SanadTimeline';
+import { GradeBadge } from '../hadith/GradeBadge';
 
 @Entry
 @Component
 struct HadithDetailsPage {
   @StorageLink(STORAGE_KEY_THEME_MODE) @Watch('onThemeModeChanged') themeMode: string = ThemeMode.SYSTEM;
   @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLangChanged') appLanguage: string = 'en';
+  @StorageLink(STORAGE_KEY_HADITH_TRANSLATION_LANG) @Watch('onLangChanged') hadithTransLang: string = 'default';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State hadith: BilingualHadith | null = null;
+  @State sanad: Sanad | null = null;
+  @State grades: HadithGrading[] = [];
   private hadithId: string = '';
 
   async aboutToAppear() {
@@ -71,13 +77,18 @@ struct HadithDetailsPage {
     this.colors = PageTheme.compute(this.themeMode);
   }
 
-  private tr(key: string): string {
-    return L.get(key, this.appLanguage);
-  }
-
-  async loadHadith() {
+  async loadHadith(): Promise<void> {
     const ctx = getContext(this) as common.UIAbilityContext;
-    this.hadith = await HadithDbHelper.getBilingualById(ctx, this.hadithId, this.appLanguage);
+    const targetLang = this.getHadithTranslationLang();
+    this.hadith = await HadithDbHelper.getBilingualById(ctx, this.hadithId, targetLang, this.appLanguage);
+
+    // v4.1.0 — load sanad + grades from core.db
+    try {
+      this.sanad = await HadithCoreDbHelper.getSanad(ctx, this.hadithId);
+      this.grades = await HadithCoreDbHelper.getGrades(ctx, this.hadithId);
+    } catch (e) {
+      console.warn('[HadithDetails] core.db load failed', e);
+    }
   }
 
   @Builder
@@ -211,7 +222,20 @@ struct HadithDetailsPage {
 
 
             this.HadithHeader()
-
+            if (this.grades.length > 0) {
+              GradeBadge({
+                colors: this.colors,
+                grades: this.grades,
+                currentLanguage: this.appLanguage
+              })
+            }
+            if (this.sanad !== null && this.sanad.confidence !== 'none') {
+              SanadTimeline({
+                colors: this.colors,
+                sanad: this.sanad,
+                currentLanguage: this.appLanguage
+              })
+            }
 
             if (this.hadith.arabic_text.length > 0) {
               Column() {
@@ -282,5 +306,16 @@ struct HadithDetailsPage {
     }
     .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
+  }
+
+  private tr(key: string): string {
+    return L.get(key, this.appLanguage);
+  }
+
+  private getHadithTranslationLang(): string {
+    if (this.hadithTransLang === 'default' || this.hadithTransLang === '') {
+      return this.appLanguage;
+    }
+    return this.hadithTransLang;
   }
 }

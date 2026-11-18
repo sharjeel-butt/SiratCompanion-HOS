@@ -11,9 +11,12 @@ import {
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
   STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_DUA_TRANSLATION_LANG,
   STORAGE_KEY_EVENT_PERSPECTIVE,
+  STORAGE_KEY_HADITH_TRANSLATION_LANG,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LANGUAGE_OVERRIDE,
+  STORAGE_KEY_QURAN_TRANSLATION_LANG,
   STORAGE_KEY_SHOW_FIRST_THIRD_LIST,
   STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH,
   STORAGE_KEY_SHOW_IMSAK_LIST,
@@ -110,6 +113,14 @@ struct CustomizePage {
   @StorageLink(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH)
   @Watch('onShowLastThirdSunpathChanged')
   showLastThirdSunpath: boolean = true;
+
+  @StorageLink(STORAGE_KEY_DUA_TRANSLATION_LANG) duaTransLang: string = 'default';
+  @State showDuaLangPicker: boolean = false;
+
+  @StorageLink(STORAGE_KEY_QURAN_TRANSLATION_LANG) quranTransLang: string = 'default';
+  @StorageLink(STORAGE_KEY_HADITH_TRANSLATION_LANG) hadithTransLang: string = 'default';
+  @State showQuranLangPicker: boolean = false;
+  @State showHadithLangPicker: boolean = false;
   // ============================================================
   // UI STATE
   // ============================================================
@@ -126,7 +137,9 @@ struct CustomizePage {
   @State showSoundPicker: boolean = false;
   @State showEventPerspectivePicker: boolean = false;
   @State showThemePicker: boolean = false;
+
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
+
 
   // ============================================================
   // LIFECYCLE
@@ -346,6 +359,54 @@ struct CustomizePage {
         )
       }
 
+      if (this.showQuranLangPicker) {
+        this.PickerOverlay(
+          this.tr('quran_translation_lang'),
+          $r('app.media.ic_book'),
+          this.buildTranslationLangItems(this.quranTransLang, true),
+          (id: string) => {
+            this.quranTransLang = id;
+            SettingsHelper.saveQuranTranslationLang(id);
+            this.showQuranLangPicker = false;
+          },
+          () => {
+            this.showQuranLangPicker = false;
+          }
+        )
+      }
+
+      if (this.showDuaLangPicker) {
+        this.PickerOverlay(
+          this.tr('dua_translation_lang'),
+          $r('app.media.ic_dua'),
+          this.buildTranslationLangItems(this.duaTransLang, true), // true = supports all 7 langs
+          (id: string) => {
+            this.duaTransLang = id;
+            SettingsHelper.saveDuaTranslationLang(id);
+            this.showDuaLangPicker = false;
+          },
+          () => {
+            this.showDuaLangPicker = false;
+          }
+        )
+      }
+
+      if (this.showHadithLangPicker) {
+        this.PickerOverlay(
+          this.tr('hadith_translation_lang'),
+          $r('app.media.ic_hadith_book'),
+          this.buildTranslationLangItems(this.hadithTransLang, false),
+          (id: string) => {
+            this.hadithTransLang = id;
+            SettingsHelper.saveHadithTranslationLang(id);
+            this.showHadithLangPicker = false;
+          },
+          () => {
+            this.showHadithLangPicker = false;
+          }
+        )
+      }
+
       if (this.showEventPerspectivePicker) {
         this.PickerOverlay(
           this.tr('event_perspective'),
@@ -504,6 +565,9 @@ struct CustomizePage {
         currentLanguage: this.currentLanguage
       })
       this.LanguageRow()
+      this.QuranTranslationRow()
+      this.HadithTranslationRow()
+      this.DuaTranslationRow()
       this.ClockFormatRow()
     }
     .width('100%')
@@ -512,6 +576,84 @@ struct CustomizePage {
     .borderRadius(16)
     .border({ width: 1, color: this.colors.borderSoft })
     .margin({ bottom: 12 })
+  }
+
+  @Builder
+  QuranTranslationRow() {
+    Row() {
+      Column() {
+        Text(this.tr('quran_translation_lang'))
+          .fontSize(15).fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Medium)
+        Text(this.tr('quran_translation_lang_desc'))
+          .fontSize(11).fontColor(this.colors.textMuted)
+          .margin({ top: 2 })
+        Text(this.getTranslationLangLabel(this.quranTransLang))
+          .fontSize(12)
+          .fontColor(this.colors.accentGold)
+          .margin({ top: 6 })
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .opacity(0.7)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
+    }
+    .width('100%')
+    .padding({
+      top: 14,
+      bottom: 14,
+      left: 16,
+      right: 16
+    })
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(12)
+    .margin({ bottom: 8 })
+    .onClick(() => {
+      this.showQuranLangPicker = true;
+    })
+  }
+
+  @Builder
+  HadithTranslationRow() {
+    Row() {
+      Column() {
+        Text(this.tr('hadith_translation_lang'))
+          .fontSize(15).fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Medium)
+        Text(this.tr('hadith_translation_lang_desc'))
+          .fontSize(11).fontColor(this.colors.textMuted)
+          .margin({ top: 2 })
+        Text(this.getTranslationLangLabel(this.hadithTransLang))
+          .fontSize(12)
+          .fontColor(this.colors.accentGold)
+          .margin({ top: 6 })
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .opacity(0.7)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
+    }
+    .width('100%')
+    .padding({
+      top: 14,
+      bottom: 14,
+      left: 16,
+      right: 16
+    })
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(12)
+    .margin({ bottom: 8 })
+    .onClick(() => {
+      this.showHadithLangPicker = true;
+    })
   }
 
   @Builder
@@ -763,6 +905,45 @@ struct CustomizePage {
     .backgroundColor(this.colors.tintSubtle)
     .borderRadius(12)
     .margin({ bottom: 8 })
+  }
+
+  @Builder
+  DuaTranslationRow() {
+    Row() {
+      Column() {
+        Text(this.tr('dua_translation_lang'))
+          .fontSize(15).fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Medium)
+        Text(this.tr('dua_translation_lang_desc'))
+          .fontSize(11).fontColor(this.colors.textMuted)
+          .margin({ top: 2 })
+        Text(this.getTranslationLangLabel(this.duaTransLang))
+          .fontSize(12)
+          .fontColor(this.colors.accentGold)
+          .margin({ top: 6 })
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .opacity(0.7)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
+    }
+    .width('100%')
+    .padding({
+      top: 14,
+      bottom: 14,
+      left: 16,
+      right: 16
+    })
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(12)
+    .margin({ bottom: 8 })
+    .onClick(() => {
+      this.showDuaLangPicker = true;
+    })
   }
 
   @Builder
@@ -1783,5 +1964,35 @@ struct CustomizePage {
     PageTheme.applyColorMode(id, ctx);
 
     this.showThemePicker = false;
+  }
+
+  private getTranslationLangLabel(lang: string): string {
+    if (lang === 'default' || lang === '') {
+      return this.tr('lang_app_default');
+    }
+    return L.get(`lang_${lang}`, this.currentLanguage);
+  }
+
+  private buildTranslationLangItems(current: string, isQuran: boolean): PickerItem[] {
+    const items: PickerItem[] = [];
+    items.push({
+      id: 'default',
+      label: this.tr('lang_app_default'),
+      selected: current === 'default'
+    });
+
+    // Quran supports all 7, Hadith supports 5 (no zh in DBs)
+    const langs = isQuran
+      ? ['en', 'ar', 'ur', 'tr', 'bn', 'id', 'zh']
+      : ['en', 'ar', 'ur', 'tr', 'bn', 'id'];
+
+    for (const l of langs) {
+      items.push({
+        id: l,
+        label: L.get(`lang_${l}`, this.currentLanguage),
+        selected: current === l
+      });
+    }
+    return items;
   }
 }

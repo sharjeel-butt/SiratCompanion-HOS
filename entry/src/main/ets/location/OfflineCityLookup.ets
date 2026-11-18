@@ -3,6 +3,7 @@
 import { common } from '@kit.AbilityKit';
 import { util } from '@kit.ArkTS';
 import { AppLogger } from '../core/AppLogger';
+import { RawPaths } from '../core/RawPaths';
 
 export enum DstRule {
   NONE = 'NONE',
@@ -43,12 +44,12 @@ export class OfflineCityLookup {
       const mgr = context.resourceManager;
 
       // 1. Load the new 6,000+ city dataset
-      const cityData = await mgr.getRawFileContent('locations/offline-cities.json');
+      const cityData = await mgr.getRawFileContent(RawPaths.OFFLINE_CITIES);
       const cityJsonStr = util.TextDecoder.create('utf-8').decodeToString(cityData);
       OfflineCityLookup.cities = JSON.parse(cityJsonStr) as City[];
 
       // 2. Load city translations
-      const transData = await mgr.getRawFileContent('locations/city_translations.json');
+      const transData = await mgr.getRawFileContent(RawPaths.CITY_TRANSLATIONS);
       const transJsonStr = util.TextDecoder.create('utf-8').decodeToString(transData);
       OfflineCityLookup.translations = JSON.parse(transJsonStr) as Record<string, Record<string, string>>;
 

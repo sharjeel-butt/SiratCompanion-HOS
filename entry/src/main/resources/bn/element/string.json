@@ -2986,7 +2986,7 @@
     },
     {
       "name": "licenses_intro",
-      "value": "এই অ্যাপে ব্যবহৃত কুরআনের পাঠ, অনুবাদ এবং আরবি লিপি নিম্নোক্ত লাইসেন্সের অধীনে বিতরণ করা হয়েছে। এই অ্যাপ বা এর ডেটা শেয়ার করার সময় অনুগ্রহ করে উৎসের স্বীকৃতি বজায় রাখুন।"
+      "value": "এই অ্যাপে ব্যবহৃত কুরআন/হাদিসের মূল পাঠ, অনুবাদসমূহ এবং স্ক্রিপ্টসমূহ নিম্নোক্ত লাইসেন্সের অধীনে বিতরণ করা হয়েছে। অনুগ্রহ করে এই অ্যাপ বা এর ডেটা শেয়ার করার সময় যথাযথ স্বীকৃতি (attribution) বজায় রাখুন।"
     },
     {
       "name": "license_section_dataset",
@@ -3007,7 +3007,8 @@
     {
       "name": "license_license_label",
       "value": "লাইসেন্স:"
-    },{
+    },
+    {
       "name": "mode_translation",
       "value": "অনুবাদ"
     },
@@ -3250,7 +3251,94 @@
     {
       "name": "mosque_add_custom_cta",
       "value": "কাস্টম মসজিদ যোগ করুন"
+    },
+    {
+      "name": "sanad_title",
+      "value": "বর্ণনার শৃঙ্খল"
+    },
+    {
+      "name": "sanad_confidence_high",
+      "value": "উচ্চ"
+    },
+    {
+      "name": "sanad_confidence_medium",
+      "value": "আংশিক"
+    },
+    {
+      "name": "sanad_confidence_athar",
+      "value": "আসার"
+    },
+    {
+      "name": "hadith_grade_title",
+      "value": "মূল্যায়ন"
+    },
+    {
+      "name": "hadith_grade_unverified",
+      "value": "গ্রেড নির্ধারিত নয়"
+    },
+    {
+      "name": "grade_sahih",
+      "value": "সহিহ"
+    },
+    {
+      "name": "grade_hasan",
+      "value": "হাসান"
+    },
+    {
+      "name": "grade_daif",
+      "value": "দাইফ"
+    },
+    {
+      "name": "grade_mawdu",
+      "value": "মাওদু"
+    },
+    {
+      "name": "grade_hasan_sahih",
+      "value": "হাসান সহীহ"
+    },
+    {
+      "name": "quran_translation_lang",
+      "value": "কুরআন অনুবাদ"
+    },
+    {
+      "name": "quran_translation_lang_desc",
+      "value": "কুরআনের জন্য অনুবাদের ভাষা নির্বাচন করুন"
+    },
+    {
+      "name": "hadith_translation_lang",
+      "value": "হাদিস অনুবাদ"
+    },
+    {
+      "name": "hadith_translation_lang_desc",
+      "value": "হাদিসের জন্য অনুবাদের ভাষা নির্বাচন করুন"
+    },
+    {
+      "name": "lang_app_default",
+      "value": "অ্যাপের ভাষা (ডিফল্ট)"
+    },
+    {
+      "name": "dua_translation_lang",
+      "value": "দুয়া অনুবাদ"
+    },
+    {
+      "name": "dua_translation_lang_des",
+      "value": "দুয়ার জন্য অনুবাদের ভাষা নির্বাচন করুন"
+    },
+    {
+      "name": "telegram_channel",
+      "value": "টেলিগ্রাম চ্যানেল"
+    },
+    {
+      "name": "telegram_channel_link",
+      "value": "https://t.me/siratcompanionhos"
+    },
+    {
+      "name": "feature_issues",
+      "value": "সমস্যা রিপোর্ট করুন / নতুন ফিচারের অনুরোধ করুন"
+    },
+    {
+      "name": "feature_issues_link",
+      "value": "https://github.com/sharjeel-butt/SiratCompanion-HOS/issues"
     }
   ]
-
 }

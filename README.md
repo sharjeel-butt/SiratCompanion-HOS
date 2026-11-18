@@ -242,6 +242,7 @@ Additional Home features:
 ### Prayer Details Page
 
 Reached from Home → Daily Prayers → View Details.
+
 - **Period selector** — Week / Month / Year
 - **Summary card** — total prayers, percentage ring, current streak, best streak
 - **Per-prayer breakdown** — five rows, one per prayer, with count and progress bar
@@ -328,6 +329,10 @@ A setting under Customize → UI Customization → Home Page UI that controls wh
 - First-launch wizard
 - HarmonyOS 7 immersive material
 - Everything works offline
+
+- **Independent Translation Languages**: Customize the translation language for Quran, Hadith, and Duas independently
+  from the app's main UI language. For example, you can keep the app UI in Urdu while reading the English translation of
+  the Quran.
 
 ---
 

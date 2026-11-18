@@ -1,7 +1,7 @@
 [
   {
     "category": "work",
-    "duaId": "dua_for_knowledge",
+    "duaId": "dua_for_beneficial_knowledge_and_accepted_deeds",
     "keywords": {
       "en": [
         "work",
@@ -103,7 +103,7 @@
   },
   {
     "category": "education",
-    "duaId": "dua_for_knowledge",
+    "duaId": "dua_for_beneficial_knowledge_and_accepted_deeds",
     "keywords": {
       "en": [
         "education",
@@ -373,7 +373,7 @@
   },
   {
     "category": "finance",
-    "duaId": "dua_for_rizq",
+    "duaId": "dua_debt_sufficiency",
     "keywords": {
       "en": [
         "finance",
@@ -457,7 +457,7 @@
   },
   {
     "category": "family_social",
-    "duaId": "dua_for_family",
+    "duaId": "dua_righteous_spouses_and_children",
     "keywords": {
       "en": [
         "family",
@@ -541,7 +541,7 @@
   },
   {
     "category": "wellness",
-    "duaId": "dua_for_anxiety",
+    "duaId": "dua_anxiety",
     "keywords": {
       "en": [
         "anxiety",
@@ -631,7 +631,7 @@
   },
   {
     "category": "household",
-    "duaId": "dua_for_daily_life",
+    "duaId": "dua_entering_home",
     "keywords": {
       "en": [
         "household",

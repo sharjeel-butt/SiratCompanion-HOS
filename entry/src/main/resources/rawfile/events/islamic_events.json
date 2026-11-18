@@ -1,6 +1,6 @@
 [
   {
-    "key": "new_year",
+    "key": "muharram",
     "month": 1,
     "day": 1,
     "recurrence": "fixed",
@@ -8,33 +8,43 @@
     "translations": {
       "en": {
         "name": "Islamic New Year",
-        "desc": "The first day of the Islamic year."
+        "desc": "The first of Muharram, the start of the Islamic lunar year. The best month for voluntary fasting after Ramadan."
       },
       "ar": {
         "name": "رأس السنة الهجرية",
-        "desc": "أول يوم في السنة الهجرية."
+        "desc": "أول محرم، بداية السنة الهجرية. أفضل الشهور للصيام التطوعي بعد رمضان."
       },
       "ur": {
         "name": "اسلامی نیا سال",
-        "desc": "اسلامی سال کا پہلا دن۔"
+        "desc": "یکم محرم، اسلامی قمری سال کا آغاز۔ رمضان کے بعد نفلی روزوں کا بہترین مہینہ۔"
       },
-      "tr": {
-        "name": "Hicri Yılbaşı",
-        "desc": "Hicri yılın ilk günü."
+      "bn": {
+        "name": "ইসলামি নববর্ষ",
+        "desc": "মুহাররমের প্রথম দিন, ইসলামি চন্দ্র বছরের শুরু। রমজানের পর নফল রোজার সর্বোত্তম মাস।"
       },
       "id": {
         "name": "Tahun Baru Islam",
-        "desc": "Hari pertama tahun Hijriah."
+        "desc": "Awal Muharram, awal tahun Hijriah. Bulan terbaik untuk puasa sunnah setelah Ramadan."
       },
-      "bn": {
-        "name": "ইসলামী নববর্ষ",
-        "desc": "হিজরি বছরের প্রথম দিন।"
+      "tr": {
+        "name": "Hicri Yılbaşı",
+        "desc": "Muharrem'in ilk günü, hicri yılın başlangıcı. Ramazan'dan sonra nafile oruç için en faziletli ay."
       },
       "zh": {
         "name": "伊斯兰新年",
-        "desc": "伊斯兰历的第一天。"
+        "desc": "穆哈兰姆月首日，伊斯兰阴历年的开始。斋月之后副功斋戒最好的月份。"
       }
-    }
+    },
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:1163",
+        "role": "primary"
+      }
+    ],
+    "duas": [],
+    "recitations": [],
+    "migration_status": "ok"
   },
   {
     "key": "ashura",
@@ -45,107 +55,48 @@
     "translations": {
       "en": {
         "name": "Day of Ashura",
-        "desc": "The 10th day of Muharram."
+        "desc": "The 10th of Muharram. Fasting on this day expiates the sins of the previous year. The Prophet ﷺ encouraged fasting the 9th alongside it."
       },
       "ar": {
         "name": "يوم عاشوراء",
-        "desc": "اليوم العاشر من شهر محرم."
+        "desc": "العاشر من محرم. صيامه يكفر ذنوب السنة الماضية. حث النبي ﷺ على صيام التاسع معه."
       },
       "ur": {
-        "name": "یوم عاشوراء",
-        "desc": "محرم کا دسواں دن۔"
+        "name": "یوم عاشورہ",
+        "desc": "دس محرم۔ اس دن کا روزہ گزشتہ سال کے گناہ معاف کراتا ہے۔ نبی ﷺ نے نویں تاریخ کا روزہ بھی رکھنے کی ترغیب دی۔"
       },
-      "tr": {
-        "name": "Aşure Günü",
-        "desc": "Muharrem ayının onuncu günü."
+      "bn": {
+        "name": "আশুরার দিন",
+        "desc": "মুহাররমের দশম দিন। এই দিনের রোজা গত বছরের গুনাহ ক্ষমা করে। রাসূল ﷺ নবম দিনের সাথে রাখার তাগিদ দিয়েছেন।"
       },
       "id": {
         "name": "Hari Asyura",
-        "desc": "Hari ke-10 bulan Muharram."
+        "desc": "Tanggal 10 Muharram. Puasa di hari ini menghapus dosa setahun lalu. Nabi ﷺ menganjurkan puasa tanggal 9 bersamanya."
       },
-      "bn": {
-        "name": "আশুরা",
-        "desc": "মুহাররম মাসের ১০ম দিন।"
+      "tr": {
+        "name": "Aşure Günü",
+        "desc": "Muharrem'in onuncu günü. Bu günün orucu geçmiş yılın günahlarına kefarettir. Peygamber ﷺ dokuzuncu günle birlikte tutulmasını tavsiye etmiştir."
       },
       "zh": {
         "name": "阿舒拉日",
-        "desc": "穆哈兰姆月的第十天。"
+        "desc": "穆哈兰姆月第十日。此日斋戒可赎去过去一年的罪过。先知ﷺ鼓励连同第九日一同封斋。"
       }
-    }
-  },
-  {
-    "key": "arbaeen",
-    "month": 2,
-    "day": 20,
-    "recurrence": "fixed",
-    "sect": "shia",
-    "translations": {
-      "en": {
-        "name": "Arbaeen",
-        "desc": "40 days after Ashura."
+    },
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:2004",
+        "role": "primary"
       },
-      "ar": {
-        "name": "الأربعين",
-        "desc": "مرور أربعين يوماً على استشهاد الإمام الحسين."
-      },
-      "ur": {
-        "name": "اربعین",
-        "desc": "عاشوراء کے چالیس دن بعد۔"
-      },
-      "tr": {
-        "name": "Erbain",
-        "desc": "Aşure'den 40 gün sonra."
-      },
-      "id": {
-        "name": "Arbain",
-        "desc": "40 hari setelah Asyura."
-      },
-      "bn": {
-        "name": "আরবাইন",
-        "desc": "আশুরার ৪০ দিন পর।"
-      },
-      "zh": {
-        "name": "阿尔巴因节",
-        "desc": "阿舒拉日后的第四十天。"
+      {
+        "type": "hadith",
+        "id": "muslim:1134",
+        "role": "supporting"
       }
-    }
-  },
-  {
-    "key": "mawlid",
-    "month": 3,
-    "day": 12,
-    "recurrence": "fixed",
-    "sect": "universal",
-    "translations": {
-      "en": {
-        "name": "Mawlid al-Nabi",
-        "desc": "The birth of Prophet Muhammad."
-      },
-      "ar": {
-        "name": "المولد النبوي",
-        "desc": "ذكرى مولد النبي محمد صلى الله عليه وسلم."
-      },
-      "ur": {
-        "name": "عید میلاد النبی",
-        "desc": "نبی کریم صلی اللہ علیہ وسلم کی ولادت۔"
-      },
-      "tr": {
-        "name": "Mevlid Kandili",
-        "desc": "Peygamber Efendimizin doğumu."
-      },
-      "id": {
-        "name": "Maulid Nabi",
-        "desc": "Kelahiran Nabi Muhammad."
-      },
-      "bn": {
-        "name": "ঈদে মিলাদুন্নবী",
-        "desc": "মহানবী (সা.)-এর জন্মদিন।"
-      },
-      "zh": {
-        "name": "圣纪节",
-        "desc": "先知穆罕默德的诞辰。"
-      }
-    }
+    ],
+    "duas": [],
+    "recitations": [],
+    "migration_status": "ok"
   },
   {
     "key": "raghaib",
@@ -156,70 +107,37 @@
     "translations": {
       "en": {
         "name": "Laylat al-Raghaib",
-        "desc": "The first Thursday night of Rajab."
+        "desc": "The first Thursday night of Rajab. A traditional devotional observance; specific practices are not established by authentic hadith."
       },
       "ar": {
         "name": "ليلة الرغائب",
-        "desc": "أول ليلة جمعة من شهر رجب."
+        "desc": "أول ليلة جمعة من رجب. تعبد تقليدي؛ لم تثبت صفة خاصة له بحديث صحيح."
       },
       "ur": {
-        "name": "شب رغائب",
-        "desc": "رجب کی پہلی جمعرات کی رات۔"
-      },
-      "tr": {
-        "name": "Regaib Kandili",
-        "desc": "Recep ayının ilk perşembe gecesi."
-      },
-      "id": {
-        "name": "Malam Raghaib",
-        "desc": "Kamis malam pertama bulan Rajab."
+        "name": "لیلۃ الرغائب",
+        "desc": "رجب کی پہلی جمعرات کی رات۔ ایک روایتی عبادت؛ اس کی خاص کیفیت صحیح حدیث سے ثابت نہیں۔"
       },
       "bn": {
-        "name": "শবে রাগাইব",
-        "desc": "রজব মাসের প্রথম বৃহস্পতিবার রাত।"
-      },
-      "zh": {
-        "name": "登霄节前奏",
-        "desc": "赖哲卜月的第一个星期四夜晚。"
-      }
-    }
-  },
-  {
-    "key": "imam_ali_birthday",
-    "month": 7,
-    "day": 13,
-    "recurrence": "fixed",
-    "sect": "shia",
-    "translations": {
-      "en": {
-        "name": "Birthday of Imam Ali",
-        "desc": "Birth of Ali ibn Abi Talib."
-      },
-      "ar": {
-        "name": "مولد الإمام علي",
-        "desc": "ذكرى مولد الإمام علي بن أبي طالب."
-      },
-      "ur": {
-        "name": "امام علی کی ولادت",
-        "desc": "حضرت علی بن ابی طالب کی ولادت۔"
-      },
-      "tr": {
-        "name": "Hz. Ali'nin Doğumu",
-        "desc": "Ali bin Ebu Talib'in doğumu."
+        "name": "লাইলাতুর রাগাইব",
+        "desc": "রজবের প্রথম বৃহস্পতিবার রাত। একটি ঐতিহ্যবাহী ইবাদত; নির্দিষ্ট পদ্ধতি সহিহ হাদিসে প্রমাণিত নয়।"
       },
       "id": {
-        "name": "Kelahiran Imam Ali",
-        "desc": "Kelahiran Ali bin Abi Thalib."
+        "name": "Lailatul Raghaib",
+        "desc": "Malam Kamis pertama bulan Rajab. Amalan tradisional; tata cara khususnya tidak ditetapkan oleh hadis sahih."
       },
-      "bn": {
-        "name": "ইমাম আলীর জন্মদিন",
-        "desc": "আলী ইবনে আবী তালিবের জন্ম।"
+      "tr": {
+        "name": "Regaib Gecesi",
+        "desc": "Recep ayının ilk perşembe gecesi. Geleneksel bir ibadet; özel uygulaması sahih hadisle sabit değildir."
       },
       "zh": {
-        "name": "伊玛目阿里诞辰",
-        "desc": "阿里·本·阿比·塔利卜的诞辰。"
+        "name": "赖哲卜月第一个周四夜",
+        "desc": "赖哲卜月第一个周四夜。传统功修；具体做法未有可靠的圣训依据。"
       }
-    }
+    },
+    "sources": [],
+    "duas": [],
+    "recitations": [],
+    "migration_status": "no_sources"
   },
   {
     "key": "isra_miraj",
@@ -230,33 +148,49 @@
     "translations": {
       "en": {
         "name": "Isra and Mi'raj",
-        "desc": "The night journey of Prophet Muhammad."
+        "desc": "The Night Journey and Ascension. The Prophet ﷺ was taken from Makkah to Jerusalem, then ascended through the heavens in a single night."
       },
       "ar": {
         "name": "الإسراء والمعراج",
-        "desc": "رحلة الإسراء والمعراج."
+        "desc": "ليلة الإسراء والمعراج. أسري بالنبي ﷺ من مكة إلى بيت المقدس ثم عرج به إلى السماوات في ليلة واحدة."
       },
       "ur": {
         "name": "اسراء و معراج",
-        "desc": "نبی کریم صلی اللہ علیہ وسلم کا معراج کا سفر۔"
+        "desc": "شب معراج۔ نبی ﷺ کو ایک رات میں مکہ سے بیت المقدس لے جایا گیا، پھر آسمانوں تک معراج ہوا۔"
       },
-      "tr": {
-        "name": "Miraç Kandili",
-        "desc": "Peygamber Efendimizin miracı."
+      "bn": {
+        "name": "ইসরা ও মিরাজ",
+        "desc": "মিরাজের রাত। এক রাতে নবী ﷺ-কে মক্কা থেকে বায়তুল মুকাদ্দাসে নিয়ে যাওয়া হয়, তারপর আসমানে উত্থিত হন।"
       },
       "id": {
         "name": "Isra Mi'raj",
-        "desc": "Perjalanan malam Nabi Muhammad."
+        "desc": "Perjalanan malam dan mi'raj. Nabi ﷺ diperjalankan dari Makkah ke Baitul Maqdis, lalu naik ke langit dalam satu malam."
       },
-      "bn": {
-        "name": "শবে মিরাজ",
-        "desc": "মহানবী (সা.)-এর মিরাজ।"
+      "tr": {
+        "name": "İsra ve Mirac",
+        "desc": "Gece yolculuğu ve mirac. Peygamber ﷺ bir gecede Mekke'den Kudüs'e götürülmüş, ardından göklere yükseltilmiştir."
       },
       "zh": {
-        "name": "登霄节",
-        "desc": "先知穆罕默德的夜行登霄。"
+        "name": "登霄夜",
+        "desc": "夜行与登霄。先知ﷺ一夜之间从麦加被带至耶路撒冷，随后升至诸天。"
       }
-    }
+    },
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 17,
+        "ayah": 1,
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "bukhari:3207",
+        "role": "supporting"
+      }
+    ],
+    "duas": [],
+    "recitations": [],
+    "migration_status": "ok"
   },
   {
     "key": "mid_shaban",
@@ -267,33 +201,37 @@
     "translations": {
       "en": {
         "name": "Mid-Sha'ban",
-        "desc": "The 15th night of Sha'ban."
+        "desc": "The 15th of Sha'ban. Some narrations mention its virtue; specific practices are disputed among scholars."
       },
       "ar": {
-        "name": "ليلة النصف من شعبان",
-        "desc": "الليلة الخامسة عشرة من شهر شعبان."
+        "name": "النصف من شعبان",
+        "desc": "الخامس عشر من شعبان. وردت بعض الروايات في فضله، والخلاف قائم في الأعمال الخاصة به."
       },
       "ur": {
-        "name": "شب برات",
-        "desc": "شعبان کی پندرہویں رات۔"
-      },
-      "tr": {
-        "name": "Berat Kandili",
-        "desc": "Şaban ayının on beşinci gecesi."
-      },
-      "id": {
-        "name": "Nisfu Sya'ban",
-        "desc": "Malam ke-15 bulan Sya'ban."
+        "name": "شعبان کی پندرہویں رات",
+        "desc": "پندرہ شعبان۔ بعض روایات میں فضیلت آئی ہے؛ خاص اعمال میں علماء کا اختلاف ہے۔"
       },
       "bn": {
-        "name": "শবে বরাত",
-        "desc": "শাবান মাসের ১৫তম রাত।"
+        "name": "শাবানের মধ্যরাত",
+        "desc": "শাবানের পনেরতম দিন। কিছু বর্ণনায় এর فضীলত এসেছে; নির্দিষ্ট আমল নিয়ে মতভেদ আছে।"
+      },
+      "id": {
+        "name": "Pertengahan Sya'ban",
+        "desc": "Tanggal 15 Sya'ban. Beberapa riwayat menyebut keutamaannya; amalan khusus diperdebatkan ulama."
+      },
+      "tr": {
+        "name": "Şaban'ın Ortası",
+        "desc": "Şaban'ın on beşinci günü. Bazı rivayetlerde fazileti geçer; özel amelleri alimler arasında ihtilaflıdır."
       },
       "zh": {
-        "name": "拜拉特夜",
-        "desc": "舍尔邦月的第十五夜。"
+        "name": "舍尔邦月半月",
+        "desc": "舍尔邦月十五日。部分传述提及其高贵；具体做法在学者间有分歧。"
       }
-    }
+    },
+    "sources": [],
+    "duas": [],
+    "recitations": [],
+    "migration_status": "no_sources"
   },
   {
     "key": "ramadan_start",
@@ -303,34 +241,118 @@
     "sect": "universal",
     "translations": {
       "en": {
-        "name": "Ramadan Start",
-        "desc": "The first day of Ramadan."
+        "name": "Ramadan Begins",
+        "desc": "The first day of Ramadan. The month in which the Quran was revealed as guidance for humanity. Fasting is obligatory from dawn to sunset."
       },
       "ar": {
         "name": "بداية رمضان",
-        "desc": "أول يوم من شهر رمضان المبارك."
+        "desc": "أول يوم من رمضان. الشهر الذي أنزل فيه القرآن هدى للناس. الصيام واجب من الفجر إلى المغرب."
       },
       "ur": {
         "name": "رمضان کا آغاز",
-        "desc": "رمضان المبارک کا پہلا دن۔"
-      },
-      "tr": {
-        "name": "Ramazan Başlangıcı",
-        "desc": "Ramazan ayının ilk günü."
-      },
-      "id": {
-        "name": "Awal Ramadan",
-        "desc": "Hari pertama bulan Ramadan."
+        "desc": "رمضان کا پہلا دن۔ وہ مہینہ جس میں قرآن نازل ہوا۔ فجر سے مغرب تک روزہ فرض ہے۔"
       },
       "bn": {
         "name": "রমজান শুরু",
-        "desc": "রমজান মাসের প্রথম দিন।"
+        "desc": "রমজানের প্রথম দিন। যে মাসে মানবজাতির হেদায়েতের জন্য কুরআন নাজিল হয়েছে। ফজর থেকে মাগরিব পর্যন্ত রোজা ফরজ।"
+      },
+      "id": {
+        "name": "Awal Ramadan",
+        "desc": "Hari pertama Ramadan. Bulan diturunkannya Al-Quran sebagai petunjuk bagi manusia. Puasa wajib dari fajar hingga maghrib."
+      },
+      "tr": {
+        "name": "Ramazan Başlangıcı",
+        "desc": "Ramazan'ın ilk günü. Kur'an'ın insanlığa hidayet olarak indirildiği ay. İmsaktan akşama kadar oruç farzdır."
       },
       "zh": {
         "name": "斋月开始",
-        "desc": "斋月的第一天。"
+        "desc": "斋月第一天。人类获得引导的《古兰经》在这月降示。从黎明到日落封斋为主命。"
       }
-    }
+    },
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 2,
+        "ayah": 185,
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "bukhari:1898",
+        "role": "supporting"
+      },
+      {
+        "type": "hadith",
+        "id": "bukhari:1901",
+        "role": "supporting"
+      }
+    ],
+    "duas": [
+      "dua_suhoor",
+      "dua_breaking_the_fast"
+    ],
+    "recitations": [],
+    "migration_status": "ok"
+  },
+  {
+    "key": "laylat_al_qadr",
+    "month": 9,
+    "day": 27,
+    "recurrence": "fixed",
+    "sect": "universal",
+    "translations": {
+      "en": {
+        "name": "Laylat al-Qadr",
+        "desc": "The Night of Power, better than a thousand months. Falls in the last ten nights of Ramadan, most likely on the 27th."
+      },
+      "ar": {
+        "name": "ليلة القدر",
+        "desc": "ليلة القدر، خير من ألف شهر. في العشر الأواخر من رمضان، وأرجى ما تكون ليلة السابعة والعشرين."
+      },
+      "ur": {
+        "name": "شب قدر",
+        "desc": "شب قدر، ہزار مہینوں سے بہتر۔ رمضان کے آخری عشرے میں، غالباً ستائیسویں رات۔"
+      },
+      "bn": {
+        "name": "লাইলাতুল কদর",
+        "desc": "কদরের রাত, হাজার মাসের চেয়ে উত্তম। রমজানের শেষ দশ রাতের মধ্যে, সম্ভবত সাতাশ তারিখে।"
+      },
+      "id": {
+        "name": "Lailatul Qadr",
+        "desc": "Malam Kemuliaan, lebih baik dari seribu bulan. Terjadi di sepuluh malam terakhir Ramadan, kemungkinan pada malam ke-27."
+      },
+      "tr": {
+        "name": "Kadir Gecesi",
+        "desc": "Bin aydan hayırlı Kadir Gecesi. Ramazan'ın son on gecesinde, büyük ihtimalle 27. gecede."
+      },
+      "zh": {
+        "name": "高贵之夜",
+        "desc": "高贵之夜，胜过一千个月。在斋月最后的十夜中，最可能是第二十七夜。"
+      }
+    },
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 97,
+        "ayah": 1,
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "bukhari:2017",
+        "role": "supporting"
+      },
+      {
+        "type": "hadith",
+        "id": "tirmidhi:3513",
+        "role": "supporting"
+      }
+    ],
+    "duas": [
+      "dua_laylatul_qadr"
+    ],
+    "recitations": [],
+    "migration_status": "ok"
   },
   {
     "key": "eid_fitr",
@@ -341,33 +363,54 @@
     "translations": {
       "en": {
         "name": "Eid al-Fitr",
-        "desc": "The festival of breaking the fast."
+        "desc": "The Festival of Breaking the Fast, marking the end of Ramadan. A day of communal prayer, charity (zakat al-fitr), and celebration."
       },
       "ar": {
         "name": "عيد الفطر",
-        "desc": "عيد الفطر المبارك."
+        "desc": "عيد الفطر، نهاية شهر رمضان. يوم صلاة الجماعة، وزكاة الفطر، والفرح."
       },
       "ur": {
         "name": "عید الفطر",
-        "desc": "عید الفطر کی خوشیاں۔"
-      },
-      "tr": {
-        "name": "Ramazan Bayramı",
-        "desc": "Ramazan Bayramı."
-      },
-      "id": {
-        "name": "Idul Fitri",
-        "desc": "Hari raya setelah bulan Ramadan."
+        "desc": "عید الفطر، رمضان کے اختتام پر۔ اجتماعی نماز، زکوٰۃ الفطر اور خوشی کا دن۔"
       },
       "bn": {
         "name": "ঈদুল ফিতর",
-        "desc": "রোজার ঈদ।"
+        "desc": "রমজানের সমাপ্তিতে ঈদুল ফিতর। জামাতে নামাজ, যাকাতুল ফিতর ও আনন্দের দিন।"
+      },
+      "id": {
+        "name": "Idul Fitri",
+        "desc": "Hari Raya Idul Fitri, menandai berakhirnya Ramadan. Hari salat berjamaah, zakat fitrah, dan kebahagiaan."
+      },
+      "tr": {
+        "name": "Ramazan Bayramı",
+        "desc": "Ramazan'ın sona ermesiyle kutlanan Ramazan Bayramı. Cemaatle namaz, fitre ve sevinç günü."
       },
       "zh": {
         "name": "开斋节",
-        "desc": "庆祝斋月结束的节日。"
+        "desc": "开斋节，标志斋月结束。是集体礼拜、缴纳开斋捐与庆祝的日子。"
       }
-    }
+    },
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 2,
+        "ayah": 185,
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "bukhari:953",
+        "role": "supporting"
+      }
+    ],
+    "duas": [],
+    "recitations": [
+      "recitation_ala_eid_prayer",
+      "recitation_ghashiyah_eid_prayer",
+      "recitation_qaf_eid_prayer",
+      "recitation_qamar_eid_prayer"
+    ],
+    "migration_status": "ok"
   },
   {
     "key": "arafah",
@@ -378,33 +421,43 @@
     "translations": {
       "en": {
         "name": "Day of Arafah",
-        "desc": "The 9th day of Dhul-Hijjah."
+        "desc": "The 9th of Dhul Hijjah. The day of standing at Arafah for pilgrims. Fasting on this day for non-pilgrims expiates two years of sins."
       },
       "ar": {
         "name": "يوم عرفة",
-        "desc": "اليوم التاسع من ذي الحجة."
+        "desc": "التاسع من ذي الحجة. يوم الوقوف بعرفة للحجاج. وصيامه لغير الحاج يكفر سنتين."
       },
       "ur": {
         "name": "یوم عرفہ",
-        "desc": "ذی الحجہ کا نواں دن۔"
-      },
-      "tr": {
-        "name": "Arefe Günü",
-        "desc": "Zilhicce ayının dokuzuncu günü."
-      },
-      "id": {
-        "name": "Hari Arafah",
-        "desc": "Hari ke-9 bulan Dzulhijjah."
+        "desc": "نو ذوالحجہ۔ حاجیوں کے عرفہ میں وقوف کا دن۔ غیر حاجی کے لیے اس دن کا روزہ دو سال کے گناہ معاف کراتا ہے۔"
       },
       "bn": {
         "name": "আরাফার দিন",
-        "desc": "জিলহজ মাসের ৯ম দিন।"
+        "desc": "যিলহজের নবম দিন। হাজীদের আরাফায় অবস্থানের দিন। غیر হাজীদের জন্য এই দিনের রোজা দুই বছরের গুনাহ মাফ করে।"
+      },
+      "id": {
+        "name": "Hari Arafah",
+        "desc": "Tanggal 9 Dzulhijjah. Hari wukuf di Arafah bagi jamaah haji. Puasa Arafah bagi non-jamaah menghapus dosa dua tahun."
+      },
+      "tr": {
+        "name": "Arefe Günü",
+        "desc": "Zilhicce'nin dokuzuncu günü. Hacıların Arafat'ta vakfe günü. Hacı olmayanların bu günü oruç tutması iki yılın günahlarına kefarettir."
       },
       "zh": {
         "name": "阿拉法特日",
-        "desc": "朝觐月的第九天。"
+        "desc": "朝觐月第九日。朝觐者在阿拉法特山驻留之日。非朝觐者在此日封斋可赎两年之罪。"
       }
-    }
+    },
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:1162",
+        "role": "primary"
+      }
+    ],
+    "duas": [],
+    "recitations": [],
+    "migration_status": "ok"
   },
   {
     "key": "eid_adha",
@@ -415,69 +468,153 @@
     "translations": {
       "en": {
         "name": "Eid al-Adha",
-        "desc": "The festival of sacrifice."
+        "desc": "The Festival of Sacrifice, marking the completion of Hajj. Commemorates Prophet Ibrahim's willingness to sacrifice his son in obedience to Allah."
       },
       "ar": {
         "name": "عيد الأضحى",
-        "desc": "عيد الأضحى المبارك."
+        "desc": "عيد الأضحى، ختام موسم الحج. يذكر استعداد إبراهيم عليه السلام للتضحية بابنه طاعة لله."
       },
       "ur": {
-        "name": "عید الاضحی",
-        "desc": "عید الاضحیٰ کی خوشیاں۔"
+        "name": "عید الاضحیٰ",
+        "desc": "عید الاضحیٰ، حج کے اختتام پر۔ حضرت ابراہیمؑ کی اللہ کے حکم پر قربانی کی تیاری کی یادگار۔"
       },
-      "tr": {
-        "name": "Kurban Bayramı",
-        "desc": "Kurban Bayramı."
+      "bn": {
+        "name": "ঈদুল আযহা",
+        "desc": "কুরবানির ঈদ, হজের সমাপ্তিতে। আল্লাহর নির্দেশে ইব্রাহিম আ.-এর পুত্র কুরবানির প্রস্তুতির স্মারক।"
       },
       "id": {
         "name": "Idul Adha",
-        "desc": "Hari raya kurban."
-      },
-      "bn": {
-        "name": "ঈদুল আজহা",
-        "desc": "কুরবানির ঈদ।"
-      },
-      "zh": {
-        "name": "宰牲节",
-        "desc": "献牲的节日。"
-      }
-    }
-  },
-  {
-    "key": "ghadir",
-    "month": 12,
-    "day": 18,
-    "recurrence": "fixed",
-    "sect": "shia",
-    "translations": {
-      "en": {
-        "name": "Eid al-Ghadir",
-        "desc": "The day of Ghadir Khumm."
-      },
-      "ar": {
-        "name": "عيد الغدير",
-        "desc": "عيد الغدير."
-      },
-      "ur": {
-        "name": "عید غدیر",
-        "desc": "عید غدیر خم۔"
+        "desc": "Hari Raya Kurban, menandai selesainya ibadah haji. Memperingati kesiapan Nabi Ibrahim mengurbankan putranya karena perintah Allah."
       },
       "tr": {
-        "name": "Gadir Hum Bayramı",
-        "desc": "Gadir Hum olayı."
-      },
-      "id": {
-        "name": "Idul Ghadir",
-        "desc": "Hari Ghadir Khum."
-      },
-      "bn": {
-        "name": "ঈদে গাদীর",
-        "desc": "গাদীর খুমের দিন।"
+        "name": "Kurban Bayramı",
+        "desc": "Hac ibadetinin tamamlanışıyla kutlanan Kurban Bayramı. İbrahim Peygamber'in Allah'ın emrine itaatle oğlunu kurban etmeye hazır olmasını anar."
       },
       "zh": {
-        "name": "加迪尔节",
-        "desc": "加迪尔·胡姆日。"
+        "name": "古尔邦节",
+        "desc": "宰牲节，标志朝觐完成。纪念先知易卜拉欣顺从安拉之命献子的事迹。"
       }
-    }
+    },
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 108,
+        "ayah": 2,
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "bukhari:5558",
+        "role": "supporting"
+      }
+    ],
+    "duas": [],
+    "recitations": [
+      "recitation_ala_eid_prayer",
+      "recitation_ghashiyah_eid_prayer",
+      "recitation_qaf_eid_prayer",
+      "recitation_qamar_eid_prayer"
+    ],
+    "migration_status": "ok"
+  },
+  {
+    "key": "tashreeq_days",
+    "month": 12,
+    "day": 11,
+    "recurrence": "fixed",
+    "sect": "universal",
+    "translations": {
+      "en": {
+        "name": "Days of Tashreeq",
+        "desc": "The 11th, 12th, and 13th of Dhul Hijjah. Days of eating, drinking, and remembering Allah. Fasting on these days is prohibited."
+      },
+      "ar": {
+        "name": "أيام التشريق",
+        "desc": "الحادي عشر والثاني عشر والثالث عشر من ذي الحجة. أيام أكل وشرب وذكر لله. يحرم صيامها."
+      },
+      "ur": {
+        "name": "ایام تشریق",
+        "desc": "گیارہ، بارہ اور تیرہ ذوالحجہ۔ کھانے، پینے اور اللہ کی یاد کے دن۔ ان دنوں روزہ حرام ہے۔"
+      },
+      "bn": {
+        "name": "তাশরিকের দিনসমূহ",
+        "desc": "যিলহজের ১১, ১২ ও ১৩ তারিখ। খাওয়া, পান করা ও আল্লাহর যিকিরের দিন। এই দিনগুলোতে রোজা নিষিদ্ধ।"
+      },
+      "id": {
+        "name": "Hari Tasyrik",
+        "desc": "Tanggal 11, 12, dan 13 Dzulhijjah. Hari makan, minum, dan berzikir kepada Allah. Puasa di hari-hari ini diharamkan."
+      },
+      "tr": {
+        "name": "Teşrik Günleri",
+        "desc": "Zilhicce'nin 11, 12 ve 13. günleri. Yeme, içme ve Allah'ı anma günleri. Bu günlerde oruç tutmak haramdır."
+      },
+      "zh": {
+        "name": "泰什里格日",
+        "desc": "朝觐月第11、12、13日。是饮食和记念安拉的日子。此三日封斋为禁止。"
+      }
+    },
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:1141",
+        "role": "primary"
+      }
+    ],
+    "duas": [],
+    "recitations": [],
+    "migration_status": "ok"
+  },
+  {
+    "key": "first_10_days_dhul_hijjah",
+    "month": 12,
+    "day": 1,
+    "recurrence": "fixed",
+    "sect": "universal",
+    "translations": {
+      "en": {
+        "name": "First Ten Days of Dhul Hijjah",
+        "desc": "The first ten days of Dhul Hijjah, the best days for righteous deeds in the year — including the days of Hajj and Eid al-Adha."
+      },
+      "ar": {
+        "name": "العشر الأول من ذي الحجة",
+        "desc": "العشر الأوائل من ذي الحجة، أفضل أيام السنة للعمل الصالح، وتشمل أيام الحج وعيد الأضحى."
+      },
+      "ur": {
+        "name": "ذوالحجہ کے پہلے دس دن",
+        "desc": "ذوالحجہ کے پہلے دس دن، سال کے بہترین نیک اعمال کے دن، جن میں حج اور عید الاضحیٰ شامل ہیں۔"
+      },
+      "bn": {
+        "name": "যিলহজের প্রথম দশ দিন",
+        "desc": "যিলহজের প্রথম দশ দিন, বছরের সেরা নেক আমলের দিন — যার মধ্যে হজ ও কুরবানির ঈদ অন্তর্ভুক্ত।"
+      },
+      "id": {
+        "name": "Sepuluh Hari Pertama Dzulhijjah",
+        "desc": "Sepuluh hari pertama Dzulhijjah, hari terbaik untuk amal saleh sepanjang tahun — termasuk hari-hari haji dan Idul Adha."
+      },
+      "tr": {
+        "name": "Zilhicce'nin İlk On Günü",
+        "desc": "Zilhicce'nin ilk on günü, yılın en faziletli amel günleri — hac ve Kurban Bayramı günlerini de kapsar."
+      },
+      "zh": {
+        "name": "朝觐月前十日",
+        "desc": "朝觐月前十日，一年中行善最优美的日子，其中包括朝觐和古尔邦节的日子。"
+      }
+    },
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 89,
+        "ayah": 1,
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "bukhari:969",
+        "role": "supporting"
+      }
+    ],
+    "duas": [],
+    "recitations": [],
+    "migration_status": "ok"
   }
 ]

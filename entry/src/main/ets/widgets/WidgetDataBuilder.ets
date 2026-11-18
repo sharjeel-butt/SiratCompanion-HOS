@@ -15,11 +15,12 @@ import { OfflineCityLookup } from '../location/OfflineCityLookup';
 import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
 import { IslamicEventService } from '../hijricalendar/IslamicEventService';
 import { common } from '@kit.AbilityKit';
-import { BaseDua } from '../duas/DuaModels';
+import { BaseDua, TranslatedDua } from '../duas/DuaModels';
 import { util } from '@kit.ArkTS';
 import { RecurrenceType } from '../hijricalendar/CustomEventModels';
 import { CustomEventStorage } from '../hijricalendar/CustomEventStorage';
 import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
+import { RawPaths } from '../core/RawPaths';
 
 
 export interface WidgetCalendarDay {
@@ -31,11 +32,11 @@ export interface WidgetCalendarDay {
 
 export class WidgetDataBuilder {
   static async build(dimension: string, currentLang?: string): Promise<Record<string, Object>> {
+    let lang: string = currentLang ?? '';
     try {
       // ALWAYS reload from disk to get the absolute latest language setting
       await PreferencesHelper.reloadFromDisk();
 
-      let lang: string = currentLang ?? '';
       const override = await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE_OVERRIDE, 'system');
 
       // If Auto-Detect is set, resolve the system language directly
@@ -84,7 +85,7 @@ export class WidgetDataBuilder {
         }
       }
       if (lat === 0 && lng === 0) {
-        return WidgetDataBuilder.errorData(dimension, 'Set location in app');
+        return WidgetDataBuilder.errorData(dimension, 'Set location in app', lang);
       }
 
       const times: DailyPrayerTimes = PrayerTimeCalculator.calculateWithDeviceTimezone(
@@ -287,15 +288,16 @@ export class WidgetDataBuilder {
     } catch (e) {
       const err = e as Error;
       AppLogger.error('WidgetDataBuilder', `build EXCEPTION: ${err.message}`);
-      return WidgetDataBuilder.errorData(dimension, 'Calc error');
+      return WidgetDataBuilder.errorData(dimension, 'Calc error', lang);
     }
   }
 
   static async buildDateWidget(context: common.Context, dimension: string,
     currentLang?: string): Promise<Record<string, Object>> {
+    const lang = currentLang || 'en';
     try {
       await IslamicEventService.init(context);
-      const lang = currentLang || 'en';
+
       const now = new Date();
 
       const hijriOffset = await SettingsHelper.getHijriOffset();
@@ -308,7 +310,23 @@ export class WidgetDataBuilder {
 
       let gregDate = '';
       try {
-        const locale = lang === 'ar' ? 'ar' : (lang === 'zh' ? 'zh-CN' : 'en-US');
+        let locale = 'en-US';
+        if (lang === 'ar') {
+          locale = 'ar';
+        } else if (lang === 'zh') {
+          locale = 'zh-CN';
+        } else if (lang === 'ur') {
+          locale =
+            'ur';
+        } else if (lang === 'tr') {
+          locale = 'tr';
+        } else if (lang === 'bn') {
+          locale = 'bn';
+        } else if (lang ===
+          'id') {
+          locale = 'id';
+        }
+
         gregDate = now.toLocaleDateString(locale, { day: 'numeric', month: 'short' });
       } catch (e) {
         gregDate = `${now.getDate()}`;
@@ -416,15 +434,16 @@ export class WidgetDataBuilder {
       return out; // Single return statement
 
     } catch (e) {
-      return WidgetDataBuilder.errorData(dimension, 'Error');
+      return WidgetDataBuilder.errorData(dimension, 'Error', lang);
     }
   }
 
   static async buildEventWidget(context: common.Context, dimension: string,
     currentLang?: string): Promise<Record<string, Object>> {
+    const lang = currentLang || 'en';
     try {
       await IslamicEventService.init(context);
-      const lang = currentLang || 'en';
+
       const hijriOffset = await SettingsHelper.getHijriOffset();
       const events = DateHelper.getUpcomingImportantDates(hijriOffset, SettingsHelper.getEventPerspective());
 
@@ -462,14 +481,17 @@ export class WidgetDataBuilder {
       }
       return out;
     } catch (e) {
-      return WidgetDataBuilder.errorData(dimension, 'Error');
+      return WidgetDataBuilder.errorData(dimension, 'Error', lang);
     }
   }
 
-  static async buildAdhkarWidget(context: common.Context, dimension: string,
-    currentLang?: string): Promise<Record<string, Object>> {
+  static async buildAdhkarWidget(
+    context: common.Context,
+    dimension: string,
+    currentLang?: string
+  ): Promise<Record<string, Object>> {
+    const lang = currentLang || 'en';
     try {
-      const lang = currentLang || 'en';
       const out: Record<string, Object> = {};
       out.dimension = dimension;
       out.lang = lang;
@@ -482,7 +504,9 @@ export class WidgetDataBuilder {
       }
 
       const mgr = context.resourceManager;
-      const data = await mgr.getRawFileContent('duas/duas_base.json');
+
+      // 1. Load base (Arabic + English reference)
+      const data = await mgr.getRawFileContent(RawPaths.DUA_BASE);
       const jsonStr = util.TextDecoder.create('utf-8').decodeToString(data);
 
       const safeContext = context || PreferencesHelper.getContext();
@@ -506,7 +530,31 @@ export class WidgetDataBuilder {
       if (duas && duas.length > 0) {
         const selected = duas[dayOfYear % duas.length];
         out.arabicText = selected.arabic;
-        out.source = selected.reference || '';
+
+        // Default to English reference
+        let localizedSource = selected.reference || '';
+
+        // 2. Look up localized reference (fallback to English on error)
+        try {
+          const locData = await mgr.getRawFileContent(RawPaths.duas(lang));
+          const locStr = util.TextDecoder.create('utf-8').decodeToString(locData);
+          const locDuas = JSON.parse(locStr) as Record<string, TranslatedDua>;
+          const locInfo = locDuas[selected.id];
+
+          if (locInfo) {
+            if (locInfo.reference_display && locInfo.reference_display.length > 0) {
+              localizedSource = locInfo.reference_display;
+            } else if (locInfo.reference && locInfo.reference.length > 0) {
+              localizedSource = locInfo.reference;
+            }
+          }
+        } catch (locErr) {
+          // Log but don't fail — use English fallback
+          AppLogger.warn('WidgetDataBuilder',
+            `Failed to load localized dua reference for ${lang}`);
+        }
+
+        out.source = localizedSource;
       } else {
         out.arabicText = 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ';
         out.source = 'Hadith';
@@ -516,16 +564,16 @@ export class WidgetDataBuilder {
       return out;
     } catch (e) {
       const err = e as Error;
-      // Return the exact error so the widget shows it
-      return WidgetDataBuilder.errorData(dimension, `Err: ${err.message}`);
+      return WidgetDataBuilder.errorData(dimension, `Err: ${err.message}`, lang);
     }
   }
 
   static async buildRamadanWidget(dimension: string, currentLang?: string): Promise<Record<string, Object>> {
+    let lang: string = currentLang ?? '';
     try {
       await PreferencesHelper.reloadFromDisk();
 
-      let lang: string = currentLang ?? '';
+
       const override = await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE_OVERRIDE, 'system');
 
       if (override === 'system') {
@@ -558,7 +606,7 @@ export class WidgetDataBuilder {
       }
 
       if (lat === 0 && lng === 0) {
-        return WidgetDataBuilder.errorData(dimension, 'Set location in app');
+        return WidgetDataBuilder.errorData(dimension, 'Set location in app', lang);
       }
 
       // --- Check if it is currently Ramadan ---
@@ -665,16 +713,28 @@ export class WidgetDataBuilder {
 
       return out;
     } catch (e) {
-      return WidgetDataBuilder.errorData(dimension, 'Calc error');
+      return WidgetDataBuilder.errorData(dimension, 'Calc error', lang);
     }
   }
 
-  static errorData(dimension: string, msg: string): Record<string, Object> {
+  static errorData(dimension: string, msgKey: string, lang: string): Record<string, Object> {
     const out: Record<string, Object> = {};
     out.dimension = dimension;
     out.city = '—';
     out.hijriDate = '—';
-    out.lang = 'en';
+    out.lang = lang;
+
+    // Translate the error message based on the key
+    let localizedError = msgKey;
+    if (msgKey === 'set_location') {
+      localizedError = L.get('widget_err_set_location', lang);
+    } else if (msgKey === 'calc_error') {
+      localizedError = L.get('widget_err_calc', lang);
+    } else {
+      localizedError = msgKey; // Fallback to raw msg
+    }
+
+    out.error = localizedError;
 
     // ---- Prayer widget ----
     out.nextId = '—';
@@ -737,7 +797,7 @@ export class WidgetDataBuilder {
     out.maghribTime24 = '--:--';
     out.ishaTime24 = '--:--';
     out.taskHadith = 'Hadith';
-    out.error = msg;
+    out.error = localizedError;
     return out;
   }
 

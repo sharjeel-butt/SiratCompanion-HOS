@@ -1,0 +1,1230 @@
+[
+  {
+    "name": "collection_abudawud",
+    "value": "Sunan Abu Dawud"
+  },
+  {
+    "name": "collection_bukhari",
+    "value": "Sahih al-Bukhari"
+  },
+  {
+    "name": "collection_dehlawi",
+    "value": "40 Hadith Shah Waliullah"
+  },
+  {
+    "name": "collection_ibnmajah",
+    "value": "Sunan Ibn Majah"
+  },
+  {
+    "name": "collection_malik",
+    "value": "Muwatta Malik"
+  },
+  {
+    "name": "collection_muslim",
+    "value": "Sahih Muslim"
+  },
+  {
+    "name": "collection_nasai",
+    "value": "Sunan an-Nasai"
+  },
+  {
+    "name": "collection_nawawi",
+    "value": "40 Hadith an-Nawawi"
+  },
+  {
+    "name": "collection_qudsi",
+    "value": "40 Hadith Qudsi"
+  },
+  {
+    "name": "collection_tirmidhi",
+    "value": "Jami at-Tirmidhi"
+  },
+  {
+    "name": "topic_adhan",
+    "value": "Adhan"
+  },
+  {
+    "name": "topic_agriculture",
+    "value": "Agriculture"
+  },
+  {
+    "name": "topic_akhirah",
+    "value": "Akhirah"
+  },
+  {
+    "name": "topic_angels",
+    "value": "Angels"
+  },
+  {
+    "name": "topic_appearance",
+    "value": "Appearance"
+  },
+  {
+    "name": "topic_aqidah",
+    "value": "Aqidah"
+  },
+  {
+    "name": "topic_arafah",
+    "value": "Arafah"
+  },
+  {
+    "name": "topic_arafah_fast",
+    "value": "Arafah Fast"
+  },
+  {
+    "name": "topic_ashura",
+    "value": "Ashura"
+  },
+  {
+    "name": "topic_barzakh",
+    "value": "Barzakh"
+  },
+  {
+    "name": "topic_books",
+    "value": "Books"
+  },
+  {
+    "name": "topic_business",
+    "value": "Business"
+  },
+  {
+    "name": "topic_character",
+    "value": "Character"
+  },
+  {
+    "name": "topic_charity",
+    "value": "Charity"
+  },
+  {
+    "name": "topic_children",
+    "value": "Children"
+  },
+  {
+    "name": "topic_companions",
+    "value": "Companions"
+  },
+  {
+    "name": "topic_contracts",
+    "value": "Contracts"
+  },
+  {
+    "name": "topic_creation",
+    "value": "Creation"
+  },
+  {
+    "name": "topic_daily_life",
+    "value": "Daily Life"
+  },
+  {
+    "name": "topic_day_of_judgment",
+    "value": "Day of Judgment"
+  },
+  {
+    "name": "topic_death",
+    "value": "Death"
+  },
+  {
+    "name": "topic_debt",
+    "value": "Debt"
+  },
+  {
+    "name": "topic_dhikr",
+    "value": "Dhikr"
+  },
+  {
+    "name": "topic_divorce",
+    "value": "Divorce"
+  },
+  {
+    "name": "topic_dreams",
+    "value": "Dreams"
+  },
+  {
+    "name": "topic_drinks",
+    "value": "Drinks"
+  },
+  {
+    "name": "topic_dua",
+    "value": "Dua"
+  },
+  {
+    "name": "topic_eclipse_prayer",
+    "value": "Eclipse Prayer"
+  },
+  {
+    "name": "topic_eid",
+    "value": "Eid"
+  },
+  {
+    "name": "topic_endowment",
+    "value": "Endowment"
+  },
+  {
+    "name": "topic_ethics",
+    "value": "Ethics"
+  },
+  {
+    "name": "topic_etiquette",
+    "value": "Etiquette"
+  },
+  {
+    "name": "topic_evil_eye",
+    "value": "Evil Eye"
+  },
+  {
+    "name": "topic_family_law",
+    "value": "Family Law"
+  },
+  {
+    "name": "topic_fasting",
+    "value": "Fasting"
+  },
+  {
+    "name": "topic_father",
+    "value": "Father"
+  },
+  {
+    "name": "topic_fay",
+    "value": "Fay"
+  },
+  {
+    "name": "topic_finance",
+    "value": "Finance"
+  },
+  {
+    "name": "topic_fiqh",
+    "value": "Fiqh"
+  },
+  {
+    "name": "topic_fitan",
+    "value": "Fitan"
+  },
+  {
+    "name": "topic_forgiveness",
+    "value": "Forgiveness"
+  },
+  {
+    "name": "topic_gift_giving",
+    "value": "Gift Giving"
+  },
+  {
+    "name": "topic_governance",
+    "value": "Governance"
+  },
+  {
+    "name": "topic_gratitude",
+    "value": "Gratitude"
+  },
+  {
+    "name": "topic_hadith_qudsi",
+    "value": "Hadith Qudsi"
+  },
+  {
+    "name": "topic_hajj",
+    "value": "Hajj"
+  },
+  {
+    "name": "topic_halal_food",
+    "value": "Halal Food"
+  },
+  {
+    "name": "topic_health",
+    "value": "Health"
+  },
+  {
+    "name": "topic_honesty",
+    "value": "Honesty"
+  },
+  {
+    "name": "topic_horses",
+    "value": "Horses"
+  },
+  {
+    "name": "topic_humility",
+    "value": "Humility"
+  },
+  {
+    "name": "topic_hunting",
+    "value": "Hunting"
+  },
+  {
+    "name": "topic_hypocrites",
+    "value": "Hypocrites"
+  },
+  {
+    "name": "topic_ihsan",
+    "value": "Ihsan"
+  },
+  {
+    "name": "topic_iman",
+    "value": "Iman"
+  },
+  {
+    "name": "topic_inheritance",
+    "value": "Inheritance"
+  },
+  {
+    "name": "topic_istiadhah",
+    "value": "Isti'adhah"
+  },
+  {
+    "name": "topic_istighfar",
+    "value": "Istighfar"
+  },
+  {
+    "name": "topic_istisqa",
+    "value": "Istisqa"
+  },
+  {
+    "name": "topic_itikaf",
+    "value": "I'tikaf"
+  },
+  {
+    "name": "topic_jahannam",
+    "value": "Jahannam"
+  },
+  {
+    "name": "topic_jamaah",
+    "value": "Jamaah"
+  },
+  {
+    "name": "topic_jannah",
+    "value": "Jannah"
+  },
+  {
+    "name": "topic_jihad",
+    "value": "Jihad"
+  },
+  {
+    "name": "topic_jizyah",
+    "value": "Jizyah"
+  },
+  {
+    "name": "topic_jumuah",
+    "value": "Jumu'ah"
+  },
+  {
+    "name": "topic_justice",
+    "value": "Justice"
+  },
+  {
+    "name": "topic_kaffarah",
+    "value": "Kaffarah"
+  },
+  {
+    "name": "topic_khumus",
+    "value": "Khumus"
+  },
+  {
+    "name": "topic_khushu",
+    "value": "Khushu"
+  },
+  {
+    "name": "topic_kindness",
+    "value": "Kindness"
+  },
+  {
+    "name": "topic_knowledge",
+    "value": "Knowledge"
+  },
+  {
+    "name": "topic_learning",
+    "value": "Learning"
+  },
+  {
+    "name": "topic_li_an",
+    "value": "Li'an"
+  },
+  {
+    "name": "topic_literature",
+    "value": "Literature"
+  },
+  {
+    "name": "topic_lost_property",
+    "value": "Lost Property"
+  },
+  {
+    "name": "topic_malahim",
+    "value": "Malahim"
+  },
+  {
+    "name": "topic_marriage",
+    "value": "Marriage"
+  },
+  {
+    "name": "topic_medicine",
+    "value": "Medicine"
+  },
+  {
+    "name": "topic_memorization",
+    "value": "Memorization"
+  },
+  {
+    "name": "topic_mercy",
+    "value": "Mercy"
+  },
+  {
+    "name": "topic_modesty",
+    "value": "Modesty"
+  },
+  {
+    "name": "topic_mosque",
+    "value": "Mosque"
+  },
+  {
+    "name": "topic_mother",
+    "value": "Mother"
+  },
+  {
+    "name": "topic_oaths_vows",
+    "value": "Oaths Vows"
+  },
+  {
+    "name": "topic_omens",
+    "value": "Omens"
+  },
+  {
+    "name": "topic_parables",
+    "value": "Parables"
+  },
+  {
+    "name": "topic_parents",
+    "value": "Parents"
+  },
+  {
+    "name": "topic_patience",
+    "value": "Patience"
+  },
+  {
+    "name": "topic_permission",
+    "value": "Permission"
+  },
+  {
+    "name": "topic_property_law",
+    "value": "Property Law"
+  },
+  {
+    "name": "topic_prophets",
+    "value": "Prophets"
+  },
+  {
+    "name": "topic_protection",
+    "value": "Protection"
+  },
+  {
+    "name": "topic_purification",
+    "value": "Purification"
+  },
+  {
+    "name": "topic_qadr",
+    "value": "Qadr"
+  },
+  {
+    "name": "topic_qiblah",
+    "value": "Qiblah"
+  },
+  {
+    "name": "topic_quran",
+    "value": "Quran"
+  },
+  {
+    "name": "topic_qurbani",
+    "value": "Qurbani"
+  },
+  {
+    "name": "topic_ramadan",
+    "value": "Ramadan"
+  },
+  {
+    "name": "topic_recitation",
+    "value": "Recitation"
+  },
+  {
+    "name": "topic_reconciliation",
+    "value": "Reconciliation"
+  },
+  {
+    "name": "topic_reflection",
+    "value": "Reflection"
+  },
+  {
+    "name": "topic_relatives",
+    "value": "Relatives"
+  },
+  {
+    "name": "topic_revelation",
+    "value": "Revelation"
+  },
+  {
+    "name": "topic_rings",
+    "value": "Rings"
+  },
+  {
+    "name": "topic_sadaqah",
+    "value": "Sadaqah"
+  },
+  {
+    "name": "topic_salah",
+    "value": "Salah"
+  },
+  {
+    "name": "topic_scholarship",
+    "value": "Scholarship"
+  },
+  {
+    "name": "topic_seerah",
+    "value": "Seerah"
+  },
+  {
+    "name": "topic_sickness",
+    "value": "Sickness"
+  },
+  {
+    "name": "topic_sincerity",
+    "value": "Sincerity"
+  },
+  {
+    "name": "topic_social_justice",
+    "value": "Social Justice"
+  },
+  {
+    "name": "topic_speech_etiquette",
+    "value": "Speech Etiquette"
+  },
+  {
+    "name": "topic_sports",
+    "value": "Sports"
+  },
+  {
+    "name": "topic_spouse",
+    "value": "Spouse"
+  },
+  {
+    "name": "topic_sunnah",
+    "value": "Sunnah"
+  },
+  {
+    "name": "topic_tafsir",
+    "value": "Tafsir"
+  },
+  {
+    "name": "topic_tahajjud",
+    "value": "Tahajjud"
+  },
+  {
+    "name": "topic_tawbah",
+    "value": "Tawbah"
+  },
+  {
+    "name": "topic_tawhid",
+    "value": "Tawhid"
+  },
+  {
+    "name": "topic_teaching",
+    "value": "Teaching"
+  },
+  {
+    "name": "topic_trade",
+    "value": "Trade"
+  },
+  {
+    "name": "topic_travel",
+    "value": "Travel"
+  },
+  {
+    "name": "topic_trustworthiness",
+    "value": "Trustworthiness"
+  },
+  {
+    "name": "topic_umrah",
+    "value": "Umrah"
+  },
+  {
+    "name": "topic_virtues",
+    "value": "Virtues"
+  },
+  {
+    "name": "topic_voluntary_fasting",
+    "value": "Voluntary Fasting"
+  },
+  {
+    "name": "topic_vows_curses",
+    "value": "Vows Curses"
+  },
+  {
+    "name": "topic_war_booty",
+    "value": "War Booty"
+  },
+  {
+    "name": "topic_water",
+    "value": "Water"
+  },
+  {
+    "name": "topic_wills",
+    "value": "Wills"
+  },
+  {
+    "name": "topic_witr",
+    "value": "Witr"
+  },
+  {
+    "name": "topic_women",
+    "value": "Women"
+  },
+  {
+    "name": "topic_wudu",
+    "value": "Wudu"
+  },
+  {
+    "name": "topic_zakat",
+    "value": "Zakat"
+  },
+  {
+    "name": "topic_zuhd",
+    "value": "Zuhd"
+  },
+  {
+    "name": "context_after_asr",
+    "value": "After Asr"
+  },
+  {
+    "name": "context_after_fajr",
+    "value": "After Fajr"
+  },
+  {
+    "name": "context_after_maghrib",
+    "value": "After Maghrib"
+  },
+  {
+    "name": "context_afternoon",
+    "value": "Afternoon"
+  },
+  {
+    "name": "context_anger",
+    "value": "Anger"
+  },
+  {
+    "name": "context_anxiety",
+    "value": "Anxiety"
+  },
+  {
+    "name": "context_aqiqah",
+    "value": "Aqiqah"
+  },
+  {
+    "name": "context_ashura",
+    "value": "Ashura"
+  },
+  {
+    "name": "context_before_fajr",
+    "value": "Before Fajr"
+  },
+  {
+    "name": "context_before_salah",
+    "value": "Before Salah"
+  },
+  {
+    "name": "context_before_sleep",
+    "value": "Before Sleep"
+  },
+  {
+    "name": "context_burnout",
+    "value": "Burnout"
+  },
+  {
+    "name": "context_business_decision",
+    "value": "Business Decision"
+  },
+  {
+    "name": "context_business_launch",
+    "value": "Business Launch"
+  },
+  {
+    "name": "context_career_growth",
+    "value": "Career Growth"
+  },
+  {
+    "name": "context_character_building",
+    "value": "Character Building"
+  },
+  {
+    "name": "context_charity",
+    "value": "Charity"
+  },
+  {
+    "name": "context_children",
+    "value": "Children"
+  },
+  {
+    "name": "context_community_service",
+    "value": "Community Service"
+  },
+  {
+    "name": "context_commuting",
+    "value": "Commuting"
+  },
+  {
+    "name": "context_contentment",
+    "value": "Contentment"
+  },
+  {
+    "name": "context_daily_life",
+    "value": "Daily Life"
+  },
+  {
+    "name": "context_daily_prayer",
+    "value": "Daily Prayer"
+  },
+  {
+    "name": "context_day_of_arafah",
+    "value": "Day of Arafah"
+  },
+  {
+    "name": "context_death_in_family",
+    "value": "Death in Family"
+  },
+  {
+    "name": "context_dhikr",
+    "value": "Dhikr"
+  },
+  {
+    "name": "context_dhul_hijjah",
+    "value": "Dhul Hijjah"
+  },
+  {
+    "name": "context_dressing",
+    "value": "Dressing"
+  },
+  {
+    "name": "context_dua",
+    "value": "Dua"
+  },
+  {
+    "name": "context_eating",
+    "value": "Eating"
+  },
+  {
+    "name": "context_eid_al_adha",
+    "value": "Eid al-Adha"
+  },
+  {
+    "name": "context_eid_al_fitr",
+    "value": "Eid al-Fitr"
+  },
+  {
+    "name": "context_end_times",
+    "value": "End Times"
+  },
+  {
+    "name": "context_engagement",
+    "value": "Engagement"
+  },
+  {
+    "name": "context_entering_home",
+    "value": "Entering Home"
+  },
+  {
+    "name": "context_entering_mosque",
+    "value": "Entering Mosque"
+  },
+  {
+    "name": "context_envy",
+    "value": "Envy"
+  },
+  {
+    "name": "context_exam",
+    "value": "Exam"
+  },
+  {
+    "name": "context_extended_family",
+    "value": "Extended Family"
+  },
+  {
+    "name": "context_family_conflict",
+    "value": "Family Conflict"
+  },
+  {
+    "name": "context_family_time",
+    "value": "Family Time"
+  },
+  {
+    "name": "context_father",
+    "value": "Father"
+  },
+  {
+    "name": "context_fear",
+    "value": "Fear"
+  },
+  {
+    "name": "context_financial_decisions",
+    "value": "Financial Decisions"
+  },
+  {
+    "name": "context_financial_stress",
+    "value": "Financial Stress"
+  },
+  {
+    "name": "context_first_10_days_dhul_hijjah",
+    "value": "First 10 Days of Dhul-Hijjah"
+  },
+  {
+    "name": "context_first_ashra",
+    "value": "First Ashra"
+  },
+  {
+    "name": "context_forgiveness",
+    "value": "Forgiveness"
+  },
+  {
+    "name": "context_friday",
+    "value": "Friday"
+  },
+  {
+    "name": "context_funeral",
+    "value": "Funeral"
+  },
+  {
+    "name": "context_governance",
+    "value": "Governance"
+  },
+  {
+    "name": "context_graduation",
+    "value": "Graduation"
+  },
+  {
+    "name": "context_grandparents",
+    "value": "Grandparents"
+  },
+  {
+    "name": "context_gratitude",
+    "value": "Gratitude"
+  },
+  {
+    "name": "context_grief",
+    "value": "Grief"
+  },
+  {
+    "name": "context_hajj",
+    "value": "Hajj"
+  },
+  {
+    "name": "context_happiness",
+    "value": "Happiness"
+  },
+  {
+    "name": "context_hope",
+    "value": "Hope"
+  },
+  {
+    "name": "context_hospital_visit",
+    "value": "Hospital Visit"
+  },
+  {
+    "name": "context_illness",
+    "value": "Illness"
+  },
+  {
+    "name": "context_islamic_law",
+    "value": "Islamic Law"
+  },
+  {
+    "name": "context_isra_miraj",
+    "value": "Isra & Mi'raj"
+  },
+  {
+    "name": "context_itikaf",
+    "value": "I'tikaf"
+  },
+  {
+    "name": "context_jamaah",
+    "value": "Jamaah"
+  },
+  {
+    "name": "context_jealousy",
+    "value": "Jealousy"
+  },
+  {
+    "name": "context_job_interview",
+    "value": "Job Interview"
+  },
+  {
+    "name": "context_job_loss",
+    "value": "Job Loss"
+  },
+  {
+    "name": "context_justice",
+    "value": "Justice"
+  },
+  {
+    "name": "context_last_ten_nights",
+    "value": "Last Ten Nights"
+  },
+  {
+    "name": "context_laylat_al_qadr",
+    "value": "Laylat al-Qadr"
+  },
+  {
+    "name": "context_leadership",
+    "value": "Leadership"
+  },
+  {
+    "name": "context_learning",
+    "value": "Learning"
+  },
+  {
+    "name": "context_leaving_home",
+    "value": "Leaving Home"
+  },
+  {
+    "name": "context_leaving_mosque",
+    "value": "Leaving Mosque"
+  },
+  {
+    "name": "context_loneliness",
+    "value": "Loneliness"
+  },
+  {
+    "name": "context_marketplace",
+    "value": "Marketplace"
+  },
+  {
+    "name": "context_marriage",
+    "value": "Marriage"
+  },
+  {
+    "name": "context_morning",
+    "value": "Morning"
+  },
+  {
+    "name": "context_mother",
+    "value": "Mother"
+  },
+  {
+    "name": "context_muharram",
+    "value": "Muharram"
+  },
+  {
+    "name": "context_new_baby",
+    "value": "New Baby"
+  },
+  {
+    "name": "context_new_job",
+    "value": "New Job"
+  },
+  {
+    "name": "context_new_marriage",
+    "value": "New Marriage"
+  },
+  {
+    "name": "context_night_21",
+    "value": "Night 21"
+  },
+  {
+    "name": "context_night_23",
+    "value": "Night 23"
+  },
+  {
+    "name": "context_night_25",
+    "value": "Night 25"
+  },
+  {
+    "name": "context_night_27",
+    "value": "Night 27"
+  },
+  {
+    "name": "context_night_29",
+    "value": "Night 29"
+  },
+  {
+    "name": "context_nikah",
+    "value": "Nikah"
+  },
+  {
+    "name": "context_parenting",
+    "value": "Parenting"
+  },
+  {
+    "name": "context_parents",
+    "value": "Parents"
+  },
+  {
+    "name": "context_patience",
+    "value": "Patience"
+  },
+  {
+    "name": "context_pledges",
+    "value": "Pledges"
+  },
+  {
+    "name": "context_prayer",
+    "value": "Prayer"
+  },
+  {
+    "name": "context_pregnancy",
+    "value": "Pregnancy"
+  },
+  {
+    "name": "context_promotion",
+    "value": "Promotion"
+  },
+  {
+    "name": "context_quran",
+    "value": "Quran"
+  },
+  {
+    "name": "context_rabi_al_awwal",
+    "value": "Rabi Al Awwal"
+  },
+  {
+    "name": "context_raising_children",
+    "value": "Raising Children"
+  },
+  {
+    "name": "context_rajab",
+    "value": "Rajab"
+  },
+  {
+    "name": "context_ramadan",
+    "value": "Ramadan"
+  },
+  {
+    "name": "context_relationships",
+    "value": "Relationships"
+  },
+  {
+    "name": "context_repentance",
+    "value": "Repentance"
+  },
+  {
+    "name": "context_retirement",
+    "value": "Retirement"
+  },
+  {
+    "name": "context_return_home",
+    "value": "Return Home"
+  },
+  {
+    "name": "context_sadness",
+    "value": "Sadness"
+  },
+  {
+    "name": "context_salary_day",
+    "value": "Salary Day"
+  },
+  {
+    "name": "context_second_ashra",
+    "value": "Second Ashra"
+  },
+  {
+    "name": "context_seeking_knowledge",
+    "value": "Seeking Knowledge"
+  },
+  {
+    "name": "context_self_improvement",
+    "value": "Self Improvement"
+  },
+  {
+    "name": "context_shaban",
+    "value": "Shaban"
+  },
+  {
+    "name": "context_siblings",
+    "value": "Siblings"
+  },
+  {
+    "name": "context_sincerity",
+    "value": "Sincerity"
+  },
+  {
+    "name": "context_social_etiquette",
+    "value": "Social Etiquette"
+  },
+  {
+    "name": "context_social_interactions",
+    "value": "Social Interactions"
+  },
+  {
+    "name": "context_spiritual_growth",
+    "value": "Spiritual Growth"
+  },
+  {
+    "name": "context_spouse",
+    "value": "Spouse"
+  },
+  {
+    "name": "context_stress",
+    "value": "Stress"
+  },
+  {
+    "name": "context_student",
+    "value": "Student"
+  },
+  {
+    "name": "context_study",
+    "value": "Study"
+  },
+  {
+    "name": "context_tahajjud",
+    "value": "Tahajjud"
+  },
+  {
+    "name": "context_taqwa",
+    "value": "Taqwa"
+  },
+  {
+    "name": "context_taraweeh",
+    "value": "Taraweeh"
+  },
+  {
+    "name": "context_tashreeq_days",
+    "value": "Tashreeq Days"
+  },
+  {
+    "name": "context_tawbah",
+    "value": "Tawbah"
+  },
+  {
+    "name": "context_teaching",
+    "value": "Teaching"
+  },
+  {
+    "name": "context_third_ashra",
+    "value": "Third Ashra"
+  },
+  {
+    "name": "context_times_of_trials",
+    "value": "Times of Trials"
+  },
+  {
+    "name": "context_travel",
+    "value": "Travel"
+  },
+  {
+    "name": "context_trust_in_allah",
+    "value": "Trust in Allah"
+  },
+  {
+    "name": "context_umrah",
+    "value": "Umrah"
+  },
+  {
+    "name": "context_wake_up",
+    "value": "Wake Up"
+  },
+  {
+    "name": "context_witr",
+    "value": "Witr"
+  },
+  {
+    "name": "context_work",
+    "value": "Work"
+  },
+  {
+    "name": "category_daily",
+    "value": "Daily Life"
+  },
+  {
+    "name": "category_distress",
+    "value": "Distress"
+  },
+  {
+    "name": "category_faith",
+    "value": "Faith"
+  },
+  {
+    "name": "category_family",
+    "value": "Family"
+  },
+  {
+    "name": "category_fasting",
+    "value": "Fasting"
+  },
+  {
+    "name": "category_forgiveness",
+    "value": "Forgiveness"
+  },
+  {
+    "name": "category_funeral",
+    "value": "Funeral"
+  },
+  {
+    "name": "category_general",
+    "value": "General"
+  },
+  {
+    "name": "category_gratitude",
+    "value": "Gratitude"
+  },
+  {
+    "name": "category_guidance",
+    "value": "Guidance"
+  },
+  {
+    "name": "category_healing",
+    "value": "Healing"
+  },
+  {
+    "name": "category_hereafter",
+    "value": "Hereafter"
+  },
+  {
+    "name": "category_knowledge",
+    "value": "Knowledge"
+  },
+  {
+    "name": "category_mercy",
+    "value": "Mercy"
+  },
+  {
+    "name": "category_morning_evening",
+    "value": "Morning & Evening"
+  },
+  {
+    "name": "category_need",
+    "value": "Need"
+  },
+  {
+    "name": "category_prayer",
+    "value": "Prayer"
+  },
+  {
+    "name": "category_protection",
+    "value": "Protection"
+  },
+  {
+    "name": "category_provision",
+    "value": "Provision"
+  },
+  {
+    "name": "category_purification",
+    "value": "Purification"
+  },
+  {
+    "name": "category_reflection",
+    "value": "Reflection"
+  },
+  {
+    "name": "category_reliance",
+    "value": "Reliance"
+  },
+  {
+    "name": "category_repentance",
+    "value": "Repentance"
+  },
+  {
+    "name": "category_steadfastness",
+    "value": "Steadfastness"
+  },
+  {
+    "name": "category_travel",
+    "value": "Travel"
+  },
+  {
+    "name": "category_weather",
+    "value": "Weather"
+  },
+  {
+    "name": "category_worship",
+    "value": "Worship"
+  }
+]

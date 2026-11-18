@@ -1281,15 +1281,66 @@ struct SettingsPage {
 
         // --- Add Developer Row here ---
         this.AboutRow(this.tr('about_developer'), 'Sharjeel Idris')
-
-        this.AboutRow(this.tr('about_platform'),
-          this.tr('about_platform_value'))
+        this.AboutRow(this.tr('about_platform'), this.tr('about_platform_value'))
         this.AboutRow(this.tr('about_copyright'), this.appInfo.name)
+
         Divider().color(this.colors.borderSoft).width('80%').margin({ top: 14, bottom: 14 })
+
+        // --- Report Issues/Features Row ---
+        Row({ space: 8 }) {
+          Image($r('app.media.ic_features_bugs'))
+            .width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
+          Text(this.tr('feature_issues'))
+            .fontSize(14)
+            .fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Medium)
+            .layoutWeight(1)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+          Image($r('app.media.ic_chevron_right'))
+            .width(14).height(14).fillColor(this.colors.accentGold)
+            .rotate({ angle: this.isRtl() ? 180 : 0 })
+        }
+        .width('100%')
+        .padding({ top: 8, bottom: 8 })
+        .onClick(() => {
+          const ctx = getContext(this) as common.UIAbilityContext;
+          ctx.startAbility({
+            action: 'ohos.want.action.viewData',
+            entities: ['entity.system.browsable'],
+            uri: this.tr('feature_issues_link')
+          }).catch((e: Error) => console.error(e.message));
+        })
+
+        // --- Telegram Row ---
+        Row({ space: 8 }) {
+          Image($r('app.media.ic_telegram'))
+            .width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
+          Text(this.tr('telegram_channel'))
+            .fontSize(14)
+            .fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Medium)
+            .layoutWeight(1)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+          Image($r('app.media.ic_chevron_right'))
+            .width(14).height(14).fillColor(this.colors.accentGold)
+            .rotate({ angle: this.isRtl() ? 180 : 0 })
+        }
+        .width('100%')
+        .padding({ top: 8, bottom: 8 })
+        .onClick(() => {
+          const ctx = getContext(this) as common.UIAbilityContext;
+          ctx.startAbility({
+            action: 'ohos.want.action.viewData',
+            entities: ['entity.system.browsable'],
+            uri: this.tr('telegram_channel_link')
+          }).catch((e: Error) => console.error(e.message));
+        })
 
         // --- Privacy Policy Row ---
         Row({ space: 8 }) {
-          Image($r('app.media.ic_info'))
+          Image($r('app.media.ic_privacy'))
             .width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
           Text(this.tr('privacy_step_title')) // Uses the existing wizard string for "Privacy Policy"
             .fontSize(14)
@@ -1310,7 +1361,7 @@ struct SettingsPage {
 
         // --- Licenses Row (existing) ---
         Row({ space: 8 }) {
-          Image($r('app.media.ic_info'))
+          Image($r('app.media.ic_licenses'))
             .width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
           Text(this.tr('licenses_title'))
             .fontSize(14).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)

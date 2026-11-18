@@ -8,6 +8,7 @@ import { PageTheme } from '../core/PageTheme';
 import { L } from '../i18n/LocalizationHelper';
 import { STORAGE_KEY_LANGUAGE } from '../core/StorageKeys';
 import { AppLogger } from '../core/AppLogger';
+import { RawPaths } from '../core/RawPaths';
 
 // 🚨 FIX: Make optional fields optional in the interface
 interface LicenseItem {
@@ -59,7 +60,7 @@ struct LicensesPage {
 
       // 1. Load Quran Licenses
       try {
-        const qData = await ctx.resourceManager.getRawFileContent('licenses/quran_licenses.json');
+        const qData = await ctx.resourceManager.getRawFileContent(RawPaths.QURAN_LICENSES);
         const qParsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(qData)) as LicenseFile;
         if (qParsed && qParsed.sections) {
           quranSections = qParsed.sections;
@@ -71,7 +72,7 @@ struct LicensesPage {
 
       // 2. Load Hadith Licenses
       try {
-        const hData = await ctx.resourceManager.getRawFileContent('licenses/hadith_licenses.json');
+        const hData = await ctx.resourceManager.getRawFileContent(RawPaths.HADITH_LICENSES);
         const hParsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(hData)) as LicenseFile;
         if (hParsed && hParsed.sections) {
           hadithSections = hParsed.sections;
@@ -93,14 +94,6 @@ struct LicensesPage {
       this.sections = [];
     }
     this.isLoading = false;
-  }
-
-  private tr(key: string): string {
-    return L.get(key, this.appLanguage);
-  }
-
-  private isRtl(): boolean {
-    return L.isRtlLang(this.appLanguage);
   }
 
   build() {
@@ -249,5 +242,13 @@ struct LicensesPage {
     .backgroundColor(this.colors.tintSubtle)
     .borderRadius(10)
     .alignItems(HorizontalAlign.Start)
+  }
+
+  private tr(key: string): string {
+    return L.get(key, this.appLanguage);
+  }
+
+  private isRtl(): boolean {
+    return L.isRtlLang(this.appLanguage);
   }
 }

@@ -94,6 +94,8 @@ struct RecitationsPage {
                     .fontColor(this.colors.textWhite)
                     .maxLines(2)
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    .textAlign(TextAlign.Start)
+                    .width('100%');
 
                   if (task.notes.length > 0) {
                     Text(task.notes)
@@ -102,15 +104,16 @@ struct RecitationsPage {
                       .margin({ top: 4 })
                       .maxLines(2)
                       .textOverflow({ overflow: TextOverflow.Ellipsis })
+                      .width('100%');
                   }
 
-                  Row({ space: 8 }) {
+                  Flex({ wrap: FlexWrap.Wrap, alignItems: ItemAlign.Center }) {
                     Text(`${task.repeatCount > 1 ? `${task.repeatCount}x ` : ''}${L.get('occasion_' + task.occasion,
                       this.appLanguage)}`)
                       .fontSize(11).fontColor(this.colors.accentGold)
 
                     if (task.authenticity) {
-                      Text(task.authenticity.toUpperCase())
+                      Text(this.getAuthenticityLabel(task.authenticity))
                         .fontSize(9)
                         .fontColor(this.colors.textOnAccent)
                         .backgroundColor(this.colors.statusExpress)
@@ -123,7 +126,8 @@ struct RecitationsPage {
                         .borderRadius(4)
                     }
                   }
-                  .margin({ top: 6 })
+                  .margin({ top: 4 })
+                  .width('100%')
                 }
                 .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
@@ -138,7 +142,12 @@ struct RecitationsPage {
                     .margin({ top: 4 })
                     .rotate({ angle: L.isRtlLang(this.appLanguage) ? 180 : 0 })
                 }
-                .alignItems(HorizontalAlign.End).margin({ left: 12 })
+                .alignItems(HorizontalAlign.End)
+                .margin({
+                  left: L.isRtlLang(this.appLanguage) ? 12 : 0,
+                  right: L.isRtlLang(this.appLanguage) ? 0 : 12
+                })
+                .constraintSize({ maxWidth: '30%' })
               }
               .width('100%')
               .padding(16)
@@ -176,5 +185,29 @@ struct RecitationsPage {
     }
     .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
+  }
+
+  /**
+   * Resolves the authenticity grade to a localized string.
+   * Falls back to the raw uppercase string if the key is missing
+   * (e.g., if a new grade is added by the pipeline before the app
+   * supports it).
+   */
+  private getAuthenticityLabel(auth: string): string {
+    if (!auth || auth.length === 0) {
+      return '';
+    }
+
+    // Standardize to lowercase to match our keys (grade_sahih, grade_hasan)
+    const key = 'grade_' + auth.toLowerCase();
+    const localized = L.get(key, this.appLanguage);
+
+    // L.get returns the key itself if not found
+    if (localized === key) {
+      // Fallback: uppercase the raw string (works for English, safe for others)
+      return auth.toUpperCase();
+    }
+
+    return localized;
   }
 }

@@ -2986,7 +2986,7 @@
     },
     {
       "name": "licenses_intro",
-      "value": "Bu uygulamada kullanılan Kur'an metni, çeviriler ve yazı sistemleri aşağıdaki lisanslar kapsamında dağıtılmaktadır. Bu uygulamayı veya verilerini paylaşırken lütfen kaynak bilgisini koruyun."
+      "value": "Bu uygulamada kullanılan Kur'an/Hadis metinleri, çeviriler ve betikler aşağıdaki lisanslar kapsamında dağıtılmaktadır. Lütfen bu uygulamayı veya verilerini paylaşırken kaynak gösterimini (atıf) koruyunuz."
     },
     {
       "name": "license_section_dataset",
@@ -3007,7 +3007,8 @@
     {
       "name": "license_license_label",
       "value": "Lisans:"
-    },{
+    },
+    {
       "name": "mode_translation",
       "value": "Çeviri"
     },
@@ -3250,6 +3251,94 @@
     {
       "name": "mosque_add_custom_cta",
       "value": "Özel Cami Ekle"
+    },
+    {
+      "name": "sanad_title",
+      "value": "Rivayet zinciri"
+    },
+    {
+      "name": "sanad_confidence_high",
+      "value": "Yüksek"
+    },
+    {
+      "name": "sanad_confidence_medium",
+      "value": "Kısmi"
+    },
+    {
+      "name": "sanad_confidence_athar",
+      "value": "Eser"
+    },
+    {
+      "name": "hadith_grade_title",
+      "value": "Derecelendirme"
+    },
+    {
+      "name": "hadith_grade_unverified",
+      "value": "Derece belirlenmedi"
+    },
+    {
+      "name": "grade_sahih",
+      "value": "Sahih"
+    },
+    {
+      "name": "grade_hasan",
+      "value": "Hasan"
+    },
+    {
+      "name": "grade_daif",
+      "value": "Zayıf"
+    },
+    {
+      "name": "grade_mawdu",
+      "value": "Mevzu"
+    },
+    {
+      "name": "grade_hasan_sahih",
+      "value": "Hasen Sahih"
+    },
+    {
+      "name": "quran_translation_lang",
+      "value": "Kur'an Çevirisi"
+    },
+    {
+      "name": "quran_translation_lang_desc",
+      "value": "Kur'an için çeviri dilini seçin"
+    },
+    {
+      "name": "hadith_translation_lang",
+      "value": "Hadis Çevirisi"
+    },
+    {
+      "name": "hadith_translation_lang_desc",
+      "value": "Hadis için çeviri dilini seçin"
+    },
+    {
+      "name": "lang_app_default",
+      "value": "Uygulama Dili (Varsayılan)"
+    },
+    {
+      "name": "dua_translation_lang",
+      "value": "Dua Çevirisi"
+    },
+    {
+      "name": "dua_translation_lang_des",
+      "value": "Dualar için çeviri dilini seçin"
+    },
+    {
+      "name": "telegram_channel",
+      "value": "Telegram Kanalı"
+    },
+    {
+      "name": "telegram_channel_link",
+      "value": "https://t.me/siratcompanionhos"
+    },
+    {
+      "name": "feature_issues",
+      "value": "Sorun Bildir / Yeni Özellik Talep Et"
+    },
+    {
+      "name": "feature_issues_link",
+      "value": "https://github.com/sharjeel-butt/SiratCompanion-HOS/issues"
     }
   ]
 }

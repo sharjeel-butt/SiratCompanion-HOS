@@ -1,36 +1,165 @@
-// entry/src/main/ets/quran/QuranService.ets
-
 import { common } from '@kit.AbilityKit';
+import { relationalStore } from '@kit.ArkData';
 import { util } from '@kit.ArkTS';
 import { AppLogger } from '../core/AppLogger';
+import { RawPaths } from '../core/RawPaths';
 import {
-  CompleteSurah, LocalizedRecitationInfo, RawRecitationTask, RecitationTask,
+  CompleteSurah, LocalizedRecitationInfo, RawRecitationTask, RecitationTask, Verse
 } from './QuranSurahModels';
 import { UpcomingCustomEvent } from '../pages/HomePage';
 
 export class QuranService {
+  private static db: relationalStore.RdbStore | null = null;
   private static cachedSurahs: CompleteSurah[] = [];
   private static cachedLang: string = '';
+  private static surahCache: Map<number, CompleteSurah> = new Map();
 
+  // ---- DB open ----
+  static async openDatabase(context: common.UIAbilityContext): Promise<boolean> {
+    if (QuranService.db !== null) {
+      return true;
+    }
+    try {
+      const config: relationalStore.StoreConfig = {
+        name: 'quran.db',
+        securityLevel: relationalStore.SecurityLevel.S1,
+        customDir: 'quran',
+        isReadOnly: true
+      };
+      QuranService.db = await relationalStore.getRdbStore(context, config);
+      return true;
+    } catch (e) {
+      AppLogger.error('QuranService', `Failed to open quran.db: ${(e as Error).message}`);
+      return false;
+    }
+  }
+
+  // ---- Metadata-only surah list (fast) ----
   static async loadSurahs(context: common.UIAbilityContext, lang: string): Promise<CompleteSurah[]> {
     if (QuranService.cachedSurahs.length > 0 && QuranService.cachedLang === lang) {
       return QuranService.cachedSurahs;
     }
+    const ok = await QuranService.openDatabase(context);
+    if (!ok || QuranService.db === null) {
+      return [];
+    }
 
     try {
-      const mgr = context.resourceManager;
-      // We no longer need separate script/translation files. It's all in one!
-      const fileName = `quran/quran_qul_verses.json`;
-
-      const data = await mgr.getRawFileContent(fileName);
-      const surahs = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(data)) as CompleteSurah[];
-
+      const rs = await QuranService.db.querySql(
+        'SELECT number, name_arabic, name_transliteration, revelation_place, ayah_count ' +
+          'FROM surahs ORDER BY number'
+      );
+      const surahs: CompleteSurah[] = [];
+      while (rs.goToNextRow()) {
+        const s: CompleteSurah = {
+          id: rs.getLong(0),
+          nameArabic: rs.getString(1) ?? '',
+          nameTransliteration: rs.getString(2) ?? '',
+          revelationPlace: rs.getString(3) ?? '',
+          ayahCount: rs.getLong(4),
+          verses: [],
+          isFavorite: false
+        };
+        surahs.push(s);
+      }
+      rs.close();
       QuranService.cachedSurahs = surahs;
       QuranService.cachedLang = lang;
       return surahs;
     } catch (e) {
-      AppLogger.error('QuranService', `Failed to load QUL data: ${JSON.stringify(e)}`);
+      AppLogger.error('QuranService', `loadSurahs failed: ${(e as Error).message}`);
       return [];
+    }
+  }
+
+  // ---- Single surah with full verses ----
+  static async loadSurah(
+    context: common.UIAbilityContext, surahId: number, lang: string
+  ): Promise<CompleteSurah | null> {
+    const cached = QuranService.surahCache.get(surahId);
+    if (cached && cached.verses.length > 0) {
+      return cached;
+    }
+
+    const ok = await QuranService.openDatabase(context);
+    if (!ok || QuranService.db === null) {
+      return null;
+    }
+
+    try {
+      // Metadata
+      const metaRs = await QuranService.db.querySql(
+        'SELECT number, name_arabic, name_transliteration, revelation_place, ayah_count ' +
+          'FROM surahs WHERE number = ?',
+        [surahId]
+      );
+      if (!metaRs.goToFirstRow()) {
+        metaRs.close();
+        return null;
+      }
+      const meta: CompleteSurah = {
+        id: metaRs.getLong(0),
+        nameArabic: metaRs.getString(1) ?? '',
+        nameTransliteration: metaRs.getString(2) ?? '',
+        revelationPlace: metaRs.getString(3) ?? '',
+        ayahCount: metaRs.getLong(4),
+        verses: [],
+        isFavorite: false
+      };
+      metaRs.close();
+
+      // Verses
+      const versesRs = await QuranService.db.querySql(
+        'SELECT ayah_number, arabic FROM verses WHERE surah_number = ? ORDER BY ayah_number',
+        [surahId]
+      );
+      const verseMap: Map<number, Verse> = new Map();
+      while (versesRs.goToNextRow()) {
+        const ayah = versesRs.getLong(0);
+        const v: Verse = {
+          ayah,
+          arabic: versesRs.getString(1) ?? '',
+          translations: {}
+        };
+        verseMap.set(ayah, v);
+      }
+      versesRs.close();
+
+      // Translations — skip 'ar' (Arabic lives in verses.arabic)
+      const langs: string[] = ['en', 'ur', 'tr', 'bn', 'id', 'zh'];
+      for (const l of langs) {
+        const tRs = await QuranService.db.querySql(
+          'SELECT ayah_number, text FROM translations WHERE surah_number = ? AND lang = ?',
+          [surahId, l]
+        );
+        while (tRs.goToNextRow()) {
+          const ayah = tRs.getLong(0);
+          const text = tRs.getString(1) ?? '';
+          const v = verseMap.get(ayah);
+          if (v !== undefined) {
+            v.translations[l] = text;
+          }
+        }
+        tRs.close();
+      }
+
+      const verses: Verse[] = [];
+      const ayahs: number[] = [];
+      verseMap.forEach((_v, k) => ayahs.push(k));
+      ayahs.sort((a, b) => a - b);
+      for (const a of ayahs) {
+        const v = verseMap.get(a);
+        if (v !== undefined) {
+          verses.push(v);
+        }
+      }
+      meta.verses = verses;
+
+      QuranService.surahCache.set(surahId, meta);
+      return meta;
+    } catch (e) {
+      AppLogger.error('QuranService', `loadSurah(${surahId}) failed: ${(e as Error).message}`);
+      return null;
     }
   }
 
@@ -44,10 +173,10 @@ export class QuranService {
     const mgr = context.resourceManager;
 
     try {
-      const rawData = await mgr.getRawFileContent('quran/quran_recitations_raw.json');
+      const rawData = await mgr.getRawFileContent(RawPaths.QURAN_RECITATIONS_RAW);
       const rawTasks = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(rawData)) as RawRecitationTask[];
 
-      const enData = await mgr.getRawFileContent('quran/quran_recitations_en.json');
+      const enData = await mgr.getRawFileContent(RawPaths.quranRecitations('en'));
       const englishLoc =
         JSON.parse(util.TextDecoder.create('utf-8').decodeToString(enData)) as Record<string, LocalizedRecitationInfo>;
 
@@ -56,7 +185,7 @@ export class QuranService {
         targetLoc = englishLoc;
       } else {
         try {
-          const langData = await mgr.getRawFileContent(`quran/quran_recitations_${lang}.json`);
+          const langData = await mgr.getRawFileContent(RawPaths.quranRecitations(lang));
           targetLoc = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(langData)) as
             Record<string, LocalizedRecitationInfo>;
         } catch (e) {
@@ -68,7 +197,7 @@ export class QuranService {
       const hour = new Date().getHours();
 
       if (hour >= 4 && hour < 12) {
-        activeOccasions.push('morning_evening', 'fajr_prayer');
+        activeOccasions.push('morning_evening', 'fajr_prayer', 'fajr_sunnah');
       }
       if (hour >= 12 && hour < 16) {
         activeOccasions.push('dhuhr_prayer');
@@ -77,7 +206,7 @@ export class QuranService {
         activeOccasions.push('maghrib_prayer');
       }
       if (hour >= 19 || hour < 4) {
-        activeOccasions.push('bedtime', 'night');
+        activeOccasions.push('bedtime', 'night', 'witr_prayer');
       }
 
       if (isFriday) {
@@ -152,26 +281,5 @@ export class QuranService {
 
   public static getCachedSurahs(): CompleteSurah[] {
     return QuranService.cachedSurahs;
-  }
-
-  private static getScriptForLanguage(lang: string): string {
-    if (lang === 'ar') {
-      return 'uthmani';
-    }
-    if (lang === 'id') {
-      return 'kemenag';
-    }
-    return 'indopak';
-  }
-
-  /**
-   * Returns the translation file path for the current language, or null
-   * if no translation exists (e.g. Arabic — the source language).
-   */
-  private static getTranslationPath(lang: string): string | null {
-    if (lang === 'ar') {
-      return null;
-    } // No Arabic "translation" — Arabic IS the source
-    return `quran/translations/quran_${lang}.json`;
   }
 }

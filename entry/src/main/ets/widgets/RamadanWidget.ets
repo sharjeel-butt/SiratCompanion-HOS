@@ -34,6 +34,7 @@ struct RamadanWidget {
           .position({ x: '60%', y: '-10%' })
       }
       .width('100%').height('100%').clip(true).borderRadius(16)
+
       Column() {
         if (this.error.length > 0) {
           Column() {

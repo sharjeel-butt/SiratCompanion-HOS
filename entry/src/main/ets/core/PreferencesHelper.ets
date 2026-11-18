@@ -266,6 +266,10 @@ export class PreferencesHelper {
   // INTERNALS
   // ============================================================
 
+  static getContext(): common.Context | null {
+    return PreferencesHelper.initContext;
+  }
+
   private static async ensureReady(): Promise<void> {
     if (PreferencesHelper.store) {
       return;
@@ -305,9 +309,5 @@ export class PreferencesHelper {
       clearTimeout(PreferencesHelper.flushTimerId);
       PreferencesHelper.flushTimerId = -1;
     }
-  }
-
-  static getContext(): common.Context | null {
-    return PreferencesHelper.initContext;
   }
 }

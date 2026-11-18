@@ -1,0 +1,1230 @@
+[
+  {
+    "name": "collection_abudawud",
+    "value": "سنن ابو داؤد"
+  },
+  {
+    "name": "collection_bukhari",
+    "value": "صحیح البخاری"
+  },
+  {
+    "name": "collection_dehlawi",
+    "value": "شاہ ولی اللہ کی 40 احادیث"
+  },
+  {
+    "name": "collection_ibnmajah",
+    "value": "سنن ابن ماجہ"
+  },
+  {
+    "name": "collection_malik",
+    "value": "موطا مالک"
+  },
+  {
+    "name": "collection_muslim",
+    "value": "صحیح مسلم"
+  },
+  {
+    "name": "collection_nasai",
+    "value": "سنن النسائی"
+  },
+  {
+    "name": "collection_nawawi",
+    "value": "نووی کی 40 احادیث"
+  },
+  {
+    "name": "collection_qudsi",
+    "value": "40 حدیث قدسی"
+  },
+  {
+    "name": "collection_tirmidhi",
+    "value": "جامع ترمذی"
+  },
+  {
+    "name": "topic_adhan",
+    "value": "اذان"
+  },
+  {
+    "name": "topic_agriculture",
+    "value": "زراعت"
+  },
+  {
+    "name": "topic_akhirah",
+    "value": "آخرت"
+  },
+  {
+    "name": "topic_angels",
+    "value": "فرشتے"
+  },
+  {
+    "name": "topic_appearance",
+    "value": "ظاہری شکل"
+  },
+  {
+    "name": "topic_aqidah",
+    "value": "عقیدہ"
+  },
+  {
+    "name": "topic_arafah",
+    "value": "عرفہ"
+  },
+  {
+    "name": "topic_arafah_fast",
+    "value": "عرفہ کا روزہ"
+  },
+  {
+    "name": "topic_ashura",
+    "value": "عاشورہ"
+  },
+  {
+    "name": "topic_barzakh",
+    "value": "برزخ"
+  },
+  {
+    "name": "topic_books",
+    "value": "کتابیں"
+  },
+  {
+    "name": "topic_business",
+    "value": "کاروبار"
+  },
+  {
+    "name": "topic_character",
+    "value": "کردار"
+  },
+  {
+    "name": "topic_charity",
+    "value": "خیرات"
+  },
+  {
+    "name": "topic_children",
+    "value": "بچے"
+  },
+  {
+    "name": "topic_companions",
+    "value": "صحابہ"
+  },
+  {
+    "name": "topic_contracts",
+    "value": "معاہدے"
+  },
+  {
+    "name": "topic_creation",
+    "value": "تخلیق"
+  },
+  {
+    "name": "topic_daily_life",
+    "value": "روزمرہ زندگی"
+  },
+  {
+    "name": "topic_day_of_judgment",
+    "value": "قیامت کا دن"
+  },
+  {
+    "name": "topic_death",
+    "value": "موت"
+  },
+  {
+    "name": "topic_debt",
+    "value": "قرض"
+  },
+  {
+    "name": "topic_dhikr",
+    "value": "ذکر"
+  },
+  {
+    "name": "topic_divorce",
+    "value": "طلاق"
+  },
+  {
+    "name": "topic_dreams",
+    "value": "خواب"
+  },
+  {
+    "name": "topic_drinks",
+    "value": "مشروبات"
+  },
+  {
+    "name": "topic_dua",
+    "value": "دعا"
+  },
+  {
+    "name": "topic_eclipse_prayer",
+    "value": "نمازِ کسوف"
+  },
+  {
+    "name": "topic_eid",
+    "value": "عید"
+  },
+  {
+    "name": "topic_endowment",
+    "value": "وقف"
+  },
+  {
+    "name": "topic_ethics",
+    "value": "اخلاقیات"
+  },
+  {
+    "name": "topic_etiquette",
+    "value": "آداب"
+  },
+  {
+    "name": "topic_evil_eye",
+    "value": "نظرِ بد"
+  },
+  {
+    "name": "topic_family_law",
+    "value": "خاندانی قانون"
+  },
+  {
+    "name": "topic_fasting",
+    "value": "روزہ"
+  },
+  {
+    "name": "topic_father",
+    "value": "والد"
+  },
+  {
+    "name": "topic_fay",
+    "value": "فیء"
+  },
+  {
+    "name": "topic_finance",
+    "value": "مالیات"
+  },
+  {
+    "name": "topic_fiqh",
+    "value": "فقہ"
+  },
+  {
+    "name": "topic_fitan",
+    "value": "فتن"
+  },
+  {
+    "name": "topic_forgiveness",
+    "value": "معافی"
+  },
+  {
+    "name": "topic_gift_giving",
+    "value": "تحفہ دینا"
+  },
+  {
+    "name": "topic_governance",
+    "value": "حکمرانی"
+  },
+  {
+    "name": "topic_gratitude",
+    "value": "شکر"
+  },
+  {
+    "name": "topic_hadith_qudsi",
+    "value": "حدیث قدسی"
+  },
+  {
+    "name": "topic_hajj",
+    "value": "حج"
+  },
+  {
+    "name": "topic_halal_food",
+    "value": "حلال کھانا"
+  },
+  {
+    "name": "topic_health",
+    "value": "صحت"
+  },
+  {
+    "name": "topic_honesty",
+    "value": "دیانت"
+  },
+  {
+    "name": "topic_horses",
+    "value": "گھوڑے"
+  },
+  {
+    "name": "topic_humility",
+    "value": "عاجزی"
+  },
+  {
+    "name": "topic_hunting",
+    "value": "شکار"
+  },
+  {
+    "name": "topic_hypocrites",
+    "value": "منافق"
+  },
+  {
+    "name": "topic_ihsan",
+    "value": "احسان"
+  },
+  {
+    "name": "topic_iman",
+    "value": "ایمان"
+  },
+  {
+    "name": "topic_inheritance",
+    "value": "وراثت"
+  },
+  {
+    "name": "topic_istiadhah",
+    "value": "استعاذہ"
+  },
+  {
+    "name": "topic_istighfar",
+    "value": "استغفار"
+  },
+  {
+    "name": "topic_istisqa",
+    "value": "استسقاء"
+  },
+  {
+    "name": "topic_itikaf",
+    "value": "اعتکاف"
+  },
+  {
+    "name": "topic_jahannam",
+    "value": "جہنم"
+  },
+  {
+    "name": "topic_jamaah",
+    "value": "جماعت"
+  },
+  {
+    "name": "topic_jannah",
+    "value": "جنت"
+  },
+  {
+    "name": "topic_jihad",
+    "value": "جہاد"
+  },
+  {
+    "name": "topic_jizyah",
+    "value": "جزیہ"
+  },
+  {
+    "name": "topic_jumuah",
+    "value": "جمعہ"
+  },
+  {
+    "name": "topic_justice",
+    "value": "انصاف"
+  },
+  {
+    "name": "topic_kaffarah",
+    "value": "کفارہ"
+  },
+  {
+    "name": "topic_khumus",
+    "value": "خمس"
+  },
+  {
+    "name": "topic_khushu",
+    "value": "خشوع"
+  },
+  {
+    "name": "topic_kindness",
+    "value": "مہربانی"
+  },
+  {
+    "name": "topic_knowledge",
+    "value": "علم"
+  },
+  {
+    "name": "topic_learning",
+    "value": "سیکھنا"
+  },
+  {
+    "name": "topic_li_an",
+    "value": "لعان"
+  },
+  {
+    "name": "topic_literature",
+    "value": "ادب"
+  },
+  {
+    "name": "topic_lost_property",
+    "value": "گمشدہ مال"
+  },
+  {
+    "name": "topic_malahim",
+    "value": "ملاحم"
+  },
+  {
+    "name": "topic_marriage",
+    "value": "شادی"
+  },
+  {
+    "name": "topic_medicine",
+    "value": "طب"
+  },
+  {
+    "name": "topic_memorization",
+    "value": "حفظ"
+  },
+  {
+    "name": "topic_mercy",
+    "value": "رحمت"
+  },
+  {
+    "name": "topic_modesty",
+    "value": "حیاء"
+  },
+  {
+    "name": "topic_mosque",
+    "value": "مسجد"
+  },
+  {
+    "name": "topic_mother",
+    "value": "والدہ"
+  },
+  {
+    "name": "topic_oaths_vows",
+    "value": "قسمیں و نذریں"
+  },
+  {
+    "name": "topic_omens",
+    "value": "شگون"
+  },
+  {
+    "name": "topic_parables",
+    "value": "تمثیلیں"
+  },
+  {
+    "name": "topic_parents",
+    "value": "والدین"
+  },
+  {
+    "name": "topic_patience",
+    "value": "صبر"
+  },
+  {
+    "name": "topic_permission",
+    "value": "اجازت"
+  },
+  {
+    "name": "topic_property_law",
+    "value": "جائیداد کا قانون"
+  },
+  {
+    "name": "topic_prophets",
+    "value": "انبیاء"
+  },
+  {
+    "name": "topic_protection",
+    "value": "تحفظ"
+  },
+  {
+    "name": "topic_purification",
+    "value": "طہارت"
+  },
+  {
+    "name": "topic_qadr",
+    "value": "تقدیر"
+  },
+  {
+    "name": "topic_qiblah",
+    "value": "قبلہ"
+  },
+  {
+    "name": "topic_quran",
+    "value": "قرآن"
+  },
+  {
+    "name": "topic_qurbani",
+    "value": "قربانی"
+  },
+  {
+    "name": "topic_ramadan",
+    "value": "رمضان"
+  },
+  {
+    "name": "topic_recitation",
+    "value": "تلاوت"
+  },
+  {
+    "name": "topic_reconciliation",
+    "value": "صلح"
+  },
+  {
+    "name": "topic_reflection",
+    "value": "غور و فکر"
+  },
+  {
+    "name": "topic_relatives",
+    "value": "رشتہ دار"
+  },
+  {
+    "name": "topic_revelation",
+    "value": "وحی"
+  },
+  {
+    "name": "topic_rings",
+    "value": "انگوٹھیاں"
+  },
+  {
+    "name": "topic_sadaqah",
+    "value": "صدقہ"
+  },
+  {
+    "name": "topic_salah",
+    "value": "نماز"
+  },
+  {
+    "name": "topic_scholarship",
+    "value": "علمی وظیفہ"
+  },
+  {
+    "name": "topic_seerah",
+    "value": "سیرت"
+  },
+  {
+    "name": "topic_sickness",
+    "value": "بیماری"
+  },
+  {
+    "name": "topic_sincerity",
+    "value": "اخلاص"
+  },
+  {
+    "name": "topic_social_justice",
+    "value": "سماجی انصاف"
+  },
+  {
+    "name": "topic_speech_etiquette",
+    "value": "آدابِ گفتگو"
+  },
+  {
+    "name": "topic_sports",
+    "value": "کھیل"
+  },
+  {
+    "name": "topic_spouse",
+    "value": "شریکِ حیات"
+  },
+  {
+    "name": "topic_sunnah",
+    "value": "سنت"
+  },
+  {
+    "name": "topic_tafsir",
+    "value": "تفسیر"
+  },
+  {
+    "name": "topic_tahajjud",
+    "value": "تہجد"
+  },
+  {
+    "name": "topic_tawbah",
+    "value": "توبہ"
+  },
+  {
+    "name": "topic_tawhid",
+    "value": "توحید"
+  },
+  {
+    "name": "topic_teaching",
+    "value": "تدریس"
+  },
+  {
+    "name": "topic_trade",
+    "value": "تجارت"
+  },
+  {
+    "name": "topic_travel",
+    "value": "سفر"
+  },
+  {
+    "name": "topic_trustworthiness",
+    "value": "امانت داری"
+  },
+  {
+    "name": "topic_umrah",
+    "value": "عمرہ"
+  },
+  {
+    "name": "topic_virtues",
+    "value": "فضائل"
+  },
+  {
+    "name": "topic_voluntary_fasting",
+    "value": "نفل روزے"
+  },
+  {
+    "name": "topic_vows_curses",
+    "value": "نذر و بددعائیں"
+  },
+  {
+    "name": "topic_war_booty",
+    "value": "مالِ غنیمت"
+  },
+  {
+    "name": "topic_water",
+    "value": "پانی"
+  },
+  {
+    "name": "topic_wills",
+    "value": "وصیتیں"
+  },
+  {
+    "name": "topic_witr",
+    "value": "وتر"
+  },
+  {
+    "name": "topic_women",
+    "value": "عورتیں"
+  },
+  {
+    "name": "topic_wudu",
+    "value": "وضو"
+  },
+  {
+    "name": "topic_zakat",
+    "value": "زکوٰۃ"
+  },
+  {
+    "name": "topic_zuhd",
+    "value": "زہد"
+  },
+  {
+    "name": "context_after_asr",
+    "value": "عصر کے بعد"
+  },
+  {
+    "name": "context_after_fajr",
+    "value": "فجر کے بعد"
+  },
+  {
+    "name": "context_after_maghrib",
+    "value": "مغرب کے بعد"
+  },
+  {
+    "name": "context_afternoon",
+    "value": "دوپہر"
+  },
+  {
+    "name": "context_anger",
+    "value": "غصہ"
+  },
+  {
+    "name": "context_anxiety",
+    "value": "بے چینی"
+  },
+  {
+    "name": "context_aqiqah",
+    "value": "عقیقہ"
+  },
+  {
+    "name": "context_ashura",
+    "value": "عاشورہ"
+  },
+  {
+    "name": "context_before_fajr",
+    "value": "فجر سے پہلے"
+  },
+  {
+    "name": "context_before_salah",
+    "value": "نماز سے پہلے"
+  },
+  {
+    "name": "context_before_sleep",
+    "value": "سونے سے پہلے"
+  },
+  {
+    "name": "context_burnout",
+    "value": "تھکاوٹ"
+  },
+  {
+    "name": "context_business_decision",
+    "value": "کاروباری فیصلہ"
+  },
+  {
+    "name": "context_business_launch",
+    "value": "کاروبار کا آغاز"
+  },
+  {
+    "name": "context_career_growth",
+    "value": "کیریئر کی ترقی"
+  },
+  {
+    "name": "context_character_building",
+    "value": "کردار سازی"
+  },
+  {
+    "name": "context_charity",
+    "value": "خیرات"
+  },
+  {
+    "name": "context_children",
+    "value": "بچے"
+  },
+  {
+    "name": "context_community_service",
+    "value": "کمیونٹی خدمت"
+  },
+  {
+    "name": "context_commuting",
+    "value": "آنا جانا"
+  },
+  {
+    "name": "context_contentment",
+    "value": "قناعت"
+  },
+  {
+    "name": "context_daily_life",
+    "value": "روزمرہ زندگی"
+  },
+  {
+    "name": "context_daily_prayer",
+    "value": "روزانہ نماز"
+  },
+  {
+    "name": "context_day_of_arafah",
+    "value": "یومِ عرفہ"
+  },
+  {
+    "name": "context_death_in_family",
+    "value": "خاندان میں موت"
+  },
+  {
+    "name": "context_dhikr",
+    "value": "ذکر"
+  },
+  {
+    "name": "context_dhul_hijjah",
+    "value": "ذوالحجہ"
+  },
+  {
+    "name": "context_dressing",
+    "value": "لباس"
+  },
+  {
+    "name": "context_dua",
+    "value": "دعا"
+  },
+  {
+    "name": "context_eating",
+    "value": "کھانا"
+  },
+  {
+    "name": "context_eid_al_adha",
+    "value": "عید الاضحیٰ"
+  },
+  {
+    "name": "context_eid_al_fitr",
+    "value": "عید الفطر"
+  },
+  {
+    "name": "context_end_times",
+    "value": "آخری زمانہ"
+  },
+  {
+    "name": "context_engagement",
+    "value": "منگنی"
+  },
+  {
+    "name": "context_entering_home",
+    "value": "گھر میں داخل ہونا"
+  },
+  {
+    "name": "context_entering_mosque",
+    "value": "مسجد میں داخل ہونا"
+  },
+  {
+    "name": "context_envy",
+    "value": "حسد"
+  },
+  {
+    "name": "context_exam",
+    "value": "امتحان"
+  },
+  {
+    "name": "context_extended_family",
+    "value": "مشترکہ خاندان"
+  },
+  {
+    "name": "context_family_conflict",
+    "value": "خاندانی تنازعہ"
+  },
+  {
+    "name": "context_family_time",
+    "value": "خاندان کے ساتھ وقت"
+  },
+  {
+    "name": "context_father",
+    "value": "والد"
+  },
+  {
+    "name": "context_fear",
+    "value": "خوف"
+  },
+  {
+    "name": "context_financial_decisions",
+    "value": "مالی فیصلے"
+  },
+  {
+    "name": "context_financial_stress",
+    "value": "مالی تناؤ"
+  },
+  {
+    "name": "context_first_10_days_dhul_hijjah",
+    "value": "ذوالحجہ کے پہلے 10 دن"
+  },
+  {
+    "name": "context_first_ashra",
+    "value": "پہلا عشرہ"
+  },
+  {
+    "name": "context_forgiveness",
+    "value": "معافی"
+  },
+  {
+    "name": "context_friday",
+    "value": "جمعہ"
+  },
+  {
+    "name": "context_funeral",
+    "value": "جنازہ"
+  },
+  {
+    "name": "context_governance",
+    "value": "حکمرانی"
+  },
+  {
+    "name": "context_graduation",
+    "value": "گریجویشن"
+  },
+  {
+    "name": "context_grandparents",
+    "value": "دادا دادی/نانا نانی"
+  },
+  {
+    "name": "context_gratitude",
+    "value": "شکر"
+  },
+  {
+    "name": "context_grief",
+    "value": "غم"
+  },
+  {
+    "name": "context_hajj",
+    "value": "حج"
+  },
+  {
+    "name": "context_happiness",
+    "value": "خوشی"
+  },
+  {
+    "name": "context_hope",
+    "value": "امید"
+  },
+  {
+    "name": "context_hospital_visit",
+    "value": "ہسپتال کی زیارت"
+  },
+  {
+    "name": "context_illness",
+    "value": "بیماری"
+  },
+  {
+    "name": "context_islamic_law",
+    "value": "اسلامی قانون"
+  },
+  {
+    "name": "context_isra_miraj",
+    "value": "اسراء و معراج"
+  },
+  {
+    "name": "context_itikaf",
+    "value": "اعتکاف"
+  },
+  {
+    "name": "context_jamaah",
+    "value": "جماعت"
+  },
+  {
+    "name": "context_jealousy",
+    "value": "رشک"
+  },
+  {
+    "name": "context_job_interview",
+    "value": "نوکری کا انٹرویو"
+  },
+  {
+    "name": "context_job_loss",
+    "value": "نوکری سے محرومی"
+  },
+  {
+    "name": "context_justice",
+    "value": "انصاف"
+  },
+  {
+    "name": "context_last_ten_nights",
+    "value": "آخری دس راتیں"
+  },
+  {
+    "name": "context_laylat_al_qadr",
+    "value": "شبِ قدر"
+  },
+  {
+    "name": "context_leadership",
+    "value": "قیادت"
+  },
+  {
+    "name": "context_learning",
+    "value": "سیکھنا"
+  },
+  {
+    "name": "context_leaving_home",
+    "value": "گھر سے نکلنا"
+  },
+  {
+    "name": "context_leaving_mosque",
+    "value": "مسجد سے نکلنا"
+  },
+  {
+    "name": "context_loneliness",
+    "value": "تنہائی"
+  },
+  {
+    "name": "context_marketplace",
+    "value": "بازار"
+  },
+  {
+    "name": "context_marriage",
+    "value": "شادی"
+  },
+  {
+    "name": "context_morning",
+    "value": "صبح"
+  },
+  {
+    "name": "context_mother",
+    "value": "والدہ"
+  },
+  {
+    "name": "context_muharram",
+    "value": "محرم"
+  },
+  {
+    "name": "context_new_baby",
+    "value": "نیا بچہ"
+  },
+  {
+    "name": "context_new_job",
+    "value": "نئی نوکری"
+  },
+  {
+    "name": "context_new_marriage",
+    "value": "نئی شادی"
+  },
+  {
+    "name": "context_night_21",
+    "value": "اکیسویں رات"
+  },
+  {
+    "name": "context_night_23",
+    "value": "تئیسویں رات"
+  },
+  {
+    "name": "context_night_25",
+    "value": "پچیسویں رات"
+  },
+  {
+    "name": "context_night_27",
+    "value": "ستائیسویں رات"
+  },
+  {
+    "name": "context_night_29",
+    "value": "انتیسویں رات"
+  },
+  {
+    "name": "context_nikah",
+    "value": "نکاح"
+  },
+  {
+    "name": "context_parenting",
+    "value": "بچوں کی پرورش"
+  },
+  {
+    "name": "context_parents",
+    "value": "والدین"
+  },
+  {
+    "name": "context_patience",
+    "value": "صبر"
+  },
+  {
+    "name": "context_pledges",
+    "value": "عہد"
+  },
+  {
+    "name": "context_prayer",
+    "value": "نماز"
+  },
+  {
+    "name": "context_pregnancy",
+    "value": "حمل"
+  },
+  {
+    "name": "context_promotion",
+    "value": "ترقی"
+  },
+  {
+    "name": "context_quran",
+    "value": "قرآن"
+  },
+  {
+    "name": "context_rabi_al_awwal",
+    "value": "ربیع الاول"
+  },
+  {
+    "name": "context_raising_children",
+    "value": "بچوں کی پرورش"
+  },
+  {
+    "name": "context_rajab",
+    "value": "رجب"
+  },
+  {
+    "name": "context_ramadan",
+    "value": "رمضان"
+  },
+  {
+    "name": "context_relationships",
+    "value": "رشتے"
+  },
+  {
+    "name": "context_repentance",
+    "value": "توبہ"
+  },
+  {
+    "name": "context_retirement",
+    "value": "ریٹائرمنٹ"
+  },
+  {
+    "name": "context_return_home",
+    "value": "گھر واپسی"
+  },
+  {
+    "name": "context_sadness",
+    "value": "اداسی"
+  },
+  {
+    "name": "context_salary_day",
+    "value": "تنخواہ کا دن"
+  },
+  {
+    "name": "context_second_ashra",
+    "value": "دوسرا عشرہ"
+  },
+  {
+    "name": "context_seeking_knowledge",
+    "value": "علم حاصل کرنا"
+  },
+  {
+    "name": "context_self_improvement",
+    "value": "خود سازی"
+  },
+  {
+    "name": "context_shaban",
+    "value": "شعبان"
+  },
+  {
+    "name": "context_siblings",
+    "value": "بہن بھائی"
+  },
+  {
+    "name": "context_sincerity",
+    "value": "اخلاص"
+  },
+  {
+    "name": "context_social_etiquette",
+    "value": "سماجی آداب"
+  },
+  {
+    "name": "context_social_interactions",
+    "value": "سماجی تعاملات"
+  },
+  {
+    "name": "context_spiritual_growth",
+    "value": "روحانی ترقی"
+  },
+  {
+    "name": "context_spouse",
+    "value": "شریکِ حیات"
+  },
+  {
+    "name": "context_stress",
+    "value": "تناؤ"
+  },
+  {
+    "name": "context_student",
+    "value": "طالبِ علم"
+  },
+  {
+    "name": "context_study",
+    "value": "مطالعہ"
+  },
+  {
+    "name": "context_tahajjud",
+    "value": "تہجد"
+  },
+  {
+    "name": "context_taqwa",
+    "value": "تقویٰ"
+  },
+  {
+    "name": "context_taraweeh",
+    "value": "تراویح"
+  },
+  {
+    "name": "context_tashreeq_days",
+    "value": "ایامِ تشریق"
+  },
+  {
+    "name": "context_tawbah",
+    "value": "توبہ"
+  },
+  {
+    "name": "context_teaching",
+    "value": "تدریس"
+  },
+  {
+    "name": "context_third_ashra",
+    "value": "تیسرا عشرہ"
+  },
+  {
+    "name": "context_times_of_trials",
+    "value": "آزمائش کے وقت"
+  },
+  {
+    "name": "context_travel",
+    "value": "سفر"
+  },
+  {
+    "name": "context_trust_in_allah",
+    "value": "اللہ پر بھروسہ"
+  },
+  {
+    "name": "context_umrah",
+    "value": "عمرہ"
+  },
+  {
+    "name": "context_wake_up",
+    "value": "بیدار ہونا"
+  },
+  {
+    "name": "context_witr",
+    "value": "وتر"
+  },
+  {
+    "name": "context_work",
+    "value": "کام"
+  },
+  {
+    "name": "category_daily",
+    "value": "روزمرہ"
+  },
+  {
+    "name": "category_distress",
+    "value": "پریشانی"
+  },
+  {
+    "name": "category_faith",
+    "value": "ایمان"
+  },
+  {
+    "name": "category_family",
+    "value": "خاندان"
+  },
+  {
+    "name": "category_fasting",
+    "value": "روزہ"
+  },
+  {
+    "name": "category_forgiveness",
+    "value": "معافی"
+  },
+  {
+    "name": "category_funeral",
+    "value": "جنازہ"
+  },
+  {
+    "name": "category_general",
+    "value": "عام"
+  },
+  {
+    "name": "category_gratitude",
+    "value": "شکر"
+  },
+  {
+    "name": "category_guidance",
+    "value": "ہدایت"
+  },
+  {
+    "name": "category_healing",
+    "value": "شفا"
+  },
+  {
+    "name": "category_hereafter",
+    "value": "آخرت"
+  },
+  {
+    "name": "category_knowledge",
+    "value": "علم"
+  },
+  {
+    "name": "category_mercy",
+    "value": "رحمت"
+  },
+  {
+    "name": "category_morning_evening",
+    "value": "صبح و شام"
+  },
+  {
+    "name": "category_need",
+    "value": "ضرورت"
+  },
+  {
+    "name": "category_prayer",
+    "value": "نماز"
+  },
+  {
+    "name": "category_protection",
+    "value": "حفاظت"
+  },
+  {
+    "name": "category_provision",
+    "value": "رزق"
+  },
+  {
+    "name": "category_purification",
+    "value": "طہارت"
+  },
+  {
+    "name": "category_reflection",
+    "value": "غور و فکر"
+  },
+  {
+    "name": "category_reliance",
+    "value": "توکل"
+  },
+  {
+    "name": "category_repentance",
+    "value": "توبہ"
+  },
+  {
+    "name": "category_steadfastness",
+    "value": "ثابت قدمی"
+  },
+  {
+    "name": "category_travel",
+    "value": "سفر"
+  },
+  {
+    "name": "category_weather",
+    "value": "موسم"
+  },
+  {
+    "name": "category_worship",
+    "value": "عبادت"
+  }
+]

@@ -1,8 +1,10 @@
 // entry/src/main/ets/components/DuaCard.ets
 
 import { ThemeColors } from '../core/Theme';
-import { CompleteDua } from './DuaModels';
+import { CompleteDua, DuaSource } from './DuaModels';
 import { TypographyHelper } from '../core/TypographyHelper';
+import { NavHelper } from '../core/NavHelper';
+import { router } from '@kit.ArkUI';
 
 /**
  * Renders a single Dua for display: optional name header, then
@@ -68,8 +70,60 @@ export struct DuaCard {
           .margin({ top: 8 })
           .width('100%')
       }
+
+      if (this.dua.sources && this.dua.sources.length > 0) {
+        Flex({ wrap: FlexWrap.Wrap }) {
+          ForEach(this.dua.sources, (src: DuaSource, i: number) => {
+            Text(this.sourceLabel(src))
+              .fontSize(10)
+              .fontColor(this.colors.accentGold)
+              .backgroundColor(this.colors.tintSoft)
+              .padding({
+                left: 8,
+                right: 8,
+                top: 3,
+                bottom: 3
+              })
+              .borderRadius(4)
+              .margin({ right: 4, top: 4 })
+              .onClick(() => this.onSourceTap(src))
+          }, (src: DuaSource, i: number) => `src-${this.dua.id}-${i}`)
+        }
+        .width('100%')
+        .margin({ top: 10 })
+      }
     }
     .width('100%')
     .alignItems(HorizontalAlign.Center)
+  }
+
+  private sourceLabel(src: DuaSource): string {
+    if (src.type === 'external') {
+      return src.display ?? '';
+    }
+    if (src.type === 'quran') {
+      return `Quran ${src.surah}:${src.ayah}`;
+    }
+    // hadith
+    return src.id ?? '';
+  }
+
+  private onSourceTap(src: DuaSource): void {
+    if (src.type === 'external') {
+      return;
+    }
+    if (src.type === 'quran' && src.surah !== undefined && src.ayah !== undefined) {
+      NavHelper.prepareForward();
+      router.pushUrl({
+        url: 'pages/SurahDetailsPage',
+        params: { surahId: src.surah, startVerse: src.ayah, endVerse: src.ayah }
+      }).catch((e: Error) => console.error(JSON.stringify(e)));
+    } else if (src.type === 'hadith' && src.id !== undefined) {
+      NavHelper.prepareForward();
+      router.pushUrl({
+        url: 'pages/HadithDetailsPage',
+        params: { id: src.id }
+      }).catch((e: Error) => console.error(JSON.stringify(e)));
+    }
   }
 }

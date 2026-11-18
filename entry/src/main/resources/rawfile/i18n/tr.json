@@ -1,0 +1,1230 @@
+[
+  {
+    "name": "collection_abudawud",
+    "value": "Sünen-i Ebu Davud"
+  },
+  {
+    "name": "collection_bukhari",
+    "value": "Sahih-i Buhari"
+  },
+  {
+    "name": "collection_dehlawi",
+    "value": "Şah Veliyyullah'ın 40 Hadisi"
+  },
+  {
+    "name": "collection_ibnmajah",
+    "value": "Sünen-i İbn Mace"
+  },
+  {
+    "name": "collection_malik",
+    "value": "Muvatta Malik"
+  },
+  {
+    "name": "collection_muslim",
+    "value": "Sahih-i Müslim"
+  },
+  {
+    "name": "collection_nasai",
+    "value": "Sünen-i Nesai"
+  },
+  {
+    "name": "collection_nawawi",
+    "value": "Nevevi'nin 40 Hadisi"
+  },
+  {
+    "name": "collection_qudsi",
+    "value": "40 Kudsî Hadis"
+  },
+  {
+    "name": "collection_tirmidhi",
+    "value": "Camiu't-Tirmizî"
+  },
+  {
+    "name": "topic_adhan",
+    "value": "Ezan"
+  },
+  {
+    "name": "topic_agriculture",
+    "value": "Tarım"
+  },
+  {
+    "name": "topic_akhirah",
+    "value": "Ahiret"
+  },
+  {
+    "name": "topic_angels",
+    "value": "Melekler"
+  },
+  {
+    "name": "topic_appearance",
+    "value": "Görünüm"
+  },
+  {
+    "name": "topic_aqidah",
+    "value": "Akide"
+  },
+  {
+    "name": "topic_arafah",
+    "value": "Arafat"
+  },
+  {
+    "name": "topic_arafah_fast",
+    "value": "Arafat Orucu"
+  },
+  {
+    "name": "topic_ashura",
+    "value": "Aşure"
+  },
+  {
+    "name": "topic_barzakh",
+    "value": "Berzah"
+  },
+  {
+    "name": "topic_books",
+    "value": "Kitaplar"
+  },
+  {
+    "name": "topic_business",
+    "value": "Ticaret"
+  },
+  {
+    "name": "topic_character",
+    "value": "Karakter"
+  },
+  {
+    "name": "topic_charity",
+    "value": "Sadaka"
+  },
+  {
+    "name": "topic_children",
+    "value": "Çocuklar"
+  },
+  {
+    "name": "topic_companions",
+    "value": "Sahabeler"
+  },
+  {
+    "name": "topic_contracts",
+    "value": "Sözleşmeler"
+  },
+  {
+    "name": "topic_creation",
+    "value": "Yaratılış"
+  },
+  {
+    "name": "topic_daily_life",
+    "value": "Günlük Hayat"
+  },
+  {
+    "name": "topic_day_of_judgment",
+    "value": "Kıyamet Günü"
+  },
+  {
+    "name": "topic_death",
+    "value": "Ölüm"
+  },
+  {
+    "name": "topic_debt",
+    "value": "Borç"
+  },
+  {
+    "name": "topic_dhikr",
+    "value": "Zikir"
+  },
+  {
+    "name": "topic_divorce",
+    "value": "Boşanma"
+  },
+  {
+    "name": "topic_dreams",
+    "value": "Rüyalar"
+  },
+  {
+    "name": "topic_drinks",
+    "value": "İçecekler"
+  },
+  {
+    "name": "topic_dua",
+    "value": "Dua"
+  },
+  {
+    "name": "topic_eclipse_prayer",
+    "value": "Güneş/Ay Tutulması Namazı"
+  },
+  {
+    "name": "topic_eid",
+    "value": "Bayram"
+  },
+  {
+    "name": "topic_endowment",
+    "value": "Vakıf"
+  },
+  {
+    "name": "topic_ethics",
+    "value": "Ahlak"
+  },
+  {
+    "name": "topic_etiquette",
+    "value": "Edep"
+  },
+  {
+    "name": "topic_evil_eye",
+    "value": "Nazar"
+  },
+  {
+    "name": "topic_family_law",
+    "value": "Aile Hukuku"
+  },
+  {
+    "name": "topic_fasting",
+    "value": "Oruç"
+  },
+  {
+    "name": "topic_father",
+    "value": "Baba"
+  },
+  {
+    "name": "topic_fay",
+    "value": "Fey"
+  },
+  {
+    "name": "topic_finance",
+    "value": "Finans"
+  },
+  {
+    "name": "topic_fiqh",
+    "value": "Fıkıh"
+  },
+  {
+    "name": "topic_fitan",
+    "value": "Fitneler"
+  },
+  {
+    "name": "topic_forgiveness",
+    "value": "Bağışlama"
+  },
+  {
+    "name": "topic_gift_giving",
+    "value": "Hediye Verme"
+  },
+  {
+    "name": "topic_governance",
+    "value": "Yönetim"
+  },
+  {
+    "name": "topic_gratitude",
+    "value": "Şükür"
+  },
+  {
+    "name": "topic_hadith_qudsi",
+    "value": "Kudsî Hadis"
+  },
+  {
+    "name": "topic_hajj",
+    "value": "Hac"
+  },
+  {
+    "name": "topic_halal_food",
+    "value": "Helal Gıda"
+  },
+  {
+    "name": "topic_health",
+    "value": "Sağlık"
+  },
+  {
+    "name": "topic_honesty",
+    "value": "Dürüstlük"
+  },
+  {
+    "name": "topic_horses",
+    "value": "Atlar"
+  },
+  {
+    "name": "topic_humility",
+    "value": "Tevazu"
+  },
+  {
+    "name": "topic_hunting",
+    "value": "Avcılık"
+  },
+  {
+    "name": "topic_hypocrites",
+    "value": "Münafıklar"
+  },
+  {
+    "name": "topic_ihsan",
+    "value": "İhsan"
+  },
+  {
+    "name": "topic_iman",
+    "value": "İman"
+  },
+  {
+    "name": "topic_inheritance",
+    "value": "Miras"
+  },
+  {
+    "name": "topic_istiadhah",
+    "value": "İstiâze"
+  },
+  {
+    "name": "topic_istighfar",
+    "value": "İstiğfar"
+  },
+  {
+    "name": "topic_istisqa",
+    "value": "İstiska"
+  },
+  {
+    "name": "topic_itikaf",
+    "value": "İtikaf"
+  },
+  {
+    "name": "topic_jahannam",
+    "value": "Cehennem"
+  },
+  {
+    "name": "topic_jamaah",
+    "value": "Cemaat"
+  },
+  {
+    "name": "topic_jannah",
+    "value": "Cennet"
+  },
+  {
+    "name": "topic_jihad",
+    "value": "Cihat"
+  },
+  {
+    "name": "topic_jizyah",
+    "value": "Cizye"
+  },
+  {
+    "name": "topic_jumuah",
+    "value": "Cuma"
+  },
+  {
+    "name": "topic_justice",
+    "value": "Adalet"
+  },
+  {
+    "name": "topic_kaffarah",
+    "value": "Keffaret"
+  },
+  {
+    "name": "topic_khumus",
+    "value": "Humus"
+  },
+  {
+    "name": "topic_khushu",
+    "value": "Huşu"
+  },
+  {
+    "name": "topic_kindness",
+    "value": "İyilik"
+  },
+  {
+    "name": "topic_knowledge",
+    "value": "İlim"
+  },
+  {
+    "name": "topic_learning",
+    "value": "Öğrenme"
+  },
+  {
+    "name": "topic_li_an",
+    "value": "Liân"
+  },
+  {
+    "name": "topic_literature",
+    "value": "Edebiyat"
+  },
+  {
+    "name": "topic_lost_property",
+    "value": "Kayıp Mal"
+  },
+  {
+    "name": "topic_malahim",
+    "value": "Melahim"
+  },
+  {
+    "name": "topic_marriage",
+    "value": "Evlilik"
+  },
+  {
+    "name": "topic_medicine",
+    "value": "Tıp"
+  },
+  {
+    "name": "topic_memorization",
+    "value": "Ezber"
+  },
+  {
+    "name": "topic_mercy",
+    "value": "Merhamet"
+  },
+  {
+    "name": "topic_modesty",
+    "value": "Hayâ"
+  },
+  {
+    "name": "topic_mosque",
+    "value": "Cami"
+  },
+  {
+    "name": "topic_mother",
+    "value": "Anne"
+  },
+  {
+    "name": "topic_oaths_vows",
+    "value": "Yeminler ve Adaklar"
+  },
+  {
+    "name": "topic_omens",
+    "value": "Uğursuzluk"
+  },
+  {
+    "name": "topic_parables",
+    "value": "Kıssalar"
+  },
+  {
+    "name": "topic_parents",
+    "value": "Ebeveynler"
+  },
+  {
+    "name": "topic_patience",
+    "value": "Sabır"
+  },
+  {
+    "name": "topic_permission",
+    "value": "İzin"
+  },
+  {
+    "name": "topic_property_law",
+    "value": "Mülkiyet Hukuku"
+  },
+  {
+    "name": "topic_prophets",
+    "value": "Peygamberler"
+  },
+  {
+    "name": "topic_protection",
+    "value": "Koruma"
+  },
+  {
+    "name": "topic_purification",
+    "value": "Temizlik"
+  },
+  {
+    "name": "topic_qadr",
+    "value": "Kader"
+  },
+  {
+    "name": "topic_qiblah",
+    "value": "Kıble"
+  },
+  {
+    "name": "topic_quran",
+    "value": "Kur'an"
+  },
+  {
+    "name": "topic_qurbani",
+    "value": "Kurban"
+  },
+  {
+    "name": "topic_ramadan",
+    "value": "Ramazan"
+  },
+  {
+    "name": "topic_recitation",
+    "value": "Kıraat"
+  },
+  {
+    "name": "topic_reconciliation",
+    "value": "Uzlaşma"
+  },
+  {
+    "name": "topic_reflection",
+    "value": "Tefekkür"
+  },
+  {
+    "name": "topic_relatives",
+    "value": "Akrabalar"
+  },
+  {
+    "name": "topic_revelation",
+    "value": "Vahiy"
+  },
+  {
+    "name": "topic_rings",
+    "value": "Yüzükler"
+  },
+  {
+    "name": "topic_sadaqah",
+    "value": "Sadaka"
+  },
+  {
+    "name": "topic_salah",
+    "value": "Namaz"
+  },
+  {
+    "name": "topic_scholarship",
+    "value": "İlmiye"
+  },
+  {
+    "name": "topic_seerah",
+    "value": "Siyer"
+  },
+  {
+    "name": "topic_sickness",
+    "value": "Hastalık"
+  },
+  {
+    "name": "topic_sincerity",
+    "value": "İhlas"
+  },
+  {
+    "name": "topic_social_justice",
+    "value": "Sosyal Adalet"
+  },
+  {
+    "name": "topic_speech_etiquette",
+    "value": "Konuşma Adabı"
+  },
+  {
+    "name": "topic_sports",
+    "value": "Spor"
+  },
+  {
+    "name": "topic_spouse",
+    "value": "Eş"
+  },
+  {
+    "name": "topic_sunnah",
+    "value": "Sünnet"
+  },
+  {
+    "name": "topic_tafsir",
+    "value": "Tefsir"
+  },
+  {
+    "name": "topic_tahajjud",
+    "value": "Teheccüd"
+  },
+  {
+    "name": "topic_tawbah",
+    "value": "Tevbe"
+  },
+  {
+    "name": "topic_tawhid",
+    "value": "Tevhid"
+  },
+  {
+    "name": "topic_teaching",
+    "value": "Öğretme"
+  },
+  {
+    "name": "topic_trade",
+    "value": "Ticaret"
+  },
+  {
+    "name": "topic_travel",
+    "value": "Yolculuk"
+  },
+  {
+    "name": "topic_trustworthiness",
+    "value": "Emanet"
+  },
+  {
+    "name": "topic_umrah",
+    "value": "Umre"
+  },
+  {
+    "name": "topic_virtues",
+    "value": "Faziletler"
+  },
+  {
+    "name": "topic_voluntary_fasting",
+    "value": "Nafile Oruç"
+  },
+  {
+    "name": "topic_vows_curses",
+    "value": "Adaklar ve Beddualar"
+  },
+  {
+    "name": "topic_war_booty",
+    "value": "Ganimet"
+  },
+  {
+    "name": "topic_water",
+    "value": "Su"
+  },
+  {
+    "name": "topic_wills",
+    "value": "Vasiyetler"
+  },
+  {
+    "name": "topic_witr",
+    "value": "Vitir"
+  },
+  {
+    "name": "topic_women",
+    "value": "Kadınlar"
+  },
+  {
+    "name": "topic_wudu",
+    "value": "Abdest"
+  },
+  {
+    "name": "topic_zakat",
+    "value": "Zekât"
+  },
+  {
+    "name": "topic_zuhd",
+    "value": "Zühd"
+  },
+  {
+    "name": "context_after_asr",
+    "value": "İkindi Sonrası"
+  },
+  {
+    "name": "context_after_fajr",
+    "value": "Sabah Namazı Sonrası"
+  },
+  {
+    "name": "context_after_maghrib",
+    "value": "Akşam Namazı Sonrası"
+  },
+  {
+    "name": "context_afternoon",
+    "value": "Öğleden Sonra"
+  },
+  {
+    "name": "context_anger",
+    "value": "Öfke"
+  },
+  {
+    "name": "context_anxiety",
+    "value": "Kaygı"
+  },
+  {
+    "name": "context_aqiqah",
+    "value": "Akika"
+  },
+  {
+    "name": "context_ashura",
+    "value": "Aşure"
+  },
+  {
+    "name": "context_before_fajr",
+    "value": "Sabah Namazından Önce"
+  },
+  {
+    "name": "context_before_salah",
+    "value": "Namazdan Önce"
+  },
+  {
+    "name": "context_before_sleep",
+    "value": "Uykudan Önce"
+  },
+  {
+    "name": "context_burnout",
+    "value": "Tükenmişlik"
+  },
+  {
+    "name": "context_business_decision",
+    "value": "İş Kararı"
+  },
+  {
+    "name": "context_business_launch",
+    "value": "İş Kurma"
+  },
+  {
+    "name": "context_career_growth",
+    "value": "Kariyer Gelişimi"
+  },
+  {
+    "name": "context_character_building",
+    "value": "Karakter Gelişimi"
+  },
+  {
+    "name": "context_charity",
+    "value": "Sadaka"
+  },
+  {
+    "name": "context_children",
+    "value": "Çocuklar"
+  },
+  {
+    "name": "context_community_service",
+    "value": "Toplum Hizmeti"
+  },
+  {
+    "name": "context_commuting",
+    "value": "İşe Gidip Gelme"
+  },
+  {
+    "name": "context_contentment",
+    "value": "Kanaat"
+  },
+  {
+    "name": "context_daily_life",
+    "value": "Günlük Hayat"
+  },
+  {
+    "name": "context_daily_prayer",
+    "value": "Günlük Namaz"
+  },
+  {
+    "name": "context_day_of_arafah",
+    "value": "Arafat Günü"
+  },
+  {
+    "name": "context_death_in_family",
+    "value": "Ailede Ölüm"
+  },
+  {
+    "name": "context_dhikr",
+    "value": "Zikir"
+  },
+  {
+    "name": "context_dhul_hijjah",
+    "value": "Zilhicce"
+  },
+  {
+    "name": "context_dressing",
+    "value": "Giyinme"
+  },
+  {
+    "name": "context_dua",
+    "value": "Dua"
+  },
+  {
+    "name": "context_eating",
+    "value": "Yemek"
+  },
+  {
+    "name": "context_eid_al_adha",
+    "value": "Kurban Bayramı"
+  },
+  {
+    "name": "context_eid_al_fitr",
+    "value": "Ramazan Bayramı"
+  },
+  {
+    "name": "context_end_times",
+    "value": "Ahir Zaman"
+  },
+  {
+    "name": "context_engagement",
+    "value": "Nişan"
+  },
+  {
+    "name": "context_entering_home",
+    "value": "Eve Girme"
+  },
+  {
+    "name": "context_entering_mosque",
+    "value": "Camiye Girme"
+  },
+  {
+    "name": "context_envy",
+    "value": "Haset"
+  },
+  {
+    "name": "context_exam",
+    "value": "Sınav"
+  },
+  {
+    "name": "context_extended_family",
+    "value": "Geniş Aile"
+  },
+  {
+    "name": "context_family_conflict",
+    "value": "Aile Çatışması"
+  },
+  {
+    "name": "context_family_time",
+    "value": "Aile Zamanı"
+  },
+  {
+    "name": "context_father",
+    "value": "Baba"
+  },
+  {
+    "name": "context_fear",
+    "value": "Korku"
+  },
+  {
+    "name": "context_financial_decisions",
+    "value": "Finansal Kararlar"
+  },
+  {
+    "name": "context_financial_stress",
+    "value": "Finansal Stres"
+  },
+  {
+    "name": "context_first_10_days_dhul_hijjah",
+    "value": "Zilhiccenin İlk 10 Günü"
+  },
+  {
+    "name": "context_first_ashra",
+    "value": "İlk Aşr"
+  },
+  {
+    "name": "context_forgiveness",
+    "value": "Bağışlama"
+  },
+  {
+    "name": "context_friday",
+    "value": "Cuma"
+  },
+  {
+    "name": "context_funeral",
+    "value": "Cenaze"
+  },
+  {
+    "name": "context_governance",
+    "value": "Yönetim"
+  },
+  {
+    "name": "context_graduation",
+    "value": "Mezuniyet"
+  },
+  {
+    "name": "context_grandparents",
+    "value": "Büyükanne ve Büyükbaba"
+  },
+  {
+    "name": "context_gratitude",
+    "value": "Şükür"
+  },
+  {
+    "name": "context_grief",
+    "value": "Yas"
+  },
+  {
+    "name": "context_hajj",
+    "value": "Hac"
+  },
+  {
+    "name": "context_happiness",
+    "value": "Mutluluk"
+  },
+  {
+    "name": "context_hope",
+    "value": "Umut"
+  },
+  {
+    "name": "context_hospital_visit",
+    "value": "Hastane Ziyareti"
+  },
+  {
+    "name": "context_illness",
+    "value": "Hastalık"
+  },
+  {
+    "name": "context_islamic_law",
+    "value": "İslam Hukuku"
+  },
+  {
+    "name": "context_isra_miraj",
+    "value": "İsra ve Mirac"
+  },
+  {
+    "name": "context_itikaf",
+    "value": "İtikaf"
+  },
+  {
+    "name": "context_jamaah",
+    "value": "Cemaat"
+  },
+  {
+    "name": "context_jealousy",
+    "value": "Kıskançlık"
+  },
+  {
+    "name": "context_job_interview",
+    "value": "İş Görüşmesi"
+  },
+  {
+    "name": "context_job_loss",
+    "value": "İş Kaybı"
+  },
+  {
+    "name": "context_justice",
+    "value": "Adalet"
+  },
+  {
+    "name": "context_last_ten_nights",
+    "value": "Son On Gece"
+  },
+  {
+    "name": "context_laylat_al_qadr",
+    "value": "Kadir Gecesi"
+  },
+  {
+    "name": "context_leadership",
+    "value": "Liderlik"
+  },
+  {
+    "name": "context_learning",
+    "value": "Öğrenme"
+  },
+  {
+    "name": "context_leaving_home",
+    "value": "Evden Ayrılma"
+  },
+  {
+    "name": "context_leaving_mosque",
+    "value": "Camiiden Ayrılma"
+  },
+  {
+    "name": "context_loneliness",
+    "value": "Yalnızlık"
+  },
+  {
+    "name": "context_marketplace",
+    "value": "Pazar"
+  },
+  {
+    "name": "context_marriage",
+    "value": "Evlilik"
+  },
+  {
+    "name": "context_morning",
+    "value": "Sabah"
+  },
+  {
+    "name": "context_mother",
+    "value": "Anne"
+  },
+  {
+    "name": "context_muharram",
+    "value": "Muharrem"
+  },
+  {
+    "name": "context_new_baby",
+    "value": "Yeni Bebek"
+  },
+  {
+    "name": "context_new_job",
+    "value": "Yeni İş"
+  },
+  {
+    "name": "context_new_marriage",
+    "value": "Yeni Evlilik"
+  },
+  {
+    "name": "context_night_21",
+    "value": "21. Gece"
+  },
+  {
+    "name": "context_night_23",
+    "value": "23. Gece"
+  },
+  {
+    "name": "context_night_25",
+    "value": "25. Gece"
+  },
+  {
+    "name": "context_night_27",
+    "value": "27. Gece"
+  },
+  {
+    "name": "context_night_29",
+    "value": "29. Gece"
+  },
+  {
+    "name": "context_nikah",
+    "value": "Nikâh"
+  },
+  {
+    "name": "context_parenting",
+    "value": "Ebeveynlik"
+  },
+  {
+    "name": "context_parents",
+    "value": "Ebeveynler"
+  },
+  {
+    "name": "context_patience",
+    "value": "Sabır"
+  },
+  {
+    "name": "context_pledges",
+    "value": "Taahhütler"
+  },
+  {
+    "name": "context_prayer",
+    "value": "Namaz"
+  },
+  {
+    "name": "context_pregnancy",
+    "value": "Hamilelik"
+  },
+  {
+    "name": "context_promotion",
+    "value": "Terfi"
+  },
+  {
+    "name": "context_quran",
+    "value": "Kur'an"
+  },
+  {
+    "name": "context_rabi_al_awwal",
+    "value": "Rebiülevvel"
+  },
+  {
+    "name": "context_raising_children",
+    "value": "Çocuk Yetiştirme"
+  },
+  {
+    "name": "context_rajab",
+    "value": "Recep"
+  },
+  {
+    "name": "context_ramadan",
+    "value": "Ramazan"
+  },
+  {
+    "name": "context_relationships",
+    "value": "İlişkiler"
+  },
+  {
+    "name": "context_repentance",
+    "value": "Tevbe"
+  },
+  {
+    "name": "context_retirement",
+    "value": "Emeklilik"
+  },
+  {
+    "name": "context_return_home",
+    "value": "Eve Dönüş"
+  },
+  {
+    "name": "context_sadness",
+    "value": "Üzüntü"
+  },
+  {
+    "name": "context_salary_day",
+    "value": "Maaş Günü"
+  },
+  {
+    "name": "context_second_ashra",
+    "value": "İkinci Aşr"
+  },
+  {
+    "name": "context_seeking_knowledge",
+    "value": "İlim Öğrenme"
+  },
+  {
+    "name": "context_self_improvement",
+    "value": "Kendini Geliştirme"
+  },
+  {
+    "name": "context_shaban",
+    "value": "Şaban"
+  },
+  {
+    "name": "context_siblings",
+    "value": "Kardeşler"
+  },
+  {
+    "name": "context_sincerity",
+    "value": "İhlas"
+  },
+  {
+    "name": "context_social_etiquette",
+    "value": "Sosyal Adab"
+  },
+  {
+    "name": "context_social_interactions",
+    "value": "Sosyal Etkileşimler"
+  },
+  {
+    "name": "context_spiritual_growth",
+    "value": "Manevi Gelişim"
+  },
+  {
+    "name": "context_spouse",
+    "value": "Eş"
+  },
+  {
+    "name": "context_stress",
+    "value": "Stres"
+  },
+  {
+    "name": "context_student",
+    "value": "Öğrenci"
+  },
+  {
+    "name": "context_study",
+    "value": "Ders Çalışma"
+  },
+  {
+    "name": "context_tahajjud",
+    "value": "Teheccüd"
+  },
+  {
+    "name": "context_taqwa",
+    "value": "Takva"
+  },
+  {
+    "name": "context_taraweeh",
+    "value": "Teravih"
+  },
+  {
+    "name": "context_tashreeq_days",
+    "value": "Teşrik Günleri"
+  },
+  {
+    "name": "context_tawbah",
+    "value": "Tevbe"
+  },
+  {
+    "name": "context_teaching",
+    "value": "Öğretme"
+  },
+  {
+    "name": "context_third_ashra",
+    "value": "Üçüncü Aşr"
+  },
+  {
+    "name": "context_times_of_trials",
+    "value": "İmtihan Zamanları"
+  },
+  {
+    "name": "context_travel",
+    "value": "Yolculuk"
+  },
+  {
+    "name": "context_trust_in_allah",
+    "value": "Allah'a Tevekkül"
+  },
+  {
+    "name": "context_umrah",
+    "value": "Umre"
+  },
+  {
+    "name": "context_wake_up",
+    "value": "Uyanma"
+  },
+  {
+    "name": "context_witr",
+    "value": "Vitir"
+  },
+  {
+    "name": "context_work",
+    "value": "İş"
+  },
+  {
+    "name": "category_daily",
+    "value": "Günlük"
+  },
+  {
+    "name": "category_distress",
+    "value": "Sıkıntı"
+  },
+  {
+    "name": "category_faith",
+    "value": "İman"
+  },
+  {
+    "name": "category_family",
+    "value": "Aile"
+  },
+  {
+    "name": "category_fasting",
+    "value": "Oruç"
+  },
+  {
+    "name": "category_forgiveness",
+    "value": "Bağışlanma"
+  },
+  {
+    "name": "category_funeral",
+    "value": "Cenaze"
+  },
+  {
+    "name": "category_general",
+    "value": "Genel"
+  },
+  {
+    "name": "category_gratitude",
+    "value": "Şükür"
+  },
+  {
+    "name": "category_guidance",
+    "value": "Hidayet"
+  },
+  {
+    "name": "category_healing",
+    "value": "Şifa"
+  },
+  {
+    "name": "category_hereafter",
+    "value": "Ahiret"
+  },
+  {
+    "name": "category_knowledge",
+    "value": "İlim"
+  },
+  {
+    "name": "category_mercy",
+    "value": "Merhamet"
+  },
+  {
+    "name": "category_morning_evening",
+    "value": "Sabah & Akşam"
+  },
+  {
+    "name": "category_need",
+    "value": "İhtiyaç"
+  },
+  {
+    "name": "category_prayer",
+    "value": "Namaz"
+  },
+  {
+    "name": "category_protection",
+    "value": "Koruma"
+  },
+  {
+    "name": "category_provision",
+    "value": "Rızık"
+  },
+  {
+    "name": "category_purification",
+    "value": "Taharet"
+  },
+  {
+    "name": "category_reflection",
+    "value": "Tefekkür"
+  },
+  {
+    "name": "category_reliance",
+    "value": "Tevekkül"
+  },
+  {
+    "name": "category_repentance",
+    "value": "Tevbe"
+  },
+  {
+    "name": "category_steadfastness",
+    "value": "Sebat"
+  },
+  {
+    "name": "category_travel",
+    "value": "Yolculuk"
+  },
+  {
+    "name": "category_weather",
+    "value": "Hava"
+  },
+  {
+    "name": "category_worship",
+    "value": "İbadet"
+  }
+]

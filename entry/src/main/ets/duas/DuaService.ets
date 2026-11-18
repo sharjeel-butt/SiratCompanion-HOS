@@ -1,12 +1,13 @@
 import { common } from '@kit.AbilityKit';
 import { util } from '@kit.ArkTS';
-import { BaseDua, CompleteDua, TranslatedDua } from './DuaModels';
+import { BaseDua, CompleteDua, DuaSource, TranslatedDua } from './DuaModels';
 import { PreferencesHelper } from '../core/PreferencesHelper';
 import { RamadanInfo } from '../ramadan/RamadanHelper';
 import { STORAGE_KEY_DUA_BINDINGS_VERSION } from '../core/StorageKeys';
 import { CustomEventKeywordHelper } from './CustomEventKeywordHelper';
 import { UpcomingCustomEvent } from '../pages/HomePage';
 import { UpcomingImportantDate } from '../hijricalendar/DateModels';
+import { RawPaths } from '../core/RawPaths';
 
 const KEY_DUA_FAVORITES = 'dua_favorites';
 const KEY_DUA_BINDINGS = 'dua_bindings';
@@ -25,10 +26,16 @@ export class DuaService {
     AppStorage.setOrCreate('dua_cache_lang', '');
   }
 
-  static async loadDuas(context: common.UIAbilityContext, lang: string): Promise<CompleteDua[]> {
+  static async loadDuas(
+    context: common.UIAbilityContext,
+    transLang: string,
+    uiLang: string
+  ): Promise<CompleteDua[]> {
+    // Cache key must include both languages
+    const cacheKey = `${transLang}_${uiLang}`;
     if (DuaService.cachedDuas) {
       const cachedLang = AppStorage.get<string>('dua_cache_lang');
-      if (cachedLang === lang) {
+      if (cachedLang === cacheKey) {
         return DuaService.cachedDuas;
       }
     }
@@ -37,44 +44,45 @@ export class DuaService {
       const mgr = context.resourceManager;
 
       // 1. Load base (Arabic text + category + reference)
-      const baseData = await mgr.getRawFileContent('duas/duas_base.json');
+      const baseData = await mgr.getRawFileContent(RawPaths.DUA_BASE);
       const baseJsonStr = util.TextDecoder.create('utf-8').decodeToString(baseData);
       const baseDuas: BaseDua[] = JSON.parse(baseJsonStr);
 
-      // 2. Load English — guaranteed complete. This is the per-ID
-      //    fallback so a partial locale file never shows raw IDs.
-      const enData = await mgr.getRawFileContent('duas/duas_en.json');
+      // 2. Load English (guaranteed complete, used as fallback)
+      const enData = await mgr.getRawFileContent(RawPaths.duas('en'));
       const englishDuas: Record<string, TranslatedDua> =
         JSON.parse(util.TextDecoder.create('utf-8').decodeToString(enData));
 
-      // 3. Load requested language — optional. If the file is absent
-      //    entirely, we fall back per-ID to English below.
-      let translatedDuas: Record<string, TranslatedDua> = {};
-      if (lang === 'en') {
-        translatedDuas = englishDuas;
-      } else {
+      // 3. Load UI Language (for Name & Reference)
+      let uiDuas: Record<string, TranslatedDua> = englishDuas;
+      if (uiLang !== 'en') {
         try {
-          const langFile = `duas/duas_${lang}.json`;
-          const langData = await mgr.getRawFileContent(langFile);
-          translatedDuas = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(langData));
-        } catch (e) {
-          translatedDuas = {};
+          const uiData = await mgr.getRawFileContent(RawPaths.duas(uiLang));
+          uiDuas = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(uiData));
+        } catch (e) { /* fallback to English */
         }
       }
 
-      // 4. Load user state
+      // 4. Load Translation Language (for Translation Text)
+      let transDuas: Record<string, TranslatedDua> = englishDuas;
+      if (transLang !== 'en') {
+        try {
+          const transData = await mgr.getRawFileContent(RawPaths.duas(transLang));
+          transDuas = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(transData));
+        } catch (e) { /* fallback to English */
+        }
+      }
+
+      // 5. Load user state
       const favorites = await DuaService.safeLoadStringArray(KEY_DUA_FAVORITES);
       const bindings = await DuaService.safeLoadRecord(KEY_DUA_BINDINGS);
 
-      // 5. Merge with three-level fallback: requested → English → base
+      // 6. Merge with three-level fallback
       const merged: CompleteDua[] = baseDuas.map((base: BaseDua): CompleteDua => {
-        const target = translatedDuas[base.id];
-        const english = englishDuas[base.id];
-        const t: TranslatedDua = target || english || {
-          name: base.id,
-          translation: '',
-          reference: base.reference
-        };
+        const uiT =
+          uiDuas[base.id] || englishDuas[base.id] || { name: base.id, translation: '', reference: base.reference };
+        const transT =
+          transDuas[base.id] || englishDuas[base.id] || { name: base.id, translation: '', reference: base.reference };
 
         const complete: CompleteDua = {
           id: base.id,
@@ -82,17 +90,25 @@ export class DuaService {
           arabic: base.arabic,
           reference: base.reference,
           transliteration: base.transliteration,
-          translatedName: t.name,
-          translatedText: t.translation,
-          translatedReference: t.reference || base.reference,
+
+          // Name & Reference from UI Language
+          translatedName: uiT.name,
+          translatedReference: uiT.reference || base.reference,
+
+          // Translation Text from Translation Language
+          translatedText: transT.translation,
+
           isFavorite: favorites.includes(base.id),
-          boundPrayerIds: bindings[base.id] || []
+          boundPrayerIds: bindings[base.id] || [],
+          sources: transT.sources ?? [],
+          reference_display: uiT.reference_display ?? base.reference,
+          migration_status: transT.migration_status ?? 'ok'
         };
         return complete;
       });
 
       DuaService.cachedDuas = merged;
-      AppStorage.setOrCreate('dua_cache_lang', lang);
+      AppStorage.setOrCreate('dua_cache_lang', cacheKey); // Store combined key
       return merged;
     } catch (e) {
       console.error('Failed to load duas:', JSON.stringify(e));
@@ -303,5 +319,28 @@ export class DuaService {
       console.warn(`[DuaService] ${key} parse failed: ${err.message}`);
       return {};
     }
+  }
+
+  // Helper at bottom of DuaService
+  private static sanitizeSources(raw: DuaSource[] | undefined): DuaSource[] {
+    if (raw === undefined) {
+      return [];
+    }
+    const out: DuaSource[] = [];
+    for (const s of raw) {
+      if (s.type !== 'hadith' && s.type !== 'quran' && s.type !== 'external') {
+        continue;
+      }
+      const entry: DuaSource = {
+        type: s.type,
+        role: s.role === 'supporting' ? 'supporting' : 'primary',
+        id: s.id,
+        surah: s.surah,
+        ayah: s.ayah,
+        display: s.display
+      };
+      out.push(entry);
+    }
+    return out;
   }
 }

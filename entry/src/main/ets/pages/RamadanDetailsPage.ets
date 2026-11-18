@@ -9,6 +9,7 @@ import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_DUA_TRANSLATION_LANG,
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_RAMADAN_STATE_VERSION,
@@ -48,7 +49,7 @@ struct RamadanDetailsPage {
   // ============================================================
   // STORAGE LINKS
   // ============================================================
-
+  @StorageLink(STORAGE_KEY_DUA_TRANSLATION_LANG) @Watch('onLanguageChanged') duaTransLang: string = 'default';
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
@@ -1711,7 +1712,7 @@ struct RamadanDetailsPage {
   private async loadDuasForSection(): Promise<void> {
     try {
       const ctx = getContext(this) as common.UIAbilityContext;
-      const all = await DuaService.loadDuas(ctx, this.currentLanguage);
+      const all = await DuaService.loadDuas(ctx, this.getDuaTranslationLang(), this.currentLanguage);
       this.suhoorDua = all.find((d: CompleteDua) => d.id === 'dua_suhoor') ?? null;
       this.iftarDua = all.find((d: CompleteDua) => d.id === 'dua_breaking_the_fast') ?? null;
     } catch (e) {
@@ -2233,5 +2234,12 @@ struct RamadanDetailsPage {
       weeks.push(padded.slice(i, i + 7));
     }
     return weeks;
+  }
+
+  private getDuaTranslationLang(): string {
+    if (this.duaTransLang === 'default' || this.duaTransLang === '') {
+      return this.appLanguage;
+    }
+    return this.duaTransLang;
   }
 }

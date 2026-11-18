@@ -1,0 +1,110 @@
+[
+  {
+    "name": "daily",
+    "count": 9
+  },
+  {
+    "name": "distress",
+    "count": 5
+  },
+  {
+    "name": "faith",
+    "count": 1
+  },
+  {
+    "name": "family",
+    "count": 6
+  },
+  {
+    "name": "fasting",
+    "count": 2
+  },
+  {
+    "name": "forgiveness",
+    "count": 11
+  },
+  {
+    "name": "funeral",
+    "count": 3
+  },
+  {
+    "name": "general",
+    "count": 3
+  },
+  {
+    "name": "gratitude",
+    "count": 2
+  },
+  {
+    "name": "guidance",
+    "count": 11
+  },
+  {
+    "name": "healing",
+    "count": 3
+  },
+  {
+    "name": "hereafter",
+    "count": 4
+  },
+  {
+    "name": "knowledge",
+    "count": 2
+  },
+  {
+    "name": "mercy",
+    "count": 1
+  },
+  {
+    "name": "morning_evening",
+    "count": 2
+  },
+  {
+    "name": "need",
+    "count": 1
+  },
+  {
+    "name": "prayer",
+    "count": 7
+  },
+  {
+    "name": "protection",
+    "count": 11
+  },
+  {
+    "name": "provision",
+    "count": 1
+  },
+  {
+    "name": "purification",
+    "count": 1
+  },
+  {
+    "name": "reflection",
+    "count": 1
+  },
+  {
+    "name": "reliance",
+    "count": 1
+  },
+  {
+    "name": "repentance",
+    "count": 1
+  },
+  {
+    "name": "steadfastness",
+    "count": 2
+  },
+  {
+    "name": "travel",
+    "count": 1
+  },
+  {
+    "name": "weather",
+    "count": 4
+  },
+  {
+    "name": "worship",
+    "count": 2
+  }
+]

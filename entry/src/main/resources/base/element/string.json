@@ -2986,7 +2986,7 @@
     },
     {
       "name": "licenses_intro",
-      "value": "The Quran text, translations and scripts used in this app are distributed under the following licenses. Please retain attribution when sharing this app or its data."
+      "value": "The Quran/Hadith text, translations and scripts used in this app are distributed under the following licenses. Please retain attribution when sharing this app or its data."
     },
     {
       "name": "license_section_dataset",
@@ -3251,6 +3251,94 @@
     {
       "name": "mosque_add_custom_cta",
       "value": "Add Custom Mosque"
+    },
+    {
+      "name": "sanad_title",
+      "value": "Chain of Narration"
+    },
+    {
+      "name": "sanad_confidence_high",
+      "value": "High"
+    },
+    {
+      "name": "sanad_confidence_medium",
+      "value": "Partial"
+    },
+    {
+      "name": "sanad_confidence_athar",
+      "value": "Athar"
+    },
+    {
+      "name": "hadith_grade_title",
+      "value": "Grading"
+    },
+    {
+      "name": "hadith_grade_unverified",
+      "value": "Grade not established"
+    },
+    {
+      "name": "grade_sahih",
+      "value": "Sahih"
+    },
+    {
+      "name": "grade_hasan",
+      "value": "Hasan"
+    },
+    {
+      "name": "grade_hasan_sahih",
+      "value": "Hasan Sahih"
+    },
+    {
+      "name": "grade_daif",
+      "value": "Daif"
+    },
+    {
+      "name": "grade_mawdu",
+      "value": "Mawdu"
+    },
+    {
+      "name": "quran_translation_lang",
+      "value": "Quran Translation"
+    },
+    {
+      "name": "quran_translation_lang_desc",
+      "value": "Choose translation language for Quran"
+    },
+    {
+      "name": "hadith_translation_lang",
+      "value": "Hadith Translation"
+    },
+    {
+      "name": "hadith_translation_lang_desc",
+      "value": "Choose translation language for Hadith"
+    },
+    {
+      "name": "lang_app_default",
+      "value": "App Language (Default)"
+    },
+    {
+      "name": "dua_translation_lang",
+      "value": "Dua Translation"
+    },
+    {
+      "name": "dua_translation_lang_des",
+      "value": "Choose translation language for Duas"
+    },
+    {
+      "name": "telegram_channel",
+      "value": "Telegram Channel"
+    },
+    {
+      "name": "telegram_channel_link",
+      "value": "https://t.me/siratcompanionhos"
+    },
+    {
+      "name": "feature_issues",
+      "value": "Report Issues/New Features"
+    },
+    {
+      "name": "feature_issues_link",
+      "value": "https://github.com/sharjeel-butt/SiratCompanion-HOS/issues"
     }
   ]
 }

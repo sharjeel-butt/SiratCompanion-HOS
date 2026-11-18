@@ -47,6 +47,7 @@ struct PrayerWidget {
           .position({ x: '60%', y: '-10%' })
       }
       .width('100%').height('100%').clip(true).borderRadius(16)
+
       Column() {
         if (this.error.length > 0) {
           Column() {
@@ -430,6 +431,7 @@ struct PrayerWidget {
                       .textAlign(TextAlign.LEFT)
                       .maxLines(1)
                   }.layoutWeight(1).alignItems(HorizontalAlign.Start).direction(Direction.Ltr)
+
                   Divider().vertical(true).height(40).color('#333333').margin({ left: 12, right: 12 })
                   Column() {
                     Text(this.currentName + (this.isCurrentYesterday ? ` (${this.lblYesterday})` : ''))
@@ -450,6 +452,7 @@ struct PrayerWidget {
                       .textOverflow({ overflow: TextOverflow.Ellipsis })
                     Text(this.currentTime).fontSize('12vp').fontColor('#A5B8CC').margin({ top: 2 }).maxLines(1)
                   }.layoutWeight(1).alignItems(HorizontalAlign.Start).direction(Direction.Ltr)
+
                   Divider().vertical(true).height(40).color('#333333').margin({ left: 12, right: 12 })
                   Column() {
                     Text(this.nextName).fontSize('18vp').fontColor('#E8A44C').fontWeight(FontWeight.Bold).maxLines(1)
@@ -486,6 +489,7 @@ struct PrayerWidget {
                       .direction(Direction.Ltr)
                       .maxLines(1)
                   }.layoutWeight(1).alignItems(HorizontalAlign.Start)
+
                   Column() {
                     Text(this.contextLabel2)
                       .fontSize('10vp')
@@ -521,6 +525,7 @@ struct PrayerWidget {
                       .direction(Direction.Ltr)
                       .maxLines(1)
                   }.layoutWeight(1).alignItems(HorizontalAlign.Start)
+
                   Column() {
                     Text(this.contextLabel2)
                       .fontSize('10vp')

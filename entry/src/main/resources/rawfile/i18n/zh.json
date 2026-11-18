@@ -1,0 +1,1230 @@
+[
+  {
+    "name": "collection_abudawud",
+    "value": "《阿布·达乌德圣训集》"
+  },
+  {
+    "name": "collection_bukhari",
+    "value": "《布哈里圣训实录》"
+  },
+  {
+    "name": "collection_dehlawi",
+    "value": "《沙阿·瓦利乌拉四十圣训》"
+  },
+  {
+    "name": "collection_ibnmajah",
+    "value": "《伊本·马哲圣训集》"
+  },
+  {
+    "name": "collection_malik",
+    "value": "《穆瓦塔·马利克》"
+  },
+  {
+    "name": "collection_muslim",
+    "value": "《穆斯林圣训实录》"
+  },
+  {
+    "name": "collection_nasai",
+    "value": "《奈萨仪圣训集》"
+  },
+  {
+    "name": "collection_nawawi",
+    "value": "《脑威四十圣训》"
+  },
+  {
+    "name": "collection_qudsi",
+    "value": "《神圣四十圣训》"
+  },
+  {
+    "name": "collection_tirmidhi",
+    "value": "《提尔密济圣训集》"
+  },
+  {
+    "name": "topic_adhan",
+    "value": "宣礼"
+  },
+  {
+    "name": "topic_agriculture",
+    "value": "农业"
+  },
+  {
+    "name": "topic_akhirah",
+    "value": "后世"
+  },
+  {
+    "name": "topic_angels",
+    "value": "天使"
+  },
+  {
+    "name": "topic_appearance",
+    "value": "外表"
+  },
+  {
+    "name": "topic_aqidah",
+    "value": "信仰"
+  },
+  {
+    "name": "topic_arafah",
+    "value": "阿拉法特"
+  },
+  {
+    "name": "topic_arafah_fast",
+    "value": "阿拉法特日斋戒"
+  },
+  {
+    "name": "topic_ashura",
+    "value": "阿舒拉"
+  },
+  {
+    "name": "topic_barzakh",
+    "value": "巴尔扎赫"
+  },
+  {
+    "name": "topic_books",
+    "value": "书籍"
+  },
+  {
+    "name": "topic_business",
+    "value": "商业"
+  },
+  {
+    "name": "topic_character",
+    "value": "品格"
+  },
+  {
+    "name": "topic_charity",
+    "value": "施舍"
+  },
+  {
+    "name": "topic_children",
+    "value": "儿童"
+  },
+  {
+    "name": "topic_companions",
+    "value": "圣门弟子"
+  },
+  {
+    "name": "topic_contracts",
+    "value": "契约"
+  },
+  {
+    "name": "topic_creation",
+    "value": "创造"
+  },
+  {
+    "name": "topic_daily_life",
+    "value": "日常生活"
+  },
+  {
+    "name": "topic_day_of_judgment",
+    "value": "审判日"
+  },
+  {
+    "name": "topic_death",
+    "value": "死亡"
+  },
+  {
+    "name": "topic_debt",
+    "value": "债务"
+  },
+  {
+    "name": "topic_dhikr",
+    "value": "记念真主"
+  },
+  {
+    "name": "topic_divorce",
+    "value": "离婚"
+  },
+  {
+    "name": "topic_dreams",
+    "value": "梦"
+  },
+  {
+    "name": "topic_drinks",
+    "value": "饮品"
+  },
+  {
+    "name": "topic_dua",
+    "value": "祈祷"
+  },
+  {
+    "name": "topic_eclipse_prayer",
+    "value": "日月食拜"
+  },
+  {
+    "name": "topic_eid",
+    "value": "节日"
+  },
+  {
+    "name": "topic_endowment",
+    "value": "瓦克夫"
+  },
+  {
+    "name": "topic_ethics",
+    "value": "伦理"
+  },
+  {
+    "name": "topic_etiquette",
+    "value": "礼仪"
+  },
+  {
+    "name": "topic_evil_eye",
+    "value": "邪眼"
+  },
+  {
+    "name": "topic_family_law",
+    "value": "家庭法"
+  },
+  {
+    "name": "topic_fasting",
+    "value": "斋戒"
+  },
+  {
+    "name": "topic_father",
+    "value": "父亲"
+  },
+  {
+    "name": "topic_fay",
+    "value": "法伊"
+  },
+  {
+    "name": "topic_finance",
+    "value": "财务"
+  },
+  {
+    "name": "topic_fiqh",
+    "value": "教法"
+  },
+  {
+    "name": "topic_fitan",
+    "value": "纷争"
+  },
+  {
+    "name": "topic_forgiveness",
+    "value": "宽恕"
+  },
+  {
+    "name": "topic_gift_giving",
+    "value": "赠礼"
+  },
+  {
+    "name": "topic_governance",
+    "value": "治理"
+  },
+  {
+    "name": "topic_gratitude",
+    "value": "感恩"
+  },
+  {
+    "name": "topic_hadith_qudsi",
+    "value": "神圣圣训"
+  },
+  {
+    "name": "topic_hajj",
+    "value": "朝觐"
+  },
+  {
+    "name": "topic_halal_food",
+    "value": "清真食品"
+  },
+  {
+    "name": "topic_health",
+    "value": "健康"
+  },
+  {
+    "name": "topic_honesty",
+    "value": "诚实"
+  },
+  {
+    "name": "topic_horses",
+    "value": "马"
+  },
+  {
+    "name": "topic_humility",
+    "value": "谦逊"
+  },
+  {
+    "name": "topic_hunting",
+    "value": "狩猎"
+  },
+  {
+    "name": "topic_hypocrites",
+    "value": "伪信者"
+  },
+  {
+    "name": "topic_ihsan",
+    "value": "至善"
+  },
+  {
+    "name": "topic_iman",
+    "value": "信仰"
+  },
+  {
+    "name": "topic_inheritance",
+    "value": "继承"
+  },
+  {
+    "name": "topic_istiadhah",
+    "value": "求护佑"
+  },
+  {
+    "name": "topic_istighfar",
+    "value": "求饶"
+  },
+  {
+    "name": "topic_istisqa",
+    "value": "求雨"
+  },
+  {
+    "name": "topic_itikaf",
+    "value": "坐静"
+  },
+  {
+    "name": "topic_jahannam",
+    "value": "火狱"
+  },
+  {
+    "name": "topic_jamaah",
+    "value": "集体"
+  },
+  {
+    "name": "topic_jannah",
+    "value": "天堂"
+  },
+  {
+    "name": "topic_jihad",
+    "value": "吉哈德"
+  },
+  {
+    "name": "topic_jizyah",
+    "value": "吉兹亚"
+  },
+  {
+    "name": "topic_jumuah",
+    "value": "主麻"
+  },
+  {
+    "name": "topic_justice",
+    "value": "公正"
+  },
+  {
+    "name": "topic_kaffarah",
+    "value": "罚赎"
+  },
+  {
+    "name": "topic_khumus",
+    "value": "五分之一"
+  },
+  {
+    "name": "topic_khushu",
+    "value": "恭顺"
+  },
+  {
+    "name": "topic_kindness",
+    "value": "仁慈"
+  },
+  {
+    "name": "topic_knowledge",
+    "value": "知识"
+  },
+  {
+    "name": "topic_learning",
+    "value": "学习"
+  },
+  {
+    "name": "topic_li_an",
+    "value": "利安"
+  },
+  {
+    "name": "topic_literature",
+    "value": "文学"
+  },
+  {
+    "name": "topic_lost_property",
+    "value": "失物"
+  },
+  {
+    "name": "topic_malahim",
+    "value": "大灾难"
+  },
+  {
+    "name": "topic_marriage",
+    "value": "婚姻"
+  },
+  {
+    "name": "topic_medicine",
+    "value": "医学"
+  },
+  {
+    "name": "topic_memorization",
+    "value": "背诵"
+  },
+  {
+    "name": "topic_mercy",
+    "value": "怜悯"
+  },
+  {
+    "name": "topic_modesty",
+    "value": "谦逊"
+  },
+  {
+    "name": "topic_mosque",
+    "value": "清真寺"
+  },
+  {
+    "name": "topic_mother",
+    "value": "母亲"
+  },
+  {
+    "name": "topic_oaths_vows",
+    "value": "誓言与许愿"
+  },
+  {
+    "name": "topic_omens",
+    "value": "凶兆"
+  },
+  {
+    "name": "topic_parables",
+    "value": "比喻"
+  },
+  {
+    "name": "topic_parents",
+    "value": "父母"
+  },
+  {
+    "name": "topic_patience",
+    "value": "忍耐"
+  },
+  {
+    "name": "topic_permission",
+    "value": "许可"
+  },
+  {
+    "name": "topic_property_law",
+    "value": "财产法"
+  },
+  {
+    "name": "topic_prophets",
+    "value": "先知"
+  },
+  {
+    "name": "topic_protection",
+    "value": "保护"
+  },
+  {
+    "name": "topic_purification",
+    "value": "净化"
+  },
+  {
+    "name": "topic_qadr",
+    "value": "前定"
+  },
+  {
+    "name": "topic_qiblah",
+    "value": "朝向"
+  },
+  {
+    "name": "topic_quran",
+    "value": "古兰经"
+  },
+  {
+    "name": "topic_qurbani",
+    "value": "献牲"
+  },
+  {
+    "name": "topic_ramadan",
+    "value": "斋月"
+  },
+  {
+    "name": "topic_recitation",
+    "value": "诵读"
+  },
+  {
+    "name": "topic_reconciliation",
+    "value": "和解"
+  },
+  {
+    "name": "topic_reflection",
+    "value": "反思"
+  },
+  {
+    "name": "topic_relatives",
+    "value": "亲戚"
+  },
+  {
+    "name": "topic_revelation",
+    "value": "启示"
+  },
+  {
+    "name": "topic_rings",
+    "value": "戒指"
+  },
+  {
+    "name": "topic_sadaqah",
+    "value": "施舍"
+  },
+  {
+    "name": "topic_salah",
+    "value": "礼拜"
+  },
+  {
+    "name": "topic_scholarship",
+    "value": "学术"
+  },
+  {
+    "name": "topic_seerah",
+    "value": "先知传记"
+  },
+  {
+    "name": "topic_sickness",
+    "value": "疾病"
+  },
+  {
+    "name": "topic_sincerity",
+    "value": "真诚"
+  },
+  {
+    "name": "topic_social_justice",
+    "value": "社会公正"
+  },
+  {
+    "name": "topic_speech_etiquette",
+    "value": "言语礼仪"
+  },
+  {
+    "name": "topic_sports",
+    "value": "体育"
+  },
+  {
+    "name": "topic_spouse",
+    "value": "配偶"
+  },
+  {
+    "name": "topic_sunnah",
+    "value": "圣行"
+  },
+  {
+    "name": "topic_tafsir",
+    "value": "经注"
+  },
+  {
+    "name": "topic_tahajjud",
+    "value": "夜间拜"
+  },
+  {
+    "name": "topic_tawbah",
+    "value": "忏悔"
+  },
+  {
+    "name": "topic_tawhid",
+    "value": "认主独一"
+  },
+  {
+    "name": "topic_teaching",
+    "value": "教学"
+  },
+  {
+    "name": "topic_trade",
+    "value": "贸易"
+  },
+  {
+    "name": "topic_travel",
+    "value": "旅行"
+  },
+  {
+    "name": "topic_trustworthiness",
+    "value": "守信"
+  },
+  {
+    "name": "topic_umrah",
+    "value": "副朝"
+  },
+  {
+    "name": "topic_virtues",
+    "value": "美德"
+  },
+  {
+    "name": "topic_voluntary_fasting",
+    "value": "自愿斋戒"
+  },
+  {
+    "name": "topic_vows_curses",
+    "value": "誓言与诅咒"
+  },
+  {
+    "name": "topic_war_booty",
+    "value": "战利品"
+  },
+  {
+    "name": "topic_water",
+    "value": "水"
+  },
+  {
+    "name": "topic_wills",
+    "value": "遗嘱"
+  },
+  {
+    "name": "topic_witr",
+    "value": "奇数拜"
+  },
+  {
+    "name": "topic_women",
+    "value": "妇女"
+  },
+  {
+    "name": "topic_wudu",
+    "value": "小净"
+  },
+  {
+    "name": "topic_zakat",
+    "value": "天课"
+  },
+  {
+    "name": "topic_zuhd",
+    "value": "淡泊"
+  },
+  {
+    "name": "context_after_asr",
+    "value": "晡礼后"
+  },
+  {
+    "name": "context_after_fajr",
+    "value": "晨礼后"
+  },
+  {
+    "name": "context_after_maghrib",
+    "value": "昏礼后"
+  },
+  {
+    "name": "context_afternoon",
+    "value": "下午"
+  },
+  {
+    "name": "context_anger",
+    "value": "愤怒"
+  },
+  {
+    "name": "context_anxiety",
+    "value": "焦虑"
+  },
+  {
+    "name": "context_aqiqah",
+    "value": "阿基卡"
+  },
+  {
+    "name": "context_ashura",
+    "value": "阿舒拉"
+  },
+  {
+    "name": "context_before_fajr",
+    "value": "晨礼前"
+  },
+  {
+    "name": "context_before_salah",
+    "value": "礼拜前"
+  },
+  {
+    "name": "context_before_sleep",
+    "value": "睡前"
+  },
+  {
+    "name": "context_burnout",
+    "value": "倦怠"
+  },
+  {
+    "name": "context_business_decision",
+    "value": "商业决策"
+  },
+  {
+    "name": "context_business_launch",
+    "value": "创业启动"
+  },
+  {
+    "name": "context_career_growth",
+    "value": "职业成长"
+  },
+  {
+    "name": "context_character_building",
+    "value": "品格培养"
+  },
+  {
+    "name": "context_charity",
+    "value": "施舍"
+  },
+  {
+    "name": "context_children",
+    "value": "儿童"
+  },
+  {
+    "name": "context_community_service",
+    "value": "社区服务"
+  },
+  {
+    "name": "context_commuting",
+    "value": "通勤"
+  },
+  {
+    "name": "context_contentment",
+    "value": "知足"
+  },
+  {
+    "name": "context_daily_life",
+    "value": "日常生活"
+  },
+  {
+    "name": "context_daily_prayer",
+    "value": "日常礼拜"
+  },
+  {
+    "name": "context_day_of_arafah",
+    "value": "阿拉法特日"
+  },
+  {
+    "name": "context_death_in_family",
+    "value": "家人去世"
+  },
+  {
+    "name": "context_dhikr",
+    "value": "记念真主"
+  },
+  {
+    "name": "context_dhul_hijjah",
+    "value": "朝觐月"
+  },
+  {
+    "name": "context_dressing",
+    "value": "穿着"
+  },
+  {
+    "name": "context_dua",
+    "value": "祈祷"
+  },
+  {
+    "name": "context_eating",
+    "value": "饮食"
+  },
+  {
+    "name": "context_eid_al_adha",
+    "value": "宰牲节"
+  },
+  {
+    "name": "context_eid_al_fitr",
+    "value": "开斋节"
+  },
+  {
+    "name": "context_end_times",
+    "value": "末世"
+  },
+  {
+    "name": "context_engagement",
+    "value": "订婚"
+  },
+  {
+    "name": "context_entering_home",
+    "value": "进家"
+  },
+  {
+    "name": "context_entering_mosque",
+    "value": "进清真寺"
+  },
+  {
+    "name": "context_envy",
+    "value": "嫉妒"
+  },
+  {
+    "name": "context_exam",
+    "value": "考试"
+  },
+  {
+    "name": "context_extended_family",
+    "value": "大家庭"
+  },
+  {
+    "name": "context_family_conflict",
+    "value": "家庭冲突"
+  },
+  {
+    "name": "context_family_time",
+    "value": "家庭时光"
+  },
+  {
+    "name": "context_father",
+    "value": "父亲"
+  },
+  {
+    "name": "context_fear",
+    "value": "恐惧"
+  },
+  {
+    "name": "context_financial_decisions",
+    "value": "财务决策"
+  },
+  {
+    "name": "context_financial_stress",
+    "value": "财务压力"
+  },
+  {
+    "name": "context_first_10_days_dhul_hijjah",
+    "value": "朝觐月前十日"
+  },
+  {
+    "name": "context_first_ashra",
+    "value": "第一个十天"
+  },
+  {
+    "name": "context_forgiveness",
+    "value": "宽恕"
+  },
+  {
+    "name": "context_friday",
+    "value": "星期五"
+  },
+  {
+    "name": "context_funeral",
+    "value": "葬礼"
+  },
+  {
+    "name": "context_governance",
+    "value": "治理"
+  },
+  {
+    "name": "context_graduation",
+    "value": "毕业"
+  },
+  {
+    "name": "context_grandparents",
+    "value": "祖父母"
+  },
+  {
+    "name": "context_gratitude",
+    "value": "感恩"
+  },
+  {
+    "name": "context_grief",
+    "value": "悲痛"
+  },
+  {
+    "name": "context_hajj",
+    "value": "朝觐"
+  },
+  {
+    "name": "context_happiness",
+    "value": "幸福"
+  },
+  {
+    "name": "context_hope",
+    "value": "希望"
+  },
+  {
+    "name": "context_hospital_visit",
+    "value": "探病"
+  },
+  {
+    "name": "context_illness",
+    "value": "疾病"
+  },
+  {
+    "name": "context_islamic_law",
+    "value": "伊斯兰法"
+  },
+  {
+    "name": "context_isra_miraj",
+    "value": "夜行与登霄"
+  },
+  {
+    "name": "context_itikaf",
+    "value": "坐静"
+  },
+  {
+    "name": "context_jamaah",
+    "value": "集体"
+  },
+  {
+    "name": "context_jealousy",
+    "value": "嫉妒"
+  },
+  {
+    "name": "context_job_interview",
+    "value": "求职面试"
+  },
+  {
+    "name": "context_job_loss",
+    "value": "失业"
+  },
+  {
+    "name": "context_justice",
+    "value": "公正"
+  },
+  {
+    "name": "context_last_ten_nights",
+    "value": "后十夜"
+  },
+  {
+    "name": "context_laylat_al_qadr",
+    "value": "高贵之夜"
+  },
+  {
+    "name": "context_leadership",
+    "value": "领导"
+  },
+  {
+    "name": "context_learning",
+    "value": "学习"
+  },
+  {
+    "name": "context_leaving_home",
+    "value": "离家"
+  },
+  {
+    "name": "context_leaving_mosque",
+    "value": "离开清真寺"
+  },
+  {
+    "name": "context_loneliness",
+    "value": "孤独"
+  },
+  {
+    "name": "context_marketplace",
+    "value": "市场"
+  },
+  {
+    "name": "context_marriage",
+    "value": "婚姻"
+  },
+  {
+    "name": "context_morning",
+    "value": "早晨"
+  },
+  {
+    "name": "context_mother",
+    "value": "母亲"
+  },
+  {
+    "name": "context_muharram",
+    "value": "穆哈兰姆月"
+  },
+  {
+    "name": "context_new_baby",
+    "value": "新生儿"
+  },
+  {
+    "name": "context_new_job",
+    "value": "新工作"
+  },
+  {
+    "name": "context_new_marriage",
+    "value": "新婚"
+  },
+  {
+    "name": "context_night_21",
+    "value": "第21夜"
+  },
+  {
+    "name": "context_night_23",
+    "value": "第23夜"
+  },
+  {
+    "name": "context_night_25",
+    "value": "第25夜"
+  },
+  {
+    "name": "context_night_27",
+    "value": "第27夜"
+  },
+  {
+    "name": "context_night_29",
+    "value": "第29夜"
+  },
+  {
+    "name": "context_nikah",
+    "value": "尼卡哈"
+  },
+  {
+    "name": "context_parenting",
+    "value": "育儿"
+  },
+  {
+    "name": "context_parents",
+    "value": "父母"
+  },
+  {
+    "name": "context_patience",
+    "value": "忍耐"
+  },
+  {
+    "name": "context_pledges",
+    "value": "承诺"
+  },
+  {
+    "name": "context_prayer",
+    "value": "礼拜"
+  },
+  {
+    "name": "context_pregnancy",
+    "value": "怀孕"
+  },
+  {
+    "name": "context_promotion",
+    "value": "升职"
+  },
+  {
+    "name": "context_quran",
+    "value": "古兰经"
+  },
+  {
+    "name": "context_rabi_al_awwal",
+    "value": "赖比尔·敖外鲁月"
+  },
+  {
+    "name": "context_raising_children",
+    "value": "抚养子女"
+  },
+  {
+    "name": "context_rajab",
+    "value": "赖哲卜月"
+  },
+  {
+    "name": "context_ramadan",
+    "value": "斋月"
+  },
+  {
+    "name": "context_relationships",
+    "value": "人际关系"
+  },
+  {
+    "name": "context_repentance",
+    "value": "忏悔"
+  },
+  {
+    "name": "context_retirement",
+    "value": "退休"
+  },
+  {
+    "name": "context_return_home",
+    "value": "回家"
+  },
+  {
+    "name": "context_sadness",
+    "value": "悲伤"
+  },
+  {
+    "name": "context_salary_day",
+    "value": "发薪日"
+  },
+  {
+    "name": "context_second_ashra",
+    "value": "第二个十天"
+  },
+  {
+    "name": "context_seeking_knowledge",
+    "value": "求知"
+  },
+  {
+    "name": "context_self_improvement",
+    "value": "自我提升"
+  },
+  {
+    "name": "context_shaban",
+    "value": "舍尔邦月"
+  },
+  {
+    "name": "context_siblings",
+    "value": "兄弟姐妹"
+  },
+  {
+    "name": "context_sincerity",
+    "value": "真诚"
+  },
+  {
+    "name": "context_social_etiquette",
+    "value": "社交礼仪"
+  },
+  {
+    "name": "context_social_interactions",
+    "value": "社交互动"
+  },
+  {
+    "name": "context_spiritual_growth",
+    "value": "精神成长"
+  },
+  {
+    "name": "context_spouse",
+    "value": "配偶"
+  },
+  {
+    "name": "context_stress",
+    "value": "压力"
+  },
+  {
+    "name": "context_student",
+    "value": "学生"
+  },
+  {
+    "name": "context_study",
+    "value": "学习"
+  },
+  {
+    "name": "context_tahajjud",
+    "value": "夜间拜"
+  },
+  {
+    "name": "context_taqwa",
+    "value": "敬畏"
+  },
+  {
+    "name": "context_taraweeh",
+    "value": "间歇拜"
+  },
+  {
+    "name": "context_tashreeq_days",
+    "value": "泰什里格日"
+  },
+  {
+    "name": "context_tawbah",
+    "value": "忏悔"
+  },
+  {
+    "name": "context_teaching",
+    "value": "教学"
+  },
+  {
+    "name": "context_third_ashra",
+    "value": "第三个十天"
+  },
+  {
+    "name": "context_times_of_trials",
+    "value": "考验时期"
+  },
+  {
+    "name": "context_travel",
+    "value": "旅行"
+  },
+  {
+    "name": "context_trust_in_allah",
+    "value": "信赖真主"
+  },
+  {
+    "name": "context_umrah",
+    "value": "副朝"
+  },
+  {
+    "name": "context_wake_up",
+    "value": "醒来"
+  },
+  {
+    "name": "context_witr",
+    "value": "奇数拜"
+  },
+  {
+    "name": "context_work",
+    "value": "工作"
+  },
+  {
+    "name": "category_daily",
+    "value": "日常"
+  },
+  {
+    "name": "category_distress",
+    "value": "困境"
+  },
+  {
+    "name": "category_faith",
+    "value": "信仰"
+  },
+  {
+    "name": "category_family",
+    "value": "家庭"
+  },
+  {
+    "name": "category_fasting",
+    "value": "斋戒"
+  },
+  {
+    "name": "category_forgiveness",
+    "value": "宽恕"
+  },
+  {
+    "name": "category_funeral",
+    "value": "葬礼"
+  },
+  {
+    "name": "category_general",
+    "value": "通用"
+  },
+  {
+    "name": "category_gratitude",
+    "value": "感恩"
+  },
+  {
+    "name": "category_guidance",
+    "value": "引导"
+  },
+  {
+    "name": "category_healing",
+    "value": "痊愈"
+  },
+  {
+    "name": "category_hereafter",
+    "value": "后世"
+  },
+  {
+    "name": "category_knowledge",
+    "value": "知识"
+  },
+  {
+    "name": "category_mercy",
+    "value": "慈悯"
+  },
+  {
+    "name": "category_morning_evening",
+    "value": "晨昏"
+  },
+  {
+    "name": "category_need",
+    "value": "需求"
+  },
+  {
+    "name": "category_prayer",
+    "value": "礼拜"
+  },
+  {
+    "name": "category_protection",
+    "value": "保护"
+  },
+  {
+    "name": "category_provision",
+    "value": "给养"
+  },
+  {
+    "name": "category_purification",
+    "value": "净化"
+  },
+  {
+    "name": "category_reflection",
+    "value": "反思"
+  },
+  {
+    "name": "category_reliance",
+    "value": "托靠"
+  },
+  {
+    "name": "category_repentance",
+    "value": "忏悔"
+  },
+  {
+    "name": "category_steadfastness",
+    "value": "坚定"
+  },
+  {
+    "name": "category_travel",
+    "value": "旅行"
+  },
+  {
+    "name": "category_weather",
+    "value": "天气"
+  },
+  {
+    "name": "category_worship",
+    "value": "功修"
+  }
+]

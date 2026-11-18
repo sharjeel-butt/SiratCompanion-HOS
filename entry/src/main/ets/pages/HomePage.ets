@@ -22,6 +22,7 @@ import {
   STORAGE_KEY_CALC_SETTINGS_VERSION,
   STORAGE_KEY_CUSTOM_EVENTS_VERSION,
   STORAGE_KEY_DISMISSED_PRAYERS,
+  STORAGE_KEY_DUA_TRANSLATION_LANG,
   STORAGE_KEY_EVENT_SETTINGS_VERSION,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_CALENDAR_VERSION,
@@ -127,6 +128,7 @@ export interface PrayerGroupData {
 
 @Component
 export struct HomePage {
+  @StorageLink(STORAGE_KEY_DUA_TRANSLATION_LANG) @Watch('onLanguageChanged') duaTransLang: string = 'default';
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
@@ -182,8 +184,8 @@ export struct HomePage {
   ramadanStateVersion: number = 0;
   @StorageLink(STORAGE_KEY_TAB_REFRESH_TICK)
   @Watch('onTabRefreshed')
+
   tabRefreshTick: number = 0;
-  private minuteTimerId: number = -1;
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State currentLocation: string = 'Loading...';
   @State isLoadingLocation: boolean = true;
@@ -221,6 +223,7 @@ export struct HomePage {
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
   @State asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
   @State calcSource: CalculationSource = CalculationSource.LOCAL;
+  private minuteTimerId: number = -1;
   @State private recommendedRecitations: RecitationTask[] = [];
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
   @State private todayFastingStatus: FastingStatus = FastingStatus.UNMARKED;
@@ -325,21 +328,6 @@ export struct HomePage {
     }
   }
 
-  private startLocationUpdateTimer(): void {
-    if (this.locationUpdateTimerId !== -1) {
-      return;
-    }
-
-    // Check every 30 minutes (30 * 60 * 1000)
-    this.locationUpdateTimerId = setInterval(() => {
-      // Only auto-update if the user is using GPS mode (not Manual)
-      if (this.locationMode === LocationMode.GPS) {
-        AppLogger.info('HomePage', 'Auto-refreshing location via 30-min timer...');
-        this.refreshLocationSilently();
-      }
-    }, 15 * 60 * 1000);
-  }
-
   async onPageShow(): Promise<void> {
     this.isFriday = new Date().getDay() === 5;
     this.currentLanguage = this.appLanguage;
@@ -353,52 +341,6 @@ export struct HomePage {
 
   onPageHide(): void {
     this.stopCountdownTimer();
-  }
-
-  private startMinuteTimer(): void {
-    if (this.minuteTimerId !== -1) {
-      return;
-    }
-    // Seed the rollover tracker with the current day.
-    this.lastKnownDayKey = PrayerManager.getDateKey();
-
-    this.minuteTimerId = setInterval(() => {
-      // Midnight rollover: refresh the data that gates Eid card,
-      // Ramadan card, upcoming-event countdown, and custom-event
-      // list. Without this, a user who leaves Home open from Shawwal
-      // 3 into Shawwal 4 keeps seeing the Eid card for an extra day,
-      // and the Qada banner stays suppressed incorrectly.
-      const currentDayKey = PrayerManager.getDateKey();
-      if (currentDayKey !== this.lastKnownDayKey) {
-        this.lastKnownDayKey = currentDayKey;
-        this.refreshHijriDate();
-        this.refreshRamadan(); // refreshes both ramadanInfo and eidInfo
-        this.upcomingEvents = DateHelper.getUpcomingImportantDates(
-          this.hijriOffset, SettingsHelper.getEventPerspective()
-        );
-        this.reloadCustomEvents();
-        this.refreshNext3Days();
-      }
-
-      this.refreshHeader();
-      this.checkPendingPrayers();
-      if (this.ramadanInfo && this.ramadanInfo.isRamadanNow) {
-        this.refreshFastingWindow();
-      }
-    }, 60000);
-  }
-
-  private stopMinuteTimer(): void {
-    if (this.minuteTimerId !== -1) {
-      clearInterval(this.minuteTimerId);
-      this.minuteTimerId = -1;
-    }
-  }
-
-  private onTabRefreshed(): void {
-    // Refresh the header and check if a new prayer time has passed
-    this.refreshHeader();
-    this.checkPendingPrayers();
   }
 
   build() {
@@ -615,7 +557,7 @@ export struct HomePage {
                     .fontSize(11).fontColor(this.colors.accentGold)
 
                   if (task.authenticity) {
-                    Text(task.authenticity.toUpperCase())
+                    Text(this.getAuthenticityLabel(task.authenticity))
                       .fontSize(9)
                       .fontColor(this.colors.textOnAccent)
                       .backgroundColor(this.colors.statusExpress)
@@ -3128,6 +3070,116 @@ export struct HomePage {
     }
   }
 
+  @Builder
+  MosqueFinderAnchorCard() {
+    Row() {
+      Column() {
+        Image($r('app.media.ic_nav_mosque')) // Use existing mosque icon
+          .width(24).height(24)
+          .fillColor(this.colors.accentGold)
+      }
+      .width(44)
+      .height(44)
+      .borderRadius(12)
+      .backgroundColor(this.colors.tintSoft)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(HorizontalAlign.Center)
+      .flexShrink(0)
+
+      Column() {
+        Text(this.tr('mosque_finder_title'))
+          .fontSize(16).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+        Text(this.tr('mosque_finder_desc'))
+          .fontSize(11)
+          .fontColor(this.colors.textMuted)
+          .margin({ top: 4 })
+          .maxLines(2)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1).padding({ left: 12, right: 12 })
+
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
+        .flexShrink(0)
+    }
+    .width('100%')
+    .padding(16)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(Theme.radiusLarge)
+    .border({ width: 1, color: this.colors.borderSoft })
+    .margin({ bottom: 14 })
+    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+    .onClick(() => {
+      NavHelper.prepareForward();
+      router.pushUrl({ url: 'pages/MosqueFinderPage' })
+        .catch((e: Error) => console.error(JSON.stringify(e)));
+    })
+  }
+
+  private startLocationUpdateTimer(): void {
+    if (this.locationUpdateTimerId !== -1) {
+      return;
+    }
+
+    // Check every 30 minutes (30 * 60 * 1000)
+    this.locationUpdateTimerId = setInterval(() => {
+      // Only auto-update if the user is using GPS mode (not Manual)
+      if (this.locationMode === LocationMode.GPS) {
+        AppLogger.info('HomePage', 'Auto-refreshing location via 30-min timer...');
+        this.refreshLocationSilently();
+      }
+    }, 15 * 60 * 1000);
+  }
+
+  private startMinuteTimer(): void {
+    if (this.minuteTimerId !== -1) {
+      return;
+    }
+    // Seed the rollover tracker with the current day.
+    this.lastKnownDayKey = PrayerManager.getDateKey();
+
+    this.minuteTimerId = setInterval(() => {
+      // Midnight rollover: refresh the data that gates Eid card,
+      // Ramadan card, upcoming-event countdown, and custom-event
+      // list. Without this, a user who leaves Home open from Shawwal
+      // 3 into Shawwal 4 keeps seeing the Eid card for an extra day,
+      // and the Qada banner stays suppressed incorrectly.
+      const currentDayKey = PrayerManager.getDateKey();
+      if (currentDayKey !== this.lastKnownDayKey) {
+        this.lastKnownDayKey = currentDayKey;
+        this.refreshHijriDate();
+        this.refreshRamadan(); // refreshes both ramadanInfo and eidInfo
+        this.upcomingEvents = DateHelper.getUpcomingImportantDates(
+          this.hijriOffset, SettingsHelper.getEventPerspective()
+        );
+        this.reloadCustomEvents();
+        this.refreshNext3Days();
+      }
+
+      this.refreshHeader();
+      this.checkPendingPrayers();
+      if (this.ramadanInfo && this.ramadanInfo.isRamadanNow) {
+        this.refreshFastingWindow();
+      }
+    }, 60000);
+  }
+
+  private stopMinuteTimer(): void {
+    if (this.minuteTimerId !== -1) {
+      clearInterval(this.minuteTimerId);
+      this.minuteTimerId = -1;
+    }
+  }
+
+  private onTabRefreshed(): void {
+    // Refresh the header and check if a new prayer time has passed
+    this.refreshHeader();
+    this.checkPendingPrayers();
+  }
+
   private async checkPendingPrayers(): Promise<void> {
     if (this.calcSource !== CalculationSource.LOCAL) {
       this.pendingPrayerPrompts = [];
@@ -3560,7 +3612,7 @@ export struct HomePage {
 
     try {
       const ctx = getContext(this) as common.UIAbilityContext;
-      const allDuas = await DuaService.loadDuas(ctx, this.currentLanguage);
+      const allDuas = await DuaService.loadDuas(ctx, this.getDuaTranslationLang(), this.currentLanguage);
 
       const activeEvent = this.upcomingEvents.length > 0 ? this.upcomingEvents[0] : null;
 
@@ -3844,55 +3896,6 @@ export struct HomePage {
         this.loadSettingsAndLocation();
       }
     }
-  }
-
-  @Builder
-  MosqueFinderAnchorCard() {
-    Row() {
-      Column() {
-        Image($r('app.media.ic_nav_mosque')) // Use existing mosque icon
-          .width(24).height(24)
-          .fillColor(this.colors.accentGold)
-      }
-      .width(44)
-      .height(44)
-      .borderRadius(12)
-      .backgroundColor(this.colors.tintSoft)
-      .justifyContent(FlexAlign.Center)
-      .alignItems(HorizontalAlign.Center)
-      .flexShrink(0)
-
-      Column() {
-        Text(this.tr('mosque_finder_title'))
-          .fontSize(16).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
-        Text(this.tr('mosque_finder_desc'))
-          .fontSize(11)
-          .fontColor(this.colors.textMuted)
-          .margin({ top: 4 })
-          .maxLines(2)
-          .textOverflow({ overflow: TextOverflow.Ellipsis })
-      }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1).padding({ left: 12, right: 12 })
-
-      Image($r('app.media.ic_chevron_right'))
-        .width(16)
-        .height(16)
-        .fillColor(this.colors.accentGold)
-        .rotate({ angle: this.isRtl() ? 180 : 0 })
-        .flexShrink(0)
-    }
-    .width('100%')
-    .padding(16)
-    .backgroundColor(this.colors.cardDark)
-    .borderRadius(Theme.radiusLarge)
-    .border({ width: 1, color: this.colors.borderSoft })
-    .margin({ bottom: 14 })
-    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
-    .onClick(() => {
-      NavHelper.prepareForward();
-      router.pushUrl({ url: 'pages/MosqueFinderPage' })
-        .catch((e: Error) => console.error(JSON.stringify(e)));
-    })
   }
 
   private async refreshTasbihData(): Promise<void> {
@@ -4675,5 +4678,36 @@ export struct HomePage {
       return this.tr('home_days_dual');
     }
     return `${days} ${this.tr('home_days')}`;
+  }
+
+  /**
+   * Resolves the authenticity grade to a localized string.
+   * Falls back to the raw uppercase string if the key is missing
+   * (e.g., if a new grade is added by the pipeline before the app
+   * supports it).
+   */
+  private getAuthenticityLabel(auth: string): string {
+    if (!auth || auth.length === 0) {
+      return '';
+    }
+
+    // Standardize to lowercase to match our keys (grade_sahih, grade_hasan)
+    const key = 'grade_' + auth.toLowerCase();
+    const localized = L.get(key, this.appLanguage);
+
+    // L.get returns the key itself if not found
+    if (localized === key) {
+      // Fallback: uppercase the raw string (works for English, safe for others)
+      return auth.toUpperCase();
+    }
+
+    return localized;
+  }
+
+  private getDuaTranslationLang(): string {
+    if (this.duaTransLang === 'default' || this.duaTransLang === '') {
+      return this.appLanguage;
+    }
+    return this.duaTransLang;
   }
 }

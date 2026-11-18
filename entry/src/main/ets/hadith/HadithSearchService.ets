@@ -1,8 +1,15 @@
 import { common } from '@kit.AbilityKit';
 import { util } from '@kit.ArkTS';
-import { HadithRef, QueryRouter, Catalog, RouteResult, HadithMetadata } from './HadithModels';
+import { Catalog, HadithMetadata, HadithRef, QueryRouter, RouteResult } from './HadithModels';
 import { AppLogger } from '../core/AppLogger';
 import { HadithDbHelper } from './HadithDbHelper';
+import { RawPaths } from '../core/RawPaths';
+
+interface I18nEntry {
+  name: string;
+  value: string;
+}
+
 
 export class HadithSearchService {
   private static router: QueryRouter | null = null;
@@ -15,7 +22,7 @@ export class HadithSearchService {
   static async init(ctx: common.Context): Promise<void> {
     if (HadithSearchService.router === null) {
       try {
-        const data: Uint8Array = await ctx.resourceManager.getRawFileContent('hadith/routing/query_router.json');
+        const data: Uint8Array = await ctx.resourceManager.getRawFileContent(RawPaths.QUERY_ROUTER);
         const jsonStr: string = util.TextDecoder.create('utf-8').decodeToString(data);
         const parsed: Object = JSON.parse(jsonStr);
         HadithSearchService.router = parsed as QueryRouter;
@@ -32,14 +39,33 @@ export class HadithSearchService {
       return;
     }
     try {
-      const data: Uint8Array = await ctx.resourceManager.getRawFileContent(`hadith/i18n/${lang}.json`);
+      const data: Uint8Array = await ctx.resourceManager.getRawFileContent(RawPaths.i18n(lang));
       const jsonStr: string = util.TextDecoder.create('utf-8').decodeToString(data);
       const parsed: Object = JSON.parse(jsonStr);
-      HadithSearchService.i18nCache.set(lang, parsed as Record<string, string>);
-      AppLogger.info('SearchService', `i18n loaded for ${lang}`);
+      // v4.1.0 format: Array<{name, value}>. Convert to Record for
+      // existing lookups throughout the app.
+      const record: Record<string, string> = {};
+      if (Array.isArray(parsed)) {
+        for (const e of parsed as I18nEntry[]) {
+          if (typeof e.name === 'string' && typeof e.value === 'string') {
+            record[e.name] = e.value;
+          }
+        }
+      } else {
+        // Defensive: fall back to Record if bundle ships old format
+        const asRecord = parsed as Record<string, string>;
+        const keys = Object.keys(asRecord);
+        for (const k of keys) {
+          if (typeof asRecord[k] === 'string') {
+            record[k] = asRecord[k];
+          }
+        }
+      }
+      HadithSearchService.i18nCache.set(lang, record);
+      AppLogger.info('SearchService', `i18n loaded for ${lang} (${Object.keys(record).length} entries)`);
     } catch (e) {
       AppLogger.warn('SearchService', `Failed to load i18n for ${lang}`);
-      HadithSearchService.i18nCache.set(lang, {}); // Prevent repeated failed loads
+      HadithSearchService.i18nCache.set(lang, {});
     }
   }
 
@@ -70,10 +96,11 @@ export class HadithSearchService {
     return raw.replace(/\b\w/g, (c: string) => c.toUpperCase());
   }
 
-  static async setLanguage(ctx: common.Context, lang: string): Promise<boolean> {
-    const dbSuccess = await HadithDbHelper.openDatabase(ctx, lang);
+  static async setLanguage(ctx: common.Context, transLang: string, uiLang: string): Promise<boolean> {
+    const dbSuccess = await HadithDbHelper.openDatabase(ctx, transLang);
     if (dbSuccess) {
-      await HadithSearchService.loadI18n(ctx, lang);
+      // Load UI language dictionary, NOT the translation language
+      await HadithSearchService.loadI18n(ctx, uiLang);
     }
     return dbSuccess;
   }
@@ -85,7 +112,7 @@ export class HadithSearchService {
     await HadithSearchService.init(ctx);
 
     if (HadithSearchService.catalog === null) {
-      const data = await ctx.resourceManager.getRawFileContent('hadith/lookup/catalog.json');
+      const data = await ctx.resourceManager.getRawFileContent(RawPaths.CATALOG);
       HadithSearchService.catalog = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(data)) as Catalog;
     }
 
@@ -114,14 +141,14 @@ export class HadithSearchService {
     if (HadithSearchService.catalog && HadithSearchService.catalog.contexts) {
       for (const c of HadithSearchService.catalog.contexts) {
         // 👇 FIX: c is a string, not an object
-        await loadFile(`hadith/contexts/${c}.json`);
+        await loadFile(RawPaths.context(c));
       }
     }
     // Load all topics
     if (HadithSearchService.catalog && HadithSearchService.catalog.topics) {
       for (const t of HadithSearchService.catalog.topics) {
         // 👇 FIX: t is a string, not an object
-        await loadFile(`hadith/topics/${t}.json`);
+        await loadFile(RawPaths.topic(t));
       }
     }
 
@@ -192,7 +219,7 @@ export class HadithSearchService {
 
     for (const c of routes.contexts) {
       try {
-        const data: Uint8Array = await ctx.resourceManager.getRawFileContent(`hadith/contexts/${c}.json`);
+        const data: Uint8Array = await ctx.resourceManager.getRawFileContent(RawPaths.context(c));
         const jsonStr: string = util.TextDecoder.create('utf-8').decodeToString(data);
         const parsed = JSON.parse(jsonStr) as HadithRef[];
         for (let i: number = 0; i < parsed.length; i++) {
@@ -204,7 +231,7 @@ export class HadithSearchService {
 
     for (const t of routes.topics) {
       try {
-        const data: Uint8Array = await ctx.resourceManager.getRawFileContent(`hadith/topics/${t}.json`);
+        const data: Uint8Array = await ctx.resourceManager.getRawFileContent(RawPaths.topic(t));
         const jsonStr: string = util.TextDecoder.create('utf-8').decodeToString(data);
         const parsed = JSON.parse(jsonStr) as HadithRef[];
         for (let i: number = 0; i < parsed.length; i++) {
@@ -234,7 +261,7 @@ export class HadithSearchService {
 
   static async getFeatured(ctx: common.Context): Promise<HadithRef[]> {
     try {
-      const data: Uint8Array = await ctx.resourceManager.getRawFileContent('hadith/featured.json');
+      const data: Uint8Array = await ctx.resourceManager.getRawFileContent(RawPaths.FEATURED);
       const jsonStr: string = util.TextDecoder.create('utf-8').decodeToString(data);
       const parsed: Object = JSON.parse(jsonStr);
       return parsed as HadithRef[];

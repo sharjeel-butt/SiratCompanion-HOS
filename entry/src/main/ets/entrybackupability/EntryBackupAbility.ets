@@ -76,6 +76,9 @@ const SETTINGS_SPECS: PrefSpec[] = [
   { key: 'app_theme_preset', type: TYPE_STRING },
   { key: 'app_language', type: TYPE_STRING },
   { key: 'app_language_override', type: TYPE_STRING },
+  { key: 'quran_translation_lang', type: TYPE_STRING },
+  { key: 'hadith_translation_lang', type: TYPE_STRING },
+  { key: 'dua_translation_lang', type: TYPE_STRING },
   { key: 'time_format', type: TYPE_STRING },
   { key: 'wizard_completed', type: TYPE_BOOLEAN },
   { key: 'hijri_offset', type: TYPE_NUMBER },
@@ -134,6 +137,8 @@ const SETTINGS_SPECS: PrefSpec[] = [
 
   // ---- Custom Mosques Data ----
   { key: 'custom_mosques_data', type: TYPE_STRING }
+
+
 ];
 
 /**

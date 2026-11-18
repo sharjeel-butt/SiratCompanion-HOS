@@ -326,11 +326,13 @@ struct MainTabs {
             .fontColor(this.menuTextColor())
             .fontWeight(FontWeight.Medium)
             .maxLines(1)
-            .constraintSize({ minWidth: 90 }) // <-- Forces straight alignment
+            .layoutWeight(1) // Expands to fill available space
+            .textAlign(TextAlign.Start) // Aligns properly in RTL
         }
+        .constraintSize({ minWidth: 160 }) // 👈 Prevents the menu from shrinking too much
         .padding({
-          top: 10,
-          bottom: 10,
+          top: 12,
+          bottom: 12,
           left: 16,
           right: 16
         })
@@ -357,11 +359,13 @@ struct MainTabs {
             .fontColor(this.menuTextColor())
             .fontWeight(FontWeight.Medium)
             .maxLines(1)
-            .constraintSize({ minWidth: 90 }) // <-- Forces straight alignment
+            .layoutWeight(1)
+            .textAlign(TextAlign.Start)
         }
+        .constraintSize({ minWidth: 160 })
         .padding({
-          top: 10,
-          bottom: 10,
+          top: 12,
+          bottom: 12,
           left: 16,
           right: 16
         })
@@ -382,18 +386,20 @@ struct MainTabs {
             .fillColor(this.menuIconColor())
             .objectFit(ImageFit.Contain)
             .flexShrink(0)
-            .scale({ x: this.isRtl() ? -1 : 1 }) // <-- Flips the exit icon in RTL
+            .scale({ x: this.isRtl() ? -1 : 1 }) // Flips the exit icon for RTL
 
           Text(L.get('exit', this.currentLanguage))
             .fontSize(15)
             .fontColor(this.menuTextColor())
             .fontWeight(FontWeight.Medium)
             .maxLines(1)
-            .constraintSize({ minWidth: 90 }) // <-- Forces straight alignment
+            .layoutWeight(1)
+            .textAlign(TextAlign.Start)
         }
+        .constraintSize({ minWidth: 160 })
         .padding({
-          top: 10,
-          bottom: 10,
+          top: 12,
+          bottom: 12,
           left: 16,
           right: 16
         })

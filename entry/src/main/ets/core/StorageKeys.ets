@@ -216,3 +216,15 @@ export const STORAGE_KEY_NAV_TARGET_TAB = 'nav_target_tab';
 export const STORAGE_KEY_DISMISSED_PRAYERS = 'dismissed_prayers';
 
 export const STORAGE_KEY_TAB_REFRESH_TICK = 'tab_refresh_tick';
+
+/** Epoch-ms of last successful core.db extraction. Device-local, not backed up. */
+export const STORAGE_KEY_CORE_DB_VERSION = 'core_db_version';
+
+/** Epoch-ms of last successful quran.db extraction. Device-local, not backed up. */
+export const STORAGE_KEY_QURAN_DB_VERSION = 'quran_db_version';
+
+export const STORAGE_KEY_QURAN_TRANSLATION_LANG = 'quran_translation_lang';
+
+export const STORAGE_KEY_HADITH_TRANSLATION_LANG = 'hadith_translation_lang';
+
+export const STORAGE_KEY_DUA_TRANSLATION_LANG = 'dua_translation_lang';

@@ -680,6 +680,32 @@ export class PrayerManager {
   // ============================================================
 
   /**
+   * Return the epoch-ms timestamp at which a specific prayer was marked
+   * checked for a given date. Returns undefined when the prayer is not
+   * marked, or when the record predates v4.0.7 (no *At fields yet).
+   *
+   * Synchronous. Reads through getCheckState() so the caller never has
+   * to know about the stateMap layout.
+   */
+  static getMarkedAt(dateKey: string, prayerId: string): number | undefined {
+    const state = PrayerManager.getCheckState(dateKey);
+    switch (prayerId) {
+      case 'fajr':
+        return state.fajrAt;
+      case 'dhuhr':
+        return state.dhuhrAt;
+      case 'asr':
+        return state.asrAt;
+      case 'maghrib':
+        return state.maghribAt;
+      case 'isha':
+        return state.ishaAt;
+      default:
+        return undefined;
+    }
+  }
+
+  /**
    * Reconstruct a local-midnight Date from a 'YYYY-MM-DD' key.
    * Used to derive the day-of-week for Jummah naming when a
    * caller passes a key without a matching Date.
@@ -709,31 +735,5 @@ export class PrayerManager {
     const deltaMinutes = Math.round((locationOffsetHours - deviceOffset) * 60);
     const deviceMinutes = now.getHours() * 60 + now.getMinutes();
     return (((deviceMinutes + deltaMinutes) % 1440) + 1440) % 1440;
-  }
-
-  /**
-   * Return the epoch-ms timestamp at which a specific prayer was marked
-   * checked for a given date. Returns undefined when the prayer is not
-   * marked, or when the record predates v4.0.7 (no *At fields yet).
-   *
-   * Synchronous. Reads through getCheckState() so the caller never has
-   * to know about the stateMap layout.
-   */
-  static getMarkedAt(dateKey: string, prayerId: string): number | undefined {
-    const state = PrayerManager.getCheckState(dateKey);
-    switch (prayerId) {
-      case 'fajr':
-        return state.fajrAt;
-      case 'dhuhr':
-        return state.dhuhrAt;
-      case 'asr':
-        return state.asrAt;
-      case 'maghrib':
-        return state.maghribAt;
-      case 'isha':
-        return state.ishaAt;
-      default:
-        return undefined;
-    }
   }
 }

@@ -8,13 +8,14 @@ import { L } from '../i18n/LocalizationHelper';
 import { QuranService } from '../quran/QuranService';
 import { CompleteSurah } from '../quran/QuranSurahModels';
 import { TypographyHelper } from '../core/TypographyHelper';
-import { STORAGE_KEY_LANGUAGE } from '../core/StorageKeys';
+import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_QURAN_TRANSLATION_LANG } from '../core/StorageKeys';
 import { NavHelper } from '../core/NavHelper';
 
 @Entry
 @Component
 struct QuranPage {
   @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLangChanged') appLanguage: string = 'en';
+  @StorageLink(STORAGE_KEY_QURAN_TRANSLATION_LANG) @Watch('onLangChanged') quranTransLang: string = 'default';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.SYSTEM);
 
   @State allSurahs: CompleteSurah[] = [];
@@ -35,7 +36,7 @@ struct QuranPage {
   async loadData() {
     this.isLoading = true;
     const ctx = getContext(this) as common.UIAbilityContext;
-    this.allSurahs = await QuranService.loadSurahs(ctx, this.appLanguage);
+    this.allSurahs = await QuranService.loadSurahs(ctx, this.getQuranTranslationLang());
     this.applyFilter();
     this.isLoading = false;
   }
@@ -62,13 +63,19 @@ struct QuranPage {
             .fillColor(this.colors.textWhite)
             .rotate({ angle: L.isRtlLang(this.appLanguage) ? 0 : 180 })
         }
-        .width(40).height(40).justifyContent(FlexAlign.Center)
-        .borderRadius(20).backgroundColor(this.colors.tintSoft)
+        .width(40)
+        .height(40)
+        .justifyContent(FlexAlign.Center)
+        .borderRadius(20)
+        .backgroundColor(this.colors.tintSoft)
         .onClick(() => router.back())
 
         Text(L.get('quran_full_title', this.appLanguage))
-          .fontSize(22).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
-          .layoutWeight(1).textAlign(TextAlign.Start)
+          .fontSize(22)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.colors.textWhite)
+          .layoutWeight(1)
+          .textAlign(TextAlign.Start)
       }
       .width('100%').height(72).padding({ left: 16, right: 16 })
       .backgroundColor(this.colors.cardDark)
@@ -82,7 +89,12 @@ struct QuranPage {
           this.searchQuery = val;
           this.applyFilter();
         })
-        .margin({ left: 16, right: 16, top: 16, bottom: 8 })
+        .margin({
+          left: 16,
+          right: 16,
+          top: 16,
+          bottom: 8
+        })
         .backgroundColor(this.colors.cardDark)
         .placeholderColor(this.colors.textMuted)
         .textFont({ size: 15 })
@@ -101,22 +113,31 @@ struct QuranPage {
                     .fontSize(14).fontWeight(FontWeight.Bold)
                     .fontColor(this.colors.accentGold)
                 }
-                .width(40).height(40).borderRadius(20)
+                .width(40)
+                .height(40)
+                .borderRadius(20)
                 .backgroundColor(this.colors.tintSubtle)
                 .border({ width: 1, color: this.colors.accentGold })
-                .justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(HorizontalAlign.Center)
                 .flexShrink(0)
 
                 // Surah Names
                 Column() {
                   Text(surah.nameTransliteration)
-                    .fontSize(16).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
-                    .maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis })
+                    .fontSize(16)
+                    .fontWeight(FontWeight.Bold)
+                    .fontColor(this.colors.textWhite)
+                    .maxLines(1)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
 
                   // FIXED: Replaced nameMeaning with revelationPlace
                   Text(`${surah.revelationPlace} · ${surah.ayahCount} ${L.get('ayahs', this.appLanguage)}`)
-                    .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 4 })
-                    .maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis })
+                    .fontSize(11)
+                    .fontColor(this.colors.textMuted)
+                    .margin({ top: 4 })
+                    .maxLines(1)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
                 }
                 .alignItems(HorizontalAlign.Start).layoutWeight(1)
                 .padding({ left: 12, right: 12 })
@@ -128,8 +149,11 @@ struct QuranPage {
                   .fontColor(this.colors.accentGold)
                   .flexShrink(0)
               }
-              .width('100%').padding(16).backgroundColor(this.colors.cardDark)
-              .borderRadius(12).border({ width: 1, color: this.colors.borderSoft })
+              .width('100%')
+              .padding(16)
+              .backgroundColor(this.colors.cardDark)
+              .borderRadius(12)
+              .border({ width: 1, color: this.colors.borderSoft })
               .direction(L.isRtlLang(this.appLanguage) ? Direction.Rtl : Direction.Ltr)
               .onClick(() => {
                 NavHelper.prepareForward();
@@ -144,8 +168,17 @@ struct QuranPage {
         .width('100%').layoutWeight(1).padding({ left: 16, right: 16, bottom: 16 })
       }
     }
-    .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
+    .width('100%')
+    .height('100%')
+    .backgroundColor(this.colors.primaryGreen)
     .direction(L.isRtlLang(this.appLanguage) ? Direction.Rtl : Direction.Ltr) // Rulebook §A
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
+  }
+
+  private getQuranTranslationLang(): string {
+    if (this.quranTransLang === 'default' || this.quranTransLang === '') {
+      return this.appLanguage;
+    }
+    return this.quranTransLang;
   }
 }

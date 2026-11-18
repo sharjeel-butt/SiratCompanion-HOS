@@ -1,0 +1,282 @@
+{
+  "generated_at": "2026-11-15T17:03:22.977356+00:00",
+  "db_version": 1,
+  "core_version": 1,
+  "quran_version": 1,
+  "languages": [
+    "ar",
+    "en",
+    "ur",
+    "bn",
+    "id",
+    "tr"
+  ],
+  "i18n_languages": [
+    "en",
+    "ar",
+    "bn",
+    "id",
+    "tr",
+    "ur",
+    "zh"
+  ],
+  "databases": {
+    "ar": {
+      "raw_bytes": 47091712,
+      "gz_bytes": 7185159,
+      "gz_ratio_pct": 15.3,
+      "sha256": "078c6b721efafcb52923f0578475b6540073ad2d083fb7027c92f4da42aaf587"
+    },
+    "en": {
+      "raw_bytes": 19402752,
+      "gz_bytes": 5394977,
+      "gz_ratio_pct": 27.8,
+      "sha256": "146dd51940001252d38abafb89e43fa1aa21f667d1022d3275905a28c074c159"
+    },
+    "ur": {
+      "raw_bytes": 37056512,
+      "gz_bytes": 6895689,
+      "gz_ratio_pct": 18.6,
+      "sha256": "f0007e8cd2ae9cca37741db3f2aa8a868b5a8e1417c487bebdeb05bc9123ba32"
+    },
+    "bn": {
+      "raw_bytes": 63401984,
+      "gz_bytes": 8539748,
+      "gz_ratio_pct": 13.5,
+      "sha256": "2aa30b1087ab3a934a8272b1c1f78dba756da67a660abeb53cba6043bde1786f"
+    },
+    "id": {
+      "raw_bytes": 28618752,
+      "gz_bytes": 6116226,
+      "gz_ratio_pct": 21.4,
+      "sha256": "d29da59644bcebd39d205a7d5fcf3de4df3a4edd01e61670b3f8a1788ed4f743"
+    },
+    "tr": {
+      "raw_bytes": 27045888,
+      "gz_bytes": 7324974,
+      "gz_ratio_pct": 27.1,
+      "sha256": "019375529403785ba4a5519cb02188db30a0f74cac9bab7d80e9bae26810de5f"
+    }
+  },
+  "core_db": {
+    "shipped": true,
+    "variant": "core_lite",
+    "source": "generated\\core_lite.db",
+    "raw_bytes": 106315776,
+    "gz_bytes": 20130667,
+    "gz_ratio_pct": 18.9,
+    "sha256": "28ff60c90dac0ecdebfe2368e6d362a3e66434449c84958b2a4a76ab9f25d777"
+  },
+  "quran_db": {
+    "shipped": true,
+    "raw_bytes": 10903552,
+    "gz_bytes": 4379380,
+    "gz_ratio_pct": 40.2,
+    "sha256": "eb62b1d0e78fc29aa73c3ff690b5c9e9e1d6a90c9f84550211be706d4d27df86"
+  },
+  "metadata": [
+    "en_sections.json",
+    "ar_sections.json",
+    "bn_sections.json",
+    "id_sections.json",
+    "tr_sections.json",
+    "ur_sections.json",
+    "master_sections.json",
+    "section_aliases_v2.json"
+  ],
+  "contexts": {
+    "before_salah": 200,
+    "daily_prayer": 200,
+    "prayer": 200,
+    "travel": 151,
+    "ramadan": 200,
+    "quran": 200,
+    "seeking_knowledge": 200,
+    "witr": 191,
+    "charity": 200,
+    "hajj": 200,
+    "nikah": 200,
+    "marriage": 200,
+    "family_conflict": 200,
+    "eid_al_adha": 200,
+    "death_in_family": 200,
+    "leadership": 200,
+    "grief": 200,
+    "pledges": 200,
+    "work": 200,
+    "financial_decisions": 200,
+    "business_decision": 200,
+    "career_growth": 155,
+    "governance": 200,
+    "justice": 200,
+    "learning": 177,
+    "daily_life": 200,
+    "illness": 200,
+    "times_of_trials": 200,
+    "end_times": 200,
+    "self_improvement": 200,
+    "character_building": 200,
+    "spiritual_growth": 200,
+    "friday": 200,
+    "community_service": 107,
+    "eid_al_fitr": 158,
+    "tahajjud": 200,
+    "jamaah": 200,
+    "taraweeh": 6,
+    "laylat_al_qadr": 11,
+    "last_ten_nights": 11,
+    "itikaf": 47,
+    "dhikr": 200,
+    "social_interactions": 68,
+    "financial_stress": 88,
+    "relationships": 166,
+    "family_time": 200,
+    "parenting": 200,
+    "social_etiquette": 200,
+    "aqiqah": 7,
+    "raising_children": 148,
+    "islamic_law": 76,
+    "tawbah": 187,
+    "repentance": 187
+  },
+  "topics": {
+    "purification": 300,
+    "wudu": 300,
+    "salah": 300,
+    "istisqa": 121,
+    "travel": 151,
+    "fasting": 300,
+    "quran": 300,
+    "zakat": 300,
+    "charity": 300,
+    "daily_life": 74,
+    "hajj": 300,
+    "marriage": 300,
+    "divorce": 300,
+    "jihad": 300,
+    "qurbani": 300,
+    "hunting": 300,
+    "wills": 201,
+    "inheritance": 189,
+    "governance": 300,
+    "death": 300,
+    "akhirah": 300,
+    "oaths_vows": 300,
+    "business": 300,
+    "trade": 300,
+    "justice": 300,
+    "knowledge": 300,
+    "drinks": 300,
+    "halal_food": 300,
+    "health": 300,
+    "aqidah": 43,
+    "social_justice": 175,
+    "appearance": 300,
+    "fitan": 300,
+    "prophets": 300,
+    "sunnah": 300,
+    "kindness": 300,
+    "revelation": 7,
+    "iman": 300,
+    "tawhid": 300,
+    "women": 269,
+    "eid": 158,
+    "eclipse_prayer": 102,
+    "virtues": 300,
+    "mosque": 300,
+    "ramadan": 64,
+    "dua": 300,
+    "etiquette": 300,
+    "property_law": 31,
+    "finance": 88,
+    "agriculture": 162,
+    "gift_giving": 166,
+    "reconciliation": 20,
+    "fiqh": 91,
+    "creation": 131,
+    "companions": 300,
+    "seerah": 300,
+    "parents": 300,
+    "zuhd": 300,
+    "qadr": 114,
+    "kaffarah": 62,
+    "ethics": 49,
+    "dreams": 168,
+    "character": 20,
+    "qiblah": 50,
+    "children": 148,
+    "protection": 19,
+    "li_an": 27,
+    "literature": 10,
+    "tawbah": 187,
+    "sports": 33,
+    "hadith_qudsi": 40,
+    "family_law": 30
+  },
+  "featured": 3700,
+  "routing": "query_router.json",
+  "duas": {
+    "en": {
+      "bytes": 52613,
+      "migrated": true
+    },
+    "ar": {
+      "bytes": 64789,
+      "migrated": true
+    },
+    "bn": {
+      "bytes": 33264,
+      "migrated": true
+    },
+    "id": {
+      "bytes": 22236,
+      "migrated": true
+    },
+    "tr": {
+      "bytes": 21544,
+      "migrated": true
+    },
+    "ur": {
+      "bytes": 25762,
+      "migrated": true
+    },
+    "zh": {
+      "bytes": 52787,
+      "migrated": true
+    }
+  },
+  "dua_supplementary": {
+    "duas_base.json": 34055,
+    "dua_keyword_map.json": 14777,
+    "categories.json": 1414
+  },
+  "recitations": {
+    "en": 22895,
+    "ar": 23983,
+    "bn": 28052,
+    "id": 23030,
+    "tr": 23244,
+    "ur": 25216,
+    "zh": 21997,
+    "_raw": "migrated"
+  },
+  "events": {
+    "shipped": true,
+    "count": 12,
+    "bytes": 24716
+  },
+  "i18n": {
+    "en": 21412,
+    "ar": 23501,
+    "bn": 25599,
+    "id": 21527,
+    "tr": 21459,
+    "ur": 22712,
+    "zh": 21238
+  },
+  "bundle_caps": {
+    "context_cap": 200,
+    "topic_cap": 300
+  },
+  "warnings": []
+}

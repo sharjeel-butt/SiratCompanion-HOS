@@ -3,7 +3,8 @@
 import { common } from '@kit.AbilityKit';
 import { util } from '@kit.ArkTS';
 import { AppLogger } from '../core/AppLogger';
-import { EventRecurrence, EventSect, IslamicEvent } from './DateModels';
+import { RawPaths } from '../core/RawPaths';
+import { EventRecurrence, EventSect, IslamicEvent, IslamicEventSource } from './DateModels';
 
 // Interface for the JSON structure
 interface EventTranslation {
@@ -18,6 +19,10 @@ interface EventJsonItem {
   recurrence: string;
   sect: string;
   translations: Record<string, EventTranslation>;
+  sources?: IslamicEventSource[];
+  duas?: string[];
+  recitations?: string[];
+  migration_status?: string;
 }
 
 export class IslamicEventService {
@@ -31,7 +36,7 @@ export class IslamicEventService {
 
     try {
       const mgr = context.resourceManager;
-      const data = await mgr.getRawFileContent('events/islamic_events.json');
+      const data = await mgr.getRawFileContent(RawPaths.EVENTS);
       const jsonStr = util.TextDecoder.create('utf-8').decodeToString(data);
       IslamicEventService.events = JSON.parse(jsonStr) as EventJsonItem[];
       IslamicEventService.isLoaded = true;
@@ -41,24 +46,46 @@ export class IslamicEventService {
     }
   }
 
-  /**
-   * Returns the event metadata for calendar generation.
-   */
   static getEvents(perspective: string): IslamicEvent[] {
     const out: IslamicEvent[] = [];
     for (const item of IslamicEventService.events) {
       if (IslamicEventService.matchesPerspective(item.sect, perspective)) {
         out.push({
           key: item.key,
-          name: item.translations['en']?.name || item.key, // English fallback
+          name: item.translations['en']?.name || item.key,
           month: item.month,
           day: item.day,
           recurrence: item.recurrence as EventRecurrence,
-          sect: item.sect as EventSect
+          sect: item.sect as EventSect,
+          sources: item.sources ?? [],
+          duas: item.duas ?? [],
+          recitations: item.recitations ?? [],
+          migrationStatus: item.migration_status ?? ''
         });
       }
     }
     return out;
+  }
+
+  // New accessors for citation UI
+  static getEventSources(key: string): IslamicEventSource[] {
+    const e = IslamicEventService.events.find(x => x.key === key);
+    return e?.sources ?? [];
+  }
+
+  static getEventDuas(key: string): string[] {
+    const e = IslamicEventService.events.find(x => x.key === key);
+    return e?.duas ?? [];
+  }
+
+  static getEventRecitations(key: string): string[] {
+    const e = IslamicEventService.events.find(x => x.key === key);
+    return e?.recitations ?? [];
+  }
+
+  static getEventMigrationStatus(key: string): string {
+    const e = IslamicEventService.events.find(x => x.key === key);
+    return e?.migration_status ?? '';
   }
 
   /**

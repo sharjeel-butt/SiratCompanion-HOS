@@ -53,3 +53,29 @@ export interface HadithMetadata {
   life_contexts: string[];
   topics: string[];
 }
+
+export interface SanadStep {
+  position: number;
+  narrator_id: string;
+  name_ar: string;
+  name_en: string | null;
+  generation: string | null;
+  reliability: string | null;
+  death_hijri: number | null;
+  auto_derived: number;
+}
+
+export interface Sanad {
+  arabic: string | null;
+  normalized: string | null;
+  confidence: string;
+  steps: SanadStep[];
+}
+
+export interface HadithGrading {
+  grade: string;
+  grader: string;
+  source: string;
+  gradeType: string;
+  note: string | null;
+}
