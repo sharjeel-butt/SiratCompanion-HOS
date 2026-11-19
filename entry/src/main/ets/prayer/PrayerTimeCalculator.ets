@@ -429,12 +429,20 @@ export class PrayerTimeCalculator {
 
     if (fajrPolarUTC !== null) {
       fajr = PrayerTimeCalculator.dateFromUTCHours(date, fajrPolarUTC + timezoneOffset);
-    } else if (fajrReachable || highLatRule === HighLatitudeRule.NONE) {
+    } else if (fajrReachable) {
       const fajrUTC =
         PrayerTimeCalculator.calculateTimeForAltitude(date, latitude, longitude, dec, eot, -params.fajrAngle, false);
       fajr = PrayerTimeCalculator.dateFromUTCHours(date, fajrUTC + timezoneOffset);
     } else {
-      fajr = PrayerTimeCalculator.applyHighLatFallback(sunrise, nightMs, params.fajrAngle, highLatRule, true);
+      // The sun never reaches the Fajr altitude today and no polar resolution
+      // applies. calculateTimeForAltitude() clamps its hour angle to ±1 in that
+      // case, which would place Fajr at solar noon and then jump by hours on the
+      // day the angle becomes unreachable. Fall back to the middle of the night
+      // when the user selected no rule; an explicit rule is used as-is.
+      const fajrFallbackRule = highLatRule === HighLatitudeRule.NONE
+        ? HighLatitudeRule.MIDDLE_OF_NIGHT
+        : highLatRule;
+      fajr = PrayerTimeCalculator.applyHighLatFallback(sunrise, nightMs, params.fajrAngle, fajrFallbackRule, true);
     }
 
     // ---- Asr ----
@@ -520,12 +528,17 @@ export class PrayerTimeCalculator {
 
       if (ishaPolarUTC !== null) {
         isha = PrayerTimeCalculator.dateFromUTCHours(date, ishaPolarUTC + timezoneOffset);
-      } else if (ishaReachable || highLatRule === HighLatitudeRule.NONE) {
+      } else if (ishaReachable) {
         const ishaUTC =
           PrayerTimeCalculator.calculateTimeForAltitude(date, latitude, longitude, dec, eot, -effectiveIshaAngle, true);
         isha = PrayerTimeCalculator.dateFromUTCHours(date, ishaUTC + timezoneOffset);
       } else {
-        isha = PrayerTimeCalculator.applyHighLatFallback(maghrib, nightMs, effectiveIshaAngle, highLatRule, false);
+        // Same guard as Fajr: the clamped hour angle would place Isha at solar
+        // midnight, which then jumps by hours at the reachability boundary.
+        const ishaFallbackRule = highLatRule === HighLatitudeRule.NONE
+          ? HighLatitudeRule.MIDDLE_OF_NIGHT
+          : highLatRule;
+        isha = PrayerTimeCalculator.applyHighLatFallback(maghrib, nightMs, effectiveIshaAngle, ishaFallbackRule, false);
       }
     }
 
