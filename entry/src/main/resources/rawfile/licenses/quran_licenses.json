@@ -1,28 +1,31 @@
 {
-  "datasetVersion": "2025-QUL-v1",
+  "datasetVersion": "2026-QuranCom-v4",
+  "generator": "Sirat Companion Quran Pipeline",
+  "generatedFrom": "Quran Foundation Content API v4",
+  "generatedAt": "2026-11-11",
   "sections": [
     {
       "id": "dataset",
       "items": [
         {
-          "name": "Quranic Universal Library (QUL)",
-          "source": "Tarteel",
-          "sourceUrl": "https://qul.tarteel.ai",
-          "license": "Open Source / Various Data Licenses",
-          "licenseUrl": "https://github.com/TarteelAI/quranic-universal-library",
-          "attribution": "Curated and distributed by QUL (Tarteel). Data sourced from Tanzil, KFGQPC, and QuranEnc."
+          "name": "Quran Foundation Content API v4",
+          "source": "Quran Foundation",
+          "sourceUrl": "https://api.quran.com/api/v4",
+          "documentationUrl": "https://api-docs.quran.foundation",
+          "license": "Quran Foundation APIs",
+          "attribution": "Quran text and translations retrieved through Quran Foundation Content APIs."
         }
       ]
     },
     {
-      "id": "scripts",
+      "id": "arabic",
       "items": [
         {
-          "name": "QPC Hafs (Uthmani / IndoPak)",
-          "source": "King Fahd Glorious Quran Printing Complex (KFGQPC)",
-          "sourceUrl": "https://fonts.qurancomplex.gov.sa",
-          "license": "Free for distribution",
-          "attribution": "Distributed via QUL."
+          "name": "Arabic Quran Text",
+          "source": "Quran Foundation",
+          "sourceUrl": "https://quran.com",
+          "license": "Quran Foundation APIs",
+          "attribution": "Arabic Quran text distributed through Quran Foundation APIs."
         }
       ]
     },
@@ -30,12 +33,39 @@
       "id": "translations",
       "items": [
         {
-          "name": "Saheeh International (English)",
-          "source": "QuranEnc.com",
-          "sourceUrl": "https://quranenc.com",
-          "license": "QuranEnc 7-condition republication",
-          "licenseUrl": "https://quranenc.com/en/home/api",
-          "attribution": "Distributed via QUL."
+          "language": "en",
+          "name": "Saheeh International",
+          "translationId": 20,
+          "source": "Quran Foundation API",
+          "license": "Quran Foundation APIs"
+        },
+        {
+          "language": "ur",
+          "name": "Tafheem-ul-Quran (Syed Abu Ala Maududi)",
+          "translationId": 97,
+          "source": "Quran Foundation API",
+          "license": "Quran Foundation APIs"
+        },
+        {
+          "language": "bn",
+          "name": "Taisirul Quran",
+          "translationId": 161,
+          "source": "Quran Foundation API",
+          "license": "Quran Foundation APIs"
+        },
+        {
+          "language": "id",
+          "name": "Indonesian Islamic Affairs Ministry",
+          "translationId": 33,
+          "source": "Quran Foundation API",
+          "license": "Quran Foundation APIs"
+        },
+        {
+          "language": "tr",
+          "name": "Turkish Translation (Diyanet)",
+          "translationId": 77,
+          "source": "Quran Foundation API",
+          "license": "Quran Foundation APIs"
         }
       ]
     }
