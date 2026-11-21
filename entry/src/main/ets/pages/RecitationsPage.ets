@@ -1,7 +1,7 @@
 // entry/src/main/ets/pages/RecitationsPage.ets
 
 import { common } from '@kit.AbilityKit';
-import { router } from '@kit.ArkUI';
+import { promptAction, router } from '@kit.ArkUI';
 import { ThemeColors, ThemeMode } from '../core/Theme';
 import { PageTheme } from '../core/PageTheme';
 import { L } from '../i18n/LocalizationHelper';
@@ -14,6 +14,7 @@ import { CustomEventStorage } from '../hijricalendar/CustomEventStorage';
 import { UpcomingCustomEvent } from './HomePage';
 import { CustomEventNotifier } from '../hijricalendar/CustomEventNotifier';
 import { SettingsHelper } from '../settings/SettingsHelper';
+import { GradeThemeHelper } from '../core/GradeThemeHelper';
 
 @Entry
 @Component
@@ -87,6 +88,7 @@ struct RecitationsPage {
           ForEach(this.tasks, (task: RecitationTask) => {
             ListItem() {
               Row() {
+                // 1. Text Information (Left side in LTR, Right side in RTL)
                 Column() {
                   Text(task.name)
                     .fontSize(15)
@@ -94,8 +96,8 @@ struct RecitationsPage {
                     .fontColor(this.colors.textWhite)
                     .maxLines(2)
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
+                    .width('100%')
                     .textAlign(TextAlign.Start)
-                    .width('100%');
 
                   if (task.notes.length > 0) {
                     Text(task.notes)
@@ -104,10 +106,11 @@ struct RecitationsPage {
                       .margin({ top: 4 })
                       .maxLines(2)
                       .textOverflow({ overflow: TextOverflow.Ellipsis })
-                      .width('100%');
+                      .width('100%')
+                      .textAlign(TextAlign.Start)
                   }
 
-                  Flex({ wrap: FlexWrap.Wrap, alignItems: ItemAlign.Center }) {
+                  Row({ space: 8 }) {
                     Text(`${task.repeatCount > 1 ? `${task.repeatCount}x ` : ''}${L.get('occasion_' + task.occasion,
                       this.appLanguage)}`)
                       .fontSize(11).fontColor(this.colors.accentGold)
@@ -115,8 +118,8 @@ struct RecitationsPage {
                     if (task.authenticity) {
                       Text(this.getAuthenticityLabel(task.authenticity))
                         .fontSize(9)
-                        .fontColor(this.colors.textOnAccent)
-                        .backgroundColor(this.colors.statusExpress)
+                        .fontColor(GradeThemeHelper.getTextColor(task.authenticity, this.colors))
+                        .backgroundColor(GradeThemeHelper.getBgColor(task.authenticity, this.colors))
                         .padding({
                           left: 4,
                           right: 4,
@@ -124,16 +127,28 @@ struct RecitationsPage {
                           bottom: 1
                         })
                         .borderRadius(4)
+                        .border({ width: 1, color: GradeThemeHelper.getTextColor(task.authenticity, this.colors) })
+                        .onClick(() => {
+                          this.handleAuthenticityTap(task);
+                        })
                     }
                   }
-                  .margin({ top: 4 })
+                  .margin({ top: 6 })
                   .width('100%')
+                  .alignItems(VerticalAlign.Center)
                 }
-                .alignItems(HorizontalAlign.Start).layoutWeight(1)
+                .alignItems(HorizontalAlign.Start)
+                .layoutWeight(1)
 
+                // 2. Arabic Text & Chevron (Right side in LTR, Left side in RTL)
                 Column() {
                   Text(task.surahNameArabic)
-                    .fontSize(20).fontFamily(TypographyHelper.getFont('ar', false)).fontColor(this.colors.accentGold)
+                    .fontSize(20)
+                    .fontFamily(TypographyHelper.getArabicFont(true)) // 👈 FIX: Uses the new Arabic font resolver
+                    .fontColor(this.colors.accentGold)
+                    .maxLines(1)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+
                   Image($r('app.media.ic_chevron_right'))
                     .width(14)
                     .height(14)
@@ -143,24 +158,19 @@ struct RecitationsPage {
                     .rotate({ angle: L.isRtlLang(this.appLanguage) ? 180 : 0 })
                 }
                 .alignItems(HorizontalAlign.End)
-                .margin({
-                  left: L.isRtlLang(this.appLanguage) ? 12 : 0,
-                  right: L.isRtlLang(this.appLanguage) ? 0 : 12
-                })
-                .constraintSize({ maxWidth: '30%' })
+                .margin({ left: this.isRtl() ? 12 : 0, right: this.isRtl() ? 0 : 12 })
               }
               .width('100%')
               .padding(16)
               .backgroundColor(this.colors.cardDark)
               .borderRadius(12)
               .border({ width: 1, color: this.colors.borderSoft })
-              .direction(L.isRtlLang(this.appLanguage) ? Direction.Rtl : Direction.Ltr)
+              .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr) // 👈 FIX: Forces RTL layout for the row
               .onClick(() => {
                 // Determine the correct verse range
                 let startV = task.startVerse;
                 let endV = task.endVerse;
 
-                // If startVerse is null, check for alternative selections
                 if (startV === null && task.verseSelections && task.verseSelections.length > 0) {
                   startV = task.verseSelections[0].startVerse;
                   endV = task.verseSelections[0].endVerse;
@@ -175,7 +185,7 @@ struct RecitationsPage {
                     endVerse: endV,
                     taskId: task.id
                   }
-                }).catch((e: Error) => console.error('Navigation failed', e));
+                }).catch((e: Error) => console.error(JSON.stringify(e)));
               })
             }
           }, (task: RecitationTask) => `rec-${task.id}-${task.name}-${task.notes}`)
@@ -209,5 +219,67 @@ struct RecitationsPage {
     }
 
     return localized;
+  }
+
+  private isRtl(): boolean {
+    return L.isRtlLang(this.appLanguage);
+  }
+
+  private getCanonicalCollection(col: string): string {
+    const c = col.toLowerCase();
+    if (c.includes('bukhari') || c === 'bukh') {
+      return 'bukhari';
+    }
+    if (c.includes('muslim') || c === 'musl') {
+      return 'muslim';
+    }
+    if (c.includes('abu dawud') || c.includes('abudawud') || c === 'abud') {
+      return 'abudawud';
+    }
+    if (c.includes('tirmidhi') || c === 'tirm') {
+      return 'tirmidhi';
+    }
+    if (c.includes('nasai') || c === 'nasa') {
+      return 'nasai';
+    }
+    if (c.includes('ibn majah') || c.includes('ibnmajah') || c === 'ibnm') {
+      return 'ibnmajah';
+    }
+    if (c.includes('malik') || c === 'mali') {
+      return 'malik';
+    }
+    return c;
+  }
+
+  private handleAuthenticityTap(task: RecitationTask): void {
+    // 1. Try to navigate to the Hadith if evidence exists
+    if (task.evidence && task.evidence.length > 0) {
+      const primaryEvidence = task.evidence[0];
+      const colId = this.getCanonicalCollection(primaryEvidence.collection);
+      const hadithId = `${colId}:${primaryEvidence.hadithNumber}`;
+
+      NavHelper.prepareForward();
+      router.pushUrl({
+        url: 'pages/HadithDetailsPage',
+        params: { id: hadithId }
+      }).catch((e: Error) => console.error(JSON.stringify(e)));
+      return;
+    }
+
+    // 2. Fallback: Show the localized dialog
+    let evidenceText = task.reference;
+    if (task.evidence && task.evidence.length > 0) {
+      const parts: string[] = [];
+      for (const e of task.evidence) {
+        parts.push(`${e.collection} ${e.hadithNumber} (${e.grade})`);
+      }
+      evidenceText = parts.join('\n');
+    }
+
+    promptAction.showDialog({
+      title: L.get('hadith_evidence_title', this.appLanguage),
+      message: evidenceText,
+      buttons: [{ text: L.get('ok', this.appLanguage), color: this.colors.accentGold }]
+    });
   }
 }

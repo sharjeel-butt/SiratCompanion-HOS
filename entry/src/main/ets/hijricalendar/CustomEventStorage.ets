@@ -1,8 +1,6 @@
 // entry/src/main/ets/helper/CustomEventStorage.ets
 
-import { PreferencesHelper } from '../core/PreferencesHelper';
-import { CustomEvent, RecurrenceType } from './CustomEventModels';
-import { STORAGE_KEY_CUSTOM_EVENTS_VERSION } from '../core/StorageKeys';
+import { CustomEvent } from './CustomEventModels';
 
 const KEY_CUSTOM_EVENTS = 'custom_events';
 

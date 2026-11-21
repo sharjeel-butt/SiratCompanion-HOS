@@ -9,6 +9,7 @@ import { NotificationHelper } from '../prayer/NotificationHelper';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_ARABIC_FONT,
   STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_DUA_TRANSLATION_LANG,
@@ -30,7 +31,8 @@ import {
   STORAGE_KEY_SYSTEM_SOUND_ENABLED,
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_THEME_OVERRIDE,
-  STORAGE_KEY_TIME_FORMAT
+  STORAGE_KEY_TIME_FORMAT,
+  STORAGE_KEY_TRANSLATION_FONT
 } from '../core/StorageKeys';
 import { AppLanguage, L } from '../i18n/LocalizationHelper';
 import { SoundHelper } from '../tasbih/SoundHelper';
@@ -41,6 +43,7 @@ import { SubsectionHeader } from '../components/SubsectionHeader';
 import { ExtraTimingToggleRow } from '../prayer/ExtraTimingToggleRow';
 import { common } from '@kit.AbilityKit';
 import { WidgetHelper } from '../widgets/WidgetHelper';
+import { TypographyHelper } from '../core/TypographyHelper';
 
 @Entry
 @Component
@@ -113,12 +116,14 @@ struct CustomizePage {
   @StorageLink(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH)
   @Watch('onShowLastThirdSunpathChanged')
   showLastThirdSunpath: boolean = true;
-
   @StorageLink(STORAGE_KEY_DUA_TRANSLATION_LANG) duaTransLang: string = 'default';
   @State showDuaLangPicker: boolean = false;
-
   @StorageLink(STORAGE_KEY_QURAN_TRANSLATION_LANG) quranTransLang: string = 'default';
   @StorageLink(STORAGE_KEY_HADITH_TRANSLATION_LANG) hadithTransLang: string = 'default';
+  @StorageLink(STORAGE_KEY_ARABIC_FONT) @Watch('onArabicFontChanged') arabicFont: string = 'auto';
+  @StorageLink(STORAGE_KEY_TRANSLATION_FONT) @Watch('onTransFontChanged') transFont: string = 'auto';
+  @State showTransFontPicker: boolean = false;
+  @State showArabicFontPicker: boolean = false;
   @State showQuranLangPicker: boolean = false;
   @State showHadithLangPicker: boolean = false;
   // ============================================================
@@ -137,9 +142,7 @@ struct CustomizePage {
   @State showSoundPicker: boolean = false;
   @State showEventPerspectivePicker: boolean = false;
   @State showThemePicker: boolean = false;
-
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
-
 
   // ============================================================
   // LIFECYCLE
@@ -323,6 +326,22 @@ struct CustomizePage {
         )
       }
 
+      if (this.showTransFontPicker) {
+        this.PickerOverlay(
+          this.tr('translation_font'),
+          $r('app.media.ic_language'),
+          this.buildTransFontItems(),
+          (id: string) => {
+            this.transFont = id;
+            SettingsHelper.saveTranslationFont(id);
+            this.showTransFontPicker = false;
+          },
+          () => {
+            this.showTransFontPicker = false;
+          }
+        )
+      }
+
       if (this.showThemePicker) {
         this.PickerOverlay(
           this.tr('dark_mode'),
@@ -343,6 +362,22 @@ struct CustomizePage {
 
       if (this.showSoundPicker) {
         this.SoundPicker()
+      }
+
+      if (this.showArabicFontPicker) {
+        this.PickerOverlay(
+          this.tr('arabic_font'),
+          $r('app.media.ic_language'), // or a font icon
+          this.buildArabicFontItems(),
+          (id: string) => {
+            this.arabicFont = id;
+            SettingsHelper.saveArabicFont(id);
+            this.showArabicFontPicker = false;
+          },
+          () => {
+            this.showArabicFontPicker = false;
+          }
+        )
       }
 
       if (this.showClockFormatPicker) {
@@ -462,6 +497,76 @@ struct CustomizePage {
     .padding({ left: 16, right: 16 })
     .backgroundColor(this.colors.cardDark)
     .alignItems(VerticalAlign.Center)
+  }
+
+  @Builder
+  TranslationFontRow() {
+    Row() {
+      Column() {
+        Text(this.tr('translation_font'))
+          .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+        Text(this.tr('translation_font_desc'))
+          .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+        Text(this.getTransFontLabel(this.transFont))
+          .fontSize(12).fontColor(this.colors.accentGold).margin({ top: 6 })
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .opacity(0.7)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
+    }
+    .width('100%')
+    .padding({
+      top: 14,
+      bottom: 14,
+      left: 16,
+      right: 16
+    })
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(12)
+    .margin({ bottom: 8 })
+    .onClick(() => {
+      this.showTransFontPicker = true;
+    })
+  }
+
+  @Builder
+  ArabicFontRow() {
+    Row() {
+      Column() {
+        Text(this.tr('arabic_font'))
+          .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+        Text(this.tr('arabic_font_desc'))
+          .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+        Text(this.getArabicFontLabel(this.arabicFont))
+          .fontSize(12).fontColor(this.colors.accentGold).margin({ top: 6 })
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .opacity(0.7)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
+    }
+    .width('100%')
+    .padding({
+      top: 14,
+      bottom: 14,
+      left: 16,
+      right: 16
+    })
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(12)
+    .margin({ bottom: 8 })
+    .onClick(() => {
+      this.showArabicFontPicker = true;
+    })
   }
 
   @Builder
@@ -989,10 +1094,6 @@ struct CustomizePage {
     }
   }
 
-  // ============================================================
-  // BUILD
-  // ============================================================
-
   @Builder
   LanguageRow() {
     Row() {
@@ -1039,6 +1140,10 @@ struct CustomizePage {
       this.showLanguagePicker = true;
     })
   }
+
+  // ============================================================
+  // BUILD
+  // ============================================================
 
   @Builder
   AppearanceContent() {
@@ -1094,6 +1199,9 @@ struct CustomizePage {
       .onClick(() => {
         this.showAppThemePicker = true;
       })
+
+      this.ArabicFontRow()
+      this.TranslationFontRow()
 
       // ---- Dark Mode ----
       Row() {
@@ -1423,10 +1531,6 @@ struct CustomizePage {
     .position({ bottom: 0 })
   }
 
-  // ---- Each toggle is its own parameterless builder so it re-reads
-  // state on every parent render. Passing the value as a builder
-  // parameter would freeze it at first render.
-
   @Builder
   PickerOverlay(
     title: string,
@@ -1564,6 +1668,10 @@ struct CustomizePage {
     .position({ bottom: 0 })
   }
 
+  // ---- Each toggle is its own parameterless builder so it re-reads
+  // state on every parent render. Passing the value as a builder
+  // parameter would freeze it at first render.
+
   @Builder
   AutoShowRamadanViewRow() {
     Row() {
@@ -1597,6 +1705,14 @@ struct CustomizePage {
     .backgroundColor(this.colors.tintSubtle)
     .borderRadius(12)
     .margin({ bottom: 8 })
+  }
+
+  private onArabicFontChanged(): void {
+    // Re-render is handled by @StorageLink, but we need to notify sub-components
+  }
+
+  private onTransFontChanged(): void {
+    // Re-render is handled by @StorageLink, but we need to notify sub-components
   }
 
   // ---- Per-timing visibility — prayer list ----
@@ -1994,5 +2110,50 @@ struct CustomizePage {
       });
     }
     return items;
+  }
+
+  private getArabicFontLabel(fontId: string): string {
+    return this.tr('font_' + fontId); // e.g., font_auto, font_Amiri
+  }
+
+  private buildArabicFontItems(): PickerItem[] {
+    const fonts = [
+      TypographyHelper.FONT_AUTO,
+      TypographyHelper.FONT_AMIRI,
+      TypographyHelper.FONT_AMIRI_QURAN,
+      TypographyHelper.FONT_HAFS,
+      TypographyHelper.FONT_QPC_HAFS,
+      TypographyHelper.FONT_NASTALIQ,
+      TypographyHelper.FONT_NOTO_NASTALIQ,
+      TypographyHelper.FONT_KEMENAG,
+      TypographyHelper.FONT_WARSH,
+      TypographyHelper.FONT_SCHEHERAZADE,
+      TypographyHelper.FONT_NOTONASKH
+    ];
+
+    return fonts.map((f): PickerItem => {
+      const item: PickerItem = {
+        id: f,
+        label: this.getArabicFontLabel(f),
+        selected: f === this.arabicFont
+
+      };
+      return item;
+    });
+  }
+
+  private getTransFontLabel(fontId: string): string {
+    return this.tr('trans_font_' + fontId);
+  }
+
+  private buildTransFontItems(): PickerItem[] {
+    const fonts = ['auto', 'Outfit', 'NotoNastaliqUrdu', 'NotoSansBengali', 'NotoSansSC', 'JameelNoori'];
+    return fonts.map((f): PickerItem => {
+      return {
+        id: f,
+        label: this.getTransFontLabel(f),
+        selected: f === this.transFont
+      };
+    });
   }
 }

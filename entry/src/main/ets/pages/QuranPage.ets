@@ -17,12 +17,10 @@ struct QuranPage {
   @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLangChanged') appLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_QURAN_TRANSLATION_LANG) @Watch('onLangChanged') quranTransLang: string = 'default';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.SYSTEM);
-
   @State allSurahs: CompleteSurah[] = [];
   @State filteredSurahs: CompleteSurah[] = [];
   @State searchQuery: string = '';
   @State isLoading: boolean = true;
-
   private activeScript: string = AppStorage.get<string>('active_quran_script') ?? 'indopak';
 
   async aboutToAppear() {
@@ -80,6 +78,25 @@ struct QuranPage {
       .width('100%').height(72).padding({ left: 16, right: 16 })
       .backgroundColor(this.colors.cardDark)
 
+      // Quran Graph
+      Row() {
+        Text(L.get('quran_explorer', this.appLanguage))
+          .fontSize(15).fontWeight(FontWeight.Bold).fontColor(this.colors.accentGold)
+          .layoutWeight(1)
+        Image($r('app.media.ic_chevron_right'))
+          .width(16).height(16).fillColor(this.colors.accentGold)
+          .rotate({ angle: L.isRtlLang(this.appLanguage) ? 180 : 0 })
+      }
+      .width('90%')
+      .padding(16)
+      .backgroundColor(this.colors.cardDark)
+      .borderRadius(12)
+      .margin({ top: 16, bottom: 8 })
+      .onClick(() => {
+        NavHelper.prepareForward();
+        router.pushUrl({ url: 'pages/QuranExplorerPage' });
+      })
+
       // Search Bar
       Search({
         value: this.searchQuery,
@@ -132,7 +149,8 @@ struct QuranPage {
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
 
                   // FIXED: Replaced nameMeaning with revelationPlace
-                  Text(`${surah.revelationPlace} · ${surah.ayahCount} ${L.get('ayahs', this.appLanguage)}`)
+                  Text(`${this.sourceLabelRevelation(surah.revelationPlace)} · ${surah.ayahCount} ${L.get('ayahs',
+                    this.appLanguage)}`)
                     .fontSize(11)
                     .fontColor(this.colors.textMuted)
                     .margin({ top: 4 })
@@ -180,5 +198,15 @@ struct QuranPage {
       return this.appLanguage;
     }
     return this.quranTransLang;
+  }
+
+  private sourceLabelRevelation(label_rev: string): string {
+    if (label_rev === 'Meccan') {
+      return L.get('revelation_place_makkah', this.appLanguage)
+    } else if (label_rev === 'Medinan') {
+      return L.get('revelation_place_madinah', this.appLanguage)
+    } else {
+      return label_rev;
+    }
   }
 }

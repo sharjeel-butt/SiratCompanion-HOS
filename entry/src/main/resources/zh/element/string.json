@@ -3339,6 +3339,142 @@
     {
       "name": "feature_issues_link",
       "value": "https://github.com/sharjeel-butt/SiratCompanion-HOS/issues"
+    },
+    {
+      "name": "quran_explorer",
+      "value": "《古兰经》探索"
+    },
+    {
+      "name": "quran_topics",
+      "value": "按主题浏览"
+    },
+    {
+      "name": "quran_prophets",
+      "value": "按先知浏览"
+    },
+    {
+      "name": "dua_appears_in",
+      "value": "收录于合集"
+    },
+    {
+      "name": "dua_related",
+      "value": "相关祈祷词"
+    },
+    {
+      "name": "rabbana_title",
+      "value": "Rabbana祈祷文"
+    },
+    {
+      "name": "rabbana_desc",
+      "value": "18篇以“Rabbana”开头的《古兰经》祈祷文"
+    },
+    {
+      "name": "prophetic_duas",
+      "value": "先知祈祷文"
+    },
+    {
+      "name": "prophetic_desc",
+      "value": "众先知所诵读的祈祷词"
+    },
+    {
+      "name": "revelation_place_makkah",
+      "value": "麦加"
+    },
+    {
+      "name": "revelation_place_madinah",
+      "value": "麦地那"
+    },
+    {
+      "name": "arabic_font",
+      "value": "阿拉伯文字体"
+    },
+    {
+      "name": "arabic_font_desc",
+      "value": "选择用于阿拉伯语文本的字体"
+    },
+    {
+      "name": "font_auto",
+      "value": "自动检测（区域）"
+    },
+    {
+      "name": "font_Amiri",
+      "value": "Amiri（纳斯赫体）"
+    },
+    {
+      "name": "font_AmiriQuran",
+      "value": "Amiri Quran（纳斯赫体）"
+    },
+    {
+      "name": "font_HafsArabic",
+      "value": "Hafs（纳斯赫体）"
+    },
+    {
+      "name": "font_QPC_Hafs",
+      "value": "QPC Hafs（乌斯曼字体）"
+    },
+    {
+      "name": "font_JameelNoori",
+      "value": "Jameel Noori（纳斯塔里克体）"
+    },
+    {
+      "name": "font_NotoNastaliqUrdu",
+      "value": "Noto Nastaliq（乌尔都语纳斯塔里克体）"
+    },
+    {
+      "name": "font_LPMQIsepMisbah",
+      "value": "LPMQ Isep Misbah（纳斯赫体）"
+    },
+    {
+      "name": "font_KFGQPCWarsh",
+      "value": "KFGQPC Warsh（Warsh体）"
+    },
+    {
+      "name": "font_ScheherazadeNew",
+      "value": "Scheherazade（纳斯赫体）"
+    },
+    {
+      "name": "font_NotoNaskh",
+      "value": "Noto Naskh（纳斯赫体）"
+    },
+    {
+      "name": "translation_font",
+      "value": "译文字体"
+    },
+    {
+      "name": "translation_font_desc",
+      "value": "选择用于译文显示的字体"
+    },
+    {
+      "name": "trans_font_auto",
+      "value": "自动检测（区域）"
+    },
+    {
+      "name": "trans_font_Outfit",
+      "value": "Outfit（拉丁文 / 默认）"
+    },
+    {
+      "name": "trans_font_NotoNastaliqUrdu",
+      "value": "Noto Nastaliq（乌尔都语）"
+    },
+    {
+      "name": "trans_font_NotoSansBengali",
+      "value": "Noto Sans Bengali（孟加拉语）"
+    },
+    {
+      "name": "trans_font_NotoSansSC",
+      "value": "Noto Sans SC（中文）"
+    },
+    {
+      "name": "hadith_evidence_title",
+      "value": "圣训依据"
+    },
+    {
+      "name": "diag_ok",
+      "value": "正常"
+    },
+    {
+      "name": "trans_font_JameelNoori",
+      "value": "Jameel Noori（纳斯塔里克体）"
     }
   ]
 }

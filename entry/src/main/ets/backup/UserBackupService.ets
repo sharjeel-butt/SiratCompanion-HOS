@@ -16,12 +16,15 @@ import { AppLogger } from '../core/AppLogger';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_ARABIC_FONT,
   STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
   STORAGE_KEY_CALC_SETTINGS_VERSION,
   STORAGE_KEY_CUSTOM_EVENTS_VERSION,
   STORAGE_KEY_DUA_BINDINGS_VERSION,
+  STORAGE_KEY_DUA_TRANSLATION_LANG,
   STORAGE_KEY_EVENT_PERSPECTIVE,
   STORAGE_KEY_EVENT_SETTINGS_VERSION,
+  STORAGE_KEY_HADITH_TRANSLATION_LANG,
   STORAGE_KEY_HIJRI_CALENDAR_TYPE,
   STORAGE_KEY_HIJRI_CALENDAR_VERSION,
   STORAGE_KEY_HIJRI_OFFSET,
@@ -29,6 +32,7 @@ import {
   STORAGE_KEY_LANGUAGE_OVERRIDE,
   STORAGE_KEY_LOCATION_VERSION,
   STORAGE_KEY_PRAYER_STATE_VERSION,
+  STORAGE_KEY_QURAN_TRANSLATION_LANG,
   STORAGE_KEY_RAMADAN_STATE_VERSION,
   STORAGE_KEY_SHOW_FIRST_THIRD_LIST,
   STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH,
@@ -45,6 +49,7 @@ import {
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_THEME_OVERRIDE,
   STORAGE_KEY_TIME_FORMAT,
+  STORAGE_KEY_TRANSLATION_FONT,
   STORAGE_KEY_VIBRATION_ENABLED,
   STORAGE_KEY_WIZARD_COMPLETED
 } from '../core/StorageKeys';
@@ -128,6 +133,8 @@ const SETTINGS_SPECS: PrefSpec[] = [
   { key: 'calc_source', type: 'string', defaultValue: 'Local' },
   { key: 'location_mode', type: 'string', defaultValue: 'GPS' },
   { key: 'manual_lat', type: 'number', defaultValue: 0 },
+  { key: 'translation_font_family', type: 'string', defaultValue: 'auto' },
+  { key: 'arabic_font_family', type: 'string', defaultValue: 'auto' },
   { key: 'manual_lng', type: 'number', defaultValue: 0 },
   { key: 'manual_refresh', type: 'number', defaultValue: 0 },
   { key: 'manual_city', type: 'string', defaultValue: '' },
@@ -678,6 +685,24 @@ export class UserBackupService {
     AppStorage.setOrCreate(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH,
       await PreferencesHelper.getBoolean(
         STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH, true));
+
+    // ============================================================
+    // v4.1.0 Additions: Independent Translation Languages & Fonts
+    // ============================================================
+    AppStorage.setOrCreate(STORAGE_KEY_QURAN_TRANSLATION_LANG,
+      await PreferencesHelper.getString(STORAGE_KEY_QURAN_TRANSLATION_LANG, 'default'));
+
+    AppStorage.setOrCreate(STORAGE_KEY_HADITH_TRANSLATION_LANG,
+      await PreferencesHelper.getString(STORAGE_KEY_HADITH_TRANSLATION_LANG, 'default'));
+
+    AppStorage.setOrCreate(STORAGE_KEY_DUA_TRANSLATION_LANG,
+      await PreferencesHelper.getString(STORAGE_KEY_DUA_TRANSLATION_LANG, 'default'));
+
+    AppStorage.setOrCreate(STORAGE_KEY_ARABIC_FONT,
+      await PreferencesHelper.getString(STORAGE_KEY_ARABIC_FONT, 'auto'));
+
+    AppStorage.setOrCreate(STORAGE_KEY_TRANSLATION_FONT,
+      await PreferencesHelper.getString(STORAGE_KEY_TRANSLATION_FONT, 'auto'));
 
     AppStorage.setOrCreate(STORAGE_KEY_CUSTOM_EVENTS_VERSION, 0);
   }

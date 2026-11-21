@@ -14,7 +14,6 @@ interface I18nEntry {
 export class HadithSearchService {
   private static router: QueryRouter | null = null;
   private static catalog: Catalog | null = null;
-
   private static metadataCache: Map<string, HadithMetadata> = new Map();
   private static isCacheBuilt: boolean = false;
   private static i18nCache: Map<string, Record<string, string>> = new Map();

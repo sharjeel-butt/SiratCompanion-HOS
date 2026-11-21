@@ -20,7 +20,6 @@ struct TrackerWidget {
   @LocalStorageProp('ishaName') p5Name: string = 'Isha';
   @LocalStorageProp('ishaTime24') p5Time: string = '--:--';
   @LocalStorageProp('p5Checked') p5Checked: boolean = false;
-
   @LocalStorageProp('taskQuran') taskQuran: string = 'Quran';
   @LocalStorageProp('taskDua') taskDua: string = 'Duas';
   @LocalStorageProp('taskRecitations') taskRecitations: string = 'Recitations';

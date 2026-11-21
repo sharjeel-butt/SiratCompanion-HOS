@@ -1,0 +1,402 @@
+{
+  "language": "zh",
+  "collections": {
+    "acceptance": {
+      "title": "接受善行的杜阿",
+      "description": "接受善行的杜阿"
+    },
+    "anxiety": {
+      "title": "杜阿和古兰经中有关压力、抑郁和焦虑的段落",
+      "description": "杜阿和古兰经中有关压力、抑郁和焦虑的段落"
+    },
+    "arabic_english_transliteration": {
+      "title": "阿拉伯语、英语和音译版《古兰经杜阿斯》",
+      "description": "阿拉伯语、英语和音译版《古兰经杜阿斯》"
+    },
+    "believers": {
+      "title": "为信徒杜阿",
+      "description": "为信徒的祈祷"
+    },
+    "benefit_from_quran": {
+      "title": "学习、记忆和受益于《古兰经》的杜阿",
+      "description": "学习、记忆和受益于《古兰经》的杜阿"
+    },
+    "black_magic_protection": {
+      "title": "保护 Ruqyah 的《古兰经》经文和杜阿",
+      "description": "保护 Ruqyah 的《古兰经》经文和杜阿"
+    },
+    "character": {
+      "title": "美丽角色的杜阿",
+      "description": "美丽角色的杜阿"
+    },
+    "children": {
+      "title": "《古兰经》中的儿童杜阿",
+      "description": "《古兰经》中的儿童杜阿"
+    },
+    "confidence": {
+      "title": "信心的杜阿",
+      "description": "信心的杜阿"
+    },
+    "daily_life": {
+      "title": "《古兰经》日常生活中的杜阿",
+      "description": "《古兰经》日常生活中的杜阿"
+    },
+    "day_night": {
+      "title": "《古兰经》白天和黑夜的思考",
+      "description": "《古兰经》白天和黑夜的思考"
+    },
+    "deceased": {
+      "title": "为死者杜阿",
+      "description": "为死者杜阿"
+    },
+    "enemies": {
+      "title": "杜阿反对敌人和有害的人",
+      "description": "杜阿反对敌人和有害的人"
+    },
+    "everyday_duas": {
+      "title": "每日背诵和记忆《古兰经》中的简短杜阿",
+      "description": "每日背诵和记忆《古兰经》中的简短杜阿"
+    },
+    "evil_eye": {
+      "title": "保护免受邪眼侵害的《古兰经》经文",
+      "description": "保护免受邪眼侵害的《古兰经》经文"
+    },
+    "exam_success": {
+      "title": "考试成功的杜阿",
+      "description": "考试成功的杜阿"
+    },
+    "family": {
+      "title": "家庭、婚姻和配偶的杜阿",
+      "description": "家庭、婚姻和配偶的杜阿"
+    },
+    "fasting": {
+      "title": "《古兰经》关于斋月和斋戒的经文",
+      "description": "《古兰经》关于斋月和斋戒的经文"
+    },
+    "fear": {
+      "title": "恐惧杜阿",
+      "description": "恐惧杜阿"
+    },
+    "forgiveness": {
+      "title": "宽恕的杜阿",
+      "description": "宽恕的杜阿"
+    },
+    "forgiveness_of_sins": {
+      "title": "罪孽宽恕的杜阿",
+      "description": "罪孽宽恕的杜阿"
+    },
+    "friends_loved_ones": {
+      "title": "为朋友和亲人杜阿",
+      "description": "为朋友和亲人杜阿"
+    },
+    "good_ending": {
+      "title": "杜阿的好结局",
+      "description": "杜阿的好结局"
+    },
+    "gratitude": {
+      "title": "杜阿和古兰经的感恩段落",
+      "description": "杜阿和古兰经的感恩段落"
+    },
+    "guidance": {
+      "title": "指导和直路的杜阿",
+      "description": "指导和直路的杜阿"
+    },
+    "hajj_umrah": {
+      "title": "朝觐和副朝杜阿",
+      "description": "朝觐和副朝杜阿"
+    },
+    "hardship": {
+      "title": "杜阿和古兰经中有关苦难、悲伤和悲伤的段落",
+      "description": "杜阿和古兰经中有关苦难、悲伤和悲伤的段落"
+    },
+    "health": {
+      "title": "《古兰经》对治疗和健康的思考",
+      "description": "《古兰经》对治疗和健康的思考"
+    },
+    "heart": {
+      "title": "为心和清洁的心而祈祷",
+      "description": "为心和清洁的心而祈祷"
+    },
+    "heart_healing": {
+      "title": "心脏疾病的杜阿",
+      "description": "心脏疾病的杜阿"
+    },
+    "hereafter": {
+      "title": "为来世杜阿",
+      "description": "为来世杜阿"
+    },
+    "humility": {
+      "title": "谦卑的杜阿",
+      "description": "谦卑的杜阿"
+    },
+    "jannah": {
+      "title": "詹纳的杜阿",
+      "description": "詹纳的杜阿"
+    },
+    "knowledge": {
+      "title": "知识杜阿",
+      "description": "知识杜阿"
+    },
+    "mercy": {
+      "title": "祈求真主仁慈的杜阿",
+      "description": "祈求真主仁慈的杜阿"
+    },
+    "new_muslims": {
+      "title": "新穆斯林杜阿",
+      "description": "新穆斯林杜阿"
+    },
+    "oppression": {
+      "title": "反对压迫的杜阿",
+      "description": "反对压迫的杜阿"
+    },
+    "pain_sickness": {
+      "title": "Duas 和《古兰经》中治疗疼痛和疾病的段落 (Shifa)",
+      "description": "Duas 和《古兰经》中治疗疼痛和疾病的段落 (Shifa)"
+    },
+    "palestine": {
+      "title": "巴勒斯坦和被压迫者的杜阿",
+      "description": "巴勒斯坦和被压迫者的杜阿"
+    },
+    "parents": {
+      "title": "《古兰经》中对父母和已故父母的杜阿",
+      "description": "《古兰经》中对父母和已故父母的杜阿"
+    },
+    "patience": {
+      "title": "杜阿和古兰经的耐心段落",
+      "description": "杜阿和古兰经的耐心段落"
+    },
+    "peace": {
+      "title": "和平杜阿斯",
+      "description": "和平杜阿斯"
+    },
+    "pious_spouse": {
+      "title": "虔诚配偶的杜阿",
+      "description": "虔诚配偶的杜阿"
+    },
+    "powerful_duas": {
+      "title": "《古兰经》中强大的杜阿",
+      "description": "《古兰经》中强大的杜阿"
+    },
+    "prophet_harun": {
+      "title": "穆萨为哈伦唱的杜阿",
+      "description": "穆萨为哈伦唱的杜阿"
+    },
+    "prophet_shuayb": {
+      "title": "先知 Shuayb 的杜阿斯和信任",
+      "description": "先知 Shuayb 的杜阿斯和信任"
+    },
+    "prophet_sulayman": {
+      "title": "先知苏莱曼的杜阿和感激之情",
+      "description": "先知苏莱曼的杜阿和感激之情"
+    },
+    "prophets": {
+      "title": "《古兰经》中先知的杜阿",
+      "description": "《古兰经》中先知的杜阿"
+    },
+    "protection": {
+      "title": "保护免受邪恶和恶魔侵害的杜阿",
+      "description": "保护免受邪恶和恶魔侵害的杜阿"
+    },
+    "protection_from_hellfire": {
+      "title": "Duas 保护免受地狱火侵害",
+      "description": "Duas 保护免受地狱火侵害"
+    },
+    "provision_wealth": {
+      "title": "古兰经经文和杜阿（Rizq）和财富",
+      "description": "古兰经经文和杜阿（Rizq）和财富"
+    },
+    "rabbana": {
+      "title": "拉巴纳·杜阿斯 (Rabbana Duas) 摘自《古兰经》",
+      "description": "拉巴纳·杜阿斯 (Rabbana Duas) 摘自《古兰经》"
+    },
+    "rain": {
+      "title": "《古兰经》对雨和祝福的思考",
+      "description": "《古兰经》对雨和祝福的思考"
+    },
+    "relief": {
+      "title": "杜阿救济",
+      "description": "杜阿救济"
+    },
+    "remembrance_reflection": {
+      "title": "《古兰经》关于纪念和反思的经文",
+      "description": "《古兰经》关于纪念和反思的经文"
+    },
+    "repentance": {
+      "title": "道巴和悔改杜阿",
+      "description": "道巴和悔改杜阿"
+    },
+    "righteous_believers": {
+      "title": "《古兰经》中正义信徒的杜阿",
+      "description": "《古兰经》中正义信徒的杜阿"
+    },
+    "righteous_offspring": {
+      "title": "正义子孙和怀孕的杜阿",
+      "description": "正义子孙和怀孕的杜阿"
+    },
+    "righteousness": {
+      "title": "正义与善行的杜阿",
+      "description": "正义与善行的杜阿"
+    },
+    "safety": {
+      "title": "杜阿安全",
+      "description": "杜阿安全"
+    },
+    "sincerity": {
+      "title": "古兰经经文和杜阿真诚",
+      "description": "古兰经经文和杜阿真诚"
+    },
+    "steadfastness": {
+      "title": "坚定的杜阿",
+      "description": "坚定的杜阿"
+    },
+    "strength": {
+      "title": "力量之二",
+      "description": "力量之二"
+    },
+    "studying": {
+      "title": "学习杜阿",
+      "description": "学习杜阿"
+    },
+    "success_barakah": {
+      "title": "成功杜阿和巴拉卡",
+      "description": "成功与祝福的祈祷"
+    },
+    "topics": {
+      "title": "《古兰经》中的杜阿（按主题）",
+      "description": "《古兰经》中的杜阿（按主题）"
+    },
+    "travel": {
+      "title": "关于旅行和旅途安全的古兰经经文和杜阿",
+      "description": "关于旅行和旅途安全的古兰经经文和杜阿"
+    },
+    "ummah": {
+      "title": "为乌玛而杜阿",
+      "description": "为乌玛而杜阿"
+    },
+    "unity": {
+      "title": "团结杜阿",
+      "description": "团结杜阿"
+    },
+    "victory": {
+      "title": "胜利杜阿",
+      "description": "胜利杜阿"
+    },
+    "waswas": {
+      "title": "为瓦瓦斯和低语而作的杜阿",
+      "description": "为瓦瓦斯和低语而作的杜阿"
+    },
+    "when_someone_dies": {
+      "title": "当有人去世时的《古兰经》段落和杜阿",
+      "description": "当有人去世时的《古兰经》段落和杜阿"
+    },
+    "wisdom": {
+      "title": "智慧杜阿",
+      "description": "智慧杜阿"
+    },
+    "work_career": {
+      "title": "工作和事业的杜阿",
+      "description": "工作和事业的杜阿"
+    }
+  },
+  "prophets": {
+    "prophet_adam": {
+      "name": "亚当"
+    },
+    "prophet_al_yasa": {
+      "name": "阿尔亚萨"
+    },
+    "prophet_ayyub": {
+      "name": "阿尤布"
+    },
+    "prophet_ayyub_illness": {
+      "name": "阿尤布病"
+    },
+    "prophet_dawud": {
+      "name": "达乌德"
+    },
+    "prophet_dhul_kifl": {
+      "name": "杜尔·基夫"
+    },
+    "prophet_harun": {
+      "name": "哈伦"
+    },
+    "prophet_hud": {
+      "name": "平视显示器"
+    },
+    "prophet_ibrahim": {
+      "name": "易卜拉欣"
+    },
+    "prophet_idris": {
+      "name": "伊德里斯"
+    },
+    "prophet_ilyas": {
+      "name": "伊利亚斯"
+    },
+    "prophet_isa": {
+      "name": "伊萨"
+    },
+    "prophet_ishaq": {
+      "name": "伊沙克"
+    },
+    "prophet_ismail": {
+      "name": "伊斯梅尔"
+    },
+    "prophet_lut": {
+      "name": "卢特"
+    },
+    "prophet_muhammad": {
+      "name": "穆罕默德"
+    },
+    "prophet_musa": {
+      "name": "穆萨"
+    },
+    "prophet_nuh": {
+      "name": "努赫"
+    },
+    "prophet_nuh_forgiveness": {
+      "name": "努赫宽恕"
+    },
+    "prophet_salih": {
+      "name": "萨利赫"
+    },
+    "prophet_shuayb": {
+      "name": "舒艾布"
+    },
+    "prophet_sulayman": {
+      "name": "苏莱曼"
+    },
+    "prophet_yahya": {
+      "name": "叶海亚"
+    },
+    "prophet_yaqub": {
+      "name": "雅库布"
+    },
+    "prophet_yunus": {
+      "name": "尤努斯"
+    },
+    "prophet_yusuf": {
+      "name": "优素福"
+    },
+    "prophet_zakariya": {
+      "name": "扎卡里亚"
+    }
+  },
+  "ui": {
+    "quran_explorer": "古兰经探索者",
+    "browse_topics": "按主题浏览",
+    "browse_prophets": "按先知浏览",
+    "related_duas": "相关杜阿",
+    "recommended_duas": "推荐杜阿",
+    "associated_duas": "联合杜阿",
+    "related_topics": "相关主题",
+    "appears_in": "出现在",
+    "explore_collection": "探索系列",
+    "discover_more": "发现更多",
+    "daily_reflection": "每日反思",
+    "prophetic_duas": "预言杜阿",
+    "all_collections": "所有系列",
+    "all_prophets": "所有先知",
+    "view_related": "查看相关",
+    "view_all": "查看全部"
+  }
+}

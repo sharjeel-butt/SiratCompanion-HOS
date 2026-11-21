@@ -1,0 +1,2576 @@
+{
+  "version": 1,
+  "collections": {
+    "rabbana": {
+      "type": "collection",
+      "id": "rabbana",
+      "title": "Rabbana Duas from the Quran",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_the_young_believers",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_light_and_forgiveness",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_promise_of_the_hereafter",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "prophets": {
+      "type": "collection",
+      "id": "prophets",
+      "title": "Duas of the Prophets in the Quran",
+      "category": "General",
+      "collection_type": "prophetic",
+      "dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_yunus_in_distress",
+        "dua_dua_of_zakariyya_for_an_heir",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_submission_and_repentance"
+      ]
+    },
+    "forgiveness": {
+      "type": "collection",
+      "id": "forgiveness",
+      "title": "Duas for Forgiveness",
+      "category": "Forgiveness",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_no_burden_beyond_capacity",
+        "dua_promise_of_the_hereafter",
+        "dua_trust_in_allah"
+      ]
+    },
+    "everyday_duas": {
+      "type": "collection",
+      "id": "everyday_duas",
+      "title": "Short Duas from the Quran for Daily Recitation and Memorization",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_yunus_in_distress",
+        "dua_for_righteous_child",
+        "dua_forgiveness_and_mercy",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_guidance_to_the_straight_path",
+        "dua_increase_me_in_knowledge",
+        "dua_mercy_for_parents"
+      ]
+    },
+    "forgiveness_of_sins": {
+      "type": "collection",
+      "id": "forgiveness_of_sins",
+      "title": "Duas for Forgiveness of Sins",
+      "category": "Forgiveness",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_light_and_forgiveness",
+        "dua_no_burden_beyond_capacity",
+        "dua_promise_of_the_hereafter"
+      ]
+    },
+    "success_barakah": {
+      "type": "collection",
+      "id": "success_barakah",
+      "title": "Duas for Success and Barakah",
+      "category": "Success",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_promise_of_the_hereafter",
+        "dua_submission_and_repentance"
+      ]
+    },
+    "righteous_believers": {
+      "type": "collection",
+      "id": "righteous_believers",
+      "title": "Duas of the Righteous Believers in the Quran",
+      "category": "General",
+      "collection_type": "believers",
+      "dua_ids": [
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_the_young_believers",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_light_and_forgiveness",
+        "dua_promise_of_the_hereafter",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts"
+      ]
+    },
+    "children": {
+      "type": "collection",
+      "id": "children",
+      "title": "Duas for Children in the Quran",
+      "category": "Family",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_zakariyya_for_an_heir",
+        "dua_for_righteous_child",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_righteous_spouses_and_children",
+        "dua_submission_and_repentance"
+      ]
+    },
+    "family": {
+      "type": "collection",
+      "id": "family",
+      "title": "Duas for Family, Marriage, and Spouses",
+      "category": "Family",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_mercy_for_parents",
+        "dua_righteous_spouses_and_children",
+        "dua_submission_and_repentance"
+      ]
+    },
+    "hereafter": {
+      "type": "collection",
+      "id": "hereafter",
+      "title": "Duas for the Hereafter",
+      "category": "Hereafter",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_ibrahim_for_wisdom",
+        "dua_dua_of_yusuf_for_a_muslim_death",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_light_and_forgiveness",
+        "dua_promise_of_the_hereafter"
+      ]
+    },
+    "hardship": {
+      "type": "collection",
+      "id": "hardship",
+      "title": "Duas and Quran Passages for Hardship, Sadness, and Grief",
+      "category": "Hardship",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_yunus_in_distress",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness"
+      ]
+    },
+    "topics": {
+      "type": "collection",
+      "id": "topics",
+      "title": "Duas from the Quran by Topic",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_yunus_in_distress",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_guidance_to_the_straight_path",
+        "dua_righteous_spouses_and_children"
+      ]
+    },
+    "daily_life": {
+      "type": "collection",
+      "id": "daily_life",
+      "title": "Duas from the Quran for Daily Life",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_musa_for_help",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_increase_me_in_knowledge",
+        "dua_mercy_for_parents",
+        "dua_protection_from_devils",
+        "dua_righteous_spouses_and_children"
+      ]
+    },
+    "arabic_english_transliteration": {
+      "type": "collection",
+      "id": "arabic_english_transliteration",
+      "title": "Quran Duas in Arabic, English, and Transliteration",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_yunus_in_distress",
+        "dua_for_righteous_child",
+        "dua_forgiveness_and_mercy",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_increase_me_in_knowledge"
+      ]
+    },
+    "acceptance": {
+      "type": "collection",
+      "id": "acceptance",
+      "title": "Duas for Acceptance of Good Deeds",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_submission_and_repentance"
+      ]
+    },
+    "hajj_umrah": {
+      "type": "collection",
+      "id": "hajj_umrah",
+      "title": "Duas for Hajj &amp; Umrah",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_submission_and_repentance"
+      ]
+    },
+    "new_muslims": {
+      "type": "collection",
+      "id": "new_muslims",
+      "title": "Duas for New Muslims",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_adam_and_hawwa",
+        "dua_forgiveness_and_mercy",
+        "dua_guidance_to_the_straight_path",
+        "dua_increase_me_in_knowledge",
+        "dua_steadfast_hearts"
+      ]
+    },
+    "parents": {
+      "type": "collection",
+      "id": "parents",
+      "title": "Duas for Parents and Deceased Parents in the Quran",
+      "category": "Family",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_mercy_for_parents"
+      ]
+    },
+    "protection_from_hellfire": {
+      "type": "collection",
+      "id": "protection_from_hellfire",
+      "title": "Duas for Protection from Hellfire",
+      "category": "Protection",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_creation_and_protection_from_fire",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_promise_of_the_hereafter"
+      ]
+    },
+    "relief": {
+      "type": "collection",
+      "id": "relief",
+      "title": "Duas for Relief",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_yunus_in_distress",
+        "dua_no_burden_beyond_capacity"
+      ]
+    },
+    "good_ending": {
+      "type": "collection",
+      "id": "good_ending",
+      "title": "Duas for a Good Ending",
+      "category": "Hereafter",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_yusuf_for_a_muslim_death",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_patience_and_a_muslim_death",
+        "dua_promise_of_the_hereafter"
+      ]
+    },
+    "believers": {
+      "type": "collection",
+      "id": "believers",
+      "title": "Duas for the Believers",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_nuh_for_believers",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_light_and_forgiveness"
+      ]
+    },
+    "anxiety": {
+      "type": "collection",
+      "id": "anxiety",
+      "title": "Duas and Quran Passages for Stress, Depression and Anxiety",
+      "category": "Hardship",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_yunus_in_distress",
+        "dua_no_burden_beyond_capacity",
+        "dua_protection_from_devils"
+      ]
+    },
+    "mercy": {
+      "type": "collection",
+      "id": "mercy",
+      "title": "Duas for Allah&#x27;s Mercy",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_the_young_believers",
+        "dua_forgiveness_and_mercy"
+      ]
+    },
+    "exam_success": {
+      "type": "collection",
+      "id": "exam_success",
+      "title": "Duas for Exam Success",
+      "category": "Success",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_increase_me_in_knowledge",
+        "dua_steadfast_hearts"
+      ]
+    },
+    "humility": {
+      "type": "collection",
+      "id": "humility",
+      "title": "Duas for Humility",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_the_young_believers",
+        "dua_forgiveness_and_mercy"
+      ]
+    },
+    "jannah": {
+      "type": "collection",
+      "id": "jannah",
+      "title": "Duas for Jannah",
+      "category": "Hereafter",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_ibrahim_for_wisdom",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_promise_of_the_hereafter"
+      ]
+    },
+    "righteousness": {
+      "type": "collection",
+      "id": "righteousness",
+      "title": "Duas for Righteousness and Good Deeds",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_ibrahim_for_wisdom",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_for_righteous_child",
+        "dua_righteous_spouses_and_children"
+      ]
+    },
+    "powerful_duas": {
+      "type": "collection",
+      "id": "powerful_duas",
+      "title": "Powerful Duas from the Quran",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_yunus_in_distress",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_righteous_spouses_and_children"
+      ]
+    },
+    "friends_loved_ones": {
+      "type": "collection",
+      "id": "friends_loved_ones",
+      "title": "Duas for Friends and Loved Ones",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers"
+      ]
+    },
+    "guidance": {
+      "type": "collection",
+      "id": "guidance",
+      "title": "Duas for Guidance and the Straight Path",
+      "category": "Guidance",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_the_young_believers",
+        "dua_guidance_to_the_straight_path",
+        "dua_steadfast_hearts"
+      ]
+    },
+    "benefit_from_quran": {
+      "type": "collection",
+      "id": "benefit_from_quran",
+      "title": "Duas for Learning, Memorizing, and Benefiting from the Quran",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_guidance_to_the_straight_path",
+        "dua_increase_me_in_knowledge",
+        "dua_steadfast_hearts"
+      ]
+    },
+    "righteous_offspring": {
+      "type": "collection",
+      "id": "righteous_offspring",
+      "title": "Duas for Righteous Offspring and Pregnancy",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_zakariyya_for_an_heir",
+        "dua_for_righteous_child",
+        "dua_righteous_spouses_and_children"
+      ]
+    },
+    "strength": {
+      "type": "collection",
+      "id": "strength",
+      "title": "Duas for Strength",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness"
+      ]
+    },
+    "repentance": {
+      "type": "collection",
+      "id": "repentance",
+      "title": "Duas for Tawbah and Repentance",
+      "category": "Forgiveness",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_trust_in_allah"
+      ]
+    },
+    "wisdom": {
+      "type": "collection",
+      "id": "wisdom",
+      "title": "Duas for Wisdom",
+      "category": "Knowledge",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_ibrahim_for_wisdom",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_increase_me_in_knowledge"
+      ]
+    },
+    "work_career": {
+      "type": "collection",
+      "id": "work_career",
+      "title": "Duas for Work and Career",
+      "category": "Success",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_sulayman_for_gratitude"
+      ]
+    },
+    "pious_spouse": {
+      "type": "collection",
+      "id": "pious_spouse",
+      "title": "Duas for a Pious Spouse",
+      "category": "Family",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_righteous_spouses_and_children"
+      ]
+    },
+    "deceased": {
+      "type": "collection",
+      "id": "deceased",
+      "title": "Duas for the Dead",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_nuh_for_believers",
+        "dua_forgiveness_for_parents_and_believers"
+      ]
+    },
+    "provision_wealth": {
+      "type": "collection",
+      "id": "provision_wealth",
+      "title": "Quran Verses and Duas for Provision (Rizq) and Wealth",
+      "category": "Provision",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_musa_for_help",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_no_burden_beyond_capacity"
+      ]
+    },
+    "sincerity": {
+      "type": "collection",
+      "id": "sincerity",
+      "title": "Quran Verses and Duas for Sincerity",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_submission_and_repentance"
+      ]
+    },
+    "remembrance_reflection": {
+      "type": "collection",
+      "id": "remembrance_reflection",
+      "title": "Quran Verses on Remembrance and Reflection",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_creation_and_protection_from_fire",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_promise_of_the_hereafter"
+      ]
+    },
+    "enemies": {
+      "type": "collection",
+      "id": "enemies",
+      "title": "Duas Against Enemies and Harmful People",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_patience_and_firmness",
+        "dua_prophet_lut"
+      ]
+    },
+    "pain_sickness": {
+      "type": "collection",
+      "id": "pain_sickness",
+      "title": "Duas and Quran Passages for Pain and Sickness (Shifa)",
+      "category": "Health",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_wisdom"
+      ]
+    },
+    "patience": {
+      "type": "collection",
+      "id": "patience",
+      "title": "Duas and Quran Passages for Patience",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness"
+      ]
+    },
+    "character": {
+      "type": "collection",
+      "id": "character",
+      "title": "Duas for Beautiful Character",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_righteous_spouses_and_children"
+      ]
+    },
+    "confidence": {
+      "type": "collection",
+      "id": "confidence",
+      "title": "Duas for Confidence",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help"
+      ]
+    },
+    "heart_healing": {
+      "type": "collection",
+      "id": "heart_healing",
+      "title": "Duas for Diseases of the Heart",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_ayyub_in_illness",
+        "dua_steadfast_hearts"
+      ]
+    },
+    "knowledge": {
+      "type": "collection",
+      "id": "knowledge",
+      "title": "Duas for Knowledge",
+      "category": "Knowledge",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_increase_me_in_knowledge"
+      ]
+    },
+    "peace": {
+      "type": "collection",
+      "id": "peace",
+      "title": "Duas for Peace",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_righteous_spouses_and_children"
+      ]
+    },
+    "protection": {
+      "type": "collection",
+      "id": "protection",
+      "title": "Duas for Protection from Evil and Shaytan",
+      "category": "Protection",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_protection_from_devils",
+        "dua_prophet_lut"
+      ]
+    },
+    "steadfastness": {
+      "type": "collection",
+      "id": "steadfastness",
+      "title": "Duas for Steadfastness",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_patience_and_a_muslim_death",
+        "dua_steadfast_hearts"
+      ]
+    },
+    "studying": {
+      "type": "collection",
+      "id": "studying",
+      "title": "Duas for Studying",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_increase_me_in_knowledge"
+      ]
+    },
+    "victory": {
+      "type": "collection",
+      "id": "victory",
+      "title": "Duas for Victory",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_patience_and_firmness",
+        "dua_prophet_lut"
+      ]
+    },
+    "waswas": {
+      "type": "collection",
+      "id": "waswas",
+      "title": "Duas for Waswas and Whispers",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_protection_from_devils",
+        "dua_steadfast_hearts"
+      ]
+    },
+    "ummah": {
+      "type": "collection",
+      "id": "ummah",
+      "title": "Duas for the Ummah",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_light_and_forgiveness"
+      ]
+    },
+    "when_someone_dies": {
+      "type": "collection",
+      "id": "when_someone_dies",
+      "title": "Quran Passages and Duas for When Someone Dies",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_forgiveness_for_parents_and_believers"
+      ]
+    },
+    "black_magic_protection": {
+      "type": "collection",
+      "id": "black_magic_protection",
+      "title": "Quran Verses and Duas for Ruqyah Protection",
+      "category": "Protection",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_guidance_to_the_straight_path",
+        "dua_no_burden_beyond_capacity"
+      ]
+    },
+    "oppression": {
+      "type": "collection",
+      "id": "oppression",
+      "title": "Duas Against Oppression",
+      "category": "Protection",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_prophet_lut"
+      ]
+    },
+    "prophet_sulayman": {
+      "type": "collection",
+      "id": "prophet_sulayman",
+      "title": "Duas and Gratitude of Prophet Sulayman",
+      "category": "Prophetic Duas",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_sulayman_for_gratitude"
+      ]
+    },
+    "gratitude": {
+      "type": "collection",
+      "id": "gratitude",
+      "title": "Duas and Quran Passages for Gratitude",
+      "category": "Gratitude",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_sulayman_for_gratitude"
+      ]
+    },
+    "palestine": {
+      "type": "collection",
+      "id": "palestine",
+      "title": "Duas for Palestine and the Oppressed",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_patience_and_firmness"
+      ]
+    },
+    "heart": {
+      "type": "collection",
+      "id": "heart",
+      "title": "Duas for the Heart and a Clean Heart",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_steadfast_hearts"
+      ]
+    },
+    "health": {
+      "type": "collection",
+      "id": "health",
+      "title": "Quran Reflections on Healing and Health",
+      "category": "Health",
+      "collection_type": "topic",
+      "dua_ids": [
+        "dua_dua_of_ibrahim_for_wisdom"
+      ]
+    },
+    "prophet_shuayb": {
+      "type": "collection",
+      "id": "prophet_shuayb",
+      "title": "Duas and Trust of Prophet Shuayb",
+      "category": "Prophetic Duas",
+      "collection_type": "topic",
+      "dua_ids": []
+    },
+    "fear": {
+      "type": "collection",
+      "id": "fear",
+      "title": "Duas for Fear",
+      "category": "Hardship",
+      "collection_type": "topic",
+      "dua_ids": []
+    },
+    "safety": {
+      "type": "collection",
+      "id": "safety",
+      "title": "Duas for Safety",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": []
+    },
+    "unity": {
+      "type": "collection",
+      "id": "unity",
+      "title": "Duas for Unity",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": []
+    },
+    "prophet_harun": {
+      "type": "collection",
+      "id": "prophet_harun",
+      "title": "Musa&#x27;s Dua for Harun",
+      "category": "Prophetic Duas",
+      "collection_type": "topic",
+      "dua_ids": []
+    },
+    "day_night": {
+      "type": "collection",
+      "id": "day_night",
+      "title": "Quran Reflections for Day and Night",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": []
+    },
+    "rain": {
+      "type": "collection",
+      "id": "rain",
+      "title": "Quran Reflections on Rain and Blessings",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": []
+    },
+    "fasting": {
+      "type": "collection",
+      "id": "fasting",
+      "title": "Quran Verses about Ramadan and Fasting",
+      "category": "General",
+      "collection_type": "topic",
+      "dua_ids": []
+    },
+    "travel": {
+      "type": "collection",
+      "id": "travel",
+      "title": "Quran Verses and Duas for Travel and Journey Safety",
+      "category": "Travel",
+      "collection_type": "topic",
+      "dua_ids": []
+    },
+    "evil_eye": {
+      "type": "collection",
+      "id": "evil_eye",
+      "title": "Quran Verses for Protection from the Evil Eye",
+      "category": "Protection",
+      "collection_type": "topic",
+      "dua_ids": []
+    }
+  },
+  "duas": {
+    "dua_acceptance_of_good_deeds": {
+      "type": "dua",
+      "id": "dua_acceptance_of_good_deeds",
+      "collection_ids": [
+        "acceptance",
+        "children",
+        "family",
+        "hajj_umrah",
+        "prophets",
+        "rabbana",
+        "sincerity",
+        "success_barakah"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_the_young_believers",
+        "dua_dua_of_yunus_in_distress",
+        "dua_dua_of_zakariyya_for_an_heir",
+        "dua_for_righteous_child",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_light_and_forgiveness",
+        "dua_mercy_for_parents",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_promise_of_the_hereafter",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_contentment_with_allah_islam_and_muhammad": {
+      "type": "dua",
+      "id": "dua_contentment_with_allah_islam_and_muhammad",
+      "collection_ids": [],
+      "prophet_ids": [
+        "prophet_muhammad"
+      ],
+      "related_dua_ids": []
+    },
+    "dua_creation_and_protection_from_fire": {
+      "type": "dua",
+      "id": "dua_creation_and_protection_from_fire",
+      "collection_ids": [
+        "forgiveness",
+        "forgiveness_of_sins",
+        "good_ending",
+        "hereafter",
+        "jannah",
+        "protection_from_hellfire",
+        "rabbana",
+        "remembrance_reflection",
+        "righteous_believers",
+        "success_barakah"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_ibrahim_for_wisdom",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_the_young_believers",
+        "dua_dua_of_yusuf_for_a_muslim_death",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_light_and_forgiveness",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_promise_of_the_hereafter",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_dua_of_adam_and_hawwa": {
+      "type": "dua",
+      "id": "dua_dua_of_adam_and_hawwa",
+      "collection_ids": [
+        "everyday_duas",
+        "forgiveness",
+        "forgiveness_of_sins",
+        "humility",
+        "mercy",
+        "new_muslims",
+        "powerful_duas",
+        "prophets",
+        "rabbana",
+        "repentance",
+        "topics"
+      ],
+      "prophet_ids": [
+        "prophet_adam"
+      ],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_the_young_believers",
+        "dua_dua_of_yunus_in_distress",
+        "dua_dua_of_zakariyya_for_an_heir",
+        "dua_for_righteous_child",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_guidance_to_the_straight_path",
+        "dua_increase_me_in_knowledge",
+        "dua_light_and_forgiveness",
+        "dua_mercy_for_parents",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_promise_of_the_hereafter",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_dua_of_ayyub_in_illness": {
+      "type": "dua",
+      "id": "dua_dua_of_ayyub_in_illness",
+      "collection_ids": [
+        "hardship",
+        "heart_healing",
+        "mercy",
+        "pain_sickness",
+        "prophets",
+        "relief"
+      ],
+      "prophet_ids": [
+        "prophet_ayyub"
+      ],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_ibrahim_for_wisdom",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_the_young_believers",
+        "dua_dua_of_yunus_in_distress",
+        "dua_dua_of_zakariyya_for_an_heir",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance"
+      ]
+    },
+    "dua_dua_of_ibrahim_for_a_secure_city": {
+      "type": "dua",
+      "id": "dua_dua_of_ibrahim_for_a_secure_city",
+      "collection_ids": [],
+      "prophet_ids": [
+        "prophet_ibrahim"
+      ],
+      "related_dua_ids": []
+    },
+    "dua_dua_of_ibrahim_for_prayer": {
+      "type": "dua",
+      "id": "dua_dua_of_ibrahim_for_prayer",
+      "collection_ids": [
+        "acceptance",
+        "believers",
+        "children",
+        "deceased",
+        "family",
+        "forgiveness",
+        "friends_loved_ones",
+        "hajj_umrah",
+        "parents",
+        "pious_spouse",
+        "prophets",
+        "rabbana",
+        "when_someone_dies"
+      ],
+      "prophet_ids": [
+        "prophet_ibrahim"
+      ],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_the_young_believers",
+        "dua_dua_of_yunus_in_distress",
+        "dua_dua_of_zakariyya_for_an_heir",
+        "dua_for_righteous_child",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_light_and_forgiveness",
+        "dua_mercy_for_parents",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_promise_of_the_hereafter",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_dua_of_ibrahim_for_wisdom": {
+      "type": "dua",
+      "id": "dua_dua_of_ibrahim_for_wisdom",
+      "collection_ids": [
+        "health",
+        "hereafter",
+        "jannah",
+        "pain_sickness",
+        "righteousness",
+        "wisdom"
+      ],
+      "prophet_ids": [
+        "prophet_ibrahim"
+      ],
+      "related_dua_ids": [
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_yusuf_for_a_muslim_death",
+        "dua_for_righteous_child",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_increase_me_in_knowledge",
+        "dua_light_and_forgiveness",
+        "dua_promise_of_the_hereafter",
+        "dua_righteous_spouses_and_children"
+      ]
+    },
+    "dua_dua_of_musa_for_ease_and_eloquence": {
+      "type": "dua",
+      "id": "dua_dua_of_musa_for_ease_and_eloquence",
+      "collection_ids": [
+        "anxiety",
+        "confidence",
+        "exam_success",
+        "knowledge",
+        "prophets",
+        "relief",
+        "strength",
+        "studying",
+        "work_career"
+      ],
+      "prophet_ids": [
+        "prophet_musa"
+      ],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_yunus_in_distress",
+        "dua_dua_of_zakariyya_for_an_heir",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_increase_me_in_knowledge",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_protection_from_devils",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance"
+      ]
+    },
+    "dua_dua_of_musa_for_help": {
+      "type": "dua",
+      "id": "dua_dua_of_musa_for_help",
+      "collection_ids": [
+        "arabic_english_transliteration",
+        "confidence",
+        "daily_life",
+        "everyday_duas",
+        "exam_success",
+        "hardship",
+        "humility",
+        "prophets",
+        "provision_wealth",
+        "relief",
+        "success_barakah",
+        "topics",
+        "work_career"
+      ],
+      "prophet_ids": [
+        "prophet_musa"
+      ],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_the_young_believers",
+        "dua_dua_of_yunus_in_distress",
+        "dua_dua_of_zakariyya_for_an_heir",
+        "dua_for_righteous_child",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_guidance_to_the_straight_path",
+        "dua_increase_me_in_knowledge",
+        "dua_mercy_for_parents",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_promise_of_the_hereafter",
+        "dua_protection_from_devils",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance"
+      ]
+    },
+    "dua_dua_of_nuh_for_believers": {
+      "type": "dua",
+      "id": "dua_dua_of_nuh_for_believers",
+      "collection_ids": [
+        "believers",
+        "deceased",
+        "forgiveness",
+        "parents",
+        "prophets"
+      ],
+      "prophet_ids": [
+        "prophet_nuh"
+      ],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_yunus_in_distress",
+        "dua_dua_of_zakariyya_for_an_heir",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_light_and_forgiveness",
+        "dua_mercy_for_parents",
+        "dua_no_burden_beyond_capacity",
+        "dua_promise_of_the_hereafter",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_dua_of_nuh_for_forgiveness": {
+      "type": "dua",
+      "id": "dua_dua_of_nuh_for_forgiveness",
+      "collection_ids": [
+        "forgiveness",
+        "prophets",
+        "repentance"
+      ],
+      "prophet_ids": [
+        "prophet_nuh"
+      ],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_yunus_in_distress",
+        "dua_dua_of_zakariyya_for_an_heir",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_no_burden_beyond_capacity",
+        "dua_promise_of_the_hereafter",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_dua_of_sulayman_for_gratitude": {
+      "type": "dua",
+      "id": "dua_dua_of_sulayman_for_gratitude",
+      "collection_ids": [
+        "acceptance",
+        "character",
+        "gratitude",
+        "parents",
+        "prophet_sulayman",
+        "prophets",
+        "righteousness",
+        "sincerity",
+        "success_barakah",
+        "wisdom",
+        "work_career"
+      ],
+      "prophet_ids": [
+        "prophet_sulayman"
+      ],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_ibrahim_for_wisdom",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_yunus_in_distress",
+        "dua_dua_of_zakariyya_for_an_heir",
+        "dua_for_righteous_child",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_increase_me_in_knowledge",
+        "dua_mercy_for_parents",
+        "dua_promise_of_the_hereafter",
+        "dua_righteous_spouses_and_children",
+        "dua_submission_and_repentance"
+      ]
+    },
+    "dua_dua_of_the_young_believers": {
+      "type": "dua",
+      "id": "dua_dua_of_the_young_believers",
+      "collection_ids": [
+        "guidance",
+        "humility",
+        "mercy",
+        "rabbana",
+        "righteous_believers"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_musa_for_help",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_guidance_to_the_straight_path",
+        "dua_light_and_forgiveness",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_promise_of_the_hereafter",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_dua_of_yunus_in_distress": {
+      "type": "dua",
+      "id": "dua_dua_of_yunus_in_distress",
+      "collection_ids": [
+        "anxiety",
+        "arabic_english_transliteration",
+        "everyday_duas",
+        "hardship",
+        "powerful_duas",
+        "prophets",
+        "relief",
+        "topics"
+      ],
+      "prophet_ids": [
+        "prophet_yunus"
+      ],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_zakariyya_for_an_heir",
+        "dua_for_righteous_child",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_guidance_to_the_straight_path",
+        "dua_increase_me_in_knowledge",
+        "dua_mercy_for_parents",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_protection_from_devils",
+        "dua_righteous_spouses_and_children",
+        "dua_submission_and_repentance"
+      ]
+    },
+    "dua_dua_of_yusuf_for_a_muslim_death": {
+      "type": "dua",
+      "id": "dua_dua_of_yusuf_for_a_muslim_death",
+      "collection_ids": [
+        "good_ending",
+        "hereafter"
+      ],
+      "prophet_ids": [
+        "prophet_yusuf"
+      ],
+      "related_dua_ids": [
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_ibrahim_for_wisdom",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_light_and_forgiveness",
+        "dua_patience_and_a_muslim_death",
+        "dua_promise_of_the_hereafter"
+      ]
+    },
+    "dua_dua_of_zakariyya_for_an_heir": {
+      "type": "dua",
+      "id": "dua_dua_of_zakariyya_for_an_heir",
+      "collection_ids": [
+        "children",
+        "prophets",
+        "righteous_offspring"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_yunus_in_distress",
+        "dua_for_righteous_child",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_righteous_spouses_and_children",
+        "dua_submission_and_repentance"
+      ]
+    },
+    "dua_for_righteous_child": {
+      "type": "dua",
+      "id": "dua_for_righteous_child",
+      "collection_ids": [
+        "arabic_english_transliteration",
+        "children",
+        "everyday_duas",
+        "righteous_offspring",
+        "righteousness"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_ibrahim_for_wisdom",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_yunus_in_distress",
+        "dua_dua_of_zakariyya_for_an_heir",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_guidance_to_the_straight_path",
+        "dua_increase_me_in_knowledge",
+        "dua_mercy_for_parents",
+        "dua_righteous_spouses_and_children",
+        "dua_submission_and_repentance"
+      ]
+    },
+    "dua_forgiveness_and_a_righteous_death": {
+      "type": "dua",
+      "id": "dua_forgiveness_and_a_righteous_death",
+      "collection_ids": [
+        "forgiveness",
+        "forgiveness_of_sins",
+        "good_ending",
+        "hereafter",
+        "jannah",
+        "protection_from_hellfire",
+        "rabbana",
+        "remembrance_reflection",
+        "righteous_believers",
+        "success_barakah"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_ibrahim_for_wisdom",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_the_young_believers",
+        "dua_dua_of_yusuf_for_a_muslim_death",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_light_and_forgiveness",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_promise_of_the_hereafter",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_forgiveness_and_mercy": {
+      "type": "dua",
+      "id": "dua_forgiveness_and_mercy",
+      "collection_ids": [
+        "arabic_english_transliteration",
+        "everyday_duas",
+        "forgiveness",
+        "forgiveness_of_sins",
+        "humility",
+        "mercy",
+        "new_muslims"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_the_young_believers",
+        "dua_dua_of_yunus_in_distress",
+        "dua_for_righteous_child",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_guidance_to_the_straight_path",
+        "dua_increase_me_in_knowledge",
+        "dua_light_and_forgiveness",
+        "dua_mercy_for_parents",
+        "dua_no_burden_beyond_capacity",
+        "dua_promise_of_the_hereafter",
+        "dua_steadfast_hearts",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_forgiveness_and_protection_from_fire": {
+      "type": "dua",
+      "id": "dua_forgiveness_and_protection_from_fire",
+      "collection_ids": [
+        "believers",
+        "forgiveness",
+        "forgiveness_of_sins",
+        "friends_loved_ones",
+        "protection_from_hellfire",
+        "rabbana",
+        "righteous_believers",
+        "ummah"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_the_young_believers",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_light_and_forgiveness",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_promise_of_the_hereafter",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_forgiveness_for_parents_and_believers": {
+      "type": "dua",
+      "id": "dua_forgiveness_for_parents_and_believers",
+      "collection_ids": [
+        "acceptance",
+        "believers",
+        "children",
+        "deceased",
+        "family",
+        "forgiveness",
+        "friends_loved_ones",
+        "hajj_umrah",
+        "parents",
+        "pious_spouse",
+        "prophets",
+        "rabbana",
+        "when_someone_dies"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_the_young_believers",
+        "dua_dua_of_yunus_in_distress",
+        "dua_dua_of_zakariyya_for_an_heir",
+        "dua_for_righteous_child",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_light_and_forgiveness",
+        "dua_mercy_for_parents",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_promise_of_the_hereafter",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_good_in_this_world_and_the_hereafter": {
+      "type": "dua",
+      "id": "dua_good_in_this_world_and_the_hereafter",
+      "collection_ids": [
+        "arabic_english_transliteration",
+        "daily_life",
+        "everyday_duas",
+        "family",
+        "hajj_umrah",
+        "hereafter",
+        "peace",
+        "powerful_duas",
+        "protection_from_hellfire",
+        "provision_wealth",
+        "rabbana",
+        "success_barakah",
+        "topics"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_ibrahim_for_wisdom",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_the_young_believers",
+        "dua_dua_of_yunus_in_distress",
+        "dua_dua_of_yusuf_for_a_muslim_death",
+        "dua_for_righteous_child",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_guidance_to_the_straight_path",
+        "dua_increase_me_in_knowledge",
+        "dua_light_and_forgiveness",
+        "dua_mercy_for_parents",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_promise_of_the_hereafter",
+        "dua_protection_from_devils",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_guidance_to_the_straight_path": {
+      "type": "dua",
+      "id": "dua_guidance_to_the_straight_path",
+      "collection_ids": [
+        "benefit_from_quran",
+        "black_magic_protection",
+        "everyday_duas",
+        "guidance",
+        "new_muslims",
+        "topics"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_the_young_believers",
+        "dua_dua_of_yunus_in_distress",
+        "dua_for_righteous_child",
+        "dua_forgiveness_and_mercy",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_increase_me_in_knowledge",
+        "dua_mercy_for_parents",
+        "dua_no_burden_beyond_capacity",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts"
+      ]
+    },
+    "dua_increase_me_in_knowledge": {
+      "type": "dua",
+      "id": "dua_increase_me_in_knowledge",
+      "collection_ids": [
+        "arabic_english_transliteration",
+        "benefit_from_quran",
+        "daily_life",
+        "everyday_duas",
+        "exam_success",
+        "knowledge",
+        "new_muslims",
+        "studying",
+        "wisdom"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ibrahim_for_wisdom",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_yunus_in_distress",
+        "dua_for_righteous_child",
+        "dua_forgiveness_and_mercy",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_guidance_to_the_straight_path",
+        "dua_mercy_for_parents",
+        "dua_protection_from_devils",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts"
+      ]
+    },
+    "dua_light_and_forgiveness": {
+      "type": "dua",
+      "id": "dua_light_and_forgiveness",
+      "collection_ids": [
+        "believers",
+        "forgiveness_of_sins",
+        "hereafter",
+        "rabbana",
+        "righteous_believers",
+        "ummah"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_ibrahim_for_wisdom",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_the_young_believers",
+        "dua_dua_of_yusuf_for_a_muslim_death",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_promise_of_the_hereafter",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_mercy_for_parents": {
+      "type": "dua",
+      "id": "dua_mercy_for_parents",
+      "collection_ids": [
+        "daily_life",
+        "everyday_duas",
+        "family",
+        "parents"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_yunus_in_distress",
+        "dua_for_righteous_child",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_guidance_to_the_straight_path",
+        "dua_increase_me_in_knowledge",
+        "dua_protection_from_devils",
+        "dua_righteous_spouses_and_children",
+        "dua_submission_and_repentance"
+      ]
+    },
+    "dua_no_burden_beyond_capacity": {
+      "type": "dua",
+      "id": "dua_no_burden_beyond_capacity",
+      "collection_ids": [
+        "anxiety",
+        "black_magic_protection",
+        "forgiveness",
+        "forgiveness_of_sins",
+        "hardship",
+        "provision_wealth",
+        "rabbana",
+        "relief"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_the_young_believers",
+        "dua_dua_of_yunus_in_distress",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_guidance_to_the_straight_path",
+        "dua_light_and_forgiveness",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_promise_of_the_hereafter",
+        "dua_protection_from_devils",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_patience_and_a_muslim_death": {
+      "type": "dua",
+      "id": "dua_patience_and_a_muslim_death",
+      "collection_ids": [
+        "good_ending",
+        "hardship",
+        "patience",
+        "rabbana",
+        "steadfastness",
+        "strength"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_the_young_believers",
+        "dua_dua_of_yunus_in_distress",
+        "dua_dua_of_yusuf_for_a_muslim_death",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_light_and_forgiveness",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_firmness",
+        "dua_promise_of_the_hereafter",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_patience_and_firmness": {
+      "type": "dua",
+      "id": "dua_patience_and_firmness",
+      "collection_ids": [
+        "enemies",
+        "hardship",
+        "palestine",
+        "patience",
+        "rabbana",
+        "strength",
+        "victory"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_the_young_believers",
+        "dua_dua_of_yunus_in_distress",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_light_and_forgiveness",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_promise_of_the_hereafter",
+        "dua_prophet_lut",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_promise_of_the_hereafter": {
+      "type": "dua",
+      "id": "dua_promise_of_the_hereafter",
+      "collection_ids": [
+        "forgiveness",
+        "forgiveness_of_sins",
+        "good_ending",
+        "hereafter",
+        "jannah",
+        "protection_from_hellfire",
+        "rabbana",
+        "remembrance_reflection",
+        "righteous_believers",
+        "success_barakah"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_ibrahim_for_wisdom",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_the_young_believers",
+        "dua_dua_of_yusuf_for_a_muslim_death",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_light_and_forgiveness",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_prophet_lut": {
+      "type": "dua",
+      "id": "dua_prophet_lut",
+      "collection_ids": [
+        "enemies",
+        "oppression",
+        "protection",
+        "victory"
+      ],
+      "prophet_ids": [
+        "prophet_lut"
+      ],
+      "related_dua_ids": [
+        "dua_patience_and_firmness",
+        "dua_protection_from_devils"
+      ]
+    },
+    "dua_protection_from_devils": {
+      "type": "dua",
+      "id": "dua_protection_from_devils",
+      "collection_ids": [
+        "anxiety",
+        "daily_life",
+        "protection",
+        "waswas"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_yunus_in_distress",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_increase_me_in_knowledge",
+        "dua_mercy_for_parents",
+        "dua_no_burden_beyond_capacity",
+        "dua_prophet_lut",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts"
+      ]
+    },
+    "dua_righteous_spouses_and_children": {
+      "type": "dua",
+      "id": "dua_righteous_spouses_and_children",
+      "collection_ids": [
+        "character",
+        "children",
+        "daily_life",
+        "family",
+        "peace",
+        "pious_spouse",
+        "powerful_duas",
+        "rabbana",
+        "righteous_believers",
+        "righteous_offspring",
+        "righteousness",
+        "topics"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_ibrahim_for_wisdom",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_the_young_believers",
+        "dua_dua_of_yunus_in_distress",
+        "dua_dua_of_zakariyya_for_an_heir",
+        "dua_for_righteous_child",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_guidance_to_the_straight_path",
+        "dua_increase_me_in_knowledge",
+        "dua_light_and_forgiveness",
+        "dua_mercy_for_parents",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_promise_of_the_hereafter",
+        "dua_protection_from_devils",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_steadfast_hearts": {
+      "type": "dua",
+      "id": "dua_steadfast_hearts",
+      "collection_ids": [
+        "benefit_from_quran",
+        "exam_success",
+        "guidance",
+        "heart",
+        "heart_healing",
+        "new_muslims",
+        "rabbana",
+        "righteous_believers",
+        "steadfastness",
+        "waswas"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_the_young_believers",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_guidance_to_the_straight_path",
+        "dua_increase_me_in_knowledge",
+        "dua_light_and_forgiveness",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_promise_of_the_hereafter",
+        "dua_protection_from_devils",
+        "dua_righteous_spouses_and_children",
+        "dua_submission_and_repentance",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_submission_and_repentance": {
+      "type": "dua",
+      "id": "dua_submission_and_repentance",
+      "collection_ids": [
+        "acceptance",
+        "children",
+        "family",
+        "hajj_umrah",
+        "prophets",
+        "rabbana",
+        "sincerity",
+        "success_barakah"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ayyub_in_illness",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_sulayman_for_gratitude",
+        "dua_dua_of_the_young_believers",
+        "dua_dua_of_yunus_in_distress",
+        "dua_dua_of_zakariyya_for_an_heir",
+        "dua_for_righteous_child",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_light_and_forgiveness",
+        "dua_mercy_for_parents",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_promise_of_the_hereafter",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts",
+        "dua_trust_in_allah"
+      ]
+    },
+    "dua_trust_in_allah": {
+      "type": "dua",
+      "id": "dua_trust_in_allah",
+      "collection_ids": [
+        "forgiveness",
+        "rabbana",
+        "repentance"
+      ],
+      "prophet_ids": [],
+      "related_dua_ids": [
+        "dua_acceptance_of_good_deeds",
+        "dua_creation_and_protection_from_fire",
+        "dua_dua_of_adam_and_hawwa",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness",
+        "dua_dua_of_the_young_believers",
+        "dua_forgiveness_and_a_righteous_death",
+        "dua_forgiveness_and_mercy",
+        "dua_forgiveness_and_protection_from_fire",
+        "dua_forgiveness_for_parents_and_believers",
+        "dua_good_in_this_world_and_the_hereafter",
+        "dua_light_and_forgiveness",
+        "dua_no_burden_beyond_capacity",
+        "dua_patience_and_a_muslim_death",
+        "dua_patience_and_firmness",
+        "dua_promise_of_the_hereafter",
+        "dua_righteous_spouses_and_children",
+        "dua_steadfast_hearts",
+        "dua_submission_and_repentance"
+      ]
+    }
+  },
+  "prophets": {
+    "prophet_adam": {
+      "type": "prophet",
+      "id": "prophet_adam",
+      "name": "Adam",
+      "dua_ids": [
+        "dua_dua_of_adam_and_hawwa"
+      ],
+      "collection_ids": [
+        "everyday_duas",
+        "forgiveness",
+        "forgiveness_of_sins",
+        "humility",
+        "mercy",
+        "new_muslims",
+        "powerful_duas",
+        "prophets",
+        "rabbana",
+        "repentance",
+        "topics"
+      ]
+    },
+    "prophet_al_yasa": {
+      "type": "prophet",
+      "id": "prophet_al_yasa",
+      "name": "Al Yasa",
+      "dua_ids": [],
+      "collection_ids": []
+    },
+    "prophet_ayyub": {
+      "type": "prophet",
+      "id": "prophet_ayyub",
+      "name": "Ayyub",
+      "dua_ids": [
+        "dua_dua_of_ayyub_in_illness"
+      ],
+      "collection_ids": [
+        "hardship",
+        "heart_healing",
+        "mercy",
+        "pain_sickness",
+        "prophets",
+        "relief"
+      ]
+    },
+    "prophet_ayyub_illness": {
+      "type": "prophet",
+      "id": "prophet_ayyub_illness",
+      "name": "Ayyub Illness",
+      "dua_ids": [],
+      "collection_ids": []
+    },
+    "prophet_dawud": {
+      "type": "prophet",
+      "id": "prophet_dawud",
+      "name": "Dawud",
+      "dua_ids": [],
+      "collection_ids": []
+    },
+    "prophet_dhul_kifl": {
+      "type": "prophet",
+      "id": "prophet_dhul_kifl",
+      "name": "Dhul Kifl",
+      "dua_ids": [],
+      "collection_ids": []
+    },
+    "prophet_harun": {
+      "type": "prophet",
+      "id": "prophet_harun",
+      "name": "Harun",
+      "dua_ids": [],
+      "collection_ids": []
+    },
+    "prophet_hud": {
+      "type": "prophet",
+      "id": "prophet_hud",
+      "name": "Hud",
+      "dua_ids": [],
+      "collection_ids": []
+    },
+    "prophet_ibrahim": {
+      "type": "prophet",
+      "id": "prophet_ibrahim",
+      "name": "Ibrahim",
+      "dua_ids": [
+        "dua_dua_of_ibrahim_for_a_secure_city",
+        "dua_dua_of_ibrahim_for_prayer",
+        "dua_dua_of_ibrahim_for_wisdom"
+      ],
+      "collection_ids": [
+        "acceptance",
+        "believers",
+        "children",
+        "deceased",
+        "family",
+        "forgiveness",
+        "friends_loved_ones",
+        "hajj_umrah",
+        "health",
+        "hereafter",
+        "jannah",
+        "pain_sickness",
+        "parents",
+        "pious_spouse",
+        "prophets",
+        "rabbana",
+        "righteousness",
+        "when_someone_dies",
+        "wisdom"
+      ]
+    },
+    "prophet_idris": {
+      "type": "prophet",
+      "id": "prophet_idris",
+      "name": "Idris",
+      "dua_ids": [],
+      "collection_ids": []
+    },
+    "prophet_ilyas": {
+      "type": "prophet",
+      "id": "prophet_ilyas",
+      "name": "Ilyas",
+      "dua_ids": [],
+      "collection_ids": []
+    },
+    "prophet_isa": {
+      "type": "prophet",
+      "id": "prophet_isa",
+      "name": "Isa",
+      "dua_ids": [],
+      "collection_ids": []
+    },
+    "prophet_ishaq": {
+      "type": "prophet",
+      "id": "prophet_ishaq",
+      "name": "Ishaq",
+      "dua_ids": [],
+      "collection_ids": []
+    },
+    "prophet_ismail": {
+      "type": "prophet",
+      "id": "prophet_ismail",
+      "name": "Ismail",
+      "dua_ids": [],
+      "collection_ids": []
+    },
+    "prophet_lut": {
+      "type": "prophet",
+      "id": "prophet_lut",
+      "name": "Lut",
+      "dua_ids": [
+        "dua_prophet_lut"
+      ],
+      "collection_ids": [
+        "enemies",
+        "oppression",
+        "protection",
+        "victory"
+      ]
+    },
+    "prophet_muhammad": {
+      "type": "prophet",
+      "id": "prophet_muhammad",
+      "name": "Muhammad",
+      "dua_ids": [
+        "dua_contentment_with_allah_islam_and_muhammad"
+      ],
+      "collection_ids": []
+    },
+    "prophet_musa": {
+      "type": "prophet",
+      "id": "prophet_musa",
+      "name": "Musa",
+      "dua_ids": [
+        "dua_dua_of_musa_for_ease_and_eloquence",
+        "dua_dua_of_musa_for_help"
+      ],
+      "collection_ids": [
+        "anxiety",
+        "arabic_english_transliteration",
+        "confidence",
+        "daily_life",
+        "everyday_duas",
+        "exam_success",
+        "hardship",
+        "humility",
+        "knowledge",
+        "prophets",
+        "provision_wealth",
+        "relief",
+        "strength",
+        "studying",
+        "success_barakah",
+        "topics",
+        "work_career"
+      ]
+    },
+    "prophet_nuh": {
+      "type": "prophet",
+      "id": "prophet_nuh",
+      "name": "Nuh",
+      "dua_ids": [
+        "dua_dua_of_nuh_for_believers",
+        "dua_dua_of_nuh_for_forgiveness"
+      ],
+      "collection_ids": [
+        "believers",
+        "deceased",
+        "forgiveness",
+        "parents",
+        "prophets",
+        "repentance"
+      ]
+    },
+    "prophet_nuh_forgiveness": {
+      "type": "prophet",
+      "id": "prophet_nuh_forgiveness",
+      "name": "Nuh Forgiveness",
+      "dua_ids": [],
+      "collection_ids": []
+    },
+    "prophet_salih": {
+      "type": "prophet",
+      "id": "prophet_salih",
+      "name": "Salih",
+      "dua_ids": [],
+      "collection_ids": []
+    },
+    "prophet_shuayb": {
+      "type": "prophet",
+      "id": "prophet_shuayb",
+      "name": "Shuayb",
+      "dua_ids": [],
+      "collection_ids": []
+    },
+    "prophet_sulayman": {
+      "type": "prophet",
+      "id": "prophet_sulayman",
+      "name": "Sulayman",
+      "dua_ids": [
+        "dua_dua_of_sulayman_for_gratitude"
+      ],
+      "collection_ids": [
+        "acceptance",
+        "character",
+        "gratitude",
+        "parents",
+        "prophet_sulayman",
+        "prophets",
+        "righteousness",
+        "sincerity",
+        "success_barakah",
+        "wisdom",
+        "work_career"
+      ]
+    },
+    "prophet_yahya": {
+      "type": "prophet",
+      "id": "prophet_yahya",
+      "name": "Yahya",
+      "dua_ids": [],
+      "collection_ids": []
+    },
+    "prophet_yaqub": {
+      "type": "prophet",
+      "id": "prophet_yaqub",
+      "name": "Yaqub",
+      "dua_ids": [],
+      "collection_ids": []
+    },
+    "prophet_yunus": {
+      "type": "prophet",
+      "id": "prophet_yunus",
+      "name": "Yunus",
+      "dua_ids": [
+        "dua_dua_of_yunus_in_distress"
+      ],
+      "collection_ids": [
+        "anxiety",
+        "arabic_english_transliteration",
+        "everyday_duas",
+        "hardship",
+        "powerful_duas",
+        "prophets",
+        "relief",
+        "topics"
+      ]
+    },
+    "prophet_yusuf": {
+      "type": "prophet",
+      "id": "prophet_yusuf",
+      "name": "Yusuf",
+      "dua_ids": [
+        "dua_dua_of_yusuf_for_a_muslim_death"
+      ],
+      "collection_ids": [
+        "good_ending",
+        "hereafter"
+      ]
+    },
+    "prophet_zakariya": {
+      "type": "prophet",
+      "id": "prophet_zakariya",
+      "name": "Zakariya",
+      "dua_ids": [],
+      "collection_ids": []
+    }
+  }
+}

@@ -3339,6 +3339,142 @@
     {
       "name": "feature_issues_link",
       "value": "https://github.com/sharjeel-butt/SiratCompanion-HOS/issues"
+    },
+    {
+      "name": "quran_explorer",
+      "value": "Penjelajah Al-Qur'an"
+    },
+    {
+      "name": "quran_topics",
+      "value": "Jelajahi berdasarkan Topik"
+    },
+    {
+      "name": "quran_prophets",
+      "value": "Jelajahi berdasarkan Nabi"
+    },
+    {
+      "name": "dua_appears_in",
+      "value": "Muncul dalam Koleksi"
+    },
+    {
+      "name": "dua_related",
+      "value": "Doa Terkait"
+    },
+    {
+      "name": "rabbana_title",
+      "value": "Doa Rabbana"
+    },
+    {
+      "name": "rabbana_desc",
+      "value": "18 doa Al-Qur'an yang diawali dengan 'Rabbana'"
+    },
+    {
+      "name": "prophetic_duas",
+      "value": "Doa Para Nabi"
+    },
+    {
+      "name": "prophetic_desc",
+      "value": "Doa-doa yang dipanjatkan oleh para Nabi"
+    },
+    {
+      "name": "revelation_place_makkah",
+      "value": "Makkah"
+    },
+    {
+      "name": "revelation_place_madinah",
+      "value": "Madinah"
+    },
+    {
+      "name": "arabic_font",
+      "value": "Font Arab"
+    },
+    {
+      "name": "arabic_font_desc",
+      "value": "Pilih font yang digunakan untuk teks Arab"
+    },
+    {
+      "name": "font_auto",
+      "value": "Deteksi Otomatis (Regional)"
+    },
+    {
+      "name": "font_Amiri",
+      "value": "Amiri (Naskh)"
+    },
+    {
+      "name": "font_AmiriQuran",
+      "value": "Amiri Quran (Naskh)"
+    },
+    {
+      "name": "font_HafsArabic",
+      "value": "Hafs (Naskh)"
+    },
+    {
+      "name": "font_QPC_Hafs",
+      "value": "QPC Hafs (Utsmani)"
+    },
+    {
+      "name": "font_JameelNoori",
+      "value": "Jameel Noori (Nastaliq)"
+    },
+    {
+      "name": "font_NotoNastaliqUrdu",
+      "value": "Noto Nastaliq (Nastaliq Urdu)"
+    },
+    {
+      "name": "font_LPMQIsepMisbah",
+      "value": "LPMQ Isep Misbah (Naskh)"
+    },
+    {
+      "name": "font_KFGQPCWarsh",
+      "value": "KFGQPC Warsh (Warsh)"
+    },
+    {
+      "name": "font_ScheherazadeNew",
+      "value": "Scheherazade (Naskh)"
+    },
+    {
+      "name": "font_NotoNaskh",
+      "value": "Noto Naskh (Naskh)"
+    },
+    {
+      "name": "translation_font",
+      "value": "Font Terjemahan"
+    },
+    {
+      "name": "translation_font_desc",
+      "value": "Pilih font yang digunakan untuk teks terjemahan"
+    },
+    {
+      "name": "trans_font_auto",
+      "value": "Deteksi Otomatis (Regional)"
+    },
+    {
+      "name": "trans_font_Outfit",
+      "value": "Outfit (Latin/Default)"
+    },
+    {
+      "name": "trans_font_NotoNastaliqUrdu",
+      "value": "Noto Nastaliq (Urdu)"
+    },
+    {
+      "name": "trans_font_NotoSansBengali",
+      "value": "Noto Sans Bengali (Bengali)"
+    },
+    {
+      "name": "trans_font_NotoSansSC",
+      "value": "Noto Sans SC (Tionghoa)"
+    },
+    {
+      "name": "hadith_evidence_title",
+      "value": "Dalil Hadis"
+    },
+    {
+      "name": "diag_ok",
+      "value": "OK"
+    },
+    {
+      "name": "trans_font_JameelNoori",
+      "value": "Jameel Noori (Nastaliq)"
     }
   ]
 }

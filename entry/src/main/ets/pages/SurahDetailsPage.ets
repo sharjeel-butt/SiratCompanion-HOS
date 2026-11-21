@@ -18,14 +18,11 @@ struct SurahDetailsPage {
   @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLangChanged') appLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_QURAN_TRANSLATION_LANG) @Watch('onLangChanged') quranTransLang: string = 'default';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.SYSTEM);
-
   @State allSurahs: CompleteSurah[] = [];
   @State currentIndex: number = 0;
   @State surah: CompleteSurah | null = null;
-
   // The filtered list of verses currently being displayed
   @State displayVerses: Verse[] = [];
-
   @State readingMode: ReadingMode = 'translation';
   @State isLoading: boolean = true;
   @State mushafCurrentPage: number = 1;
@@ -82,7 +79,8 @@ struct SurahDetailsPage {
               .fontSize(10).fontColor(this.colors.accentGold).margin({ top: 2 })
           } else {
             Text(this.isLoading ? '' : `${this.tr('juz_label')} ${Math.ceil(
-              this.surah!.id / 2)} · ${this.surah!.revelationPlace} · ${this.surah!.ayahCount} ${this.tr('ayahs')}`)
+              this.surah!.id / 2)} · ${this.sourceLabelRevelation(
+              this.surah!.revelationPlace)} · ${this.surah!.ayahCount} ${this.tr('ayahs')}`)
               .fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
           }
         }
@@ -509,5 +507,15 @@ struct SurahDetailsPage {
       return this.appLanguage;
     }
     return this.quranTransLang;
+  }
+
+  private sourceLabelRevelation(label_rev: string): string {
+    if (label_rev === 'Meccan') {
+      return L.get('revelation_place_makkah', this.appLanguage)
+    } else if (label_rev === 'Medinan') {
+      return L.get('revelation_place_madinah', this.appLanguage)
+    } else {
+      return label_rev;
+    }
   }
 }

@@ -1,4 +1,5 @@
 // entry/src/main/ets/models/DateModels.ets
+import { SourceItem } from '../core/SourceParser';
 
 /**
  * How an Islamic event recurs within the Hijri calendar.
@@ -21,7 +22,7 @@ export enum EventSect {
   SHIA = 'shia'
 }
 
-export interface IslamicEventSource {
+export interface IslamicEventSource extends SourceItem {
   type: 'hadith' | 'quran' | 'external';
   id?: string;
   surah?: number;

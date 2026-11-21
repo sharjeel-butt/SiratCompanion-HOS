@@ -1,7 +1,5 @@
 // entry/src/main/ets/core/NavHelper.ets
 
-import { STORAGE_KEY_NAV_DIRECTION } from './StorageKeys';
-
 /**
  * Decides the slide direction for routed navigation.
  *

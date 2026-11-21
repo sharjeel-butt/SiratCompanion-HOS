@@ -1,0 +1,2466 @@
+[
+  {
+    "id": "rabbana",
+    "title": "Rabbana Duas from the Quran",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 22,
+    "dua_count": 18,
+    "dua_ids": [
+      "dua_acceptance_of_good_deeds",
+      "dua_creation_and_protection_from_fire",
+      "dua_dua_of_adam_and_hawwa",
+      "dua_dua_of_ibrahim_for_prayer",
+      "dua_dua_of_the_young_believers",
+      "dua_forgiveness_and_a_righteous_death",
+      "dua_forgiveness_and_protection_from_fire",
+      "dua_forgiveness_for_parents_and_believers",
+      "dua_good_in_this_world_and_the_hereafter",
+      "dua_light_and_forgiveness",
+      "dua_no_burden_beyond_capacity",
+      "dua_patience_and_a_muslim_death",
+      "dua_patience_and_firmness",
+      "dua_promise_of_the_hereafter",
+      "dua_righteous_spouses_and_children",
+      "dua_steadfast_hearts",
+      "dua_submission_and_repentance",
+      "dua_trust_in_allah"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_acceptance_of_good_deeds",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_creation_and_protection_from_fire",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_adam_and_hawwa",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_prayer",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_the_young_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_a_righteous_death",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_protection_from_fire",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_for_parents_and_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_good_in_this_world_and_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_light_and_forgiveness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_no_burden_beyond_capacity",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_patience_and_a_muslim_death",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_patience_and_firmness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_promise_of_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_righteous_spouses_and_children",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_steadfast_hearts",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_submission_and_repentance",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_trust_in_allah",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "prophets",
+    "title": "Duas of the Prophets in the Quran",
+    "category": "General",
+    "collection_type": "prophetic",
+    "reference_count": 11,
+    "dua_count": 13,
+    "dua_ids": [
+      "dua_acceptance_of_good_deeds",
+      "dua_dua_of_adam_and_hawwa",
+      "dua_dua_of_ayyub_in_illness",
+      "dua_dua_of_ibrahim_for_prayer",
+      "dua_dua_of_musa_for_ease_and_eloquence",
+      "dua_dua_of_musa_for_help",
+      "dua_dua_of_nuh_for_believers",
+      "dua_dua_of_nuh_for_forgiveness",
+      "dua_dua_of_sulayman_for_gratitude",
+      "dua_dua_of_yunus_in_distress",
+      "dua_dua_of_zakariyya_for_an_heir",
+      "dua_forgiveness_for_parents_and_believers",
+      "dua_submission_and_repentance"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_acceptance_of_good_deeds",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_adam_and_hawwa",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_ayyub_in_illness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_prayer",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_musa_for_ease_and_eloquence",
+        "match_score": 100.0,
+        "shared_ayahs": 4
+      },
+      {
+        "dua_id": "dua_dua_of_musa_for_help",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_nuh_for_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_nuh_for_forgiveness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_sulayman_for_gratitude",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_yunus_in_distress",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_zakariyya_for_an_heir",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_for_parents_and_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_submission_and_repentance",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "forgiveness",
+    "title": "Duas for Forgiveness",
+    "category": "Forgiveness",
+    "collection_type": "topic",
+    "reference_count": 15,
+    "dua_count": 12,
+    "dua_ids": [
+      "dua_creation_and_protection_from_fire",
+      "dua_dua_of_adam_and_hawwa",
+      "dua_dua_of_ibrahim_for_prayer",
+      "dua_dua_of_nuh_for_believers",
+      "dua_dua_of_nuh_for_forgiveness",
+      "dua_forgiveness_and_a_righteous_death",
+      "dua_forgiveness_and_mercy",
+      "dua_forgiveness_and_protection_from_fire",
+      "dua_forgiveness_for_parents_and_believers",
+      "dua_no_burden_beyond_capacity",
+      "dua_promise_of_the_hereafter",
+      "dua_trust_in_allah"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_creation_and_protection_from_fire",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_adam_and_hawwa",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_prayer",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_nuh_for_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_nuh_for_forgiveness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_a_righteous_death",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_mercy",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_protection_from_fire",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_for_parents_and_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_no_burden_beyond_capacity",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_promise_of_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_trust_in_allah",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "everyday_duas",
+    "title": "Short Duas from the Quran for Daily Recitation and Memorization",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 9,
+    "dua_count": 9,
+    "dua_ids": [
+      "dua_dua_of_adam_and_hawwa",
+      "dua_dua_of_musa_for_help",
+      "dua_dua_of_yunus_in_distress",
+      "dua_for_righteous_child",
+      "dua_forgiveness_and_mercy",
+      "dua_good_in_this_world_and_the_hereafter",
+      "dua_guidance_to_the_straight_path",
+      "dua_increase_me_in_knowledge",
+      "dua_mercy_for_parents"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_adam_and_hawwa",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_musa_for_help",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_yunus_in_distress",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_for_righteous_child",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_mercy",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_good_in_this_world_and_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_guidance_to_the_straight_path",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_increase_me_in_knowledge",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_mercy_for_parents",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "forgiveness_of_sins",
+    "title": "Duas for Forgiveness of Sins",
+    "category": "Forgiveness",
+    "collection_type": "topic",
+    "reference_count": 7,
+    "dua_count": 8,
+    "dua_ids": [
+      "dua_creation_and_protection_from_fire",
+      "dua_dua_of_adam_and_hawwa",
+      "dua_forgiveness_and_a_righteous_death",
+      "dua_forgiveness_and_mercy",
+      "dua_forgiveness_and_protection_from_fire",
+      "dua_light_and_forgiveness",
+      "dua_no_burden_beyond_capacity",
+      "dua_promise_of_the_hereafter"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_creation_and_protection_from_fire",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_adam_and_hawwa",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_a_righteous_death",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_mercy",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_protection_from_fire",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_light_and_forgiveness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_no_burden_beyond_capacity",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_promise_of_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "success_barakah",
+    "title": "Duas for Success and Barakah",
+    "category": "Success",
+    "collection_type": "topic",
+    "reference_count": 6,
+    "dua_count": 8,
+    "dua_ids": [
+      "dua_acceptance_of_good_deeds",
+      "dua_creation_and_protection_from_fire",
+      "dua_dua_of_musa_for_help",
+      "dua_dua_of_sulayman_for_gratitude",
+      "dua_forgiveness_and_a_righteous_death",
+      "dua_good_in_this_world_and_the_hereafter",
+      "dua_promise_of_the_hereafter",
+      "dua_submission_and_repentance"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_acceptance_of_good_deeds",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_creation_and_protection_from_fire",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_musa_for_help",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_sulayman_for_gratitude",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_a_righteous_death",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_good_in_this_world_and_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_promise_of_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_submission_and_repentance",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "righteous_believers",
+    "title": "Duas of the Righteous Believers in the Quran",
+    "category": "General",
+    "collection_type": "believers",
+    "reference_count": 10,
+    "dua_count": 8,
+    "dua_ids": [
+      "dua_creation_and_protection_from_fire",
+      "dua_dua_of_the_young_believers",
+      "dua_forgiveness_and_a_righteous_death",
+      "dua_forgiveness_and_protection_from_fire",
+      "dua_light_and_forgiveness",
+      "dua_promise_of_the_hereafter",
+      "dua_righteous_spouses_and_children",
+      "dua_steadfast_hearts"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_creation_and_protection_from_fire",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_the_young_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_a_righteous_death",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_protection_from_fire",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_light_and_forgiveness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_promise_of_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_righteous_spouses_and_children",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_steadfast_hearts",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "children",
+    "title": "Duas for Children in the Quran",
+    "category": "Family",
+    "collection_type": "topic",
+    "reference_count": 9,
+    "dua_count": 7,
+    "dua_ids": [
+      "dua_acceptance_of_good_deeds",
+      "dua_dua_of_ibrahim_for_prayer",
+      "dua_dua_of_zakariyya_for_an_heir",
+      "dua_for_righteous_child",
+      "dua_forgiveness_for_parents_and_believers",
+      "dua_righteous_spouses_and_children",
+      "dua_submission_and_repentance"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_acceptance_of_good_deeds",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_prayer",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_zakariyya_for_an_heir",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_for_righteous_child",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_for_parents_and_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_righteous_spouses_and_children",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_submission_and_repentance",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "family",
+    "title": "Duas for Family, Marriage, and Spouses",
+    "category": "Family",
+    "collection_type": "topic",
+    "reference_count": 7,
+    "dua_count": 7,
+    "dua_ids": [
+      "dua_acceptance_of_good_deeds",
+      "dua_dua_of_ibrahim_for_prayer",
+      "dua_forgiveness_for_parents_and_believers",
+      "dua_good_in_this_world_and_the_hereafter",
+      "dua_mercy_for_parents",
+      "dua_righteous_spouses_and_children",
+      "dua_submission_and_repentance"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_acceptance_of_good_deeds",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_prayer",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_for_parents_and_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_good_in_this_world_and_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_mercy_for_parents",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_righteous_spouses_and_children",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_submission_and_repentance",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "hereafter",
+    "title": "Duas for the Hereafter",
+    "category": "Hereafter",
+    "collection_type": "topic",
+    "reference_count": 8,
+    "dua_count": 7,
+    "dua_ids": [
+      "dua_creation_and_protection_from_fire",
+      "dua_dua_of_ibrahim_for_wisdom",
+      "dua_dua_of_yusuf_for_a_muslim_death",
+      "dua_forgiveness_and_a_righteous_death",
+      "dua_good_in_this_world_and_the_hereafter",
+      "dua_light_and_forgiveness",
+      "dua_promise_of_the_hereafter"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_creation_and_protection_from_fire",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_wisdom",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_yusuf_for_a_muslim_death",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_a_righteous_death",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_good_in_this_world_and_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_light_and_forgiveness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_promise_of_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "hardship",
+    "title": "Duas and Quran Passages for Hardship, Sadness, and Grief",
+    "category": "Hardship",
+    "collection_type": "topic",
+    "reference_count": 10,
+    "dua_count": 6,
+    "dua_ids": [
+      "dua_dua_of_ayyub_in_illness",
+      "dua_dua_of_musa_for_help",
+      "dua_dua_of_yunus_in_distress",
+      "dua_no_burden_beyond_capacity",
+      "dua_patience_and_a_muslim_death",
+      "dua_patience_and_firmness"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_ayyub_in_illness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_musa_for_help",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_yunus_in_distress",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_no_burden_beyond_capacity",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_patience_and_a_muslim_death",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_patience_and_firmness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "topics",
+    "title": "Duas from the Quran by Topic",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 7,
+    "dua_count": 6,
+    "dua_ids": [
+      "dua_dua_of_adam_and_hawwa",
+      "dua_dua_of_musa_for_help",
+      "dua_dua_of_yunus_in_distress",
+      "dua_good_in_this_world_and_the_hereafter",
+      "dua_guidance_to_the_straight_path",
+      "dua_righteous_spouses_and_children"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_adam_and_hawwa",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_musa_for_help",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_yunus_in_distress",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_good_in_this_world_and_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_guidance_to_the_straight_path",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_righteous_spouses_and_children",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "daily_life",
+    "title": "Duas from the Quran for Daily Life",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 7,
+    "dua_count": 6,
+    "dua_ids": [
+      "dua_dua_of_musa_for_help",
+      "dua_good_in_this_world_and_the_hereafter",
+      "dua_increase_me_in_knowledge",
+      "dua_mercy_for_parents",
+      "dua_protection_from_devils",
+      "dua_righteous_spouses_and_children"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_musa_for_help",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_good_in_this_world_and_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_increase_me_in_knowledge",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_mercy_for_parents",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_protection_from_devils",
+        "match_score": 100.0,
+        "shared_ayahs": 2
+      },
+      {
+        "dua_id": "dua_righteous_spouses_and_children",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "arabic_english_transliteration",
+    "title": "Quran Duas in Arabic, English, and Transliteration",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 6,
+    "dua_count": 6,
+    "dua_ids": [
+      "dua_dua_of_musa_for_help",
+      "dua_dua_of_yunus_in_distress",
+      "dua_for_righteous_child",
+      "dua_forgiveness_and_mercy",
+      "dua_good_in_this_world_and_the_hereafter",
+      "dua_increase_me_in_knowledge"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_musa_for_help",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_yunus_in_distress",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_for_righteous_child",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_mercy",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_good_in_this_world_and_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_increase_me_in_knowledge",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "acceptance",
+    "title": "Duas for Acceptance of Good Deeds",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 4,
+    "dua_count": 5,
+    "dua_ids": [
+      "dua_acceptance_of_good_deeds",
+      "dua_dua_of_ibrahim_for_prayer",
+      "dua_dua_of_sulayman_for_gratitude",
+      "dua_forgiveness_for_parents_and_believers",
+      "dua_submission_and_repentance"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_acceptance_of_good_deeds",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_prayer",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_sulayman_for_gratitude",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_for_parents_and_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_submission_and_repentance",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "hajj_umrah",
+    "title": "Duas for Hajj &amp; Umrah",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 5,
+    "dua_count": 5,
+    "dua_ids": [
+      "dua_acceptance_of_good_deeds",
+      "dua_dua_of_ibrahim_for_prayer",
+      "dua_forgiveness_for_parents_and_believers",
+      "dua_good_in_this_world_and_the_hereafter",
+      "dua_submission_and_repentance"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_acceptance_of_good_deeds",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_prayer",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_for_parents_and_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_good_in_this_world_and_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_submission_and_repentance",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "new_muslims",
+    "title": "Duas for New Muslims",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 6,
+    "dua_count": 5,
+    "dua_ids": [
+      "dua_dua_of_adam_and_hawwa",
+      "dua_forgiveness_and_mercy",
+      "dua_guidance_to_the_straight_path",
+      "dua_increase_me_in_knowledge",
+      "dua_steadfast_hearts"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_adam_and_hawwa",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_mercy",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_guidance_to_the_straight_path",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_increase_me_in_knowledge",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_steadfast_hearts",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "parents",
+    "title": "Duas for Parents and Deceased Parents in the Quran",
+    "category": "Family",
+    "collection_type": "topic",
+    "reference_count": 5,
+    "dua_count": 5,
+    "dua_ids": [
+      "dua_dua_of_ibrahim_for_prayer",
+      "dua_dua_of_nuh_for_believers",
+      "dua_dua_of_sulayman_for_gratitude",
+      "dua_forgiveness_for_parents_and_believers",
+      "dua_mercy_for_parents"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_prayer",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_nuh_for_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_sulayman_for_gratitude",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_for_parents_and_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_mercy_for_parents",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "protection_from_hellfire",
+    "title": "Duas for Protection from Hellfire",
+    "category": "Protection",
+    "collection_type": "topic",
+    "reference_count": 5,
+    "dua_count": 5,
+    "dua_ids": [
+      "dua_creation_and_protection_from_fire",
+      "dua_forgiveness_and_a_righteous_death",
+      "dua_forgiveness_and_protection_from_fire",
+      "dua_good_in_this_world_and_the_hereafter",
+      "dua_promise_of_the_hereafter"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_creation_and_protection_from_fire",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_a_righteous_death",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_protection_from_fire",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_good_in_this_world_and_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_promise_of_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "relief",
+    "title": "Duas for Relief",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 5,
+    "dua_count": 5,
+    "dua_ids": [
+      "dua_dua_of_ayyub_in_illness",
+      "dua_dua_of_musa_for_ease_and_eloquence",
+      "dua_dua_of_musa_for_help",
+      "dua_dua_of_yunus_in_distress",
+      "dua_no_burden_beyond_capacity"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_ayyub_in_illness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_musa_for_ease_and_eloquence",
+        "match_score": 100.0,
+        "shared_ayahs": 4
+      },
+      {
+        "dua_id": "dua_dua_of_musa_for_help",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_yunus_in_distress",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_no_burden_beyond_capacity",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "good_ending",
+    "title": "Duas for a Good Ending",
+    "category": "Hereafter",
+    "collection_type": "topic",
+    "reference_count": 3,
+    "dua_count": 5,
+    "dua_ids": [
+      "dua_creation_and_protection_from_fire",
+      "dua_dua_of_yusuf_for_a_muslim_death",
+      "dua_forgiveness_and_a_righteous_death",
+      "dua_patience_and_a_muslim_death",
+      "dua_promise_of_the_hereafter"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_creation_and_protection_from_fire",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_yusuf_for_a_muslim_death",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_a_righteous_death",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_patience_and_a_muslim_death",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_promise_of_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "believers",
+    "title": "Duas for the Believers",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 7,
+    "dua_count": 5,
+    "dua_ids": [
+      "dua_dua_of_ibrahim_for_prayer",
+      "dua_dua_of_nuh_for_believers",
+      "dua_forgiveness_and_protection_from_fire",
+      "dua_forgiveness_for_parents_and_believers",
+      "dua_light_and_forgiveness"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_prayer",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_nuh_for_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_protection_from_fire",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_for_parents_and_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_light_and_forgiveness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "anxiety",
+    "title": "Duas and Quran Passages for Stress, Depression and Anxiety",
+    "category": "Hardship",
+    "collection_type": "topic",
+    "reference_count": 7,
+    "dua_count": 4,
+    "dua_ids": [
+      "dua_dua_of_musa_for_ease_and_eloquence",
+      "dua_dua_of_yunus_in_distress",
+      "dua_no_burden_beyond_capacity",
+      "dua_protection_from_devils"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_musa_for_ease_and_eloquence",
+        "match_score": 100.0,
+        "shared_ayahs": 4
+      },
+      {
+        "dua_id": "dua_dua_of_yunus_in_distress",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_no_burden_beyond_capacity",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_protection_from_devils",
+        "match_score": 100.0,
+        "shared_ayahs": 2
+      }
+    ]
+  },
+  {
+    "id": "mercy",
+    "title": "Duas for Allah&#x27;s Mercy",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 7,
+    "dua_count": 4,
+    "dua_ids": [
+      "dua_dua_of_adam_and_hawwa",
+      "dua_dua_of_ayyub_in_illness",
+      "dua_dua_of_the_young_believers",
+      "dua_forgiveness_and_mercy"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_adam_and_hawwa",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_ayyub_in_illness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_the_young_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_mercy",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "exam_success",
+    "title": "Duas for Exam Success",
+    "category": "Success",
+    "collection_type": "topic",
+    "reference_count": 4,
+    "dua_count": 4,
+    "dua_ids": [
+      "dua_dua_of_musa_for_ease_and_eloquence",
+      "dua_dua_of_musa_for_help",
+      "dua_increase_me_in_knowledge",
+      "dua_steadfast_hearts"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_musa_for_ease_and_eloquence",
+        "match_score": 100.0,
+        "shared_ayahs": 4
+      },
+      {
+        "dua_id": "dua_dua_of_musa_for_help",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_increase_me_in_knowledge",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_steadfast_hearts",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "humility",
+    "title": "Duas for Humility",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 4,
+    "dua_count": 4,
+    "dua_ids": [
+      "dua_dua_of_adam_and_hawwa",
+      "dua_dua_of_musa_for_help",
+      "dua_dua_of_the_young_believers",
+      "dua_forgiveness_and_mercy"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_adam_and_hawwa",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_musa_for_help",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_the_young_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_mercy",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "jannah",
+    "title": "Duas for Jannah",
+    "category": "Hereafter",
+    "collection_type": "topic",
+    "reference_count": 5,
+    "dua_count": 4,
+    "dua_ids": [
+      "dua_creation_and_protection_from_fire",
+      "dua_dua_of_ibrahim_for_wisdom",
+      "dua_forgiveness_and_a_righteous_death",
+      "dua_promise_of_the_hereafter"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_creation_and_protection_from_fire",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_wisdom",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_a_righteous_death",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_promise_of_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "righteousness",
+    "title": "Duas for Righteousness and Good Deeds",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 6,
+    "dua_count": 4,
+    "dua_ids": [
+      "dua_dua_of_ibrahim_for_wisdom",
+      "dua_dua_of_sulayman_for_gratitude",
+      "dua_for_righteous_child",
+      "dua_righteous_spouses_and_children"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_wisdom",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_sulayman_for_gratitude",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_for_righteous_child",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_righteous_spouses_and_children",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "powerful_duas",
+    "title": "Powerful Duas from the Quran",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 4,
+    "dua_count": 4,
+    "dua_ids": [
+      "dua_dua_of_adam_and_hawwa",
+      "dua_dua_of_yunus_in_distress",
+      "dua_good_in_this_world_and_the_hereafter",
+      "dua_righteous_spouses_and_children"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_adam_and_hawwa",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_yunus_in_distress",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_good_in_this_world_and_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_righteous_spouses_and_children",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "friends_loved_ones",
+    "title": "Duas for Friends and Loved Ones",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 4,
+    "dua_count": 3,
+    "dua_ids": [
+      "dua_dua_of_ibrahim_for_prayer",
+      "dua_forgiveness_and_protection_from_fire",
+      "dua_forgiveness_for_parents_and_believers"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_prayer",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_protection_from_fire",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_for_parents_and_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "guidance",
+    "title": "Duas for Guidance and the Straight Path",
+    "category": "Guidance",
+    "collection_type": "topic",
+    "reference_count": 5,
+    "dua_count": 3,
+    "dua_ids": [
+      "dua_dua_of_the_young_believers",
+      "dua_guidance_to_the_straight_path",
+      "dua_steadfast_hearts"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_the_young_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_guidance_to_the_straight_path",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_steadfast_hearts",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "benefit_from_quran",
+    "title": "Duas for Learning, Memorizing, and Benefiting from the Quran",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 5,
+    "dua_count": 3,
+    "dua_ids": [
+      "dua_guidance_to_the_straight_path",
+      "dua_increase_me_in_knowledge",
+      "dua_steadfast_hearts"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_guidance_to_the_straight_path",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_increase_me_in_knowledge",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_steadfast_hearts",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "righteous_offspring",
+    "title": "Duas for Righteous Offspring and Pregnancy",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 6,
+    "dua_count": 3,
+    "dua_ids": [
+      "dua_dua_of_zakariyya_for_an_heir",
+      "dua_for_righteous_child",
+      "dua_righteous_spouses_and_children"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_zakariyya_for_an_heir",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_for_righteous_child",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_righteous_spouses_and_children",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "strength",
+    "title": "Duas for Strength",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 3,
+    "dua_count": 3,
+    "dua_ids": [
+      "dua_dua_of_musa_for_ease_and_eloquence",
+      "dua_patience_and_a_muslim_death",
+      "dua_patience_and_firmness"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_musa_for_ease_and_eloquence",
+        "match_score": 100.0,
+        "shared_ayahs": 4
+      },
+      {
+        "dua_id": "dua_patience_and_a_muslim_death",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_patience_and_firmness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "repentance",
+    "title": "Duas for Tawbah and Repentance",
+    "category": "Forgiveness",
+    "collection_type": "topic",
+    "reference_count": 7,
+    "dua_count": 3,
+    "dua_ids": [
+      "dua_dua_of_adam_and_hawwa",
+      "dua_dua_of_nuh_for_forgiveness",
+      "dua_trust_in_allah"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_adam_and_hawwa",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_nuh_for_forgiveness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_trust_in_allah",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "wisdom",
+    "title": "Duas for Wisdom",
+    "category": "Knowledge",
+    "collection_type": "topic",
+    "reference_count": 5,
+    "dua_count": 3,
+    "dua_ids": [
+      "dua_dua_of_ibrahim_for_wisdom",
+      "dua_dua_of_sulayman_for_gratitude",
+      "dua_increase_me_in_knowledge"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_wisdom",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_sulayman_for_gratitude",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_increase_me_in_knowledge",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "work_career",
+    "title": "Duas for Work and Career",
+    "category": "Success",
+    "collection_type": "topic",
+    "reference_count": 4,
+    "dua_count": 3,
+    "dua_ids": [
+      "dua_dua_of_musa_for_ease_and_eloquence",
+      "dua_dua_of_musa_for_help",
+      "dua_dua_of_sulayman_for_gratitude"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_musa_for_ease_and_eloquence",
+        "match_score": 100.0,
+        "shared_ayahs": 4
+      },
+      {
+        "dua_id": "dua_dua_of_musa_for_help",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_sulayman_for_gratitude",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "pious_spouse",
+    "title": "Duas for a Pious Spouse",
+    "category": "Family",
+    "collection_type": "topic",
+    "reference_count": 2,
+    "dua_count": 3,
+    "dua_ids": [
+      "dua_dua_of_ibrahim_for_prayer",
+      "dua_forgiveness_for_parents_and_believers",
+      "dua_righteous_spouses_and_children"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_prayer",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_for_parents_and_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_righteous_spouses_and_children",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "deceased",
+    "title": "Duas for the Dead",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 3,
+    "dua_count": 3,
+    "dua_ids": [
+      "dua_dua_of_ibrahim_for_prayer",
+      "dua_dua_of_nuh_for_believers",
+      "dua_forgiveness_for_parents_and_believers"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_prayer",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_nuh_for_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_for_parents_and_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "provision_wealth",
+    "title": "Quran Verses and Duas for Provision (Rizq) and Wealth",
+    "category": "Provision",
+    "collection_type": "topic",
+    "reference_count": 7,
+    "dua_count": 3,
+    "dua_ids": [
+      "dua_dua_of_musa_for_help",
+      "dua_good_in_this_world_and_the_hereafter",
+      "dua_no_burden_beyond_capacity"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_musa_for_help",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_good_in_this_world_and_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_no_burden_beyond_capacity",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "sincerity",
+    "title": "Quran Verses and Duas for Sincerity",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 4,
+    "dua_count": 3,
+    "dua_ids": [
+      "dua_acceptance_of_good_deeds",
+      "dua_dua_of_sulayman_for_gratitude",
+      "dua_submission_and_repentance"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_acceptance_of_good_deeds",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_sulayman_for_gratitude",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_submission_and_repentance",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "remembrance_reflection",
+    "title": "Quran Verses on Remembrance and Reflection",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 11,
+    "dua_count": 3,
+    "dua_ids": [
+      "dua_creation_and_protection_from_fire",
+      "dua_forgiveness_and_a_righteous_death",
+      "dua_promise_of_the_hereafter"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_creation_and_protection_from_fire",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_and_a_righteous_death",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_promise_of_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "enemies",
+    "title": "Duas Against Enemies and Harmful People",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 4,
+    "dua_count": 2,
+    "dua_ids": [
+      "dua_patience_and_firmness",
+      "dua_prophet_lut"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_patience_and_firmness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_prophet_lut",
+        "match_score": 50.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "pain_sickness",
+    "title": "Duas and Quran Passages for Pain and Sickness (Shifa)",
+    "category": "Health",
+    "collection_type": "topic",
+    "reference_count": 3,
+    "dua_count": 2,
+    "dua_ids": [
+      "dua_dua_of_ayyub_in_illness",
+      "dua_dua_of_ibrahim_for_wisdom"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_ayyub_in_illness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_wisdom",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "patience",
+    "title": "Duas and Quran Passages for Patience",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 4,
+    "dua_count": 2,
+    "dua_ids": [
+      "dua_patience_and_a_muslim_death",
+      "dua_patience_and_firmness"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_patience_and_a_muslim_death",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_patience_and_firmness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "character",
+    "title": "Duas for Beautiful Character",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 4,
+    "dua_count": 2,
+    "dua_ids": [
+      "dua_dua_of_sulayman_for_gratitude",
+      "dua_righteous_spouses_and_children"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_sulayman_for_gratitude",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_righteous_spouses_and_children",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "confidence",
+    "title": "Duas for Confidence",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 4,
+    "dua_count": 2,
+    "dua_ids": [
+      "dua_dua_of_musa_for_ease_and_eloquence",
+      "dua_dua_of_musa_for_help"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_musa_for_ease_and_eloquence",
+        "match_score": 100.0,
+        "shared_ayahs": 4
+      },
+      {
+        "dua_id": "dua_dua_of_musa_for_help",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "heart_healing",
+    "title": "Duas for Diseases of the Heart",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 4,
+    "dua_count": 2,
+    "dua_ids": [
+      "dua_dua_of_ayyub_in_illness",
+      "dua_steadfast_hearts"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_ayyub_in_illness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_steadfast_hearts",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "knowledge",
+    "title": "Duas for Knowledge",
+    "category": "Knowledge",
+    "collection_type": "topic",
+    "reference_count": 3,
+    "dua_count": 2,
+    "dua_ids": [
+      "dua_dua_of_musa_for_ease_and_eloquence",
+      "dua_increase_me_in_knowledge"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_musa_for_ease_and_eloquence",
+        "match_score": 100.0,
+        "shared_ayahs": 4
+      },
+      {
+        "dua_id": "dua_increase_me_in_knowledge",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "peace",
+    "title": "Duas for Peace",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 3,
+    "dua_count": 2,
+    "dua_ids": [
+      "dua_good_in_this_world_and_the_hereafter",
+      "dua_righteous_spouses_and_children"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_good_in_this_world_and_the_hereafter",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_righteous_spouses_and_children",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "protection",
+    "title": "Duas for Protection from Evil and Shaytan",
+    "category": "Protection",
+    "collection_type": "topic",
+    "reference_count": 6,
+    "dua_count": 2,
+    "dua_ids": [
+      "dua_protection_from_devils",
+      "dua_prophet_lut"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_protection_from_devils",
+        "match_score": 100.0,
+        "shared_ayahs": 2
+      },
+      {
+        "dua_id": "dua_prophet_lut",
+        "match_score": 50.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "steadfastness",
+    "title": "Duas for Steadfastness",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 2,
+    "dua_count": 2,
+    "dua_ids": [
+      "dua_patience_and_a_muslim_death",
+      "dua_steadfast_hearts"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_patience_and_a_muslim_death",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_steadfast_hearts",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "studying",
+    "title": "Duas for Studying",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 3,
+    "dua_count": 2,
+    "dua_ids": [
+      "dua_dua_of_musa_for_ease_and_eloquence",
+      "dua_increase_me_in_knowledge"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_musa_for_ease_and_eloquence",
+        "match_score": 100.0,
+        "shared_ayahs": 4
+      },
+      {
+        "dua_id": "dua_increase_me_in_knowledge",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "victory",
+    "title": "Duas for Victory",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 3,
+    "dua_count": 2,
+    "dua_ids": [
+      "dua_patience_and_firmness",
+      "dua_prophet_lut"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_patience_and_firmness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_prophet_lut",
+        "match_score": 50.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "waswas",
+    "title": "Duas for Waswas and Whispers",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 2,
+    "dua_count": 2,
+    "dua_ids": [
+      "dua_protection_from_devils",
+      "dua_steadfast_hearts"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_protection_from_devils",
+        "match_score": 100.0,
+        "shared_ayahs": 2
+      },
+      {
+        "dua_id": "dua_steadfast_hearts",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "ummah",
+    "title": "Duas for the Ummah",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 6,
+    "dua_count": 2,
+    "dua_ids": [
+      "dua_forgiveness_and_protection_from_fire",
+      "dua_light_and_forgiveness"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_forgiveness_and_protection_from_fire",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_light_and_forgiveness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "when_someone_dies",
+    "title": "Quran Passages and Duas for When Someone Dies",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 3,
+    "dua_count": 2,
+    "dua_ids": [
+      "dua_dua_of_ibrahim_for_prayer",
+      "dua_forgiveness_for_parents_and_believers"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_prayer",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_forgiveness_for_parents_and_believers",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "black_magic_protection",
+    "title": "Quran Verses and Duas for Ruqyah Protection",
+    "category": "Protection",
+    "collection_type": "topic",
+    "reference_count": 12,
+    "dua_count": 2,
+    "dua_ids": [
+      "dua_guidance_to_the_straight_path",
+      "dua_no_burden_beyond_capacity"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_guidance_to_the_straight_path",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      },
+      {
+        "dua_id": "dua_no_burden_beyond_capacity",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "oppression",
+    "title": "Duas Against Oppression",
+    "category": "Protection",
+    "collection_type": "topic",
+    "reference_count": 4,
+    "dua_count": 1,
+    "dua_ids": [
+      "dua_prophet_lut"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_prophet_lut",
+        "match_score": 50.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "prophet_sulayman",
+    "title": "Duas and Gratitude of Prophet Sulayman",
+    "category": "Prophetic Duas",
+    "collection_type": "topic",
+    "reference_count": 3,
+    "dua_count": 1,
+    "dua_ids": [
+      "dua_dua_of_sulayman_for_gratitude"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_sulayman_for_gratitude",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "gratitude",
+    "title": "Duas and Quran Passages for Gratitude",
+    "category": "Gratitude",
+    "collection_type": "topic",
+    "reference_count": 5,
+    "dua_count": 1,
+    "dua_ids": [
+      "dua_dua_of_sulayman_for_gratitude"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_sulayman_for_gratitude",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "palestine",
+    "title": "Duas for Palestine and the Oppressed",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 4,
+    "dua_count": 1,
+    "dua_ids": [
+      "dua_patience_and_firmness"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_patience_and_firmness",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "heart",
+    "title": "Duas for the Heart and a Clean Heart",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 3,
+    "dua_count": 1,
+    "dua_ids": [
+      "dua_steadfast_hearts"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_steadfast_hearts",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "health",
+    "title": "Quran Reflections on Healing and Health",
+    "category": "Health",
+    "collection_type": "topic",
+    "reference_count": 1,
+    "dua_count": 1,
+    "dua_ids": [
+      "dua_dua_of_ibrahim_for_wisdom"
+    ],
+    "matches": [
+      {
+        "dua_id": "dua_dua_of_ibrahim_for_wisdom",
+        "match_score": 100.0,
+        "shared_ayahs": 1
+      }
+    ]
+  },
+  {
+    "id": "prophet_shuayb",
+    "title": "Duas and Trust of Prophet Shuayb",
+    "category": "Prophetic Duas",
+    "collection_type": "topic",
+    "reference_count": 2,
+    "dua_count": 0,
+    "dua_ids": [],
+    "matches": []
+  },
+  {
+    "id": "fear",
+    "title": "Duas for Fear",
+    "category": "Hardship",
+    "collection_type": "topic",
+    "reference_count": 4,
+    "dua_count": 0,
+    "dua_ids": [],
+    "matches": []
+  },
+  {
+    "id": "safety",
+    "title": "Duas for Safety",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 4,
+    "dua_count": 0,
+    "dua_ids": [],
+    "matches": []
+  },
+  {
+    "id": "unity",
+    "title": "Duas for Unity",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 2,
+    "dua_count": 0,
+    "dua_ids": [],
+    "matches": []
+  },
+  {
+    "id": "prophet_harun",
+    "title": "Musa&#x27;s Dua for Harun",
+    "category": "Prophetic Duas",
+    "collection_type": "topic",
+    "reference_count": 1,
+    "dua_count": 0,
+    "dua_ids": [],
+    "matches": []
+  },
+  {
+    "id": "day_night",
+    "title": "Quran Reflections for Day and Night",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 13,
+    "dua_count": 0,
+    "dua_ids": [],
+    "matches": []
+  },
+  {
+    "id": "rain",
+    "title": "Quran Reflections on Rain and Blessings",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 2,
+    "dua_count": 0,
+    "dua_ids": [],
+    "matches": []
+  },
+  {
+    "id": "fasting",
+    "title": "Quran Verses about Ramadan and Fasting",
+    "category": "General",
+    "collection_type": "topic",
+    "reference_count": 4,
+    "dua_count": 0,
+    "dua_ids": [],
+    "matches": []
+  },
+  {
+    "id": "travel",
+    "title": "Quran Verses and Duas for Travel and Journey Safety",
+    "category": "Travel",
+    "collection_type": "topic",
+    "reference_count": 3,
+    "dua_count": 0,
+    "dua_ids": [],
+    "matches": []
+  },
+  {
+    "id": "evil_eye",
+    "title": "Quran Verses for Protection from the Evil Eye",
+    "category": "Protection",
+    "collection_type": "topic",
+    "reference_count": 2,
+    "dua_count": 0,
+    "dua_ids": [],
+    "matches": []
+  }
+]

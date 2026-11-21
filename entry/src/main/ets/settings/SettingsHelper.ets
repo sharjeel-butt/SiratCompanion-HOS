@@ -5,6 +5,7 @@ import { CalculationSource, LocationMode, ManualCoords, PickerItem } from './Set
 import { PreferencesHelper } from '../core/PreferencesHelper';
 import {
   STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_ARABIC_FONT,
   STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
   STORAGE_KEY_CALC_SETTINGS_VERSION,
   STORAGE_KEY_DUA_TRANSLATION_LANG,
@@ -47,6 +48,7 @@ import {
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_THEME_OVERRIDE,
   STORAGE_KEY_TIME_FORMAT,
+  STORAGE_KEY_TRANSLATION_FONT,
   STORAGE_KEY_VIBRATION_ENABLED,
   STORAGE_KEY_WIZARD_COMPLETED
 } from '../core/StorageKeys';
@@ -1165,6 +1167,24 @@ export class SettingsHelper {
   static saveDuaTranslationLang(lang: string): void {
     AppStorage.setOrCreate(STORAGE_KEY_DUA_TRANSLATION_LANG, lang);
     PreferencesHelper.setString(STORAGE_KEY_DUA_TRANSLATION_LANG, lang);
+  }
+
+  static getArabicFont(): string {
+    return AppStorage.get<string>(STORAGE_KEY_ARABIC_FONT) ?? 'auto';
+  }
+
+  static saveArabicFont(fontId: string): void {
+    AppStorage.setOrCreate(STORAGE_KEY_ARABIC_FONT, fontId);
+    PreferencesHelper.setString(STORAGE_KEY_ARABIC_FONT, fontId);
+  }
+
+  static getTranslationFont(): string {
+    return AppStorage.get<string>(STORAGE_KEY_TRANSLATION_FONT) ?? 'auto';
+  }
+
+  static saveTranslationFont(fontId: string): void {
+    AppStorage.setOrCreate(STORAGE_KEY_TRANSLATION_FONT, fontId);
+    PreferencesHelper.setString(STORAGE_KEY_TRANSLATION_FONT, fontId);
   }
 
   private static bumpCalcSettingsVersion(): void {

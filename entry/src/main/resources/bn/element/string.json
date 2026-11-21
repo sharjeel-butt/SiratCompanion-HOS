@@ -3339,6 +3339,142 @@
     {
       "name": "feature_issues_link",
       "value": "https://github.com/sharjeel-butt/SiratCompanion-HOS/issues"
+    },
+    {
+      "name": "quran_explorer",
+      "value": "কুরআন এক্সপ্লোরার"
+    },
+    {
+      "name": "quran_topics",
+      "value": "বিষয় অনুযায়ী দেখুন"
+    },
+    {
+      "name": "quran_prophets",
+      "value": "নবী অনুযায়ী দেখুন"
+    },
+    {
+      "name": "dua_appears_in",
+      "value": "সংকলনে অন্তর্ভুক্ত"
+    },
+    {
+      "name": "dua_related",
+      "value": "সম্পর্কিত দুয়া"
+    },
+    {
+      "name": "rabbana_title",
+      "value": "রব্বানা দুয়া"
+    },
+    {
+      "name": "rabbana_desc",
+      "value": "কুরআনের ১৮টি দোয়া যা 'রব্বানা' দিয়ে শুরু হয়েছে"
+    },
+    {
+      "name": "prophetic_duas",
+      "value": "নবীদের দোয়া"
+    },
+    {
+      "name": "prophetic_desc",
+      "value": "নবীগণ কর্তৃক করা দোয়াসমূহ"
+    },
+    {
+      "name": "revelation_place_makkah",
+      "value": "মক্কা"
+    },
+    {
+      "name": "revelation_place_madinah",
+      "value": "মদিনা"
+    },
+    {
+      "name": "arabic_font",
+      "value": "আরবি ফন্ট"
+    },
+    {
+      "name": "arabic_font_desc",
+      "value": "আরবি পাঠ্যের জন্য ব্যবহৃত ফন্ট নির্বাচন করুন"
+    },
+    {
+      "name": "font_auto",
+      "value": "স্বয়ংক্রিয় নির্বাচন (আঞ্চলিক)"
+    },
+    {
+      "name": "font_Amiri",
+      "value": "আমিরি (নাসখ)"
+    },
+    {
+      "name": "font_AmiriQuran",
+      "value": "আমিরি কুরআন (নাসখ)"
+    },
+    {
+      "name": "font_HafsArabic",
+      "value": "হাফস (নাসখ)"
+    },
+    {
+      "name": "font_QPC_Hafs",
+      "value": "QPC হাফস (উসমানী)"
+    },
+    {
+      "name": "font_JameelNoori",
+      "value": "জামিল নূরী (নাস্তালিক)"
+    },
+    {
+      "name": "font_NotoNastaliqUrdu",
+      "value": "নোটো নাস্তালিক (উর্দু নাস্তালিক)"
+    },
+    {
+      "name": "font_LPMQIsepMisbah",
+      "value": "LPMQ ইসেপ মিসবাহ (নাসখ)"
+    },
+    {
+      "name": "font_KFGQPCWarsh",
+      "value": "KFGQPC ওয়ারশ (ওয়ারশ)"
+    },
+    {
+      "name": "font_ScheherazadeNew",
+      "value": "শেহেরাজাদে (নাসখ)"
+    },
+    {
+      "name": "font_NotoNaskh",
+      "value": "নোটো নাসখ (নাসখ)"
+    },
+    {
+      "name": "translation_font",
+      "value": "অনুবাদের ফন্ট"
+    },
+    {
+      "name": "translation_font_desc",
+      "value": "অনূদিত লেখার জন্য ব্যবহৃত ফন্ট নির্বাচন করুন"
+    },
+    {
+      "name": "trans_font_auto",
+      "value": "স্বয়ংক্রিয় নির্বাচন (আঞ্চলিক)"
+    },
+    {
+      "name": "trans_font_Outfit",
+      "value": "Outfit (ল্যাটিন / ডিফল্ট)"
+    },
+    {
+      "name": "trans_font_NotoNastaliqUrdu",
+      "value": "Noto Nastaliq (উর্দু)"
+    },
+    {
+      "name": "trans_font_NotoSansBengali",
+      "value": "Noto Sans Bengali (বাংলা)"
+    },
+    {
+      "name": "trans_font_NotoSansSC",
+      "value": "Noto Sans SC (চীনা)"
+    },
+    {
+      "name": "hadith_evidence_title",
+      "value": "হাদিসের প্রমাণ"
+    },
+    {
+      "name": "diag_ok",
+      "value": "ঠিক আছে"
+    },
+    {
+      "name": "trans_font_JameelNoori",
+      "value": "জামিল নূরী (নাস্তালিক)"
     }
   ]
 }

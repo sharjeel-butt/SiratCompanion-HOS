@@ -1,31 +1,31 @@
 <!DOCTYPE html>
-<html lang="{{ page.lang }}"
-      dir="{% if page.lang == 'ar' or page.lang == 'ur' %}rtl{% else %}ltr{% endif %}">
+<html dir="{% if page.lang == 'ar' or page.lang == 'ur' %}rtl{% else %}ltr{% endif %}"
+      lang="{{ page.lang }}">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
 
     <title>{{ site.title }}</title>
-    <meta name="description" content="{{ site.description }}">
+    <meta content="{{ site.description }}" name="description">
 
-    <link rel="stylesheet" href="{{ '/assets/css/privacy.css' | relative_url }}">
+    <link href="{{ '/assets/css/privacy.css' | relative_url }}" rel="stylesheet">
 
     {% case page.lang %}
     {% when 'ar' %}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600;700&display=swap"
           rel="stylesheet">
 
     {% when 'ur' %}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap"
           rel="stylesheet">
 
     {% when 'bn' %}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap"
           rel="stylesheet">
     {% endcase %}
@@ -33,12 +33,12 @@
 
 <body class="privacy-page lang-{{ page.lang }}">
 
-<nav class="lang-nav" aria-label="Language">
+<nav aria-label="Language" class="lang-nav">
     {% for l in site.languages %}
     {% if l.code == page.lang %}
-    <a href="{{ l.permalink | relative_url }}"
-       lang="{{ l.code }}"
-       class="active">
+    <a class="active"
+       href="{{ l.permalink | relative_url }}"
+       lang="{{ l.code }}">
         {{ l.name }}
     </a>
     {% else %}
@@ -56,37 +56,37 @@
         <h1 id="page-title">{{ site.title }}</h1>
     </header>
 
-    <div id="loader"
+    <div aria-live="polite"
          class="loader"
-         role="status"
-         aria-live="polite">
-        <span class="spinner" aria-hidden="true"></span>
+         id="loader"
+         role="status">
+        <span aria-hidden="true" class="spinner"></span>
         <span>Loading...</span>
     </div>
 
-    <div id="error" class="error" hidden>
+    <div class="error" hidden id="error">
         <p><strong>Could not load the privacy policy.</strong></p>
         <p>You can still view the raw source file.</p>
         <p>
-            <a id="raw-link"
-               href="#"
-               target="_blank"
-               rel="noopener">
+            <a href="#"
+               id="raw-link"
+               rel="noopener"
+               target="_blank">
                 Open Privacy JSON
             </a>
         </p>
     </div>
 
-    <article id="policy"
+    <article aria-live="polite"
              class="policy"
-             aria-live="polite">
+             id="policy">
     </article>
 
     <footer class="policy-footer">
         <p>
             <a href="https://github.com/sharjeel-butt/SiratCompanion-HOS"
-               target="_blank"
-               rel="noopener">
+               rel="noopener"
+               target="_blank">
                 Sirat Companion on GitHub
             </a>
         </p>

@@ -1,0 +1,402 @@
+{
+  "language": "tr",
+  "collections": {
+    "acceptance": {
+      "title": "İyi Amellerin Kabulü İçin Dualar",
+      "description": "İyi Amellerin Kabulü İçin Dualar"
+    },
+    "anxiety": {
+      "title": "Stres, Depresyon ve Kaygıya Karşı Dua ve Kuran Pasajları",
+      "description": "Stres, Depresyon ve Kaygıya Karşı Dua ve Kuran Pasajları"
+    },
+    "arabic_english_transliteration": {
+      "title": "Arapça, İngilizce ve Transliterasyonda Kuran Duas",
+      "description": "Arapça, İngilizce ve Transliterasyonda Kuran Duas"
+    },
+    "believers": {
+      "title": "Müminler için Dualar",
+      "description": "Müminler için Dualar"
+    },
+    "benefit_from_quran": {
+      "title": "Kur'an'ı Öğrenmek, Ezberlemek ve Faydalanmak için Dualar",
+      "description": "Kur'an'ı Öğrenmek, Ezberlemek ve Faydalanmak için Dualar"
+    },
+    "black_magic_protection": {
+      "title": "Ruqyah Koruması için Kur'an Ayetleri ve Dualar",
+      "description": "Ruqyah Koruması için Kur'an Ayetleri ve Dualar"
+    },
+    "character": {
+      "title": "Güzel Karakter için Dualar",
+      "description": "Güzel Karakter için Dualar"
+    },
+    "children": {
+      "title": "Kur'an'da Çocuklara Dua",
+      "description": "Kur'an'da Çocuklara Dua"
+    },
+    "confidence": {
+      "title": "Güven için Dualar",
+      "description": "Güven için Dualar"
+    },
+    "daily_life": {
+      "title": "Günlük Yaşam için Kur'an'dan Dualar",
+      "description": "Günlük Yaşam için Kur'an'dan Dualar"
+    },
+    "day_night": {
+      "title": "Gündüz ve Gece için Kur'an Yansımaları",
+      "description": "Gündüz ve Gece için Kur'an Yansımaları"
+    },
+    "deceased": {
+      "title": "Ölüler için Dualar",
+      "description": "Ölüler için Dualar"
+    },
+    "enemies": {
+      "title": "Düşmanlara ve Zararlı İnsanlara Karşı Dua",
+      "description": "Düşmanlara ve Zararlı İnsanlara Karşı Dua"
+    },
+    "everyday_duas": {
+      "title": "Günlük Okuma ve Ezberleme için Kur'an'dan Kısa Dualar",
+      "description": "Günlük Okuma ve Ezberleme için Kur'an'dan Kısa Dualar"
+    },
+    "evil_eye": {
+      "title": "Nazardan Korunmak İçin Kuran Ayetleri",
+      "description": "Nazardan Korunmak İçin Kuran Ayetleri"
+    },
+    "exam_success": {
+      "title": "Sınav Başarısı İçin Dua",
+      "description": "Sınav Başarısı İçin Dua"
+    },
+    "family": {
+      "title": "Aile, Evlilik ve Eşler için Dualar",
+      "description": "Aile, Evlilik ve Eşler için Dualar"
+    },
+    "fasting": {
+      "title": "Ramazan ve Oruçla İlgili Kur'an Ayetleri",
+      "description": "Ramazan ve Oruçla İlgili Kur'an Ayetleri"
+    },
+    "fear": {
+      "title": "Korku için Dualar",
+      "description": "Korku için Dualar"
+    },
+    "forgiveness": {
+      "title": "Bağışlanmak için Dualar",
+      "description": "Bağışlanmak için Dualar"
+    },
+    "forgiveness_of_sins": {
+      "title": "Günahların Bağışlanması İçin Dua",
+      "description": "Günahların Bağışlanması İçin Dua"
+    },
+    "friends_loved_ones": {
+      "title": "Arkadaşlar ve Sevdikleriniz İçin Dualar",
+      "description": "Arkadaşlar ve Sevdikleriniz İçin Dualar"
+    },
+    "good_ending": {
+      "title": "İyi Bir Son İçin Dualar",
+      "description": "İyi Bir Son İçin Dualar"
+    },
+    "gratitude": {
+      "title": "Şükür için dualar ve Kur'an-ı Kerim pasajları",
+      "description": "Şükür için dualar ve Kur'an-ı Kerim pasajları"
+    },
+    "guidance": {
+      "title": "Hidayet ve Doğru Yol İçin Dualar",
+      "description": "Hidayet ve Doğru Yol İçin Dualar"
+    },
+    "hajj_umrah": {
+      "title": "Hac ve Umre için Dualar",
+      "description": "Hac ve Umre için Dualar"
+    },
+    "hardship": {
+      "title": "Zorluk, Üzüntü ve Keder İçin Dua ve Kuran Pasajları",
+      "description": "Zorluk, Üzüntü ve Keder İçin Dua ve Kuran Pasajları"
+    },
+    "health": {
+      "title": "Şifa ve Sağlık Konusunda Kur'an'ın Yansımaları",
+      "description": "Şifa ve Sağlık Konusunda Kur'an'ın Yansımaları"
+    },
+    "heart": {
+      "title": "Kalp ve Temiz Bir Kalp için Dualar",
+      "description": "Kalp ve Temiz Bir Kalp için Dualar"
+    },
+    "heart_healing": {
+      "title": "Kalp Hastalıkları İçin Dua",
+      "description": "Kalp Hastalıkları İçin Dua"
+    },
+    "hereafter": {
+      "title": "Ahiret için dualar",
+      "description": "Ahiret için dualar"
+    },
+    "humility": {
+      "title": "Alçakgönüllülük için Dualar",
+      "description": "Alçakgönüllülük için Dualar"
+    },
+    "jannah": {
+      "title": "Cennet için dualar",
+      "description": "Cennet için dualar"
+    },
+    "knowledge": {
+      "title": "İlim İçin Dualar",
+      "description": "İlim İçin Dualar"
+    },
+    "mercy": {
+      "title": "Allah'ın Rahmeti İçin Dua",
+      "description": "Allah'ın Rahmeti İçin Dua"
+    },
+    "new_muslims": {
+      "title": "Yeni Müslümanlar için Dualar",
+      "description": "Yeni Müslümanlar için Dualar"
+    },
+    "oppression": {
+      "title": "Zulme Karşı Dualar",
+      "description": "Zulme Karşı Dualar"
+    },
+    "pain_sickness": {
+      "title": "Acı ve Hastalık için Duas ve Kuran Pasajları (Şifa)",
+      "description": "Acı ve Hastalık için Duas ve Kuran Pasajları (Şifa)"
+    },
+    "palestine": {
+      "title": "Filistin ve Mazlumlar İçin Dua",
+      "description": "Filistin ve Mazlumlar İçin Dua"
+    },
+    "parents": {
+      "title": "Kur'an'da Anne-Baba ve Ölen Anne-Babaya Dua",
+      "description": "Kur'an'da Anne-Baba ve Ölen Anne-Babaya Dua"
+    },
+    "patience": {
+      "title": "Sabır için Duas ve Kuran Pasajları",
+      "description": "Sabır için Duas ve Kuran Pasajları"
+    },
+    "peace": {
+      "title": "Barış için Dualar",
+      "description": "Barış için Dualar"
+    },
+    "pious_spouse": {
+      "title": "Dindar Bir Eş İçin Dua",
+      "description": "Dindar Bir Eş İçin Dua"
+    },
+    "powerful_duas": {
+      "title": "Kur'an'dan Güçlü Dualar",
+      "description": "Kur'an'dan Güçlü Dualar"
+    },
+    "prophet_harun": {
+      "title": "Musa'nın Harun'a Duası",
+      "description": "Musa'nın Harun'a Duası"
+    },
+    "prophet_shuayb": {
+      "title": "Şuayb Peygamberin Duası ve Emaneti",
+      "description": "Şuayb Peygamberin Duası ve Emaneti"
+    },
+    "prophet_sulayman": {
+      "title": "Süleyman Peygamber'in Duası ve Şükürleri",
+      "description": "Süleyman Peygamber'in Duası ve Şükürleri"
+    },
+    "prophets": {
+      "title": "Peygamberlerin Kur'an'daki Duaları",
+      "description": "Peygamberlerin Kur'an'daki Duaları"
+    },
+    "protection": {
+      "title": "Kötülüklerden ve Şeytandan Korunmak İçin Dua",
+      "description": "Kötülüklerden ve Şeytandan Korunmak İçin Dua"
+    },
+    "protection_from_hellfire": {
+      "title": "Cehennem Ateşinden Korunmak İçin Dua",
+      "description": "Cehennem Ateşinden Korunmak İçin Dua"
+    },
+    "provision_wealth": {
+      "title": "Rızık ve Zenginlik İçin Kur'an Ayetleri ve Duaları",
+      "description": "Rızık ve Zenginlik İçin Kur'an Ayetleri ve Duaları"
+    },
+    "rabbana": {
+      "title": "Kur'an'dan Rabbana Duası",
+      "description": "Kur'an'dan Rabbana Duası"
+    },
+    "rain": {
+      "title": "Yağmur ve Bereket Üzerine Kur'an Yansımaları",
+      "description": "Yağmur ve Bereket Üzerine Kur'an Yansımaları"
+    },
+    "relief": {
+      "title": "Kurtuluş İçin Dualar",
+      "description": "Kurtuluş İçin Dualar"
+    },
+    "remembrance_reflection": {
+      "title": "Zikre ve Düşünmeye İlişkin Kur'an Ayetleri",
+      "description": "Zikre ve Düşünmeye İlişkin Kur'an Ayetleri"
+    },
+    "repentance": {
+      "title": "Tevbe ve Tevbe için Dualar",
+      "description": "Tevbe ve Tevbe için Dualar"
+    },
+    "righteous_believers": {
+      "title": "Salih Müminlerin Kur'an'daki Duaları",
+      "description": "Salih Müminlerin Kur'an'daki Duaları"
+    },
+    "righteous_offspring": {
+      "title": "Salih Çocuk ve Hamilelik için Dualar",
+      "description": "Salih Çocuk ve Hamilelik için Dualar"
+    },
+    "righteousness": {
+      "title": "Doğruluk ve İyi Amel İçin Dualar",
+      "description": "Doğruluk ve İyi Amel İçin Dualar"
+    },
+    "safety": {
+      "title": "Güvenlik için Dualar",
+      "description": "Güvenlik için Dualar"
+    },
+    "sincerity": {
+      "title": "Kuran ayetleri ve samimiyet için dualar",
+      "description": "Kuran ayetleri ve samimiyet için dualar"
+    },
+    "steadfastness": {
+      "title": "İstikrar için Dualar",
+      "description": "İstikrar için Dualar"
+    },
+    "strength": {
+      "title": "Güç için Dualar",
+      "description": "Güç için Dualar"
+    },
+    "studying": {
+      "title": "Ders çalışmak için dualar",
+      "description": "Ders çalışmak için dualar"
+    },
+    "success_barakah": {
+      "title": "Başarı ve Bereket için Dualar",
+      "description": "Başarı ve Bereket için Dualar"
+    },
+    "topics": {
+      "title": "Konuya göre Kur'an'dan dualar",
+      "description": "Konuya göre Kur'an'dan dualar"
+    },
+    "travel": {
+      "title": "Seyahat ve Yolculuk Güvenliği İçin Kuran Ayetleri ve Dualar",
+      "description": "Seyahat ve Yolculuk Güvenliği İçin Kuran Ayetleri ve Dualar"
+    },
+    "ummah": {
+      "title": "Ümmet için Dualar",
+      "description": "Ümmet için Dualar"
+    },
+    "unity": {
+      "title": "Birlik için Dualar",
+      "description": "Birlik için Dualar"
+    },
+    "victory": {
+      "title": "Zafer için Dualar",
+      "description": "Zafer için Dualar"
+    },
+    "waswas": {
+      "title": "Waswas ve Fısıltılar için Dualar",
+      "description": "Waswas ve Fısıltılar için Dualar"
+    },
+    "when_someone_dies": {
+      "title": "Birisi öldüğünde okunacak Kuran pasajları ve dualar",
+      "description": "Birisi öldüğünde okunacak Kuran pasajları ve dualar"
+    },
+    "wisdom": {
+      "title": "Bilgelik için Dualar",
+      "description": "Bilgelik için Dualar"
+    },
+    "work_career": {
+      "title": "İş ve Kariyer İçin Dualar",
+      "description": "İş ve Kariyer İçin Dualar"
+    }
+  },
+  "prophets": {
+    "prophet_adam": {
+      "name": "Adem"
+    },
+    "prophet_al_yasa": {
+      "name": "El Yasa"
+    },
+    "prophet_ayyub": {
+      "name": "Eyyub"
+    },
+    "prophet_ayyub_illness": {
+      "name": "Eyyub Hastalığı"
+    },
+    "prophet_dawud": {
+      "name": "Davud"
+    },
+    "prophet_dhul_kifl": {
+      "name": "Zül Kifl"
+    },
+    "prophet_harun": {
+      "name": "Harun"
+    },
+    "prophet_hud": {
+      "name": "Hud"
+    },
+    "prophet_ibrahim": {
+      "name": "İbrahim"
+    },
+    "prophet_idris": {
+      "name": "İdris"
+    },
+    "prophet_ilyas": {
+      "name": "İlyas"
+    },
+    "prophet_isa": {
+      "name": "İsa"
+    },
+    "prophet_ishaq": {
+      "name": "İshak"
+    },
+    "prophet_ismail": {
+      "name": "İsmail"
+    },
+    "prophet_lut": {
+      "name": "Lut"
+    },
+    "prophet_muhammad": {
+      "name": "Muhammed"
+    },
+    "prophet_musa": {
+      "name": "Musa"
+    },
+    "prophet_nuh": {
+      "name": "Nuh"
+    },
+    "prophet_nuh_forgiveness": {
+      "name": "Nuh'un Bağışlanması"
+    },
+    "prophet_salih": {
+      "name": "salih"
+    },
+    "prophet_shuayb": {
+      "name": "Şuayb"
+    },
+    "prophet_sulayman": {
+      "name": "Süleyman"
+    },
+    "prophet_yahya": {
+      "name": "Yahya"
+    },
+    "prophet_yaqub": {
+      "name": "Yakub"
+    },
+    "prophet_yunus": {
+      "name": "Yunus"
+    },
+    "prophet_yusuf": {
+      "name": "Yusuf"
+    },
+    "prophet_zakariya": {
+      "name": "Zekeriya"
+    }
+  },
+  "ui": {
+    "quran_explorer": "Kuran Gezgini",
+    "browse_topics": "Konuya Göre Gözat",
+    "browse_prophets": "Peygamber'e göre göz atın",
+    "related_duas": "İlgili Dualar",
+    "recommended_duas": "Önerilen Dualar",
+    "associated_duas": "İlgili Dualar",
+    "related_topics": "İlgili Konular",
+    "appears_in": "Şurada Görünür:",
+    "explore_collection": "Koleksiyonu Keşfedin",
+    "discover_more": "Daha Fazlasını Keşfedin",
+    "daily_reflection": "Günlük Yansıma",
+    "prophetic_duas": "Peygamberlik Duaları",
+    "all_collections": "Tüm Koleksiyonlar",
+    "all_prophets": "Tüm Peygamberler",
+    "view_related": "İlgilileri Görüntüle",
+    "view_all": "Tümünü Görüntüle"
+  }
+}

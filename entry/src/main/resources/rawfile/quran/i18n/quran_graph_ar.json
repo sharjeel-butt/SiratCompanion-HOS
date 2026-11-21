@@ -1,0 +1,402 @@
+{
+  "language": "أون",
+  "collections": {
+    "acceptance": {
+      "title": "دعاء لقبول الصالحات",
+      "description": "دعاء لقبول الصالحات"
+    },
+    "anxiety": {
+      "title": "أدعية ومقاطع قرآنية للتوتر والاكتئاب والقلق",
+      "description": "أدعية ومقاطع قرآنية للتوتر والاكتئاب والقلق"
+    },
+    "arabic_english_transliteration": {
+      "title": "ادعية القرآن الكريم باللغات العربية والإنجليزية والترجمة الصوتية",
+      "description": "ادعية القرآن الكريم باللغات العربية والإنجليزية والترجمة الصوتية"
+    },
+    "believers": {
+      "title": "دعاء للمؤمنين",
+      "description": "دعاء للمؤمنين"
+    },
+    "benefit_from_quran": {
+      "title": "ادعية لتعلم القرآن وحفظه والإستفادة منه",
+      "description": "ادعية لتعلم القرآن وحفظه والإستفادة منه"
+    },
+    "black_magic_protection": {
+      "title": "آيات قرآنية وأدعية للحماية من الرقية",
+      "description": "آيات قرآنية وأدعية للحماية من الرقية"
+    },
+    "character": {
+      "title": "ادعية لشخصية جميلة",
+      "description": "ادعية لشخصية جميلة"
+    },
+    "children": {
+      "title": "أدعية للأطفال في القرآن",
+      "description": "أدعية للأطفال في القرآن"
+    },
+    "confidence": {
+      "title": "ادعية للثقة",
+      "description": "ادعية للثقة"
+    },
+    "daily_life": {
+      "title": "أدعية من القرآن للحياة اليومية",
+      "description": "أدعية من القرآن للحياة اليومية"
+    },
+    "day_night": {
+      "title": "تأملات القرآن ليلا ونهارا",
+      "description": "تأملات القرآن ليلا ونهارا"
+    },
+    "deceased": {
+      "title": "ادعية للميت",
+      "description": "ادعية للميت"
+    },
+    "enemies": {
+      "title": "أدعية ضد الأعداء وأهل الأذى",
+      "description": "أدعية ضد الأعداء وأهل الأذى"
+    },
+    "everyday_duas": {
+      "title": "أدعية قصيرة من القرآن الكريم تلاوة وحفظا يوميا",
+      "description": "أدعية قصيرة من القرآن الكريم تلاوة وحفظا يوميا"
+    },
+    "evil_eye": {
+      "title": "آيات قرآنية للحماية من العين الشريرة",
+      "description": "آيات قرآنية للحماية من العين الشريرة"
+    },
+    "exam_success": {
+      "title": "ادعية للنجاح في الامتحان",
+      "description": "ادعية للنجاح في الامتحان"
+    },
+    "family": {
+      "title": "ادعية للعائلة والزواج والأزواج",
+      "description": "ادعية للعائلة والزواج والأزواج"
+    },
+    "fasting": {
+      "title": "آيات قرآنية عن رمضان والصيام",
+      "description": "آيات قرآنية عن رمضان والصيام"
+    },
+    "fear": {
+      "title": "ادعية للخوف",
+      "description": "ادعية للخوف"
+    },
+    "forgiveness": {
+      "title": "ادعية للاستغفار",
+      "description": "ادعية للاستغفار"
+    },
+    "forgiveness_of_sins": {
+      "title": "ادعية لغفران الذنوب",
+      "description": "ادعية لغفران الذنوب"
+    },
+    "friends_loved_ones": {
+      "title": "ادعية للأصدقاء والأحباء",
+      "description": "ادعية للأصدقاء والأحباء"
+    },
+    "good_ending": {
+      "title": "ادعية لحسن الخاتمة",
+      "description": "ادعية لحسن الخاتمة"
+    },
+    "gratitude": {
+      "title": "أدعية وآيات قرآنية للشكر",
+      "description": "أدعية وآيات قرآنية للشكر"
+    },
+    "guidance": {
+      "title": "ادعية الهداية والصراط المستقيم",
+      "description": "ادعية الهداية والصراط المستقيم"
+    },
+    "hajj_umrah": {
+      "title": "ادعية للحج والعمرة",
+      "description": "ادعية للحج والعمرة"
+    },
+    "hardship": {
+      "title": "أدعية ومقاطع قرآنية للضيق والحزن والحزن",
+      "description": "أدعية ومقاطع قرآنية للضيق والحزن والحزن"
+    },
+    "health": {
+      "title": "تأملات قرآنية في الشفاء والصحة",
+      "description": "تأملات قرآنية في الشفاء والصحة"
+    },
+    "heart": {
+      "title": "ادعية للقلب والقلب النظيف",
+      "description": "ادعية للقلب والقلب النظيف"
+    },
+    "heart_healing": {
+      "title": "دعاء لأمراض القلب",
+      "description": "دعاء لأمراض القلب"
+    },
+    "hereafter": {
+      "title": "دعاء الآخرة",
+      "description": "دعاء الآخرة"
+    },
+    "humility": {
+      "title": "ادعية للتواضع",
+      "description": "ادعية للتواضع"
+    },
+    "jannah": {
+      "title": "دعاء للجنة",
+      "description": "دعاء للجنة"
+    },
+    "knowledge": {
+      "title": "ادعية للعلم",
+      "description": "ادعية للعلم"
+    },
+    "mercy": {
+      "title": "ادعية لرحمة الله",
+      "description": "ادعية لرحمة الله"
+    },
+    "new_muslims": {
+      "title": "ادعية للمسلمين الجدد",
+      "description": "ادعية للمسلمين الجدد"
+    },
+    "oppression": {
+      "title": "ادعية ضد الظلم",
+      "description": "ادعية ضد الظلم"
+    },
+    "pain_sickness": {
+      "title": "أدعية ومقاطع قرآنية للألم والمرض (الشفاء)",
+      "description": "أدعية ومقاطع قرآنية للألم والمرض (الشفاء)"
+    },
+    "palestine": {
+      "title": "دعاء لفلسطين والمظلومين",
+      "description": "دعاء لفلسطين والمظلومين"
+    },
+    "parents": {
+      "title": "ادعية للوالدين و الأموات في القرآن الكريم",
+      "description": "ادعية للوالدين و الأموات في القرآن الكريم"
+    },
+    "patience": {
+      "title": "أدعية ومقاطع قرآنية للصبر",
+      "description": "أدعية ومقاطع قرآنية للصبر"
+    },
+    "peace": {
+      "title": "ادعية من أجل السلام",
+      "description": "ادعية من أجل السلام"
+    },
+    "pious_spouse": {
+      "title": "ادعية للزوج الصالح",
+      "description": "ادعية للزوج الصالح"
+    },
+    "powerful_duas": {
+      "title": "أدعية قوية من القرآن",
+      "description": "أدعية قوية من القرآن"
+    },
+    "prophet_harun": {
+      "title": "دعاء موسى لهارون",
+      "description": "دعاء موسى لهارون"
+    },
+    "prophet_shuayb": {
+      "title": "ادعية وثقة النبي شعيب",
+      "description": "ادعية وثقة النبي شعيب"
+    },
+    "prophet_sulayman": {
+      "title": "دعاء وشكر النبي سليمان",
+      "description": "دعاء وشكر النبي سليمان"
+    },
+    "prophets": {
+      "title": "أدعية الأنبياء في القرآن",
+      "description": "أدعية الأنبياء في القرآن"
+    },
+    "protection": {
+      "title": "ادعية للحماية من الشر والشيطان",
+      "description": "ادعية للحماية من الشر والشيطان"
+    },
+    "protection_from_hellfire": {
+      "title": "دعاء للحماية من النار",
+      "description": "دعاء للحماية من النار"
+    },
+    "provision_wealth": {
+      "title": "آيات قرآنية وأدعية للرزق والثروة",
+      "description": "آيات قرآنية وأدعية للرزق والثروة"
+    },
+    "rabbana": {
+      "title": "ادعية ربانا من القرآن",
+      "description": "ادعية ربانا من القرآن"
+    },
+    "rain": {
+      "title": "تأملات قرآنية في المطر والبركات",
+      "description": "تأملات قرآنية في المطر والبركات"
+    },
+    "relief": {
+      "title": "ادعية للإغاثة",
+      "description": "ادعية للإغاثة"
+    },
+    "remembrance_reflection": {
+      "title": "آيات قرآنية في الذكر والتفكر",
+      "description": "آيات قرآنية في الذكر والتفكر"
+    },
+    "repentance": {
+      "title": "دعاء التوبة والتوبة",
+      "description": "دعاء التوبة والتوبة"
+    },
+    "righteous_believers": {
+      "title": "أدعية المؤمنين الصالحين في القرآن",
+      "description": "أدعية المؤمنين الصالحين في القرآن"
+    },
+    "righteous_offspring": {
+      "title": "ادعية للذرية الصالحة والحمل",
+      "description": "ادعية للذرية الصالحة والحمل"
+    },
+    "righteousness": {
+      "title": "دعاء للبر وعمل الخير",
+      "description": "دعاء للبر وعمل الخير"
+    },
+    "safety": {
+      "title": "ادعية للسلامة",
+      "description": "ادعية للسلامة"
+    },
+    "sincerity": {
+      "title": "آيات قرآنية وأدعية للإخلاص",
+      "description": "آيات قرآنية وأدعية للإخلاص"
+    },
+    "steadfastness": {
+      "title": "ادعية للثبات",
+      "description": "ادعية للثبات"
+    },
+    "strength": {
+      "title": "ادعية للقوة",
+      "description": "ادعية للقوة"
+    },
+    "studying": {
+      "title": "ادعية للدراسة",
+      "description": "ادعية للدراسة"
+    },
+    "success_barakah": {
+      "title": "ادعية النجاح والبركة",
+      "description": "ادعية النجاح والبركة"
+    },
+    "topics": {
+      "title": "أدعية من القرآن حسب الموضوع",
+      "description": "أدعية من القرآن حسب الموضوع"
+    },
+    "travel": {
+      "title": "آيات قرآنية وأدعية للسفر وسلامة الرحلة",
+      "description": "آيات قرآنية وأدعية للسفر وسلامة الرحلة"
+    },
+    "ummah": {
+      "title": "ادعية للأمة",
+      "description": "ادعية للأمة"
+    },
+    "unity": {
+      "title": "ادعية للتوحيد",
+      "description": "ادعية للتوحيد"
+    },
+    "victory": {
+      "title": "ادعية النصر",
+      "description": "ادعية النصر"
+    },
+    "waswas": {
+      "title": "ادعية للوسواس والوساوس",
+      "description": "ادعية للوسواس والوساوس"
+    },
+    "when_someone_dies": {
+      "title": "مقاطع قرآنية وأدعية عند وفاة شخص ما",
+      "description": "مقاطع قرآنية وأدعية عند وفاة شخص ما"
+    },
+    "wisdom": {
+      "title": "ادعية للحكمة",
+      "description": "ادعية للحكمة"
+    },
+    "work_career": {
+      "title": "ادعية للعمل والوظيفة",
+      "description": "ادعية للعمل والوظيفة"
+    }
+  },
+  "prophets": {
+    "prophet_adam": {
+      "name": "آدم"
+    },
+    "prophet_al_yasa": {
+      "name": "الياسا"
+    },
+    "prophet_ayyub": {
+      "name": "أيوب"
+    },
+    "prophet_ayyub_illness": {
+      "name": "مرض أيوب"
+    },
+    "prophet_dawud": {
+      "name": "داود"
+    },
+    "prophet_dhul_kifl": {
+      "name": "ذو الكفل"
+    },
+    "prophet_harun": {
+      "name": "هارون"
+    },
+    "prophet_hud": {
+      "name": "هود"
+    },
+    "prophet_ibrahim": {
+      "name": "ابراهيم"
+    },
+    "prophet_idris": {
+      "name": "إدريس"
+    },
+    "prophet_ilyas": {
+      "name": "إلياس"
+    },
+    "prophet_isa": {
+      "name": "عيسى"
+    },
+    "prophet_ishaq": {
+      "name": "إسحاق"
+    },
+    "prophet_ismail": {
+      "name": "اسماعيل"
+    },
+    "prophet_lut": {
+      "name": "لوط"
+    },
+    "prophet_muhammad": {
+      "name": "محمد"
+    },
+    "prophet_musa": {
+      "name": "موسى"
+    },
+    "prophet_nuh": {
+      "name": "نوح"
+    },
+    "prophet_nuh_forgiveness": {
+      "name": "نوح المغفرة"
+    },
+    "prophet_salih": {
+      "name": "صالح"
+    },
+    "prophet_shuayb": {
+      "name": "شعيب"
+    },
+    "prophet_sulayman": {
+      "name": "سليمان"
+    },
+    "prophet_yahya": {
+      "name": "يحيى"
+    },
+    "prophet_yaqub": {
+      "name": "يعقوب"
+    },
+    "prophet_yunus": {
+      "name": "يونس"
+    },
+    "prophet_yusuf": {
+      "name": "يوسف"
+    },
+    "prophet_zakariya": {
+      "name": "زكريا"
+    }
+  },
+  "ui": {
+    "quran_explorer": "مستكشف القرآن",
+    "browse_topics": "تصفح حسب الموضوع",
+    "browse_prophets": "تصفح حسب النبي",
+    "related_duas": "ادعية ذات صلة",
+    "recommended_duas": "أدعية مستحسنة",
+    "associated_duas": "ادعية المرتبطة",
+    "related_topics": "موضوعات ذات صلة",
+    "appears_in": "يظهر في",
+    "explore_collection": "استكشاف المجموعة",
+    "discover_more": "اكتشف المزيد",
+    "daily_reflection": "التأمل اليومي",
+    "prophetic_duas": "ادعية نبوية",
+    "all_collections": "جميع المجموعات",
+    "all_prophets": "جميع الأنبياء",
+    "view_related": "عرض ذات الصلة",
+    "view_all": "عرض الكل"
+  }
+}

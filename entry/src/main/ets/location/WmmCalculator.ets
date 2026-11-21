@@ -55,7 +55,6 @@ export class WmmCalculator {
   private static readonly C4 = WmmCalculator.A4 - WmmCalculator.B4;
   /** Degree and order of the model. */
   private static readonly MAXORD = 12;
-
   // WMM2025 Coefficients (Degree/Order 12)
   // Format: [n, m, g, h, gdot, hdot]
   private static readonly COEFFS: number[][] = [

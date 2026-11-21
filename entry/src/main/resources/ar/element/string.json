@@ -3339,6 +3339,142 @@
     {
       "name": "feature_issues_link",
       "value": "https://github.com/sharjeel-butt/SiratCompanion-HOS/issues"
+    },
+    {
+      "name": "quran_explorer",
+      "value": "مستكشف القرآن"
+    },
+    {
+      "name": "quran_topics",
+      "value": "تصفح حسب الموضوع"
+    },
+    {
+      "name": "quran_prophets",
+      "value": "تصفح حسب النبي"
+    },
+    {
+      "name": "dua_appears_in",
+      "value": "موجودة في المجموعات"
+    },
+    {
+      "name": "dua_related",
+      "value": "أدعية ذات صلة"
+    },
+    {
+      "name": "rabbana_title",
+      "value": "أدعية ربنا"
+    },
+    {
+      "name": "rabbana_desc",
+      "value": "18 دعاءً قرآنيًا تبدأ بلفظ «ربنا»"
+    },
+    {
+      "name": "prophetic_duas",
+      "value": "أدعية الأنبياء"
+    },
+    {
+      "name": "prophetic_desc",
+      "value": "الأدعية التي دعا بها الأنبياء"
+    },
+    {
+      "name": "revelation_place_makkah",
+      "value": "مكة"
+    },
+    {
+      "name": "revelation_place_madinah",
+      "value": "المدينة"
+    },
+    {
+      "name": "arabic_font",
+      "value": "الخط العربي"
+    },
+    {
+      "name": "arabic_font_desc",
+      "value": "اختر الخط المستخدم للنص العربي"
+    },
+    {
+      "name": "font_auto",
+      "value": "اكتشاف تلقائي (إقليمي)"
+    },
+    {
+      "name": "font_Amiri",
+      "value": "أميري (نسخ)"
+    },
+    {
+      "name": "font_AmiriQuran",
+      "value": "أميري قرآن (نسخ)"
+    },
+    {
+      "name": "font_HafsArabic",
+      "value": "حفص (نسخ)"
+    },
+    {
+      "name": "font_QPC_Hafs",
+      "value": "QPC حفص (عثماني)"
+    },
+    {
+      "name": "font_JameelNoori",
+      "value": "جميل نوري (نستعليق)"
+    },
+    {
+      "name": "font_NotoNastaliqUrdu",
+      "value": "نوتو نستعليق (الأردية)"
+    },
+    {
+      "name": "font_LPMQIsepMisbah",
+      "value": "LPMQ Isep Misbah (نسخ)"
+    },
+    {
+      "name": "font_KFGQPCWarsh",
+      "value": "KFGQPC ورش (ورش)"
+    },
+    {
+      "name": "font_ScheherazadeNew",
+      "value": "شهرزاد (نسخ)"
+    },
+    {
+      "name": "font_NotoNaskh",
+      "value": "نوتو نسخ (نسخ)"
+    },
+    {
+      "name": "translation_font",
+      "value": "خط الترجمة"
+    },
+    {
+      "name": "translation_font_desc",
+      "value": "اختر الخط المستخدم للنص المترجم"
+    },
+    {
+      "name": "trans_font_auto",
+      "value": "اكتشاف تلقائي (إقليمي)"
+    },
+    {
+      "name": "trans_font_Outfit",
+      "value": "Outfit (لاتيني / افتراضي)"
+    },
+    {
+      "name": "trans_font_NotoNastaliqUrdu",
+      "value": "نوتو نستعليق (الأردية)"
+    },
+    {
+      "name": "trans_font_NotoSansBengali",
+      "value": "نوتو سانس البنغالية (البنغالية)"
+    },
+    {
+      "name": "trans_font_NotoSansSC",
+      "value": "نوتو سانس إس سي (الصينية)"
+    },
+    {
+      "name": "hadith_evidence_title",
+      "value": "الدليل من الحديث"
+    },
+    {
+      "name": "diag_ok",
+      "value": "موافق"
+    },
+    {
+      "name": "trans_font_JameelNoori",
+      "value": "جميل نوري (نستعليق)"
     }
   ]
 }

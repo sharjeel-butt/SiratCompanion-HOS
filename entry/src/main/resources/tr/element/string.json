@@ -3339,6 +3339,142 @@
     {
       "name": "feature_issues_link",
       "value": "https://github.com/sharjeel-butt/SiratCompanion-HOS/issues"
+    },
+    {
+      "name": "quran_explorer",
+      "value": "Kur'an Gezgini"
+    },
+    {
+      "name": "quran_topics",
+      "value": "Konuya Göre Göz At"
+    },
+    {
+      "name": "quran_prophets",
+      "value": "Peygambere Göre Göz At"
+    },
+    {
+      "name": "dua_appears_in",
+      "value": "Koleksiyonlarda Yer Alır"
+    },
+    {
+      "name": "dua_related",
+      "value": "İlgili Dualar"
+    },
+    {
+      "name": "rabbana_title",
+      "value": "Rabbena Duaları"
+    },
+    {
+      "name": "rabbana_desc",
+      "value": "'Rabbena' ile başlayan 18 Kur'an duası"
+    },
+    {
+      "name": "prophetic_duas",
+      "value": "Peygamber Duaları"
+    },
+    {
+      "name": "prophetic_desc",
+      "value": "Peygamberlerin yaptığı dualar"
+    },
+    {
+      "name": "revelation_place_makkah",
+      "value": "Mekke"
+    },
+    {
+      "name": "revelation_place_madinah",
+      "value": "Medine"
+    },
+    {
+      "name": "arabic_font",
+      "value": "Arapça Yazı Tipi"
+    },
+    {
+      "name": "arabic_font_desc",
+      "value": "Arapça metin için kullanılacak yazı tipini seçin"
+    },
+    {
+      "name": "font_auto",
+      "value": "Otomatik Algıla (Bölgesel)"
+    },
+    {
+      "name": "font_Amiri",
+      "value": "Amiri (Nesih)"
+    },
+    {
+      "name": "font_AmiriQuran",
+      "value": "Amiri Kur'an (Nesih)"
+    },
+    {
+      "name": "font_HafsArabic",
+      "value": "Hafs (Nesih)"
+    },
+    {
+      "name": "font_QPC_Hafs",
+      "value": "QPC Hafs (Osmanlı Hattı)"
+    },
+    {
+      "name": "font_JameelNoori",
+      "value": "Jameel Noori (Nestalik)"
+    },
+    {
+      "name": "font_NotoNastaliqUrdu",
+      "value": "Noto Nastaliq (Urdu Nestalik)"
+    },
+    {
+      "name": "font_LPMQIsepMisbah",
+      "value": "LPMQ Isep Misbah (Nesih)"
+    },
+    {
+      "name": "font_KFGQPCWarsh",
+      "value": "KFGQPC Warsh (Warsh)"
+    },
+    {
+      "name": "font_ScheherazadeNew",
+      "value": "Scheherazade (Nesih)"
+    },
+    {
+      "name": "font_NotoNaskh",
+      "value": "Noto Naskh (Nesih)"
+    },
+    {
+      "name": "translation_font",
+      "value": "Çeviri Yazı Tipi"
+    },
+    {
+      "name": "translation_font_desc",
+      "value": "Çevrilmiş metin için kullanılacak yazı tipini seçin"
+    },
+    {
+      "name": "trans_font_auto",
+      "value": "Otomatik Algıla (Bölgesel)"
+    },
+    {
+      "name": "trans_font_Outfit",
+      "value": "Outfit (Latin/Varsayılan)"
+    },
+    {
+      "name": "trans_font_NotoNastaliqUrdu",
+      "value": "Noto Nastaliq (Urduca)"
+    },
+    {
+      "name": "trans_font_NotoSansBengali",
+      "value": "Noto Sans Bengali (Bengalce)"
+    },
+    {
+      "name": "trans_font_NotoSansSC",
+      "value": "Noto Sans SC (Çince)"
+    },
+    {
+      "name": "hadith_evidence_title",
+      "value": "Hadis Delili"
+    },
+    {
+      "name": "diag_ok",
+      "value": "Tamam"
+    },
+    {
+      "name": "trans_font_JameelNoori",
+      "value": "Jameel Noori (Nestalik)"
     }
   ]
 }

@@ -3339,6 +3339,170 @@
     {
       "name": "feature_issues_link",
       "value": "https://github.com/sharjeel-butt/SiratCompanion-HOS/issues"
+    },
+    {
+      "name": "quran_explorer",
+      "value": "قرآن ایکسپلورر"
+    },
+    {
+      "name": "quran_topics",
+      "value": "موضوع کے لحاظ سے براؤز کریں"
+    },
+    {
+      "name": "quran_prophets",
+      "value": "انبیاء کے لحاظ سے براؤز کریں"
+    },
+    {
+      "name": "dua_appears_in",
+      "value": "مجموعوں میں موجود"
+    },
+    {
+      "name": "dua_related",
+      "value": "متعلقہ دعائیں"
+    },
+    {
+      "name": "rabbana_title",
+      "value": "ربنا دعائیں"
+    },
+    {
+      "name": "prophetic_duas",
+      "value": "انبیاء کی دعائیں"
+    },
+    {
+      "name": "prophetic_desc",
+      "value": "انبیاء کرام کی کی گئی دعائیں"
+    },
+    {
+      "name": "rabbana_desc",
+      "value": "قرآن کی 18 دعائیں جو 'ربنا' سے شروع ہوتی ہیں"
+    },
+    {
+      "name": "qkg_collection_hardship",
+      "value": "مشکل اور راحت"
+    },
+    {
+      "name": "qkg_collection_guidance",
+      "value": "ہدایت"
+    },
+    {
+      "name": "qkg_collection_forgiveness",
+      "value": "معافی"
+    },
+    {
+      "name": "qkg_collection_protection",
+      "value": "حفاظت"
+    },
+    {
+      "name": "qkg_prophet_yunus",
+      "value": "حضرت یونس علیہ السلام"
+    },
+    {
+      "name": "qkg_prophet_ayyub",
+      "value": "حضرت ایوب علیہ السلام"
+    },
+    {
+      "name": "qkg_prophet_musa",
+      "value": "حضرت موسیٰ علیہ السلام"
+    },
+    {
+      "name": "revelation_place_makkah",
+      "value": "مکہ"
+    },
+    {
+      "name": "revelation_place_madinah",
+      "value": "مدینہ"
+    },
+    {
+      "name": "arabic_font",
+      "value": "عربی فونٹ"
+    },
+    {
+      "name": "arabic_font_desc",
+      "value": "عربی متن کے لیے استعمال ہونے والا فونٹ منتخب کریں"
+    },
+    {
+      "name": "font_auto",
+      "value": "خودکار انتخاب (علاقائی)"
+    },
+    {
+      "name": "font_Amiri",
+      "value": "امیری (نسخ)"
+    },
+    {
+      "name": "font_AmiriQuran",
+      "value": "امیری قرآن (نسخ)"
+    },
+    {
+      "name": "font_HafsArabic",
+      "value": "حفص (نسخ)"
+    },
+    {
+      "name": "font_QPC_Hafs",
+      "value": "QPC حفص (عثمانی)"
+    },
+    {
+      "name": "font_JameelNoori",
+      "value": "جمیل نوری (نستعلیق)"
+    },
+    {
+      "name": "font_NotoNastaliqUrdu",
+      "value": "نوٹو نستعلیق (اردو نستعلیق)"
+    },
+    {
+      "name": "font_LPMQIsepMisbah",
+      "value": "LPMQ ایسپ مصباح (نسخ)"
+    },
+    {
+      "name": "font_KFGQPCWarsh",
+      "value": "KFGQPC ورش (ورش)"
+    },
+    {
+      "name": "font_ScheherazadeNew",
+      "value": "شہرزاد نیو"
+    },
+    {
+      "name": "font_NotoNaskh",
+      "value": "نوٹو نسخ (نسخ)"
+    },
+    {
+      "name": "translation_font",
+      "value": "ترجمے کا فونٹ"
+    },
+    {
+      "name": "translation_font_desc",
+      "value": "ترجمہ شدہ متن کے لیے استعمال ہونے والا فونٹ منتخب کریں"
+    },
+    {
+      "name": "trans_font_auto",
+      "value": "خودکار انتخاب (علاقائی)"
+    },
+    {
+      "name": "trans_font_Outfit",
+      "value": "آؤٹ فٹ (لاطینی / پہلے سے طے شدہ)"
+    },
+    {
+      "name": "trans_font_NotoNastaliqUrdu",
+      "value": "نوٹو نستعلیق (اردو)"
+    },
+    {
+      "name": "trans_font_NotoSansBengali",
+      "value": "نوٹو سانس بنگالی (بنگالی)"
+    },
+    {
+      "name": "trans_font_NotoSansSC",
+      "value": "نوٹو سانس ایس سی (چینی)"
+    },
+    {
+      "name": "hadith_evidence_title",
+      "value": "حدیثی دلیل"
+    },
+    {
+      "name": "diag_ok",
+      "value": "ٹھیک"
+    },
+    {
+      "name": "trans_font_JameelNoori",
+      "value": "جمیل نوری (نستعلیق)"
     }
   ]
 }

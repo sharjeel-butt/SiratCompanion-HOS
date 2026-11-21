@@ -10,10 +10,11 @@ import { AppLogger } from '../core/AppLogger';
 import { PdfExportHelper } from '../core/PdfExportHelper';
 import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
 import { DuaService } from '../duas/DuaService';
-import { CompleteDua } from '../duas/DuaModels';
+import { CompleteDua, DuaSource } from '../duas/DuaModels';
 import { CustomEvent } from '../hijricalendar/CustomEventModels';
 import { CustomEventStorage } from '../hijricalendar/CustomEventStorage';
 import { CustomEventNotifier } from '../hijricalendar/CustomEventNotifier';
+import { GradeThemeHelper } from '../core/GradeThemeHelper';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -83,6 +84,7 @@ import { IslamicEventService } from '../hijricalendar/IslamicEventService';
 import { CustomEventKeywordHelper } from '../duas/CustomEventKeywordHelper';
 import { PreferencesHelper } from '../core/PreferencesHelper';
 import { NotificationHelper } from '../prayer/NotificationHelper';
+import { SourceParser } from '../core/SourceParser';
 
 export interface RamadanTableRow {
   hijriDate: string;
@@ -390,6 +392,7 @@ export struct HomePage {
                     this.LiveCountdownBanner()
                     this.PrayerPromptCard()
                     this.FullQuranAnchorCard()
+                    this.RabbanaCard()
                     this.HadithAnchorCard()
                     this.MosqueFinderAnchorCard()
                     this.RecommendedRecitationsCard()
@@ -441,16 +444,19 @@ export struct HomePage {
                   this.LiveCountdownBanner()
                   this.PrayerPromptCard()
                   this.FullQuranAnchorCard()
+                  this.RecommendedRecitationsCard()
+                  this.RabbanaCard()
+                  this.DuasCard()
                   this.HadithAnchorCard()
                   this.MosqueFinderAnchorCard()
-                  this.RecommendedRecitationsCard()
+
                   if (this.eidInfo !== null) {
                     this.EidCard()
                   } else if (this.ramadanInfo !== null) {
                     this.RamadanCard()
                   }
                   this.TodayFastCard()
-                  this.DuasCard()
+
                   // --- NEW: Bound Tasbihs Card ---
                   this.BoundTasbihsCard()
                   this.CustomEventsCard()
@@ -559,8 +565,8 @@ export struct HomePage {
                   if (task.authenticity) {
                     Text(this.getAuthenticityLabel(task.authenticity))
                       .fontSize(9)
-                      .fontColor(this.colors.textOnAccent)
-                      .backgroundColor(this.colors.statusExpress)
+                      .fontColor(GradeThemeHelper.getTextColor(task.authenticity, this.colors))
+                      .backgroundColor(GradeThemeHelper.getBgColor(task.authenticity, this.colors))
                       .padding({
                         left: 4,
                         right: 4,
@@ -568,21 +574,9 @@ export struct HomePage {
                         bottom: 1
                       })
                       .borderRadius(4)
+                      .border({ width: 1, color: GradeThemeHelper.getTextColor(task.authenticity, this.colors) })
                       .onClick(() => {
-                        let evidenceText = task.reference;
-                        if (task.evidence && task.evidence.length > 0) {
-                          // Explicit mapping (ArkTS safe)
-                          const parts: string[] = [];
-                          for (const e of task.evidence) {
-                            parts.push(`${e.collection} ${e.hadithNumber} (${e.grade})`);
-                          }
-                          evidenceText = parts.join('\n');
-                        }
-                        promptAction.showDialog({
-                          title: 'Hadith Evidence',
-                          message: evidenceText,
-                          buttons: [{ text: 'OK', color: this.colors.accentGold }]
-                        });
+                        this.handleAuthenticityTap(task);
                       })
                   }
                 }
@@ -593,7 +587,7 @@ export struct HomePage {
               Column() {
                 Text(task.surahNameArabic)
                   .fontSize(20)
-                  .fontFamily(TypographyHelper.getQuranFont(this.currentLanguage))
+                  .fontFamily(TypographyHelper.getArabicFont(true, this.currentLanguage))
                   .fontColor(this.colors.accentGold)
                 Image($r('app.media.ic_chevron_right'))
                   .width(14)
@@ -690,6 +684,57 @@ export struct HomePage {
       NavHelper.prepareForward();
       router.pushUrl({ url: 'pages/QuranPage' })
         .catch((e: Error) => console.error(JSON.stringify(e)));
+    })
+  }
+
+  @Builder
+  RabbanaCard() {
+    Row() {
+      Column() {
+        Image($r('app.media.ic_dua'))
+          .width(24).height(24)
+          .fillColor(this.colors.accentGold)
+      }
+      .width(44)
+      .height(44)
+      .borderRadius(12)
+      .backgroundColor(this.colors.tintSoft)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(HorizontalAlign.Center)
+      .flexShrink(0)
+
+      Column() {
+        Text(this.tr('rabbana_title'))
+          .fontSize(16).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+        Text(this.tr('rabbana_desc'))
+          .fontSize(11)
+          .fontColor(this.colors.textMuted)
+          .margin({ top: 4 })
+          .maxLines(2)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+      }
+      .alignItems(HorizontalAlign.Start).layoutWeight(1).padding({ left: 12, right: 12 })
+
+      Image($r('app.media.ic_chevron_right'))
+        .width(16)
+        .height(16)
+        .fillColor(this.colors.accentGold)
+        .rotate({ angle: this.isRtl() ? 180 : 0 })
+        .flexShrink(0)
+    }
+    .width('100%')
+    .padding(16)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(Theme.radiusLarge)
+    .border({ width: 1, color: this.colors.borderSoft })
+    .margin({ bottom: 14 })
+    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+    .onClick(() => {
+      NavHelper.prepareForward();
+      router.pushUrl({
+        url: 'pages/QuranCollectionPage',
+        params: { collectionId: 'rabbana', title: L.get('rabbana_title', this.appLanguage) }
+      });
     })
   }
 
@@ -1315,6 +1360,34 @@ export struct HomePage {
                   .margin({ top: 2 })
                   .width('100%')
                   .textAlign(TextAlign.Start)
+
+                if (dua.sources && dua.sources.length > 0) {
+                  Flex({ wrap: FlexWrap.Wrap }) {
+                    ForEach(dua.sources, (src: DuaSource, i: number) => {
+                      Row({ space: 4 }) {
+                        Image($r('app.media.ic_link'))
+                          .width(10).height(10)
+                          .fillColor(this.colors.accentGold)
+                        Text(SourceParser.getLabel(src, this.currentLanguage))
+                          .fontSize(9)
+                          .fontColor(this.colors.accentGold)
+                          .fontWeight(FontWeight.Medium)
+                      }
+                      .padding({
+                        left: 6,
+                        right: 6,
+                        top: 2,
+                        bottom: 2
+                      })
+                      .backgroundColor(this.colors.tintSoft)
+                      .borderRadius(8)
+                      .border({ width: 1, color: this.colors.borderSoft })
+                      .margin({ right: 4, top: 6 })
+                      .onClick(() => this.onSourceTap(src))
+                    }, (src: DuaSource, i: number) => `hsrc-${dua.id}-${i}`)
+                  }
+                  .width('100%').margin({ top: 2 })
+                }
               }
               .alignItems(HorizontalAlign.Start).layoutWeight(1)
 
@@ -1331,7 +1404,7 @@ export struct HomePage {
             .backgroundColor(this.colors.tintSubtle)
             .borderRadius(10)
             .onClick(() => {
-              // Pass the category to filter the page
+              // Parent click goes to DuasPage
               router.pushUrl({
                 url: 'pages/DuasPage',
                 params: { filterCategory: dua.category }
@@ -4709,5 +4782,92 @@ export struct HomePage {
       return this.appLanguage;
     }
     return this.duaTransLang;
+  }
+
+  /**
+   * Resolves the evidence to a canonical Hadith ID (e.g., bukhari:1).
+   * Handles both canonical codes ('bukhari') and display names ('Sahih al-Bukhari').
+   */
+  private getCanonicalCollection(col: string): string {
+    const c = col.toLowerCase();
+    if (c.includes('bukhari') || c === 'bukh') {
+      return 'bukhari';
+    }
+    if (c.includes('muslim') || c === 'musl') {
+      return 'muslim';
+    }
+    if (c.includes('abu dawud') || c.includes('abudawud') || c === 'abud') {
+      return 'abudawud';
+    }
+    if (c.includes('tirmidhi') || c === 'tirm') {
+      return 'tirmidhi';
+    }
+    if (c.includes('nasai') || c === 'nasa') {
+      return 'nasai';
+    }
+    if (c.includes('ibn majah') || c.includes('ibnmajah') || c === 'ibnm') {
+      return 'ibnmajah';
+    }
+    if (c.includes('malik') || c === 'mali') {
+      return 'malik';
+    }
+    return c;
+  }
+
+  private handleAuthenticityTap(task: RecitationTask): void {
+    // 1. Try to navigate to the Hadith if evidence exists
+    if (task.evidence && task.evidence.length > 0) {
+      const primaryEvidence = task.evidence[0];
+      const colId = this.getCanonicalCollection(primaryEvidence.collection);
+      const hadithId = `${colId}:${primaryEvidence.hadithNumber}`;
+
+      NavHelper.prepareForward();
+      router.pushUrl({
+        url: 'pages/HadithDetailsPage',
+        params: { id: hadithId }
+      }).catch((e: Error) => console.error(JSON.stringify(e)));
+      return;
+    }
+
+    // 2. Fallback: Show the localized dialog
+    let evidenceText = task.reference;
+    // (Fallback logic in case evidence exists but wasn't caught above, though unlikely)
+
+    promptAction.showDialog({
+      title: L.get('hadith_evidence_title', this.currentLanguage),
+      message: evidenceText,
+      buttons: [{ text: L.get('ok', this.currentLanguage), color: this.colors.accentGold }]
+    });
+  }
+
+  private onSourceTap(src: DuaSource): void {
+    if (src.type === 'hadith' && src.id) {
+      const parts = src.id.split(':');
+      if (parts.length === 2) {
+        const col = this.getCanonicalCollection(parts[0]);
+        const hadithId = `${col}:${parts[1]}`;
+        NavHelper.prepareForward();
+        router.pushUrl({
+          url: 'pages/HadithDetailsPage',
+          params: { id: hadithId }
+        }).catch((e: Error) => console.error(JSON.stringify(e)));
+        return;
+      }
+    }
+    if (src.type === 'quran' && src.surah !== undefined && src.ayah !== undefined) {
+      NavHelper.prepareForward();
+      router.pushUrl({
+        url: 'pages/SurahDetailsPage',
+        params: { surahId: src.surah, startVerse: src.ayah, endVerse: src.ayah }
+      }).catch((e: Error) => console.error(JSON.stringify(e)));
+      return;
+    }
+    const title = L.get('hadith_evidence_title', this.currentLanguage);
+    const msg = src.display || src.id || 'Unknown Source';
+    promptAction.showDialog({
+      title: title,
+      message: msg,
+      buttons: [{ text: L.get('ok', this.currentLanguage), color: this.colors.accentGold }]
+    });
   }
 }
