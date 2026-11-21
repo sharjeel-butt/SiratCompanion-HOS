@@ -38,7 +38,6 @@ struct MosqueFinderPage {
   @State locationStatus: string = '';
   @State renderTick: number = 0;
   @State activeFilter: string = 'all';
-
   @State isFetchingLocation: boolean = false;
 
   async aboutToAppear() {

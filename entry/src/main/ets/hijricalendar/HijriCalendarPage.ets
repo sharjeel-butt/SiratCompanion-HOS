@@ -7,6 +7,7 @@ import { PageTheme } from '../core/PageTheme';
 import { CustomEvent, RecurrenceType } from './CustomEventModels';
 import { CustomEventStorage } from './CustomEventStorage';
 import { CustomEventNotifier } from './CustomEventNotifier';
+import { SourceParser } from '../core/SourceParser';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -1669,14 +1670,7 @@ export struct HijriCalendarPage {
   }
 
   private sourceLabel(src: IslamicEventSource): string {
-    if (src.type === 'external') {
-      return src.display ?? '';
-    }
-    if (src.type === 'quran') {
-      return `Quran ${src.surah}:${src.ayah}`;
-    }
-    // hadith
-    return src.id ?? '';
+    return SourceParser.getLabel(src, this.currentLanguage);
   }
 
   private onSourceTap(src: IslamicEventSource): void {

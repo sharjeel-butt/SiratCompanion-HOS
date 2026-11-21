@@ -1,3 +1,5 @@
+import { SourceItem } from '../core/SourceParser';
+
 export interface BaseDua {
   id: string;
   category: string;
@@ -17,7 +19,7 @@ export interface TranslatedDua {
   migration_status?: string;
 }
 
-export interface DuaSource {
+export interface DuaSource extends SourceItem {
   type: 'hadith' | 'quran' | 'external';
   id?: string;
   surah?: number;

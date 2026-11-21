@@ -228,3 +228,7 @@ export const STORAGE_KEY_QURAN_TRANSLATION_LANG = 'quran_translation_lang';
 export const STORAGE_KEY_HADITH_TRANSLATION_LANG = 'hadith_translation_lang';
 
 export const STORAGE_KEY_DUA_TRANSLATION_LANG = 'dua_translation_lang';
+
+export const STORAGE_KEY_ARABIC_FONT = 'arabic_font_family';
+
+export const STORAGE_KEY_TRANSLATION_FONT = 'translation_font_family';

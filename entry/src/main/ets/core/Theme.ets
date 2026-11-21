@@ -54,6 +54,17 @@ export class ThemeColors {
   categoryAbout: string = '#F5A623';
   categoryHijriCalendar: string = '#06B6D4';
   categoryNotifications: string = '#F97316';
+  // ---- Grade / Authenticity Colors (Light Mode Defaults) ----
+  colorGradeSahih: string = '#047857'; // Dark Green
+  bgGradeSahih: string = 'rgba(4, 120, 87, 0.12)';
+  colorGradeHasan: string = '#0284C7'; // Blue/Teal
+  bgGradeHasan: string = 'rgba(2, 132, 199, 0.12)';
+  colorGradeDaif: string = '#D97706'; // Amber
+  bgGradeDaif: string = 'rgba(217, 119, 6, 0.12)';
+  colorGradeMawdu: string = '#DC2626'; // Red
+  bgGradeMawdu: string = 'rgba(220, 38, 38, 0.12)';
+  colorGradeUnverified: string = '#6B7280'; // Gray
+  bgGradeUnverified: string = 'rgba(107, 114, 128, 0.12)';
 }
 
 // ============================================================
@@ -105,6 +116,17 @@ class Palettes {
     c.categoryAbout = '#FBBF24';
     c.categoryHijriCalendar = '#22D3EE';
     c.categoryNotifications = '#FB923C';
+    // Grade Colors (Dark Mode)
+    c.colorGradeSahih = '#4ADE80';
+    c.bgGradeSahih = 'rgba(74, 222, 128, 0.15)';
+    c.colorGradeHasan = '#38BDF8';
+    c.bgGradeHasan = 'rgba(56, 189, 248, 0.15)';
+    c.colorGradeDaif = '#FBBF24';
+    c.bgGradeDaif = 'rgba(251, 191, 36, 0.15)';
+    c.colorGradeMawdu = '#F87171';
+    c.bgGradeMawdu = 'rgba(248, 113, 113, 0.15)';
+    c.colorGradeUnverified = '#9CA3AF';
+    c.bgGradeUnverified = 'rgba(156, 163, 175, 0.15)';
     return c;
   }
 
@@ -181,6 +203,17 @@ class Palettes {
     c.categoryAbout = '#FBBF24';
     c.categoryHijriCalendar = '#22D3EE';
     c.categoryNotifications = '#FBBF24';
+    // Grade Colors (Dark Mode)
+    c.colorGradeSahih = '#4ADE80';
+    c.bgGradeSahih = 'rgba(74, 222, 128, 0.15)';
+    c.colorGradeHasan = '#38BDF8';
+    c.bgGradeHasan = 'rgba(56, 189, 248, 0.15)';
+    c.colorGradeDaif = '#FBBF24';
+    c.bgGradeDaif = 'rgba(251, 191, 36, 0.15)';
+    c.colorGradeMawdu = '#F87171';
+    c.bgGradeMawdu = 'rgba(248, 113, 113, 0.15)';
+    c.colorGradeUnverified = '#9CA3AF';
+    c.bgGradeUnverified = 'rgba(156, 163, 175, 0.15)';
     return c;
   }
 
@@ -257,6 +290,17 @@ class Palettes {
     c.categoryAbout = '#FBBF24';
     c.categoryHijriCalendar = '#2DD4BF';
     c.categoryNotifications = '#FB923C';
+    // Grade Colors (Dark Mode)
+    c.colorGradeSahih = '#4ADE80';
+    c.bgGradeSahih = 'rgba(74, 222, 128, 0.15)';
+    c.colorGradeHasan = '#38BDF8';
+    c.bgGradeHasan = 'rgba(56, 189, 248, 0.15)';
+    c.colorGradeDaif = '#FBBF24';
+    c.bgGradeDaif = 'rgba(251, 191, 36, 0.15)';
+    c.colorGradeMawdu = '#F87171';
+    c.bgGradeMawdu = 'rgba(248, 113, 113, 0.15)';
+    c.colorGradeUnverified = '#9CA3AF';
+    c.bgGradeUnverified = 'rgba(156, 163, 175, 0.15)';
     return c;
   }
 
@@ -333,6 +377,17 @@ class Palettes {
     c.categoryAbout = '#A3E635';
     c.categoryHijriCalendar = '#2DD4BF';
     c.categoryNotifications = '#F87171';
+    // Grade Colors (Dark Mode)
+    c.colorGradeSahih = '#4ADE80';
+    c.bgGradeSahih = 'rgba(74, 222, 128, 0.15)';
+    c.colorGradeHasan = '#38BDF8';
+    c.bgGradeHasan = 'rgba(56, 189, 248, 0.15)';
+    c.colorGradeDaif = '#FBBF24';
+    c.bgGradeDaif = 'rgba(251, 191, 36, 0.15)';
+    c.colorGradeMawdu = '#F87171';
+    c.bgGradeMawdu = 'rgba(248, 113, 113, 0.15)';
+    c.colorGradeUnverified = '#9CA3AF';
+    c.bgGradeUnverified = 'rgba(156, 163, 175, 0.15)';
     return c;
   }
 
@@ -409,6 +464,17 @@ class Palettes {
     c.categoryAbout = '#FBBF24';
     c.categoryHijriCalendar = '#34D399';
     c.categoryNotifications = '#FB923C';
+    // Grade Colors (Dark Mode)
+    c.colorGradeSahih = '#4ADE80';
+    c.bgGradeSahih = 'rgba(74, 222, 128, 0.15)';
+    c.colorGradeHasan = '#38BDF8';
+    c.bgGradeHasan = 'rgba(56, 189, 248, 0.15)';
+    c.colorGradeDaif = '#FBBF24';
+    c.bgGradeDaif = 'rgba(251, 191, 36, 0.15)';
+    c.colorGradeMawdu = '#F87171';
+    c.bgGradeMawdu = 'rgba(248, 113, 113, 0.15)';
+    c.colorGradeUnverified = '#9CA3AF';
+    c.bgGradeUnverified = 'rgba(156, 163, 175, 0.15)';
     return c;
   }
 }

@@ -126,11 +126,23 @@ export class L {
    * This forces native overlays (bindSheet, Menu, TextInput, etc.)
    * to adopt the correct RTL/LTR direction automatically.
    */
-  static applySystemLanguage(override: string): void {
+  static applySystemLanguage(override: string): string {
     try {
       let sysLang = 'en';
+
       if (override === AppLanguage.SYSTEM) {
-        sysLang = i18n.System.getSystemLanguage();
+        // 1. Get the full system locale (e.g., "en-US", "zh-Hans-CN", "ar-SA")
+        const fullLocale = i18n.System.getSystemLanguage();
+        console.info(`[L] Raw system language detected: ${fullLocale}`);
+
+        // 2. Extract the base 2-letter language code (e.g., "en-US" -> "en")
+        // This is CRITICAL for laptops, which often return region-specific codes like "en-GB"
+        sysLang = fullLocale.split('-')[0].toLowerCase();
+
+        // Optional: Handle specific script variations if needed
+        if (sysLang === 'zh') {
+          sysLang = 'zh'; // Ensure it maps cleanly to your 'zh' resources
+        }
       } else if (override === AppLanguage.ARABIC) {
         sysLang = 'ar';
       } else if (override === AppLanguage.CHINESE) {
@@ -146,10 +158,20 @@ export class L {
       } else if (override === AppLanguage.BENGALI) {
         sysLang = 'bn';
       }
+
+      // 3. Set the app preferred language
       i18n.System.setAppPreferredLanguage(sysLang);
-      console.info(`[L] App preferred language set to ${sysLang}`);
+
+      console.info(`[I] App preferred language set to: ${sysLang}`);
+
+      // 4. CRITICAL: Update global state so the Wizard UI reactively rebuilds!
+      // Replace 'currentLanguage' with the actual key you use in AppStorage/LocalStorage
+      AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, sysLang);
+      return sysLang;
+
     } catch (err) {
       console.warn(`[L] Failed to setAppPreferredLanguage: ${JSON.stringify(err)}`);
+      return 'en'; // Safe fallback
     }
   }
 

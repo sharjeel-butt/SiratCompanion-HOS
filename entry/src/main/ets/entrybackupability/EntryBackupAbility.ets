@@ -104,6 +104,9 @@ const SETTINGS_SPECS: PrefSpec[] = [
   { key: 'show_midnight_sunpath', type: TYPE_BOOLEAN },
   { key: 'show_last_third_sunpath', type: TYPE_BOOLEAN },
 
+  { key: 'translation_font_family', type: TYPE_STRING },
+  { key: 'arabic_font_family', type: TYPE_STRING },
+
   // ---- Notifications ----
   { key: 'notif_master_enabled', type: TYPE_BOOLEAN },
   { key: 'notif_before_minutes', type: TYPE_NUMBER },

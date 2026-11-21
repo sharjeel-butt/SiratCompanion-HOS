@@ -106,7 +106,7 @@ const ARABIC_METRICS: LanguageMetrics = {
 
 export class TypographyHelper {
   /** Font size for verse-by-verse text (Reading/Translation modes). */
-  static readonly QURAN_FONT_SIZE_VERSE: number = 26;
+  static readonly QURAN_FONT_SIZE_VERSE: number = 32;
   /** Base line height for verse-by-verse text. */
   static readonly QURAN_LINE_HEIGHT_VERSE: number = 60;
   /** Font size for continuous Mushaf text (Increased for readability). */
@@ -118,36 +118,55 @@ export class TypographyHelper {
   /** Base line height for the Bismillah header. */
   static readonly BISMILLAH_LINE_HEIGHT: number = 60;
   /** Font size for the Surah header ornament in Mushaf view. */
-  static readonly SURAH_HEADER_FONT_SIZE: number = 22;
+  static readonly SURAH_HEADER_FONT_SIZE: number = 26;
+  static readonly FONT_AUTO = 'auto';
+  static readonly FONT_AMIRI = 'Amiri';
+  static readonly FONT_AMIRI_QURAN = 'AmiriQuran';
+  static readonly FONT_HAFS = 'HafsArabic';
+  static readonly FONT_NASTALIQ = 'JameelNoori';
+  static readonly FONT_NOTO_NASTALIQ = 'NotoNastaliqUrdu';
+  static readonly FONT_QPC_HAFS = 'QPC_Hafs';
+  static readonly FONT_KEMENAG = 'LPMQIsepMisbah';
+  static readonly FONT_WARSH = 'KFGQPCWarsh';
+  static readonly FONT_SCHEHERAZADE = 'ScheherazadeNew';
+  static readonly FONT_NOTONASKH = 'NotoNaskh';
 
   /**
    * Register custom fonts. Call this once in EntryAbility.
    */
   static init(): void {
     try {
-      // Explicitly typing the objects to satisfy ArkTS strict mode (Rulebook §C)
-      const outfit: font.FontOptions = { familyName: 'Outfit', familySrc: $rawfile('fonts/Outfit-Regular.ttf') };
-      const outfitBold: font.FontOptions = { familyName: 'Outfit-Bold', familySrc: $rawfile('fonts/Outfit-Bold.ttf') };
-      const amiri: font.FontOptions = { familyName: 'Amiri', familySrc: $rawfile('fonts/Amiri-Regular.ttf') };
-      const amiriBold: font.FontOptions = { familyName: 'Amiri-Bold', familySrc: $rawfile('fonts/Amiri-Bold.ttf') };
-
-      const nastaliq: font.FontOptions =
-        { familyName: 'NotoNastaliqUrdu', familySrc: $rawfile('fonts/NotoNastaliqUrdu-Regular.ttf') };
-      const amiriQuran: font.FontOptions =
-        { familyName: 'AmiriQuran', familySrc: $rawfile('fonts/AmiriQuran-Regular.ttf') };
-      const kemenag: font.FontOptions = { familyName: 'LPMQIsepMisbah', familySrc: $rawfile('fonts/LPMQ-Regular.ttf') };
-      const kfgqpcWarsh: font.FontOptions =
-        { familyName: 'KFGQPCWarsh', familySrc: $rawfile('fonts/KFGQPC-Regular.ttf') };
+      // ---- Translation Fonts (tr) ----
       const bengali: font.FontOptions =
-        { familyName: 'NotoSansBengali', familySrc: $rawfile('fonts/NotoSansBengali-Regular.ttf') };
+        { familyName: 'NotoSansBengali', familySrc: $rawfile('fonts/tr/NotoSansBengali-Regular.ttf') };
       const chinese: font.FontOptions =
-        { familyName: 'NotoSansSC', familySrc: $rawfile('fonts/NotoSansSC-Regular.ttf') };
+        { familyName: 'NotoSansSC', familySrc: $rawfile('fonts/tr/NotoSansSC-Regular.ttf') };
+      const outfit: font.FontOptions = { familyName: 'Outfit', familySrc: $rawfile('fonts/tr/Outfit-Regular.ttf') };
+      const outfitBold: font.FontOptions =
+        { familyName: 'Outfit-Bold', familySrc: $rawfile('fonts/tr/Outfit-Bold.ttf') };
+      const nastaliq: font.FontOptions =
+        { familyName: 'NotoNastaliqUrdu', familySrc: $rawfile('fonts/tr/NotoNastaliqUrdu-Regular.ttf') };
 
+      // ---- Arabic Fonts (ar) ----
+      const amiri: font.FontOptions = { familyName: 'Amiri', familySrc: $rawfile('fonts/ar/Amiri-Regular.ttf') };
+      const amiriBold: font.FontOptions = { familyName: 'Amiri-Bold', familySrc: $rawfile('fonts/ar/Amiri-Bold.ttf') };
+      const scheherazade: font.FontOptions =
+        { familyName: 'ScheherazadeNew', familySrc: $rawfile('fonts/ar/ScheherazadeNew-Regular.ttf') };
+      const notonaskh: font.FontOptions =
+        { familyName: 'NotoNaskh', familySrc: $rawfile('fonts/ar/NotoNaskhArabic-Regular.ttf') };
+      const amiriQuran: font.FontOptions =
+        { familyName: 'AmiriQuran', familySrc: $rawfile('fonts/ar/AmiriQuran-Regular.ttf') };
+      const kemenag: font.FontOptions =
+        { familyName: 'LPMQIsepMisbah', familySrc: $rawfile('fonts/ar/LPMQ-Regular.ttf') };
+      const kfgqpcWarsh: font.FontOptions =
+        { familyName: 'KFGQPCWarsh', familySrc: $rawfile('fonts/ar/KFGQPC-Regular.ttf') };
       const hafsArabic: font.FontOptions =
-        { familyName: 'HafsArabic', familySrc: $rawfile('fonts/HafsArabic-Regular.ttf') };
+        { familyName: 'HafsArabic', familySrc: $rawfile('fonts/ar/HafsArabic-Regular.ttf') };
       const jameelNoori: font.FontOptions =
-        { familyName: 'JameelNoori', familySrc: $rawfile('fonts/JameelNooriNastaleeq.ttf') };
-      const qpcHafs: font.FontOptions = { familyName: 'QPC_Hafs', familySrc: $rawfile('fonts/QPC-Hafs.ttf') };
+        { familyName: 'JameelNoori', familySrc: $rawfile('fonts/ar/JameelNooriNastaleeq.ttf') };
+      const qpcHafs: font.FontOptions = { familyName: 'QPC_Hafs', familySrc: $rawfile('fonts/ar/QPC-Hafs.ttf') };
+
+      // ---- Register Fonts ----
       font.registerFont(qpcHafs);
       font.registerFont(jameelNoori);
       font.registerFont(hafsArabic);
@@ -161,27 +180,12 @@ export class TypographyHelper {
       font.registerFont(kfgqpcWarsh);
       font.registerFont(bengali);
       font.registerFont(chinese);
-
+      font.registerFont(scheherazade);
+      font.registerFont(notonaskh);
       AppLogger.info('TypographyHelper', 'All fonts registered successfully.');
     } catch (err) {
       AppLogger.error('TypographyHelper', `Font registration failed: ${JSON.stringify(err)}`);
     }
-  }
-
-  /**
-   * Returns the appropriate font family string.
-   *
-   * Amiri (Naskh) is used for both Arabic and Urdu. Traditional
-   * Urdu Nastaliq would require a separate font (~600 KB) which is
-   * not bundled; Naskh is fully legible and standard on screen.
-   * Bengali relies on the system's Noto Sans Bengali via the
-   * `sans-serif` fallback suffix.
-   */
-  static getFont(lang: string, isBold: boolean = false): string {
-    if (lang === 'ar' || lang === 'ur') {
-      return isBold ? 'Amiri-Bold, sans-serif' : 'Amiri, sans-serif';
-    }
-    return isBold ? 'Outfit-Bold, sans-serif' : 'Outfit, sans-serif';
   }
 
   // ============================================================
@@ -260,68 +264,131 @@ export class TypographyHelper {
   }
 
 
-  /**
-   * Returns the font based on the ACTIVE SCRIPT loaded from the JSON data.
-   */
-  static getQuranFontByScript(script: string): string {
-    switch (script) {
-      case 'indopak':
-      case 'hafs-nastaliq':
-        return 'JameelNoori, NotoNastaliqUrdu, sans-serif';
+  // ============================================================
+  // TRANSLATION FONTS
+  // ============================================================
 
-      case 'kemenag':
-        return 'LPMQIsepMisbah, sans-serif';
+  static getTranslationFont(lang: string, isBold: boolean = false): string {
+    const pref = AppStorage.get<string>('translation_font_family') ?? 'auto';
 
-      case 'warsh':
-        return 'KFGQPCWarsh, AmiriQuran, sans-serif';
-
-      case 'qalun':
-      case 'duri':
-      case 'shubah':
-      case 'susi':
-        return 'AmiriQuran, sans-serif';
-
-      case 'simple':
-      case 'simple-clean':
-      case 'simple-min':
-      case 'simple-plain':
-        return 'Outfit, sans-serif';
-
-      case 'uthmani':
-      case 'uthmani-min':
-      case 'qpc-hafs':
-        return 'QPC_Hafs, AmiriQuran, sans-serif';
-      default:
-        return 'HafsArabic, AmiriQuran, sans-serif';
+    if (pref !== 'auto') {
+      return isBold ? `${pref}-Bold, ${pref}, sans-serif` : `${pref}, sans-serif`;
     }
+
+    // Auto-Detect logic
+    if (lang === 'bn') {
+      return 'NotoSansBengali, sans-serif';
+    }
+    if (lang === 'zh') {
+      return 'NotoSansSC, sans-serif';
+    }
+    if (lang === 'ur') {
+      return 'NotoNastaliqUrdu, sans-serif';
+    }
+
+    return isBold ? 'Outfit-Bold, sans-serif' : 'Outfit, sans-serif';
   }
 
-  /**
-   * Fallback if the active script isn't explicitly loaded in AppStorage.
-   */
-  static getQuranFont(lang: string): string {
-    if (lang === 'id') {
-      return 'LPMQIsepMisbah, sans-serif';
+  // ============================================================
+  // ARABIC FONTS
+  // ============================================================
+
+  static getArabicFont(isQuran: boolean = false, activeScript: string = ''): string {
+    const pref = AppStorage.get<string>('arabic_font_family') ?? 'auto';
+
+    if (pref !== 'auto') {
+      return `${pref}, AmiriQuran, Amiri, sans-serif`;
     }
+
+    // Auto-Detect logic based on language and context
+    const lang = AppStorage.get<string>('app_language') ?? 'en';
+
+    if (isQuran) {
+      if (activeScript === 'indopak') {
+        return 'JameelNoori, NotoNastaliqUrdu, sans-serif';
+      }
+      if (activeScript === 'kemenag') {
+        return 'LPMQIsepMisbah, sans-serif';
+      }
+      if (activeScript === 'warsh') {
+        return 'KFGQPCWarsh, AmiriQuran, sans-serif';
+      }
+      if (activeScript === 'uthmani' || activeScript === 'qpc-hafs') {
+        return 'QPC_Hafs, AmiriQuran, sans-serif';
+      }
+      return 'AmiriQuran, sans-serif';
+    }
+
     if (lang === 'ur') {
       return 'JameelNoori, NotoNastaliqUrdu, sans-serif';
     }
-    return 'HafsArabic, AmiriQuran, sans-serif';
+    if (lang === 'id') {
+      return 'LPMQIsepMisbah, Amiri, sans-serif';
+    }
+
+    return 'Amiri, HafsArabic, sans-serif';
   }
 
   /**
-   * Returns the appropriate font for translation text.
+   * Legacy wrapper to prevent breaking existing calls.
    */
-  static getTranslationFont(lang: string): string {
-    switch (lang) {
-      case 'bn':
-        return 'NotoSansBengali, sans-serif';
-      case 'zh':
-        return 'NotoSansSC, sans-serif';
-      case 'ur':
-        return 'NotoNastaliqUrdu, sans-serif';
-      default:
-        return 'Outfit, sans-serif';
+  static getFont(lang: string, isBold: boolean = false): string {
+    if (lang === 'ar' || lang === 'ur') {
+      return TypographyHelper.getArabicFont(false);
     }
+    return TypographyHelper.getTranslationFont(lang, isBold);
+  }
+
+  /**
+   * Legacy wrapper for Quran scripts.
+   */
+  static getQuranFontByScript(script: string): string {
+    return TypographyHelper.getArabicFont(true, script);
+  }
+
+  /**
+   * Resolves the user's preferred Arabic font.
+   * If 'auto', falls back to a script-appropriate default based on the UI language.
+   */
+  static getActiveArabicFont(isQuran: boolean = false, activeScript: string = ''): string {
+    const pref = AppStorage.get<string>('arabic_font_family') ?? 'auto';
+
+    if (pref !== 'auto') {
+      // User manually selected a font. Ensure fallbacks are appended.
+      return `${pref}, AmiriQuran, Amiri, sans-serif`;
+    }
+
+    // --- AUTO DETECT LOGIC ---
+    const lang = AppStorage.get<string>('app_language') ?? 'en';
+
+    // 1. Region-specific defaults
+    if (lang === 'ur') {
+      // Urdu users default to Nastaliq for general text, Naskh for Quran
+      return isQuran ? 'AmiriQuran, sans-serif' : 'JameelNoori, NotoNastaliqUrdu, sans-serif';
+    }
+    if (lang === 'id') {
+      return isQuran ? 'AmiriQuran, LPMQIsepMisbah, sans-serif' : 'LPMQIsepMisbah, Amiri, sans-serif';
+    }
+
+    // 2. Context-specific defaults for everyone else
+    if (isQuran) {
+      // Respect the specific Quran script setting if provided
+      if (activeScript === 'indopak') {
+        return 'JameelNoori, NotoNastaliqUrdu, sans-serif';
+      }
+      if (activeScript === 'kemenag') {
+        return 'LPMQIsepMisbah, sans-serif';
+      }
+      if (activeScript === 'warsh') {
+        return 'KFGQPCWarsh, AmiriQuran, sans-serif';
+      }
+      if (activeScript === 'uthmani' || activeScript === 'qpc-hafs') {
+        return 'QPC_Hafs, AmiriQuran, sans-serif';
+      }
+      return 'AmiriQuran, sans-serif'; // Standard fallback
+    }
+
+    // General Arabic text (Hadith, Duas, UI)
+    return 'Amiri, HafsArabic, sans-serif';
   }
 }

@@ -10,6 +10,7 @@ import { HadithSearchService } from '../hadith/HadithSearchService';
 import { HadithCoreDbHelper } from '../hadith/HadithCoreDbHelper';
 import { SanadTimeline } from '../hadith/SanadTimeline';
 import { GradeBadge } from '../hadith/GradeBadge';
+import { TypographyHelper } from '../core/TypographyHelper';
 
 @Entry
 @Component
@@ -241,7 +242,7 @@ struct HadithDetailsPage {
               Column() {
                 Text(this.hadith.arabic_text)
                   .fontSize(28)
-                  .fontFamily('AmiriQuran, sans-serif')
+                  .fontFamily(TypographyHelper.getActiveArabicFont(false))
                   .fontColor(this.colors.textWhite)
                   .lineHeight(50)
                   .textAlign(TextAlign.Start)
@@ -281,7 +282,7 @@ struct HadithDetailsPage {
 
                 Text(this.hadith.translated_text)
                   .fontSize(17)
-                  .fontFamily('Outfit, sans-serif')
+                  .fontFamily(TypographyHelper.getTranslationFont(this.appLanguage))
                   .fontColor(this.colors.textWhite)
                   .lineHeight(28)
                   .textAlign(TextAlign.Start)

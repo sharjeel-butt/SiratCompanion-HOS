@@ -1,0 +1,416 @@
+[
+  {
+    "id": "prophet_adam",
+    "name": "Adam",
+    "dua_count": 1,
+    "collection_count": 11,
+    "dua_ids": [
+      "dua_dua_of_adam_and_hawwa"
+    ],
+    "collection_ids": [
+      "everyday_duas",
+      "forgiveness",
+      "forgiveness_of_sins",
+      "humility",
+      "mercy",
+      "new_muslims",
+      "powerful_duas",
+      "prophets",
+      "rabbana",
+      "repentance",
+      "topics"
+    ],
+    "catalog_entries": [
+      "adam_hawwa"
+    ]
+  },
+  {
+    "id": "prophet_al_yasa",
+    "name": "Al Yasa",
+    "dua_count": 0,
+    "collection_count": 0,
+    "dua_ids": [],
+    "collection_ids": [],
+    "catalog_entries": [
+      "prophet_al_yasa"
+    ]
+  },
+  {
+    "id": "prophet_ayyub",
+    "name": "Ayyub",
+    "dua_count": 1,
+    "collection_count": 6,
+    "dua_ids": [
+      "dua_dua_of_ayyub_in_illness"
+    ],
+    "collection_ids": [
+      "hardship",
+      "heart_healing",
+      "mercy",
+      "pain_sickness",
+      "prophets",
+      "relief"
+    ],
+    "catalog_entries": [
+      "prophet_ayyub"
+    ]
+  },
+  {
+    "id": "prophet_ayyub_illness",
+    "name": "Ayyub Illness",
+    "dua_count": 0,
+    "collection_count": 0,
+    "dua_ids": [],
+    "collection_ids": [],
+    "catalog_entries": [
+      "prophet_ayyub_illness"
+    ]
+  },
+  {
+    "id": "prophet_dawud",
+    "name": "Dawud",
+    "dua_count": 0,
+    "collection_count": 0,
+    "dua_ids": [],
+    "collection_ids": [],
+    "catalog_entries": [
+      "prophet_dawud"
+    ]
+  },
+  {
+    "id": "prophet_dhul_kifl",
+    "name": "Dhul Kifl",
+    "dua_count": 0,
+    "collection_count": 0,
+    "dua_ids": [],
+    "collection_ids": [],
+    "catalog_entries": [
+      "prophet_dhul_kifl"
+    ]
+  },
+  {
+    "id": "prophet_harun",
+    "name": "Harun",
+    "dua_count": 0,
+    "collection_count": 0,
+    "dua_ids": [],
+    "collection_ids": [],
+    "catalog_entries": [
+      "prophet_harun"
+    ]
+  },
+  {
+    "id": "prophet_hud",
+    "name": "Hud",
+    "dua_count": 0,
+    "collection_count": 0,
+    "dua_ids": [],
+    "collection_ids": [],
+    "catalog_entries": [
+      "prophet_hud"
+    ]
+  },
+  {
+    "id": "prophet_ibrahim",
+    "name": "Ibrahim",
+    "dua_count": 3,
+    "collection_count": 19,
+    "dua_ids": [
+      "dua_dua_of_ibrahim_for_a_secure_city",
+      "dua_dua_of_ibrahim_for_prayer",
+      "dua_dua_of_ibrahim_for_wisdom"
+    ],
+    "collection_ids": [
+      "acceptance",
+      "believers",
+      "children",
+      "deceased",
+      "family",
+      "forgiveness",
+      "friends_loved_ones",
+      "hajj_umrah",
+      "health",
+      "hereafter",
+      "jannah",
+      "pain_sickness",
+      "parents",
+      "pious_spouse",
+      "prophets",
+      "rabbana",
+      "righteousness",
+      "when_someone_dies",
+      "wisdom"
+    ],
+    "catalog_entries": [
+      "prophet_ibrahim"
+    ]
+  },
+  {
+    "id": "prophet_idris",
+    "name": "Idris",
+    "dua_count": 0,
+    "collection_count": 0,
+    "dua_ids": [],
+    "collection_ids": [],
+    "catalog_entries": [
+      "prophet_idris"
+    ]
+  },
+  {
+    "id": "prophet_ilyas",
+    "name": "Ilyas",
+    "dua_count": 0,
+    "collection_count": 0,
+    "dua_ids": [],
+    "collection_ids": [],
+    "catalog_entries": [
+      "prophet_ilyas"
+    ]
+  },
+  {
+    "id": "prophet_isa",
+    "name": "Isa",
+    "dua_count": 0,
+    "collection_count": 0,
+    "dua_ids": [],
+    "collection_ids": [],
+    "catalog_entries": [
+      "prophet_isa"
+    ]
+  },
+  {
+    "id": "prophet_ishaq",
+    "name": "Ishaq",
+    "dua_count": 0,
+    "collection_count": 0,
+    "dua_ids": [],
+    "collection_ids": [],
+    "catalog_entries": [
+      "prophet_ishaq"
+    ]
+  },
+  {
+    "id": "prophet_ismail",
+    "name": "Ismail",
+    "dua_count": 0,
+    "collection_count": 0,
+    "dua_ids": [],
+    "collection_ids": [],
+    "catalog_entries": [
+      "prophet_ismail"
+    ]
+  },
+  {
+    "id": "prophet_lut",
+    "name": "Lut",
+    "dua_count": 1,
+    "collection_count": 4,
+    "dua_ids": [
+      "dua_prophet_lut"
+    ],
+    "collection_ids": [
+      "enemies",
+      "oppression",
+      "protection",
+      "victory"
+    ],
+    "catalog_entries": [
+      "prophet_lut"
+    ]
+  },
+  {
+    "id": "prophet_muhammad",
+    "name": "Muhammad",
+    "dua_count": 1,
+    "collection_count": 0,
+    "dua_ids": [
+      "dua_contentment_with_allah_islam_and_muhammad"
+    ],
+    "collection_ids": [],
+    "catalog_entries": [
+      "prophet_muhammad"
+    ]
+  },
+  {
+    "id": "prophet_musa",
+    "name": "Musa",
+    "dua_count": 2,
+    "collection_count": 17,
+    "dua_ids": [
+      "dua_dua_of_musa_for_ease_and_eloquence",
+      "dua_dua_of_musa_for_help"
+    ],
+    "collection_ids": [
+      "anxiety",
+      "arabic_english_transliteration",
+      "confidence",
+      "daily_life",
+      "everyday_duas",
+      "exam_success",
+      "hardship",
+      "humility",
+      "knowledge",
+      "prophets",
+      "provision_wealth",
+      "relief",
+      "strength",
+      "studying",
+      "success_barakah",
+      "topics",
+      "work_career"
+    ],
+    "catalog_entries": [
+      "prophet_musa"
+    ]
+  },
+  {
+    "id": "prophet_nuh",
+    "name": "Nuh",
+    "dua_count": 2,
+    "collection_count": 6,
+    "dua_ids": [
+      "dua_dua_of_nuh_for_believers",
+      "dua_dua_of_nuh_for_forgiveness"
+    ],
+    "collection_ids": [
+      "believers",
+      "deceased",
+      "forgiveness",
+      "parents",
+      "prophets",
+      "repentance"
+    ],
+    "catalog_entries": [
+      "prophet_nuh"
+    ]
+  },
+  {
+    "id": "prophet_nuh_forgiveness",
+    "name": "Nuh Forgiveness",
+    "dua_count": 0,
+    "collection_count": 0,
+    "dua_ids": [],
+    "collection_ids": [],
+    "catalog_entries": [
+      "prophet_nuh_forgiveness"
+    ]
+  },
+  {
+    "id": "prophet_salih",
+    "name": "Salih",
+    "dua_count": 0,
+    "collection_count": 0,
+    "dua_ids": [],
+    "collection_ids": [],
+    "catalog_entries": [
+      "prophet_salih"
+    ]
+  },
+  {
+    "id": "prophet_shuayb",
+    "name": "Shuayb",
+    "dua_count": 0,
+    "collection_count": 0,
+    "dua_ids": [],
+    "collection_ids": [],
+    "catalog_entries": [
+      "prophet_shuayb"
+    ]
+  },
+  {
+    "id": "prophet_sulayman",
+    "name": "Sulayman",
+    "dua_count": 1,
+    "collection_count": 11,
+    "dua_ids": [
+      "dua_dua_of_sulayman_for_gratitude"
+    ],
+    "collection_ids": [
+      "acceptance",
+      "character",
+      "gratitude",
+      "parents",
+      "prophet_sulayman",
+      "prophets",
+      "righteousness",
+      "sincerity",
+      "success_barakah",
+      "wisdom",
+      "work_career"
+    ],
+    "catalog_entries": [
+      "prophet_sulayman"
+    ]
+  },
+  {
+    "id": "prophet_yahya",
+    "name": "Yahya",
+    "dua_count": 0,
+    "collection_count": 0,
+    "dua_ids": [],
+    "collection_ids": [],
+    "catalog_entries": [
+      "prophet_yahya"
+    ]
+  },
+  {
+    "id": "prophet_yaqub",
+    "name": "Yaqub",
+    "dua_count": 0,
+    "collection_count": 0,
+    "dua_ids": [],
+    "collection_ids": [],
+    "catalog_entries": [
+      "prophet_yaqub"
+    ]
+  },
+  {
+    "id": "prophet_yunus",
+    "name": "Yunus",
+    "dua_count": 1,
+    "collection_count": 8,
+    "dua_ids": [
+      "dua_dua_of_yunus_in_distress"
+    ],
+    "collection_ids": [
+      "anxiety",
+      "arabic_english_transliteration",
+      "everyday_duas",
+      "hardship",
+      "powerful_duas",
+      "prophets",
+      "relief",
+      "topics"
+    ],
+    "catalog_entries": [
+      "prophet_yunus"
+    ]
+  },
+  {
+    "id": "prophet_yusuf",
+    "name": "Yusuf",
+    "dua_count": 1,
+    "collection_count": 2,
+    "dua_ids": [
+      "dua_dua_of_yusuf_for_a_muslim_death"
+    ],
+    "collection_ids": [
+      "good_ending",
+      "hereafter"
+    ],
+    "catalog_entries": [
+      "prophet_yusuf"
+    ]
+  },
+  {
+    "id": "prophet_zakariya",
+    "name": "Zakariya",
+    "dua_count": 0,
+    "collection_count": 0,
+    "dua_ids": [],
+    "collection_ids": [],
+    "catalog_entries": [
+      "prophet_zakariya"
+    ]
+  }
+]

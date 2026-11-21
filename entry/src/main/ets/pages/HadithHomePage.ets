@@ -11,6 +11,7 @@ import { NavHelper } from '../core/NavHelper';
 import { util } from '@kit.ArkTS';
 import { RawPaths } from '../core/RawPaths';
 import { AppLogger } from '../core/AppLogger';
+import { TypographyHelper } from '../core/TypographyHelper';
 
 @Entry
 @Component
@@ -179,7 +180,8 @@ struct HadithHomePage {
 
       Text(hadith.arabic_text.length > 0 ? hadith.arabic_text : hadith.translated_text)
         .fontSize(hadith.arabic_text.length > 0 ? 22 : 16)
-        .fontFamily(hadith.arabic_text.length > 0 ? 'AmiriQuran, sans-serif' : 'Outfit, sans-serif')
+        .fontFamily(hadith.arabic_text.length > 0 ? TypographyHelper.getActiveArabicFont(false) :
+          TypographyHelper.getActiveArabicFont(false))
         .fontColor(this.colors.textWhite)
         .direction(hadith.arabic_text.length > 0 ? Direction.Rtl : Direction.Ltr)
         .textAlign(TextAlign.Start)

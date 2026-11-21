@@ -47,7 +47,6 @@ export struct PageHeader {
   clockFormat: string = ClockFormat.SYSTEM;
   @Prop isRamadan: boolean = false;
   @Prop fastingEndTime: string = '';
-
   onOpenLocationSettings: () => void = () => {
   };
   onOpenSettings: () => void = () => {

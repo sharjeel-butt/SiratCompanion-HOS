@@ -1,0 +1,402 @@
+{
+  "language": "en",
+  "collections": {
+    "acceptance": {
+      "title": "Duas for Acceptance of Good Deeds",
+      "description": "Duas for Acceptance of Good Deeds"
+    },
+    "anxiety": {
+      "title": "Duas and Quran Passages for Stress, Depression and Anxiety",
+      "description": "Duas and Quran Passages for Stress, Depression and Anxiety"
+    },
+    "arabic_english_transliteration": {
+      "title": "Quran Duas in Arabic, English, and Transliteration",
+      "description": "Quran Duas in Arabic, English, and Transliteration"
+    },
+    "believers": {
+      "title": "Duas for the Believers",
+      "description": "Duas for the Believers"
+    },
+    "benefit_from_quran": {
+      "title": "Duas for Learning, Memorizing, and Benefiting from the Quran",
+      "description": "Duas for Learning, Memorizing, and Benefiting from the Quran"
+    },
+    "black_magic_protection": {
+      "title": "Quran Verses and Duas for Ruqyah Protection",
+      "description": "Quran Verses and Duas for Ruqyah Protection"
+    },
+    "character": {
+      "title": "Duas for Beautiful Character",
+      "description": "Duas for Beautiful Character"
+    },
+    "children": {
+      "title": "Duas for Children in the Quran",
+      "description": "Duas for Children in the Quran"
+    },
+    "confidence": {
+      "title": "Duas for Confidence",
+      "description": "Duas for Confidence"
+    },
+    "daily_life": {
+      "title": "Duas from the Quran for Daily Life",
+      "description": "Duas from the Quran for Daily Life"
+    },
+    "day_night": {
+      "title": "Quran Reflections for Day and Night",
+      "description": "Quran Reflections for Day and Night"
+    },
+    "deceased": {
+      "title": "Duas for the Dead",
+      "description": "Duas for the Dead"
+    },
+    "enemies": {
+      "title": "Duas Against Enemies and Harmful People",
+      "description": "Duas Against Enemies and Harmful People"
+    },
+    "everyday_duas": {
+      "title": "Short Duas from the Quran for Daily Recitation and Memorization",
+      "description": "Short Duas from the Quran for Daily Recitation and Memorization"
+    },
+    "evil_eye": {
+      "title": "Quran Verses for Protection from the Evil Eye",
+      "description": "Quran Verses for Protection from the Evil Eye"
+    },
+    "exam_success": {
+      "title": "Duas for Exam Success",
+      "description": "Duas for Exam Success"
+    },
+    "family": {
+      "title": "Duas for Family, Marriage, and Spouses",
+      "description": "Duas for Family, Marriage, and Spouses"
+    },
+    "fasting": {
+      "title": "Quran Verses about Ramadan and Fasting",
+      "description": "Quran Verses about Ramadan and Fasting"
+    },
+    "fear": {
+      "title": "Duas for Fear",
+      "description": "Duas for Fear"
+    },
+    "forgiveness": {
+      "title": "Duas for Forgiveness",
+      "description": "Duas for Forgiveness"
+    },
+    "forgiveness_of_sins": {
+      "title": "Duas for Forgiveness of Sins",
+      "description": "Duas for Forgiveness of Sins"
+    },
+    "friends_loved_ones": {
+      "title": "Duas for Friends and Loved Ones",
+      "description": "Duas for Friends and Loved Ones"
+    },
+    "good_ending": {
+      "title": "Duas for a Good Ending",
+      "description": "Duas for a Good Ending"
+    },
+    "gratitude": {
+      "title": "Duas and Quran Passages for Gratitude",
+      "description": "Duas and Quran Passages for Gratitude"
+    },
+    "guidance": {
+      "title": "Duas for Guidance and the Straight Path",
+      "description": "Duas for Guidance and the Straight Path"
+    },
+    "hajj_umrah": {
+      "title": "Duas for Hajj &amp; Umrah",
+      "description": "Duas for Hajj &amp; Umrah"
+    },
+    "hardship": {
+      "title": "Duas and Quran Passages for Hardship, Sadness, and Grief",
+      "description": "Duas and Quran Passages for Hardship, Sadness, and Grief"
+    },
+    "health": {
+      "title": "Quran Reflections on Healing and Health",
+      "description": "Quran Reflections on Healing and Health"
+    },
+    "heart": {
+      "title": "Duas for the Heart and a Clean Heart",
+      "description": "Duas for the Heart and a Clean Heart"
+    },
+    "heart_healing": {
+      "title": "Duas for Diseases of the Heart",
+      "description": "Duas for Diseases of the Heart"
+    },
+    "hereafter": {
+      "title": "Duas for the Hereafter",
+      "description": "Duas for the Hereafter"
+    },
+    "humility": {
+      "title": "Duas for Humility",
+      "description": "Duas for Humility"
+    },
+    "jannah": {
+      "title": "Duas for Jannah",
+      "description": "Duas for Jannah"
+    },
+    "knowledge": {
+      "title": "Duas for Knowledge",
+      "description": "Duas for Knowledge"
+    },
+    "mercy": {
+      "title": "Duas for Allah&#x27;s Mercy",
+      "description": "Duas for Allah&#x27;s Mercy"
+    },
+    "new_muslims": {
+      "title": "Duas for New Muslims",
+      "description": "Duas for New Muslims"
+    },
+    "oppression": {
+      "title": "Duas Against Oppression",
+      "description": "Duas Against Oppression"
+    },
+    "pain_sickness": {
+      "title": "Duas and Quran Passages for Pain and Sickness (Shifa)",
+      "description": "Duas and Quran Passages for Pain and Sickness (Shifa)"
+    },
+    "palestine": {
+      "title": "Duas for Palestine and the Oppressed",
+      "description": "Duas for Palestine and the Oppressed"
+    },
+    "parents": {
+      "title": "Duas for Parents and Deceased Parents in the Quran",
+      "description": "Duas for Parents and Deceased Parents in the Quran"
+    },
+    "patience": {
+      "title": "Duas and Quran Passages for Patience",
+      "description": "Duas and Quran Passages for Patience"
+    },
+    "peace": {
+      "title": "Duas for Peace",
+      "description": "Duas for Peace"
+    },
+    "pious_spouse": {
+      "title": "Duas for a Pious Spouse",
+      "description": "Duas for a Pious Spouse"
+    },
+    "powerful_duas": {
+      "title": "Powerful Duas from the Quran",
+      "description": "Powerful Duas from the Quran"
+    },
+    "prophet_harun": {
+      "title": "Musa&#x27;s Dua for Harun",
+      "description": "Musa&#x27;s Dua for Harun"
+    },
+    "prophet_shuayb": {
+      "title": "Duas and Trust of Prophet Shuayb",
+      "description": "Duas and Trust of Prophet Shuayb"
+    },
+    "prophet_sulayman": {
+      "title": "Duas and Gratitude of Prophet Sulayman",
+      "description": "Duas and Gratitude of Prophet Sulayman"
+    },
+    "prophets": {
+      "title": "Duas of the Prophets in the Quran",
+      "description": "Duas of the Prophets in the Quran"
+    },
+    "protection": {
+      "title": "Duas for Protection from Evil and Shaytan",
+      "description": "Duas for Protection from Evil and Shaytan"
+    },
+    "protection_from_hellfire": {
+      "title": "Duas for Protection from Hellfire",
+      "description": "Duas for Protection from Hellfire"
+    },
+    "provision_wealth": {
+      "title": "Quran Verses and Duas for Provision (Rizq) and Wealth",
+      "description": "Quran Verses and Duas for Provision (Rizq) and Wealth"
+    },
+    "rabbana": {
+      "title": "Rabbana Duas from the Quran",
+      "description": "Rabbana Duas from the Quran"
+    },
+    "rain": {
+      "title": "Quran Reflections on Rain and Blessings",
+      "description": "Quran Reflections on Rain and Blessings"
+    },
+    "relief": {
+      "title": "Duas for Relief",
+      "description": "Duas for Relief"
+    },
+    "remembrance_reflection": {
+      "title": "Quran Verses on Remembrance and Reflection",
+      "description": "Quran Verses on Remembrance and Reflection"
+    },
+    "repentance": {
+      "title": "Duas for Tawbah and Repentance",
+      "description": "Duas for Tawbah and Repentance"
+    },
+    "righteous_believers": {
+      "title": "Duas of the Righteous Believers in the Quran",
+      "description": "Duas of the Righteous Believers in the Quran"
+    },
+    "righteous_offspring": {
+      "title": "Duas for Righteous Offspring and Pregnancy",
+      "description": "Duas for Righteous Offspring and Pregnancy"
+    },
+    "righteousness": {
+      "title": "Duas for Righteousness and Good Deeds",
+      "description": "Duas for Righteousness and Good Deeds"
+    },
+    "safety": {
+      "title": "Duas for Safety",
+      "description": "Duas for Safety"
+    },
+    "sincerity": {
+      "title": "Quran Verses and Duas for Sincerity",
+      "description": "Quran Verses and Duas for Sincerity"
+    },
+    "steadfastness": {
+      "title": "Duas for Steadfastness",
+      "description": "Duas for Steadfastness"
+    },
+    "strength": {
+      "title": "Duas for Strength",
+      "description": "Duas for Strength"
+    },
+    "studying": {
+      "title": "Duas for Studying",
+      "description": "Duas for Studying"
+    },
+    "success_barakah": {
+      "title": "Duas for Success and Barakah",
+      "description": "Duas for Success and Barakah"
+    },
+    "topics": {
+      "title": "Duas from the Quran by Topic",
+      "description": "Duas from the Quran by Topic"
+    },
+    "travel": {
+      "title": "Quran Verses and Duas for Travel and Journey Safety",
+      "description": "Quran Verses and Duas for Travel and Journey Safety"
+    },
+    "ummah": {
+      "title": "Duas for the Ummah",
+      "description": "Duas for the Ummah"
+    },
+    "unity": {
+      "title": "Duas for Unity",
+      "description": "Duas for Unity"
+    },
+    "victory": {
+      "title": "Duas for Victory",
+      "description": "Duas for Victory"
+    },
+    "waswas": {
+      "title": "Duas for Waswas and Whispers",
+      "description": "Duas for Waswas and Whispers"
+    },
+    "when_someone_dies": {
+      "title": "Quran Passages and Duas for When Someone Dies",
+      "description": "Quran Passages and Duas for When Someone Dies"
+    },
+    "wisdom": {
+      "title": "Duas for Wisdom",
+      "description": "Duas for Wisdom"
+    },
+    "work_career": {
+      "title": "Duas for Work and Career",
+      "description": "Duas for Work and Career"
+    }
+  },
+  "prophets": {
+    "prophet_adam": {
+      "name": "Adam"
+    },
+    "prophet_al_yasa": {
+      "name": "Al Yasa"
+    },
+    "prophet_ayyub": {
+      "name": "Ayyub"
+    },
+    "prophet_ayyub_illness": {
+      "name": "Ayyub Illness"
+    },
+    "prophet_dawud": {
+      "name": "Dawud"
+    },
+    "prophet_dhul_kifl": {
+      "name": "Dhul Kifl"
+    },
+    "prophet_harun": {
+      "name": "Harun"
+    },
+    "prophet_hud": {
+      "name": "Hud"
+    },
+    "prophet_ibrahim": {
+      "name": "Ibrahim"
+    },
+    "prophet_idris": {
+      "name": "Idris"
+    },
+    "prophet_ilyas": {
+      "name": "Ilyas"
+    },
+    "prophet_isa": {
+      "name": "Isa"
+    },
+    "prophet_ishaq": {
+      "name": "Ishaq"
+    },
+    "prophet_ismail": {
+      "name": "Ismail"
+    },
+    "prophet_lut": {
+      "name": "Lut"
+    },
+    "prophet_muhammad": {
+      "name": "Muhammad"
+    },
+    "prophet_musa": {
+      "name": "Musa"
+    },
+    "prophet_nuh": {
+      "name": "Nuh"
+    },
+    "prophet_nuh_forgiveness": {
+      "name": "Nuh Forgiveness"
+    },
+    "prophet_salih": {
+      "name": "Salih"
+    },
+    "prophet_shuayb": {
+      "name": "Shuayb"
+    },
+    "prophet_sulayman": {
+      "name": "Sulayman"
+    },
+    "prophet_yahya": {
+      "name": "Yahya"
+    },
+    "prophet_yaqub": {
+      "name": "Yaqub"
+    },
+    "prophet_yunus": {
+      "name": "Yunus"
+    },
+    "prophet_yusuf": {
+      "name": "Yusuf"
+    },
+    "prophet_zakariya": {
+      "name": "Zakariya"
+    }
+  },
+  "ui": {
+    "quran_explorer": "Quran Explorer",
+    "browse_topics": "Browse by Topic",
+    "browse_prophets": "Browse by Prophet",
+    "related_duas": "Related Duas",
+    "recommended_duas": "Recommended Duas",
+    "associated_duas": "Associated Duas",
+    "related_topics": "Related Topics",
+    "appears_in": "Appears In",
+    "explore_collection": "Explore Collection",
+    "discover_more": "Discover More",
+    "daily_reflection": "Daily Reflection",
+    "prophetic_duas": "Prophetic Duas",
+    "all_collections": "All Collections",
+    "all_prophets": "All Prophets",
+    "view_related": "View Related",
+    "view_all": "View All"
+  }
+}

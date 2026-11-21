@@ -10,6 +10,7 @@ import { HadithDbHelper } from '../hadith/HadithDbHelper';
 import { NavHelper } from '../core/NavHelper';
 import { util } from '@kit.ArkTS';
 import { RawPaths } from '../core/RawPaths';
+import { TypographyHelper } from '../core/TypographyHelper';
 
 @Entry
 @Component
@@ -18,14 +19,12 @@ struct HadithBrowsePage {
   @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLangChanged') appLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_HADITH_TRANSLATION_LANG) @Watch('onLangChanged') hadithTransLang: string = 'default';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
-
   @State hadiths: BilingualHadith[] = [];
   @State filteredHadiths: BilingualHadith[] = [];
   @State isLoading: boolean = true;
   @State pageTitle: string = 'Browse';
   @State searchQuery: string = '';
   @State totalCount: number = 0;
-
   private browseType: string = '';
   private browseId: string = '';
   private pageOffset: number = 0;
@@ -235,7 +234,7 @@ struct HadithBrowsePage {
 
                 Text(hadith.arabic_text)
                   .fontSize(22)
-                  .fontFamily('AmiriQuran, sans-serif')
+                  .fontFamily(TypographyHelper.getActiveArabicFont(false))
                   .fontColor(this.colors.textWhite)
                   .direction(Direction.Rtl)
                   .textAlign(TextAlign.Start)

@@ -37,7 +37,6 @@ export class TasbihStorage {
    * todayKey() will differ from this and the scan re-runs.
    */
   private static lastRolloverDateKey: string = '';
-
   private static store: preferences.Preferences | null = null;
 
   static async init(context: common.UIAbilityContext): Promise<void> {

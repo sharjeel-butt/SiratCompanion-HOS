@@ -1,8 +1,9 @@
 // entry/src/main/ets/pages/MainTabs.ets
 
-import { display, mediaquery, promptAction, router } from '@kit.ArkUI';
+import { display, mediaquery, promptAction, router, window } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { deviceInfo } from '@kit.BasicServicesKit';
+
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -828,38 +829,36 @@ struct MainTabs {
   }
 
   private exitApp(): void {
-    promptAction.showDialog({
+    // FIX: Explicitly get PromptAction from the current UIContext.
+    // This prevents the "context is nullptr" error on emulators and laptops.
+    const uiPromptAction = this.getUIContext().getPromptAction();
+
+    uiPromptAction.showDialog({
       title: L.get('exit', this.currentLanguage),
       message: L.get('exit_confirm_message', this.currentLanguage),
       buttons: [
-        {
-          text: L.get('cancel', this.currentLanguage),
-          color: this.colors.dialogCancel
-        },
-        {
-          text: L.get('exit', this.currentLanguage),
-          color: this.colors.accentGold
-        }
+        { text: L.get('cancel', this.currentLanguage), color: this.colors.dialogCancel },
+        { text: L.get('exit', this.currentLanguage), color: this.colors.accentGold }
       ]
     }).then((result: promptAction.ShowDialogSuccessResponse) => {
       if (result.index === 1) {
         const ctx = getContext(this) as common.UIAbilityContext;
 
-        // Delay slightly to allow the dialog dismiss animation to finish.
-        setTimeout(async () => {
-          try {
-            // FIX: Removed the window.destroyWindow() logic.
-            // terminateSelf() automatically destroys the window and the ability.
-            // Calling destroyWindow() first causes the app to hang on 2-in-1 devices.
-            await ctx.terminateSelf();
-            console.info('[Exit] terminateSelf succeeded');
-          } catch (e) {
-            console.error('[Exit] terminateSelf failed: ' + (e as Error).message);
-          }
-        }, 250);
+        // BEST PRACTICE: Minimize the app instead of force-killing it.
+        // This completely avoids the window manager deadlock on emulators/laptops.
+        window.getLastWindow(ctx).then((win) => {
+          console.info('[Exit] Minimizing app to background...');
+          win.minimize();
+        }).catch((err: Error) => {
+          console.error('[Exit] Minimize failed, falling back to terminateSelf:', JSON.stringify(err));
+          // Fallback with a delay to let the UI thread clear
+          setTimeout(() => {
+            ctx.terminateSelf();
+          }, 300);
+        });
       }
     }).catch((err: Error) => {
-      console.error('Dialog error:', JSON.stringify(err));
+      console.error('[Exit] Dialog error:', JSON.stringify(err));
     });
   }
 }

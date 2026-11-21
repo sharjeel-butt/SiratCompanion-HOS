@@ -12,10 +12,8 @@ import { RawPaths } from '../core/RawPaths';
 export class HadithDbHelper {
   private static store: relationalStore.RdbStore | null = null;
   private static currentLang: string = '';
-
   private static sectionAliases: Record<string, string> | null = null;
   private static localizedSectionsMap: Map<string, Record<string, string>> = new Map();
-
   // 👇 Dynamic schema variables
   private static idCol: string = 'hadith_id';
   private static textCol: string = 'text';

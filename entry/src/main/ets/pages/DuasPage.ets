@@ -1,16 +1,18 @@
 import { ThemeColors, ThemeMode } from '../core/Theme';
 import { PageTheme } from '../core/PageTheme';
-import { CompleteDua } from '../duas/DuaModels';
+import { CompleteDua, DuaSource } from '../duas/DuaModels';
 import { STORAGE_KEY_DUA_TRANSLATION_LANG, STORAGE_KEY_LANGUAGE } from '../core/StorageKeys';
 import { RawPaths } from '../core/RawPaths';
 import { util } from '@kit.ArkTS';
 import { AppLogger } from '../core/AppLogger';
-import { router } from '@kit.ArkUI';
+import { promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { DuaService } from '../duas/DuaService';
 import { HadithSearchService } from '../hadith/HadithSearchService';
 import { L } from '../i18n/LocalizationHelper';
 import { TypographyHelper } from '../core/TypographyHelper';
+import { SourceParser } from '../core/SourceParser';
+import { NavHelper } from '../core/NavHelper';
 
 interface CategoryEntry {
   name: string;
@@ -325,27 +327,77 @@ struct DuasPage {
 
       // ---- Footer: Reference + Bind menu ----
       Row() {
-        Text(dua.translatedReference)
-          .fontSize(TypographyHelper.getFontSize(this.appLanguage, 11))
-          .fontColor(this.colors.textMuted)
-          .fontStyle(FontStyle.Italic)
-          .lineHeight(TypographyHelper.getLineHeight(this.appLanguage, 16))
-          .layoutWeight(1)
+        // Text(dua.translatedReference)
+        //   .fontSize(TypographyHelper.getFontSize(this.appLanguage, 11))
+        //   .fontColor(this.colors.textMuted)
+        //   .fontStyle(FontStyle.Italic)
+        //   .lineHeight(TypographyHelper.getLineHeight(this.appLanguage, 16))
+        //   .layoutWeight(1)
 
-        Text(L.get('bind_prayer', this.appLanguage))
-          .fontSize(TypographyHelper.getFontSize(this.appLanguage, 11))
-          .fontColor(this.colors.accentGold)
-          .padding({
-            left: 8,
-            right: 8,
-            top: 4,
-            bottom: 4
-          })
-          .backgroundColor(this.colors.tintSoft)
-          .borderRadius(8)
-          .bindMenu(this.buildPrayerMenu(dua))
+        if (dua.sources && dua.sources.length > 0) {
+          Row() {
+
+            // Left side - sources
+            Flex({
+              wrap: FlexWrap.Wrap,
+              justifyContent: FlexAlign.Start
+            }) {
+              ForEach(dua.sources, (src: DuaSource, i: number) => {
+                Row({ space: 4 }) {
+                  Image($r('app.media.ic_link'))
+                    .width(10)
+                    .height(10)
+                    .fillColor(this.colors.accentGold)
+
+                  Text(SourceParser.getLabel(src, this.appLanguage))
+                    .fontSize(10)
+                    .fontColor(this.colors.accentGold)
+                    .fontWeight(FontWeight.Medium)
+                }
+                .padding({
+                  left: 8,
+                  right: 8,
+                  top: 4,
+                  bottom: 4
+                })
+                .backgroundColor(this.colors.tintSoft)
+                .borderRadius(12)
+                .border({
+                  width: 1,
+                  color: this.colors.borderSoft
+                })
+                .margin({
+                  right: 6,
+                  top: 6
+                })
+                .onClick(() => this.onSourceTap(src))
+              }, (src: DuaSource, i: number) => `dsrc-${dua.id}-${i}`)
+            }
+            .layoutWeight(1)
+
+            // Right side - bind prayer
+            Text(L.get('bind_prayer', this.appLanguage))
+              .fontSize(TypographyHelper.getFontSize(this.appLanguage, 11))
+              .fontColor(this.colors.accentGold)
+              .padding({
+                left: 8,
+                right: 8,
+                top: 4,
+                bottom: 4
+              })
+              .backgroundColor(this.colors.tintSoft)
+              .borderRadius(8)
+              .margin({ left: 8, top: 6 })
+              .bindMenu(this.buildPrayerMenu(dua))
+          }
+          .width('100%')
+          .justifyContent(FlexAlign.SpaceBetween)
+          .alignItems(VerticalAlign.Top)
+          .margin({ top: 4 })
+        }
       }
       .width('100%').alignItems(VerticalAlign.Center)
+
     }
     .width('100%')
     .padding(20)
@@ -410,5 +462,62 @@ struct DuasPage {
       return this.appLanguage;
     }
     return this.duaTransLang;
+  }
+
+  private getCanonicalCollection(col: string): string {
+    const c = col.toLowerCase();
+    if (c.includes('bukhari') || c === 'bukh') {
+      return 'bukhari';
+    }
+    if (c.includes('muslim') || c === 'musl') {
+      return 'muslim';
+    }
+    if (c.includes('abu dawud') || c.includes('abudawud') || c === 'abud') {
+      return 'abudawud';
+    }
+    if (c.includes('tirmidhi') || c === 'tirm') {
+      return 'tirmidhi';
+    }
+    if (c.includes('nasai') || c === 'nasa') {
+      return 'nasai';
+    }
+    if (c.includes('ibn majah') || c.includes('ibnmajah') || c === 'ibnm') {
+      return 'ibnmajah';
+    }
+    if (c.includes('malik') || c === 'mali') {
+      return 'malik';
+    }
+    return c;
+  }
+
+  private onSourceTap(src: DuaSource): void {
+    if (src.type === 'hadith' && src.id) {
+      const parts = src.id.split(':');
+      if (parts.length === 2) {
+        const col = this.getCanonicalCollection(parts[0]);
+        const hadithId = `${col}:${parts[1]}`;
+        NavHelper.prepareForward();
+        router.pushUrl({
+          url: 'pages/HadithDetailsPage',
+          params: { id: hadithId }
+        }).catch((e: Error) => console.error(JSON.stringify(e)));
+        return;
+      }
+    }
+    if (src.type === 'quran' && src.surah !== undefined && src.ayah !== undefined) {
+      NavHelper.prepareForward();
+      router.pushUrl({
+        url: 'pages/SurahDetailsPage',
+        params: { surahId: src.surah, startVerse: src.ayah, endVerse: src.ayah }
+      }).catch((e: Error) => console.error(JSON.stringify(e)));
+      return;
+    }
+    const title = L.get('hadith_evidence_title', this.appLanguage);
+    const msg = src.display || src.id || 'Unknown Source';
+    promptAction.showDialog({
+      title: title,
+      message: msg,
+      buttons: [{ text: L.get('ok', this.appLanguage), color: this.colors.accentGold }]
+    });
   }
 }

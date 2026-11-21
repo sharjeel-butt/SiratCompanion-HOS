@@ -1,0 +1,5129 @@
+[
+  {
+    "id": "children",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "children",
+    "title": "Duas for Children in the Quran",
+    "category": "Family",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/children",
+    "reference_count": 9,
+    "references": [
+      {
+        "surah": 21,
+        "ayah_start": 89,
+        "ayah_end": 89
+      },
+      {
+        "surah": 19,
+        "ayah_start": 4,
+        "ayah_end": 5
+      },
+      {
+        "surah": 14,
+        "ayah_start": 37,
+        "ayah_end": 38
+      },
+      {
+        "surah": 46,
+        "ayah_start": 15,
+        "ayah_end": 15
+      },
+      {
+        "surah": 37,
+        "ayah_start": 100,
+        "ayah_end": 100
+      },
+      {
+        "surah": 3,
+        "ayah_start": 38,
+        "ayah_end": 38
+      },
+      {
+        "surah": 2,
+        "ayah_start": 127,
+        "ayah_end": 128
+      },
+      {
+        "surah": 14,
+        "ayah_start": 40,
+        "ayah_end": 41
+      },
+      {
+        "surah": 25,
+        "ayah_start": 74,
+        "ayah_end": 74
+      }
+    ],
+    "tags": [
+      "children",
+      "family"
+    ],
+    "keywords": [
+      "children",
+      "dua",
+      "duas",
+      "family",
+      "for",
+      "in",
+      "quran",
+      "the"
+    ]
+  },
+  {
+    "id": "family",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "family",
+    "title": "Duas for Family, Marriage, and Spouses",
+    "category": "Family",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/family",
+    "reference_count": 7,
+    "references": [
+      {
+        "surah": 46,
+        "ayah_start": 15,
+        "ayah_end": 15
+      },
+      {
+        "surah": 17,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 2,
+        "ayah_start": 201,
+        "ayah_end": 201
+      },
+      {
+        "surah": 40,
+        "ayah_start": 7,
+        "ayah_end": 9
+      },
+      {
+        "surah": 2,
+        "ayah_start": 127,
+        "ayah_end": 128
+      },
+      {
+        "surah": 14,
+        "ayah_start": 40,
+        "ayah_end": 41
+      },
+      {
+        "surah": 25,
+        "ayah_start": 74,
+        "ayah_end": 74
+      }
+    ],
+    "tags": [
+      "family"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "family",
+      "for",
+      "marriage",
+      "spouses"
+    ]
+  },
+  {
+    "id": "parents",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "parents",
+    "title": "Duas for Parents and Deceased Parents in the Quran",
+    "category": "Family",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/parents",
+    "reference_count": 5,
+    "references": [
+      {
+        "surah": 46,
+        "ayah_start": 15,
+        "ayah_end": 15
+      },
+      {
+        "surah": 27,
+        "ayah_start": 19,
+        "ayah_end": 19
+      },
+      {
+        "surah": 71,
+        "ayah_start": 28,
+        "ayah_end": 28
+      },
+      {
+        "surah": 17,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 14,
+        "ayah_start": 40,
+        "ayah_end": 41
+      }
+    ],
+    "tags": [
+      "family"
+    ],
+    "keywords": [
+      "and",
+      "deceased",
+      "dua",
+      "duas",
+      "family",
+      "for",
+      "in",
+      "parents",
+      "quran",
+      "the"
+    ]
+  },
+  {
+    "id": "pious_spouse",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "pious-spouse",
+    "title": "Duas for a Pious Spouse",
+    "category": "Family",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/pious-spouse",
+    "reference_count": 2,
+    "references": [
+      {
+        "surah": 14,
+        "ayah_start": 40,
+        "ayah_end": 41
+      },
+      {
+        "surah": 25,
+        "ayah_start": 74,
+        "ayah_end": 74
+      }
+    ],
+    "tags": [
+      "family"
+    ],
+    "keywords": [
+      "a",
+      "dua",
+      "duas",
+      "family",
+      "for",
+      "pious",
+      "spouse"
+    ]
+  },
+  {
+    "id": "forgiveness",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "forgiveness",
+    "title": "Duas for Forgiveness",
+    "category": "Forgiveness",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/forgiveness",
+    "reference_count": 15,
+    "references": [
+      {
+        "surah": 3,
+        "ayah_start": 191,
+        "ayah_end": 194
+      },
+      {
+        "surah": 60,
+        "ayah_start": 4,
+        "ayah_end": 5
+      },
+      {
+        "surah": 2,
+        "ayah_start": 285,
+        "ayah_end": 285
+      },
+      {
+        "surah": 14,
+        "ayah_start": 40,
+        "ayah_end": 41
+      },
+      {
+        "surah": 7,
+        "ayah_start": 151,
+        "ayah_end": 151
+      },
+      {
+        "surah": 3,
+        "ayah_start": 16,
+        "ayah_end": 16
+      },
+      {
+        "surah": 7,
+        "ayah_start": 23,
+        "ayah_end": 23
+      },
+      {
+        "surah": 11,
+        "ayah_start": 47,
+        "ayah_end": 47
+      },
+      {
+        "surah": 7,
+        "ayah_start": 155,
+        "ayah_end": 156
+      },
+      {
+        "surah": 59,
+        "ayah_start": 10,
+        "ayah_end": 10
+      },
+      {
+        "surah": 71,
+        "ayah_start": 28,
+        "ayah_end": 28
+      },
+      {
+        "surah": 40,
+        "ayah_start": 7,
+        "ayah_end": 9
+      },
+      {
+        "surah": 28,
+        "ayah_start": 16,
+        "ayah_end": 16
+      },
+      {
+        "surah": 2,
+        "ayah_start": 286,
+        "ayah_end": 286
+      },
+      {
+        "surah": 23,
+        "ayah_start": 118,
+        "ayah_end": 118
+      }
+    ],
+    "tags": [
+      "forgiveness"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "forgiveness"
+    ]
+  },
+  {
+    "id": "forgiveness_of_sins",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "forgiveness-of-sins",
+    "title": "Duas for Forgiveness of Sins",
+    "category": "Forgiveness",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/forgiveness-of-sins",
+    "reference_count": 7,
+    "references": [
+      {
+        "surah": 3,
+        "ayah_start": 191,
+        "ayah_end": 194
+      },
+      {
+        "surah": 66,
+        "ayah_start": 8,
+        "ayah_end": 8
+      },
+      {
+        "surah": 3,
+        "ayah_start": 16,
+        "ayah_end": 16
+      },
+      {
+        "surah": 7,
+        "ayah_start": 23,
+        "ayah_end": 23
+      },
+      {
+        "surah": 59,
+        "ayah_start": 10,
+        "ayah_end": 10
+      },
+      {
+        "surah": 2,
+        "ayah_start": 286,
+        "ayah_end": 286
+      },
+      {
+        "surah": 23,
+        "ayah_start": 118,
+        "ayah_end": 118
+      }
+    ],
+    "tags": [
+      "forgiveness"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "forgiveness",
+      "of",
+      "sins"
+    ]
+  },
+  {
+    "id": "repentance",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "repentance",
+    "title": "Duas for Tawbah and Repentance",
+    "category": "Forgiveness",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/repentance",
+    "reference_count": 7,
+    "references": [
+      {
+        "surah": 60,
+        "ayah_start": 4,
+        "ayah_end": 5
+      },
+      {
+        "surah": 46,
+        "ayah_start": 15,
+        "ayah_end": 15
+      },
+      {
+        "surah": 7,
+        "ayah_start": 151,
+        "ayah_end": 151
+      },
+      {
+        "surah": 11,
+        "ayah_start": 47,
+        "ayah_end": 47
+      },
+      {
+        "surah": 7,
+        "ayah_start": 23,
+        "ayah_end": 23
+      },
+      {
+        "surah": 7,
+        "ayah_start": 155,
+        "ayah_end": 156
+      },
+      {
+        "surah": 28,
+        "ayah_start": 16,
+        "ayah_end": 16
+      }
+    ],
+    "tags": [
+      "forgiveness",
+      "repentance"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "for",
+      "forgiveness",
+      "repentance",
+      "tawbah"
+    ]
+  },
+  {
+    "id": "rabbi_jalni_muqim_as_salah",
+    "type": "quran",
+    "entity_type": "dua",
+    "collection_type": null,
+    "slug": "rabbi-jalni-muqim-as-salah",
+    "title": "Dua of Ibrahim for Prayer",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/rabbi-jalni-muqim-as-salah",
+    "reference_count": 1,
+    "references": [
+      {
+        "surah": 14,
+        "ayah_start": 40,
+        "ayah_end": 41
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "dua",
+      "for",
+      "general",
+      "ibrahim",
+      "of",
+      "prayer"
+    ]
+  },
+  {
+    "id": "enemies",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "enemies",
+    "title": "Duas Against Enemies and Harmful People",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/enemies",
+    "reference_count": 4,
+    "references": [
+      {
+        "surah": 10,
+        "ayah_start": 85,
+        "ayah_end": 86
+      },
+      {
+        "surah": 28,
+        "ayah_start": 21,
+        "ayah_end": 21
+      },
+      {
+        "surah": 2,
+        "ayah_start": 250,
+        "ayah_end": 250
+      },
+      {
+        "surah": 29,
+        "ayah_start": 30,
+        "ayah_end": 30
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "against",
+      "and",
+      "dua",
+      "duas",
+      "enemies",
+      "general",
+      "harmful",
+      "people"
+    ]
+  },
+  {
+    "id": "patience",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "patience",
+    "title": "Duas and Quran Passages for Patience",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/patience",
+    "reference_count": 4,
+    "references": [
+      {
+        "surah": 7,
+        "ayah_start": 126,
+        "ayah_end": 126
+      },
+      {
+        "surah": 2,
+        "ayah_start": 250,
+        "ayah_end": 250
+      },
+      {
+        "surah": 12,
+        "ayah_start": 83,
+        "ayah_end": 83
+      },
+      {
+        "surah": 12,
+        "ayah_start": 18,
+        "ayah_end": 18
+      }
+    ],
+    "tags": [
+      "general",
+      "patience"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "passages",
+      "patience",
+      "quran"
+    ]
+  },
+  {
+    "id": "acceptance",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "acceptance",
+    "title": "Duas for Acceptance of Good Deeds",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/acceptance",
+    "reference_count": 4,
+    "references": [
+      {
+        "surah": 2,
+        "ayah_start": 127,
+        "ayah_end": 128
+      },
+      {
+        "surah": 14,
+        "ayah_start": 40,
+        "ayah_end": 41
+      },
+      {
+        "surah": 27,
+        "ayah_start": 19,
+        "ayah_end": 19
+      },
+      {
+        "surah": 46,
+        "ayah_start": 15,
+        "ayah_end": 15
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "acceptance",
+      "deeds",
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "good",
+      "of"
+    ]
+  },
+  {
+    "id": "mercy",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "mercy",
+    "title": "Duas for Allah&#x27;s Mercy",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/mercy",
+    "reference_count": 7,
+    "references": [
+      {
+        "surah": 21,
+        "ayah_start": 83,
+        "ayah_end": 83
+      },
+      {
+        "surah": 7,
+        "ayah_start": 151,
+        "ayah_end": 151
+      },
+      {
+        "surah": 7,
+        "ayah_start": 23,
+        "ayah_end": 23
+      },
+      {
+        "surah": 7,
+        "ayah_start": 155,
+        "ayah_end": 156
+      },
+      {
+        "surah": 40,
+        "ayah_start": 7,
+        "ayah_end": 9
+      },
+      {
+        "surah": 18,
+        "ayah_start": 10,
+        "ayah_end": 10
+      },
+      {
+        "surah": 23,
+        "ayah_start": 118,
+        "ayah_end": 118
+      }
+    ],
+    "tags": [
+      "general",
+      "mercy"
+    ],
+    "keywords": [
+      "allah",
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "mercy",
+      "s",
+      "x"
+    ]
+  },
+  {
+    "id": "character",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "character",
+    "title": "Duas for Beautiful Character",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/character",
+    "reference_count": 4,
+    "references": [
+      {
+        "surah": 27,
+        "ayah_start": 19,
+        "ayah_end": 19
+      },
+      {
+        "surah": 25,
+        "ayah_start": 74,
+        "ayah_end": 74
+      },
+      {
+        "surah": 59,
+        "ayah_start": 10,
+        "ayah_end": 10
+      },
+      {
+        "surah": 46,
+        "ayah_start": 15,
+        "ayah_end": 15
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "beautiful",
+      "character",
+      "dua",
+      "duas",
+      "for",
+      "general"
+    ]
+  },
+  {
+    "id": "confidence",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "confidence",
+    "title": "Duas for Confidence",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/confidence",
+    "reference_count": 4,
+    "references": [
+      {
+        "surah": 20,
+        "ayah_start": 25,
+        "ayah_end": 28
+      },
+      {
+        "surah": 28,
+        "ayah_start": 21,
+        "ayah_end": 21
+      },
+      {
+        "surah": 28,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 28,
+        "ayah_start": 22,
+        "ayah_end": 22
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "confidence",
+      "dua",
+      "duas",
+      "for",
+      "general"
+    ]
+  },
+  {
+    "id": "heart_healing",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "heart-healing",
+    "title": "Duas for Diseases of the Heart",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/heart-healing",
+    "reference_count": 4,
+    "references": [
+      {
+        "surah": 26,
+        "ayah_start": 87,
+        "ayah_end": 89
+      },
+      {
+        "surah": 3,
+        "ayah_start": 8,
+        "ayah_end": 9
+      },
+      {
+        "surah": 21,
+        "ayah_start": 83,
+        "ayah_end": 83
+      },
+      {
+        "surah": 59,
+        "ayah_start": 10,
+        "ayah_end": 10
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "diseases",
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "heart",
+      "of",
+      "the"
+    ]
+  },
+  {
+    "id": "friends_loved_ones",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "friends-loved-ones",
+    "title": "Duas for Friends and Loved Ones",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/friends-loved-ones",
+    "reference_count": 4,
+    "references": [
+      {
+        "surah": 14,
+        "ayah_start": 40,
+        "ayah_end": 41
+      },
+      {
+        "surah": 40,
+        "ayah_start": 7,
+        "ayah_end": 9
+      },
+      {
+        "surah": 3,
+        "ayah_start": 16,
+        "ayah_end": 16
+      },
+      {
+        "surah": 59,
+        "ayah_start": 10,
+        "ayah_end": 10
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "for",
+      "friends",
+      "general",
+      "loved",
+      "ones"
+    ]
+  },
+  {
+    "id": "hajj_umrah",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "hajj-umrah",
+    "title": "Duas for Hajj &amp; Umrah",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/hajj-umrah",
+    "reference_count": 5,
+    "references": [
+      {
+        "surah": 14,
+        "ayah_start": 37,
+        "ayah_end": 38
+      },
+      {
+        "surah": 2,
+        "ayah_start": 126,
+        "ayah_end": 126
+      },
+      {
+        "surah": 2,
+        "ayah_start": 201,
+        "ayah_end": 201
+      },
+      {
+        "surah": 2,
+        "ayah_start": 127,
+        "ayah_end": 128
+      },
+      {
+        "surah": 14,
+        "ayah_start": 40,
+        "ayah_end": 41
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "amp",
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "hajj",
+      "umrah"
+    ]
+  },
+  {
+    "id": "humility",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "humility",
+    "title": "Duas for Humility",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/humility",
+    "reference_count": 4,
+    "references": [
+      {
+        "surah": 28,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 18,
+        "ayah_start": 10,
+        "ayah_end": 10
+      },
+      {
+        "surah": 23,
+        "ayah_start": 118,
+        "ayah_end": 118
+      },
+      {
+        "surah": 7,
+        "ayah_start": 23,
+        "ayah_end": 23
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "humility"
+    ]
+  },
+  {
+    "id": "benefit_from_quran",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "benefit-from-quran",
+    "title": "Duas for Learning, Memorizing, and Benefiting from the Quran",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/benefit-from-quran",
+    "reference_count": 5,
+    "references": [
+      {
+        "surah": 20,
+        "ayah_start": 114,
+        "ayah_end": 114
+      },
+      {
+        "surah": 18,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 2,
+        "ayah_start": 32,
+        "ayah_end": 32
+      },
+      {
+        "surah": 1,
+        "ayah_start": 1,
+        "ayah_end": 7
+      },
+      {
+        "surah": 3,
+        "ayah_start": 8,
+        "ayah_end": 9
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "and",
+      "benefiting",
+      "dua",
+      "duas",
+      "for",
+      "from",
+      "general",
+      "learning",
+      "memorizing",
+      "quran",
+      "the"
+    ]
+  },
+  {
+    "id": "new_muslims",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "new-muslims",
+    "title": "Duas for New Muslims",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/new-muslims",
+    "reference_count": 6,
+    "references": [
+      {
+        "surah": 20,
+        "ayah_start": 114,
+        "ayah_end": 114
+      },
+      {
+        "surah": 1,
+        "ayah_start": 1,
+        "ayah_end": 7
+      },
+      {
+        "surah": 7,
+        "ayah_start": 23,
+        "ayah_end": 23
+      },
+      {
+        "surah": 59,
+        "ayah_start": 10,
+        "ayah_end": 10
+      },
+      {
+        "surah": 3,
+        "ayah_start": 8,
+        "ayah_end": 9
+      },
+      {
+        "surah": 23,
+        "ayah_start": 118,
+        "ayah_end": 118
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "muslims",
+      "new"
+    ]
+  },
+  {
+    "id": "palestine",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "palestine",
+    "title": "Duas for Palestine and the Oppressed",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/palestine",
+    "reference_count": 4,
+    "references": [
+      {
+        "surah": 10,
+        "ayah_start": 85,
+        "ayah_end": 86
+      },
+      {
+        "surah": 2,
+        "ayah_start": 250,
+        "ayah_end": 250
+      },
+      {
+        "surah": 40,
+        "ayah_start": 7,
+        "ayah_end": 9
+      },
+      {
+        "surah": 59,
+        "ayah_start": 10,
+        "ayah_end": 10
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "oppressed",
+      "palestine",
+      "the"
+    ]
+  },
+  {
+    "id": "peace",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "peace",
+    "title": "Duas for Peace",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/peace",
+    "reference_count": 3,
+    "references": [
+      {
+        "surah": 2,
+        "ayah_start": 201,
+        "ayah_end": 201
+      },
+      {
+        "surah": 25,
+        "ayah_start": 74,
+        "ayah_end": 74
+      },
+      {
+        "surah": 59,
+        "ayah_start": 10,
+        "ayah_end": 10
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "peace"
+    ]
+  },
+  {
+    "id": "relief",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "relief",
+    "title": "Duas for Relief",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/relief",
+    "reference_count": 5,
+    "references": [
+      {
+        "surah": 21,
+        "ayah_start": 87,
+        "ayah_end": 87
+      },
+      {
+        "surah": 21,
+        "ayah_start": 83,
+        "ayah_end": 83
+      },
+      {
+        "surah": 20,
+        "ayah_start": 25,
+        "ayah_end": 28
+      },
+      {
+        "surah": 28,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 2,
+        "ayah_start": 286,
+        "ayah_end": 286
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "relief"
+    ]
+  },
+  {
+    "id": "righteous_offspring",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "righteous-offspring",
+    "title": "Duas for Righteous Offspring and Pregnancy",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/righteous-offspring",
+    "reference_count": 6,
+    "references": [
+      {
+        "surah": 21,
+        "ayah_start": 89,
+        "ayah_end": 89
+      },
+      {
+        "surah": 46,
+        "ayah_start": 15,
+        "ayah_end": 15
+      },
+      {
+        "surah": 37,
+        "ayah_start": 100,
+        "ayah_end": 100
+      },
+      {
+        "surah": 3,
+        "ayah_start": 38,
+        "ayah_end": 38
+      },
+      {
+        "surah": 19,
+        "ayah_start": 4,
+        "ayah_end": 5
+      },
+      {
+        "surah": 25,
+        "ayah_start": 74,
+        "ayah_end": 74
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "offspring",
+      "pregnancy",
+      "righteous"
+    ]
+  },
+  {
+    "id": "righteousness",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "righteousness",
+    "title": "Duas for Righteousness and Good Deeds",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/righteousness",
+    "reference_count": 6,
+    "references": [
+      {
+        "surah": 46,
+        "ayah_start": 15,
+        "ayah_end": 15
+      },
+      {
+        "surah": 27,
+        "ayah_start": 19,
+        "ayah_end": 19
+      },
+      {
+        "surah": 26,
+        "ayah_start": 87,
+        "ayah_end": 89
+      },
+      {
+        "surah": 37,
+        "ayah_start": 100,
+        "ayah_end": 100
+      },
+      {
+        "surah": 25,
+        "ayah_start": 74,
+        "ayah_end": 74
+      },
+      {
+        "surah": 26,
+        "ayah_start": 78,
+        "ayah_end": 85
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "and",
+      "deeds",
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "good",
+      "righteousness"
+    ]
+  },
+  {
+    "id": "safety",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "safety",
+    "title": "Duas for Safety",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/safety",
+    "reference_count": 4,
+    "references": [
+      {
+        "surah": 28,
+        "ayah_start": 21,
+        "ayah_end": 21
+      },
+      {
+        "surah": 10,
+        "ayah_start": 85,
+        "ayah_end": 86
+      },
+      {
+        "surah": 66,
+        "ayah_start": 11,
+        "ayah_end": 11
+      },
+      {
+        "surah": 2,
+        "ayah_start": 126,
+        "ayah_end": 126
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "safety"
+    ]
+  },
+  {
+    "id": "steadfastness",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "steadfastness",
+    "title": "Duas for Steadfastness",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/steadfastness",
+    "reference_count": 2,
+    "references": [
+      {
+        "surah": 7,
+        "ayah_start": 126,
+        "ayah_end": 126
+      },
+      {
+        "surah": 3,
+        "ayah_start": 8,
+        "ayah_end": 9
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "steadfastness"
+    ]
+  },
+  {
+    "id": "strength",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "strength",
+    "title": "Duas for Strength",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/strength",
+    "reference_count": 3,
+    "references": [
+      {
+        "surah": 20,
+        "ayah_start": 25,
+        "ayah_end": 28
+      },
+      {
+        "surah": 7,
+        "ayah_start": 126,
+        "ayah_end": 126
+      },
+      {
+        "surah": 2,
+        "ayah_start": 250,
+        "ayah_end": 250
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "strength"
+    ]
+  },
+  {
+    "id": "studying",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "studying",
+    "title": "Duas for Studying",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/studying",
+    "reference_count": 3,
+    "references": [
+      {
+        "surah": 20,
+        "ayah_start": 25,
+        "ayah_end": 28
+      },
+      {
+        "surah": 20,
+        "ayah_start": 114,
+        "ayah_end": 114
+      },
+      {
+        "surah": 18,
+        "ayah_start": 24,
+        "ayah_end": 24
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "studying"
+    ]
+  },
+  {
+    "id": "unity",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "unity",
+    "title": "Duas for Unity",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/unity",
+    "reference_count": 2,
+    "references": [
+      {
+        "surah": 40,
+        "ayah_start": 7,
+        "ayah_end": 9
+      },
+      {
+        "surah": 59,
+        "ayah_start": 10,
+        "ayah_end": 10
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "unity"
+    ]
+  },
+  {
+    "id": "victory",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "victory",
+    "title": "Duas for Victory",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/victory",
+    "reference_count": 3,
+    "references": [
+      {
+        "surah": 2,
+        "ayah_start": 250,
+        "ayah_end": 250
+      },
+      {
+        "surah": 29,
+        "ayah_start": 30,
+        "ayah_end": 30
+      },
+      {
+        "surah": 54,
+        "ayah_start": 10,
+        "ayah_end": 10
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "victory"
+    ]
+  },
+  {
+    "id": "waswas",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "waswas",
+    "title": "Duas for Waswas and Whispers",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/waswas",
+    "reference_count": 2,
+    "references": [
+      {
+        "surah": 23,
+        "ayah_start": 97,
+        "ayah_end": 98
+      },
+      {
+        "surah": 3,
+        "ayah_start": 8,
+        "ayah_end": 9
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "waswas",
+      "whispers"
+    ]
+  },
+  {
+    "id": "believers",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "believers",
+    "title": "Duas for the Believers",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/believers",
+    "reference_count": 7,
+    "references": [
+      {
+        "surah": 66,
+        "ayah_start": 8,
+        "ayah_end": 8
+      },
+      {
+        "surah": 3,
+        "ayah_start": 16,
+        "ayah_end": 16
+      },
+      {
+        "surah": 71,
+        "ayah_start": 28,
+        "ayah_end": 28
+      },
+      {
+        "surah": 59,
+        "ayah_start": 10,
+        "ayah_end": 10
+      },
+      {
+        "surah": 40,
+        "ayah_start": 7,
+        "ayah_end": 9
+      },
+      {
+        "surah": 14,
+        "ayah_start": 40,
+        "ayah_end": 41
+      },
+      {
+        "surah": 5,
+        "ayah_start": 83,
+        "ayah_end": 84
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "believers",
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "the"
+    ]
+  },
+  {
+    "id": "deceased",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "deceased",
+    "title": "Duas for the Dead",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/deceased",
+    "reference_count": 3,
+    "references": [
+      {
+        "surah": 14,
+        "ayah_start": 40,
+        "ayah_end": 41
+      },
+      {
+        "surah": 71,
+        "ayah_start": 28,
+        "ayah_end": 28
+      },
+      {
+        "surah": 59,
+        "ayah_start": 10,
+        "ayah_end": 10
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "dead",
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "the"
+    ]
+  },
+  {
+    "id": "heart",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "heart",
+    "title": "Duas for the Heart and a Clean Heart",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/heart",
+    "reference_count": 3,
+    "references": [
+      {
+        "surah": 26,
+        "ayah_start": 87,
+        "ayah_end": 89
+      },
+      {
+        "surah": 3,
+        "ayah_start": 8,
+        "ayah_end": 9
+      },
+      {
+        "surah": 59,
+        "ayah_start": 10,
+        "ayah_end": 10
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "a",
+      "and",
+      "clean",
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "heart",
+      "the"
+    ]
+  },
+  {
+    "id": "ummah",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "ummah",
+    "title": "Duas for the Ummah",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/ummah",
+    "reference_count": 6,
+    "references": [
+      {
+        "surah": 10,
+        "ayah_start": 85,
+        "ayah_end": 86
+      },
+      {
+        "surah": 66,
+        "ayah_start": 8,
+        "ayah_end": 8
+      },
+      {
+        "surah": 3,
+        "ayah_start": 16,
+        "ayah_end": 16
+      },
+      {
+        "surah": 59,
+        "ayah_start": 10,
+        "ayah_end": 10
+      },
+      {
+        "surah": 40,
+        "ayah_start": 7,
+        "ayah_end": 9
+      },
+      {
+        "surah": 5,
+        "ayah_start": 83,
+        "ayah_end": 84
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "the",
+      "ummah"
+    ]
+  },
+  {
+    "id": "topics",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "topics",
+    "title": "Duas from the Quran by Topic",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/topics",
+    "reference_count": 7,
+    "references": [
+      {
+        "surah": 21,
+        "ayah_start": 87,
+        "ayah_end": 87
+      },
+      {
+        "surah": 1,
+        "ayah_start": 1,
+        "ayah_end": 7
+      },
+      {
+        "surah": 7,
+        "ayah_start": 23,
+        "ayah_end": 23
+      },
+      {
+        "surah": 59,
+        "ayah_start": 10,
+        "ayah_end": 10
+      },
+      {
+        "surah": 28,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 2,
+        "ayah_start": 201,
+        "ayah_end": 201
+      },
+      {
+        "surah": 25,
+        "ayah_start": 74,
+        "ayah_end": 74
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "by",
+      "dua",
+      "duas",
+      "from",
+      "general",
+      "quran",
+      "the",
+      "topic"
+    ]
+  },
+  {
+    "id": "daily_life",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "daily-life",
+    "title": "Duas from the Quran for Daily Life",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/daily-life",
+    "reference_count": 7,
+    "references": [
+      {
+        "surah": 20,
+        "ayah_start": 114,
+        "ayah_end": 114
+      },
+      {
+        "surah": 46,
+        "ayah_start": 15,
+        "ayah_end": 15
+      },
+      {
+        "surah": 23,
+        "ayah_start": 97,
+        "ayah_end": 98
+      },
+      {
+        "surah": 17,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 28,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 2,
+        "ayah_start": 201,
+        "ayah_end": 201
+      },
+      {
+        "surah": 25,
+        "ayah_start": 74,
+        "ayah_end": 74
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "daily",
+      "dua",
+      "duas",
+      "for",
+      "from",
+      "general",
+      "life",
+      "quran",
+      "the"
+    ]
+  },
+  {
+    "id": "prophets",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "prophetic",
+    "slug": "prophets",
+    "title": "Duas of the Prophets in the Quran",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophets",
+    "reference_count": 11,
+    "references": [
+      {
+        "surah": 21,
+        "ayah_start": 87,
+        "ayah_end": 87
+      },
+      {
+        "surah": 21,
+        "ayah_start": 89,
+        "ayah_end": 89
+      },
+      {
+        "surah": 21,
+        "ayah_start": 83,
+        "ayah_end": 83
+      },
+      {
+        "surah": 20,
+        "ayah_start": 25,
+        "ayah_end": 28
+      },
+      {
+        "surah": 27,
+        "ayah_start": 19,
+        "ayah_end": 19
+      },
+      {
+        "surah": 71,
+        "ayah_start": 28,
+        "ayah_end": 28
+      },
+      {
+        "surah": 11,
+        "ayah_start": 47,
+        "ayah_end": 47
+      },
+      {
+        "surah": 7,
+        "ayah_start": 23,
+        "ayah_end": 23
+      },
+      {
+        "surah": 28,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 2,
+        "ayah_start": 127,
+        "ayah_end": 128
+      },
+      {
+        "surah": 14,
+        "ayah_start": 40,
+        "ayah_end": 41
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "general",
+      "in",
+      "of",
+      "prophets",
+      "quran",
+      "the"
+    ]
+  },
+  {
+    "id": "righteous_believers",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "believers",
+    "slug": "righteous-believers",
+    "title": "Duas of the Righteous Believers in the Quran",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/righteous-believers",
+    "reference_count": 10,
+    "references": [
+      {
+        "surah": 3,
+        "ayah_start": 191,
+        "ayah_end": 194
+      },
+      {
+        "surah": 66,
+        "ayah_start": 8,
+        "ayah_end": 8
+      },
+      {
+        "surah": 3,
+        "ayah_start": 16,
+        "ayah_end": 16
+      },
+      {
+        "surah": 59,
+        "ayah_start": 10,
+        "ayah_end": 10
+      },
+      {
+        "surah": 25,
+        "ayah_start": 65,
+        "ayah_end": 66
+      },
+      {
+        "surah": 40,
+        "ayah_start": 7,
+        "ayah_end": 9
+      },
+      {
+        "surah": 3,
+        "ayah_start": 8,
+        "ayah_end": 9
+      },
+      {
+        "surah": 18,
+        "ayah_start": 10,
+        "ayah_end": 10
+      },
+      {
+        "surah": 25,
+        "ayah_start": 74,
+        "ayah_end": 74
+      },
+      {
+        "surah": 5,
+        "ayah_start": 83,
+        "ayah_end": 84
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "believers",
+      "dua",
+      "duas",
+      "general",
+      "in",
+      "of",
+      "quran",
+      "righteous",
+      "the"
+    ]
+  },
+  {
+    "id": "powerful_duas",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "powerful-duas",
+    "title": "Powerful Duas from the Quran",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/powerful-duas",
+    "reference_count": 4,
+    "references": [
+      {
+        "surah": 21,
+        "ayah_start": 87,
+        "ayah_end": 87
+      },
+      {
+        "surah": 2,
+        "ayah_start": 201,
+        "ayah_end": 201
+      },
+      {
+        "surah": 25,
+        "ayah_start": 74,
+        "ayah_end": 74
+      },
+      {
+        "surah": 7,
+        "ayah_start": 23,
+        "ayah_end": 23
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "from",
+      "general",
+      "powerful",
+      "quran",
+      "the"
+    ]
+  },
+  {
+    "id": "laylatul_qadr",
+    "type": "quran",
+    "entity_type": "topic",
+    "collection_type": null,
+    "slug": "laylatul-qadr",
+    "title": "Quran Context for Laylatul Qadr",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/laylatul-qadr",
+    "reference_count": 2,
+    "references": [
+      {
+        "surah": 44,
+        "ayah_start": 3,
+        "ayah_end": 6
+      },
+      {
+        "surah": 97,
+        "ayah_start": 1,
+        "ayah_end": 5
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "context",
+      "dua",
+      "for",
+      "general",
+      "laylatul",
+      "qadr",
+      "quran"
+    ]
+  },
+  {
+    "id": "arabic_english_transliteration",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "arabic-english-transliteration",
+    "title": "Quran Duas in Arabic, English, and Transliteration",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/arabic-english-transliteration",
+    "reference_count": 6,
+    "references": [
+      {
+        "surah": 21,
+        "ayah_start": 87,
+        "ayah_end": 87
+      },
+      {
+        "surah": 20,
+        "ayah_start": 114,
+        "ayah_end": 114
+      },
+      {
+        "surah": 28,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 37,
+        "ayah_start": 100,
+        "ayah_end": 100
+      },
+      {
+        "surah": 2,
+        "ayah_start": 201,
+        "ayah_end": 201
+      },
+      {
+        "surah": 23,
+        "ayah_start": 118,
+        "ayah_end": 118
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "and",
+      "arabic",
+      "dua",
+      "duas",
+      "english",
+      "general",
+      "in",
+      "quran",
+      "transliteration"
+    ]
+  },
+  {
+    "id": "when_someone_dies",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "when-someone-dies",
+    "title": "Quran Passages and Duas for When Someone Dies",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/when-someone-dies",
+    "reference_count": 3,
+    "references": [
+      {
+        "surah": 14,
+        "ayah_start": 40,
+        "ayah_end": 41
+      },
+      {
+        "surah": 2,
+        "ayah_start": 155,
+        "ayah_end": 156
+      },
+      {
+        "surah": 59,
+        "ayah_start": 10,
+        "ayah_end": 10
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "and",
+      "dies",
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "passages",
+      "quran",
+      "someone",
+      "when"
+    ]
+  },
+  {
+    "id": "day_night",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "day-night",
+    "title": "Quran Reflections for Day and Night",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/day-night",
+    "reference_count": 13,
+    "references": [
+      {
+        "surah": 27,
+        "ayah_start": 86,
+        "ayah_end": 86
+      },
+      {
+        "surah": 21,
+        "ayah_start": 33,
+        "ayah_end": 33
+      },
+      {
+        "surah": 39,
+        "ayah_start": 42,
+        "ayah_end": 42
+      },
+      {
+        "surah": 78,
+        "ayah_start": 9,
+        "ayah_end": 11
+      },
+      {
+        "surah": 7,
+        "ayah_start": 54,
+        "ayah_end": 54
+      },
+      {
+        "surah": 40,
+        "ayah_start": 61,
+        "ayah_end": 61
+      },
+      {
+        "surah": 8,
+        "ayah_start": 11,
+        "ayah_end": 11
+      },
+      {
+        "surah": 25,
+        "ayah_start": 47,
+        "ayah_end": 47
+      },
+      {
+        "surah": 36,
+        "ayah_start": 37,
+        "ayah_end": 40
+      },
+      {
+        "surah": 17,
+        "ayah_start": 12,
+        "ayah_end": 12
+      },
+      {
+        "surah": 10,
+        "ayah_start": 67,
+        "ayah_end": 67
+      },
+      {
+        "surah": 2,
+        "ayah_start": 255,
+        "ayah_end": 255
+      },
+      {
+        "surah": 30,
+        "ayah_start": 23,
+        "ayah_end": 23
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "and",
+      "day",
+      "dua",
+      "for",
+      "general",
+      "night",
+      "quran",
+      "reflections"
+    ]
+  },
+  {
+    "id": "rain",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "rain",
+    "title": "Quran Reflections on Rain and Blessings",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/rain",
+    "reference_count": 2,
+    "references": [
+      {
+        "surah": 71,
+        "ayah_start": 10,
+        "ayah_end": 12
+      },
+      {
+        "surah": 11,
+        "ayah_start": 52,
+        "ayah_end": 52
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "and",
+      "blessings",
+      "dua",
+      "general",
+      "on",
+      "quran",
+      "rain",
+      "reflections"
+    ]
+  },
+  {
+    "id": "fasting",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "fasting",
+    "title": "Quran Verses about Ramadan and Fasting",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/fasting",
+    "reference_count": 4,
+    "references": [
+      {
+        "surah": 2,
+        "ayah_start": 187,
+        "ayah_end": 187
+      },
+      {
+        "surah": 2,
+        "ayah_start": 186,
+        "ayah_end": 186
+      },
+      {
+        "surah": 2,
+        "ayah_start": 183,
+        "ayah_end": 184
+      },
+      {
+        "surah": 2,
+        "ayah_start": 185,
+        "ayah_end": 185
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "about",
+      "and",
+      "dua",
+      "fasting",
+      "general",
+      "quran",
+      "ramadan",
+      "verses"
+    ]
+  },
+  {
+    "id": "sincerity",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "sincerity",
+    "title": "Quran Verses and Duas for Sincerity",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/sincerity",
+    "reference_count": 4,
+    "references": [
+      {
+        "surah": 2,
+        "ayah_start": 127,
+        "ayah_end": 128
+      },
+      {
+        "surah": 27,
+        "ayah_start": 19,
+        "ayah_end": 19
+      },
+      {
+        "surah": 6,
+        "ayah_start": 162,
+        "ayah_end": 162
+      },
+      {
+        "surah": 6,
+        "ayah_start": 79,
+        "ayah_end": 79
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "for",
+      "general",
+      "quran",
+      "sincerity",
+      "verses"
+    ]
+  },
+  {
+    "id": "remembrance_reflection",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "remembrance-reflection",
+    "title": "Quran Verses on Remembrance and Reflection",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/remembrance-reflection",
+    "reference_count": 11,
+    "references": [
+      {
+        "surah": 13,
+        "ayah_start": 28,
+        "ayah_end": 28
+      },
+      {
+        "surah": 3,
+        "ayah_start": 191,
+        "ayah_end": 194
+      },
+      {
+        "surah": 2,
+        "ayah_start": 152,
+        "ayah_end": 152
+      },
+      {
+        "surah": 23,
+        "ayah_start": 68,
+        "ayah_end": 68
+      },
+      {
+        "surah": 4,
+        "ayah_start": 82,
+        "ayah_end": 82
+      },
+      {
+        "surah": 13,
+        "ayah_start": 3,
+        "ayah_end": 3
+      },
+      {
+        "surah": 29,
+        "ayah_start": 45,
+        "ayah_end": 45
+      },
+      {
+        "surah": 20,
+        "ayah_start": 124,
+        "ayah_end": 124
+      },
+      {
+        "surah": 33,
+        "ayah_start": 41,
+        "ayah_end": 42
+      },
+      {
+        "surah": 7,
+        "ayah_start": 205,
+        "ayah_end": 205
+      },
+      {
+        "surah": 47,
+        "ayah_start": 24,
+        "ayah_end": 24
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "general",
+      "on",
+      "quran",
+      "reflection",
+      "remembrance",
+      "verses"
+    ]
+  },
+  {
+    "id": "rabbana",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "rabbana",
+    "title": "Rabbana Duas from the Quran",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/rabbana",
+    "reference_count": 22,
+    "references": [
+      {
+        "surah": 3,
+        "ayah_start": 191,
+        "ayah_end": 194
+      },
+      {
+        "surah": 7,
+        "ayah_start": 126,
+        "ayah_end": 126
+      },
+      {
+        "surah": 2,
+        "ayah_start": 201,
+        "ayah_end": 201
+      },
+      {
+        "surah": 14,
+        "ayah_start": 40,
+        "ayah_end": 41
+      },
+      {
+        "surah": 3,
+        "ayah_start": 8,
+        "ayah_end": 9
+      },
+      {
+        "surah": 5,
+        "ayah_start": 83,
+        "ayah_end": 84
+      },
+      {
+        "surah": 10,
+        "ayah_start": 85,
+        "ayah_end": 86
+      },
+      {
+        "surah": 60,
+        "ayah_start": 4,
+        "ayah_end": 5
+      },
+      {
+        "surah": 2,
+        "ayah_start": 285,
+        "ayah_end": 285
+      },
+      {
+        "surah": 66,
+        "ayah_start": 8,
+        "ayah_end": 8
+      },
+      {
+        "surah": 2,
+        "ayah_start": 250,
+        "ayah_end": 250
+      },
+      {
+        "surah": 7,
+        "ayah_start": 23,
+        "ayah_end": 23
+      },
+      {
+        "surah": 59,
+        "ayah_start": 10,
+        "ayah_end": 10
+      },
+      {
+        "surah": 2,
+        "ayah_start": 127,
+        "ayah_end": 128
+      },
+      {
+        "surah": 25,
+        "ayah_start": 65,
+        "ayah_end": 66
+      },
+      {
+        "surah": 2,
+        "ayah_start": 286,
+        "ayah_end": 286
+      },
+      {
+        "surah": 7,
+        "ayah_start": 89,
+        "ayah_end": 89
+      },
+      {
+        "surah": 14,
+        "ayah_start": 37,
+        "ayah_end": 38
+      },
+      {
+        "surah": 3,
+        "ayah_start": 16,
+        "ayah_end": 16
+      },
+      {
+        "surah": 40,
+        "ayah_start": 7,
+        "ayah_end": 9
+      },
+      {
+        "surah": 18,
+        "ayah_start": 10,
+        "ayah_end": 10
+      },
+      {
+        "surah": 25,
+        "ayah_start": 74,
+        "ayah_end": 74
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "from",
+      "general",
+      "quran",
+      "rabbana",
+      "the"
+    ]
+  },
+  {
+    "id": "everyday_duas",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "everyday-duas",
+    "title": "Short Duas from the Quran for Daily Recitation and Memorization",
+    "category": "General",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/everyday-duas",
+    "reference_count": 9,
+    "references": [
+      {
+        "surah": 21,
+        "ayah_start": 87,
+        "ayah_end": 87
+      },
+      {
+        "surah": 20,
+        "ayah_start": 114,
+        "ayah_end": 114
+      },
+      {
+        "surah": 1,
+        "ayah_start": 1,
+        "ayah_end": 7
+      },
+      {
+        "surah": 7,
+        "ayah_start": 23,
+        "ayah_end": 23
+      },
+      {
+        "surah": 28,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 17,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 2,
+        "ayah_start": 201,
+        "ayah_end": 201
+      },
+      {
+        "surah": 37,
+        "ayah_start": 100,
+        "ayah_end": 100
+      },
+      {
+        "surah": 23,
+        "ayah_start": 118,
+        "ayah_end": 118
+      }
+    ],
+    "tags": [
+      "general"
+    ],
+    "keywords": [
+      "and",
+      "daily",
+      "dua",
+      "duas",
+      "for",
+      "from",
+      "general",
+      "memorization",
+      "quran",
+      "recitation",
+      "short",
+      "the"
+    ]
+  },
+  {
+    "id": "gratitude",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "gratitude",
+    "title": "Duas and Quran Passages for Gratitude",
+    "category": "Gratitude",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/gratitude",
+    "reference_count": 5,
+    "references": [
+      {
+        "surah": 46,
+        "ayah_start": 15,
+        "ayah_end": 15
+      },
+      {
+        "surah": 27,
+        "ayah_start": 19,
+        "ayah_end": 19
+      },
+      {
+        "surah": 7,
+        "ayah_start": 43,
+        "ayah_end": 43
+      },
+      {
+        "surah": 27,
+        "ayah_start": 40,
+        "ayah_end": 40
+      },
+      {
+        "surah": 27,
+        "ayah_start": 15,
+        "ayah_end": 15
+      }
+    ],
+    "tags": [
+      "gratitude"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "for",
+      "gratitude",
+      "passages",
+      "quran"
+    ]
+  },
+  {
+    "id": "guidance",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "guidance",
+    "title": "Duas for Guidance and the Straight Path",
+    "category": "Guidance",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/guidance",
+    "reference_count": 5,
+    "references": [
+      {
+        "surah": 18,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 1,
+        "ayah_start": 1,
+        "ayah_end": 7
+      },
+      {
+        "surah": 28,
+        "ayah_start": 22,
+        "ayah_end": 22
+      },
+      {
+        "surah": 3,
+        "ayah_start": 8,
+        "ayah_end": 9
+      },
+      {
+        "surah": 18,
+        "ayah_start": 10,
+        "ayah_end": 10
+      }
+    ],
+    "tags": [
+      "guidance"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "for",
+      "guidance",
+      "path",
+      "straight",
+      "the"
+    ]
+  },
+  {
+    "id": "hardship",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "hardship",
+    "title": "Duas and Quran Passages for Hardship, Sadness, and Grief",
+    "category": "Hardship",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/hardship",
+    "reference_count": 10,
+    "references": [
+      {
+        "surah": 21,
+        "ayah_start": 87,
+        "ayah_end": 87
+      },
+      {
+        "surah": 12,
+        "ayah_start": 86,
+        "ayah_end": 86
+      },
+      {
+        "surah": 21,
+        "ayah_start": 83,
+        "ayah_end": 83
+      },
+      {
+        "surah": 2,
+        "ayah_start": 250,
+        "ayah_end": 250
+      },
+      {
+        "surah": 7,
+        "ayah_start": 126,
+        "ayah_end": 126
+      },
+      {
+        "surah": 28,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 2,
+        "ayah_start": 156,
+        "ayah_end": 156
+      },
+      {
+        "surah": 12,
+        "ayah_start": 83,
+        "ayah_end": 83
+      },
+      {
+        "surah": 12,
+        "ayah_start": 18,
+        "ayah_end": 18
+      },
+      {
+        "surah": 2,
+        "ayah_start": 286,
+        "ayah_end": 286
+      }
+    ],
+    "tags": [
+      "hardship"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "for",
+      "grief",
+      "hardship",
+      "passages",
+      "quran",
+      "sadness"
+    ]
+  },
+  {
+    "id": "anxiety",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "anxiety",
+    "title": "Duas and Quran Passages for Stress, Depression and Anxiety",
+    "category": "Hardship",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/anxiety",
+    "reference_count": 7,
+    "references": [
+      {
+        "surah": 21,
+        "ayah_start": 87,
+        "ayah_end": 87
+      },
+      {
+        "surah": 12,
+        "ayah_start": 86,
+        "ayah_end": 86
+      },
+      {
+        "surah": 20,
+        "ayah_start": 25,
+        "ayah_end": 28
+      },
+      {
+        "surah": 23,
+        "ayah_start": 97,
+        "ayah_end": 98
+      },
+      {
+        "surah": 12,
+        "ayah_start": 83,
+        "ayah_end": 83
+      },
+      {
+        "surah": 12,
+        "ayah_start": 18,
+        "ayah_end": 18
+      },
+      {
+        "surah": 2,
+        "ayah_start": 286,
+        "ayah_end": 286
+      }
+    ],
+    "tags": [
+      "hardship"
+    ],
+    "keywords": [
+      "and",
+      "anxiety",
+      "depression",
+      "dua",
+      "duas",
+      "for",
+      "hardship",
+      "passages",
+      "quran",
+      "stress"
+    ]
+  },
+  {
+    "id": "fear",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "fear",
+    "title": "Duas for Fear",
+    "category": "Hardship",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/fear",
+    "reference_count": 4,
+    "references": [
+      {
+        "surah": 28,
+        "ayah_start": 21,
+        "ayah_end": 21
+      },
+      {
+        "surah": 10,
+        "ayah_start": 85,
+        "ayah_end": 86
+      },
+      {
+        "surah": 23,
+        "ayah_start": 93,
+        "ayah_end": 94
+      },
+      {
+        "surah": 28,
+        "ayah_start": 22,
+        "ayah_end": 22
+      }
+    ],
+    "tags": [
+      "hardship"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "fear",
+      "for",
+      "hardship"
+    ]
+  },
+  {
+    "id": "pain_sickness",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "pain-sickness",
+    "title": "Duas and Quran Passages for Pain and Sickness (Shifa)",
+    "category": "Health",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/pain-sickness",
+    "reference_count": 3,
+    "references": [
+      {
+        "surah": 21,
+        "ayah_start": 83,
+        "ayah_end": 83
+      },
+      {
+        "surah": 26,
+        "ayah_start": 78,
+        "ayah_end": 85
+      },
+      {
+        "surah": 26,
+        "ayah_start": 80,
+        "ayah_end": 80
+      }
+    ],
+    "tags": [
+      "health"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "for",
+      "health",
+      "pain",
+      "passages",
+      "quran",
+      "shifa",
+      "sickness"
+    ]
+  },
+  {
+    "id": "health",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "health",
+    "title": "Quran Reflections on Healing and Health",
+    "category": "Health",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/health",
+    "reference_count": 1,
+    "references": [
+      {
+        "surah": 26,
+        "ayah_start": 78,
+        "ayah_end": 85
+      }
+    ],
+    "tags": [
+      "health"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "healing",
+      "health",
+      "on",
+      "quran",
+      "reflections"
+    ]
+  },
+  {
+    "id": "jannah",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "jannah",
+    "title": "Duas for Jannah",
+    "category": "Hereafter",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/jannah",
+    "reference_count": 5,
+    "references": [
+      {
+        "surah": 3,
+        "ayah_start": 191,
+        "ayah_end": 194
+      },
+      {
+        "surah": 26,
+        "ayah_start": 87,
+        "ayah_end": 89
+      },
+      {
+        "surah": 66,
+        "ayah_start": 11,
+        "ayah_end": 11
+      },
+      {
+        "surah": 40,
+        "ayah_start": 7,
+        "ayah_end": 9
+      },
+      {
+        "surah": 26,
+        "ayah_start": 78,
+        "ayah_end": 85
+      }
+    ],
+    "tags": [
+      "hereafter",
+      "jannah"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "hereafter",
+      "jannah"
+    ]
+  },
+  {
+    "id": "good_ending",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "good-ending",
+    "title": "Duas for a Good Ending",
+    "category": "Hereafter",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/good-ending",
+    "reference_count": 3,
+    "references": [
+      {
+        "surah": 3,
+        "ayah_start": 191,
+        "ayah_end": 194
+      },
+      {
+        "surah": 7,
+        "ayah_start": 126,
+        "ayah_end": 126
+      },
+      {
+        "surah": 12,
+        "ayah_start": 101,
+        "ayah_end": 101
+      }
+    ],
+    "tags": [
+      "hereafter"
+    ],
+    "keywords": [
+      "a",
+      "dua",
+      "duas",
+      "ending",
+      "for",
+      "good",
+      "hereafter"
+    ]
+  },
+  {
+    "id": "hereafter",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "hereafter",
+    "title": "Duas for the Hereafter",
+    "category": "Hereafter",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/hereafter",
+    "reference_count": 8,
+    "references": [
+      {
+        "surah": 3,
+        "ayah_start": 191,
+        "ayah_end": 194
+      },
+      {
+        "surah": 66,
+        "ayah_start": 8,
+        "ayah_end": 8
+      },
+      {
+        "surah": 26,
+        "ayah_start": 87,
+        "ayah_end": 89
+      },
+      {
+        "surah": 12,
+        "ayah_start": 101,
+        "ayah_end": 101
+      },
+      {
+        "surah": 2,
+        "ayah_start": 201,
+        "ayah_end": 201
+      },
+      {
+        "surah": 25,
+        "ayah_start": 65,
+        "ayah_end": 66
+      },
+      {
+        "surah": 40,
+        "ayah_start": 7,
+        "ayah_end": 9
+      },
+      {
+        "surah": 26,
+        "ayah_start": 78,
+        "ayah_end": 85
+      }
+    ],
+    "tags": [
+      "hereafter"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "hereafter",
+      "the"
+    ]
+  },
+  {
+    "id": "knowledge",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "knowledge",
+    "title": "Duas for Knowledge",
+    "category": "Knowledge",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/knowledge",
+    "reference_count": 3,
+    "references": [
+      {
+        "surah": 20,
+        "ayah_start": 25,
+        "ayah_end": 28
+      },
+      {
+        "surah": 20,
+        "ayah_start": 114,
+        "ayah_end": 114
+      },
+      {
+        "surah": 2,
+        "ayah_start": 32,
+        "ayah_end": 32
+      }
+    ],
+    "tags": [
+      "knowledge"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "knowledge"
+    ]
+  },
+  {
+    "id": "wisdom",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "wisdom",
+    "title": "Duas for Wisdom",
+    "category": "Knowledge",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/wisdom",
+    "reference_count": 5,
+    "references": [
+      {
+        "surah": 20,
+        "ayah_start": 114,
+        "ayah_end": 114
+      },
+      {
+        "surah": 2,
+        "ayah_start": 32,
+        "ayah_end": 32
+      },
+      {
+        "surah": 27,
+        "ayah_start": 19,
+        "ayah_end": 19
+      },
+      {
+        "surah": 26,
+        "ayah_start": 87,
+        "ayah_end": 89
+      },
+      {
+        "surah": 26,
+        "ayah_start": 78,
+        "ayah_end": 85
+      }
+    ],
+    "tags": [
+      "knowledge",
+      "wisdom"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "knowledge",
+      "wisdom"
+    ]
+  },
+  {
+    "id": "prophet_dawud",
+    "type": "quran",
+    "entity_type": "profile",
+    "collection_type": null,
+    "slug": "prophet-dawud",
+    "title": "Dawud and Sulayman&#x27;s Gratitude in the Quran",
+    "category": "Prophetic Duas",
+    "prophet": "Dawud",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-dawud",
+    "reference_count": 1,
+    "references": [
+      {
+        "surah": 27,
+        "ayah_start": 15,
+        "ayah_end": 15
+      }
+    ],
+    "tags": [
+      "dawud",
+      "gratitude",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "and",
+      "dawud",
+      "dua",
+      "gratitude",
+      "in",
+      "prophetic duas",
+      "quran",
+      "s",
+      "sulayman",
+      "the",
+      "x"
+    ]
+  },
+  {
+    "id": "prophet_ismail",
+    "type": "quran",
+    "entity_type": "dua",
+    "collection_type": null,
+    "slug": "prophet-ismail",
+    "title": "Dua of Ibrahim and Ismail at the Ka&#x27;bah",
+    "category": "Prophetic Duas",
+    "prophet": "Ismail",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-ismail",
+    "reference_count": 1,
+    "references": [
+      {
+        "surah": 2,
+        "ayah_start": 127,
+        "ayah_end": 129
+      }
+    ],
+    "tags": [
+      "ismail",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "and",
+      "at",
+      "bah",
+      "dua",
+      "ibrahim",
+      "ismail",
+      "ka",
+      "of",
+      "prophetic duas",
+      "the",
+      "x"
+    ]
+  },
+  {
+    "id": "adam_hawwa",
+    "type": "quran",
+    "entity_type": "dua",
+    "collection_type": null,
+    "slug": "adam-hawwa",
+    "title": "Dua of Prophet Adam and Hawwa",
+    "category": "Prophetic Duas",
+    "prophet": "Adam",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/adam-hawwa",
+    "reference_count": 1,
+    "references": [
+      {
+        "surah": 7,
+        "ayah_start": 23,
+        "ayah_end": 23
+      }
+    ],
+    "tags": [
+      "adam",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "adam",
+      "and",
+      "dua",
+      "hawwa",
+      "of",
+      "prophet",
+      "prophetic duas"
+    ]
+  },
+  {
+    "id": "prophet_ayyub",
+    "type": "quran",
+    "entity_type": "dua",
+    "collection_type": null,
+    "slug": "prophet-ayyub",
+    "title": "Dua of Prophet Ayyub",
+    "category": "Prophetic Duas",
+    "prophet": "Ayyub",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-ayyub",
+    "reference_count": 1,
+    "references": [
+      {
+        "surah": 21,
+        "ayah_start": 83,
+        "ayah_end": 83
+      }
+    ],
+    "tags": [
+      "ayyub",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "ayyub",
+      "dua",
+      "of",
+      "prophet",
+      "prophetic duas"
+    ]
+  },
+  {
+    "id": "prophet_yunus",
+    "type": "quran",
+    "entity_type": "dua",
+    "collection_type": null,
+    "slug": "prophet-yunus",
+    "title": "Dua of Prophet Yunus",
+    "category": "Prophetic Duas",
+    "prophet": "Yunus",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-yunus",
+    "reference_count": 1,
+    "references": [
+      {
+        "surah": 21,
+        "ayah_start": 87,
+        "ayah_end": 87
+      }
+    ],
+    "tags": [
+      "prophetic duas",
+      "yunus"
+    ],
+    "keywords": [
+      "dua",
+      "of",
+      "prophet",
+      "prophetic duas",
+      "yunus"
+    ]
+  },
+  {
+    "id": "prophet_yusuf",
+    "type": "quran",
+    "entity_type": "dua",
+    "collection_type": null,
+    "slug": "prophet-yusuf",
+    "title": "Dua of Prophet Yusuf",
+    "category": "Prophetic Duas",
+    "prophet": "Yusuf",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-yusuf",
+    "reference_count": 1,
+    "references": [
+      {
+        "surah": 12,
+        "ayah_start": 101,
+        "ayah_end": 101
+      }
+    ],
+    "tags": [
+      "prophetic duas",
+      "yusuf"
+    ],
+    "keywords": [
+      "dua",
+      "of",
+      "prophet",
+      "prophetic duas",
+      "yusuf"
+    ]
+  },
+  {
+    "id": "prophet_isa",
+    "type": "quran",
+    "entity_type": "profile",
+    "collection_type": null,
+    "slug": "prophet-isa",
+    "title": "Duas Connected to Prophet Isa",
+    "category": "Prophetic Duas",
+    "prophet": "Isa",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-isa",
+    "reference_count": 3,
+    "references": [
+      {
+        "surah": 3,
+        "ayah_start": 52,
+        "ayah_end": 53
+      },
+      {
+        "surah": 5,
+        "ayah_start": 118,
+        "ayah_end": 118
+      },
+      {
+        "surah": 5,
+        "ayah_start": 114,
+        "ayah_end": 114
+      }
+    ],
+    "tags": [
+      "isa",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "connected",
+      "dua",
+      "duas",
+      "isa",
+      "prophet",
+      "prophetic duas",
+      "to"
+    ]
+  },
+  {
+    "id": "prophet_sulayman",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "prophet-sulayman",
+    "title": "Duas and Gratitude of Prophet Sulayman",
+    "category": "Prophetic Duas",
+    "prophet": "Sulayman",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-sulayman",
+    "reference_count": 3,
+    "references": [
+      {
+        "surah": 27,
+        "ayah_start": 19,
+        "ayah_end": 19
+      },
+      {
+        "surah": 27,
+        "ayah_start": 40,
+        "ayah_end": 40
+      },
+      {
+        "surah": 27,
+        "ayah_start": 15,
+        "ayah_end": 15
+      }
+    ],
+    "tags": [
+      "gratitude",
+      "prophetic duas",
+      "sulayman"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "gratitude",
+      "of",
+      "prophet",
+      "prophetic duas",
+      "sulayman"
+    ]
+  },
+  {
+    "id": "prophet_shuayb",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "prophet-shuayb",
+    "title": "Duas and Trust of Prophet Shuayb",
+    "category": "Prophetic Duas",
+    "prophet": "Shuayb",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-shuayb",
+    "reference_count": 2,
+    "references": [
+      {
+        "surah": 11,
+        "ayah_start": 88,
+        "ayah_end": 88
+      },
+      {
+        "surah": 7,
+        "ayah_start": 89,
+        "ayah_end": 89
+      }
+    ],
+    "tags": [
+      "prophetic duas",
+      "shuayb"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "of",
+      "prophet",
+      "prophetic duas",
+      "shuayb",
+      "trust"
+    ]
+  },
+  {
+    "id": "prophet_nuh_forgiveness",
+    "type": "quran",
+    "entity_type": "dua",
+    "collection_type": null,
+    "slug": "prophet-nuh-forgiveness",
+    "title": "Duas of Nuh for Forgiveness",
+    "category": "Prophetic Duas",
+    "prophet": "Nuh Forgiveness",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-nuh-forgiveness",
+    "reference_count": 2,
+    "references": [
+      {
+        "surah": 71,
+        "ayah_start": 28,
+        "ayah_end": 28
+      },
+      {
+        "surah": 11,
+        "ayah_start": 47,
+        "ayah_end": 47
+      }
+    ],
+    "tags": [
+      "forgiveness",
+      "nuh forgiveness",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "forgiveness",
+      "nuh",
+      "nuh forgiveness",
+      "of",
+      "prophetic duas"
+    ]
+  },
+  {
+    "id": "prophet_ibrahim",
+    "type": "quran",
+    "entity_type": "dua",
+    "collection_type": null,
+    "slug": "prophet-ibrahim",
+    "title": "Duas of Prophet Ibrahim",
+    "category": "Prophetic Duas",
+    "prophet": "Ibrahim",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-ibrahim",
+    "reference_count": 8,
+    "references": [
+      {
+        "surah": 60,
+        "ayah_start": 4,
+        "ayah_end": 5
+      },
+      {
+        "surah": 26,
+        "ayah_start": 87,
+        "ayah_end": 89
+      },
+      {
+        "surah": 2,
+        "ayah_start": 126,
+        "ayah_end": 126
+      },
+      {
+        "surah": 37,
+        "ayah_start": 100,
+        "ayah_end": 100
+      },
+      {
+        "surah": 2,
+        "ayah_start": 127,
+        "ayah_end": 128
+      },
+      {
+        "surah": 14,
+        "ayah_start": 40,
+        "ayah_end": 41
+      },
+      {
+        "surah": 14,
+        "ayah_start": 35,
+        "ayah_end": 38
+      },
+      {
+        "surah": 26,
+        "ayah_start": 78,
+        "ayah_end": 85
+      }
+    ],
+    "tags": [
+      "ibrahim",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "ibrahim",
+      "of",
+      "prophet",
+      "prophetic duas"
+    ]
+  },
+  {
+    "id": "prophet_lut",
+    "type": "quran",
+    "entity_type": "dua",
+    "collection_type": null,
+    "slug": "prophet-lut",
+    "title": "Duas of Prophet Lut",
+    "category": "Prophetic Duas",
+    "prophet": "Lut",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-lut",
+    "reference_count": 2,
+    "references": [
+      {
+        "surah": 26,
+        "ayah_start": 169,
+        "ayah_end": 169
+      },
+      {
+        "surah": 29,
+        "ayah_start": 30,
+        "ayah_end": 30
+      }
+    ],
+    "tags": [
+      "lut",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "lut",
+      "of",
+      "prophet",
+      "prophetic duas"
+    ]
+  },
+  {
+    "id": "prophet_muhammad",
+    "type": "quran",
+    "entity_type": "profile",
+    "collection_type": null,
+    "slug": "prophet-muhammad",
+    "title": "Duas of Prophet Muhammad in the Quran",
+    "category": "Prophetic Duas",
+    "prophet": "Muhammad",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-muhammad",
+    "reference_count": 5,
+    "references": [
+      {
+        "surah": 20,
+        "ayah_start": 114,
+        "ayah_end": 114
+      },
+      {
+        "surah": 17,
+        "ayah_start": 80,
+        "ayah_end": 80
+      },
+      {
+        "surah": 21,
+        "ayah_start": 112,
+        "ayah_end": 112
+      },
+      {
+        "surah": 23,
+        "ayah_start": 97,
+        "ayah_end": 98
+      },
+      {
+        "surah": 23,
+        "ayah_start": 118,
+        "ayah_end": 118
+      }
+    ],
+    "tags": [
+      "muhammad",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "in",
+      "muhammad",
+      "of",
+      "prophet",
+      "prophetic duas",
+      "quran",
+      "the"
+    ]
+  },
+  {
+    "id": "prophet_musa",
+    "type": "quran",
+    "entity_type": "dua",
+    "collection_type": null,
+    "slug": "prophet-musa",
+    "title": "Duas of Prophet Musa",
+    "category": "Prophetic Duas",
+    "prophet": "Musa",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-musa",
+    "reference_count": 9,
+    "references": [
+      {
+        "surah": 5,
+        "ayah_start": 25,
+        "ayah_end": 25
+      },
+      {
+        "surah": 20,
+        "ayah_start": 25,
+        "ayah_end": 28
+      },
+      {
+        "surah": 28,
+        "ayah_start": 21,
+        "ayah_end": 21
+      },
+      {
+        "surah": 7,
+        "ayah_start": 151,
+        "ayah_end": 151
+      },
+      {
+        "surah": 7,
+        "ayah_start": 155,
+        "ayah_end": 156
+      },
+      {
+        "surah": 28,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 28,
+        "ayah_start": 22,
+        "ayah_end": 22
+      },
+      {
+        "surah": 28,
+        "ayah_start": 16,
+        "ayah_end": 16
+      },
+      {
+        "surah": 28,
+        "ayah_start": 17,
+        "ayah_end": 17
+      }
+    ],
+    "tags": [
+      "musa",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "musa",
+      "of",
+      "prophet",
+      "prophetic duas"
+    ]
+  },
+  {
+    "id": "prophet_nuh",
+    "type": "quran",
+    "entity_type": "dua",
+    "collection_type": null,
+    "slug": "prophet-nuh",
+    "title": "Duas of Prophet Nuh",
+    "category": "Prophetic Duas",
+    "prophet": "Nuh",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-nuh",
+    "reference_count": 5,
+    "references": [
+      {
+        "surah": 71,
+        "ayah_start": 28,
+        "ayah_end": 28
+      },
+      {
+        "surah": 11,
+        "ayah_start": 47,
+        "ayah_end": 47
+      },
+      {
+        "surah": 11,
+        "ayah_start": 41,
+        "ayah_end": 41
+      },
+      {
+        "surah": 23,
+        "ayah_start": 28,
+        "ayah_end": 29
+      },
+      {
+        "surah": 54,
+        "ayah_start": 10,
+        "ayah_end": 10
+      }
+    ],
+    "tags": [
+      "nuh",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "nuh",
+      "of",
+      "prophet",
+      "prophetic duas"
+    ]
+  },
+  {
+    "id": "prophet_zakariya",
+    "type": "quran",
+    "entity_type": "dua",
+    "collection_type": null,
+    "slug": "prophet-zakariya",
+    "title": "Duas of Prophet Zakariya",
+    "category": "Prophetic Duas",
+    "prophet": "Zakariya",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-zakariya",
+    "reference_count": 3,
+    "references": [
+      {
+        "surah": 19,
+        "ayah_start": 4,
+        "ayah_end": 5
+      },
+      {
+        "surah": 21,
+        "ayah_start": 89,
+        "ayah_end": 89
+      },
+      {
+        "surah": 3,
+        "ayah_start": 38,
+        "ayah_end": 38
+      }
+    ],
+    "tags": [
+      "prophetic duas",
+      "zakariya"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "of",
+      "prophet",
+      "prophetic duas",
+      "zakariya"
+    ]
+  },
+  {
+    "id": "prophet_harun",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "prophet-harun",
+    "title": "Musa&#x27;s Dua for Harun",
+    "category": "Prophetic Duas",
+    "prophet": "Harun",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-harun",
+    "reference_count": 1,
+    "references": [
+      {
+        "surah": 20,
+        "ayah_start": 29,
+        "ayah_end": 32
+      }
+    ],
+    "tags": [
+      "harun",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "dua",
+      "for",
+      "harun",
+      "musa",
+      "prophetic duas",
+      "s",
+      "x"
+    ]
+  },
+  {
+    "id": "prophet_al_yasa",
+    "type": "quran",
+    "entity_type": "profile",
+    "collection_type": null,
+    "slug": "prophet-al-yasa",
+    "title": "Prophet Al-Yasa in the Quran",
+    "category": "Prophetic Duas",
+    "prophet": "Al Yasa",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-al-yasa",
+    "reference_count": 2,
+    "references": [
+      {
+        "surah": 38,
+        "ayah_start": 48,
+        "ayah_end": 48
+      },
+      {
+        "surah": 6,
+        "ayah_start": 86,
+        "ayah_end": 86
+      }
+    ],
+    "tags": [
+      "al yasa",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "al",
+      "al yasa",
+      "dua",
+      "in",
+      "prophet",
+      "prophetic duas",
+      "quran",
+      "the",
+      "yasa"
+    ]
+  },
+  {
+    "id": "prophet_ayyub_illness",
+    "type": "quran",
+    "entity_type": "profile",
+    "collection_type": null,
+    "slug": "prophet-ayyub-illness",
+    "title": "Prophet Ayyub&#x27;s Illness and Dua in the Quran",
+    "category": "Prophetic Duas",
+    "prophet": "Ayyub Illness",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-ayyub-illness",
+    "reference_count": 2,
+    "references": [
+      {
+        "surah": 21,
+        "ayah_start": 83,
+        "ayah_end": 84
+      },
+      {
+        "surah": 38,
+        "ayah_start": 41,
+        "ayah_end": 44
+      }
+    ],
+    "tags": [
+      "ayyub illness",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "and",
+      "ayyub",
+      "ayyub illness",
+      "dua",
+      "illness",
+      "in",
+      "prophet",
+      "prophetic duas",
+      "quran",
+      "s",
+      "the",
+      "x"
+    ]
+  },
+  {
+    "id": "prophet_dhul_kifl",
+    "type": "quran",
+    "entity_type": "profile",
+    "collection_type": null,
+    "slug": "prophet-dhul-kifl",
+    "title": "Prophet Dhul-Kifl in the Quran",
+    "category": "Prophetic Duas",
+    "prophet": "Dhul Kifl",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-dhul-kifl",
+    "reference_count": 2,
+    "references": [
+      {
+        "surah": 21,
+        "ayah_start": 85,
+        "ayah_end": 86
+      },
+      {
+        "surah": 38,
+        "ayah_start": 48,
+        "ayah_end": 48
+      }
+    ],
+    "tags": [
+      "dhul kifl",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "dhul",
+      "dhul kifl",
+      "dua",
+      "in",
+      "kifl",
+      "prophet",
+      "prophetic duas",
+      "quran",
+      "the"
+    ]
+  },
+  {
+    "id": "prophet_hud",
+    "type": "quran",
+    "entity_type": "profile",
+    "collection_type": null,
+    "slug": "prophet-hud",
+    "title": "Prophet Hud&#x27;s Declaration of Trust in Allah",
+    "category": "Prophetic Duas",
+    "prophet": "Hud",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-hud",
+    "reference_count": 1,
+    "references": [
+      {
+        "surah": 11,
+        "ayah_start": 56,
+        "ayah_end": 56
+      }
+    ],
+    "tags": [
+      "hud",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "allah",
+      "declaration",
+      "dua",
+      "hud",
+      "in",
+      "of",
+      "prophet",
+      "prophetic duas",
+      "s",
+      "trust",
+      "x"
+    ]
+  },
+  {
+    "id": "prophet_idris",
+    "type": "quran",
+    "entity_type": "profile",
+    "collection_type": null,
+    "slug": "prophet-idris",
+    "title": "Prophet Idris in the Quran",
+    "category": "Prophetic Duas",
+    "prophet": "Idris",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-idris",
+    "reference_count": 2,
+    "references": [
+      {
+        "surah": 19,
+        "ayah_start": 56,
+        "ayah_end": 57
+      },
+      {
+        "surah": 21,
+        "ayah_start": 85,
+        "ayah_end": 85
+      }
+    ],
+    "tags": [
+      "idris",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "dua",
+      "idris",
+      "in",
+      "prophet",
+      "prophetic duas",
+      "quran",
+      "the"
+    ]
+  },
+  {
+    "id": "prophet_ilyas",
+    "type": "quran",
+    "entity_type": "profile",
+    "collection_type": null,
+    "slug": "prophet-ilyas",
+    "title": "Prophet Ilyas in the Quran",
+    "category": "Prophetic Duas",
+    "prophet": "Ilyas",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-ilyas",
+    "reference_count": 1,
+    "references": [
+      {
+        "surah": 37,
+        "ayah_start": 123,
+        "ayah_end": 132
+      }
+    ],
+    "tags": [
+      "ilyas",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "dua",
+      "ilyas",
+      "in",
+      "prophet",
+      "prophetic duas",
+      "quran",
+      "the"
+    ]
+  },
+  {
+    "id": "prophet_ishaq",
+    "type": "quran",
+    "entity_type": "profile",
+    "collection_type": null,
+    "slug": "prophet-ishaq",
+    "title": "Prophet Ishaq in the Quran",
+    "category": "Prophetic Duas",
+    "prophet": "Ishaq",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-ishaq",
+    "reference_count": 2,
+    "references": [
+      {
+        "surah": 37,
+        "ayah_start": 112,
+        "ayah_end": 113
+      },
+      {
+        "surah": 11,
+        "ayah_start": 71,
+        "ayah_end": 73
+      }
+    ],
+    "tags": [
+      "ishaq",
+      "prophetic duas"
+    ],
+    "keywords": [
+      "dua",
+      "in",
+      "ishaq",
+      "prophet",
+      "prophetic duas",
+      "quran",
+      "the"
+    ]
+  },
+  {
+    "id": "prophet_salih",
+    "type": "quran",
+    "entity_type": "profile",
+    "collection_type": null,
+    "slug": "prophet-salih",
+    "title": "Prophet Salih in the Quran",
+    "category": "Prophetic Duas",
+    "prophet": "Salih",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-salih",
+    "reference_count": 2,
+    "references": [
+      {
+        "surah": 26,
+        "ayah_start": 142,
+        "ayah_end": 159
+      },
+      {
+        "surah": 11,
+        "ayah_start": 61,
+        "ayah_end": 61
+      }
+    ],
+    "tags": [
+      "prophetic duas",
+      "salih"
+    ],
+    "keywords": [
+      "dua",
+      "in",
+      "prophet",
+      "prophetic duas",
+      "quran",
+      "salih",
+      "the"
+    ]
+  },
+  {
+    "id": "prophet_yahya",
+    "type": "quran",
+    "entity_type": "profile",
+    "collection_type": null,
+    "slug": "prophet-yahya",
+    "title": "Prophet Yahya in the Quran",
+    "category": "Prophetic Duas",
+    "prophet": "Yahya",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-yahya",
+    "reference_count": 2,
+    "references": [
+      {
+        "surah": 19,
+        "ayah_start": 7,
+        "ayah_end": 15
+      },
+      {
+        "surah": 3,
+        "ayah_start": 38,
+        "ayah_end": 38
+      }
+    ],
+    "tags": [
+      "prophetic duas",
+      "yahya"
+    ],
+    "keywords": [
+      "dua",
+      "in",
+      "prophet",
+      "prophetic duas",
+      "quran",
+      "the",
+      "yahya"
+    ]
+  },
+  {
+    "id": "prophet_yaqub",
+    "type": "quran",
+    "entity_type": "profile",
+    "collection_type": null,
+    "slug": "prophet-yaqub",
+    "title": "Prophet Yaqub&#x27;s Patience and Duas",
+    "category": "Prophetic Duas",
+    "prophet": "Yaqub",
+    "source": "quran.com",
+    "url": "https://quran.com/duas/prophet-yaqub",
+    "reference_count": 4,
+    "references": [
+      {
+        "surah": 12,
+        "ayah_start": 83,
+        "ayah_end": 83
+      },
+      {
+        "surah": 12,
+        "ayah_start": 67,
+        "ayah_end": 67
+      },
+      {
+        "surah": 12,
+        "ayah_start": 18,
+        "ayah_end": 18
+      },
+      {
+        "surah": 12,
+        "ayah_start": 86,
+        "ayah_end": 86
+      }
+    ],
+    "tags": [
+      "patience",
+      "prophetic duas",
+      "yaqub"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "patience",
+      "prophet",
+      "prophetic duas",
+      "s",
+      "x",
+      "yaqub"
+    ]
+  },
+  {
+    "id": "oppression",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "oppression",
+    "title": "Duas Against Oppression",
+    "category": "Protection",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/oppression",
+    "reference_count": 4,
+    "references": [
+      {
+        "surah": 28,
+        "ayah_start": 21,
+        "ayah_end": 21
+      },
+      {
+        "surah": 10,
+        "ayah_start": 85,
+        "ayah_end": 86
+      },
+      {
+        "surah": 29,
+        "ayah_start": 30,
+        "ayah_end": 30
+      },
+      {
+        "surah": 54,
+        "ayah_start": 10,
+        "ayah_end": 10
+      }
+    ],
+    "tags": [
+      "protection"
+    ],
+    "keywords": [
+      "against",
+      "dua",
+      "duas",
+      "oppression",
+      "protection"
+    ]
+  },
+  {
+    "id": "protection",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "protection",
+    "title": "Duas for Protection from Evil and Shaytan",
+    "category": "Protection",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/protection",
+    "reference_count": 6,
+    "references": [
+      {
+        "surah": 10,
+        "ayah_start": 85,
+        "ayah_end": 86
+      },
+      {
+        "surah": 28,
+        "ayah_start": 21,
+        "ayah_end": 21
+      },
+      {
+        "surah": 29,
+        "ayah_start": 30,
+        "ayah_end": 30
+      },
+      {
+        "surah": 23,
+        "ayah_start": 97,
+        "ayah_end": 98
+      },
+      {
+        "surah": 66,
+        "ayah_start": 11,
+        "ayah_end": 11
+      },
+      {
+        "surah": 23,
+        "ayah_start": 93,
+        "ayah_end": 94
+      }
+    ],
+    "tags": [
+      "protection"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "evil",
+      "for",
+      "from",
+      "protection",
+      "shaytan"
+    ]
+  },
+  {
+    "id": "protection_from_hellfire",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "protection-from-hellfire",
+    "title": "Duas for Protection from Hellfire",
+    "category": "Protection",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/protection-from-hellfire",
+    "reference_count": 5,
+    "references": [
+      {
+        "surah": 3,
+        "ayah_start": 191,
+        "ayah_end": 194
+      },
+      {
+        "surah": 3,
+        "ayah_start": 16,
+        "ayah_end": 16
+      },
+      {
+        "surah": 2,
+        "ayah_start": 201,
+        "ayah_end": 201
+      },
+      {
+        "surah": 25,
+        "ayah_start": 65,
+        "ayah_end": 66
+      },
+      {
+        "surah": 40,
+        "ayah_start": 7,
+        "ayah_end": 9
+      }
+    ],
+    "tags": [
+      "protection"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "for",
+      "from",
+      "hellfire",
+      "protection"
+    ]
+  },
+  {
+    "id": "black_magic_protection",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "black-magic-protection",
+    "title": "Quran Verses and Duas for Ruqyah Protection",
+    "category": "Protection",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/black-magic-protection",
+    "reference_count": 12,
+    "references": [
+      {
+        "surah": 20,
+        "ayah_start": 69,
+        "ayah_end": 69
+      },
+      {
+        "surah": 2,
+        "ayah_start": 102,
+        "ayah_end": 102
+      },
+      {
+        "surah": 10,
+        "ayah_start": 57,
+        "ayah_end": 57
+      },
+      {
+        "surah": 17,
+        "ayah_start": 82,
+        "ayah_end": 82
+      },
+      {
+        "surah": 10,
+        "ayah_start": 81,
+        "ayah_end": 82
+      },
+      {
+        "surah": 1,
+        "ayah_start": 1,
+        "ayah_end": 7
+      },
+      {
+        "surah": 7,
+        "ayah_start": 117,
+        "ayah_end": 122
+      },
+      {
+        "surah": 2,
+        "ayah_start": 285,
+        "ayah_end": 286
+      },
+      {
+        "surah": 68,
+        "ayah_start": 51,
+        "ayah_end": 52
+      },
+      {
+        "surah": 112,
+        "ayah_start": 1,
+        "ayah_end": 4
+      },
+      {
+        "surah": 113,
+        "ayah_start": 1,
+        "ayah_end": 5
+      },
+      {
+        "surah": 2,
+        "ayah_start": 255,
+        "ayah_end": 255
+      }
+    ],
+    "tags": [
+      "protection"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "for",
+      "protection",
+      "quran",
+      "ruqyah",
+      "verses"
+    ]
+  },
+  {
+    "id": "evil_eye",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "evil-eye",
+    "title": "Quran Verses for Protection from the Evil Eye",
+    "category": "Protection",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/evil-eye",
+    "reference_count": 2,
+    "references": [
+      {
+        "surah": 113,
+        "ayah_start": 1,
+        "ayah_end": 5
+      },
+      {
+        "surah": 114,
+        "ayah_start": 1,
+        "ayah_end": 6
+      }
+    ],
+    "tags": [
+      "protection"
+    ],
+    "keywords": [
+      "dua",
+      "evil",
+      "eye",
+      "for",
+      "from",
+      "protection",
+      "quran",
+      "the",
+      "verses"
+    ]
+  },
+  {
+    "id": "rabbi_inni_lima_anzalta",
+    "type": "quran",
+    "entity_type": "dua",
+    "collection_type": null,
+    "slug": "rabbi-inni-lima-anzalta",
+    "title": "Dua of Musa for Rizq and Need",
+    "category": "Provision",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/rabbi-inni-lima-anzalta",
+    "reference_count": 1,
+    "references": [
+      {
+        "surah": 28,
+        "ayah_start": 24,
+        "ayah_end": 24
+      }
+    ],
+    "tags": [
+      "provision"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "for",
+      "musa",
+      "need",
+      "of",
+      "provision",
+      "rizq"
+    ]
+  },
+  {
+    "id": "provision_wealth",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "provision-wealth",
+    "title": "Quran Verses and Duas for Provision (Rizq) and Wealth",
+    "category": "Provision",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/provision-wealth",
+    "reference_count": 7,
+    "references": [
+      {
+        "surah": 65,
+        "ayah_start": 3,
+        "ayah_end": 3
+      },
+      {
+        "surah": 14,
+        "ayah_start": 37,
+        "ayah_end": 38
+      },
+      {
+        "surah": 2,
+        "ayah_start": 126,
+        "ayah_end": 126
+      },
+      {
+        "surah": 28,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 2,
+        "ayah_start": 201,
+        "ayah_end": 201
+      },
+      {
+        "surah": 2,
+        "ayah_start": 286,
+        "ayah_end": 286
+      },
+      {
+        "surah": 3,
+        "ayah_start": 26,
+        "ayah_end": 27
+      }
+    ],
+    "tags": [
+      "provision"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "for",
+      "provision",
+      "quran",
+      "rizq",
+      "verses",
+      "wealth"
+    ]
+  },
+  {
+    "id": "exam_success",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "exam-success",
+    "title": "Duas for Exam Success",
+    "category": "Success",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/exam-success",
+    "reference_count": 4,
+    "references": [
+      {
+        "surah": 20,
+        "ayah_start": 25,
+        "ayah_end": 28
+      },
+      {
+        "surah": 28,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 3,
+        "ayah_start": 8,
+        "ayah_end": 9
+      },
+      {
+        "surah": 20,
+        "ayah_start": 114,
+        "ayah_end": 114
+      }
+    ],
+    "tags": [
+      "success"
+    ],
+    "keywords": [
+      "dua",
+      "duas",
+      "exam",
+      "for",
+      "success"
+    ]
+  },
+  {
+    "id": "success_barakah",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "success-barakah",
+    "title": "Duas for Success and Barakah",
+    "category": "Success",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/success-barakah",
+    "reference_count": 6,
+    "references": [
+      {
+        "surah": 3,
+        "ayah_start": 191,
+        "ayah_end": 194
+      },
+      {
+        "surah": 46,
+        "ayah_start": 15,
+        "ayah_end": 15
+      },
+      {
+        "surah": 27,
+        "ayah_start": 19,
+        "ayah_end": 19
+      },
+      {
+        "surah": 28,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 2,
+        "ayah_start": 201,
+        "ayah_end": 201
+      },
+      {
+        "surah": 2,
+        "ayah_start": 127,
+        "ayah_end": 128
+      }
+    ],
+    "tags": [
+      "success"
+    ],
+    "keywords": [
+      "and",
+      "barakah",
+      "dua",
+      "duas",
+      "for",
+      "success"
+    ]
+  },
+  {
+    "id": "work_career",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "work-career",
+    "title": "Duas for Work and Career",
+    "category": "Success",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/work-career",
+    "reference_count": 4,
+    "references": [
+      {
+        "surah": 20,
+        "ayah_start": 25,
+        "ayah_end": 28
+      },
+      {
+        "surah": 28,
+        "ayah_start": 24,
+        "ayah_end": 24
+      },
+      {
+        "surah": 27,
+        "ayah_start": 19,
+        "ayah_end": 19
+      },
+      {
+        "surah": 46,
+        "ayah_start": 15,
+        "ayah_end": 15
+      }
+    ],
+    "tags": [
+      "success"
+    ],
+    "keywords": [
+      "and",
+      "career",
+      "dua",
+      "duas",
+      "for",
+      "success",
+      "work"
+    ]
+  },
+  {
+    "id": "travel",
+    "type": "quran",
+    "entity_type": "collection",
+    "collection_type": "topic",
+    "slug": "travel",
+    "title": "Quran Verses and Duas for Travel and Journey Safety",
+    "category": "Travel",
+    "prophet": null,
+    "source": "quran.com",
+    "url": "https://quran.com/duas/travel",
+    "reference_count": 3,
+    "references": [
+      {
+        "surah": 43,
+        "ayah_start": 13,
+        "ayah_end": 14
+      },
+      {
+        "surah": 28,
+        "ayah_start": 21,
+        "ayah_end": 21
+      },
+      {
+        "surah": 11,
+        "ayah_start": 41,
+        "ayah_end": 41
+      }
+    ],
+    "tags": [
+      "travel"
+    ],
+    "keywords": [
+      "and",
+      "dua",
+      "duas",
+      "for",
+      "journey",
+      "quran",
+      "safety",
+      "travel",
+      "verses"
+    ]
+  }
+]

@@ -1,5 +1,4 @@
 // entry/src/main/ets/core/NavHelper.ets
-
 import { STORAGE_KEY_NAV_DIRECTION } from './StorageKeys';
 
 /**

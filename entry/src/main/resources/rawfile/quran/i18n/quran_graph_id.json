@@ -1,0 +1,402 @@
+{
+  "language": "en",
+  "collections": {
+    "acceptance": {
+      "title": "Duas untuk Penerimaan Perbuatan Baik",
+      "description": "Duas untuk Penerimaan Perbuatan Baik"
+    },
+    "anxiety": {
+      "title": "Duas dan Ayat Quran untuk Stres, Depresi dan Kecemasan",
+      "description": "Duas dan Ayat Quran untuk Stres, Depresi dan Kecemasan"
+    },
+    "arabic_english_transliteration": {
+      "title": "Quran Duas dalam bahasa Arab, Inggris, dan Transliterasi",
+      "description": "Quran Duas dalam bahasa Arab, Inggris, dan Transliterasi"
+    },
+    "believers": {
+      "title": "Duas untuk Orang Beriman",
+      "description": "Duas untuk Orang Beriman"
+    },
+    "benefit_from_quran": {
+      "title": "Duas untuk Belajar, Menghafal, dan Memanfaatkan Al-Qur'an",
+      "description": "Duas untuk Belajar, Menghafal, dan Memanfaatkan Al-Qur'an"
+    },
+    "black_magic_protection": {
+      "title": "Ayat Quran dan Duas untuk Perlindungan Ruqyah",
+      "description": "Ayat Quran dan Duas untuk Perlindungan Ruqyah"
+    },
+    "character": {
+      "title": "Duas untuk Karakter Cantik",
+      "description": "Duas untuk Karakter Cantik"
+    },
+    "children": {
+      "title": "Duas untuk Anak-anak dalam Al-Qur'an",
+      "description": "Duas untuk Anak-anak dalam Al-Qur'an"
+    },
+    "confidence": {
+      "title": "Duas untuk Keyakinan",
+      "description": "Duas untuk Keyakinan"
+    },
+    "daily_life": {
+      "title": "Duas dari Quran untuk Kehidupan Sehari-hari",
+      "description": "Duas dari Quran untuk Kehidupan Sehari-hari"
+    },
+    "day_night": {
+      "title": "Renungan Al Quran Siang dan Malam",
+      "description": "Renungan Al Quran Siang dan Malam"
+    },
+    "deceased": {
+      "title": "Duas untuk Orang Mati",
+      "description": "Duas untuk Orang Mati"
+    },
+    "enemies": {
+      "title": "Duas Melawan Musuh dan Orang Berbahaya",
+      "description": "Duas Melawan Musuh dan Orang Berbahaya"
+    },
+    "everyday_duas": {
+      "title": "Duas Pendek dari Al-Qur'an untuk Bacaan dan Hafalan Harian",
+      "description": "Duas Pendek dari Al-Qur'an untuk Bacaan dan Hafalan Harian"
+    },
+    "evil_eye": {
+      "title": "Ayat Alquran untuk Perlindungan dari Mata Jahat",
+      "description": "Ayat Alquran untuk Perlindungan dari Mata Jahat"
+    },
+    "exam_success": {
+      "title": "Duas untuk Sukses Ujian",
+      "description": "Duas untuk Sukses Ujian"
+    },
+    "family": {
+      "title": "Duas untuk Keluarga, Pernikahan, dan Pasangan",
+      "description": "Duas untuk Keluarga, Pernikahan, dan Pasangan"
+    },
+    "fasting": {
+      "title": "Ayat Quran tentang Ramadhan dan Puasa",
+      "description": "Ayat Quran tentang Ramadhan dan Puasa"
+    },
+    "fear": {
+      "title": "Duas untuk Ketakutan",
+      "description": "Duas untuk Ketakutan"
+    },
+    "forgiveness": {
+      "title": "Duas untuk Pengampunan",
+      "description": "Duas untuk Pengampunan"
+    },
+    "forgiveness_of_sins": {
+      "title": "Doa Pengampunan Dosa",
+      "description": "Doa Pengampunan Dosa"
+    },
+    "friends_loved_ones": {
+      "title": "Duas untuk Teman dan Orang Tercinta",
+      "description": "Duas untuk Teman dan Orang Tercinta"
+    },
+    "good_ending": {
+      "title": "Duas untuk Akhir yang Baik",
+      "description": "Duas untuk Akhir yang Baik"
+    },
+    "gratitude": {
+      "title": "Duas dan Ayat Quran untuk Syukur",
+      "description": "Duas dan Ayat Quran untuk Syukur"
+    },
+    "guidance": {
+      "title": "Duas untuk Bimbingan dan Jalan Lurus",
+      "description": "Duas untuk Bimbingan dan Jalan Lurus"
+    },
+    "hajj_umrah": {
+      "title": "Duas untuk Haji & Umrah",
+      "description": "Duas untuk Haji & Umrah"
+    },
+    "hardship": {
+      "title": "Duas dan Ayat Quran untuk Kesulitan, Kesedihan, dan Duka",
+      "description": "Duas dan Ayat Quran untuk Kesulitan, Kesedihan, dan Duka"
+    },
+    "health": {
+      "title": "Refleksi Quran tentang Penyembuhan dan Kesehatan",
+      "description": "Refleksi Quran tentang Penyembuhan dan Kesehatan"
+    },
+    "heart": {
+      "title": "Doa untuk Hati dan Hati yang Bersih",
+      "description": "Doa untuk Hati dan Hati yang Bersih"
+    },
+    "heart_healing": {
+      "title": "Doa untuk Penyakit Jantung",
+      "description": "Doa untuk Penyakit Jantung"
+    },
+    "hereafter": {
+      "title": "Duas untuk Akhirat",
+      "description": "Duas untuk Akhirat"
+    },
+    "humility": {
+      "title": "Duas untuk Kerendahan Hati",
+      "description": "Duas untuk Kerendahan Hati"
+    },
+    "jannah": {
+      "title": "Doa untuk Jannah",
+      "description": "Doa untuk Jannah"
+    },
+    "knowledge": {
+      "title": "Duas untuk Pengetahuan",
+      "description": "Duas untuk Pengetahuan"
+    },
+    "mercy": {
+      "title": "Duas untuk Rahmat Allah",
+      "description": "Duas untuk Rahmat Allah"
+    },
+    "new_muslims": {
+      "title": "Duas untuk Muslim Baru",
+      "description": "Duas untuk Muslim Baru"
+    },
+    "oppression": {
+      "title": "Duas Melawan Penindasan",
+      "description": "Duas Melawan Penindasan"
+    },
+    "pain_sickness": {
+      "title": "Duas dan Ayat Quran untuk Sakit dan Penyakit (Shifa)",
+      "description": "Duas dan Ayat Quran untuk Sakit dan Penyakit (Shifa)"
+    },
+    "palestine": {
+      "title": "Duas untuk Palestina dan Kaum Tertindas",
+      "description": "Duas untuk Palestina dan Kaum Tertindas"
+    },
+    "parents": {
+      "title": "Doa untuk Orang Tua dan Orang Tua yang Meninggal dalam Al-Qur'an",
+      "description": "Doa untuk Orang Tua dan Orang Tua yang Meninggal dalam Al-Qur'an"
+    },
+    "patience": {
+      "title": "Duas dan Ayat Quran untuk Kesabaran",
+      "description": "Duas dan Ayat Quran untuk Kesabaran"
+    },
+    "peace": {
+      "title": "Duas untuk Perdamaian",
+      "description": "Duas untuk Perdamaian"
+    },
+    "pious_spouse": {
+      "title": "Duas untuk Pasangan yang Saleh",
+      "description": "Duas untuk Pasangan yang Saleh"
+    },
+    "powerful_duas": {
+      "title": "Duas Kuat dari Al-Qur'an",
+      "description": "Duas Kuat dari Al-Qur'an"
+    },
+    "prophet_harun": {
+      "title": "Doa Musa untuk Harun",
+      "description": "Doa Musa untuk Harun"
+    },
+    "prophet_shuayb": {
+      "title": "Duas dan Kepercayaan Nabi Shuayb",
+      "description": "Duas dan Kepercayaan Nabi Shuayb"
+    },
+    "prophet_sulayman": {
+      "title": "Doa dan Syukur Nabi Sulaiman",
+      "description": "Doa dan Syukur Nabi Sulaiman"
+    },
+    "prophets": {
+      "title": "Duas Para Nabi dalam Al-Qur'an",
+      "description": "Duas Para Nabi dalam Al-Qur'an"
+    },
+    "protection": {
+      "title": "Duas untuk Perlindungan dari Kejahatan dan Setan",
+      "description": "Duas untuk Perlindungan dari Kejahatan dan Setan"
+    },
+    "protection_from_hellfire": {
+      "title": "Duas untuk Perlindungan dari Api Neraka",
+      "description": "Duas untuk Perlindungan dari Api Neraka"
+    },
+    "provision_wealth": {
+      "title": "Ayat Alquran dan Duas untuk Rezeki (Rizq) dan Kekayaan",
+      "description": "Ayat Alquran dan Duas untuk Rezeki (Rizq) dan Kekayaan"
+    },
+    "rabbana": {
+      "title": "Rabbana Duas dari Al-Qur'an",
+      "description": "Rabbana Duas dari Al-Qur'an"
+    },
+    "rain": {
+      "title": "Renungan Al Quran Tentang Hujan dan Berkah",
+      "description": "Renungan Al Quran Tentang Hujan dan Berkah"
+    },
+    "relief": {
+      "title": "Duas untuk Bantuan",
+      "description": "Duas untuk Bantuan"
+    },
+    "remembrance_reflection": {
+      "title": "Ayat Alquran tentang Zikir dan Renungan",
+      "description": "Ayat Alquran tentang Zikir dan Renungan"
+    },
+    "repentance": {
+      "title": "Doa untuk Taubat dan Taubat",
+      "description": "Doa untuk Taubat dan Taubat"
+    },
+    "righteous_believers": {
+      "title": "Duas Orang-Orang Beriman yang Benar dalam Al-Qur'an",
+      "description": "Duas Orang-Orang Beriman yang Benar dalam Al-Qur'an"
+    },
+    "righteous_offspring": {
+      "title": "Doa untuk Keturunan dan Kehamilan yang Saleh",
+      "description": "Doa untuk Keturunan dan Kehamilan yang Saleh"
+    },
+    "righteousness": {
+      "title": "Duas untuk Kebenaran dan Perbuatan Baik",
+      "description": "Duas untuk Kebenaran dan Perbuatan Baik"
+    },
+    "safety": {
+      "title": "Duas untuk Keamanan",
+      "description": "Duas untuk Keamanan"
+    },
+    "sincerity": {
+      "title": "Ayat Quran dan Duas untuk Ketulusan",
+      "description": "Ayat Quran dan Duas untuk Ketulusan"
+    },
+    "steadfastness": {
+      "title": "Duas untuk Ketabahan",
+      "description": "Duas untuk Ketabahan"
+    },
+    "strength": {
+      "title": "Duas untuk Kekuatan",
+      "description": "Duas untuk Kekuatan"
+    },
+    "studying": {
+      "title": "Duas untuk Belajar",
+      "description": "Duas untuk Belajar"
+    },
+    "success_barakah": {
+      "title": "Duas untuk Sukses dan Barakah",
+      "description": "Duas untuk Sukses dan Barakah"
+    },
+    "topics": {
+      "title": "Duas dari Al-Qur'an berdasarkan Topik",
+      "description": "Duas dari Al-Qur'an berdasarkan Topik"
+    },
+    "travel": {
+      "title": "Ayat Alquran dan Duas untuk Keselamatan Perjalanan dan Perjalanan",
+      "description": "Ayat Alquran dan Duas untuk Keselamatan Perjalanan dan Perjalanan"
+    },
+    "ummah": {
+      "title": "Doa untuk Umat",
+      "description": "Doa untuk Umat"
+    },
+    "unity": {
+      "title": "Duas untuk Persatuan",
+      "description": "Duas untuk Persatuan"
+    },
+    "victory": {
+      "title": "Duas untuk Kemenangan",
+      "description": "Duas untuk Kemenangan"
+    },
+    "waswas": {
+      "title": "Duas untuk Waswas dan Bisikan",
+      "description": "Duas untuk Waswas dan Bisikan"
+    },
+    "when_someone_dies": {
+      "title": "Ayat-ayat Alquran dan Doa Ketika Seseorang Meninggal",
+      "description": "Ayat-ayat Alquran dan Doa Ketika Seseorang Meninggal"
+    },
+    "wisdom": {
+      "title": "Duas untuk Kebijaksanaan",
+      "description": "Doa untuk Kebijaksanaan"
+    },
+    "work_career": {
+      "title": "Duas untuk Pekerjaan dan Karir",
+      "description": "Doa untuk Pekerjaan dan Karier"
+    }
+  },
+  "prophets": {
+    "prophet_adam": {
+      "name": "adam"
+    },
+    "prophet_al_yasa": {
+      "name": "Al Yasa"
+    },
+    "prophet_ayyub": {
+      "name": "Ayub"
+    },
+    "prophet_ayyub_illness": {
+      "name": "Penyakit Ayyub"
+    },
+    "prophet_dawud": {
+      "name": "Dawud"
+    },
+    "prophet_dhul_kifl": {
+      "name": "Dzul Kifl"
+    },
+    "prophet_harun": {
+      "name": "Harun"
+    },
+    "prophet_hud": {
+      "name": "Hud"
+    },
+    "prophet_ibrahim": {
+      "name": "Ibrahim"
+    },
+    "prophet_idris": {
+      "name": "Idris"
+    },
+    "prophet_ilyas": {
+      "name": "Ilyas"
+    },
+    "prophet_isa": {
+      "name": "Adalah"
+    },
+    "prophet_ishaq": {
+      "name": "Ishaq"
+    },
+    "prophet_ismail": {
+      "name": "Ismail"
+    },
+    "prophet_lut": {
+      "name": "Luth"
+    },
+    "prophet_muhammad": {
+      "name": "Muhammad"
+    },
+    "prophet_musa": {
+      "name": "Musa"
+    },
+    "prophet_nuh": {
+      "name": "Tidak"
+    },
+    "prophet_nuh_forgiveness": {
+      "name": "Nuh Maafkan"
+    },
+    "prophet_salih": {
+      "name": "Salih"
+    },
+    "prophet_shuayb": {
+      "name": "Shuayb"
+    },
+    "prophet_sulayman": {
+      "name": "Sulaiman"
+    },
+    "prophet_yahya": {
+      "name": "Yahya"
+    },
+    "prophet_yaqub": {
+      "name": "Yaqub"
+    },
+    "prophet_yunus": {
+      "name": "Yunus"
+    },
+    "prophet_yusuf": {
+      "name": "Yusuf"
+    },
+    "prophet_zakariya": {
+      "name": "Zakaria"
+    }
+  },
+  "ui": {
+    "quran_explorer": "Penjelajah Alquran",
+    "browse_topics": "Jelajahi berdasarkan Topik",
+    "browse_prophets": "Telusuri berdasarkan Nabi",
+    "related_duas": "Duas terkait",
+    "recommended_duas": "Duas yang direkomendasikan",
+    "associated_duas": "Duas Terkait",
+    "related_topics": "Topik Terkait",
+    "appears_in": "Muncul di",
+    "explore_collection": "Jelajahi Koleksi",
+    "discover_more": "Temukan Lebih Banyak",
+    "daily_reflection": "Refleksi Harian",
+    "prophetic_duas": "Duas Nabi",
+    "all_collections": "Semua Koleksi",
+    "all_prophets": "Semua Nabi",
+    "view_related": "Lihat Terkait",
+    "view_all": "Lihat Semua"
+  }
+}

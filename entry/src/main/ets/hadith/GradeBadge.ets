@@ -3,6 +3,7 @@
 import { ThemeColors } from '../core/Theme';
 import { L } from '../i18n/LocalizationHelper';
 import { HadithGrading } from './HadithModels';
+import { GradeThemeHelper } from '../core/GradeThemeHelper';
 
 @Component
 export struct GradeBadge {
@@ -31,21 +32,23 @@ export struct GradeBadge {
               Row({ space: 4 }) {
                 Image(this.iconFor(g.grade))
                   .width(12).height(12)
-                  .fillColor(this.colorFor(g.grade))
+                  .fillColor(GradeThemeHelper.getTextColor(g.grade, this.colors)) // 👈 Global Color
                 Text(`${this.gradeLabel(g.grade)} (${this.graderLabel(g.grader)})`)
                   .fontSize(10)
-                  .fontColor(this.colorFor(g.grade))
+                  .fontColor(GradeThemeHelper.getTextColor(g.grade, this.colors)) // 👈 Global Color
+                  .fontWeight(FontWeight.Medium)
                   .maxLines(1)
                   .textOverflow({ overflow: TextOverflow.Ellipsis })
               }
               .padding({
                 left: 8,
                 right: 8,
-                top: 3,
-                bottom: 3
+                top: 4,
+                bottom: 4
               })
-              .backgroundColor(this.colors.tintSoft)
+              .backgroundColor(GradeThemeHelper.getBgColor(g.grade, this.colors)) // 👈 Global Color
               .borderRadius(6)
+              .border({ width: 1, color: GradeThemeHelper.getTextColor(g.grade, this.colors) }) // 👈 Global Color
               .margin({ right: 4, top: 4 })
             },
             (g: HadithGrading, i: number) => `grade-${i}-${g.grade}-${g.grader}`
@@ -81,19 +84,6 @@ export struct GradeBadge {
       return $r('app.media.ic_warning');
     }
     return $r('app.media.ic_info');
-  }
-
-  private colorFor(grade: string): string {
-    if (grade === 'sahih') {
-      return this.colors.accentGold;
-    }
-    if (grade === 'hasan') {
-      return this.colors.accentGoldLight;
-    }
-    if (grade === 'daif') {
-      return this.colors.statusExpress;
-    }
-    return this.colors.textMuted;
   }
 
   private gradeLabel(grade: string): string {

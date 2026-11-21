@@ -1,0 +1,402 @@
+{
+  "language": "en",
+  "collections": {
+    "acceptance": {
+      "title": "نیکیوں کی قبولیت کی دعائیں",
+      "description": "نیکیوں کی قبولیت کی دعائیں"
+    },
+    "anxiety": {
+      "title": "تناؤ، افسردگی اور اضطراب کے لیے دعائیں اور قرآنی آیات",
+      "description": "تناؤ، افسردگی اور اضطراب کے لیے دعائیں اور قرآنی آیات"
+    },
+    "arabic_english_transliteration": {
+      "title": "عربی، انگریزی اور نقل حرفی میں قرآن کی دعا",
+      "description": "عربی، انگریزی اور نقل حرفی میں قرآن کی دعا"
+    },
+    "believers": {
+      "title": "مومنین کے لیے دعا",
+      "description": "مومنین کے لیے دعا"
+    },
+    "benefit_from_quran": {
+      "title": "قرآن سیکھنے، حفظ کرنے اور اس سے استفادہ کرنے کی دعائیں",
+      "description": "قرآن سیکھنے، حفظ کرنے اور اس سے فائدہ اٹھانے کی دعائیں"
+    },
+    "black_magic_protection": {
+      "title": "رقیہ کی حفاظت کے لیے آیات قرآنی اور دعائیں",
+      "description": "رقیہ کی حفاظت کے لیے آیات قرآنی اور دعائیں"
+    },
+    "character": {
+      "title": "خوبصورت کردار کے لیے دعا",
+      "description": "خوبصورت کردار کے لیے دعا"
+    },
+    "children": {
+      "title": "قرآن میں بچوں کے لیے دعائیں",
+      "description": "قرآن میں بچوں کے لیے دعائیں"
+    },
+    "confidence": {
+      "title": "اعتماد کے لیے دعا",
+      "description": "اعتماد کے لیے دعا"
+    },
+    "daily_life": {
+      "title": "روزمرہ کی زندگی کے لیے قرآن سے دعائیں",
+      "description": "روزمرہ کی زندگی کے لیے قرآن سے دعائیں"
+    },
+    "day_night": {
+      "title": "دن اور رات کے لئے قرآن کے مظاہر",
+      "description": "دن اور رات کے لئے قرآن کے مظاہر"
+    },
+    "deceased": {
+      "title": "مرنے والوں کے لیے دعا",
+      "description": "مرنے والوں کے لیے دعا"
+    },
+    "enemies": {
+      "title": "دشمنوں اور نقصان دہ لوگوں کے خلاف دعا",
+      "description": "دشمنوں اور نقصان دہ لوگوں کے خلاف دعا"
+    },
+    "everyday_duas": {
+      "title": "روزانہ تلاوت اور حفظ کے لیے قرآن سے مختصر دعائیں",
+      "description": "روزانہ تلاوت اور حفظ کے لیے قرآن سے مختصر دعائیں"
+    },
+    "evil_eye": {
+      "title": "نظر بد سے حفاظت کے لیے قرآنی آیات",
+      "description": "نظر بد سے حفاظت کے لیے قرآنی آیات"
+    },
+    "exam_success": {
+      "title": "امتحان میں کامیابی کی دعا",
+      "description": "امتحان میں کامیابی کی دعا"
+    },
+    "family": {
+      "title": "خاندان، شادی اور میاں بیوی کے لیے دعائیں",
+      "description": "خاندان، شادی اور میاں بیوی کے لیے دعائیں"
+    },
+    "fasting": {
+      "title": "رمضان اور روزے کے بارے میں قرآنی آیات",
+      "description": "رمضان اور روزے کے بارے میں قرآنی آیات"
+    },
+    "fear": {
+      "title": "خوف کے لیے دعا",
+      "description": "خوف کے لیے دعا"
+    },
+    "forgiveness": {
+      "title": "دعائے مغفرت",
+      "description": "دعائے مغفرت"
+    },
+    "forgiveness_of_sins": {
+      "title": "گناہوں کی معافی کی دعا",
+      "description": "گناہوں کی معافی کی دعا"
+    },
+    "friends_loved_ones": {
+      "title": "دوستوں اور پیاروں کے لیے دعائیں",
+      "description": "دوستوں اور پیاروں کے لیے دعائیں"
+    },
+    "good_ending": {
+      "title": "اچھے اختتام کی دعا",
+      "description": "اچھے اختتام کی دعا"
+    },
+    "gratitude": {
+      "title": "تشکر کے لیے دعائیں اور قرآنی آیات",
+      "description": "تشکر کے لیے دعائیں اور قرآنی آیات"
+    },
+    "guidance": {
+      "title": "ہدایت اور صراط مستقیم کی دعا",
+      "description": "ہدایت اور صراط مستقیم کی دعا"
+    },
+    "hajj_umrah": {
+      "title": "حج اور عمرہ کی دعائیں",
+      "description": "حج اور عمرہ کی دعائیں"
+    },
+    "hardship": {
+      "title": "سختی، غم اور غم کے لیے دعائیں اور قرآنی آیات",
+      "description": "سختی، غم اور غم کے لیے دعائیں اور قرآنی آیات"
+    },
+    "health": {
+      "title": "شفا اور صحت پر قرآنی مظاہر",
+      "description": "شفا اور صحت پر قرآنی مظاہر"
+    },
+    "heart": {
+      "title": "دل اور صاف دل کے لیے دعا",
+      "description": "دل اور صاف دل کے لیے دعا"
+    },
+    "heart_healing": {
+      "title": "دل کے امراض کے لیے دعا",
+      "description": "دل کے امراض کے لیے دعا"
+    },
+    "hereafter": {
+      "title": "آخرت کے لیے دعائیں",
+      "description": "آخرت کے لیے دعائیں"
+    },
+    "humility": {
+      "title": "عاجزی کی دعا",
+      "description": "عاجزی کی دعا"
+    },
+    "jannah": {
+      "title": "جنت کے لیے دعا",
+      "description": "جنت کے لیے دعا"
+    },
+    "knowledge": {
+      "title": "دعائے علم",
+      "description": "دعائے علم"
+    },
+    "mercy": {
+      "title": "اللہ کی رحمت کے لیے دعا",
+      "description": "اللہ کی رحمت کے لیے دعا"
+    },
+    "new_muslims": {
+      "title": "نئے مسلمانوں کے لیے دعا",
+      "description": "نئے مسلمانوں کے لیے دعا"
+    },
+    "oppression": {
+      "title": "ظلم کے خلاف دعا",
+      "description": "ظلم کے خلاف دعا"
+    },
+    "pain_sickness": {
+      "title": "درد اور بیماری کے لیے دعائیں اور قرآنی آیات (شفا)",
+      "description": "درد اور بیماری کے لیے دعائیں اور قرآنی آیات (شفا)"
+    },
+    "palestine": {
+      "title": "فلسطین اور مظلوموں کے لیے دعا",
+      "description": "فلسطین اور مظلوموں کے لیے دعا"
+    },
+    "parents": {
+      "title": "قرآن مجید میں والدین اور فوت شدہ والدین کے لیے دعائیں",
+      "description": "قرآن مجید میں والدین اور فوت شدہ والدین کے لیے دعائیں"
+    },
+    "patience": {
+      "title": "صبر کے لیے دعائیں اور قرآنی آیات",
+      "description": "صبر کے لیے دعائیں اور قرآنی آیات"
+    },
+    "peace": {
+      "title": "امن کی دعا",
+      "description": "امن کی دعا"
+    },
+    "pious_spouse": {
+      "title": "متقی شریک حیات کے لیے دعا",
+      "description": "متقی شریک حیات کے لیے دعا"
+    },
+    "powerful_duas": {
+      "title": "قرآن سے طاقتور دعائیں",
+      "description": "قرآن سے طاقتور دعائیں"
+    },
+    "prophet_harun": {
+      "title": "ہارون کے لیے موسیٰ کی دعا",
+      "description": "ہارون کے لیے موسیٰ کی دعا"
+    },
+    "prophet_shuayb": {
+      "title": "حضرت شعیب علیہ السلام کی دعا اور امانت",
+      "description": "حضرت شعیب علیہ السلام کی دعا اور امانت"
+    },
+    "prophet_sulayman": {
+      "title": "حضرت سلیمان علیہ السلام کی دعا اور شکرگزاری",
+      "description": "حضرت سلیمان علیہ السلام کی دعا اور شکرگزاری"
+    },
+    "prophets": {
+      "title": "قرآن میں انبیاء کی دعائیں",
+      "description": "قرآن میں انبیاء کی دعائیں"
+    },
+    "protection": {
+      "title": "شیطان اور شر سے حفاظت کی دعا",
+      "description": "شیطان اور شر سے حفاظت کی دعا"
+    },
+    "protection_from_hellfire": {
+      "title": "جہنم کی آگ سے حفاظت کی دعا",
+      "description": "جہنم کی آگ سے حفاظت کی دعا"
+    },
+    "provision_wealth": {
+      "title": "قرآنی آیات اور رزق (رزق) اور دولت کے لیے دعائیں",
+      "description": "قرآنی آیات اور رزق (رزق) اور دولت کے لیے دعائیں"
+    },
+    "rabbana": {
+      "title": "ربنا دعا قرآن سے",
+      "description": "ربنا دعا قرآن سے"
+    },
+    "rain": {
+      "title": "بارش اور برکات پر قرآنی مظاہر",
+      "description": "بارش اور برکات پر قرآنی مظاہر"
+    },
+    "relief": {
+      "title": "رفع حاجت کی دعا",
+      "description": "رفع حاجت کی دعا"
+    },
+    "remembrance_reflection": {
+      "title": "قرآنی آیات ذکر اور غور و فکر سے متعلق",
+      "description": "قرآنی آیات ذکر اور غور و فکر سے متعلق"
+    },
+    "repentance": {
+      "title": "توبہ اور توبہ کی دعا",
+      "description": "توبہ اور توبہ کی دعا"
+    },
+    "righteous_believers": {
+      "title": "قرآن میں نیک مومنین کی دعائیں",
+      "description": "قرآن میں نیک مومنین کی دعائیں"
+    },
+    "righteous_offspring": {
+      "title": "صالح اولاد اور حمل کی دعا",
+      "description": "صالح اولاد اور حمل کی دعا"
+    },
+    "righteousness": {
+      "title": "نیکی اور اعمال صالحہ کی دعا",
+      "description": "نیکی اور اعمال صالحہ کی دعا"
+    },
+    "safety": {
+      "title": "حفاظت کی دعا",
+      "description": "حفاظت کی دعا"
+    },
+    "sincerity": {
+      "title": "قرآنی آیات اور اخلاص کی دعا",
+      "description": "قرآنی آیات اور اخلاص کی دعا"
+    },
+    "steadfastness": {
+      "title": "استقامت کی دعا",
+      "description": "استقامت کی دعا"
+    },
+    "strength": {
+      "title": "طاقت کی دعا",
+      "description": "طاقت کی دعا"
+    },
+    "studying": {
+      "title": "مطالعہ کے لیے دعائیں",
+      "description": "مطالعہ کے لیے دعائیں"
+    },
+    "success_barakah": {
+      "title": "کامیابی اور برکات کی دعا",
+      "description": "کامیابی اور برکات کی دعا"
+    },
+    "topics": {
+      "title": "موضوع کے لحاظ سے قرآن سے دعائیں",
+      "description": "موضوع کے لحاظ سے قرآن سے دعائیں"
+    },
+    "travel": {
+      "title": "سفر اور سفر کی حفاظت کے لیے قرآنی آیات اور دعائیں",
+      "description": "سفر اور سفر کی حفاظت کے لیے قرآنی آیات اور دعائیں"
+    },
+    "ummah": {
+      "title": "امت کے لیے دعائیں",
+      "description": "امت کے لیے دعا"
+    },
+    "unity": {
+      "title": "اتحاد کی دعا",
+      "description": "اتحاد کی دعا"
+    },
+    "victory": {
+      "title": "فتح کی دعا",
+      "description": "فتح کی دعا"
+    },
+    "waswas": {
+      "title": "وسوسے اور سرگوشیوں کے لیے دعا",
+      "description": "وسوسے اور سرگوشیوں کے لیے دعا"
+    },
+    "when_someone_dies": {
+      "title": "جب کوئی مر جاتا ہے تو قرآنی آیات اور دعائیں",
+      "description": "جب کوئی مر جاتا ہے تو قرآنی آیات اور دعائیں"
+    },
+    "wisdom": {
+      "title": "حکمت کی دعا",
+      "description": "حکمت کی دعا"
+    },
+    "work_career": {
+      "title": "کام اور کیریئر کے لیے دعائیں",
+      "description": "کام اور کیریئر کے لیے دعائیں"
+    }
+  },
+  "prophets": {
+    "prophet_adam": {
+      "name": "آدم"
+    },
+    "prophet_al_yasa": {
+      "name": "ال یاسا"
+    },
+    "prophet_ayyub": {
+      "name": "ایوب"
+    },
+    "prophet_ayyub_illness": {
+      "name": "ایوب کی بیماری"
+    },
+    "prophet_dawud": {
+      "name": "داؤد"
+    },
+    "prophet_dhul_kifl": {
+      "name": "ذوالکفل"
+    },
+    "prophet_harun": {
+      "name": "ہارون"
+    },
+    "prophet_hud": {
+      "name": "ہود"
+    },
+    "prophet_ibrahim": {
+      "name": "ابراہیم"
+    },
+    "prophet_idris": {
+      "name": "ادریس"
+    },
+    "prophet_ilyas": {
+      "name": "الیاس"
+    },
+    "prophet_isa": {
+      "name": "عیسیٰ"
+    },
+    "prophet_ishaq": {
+      "name": "اسحاق"
+    },
+    "prophet_ismail": {
+      "name": "اسماعیل"
+    },
+    "prophet_lut": {
+      "name": "لوط"
+    },
+    "prophet_muhammad": {
+      "name": "محمد"
+    },
+    "prophet_musa": {
+      "name": "موسی"
+    },
+    "prophet_nuh": {
+      "name": "نوح"
+    },
+    "prophet_nuh_forgiveness": {
+      "name": "نوح بخشش"
+    },
+    "prophet_salih": {
+      "name": "صالح"
+    },
+    "prophet_shuayb": {
+      "name": "شعیب"
+    },
+    "prophet_sulayman": {
+      "name": "سلیمان"
+    },
+    "prophet_yahya": {
+      "name": "یحییٰ"
+    },
+    "prophet_yaqub": {
+      "name": "یعقوب"
+    },
+    "prophet_yunus": {
+      "name": "یونس"
+    },
+    "prophet_yusuf": {
+      "name": "یوسف"
+    },
+    "prophet_zakariya": {
+      "name": "زکریا"
+    }
+  },
+  "ui": {
+    "quran_explorer": "قرآن ایکسپلورر",
+    "browse_topics": "موضوع کے لحاظ سے براؤز کریں۔",
+    "browse_prophets": "نبی کے ذریعے براؤز کریں۔",
+    "related_duas": "متعلقہ دعائیں",
+    "recommended_duas": "مستحب دعا",
+    "associated_duas": "منسلک دعا",
+    "related_topics": "متعلقہ موضوعات",
+    "appears_in": "میں ظاہر ہوتا ہے۔",
+    "explore_collection": "مجموعہ دریافت کریں۔",
+    "discover_more": "مزید دریافت کریں۔",
+    "daily_reflection": "روزانہ کی عکاسی",
+    "prophetic_duas": "نبوی دعائیں",
+    "all_collections": "تمام مجموعے۔",
+    "all_prophets": "تمام انبیاء",
+    "view_related": "متعلقہ دیکھیں",
+    "view_all": "سبھی دیکھیں"
+  }
+}

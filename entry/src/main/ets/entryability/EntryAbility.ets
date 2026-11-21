@@ -14,6 +14,7 @@ import { BundleBootstrap } from '../bootstrap/BundleBootstrap';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
+  STORAGE_KEY_ARABIC_FONT,
   STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
   STORAGE_KEY_CALC_SETTINGS_VERSION,
   STORAGE_KEY_DUA_TRANSLATION_LANG,
@@ -45,6 +46,7 @@ import {
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_THEME_OVERRIDE,
   STORAGE_KEY_TIME_FORMAT,
+  STORAGE_KEY_TRANSLATION_FONT,
   STORAGE_KEY_VIBRATION_ENABLED,
   STORAGE_KEY_WIZARD_COMPLETED
 } from '../core/StorageKeys';
@@ -201,6 +203,14 @@ export default class EntryAbility extends UIAbility {
           STORAGE_KEY_SOUND_ENABLED, true
         );
         AppStorage.setOrCreate(STORAGE_KEY_SOUND_ENABLED, soundEnabled);
+
+        const savedArabicFont = await PreferencesHelper.getString(
+          STORAGE_KEY_ARABIC_FONT, 'auto'
+        );
+        AppStorage.setOrCreate(STORAGE_KEY_ARABIC_FONT, savedArabicFont);
+
+        const savedTransFont = await PreferencesHelper.getString(STORAGE_KEY_TRANSLATION_FONT, 'auto');
+        AppStorage.setOrCreate(STORAGE_KEY_TRANSLATION_FONT, savedTransFont);
 
         const savedAppTheme = await PreferencesHelper.getString(
           STORAGE_KEY_APP_THEME, ThemePreset.SIRAT

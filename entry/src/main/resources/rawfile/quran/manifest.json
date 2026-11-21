@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "asset_count": 6,
+  "assets": [
+    "quranic_duas_catalog.json",
+    "quranic_collection_graph.json",
+    "quranic_collection_index.json",
+    "quranic_reverse_index.json",
+    "quranic_prophet_graph.json",
+    "quranic_entity_graph.json"
+  ]
+}

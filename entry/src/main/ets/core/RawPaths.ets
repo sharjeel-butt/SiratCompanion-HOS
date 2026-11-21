@@ -7,7 +7,6 @@
 export class RawPaths {
   static readonly BUNDLE_MANIFEST: string = 'bundle_manifest.json';
   static readonly FEATURED: string = 'featured.json';
-
   static readonly DATABASE_VERSION: string = 'database/VERSION';
   static readonly CORE_VERSION: string = 'core/VERSION';
   static readonly CORE_DB: string = 'core/core.db.gz';
@@ -26,6 +25,12 @@ export class RawPaths {
   static readonly CITY_TRANSLATIONS: string = 'locations/city_translations.json';
   static readonly QURAN_LICENSES: string = 'licenses/quran_licenses.json';
   static readonly HADITH_LICENSES: string = 'licenses/hadith_licenses.json';
+  static readonly QURAN_ENTITY_GRAPH: string = 'quran/quranic_entity_graph.json';
+  static readonly QURAN_MERGED_CATALOG: string = 'quran/quranic_merged_dua_catalog.json';
+
+  static quranGraphI18n(lang: string): string {
+    return `quran/i18n/quran_graph_${lang}.json`;
+  }
 
   static hadithDb(lang: string): string {
     return `database/${lang}/hadith.db.gz`;

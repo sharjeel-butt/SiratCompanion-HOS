@@ -3339,6 +3339,170 @@
     {
       "name": "feature_issues_link",
       "value": "https://github.com/sharjeel-butt/SiratCompanion-HOS/issues"
+    },
+    {
+      "name": "quran_explorer",
+      "value": "Quran Explorer"
+    },
+    {
+      "name": "quran_topics",
+      "value": "Browse by Topic"
+    },
+    {
+      "name": "quran_prophets",
+      "value": "Browse by Prophet"
+    },
+    {
+      "name": "dua_appears_in",
+      "value": "Appears in Collections"
+    },
+    {
+      "name": "dua_related",
+      "value": "Related Duas"
+    },
+    {
+      "name": "rabbana_title",
+      "value": "Rabbana Duas"
+    },
+    {
+      "name": "rabbana_desc",
+      "value": "18 Quranic supplications beginning with Rabbana"
+    },
+    {
+      "name": "prophetic_duas",
+      "value": "Prophetic Duas"
+    },
+    {
+      "name": "prophetic_desc",
+      "value": "Supplications made by the Prophets"
+    },
+    {
+      "name": "qkg_collection_hardship",
+      "value": "Hardship & Relief"
+    },
+    {
+      "name": "qkg_collection_guidance",
+      "value": "Guidance"
+    },
+    {
+      "name": "qkg_collection_forgiveness",
+      "value": "Forgiveness"
+    },
+    {
+      "name": "qkg_collection_protection",
+      "value": "Protection"
+    },
+    {
+      "name": "qkg_prophet_yunus",
+      "value": "Prophet Yunus"
+    },
+    {
+      "name": "qkg_prophet_ayyub",
+      "value": "Prophet Ayyub"
+    },
+    {
+      "name": "qkg_prophet_musa",
+      "value": "Prophet Musa"
+    },
+    {
+      "name": "revelation_place_makkah",
+      "value": "Makkah"
+    },
+    {
+      "name": "revelation_place_madinah",
+      "value": "Madinah"
+    },
+    {
+      "name": "arabic_font",
+      "value": "Arabic Font"
+    },
+    {
+      "name": "arabic_font_desc",
+      "value": "Select the font used for Arabic text"
+    },
+    {
+      "name": "font_auto",
+      "value": "Auto-Detect (Regional)"
+    },
+    {
+      "name": "font_Amiri",
+      "value": "Amiri (Naskh)"
+    },
+    {
+      "name": "font_AmiriQuran",
+      "value": "Amiri Quran (Naskh)"
+    },
+    {
+      "name": "font_HafsArabic",
+      "value": "Hafs (Naskh)"
+    },
+    {
+      "name": "font_QPC_Hafs",
+      "value": "QPC Hafs (Uthmani)"
+    },
+    {
+      "name": "font_JameelNoori",
+      "value": "Jameel Noori (Nastaliq)"
+    },
+    {
+      "name": "font_NotoNastaliqUrdu",
+      "value": "Noto Nastaliq (Nastaliq-Urdu)"
+    },
+    {
+      "name": "font_LPMQIsepMisbah",
+      "value": "LPMQ Isep Misbah (Naskh)"
+    },
+    {
+      "name": "font_KFGQPCWarsh",
+      "value": "KFGQPC Warsh (Warsh)"
+    },
+    {
+      "name": "font_ScheherazadeNew",
+      "value": "Scheherazade (Naskh)"
+    },
+    {
+      "name": "font_NotoNaskh",
+      "value": "Noto Naksh (Naskh)"
+    },
+    {
+      "name": "translation_font",
+      "value": "Translation Font"
+    },
+    {
+      "name": "translation_font_desc",
+      "value": "Select the font used for translated text"
+    },
+    {
+      "name": "trans_font_auto",
+      "value": "Auto-Detect (Regional)"
+    },
+    {
+      "name": "trans_font_Outfit",
+      "value": "Outfit (Latin/Default)"
+    },
+    {
+      "name": "trans_font_NotoNastaliqUrdu",
+      "value": "Noto Nastaliq (Urdu)"
+    },
+    {
+      "name": "trans_font_NotoSansBengali",
+      "value": "Noto Sans Bengali (Bengali)"
+    },
+    {
+      "name": "trans_font_NotoSansSC",
+      "value": "Noto Sans SC (Chinese)"
+    },
+    {
+      "name": "trans_font_JameelNoori",
+      "value": "Jameel Noori (Nastaliq)"
+    },
+    {
+      "name": "hadith_evidence_title",
+      "value": "Hadith Evidence"
+    },
+    {
+      "name": "diag_ok",
+      "value": "OK"
     }
   ]
 }
