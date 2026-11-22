@@ -17,8 +17,8 @@ import { PrayerCheckState, PrayerManager } from './PrayerManager';
 import { LocationCache } from '../location/LocationCache';
 import { LocationMode } from '../settings/SettingsModels';
 import { L } from '../i18n/LocalizationHelper';
-import { AppLogger } from '../core/AppLogger';
-import { CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED } from '../core/FeatureFlags';
+import { AppLogger } from '../core/app/AppLogger';
+import { CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED } from '../core/common/FeatureFlags';
 import { CalendarReminderEntry, CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
 
 /** How many days ahead to schedule. Older reminders renew on app open. */

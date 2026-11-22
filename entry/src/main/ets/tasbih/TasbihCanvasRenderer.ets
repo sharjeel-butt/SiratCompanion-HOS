@@ -1,8 +1,6 @@
 // entry/src/main/ets/tasbih/TasbihCanvasRenderer.ets
 
-import {
-  BeadColors, TasbihFinish, TasbihTheme, TasbihThemes
-} from './TasbihThemes';
+import { BeadColors, TasbihThemes } from './TasbihThemes';
 
 export type BeadRenderStyle = 'classic' | 'premium';
 
@@ -18,7 +16,7 @@ export interface BeadCanvasConfig {
   isDark: boolean;
   stringColor: string;
   topShiftProgress: number;
-  theme: TasbihTheme;
+  themePresetId: string;
   bottomPrevCount: number;
   bottomFadeProgress: number;
   bottomPopProgress: number;
@@ -68,7 +66,11 @@ export class TasbihCanvasRenderer {
       return 1 + TasbihCanvasRenderer.FISHEYE_GAP_STRETCH * ((sa + sb) / 2 - 1);
     };
 
-    const palette: BeadColors = TasbihThemes.palette(cfg.theme.color);
+    const palette: BeadColors =
+      TasbihThemes.getBeadColors(
+        cfg.themePresetId,
+        cfg.isDark
+      );
 
     // ---- TOP STACK ----
     const topColors: BeadColors = cfg.isComplete ? DONE_COLORS : palette;
@@ -96,8 +98,12 @@ export class TasbihCanvasRenderer {
           ctx.save();
           ctx.globalAlpha = alpha;
           TasbihCanvasRenderer.drawBead(
-            ctx, cx, finalY, r * topScales[i],
-            topColors, cfg.renderStyle, cfg.theme.finish
+            ctx,
+            cx,
+            finalY,
+            r * topScales[i],
+            topColors,
+            cfg.renderStyle
           );
           ctx.restore();
         }
@@ -109,8 +115,12 @@ export class TasbihCanvasRenderer {
         ctx.save();
         ctx.globalAlpha = shift;
         TasbihCanvasRenderer.drawBead(
-          ctx, cx, extraY, r * topScales[topCount - 1],
-          topColors, cfg.renderStyle, cfg.theme.finish
+          ctx,
+          cx,
+          extraY,
+          r * topScales[topCount - 1],
+          topColors,
+          cfg.renderStyle
         );
         ctx.restore();
       }
@@ -152,8 +162,12 @@ export class TasbihCanvasRenderer {
       ctx.globalAlpha = alpha;
       for (let i = 0; i < count; i++) {
         TasbihCanvasRenderer.drawBead(
-          ctx, cx, centers[i], r * scales[i],
-          botColors, cfg.renderStyle, cfg.theme.finish
+          ctx,
+          cx,
+          centers[i],
+          r * scales[i],
+          botColors,
+          cfg.renderStyle
         );
       }
       ctx.restore();
@@ -204,8 +218,12 @@ export class TasbihCanvasRenderer {
         ctx.save();
         ctx.globalAlpha = alpha;
         TasbihCanvasRenderer.drawBead(
-          ctx, cx, currentY, r * scaleFor(currentY),
-          topColors, cfg.renderStyle, cfg.theme.finish
+          ctx,
+          cx,
+          currentY,
+          r * scaleFor(currentY),
+          topColors,
+          cfg.renderStyle
         );
         ctx.restore();
       }
@@ -295,18 +313,26 @@ export class TasbihCanvasRenderer {
     cy: number,
     r: number,
     colors: BeadColors,
-    style: BeadRenderStyle,
-    finish: TasbihFinish
+    style: BeadRenderStyle
   ): void {
     if (style === 'classic') {
-      TasbihCanvasRenderer.drawClassic(ctx, cx, cy, r, colors);
+      TasbihCanvasRenderer.drawClassic(
+        ctx,
+        cx,
+        cy,
+        r,
+        colors
+      );
       return;
     }
-    if (finish === TasbihFinish.METALLIC) {
-      TasbihCanvasRenderer.drawMetallic(ctx, cx, cy, r, colors);
-    } else {
-      TasbihCanvasRenderer.drawMatte(ctx, cx, cy, r, colors);
-    }
+
+    TasbihCanvasRenderer.drawMatte(
+      ctx,
+      cx,
+      cy,
+      r,
+      colors
+    );
   }
 
   // ============================================================

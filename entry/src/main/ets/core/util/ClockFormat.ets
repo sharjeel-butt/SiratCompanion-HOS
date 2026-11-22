@@ -1,10 +1,5 @@
 // entry/src/main/ets/common/ClockFormat.ets
 
-import { i18n } from '@kit.LocalizationKit';
-import { settings } from '@kit.BasicServicesKit';
-import { common } from '@kit.AbilityKit';
-import { STORAGE_KEY_TIME_FORMAT } from './StorageKeys';
-
 export enum ClockFormat {
   SYSTEM = 'System',
   TWELVE_HOUR = '12h',

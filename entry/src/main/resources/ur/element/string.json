@@ -1289,90 +1289,6 @@
       "value": "آن لائن"
     },
     {
-      "name": "theme_preset",
-      "value": "ایپ تھیم"
-    },
-    {
-      "name": "theme_preset_desc",
-      "value": "ایپ کا بصری انداز منتخب کریں"
-    },
-    {
-      "name": "theme_preset_sirat",
-      "value": "صراط"
-    },
-    {
-      "name": "theme_preset_sirat_desc",
-      "value": "جدید اور سادہ — HarmonyOS 7 کا حسن"
-    },
-    {
-      "name": "theme_preset_current",
-      "value": "صراط کلاسک"
-    },
-    {
-      "name": "theme_preset_current_desc",
-      "value": "گرم کریم اور گہرا سبز — اصل"
-    },
-    {
-      "name": "theme_preset_harmony7",
-      "value": "نور"
-    },
-    {
-      "name": "theme_preset_harmony7_desc",
-      "value": "چمکتا بنفشی — پرسکون اور جدید"
-    },
-    {
-      "name": "theme_preset_harmony6",
-      "value": "سحر"
-    },
-    {
-      "name": "theme_preset_harmony6_desc",
-      "value": "سنہری عنبر — پہلی روشنی کی سکون"
-    },
-    {
-      "name": "theme_preset_harmony5",
-      "value": "بہار"
-    },
-    {
-      "name": "theme_preset_harmony5_desc",
-      "value": "ٹھنڈا ٹیل — وسیع، تازہ اور صاف"
-    },
-    {
-      "name": "theme_amber",
-      "value": "عنبر"
-    },
-    {
-      "name": "theme_charcoal",
-      "value": "چارکول"
-    },
-    {
-      "name": "theme_emerald",
-      "value": "زمرد"
-    },
-    {
-      "name": "theme_pearl",
-      "value": "موتی"
-    },
-    {
-      "name": "theme_gold",
-      "value": "سونا (دھاتی)"
-    },
-    {
-      "name": "theme_white",
-      "value": "سفید"
-    },
-    {
-      "name": "theme_sapphire",
-      "value": "نیلم"
-    },
-    {
-      "name": "theme_rose",
-      "value": "گلاب"
-    },
-    {
-      "name": "theme_silver",
-      "value": "چاندی"
-    },
-    {
       "name": "wizard_step",
       "value": "مرحلہ"
     },
@@ -3503,6 +3419,170 @@
     {
       "name": "trans_font_JameelNoori",
       "value": "جمیل نوری (نستعلیق)"
+    },
+    {
+      "name": "theme_emerald",
+      "value": "زمردی"
+    },
+    {
+      "name": "theme_emerald_desc",
+      "value": "صاف اور متوازن انداز کے ساتھ زمردی سبز رنگ"
+    },
+    {
+      "name": "theme_charcoal",
+      "value": "چارکول"
+    },
+    {
+      "name": "theme_charcoal_desc",
+      "value": "مضبوط تضاد کے ساتھ خوبصورت سرمئی تھیم"
+    },
+    {
+      "name": "theme_sky",
+      "value": "آسمانی"
+    },
+    {
+      "name": "theme_sky_desc",
+      "value": "کھلے آسمان سے متاثر تازگی بخش آسمانی نیلا رنگ"
+    },
+    {
+      "name": "theme_amethyst",
+      "value": "جمشتی"
+    },
+    {
+      "name": "theme_amethyst_desc",
+      "value": "نفیس اور جدید احساس کے ساتھ نرم جامنی رنگ"
+    },
+    {
+      "name": "theme_rose",
+      "value": "گلابی"
+    },
+    {
+      "name": "theme_rose_desc",
+      "value": "توانائی بھرے گرم گلابی رنگ"
+    },
+    {
+      "name": "theme_cobalt",
+      "value": "کوبالٹ"
+    },
+    {
+      "name": "theme_cobalt_desc",
+      "value": "پیشہ ورانہ انداز کے لیے نمایاں کوبالٹ نیلا رنگ"
+    },
+    {
+      "name": "theme_navy",
+      "value": "سرمہ نیلا"
+    },
+    {
+      "name": "theme_navy_desc",
+      "value": "ہمیشہ دلکش کلاسیکی نیوی بلیو تھیم"
+    },
+    {
+      "name": "theme_violet",
+      "value": "بنفشی"
+    },
+    {
+      "name": "theme_violet_desc",
+      "value": "پرسکون اور تخلیقی ماحول کے ساتھ گہرے بنفشی رنگ"
+    },
+    {
+      "name": "theme_lime",
+      "value": "لیموں سبز"
+    },
+    {
+      "name": "theme_lime_desc",
+      "value": "قدرت سے متاثر تازہ لیموں سبز رنگ"
+    },
+    {
+      "name": "theme_teal",
+      "value": "سبز مائل نیلا"
+    },
+    {
+      "name": "theme_teal_desc",
+      "value": "نیلے اور سبز رنگوں کا جدید امتزاج"
+    },
+    {
+      "name": "theme_pine",
+      "value": "صنوبر"
+    },
+    {
+      "name": "theme_pine_desc",
+      "value": "قدرتی انداز کے ساتھ گہرے صنوبر سبز رنگ"
+    },
+    {
+      "name": "theme_olive",
+      "value": "زیتونی"
+    },
+    {
+      "name": "theme_olive_desc",
+      "value": "نفیس زیتونی رنگوں پر مبنی زمینی تھیم"
+    },
+    {
+      "name": "theme_sunflower",
+      "value": "سورج مکھی"
+    },
+    {
+      "name": "theme_sunflower_desc",
+      "value": "خوشگوار تجربے کے لیے چمکدار زرد رنگ"
+    },
+    {
+      "name": "theme_sand",
+      "value": "ریتلا"
+    },
+    {
+      "name": "theme_sand_desc",
+      "value": "گرمجوش اور آرام دہ احساس کے ساتھ نرم ریتلے رنگ"
+    },
+    {
+      "name": "theme_umber",
+      "value": "مٹیالا بھورا"
+    },
+    {
+      "name": "theme_umber_desc",
+      "value": "قدرتی زمینی رنگوں سے متاثر بھرپور بھورے شیڈز"
+    },
+    {
+      "name": "theme_wine",
+      "value": "شرابی"
+    },
+    {
+      "name": "theme_wine_desc",
+      "value": "پرتعیش انداز کے ساتھ گہرے شرابی سرخ رنگ"
+    },
+    {
+      "name": "theme_mustard",
+      "value": "سرسوںی"
+    },
+    {
+      "name": "theme_mustard_desc",
+      "value": "توانائی سے بھرپور گرم سنہری سرسوںی رنگ"
+    },
+    {
+      "name": "theme_coral",
+      "value": "مرجانی"
+    },
+    {
+      "name": "theme_coral_desc",
+      "value": "خوش آمدیدی احساس کے ساتھ نرم مرجانی رنگ"
+    },
+    {
+      "name": "theme_crimson",
+      "value": "قرمزی"
+    },
+    {
+      "name": "theme_crimson_desc",
+      "value": "جری بصری انداز کے لیے نمایاں قرمزی رنگ"
+    },
+    {
+      "name": "theme_tangerine",
+      "value": "مالٹائی"
+    },
+    {
+      "name": "theme_tangerine_desc",
+      "value": "حرارت اور توانائی سے بھرپور شوخ نارنجی رنگ"
+    },
+    {
+      "name": "theme_preset",
+      "value": "تھیم سیٹ"
     }
   ]
 }

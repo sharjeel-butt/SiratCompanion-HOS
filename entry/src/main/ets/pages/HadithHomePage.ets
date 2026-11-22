@@ -1,17 +1,21 @@
 import { common } from '@kit.AbilityKit';
 import { router } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import { L } from '../i18n/LocalizationHelper';
-import { STORAGE_KEY_HADITH_TRANSLATION_LANG, STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../core/StorageKeys';
+import {
+  STORAGE_KEY_HADITH_TRANSLATION_LANG,
+  STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_THEME_MODE
+} from '../core/common/StorageKeys';
 import { BilingualHadith, Catalog, HadithDbRecord, HadithRef } from '../hadith/HadithModels';
 import { HadithSearchService } from '../hadith/HadithSearchService';
 import { HadithDbHelper } from '../hadith/HadithDbHelper';
-import { NavHelper } from '../core/NavHelper';
+import { NavHelper } from '../core/util/NavHelper';
 import { util } from '@kit.ArkTS';
-import { RawPaths } from '../core/RawPaths';
-import { AppLogger } from '../core/AppLogger';
-import { TypographyHelper } from '../core/TypographyHelper';
+import { RawPaths } from '../core/common/RawPaths';
+import { AppLogger } from '../core/app/AppLogger';
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
 
 @Entry
 @Component

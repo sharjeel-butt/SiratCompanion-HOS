@@ -1,7 +1,7 @@
 // entry/src/main/ets/utils/LocationCache.ets
 
-import { PreferencesHelper } from '../core/PreferencesHelper';
-import { STORAGE_KEY_LOCATION_VERSION } from '../core/StorageKeys';
+import { PreferencesHelper } from '../core/util/PreferencesHelper';
+import { STORAGE_KEY_LOCATION_VERSION } from '../core/common/StorageKeys';
 
 export interface FallbackLocation {
   latitude: number;

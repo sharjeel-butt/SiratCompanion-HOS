@@ -1,9 +1,9 @@
 // entry/src/main/ets/hadith/GradeBadge.ets
 
-import { ThemeColors } from '../core/Theme';
+import { ThemeColors } from '../core/ui/themes/Theme';
 import { L } from '../i18n/LocalizationHelper';
 import { HadithGrading } from './HadithModels';
-import { GradeThemeHelper } from '../core/GradeThemeHelper';
+import { GradeThemeHelper } from '../core/ui/themes/GradeThemeHelper';
 
 @Component
 export struct GradeBadge {

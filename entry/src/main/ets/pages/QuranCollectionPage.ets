@@ -1,21 +1,25 @@
 import { common } from '@kit.AbilityKit';
 import { router } from '@kit.ArkUI';
-import { ThemeColors, ThemeMode } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import { L } from '../i18n/LocalizationHelper';
-import { STORAGE_KEY_DUA_TRANSLATION_LANG, STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../core/StorageKeys';
+import {
+  STORAGE_KEY_DUA_TRANSLATION_LANG,
+  STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_THEME_MODE
+} from '../core/common/StorageKeys';
 import { QuranGraphService } from '../quran/QuranGraphService';
 import { DuaService } from '../duas/DuaService';
 import { CompleteDua } from '../duas/DuaModels';
 import { DuaCard } from '../duas/DuaCard';
-import { NavHelper } from '../core/NavHelper';
+import { NavHelper } from '../core/util/NavHelper';
 
 @Entry
 @Component
 struct QuranCollectionPage {
   @StorageLink(STORAGE_KEY_THEME_MODE) @Watch('onThemeModeChanged') themeMode: string = ThemeMode.SYSTEM;
   @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLangChanged') appLanguage: string = 'en';
-  @StorageLink(STORAGE_KEY_DUA_TRANSLATION_LANG) duaTransLang: string = 'default';
+  @StorageLink(STORAGE_KEY_DUA_TRANSLATION_LANG) @Watch('onDuaLangChanged') duaTransLang: string = 'default';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State title: string = '';
   @State duas: CompleteDua[] = [];
@@ -42,6 +46,15 @@ struct QuranCollectionPage {
 
     this.duas = allDuas.filter((d: CompleteDua) => duaIds.includes(d.id));
     this.isLoading = false;
+  }
+
+  onDuaLangChanged() {
+    this.aboutToAppear(); // Reload data immediately when the setting changes
+  }
+
+  async onPageShow() {
+    // Reload when navigating back from Customize or DuaDetailsPage
+    await this.aboutToAppear();
   }
 
   onThemeModeChanged() {

@@ -5,12 +5,12 @@ import { fileIo as fs } from '@kit.CoreFileKit';
 import { util } from '@kit.ArkTS';
 import { zlib } from '@kit.BasicServicesKit';
 import { relationalStore } from '@kit.ArkData';
-import { PreferencesHelper } from '../core/PreferencesHelper';
-import { AppLogger } from '../core/AppLogger';
-import { RawPaths } from '../core/RawPaths';
+import { PreferencesHelper } from '../core/util/PreferencesHelper';
+import { AppLogger } from '../core/app/AppLogger';
+import { RawPaths } from '../core/common/RawPaths';
 import {
   STORAGE_KEY_CORE_DB_VERSION, STORAGE_KEY_QURAN_DB_VERSION
-} from '../core/StorageKeys';
+} from '../core/common/StorageKeys';
 
 /**
  * Eagerly extracts core.db and quran.db from rawfile on first launch

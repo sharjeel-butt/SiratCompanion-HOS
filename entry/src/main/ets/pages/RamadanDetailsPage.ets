@@ -1,8 +1,8 @@
 // entry/src/main/ets/pages/RamadanDetailsPage.ets
 
 import { mediaquery, router } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
 import { CalendarDay } from '../hijricalendar/HijriCalendarModels';
 import {
@@ -14,11 +14,11 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_RAMADAN_STATE_VERSION,
   STORAGE_KEY_THEME_MODE
-} from '../core/StorageKeys';
+} from '../core/common/StorageKeys';
 import { DuaCard } from '../duas/DuaCard';
 import { DuaService } from '../duas/DuaService';
 import { CompleteDua } from '../duas/DuaModels';
-import { Breakpoints } from '../core/Breakpoints';
+import { Breakpoints } from '../core/layout/Breakpoints';
 import { L } from '../i18n/LocalizationHelper';
 import {
   LaylatAlQadrNight, RamadanAshra, RamadanHelper, RamadanInfo
@@ -49,7 +49,7 @@ struct RamadanDetailsPage {
   // ============================================================
   // STORAGE LINKS
   // ============================================================
-  @StorageLink(STORAGE_KEY_DUA_TRANSLATION_LANG) @Watch('onLanguageChanged') duaTransLang: string = 'default';
+  @StorageLink(STORAGE_KEY_DUA_TRANSLATION_LANG) @Watch('onDuaLangChanged') duaTransLang: string = 'default';
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
@@ -58,7 +58,7 @@ struct RamadanDetailsPage {
   appLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
-  appThemePreset: string = ThemePreset.SIRAT;
+  appThemePreset: string = '';
   @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
   @Watch('onHijriOffsetChanged')
   hijriOffset: number = 0;
@@ -122,6 +122,10 @@ struct RamadanDetailsPage {
   aboutToDisappear(): void {
     PageTheme.uninstallSystemListener(this.systemDarkListener);
     this.systemDarkListener = null;
+  }
+
+  onDuaLangChanged() {
+    this.loadDuasForSection();
   }
 
   onPageShow(): void {

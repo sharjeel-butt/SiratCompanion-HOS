@@ -1,8 +1,8 @@
 // entry/src/main/ets/pages/PrayerProgressPage.ets
 
 import { mediaquery, router } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
@@ -11,7 +11,7 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_PRAYER_STATE_VERSION,
   STORAGE_KEY_THEME_MODE
-} from '../core/StorageKeys';
+} from '../core/common/StorageKeys';
 import { L } from '../i18n/LocalizationHelper';
 import {
   MonthDayCell,
@@ -22,8 +22,8 @@ import {
   YearDetailSnapshot,
   YearMonthRow
 } from '../progress/ProgressHelper';
-import { Breakpoints } from '../core/Breakpoints';
-import { TypographyHelper } from '../core/TypographyHelper';
+import { Breakpoints } from '../core/layout/Breakpoints';
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
 
 type Period = 'week' | 'month' | 'year';
 
@@ -37,7 +37,7 @@ struct PrayerDetailsPage {
   appLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
-  appThemePreset: string = ThemePreset.SIRAT;
+  appThemePreset: string = '';
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;

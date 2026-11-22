@@ -6,11 +6,11 @@ import { PrayerManager } from '../prayer/PrayerManager';
 import { DateHelper } from '../hijricalendar/DateUtils';
 import { RamadanHelper } from '../ramadan/RamadanHelper';
 import { L } from '../i18n/LocalizationHelper';
-import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_LANGUAGE_OVERRIDE } from '../core/StorageKeys';
-import { ClockFormatHelper } from '../core/ClockFormat';
-import { AppLogger } from '../core/AppLogger';
+import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_LANGUAGE_OVERRIDE } from '../core/common/StorageKeys';
+import { ClockFormatHelper } from '../core/util/ClockFormat';
+import { AppLogger } from '../core/app/AppLogger';
 import { formBindingData } from '@kit.FormKit';
-import { PreferencesHelper } from '../core/PreferencesHelper';
+import { PreferencesHelper } from '../core/util/PreferencesHelper';
 import { OfflineCityLookup } from '../location/OfflineCityLookup';
 import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
 import { IslamicEventService } from '../hijricalendar/IslamicEventService';
@@ -20,7 +20,7 @@ import { util } from '@kit.ArkTS';
 import { RecurrenceType } from '../hijricalendar/CustomEventModels';
 import { CustomEventStorage } from '../hijricalendar/CustomEventStorage';
 import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
-import { RawPaths } from '../core/RawPaths';
+import { RawPaths } from '../core/common/RawPaths';
 
 
 export interface WidgetCalendarDay {

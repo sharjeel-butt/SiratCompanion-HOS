@@ -1,13 +1,13 @@
 import { common } from '@kit.AbilityKit';
 import { util } from '@kit.ArkTS';
 import { BaseDua, CompleteDua, DuaSource, TranslatedDua } from './DuaModels';
-import { PreferencesHelper } from '../core/PreferencesHelper';
+import { PreferencesHelper } from '../core/util/PreferencesHelper';
 import { RamadanInfo } from '../ramadan/RamadanHelper';
-import { STORAGE_KEY_DUA_BINDINGS_VERSION } from '../core/StorageKeys';
+import { STORAGE_KEY_DUA_BINDINGS_VERSION } from '../core/common/StorageKeys';
 import { CustomEventKeywordHelper } from './CustomEventKeywordHelper';
 import { UpcomingCustomEvent } from '../pages/HomePage';
 import { UpcomingImportantDate } from '../hijricalendar/DateModels';
-import { RawPaths } from '../core/RawPaths';
+import { RawPaths } from '../core/common/RawPaths';
 
 const KEY_DUA_FAVORITES = 'dua_favorites';
 const KEY_DUA_BINDINGS = 'dua_bindings';

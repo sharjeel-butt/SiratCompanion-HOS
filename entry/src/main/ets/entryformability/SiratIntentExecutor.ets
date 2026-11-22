@@ -1,14 +1,14 @@
 import { insightIntent, InsightIntentExecutor } from '@kit.AbilityKit';
 import { window } from '@kit.ArkUI';
 import { WidgetDataBuilder } from '../widgets/WidgetDataBuilder';
-import { PreferencesHelper } from '../core/PreferencesHelper';
+import { PreferencesHelper } from '../core/util/PreferencesHelper';
 import { RamadanHelper, RamadanInfo } from '../ramadan/RamadanHelper';
 import { L } from '../i18n/LocalizationHelper';
 import {
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LANGUAGE_OVERRIDE
-} from '../core/StorageKeys';
+} from '../core/common/StorageKeys';
 
 /**
  * XiaoYi insight-intent executor.

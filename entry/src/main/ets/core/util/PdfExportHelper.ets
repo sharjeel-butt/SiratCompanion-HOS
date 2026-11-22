@@ -6,8 +6,8 @@ import { common } from '@kit.AbilityKit';
 import { componentSnapshot, promptAction } from '@kit.ArkUI';
 import { image } from '@kit.ImageKit';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { L } from '../i18n/LocalizationHelper';
-import { AppLogger } from './AppLogger';
+import { L } from '../../i18n/LocalizationHelper';
+import { AppLogger } from '../app/AppLogger';
 
 export class PdfExportHelper {
   static async exportBuilderToPdf(

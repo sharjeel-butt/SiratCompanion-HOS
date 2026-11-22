@@ -1,9 +1,9 @@
 import { common } from '@kit.AbilityKit';
 import { util } from '@kit.ArkTS';
 import { Catalog, HadithMetadata, HadithRef, QueryRouter, RouteResult } from './HadithModels';
-import { AppLogger } from '../core/AppLogger';
+import { AppLogger } from '../core/app/AppLogger';
 import { HadithDbHelper } from './HadithDbHelper';
-import { RawPaths } from '../core/RawPaths';
+import { RawPaths } from '../core/common/RawPaths';
 
 interface I18nEntry {
   name: string;

@@ -1,7 +1,7 @@
 import { router } from '@kit.ArkUI';
-import { ThemeColors } from '../core/Theme';
-import { PreferencesHelper } from '../core/PreferencesHelper';
-import { STORAGE_KEY_DUA_BINDINGS_VERSION } from '../core/StorageKeys';
+import { ThemeColors } from '../core/ui/themes/Theme';
+import { PreferencesHelper } from '../core/util/PreferencesHelper';
+import { STORAGE_KEY_DUA_BINDINGS_VERSION } from '../core/common/StorageKeys';
 
 @Component
 export struct DuaIndicator {

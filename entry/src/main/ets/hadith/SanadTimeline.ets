@@ -1,6 +1,6 @@
 // entry/src/main/ets/hadith/SanadTimeline.ets
 
-import { ThemeColors } from '../core/Theme';
+import { ThemeColors } from '../core/ui/themes/Theme';
 import { L } from '../i18n/LocalizationHelper';
 import { Sanad, SanadStep } from './HadithModels';
 

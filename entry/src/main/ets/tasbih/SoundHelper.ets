@@ -7,9 +7,9 @@ import { resourceManager } from '@kit.LocalizationKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import {
   STORAGE_KEY_SOUND_ENABLED, STORAGE_KEY_TASBIH_SOUND
-} from '../core/StorageKeys';
+} from '../core/common/StorageKeys';
 import { SoundOptions, TASBIH_SOUND_OPTIONS } from './SoundOptions';
-import { SystemFeedbackHelper } from '../core/SystemFeedbackHelper';
+import { SystemFeedbackHelper } from '../core/util/SystemFeedbackHelper';
 
 /**
  * Plays a short click on each Tasbih count.

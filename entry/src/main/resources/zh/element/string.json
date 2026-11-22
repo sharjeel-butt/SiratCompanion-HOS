@@ -1289,90 +1289,6 @@
       "value": "在线"
     },
     {
-      "name": "theme_preset",
-      "value": "应用主题"
-    },
-    {
-      "name": "theme_preset_desc",
-      "value": "选择应用的视觉风格"
-    },
-    {
-      "name": "theme_preset_sirat",
-      "value": "Sirat · 现代"
-    },
-    {
-      "name": "theme_preset_sirat_desc",
-      "value": "现代简约 — HarmonyOS 7 风格"
-    },
-    {
-      "name": "theme_preset_current",
-      "value": "Sirat 经典"
-    },
-    {
-      "name": "theme_preset_current_desc",
-      "value": "暖米色与深绿 — 经典原版"
-    },
-    {
-      "name": "theme_preset_harmony7",
-      "value": "Noor · 光辉"
-    },
-    {
-      "name": "theme_preset_harmony7_desc",
-      "value": "光辉紫罗兰 — 宁静现代"
-    },
-    {
-      "name": "theme_preset_harmony6",
-      "value": "Sahar · 晨曦"
-    },
-    {
-      "name": "theme_preset_harmony6_desc",
-      "value": "晨曦琥珀 — 初光之静"
-    },
-    {
-      "name": "theme_preset_harmony5",
-      "value": "Bahar · 春韵"
-    },
-    {
-      "name": "theme_preset_harmony5_desc",
-      "value": "海韵青绿 — 辽阔清爽"
-    },
-    {
-      "name": "theme_amber",
-      "value": "琥珀"
-    },
-    {
-      "name": "theme_charcoal",
-      "value": "炭黑"
-    },
-    {
-      "name": "theme_emerald",
-      "value": "翡翠"
-    },
-    {
-      "name": "theme_pearl",
-      "value": "珍珠"
-    },
-    {
-      "name": "theme_gold",
-      "value": "金色（金属）"
-    },
-    {
-      "name": "theme_white",
-      "value": "白色"
-    },
-    {
-      "name": "theme_sapphire",
-      "value": "蓝宝石"
-    },
-    {
-      "name": "theme_rose",
-      "value": "玫瑰"
-    },
-    {
-      "name": "theme_silver",
-      "value": "银色"
-    },
-    {
       "name": "wizard_step",
       "value": "步骤"
     },
@@ -3475,6 +3391,170 @@
     {
       "name": "trans_font_JameelNoori",
       "value": "Jameel Noori（纳斯塔里克体）"
+    },
+    {
+      "name": "theme_emerald",
+      "value": "翡翠"
+    },
+    {
+      "name": "theme_emerald_desc",
+      "value": "采用翡翠绿色点缀，呈现简洁且平衡的视觉风格"
+    },
+    {
+      "name": "theme_charcoal",
+      "value": "炭灰"
+    },
+    {
+      "name": "theme_charcoal_desc",
+      "value": "优雅的灰度主题，具有鲜明的对比效果"
+    },
+    {
+      "name": "theme_sky",
+      "value": "天空蓝"
+    },
+    {
+      "name": "theme_sky_desc",
+      "value": "灵感源于广阔天空的清新蓝色配色"
+    },
+    {
+      "name": "theme_amethyst",
+      "value": "紫水晶"
+    },
+    {
+      "name": "theme_amethyst_desc",
+      "value": "柔和紫色调，兼具现代感与精致气息"
+    },
+    {
+      "name": "theme_rose",
+      "value": "玫瑰"
+    },
+    {
+      "name": "theme_rose_desc",
+      "value": "温暖的玫瑰粉色，充满活力与个性"
+    },
+    {
+      "name": "theme_cobalt",
+      "value": "钴蓝"
+    },
+    {
+      "name": "theme_cobalt_desc",
+      "value": "醒目的钴蓝色点缀，打造专业外观"
+    },
+    {
+      "name": "theme_navy",
+      "value": "海军蓝"
+    },
+    {
+      "name": "theme_navy_desc",
+      "value": "经典海军蓝主题，展现历久弥新的优雅"
+    },
+    {
+      "name": "theme_violet",
+      "value": "紫罗兰"
+    },
+    {
+      "name": "theme_violet_desc",
+      "value": "浓郁紫罗兰色调，营造平静且富有创造力的氛围"
+    },
+    {
+      "name": "theme_lime",
+      "value": "青柠"
+    },
+    {
+      "name": "theme_lime_desc",
+      "value": "灵感源于自然的清新青柠绿色点缀"
+    },
+    {
+      "name": "theme_teal",
+      "value": "蓝绿色"
+    },
+    {
+      "name": "theme_teal_desc",
+      "value": "融合蓝色与绿色的现代蓝绿色配色方案"
+    },
+    {
+      "name": "theme_pine",
+      "value": "松绿"
+    },
+    {
+      "name": "theme_pine_desc",
+      "value": "深邃的松树绿色，展现自然气息"
+    },
+    {
+      "name": "theme_olive",
+      "value": "橄榄"
+    },
+    {
+      "name": "theme_olive_desc",
+      "value": "低调雅致的橄榄色调，带有大地气息"
+    },
+    {
+      "name": "theme_sunflower",
+      "value": "向日葵"
+    },
+    {
+      "name": "theme_sunflower_desc",
+      "value": "明亮的向日葵黄色点缀，带来愉悦体验"
+    },
+    {
+      "name": "theme_sand",
+      "value": "沙色"
+    },
+    {
+      "name": "theme_sand_desc",
+      "value": "柔和的沙米色调，营造温暖放松的感觉"
+    },
+    {
+      "name": "theme_umber",
+      "value": "赭色"
+    },
+    {
+      "name": "theme_umber_desc",
+      "value": "灵感源于天然土地色彩的浓郁棕色调"
+    },
+    {
+      "name": "theme_wine",
+      "value": "酒红"
+    },
+    {
+      "name": "theme_wine_desc",
+      "value": "深邃酒红色点缀，展现奢华风格"
+    },
+    {
+      "name": "theme_mustard",
+      "value": "芥末黄"
+    },
+    {
+      "name": "theme_mustard_desc",
+      "value": "温暖的芥末金色配色，充满活力与能量"
+    },
+    {
+      "name": "theme_coral",
+      "value": "珊瑚"
+    },
+    {
+      "name": "theme_coral_desc",
+      "value": "柔和的珊瑚色调，营造亲切友好的氛围"
+    },
+    {
+      "name": "theme_crimson",
+      "value": "深红"
+    },
+    {
+      "name": "theme_crimson_desc",
+      "value": "强烈的深红色点缀，塑造大胆鲜明的视觉风格"
+    },
+    {
+      "name": "theme_tangerine",
+      "value": "橘橙"
+    },
+    {
+      "name": "theme_tangerine_desc",
+      "value": "充满温暖与活力的鲜艳橘橙色调"
+    },
+    {
+      "name": "theme_preset",
+      "value": "主题预设"
     }
   ]
 }

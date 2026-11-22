@@ -1289,90 +1289,6 @@
       "value": "Online"
     },
     {
-      "name": "theme_preset",
-      "value": "App Theme"
-    },
-    {
-      "name": "theme_preset_desc",
-      "value": "Choose the visual style of the app"
-    },
-    {
-      "name": "theme_preset_sirat",
-      "value": "Sirat"
-    },
-    {
-      "name": "theme_preset_sirat_desc",
-      "value": "Modern and minimal — a HarmonyOS 7 aesthetic"
-    },
-    {
-      "name": "theme_preset_current",
-      "value": "Sirat Classic"
-    },
-    {
-      "name": "theme_preset_current_desc",
-      "value": "Warm cream and deep green — the original"
-    },
-    {
-      "name": "theme_preset_harmony7",
-      "value": "Noor"
-    },
-    {
-      "name": "theme_preset_harmony7_desc",
-      "value": "Radiant violet — serene and modern"
-    },
-    {
-      "name": "theme_preset_harmony6",
-      "value": "Sahar"
-    },
-    {
-      "name": "theme_preset_harmony6_desc",
-      "value": "Golden amber — the calm of first light"
-    },
-    {
-      "name": "theme_preset_harmony5",
-      "value": "Bahar"
-    },
-    {
-      "name": "theme_preset_harmony5_desc",
-      "value": "Cool teal — vast, fresh, and clear"
-    },
-    {
-      "name": "theme_amber",
-      "value": "Amber"
-    },
-    {
-      "name": "theme_charcoal",
-      "value": "Charcoal"
-    },
-    {
-      "name": "theme_emerald",
-      "value": "Emerald"
-    },
-    {
-      "name": "theme_pearl",
-      "value": "Pearl"
-    },
-    {
-      "name": "theme_gold",
-      "value": "Gold (Metallic)"
-    },
-    {
-      "name": "theme_white",
-      "value": "White"
-    },
-    {
-      "name": "theme_sapphire",
-      "value": "Sapphire"
-    },
-    {
-      "name": "theme_rose",
-      "value": "Rose"
-    },
-    {
-      "name": "theme_silver",
-      "value": "Silver"
-    },
-    {
       "name": "wizard_step",
       "value": "Step"
     },
@@ -3503,6 +3419,170 @@
     {
       "name": "diag_ok",
       "value": "OK"
+    },
+    {
+      "name": "theme_emerald",
+      "value": "Emerald"
+    },
+    {
+      "name": "theme_emerald_desc",
+      "value": "Emerald green accent with a clean and balanced appearance"
+    },
+    {
+      "name": "theme_charcoal",
+      "value": "Charcoal"
+    },
+    {
+      "name": "theme_charcoal_desc",
+      "value": "Elegant grayscale theme with strong contrast"
+    },
+    {
+      "name": "theme_sky",
+      "value": "Sky"
+    },
+    {
+      "name": "theme_sky_desc",
+      "value": "Refreshing sky blue palette inspired by open skies"
+    },
+    {
+      "name": "theme_amethyst",
+      "value": "Amethyst"
+    },
+    {
+      "name": "theme_amethyst_desc",
+      "value": "Soft purple tones with a refined and modern feel"
+    },
+    {
+      "name": "theme_rose",
+      "value": "Rose"
+    },
+    {
+      "name": "theme_rose_desc",
+      "value": "Warm rose pink colors with a vibrant personality"
+    },
+    {
+      "name": "theme_cobalt",
+      "value": "Cobalt"
+    },
+    {
+      "name": "theme_cobalt_desc",
+      "value": "Bold cobalt blue accents for a professional look"
+    },
+    {
+      "name": "theme_navy",
+      "value": "Navy"
+    },
+    {
+      "name": "theme_navy_desc",
+      "value": "Classic navy blue theme with timeless elegance"
+    },
+    {
+      "name": "theme_violet",
+      "value": "Violet"
+    },
+    {
+      "name": "theme_violet_desc",
+      "value": "Rich violet hues with a calm and creative atmosphere"
+    },
+    {
+      "name": "theme_lime",
+      "value": "Lime"
+    },
+    {
+      "name": "theme_lime_desc",
+      "value": "Fresh lime green accents inspired by nature"
+    },
+    {
+      "name": "theme_teal",
+      "value": "Teal"
+    },
+    {
+      "name": "theme_teal_desc",
+      "value": "Modern teal palette blending blue and green tones"
+    },
+    {
+      "name": "theme_pine",
+      "value": "Pine"
+    },
+    {
+      "name": "theme_pine_desc",
+      "value": "Deep pine green colors with a natural appearance"
+    },
+    {
+      "name": "theme_olive",
+      "value": "Olive"
+    },
+    {
+      "name": "theme_olive_desc",
+      "value": "Earthy olive tones with subtle sophistication"
+    },
+    {
+      "name": "theme_sunflower",
+      "value": "Sunflower"
+    },
+    {
+      "name": "theme_sunflower_desc",
+      "value": "Bright sunflower yellow accents for a cheerful experience"
+    },
+    {
+      "name": "theme_sand",
+      "value": "Sand"
+    },
+    {
+      "name": "theme_sand_desc",
+      "value": "Soft sandy beige colors with a warm and relaxing feel"
+    },
+    {
+      "name": "theme_umber",
+      "value": "Umber"
+    },
+    {
+      "name": "theme_umber_desc",
+      "value": "Rich brown tones inspired by natural earth colors"
+    },
+    {
+      "name": "theme_wine",
+      "value": "Wine"
+    },
+    {
+      "name": "theme_wine_desc",
+      "value": "Deep wine-red accents with a luxurious appearance"
+    },
+    {
+      "name": "theme_mustard",
+      "value": "Mustard"
+    },
+    {
+      "name": "theme_mustard_desc",
+      "value": "Warm mustard gold palette with vibrant energy"
+    },
+    {
+      "name": "theme_coral",
+      "value": "Coral"
+    },
+    {
+      "name": "theme_coral_desc",
+      "value": "Gentle coral shades with a welcoming atmosphere"
+    },
+    {
+      "name": "theme_crimson",
+      "value": "Crimson"
+    },
+    {
+      "name": "theme_crimson_desc",
+      "value": "Strong crimson accents for a bold visual style"
+    },
+    {
+      "name": "theme_tangerine",
+      "value": "Tangerine"
+    },
+    {
+      "name": "theme_tangerine_desc",
+      "value": "Lively tangerine orange tones full of warmth and energy"
+    },
+    {
+      "name": "theme_preset",
+      "value": "Theme Preset"
     }
   ]
 }

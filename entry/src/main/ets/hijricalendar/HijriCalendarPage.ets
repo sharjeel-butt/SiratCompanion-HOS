@@ -2,12 +2,12 @@
 
 import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import { CustomEvent, RecurrenceType } from './CustomEventModels';
 import { CustomEventStorage } from './CustomEventStorage';
 import { CustomEventNotifier } from './CustomEventNotifier';
-import { SourceParser } from '../core/SourceParser';
+import { SourceParser } from '../i18n/SourceParser';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -18,18 +18,18 @@ import {
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
-} from '../core/StorageKeys';
+} from '../core/common/StorageKeys';
 import { CalendarDay, HijriDate } from './HijriCalendarModels';
 import { IslamicEvent, IslamicEventSource } from './DateModels';
 import { HijriCalendarHelper } from './HijriCalendarHelper';
 import { L } from '../i18n/LocalizationHelper';
-import { Breakpoints } from '../core/Breakpoints';
+import { Breakpoints } from '../core/layout/Breakpoints';
 import { HijriCalendarType } from './HijriCalendarType';
 import { SettingsHelper } from '../settings/SettingsHelper';
-import { PdfExportHelper } from '../core/PdfExportHelper';
+import { PdfExportHelper } from '../core/util/PdfExportHelper';
 import { EventPerspectiveNotifier } from './EventPerspectiveNotifier';
 import { IslamicEventService } from './IslamicEventService';
-import { NavHelper } from '../core/NavHelper';
+import { NavHelper } from '../core/util/NavHelper';
 
 // Interface for PDF Export
 export interface CalendarExportDay {
@@ -52,7 +52,7 @@ export struct HijriCalendarPage {
   appLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
-  appThemePreset: string = ThemePreset.SIRAT;
+  appThemePreset: string = '';
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;

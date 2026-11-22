@@ -1,9 +1,9 @@
 import { promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
-import { ThemeColors, ThemeMode } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import { L } from '../i18n/LocalizationHelper';
-import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../core/StorageKeys';
+import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../core/common/StorageKeys';
 import { MosqueService } from '../mosques/MosqueService';
 import { MosqueModel } from '../mosques/MosqueModels';
 import { MosqueDbHelper } from '../mosques/MosqueDbHelper';

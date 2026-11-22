@@ -2,7 +2,7 @@
 
 import { vibrator } from '@kit.SensorServiceKit';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { STORAGE_KEY_VIBRATION_ENABLED } from './StorageKeys';
+import { STORAGE_KEY_VIBRATION_ENABLED } from '../common/StorageKeys';
 import { SystemFeedbackHelper } from './SystemFeedbackHelper';
 
 /**

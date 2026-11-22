@@ -1,7 +1,7 @@
 // entry/src/main/ets/helper/RamadanStorage.ets
 
-import { PreferencesHelper } from '../core/PreferencesHelper';
-import { AppLogger } from '../core/AppLogger';
+import { PreferencesHelper } from '../core/util/PreferencesHelper';
+import { AppLogger } from '../core/app/AppLogger';
 import {
   FastingDay,
   FastingStatus,
@@ -13,7 +13,7 @@ import {
 } from './RamadanModels';
 import {
   STORAGE_KEY_RAMADAN_LOG, STORAGE_KEY_RAMADAN_STATE_VERSION
-} from '../core/StorageKeys';
+} from '../core/common/StorageKeys';
 
 /**
  * Persistence and pure helpers for the Ramadan tracker.

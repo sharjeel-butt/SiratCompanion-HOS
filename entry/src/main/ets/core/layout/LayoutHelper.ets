@@ -2,7 +2,7 @@
 
 import { mediaquery } from '@kit.ArkUI';
 import { Breakpoints } from './Breakpoints';
-import { STORAGE_KEY_BREAKPOINT } from './StorageKeys';
+import { STORAGE_KEY_BREAKPOINT } from '../common/StorageKeys';
 
 /**
  * Reactive breakpoint tracking for the whole app.

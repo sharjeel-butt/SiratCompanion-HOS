@@ -1,8 +1,8 @@
 // entry/src/main/ets/pages/CustomizePage.ets
 
 import { mediaquery, router } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import { SettingsHelper } from '../settings/SettingsHelper';
 import { PickerItem } from '../settings/SettingsModels';
 import { NotificationHelper } from '../prayer/NotificationHelper';
@@ -33,17 +33,22 @@ import {
   STORAGE_KEY_THEME_OVERRIDE,
   STORAGE_KEY_TIME_FORMAT,
   STORAGE_KEY_TRANSLATION_FONT
-} from '../core/StorageKeys';
-import { AppLanguage, L } from '../i18n/LocalizationHelper';
+} from '../core/common/StorageKeys';
+import { L } from '../i18n/LocalizationHelper';
+import { LanguageService } from '../i18n/LanguageService';
+import { AppLanguageJson } from '../i18n/LanguageModels';
 import { SoundHelper } from '../tasbih/SoundHelper';
 import { SoundOptions, TASBIH_SOUND_OPTIONS, TasbihSoundOption } from '../tasbih/SoundOptions';
-import { Breakpoints } from '../core/Breakpoints';
-import { ClockFormat } from '../core/ClockFormat';
+import { Breakpoints } from '../core/layout/Breakpoints';
+import { ClockFormat } from '../core/util/ClockFormat';
 import { SubsectionHeader } from '../components/SubsectionHeader';
 import { ExtraTimingToggleRow } from '../prayer/ExtraTimingToggleRow';
 import { common } from '@kit.AbilityKit';
 import { WidgetHelper } from '../widgets/WidgetHelper';
-import { TypographyHelper } from '../core/TypographyHelper';
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
+import { ThemeService } from '../core/ui/themes/ThemeService';
+import { AppThemeJson } from '../core/ui/themes/ThemeModels';
+import { AppLogger } from '../core/app/AppLogger';
 
 @Entry
 @Component
@@ -60,16 +65,16 @@ struct CustomizePage {
   autoShowRamadanView: boolean = true;
   @StorageLink(STORAGE_KEY_LANGUAGE_OVERRIDE)
   @Watch('onLanguageOverrideChanged')
-  languageOverride: string = AppLanguage.SYSTEM;
+  languageOverride: string = 'system';
   @StorageLink(STORAGE_KEY_THEME_OVERRIDE)
   @Watch('onThemeOverrideChanged')
   themeOverride: string = ThemeMode.SYSTEM;
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
-  appLanguage: string = AppLanguage.ENGLISH;
+  appLanguage: string = LanguageService.defaultLanguage();
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
-  appTheme: string = ThemePreset.CURRENT;
+  appTheme: string = '';
   @StorageLink(STORAGE_KEY_SYSTEM_SOUND_ENABLED)
   @Watch('onSystemFeedbackChanged')
   systemSoundEnabled: boolean = true;
@@ -131,7 +136,7 @@ struct CustomizePage {
   // ============================================================
 
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
-  @State currentLanguage: string = AppLanguage.ENGLISH;
+  @State currentLanguage: string = LanguageService.defaultLanguage();
   @State showClockFormatPicker: boolean = false;
   @State vibrationEnabled: boolean = true;
   @State soundEnabled: boolean = true;
@@ -1153,7 +1158,7 @@ struct CustomizePage {
         Column() {
           Text(this.tr('theme_preset'))
             .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-          Text(this.tr('theme_preset_desc'))
+          Text(this.currentThemeDescription())
             .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
 
           // FIX: Use Row({ space: 8 }) instead of margin left
@@ -1166,7 +1171,7 @@ struct CustomizePage {
               .border({ width: 1, color: this.colors.borderSoft })
               .flexShrink(0)
 
-            Text(this.appThemeLabel())
+            Text(this.currentThemeName())
               .fontSize(12)
               .fontColor(this.colors.accentGold)
               .maxLines(1)
@@ -1250,13 +1255,6 @@ struct CustomizePage {
 
   @Builder
   AppThemePicker() {
-    Column()
-      .width('100%').height('100%')
-      .backgroundColor(this.colors.overlayDim)
-      .onClick(() => {
-        this.showAppThemePicker = false;
-      })
-
     Column() {
       Row()
         .width(44)
@@ -1268,12 +1266,10 @@ struct CustomizePage {
       Row({ space: 14 }) {
         Row() {
           Image($r('app.media.ic_palette')).width(22).height(22).fillColor(this.colors.accentGold)
-        }
-        .width(44).height(44).justifyContent(FlexAlign.Center).alignItems(VerticalAlign.Center)
+        }.width(44).height(44).justifyContent(FlexAlign.Center)
 
         Text(this.tr('theme_preset'))
-          .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
-          .layoutWeight(1)
+          .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite).layoutWeight(1)
       }
       .width('100%')
       .padding({
@@ -1285,108 +1281,47 @@ struct CustomizePage {
 
       Divider().color(this.colors.borderSoft).width('90%')
 
+      // 👇 NEW: Grid Layout based on the image
       Scroll() {
-        Column() {
-          ForEach(
-            [ThemePreset.SIRAT, ThemePreset.CURRENT, ThemePreset.HARMONY_7,
-              ThemePreset.HARMONY_6, ThemePreset.HARMONY_5],
-            (preset: string) => {
-              Row({ space: 14 }) { // <-- Added Row space
-                Row()
-                  .width(34)
-                  .height(34)
-                  .borderRadius(17)
-                  .backgroundColor(this.appThemeSwatch(preset))
-                  .border({
-                    width: 2,
-                    color: preset === this.appTheme
-                      ? this.colors.accentGold : this.colors.borderSoft
-                  })
-                  .flexShrink(0)
-
-                Column() {
-                  Text(SettingsHelper.getAppThemeLabel(preset))
-                    .fontSize(15)
-                    .fontColor(preset === this.appTheme
-                      ? this.colors.accentGold
-                      : this.colors.textWhite)
-                    .fontWeight(preset === this.appTheme
-                      ? FontWeight.Bold
-                      : FontWeight.Normal)
-                    .width('100%')
-
-                  Text(this.appThemeSubtitle(preset))
-                    .fontSize(11)
-                    .fontColor(this.colors.textMuted)
-                    .margin({ top: 2 })
-                    .width('100%')
-                    .maxLines(2)
-                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+        Grid() {
+          ForEach(ThemeService.getAllThemes(), (theme: AppThemeJson) => {
+            GridItem() {
+              Column() {
+                Stack() {
+                  Circle()
+                    .width(48).height(48)
+                    .fill(theme.light.accent) // Show light mode accent as the swatch
+                  if (theme.id === this.appTheme) {
+                    Image($r('app.media.ic_check'))
+                      .width(24).height(24)
+                      .fillColor('#FFFFFF')
+                  }
                 }
-                .alignItems(HorizontalAlign.Start)
-                .layoutWeight(1)
-
-                if (preset === this.appTheme) {
-                  Image($r('app.media.ic_check')).width(18).height(18).fillColor(this.colors.accentGold)
-                }
+                .onClick(() => this.pickAppTheme(theme.id))
               }
-              .width('100%')
-              .padding({
-                top: 14,
-                bottom: 14,
-                left: 20,
-                right: 20
-              })
-              .backgroundColor(preset === this.appTheme
-                ? this.colors.tintSoft
-                : 'transparent')
-              .borderRadius(12)
-              .margin({ bottom: 4 })
-              .alignItems(VerticalAlign.Center)
-              .onClick(() => {
-                this.pickAppTheme(preset);
-              })
-            },
-            (preset: string) => `preset-${preset}`
-          )
+            }
+          }, (theme: AppThemeJson) => theme.id)
         }
-        .width('100%')
-        .padding({
-          left: 8,
-          right: 8,
-          top: 12,
-          bottom: 12
-        })
+        .columnsTemplate('1fr 1fr 1fr 1fr') // 4 columns like the image
+        .columnsGap(16).rowsGap(16)
+        .padding(20)
       }
-      .layoutWeight(1) // <-- Critical fix
-      .width('100%')
-      .scrollBar(BarState.Auto)
-      .edgeEffect(EdgeEffect.Spring)
+      .layoutWeight(1).width('100%')
 
       Button(this.tr('cancel'))
         .width('90%')
         .height(48)
-        .fontSize(15)
-        .fontWeight(FontWeight.Medium)
-        .fontColor(this.colors.textWhite)
-        .backgroundColor(this.colors.tintSoft)
-        .borderRadius(12)
         .margin({ top: 8, bottom: 24 })
+        .backgroundColor(this.colors.tintSoft)
+        .fontColor(this.colors.textWhite)
         .onClick(() => {
           this.showAppThemePicker = false;
         })
     }
     .width('100%')
-    .constraintSize({ maxHeight: '85%' }) // <-- Critical fix
+    .constraintSize({ maxHeight: '85%' })
     .backgroundColor(this.colors.cardDark)
     .borderRadius({ topLeft: 28, topRight: 28 })
-    .shadow({
-      radius: 24,
-      color: this.colors.shadowFloating,
-      offsetX: 0,
-      offsetY: -6
-    })
-    .border({ width: { top: 1 }, color: this.colors.borderSoft })
     .position({ bottom: 0 })
   }
 
@@ -1980,33 +1915,26 @@ struct CustomizePage {
   }
 
   private buildLanguageItems(): PickerItem[] {
-    const langs = [
-      AppLanguage.SYSTEM,
-      AppLanguage.ENGLISH,
-      AppLanguage.INDONESIAN,
-      AppLanguage.URDU,
-      AppLanguage.TURKISH,
-      AppLanguage.BENGALI,
-      AppLanguage.CHINESE,
-      AppLanguage.ARABIC
-    ];
-    return langs.map((l): PickerItem => {
-      const item: PickerItem = {
-        id: l,
-        label: l === AppLanguage.SYSTEM
-          ? this.tr('lang_system')
-          : L.get(`lang_${l}`, this.currentLanguage),
-        selected: l === this.languageOverride
-      };
-      return item;
-    });
+    AppLogger.info(
+      'CustomizePage',
+      `languages=${LanguageService.getAllLanguages().length}`
+    );
+    return LanguageService
+      .getAllLanguages()
+      .map((lang: AppLanguageJson): PickerItem => {
+        return {
+          id: lang.id,
+          label: this.tr(lang.nameKey),
+          selected: lang.id === this.languageOverride
+        };
+      });
   }
 
   private currentLanguageLabel(): string {
-    if (this.languageOverride === AppLanguage.SYSTEM) {
-      return this.tr('lang_system');
-    }
-    return L.get(`lang_${this.languageOverride}`, this.currentLanguage);
+    const lang = LanguageService.find(
+      this.languageOverride
+    );
+    return this.tr(lang.nameKey);
   }
 
   private appThemeLabel(): string {
@@ -2023,19 +1951,13 @@ struct CustomizePage {
   }
 
   private appThemeSubtitle(preset: string): string {
-    switch (preset) {
-      case ThemePreset.SIRAT:
-        return this.tr('theme_preset_sirat_desc');
-      case ThemePreset.HARMONY_7:
-        return this.tr('theme_preset_harmony7_desc');
-      case ThemePreset.HARMONY_6:
-        return this.tr('theme_preset_harmony6_desc');
-      case ThemePreset.HARMONY_5:
-        return this.tr('theme_preset_harmony5_desc');
-      case ThemePreset.CURRENT:
-      default:
-        return this.tr('theme_preset_current_desc');
-    }
+    const theme = ThemeService
+      .getAllThemes()
+      .find((t: AppThemeJson) => t.id === preset);
+
+    return theme?.descKey
+      ? this.tr(theme.descKey)
+      : '';
   }
 
   /**
@@ -2155,5 +2077,28 @@ struct CustomizePage {
         selected: f === this.transFont
       };
     });
+  }
+
+  private currentThemeName(): string {
+    const theme = ThemeService.getAllThemes().find(
+      (t: AppThemeJson) => t.id === this.appTheme
+    );
+
+    return this.tr(
+      theme?.nameKey ??
+        ThemeService.getDefaultTheme().nameKey
+    );
+  }
+
+  private currentThemeDescription(): string {
+    const theme = ThemeService.getAllThemes().find(
+      (t: AppThemeJson) => t.id === this.appTheme
+    );
+
+    return this.tr(
+      theme?.descKey ??
+        ThemeService.getDefaultTheme().descKey ??
+        ''
+    );
   }
 }

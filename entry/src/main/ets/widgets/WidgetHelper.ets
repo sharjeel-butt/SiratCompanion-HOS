@@ -1,8 +1,8 @@
 import { formBindingData, formProvider } from '@kit.FormKit';
-import { PreferencesHelper } from '../core/PreferencesHelper';
+import { PreferencesHelper } from '../core/util/PreferencesHelper';
 import { WidgetDataBuilder } from './WidgetDataBuilder';
-import { AppLogger } from '../core/AppLogger';
-import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_LANGUAGE_OVERRIDE } from '../core/StorageKeys';
+import { AppLogger } from '../core/app/AppLogger';
+import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_LANGUAGE_OVERRIDE } from '../core/common/StorageKeys';
 import { L } from '../i18n/LocalizationHelper';
 import { common } from '@kit.AbilityKit';
 

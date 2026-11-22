@@ -1,4 +1,4 @@
-import { SourceItem } from '../core/SourceParser';
+import { SourceItem } from '../i18n/SourceParser';
 
 export interface BaseDua {
   id: string;

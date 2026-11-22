@@ -1,11 +1,11 @@
 // entry/src/main/ets/components/DuaCard.ets
 
-import { ThemeColors } from '../core/Theme';
+import { ThemeColors } from '../core/ui/themes/Theme';
 import { CompleteDua, DuaSource } from './DuaModels';
-import { TypographyHelper } from '../core/TypographyHelper';
-import { NavHelper } from '../core/NavHelper';
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
+import { NavHelper } from '../core/util/NavHelper';
 import { promptAction, router } from '@kit.ArkUI';
-import { SourceParser } from '../core/SourceParser';
+import { SourceParser } from '../i18n/SourceParser';
 import { L } from '../i18n/LocalizationHelper';
 
 /**

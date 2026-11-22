@@ -3,12 +3,12 @@
 import { common } from '@kit.AbilityKit';
 import { router } from '@kit.ArkUI';
 import { util } from '@kit.ArkTS';
-import { Theme, ThemeColors, ThemeMode } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import { L } from '../i18n/LocalizationHelper';
-import { STORAGE_KEY_LANGUAGE } from '../core/StorageKeys';
-import { AppLogger } from '../core/AppLogger';
-import { RawPaths } from '../core/RawPaths';
+import { STORAGE_KEY_LANGUAGE } from '../core/common/StorageKeys';
+import { AppLogger } from '../core/app/AppLogger';
+import { RawPaths } from '../core/common/RawPaths';
 
 // 🚨 FIX: Make optional fields optional in the interface
 interface LicenseItem {

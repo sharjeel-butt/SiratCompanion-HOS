@@ -1,7 +1,5 @@
 // entry/src/main/ets/tasbih/TasbihModels.ets
 
-import { TasbihTheme } from './TasbihThemes';
-
 export interface Dhikr {
   id: string;
   arabic: string;
@@ -23,7 +21,6 @@ export interface Tasbih {
   dhikrs: Dhikr[];
   createdAt: number;
   lifetimeCount: number;
-  theme?: TasbihTheme;
   themePresetId?: string;
   history?: TasbihDayLog[];
   boundPrayerIds?: string[];

@@ -1289,90 +1289,6 @@
       "value": "عبر الإنترنت"
     },
     {
-      "name": "theme_preset",
-      "value": "مظهر التطبيق"
-    },
-    {
-      "name": "theme_preset_desc",
-      "value": "اختر النمط البصري للتطبيق"
-    },
-    {
-      "name": "theme_preset_sirat",
-      "value": "الصراط — عصري"
-    },
-    {
-      "name": "theme_preset_sirat_desc",
-      "value": "عصري وبسيط — بأسلوب HarmonyOS 7"
-    },
-    {
-      "name": "theme_preset_current",
-      "value": "الصراط الكلاسيكي"
-    },
-    {
-      "name": "theme_preset_current_desc",
-      "value": "كريمي دافئ وأخضر غامق — الأصلي"
-    },
-    {
-      "name": "theme_preset_harmony7",
-      "value": "نور"
-    },
-    {
-      "name": "theme_preset_harmony7_desc",
-      "value": "بنفسجي مشرق — هدوء وحداثة"
-    },
-    {
-      "name": "theme_preset_harmony6",
-      "value": "سَحَر"
-    },
-    {
-      "name": "theme_preset_harmony6_desc",
-      "value": "كهرماني ذهبي — سكون الفجر"
-    },
-    {
-      "name": "theme_preset_harmony5",
-      "value": "بهار"
-    },
-    {
-      "name": "theme_preset_harmony5_desc",
-      "value": "أزرق مخضرّ بارد — رحب ونقي"
-    },
-    {
-      "name": "theme_amber",
-      "value": "كهرماني"
-    },
-    {
-      "name": "theme_charcoal",
-      "value": "فحمي"
-    },
-    {
-      "name": "theme_emerald",
-      "value": "زمردي"
-    },
-    {
-      "name": "theme_pearl",
-      "value": "لؤلؤي"
-    },
-    {
-      "name": "theme_gold",
-      "value": "ذهبي (معدني)"
-    },
-    {
-      "name": "theme_white",
-      "value": "أبيض"
-    },
-    {
-      "name": "theme_sapphire",
-      "value": "ياقوت أزرق"
-    },
-    {
-      "name": "theme_rose",
-      "value": "وردي"
-    },
-    {
-      "name": "theme_silver",
-      "value": "فضي"
-    },
-    {
       "name": "wizard_step",
       "value": "خطوة"
     },
@@ -3475,6 +3391,170 @@
     {
       "name": "trans_font_JameelNoori",
       "value": "جميل نوري (نستعليق)"
+    },
+    {
+      "name": "theme_emerald",
+      "value": "زمرد"
+    },
+    {
+      "name": "theme_emerald_desc",
+      "value": "لون أخضر زمردي مع مظهر نظيف ومتوازن"
+    },
+    {
+      "name": "theme_charcoal",
+      "value": "فحمي"
+    },
+    {
+      "name": "theme_charcoal_desc",
+      "value": "سمة رمادية أنيقة بتباين قوي"
+    },
+    {
+      "name": "theme_sky",
+      "value": "سماء"
+    },
+    {
+      "name": "theme_sky_desc",
+      "value": "لوحة ألوان زرقاء سماوية منعشة مستوحاة من السماء المفتوحة"
+    },
+    {
+      "name": "theme_amethyst",
+      "value": "جمشت"
+    },
+    {
+      "name": "theme_amethyst_desc",
+      "value": "درجات بنفسجية ناعمة بطابع عصري وأنيق"
+    },
+    {
+      "name": "theme_rose",
+      "value": "وردي"
+    },
+    {
+      "name": "theme_rose_desc",
+      "value": "ألوان وردية دافئة ذات طابع حيوي"
+    },
+    {
+      "name": "theme_cobalt",
+      "value": "كوبالت"
+    },
+    {
+      "name": "theme_cobalt_desc",
+      "value": "لمسات زرقاء كوبالتية جريئة لمظهر احترافي"
+    },
+    {
+      "name": "theme_navy",
+      "value": "كحلي"
+    },
+    {
+      "name": "theme_navy_desc",
+      "value": "سمة كحلية كلاسيكية بأناقة خالدة"
+    },
+    {
+      "name": "theme_violet",
+      "value": "بنفسجي"
+    },
+    {
+      "name": "theme_violet_desc",
+      "value": "درجات بنفسجية غنية بأجواء هادئة وإبداعية"
+    },
+    {
+      "name": "theme_lime",
+      "value": "ليموني"
+    },
+    {
+      "name": "theme_lime_desc",
+      "value": "لمسات خضراء ليمونية منعشة مستوحاة من الطبيعة"
+    },
+    {
+      "name": "theme_teal",
+      "value": "تركوازي"
+    },
+    {
+      "name": "theme_teal_desc",
+      "value": "لوحة تركوازية حديثة تمزج بين الأزرق والأخضر"
+    },
+    {
+      "name": "theme_pine",
+      "value": "صنوبري"
+    },
+    {
+      "name": "theme_pine_desc",
+      "value": "ألوان خضراء داكنة مستوحاة من أشجار الصنوبر"
+    },
+    {
+      "name": "theme_olive",
+      "value": "زيتي"
+    },
+    {
+      "name": "theme_olive_desc",
+      "value": "درجات زيتونية ترابية بأناقة هادئة"
+    },
+    {
+      "name": "theme_sunflower",
+      "value": "عباد الشمس"
+    },
+    {
+      "name": "theme_sunflower_desc",
+      "value": "لمسات صفراء زاهية تضفي تجربة مبهجة"
+    },
+    {
+      "name": "theme_sand",
+      "value": "رملي"
+    },
+    {
+      "name": "theme_sand_desc",
+      "value": "ألوان بيج رملية ناعمة بإحساس دافئ ومريح"
+    },
+    {
+      "name": "theme_umber",
+      "value": "بني ترابي"
+    },
+    {
+      "name": "theme_umber_desc",
+      "value": "درجات بنية غنية مستوحاة من ألوان الأرض الطبيعية"
+    },
+    {
+      "name": "theme_wine",
+      "value": "نبيذي"
+    },
+    {
+      "name": "theme_wine_desc",
+      "value": "لمسات حمراء نبيذية عميقة بمظهر فاخر"
+    },
+    {
+      "name": "theme_mustard",
+      "value": "خردلي"
+    },
+    {
+      "name": "theme_mustard_desc",
+      "value": "لوحة ذهبية خردلية دافئة مليئة بالحيوية"
+    },
+    {
+      "name": "theme_coral",
+      "value": "مرجاني"
+    },
+    {
+      "name": "theme_coral_desc",
+      "value": "درجات مرجانية لطيفة بأجواء ترحيبية"
+    },
+    {
+      "name": "theme_crimson",
+      "value": "قرمزي"
+    },
+    {
+      "name": "theme_crimson_desc",
+      "value": "لمسات قرمزية قوية لأسلوب بصري جريء"
+    },
+    {
+      "name": "theme_tangerine",
+      "value": "يوسفي"
+    },
+    {
+      "name": "theme_tangerine_desc",
+      "value": "درجات برتقالية يوسفية نابضة بالدفء والطاقة"
+    },
+    {
+      "name": "theme_preset",
+      "value": "سمة الألوان"
     }
   ]
 }

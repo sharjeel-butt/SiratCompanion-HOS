@@ -1,23 +1,27 @@
 import { common } from '@kit.AbilityKit';
 import { promptAction, router } from '@kit.ArkUI';
-import { ThemeColors, ThemeMode } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import { L } from '../i18n/LocalizationHelper';
-import { STORAGE_KEY_DUA_TRANSLATION_LANG, STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../core/StorageKeys';
+import {
+  STORAGE_KEY_DUA_TRANSLATION_LANG,
+  STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_THEME_MODE
+} from '../core/common/StorageKeys';
 import { QuranGraphService } from '../quran/QuranGraphService';
 import { DuaService } from '../duas/DuaService';
 import { CompleteDua, DuaSource } from '../duas/DuaModels';
-import { TypographyHelper } from '../core/TypographyHelper';
-import { NavHelper } from '../core/NavHelper';
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
+import { NavHelper } from '../core/util/NavHelper';
 import { QuranCollection } from '../quran/QuranGraphModels';
-import { SourceParser } from '../core/SourceParser';
+import { SourceParser } from '../i18n/SourceParser';
 
 @Entry
 @Component
 struct DuaDetailsPage {
   @StorageLink(STORAGE_KEY_THEME_MODE) @Watch('onThemeModeChanged') themeMode: string = ThemeMode.SYSTEM;
   @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLangChanged') appLanguage: string = 'en';
-  @StorageLink(STORAGE_KEY_DUA_TRANSLATION_LANG) duaTransLang: string = 'default';
+  @StorageLink(STORAGE_KEY_DUA_TRANSLATION_LANG) @Watch('onDuaLangChanged') duaTransLang: string = 'default';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State dua: CompleteDua | null = null;
   @State relatedDuas: CompleteDua[] = [];
@@ -29,6 +33,14 @@ struct DuaDetailsPage {
     this.colors = PageTheme.compute(this.themeMode);
     const params = router.getParams() as Record<string, string>;
     this.duaId = params['id'];
+    await this.loadData();
+  }
+
+  onDuaLangChanged() {
+    this.loadData();
+  }
+
+  async onPageShow() {
     await this.loadData();
   }
 
@@ -170,7 +182,7 @@ struct DuaDetailsPage {
                       .border({ width: 1, color: this.colors.borderSoft })
                       .margin({ right: 8, top: 12 })
                       .onClick(() => this.onSourceTap(src))
-                    }, (src: DuaSource, i: number) => `src-${this.dua?.id}-${i}`)
+                    }, (rel: CompleteDua) => `rel-${rel.id}-${this.appLanguage}-${this.duaTransLang}`)
                   }
                   .width('100%').margin({ top: 4 })
                 }

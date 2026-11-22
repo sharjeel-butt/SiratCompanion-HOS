@@ -1,8 +1,8 @@
 // entry/src/main/ets/pages/WizardPage.ets
 
 import { mediaquery, promptAction, router } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -10,19 +10,22 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LANGUAGE_OVERRIDE,
   STORAGE_KEY_THEME_MODE
-} from '../core/StorageKeys';
+} from '../core/common/StorageKeys';
 import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator';
 import { SettingsHelper } from '../settings/SettingsHelper';
 import { LocationData, LocationHelper } from '../location/LocationUtils';
 import { CalculationSource, LocationMode, PickerItem } from '../settings/SettingsModels';
-import { AppLanguage, L } from '../i18n/LocalizationHelper';
-import { NavHelper } from '../core/NavHelper';
+import { L } from '../i18n/LocalizationHelper';
+import { NavHelper } from '../core/util/NavHelper';
 import { PrivacyPolicyProvider } from '../legal/PrivacyPolicy';
-import { Breakpoints } from '../core/Breakpoints';
+import { Breakpoints } from '../core/layout/Breakpoints';
 import { FALLBACK_LOCATION, LocationCache } from '../location/LocationCache';
 import { common, Want } from '@kit.AbilityKit';
 import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
 import { NotificationHelper } from '../prayer/NotificationHelper';
+import { ThemeService } from '../core/ui/themes/ThemeService';
+import { AppThemeJson } from '../core/ui/themes/ThemeModels';
+import { LanguageService } from '../i18n/LanguageService';
 
 const TOTAL_STEPS = 6;
 
@@ -47,13 +50,13 @@ struct WizardPage {
   themeMode: string = ThemeMode.SYSTEM;
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
-  appLanguage: string = AppLanguage.ENGLISH;
+  appLanguage: string = LanguageService.defaultLanguage();
   @StorageLink(STORAGE_KEY_LANGUAGE_OVERRIDE)
   @Watch('onLanguageOverrideChanged')
-  languageOverride: string = AppLanguage.SYSTEM;
+  languageOverride: string = 'system';
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemeChanged')
-  appTheme: string = ThemePreset.CURRENT;
+  appTheme: string = '';
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
@@ -61,9 +64,9 @@ struct WizardPage {
   breakpoint: string = 'sm';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State step: number = 0;
-  @State selectedLanguage: string = AppLanguage.ENGLISH;
+  @State selectedLanguage: string = LanguageService.defaultLanguage();
   @State privacyAccepted: boolean = false;
-  @State selectedTheme: string = ThemePreset.SIRAT;
+  @State selectedTheme: string = '';
   @State locationMode: LocationMode = LocationMode.GPS;
   @State manualLat: string = '';
   @State manualLng: string = '';
@@ -80,7 +83,7 @@ struct WizardPage {
   @State notifMasterEnabled: boolean = false;
   @State notifRequesting: boolean = false;
   @State private usedDefaultLocation: boolean = false;
-  @State private currentLanguage: string = AppLanguage.ENGLISH;
+  @State private currentLanguage: string = LanguageService.defaultLanguage();
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
   @State private notificationPermissionAttempts: number = 0;
   @State private privacyPolicyText: string = '';
@@ -566,7 +569,7 @@ struct WizardPage {
   ThemeStep() {
     Scroll() {
       Column() {
-        ForEach(this.getThemeOptions(), (opt: ThemeOption) => {
+        ForEach(this.getThemeOptions(), (opt: AppThemeJson) => {
           Row({ space: 14 }) {
             Stack() {
               Column()
@@ -596,7 +599,9 @@ struct WizardPage {
                   ? this.colors.accentGold
                   : this.colors.textWhite)
                 .width('100%')
-              Text(this.tr(opt.descKey))
+              Text(opt.descKey
+                ? this.tr(opt.descKey)
+                : '')
                 .fontSize(11)
                 .fontColor(this.colors.textMuted)
                 .margin({ top: 4 })
@@ -1348,46 +1353,22 @@ struct WizardPage {
 
   private getLanguageOptions(): LanguageOption[] {
     const system: LanguageOption = {
-      id: AppLanguage.SYSTEM,
+      id: 'system',
       nativeName: this.tr('lang_system'),
       localizedName: this.tr('lang_system_desc')
     };
-    const en: LanguageOption = {
-      id: AppLanguage.ENGLISH,
-      nativeName: 'English',
-      localizedName: L.get('lang_en', this.currentLanguage)
-    };
-    const id: LanguageOption = {
-      id: AppLanguage.INDONESIAN,
-      nativeName: 'Bahasa Indonesia',
-      localizedName: L.get('lang_id', this.currentLanguage)
-    };
-    const ur: LanguageOption = {
-      id: AppLanguage.URDU,
-      nativeName: 'اردو',
-      localizedName: L.get('lang_ur', this.currentLanguage)
-    };
-    const tr: LanguageOption = {
-      id: AppLanguage.TURKISH,
-      nativeName: 'Türkçe',
-      localizedName: L.get('lang_tr', this.currentLanguage)
-    };
-    const bn: LanguageOption = {
-      id: AppLanguage.BENGALI,
-      nativeName: 'বাংলা',
-      localizedName: L.get('lang_bn', this.currentLanguage)
-    };
-    const zh: LanguageOption = {
-      id: AppLanguage.CHINESE,
-      nativeName: '中文',
-      localizedName: L.get('lang_zh', this.currentLanguage)
-    };
-    const ar: LanguageOption = {
-      id: AppLanguage.ARABIC,
-      nativeName: 'العربية',
-      localizedName: L.get('lang_ar', this.currentLanguage)
-    };
-    return [system, en, id, ur, tr, bn, zh, ar];
+
+    const languages = LanguageService
+      .getAllLanguages()
+      .map((lang): LanguageOption => {
+        return {
+          id: lang.id,
+          nativeName: lang.nativeName,
+          localizedName: this.tr(lang.nameKey)
+        };
+      });
+
+    return [system, ...languages];
   }
 
   private pickLanguage(id: string): void {
@@ -1508,32 +1489,15 @@ struct WizardPage {
   }
 
   private getThemeOptions(): ThemeOption[] {
-    const sirat: ThemeOption = {
-      id: ThemePreset.SIRAT,
-      nameKey: 'theme_preset_sirat',
-      descKey: 'theme_preset_sirat_desc'
-    };
-    const current: ThemeOption = {
-      id: ThemePreset.CURRENT,
-      nameKey: 'theme_preset_current',
-      descKey: 'theme_preset_current_desc'
-    };
-    const h7: ThemeOption = {
-      id: ThemePreset.HARMONY_7,
-      nameKey: 'theme_preset_harmony7',
-      descKey: 'theme_preset_harmony7_desc'
-    };
-    const h6: ThemeOption = {
-      id: ThemePreset.HARMONY_6,
-      nameKey: 'theme_preset_harmony6',
-      descKey: 'theme_preset_harmony6_desc'
-    };
-    const h5: ThemeOption = {
-      id: ThemePreset.HARMONY_5,
-      nameKey: 'theme_preset_harmony5',
-      descKey: 'theme_preset_harmony5_desc'
-    };
-    return [sirat, current, h7, h6, h5];
+    return ThemeService
+      .getAllThemes()
+      .map((theme: AppThemeJson): ThemeOption => {
+        return {
+          id: theme.id,
+          nameKey: theme.nameKey,
+          descKey: theme.descKey
+        };
+      });
   }
 
   private pickAppTheme(id: string): void {
@@ -1566,7 +1530,6 @@ struct WizardPage {
       return;
     }
     this.isGettingLocation = true;
-    this.usedDefaultLocation = false;
     this.locationStatus = 'idle';
     this.detectedCity = '';
     this.usedDefaultLocation = false;

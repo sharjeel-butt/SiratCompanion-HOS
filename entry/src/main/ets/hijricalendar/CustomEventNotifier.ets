@@ -1,7 +1,7 @@
 import { CustomEvent, RecurrenceType } from './CustomEventModels';
 import { HijriCalendarHelper } from './HijriCalendarHelper';
 import { CalendarReminderEntry, CalendarReminderHelper } from './CalendarReminderHelper';
-import { AppLogger } from '../core/AppLogger';
+import { AppLogger } from '../core/app/AppLogger';
 
 export class CustomEventNotifier {
   static async reschedule(events: CustomEvent[], offsetDays: number): Promise<void> {

@@ -1,14 +1,14 @@
 // entry/src/main/ets/pages/AdvancedCalcPage.ets
 
 import { mediaquery, router } from '@kit.ArkUI';
-import { ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import {
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
-} from '../core/StorageKeys';
+} from '../core/common/StorageKeys';
 import { PickerItem } from '../settings/SettingsModels';
 import {
   MidnightMethod, PolarResolution, RoundingMethod, Shafaq
@@ -16,7 +16,7 @@ import {
 import {
   CalculationMethod, HighLatitudeRule
 } from '../prayer/PrayerTimeCalculator';
-import { Breakpoints } from '../core/Breakpoints';
+import { Breakpoints } from '../core/layout/Breakpoints';
 import { SettingsHelper } from '../settings/SettingsHelper';
 import { L } from '../i18n/LocalizationHelper';
 
@@ -34,7 +34,7 @@ struct AdvancedCalcPage {
   appLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
-  appThemePreset: string = ThemePreset.SIRAT;
+  appThemePreset: string = '';
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);

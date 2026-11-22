@@ -1,5 +1,5 @@
 // entry/src/main/ets/core/SourceParser.ets
-import { L } from '../i18n/LocalizationHelper';
+import { L } from './LocalizationHelper';
 
 export interface SourceItem {
   type: string;

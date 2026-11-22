@@ -1,14 +1,14 @@
 // entry/src/main/ets/components/PageHeader.ets
 
-import { ThemeColors, ThemeMode } from '../core/Theme';
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
 import { L } from '../i18n/LocalizationHelper';
 import { SettingsHelper } from '../settings/SettingsHelper';
 import { AsrShadowRule, CalculationMethod } from './PrayerTimeCalculator';
 import { CalculationSource } from '../settings/SettingsModels';
-import { ClockFormat, ClockFormatHelper } from '../core/ClockFormat';
-import { STORAGE_KEY_THEME_MODE, STORAGE_KEY_TIME_FORMAT } from '../core/StorageKeys';
-import { TypographyHelper } from '../core/TypographyHelper';
-import { PageTheme } from '../core/PageTheme';
+import { ClockFormat, ClockFormatHelper } from '../core/util/ClockFormat';
+import { STORAGE_KEY_THEME_MODE, STORAGE_KEY_TIME_FORMAT } from '../core/common/StorageKeys';
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
+import { PageTheme } from '../core/ui/PageTheme';
 import { router } from '@kit.ArkUI';
 
 /**
@@ -161,11 +161,7 @@ export struct PageHeader {
         top: 8,
         bottom: 8
       })
-      .backgroundColor(
-        PageTheme.isDarkFor(this.themeMode)
-          ? 'rgba(10, 13, 20, 0.85)'
-          : 'rgba(240, 244, 250, 0.85)'
-      )
+      .backgroundColor(this.colors.cardDark)
       .backgroundBlurStyle(BlurStyle.Thin)
       .borderRadius(19)
       .border({ width: 1, color: this.colors.borderSoft })

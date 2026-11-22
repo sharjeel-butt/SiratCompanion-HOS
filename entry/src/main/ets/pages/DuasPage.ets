@@ -1,18 +1,18 @@
-import { ThemeColors, ThemeMode } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import { CompleteDua, DuaSource } from '../duas/DuaModels';
-import { STORAGE_KEY_DUA_TRANSLATION_LANG, STORAGE_KEY_LANGUAGE } from '../core/StorageKeys';
-import { RawPaths } from '../core/RawPaths';
+import { STORAGE_KEY_DUA_TRANSLATION_LANG, STORAGE_KEY_LANGUAGE } from '../core/common/StorageKeys';
+import { RawPaths } from '../core/common/RawPaths';
 import { util } from '@kit.ArkTS';
-import { AppLogger } from '../core/AppLogger';
+import { AppLogger } from '../core/app/AppLogger';
 import { promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { DuaService } from '../duas/DuaService';
 import { HadithSearchService } from '../hadith/HadithSearchService';
 import { L } from '../i18n/LocalizationHelper';
-import { TypographyHelper } from '../core/TypographyHelper';
-import { SourceParser } from '../core/SourceParser';
-import { NavHelper } from '../core/NavHelper';
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
+import { SourceParser } from '../i18n/SourceParser';
+import { NavHelper } from '../core/util/NavHelper';
 
 interface CategoryEntry {
   name: string;
@@ -22,7 +22,8 @@ interface CategoryEntry {
 @Entry
 @Component
 struct DuasPage {
-  @StorageLink(STORAGE_KEY_DUA_TRANSLATION_LANG) @Watch('onLangChanged') duaTransLang: string = 'default';
+  @StorageLink(STORAGE_KEY_DUA_TRANSLATION_LANG) @Watch('onDuaLangChanged') duaTransLang: string = 'default';
+
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLangChanged')
   appLanguage: string = 'en';
@@ -49,6 +50,14 @@ struct DuasPage {
       this.filterPrayer = params['filterPrayer'] as string;
     }
 
+    await this.loadData();
+  }
+
+  onDuaLangChanged() {
+    this.loadData();
+  }
+
+  async onPageShow() {
     await this.loadData();
   }
 
@@ -254,7 +263,7 @@ struct DuasPage {
             ListItem() {
               this.DuaCard(dua)
             }
-          }, (dua: CompleteDua) => `dua-${dua.id}-${dua.isFavorite}-${this.appLanguage}`)
+          }, (dua: CompleteDua) => `dua-${dua.id}-${dua.isFavorite}-${this.appLanguage}-${this.duaTransLang}`)
         }
         .width('100%')
         .layoutWeight(1)

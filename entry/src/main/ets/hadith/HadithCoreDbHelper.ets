@@ -2,7 +2,7 @@
 
 import { relationalStore } from '@kit.ArkData';
 import { common } from '@kit.AbilityKit';
-import { AppLogger } from '../core/AppLogger';
+import { AppLogger } from '../core/app/AppLogger';
 import { HadithGrading, Sanad, SanadStep } from './HadithModels';
 
 export class HadithCoreDbHelper {

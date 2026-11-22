@@ -1,0 +1,51 @@
+[
+  {
+    "id": "system",
+    "nameKey": "lang_system",
+    "nativeName": "System",
+    "rtl": false
+  },
+  {
+    "id": "en",
+    "nameKey": "lang_en",
+    "nativeName": "English",
+    "rtl": false,
+    "isDefault": true
+  },
+  {
+    "id": "id",
+    "nameKey": "lang_id",
+    "nativeName": "Bahasa Indonesia",
+    "rtl": false
+  },
+  {
+    "id": "ur",
+    "nameKey": "lang_ur",
+    "nativeName": "اردو",
+    "rtl": true
+  },
+  {
+    "id": "tr",
+    "nameKey": "lang_tr",
+    "nativeName": "Türkçe",
+    "rtl": false
+  },
+  {
+    "id": "bn",
+    "nameKey": "lang_bn",
+    "nativeName": "বাংলা",
+    "rtl": false
+  },
+  {
+    "id": "zh",
+    "nameKey": "lang_zh",
+    "nativeName": "中文",
+    "rtl": false
+  },
+  {
+    "id": "ar",
+    "nameKey": "lang_ar",
+    "nativeName": "العربية",
+    "rtl": true
+  }
+]

@@ -1,6 +1,6 @@
 // entry/src/main/ets/components/ExtraTimingToggleRow.ets
 
-import { ThemeColors } from '../core/Theme';
+import { ThemeColors } from '../core/ui/themes/Theme';
 import { L } from '../i18n/LocalizationHelper';
 
 /**

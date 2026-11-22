@@ -7,9 +7,9 @@ import { CustomEventStorage } from '../hijricalendar/CustomEventStorage';
 import { CustomEventNotifier } from '../hijricalendar/CustomEventNotifier';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { deviceInfo } from '@kit.BasicServicesKit';
-import { PreferencesHelper } from '../core/PreferencesHelper';
-import { AppLogger } from '../core/AppLogger';
-import { AppLanguage, L } from '../i18n/LocalizationHelper';
+import { PreferencesHelper } from '../core/util/PreferencesHelper';
+import { AppLogger } from '../core/app/AppLogger';
+import { L } from '../i18n/LocalizationHelper';
 import { BundleBootstrap } from '../bootstrap/BundleBootstrap';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
@@ -49,27 +49,30 @@ import {
   STORAGE_KEY_TRANSLATION_FONT,
   STORAGE_KEY_VIBRATION_ENABLED,
   STORAGE_KEY_WIZARD_COMPLETED
-} from '../core/StorageKeys';
+} from '../core/common/StorageKeys';
 import { SoundHelper } from '../tasbih/SoundHelper';
 import { SoundOptions } from '../tasbih/SoundOptions';
-import { SystemFeedbackHelper } from '../core/SystemFeedbackHelper';
-import { ThemeMode, ThemePreset } from '../core/Theme';
+import { SystemFeedbackHelper } from '../core/util/SystemFeedbackHelper';
+import { ThemeMode } from '../core/ui/themes/Theme';
 import { PrayerManager } from '../prayer/PrayerManager';
-import { LayoutHelper } from '../core/LayoutHelper';
-import { MaterialHelper } from '../core/MaterialHelper';
+import { LayoutHelper } from '../core/layout/LayoutHelper';
+import { MaterialHelper } from '../core/ui/MaterialHelper';
 import { SettingsHelper } from '../settings/SettingsHelper';
 import { NotificationHelper } from '../prayer/NotificationHelper';
 import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
-import { CALENDAR_REMINDERS_ENABLED } from '../core/FeatureFlags';
-import { ClockFormat } from '../core/ClockFormat';
+import { CALENDAR_REMINDERS_ENABLED } from '../core/common/FeatureFlags';
+import { ClockFormat } from '../core/util/ClockFormat';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 import { LocationCache } from '../location/LocationCache';
-import { TypographyHelper } from '../core/TypographyHelper';
-import { PageTheme } from '../core/PageTheme';
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
+import { PageTheme } from '../core/ui/PageTheme';
 import { PrivacyPolicyProvider } from '../legal/PrivacyPolicy';
 import { WidgetHelper } from '../widgets/WidgetHelper';
 import { OfflineCityLookup } from '../location/OfflineCityLookup';
 import { IslamicEventService } from '../hijricalendar/IslamicEventService';
+import { ThemeService } from '../core/ui/themes/ThemeService';
+import { TasbihThemes } from '../tasbih/TasbihThemes';
+import { LanguageService } from '../i18n/LanguageService';
 
 /** How long the splash stays visible, in milliseconds. */
 const SPLASH_DELAY_MS = 1500;
@@ -155,6 +158,7 @@ export default class EntryAbility extends UIAbility {
         );
         await BundleBootstrap.init(this.context);
         await IslamicEventService.init(this.context);
+        await LanguageService.init(this.context);
         if (savedThemeOverride.length === 0) {
           // Migrate from previous versions (which only had THEME_MODE)
           const legacyTheme = await PreferencesHelper.getString(
@@ -177,10 +181,10 @@ export default class EntryAbility extends UIAbility {
           const legacyLang = await PreferencesHelper.getString(
             STORAGE_KEY_LANGUAGE, ''
           );
-          if (legacyLang.length > 0 && legacyLang !== AppLanguage.SYSTEM) {
+          if (legacyLang.length > 0 && legacyLang !== 'system') {
             savedOverride = legacyLang;
           } else {
-            savedOverride = AppLanguage.SYSTEM;
+            savedOverride = 'system';
           }
           PreferencesHelper.setString(STORAGE_KEY_LANGUAGE_OVERRIDE, savedOverride);
           AppLogger.info('EntryAbility', `Language override migrated → '${savedOverride}'`);
@@ -212,10 +216,17 @@ export default class EntryAbility extends UIAbility {
         const savedTransFont = await PreferencesHelper.getString(STORAGE_KEY_TRANSLATION_FONT, 'auto');
         AppStorage.setOrCreate(STORAGE_KEY_TRANSLATION_FONT, savedTransFont);
 
-        const savedAppTheme = await PreferencesHelper.getString(
-          STORAGE_KEY_APP_THEME, ThemePreset.SIRAT
+        const savedAppTheme = ThemeService.ensureValidThemeId(
+          await PreferencesHelper.getString(
+            STORAGE_KEY_APP_THEME,
+            ThemeService.getDefaultThemeId()
+          )
         );
-        AppStorage.setOrCreate(STORAGE_KEY_APP_THEME, savedAppTheme);
+
+        AppStorage.setOrCreate(
+          STORAGE_KEY_APP_THEME,
+          savedAppTheme
+        );
 
         const savedQuranLang = await PreferencesHelper.getString(STORAGE_KEY_QURAN_TRANSLATION_LANG, 'default');
         AppStorage.setOrCreate(STORAGE_KEY_QURAN_TRANSLATION_LANG, savedQuranLang);
@@ -346,6 +357,7 @@ export default class EntryAbility extends UIAbility {
 
         await PrayerManager.primeStateMap();
         SystemFeedbackHelper.init(this.context);
+        await ThemeService.init(this.context);
 
         // ---- Decide the start page ----
         const wizardDone = await PreferencesHelper.getBoolean(
@@ -584,7 +596,7 @@ export default class EntryAbility extends UIAbility {
    */
   private reResolveSystemLanguage(): void {
     const override = AppStorage.get<string>(STORAGE_KEY_LANGUAGE_OVERRIDE);
-    if (override !== AppLanguage.SYSTEM) {
+    if (override !== 'system') {
       return;
     }
     const current = AppStorage.get<string>(STORAGE_KEY_LANGUAGE);

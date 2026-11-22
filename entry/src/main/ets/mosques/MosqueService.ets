@@ -2,7 +2,7 @@ import { http } from '@kit.NetworkKit';
 import { common } from '@kit.AbilityKit';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { relationalStore } from '@kit.ArkData'; // MUST be at the top
-import { AppLogger } from '../core/AppLogger';
+import { AppLogger } from '../core/app/AppLogger';
 import { ManifestData, MosqueModel } from './MosqueModels';
 import { MosqueDbHelper } from './MosqueDbHelper';
 import { MosqueStorage } from './MosqueStorage';

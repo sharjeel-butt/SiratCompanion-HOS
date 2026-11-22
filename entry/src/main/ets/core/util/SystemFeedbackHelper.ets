@@ -3,8 +3,8 @@
 import { audio } from '@kit.AudioKit';
 import { BusinessError, settings } from '@kit.BasicServicesKit';
 import { common } from '@kit.AbilityKit';
-import { STORAGE_KEY_SYSTEM_HAPTICS_ENABLED, STORAGE_KEY_SYSTEM_SOUND_ENABLED } from './StorageKeys';
-import { AppLogger } from './AppLogger';
+import { STORAGE_KEY_SYSTEM_HAPTICS_ENABLED, STORAGE_KEY_SYSTEM_SOUND_ENABLED } from '../common/StorageKeys';
+import { AppLogger } from '../app/AppLogger';
 
 /**
  * Reads and monitors the system's sound & haptics state.

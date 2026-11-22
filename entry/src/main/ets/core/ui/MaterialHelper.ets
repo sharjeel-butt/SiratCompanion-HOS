@@ -1,7 +1,7 @@
 // entry/src/main/ets/helper/MaterialHelper.ets
 
 import { deviceInfo } from '@kit.BasicServicesKit';
-import { AppLogger } from './AppLogger';
+import { AppLogger } from '../app/AppLogger';
 
 /**
  * Material capability probe and factory.

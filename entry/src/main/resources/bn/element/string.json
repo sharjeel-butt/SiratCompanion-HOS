@@ -1289,90 +1289,6 @@
       "value": "অনলাইন"
     },
     {
-      "name": "theme_preset",
-      "value": "অ্যাপ থিম"
-    },
-    {
-      "name": "theme_preset_desc",
-      "value": "অ্যাপের ভিজ্যুয়াল স্টাইল বেছে নিন"
-    },
-    {
-      "name": "theme_preset_sirat",
-      "value": "সিরাত"
-    },
-    {
-      "name": "theme_preset_sirat_desc",
-      "value": "আধুনিক ও মিনিমাল — হারমোনিওএস ৭ নান্দনিকতা"
-    },
-    {
-      "name": "theme_preset_current",
-      "value": "সিরাত ক্লাসিক"
-    },
-    {
-      "name": "theme_preset_current_desc",
-      "value": "উষ্ণ ক্রিম ও গভীর সবুজ — মূল রূপ"
-    },
-    {
-      "name": "theme_preset_harmony7",
-      "value": "নূর"
-    },
-    {
-      "name": "theme_preset_harmony7_desc",
-      "value": "দীপ্তিময় বেগুনি — শান্ত ও আধুনিক"
-    },
-    {
-      "name": "theme_preset_harmony6",
-      "value": "সাহার"
-    },
-    {
-      "name": "theme_preset_harmony6_desc",
-      "value": "সোনালি অ্যাম্বার — প্রথম আলোর প্রশান্তি"
-    },
-    {
-      "name": "theme_preset_harmony5",
-      "value": "বাহার"
-    },
-    {
-      "name": "theme_preset_harmony5_desc",
-      "value": "শীতল টিল — বিশাল, সতেজ ও পরিষ্কার"
-    },
-    {
-      "name": "theme_amber",
-      "value": "অ্যাম্বার"
-    },
-    {
-      "name": "theme_charcoal",
-      "value": "চারকোল"
-    },
-    {
-      "name": "theme_emerald",
-      "value": "এমারেল্ড"
-    },
-    {
-      "name": "theme_pearl",
-      "value": "পার্ল"
-    },
-    {
-      "name": "theme_gold",
-      "value": "সোনালি (ধাতব)"
-    },
-    {
-      "name": "theme_white",
-      "value": "সাদা"
-    },
-    {
-      "name": "theme_sapphire",
-      "value": "স্যাফায়ার"
-    },
-    {
-      "name": "theme_rose",
-      "value": "রোজ"
-    },
-    {
-      "name": "theme_silver",
-      "value": "রূপালি"
-    },
-    {
       "name": "wizard_step",
       "value": "ধাপ"
     },
@@ -3475,6 +3391,170 @@
     {
       "name": "trans_font_JameelNoori",
       "value": "জামিল নূরী (নাস্তালিক)"
+    },
+    {
+      "name": "theme_emerald",
+      "value": "পান্না"
+    },
+    {
+      "name": "theme_emerald_desc",
+      "value": "পরিচ্ছন্ন ও ভারসাম্যপূর্ণ চেহারার পান্না সবুজ রঙ"
+    },
+    {
+      "name": "theme_charcoal",
+      "value": "চারকোল"
+    },
+    {
+      "name": "theme_charcoal_desc",
+      "value": "শক্তিশালী বৈসাদৃশ্যসহ মার্জিত ধূসর রঙের থিম"
+    },
+    {
+      "name": "theme_sky",
+      "value": "আকাশি"
+    },
+    {
+      "name": "theme_sky_desc",
+      "value": "উন্মুক্ত আকাশ থেকে অনুপ্রাণিত সতেজ আকাশি নীল রঙের প্যালেট"
+    },
+    {
+      "name": "theme_amethyst",
+      "value": "অ্যামেথিস্ট"
+    },
+    {
+      "name": "theme_amethyst_desc",
+      "value": "পরিশীলিত ও আধুনিক অনুভূতির নরম বেগুনি রঙ"
+    },
+    {
+      "name": "theme_rose",
+      "value": "গোলাপি"
+    },
+    {
+      "name": "theme_rose_desc",
+      "value": "প্রাণবন্ত ব্যক্তিত্বসম্পন্ন উষ্ণ গোলাপি রঙ"
+    },
+    {
+      "name": "theme_cobalt",
+      "value": "কোবাল্ট"
+    },
+    {
+      "name": "theme_cobalt_desc",
+      "value": "পেশাদার চেহারার জন্য উজ্জ্বল কোবাল্ট নীল রঙের ব্যবহার"
+    },
+    {
+      "name": "theme_navy",
+      "value": "নেভি"
+    },
+    {
+      "name": "theme_navy_desc",
+      "value": "কালজয়ী সৌন্দর্যপূর্ণ ক্লাসিক নেভি নীল থিম"
+    },
+    {
+      "name": "theme_violet",
+      "value": "বেগুনি"
+    },
+    {
+      "name": "theme_violet_desc",
+      "value": "শান্ত ও সৃজনশীল পরিবেশের সমৃদ্ধ বেগুনি রঙ"
+    },
+    {
+      "name": "theme_lime",
+      "value": "লাইম"
+    },
+    {
+      "name": "theme_lime_desc",
+      "value": "প্রকৃতি থেকে অনুপ্রাণিত সতেজ লাইম সবুজ রঙ"
+    },
+    {
+      "name": "theme_teal",
+      "value": "টিল"
+    },
+    {
+      "name": "theme_teal_desc",
+      "value": "নীল ও সবুজের মিশ্রণে গঠিত আধুনিক টিল প্যালেট"
+    },
+    {
+      "name": "theme_pine",
+      "value": "পাইন"
+    },
+    {
+      "name": "theme_pine_desc",
+      "value": "প্রাকৃতিক চেহারার গভীর পাইন সবুজ রঙ"
+    },
+    {
+      "name": "theme_olive",
+      "value": "জলপাই"
+    },
+    {
+      "name": "theme_olive_desc",
+      "value": "সূক্ষ্ম পরিশীলিততার মাটিরঙা জলপাই টোন"
+    },
+    {
+      "name": "theme_sunflower",
+      "value": "সূর্যমুখী"
+    },
+    {
+      "name": "theme_sunflower_desc",
+      "value": "প্রফুল্ল অভিজ্ঞতার জন্য উজ্জ্বল হলুদ রঙের ব্যবহার"
+    },
+    {
+      "name": "theme_sand",
+      "value": "বালুকাময়"
+    },
+    {
+      "name": "theme_sand_desc",
+      "value": "উষ্ণ ও আরামদায়ক অনুভূতির নরম বালুকাময় বেইজ রঙ"
+    },
+    {
+      "name": "theme_umber",
+      "value": "আম্বর"
+    },
+    {
+      "name": "theme_umber_desc",
+      "value": "প্রাকৃতিক মাটির রঙ থেকে অনুপ্রাণিত সমৃদ্ধ বাদামী টোন"
+    },
+    {
+      "name": "theme_wine",
+      "value": "ওয়াইন"
+    },
+    {
+      "name": "theme_wine_desc",
+      "value": "বিলাসবহুল চেহারার গভীর ওয়াইন-লাল রঙ"
+    },
+    {
+      "name": "theme_mustard",
+      "value": "সরিষা"
+    },
+    {
+      "name": "theme_mustard_desc",
+      "value": "প্রাণশক্তিতে ভরপুর উষ্ণ সরিষা-সোনালি রঙের প্যালেট"
+    },
+    {
+      "name": "theme_coral",
+      "value": "প্রবাল"
+    },
+    {
+      "name": "theme_coral_desc",
+      "value": "স্বাগতপূর্ণ পরিবেশ সৃষ্টিকারী কোমল প্রবাল রঙ"
+    },
+    {
+      "name": "theme_crimson",
+      "value": "গাঢ় লাল"
+    },
+    {
+      "name": "theme_crimson_desc",
+      "value": "সাহসী ভিজ্যুয়াল শৈলীর জন্য শক্তিশালী গাঢ় লাল রঙ"
+    },
+    {
+      "name": "theme_tangerine",
+      "value": "ট্যাঞ্জারিন"
+    },
+    {
+      "name": "theme_tangerine_desc",
+      "value": "উষ্ণতা ও শক্তিতে পরিপূর্ণ প্রাণবন্ত কমলা রঙ"
+    },
+    {
+      "name": "theme_preset",
+      "value": "থিম প্রিসেট"
     }
   ]
 }

@@ -1,10 +1,10 @@
-import { ThemeColors } from '../core/Theme';
-import { STORAGE_KEY_TASBIH_STATE_VERSION } from '../core/StorageKeys';
+import { ThemeColors } from '../core/ui/themes/Theme';
+import { STORAGE_KEY_TASBIH_STATE_VERSION } from '../core/common/StorageKeys';
 import { TasbihStorage } from './TasbihStorage';
 import { TasbihManager } from './TasbihManager';
 import { Tasbih } from './TasbihModels';
 import { common } from '@kit.AbilityKit';
-import { AppLogger } from '../core/AppLogger';
+import { AppLogger } from '../core/app/AppLogger';
 
 @Component
 export struct TasbihIndicator {

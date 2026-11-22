@@ -2,60 +2,6 @@
 
 import { AsrShadowRule, CalculationMethod, HighLatitudeRule } from '../prayer/PrayerTimeCalculator';
 import { CalculationSource, LocationMode, ManualCoords, PickerItem } from './SettingsModels';
-import { PreferencesHelper } from '../core/PreferencesHelper';
-import {
-  STORAGE_KEY_APP_THEME,
-  STORAGE_KEY_ARABIC_FONT,
-  STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
-  STORAGE_KEY_CALC_SETTINGS_VERSION,
-  STORAGE_KEY_DUA_TRANSLATION_LANG,
-  STORAGE_KEY_EVENT_PERSPECTIVE,
-  STORAGE_KEY_EVENT_SETTINGS_VERSION,
-  STORAGE_KEY_HADITH_TRANSLATION_LANG,
-  STORAGE_KEY_HIGH_LAT_RULE,
-  STORAGE_KEY_HIJRI_CALENDAR_TYPE,
-  STORAGE_KEY_HIJRI_CALENDAR_VERSION,
-  STORAGE_KEY_HIJRI_OFFSET,
-  STORAGE_KEY_LANGUAGE,
-  STORAGE_KEY_LANGUAGE_OVERRIDE,
-  STORAGE_KEY_MIDNIGHT_METHOD,
-  STORAGE_KEY_NOTIF_ASR,
-  STORAGE_KEY_NOTIF_BEFORE_MINUTES,
-  STORAGE_KEY_NOTIF_DHUHR,
-  STORAGE_KEY_NOTIF_FAJR,
-  STORAGE_KEY_NOTIF_ISHA,
-  STORAGE_KEY_NOTIF_MAGHRIB,
-  STORAGE_KEY_NOTIF_MASTER,
-  STORAGE_KEY_POLAR_RESOLUTION,
-  STORAGE_KEY_QURAN_TRANSLATION_LANG,
-  STORAGE_KEY_ROUNDING_METHOD,
-  STORAGE_KEY_SHAFAQ,
-  STORAGE_KEY_SHOW_EXTRA_TIMINGS_LIST,
-  STORAGE_KEY_SHOW_EXTRA_TIMINGS_SUNPATH,
-  STORAGE_KEY_SHOW_FIRST_THIRD_LIST,
-  STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH,
-  STORAGE_KEY_SHOW_IMSAK_LIST,
-  STORAGE_KEY_SHOW_IMSAK_SUNPATH,
-  STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
-  STORAGE_KEY_SHOW_LAST_THIRD_LIST,
-  STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH,
-  STORAGE_KEY_SHOW_MIDNIGHT_LIST,
-  STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH,
-  STORAGE_KEY_SOUND_ENABLED,
-  STORAGE_KEY_TASBIH_RENDER_STYLE,
-  STORAGE_KEY_TASBIH_SOUND,
-  STORAGE_KEY_TASBIH_THEME_PRESET,
-  STORAGE_KEY_THEME_MODE,
-  STORAGE_KEY_THEME_OVERRIDE,
-  STORAGE_KEY_TIME_FORMAT,
-  STORAGE_KEY_TRANSLATION_FONT,
-  STORAGE_KEY_VIBRATION_ENABLED,
-  STORAGE_KEY_WIZARD_COMPLETED
-} from '../core/StorageKeys';
-import { ThemeMode, ThemePreset } from '../core/Theme';
-import { AppLanguage, L } from '../i18n/LocalizationHelper';
-import { SoundOptions } from '../tasbih/SoundOptions';
-import { TasbihThemes } from '../tasbih/TasbihThemes';
 import {
   AdvancedCalcSettings,
   MidnightMethod,
@@ -63,9 +9,6 @@ import {
   RoundingMethod,
   Shafaq
 } from '../prayer/AdvancedCalcModels';
-import { ClockFormat } from '../core/ClockFormat';
-import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
-import { EventPerspectiveNotifier } from '../hijricalendar/EventPerspectiveNotifier';
 
 const KEY_METHOD = 'calc_method';
 const KEY_ASR = 'asr_rule';
@@ -77,7 +20,6 @@ const KEY_MANUAL_LNG = 'manual_lng';
 const KEY_MANUAL_REFRESH = 'manual_refresh';
 const KEY_MANUAL_CITY = 'manual_city';
 
-const KEY_SHOW_EXTRA_TIMINGS = 'show_extra_timings';
 const KEY_SHOW_ISLAMIC_EVENTS = 'show_islamic_events';
 
 const KEY_OFFSET_FAJR = 'offset_fajr';
@@ -310,16 +252,26 @@ export class SettingsHelper {
 
   static async getAppTheme(): Promise<string> {
     const cached = AppStorage.get<string>(STORAGE_KEY_APP_THEME);
+
     if (cached !== undefined && cached.length > 0) {
-      return cached;
+      return ThemeService.ensureValidThemeId(cached);
     }
 
     const stored = await PreferencesHelper.getString(
-      STORAGE_KEY_APP_THEME, ThemePreset.SIRAT
+      STORAGE_KEY_APP_THEME,
+      ThemeService.getDefaultThemeId()
     );
-    AppStorage.setOrCreate(STORAGE_KEY_APP_THEME, stored);
-    return stored;
+
+    const themeId = ThemeService.ensureValidThemeId(stored);
+
+    AppStorage.setOrCreate(
+      STORAGE_KEY_APP_THEME,
+      themeId
+    );
+
+    return themeId;
   }
+
 
   static saveAppTheme(preset: string): void {
     AppStorage.setOrCreate(STORAGE_KEY_APP_THEME, preset);
@@ -327,36 +279,33 @@ export class SettingsHelper {
   }
 
   static getAppThemeLabel(preset: string): string {
-    switch (preset) {
-      case ThemePreset.HARMONY_7:
-        return L.get('theme_preset_harmony7');
-      case ThemePreset.HARMONY_6:
-        return L.get('theme_preset_harmony6');
-      case ThemePreset.HARMONY_5:
-        return L.get('theme_preset_harmony5');
-      case ThemePreset.CURRENT:
-        return L.get('theme_preset_current');
-      case ThemePreset.SIRAT:
-      default:
-        return L.get('theme_preset_sirat');
+    const theme = ThemeService
+      .getAllThemes()
+      .find((t: AppThemeJson) => t.id === preset);
+
+    if (theme) {
+      return L.get(theme.nameKey);
     }
+
+    return L.get(
+      ThemeService.getDefaultTheme().nameKey
+    );
   }
 
-  static buildAppThemePickerItems(current: string): PickerItem[] {
-    return [
-      ThemePreset.SIRAT,
-      ThemePreset.CURRENT,
-      ThemePreset.HARMONY_7,
-      ThemePreset.HARMONY_6,
-      ThemePreset.HARMONY_5
-    ].map((p): PickerItem => {
-      const item: PickerItem = {
-        id: p,
-        label: SettingsHelper.getAppThemeLabel(p),
-        selected: p === current
-      };
-      return item;
-    });
+  static buildAppThemePickerItems(
+    current: string
+  ): PickerItem[] {
+
+    return ThemeService
+      .getAllThemes()
+      .map((theme: AppThemeJson): PickerItem => {
+
+        return {
+          id: theme.id,
+          label: L.get(theme.nameKey),
+          selected: theme.id === current
+        };
+      });
   }
 
   static buildHighLatPickerItems(current: HighLatitudeRule): PickerItem[] {
@@ -868,7 +817,7 @@ export class SettingsHelper {
       return cached;
     }
     const loaded = await PreferencesHelper.getString(
-      STORAGE_KEY_LANGUAGE_OVERRIDE, AppLanguage.SYSTEM
+      STORAGE_KEY_LANGUAGE_OVERRIDE, 'system'
     );
     AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE_OVERRIDE, loaded);
     return loaded;

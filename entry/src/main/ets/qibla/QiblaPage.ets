@@ -1,8 +1,8 @@
 // entry/src/main/ets/pages/QiblaPage.ets
 
 import { mediaquery, router } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import { QiblaCalibrationOverlay } from './QiblaCalibrationOverlay';
 import {
   OrientationReading, QiblaSensorHelper, SensorAccuracy
@@ -15,15 +15,15 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_SETTINGS_INITIAL_CATEGORY,
   STORAGE_KEY_THEME_MODE
-} from '../core/StorageKeys';
+} from '../core/common/StorageKeys';
 import { QiblaCalculator } from './QiblaCalculator';
 import { SettingsHelper } from '../settings/SettingsHelper';
 import { LocationCache } from '../location/LocationCache';
 import { LocationMode } from '../settings/SettingsModels';
-import { NavHelper } from '../core/NavHelper';
+import { NavHelper } from '../core/util/NavHelper';
 import { L } from '../i18n/LocalizationHelper';
 import { OfflineCityLookup } from '../location/OfflineCityLookup';
-import { Breakpoints } from '../core/Breakpoints';
+import { Breakpoints } from '../core/layout/Breakpoints';
 import { WmmCalculator } from '../location/WmmCalculator';
 
 const SENSOR_INTERVAL_MS = 100;
@@ -39,7 +39,7 @@ export struct QiblaPage {
   breakpoint: string = 'sm';
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
-  appThemePreset: string = ThemePreset.SIRAT;
+  appThemePreset: string = '';
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = 'en';

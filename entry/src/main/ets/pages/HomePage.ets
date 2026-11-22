@@ -4,17 +4,17 @@ import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { QuranService } from '../quran/QuranService';
 import { RecitationTask } from '../quran/QuranSurahModels';
 import { common } from '@kit.AbilityKit';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
-import { AppLogger } from '../core/AppLogger';
-import { PdfExportHelper } from '../core/PdfExportHelper';
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
+import { AppLogger } from '../core/app/AppLogger';
+import { PdfExportHelper } from '../core/util/PdfExportHelper';
 import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
 import { DuaService } from '../duas/DuaService';
 import { CompleteDua, DuaSource } from '../duas/DuaModels';
 import { CustomEvent } from '../hijricalendar/CustomEventModels';
 import { CustomEventStorage } from '../hijricalendar/CustomEventStorage';
 import { CustomEventNotifier } from '../hijricalendar/CustomEventNotifier';
-import { GradeThemeHelper } from '../core/GradeThemeHelper';
+import { GradeThemeHelper } from '../core/ui/themes/GradeThemeHelper';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -31,6 +31,7 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
   STORAGE_KEY_PRAYER_STATE_VERSION,
+  STORAGE_KEY_QURAN_TRANSLATION_LANG,
   STORAGE_KEY_RAMADAN_STATE_VERSION,
   STORAGE_KEY_SETTINGS_INITIAL_CATEGORY,
   STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
@@ -38,12 +39,12 @@ import {
   STORAGE_KEY_TASBIH_STATE_VERSION,
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
-} from '../core/StorageKeys';
+} from '../core/common/StorageKeys';
 import { RamadanStorage } from '../ramadan/RamadanStorage';
 import {
   EidInfo, FastingStatus, MissedReason, QadaSummary
 } from '../ramadan/RamadanModels';
-import { ClockFormat, ClockFormatHelper } from '../core/ClockFormat';
+import { ClockFormat, ClockFormatHelper } from '../core/util/ClockFormat';
 import { DateHelper } from '../hijricalendar/DateUtils';
 import { PrayerModel } from '../prayer/PrayerModel';
 import { UpcomingImportantDate } from '../hijricalendar/DateModels';
@@ -59,7 +60,7 @@ import {
   PrayerTimeCalculator
 } from '../prayer/PrayerTimeCalculator';
 import { PrayerManager } from '../prayer/PrayerManager';
-import { NavHelper } from '../core/NavHelper';
+import { NavHelper } from '../core/util/NavHelper';
 import { L } from '../i18n/LocalizationHelper';
 import {
   MonthDayCell,
@@ -74,17 +75,17 @@ import { Dhikr, Tasbih } from '../tasbih/TasbihModels';
 import { PageHeader } from '../prayer/PageHeader';
 import { DuaCard } from '../duas/DuaCard';
 import { RamadanAshra, RamadanHelper, RamadanInfo } from '../ramadan/RamadanHelper';
-import { Breakpoints } from '../core/Breakpoints';
+import { Breakpoints } from '../core/layout/Breakpoints';
 import { AdvancedCalcSettings, DEFAULT_ADVANCED_CALC } from '../prayer/AdvancedCalcModels';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 import { EventPerspectiveNotifier } from '../hijricalendar/EventPerspectiveNotifier';
-import { TypographyHelper } from '../core/TypographyHelper';
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
 import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
 import { IslamicEventService } from '../hijricalendar/IslamicEventService';
 import { CustomEventKeywordHelper } from '../duas/CustomEventKeywordHelper';
-import { PreferencesHelper } from '../core/PreferencesHelper';
+import { PreferencesHelper } from '../core/util/PreferencesHelper';
 import { NotificationHelper } from '../prayer/NotificationHelper';
-import { SourceParser } from '../core/SourceParser';
+import { SourceParser } from '../i18n/SourceParser';
 
 export interface RamadanTableRow {
   hijriDate: string;
@@ -131,6 +132,7 @@ export interface PrayerGroupData {
 @Component
 export struct HomePage {
   @StorageLink(STORAGE_KEY_DUA_TRANSLATION_LANG) @Watch('onLanguageChanged') duaTransLang: string = 'default';
+  @StorageLink(STORAGE_KEY_QURAN_TRANSLATION_LANG) @Watch('onTranslationChanged') quranTransLang: string = 'default';
   @StorageLink(STORAGE_KEY_THEME_MODE)
   @Watch('onThemeModeChanged')
   themeMode: string = ThemeMode.SYSTEM;
@@ -160,7 +162,7 @@ export struct HomePage {
   appLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
-  appThemePreset: string = ThemePreset.SIRAT;
+  appThemePreset: string = '';
   @StorageLink(STORAGE_KEY_SHOW_ISLAMIC_EVENTS)
   @Watch('onShowIslamicEventsChanged')
   showIslamicEvents: boolean = true;
@@ -343,6 +345,17 @@ export struct HomePage {
 
   onPageHide(): void {
     this.stopCountdownTimer();
+  }
+
+  private onTranslationChanged(): void {
+    this.refreshDashboard();
+  }
+
+  private getQuranTranslationLang(): string {
+    if (this.quranTransLang === 'default' || this.quranTransLang === '') {
+      return this.appLanguage;
+    }
+    return this.quranTransLang;
   }
 
   build() {

@@ -1,7 +1,7 @@
 import { formBindingData, FormExtensionAbility, formProvider } from '@kit.FormKit';
 import { common, Want } from '@kit.AbilityKit';
 import { Configuration } from '@ohos.app.ability.Configuration';
-import { PreferencesHelper } from '../core/PreferencesHelper';
+import { PreferencesHelper } from '../core/util/PreferencesHelper';
 import { WidgetDataBuilder } from '../widgets/WidgetDataBuilder';
 import {
   STORAGE_KEY_WIDGET_DIM_PREFIX,
@@ -9,10 +9,14 @@ import {
   STORAGE_KEY_WIDGET_NAME_PREFIX,
   WidgetHelper
 } from '../widgets/WidgetHelper';
-import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_LANGUAGE_OVERRIDE, STORAGE_KEY_TIME_FORMAT } from '../core/StorageKeys';
-import { AppLanguage, L } from '../i18n/LocalizationHelper';
+import {
+  STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_LANGUAGE_OVERRIDE,
+  STORAGE_KEY_TIME_FORMAT
+} from '../core/common/StorageKeys';
+import { L } from '../i18n/LocalizationHelper';
 import { OfflineCityLookup } from '../location/OfflineCityLookup';
-import { AppLogger } from '../core/AppLogger';
+import { AppLogger } from '../core/app/AppLogger';
 import { PrayerManager } from '../prayer/PrayerManager';
 
 const FORM_DIM_KEY = 'ohos.extra.param.key.form_dimension';
@@ -277,17 +281,24 @@ export default class EntryFormAbility extends FormExtensionAbility {
    */
   private reResolveSystemLanguage(): void {
     const override = AppStorage.get<string>(STORAGE_KEY_LANGUAGE_OVERRIDE);
-    if (override !== AppLanguage.SYSTEM) {
+    if (override !== 'system') {
       return;
     }
     const current = AppStorage.get<string>(STORAGE_KEY_LANGUAGE);
     const resolved = L.matchSystemLocale();
 
     if (current !== resolved) {
-      AppLogger.info('EntryAbility', `System language changed → '${resolved}'`);
-      AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, resolved);
-      PreferencesHelper.setString(STORAGE_KEY_LANGUAGE, resolved);
-      L.applySystemLanguage(override);
+      AppLogger.info(
+        'EntryAbility',
+        `System language changed → '${resolved}'`
+      );
+
+      L.applySystemLanguage(resolved);
+
+      PreferencesHelper.setString(
+        STORAGE_KEY_LANGUAGE,
+        resolved
+      );
     }
   }
 }

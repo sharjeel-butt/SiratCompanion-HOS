@@ -17,7 +17,7 @@ import {
   STORAGE_KEY_TAB_REFRESH_TICK,
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
-} from '../core/StorageKeys';
+} from '../core/common/StorageKeys';
 import {
   HdsBarWidthRangeOptions,
   hdsMaterial,
@@ -29,18 +29,18 @@ import {
   ScrollEffectType,
   SystemMaterialParams
 } from '@kit.UIDesignKit';
-import { ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import { L } from '../i18n/LocalizationHelper';
-import { NavHelper } from '../core/NavHelper';
+import { NavHelper } from '../core/util/NavHelper';
 
 import { HomePage } from './HomePage';
 import { Prayer } from '../prayer/Prayer';
 import { HijriCalendarPage } from '../hijricalendar/HijriCalendarPage';
 import { QiblaPage } from '../qibla/QiblaPage';
 import { TasbihPage } from '../tasbih/TasbihPage';
-import { TypographyHelper } from '../core/TypographyHelper';
-import { AppLogger } from '../core/AppLogger';
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
+import { AppLogger } from '../core/app/AppLogger';
 import { WidgetHelper } from '../widgets/WidgetHelper';
 
 const HDS_MIN_API = 23;
@@ -53,7 +53,7 @@ struct MainTabs {
   themeMode: string = ThemeMode.SYSTEM;
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
-  appThemePreset: string = ThemePreset.SIRAT;
+  appThemePreset: string = '';
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChanged')
   appLanguage: string = 'en';

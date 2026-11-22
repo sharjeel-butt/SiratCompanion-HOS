@@ -1,7 +1,8 @@
 // entry/src/main/ets/helper/TypographyHelper.ets
 
 import { font } from '@kit.ArkUI';
-import { AppLogger } from './AppLogger';
+import { AppLogger } from '../../app/AppLogger';
+import { FontPaths } from '../../common/FontPaths';
 
 /**
  * Per-language typography metrics.
@@ -136,55 +137,119 @@ export class TypographyHelper {
    */
   static init(): void {
     try {
-      // ---- Translation Fonts (tr) ----
-      const bengali: font.FontOptions =
-        { familyName: 'NotoSansBengali', familySrc: $rawfile('fonts/tr/NotoSansBengali-Regular.ttf') };
-      const chinese: font.FontOptions =
-        { familyName: 'NotoSansSC', familySrc: $rawfile('fonts/tr/NotoSansSC-Regular.ttf') };
-      const outfit: font.FontOptions = { familyName: 'Outfit', familySrc: $rawfile('fonts/tr/Outfit-Regular.ttf') };
-      const outfitBold: font.FontOptions =
-        { familyName: 'Outfit-Bold', familySrc: $rawfile('fonts/tr/Outfit-Bold.ttf') };
-      const nastaliq: font.FontOptions =
-        { familyName: 'NotoNastaliqUrdu', familySrc: $rawfile('fonts/tr/NotoNastaliqUrdu-Regular.ttf') };
 
-      // ---- Arabic Fonts (ar) ----
-      const amiri: font.FontOptions = { familyName: 'Amiri', familySrc: $rawfile('fonts/ar/Amiri-Regular.ttf') };
-      const amiriBold: font.FontOptions = { familyName: 'Amiri-Bold', familySrc: $rawfile('fonts/ar/Amiri-Bold.ttf') };
-      const scheherazade: font.FontOptions =
-        { familyName: 'ScheherazadeNew', familySrc: $rawfile('fonts/ar/ScheherazadeNew-Regular.ttf') };
-      const notonaskh: font.FontOptions =
-        { familyName: 'NotoNaskh', familySrc: $rawfile('fonts/ar/NotoNaskhArabic-Regular.ttf') };
-      const amiriQuran: font.FontOptions =
-        { familyName: 'AmiriQuran', familySrc: $rawfile('fonts/ar/AmiriQuran-Regular.ttf') };
-      const kemenag: font.FontOptions =
-        { familyName: 'LPMQIsepMisbah', familySrc: $rawfile('fonts/ar/LPMQ-Regular.ttf') };
-      const kfgqpcWarsh: font.FontOptions =
-        { familyName: 'KFGQPCWarsh', familySrc: $rawfile('fonts/ar/KFGQPC-Regular.ttf') };
-      const hafsArabic: font.FontOptions =
-        { familyName: 'HafsArabic', familySrc: $rawfile('fonts/ar/HafsArabic-Regular.ttf') };
-      const jameelNoori: font.FontOptions =
-        { familyName: 'JameelNoori', familySrc: $rawfile('fonts/ar/JameelNooriNastaleeq.ttf') };
-      const qpcHafs: font.FontOptions = { familyName: 'QPC_Hafs', familySrc: $rawfile('fonts/ar/QPC-Hafs.ttf') };
+      const fonts: font.FontOptions[] = [
 
-      // ---- Register Fonts ----
-      font.registerFont(qpcHafs);
-      font.registerFont(jameelNoori);
-      font.registerFont(hafsArabic);
-      font.registerFont(outfit);
-      font.registerFont(outfitBold);
-      font.registerFont(amiri);
-      font.registerFont(amiriBold);
-      font.registerFont(nastaliq);
-      font.registerFont(amiriQuran);
-      font.registerFont(kemenag);
-      font.registerFont(kfgqpcWarsh);
-      font.registerFont(bengali);
-      font.registerFont(chinese);
-      font.registerFont(scheherazade);
-      font.registerFont(notonaskh);
-      AppLogger.info('TypographyHelper', 'All fonts registered successfully.');
+        // ========================================================
+        // LATIN
+        // ========================================================
+
+        {
+          familyName: 'Outfit',
+          familySrc: $rawfile(FontPaths.OUTFIT)
+        },
+        {
+          familyName: 'Outfit-Bold',
+          familySrc: $rawfile(FontPaths.OUTFIT_BOLD)
+        },
+
+        // ========================================================
+        // BENGALI
+        // ========================================================
+
+        {
+          familyName: 'NotoSansBengali',
+          familySrc: $rawfile(FontPaths.NOTO_SANS_BENGALI)
+        },
+
+        // ========================================================
+        // CHINESE
+        // ========================================================
+
+        {
+          familyName: 'NotoSansSC',
+          familySrc: $rawfile(FontPaths.NOTO_SANS_SC)
+        },
+
+        // ========================================================
+        // URDU
+        // ========================================================
+
+        {
+          familyName: 'NotoNastaliqUrdu',
+          familySrc: $rawfile(FontPaths.NOTO_NASTALIQ_URDU)
+        },
+
+        {
+          familyName: 'JameelNoori',
+          familySrc: $rawfile(FontPaths.JAMEEL_NOORI)
+        },
+
+        // ========================================================
+        // ARABIC
+        // ========================================================
+
+        {
+          familyName: 'Amiri',
+          familySrc: $rawfile(FontPaths.AMIRI)
+        },
+
+        {
+          familyName: 'Amiri-Bold',
+          familySrc: $rawfile(FontPaths.AMIRI_BOLD)
+        },
+
+        {
+          familyName: 'AmiriQuran',
+          familySrc: $rawfile(FontPaths.AMIRI_QURAN)
+        },
+
+        {
+          familyName: 'ScheherazadeNew',
+          familySrc: $rawfile(FontPaths.SCHEHERAZADE_NEW)
+        },
+
+        {
+          familyName: 'NotoNaskh',
+          familySrc: $rawfile(FontPaths.NOTO_NASKH_ARABIC)
+        },
+
+        {
+          familyName: 'HafsArabic',
+          familySrc: $rawfile(FontPaths.HAFS_ARABIC)
+        },
+
+        {
+          familyName: 'LPMQIsepMisbah',
+          familySrc: $rawfile(FontPaths.LPMQ_ISEP_MISBAH)
+        },
+
+        {
+          familyName: 'KFGQPCWarsh',
+          familySrc: $rawfile(FontPaths.KFGQPC_WARSH)
+        },
+
+        {
+          familyName: 'QPC_Hafs',
+          familySrc: $rawfile(FontPaths.QPC_HAFS)
+        }
+      ];
+
+      fonts.forEach((fontOption: font.FontOptions) => {
+        font.registerFont(fontOption);
+      });
+
+      AppLogger.info(
+        'TypographyHelper',
+        `Registered ${fonts.length} fonts successfully.`
+      );
+
     } catch (err) {
-      AppLogger.error('TypographyHelper', `Font registration failed: ${JSON.stringify(err)}`);
+
+      AppLogger.error(
+        'TypographyHelper',
+        `Font registration failed: ${JSON.stringify(err)}`
+      );
     }
   }
 

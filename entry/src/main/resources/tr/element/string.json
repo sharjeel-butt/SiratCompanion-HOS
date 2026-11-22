@@ -1289,90 +1289,6 @@
       "value": "Çevrimiçi"
     },
     {
-      "name": "theme_preset",
-      "value": "Uygulama Teması"
-    },
-    {
-      "name": "theme_preset_desc",
-      "value": "Uygulamanın görsel stilini seçin"
-    },
-    {
-      "name": "theme_preset_sirat",
-      "value": "Sirat"
-    },
-    {
-      "name": "theme_preset_sirat_desc",
-      "value": "Modern ve sade — HarmonyOS 7 estetiği"
-    },
-    {
-      "name": "theme_preset_current",
-      "value": "Sirat Klasik"
-    },
-    {
-      "name": "theme_preset_current_desc",
-      "value": "Sıcak krem ve koyu yeşil — orijinal"
-    },
-    {
-      "name": "theme_preset_harmony7",
-      "value": "Noor"
-    },
-    {
-      "name": "theme_preset_harmony7_desc",
-      "value": "Işıltılı menekşe — huzurlu ve modern"
-    },
-    {
-      "name": "theme_preset_harmony6",
-      "value": "Sahar"
-    },
-    {
-      "name": "theme_preset_harmony6_desc",
-      "value": "Altın kehribar — ilk ışığın sakinliği"
-    },
-    {
-      "name": "theme_preset_harmony5",
-      "value": "Bahar"
-    },
-    {
-      "name": "theme_preset_harmony5_desc",
-      "value": "Serin turkuaz — geniş, taze ve berrak"
-    },
-    {
-      "name": "theme_amber",
-      "value": "Kehribar"
-    },
-    {
-      "name": "theme_charcoal",
-      "value": "Kömür"
-    },
-    {
-      "name": "theme_emerald",
-      "value": "Zümrüt"
-    },
-    {
-      "name": "theme_pearl",
-      "value": "İnci"
-    },
-    {
-      "name": "theme_gold",
-      "value": "Altın (Metalik)"
-    },
-    {
-      "name": "theme_white",
-      "value": "Beyaz"
-    },
-    {
-      "name": "theme_sapphire",
-      "value": "Safir"
-    },
-    {
-      "name": "theme_rose",
-      "value": "Gül"
-    },
-    {
-      "name": "theme_silver",
-      "value": "Gümüş"
-    },
-    {
       "name": "wizard_step",
       "value": "Adım"
     },
@@ -3475,6 +3391,170 @@
     {
       "name": "trans_font_JameelNoori",
       "value": "Jameel Noori (Nestalik)"
+    },
+    {
+      "name": "theme_emerald",
+      "value": "Zümrüt"
+    },
+    {
+      "name": "theme_emerald_desc",
+      "value": "Temiz ve dengeli bir görünüm sunan zümrüt yeşili vurgu rengi"
+    },
+    {
+      "name": "theme_charcoal",
+      "value": "Kömür"
+    },
+    {
+      "name": "theme_charcoal_desc",
+      "value": "Güçlü kontrasta sahip zarif gri tonlu tema"
+    },
+    {
+      "name": "theme_sky",
+      "value": "Gök Mavisi"
+    },
+    {
+      "name": "theme_sky_desc",
+      "value": "Açık gökyüzünden ilham alan ferahlatıcı mavi renk paleti"
+    },
+    {
+      "name": "theme_amethyst",
+      "value": "Ametist"
+    },
+    {
+      "name": "theme_amethyst_desc",
+      "value": "Zarif ve modern bir his veren yumuşak mor tonlar"
+    },
+    {
+      "name": "theme_rose",
+      "value": "Gül"
+    },
+    {
+      "name": "theme_rose_desc",
+      "value": "Canlı bir karaktere sahip sıcak gül pembesi renkler"
+    },
+    {
+      "name": "theme_cobalt",
+      "value": "Kobalt"
+    },
+    {
+      "name": "theme_cobalt_desc",
+      "value": "Profesyonel bir görünüm için güçlü kobalt mavisi vurgular"
+    },
+    {
+      "name": "theme_navy",
+      "value": "Lacivert"
+    },
+    {
+      "name": "theme_navy_desc",
+      "value": "Zamansız bir zarafet sunan klasik lacivert tema"
+    },
+    {
+      "name": "theme_violet",
+      "value": "Menekşe"
+    },
+    {
+      "name": "theme_violet_desc",
+      "value": "Sakin ve yaratıcı bir atmosfer sunan zengin mor tonlar"
+    },
+    {
+      "name": "theme_lime",
+      "value": "Lime"
+    },
+    {
+      "name": "theme_lime_desc",
+      "value": "Doğadan ilham alan canlı lime yeşili vurgular"
+    },
+    {
+      "name": "theme_teal",
+      "value": "Turkuaz"
+    },
+    {
+      "name": "theme_teal_desc",
+      "value": "Mavi ve yeşilin birleştiği modern turkuaz paleti"
+    },
+    {
+      "name": "theme_pine",
+      "value": "Çam"
+    },
+    {
+      "name": "theme_pine_desc",
+      "value": "Doğal bir görünüm sunan koyu çam yeşili tonları"
+    },
+    {
+      "name": "theme_olive",
+      "value": "Zeytin"
+    },
+    {
+      "name": "theme_olive_desc",
+      "value": "İnce bir zarafet taşıyan toprak tonlu zeytin renkleri"
+    },
+    {
+      "name": "theme_sunflower",
+      "value": "Ayçiçeği"
+    },
+    {
+      "name": "theme_sunflower_desc",
+      "value": "Neşeli bir deneyim sunan parlak sarı vurgular"
+    },
+    {
+      "name": "theme_sand",
+      "value": "Kum"
+    },
+    {
+      "name": "theme_sand_desc",
+      "value": "Sıcak ve rahatlatıcı bir his veren yumuşak kum beji tonları"
+    },
+    {
+      "name": "theme_umber",
+      "value": "Umber"
+    },
+    {
+      "name": "theme_umber_desc",
+      "value": "Doğal toprak renklerinden ilham alan zengin kahverengi tonlar"
+    },
+    {
+      "name": "theme_wine",
+      "value": "Şarap"
+    },
+    {
+      "name": "theme_wine_desc",
+      "value": "Lüks bir görünüm sunan koyu şarap kırmızısı vurgular"
+    },
+    {
+      "name": "theme_mustard",
+      "value": "Hardal"
+    },
+    {
+      "name": "theme_mustard_desc",
+      "value": "Enerjik ve sıcak hardal altını renk paleti"
+    },
+    {
+      "name": "theme_coral",
+      "value": "Mercan"
+    },
+    {
+      "name": "theme_coral_desc",
+      "value": "Davetkar bir atmosfer oluşturan yumuşak mercan tonları"
+    },
+    {
+      "name": "theme_crimson",
+      "value": "Kızıl"
+    },
+    {
+      "name": "theme_crimson_desc",
+      "value": "Cesur bir görsel stil için güçlü kızıl vurgular"
+    },
+    {
+      "name": "theme_tangerine",
+      "value": "Mandalina"
+    },
+    {
+      "name": "theme_tangerine_desc",
+      "value": "Sıcaklık ve enerji dolu canlı mandalina turuncusu tonları"
+    },
+    {
+      "name": "theme_preset",
+      "value": "Tema Ön Ayarı"
     }
   ]
 }

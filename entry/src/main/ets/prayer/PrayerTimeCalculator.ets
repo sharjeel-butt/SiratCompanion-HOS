@@ -2,7 +2,7 @@
 
 import { TimezoneResolver } from '../location/TimezoneResolver';
 import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
-import { STORAGE_KEY_HIJRI_OFFSET } from '../core/StorageKeys';
+import { STORAGE_KEY_HIJRI_OFFSET } from '../core/common/StorageKeys';
 import {
   AdvancedCalcSettings,
   DEFAULT_ADVANCED_CALC,

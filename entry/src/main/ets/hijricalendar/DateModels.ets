@@ -1,5 +1,5 @@
 // entry/src/main/ets/models/DateModels.ets
-import { SourceItem } from '../core/SourceParser';
+import { SourceItem } from '../i18n/SourceParser';
 
 /**
  * How an Islamic event recurs within the Hijri calendar.

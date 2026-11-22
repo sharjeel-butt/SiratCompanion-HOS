@@ -1,0 +1,343 @@
+[
+  {
+    "id": "sirat",
+    "nameKey": "theme_emerald",
+    "descKey": "theme_emerald_desc",
+    "isDefault": true,
+    "light": {
+      "bg": "#F0F4FA",
+      "surface": "#FFFFFF",
+      "accent": "#1DB954",
+      "text": "#16181D"
+    },
+    "dark": {
+      "bg": "#0A0D14",
+      "surface": "#171D26",
+      "accent": "#1DB954",
+      "text": "#F5F7FA"
+    }
+  },
+  {
+    "id": "charcoal",
+    "nameKey": "theme_charcoal",
+    "descKey": "theme_charcoal_desc",
+    "light": {
+      "bg": "#F5F5F5",
+      "surface": "#FFFFFF",
+      "accent": "#333333",
+      "text": "#111111"
+    },
+    "dark": {
+      "bg": "#121212",
+      "surface": "#1E1E1E",
+      "accent": "#888888",
+      "text": "#EEEEEE"
+    }
+  },
+  {
+    "id": "sky",
+    "nameKey": "theme_sky",
+    "descKey": "theme_sky_desc",
+    "light": {
+      "bg": "#F0F8FF",
+      "surface": "#FFFFFF",
+      "accent": "#00A8FF",
+      "text": "#102A43"
+    },
+    "dark": {
+      "bg": "#0B132B",
+      "surface": "#1C2541",
+      "accent": "#00A8FF",
+      "text": "#E0E1DD"
+    }
+  },
+  {
+    "id": "amethyst",
+    "nameKey": "theme_amethyst",
+    "descKey": "theme_amethyst_desc",
+    "light": {
+      "bg": "#F8F0FC",
+      "surface": "#FFFFFF",
+      "accent": "#B158D6",
+      "text": "#2D1B36"
+    },
+    "dark": {
+      "bg": "#1A1025",
+      "surface": "#2D1B36",
+      "accent": "#B158D6",
+      "text": "#F3E8F9"
+    }
+  },
+  {
+    "id": "rose",
+    "nameKey": "theme_rose",
+    "descKey": "theme_rose_desc",
+    "light": {
+      "bg": "#FFF0F5",
+      "surface": "#FFFFFF",
+      "accent": "#E91E63",
+      "text": "#2C0A1A"
+    },
+    "dark": {
+      "bg": "#240711",
+      "surface": "#3D0C1E",
+      "accent": "#E91E63",
+      "text": "#FCE4EC"
+    }
+  },
+  {
+    "id": "cobalt",
+    "nameKey": "theme_cobalt",
+    "descKey": "theme_cobalt_desc",
+    "light": {
+      "bg": "#F0F4FF",
+      "surface": "#FFFFFF",
+      "accent": "#2B6DE6",
+      "text": "#0A1A3A"
+    },
+    "dark": {
+      "bg": "#0A1224",
+      "surface": "#152244",
+      "accent": "#2B6DE6",
+      "text": "#E6EEFF"
+    }
+  },
+  {
+    "id": "navy",
+    "nameKey": "theme_navy",
+    "descKey": "theme_navy_desc",
+    "light": {
+      "bg": "#F0F4F8",
+      "surface": "#FFFFFF",
+      "accent": "#0F4C81",
+      "text": "#0A1D2E"
+    },
+    "dark": {
+      "bg": "#081524",
+      "surface": "#0F2236",
+      "accent": "#0F4C81",
+      "text": "#E6F0FA"
+    }
+  },
+  {
+    "id": "violet",
+    "nameKey": "theme_violet",
+    "descKey": "theme_violet_desc",
+    "light": {
+      "bg": "#F5F0FF",
+      "surface": "#FFFFFF",
+      "accent": "#6A4C93",
+      "text": "#1D1130"
+    },
+    "dark": {
+      "bg": "#130D22",
+      "surface": "#1F1438",
+      "accent": "#6A4C93",
+      "text": "#EAE2F8"
+    }
+  },
+  {
+    "id": "lime",
+    "nameKey": "theme_lime",
+    "descKey": "theme_lime_desc",
+    "light": {
+      "bg": "#F4FAF0",
+      "surface": "#FFFFFF",
+      "accent": "#7CB342",
+      "text": "#1A2E0B"
+    },
+    "dark": {
+      "bg": "#0F1A08",
+      "surface": "#1A2E0B",
+      "accent": "#7CB342",
+      "text": "#E8F5E1"
+    }
+  },
+  {
+    "id": "teal",
+    "nameKey": "theme_teal",
+    "descKey": "theme_teal_desc",
+    "light": {
+      "bg": "#F0FAFA",
+      "surface": "#FFFFFF",
+      "accent": "#009688",
+      "text": "#0A2624"
+    },
+    "dark": {
+      "bg": "#0A1A18",
+      "surface": "#0F2B28",
+      "accent": "#009688",
+      "text": "#E0F2F0"
+    }
+  },
+  {
+    "id": "pine",
+    "nameKey": "theme_pine",
+    "descKey": "theme_pine_desc",
+    "light": {
+      "bg": "#F2F7F6",
+      "surface": "#FFFFFF",
+      "accent": "#00796B",
+      "text": "#0D211E"
+    },
+    "dark": {
+      "bg": "#0B1716",
+      "surface": "#122521",
+      "accent": "#00796B",
+      "text": "#E0F0EC"
+    }
+  },
+  {
+    "id": "olive",
+    "nameKey": "theme_olive",
+    "descKey": "theme_olive_desc",
+    "light": {
+      "bg": "#F6F8F2",
+      "surface": "#FFFFFF",
+      "accent": "#3E5F3E",
+      "text": "#1A261A"
+    },
+    "dark": {
+      "bg": "#101C10",
+      "surface": "#1A261A",
+      "accent": "#3E5F3E",
+      "text": "#E8EFE8"
+    }
+  },
+  {
+    "id": "sunflower",
+    "nameKey": "theme_sunflower",
+    "descKey": "theme_sunflower_desc",
+    "light": {
+      "bg": "#FFFDF0",
+      "surface": "#FFFFFF",
+      "accent": "#FBC02D",
+      "text": "#33270A"
+    },
+    "dark": {
+      "bg": "#1A1408",
+      "surface": "#33270A",
+      "accent": "#FBC02D",
+      "text": "#FFF8E1"
+    }
+  },
+  {
+    "id": "sand",
+    "nameKey": "theme_sand",
+    "descKey": "theme_sand_desc",
+    "light": {
+      "bg": "#FAF8F5",
+      "surface": "#FFFFFF",
+      "accent": "#D4C4A8",
+      "text": "#2E281F"
+    },
+    "dark": {
+      "bg": "#14110D",
+      "surface": "#2E281F",
+      "accent": "#D4C4A8",
+      "text": "#F4F1EA"
+    }
+  },
+  {
+    "id": "umber",
+    "nameKey": "theme_umber",
+    "descKey": "theme_umber_desc",
+    "light": {
+      "bg": "#FBF7F4",
+      "surface": "#FFFFFF",
+      "accent": "#A16A3E",
+      "text": "#2E1B0F"
+    },
+    "dark": {
+      "bg": "#1A0F08",
+      "surface": "#2E1B0F",
+      "accent": "#A16A3E",
+      "text": "#F5E8DF"
+    }
+  },
+  {
+    "id": "wine",
+    "nameKey": "theme_wine",
+    "descKey": "theme_wine_desc",
+    "light": {
+      "bg": "#FAF0F2",
+      "surface": "#FFFFFF",
+      "accent": "#880E4F",
+      "text": "#2B0519"
+    },
+    "dark": {
+      "bg": "#1A030F",
+      "surface": "#2B0519",
+      "accent": "#880E4F",
+      "text": "#FCE4EC"
+    }
+  },
+  {
+    "id": "mustard",
+    "nameKey": "theme_mustard",
+    "descKey": "theme_mustard_desc",
+    "light": {
+      "bg": "#FEFBF0",
+      "surface": "#FFFFFF",
+      "accent": "#E5A824",
+      "text": "#332407"
+    },
+    "dark": {
+      "bg": "#1A1203",
+      "surface": "#332407",
+      "accent": "#E5A824",
+      "text": "#FDF6E3"
+    }
+  },
+  {
+    "id": "coral",
+    "nameKey": "theme_coral",
+    "descKey": "theme_coral_desc",
+    "light": {
+      "bg": "#FFF5F5",
+      "surface": "#FFFFFF",
+      "accent": "#E57373",
+      "text": "#331515"
+    },
+    "dark": {
+      "bg": "#1A0A0A",
+      "surface": "#331515",
+      "accent": "#E57373",
+      "text": "#FFEBEE"
+    }
+  },
+  {
+    "id": "crimson",
+    "nameKey": "theme_crimson",
+    "descKey": "theme_crimson_desc",
+    "light": {
+      "bg": "#FFF0F3",
+      "surface": "#FFFFFF",
+      "accent": "#D81B60",
+      "text": "#330715"
+    },
+    "dark": {
+      "bg": "#1A030A",
+      "surface": "#330715",
+      "accent": "#D81B60",
+      "text": "#FCE4EC"
+    }
+  },
+  {
+    "id": "tangerine",
+    "nameKey": "theme_tangerine",
+    "descKey": "theme_tangerine_desc",
+    "light": {
+      "bg": "#FFF6F0",
+      "surface": "#FFFFFF",
+      "accent": "#E64A19",
+      "text": "#331105"
+    },
+    "dark": {
+      "bg": "#1A0803",
+      "surface": "#331105",
+      "accent": "#E64A19",
+      "text": "#FBE9E7"
+    }
+  }
+]

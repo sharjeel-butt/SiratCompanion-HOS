@@ -2,19 +2,8 @@
 
 import { i18n, resourceManager } from '@kit.LocalizationKit';
 import { common } from '@kit.AbilityKit';
-import { STORAGE_KEY_LANGUAGE } from '../core/StorageKeys';
-
-
-export enum AppLanguage {
-  ENGLISH = 'en',
-  CHINESE = 'zh',
-  ARABIC = 'ar',
-  INDONESIAN = 'id',
-  URDU = 'ur',
-  TURKISH = 'tr',
-  BENGALI = 'bn',
-  SYSTEM = 'system'
-}
+import { STORAGE_KEY_LANGUAGE } from '../core/common/StorageKeys';
+import { LanguageService } from './LanguageService';
 
 /**
  * Localization provider backed by HarmonyOS resources.
@@ -39,7 +28,7 @@ export class L {
    * supported languages. English is the safe default — it is the
    * base resource set and every key is guaranteed to be defined.
    */
-  static readonly DEFAULT_LANGUAGE = AppLanguage.ENGLISH;
+  static readonly DEFAULT_LANGUAGE = 'en';
   private static ctx: common.Context | null = null;
   private static readonly overrideCache: Map<string, resourceManager.ResourceManager>
     = new Map<string, resourceManager.ResourceManager>();
@@ -51,6 +40,7 @@ export class L {
    */
   static init(context: common.Context): void {
     L.ctx = context;
+
     L.overrideCache.clear();
   }
 
@@ -65,17 +55,19 @@ export class L {
    * Used by SettingsHelper.saveLanguage() and the migration path
    * in EntryAbility. Safe to call from any context.
    */
-  static resolveOverride(override: string): string {
-    if (override === AppLanguage.ENGLISH
-      || override === AppLanguage.CHINESE
-      || override === AppLanguage.ARABIC
-      || override === AppLanguage.INDONESIAN
-      || override === AppLanguage.URDU
-      || override === AppLanguage.TURKISH
-      || override === AppLanguage.BENGALI) {
+  static resolveOverride(
+    override: string
+  ): string {
+
+    if (override === 'system') {
+      return LanguageService.systemLanguage();
+    }
+
+    if (LanguageService.supports(override)) {
       return override;
     }
-    return L.matchSystemLocale();
+
+    return LanguageService.defaultLanguage();
   }
 
   /**
@@ -88,37 +80,7 @@ export class L {
    * falls through to English.
    */
   static matchSystemLocale(): string {
-    try {
-      const sysLocale = i18n.System.getSystemLocale();
-      if (sysLocale === undefined || sysLocale.length === 0) {
-        return L.DEFAULT_LANGUAGE;
-      }
-      const sysLang = sysLocale.split('-')[0].toLowerCase();
-      if (sysLang === 'zh') {
-        return AppLanguage.CHINESE;
-      }
-      if (sysLang === 'ar') {
-        return AppLanguage.ARABIC;
-      }
-      if (sysLang === 'en') {
-        return AppLanguage.ENGLISH;
-      }
-      if (sysLang === 'id' || sysLang === 'in') {
-        return AppLanguage.INDONESIAN;
-      }
-      if (sysLang === 'ur') {
-        return AppLanguage.URDU;
-      }
-      if (sysLang === 'tr') {
-        return AppLanguage.TURKISH;
-      }
-      if (sysLang === 'bn') {
-        return AppLanguage.BENGALI;
-      }
-      return L.DEFAULT_LANGUAGE;
-    } catch (err) {
-      return L.DEFAULT_LANGUAGE;
-    }
+    return LanguageService.systemLanguage();
   }
 
   /**
@@ -126,52 +88,29 @@ export class L {
    * This forces native overlays (bindSheet, Menu, TextInput, etc.)
    * to adopt the correct RTL/LTR direction automatically.
    */
-  static applySystemLanguage(override: string): string {
+  static applySystemLanguage(
+    override: string
+  ): string {
+
     try {
-      let sysLang = 'en';
 
-      if (override === AppLanguage.SYSTEM) {
-        // 1. Get the full system locale (e.g., "en-US", "zh-Hans-CN", "ar-SA")
-        const fullLocale = i18n.System.getSystemLanguage();
-        console.info(`[L] Raw system language detected: ${fullLocale}`);
+      const lang =
+        L.resolveOverride(override);
 
-        // 2. Extract the base 2-letter language code (e.g., "en-US" -> "en")
-        // This is CRITICAL for laptops, which often return region-specific codes like "en-GB"
-        sysLang = fullLocale.split('-')[0].toLowerCase();
+      i18n.System.setAppPreferredLanguage(
+        lang
+      );
 
-        // Optional: Handle specific script variations if needed
-        if (sysLang === 'zh') {
-          sysLang = 'zh'; // Ensure it maps cleanly to your 'zh' resources
-        }
-      } else if (override === AppLanguage.ARABIC) {
-        sysLang = 'ar';
-      } else if (override === AppLanguage.CHINESE) {
-        sysLang = 'zh';
-      } else if (override === AppLanguage.ENGLISH) {
-        sysLang = 'en';
-      } else if (override === AppLanguage.INDONESIAN) {
-        sysLang = 'id';
-      } else if (override === AppLanguage.URDU) {
-        sysLang = 'ur';
-      } else if (override === AppLanguage.TURKISH) {
-        sysLang = 'tr';
-      } else if (override === AppLanguage.BENGALI) {
-        sysLang = 'bn';
-      }
+      AppStorage.setOrCreate(
+        STORAGE_KEY_LANGUAGE,
+        lang
+      );
 
-      // 3. Set the app preferred language
-      i18n.System.setAppPreferredLanguage(sysLang);
-
-      console.info(`[I] App preferred language set to: ${sysLang}`);
-
-      // 4. CRITICAL: Update global state so the Wizard UI reactively rebuilds!
-      // Replace 'currentLanguage' with the actual key you use in AppStorage/LocalStorage
-      AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, sysLang);
-      return sysLang;
+      return lang;
 
     } catch (err) {
-      console.warn(`[L] Failed to setAppPreferredLanguage: ${JSON.stringify(err)}`);
-      return 'en'; // Safe fallback
+
+      return LanguageService.defaultLanguage();
     }
   }
 
@@ -181,7 +120,9 @@ export class L {
 
   static current(): string {
     const v = AppStorage.get<string>(STORAGE_KEY_LANGUAGE);
-    return v ? v : AppLanguage.ENGLISH;
+    return v
+      ? v
+      : LanguageService.defaultLanguage();
   }
 
   static setLanguage(lang: string): void {
@@ -189,12 +130,13 @@ export class L {
   }
 
   static isRtl(): boolean {
-    return L.isRtlLang(L.current());
+    return LanguageService.isRtl(L.current());
   }
 
   static isRtlLang(lang: string): boolean {
-    return lang === AppLanguage.ARABIC || lang === AppLanguage.URDU;
+    return LanguageService.isRtl(lang);
   }
+
 
   static getLanguageLabel(lang: string): string {
     return L.get(`lang_${lang}`);
@@ -206,25 +148,33 @@ export class L {
 
   static get(key: string, lang?: string): string {
     let language = (lang !== undefined && lang.length > 0)
-      ? lang : L.current();
-    if (language === AppLanguage.SYSTEM) {
+      ? lang
+      : L.current();
+
+    if (language === 'system') {
       language = L.matchSystemLocale();
     }
+
     const mgr = L.mgrFor(language);
+
     if (mgr === null) {
       return key;
     }
+
     try {
       return mgr.getStringByNameSync(key);
-    } catch (err) {
+    } catch (_) {
       try {
-        const baseMgr = L.mgrFor(AppLanguage.ENGLISH);
+        const baseMgr = L.mgrFor(
+          LanguageService.defaultLanguage()
+        );
+
         if (baseMgr !== null && baseMgr !== mgr) {
           return baseMgr.getStringByNameSync(key);
         }
-      } catch (inner) {
-        // Fall through to returning the key.
+      } catch (_) {
       }
+
       console.warn(`[L] missing string key: ${key}`);
       return key;
     }
@@ -232,25 +182,33 @@ export class L {
 
   static getArray(key: string, lang?: string): string[] {
     let language = (lang !== undefined && lang.length > 0)
-      ? lang : L.current();
-    if (language === AppLanguage.SYSTEM) {
+      ? lang
+      : L.current();
+
+    if (language === 'system') {
       language = L.matchSystemLocale();
     }
+
     const mgr = L.mgrFor(language);
+
     if (mgr === null) {
       return [];
     }
+
     try {
       return mgr.getStringArrayByNameSync(key);
-    } catch (err) {
+    } catch (_) {
       try {
-        const baseMgr = L.mgrFor(AppLanguage.ENGLISH);
+        const baseMgr = L.mgrFor(
+          LanguageService.defaultLanguage()
+        );
+
         if (baseMgr !== null && baseMgr !== mgr) {
           return baseMgr.getStringArrayByNameSync(key);
         }
-      } catch (inner) {
-        // Fall through to empty array.
+      } catch (_) {
       }
+
       console.warn(`[L] missing string-array key: ${key}`);
       return [];
     }

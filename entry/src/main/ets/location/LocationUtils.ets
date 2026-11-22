@@ -5,7 +5,7 @@ import { L } from '../i18n/LocalizationHelper';
 import { OfflineCityLookup } from './OfflineCityLookup';
 import { geoLocationManager } from '@kit.LocationKit';
 import { promptAction } from '@kit.ArkUI';
-import { STORAGE_KEY_LANGUAGE } from '../core/StorageKeys';
+import { STORAGE_KEY_LANGUAGE } from '../core/common/StorageKeys';
 import { i18n } from '@kit.LocalizationKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 

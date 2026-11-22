@@ -1,4 +1,4 @@
-import { PreferencesHelper } from '../core/PreferencesHelper';
+import { PreferencesHelper } from '../core/util/PreferencesHelper';
 import { MosqueModel } from './MosqueModels';
 
 const KEY_CUSTOM_MOSQUES = 'custom_mosques_data';

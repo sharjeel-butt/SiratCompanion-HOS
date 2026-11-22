@@ -2,8 +2,8 @@
 
 import { mediaquery, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -11,9 +11,9 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_TASBIH_STATE_VERSION,
   STORAGE_KEY_THEME_MODE
-} from '../core/StorageKeys';
+} from '../core/common/StorageKeys';
 import { L } from '../i18n/LocalizationHelper';
-import { Breakpoints } from '../core/Breakpoints';
+import { Breakpoints } from '../core/layout/Breakpoints';
 import { Tasbih } from '../tasbih/TasbihModels';
 import { TasbihManager } from '../tasbih/TasbihManager';
 import { TasbihStorage } from '../tasbih/TasbihStorage';
@@ -40,7 +40,7 @@ struct TasbihDetailsPage {
   appLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
-  appThemePreset: string = ThemePreset.SIRAT;
+  appThemePreset: string = '';
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
@@ -292,11 +292,14 @@ struct TasbihDetailsPage {
           .height(14)
           .borderRadius(7)
           .flexShrink(0)
-          .backgroundColor(TasbihThemes.presetById(
-            row.themePresetId.length > 0
-              ? row.themePresetId
-              : TasbihThemes.DEFAULT_PRESET_ID
-          ).swatch)
+          .backgroundColor(
+            TasbihThemes.getSwatch(
+              row.themePresetId.length > 0
+                ? row.themePresetId
+                : TasbihThemes.DEFAULT_PRESET_ID,
+              this.colors
+            )
+          )
 
         // Tasbih Name
         Text(row.tasbihName)

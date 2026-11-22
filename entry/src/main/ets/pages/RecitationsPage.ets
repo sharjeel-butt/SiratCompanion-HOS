@@ -2,30 +2,39 @@
 
 import { common } from '@kit.AbilityKit';
 import { promptAction, router } from '@kit.ArkUI';
-import { ThemeColors, ThemeMode } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import { L } from '../i18n/LocalizationHelper';
 import { QuranService } from '../quran/QuranService';
 import { RecitationTask } from '../quran/QuranSurahModels';
-import { TypographyHelper } from '../core/TypographyHelper';
-import { STORAGE_KEY_LANGUAGE } from '../core/StorageKeys';
-import { NavHelper } from '../core/NavHelper';
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
+import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_QURAN_TRANSLATION_LANG } from '../core/common/StorageKeys';
+import { NavHelper } from '../core/util/NavHelper';
 import { CustomEventStorage } from '../hijricalendar/CustomEventStorage';
 import { UpcomingCustomEvent } from './HomePage';
 import { CustomEventNotifier } from '../hijricalendar/CustomEventNotifier';
 import { SettingsHelper } from '../settings/SettingsHelper';
-import { GradeThemeHelper } from '../core/GradeThemeHelper';
+import { GradeThemeHelper } from '../core/ui/themes/GradeThemeHelper';
 
 @Entry
 @Component
 struct RecitationsPage {
   @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLangChanged') appLanguage: string = 'en';
+  @StorageLink(STORAGE_KEY_QURAN_TRANSLATION_LANG) @Watch('onLangChanged') quranTransLang: string = 'default';
+
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.SYSTEM);
   @State tasks: RecitationTask[] = [];
   @State isLoading: boolean = true;
 
   async aboutToAppear() {
     await this.loadData();
+  }
+
+  private getQuranTranslationLang(): string {
+    if (this.quranTransLang === 'default' || this.quranTransLang === '') {
+      return this.appLanguage;
+    }
+    return this.quranTransLang;
   }
 
   onLangChanged() {
@@ -50,7 +59,7 @@ struct RecitationsPage {
 
     // Pass `true` to show ALL recitations
     this.tasks = await QuranService.getRecommendedRecitations(
-      ctx, this.appLanguage, isFriday, upcomingCustomEvents, true
+      ctx, this.getQuranTranslationLang(), isFriday, upcomingCustomEvents, true
     );
 
     this.isLoading = false;

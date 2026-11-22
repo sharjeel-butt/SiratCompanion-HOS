@@ -1,9 +1,10 @@
 // entry/src/main/ets/common/PageTheme.ets
 
 import { mediaquery } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from './Theme';
+import { Theme, ThemeColors, ThemeMode } from './themes/Theme';
 import { common, ConfigurationConstant } from '@kit.AbilityKit';
-import { STORAGE_KEY_APP_THEME, STORAGE_KEY_THEME_MODE } from './StorageKeys';
+import { STORAGE_KEY_APP_THEME, STORAGE_KEY_THEME_MODE } from '../common/StorageKeys';
+import { ThemeService } from './themes/ThemeService';
 
 export class PageTheme {
   /**
@@ -110,6 +111,9 @@ export class PageTheme {
   /** Reads the current preset from AppStorage on every call. */
   private static currentPreset(): string {
     const v = AppStorage.get<string>(STORAGE_KEY_APP_THEME);
-    return (v !== undefined && v.length > 0) ? v : ThemePreset.SIRAT;
+
+    return ThemeService.ensureValidThemeId(
+      v
+    );
   }
 }

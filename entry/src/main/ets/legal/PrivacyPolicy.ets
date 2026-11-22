@@ -2,8 +2,9 @@
 
 import { common } from '@kit.AbilityKit';
 import { util } from '@kit.ArkTS';
-import { AppLogger } from '../core/AppLogger';
-import { RawPaths } from '../core/RawPaths';
+import { AppLogger } from '../core/app/AppLogger';
+import { RawPaths } from '../core/common/RawPaths';
+import { LanguageService } from '../i18n/LanguageService';
 
 export interface PrivacyPolicyMetadata {
   title: string;
@@ -49,7 +50,6 @@ export class PrivacyPolicyProvider {
   static readonly LAST_UPDATED = 'October 27, 2026';
   static readonly APPLIES_TO = '3.5.0 and later';
   /** Locales with a bundled translation. */
-  private static readonly SUPPORTED: string[] = ['en', 'zh', 'ar', 'ur', 'tr', 'bn', 'id'];
   private static ctx: common.UIAbilityContext | null = null;
   private static cache: Map<string, PrivacyPolicyDocument> =
     new Map<string, PrivacyPolicyDocument>();
@@ -140,23 +140,7 @@ export class PrivacyPolicyProvider {
 
   // NEW: Map the current app language to the correct GitHub Pages URL
   static getUrlForLanguage(lang: string): string {
-    switch (lang) {
-      case 'ar':
-        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/ar/';
-      case 'bn':
-        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/bn/';
-      case 'id':
-        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/id/';
-      case 'tr':
-        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/tr/';
-      case 'ur':
-        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/ur/';
-      case 'zh':
-        return 'https://sharjeel-butt.github.io/SiratCompanion-HOS/zh/';
-      case 'en':
-      default:
-        return PrivacyPolicyProvider.BASE_URL;
-    }
+    return PrivacyPolicyProvider.getFullUrl(lang);
   }
 
   private static lookup(lang: string): PrivacyPolicyDocument | null {
@@ -168,9 +152,16 @@ export class PrivacyPolicyProvider {
     return en !== undefined ? en : null;
   }
 
+  private static supportsLanguage(lang: string): boolean {
+    return LanguageService.supports(lang);
+  }
+
+
   private static async doLoad(lang: string): Promise<PrivacyPolicyDocument> {
-    const effective = PrivacyPolicyProvider.SUPPORTED.includes(lang)
-      ? lang : 'en';
+    const effective =
+      LanguageService.supports(lang)
+        ? lang
+        : LanguageService.defaultLanguage();
 
     if (PrivacyPolicyProvider.ctx === null) {
       return PrivacyPolicyProvider.emptyDoc();

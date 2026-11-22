@@ -17,7 +17,7 @@ import { TimezoneResolver } from '../location/TimezoneResolver';
 import {
   AdvancedCalcSettings, DEFAULT_ADVANCED_CALC
 } from './AdvancedCalcModels';
-import { AppLogger } from '../core/AppLogger';
+import { AppLogger } from '../core/app/AppLogger';
 import { OfflineCityLookup } from '../location/OfflineCityLookup';
 
 export interface HomePrayerSnapshot {

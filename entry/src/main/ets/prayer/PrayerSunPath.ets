@@ -1,11 +1,11 @@
 // entry/src/main/ets/components/PrayerSunPath.ets
 
-import { ThemeColors } from '../core/Theme';
+import { ThemeColors } from '../core/ui/themes/Theme';
 import { L } from '../i18n/LocalizationHelper';
 import { PrayerModel } from '../prayer/PrayerModel';
 import { PrayerManager } from '../prayer/PrayerManager';
-import { ClockFormat, ClockFormatHelper } from '../core/ClockFormat';
-import { STORAGE_KEY_TIME_FORMAT } from '../core/StorageKeys';
+import { ClockFormat, ClockFormatHelper } from '../core/util/ClockFormat';
+import { STORAGE_KEY_TIME_FORMAT } from '../core/common/StorageKeys';
 
 interface PathPoint {
   x: number;

@@ -2,8 +2,8 @@
 
 import { common } from '@kit.AbilityKit';
 import { util } from '@kit.ArkTS';
-import { AppLogger } from '../core/AppLogger';
-import { RawPaths } from '../core/RawPaths';
+import { AppLogger } from '../core/app/AppLogger';
+import { RawPaths } from '../core/common/RawPaths';
 import { EventRecurrence, EventSect, IslamicEvent, IslamicEventSource } from './DateModels';
 
 // Interface for the JSON structure

@@ -1289,90 +1289,6 @@
       "value": "Online"
     },
     {
-      "name": "theme_preset",
-      "value": "Tema Aplikasi"
-    },
-    {
-      "name": "theme_preset_desc",
-      "value": "Pilih gaya visual aplikasi"
-    },
-    {
-      "name": "theme_preset_sirat",
-      "value": "Sirat"
-    },
-    {
-      "name": "theme_preset_sirat_desc",
-      "value": "Modern dan minimalis — estetika HarmonyOS 7"
-    },
-    {
-      "name": "theme_preset_current",
-      "value": "Sirat Klasik"
-    },
-    {
-      "name": "theme_preset_current_desc",
-      "value": "Krem hangat dan hijau tua — yang asli"
-    },
-    {
-      "name": "theme_preset_harmony7",
-      "value": "Noor"
-    },
-    {
-      "name": "theme_preset_harmony7_desc",
-      "value": "Violet bersinar — tenang dan modern"
-    },
-    {
-      "name": "theme_preset_harmony6",
-      "value": "Sahar"
-    },
-    {
-      "name": "theme_preset_harmony6_desc",
-      "value": "Amber keemasan — ketenangan cahaya pertama"
-    },
-    {
-      "name": "theme_preset_harmony5",
-      "value": "Bahar"
-    },
-    {
-      "name": "theme_preset_harmony5_desc",
-      "value": "Teal sejuk — luas, segar, dan jernih"
-    },
-    {
-      "name": "theme_amber",
-      "value": "Amber"
-    },
-    {
-      "name": "theme_charcoal",
-      "value": "Arang"
-    },
-    {
-      "name": "theme_emerald",
-      "value": "Zamrud"
-    },
-    {
-      "name": "theme_pearl",
-      "value": "Mutiara"
-    },
-    {
-      "name": "theme_gold",
-      "value": "Emas (Metalik)"
-    },
-    {
-      "name": "theme_white",
-      "value": "Putih"
-    },
-    {
-      "name": "theme_sapphire",
-      "value": "Safir"
-    },
-    {
-      "name": "theme_rose",
-      "value": "Mawar"
-    },
-    {
-      "name": "theme_silver",
-      "value": "Perak"
-    },
-    {
       "name": "wizard_step",
       "value": "Langkah"
     },
@@ -3475,6 +3391,170 @@
     {
       "name": "trans_font_JameelNoori",
       "value": "Jameel Noori (Nastaliq)"
+    },
+    {
+      "name": "theme_emerald",
+      "value": "Zamrud"
+    },
+    {
+      "name": "theme_emerald_desc",
+      "value": "Aksen hijau zamrud dengan tampilan yang bersih dan seimbang"
+    },
+    {
+      "name": "theme_charcoal",
+      "value": "Arang"
+    },
+    {
+      "name": "theme_charcoal_desc",
+      "value": "Tema abu-abu elegan dengan kontras yang kuat"
+    },
+    {
+      "name": "theme_sky",
+      "value": "Langit"
+    },
+    {
+      "name": "theme_sky_desc",
+      "value": "Palet biru langit yang menyegarkan, terinspirasi oleh langit terbuka"
+    },
+    {
+      "name": "theme_amethyst",
+      "value": "Ametis"
+    },
+    {
+      "name": "theme_amethyst_desc",
+      "value": "Nuansa ungu lembut dengan kesan modern dan elegan"
+    },
+    {
+      "name": "theme_rose",
+      "value": "Mawar"
+    },
+    {
+      "name": "theme_rose_desc",
+      "value": "Warna merah muda mawar yang hangat dan penuh karakter"
+    },
+    {
+      "name": "theme_cobalt",
+      "value": "Kobalt"
+    },
+    {
+      "name": "theme_cobalt_desc",
+      "value": "Aksen biru kobalt yang tegas untuk tampilan profesional"
+    },
+    {
+      "name": "theme_navy",
+      "value": "Navy"
+    },
+    {
+      "name": "theme_navy_desc",
+      "value": "Tema biru navy klasik dengan keanggunan abadi"
+    },
+    {
+      "name": "theme_violet",
+      "value": "Violet"
+    },
+    {
+      "name": "theme_violet_desc",
+      "value": "Nuansa ungu kaya dengan suasana yang tenang dan kreatif"
+    },
+    {
+      "name": "theme_lime",
+      "value": "Lime"
+    },
+    {
+      "name": "theme_lime_desc",
+      "value": "Aksen hijau lime yang segar, terinspirasi oleh alam"
+    },
+    {
+      "name": "theme_teal",
+      "value": "Teal"
+    },
+    {
+      "name": "theme_teal_desc",
+      "value": "Palet teal modern yang memadukan nuansa biru dan hijau"
+    },
+    {
+      "name": "theme_pine",
+      "value": "Pinus"
+    },
+    {
+      "name": "theme_pine_desc",
+      "value": "Warna hijau pinus yang dalam dengan tampilan alami"
+    },
+    {
+      "name": "theme_olive",
+      "value": "Zaitun"
+    },
+    {
+      "name": "theme_olive_desc",
+      "value": "Nuansa zaitun yang alami dengan kesan elegan dan halus"
+    },
+    {
+      "name": "theme_sunflower",
+      "value": "Bunga Matahari"
+    },
+    {
+      "name": "theme_sunflower_desc",
+      "value": "Aksen kuning cerah untuk pengalaman yang ceria"
+    },
+    {
+      "name": "theme_sand",
+      "value": "Pasir"
+    },
+    {
+      "name": "theme_sand_desc",
+      "value": "Warna krem pasir yang lembut dengan suasana hangat dan menenangkan"
+    },
+    {
+      "name": "theme_umber",
+      "value": "Umber"
+    },
+    {
+      "name": "theme_umber_desc",
+      "value": "Nuansa cokelat kaya yang terinspirasi oleh warna tanah alami"
+    },
+    {
+      "name": "theme_wine",
+      "value": "Anggur"
+    },
+    {
+      "name": "theme_wine_desc",
+      "value": "Aksen merah anggur yang dalam dengan tampilan mewah"
+    },
+    {
+      "name": "theme_mustard",
+      "value": "Mustard"
+    },
+    {
+      "name": "theme_mustard_desc",
+      "value": "Palet emas mustard yang hangat dan penuh energi"
+    },
+    {
+      "name": "theme_coral",
+      "value": "Koral"
+    },
+    {
+      "name": "theme_coral_desc",
+      "value": "Nuansa koral yang lembut dengan suasana yang ramah"
+    },
+    {
+      "name": "theme_crimson",
+      "value": "Merah Tua"
+    },
+    {
+      "name": "theme_crimson_desc",
+      "value": "Aksen merah tua yang kuat untuk gaya visual yang berani"
+    },
+    {
+      "name": "theme_tangerine",
+      "value": "Jeruk Tangerine"
+    },
+    {
+      "name": "theme_tangerine_desc",
+      "value": "Nuansa oranye tangerine yang cerah, penuh kehangatan dan energi"
+    },
+    {
+      "name": "theme_preset",
+      "value": "Preset Tema"
     }
   ]
 }

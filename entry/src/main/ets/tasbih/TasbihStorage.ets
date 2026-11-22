@@ -2,7 +2,7 @@ import { preferences } from '@kit.ArkData';
 import { common } from '@kit.AbilityKit';
 import { Dhikr, Tasbih } from './TasbihModels';
 import { TasbihManager } from './TasbihManager';
-import { STORAGE_KEY_TASBIH_STATE_VERSION } from '../core/StorageKeys';
+import { STORAGE_KEY_TASBIH_STATE_VERSION } from '../core/common/StorageKeys';
 
 const PREF_STORE = 'tasbih_prefs';
 const KEY_TASBIHS = 'tasbihs_data';
@@ -164,7 +164,6 @@ export class TasbihStorage {
           dhikrs: dhikrs,
           createdAt: t.createdAt,
           lifetimeCount: typeof t.lifetimeCount === 'number' ? t.lifetimeCount : 0,
-          theme: t.theme,
           themePresetId: (typeof t.themePresetId === 'string' && t.themePresetId.length > 0) ? t.themePresetId :
             undefined,
           history: Array.isArray(t.history) ? t.history : [],

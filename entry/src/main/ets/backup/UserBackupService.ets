@@ -5,14 +5,14 @@ import { common } from '@kit.AbilityKit';
 import { preferences } from '@kit.ArkData';
 import { buffer } from '@kit.ArkTS';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { PreferencesHelper } from '../core/PreferencesHelper';
+import { PreferencesHelper } from '../core/util/PreferencesHelper';
 import { PrayerManager } from '../prayer/PrayerManager';
 import { TasbihStorage } from '../tasbih/TasbihStorage';
 import { TasbihManager } from '../tasbih/TasbihManager';
 import { RamadanStorage } from '../ramadan/RamadanStorage';
 import { CustomEventStorage } from '../hijricalendar/CustomEventStorage';
 import { CustomEventNotifier } from '../hijricalendar/CustomEventNotifier';
-import { AppLogger } from '../core/AppLogger';
+import { AppLogger } from '../core/app/AppLogger';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -52,7 +52,7 @@ import {
   STORAGE_KEY_TRANSLATION_FONT,
   STORAGE_KEY_VIBRATION_ENABLED,
   STORAGE_KEY_WIZARD_COMPLETED
-} from '../core/StorageKeys';
+} from '../core/common/StorageKeys';
 import { SettingsHelper } from '../settings/SettingsHelper';
 import { DuaService } from '../duas/DuaService';
 
@@ -601,110 +601,161 @@ export class UserBackupService {
   }
 
   private static async seedAppStorageFromPrefs(): Promise<void> {
-    AppStorage.setOrCreate(STORAGE_KEY_THEME_MODE,
-      await PreferencesHelper.getString(STORAGE_KEY_THEME_MODE, 'System'));
 
-    AppStorage.setOrCreate(STORAGE_KEY_THEME_OVERRIDE,
-      await PreferencesHelper.getString(STORAGE_KEY_THEME_OVERRIDE, 'System'));
+    await UserBackupService.seedString(
+      STORAGE_KEY_THEME_MODE,
+      'System'
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_APP_THEME,
-      await PreferencesHelper.getString(STORAGE_KEY_APP_THEME, 'Sirat'));
+    await UserBackupService.seedString(
+      STORAGE_KEY_THEME_OVERRIDE,
+      'System'
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE,
-      await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE, 'en'));
+    await UserBackupService.seedString(
+      STORAGE_KEY_APP_THEME,
+      'Sirat'
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE_OVERRIDE,
-      await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE_OVERRIDE, 'system'));
+    await UserBackupService.seedString(
+      STORAGE_KEY_LANGUAGE,
+      'en'
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_TIME_FORMAT,
-      await PreferencesHelper.getString(STORAGE_KEY_TIME_FORMAT, 'System'));
+    await UserBackupService.seedString(
+      STORAGE_KEY_LANGUAGE_OVERRIDE,
+      'system'
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_HIJRI_OFFSET,
-      await PreferencesHelper.getNumber(STORAGE_KEY_HIJRI_OFFSET, 0));
+    await UserBackupService.seedString(
+      STORAGE_KEY_TIME_FORMAT,
+      'System'
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_HIJRI_CALENDAR_TYPE,
-      await PreferencesHelper.getString(
-        STORAGE_KEY_HIJRI_CALENDAR_TYPE, 'UmmAlQura'));
+    await UserBackupService.seedNumber(
+      STORAGE_KEY_HIJRI_OFFSET,
+      0
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_EVENT_PERSPECTIVE,
-      await PreferencesHelper.getString(
-        STORAGE_KEY_EVENT_PERSPECTIVE, 'universal'));
+    await UserBackupService.seedString(
+      STORAGE_KEY_HIJRI_CALENDAR_TYPE,
+      'UmmAlQura'
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
-      await PreferencesHelper.getBoolean(
-        STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW, true));
+    await UserBackupService.seedString(
+      STORAGE_KEY_EVENT_PERSPECTIVE,
+      'universal'
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_SOUND_ENABLED,
-      await PreferencesHelper.getBoolean(STORAGE_KEY_SOUND_ENABLED, true));
+    await UserBackupService.seedBoolean(
+      STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
+      true
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_VIBRATION_ENABLED,
-      await PreferencesHelper.getBoolean(STORAGE_KEY_VIBRATION_ENABLED, true));
+    await UserBackupService.seedBoolean(
+      STORAGE_KEY_SOUND_ENABLED,
+      true
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_TASBIH_SOUND,
-      await PreferencesHelper.getString(STORAGE_KEY_TASBIH_SOUND, 'soft_click'));
+    await UserBackupService.seedBoolean(
+      STORAGE_KEY_VIBRATION_ENABLED,
+      true
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_WIZARD_COMPLETED,
-      await PreferencesHelper.getBoolean(STORAGE_KEY_WIZARD_COMPLETED, false));
+    await UserBackupService.seedString(
+      STORAGE_KEY_TASBIH_SOUND,
+      'soft_click'
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
-      await PreferencesHelper.getBoolean(
-        STORAGE_KEY_SHOW_ISLAMIC_EVENTS, true));
+    await UserBackupService.seedBoolean(
+      STORAGE_KEY_WIZARD_COMPLETED,
+      false
+    );
 
-    AppStorage.setOrCreate('active_quran_script',
-      await PreferencesHelper.getString('active_quran_script', 'indopak'));
+    await UserBackupService.seedBoolean(
+      STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
+      true
+    );
 
-    AppStorage.setOrCreate('dismissed_prayers',
-      await PreferencesHelper.getString('dismissed_prayers', '[]'));
+    await UserBackupService.seedString(
+      'active_quran_script',
+      'indopak'
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_SHOW_IMSAK_LIST,
-      await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_IMSAK_LIST, true));
+    await UserBackupService.seedString(
+      'dismissed_prayers',
+      '[]'
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_SHOW_FIRST_THIRD_LIST,
-      await PreferencesHelper.getBoolean(
-        STORAGE_KEY_SHOW_FIRST_THIRD_LIST, true));
+    await UserBackupService.seedBoolean(
+      STORAGE_KEY_SHOW_IMSAK_LIST,
+      true
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_SHOW_MIDNIGHT_LIST,
-      await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_MIDNIGHT_LIST, true));
+    await UserBackupService.seedBoolean(
+      STORAGE_KEY_SHOW_FIRST_THIRD_LIST,
+      true
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_SHOW_LAST_THIRD_LIST,
-      await PreferencesHelper.getBoolean(
-        STORAGE_KEY_SHOW_LAST_THIRD_LIST, true));
+    await UserBackupService.seedBoolean(
+      STORAGE_KEY_SHOW_MIDNIGHT_LIST,
+      true
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_SHOW_IMSAK_SUNPATH,
-      await PreferencesHelper.getBoolean(
-        STORAGE_KEY_SHOW_IMSAK_SUNPATH, true));
+    await UserBackupService.seedBoolean(
+      STORAGE_KEY_SHOW_LAST_THIRD_LIST,
+      true
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH,
-      await PreferencesHelper.getBoolean(
-        STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH, true));
+    await UserBackupService.seedBoolean(
+      STORAGE_KEY_SHOW_IMSAK_SUNPATH,
+      true
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH,
-      await PreferencesHelper.getBoolean(
-        STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH, true));
+    await UserBackupService.seedBoolean(
+      STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH,
+      true
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH,
-      await PreferencesHelper.getBoolean(
-        STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH, true));
+    await UserBackupService.seedBoolean(
+      STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH,
+      true
+    );
 
-    // ============================================================
-    // v4.1.0 Additions: Independent Translation Languages & Fonts
-    // ============================================================
-    AppStorage.setOrCreate(STORAGE_KEY_QURAN_TRANSLATION_LANG,
-      await PreferencesHelper.getString(STORAGE_KEY_QURAN_TRANSLATION_LANG, 'default'));
+    await UserBackupService.seedBoolean(
+      STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH,
+      true
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_HADITH_TRANSLATION_LANG,
-      await PreferencesHelper.getString(STORAGE_KEY_HADITH_TRANSLATION_LANG, 'default'));
+    await UserBackupService.seedString(
+      STORAGE_KEY_QURAN_TRANSLATION_LANG,
+      'default'
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_DUA_TRANSLATION_LANG,
-      await PreferencesHelper.getString(STORAGE_KEY_DUA_TRANSLATION_LANG, 'default'));
+    await UserBackupService.seedString(
+      STORAGE_KEY_HADITH_TRANSLATION_LANG,
+      'default'
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_ARABIC_FONT,
-      await PreferencesHelper.getString(STORAGE_KEY_ARABIC_FONT, 'auto'));
+    await UserBackupService.seedString(
+      STORAGE_KEY_DUA_TRANSLATION_LANG,
+      'default'
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_TRANSLATION_FONT,
-      await PreferencesHelper.getString(STORAGE_KEY_TRANSLATION_FONT, 'auto'));
+    await UserBackupService.seedString(
+      STORAGE_KEY_ARABIC_FONT,
+      'auto'
+    );
 
-    AppStorage.setOrCreate(STORAGE_KEY_CUSTOM_EVENTS_VERSION, 0);
+    await UserBackupService.seedString(
+      STORAGE_KEY_TRANSLATION_FONT,
+      'auto'
+    );
+
+    AppStorage.setOrCreate(
+      STORAGE_KEY_CUSTOM_EVENTS_VERSION,
+      0
+    );
   }
 
   private static bumpVersion(key: string): void {
@@ -712,4 +763,45 @@ export class UserBackupService {
     const next = (prev === undefined ? 0 : prev) + 1;
     AppStorage.setOrCreate(key, next);
   }
+
+  private static async seedString(
+    key: string,
+    fallback: string
+  ): Promise<void> {
+    AppStorage.setOrCreate(
+      key,
+      await PreferencesHelper.getString(
+        key,
+        fallback
+      )
+    );
+  }
+
+  private static async seedNumber(
+    key: string,
+    fallback: number
+  ): Promise<void> {
+    AppStorage.setOrCreate(
+      key,
+      await PreferencesHelper.getNumber(
+        key,
+        fallback
+      )
+    );
+  }
+
+  private static async seedBoolean(
+    key: string,
+    fallback: boolean
+  ): Promise<void> {
+    AppStorage.setOrCreate(
+      key,
+      await PreferencesHelper.getBoolean(
+        key,
+        fallback
+      )
+    );
+  }
+
+
 }

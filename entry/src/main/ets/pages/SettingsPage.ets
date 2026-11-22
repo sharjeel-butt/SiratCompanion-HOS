@@ -3,9 +3,9 @@
 import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
 import { pasteboard } from '@kit.BasicServicesKit';
-import { ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
-import { AppRestartHelper } from '../core/AppRestartHelper';
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
+import { AppRestartHelper } from '../core/app/AppRestartHelper';
 import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator';
 import { PrayerOffsets, SettingsHelper } from '../settings/SettingsHelper';
 import { LocationData, LocationHelper } from '../location/LocationUtils';
@@ -21,7 +21,7 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_SETTINGS_INITIAL_CATEGORY,
   STORAGE_KEY_THEME_MODE
-} from '../core/StorageKeys';
+} from '../core/common/StorageKeys';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
 import { UserBackupService } from '../backup/UserBackupService';
 import { OffsetKey, PrayerOffsetsHelper } from '../prayer/PrayerOffsetsHelper';
@@ -31,12 +31,12 @@ import {
   NotificationHelper,
   STEP_BEFORE_MINUTES
 } from '../prayer/NotificationHelper';
-import { AppLogger } from '../core/AppLogger';
-import { AppInfoHelper, AppInfoSnapshot } from '../core/AppInfoHelper';
+import { AppLogger } from '../core/app/AppLogger';
+import { AppInfoHelper, AppInfoSnapshot } from '../core/app/AppInfoHelper';
 import { L } from '../i18n/LocalizationHelper';
-import { Breakpoints } from '../core/Breakpoints';
-import { CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED } from '../core/FeatureFlags';
-import { NavHelper } from '../core/NavHelper';
+import { Breakpoints } from '../core/layout/Breakpoints';
+import { CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED } from '../core/common/FeatureFlags';
+import { NavHelper } from '../core/util/NavHelper';
 import { SettingsRow } from '../settings/SettingsRow';
 import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
 import { WidgetHelper } from '../widgets/WidgetHelper';
@@ -67,7 +67,7 @@ struct SettingsPage {
   breakpoint: string = 'sm';
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
-  appThemePreset: string = ThemePreset.SIRAT;
+  appThemePreset: string = '';
   // ---- state ----
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;

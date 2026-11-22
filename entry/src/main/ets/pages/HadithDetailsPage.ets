@@ -1,16 +1,20 @@
 import { common } from '@kit.AbilityKit';
 import { router } from '@kit.ArkUI';
-import { ThemeColors, ThemeMode } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import { L } from '../i18n/LocalizationHelper';
-import { STORAGE_KEY_HADITH_TRANSLATION_LANG, STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../core/StorageKeys';
+import {
+  STORAGE_KEY_HADITH_TRANSLATION_LANG,
+  STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_THEME_MODE
+} from '../core/common/StorageKeys';
 import { BilingualHadith, HadithGrading, Sanad } from '../hadith/HadithModels';
 import { HadithDbHelper } from '../hadith/HadithDbHelper';
 import { HadithSearchService } from '../hadith/HadithSearchService';
 import { HadithCoreDbHelper } from '../hadith/HadithCoreDbHelper';
 import { SanadTimeline } from '../hadith/SanadTimeline';
 import { GradeBadge } from '../hadith/GradeBadge';
-import { TypographyHelper } from '../core/TypographyHelper';
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
 
 @Entry
 @Component

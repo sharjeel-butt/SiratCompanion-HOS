@@ -1,8 +1,8 @@
 // entry/src/main/ets/pages/Prayer.ets
 
 import { mediaquery, router } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import { ExtraTiming, PrayerModel } from './PrayerModel';
 import { DateHelper } from '../hijricalendar/DateUtils';
 import { LocationData, LocationHelper } from '../location/LocationUtils';
@@ -13,7 +13,7 @@ import { PrayerOffsets, SettingsHelper } from '../settings/SettingsHelper';
 import { CalculationSource, LocationMode } from '../settings/SettingsModels';
 import { NotificationHelper } from './NotificationHelper';
 import { common } from '@kit.AbilityKit';
-import { PdfExportHelper } from '../core/PdfExportHelper';
+import { PdfExportHelper } from '../core/util/PdfExportHelper';
 import { DuaIndicator } from '../duas/DuaIndicator';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
@@ -38,9 +38,9 @@ import {
   STORAGE_KEY_TAB_REFRESH_TICK,
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
-} from '../core/StorageKeys';
-import { ClockFormat, ClockFormatHelper } from '../core/ClockFormat';
-import { AppLogger } from '../core/AppLogger';
+} from '../core/common/StorageKeys';
+import { ClockFormat, ClockFormatHelper } from '../core/util/ClockFormat';
+import { AppLogger } from '../core/app/AppLogger';
 import { HomeController } from './HomeController';
 import {
   AsrShadowRule,
@@ -48,12 +48,12 @@ import {
   HighLatitudeRule,
   PrayerTimeCalculator
 } from './PrayerTimeCalculator';
-import { NavHelper } from '../core/NavHelper';
+import { NavHelper } from '../core/util/NavHelper';
 import { TimezoneResolver } from '../location/TimezoneResolver';
 import { L } from '../i18n/LocalizationHelper';
 import { PageHeader } from './PageHeader';
 import { PrayerSunPath } from './PrayerSunPath';
-import { Breakpoints } from '../core/Breakpoints';
+import { Breakpoints } from '../core/layout/Breakpoints';
 import { AdvancedCalcSettings, DEFAULT_ADVANCED_CALC } from './AdvancedCalcModels';
 import { EventPerspectiveNotifier } from '../hijricalendar/EventPerspectiveNotifier';
 import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
@@ -91,7 +91,7 @@ export struct Prayer {
   locationVersion: number = 0;
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
-  appThemePreset: string = ThemePreset.SIRAT;
+  appThemePreset: string = '';
   @StorageLink(STORAGE_KEY_LANGUAGE)
   @Watch('onLanguageChangedInHome')
   appLanguage: string = 'en';

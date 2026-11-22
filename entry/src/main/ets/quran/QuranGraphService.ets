@@ -1,7 +1,7 @@
 import { common } from '@kit.AbilityKit';
 import { util } from '@kit.ArkTS';
-import { RawPaths } from '../core/RawPaths';
-import { AppLogger } from '../core/AppLogger';
+import { RawPaths } from '../core/common/RawPaths';
+import { AppLogger } from '../core/app/AppLogger';
 import { QuranCollection, QuranEntityGraph, QuranGraphI18n, QuranProphet } from './QuranGraphModels';
 
 export class QuranGraphService {

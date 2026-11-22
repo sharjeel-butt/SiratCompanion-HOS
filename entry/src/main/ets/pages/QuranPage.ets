@@ -2,14 +2,14 @@
 
 import { common } from '@kit.AbilityKit';
 import { router } from '@kit.ArkUI';
-import { ThemeColors, ThemeMode } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import { L } from '../i18n/LocalizationHelper';
 import { QuranService } from '../quran/QuranService';
 import { CompleteSurah } from '../quran/QuranSurahModels';
-import { TypographyHelper } from '../core/TypographyHelper';
-import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_QURAN_TRANSLATION_LANG } from '../core/StorageKeys';
-import { NavHelper } from '../core/NavHelper';
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
+import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_QURAN_TRANSLATION_LANG } from '../core/common/StorageKeys';
+import { NavHelper } from '../core/util/NavHelper';
 
 @Entry
 @Component

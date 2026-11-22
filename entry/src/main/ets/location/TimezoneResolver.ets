@@ -3,7 +3,7 @@
 import { CountryTimezoneLookup } from './CountryTimezoneTable';
 import { City, DstRule, OfflineCityLookup } from './OfflineCityLookup';
 import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
-import { STORAGE_KEY_HIJRI_OFFSET } from '../core/StorageKeys';
+import { STORAGE_KEY_HIJRI_OFFSET } from '../core/common/StorageKeys';
 
 const MS_PER_DAY = 86400000;
 

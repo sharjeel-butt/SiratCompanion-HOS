@@ -3,8 +3,8 @@
 import { ExtraTiming, PrayerModel } from './PrayerModel';
 import { DailyPrayerTimes } from './PrayerTimeCalculator';
 import { PrayerOffsets } from '../settings/SettingsHelper';
-import { PreferencesHelper } from '../core/PreferencesHelper';
-import { STORAGE_KEY_PRAYER_STATE_VERSION } from '../core/StorageKeys';
+import { PreferencesHelper } from '../core/util/PreferencesHelper';
+import { STORAGE_KEY_PRAYER_STATE_VERSION } from '../core/common/StorageKeys';
 
 export interface PrayerCheckState {
   fajr: boolean;

@@ -4,10 +4,10 @@ import { fileIo as fs } from '@kit.CoreFileKit';
 import { util } from '@kit.ArkTS';
 import { zlib } from '@kit.BasicServicesKit'; // Rule §C: Native modules imported at top
 import { BilingualHadith, HadithDbRecord } from './HadithModels';
-import { AppLogger } from '../core/AppLogger';
+import { AppLogger } from '../core/app/AppLogger';
 import { L } from '../i18n/LocalizationHelper';
-import { PreferencesHelper } from '../core/PreferencesHelper';
-import { RawPaths } from '../core/RawPaths';
+import { PreferencesHelper } from '../core/util/PreferencesHelper';
+import { RawPaths } from '../core/common/RawPaths';
 
 export class HadithDbHelper {
   private static store: relationalStore.RdbStore | null = null;

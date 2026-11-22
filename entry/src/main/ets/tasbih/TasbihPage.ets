@@ -3,21 +3,21 @@
 import {
   AnimatorOptions, AnimatorResult, LengthMetrics, mediaquery, promptAction
 } from '@kit.ArkUI';
-import { MaterialHelper } from '../core/MaterialHelper';
+import { MaterialHelper } from '../core/ui/MaterialHelper';
 import { common } from '@kit.AbilityKit';
-import { ThemeColors, ThemeMode, ThemePreset } from '../core/Theme';
-import { PageTheme } from '../core/PageTheme';
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
+import { PageTheme } from '../core/ui/PageTheme';
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
-} from '../core/StorageKeys';
+} from '../core/common/StorageKeys';
 import { BeadView, Dhikr, DhikrFields, Tasbih } from './TasbihModels';
 import { MAX_BOTTOM_BEADS, TasbihManager } from './TasbihManager';
 import { TasbihStorage } from './TasbihStorage';
-import { HapticHelper } from '../core/HapticHelper';
+import { HapticHelper } from '../core/util/HapticHelper';
 import { SoundHelper } from './SoundHelper';
 import { SettingsHelper } from '../settings/SettingsHelper';
 import { L } from '../i18n/LocalizationHelper';
@@ -25,15 +25,13 @@ import {
   BeadCanvasConfig, BeadRenderStyle, TasbihCanvasRenderer
 } from './TasbihCanvasRenderer';
 import {
-  TASBIH_THEME_PRESETS,
-  TasbihColor,
-  TasbihTheme,
-  TasbihThemePreset,
   TasbihThemes
 } from './TasbihThemes';
-import { Breakpoints } from '../core/Breakpoints';
-import { TypographyHelper } from '../core/TypographyHelper';
-import { AppLogger } from '../core/AppLogger';
+import { Breakpoints } from '../core/layout/Breakpoints';
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
+import { AppLogger } from '../core/app/AppLogger';
+import { ThemeService } from '../core/ui/themes/ThemeService';
+import { AppThemeJson } from '../core/ui/themes/ThemeModels';
 
 const BEAD_SIZE = 28;
 const BEAD_GAP = 7;
@@ -79,7 +77,7 @@ export struct TasbihPage {
   breakpoint: string = 'sm';
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
-  appThemePreset: string = ThemePreset.SIRAT;
+  appThemePreset: string = '';
   @StorageLink('nav_target_tasbih')
   @Watch('onNavTargetTasbihChanged')
   navTargetTasbih: string = '';
@@ -119,8 +117,6 @@ export struct TasbihPage {
   private canvasReady: boolean = false;
   @State private activeThemePresetId: string =
     TasbihThemes.DEFAULT_PRESET_ID;
-  @State private activeTheme: TasbihTheme =
-    TasbihThemes.themeForPreset(TasbihThemes.DEFAULT_PRESET_ID);
   @State private currentDateKey: string = TasbihManager.todayKey();
   private dateCheckTimer: number = -1;
   @State private fingerY: number = -1;
@@ -192,6 +188,11 @@ export struct TasbihPage {
         AppStorage.setOrCreate('nav_target_dhikr', 0);
       }
     }, 100);
+  }
+
+  onAppThemePresetChanged(): void {
+    this.colors = PageTheme.compute(this.themeMode);
+    this.refreshBeadView();
   }
 
   aboutToDisappear(): void {
@@ -568,9 +569,18 @@ export struct TasbihPage {
               this.Bead(SHADE_DONE_HI, SHADE_DONE_BASE, SHADE_DONE_LO)
             } else {
               this.Bead(
-                TasbihThemes.palette(this.currentThemeColor()).hi,
-                TasbihThemes.palette(this.currentThemeColor()).base,
-                TasbihThemes.palette(this.currentThemeColor()).lo
+                TasbihThemes.getBeadColors(
+                  this.activeThemePresetId,
+                  PageTheme.isDarkFor(this.themeMode)
+                ).hi,
+                TasbihThemes.getBeadColors(
+                  this.activeThemePresetId,
+                  PageTheme.isDarkFor(this.themeMode)
+                ).base,
+                TasbihThemes.getBeadColors(
+                  this.activeThemePresetId,
+                  PageTheme.isDarkFor(this.themeMode)
+                ).lo
               )
             }
           }
@@ -587,9 +597,18 @@ export struct TasbihPage {
               this.Bead(SHADE_DONE_HI, SHADE_DONE_BASE, SHADE_DONE_LO)
             } else {
               this.Bead(
-                TasbihThemes.palette(this.currentThemeColor()).hi,
-                TasbihThemes.palette(this.currentThemeColor()).base,
-                TasbihThemes.palette(this.currentThemeColor()).lo
+                TasbihThemes.getBeadColors(
+                  this.activeThemePresetId,
+                  PageTheme.isDarkFor(this.themeMode)
+                ).hi,
+                TasbihThemes.getBeadColors(
+                  this.activeThemePresetId,
+                  PageTheme.isDarkFor(this.themeMode)
+                ).base,
+                TasbihThemes.getBeadColors(
+                  this.activeThemePresetId,
+                  PageTheme.isDarkFor(this.themeMode)
+                ).lo
               )
             }
           }
@@ -718,11 +737,12 @@ export struct TasbihPage {
                 .height(16)
                 .borderRadius(8)
                 .flexShrink(0) // Prevent squish
-                .backgroundColor(TasbihThemes.presetById(
-                  t.themePresetId !== undefined && t.themePresetId.length > 0
-                    ? t.themePresetId
-                    : TasbihThemes.DEFAULT_PRESET_ID
-                ).swatch)
+                .backgroundColor(
+                  TasbihThemes.getSwatch(
+                    t.themePresetId ?? this.appThemePreset,
+                    this.colors
+                  )
+                )
 
               Column() {
                 Text(this.getTasbihName(t)) // <-- Updated
@@ -1072,18 +1092,16 @@ export struct TasbihPage {
               .fontSize(12).fontColor(this.colors.textMuted)
               .width('100%').margin({ bottom: 8 })
 
-            Flex({
-              wrap: FlexWrap.Wrap,
-              justifyContent: FlexAlign.Start,
-              alignItems: ItemAlign.Center
-            }) {
-              ForEach(TASBIH_THEME_PRESETS, (preset: TasbihThemePreset) => {
+            Flex({ wrap: FlexWrap.Wrap, justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }) {
+              ForEach(
+                ThemeService.getAllThemes(),
+                (theme: AppThemeJson) => {
                 Stack() {
                   Column()
                     .width(36)
                     .height(36)
                     .borderRadius(18)
-                    .backgroundColor(preset.swatch)
+                    .backgroundColor(theme.light.accent)
                     .border({ width: 1, color: 'rgba(0,0,0,0.20)' })
                     .shadow({
                       radius: 3,
@@ -1092,25 +1110,23 @@ export struct TasbihPage {
                       offsetY: 2
                     })
 
-                  if (preset.id === this.formThemePresetId) {
+                  if (theme.id === this.formThemePresetId) {
                     Column()
                       .width(48).height(48).borderRadius(24)
                       .border({ width: 2, color: this.colors.accentGold })
                   }
                 }
                 .width(52).height(52)
-                // Ensure there is spacing between swatches
                 .margin({ right: 6, bottom: 6 })
                 .onClick(() => {
-                  this.formThemePresetId = preset.id;
+                  this.formThemePresetId = theme.id;
                 })
-              }, (preset: TasbihThemePreset) =>
-              `editor-${preset.id}-${preset.id === this.formThemePresetId ? 'sel' : 'un'}`)
+                },
+                (preset: AppThemeJson) => `editor-${preset.id}-${preset.id === this.formThemePresetId ? 'sel' : 'un'}`)
             }
             .width('100%')
           }
-          .width('100%')
-          .padding({ left: 20, right: 20, bottom: 16 })
+          .width('100%').padding({ left: 20, right: 20, bottom: 16 })
         }
         .width('100%')
       }
@@ -1551,7 +1567,6 @@ export struct TasbihPage {
           dhikrs: newDhikrs,
           createdAt: tas.createdAt,
           lifetimeCount: tas.lifetimeCount,
-          theme: tas.theme,
           themePresetId: tas.themePresetId,
           history: tas.history,
           boundPrayerIds: tas.boundPrayerIds,
@@ -1620,10 +1635,6 @@ export struct TasbihPage {
     this.colors = PageTheme.compute(this.themeMode);
   }
 
-  private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-  }
-
   private onLanguageChanged(): void {
     this.currentLanguage = this.appLanguage;
   }
@@ -1649,30 +1660,10 @@ export struct TasbihPage {
 
   private resolveActiveTheme(): void {
     const t = this.getActiveTasbih();
-    const presetId = (t && t.themePresetId !== undefined
-      && t.themePresetId.length > 0)
-      ? t.themePresetId
-      : TasbihThemes.DEFAULT_PRESET_ID;
-    this.activeThemePresetId = presetId;
-    this.activeTheme = TasbihThemes.themeForPreset(presetId);
-  }
 
-  private currentTheme(): TasbihTheme {
-    const t = this.getActiveTasbih();
-    if (!t) {
-      return TasbihThemes.themeForPreset(TasbihThemes.DEFAULT_PRESET_ID);
-    }
-    if (t.themePresetId !== undefined && t.themePresetId.length > 0) {
-      return TasbihThemes.themeForPreset(t.themePresetId);
-    }
-    if (t.theme !== undefined) {
-      return t.theme;
-    }
-    return TasbihThemes.themeForPreset(TasbihThemes.DEFAULT_PRESET_ID);
-  }
-
-  private currentThemeColor(): TasbihColor {
-    return this.currentTheme().color;
+    this.activeThemePresetId =
+      t?.themePresetId ??
+        TasbihThemes.DEFAULT_PRESET_ID;
   }
 
   private refreshBeadView(): void {
@@ -1733,7 +1724,6 @@ export struct TasbihPage {
             nameKey: tas.nameKey,
             createdAt: tas.createdAt,
             lifetimeCount: tas.lifetimeCount,
-            theme: tas.theme,
             themePresetId: tas.themePresetId,
             history: tas.history,
             boundPrayerIds: tas.boundPrayerIds,
@@ -1756,7 +1746,9 @@ export struct TasbihPage {
       return;
     }
 
-    const liveTheme: TasbihTheme = this.currentTheme();
+    const themePresetId =
+      this.getActiveTasbih()?.themePresetId ??
+        TasbihThemes.DEFAULT_PRESET_ID;
 
     const cfg: BeadCanvasConfig = {
       topCount: this.beadView.topIds.length,
@@ -1770,7 +1762,7 @@ export struct TasbihPage {
       isDark: PageTheme.isDarkFor(this.themeMode),
       stringColor: STRING_LINE_COLOR,
       topShiftProgress: this.topShiftProgress,
-      theme: liveTheme,
+      themePresetId: themePresetId,
       bottomPrevCount: this.shiftPrevBottomCount,
       bottomFadeProgress: this.shiftFadeProgress,
       bottomPopProgress: this.bottomPopProgress
@@ -2132,29 +2124,58 @@ export struct TasbihPage {
     const name = this.formTasbihName.trim();
     const finalName = name.length > 0 ? name : 'Tasbih';
 
+    // Force Tasbih theme to always match the app theme
+    const themePresetId = this.formThemePresetId;
+
     if (this.editingTasbihId.length > 0) {
+
       this.tasbihs = TasbihManager.renameTasbih(
-        this.tasbihs, this.editingTasbihId, finalName, this.formThemePresetId
+        this.tasbihs,
+        this.editingTasbihId,
+        finalName,
+        themePresetId
       );
+
       this.tasbihs = TasbihManager.setTheme(
-        this.tasbihs, this.editingTasbihId, this.formThemePresetId
+        this.tasbihs,
+        this.editingTasbihId,
+        themePresetId
       );
+
       this.tasbihs = TasbihManager.updateBinding(
-        this.tasbihs, this.editingTasbihId, this.formBoundPrayerIds
+        this.tasbihs,
+        this.editingTasbihId,
+        this.formBoundPrayerIds
       );
+
     } else {
-      const res = TasbihManager.addTasbih(this.tasbihs, finalName, this.formThemePresetId);
+
+      const res = TasbihManager.addTasbih(
+        this.tasbihs,
+        finalName,
+        themePresetId
+      );
+
       this.tasbihs = res.tasbihs;
-      this.tasbihs = TasbihManager.updateBinding(this.tasbihs, res.newId, this.formBoundPrayerIds);
+
+      this.tasbihs = TasbihManager.updateBinding(
+        this.tasbihs,
+        res.newId,
+        this.formBoundPrayerIds
+      );
+
       this.activeTasbihId = res.newId;
       this.activeDhikrIndex = 0;
     }
 
-    this.resolveActiveTheme();
     this.persist();
     this.refreshBeadView();
     this.activeSheet = 'none';
-    console.info('[Tasbih Page]SAVED BINDINGS:', JSON.stringify(this.formBoundPrayerIds));
+
+    console.info(
+      '[Tasbih Page] SAVED BINDINGS:',
+      JSON.stringify(this.formBoundPrayerIds)
+    );
   }
 
   private deleteTasbih(id: string): void {
