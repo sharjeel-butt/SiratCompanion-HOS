@@ -13,8 +13,7 @@ export class MosqueStorage {
     }
   }
 
-  static async save(mosques: MosqueModel[]): Promise<void> {
-    // Only save the custom ones
+  static async save(mosques: MosqueModel[]): Promise<void> { // Only save the custom ones
     const customOnly = mosques.filter(m => m.isCustom);
     await PreferencesHelper.setString(KEY_CUSTOM_MOSQUES, JSON.stringify(customOnly));
   }

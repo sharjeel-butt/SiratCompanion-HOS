@@ -3555,6 +3555,154 @@
     {
       "name": "theme_preset",
       "value": "سمة الألوان"
+    },
+    {
+      "name": "notif_prayer_due_title",
+      "value": "الصلاة معلقة"
+    },
+    {
+      "name": "notif_fajr_due",
+      "value": "لم يتم تسجيل صلاة الفجر."
+    },
+    {
+      "name": "notif_dhuhr_due",
+      "value": "لم يتم تسجيل صلاة الظهر."
+    },
+    {
+      "name": "notif_asr_due",
+      "value": "لم يتم تسجيل صلاة العصر."
+    },
+    {
+      "name": "notif_maghrib_due",
+      "value": "لم يتم تسجيل صلاة المغرب."
+    },
+    {
+      "name": "notif_isha_due",
+      "value": "لم يتم تسجيل صلاة العشاء."
+    },
+    {
+      "name": "title_notifications",
+      "value": "الإشعارات"
+    },
+    {
+      "name": "notifications_empty",
+      "value": "لا توجد إشعارات حالياً."
+    },
+    {
+      "name": "all_prayers_completed",
+      "value": "الحمد لله!"
+    },
+    {
+      "name": "all_prayers_completed_subtitle",
+      "value": "تم إكمال جميع الصلوات اليوم."
+    },
+    {
+      "name": "notif_day_complete_title",
+      "value": "الحمد لله!"
+    },
+    {
+      "name": "notif_day_complete_message",
+      "value": "لقد أكملت جميع الصلوات لهذا اليوم."
+    },
+    {
+      "name": "notif_streak_title",
+      "value": "سلسلة الصلوات"
+    },
+    {
+      "name": "notif_streak_3",
+      "value": "أكملت الصلوات لمدة 3 أيام متتالية."
+    },
+    {
+      "name": "notif_streak_7",
+      "value": "أكملت الصلوات لمدة 7 أيام متتالية."
+    },
+    {
+      "name": "notif_streak_14",
+      "value": "أكملت الصلوات لمدة 14 يوماً متتالياً."
+    },
+    {
+      "name": "notif_streak_30",
+      "value": "أكملت الصلوات لمدة 30 يوماً متتالياً."
+    },
+    {
+      "name": "notif_streak_100",
+      "value": "أكملت الصلوات لمدة 100 يوم متتالٍ."
+    },
+    {
+      "name": "notif_streak_1000",
+      "value": "أكملت الصلوات لمدة 1,000 يوم متتالٍ."
+    },
+    {
+      "name": "notif_streak_10000",
+      "value": "أكملت الصلوات لمدة 10,000 يوم متتالٍ."
+    },
+    {
+      "name": "notif_ramadan_start_title",
+      "value": "اقتراب رمضان"
+    },
+    {
+      "name": "notif_ramadan_start_7",
+      "value": "يبدأ شهر رمضان بعد 7 أيام."
+    },
+    {
+      "name": "notif_ramadan_mubarak_title",
+      "value": "رمضان مبارك"
+    },
+    {
+      "name": "notif_ramadan_mubarak_message",
+      "value": "نسأل الله أن يتقبل صيامكم وعبادتكم."
+    },
+    {
+      "name": "notif_last_ashra_title",
+      "value": "بداية العشر الأواخر"
+    },
+    {
+      "name": "notif_last_ashra_message",
+      "value": "بدأت الليالي العشر الأخيرة من رمضان."
+    },
+    {
+      "name": "notif_laylatul_qadr_title",
+      "value": "ليلة القدر"
+    },
+    {
+      "name": "notif_laylatul_qadr_message",
+      "value": "هذه الليلة من الليالي الوترية المباركة في العشر الأواخر."
+    },
+    {
+      "name": "notif_eid_title",
+      "value": "عيد مبارك"
+    },
+    {
+      "name": "notif_eid_message",
+      "value": "نسأل الله أن يتقبل صيامكم وصلواتكم وأعمالكم الصالحة."
+    },
+    {
+      "name": "notif_laylatul_qadr_21",
+      "value": "هذه الليلة هي الليلة الحادية والعشرون من رمضان. أكثر من الصلاة وتلاوة القرآن وذكر الله."
+    },
+    {
+      "name": "notif_laylatul_qadr_23",
+      "value": "هذه الليلة هي الليلة الثالثة والعشرون من رمضان. التمس رحمة الله ومغفرته بالعبادة الصادقة."
+    },
+    {
+      "name": "notif_laylatul_qadr_25",
+      "value": "هذه الليلة هي الليلة الخامسة والعشرون من رمضان. واصل الاجتهاد في العبادة خلال هذه الليالي المباركة."
+    },
+    {
+      "name": "notif_laylatul_qadr_27",
+      "value": "هذه الليلة هي الليلة السابعة والعشرون من رمضان، وهي ليلة يكثر فيها المسلمون من العبادة طلباً لليلة القدر."
+    },
+    {
+      "name": "notif_laylatul_qadr_29",
+      "value": "هذه الليلة هي الليلة التاسعة والعشرون من رمضان. اغتنم آخر الفرص في هذا الشهر المبارك."
+    },
+    {
+      "name": "home_worship",
+      "value": "العبادة"
+    },
+    {
+      "name": "home_insights",
+      "value": "الإحصاءات"
     }
   ]
 }

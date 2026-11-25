@@ -11,9 +11,7 @@ export struct TasbihIndicator {
   @Prop colors: ThemeColors;
   @Prop prayerId: string;
   @Prop currentLanguage: string = 'en';
-  @StorageLink(STORAGE_KEY_TASBIH_STATE_VERSION)
-  @Watch('loadData')
-  version: number = 0;
+  @StorageLink(STORAGE_KEY_TASBIH_STATE_VERSION) @Watch('loadData') version: number = 0;
   @State private count: number = 0;
   @State private firstTasbihId: string = '';
   @State private firstPendingDhikrIndex: number = 0;
@@ -28,14 +26,11 @@ export struct TasbihIndicator {
       await TasbihStorage.init(ctx);
       const loaded = await TasbihStorage.load(TasbihManager.createDefaults());
 
-      const bound = loaded.tasbihs.filter((t: Tasbih) =>
-      t.boundPrayerIds?.includes(this.prayerId)
-      );
+      const bound = loaded.tasbihs.filter((t: Tasbih) => t.boundPrayerIds?.includes(this.prayerId));
 
       this.count = bound.length;
 
-      if (this.count > 0) {
-        // Pick the first Tasbih to determine navigation target
+      if (this.count > 0) { // Pick the first Tasbih to determine navigation target
         const t = bound[0];
         this.firstTasbihId = t.id;
 
@@ -52,10 +47,7 @@ export struct TasbihIndicator {
     if (this.count > 0) {
       Row({ space: 4 }) {
         Image($r('app.media.ic_nav_tasbih')).width(12).height(12).fillColor(this.colors.accentGold).flexShrink(0)
-        Text(`${this.count}`)
-          .fontSize(12)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(this.colors.accentGold)
+        Text(`${this.count}`).fontSize(12).fontWeight(FontWeight.Bold).fontColor(this.colors.accentGold)
       }
       .padding({
         left: 8,

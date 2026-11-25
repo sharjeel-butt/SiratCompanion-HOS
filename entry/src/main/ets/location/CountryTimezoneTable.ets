@@ -25,43 +25,39 @@ export interface CountryZone {
  *   US (4), CA (6), RU (11), AU (5), BR (2), MX (3), ID (3)
  */
 
-export const COUNTRY_ZONES: CountryZone[] = [
-  {
-    code: 'GE-W',
-    minLat: 41.50,
-    maxLat: 43.6,
-    minLng: 40.0,
-    maxLng: 42.5,
-    standardOffset: 4,
-    dstRule: DstRule.NONE
-  },
-  {
-    code: 'GE-E',
-    minLat: 41.40,
-    maxLat: 43.6,
-    minLng: 42.5,
-    maxLng: 46.8,
-    standardOffset: 4,
-    dstRule: DstRule.NONE
-  },
-  {
-    code: 'AM',
-    minLat: 38.8,
-    maxLat: 41.3,
-    minLng: 43.4,
-    maxLng: 46.7,
-    standardOffset: 4,
-    dstRule: DstRule.NONE
-  },
-  {
-    code: 'AZ',
-    minLat: 38.4,
-    maxLat: 41.9,
-    minLng: 44.8,
-    maxLng: 50.4,
-    standardOffset: 4,
-    dstRule: DstRule.NONE
-  },
+export const COUNTRY_ZONES: CountryZone[] = [{
+  code: 'GE-W',
+  minLat: 41.50,
+  maxLat: 43.6,
+  minLng: 40.0,
+  maxLng: 42.5,
+  standardOffset: 4,
+  dstRule: DstRule.NONE
+}, {
+  code: 'GE-E',
+  minLat: 41.40,
+  maxLat: 43.6,
+  minLng: 42.5,
+  maxLng: 46.8,
+  standardOffset: 4,
+  dstRule: DstRule.NONE
+}, {
+  code: 'AM',
+  minLat: 38.8,
+  maxLat: 41.3,
+  minLng: 43.4,
+  maxLng: 46.7,
+  standardOffset: 4,
+  dstRule: DstRule.NONE
+}, {
+  code: 'AZ',
+  minLat: 38.4,
+  maxLat: 41.9,
+  minLng: 44.8,
+  maxLng: 50.4,
+  standardOffset: 4,
+  dstRule: DstRule.NONE
+},
 
   // ---- Middle East / Anatolia ----
   // Now reached only for points that didn't match GE / AM / AZ
@@ -96,8 +92,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 77.9,
     standardOffset: 5,
     dstRule: DstRule.NONE
-  },
-  {
+  }, {
     code: 'IN',
     minLat: 6.7,
     maxLat: 35.5,
@@ -115,8 +110,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 92.7,
     standardOffset: 6,
     dstRule: DstRule.NONE
-  },
-  {
+  }, {
     code: 'LK',
     minLat: 5.9,
     maxLat: 9.9,
@@ -124,8 +118,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 81.9,
     standardOffset: 5.5,
     dstRule: DstRule.NONE
-  },
-  {
+  }, {
     code: 'NP',
     minLat: 26.3,
     maxLat: 30.5,
@@ -144,8 +137,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 55.7,
     standardOffset: 3,
     dstRule: DstRule.NONE
-  },
-  {
+  }, {
     code: 'AE',
     minLat: 22.6,
     maxLat: 26.1,
@@ -153,8 +145,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 56.4,
     standardOffset: 4,
     dstRule: DstRule.NONE
-  },
-  {
+  }, {
     code: 'QA',
     minLat: 24.4,
     maxLat: 26.2,
@@ -162,8 +153,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 51.7,
     standardOffset: 3,
     dstRule: DstRule.NONE
-  },
-  {
+  }, {
     code: 'KW',
     minLat: 28.5,
     maxLat: 30.1,
@@ -171,8 +161,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 48.4,
     standardOffset: 3,
     dstRule: DstRule.NONE
-  },
-  {
+  }, {
     code: 'OM',
     minLat: 16.6,
     maxLat: 26.4,
@@ -180,8 +169,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 59.9,
     standardOffset: 4,
     dstRule: DstRule.NONE
-  },
-  {
+  }, {
     code: 'IR',
     minLat: 25.0,
     maxLat: 39.8,
@@ -200,8 +188,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 1.8,
     standardOffset: 0,
     dstRule: DstRule.EU
-  },
-  {
+  }, {
     code: 'FR',
     minLat: 41.3,
     maxLat: 51.1,
@@ -209,8 +196,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 9.6,
     standardOffset: 1,
     dstRule: DstRule.EU
-  },
-  {
+  }, {
     code: 'DE',
     minLat: 47.2,
     maxLat: 55.1,
@@ -218,8 +204,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 15.1,
     standardOffset: 1,
     dstRule: DstRule.EU
-  },
-  {
+  }, {
     code: 'ES',
     minLat: 36.0,
     maxLat: 43.8,
@@ -227,8 +212,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 4.4,
     standardOffset: 1,
     dstRule: DstRule.EU
-  },
-  {
+  }, {
     code: 'IT',
     minLat: 36.6,
     maxLat: 47.1,
@@ -247,8 +231,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 36.9,
     standardOffset: 2,
     dstRule: DstRule.EGYPT
-  },
-  {
+  }, {
     code: 'MA-WS',
     minLat: 22.5,
     maxLat: 28.0,
@@ -256,8 +239,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -11.5,
     standardOffset: 0,
     dstRule: DstRule.MOROCCO
-  },
-  // Morocco proper
+  }, // Morocco proper
   {
     code: 'MA',
     minLat: 20.7,
@@ -266,8 +248,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -1.0,
     standardOffset: 1,
     dstRule: DstRule.MOROCCO
-  },
-  {
+  }, {
     code: 'NG',
     minLat: 4.2,
     maxLat: 13.9,
@@ -275,8 +256,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 14.7,
     standardOffset: 1,
     dstRule: DstRule.NONE
-  },
-  {
+  }, {
     code: 'KE',
     minLat: -4.7,
     maxLat: 5.1,
@@ -284,8 +264,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 41.9,
     standardOffset: 3,
     dstRule: DstRule.NONE
-  },
-  {
+  }, {
     code: 'ZA',
     minLat: -34.9,
     maxLat: -22.1,
@@ -308,8 +287,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 61.0,
     standardOffset: 5,
     dstRule: DstRule.NONE
-  },
-  {
+  }, {
     code: 'KZ-E',
     minLat: 40.5,
     maxLat: 55.4,
@@ -329,8 +307,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 23.0,
     standardOffset: 2,
     dstRule: DstRule.NONE
-  },
-  // Moscow Time (European Russia)
+  }, // Moscow Time (European Russia)
   {
     code: 'RU-MSK',
     minLat: 41.0,
@@ -339,8 +316,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 46.0,
     standardOffset: 3,
     dstRule: DstRule.NONE
-  },
-  // Samara Time (Samara, Udmurtia, Ulyanovsk)
+  }, // Samara Time (Samara, Udmurtia, Ulyanovsk)
   {
     code: 'RU-SAM',
     minLat: 50.0,
@@ -349,8 +325,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 56.0,
     standardOffset: 4,
     dstRule: DstRule.NONE
-  },
-  // Yekaterinburg Time (Sverdlovsk, Chelyabinsk, Bashkortostan)
+  }, // Yekaterinburg Time (Sverdlovsk, Chelyabinsk, Bashkortostan)
   {
     code: 'RU-YEK',
     minLat: 50.0,
@@ -359,8 +334,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 68.0,
     standardOffset: 5,
     dstRule: DstRule.NONE
-  },
-  // Omsk Time
+  }, // Omsk Time
   {
     code: 'RU-OMS',
     minLat: 53.0,
@@ -369,8 +343,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 79.0,
     standardOffset: 6,
     dstRule: DstRule.NONE
-  },
-  // Krasnoyarsk Time (Novosibirsk, Krasnoyarsk, Tomsk)
+  }, // Krasnoyarsk Time (Novosibirsk, Krasnoyarsk, Tomsk)
   {
     code: 'RU-NOV',
     minLat: 50.0,
@@ -379,8 +352,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 96.0,
     standardOffset: 7,
     dstRule: DstRule.NONE
-  },
-  // Irkutsk Time
+  }, // Irkutsk Time
   {
     code: 'RU-IRK',
     minLat: 50.0,
@@ -389,8 +361,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 116.0,
     standardOffset: 8,
     dstRule: DstRule.NONE
-  },
-  // Yakutsk Time (Yakutia west, Amur, Zabaykalsky)
+  }, // Yakutsk Time (Yakutia west, Amur, Zabaykalsky)
   {
     code: 'RU-YAK',
     minLat: 50.0,
@@ -399,8 +370,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 140.0,
     standardOffset: 9,
     dstRule: DstRule.NONE
-  },
-  // Vladivostok Time (Primorsky, Khabarovsk south)
+  }, // Vladivostok Time (Primorsky, Khabarovsk south)
   {
     code: 'RU-VLA',
     minLat: 42.0,
@@ -409,8 +379,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 142.0,
     standardOffset: 10,
     dstRule: DstRule.NONE
-  },
-  // Magadan Time (Magadan, Sakhalin, Kuril)
+  }, // Magadan Time (Magadan, Sakhalin, Kuril)
   {
     code: 'RU-MAG',
     minLat: 43.0,
@@ -419,8 +388,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 160.0,
     standardOffset: 11,
     dstRule: DstRule.NONE
-  },
-  // Kamchatka Time (Kamchatka, Chukotka)
+  }, // Kamchatka Time (Kamchatka, Chukotka)
   {
     code: 'RU-KAM',
     minLat: 50.0,
@@ -440,8 +408,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 134.8,
     standardOffset: 8,
     dstRule: DstRule.NONE
-  },
-  {
+  }, {
     code: 'JP',
     minLat: 24.0,
     maxLat: 45.6,
@@ -449,8 +416,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 153.9,
     standardOffset: 9,
     dstRule: DstRule.NONE
-  },
-  {
+  }, {
     code: 'KR',
     minLat: 33.1,
     maxLat: 38.7,
@@ -470,8 +436,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 115.0,
     standardOffset: 7,
     dstRule: DstRule.NONE
-  },
-  // WITA (Bali, Lombok, Sulawesi, Kalimantan south/east) — +8
+  }, // WITA (Bali, Lombok, Sulawesi, Kalimantan south/east) — +8
   {
     code: 'ID-WITA',
     minLat: -11.0,
@@ -480,8 +445,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 127.5,
     standardOffset: 8,
     dstRule: DstRule.NONE
-  },
-  // WIT (Papua, Maluku) — +9
+  }, // WIT (Papua, Maluku) — +9
   {
     code: 'ID-WIT',
     minLat: -11.0,
@@ -500,8 +464,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 119.3,
     standardOffset: 8,
     dstRule: DstRule.NONE
-  },
-  {
+  }, {
     code: 'SG',
     minLat: 1.1,
     maxLat: 1.5,
@@ -509,8 +472,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 104.1,
     standardOffset: 8,
     dstRule: DstRule.NONE
-  },
-  {
+  }, {
     code: 'TH',
     minLat: 5.6,
     maxLat: 20.5,
@@ -518,8 +480,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 105.6,
     standardOffset: 7,
     dstRule: DstRule.NONE
-  },
-  {
+  }, {
     code: 'VN',
     minLat: 8.1,
     maxLat: 23.4,
@@ -527,8 +488,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 109.5,
     standardOffset: 7,
     dstRule: DstRule.NONE
-  },
-  {
+  }, {
     code: 'PH',
     minLat: 4.5,
     maxLat: 21.2,
@@ -547,8 +507,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -66.9,
     standardOffset: -5,
     dstRule: DstRule.US
-  },
-  {
+  }, {
     code: 'US-C',
     minLat: 24.4,
     maxLat: 49.4,
@@ -556,8 +515,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -82.0,
     standardOffset: -6,
     dstRule: DstRule.US
-  },
-  {
+  }, {
     code: 'US-M',
     minLat: 24.4,
     maxLat: 49.4,
@@ -565,8 +523,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -104.0,
     standardOffset: -7,
     dstRule: DstRule.US
-  },
-  {
+  }, {
     code: 'US-P',
     minLat: 24.4,
     maxLat: 49.4,
@@ -586,8 +543,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -52.6,
     standardOffset: -3.5,
     dstRule: DstRule.US
-  },
-  // Atlantic (Nova Scotia, New Brunswick, PEI)
+  }, // Atlantic (Nova Scotia, New Brunswick, PEI)
   {
     code: 'CA-ATL',
     minLat: 43.0,
@@ -596,8 +552,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -59.9,
     standardOffset: -4,
     dstRule: DstRule.US
-  },
-  // Eastern (Ontario, Quebec)
+  }, // Eastern (Ontario, Quebec)
   {
     code: 'CA-E',
     minLat: 41.7,
@@ -606,8 +561,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -59.9,
     standardOffset: -5,
     dstRule: DstRule.US
-  },
-  // Central (Manitoba, Saskatchewan, Nunavut east)
+  }, // Central (Manitoba, Saskatchewan, Nunavut east)
   {
     code: 'CA-C',
     minLat: 48.0,
@@ -616,8 +570,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -90.0,
     standardOffset: -6,
     dstRule: DstRule.US
-  },
-  // Mountain (Alberta, Northwest Territories)
+  }, // Mountain (Alberta, Northwest Territories)
   {
     code: 'CA-M',
     minLat: 48.0,
@@ -626,8 +579,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -102.0,
     standardOffset: -7,
     dstRule: DstRule.US
-  },
-  // Pacific (British Columbia, Yukon)
+  }, // Pacific (British Columbia, Yukon)
   {
     code: 'CA-P',
     minLat: 48.0,
@@ -648,8 +600,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -86.7,
     standardOffset: -5,
     dstRule: DstRule.NONE
-  },
-  // Baja California (norte) — Tijuana / Mexicali / Ensenada.
+  }, // Baja California (norte) — Tijuana / Mexicali / Ensenada.
   // UTC−8 with US DST, synced with California. MUST be listed
   // before MX-BCS and MX so that points >300 km from the LA city
   // entry (e.g. Mexicali, ~340 km) do not fall through to the -6
@@ -663,8 +614,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -114.5,
     standardOffset: -8,
     dstRule: DstRule.US
-  },
-  // Baja California Sur — La Paz / Cabo San Lucas / Loreto.
+  }, // Baja California Sur — La Paz / Cabo San Lucas / Loreto.
   // UTC−7 (Mountain Standard) year-round, no DST. Fixes the
   // 1-hour error for the entire peninsula below the BC border.
   {
@@ -675,8 +625,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -109.3,
     standardOffset: -7,
     dstRule: DstRule.NONE
-  },
-  // Sonora — the only -7 area on the mainland
+  }, // Sonora — the only -7 area on the mainland
   {
     code: 'MX-SON',
     minLat: 26.0,
@@ -685,8 +634,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -108.4,
     standardOffset: -7,
     dstRule: DstRule.NONE
-  },
-  // Rest of mainland Mexico — -6
+  }, // Rest of mainland Mexico — -6
   {
     code: 'MX',
     minLat: 14.5,
@@ -707,8 +655,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -56.1,
     standardOffset: -4,
     dstRule: DstRule.NONE
-  },
-  // Roraima — Boa Vista and the northern savanna.
+  }, // Roraima — Boa Vista and the northern savanna.
   {
     code: 'BR-RR',
     minLat: -1.2,
@@ -717,8 +664,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -59.7,
     standardOffset: -4,
     dstRule: DstRule.NONE
-  },
-  // Rondônia — Porto Velho, Ji-Paraná.
+  }, // Rondônia — Porto Velho, Ji-Paraná.
   {
     code: 'BR-RO',
     minLat: -13.7,
@@ -727,8 +673,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -59.8,
     standardOffset: -4,
     dstRule: DstRule.NONE
-  },
-  // Mato Grosso — Cuiabá, Rondonópolis. East edge stops before
+  }, // Mato Grosso — Cuiabá, Rondonópolis. East edge stops before
   // Goiás (which is -3) at lng -50.2.
   {
     code: 'BR-MT',
@@ -738,8 +683,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -50.2,
     standardOffset: -4,
     dstRule: DstRule.NONE
-  },
-  // Mato Grosso do Sul — Campo Grande, Corumbá, Dourados.
+  }, // Mato Grosso do Sul — Campo Grande, Corumbá, Dourados.
   {
     code: 'BR-MS',
     minLat: -24.1,
@@ -748,8 +692,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: -50.9,
     standardOffset: -4,
     dstRule: DstRule.NONE
-  },
-  // Rest of Brazil — UTC−3 (Brasília, São Paulo, Rio, Salvador,
+  }, // Rest of Brazil — UTC−3 (Brasília, São Paulo, Rio, Salvador,
   // Recife, Fortaleza, Belo Horizonte).
   {
     code: 'BR',
@@ -771,8 +714,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 129.0,
     standardOffset: 8,
     dstRule: DstRule.NONE
-  },
-  // Northern Territory (Darwin) — +9:30, no DST
+  }, // Northern Territory (Darwin) — +9:30, no DST
   {
     code: 'AU-NT',
     minLat: -26.0,
@@ -781,8 +723,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 138.0,
     standardOffset: 9.5,
     dstRule: DstRule.NONE
-  },
-  // South Australia (Adelaide) — +9:30, DST
+  }, // South Australia (Adelaide) — +9:30, DST
   {
     code: 'AU-SA',
     minLat: -38.0,
@@ -805,8 +746,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 142.0,
     standardOffset: 9.5,
     dstRule: DstRule.AU
-  },
-  // Eastern states (NSW, VIC, TAS, ACT) — +10, DST
+  }, // Eastern states (NSW, VIC, TAS, ACT) — +10, DST
   // Listed before QLD so the Gold Coast / Tweed Heads
   // border region falls to DST (NSW) rather than no-DST.
   {
@@ -817,8 +757,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 154.0,
     standardOffset: 10,
     dstRule: DstRule.AU
-  },
-  // Queensland (Brisbane) — +10, no DST
+  }, // Queensland (Brisbane) — +10, no DST
   {
     code: 'AU-QLD',
     minLat: -29.0,
@@ -838,8 +777,7 @@ export const COUNTRY_ZONES: CountryZone[] = [
     maxLng: 178.6,
     standardOffset: 12,
     dstRule: DstRule.NZ    // was: DstRule.AU
-  }
-];
+  }];
 
 export class CountryTimezoneLookup {
   /**
@@ -848,8 +786,7 @@ export class CountryTimezoneLookup {
    */
   static zoneFor(latitude: number, longitude: number): CountryZone | null {
     for (const z of COUNTRY_ZONES) {
-      if (latitude >= z.minLat && latitude <= z.maxLat &&
-        longitude >= z.minLng && longitude <= z.maxLng) {
+      if (latitude >= z.minLat && latitude <= z.maxLat && longitude >= z.minLng && longitude <= z.maxLng) {
         return z;
       }
     }

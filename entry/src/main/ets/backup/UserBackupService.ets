@@ -126,109 +126,103 @@ const STORE_TASBIH = 'tasbih_prefs';
 // dropped, so adding a new key to a future build is safe.
 // ------------------------------------------------------------
 
-const SETTINGS_SPECS: PrefSpec[] = [
-  // ---- Calculation & Location ----
-  { key: 'calc_method', type: 'string', defaultValue: 'Karachi' },
-  { key: 'asr_rule', type: 'number', defaultValue: 1 }, // 1 = STANDARD
-  { key: 'calc_source', type: 'string', defaultValue: 'Local' },
-  { key: 'location_mode', type: 'string', defaultValue: 'GPS' },
-  { key: 'manual_lat', type: 'number', defaultValue: 0 },
-  { key: 'translation_font_family', type: 'string', defaultValue: 'auto' },
-  { key: 'arabic_font_family', type: 'string', defaultValue: 'auto' },
-  { key: 'manual_lng', type: 'number', defaultValue: 0 },
-  { key: 'manual_refresh', type: 'number', defaultValue: 0 },
-  { key: 'manual_city', type: 'string', defaultValue: '' },
-  { key: 'high_lat_rule', type: 'string', defaultValue: 'None' },
-  { key: 'calc_rounding_method', type: 'string', defaultValue: 'Nearest' },
-  { key: 'calc_midnight_method', type: 'string', defaultValue: 'Standard' },
-  { key: 'calc_polar_resolution', type: 'string', defaultValue: 'Unresolved' },
-  { key: 'calc_shafaq', type: 'string', defaultValue: 'General' },
-  { key: 'offset_fajr', type: 'number', defaultValue: 0 },
-  { key: 'offset_dhuhr', type: 'number', defaultValue: 0 },
-  { key: 'offset_asr', type: 'number', defaultValue: 0 },
-  { key: 'offset_maghrib', type: 'number', defaultValue: 0 },
+const SETTINGS_SPECS: PrefSpec[] = [{ key: 'calc_method', type: 'string', defaultValue: 'Karachi' },
+  { key: 'asr_rule', type: 'number', defaultValue: 1 },
+
+  {
+    key: 'calc_source',
+    type: 'string',
+    defaultValue: 'Local'
+  }, { key: 'location_mode', type: 'string', defaultValue: 'GPS' },
+    { key: 'manual_lat', type: 'number', defaultValue: 0 },
+    { key: 'translation_font_family', type: 'string', defaultValue: 'auto' },
+    { key: 'arabic_font_family', type: 'string', defaultValue: 'auto' },
+    { key: 'manual_lng', type: 'number', defaultValue: 0 }, { key: 'manual_refresh', type: 'number', defaultValue: 0 },
+    { key: 'manual_city', type: 'string', defaultValue: '' },
+    { key: 'high_lat_rule', type: 'string', defaultValue: 'None' },
+    { key: 'calc_rounding_method', type: 'string', defaultValue: 'Nearest' },
+    { key: 'calc_midnight_method', type: 'string', defaultValue: 'Standard' },
+    { key: 'calc_polar_resolution', type: 'string', defaultValue: 'Unresolved' },
+    { key: 'calc_shafaq', type: 'string', defaultValue: 'General' },
+    { key: 'offset_fajr', type: 'number', defaultValue: 0 }, { key: 'offset_dhuhr', type: 'number', defaultValue: 0 },
+    { key: 'offset_asr', type: 'number', defaultValue: 0 }, { key: 'offset_maghrib', type: 'number', defaultValue: 0 },
   { key: 'offset_isha', type: 'number', defaultValue: 0 },
 
   // ---- GPS Cache ----
-  { key: 'gps_lat', type: 'number', defaultValue: 0 },
-  { key: 'gps_lng', type: 'number', defaultValue: 0 },
-  { key: 'gps_city', type: 'string', defaultValue: '' },
-  { key: 'gps_refresh', type: 'number', defaultValue: 0 },
+    { key: 'gps_lat', type: 'number', defaultValue: 0 }, { key: 'gps_lng', type: 'number', defaultValue: 0 },
+    { key: 'gps_city', type: 'string', defaultValue: '' }, { key: 'gps_refresh', type: 'number', defaultValue: 0 },
 
   // ---- App Settings ----
-  { key: 'theme_mode', type: 'string', defaultValue: 'System' },
-  { key: 'theme_mode_override', type: 'string', defaultValue: 'System' },
-  { key: 'app_theme_preset', type: 'string', defaultValue: 'Sirat' },
-  { key: 'app_language', type: 'string', defaultValue: 'en' },
-  { key: 'app_language_override', type: 'string', defaultValue: 'system' },
-  { key: 'quran_translation_lang', type: 'string', defaultValue: 'default' },
-  { key: 'hadith_translation_lang', type: 'string', defaultValue: 'default' },
-  { key: 'dua_translation_lang', type: 'string', defaultValue: 'default' },
-  { key: 'time_format', type: 'string', defaultValue: 'System' },
-  { key: 'wizard_completed', type: 'boolean', defaultValue: false },
-  { key: 'hijri_offset', type: 'number', defaultValue: 0 },
-  { key: 'hijri_calendar_type', type: 'string', defaultValue: 'UmmAlQura' },
-  { key: 'event_perspective', type: 'string', defaultValue: 'universal' },
-  { key: 'auto_show_ramadan_view', type: 'boolean', defaultValue: true },
-  { key: 'show_islamic_events', type: 'boolean', defaultValue: true },
+    { key: 'theme_mode', type: 'string', defaultValue: 'System' },
+    { key: 'theme_mode_override', type: 'string', defaultValue: 'System' },
+    { key: 'app_theme_preset', type: 'string', defaultValue: 'Sirat' },
+    { key: 'app_language', type: 'string', defaultValue: 'en' },
+    { key: 'app_language_override', type: 'string', defaultValue: 'system' },
+    { key: 'quran_translation_lang', type: 'string', defaultValue: 'default' },
+    { key: 'hadith_translation_lang', type: 'string', defaultValue: 'default' },
+    { key: 'dua_translation_lang', type: 'string', defaultValue: 'default' },
+    { key: 'time_format', type: 'string', defaultValue: 'System' },
+    { key: 'wizard_completed', type: 'boolean', defaultValue: false },
+    { key: 'hijri_offset', type: 'number', defaultValue: 0 },
+    { key: 'hijri_calendar_type', type: 'string', defaultValue: 'UmmAlQura' },
+    { key: 'event_perspective', type: 'string', defaultValue: 'universal' },
+    { key: 'auto_show_ramadan_view', type: 'boolean', defaultValue: true },
+    { key: 'show_islamic_events', type: 'boolean', defaultValue: true },
 
   // ---- Extra Timings (Legacy & Current) ----
-  { key: 'show_extra_timings', type: 'boolean', defaultValue: true },
-  { key: 'show_extra_timings_list', type: 'boolean', defaultValue: true },
-  { key: 'show_extra_timings_sunpath', type: 'boolean', defaultValue: true },
-  { key: 'show_imsak', type: 'boolean', defaultValue: true },
-  { key: 'show_first_third', type: 'boolean', defaultValue: true },
-  { key: 'show_midnight', type: 'boolean', defaultValue: true },
-  { key: 'show_last_third', type: 'boolean', defaultValue: true },
-  { key: 'show_imsak_list', type: 'boolean', defaultValue: true },
-  { key: 'show_first_third_list', type: 'boolean', defaultValue: true },
-  { key: 'show_midnight_list', type: 'boolean', defaultValue: true },
-  { key: 'show_last_third_list', type: 'boolean', defaultValue: true },
-  { key: 'show_imsak_sunpath', type: 'boolean', defaultValue: true },
-  { key: 'show_first_third_sunpath', type: 'boolean', defaultValue: true },
-  { key: 'show_midnight_sunpath', type: 'boolean', defaultValue: true },
-  { key: 'show_last_third_sunpath', type: 'boolean', defaultValue: true },
+    { key: 'show_extra_timings', type: 'boolean', defaultValue: true },
+    { key: 'show_extra_timings_list', type: 'boolean', defaultValue: true },
+    { key: 'show_extra_timings_sunpath', type: 'boolean', defaultValue: true },
+    { key: 'show_imsak', type: 'boolean', defaultValue: true },
+    { key: 'show_first_third', type: 'boolean', defaultValue: true },
+    { key: 'show_midnight', type: 'boolean', defaultValue: true },
+    { key: 'show_last_third', type: 'boolean', defaultValue: true },
+    { key: 'show_imsak_list', type: 'boolean', defaultValue: true },
+    { key: 'show_first_third_list', type: 'boolean', defaultValue: true },
+    { key: 'show_midnight_list', type: 'boolean', defaultValue: true },
+    { key: 'show_last_third_list', type: 'boolean', defaultValue: true },
+    { key: 'show_imsak_sunpath', type: 'boolean', defaultValue: true },
+    { key: 'show_first_third_sunpath', type: 'boolean', defaultValue: true },
+    { key: 'show_midnight_sunpath', type: 'boolean', defaultValue: true },
+    { key: 'show_last_third_sunpath', type: 'boolean', defaultValue: true },
 
   // ---- Notifications ----
-  { key: 'notif_master_enabled', type: 'boolean', defaultValue: false },
-  { key: 'notif_before_minutes', type: 'number', defaultValue: 10 },
-  { key: 'notif_fajr', type: 'boolean', defaultValue: true },
-  { key: 'notif_dhuhr', type: 'boolean', defaultValue: true },
-  { key: 'notif_asr', type: 'boolean', defaultValue: true },
-  { key: 'notif_maghrib', type: 'boolean', defaultValue: true },
-  { key: 'notif_isha', type: 'boolean', defaultValue: true },
+    { key: 'notif_master_enabled', type: 'boolean', defaultValue: false },
+    { key: 'notif_before_minutes', type: 'number', defaultValue: 10 },
+    { key: 'notif_fajr', type: 'boolean', defaultValue: true },
+    { key: 'notif_dhuhr', type: 'boolean', defaultValue: true },
+    { key: 'notif_asr', type: 'boolean', defaultValue: true },
+    { key: 'notif_maghrib', type: 'boolean', defaultValue: true },
+    { key: 'notif_isha', type: 'boolean', defaultValue: true },
 
   // ---- Sound & Haptics ----
-  { key: 'vibration_enabled', type: 'boolean', defaultValue: true },
-  { key: 'sound_enabled', type: 'boolean', defaultValue: true },
-  { key: 'tasbih_sound', type: 'string', defaultValue: 'soft_click' },
-  { key: 'tasbih_render_style', type: 'string', defaultValue: 'premium' },
+    { key: 'vibration_enabled', type: 'boolean', defaultValue: true },
+    { key: 'sound_enabled', type: 'boolean', defaultValue: true },
+    { key: 'tasbih_sound', type: 'string', defaultValue: 'soft_click' },
+    { key: 'tasbih_render_style', type: 'string', defaultValue: 'premium' },
   { key: 'tasbih_theme_preset', type: 'string', defaultValue: 'amber' },
 
   // ---- Progress & Logs ----
-  { key: 'prayer_state_map', type: 'string', defaultValue: '{}' },
-  { key: 'ramadan_log', type: 'string', defaultValue: '{"years":[]}' },
+    { key: 'prayer_state_map', type: 'string', defaultValue: '{}' },
+    { key: 'ramadan_log', type: 'string', defaultValue: '{"years":[]}' },
 
   // ---- Duas ----
-  { key: 'dua_favorites', type: 'string', defaultValue: '[]' },
-  { key: 'dua_bindings', type: 'string', defaultValue: '{}' },
+    { key: 'dua_favorites', type: 'string', defaultValue: '[]' },
+    { key: 'dua_bindings', type: 'string', defaultValue: '{}' },
 
   // ---- Custom Calendar Events ----
   { key: 'custom_events', type: 'string', defaultValue: '[]' },
 
   // ---- Quran & Prayer Prompts ----
-  { key: 'active_quran_script', type: 'string', defaultValue: 'indopak' },
-  { key: 'dismissed_prayers', type: 'string', defaultValue: '[]' },
+    { key: 'active_quran_script', type: 'string', defaultValue: 'indopak' },
+    { key: 'dismissed_prayers', type: 'string', defaultValue: '[]' },
 
   // ---- Custom Mosques ----
-  { key: 'custom_mosques_data', type: 'string', defaultValue: '[]' }
-];
+    { key: 'custom_mosques_data', type: 'string', defaultValue: '[]' }];
 
-const TASBIH_SPECS: PrefSpec[] = [
-  { key: 'tasbihs_data', type: 'string', defaultValue: '[]' },
+const TASBIH_SPECS: PrefSpec[] = [{ key: 'tasbihs_data', type: 'string', defaultValue: '[]' },
   { key: 'tasbih_active_id', type: 'string', defaultValue: '' },
-  { key: 'tasbih_active_dhikr', type: 'number', defaultValue: 0 }
-];
+  { key: 'tasbih_active_dhikr', type: 'number', defaultValue: 0 }];
 
 // ============================================================
 // UserBackupService
@@ -239,10 +233,7 @@ export class UserBackupService {
   // BACKUP
   // ============================================================
 
-  static async backupToFile(
-    context: common.UIAbilityContext,
-    appVersion: string
-  ): Promise<BackupResult> {
+  static async backupToFile(context: common.UIAbilityContext, appVersion: string): Promise<BackupResult> {
     try {
       const backup = await UserBackupService.buildBackupObject(context, appVersion);
       const json = JSON.stringify(backup, null, 2);
@@ -258,22 +249,18 @@ export class UserBackupService {
       }
 
       AppLogger.info('UserBackupService',
-        `Backup saved: ${uri} (${json.length} bytes, ` +
-          `${Object.keys(backup.settings).length} settings, ` +
+        `Backup saved: ${uri} (${json.length} bytes, ` + `${Object.keys(backup.settings).length} settings, ` +
           `${Object.keys(backup.tasbih).length} tasbih keys)`);
 
       return { ok: true, message: 'saved', path: uri };
     } catch (err) {
       const e = err as BusinessError;
-      AppLogger.error('UserBackupService',
-        `backupToFile failed: ${e.code ?? ''} ${e.message ?? ''}`);
+      AppLogger.error('UserBackupService', `backupToFile failed: ${e.code ?? ''} ${e.message ?? ''}`);
       return { ok: false, message: e.message ?? 'unknown_error' };
     }
   }
 
-  static async restoreFromFile(
-    context: common.UIAbilityContext
-  ): Promise<RestoreResult> {
+  static async restoreFromFile(context: common.UIAbilityContext): Promise<RestoreResult> {
     try {
       const uri = await UserBackupService.pickOpenLocation(context);
       if (uri.length === 0) {
@@ -301,31 +288,21 @@ export class UserBackupService {
       await UserBackupService.reloadAllAfterRestore(context);
 
       AppLogger.info('UserBackupService',
-        `Restore complete: backup from v${backup.backupVersion} ` +
-          `created ${backup.createdAt}`);
+        `Restore complete: backup from v${backup.backupVersion} ` + `created ${backup.createdAt}`);
       return {
-        ok: true,
-        message: 'restored',
-        backedUpVersion: backup.backupVersion
+        ok: true, message: 'restored', backedUpVersion: backup.backupVersion
       };
     } catch (err) {
       const e = err as BusinessError;
-      AppLogger.error('UserBackupService',
-        `restoreFromFile failed: ${e.code ?? ''} ${e.message ?? ''}`);
+      AppLogger.error('UserBackupService', `restoreFromFile failed: ${e.code ?? ''} ${e.message ?? ''}`);
       return { ok: false, message: e.message ?? 'unknown_error' };
     }
   }
 
-  private static async buildBackupObject(
-    context: common.UIAbilityContext,
-    appVersion: string
-  ): Promise<BackupFileShape> {
-    const settings = await UserBackupService.collectStore(
-      context, STORE_SETTINGS, SETTINGS_SPECS
-    );
-    const tasbih = await UserBackupService.collectStore(
-      context, STORE_TASBIH, TASBIH_SPECS
-    );
+  private static async buildBackupObject(context: common.UIAbilityContext,
+    appVersion: string): Promise<BackupFileShape> {
+    const settings = await UserBackupService.collectStore(context, STORE_SETTINGS, SETTINGS_SPECS);
+    const tasbih = await UserBackupService.collectStore(context, STORE_TASBIH, TASBIH_SPECS);
     const lang = AppStorage.get<string>(STORAGE_KEY_LANGUAGE) ?? 'en';
 
     return {
@@ -340,11 +317,8 @@ export class UserBackupService {
     };
   }
 
-  private static async collectStore(
-    context: common.UIAbilityContext,
-    storeName: string,
-    specs: PrefSpec[]
-  ): Promise<Record<string, BackupValue>> {
+  private static async collectStore(context: common.UIAbilityContext, storeName: string,
+    specs: PrefSpec[]): Promise<Record<string, BackupValue>> {
     const store = await preferences.getPreferences(context, storeName);
     const out: Record<string, BackupValue> = {};
 
@@ -366,17 +340,13 @@ export class UserBackupService {
           out[spec.key] = v === true;
         }
       } catch (err) {
-        AppLogger.warn('UserBackupService',
-          `${storeName}.${spec.key}: read failed, skipping`);
+        AppLogger.warn('UserBackupService', `${storeName}.${spec.key}: read failed, skipping`);
       }
     }
     return out;
   }
 
-  private static async pickSaveLocation(
-    context: common.UIAbilityContext,
-    backup: BackupFileShape
-  ): Promise<string> {
+  private static async pickSaveLocation(context: common.UIAbilityContext, backup: BackupFileShape): Promise<string> {
     try {
       const documentPicker = new picker.DocumentViewPicker(context);
       const options = new picker.DocumentSaveOptions();
@@ -388,8 +358,7 @@ export class UserBackupService {
       }
       return uris[0];
     } catch (err) {
-      AppLogger.info('UserBackupService',
-        'save picker dismissed by user or unavailable');
+      AppLogger.info('UserBackupService', 'save picker dismissed by user or unavailable');
       return '';
     }
   }
@@ -404,13 +373,9 @@ export class UserBackupService {
       file = fs.openSync(uri, fs.OpenMode.WRITE_ONLY | fs.OpenMode.TRUNC);
     } catch (err) {
       try {
-        file = fs.openSync(
-          uri,
-          fs.OpenMode.WRITE_ONLY | fs.OpenMode.CREATE | fs.OpenMode.TRUNC
-        );
+        file = fs.openSync(uri, fs.OpenMode.WRITE_ONLY | fs.OpenMode.CREATE | fs.OpenMode.TRUNC);
       } catch (err2) {
-        AppLogger.warn('UserBackupService',
-          `writeTextToUri: open failed for ${uri}`);
+        AppLogger.warn('UserBackupService', `writeTextToUri: open failed for ${uri}`);
         return false;
       }
     }
@@ -427,9 +392,7 @@ export class UserBackupService {
     }
   }
 
-  private static async pickOpenLocation(
-    context: common.UIAbilityContext
-  ): Promise<string> {
+  private static async pickOpenLocation(context: common.UIAbilityContext): Promise<string> {
     try {
       const documentPicker = new picker.DocumentViewPicker(context);
       const options = new picker.DocumentSelectOptions();
@@ -441,8 +404,7 @@ export class UserBackupService {
       }
       return uris[0];
     } catch (err) {
-      AppLogger.info('UserBackupService',
-        'open picker dismissed by user or unavailable');
+      AppLogger.info('UserBackupService', 'open picker dismissed by user or unavailable');
       return '';
     }
   }
@@ -481,9 +443,7 @@ export class UserBackupService {
     }
   }
 
-  private static validateBackup(
-    backup: BackupFileShape
-  ): ValidationResult {
+  private static validateBackup(backup: BackupFileShape): ValidationResult {
     if (!backup || typeof backup !== 'object') {
       return { ok: false, message: 'not_an_object' };
     }
@@ -505,24 +465,13 @@ export class UserBackupService {
     return { ok: true, message: 'ok' };
   }
 
-  private static async applyBackup(
-    context: common.UIAbilityContext,
-    backup: BackupFileShape
-  ): Promise<void> {
-    await UserBackupService.applyStore(
-      context, STORE_SETTINGS, backup.settings, SETTINGS_SPECS
-    );
-    await UserBackupService.applyStore(
-      context, STORE_TASBIH, backup.tasbih, TASBIH_SPECS
-    );
+  private static async applyBackup(context: common.UIAbilityContext, backup: BackupFileShape): Promise<void> {
+    await UserBackupService.applyStore(context, STORE_SETTINGS, backup.settings, SETTINGS_SPECS);
+    await UserBackupService.applyStore(context, STORE_TASBIH, backup.tasbih, TASBIH_SPECS);
   }
 
-  private static async applyStore(
-    context: common.UIAbilityContext,
-    storeName: string,
-    data: Record<string, BackupValue>,
-    specs: PrefSpec[]
-  ): Promise<void> {
+  private static async applyStore(context: common.UIAbilityContext, storeName: string,
+    data: Record<string, BackupValue>, specs: PrefSpec[]): Promise<void> {
     const store = await preferences.getPreferences(context, storeName);
     await store.clear();
 
@@ -555,9 +504,7 @@ export class UserBackupService {
   // ============================================================
 
   private static async reloadAllAfterRestore(
-    context: common.UIAbilityContext
-  ): Promise<void> {
-    // 1. Re-prime module-level caches.
+    context: common.UIAbilityContext): Promise<void> { // 1. Re-prime module-level caches.
     await PrayerManager.primeStateMap();
     await TasbihStorage.init(context);
     await TasbihStorage.load(TasbihManager.createDefaults());
@@ -591,171 +538,76 @@ export class UserBackupService {
       if (customEvents.length > 0) {
         const hijriOffset = await SettingsHelper.getHijriOffset();
         await CustomEventNotifier.reschedule(customEvents, hijriOffset);
-        AppLogger.info('UserBackupService',
-          `Rescheduled ${customEvents.length} custom event notification(s)`);
+        AppLogger.info('UserBackupService', `Rescheduled ${customEvents.length} custom event notification(s)`);
       }
     } catch (e) {
-      AppLogger.warn('UserBackupService',
-        `Custom event reschedule after restore failed: ${(e as Error).message}`);
+      AppLogger.warn('UserBackupService', `Custom event reschedule after restore failed: ${(e as Error).message}`);
     }
   }
 
   private static async seedAppStorageFromPrefs(): Promise<void> {
 
-    await UserBackupService.seedString(
-      STORAGE_KEY_THEME_MODE,
-      'System'
-    );
+    await UserBackupService.seedString(STORAGE_KEY_THEME_MODE, 'System');
 
-    await UserBackupService.seedString(
-      STORAGE_KEY_THEME_OVERRIDE,
-      'System'
-    );
+    await UserBackupService.seedString(STORAGE_KEY_THEME_OVERRIDE, 'System');
 
-    await UserBackupService.seedString(
-      STORAGE_KEY_APP_THEME,
-      'Sirat'
-    );
+    await UserBackupService.seedString(STORAGE_KEY_APP_THEME, 'Sirat');
 
-    await UserBackupService.seedString(
-      STORAGE_KEY_LANGUAGE,
-      'en'
-    );
+    await UserBackupService.seedString(STORAGE_KEY_LANGUAGE, 'en');
 
-    await UserBackupService.seedString(
-      STORAGE_KEY_LANGUAGE_OVERRIDE,
-      'system'
-    );
+    await UserBackupService.seedString(STORAGE_KEY_LANGUAGE_OVERRIDE, 'system');
 
-    await UserBackupService.seedString(
-      STORAGE_KEY_TIME_FORMAT,
-      'System'
-    );
+    await UserBackupService.seedString(STORAGE_KEY_TIME_FORMAT, 'System');
 
-    await UserBackupService.seedNumber(
-      STORAGE_KEY_HIJRI_OFFSET,
-      0
-    );
+    await UserBackupService.seedNumber(STORAGE_KEY_HIJRI_OFFSET, 0);
 
-    await UserBackupService.seedString(
-      STORAGE_KEY_HIJRI_CALENDAR_TYPE,
-      'UmmAlQura'
-    );
+    await UserBackupService.seedString(STORAGE_KEY_HIJRI_CALENDAR_TYPE, 'UmmAlQura');
 
-    await UserBackupService.seedString(
-      STORAGE_KEY_EVENT_PERSPECTIVE,
-      'universal'
-    );
+    await UserBackupService.seedString(STORAGE_KEY_EVENT_PERSPECTIVE, 'universal');
 
-    await UserBackupService.seedBoolean(
-      STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
-      true
-    );
+    await UserBackupService.seedBoolean(STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW, true);
 
-    await UserBackupService.seedBoolean(
-      STORAGE_KEY_SOUND_ENABLED,
-      true
-    );
+    await UserBackupService.seedBoolean(STORAGE_KEY_SOUND_ENABLED, true);
 
-    await UserBackupService.seedBoolean(
-      STORAGE_KEY_VIBRATION_ENABLED,
-      true
-    );
+    await UserBackupService.seedBoolean(STORAGE_KEY_VIBRATION_ENABLED, true);
 
-    await UserBackupService.seedString(
-      STORAGE_KEY_TASBIH_SOUND,
-      'soft_click'
-    );
+    await UserBackupService.seedString(STORAGE_KEY_TASBIH_SOUND, 'soft_click');
 
-    await UserBackupService.seedBoolean(
-      STORAGE_KEY_WIZARD_COMPLETED,
-      false
-    );
+    await UserBackupService.seedBoolean(STORAGE_KEY_WIZARD_COMPLETED, false);
 
-    await UserBackupService.seedBoolean(
-      STORAGE_KEY_SHOW_ISLAMIC_EVENTS,
-      true
-    );
+    await UserBackupService.seedBoolean(STORAGE_KEY_SHOW_ISLAMIC_EVENTS, true);
 
-    await UserBackupService.seedString(
-      'active_quran_script',
-      'indopak'
-    );
+    await UserBackupService.seedString('active_quran_script', 'indopak');
 
-    await UserBackupService.seedString(
-      'dismissed_prayers',
-      '[]'
-    );
+    await UserBackupService.seedString('dismissed_prayers', '[]');
 
-    await UserBackupService.seedBoolean(
-      STORAGE_KEY_SHOW_IMSAK_LIST,
-      true
-    );
+    await UserBackupService.seedBoolean(STORAGE_KEY_SHOW_IMSAK_LIST, true);
 
-    await UserBackupService.seedBoolean(
-      STORAGE_KEY_SHOW_FIRST_THIRD_LIST,
-      true
-    );
+    await UserBackupService.seedBoolean(STORAGE_KEY_SHOW_FIRST_THIRD_LIST, true);
 
-    await UserBackupService.seedBoolean(
-      STORAGE_KEY_SHOW_MIDNIGHT_LIST,
-      true
-    );
+    await UserBackupService.seedBoolean(STORAGE_KEY_SHOW_MIDNIGHT_LIST, true);
 
-    await UserBackupService.seedBoolean(
-      STORAGE_KEY_SHOW_LAST_THIRD_LIST,
-      true
-    );
+    await UserBackupService.seedBoolean(STORAGE_KEY_SHOW_LAST_THIRD_LIST, true);
 
-    await UserBackupService.seedBoolean(
-      STORAGE_KEY_SHOW_IMSAK_SUNPATH,
-      true
-    );
+    await UserBackupService.seedBoolean(STORAGE_KEY_SHOW_IMSAK_SUNPATH, true);
 
-    await UserBackupService.seedBoolean(
-      STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH,
-      true
-    );
+    await UserBackupService.seedBoolean(STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH, true);
 
-    await UserBackupService.seedBoolean(
-      STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH,
-      true
-    );
+    await UserBackupService.seedBoolean(STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH, true);
 
-    await UserBackupService.seedBoolean(
-      STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH,
-      true
-    );
+    await UserBackupService.seedBoolean(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH, true);
 
-    await UserBackupService.seedString(
-      STORAGE_KEY_QURAN_TRANSLATION_LANG,
-      'default'
-    );
+    await UserBackupService.seedString(STORAGE_KEY_QURAN_TRANSLATION_LANG, 'default');
 
-    await UserBackupService.seedString(
-      STORAGE_KEY_HADITH_TRANSLATION_LANG,
-      'default'
-    );
+    await UserBackupService.seedString(STORAGE_KEY_HADITH_TRANSLATION_LANG, 'default');
 
-    await UserBackupService.seedString(
-      STORAGE_KEY_DUA_TRANSLATION_LANG,
-      'default'
-    );
+    await UserBackupService.seedString(STORAGE_KEY_DUA_TRANSLATION_LANG, 'default');
 
-    await UserBackupService.seedString(
-      STORAGE_KEY_ARABIC_FONT,
-      'auto'
-    );
+    await UserBackupService.seedString(STORAGE_KEY_ARABIC_FONT, 'auto');
 
-    await UserBackupService.seedString(
-      STORAGE_KEY_TRANSLATION_FONT,
-      'auto'
-    );
+    await UserBackupService.seedString(STORAGE_KEY_TRANSLATION_FONT, 'auto');
 
-    AppStorage.setOrCreate(
-      STORAGE_KEY_CUSTOM_EVENTS_VERSION,
-      0
-    );
+    AppStorage.setOrCreate(STORAGE_KEY_CUSTOM_EVENTS_VERSION, 0);
   }
 
   private static bumpVersion(key: string): void {
@@ -764,44 +616,15 @@ export class UserBackupService {
     AppStorage.setOrCreate(key, next);
   }
 
-  private static async seedString(
-    key: string,
-    fallback: string
-  ): Promise<void> {
-    AppStorage.setOrCreate(
-      key,
-      await PreferencesHelper.getString(
-        key,
-        fallback
-      )
-    );
+  private static async seedString(key: string, fallback: string): Promise<void> {
+    AppStorage.setOrCreate(key, await PreferencesHelper.getString(key, fallback));
   }
 
-  private static async seedNumber(
-    key: string,
-    fallback: number
-  ): Promise<void> {
-    AppStorage.setOrCreate(
-      key,
-      await PreferencesHelper.getNumber(
-        key,
-        fallback
-      )
-    );
+  private static async seedNumber(key: string, fallback: number): Promise<void> {
+    AppStorage.setOrCreate(key, await PreferencesHelper.getNumber(key, fallback));
   }
 
-  private static async seedBoolean(
-    key: string,
-    fallback: boolean
-  ): Promise<void> {
-    AppStorage.setOrCreate(
-      key,
-      await PreferencesHelper.getBoolean(
-        key,
-        fallback
-      )
-    );
+  private static async seedBoolean(key: string, fallback: boolean): Promise<void> {
+    AppStorage.setOrCreate(key, await PreferencesHelper.getBoolean(key, fallback));
   }
-
-
 }

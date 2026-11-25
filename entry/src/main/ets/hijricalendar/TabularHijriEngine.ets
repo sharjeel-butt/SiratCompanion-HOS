@@ -19,9 +19,7 @@ import { HijriCalendarEngine } from './HijriCalendarEngine';
 export class TabularHijriEngine implements HijriCalendarEngine {
   /** JDN of 1 Muharram 1 AH (civil epoch). */
   private static readonly EPOCH_JDN = 1948440;
-  private static readonly LEAP_YEARS_IN_CYCLE: number[] = [
-    2, 5, 7, 10, 13, 16, 18, 21, 24, 26, 29
-  ];
+  private static readonly LEAP_YEARS_IN_CYCLE: number[] = [2, 5, 7, 10, 13, 16, 18, 21, 24, 26, 29];
   readonly type: HijriCalendarType = HijriCalendarType.TABULAR;
 
   /** Gregorian date → JDN using the Fliegel–Van Flandern formula. */
@@ -34,13 +32,8 @@ export class TabularHijriEngine implements HijriCalendarEngine {
     const y = year + 4800 - a;
     const m = month + 12 * a - 3;
 
-    return day
-      + Math.floor((153 * m + 2) / 5)
-      + 365 * y
-      + Math.floor(y / 4)
-      - Math.floor(y / 100)
-      + Math.floor(y / 400)
-      - 32045;
+    return day + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) +
+      Math.floor(y / 400) - 32045;
   }
 
   /** JDN → Gregorian date at local midnight. */
@@ -71,8 +64,7 @@ export class TabularHijriEngine implements HijriCalendarEngine {
     return false;
   }
 
-  daysInMonth(year: number, month: number): number {
-    // Odd months (1, 3, 5, ...) = 30 days.
+  daysInMonth(year: number, month: number): number { // Odd months (1, 3, 5, ...) = 30 days.
     // Even months (2, 4, 6, ...) = 29 days.
     // Month 12 gets an extra day in leap years.
     if (month < 1 || month > 12) {
@@ -120,8 +112,7 @@ export class TabularHijriEngine implements HijriCalendarEngine {
     const cycleDays = 10631;
     const cycle = Math.floor(daysSinceEpoch / cycleDays);
     let dayInCycle = daysSinceEpoch - cycle * cycleDays;
-    if (dayInCycle < 0) {
-      // Only possible before the epoch.
+    if (dayInCycle < 0) { // Only possible before the epoch.
       dayInCycle += cycleDays;
     }
 

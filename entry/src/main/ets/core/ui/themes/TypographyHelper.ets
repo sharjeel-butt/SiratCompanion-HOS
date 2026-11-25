@@ -87,13 +87,12 @@ const LANGUAGE_METRICS: Record<string, LanguageMetrics> = {
   // ---- Southeast Asian ----
   'th': { lineHeightScale: 1.20, fontSizeScale: 1.00 },
   'lo': { lineHeightScale: 1.20, fontSizeScale: 1.00 },
-  'km': { lineHeightScale: 1.25, fontSizeScale: 1.00 },
+  'km': { lineHeightScale: 1.25, fontSizeScale: 1.00 }
 };
 
 
 const DEFAULT_METRICS: LanguageMetrics = {
-  lineHeightScale: 1.00,
-  fontSizeScale: 1.00
+  lineHeightScale: 1.00, fontSizeScale: 1.00
 };
 
 /** Arabic font metrics — used for Arabic glyphs rendered inside a
@@ -101,8 +100,7 @@ const DEFAULT_METRICS: LanguageMetrics = {
  *  English title). The GLYPHS are Arabic regardless of UI language,
  *  so Arabic metrics apply. */
 const ARABIC_METRICS: LanguageMetrics = {
-  lineHeightScale: 1.15,
-  fontSizeScale: 1.00
+  lineHeightScale: 1.15, fontSizeScale: 1.00
 };
 
 export class TypographyHelper {
@@ -140,26 +138,20 @@ export class TypographyHelper {
 
       const fonts: font.FontOptions[] = [
 
-        // ========================================================
-        // LATIN
-        // ========================================================
+        // ========================================================// LATIN// ========================================================
 
         {
-          familyName: 'Outfit',
-          familySrc: $rawfile(FontPaths.OUTFIT)
-        },
-        {
-          familyName: 'Outfit-Bold',
-          familySrc: $rawfile(FontPaths.OUTFIT_BOLD)
-        },
+          familyName: 'Outfit', familySrc: $rawfile(FontPaths.OUTFIT)
+        }, {
+        familyName: 'Outfit-Bold', familySrc: $rawfile(FontPaths.OUTFIT_BOLD)
+      },
 
         // ========================================================
         // BENGALI
         // ========================================================
 
         {
-          familyName: 'NotoSansBengali',
-          familySrc: $rawfile(FontPaths.NOTO_SANS_BENGALI)
+          familyName: 'NotoSansBengali', familySrc: $rawfile(FontPaths.NOTO_SANS_BENGALI)
         },
 
         // ========================================================
@@ -167,8 +159,7 @@ export class TypographyHelper {
         // ========================================================
 
         {
-          familyName: 'NotoSansSC',
-          familySrc: $rawfile(FontPaths.NOTO_SANS_SC)
+          familyName: 'NotoSansSC', familySrc: $rawfile(FontPaths.NOTO_SANS_SC)
         },
 
         // ========================================================
@@ -176,13 +167,11 @@ export class TypographyHelper {
         // ========================================================
 
         {
-          familyName: 'NotoNastaliqUrdu',
-          familySrc: $rawfile(FontPaths.NOTO_NASTALIQ_URDU)
+          familyName: 'NotoNastaliqUrdu', familySrc: $rawfile(FontPaths.NOTO_NASTALIQ_URDU)
         },
 
         {
-          familyName: 'JameelNoori',
-          familySrc: $rawfile(FontPaths.JAMEEL_NOORI)
+          familyName: 'JameelNoori', familySrc: $rawfile(FontPaths.JAMEEL_NOORI)
         },
 
         // ========================================================
@@ -190,66 +179,50 @@ export class TypographyHelper {
         // ========================================================
 
         {
-          familyName: 'Amiri',
-          familySrc: $rawfile(FontPaths.AMIRI)
+          familyName: 'Amiri', familySrc: $rawfile(FontPaths.AMIRI)
         },
 
         {
-          familyName: 'Amiri-Bold',
-          familySrc: $rawfile(FontPaths.AMIRI_BOLD)
+          familyName: 'Amiri-Bold', familySrc: $rawfile(FontPaths.AMIRI_BOLD)
         },
 
         {
-          familyName: 'AmiriQuran',
-          familySrc: $rawfile(FontPaths.AMIRI_QURAN)
+          familyName: 'AmiriQuran', familySrc: $rawfile(FontPaths.AMIRI_QURAN)
         },
 
         {
-          familyName: 'ScheherazadeNew',
-          familySrc: $rawfile(FontPaths.SCHEHERAZADE_NEW)
+          familyName: 'ScheherazadeNew', familySrc: $rawfile(FontPaths.SCHEHERAZADE_NEW)
         },
 
         {
-          familyName: 'NotoNaskh',
-          familySrc: $rawfile(FontPaths.NOTO_NASKH_ARABIC)
+          familyName: 'NotoNaskh', familySrc: $rawfile(FontPaths.NOTO_NASKH_ARABIC)
         },
 
         {
-          familyName: 'HafsArabic',
-          familySrc: $rawfile(FontPaths.HAFS_ARABIC)
+          familyName: 'HafsArabic', familySrc: $rawfile(FontPaths.HAFS_ARABIC)
         },
 
         {
-          familyName: 'LPMQIsepMisbah',
-          familySrc: $rawfile(FontPaths.LPMQ_ISEP_MISBAH)
+          familyName: 'LPMQIsepMisbah', familySrc: $rawfile(FontPaths.LPMQ_ISEP_MISBAH)
         },
 
         {
-          familyName: 'KFGQPCWarsh',
-          familySrc: $rawfile(FontPaths.KFGQPC_WARSH)
+          familyName: 'KFGQPCWarsh', familySrc: $rawfile(FontPaths.KFGQPC_WARSH)
         },
 
         {
-          familyName: 'QPC_Hafs',
-          familySrc: $rawfile(FontPaths.QPC_HAFS)
-        }
-      ];
+          familyName: 'QPC_Hafs', familySrc: $rawfile(FontPaths.QPC_HAFS)
+        }];
 
       fonts.forEach((fontOption: font.FontOptions) => {
         font.registerFont(fontOption);
       });
 
-      AppLogger.info(
-        'TypographyHelper',
-        `Registered ${fonts.length} fonts successfully.`
-      );
+      AppLogger.info('TypographyHelper', `Registered ${fonts.length} fonts successfully.`);
 
     } catch (err) {
 
-      AppLogger.error(
-        'TypographyHelper',
-        `Font registration failed: ${JSON.stringify(err)}`
-      );
+      AppLogger.error('TypographyHelper', `Font registration failed: ${JSON.stringify(err)}`);
     }
   }
 
@@ -418,8 +391,7 @@ export class TypographyHelper {
   static getActiveArabicFont(isQuran: boolean = false, activeScript: string = ''): string {
     const pref = AppStorage.get<string>('arabic_font_family') ?? 'auto';
 
-    if (pref !== 'auto') {
-      // User manually selected a font. Ensure fallbacks are appended.
+    if (pref !== 'auto') { // User manually selected a font. Ensure fallbacks are appended.
       return `${pref}, AmiriQuran, Amiri, sans-serif`;
     }
 
@@ -427,8 +399,7 @@ export class TypographyHelper {
     const lang = AppStorage.get<string>('app_language') ?? 'en';
 
     // 1. Region-specific defaults
-    if (lang === 'ur') {
-      // Urdu users default to Nastaliq for general text, Naskh for Quran
+    if (lang === 'ur') { // Urdu users default to Nastaliq for general text, Naskh for Quran
       return isQuran ? 'AmiriQuran, sans-serif' : 'JameelNoori, NotoNastaliqUrdu, sans-serif';
     }
     if (lang === 'id') {
@@ -436,8 +407,7 @@ export class TypographyHelper {
     }
 
     // 2. Context-specific defaults for everyone else
-    if (isQuran) {
-      // Respect the specific Quran script setting if provided
+    if (isQuran) { // Respect the specific Quran script setting if provided
       if (activeScript === 'indopak') {
         return 'JameelNoori, NotoNastaliqUrdu, sans-serif';
       }

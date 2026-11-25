@@ -32,20 +32,11 @@ const HEADING_SMOOTHING = 0.35;
 
 @Component
 export struct QiblaPage {
-  @StorageLink(STORAGE_KEY_THEME_MODE)
-  @Watch('onThemeModeChanged')
-  themeMode: string = ThemeMode.SYSTEM;
-  @StorageLink(STORAGE_KEY_BREAKPOINT)
-  breakpoint: string = 'sm';
-  @StorageLink(STORAGE_KEY_APP_THEME)
-  @Watch('onAppThemePresetChanged')
-  appThemePreset: string = '';
-  @StorageLink(STORAGE_KEY_LANGUAGE)
-  @Watch('onLanguageChanged')
-  appLanguage: string = 'en';
-  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
-  @Watch('onAppForegrounded')
-  appForegroundTick: number = 0;
+  @StorageLink(STORAGE_KEY_THEME_MODE) @Watch('onThemeModeChanged') themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_BREAKPOINT) breakpoint: string = 'sm';
+  @StorageLink(STORAGE_KEY_APP_THEME) @Watch('onAppThemePresetChanged') appThemePreset: string = '';
+  @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLanguageChanged') appLanguage: string = 'en';
+  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK) @Watch('onAppForegrounded') appForegroundTick: number = 0;
   @State declinationDeg: number = 0;
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State qiblaBearing: number = 0;
@@ -80,12 +71,9 @@ export struct QiblaPage {
   aboutToAppear(): void {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
-    this.systemDarkListener = PageTheme.installSystemListener(
-      this.themeMode,
-      (c) => {
-        this.colors = c;
-      }
-    );
+    this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
+      this.colors = c;
+    });
 
     this.loadLocation();
 
@@ -120,21 +108,18 @@ export struct QiblaPage {
 
   build() {
     Stack() {
-      Column() {
-        // if (deviceInfo.sdkApiVersion < 23) {
+      Column() { // if (deviceInfo.sdkApiVersion < 23) {
         //   Column().height(72)
         // }
 
         Scroll() {
-          if (this.isTablet()) {
-            // Two columns: compass on the left, info on the right.
+          if (this.isTablet()) { // Two columns: compass on the left, info on the right.
             Row({ space: 32 }) {
               Column() {
                 Row({ space: 8 }) { // <-- Added space
                   Image($r('app.media.ic_pin'))
-                    .width(16).height(16) // <-- Matched size to PageHeader
-                    .fillColor(this.colors.accentGold)
-                    .flexShrink(0)
+                    .width(16)
+                    .height(16) // <-- Matched size to PageHeader.fillColor(this.colors.accentGold).flexShrink(0)
                   Text(this.cityName.length > 0 ? this.cityName : this.tr('loading_location'))
                     .fontSize(14)
                     .fontColor(this.colors.textWhite)
@@ -156,15 +141,12 @@ export struct QiblaPage {
                 })
 
                 this.CompassView()
-              }
-              .layoutWeight(1)
-              .alignItems(HorizontalAlign.Center)
+              }.layoutWeight(1).alignItems(HorizontalAlign.Center)
 
               Column() {
                 Column() {
                   Row() {
-                    Text(this.tr('qibla_direction'))
-                      .fontSize(13).fontColor(this.colors.textMuted)
+                    Text(this.tr('qibla_direction')).fontSize(13).fontColor(this.colors.textMuted)
                     Blank()
                     Text(this.formatDegree(this.qiblaBearing))
                       .fontSize(15)
@@ -176,8 +158,7 @@ export struct QiblaPage {
                   Divider().color(this.colors.borderSoft).width('100%')
 
                   Row() {
-                    Text(this.tr('device_heading'))
-                      .fontSize(13).fontColor(this.colors.textMuted)
+                    Text(this.tr('device_heading')).fontSize(13).fontColor(this.colors.textMuted)
                     Blank()
                     Text(this.formatDegree(this.smoothedHeading))
                       .fontSize(15)
@@ -189,8 +170,7 @@ export struct QiblaPage {
                   Divider().color(this.colors.borderSoft).width('100%')
 
                   Row() {
-                    Text(this.tr('distance_to_kaaba'))
-                      .fontSize(13).fontColor(this.colors.textMuted)
+                    Text(this.tr('distance_to_kaaba')).fontSize(13).fontColor(this.colors.textMuted)
                     Blank()
                     Text(this.formatDistance(this.distanceKm))
                       .fontSize(15)
@@ -206,24 +186,16 @@ export struct QiblaPage {
                 .border({ width: 1, color: this.colors.borderSoft })
 
                 this.StatusCard()
-              }
-              .layoutWeight(1)
-              .alignItems(HorizontalAlign.Start)
-            }
-            .width('100%')
-            .alignItems(VerticalAlign.Top)
-            .padding({
-              left: this.breakpoint === 'lg' ? 48 : 24,
-              right: this.breakpoint === 'lg' ? 48 : 24
+              }.layoutWeight(1).alignItems(HorizontalAlign.Start)
+            }.width('100%').alignItems(VerticalAlign.Top).padding({
+              left: this.breakpoint === 'lg' ? 48 : 24, right: this.breakpoint === 'lg' ? 48 : 24
             })
-          } else {
-            // Phone: single-column layout.
+          } else { // Phone: single-column layout.
             Column() {
               Row({ space: 8 }) { // <-- Added space
                 Image($r('app.media.ic_pin'))
-                  .width(16).height(16) // <-- Matched size to PageHeader
-                  .fillColor(this.colors.accentGold)
-                  .flexShrink(0)
+                  .width(16)
+                  .height(16) // <-- Matched size to PageHeader.fillColor(this.colors.accentGold).flexShrink(0)
                 Text(this.cityName.length > 0 ? this.cityName : this.tr('loading_location'))
                   .fontSize(14)
                   .fontColor(this.colors.textWhite)
@@ -248,8 +220,7 @@ export struct QiblaPage {
 
               Column() {
                 Row() {
-                  Text(this.tr('qibla_direction'))
-                    .fontSize(13).fontColor(this.colors.textMuted)
+                  Text(this.tr('qibla_direction')).fontSize(13).fontColor(this.colors.textMuted)
                   Blank()
                   Text(this.formatDegree(this.qiblaBearing))
                     .fontSize(15)
@@ -261,8 +232,7 @@ export struct QiblaPage {
                 Divider().color(this.colors.borderSoft).width('100%')
 
                 Row() {
-                  Text(this.tr('device_heading'))
-                    .fontSize(13).fontColor(this.colors.textMuted)
+                  Text(this.tr('device_heading')).fontSize(13).fontColor(this.colors.textMuted)
                   Blank()
                   Text(this.formatDegree(this.smoothedHeading))
                     .fontSize(15)
@@ -274,8 +244,7 @@ export struct QiblaPage {
                 Divider().color(this.colors.borderSoft).width('100%')
 
                 Row() {
-                  Text(this.tr('distance_to_kaaba'))
-                    .fontSize(13).fontColor(this.colors.textMuted)
+                  Text(this.tr('distance_to_kaaba')).fontSize(13).fontColor(this.colors.textMuted)
                   Blank()
                   Text(this.formatDistance(this.distanceKm))
                     .fontSize(15)
@@ -294,10 +263,7 @@ export struct QiblaPage {
               this.StatusCard()
 
               Column().height(140)
-            }
-            .width('100%')
-            .padding({ left: 16, right: 16 })
-            .alignItems(HorizontalAlign.Center)
+            }.width('100%').padding({ left: 16, right: 16 }).alignItems(HorizontalAlign.Center)
           }
         }
         .layoutWeight(1)
@@ -306,9 +272,7 @@ export struct QiblaPage {
         .scrollable(ScrollDirection.Vertical)
         .scrollBar(BarState.Auto)
         .edgeEffect(EdgeEffect.Spring)
-      }
-      .width('100%').height('100%')
-      .backgroundColor(this.colors.primaryGreen)
+      }.width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
 
       // ---- Calibration overlay (topmost) ----
       if (this.showCalibrationOverlay) {
@@ -326,10 +290,7 @@ export struct QiblaPage {
     .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
-    .expandSafeArea(
-      [SafeAreaType.SYSTEM],
-      [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM]
-    )
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 
   @Builder
@@ -338,21 +299,19 @@ export struct QiblaPage {
       Column() {
         this.CompassLabels()
       }
-      .width(280).height(280)
+      .width(280)
+      .height(280)
       .rotate({ angle: this.roseAngle })
       .animation({ duration: ROTATION_ANIM_MS, curve: Curve.Linear })
 
       Column() {
         Column() {
           Image($r('app.media.ic_kaaba')).width(36).height(36).fillColor(this.colors.accentGold).margin({ bottom: -8 })
-          Column()
-            .width(4).height(90)
-            .backgroundColor(this.colors.accentGold)
-            .borderRadius(2)
-        }
-        .margin({ bottom: 140 })
+          Column().width(4).height(90).backgroundColor(this.colors.accentGold).borderRadius(2)
+        }.margin({ bottom: 140 })
       }
-      .width(280).height(280)
+      .width(280)
+      .height(280)
       .rotate({ angle: this.needleAngle })
       .animation({ duration: ROTATION_ANIM_MS, curve: Curve.Linear })
 
@@ -387,25 +346,11 @@ export struct QiblaPage {
   @Builder
   CompassLabels() {
     Stack() {
-      Text('N')
-        .fontSize(18).fontWeight(FontWeight.Bold)
-        .fontColor(this.colors.accentGold)
-        .margin({ bottom: 240 })
-      Text('S')
-        .fontSize(18).fontWeight(FontWeight.Medium)
-        .fontColor(this.colors.textMuted)
-        .margin({ top: 240 })
-      Text('E')
-        .fontSize(18).fontWeight(FontWeight.Medium)
-        .fontColor(this.colors.textMuted)
-        .margin({ left: 240 })
-      Text('W')
-        .fontSize(18).fontWeight(FontWeight.Medium)
-        .fontColor(this.colors.textMuted)
-        .margin({ right: 240 })
-    }
-    .width(280).height(280)
-    .direction(Direction.Ltr)
+      Text('N').fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.colors.accentGold).margin({ bottom: 240 })
+      Text('S').fontSize(18).fontWeight(FontWeight.Medium).fontColor(this.colors.textMuted).margin({ top: 240 })
+      Text('E').fontSize(18).fontWeight(FontWeight.Medium).fontColor(this.colors.textMuted).margin({ left: 240 })
+      Text('W').fontSize(18).fontWeight(FontWeight.Medium).fontColor(this.colors.textMuted).margin({ right: 240 })
+    }.width(280).height(280).direction(Direction.Ltr)
   }
 
   @Builder
@@ -424,16 +369,15 @@ export struct QiblaPage {
       } else {
         Row({ space: 8 }) {
           Image($r('app.media.ic_check')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
-          Text(this.tr('compass_ready'))
-            .fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
+          Text(this.tr('compass_ready')).fontSize(12).fontColor(this.colors.textMuted).layoutWeight(1)
           Text(this.tr('qibla_calibrate_hint'))
-            .fontSize(10).fontColor(this.colors.accentGold)
+            .fontSize(10)
+            .fontColor(this.colors.accentGold)
             .decoration({ type: TextDecorationType.Underline })
             .onClick(() => {
               this.showCalibrationOverlay = true;
             })
-        }
-        .width('100%')
+        }.width('100%')
       }
     }
     .width('100%')
@@ -505,8 +449,7 @@ export struct QiblaPage {
    * redundant state writes.
    */
   private evaluateCalibrationNeed(): void {
-    const isPoor = this.sensorAccuracy === SensorAccuracy.UNRELIABLE
-      || this.sensorAccuracy === SensorAccuracy.LOW;
+    const isPoor = this.sensorAccuracy === SensorAccuracy.UNRELIABLE || this.sensorAccuracy === SensorAccuracy.LOW;
 
     if (isPoor && !this.calibrationSkippedThisSession) {
       if (!this.showCalibrationOverlay) {
@@ -551,8 +494,7 @@ export struct QiblaPage {
     }
 
     const hDelta = this.shortestDelta(this.smoothedHeading, rawHeading);
-    this.smoothedHeading =
-      (this.smoothedHeading + hDelta * HEADING_SMOOTHING + 360) % 360;
+    this.smoothedHeading = (this.smoothedHeading + hDelta * HEADING_SMOOTHING + 360) % 360;
 
     const trueHeading = this.smoothedHeading + this.declinationDeg;
 
@@ -579,9 +521,7 @@ export struct QiblaPage {
           rawCity = OfflineCityLookup.translateCityName(rawCity, this.currentLanguage);
         }
 
-        this.cityName = rawCity.length > 0
-          ? `${rawCity} (${this.tr('manual_location')})`
-          : this.tr('manual_location');
+        this.cityName = rawCity.length > 0 ? `${rawCity} (${this.tr('manual_location')})` : this.tr('manual_location');
         this.updateQibla();
         return;
       }
@@ -609,20 +549,12 @@ export struct QiblaPage {
     if (this.latitude === 0 && this.longitude === 0) {
       return;
     }
-    this.qiblaBearing = QiblaCalculator.calculateBearing(
-      this.latitude, this.longitude
-    );
-    this.distanceKm = QiblaCalculator.calculateDistance(
-      this.latitude, this.longitude
-    );
+    this.qiblaBearing = QiblaCalculator.calculateBearing(this.latitude, this.longitude);
+    this.distanceKm = QiblaCalculator.calculateDistance(this.latitude, this.longitude);
 
     try {
-      this.declinationDeg = WmmCalculator.getDeclination(
-        this.latitude,
-        this.longitude,
-        0, // Sea level
-        new Date()
-      );
+      this.declinationDeg = WmmCalculator.getDeclination(this.latitude, this.longitude, 0, // Sea level
+        new Date());
     } catch (e) {
       console.error('WMM calculation failed', e);
       this.declinationDeg = 0; // Fallback
@@ -634,14 +566,10 @@ export struct QiblaPage {
   }
 
   private openLocationSettings(): void {
-    AppStorage.setOrCreate(
-      STORAGE_KEY_SETTINGS_INITIAL_CATEGORY, 'Location'
-    );
+    AppStorage.setOrCreate(STORAGE_KEY_SETTINGS_INITIAL_CATEGORY, 'Location');
     NavHelper.prepareForward();
     router.pushUrl({ url: 'pages/SettingsPage' })
-      .catch((err: Error) =>
-      console.error('Navigation failed:', JSON.stringify(err))
-      );
+      .catch((err: Error) => console.error('Navigation failed:', JSON.stringify(err)));
   }
 
   private formatDegree(deg: number): string {

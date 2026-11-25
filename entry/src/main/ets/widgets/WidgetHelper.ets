@@ -39,12 +39,8 @@ export class WidgetHelper {
       }
 
       if (alive.length !== formIds.length) {
-        await PreferencesHelper.setString(
-          STORAGE_KEY_WIDGET_FORM_IDS,
-          JSON.stringify(alive)
-        );
-        AppLogger.info(TAG,
-          `Pruned ${formIds.length - alive.length} stale ID(s); ${alive.length} remain`);
+        await PreferencesHelper.setString(STORAGE_KEY_WIDGET_FORM_IDS, JSON.stringify(alive));
+        AppLogger.info(TAG, `Pruned ${formIds.length - alive.length} stale ID(s); ${alive.length} remain`);
       }
     } catch (e) {
       AppLogger.warn(TAG, `refreshAll failed: ${(e as Error).message}`);
@@ -57,20 +53,16 @@ export class WidgetHelper {
     }
     WidgetHelper.debounceTimer = setTimeout((): void => {
       WidgetHelper.debounceTimer = -1;
-      WidgetHelper.refreshAll().catch((): void => {
-        // swallow
+      WidgetHelper.refreshAll().catch((): void => { // swallow
       });
     }, 400);
   }
 
   static async refreshOne(formId: string): Promise<boolean> {
     try {
-      const dim: string = await PreferencesHelper.getString(
-        STORAGE_KEY_WIDGET_DIM_PREFIX + formId, '2*2'
-      );
-      const formName: string = await PreferencesHelper.getString(
-        STORAGE_KEY_WIDGET_NAME_PREFIX + formId, 'prayer_widget'
-      );
+      const dim: string = await PreferencesHelper.getString(STORAGE_KEY_WIDGET_DIM_PREFIX + formId, '2*2');
+      const formName: string =
+        await PreferencesHelper.getString(STORAGE_KEY_WIDGET_NAME_PREFIX + formId, 'prayer_widget');
 
       // Resolve the language strictly from disk preferences
       await PreferencesHelper.reloadFromDisk();
@@ -107,8 +99,7 @@ export class WidgetHelper {
         data = await WidgetDataBuilder.build(dim, lang);
       }
 
-      const fb: formBindingData.FormBindingData =
-        WidgetDataBuilder.toFormBindingData(data);
+      const fb: formBindingData.FormBindingData = WidgetDataBuilder.toFormBindingData(data);
       await formProvider.updateForm(formId, fb);
       return true;
     } catch (e) {
@@ -119,9 +110,7 @@ export class WidgetHelper {
   static async readFormIds(): Promise<string[]> {
     try {
       await PreferencesHelper.reloadFromDisk();
-      const json: string = await PreferencesHelper.getString(
-        STORAGE_KEY_WIDGET_FORM_IDS, '[]'
-      );
+      const json: string = await PreferencesHelper.getString(STORAGE_KEY_WIDGET_FORM_IDS, '[]');
       const parsed: Object = JSON.parse(json);
       if (!Array.isArray(parsed)) {
         return [];

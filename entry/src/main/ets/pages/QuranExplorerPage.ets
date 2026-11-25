@@ -37,11 +37,12 @@ struct QuranExplorerPage {
   }
 
   build() {
-    Column() {
-      // Top Bar
+    Column() { // Top Bar
       Row({ space: 16 }) {
         Row() {
-          Image($r('app.media.ic_chevron_right')).width(20).height(20)
+          Image($r('app.media.ic_chevron_right'))
+            .width(20)
+            .height(20)
             .fillColor(this.colors.textWhite)
             .rotate({ angle: L.isRtlLang(this.appLanguage) ? 0 : 180 })
         }
@@ -58,16 +59,13 @@ struct QuranExplorerPage {
           .fontColor(this.colors.textWhite)
           .layoutWeight(1)
           .textAlign(TextAlign.Start)
-      }
-      .width('100%').height(72).padding({ left: 16, right: 16 })
-      .backgroundColor(this.colors.cardDark)
+      }.width('100%').height(72).padding({ left: 16, right: 16 }).backgroundColor(this.colors.cardDark)
 
       if (this.isLoading) {
         LoadingProgress().width(40).height(40).color(this.colors.accentGold).margin({ top: 40 })
       } else {
         Scroll() {
-          Column() {
-            // Featured Section
+          Column() { // Featured Section
             this.FeaturedSection()
 
             // Tabs
@@ -86,27 +84,30 @@ struct QuranExplorerPage {
             } else {
               this.ProphetsList()
             }
-          }
-          .width('100%')
-        }
-        .layoutWeight(1)
+          }.width('100%')
+        }.layoutWeight(1)
       }
     }
-    .width('100%').height('100%')
+    .width('100%')
+    .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
   }
 
   @Builder
   FeaturedSection() {
-    Row({ space: 12 }) {
-      // Rabbana Hero Card
+    Row({ space: 12 }) { // Rabbana Hero Card
       Column() {
         Image($r('app.media.ic_dua')).width(24).height(24).fillColor(this.colors.accentGold).margin({ bottom: 8 })
         Text(L.get('rabbana_title', this.appLanguage))
-          .fontSize(16).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+          .fontSize(16)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.colors.textWhite)
         Text(L.get('rabbana_desc', this.appLanguage))
-          .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 4 }).maxLines(2)
+          .fontSize(11)
+          .fontColor(this.colors.textMuted)
+          .margin({ top: 4 })
+          .maxLines(2)
       }
       .layoutWeight(1)
       .padding(16)
@@ -128,9 +129,14 @@ struct QuranExplorerPage {
           .fillColor(this.colors.accentGold)
           .margin({ bottom: 8 })
         Text(L.get('prophetic_duas', this.appLanguage))
-          .fontSize(16).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+          .fontSize(16)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.colors.textWhite)
         Text(L.get('prophetic_desc', this.appLanguage))
-          .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 4 }).maxLines(2)
+          .fontSize(11)
+          .fontColor(this.colors.textMuted)
+          .margin({ top: 4 })
+          .maxLines(2)
       }
       .layoutWeight(1)
       .padding(16)
@@ -143,8 +149,7 @@ struct QuranExplorerPage {
           params: { collectionId: 'prophets', title: L.get('prophetic_duas', this.appLanguage) }
         });
       })
-    }
-    .width('100%').padding({ left: 16, right: 16, top: 16 })
+    }.width('100%').padding({ left: 16, right: 16, top: 16 })
   }
 
   @Builder
@@ -175,12 +180,15 @@ struct QuranExplorerPage {
               .maxLines(1)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
             Text(`${col.dua_ids.length} ${L.get('duas', this.appLanguage)}`)
-              .fontSize(12).fontColor(this.colors.textMuted).margin({ top: 4 })
-          }
-          .alignItems(HorizontalAlign.Start).layoutWeight(1)
+              .fontSize(12)
+              .fontColor(this.colors.textMuted)
+              .margin({ top: 4 })
+          }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
           Image($r('app.media.ic_chevron_right'))
-            .width(16).height(16).fillColor(this.colors.accentGold)
+            .width(16)
+            .height(16)
+            .fillColor(this.colors.accentGold)
             .rotate({ angle: L.isRtlLang(this.appLanguage) ? 180 : 0 })
         }
         .width('100%')
@@ -197,8 +205,7 @@ struct QuranExplorerPage {
           });
         })
       }, (col: QuranCollection) => `col-${col.id}-${this.appLanguage}`)
-    }
-    .width('100%').padding(16)
+    }.width('100%').padding(16)
   }
 
   @Builder
@@ -207,10 +214,14 @@ struct QuranExplorerPage {
       ForEach(this.prophets, (prop: QuranProphet) => {
         Row() {
           Text(QuranGraphService.getProphetName(prop.id))
-            .fontSize(16).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+            .fontSize(16)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.textWhite)
             .layoutWeight(1)
           Image($r('app.media.ic_chevron_right'))
-            .width(16).height(16).fillColor(this.colors.accentGold)
+            .width(16)
+            .height(16)
+            .fillColor(this.colors.accentGold)
             .rotate({ angle: L.isRtlLang(this.appLanguage) ? 180 : 0 })
         }
         .width('100%')
@@ -227,7 +238,6 @@ struct QuranExplorerPage {
           });
         })
       }, (prop: QuranProphet) => `prop-${prop.id}-${this.appLanguage}`)
-    }
-    .width('100%').padding(16)
+    }.width('100%').padding(16)
   }
 }

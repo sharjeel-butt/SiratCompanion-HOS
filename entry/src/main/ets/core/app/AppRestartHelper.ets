@@ -31,8 +31,7 @@ import { AppLogger } from './AppLogger';
 export class AppRestartHelper {
   static async restart(context: common.UIAbilityContext): Promise<boolean> {
     const want: Want = {
-      bundleName: 'com.siratcompanion.hos.app',
-      abilityName: 'EntryAbility'
+      bundleName: 'com.siratcompanion.hos.app', abilityName: 'EntryAbility'
     };
 
     AppLogger.info('AppRestartHelper', 'restart start');
@@ -41,8 +40,7 @@ export class AppRestartHelper {
     // continue immediately so startAbility fires while the
     // context is still valid.
     context.terminateSelf().catch((err: BusinessError) => {
-      AppLogger.warn('AppRestartHelper',
-        `terminateSelf failed: code=${err.code ?? ''} msg=${err.message ?? ''}`);
+      AppLogger.warn('AppRestartHelper', `terminateSelf failed: code=${err.code ?? ''} msg=${err.message ?? ''}`);
     });
 
     // Fire startAbility immediately — the intent is queued in
@@ -53,8 +51,7 @@ export class AppRestartHelper {
       return true;
     } catch (err) {
       const e = err as BusinessError;
-      AppLogger.error('AppRestartHelper',
-        `startAbility failed: code=${e.code ?? ''} msg=${e.message ?? ''}`);
+      AppLogger.error('AppRestartHelper', `startAbility failed: code=${e.code ?? ''} msg=${e.message ?? ''}`);
       return true;
     }
   }

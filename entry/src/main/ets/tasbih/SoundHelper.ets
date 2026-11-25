@@ -39,36 +39,29 @@ export class SoundHelper {
 
     try {
       const audioRendererInfo: audio.AudioRendererInfo = {
-        usage: audio.StreamUsage.STREAM_USAGE_MUSIC,
-        rendererFlags: 0
+        usage: audio.StreamUsage.STREAM_USAGE_MUSIC, rendererFlags: 0
       };
 
-      const pool: media.SoundPool = await media.createSoundPool(
-        TASBIH_SOUND_OPTIONS.length + 2, // headroom for concurrent streams
-        audioRendererInfo
-      );
+      const pool: media.SoundPool =
+        await media.createSoundPool(TASBIH_SOUND_OPTIONS.length + 2, // headroom for concurrent streams
+          audioRendererInfo);
 
       const mgr: resourceManager.ResourceManager = context.resourceManager;
 
       for (const opt of TASBIH_SOUND_OPTIONS) {
         try {
-          const fd: resourceManager.RawFileDescriptor =
-            await mgr.getRawFd(opt.file);
+          const fd: resourceManager.RawFileDescriptor = await mgr.getRawFd(opt.file);
           const sid: number = await pool.load(fd.fd, fd.offset, fd.length);
           SoundHelper.soundIds.set(opt.id, sid);
         } catch (err) {
           const e = err as BusinessError;
-          console.warn(
-            `[SoundHelper] failed to load ${opt.file}: ${e.code} ${e.message}`
-          );
+          console.warn(`[SoundHelper] failed to load ${opt.file}: ${e.code} ${e.message}`);
         }
       }
 
       SoundHelper.pool = pool;
       SoundHelper.ready = SoundHelper.soundIds.size > 0;
-      console.info(
-        `[SoundHelper] ready with ${SoundHelper.soundIds.size} sound(s)`
-      );
+      console.info(`[SoundHelper] ready with ${SoundHelper.soundIds.size} sound(s)`);
     } catch (err) {
       const e = err as BusinessError;
       console.warn(`[SoundHelper] init failed: ${e.code} ${e.message}`);
@@ -86,8 +79,7 @@ export class SoundHelper {
   static tick(): void {
     if (!SoundHelper.isEnabled()) {
       return;
-    }
-    // Respect the system's silent mode — when the ringer is set to
+    } // Respect the system's silent mode — when the ringer is set to
     // silent or vibrate, suppress our own sound entirely.
     if (!SystemFeedbackHelper.isSystemSoundEnabled()) {
       return;

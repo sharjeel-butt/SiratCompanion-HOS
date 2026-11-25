@@ -53,18 +53,15 @@ export class HadithDbHelper {
       if (needsExtract) {
         if (hasValidExisting && !versionMatches) {
           AppLogger.info('HadithDbHelper',
-            `Re-extracting ${lang}.db: bundle version ` +
-              `${storedVersion} -> ${bundledVersion}`);
+            `Re-extracting ${lang}.db: bundle version ` + `${storedVersion} -> ${bundledVersion}`);
         } else {
-          AppLogger.info('HadithDbHelper',
-            `Extracting ${lang}.db.gz to sandbox...`);
+          AppLogger.info('HadithDbHelper', `Extracting ${lang}.db.gz to sandbox...`);
         }
 
         const rawfilePath = RawPaths.hadithDb(lang);
         const tempGzPath = `${context.cacheDir}/${lang}.db.gz`;
 
-        try {
-          // Clean any leftover temp file from a previous failed run.
+        try { // Clean any leftover temp file from a previous failed run.
           if (fs.accessSync(tmpPath)) {
             try {
               fs.unlinkSync(tmpPath);
@@ -93,10 +90,7 @@ export class HadithDbHelper {
           // Writing to a temp path (not dbPath) ensures a mid-stream
           // failure cannot corrupt a previously-working DB.
           const gzip = zlib.createGZipSync();
-          const dbFile = fs.openSync(
-            tmpPath,
-            fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC
-          );
+          const dbFile = fs.openSync(tmpPath, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC);
           try {
             await gzip.gzopen(tempGzPath, 'rb');
             const bufSize = 65536; // 64 KB chunks
@@ -111,8 +105,7 @@ export class HadithDbHelper {
             }
           } finally {
             await gzip.gzclose().catch((e: Error) => {
-              AppLogger.warn('HadithDbHelper',
-                `gzclose failed for ${lang}: ${e.message}`);
+              AppLogger.warn('HadithDbHelper', `gzclose failed for ${lang}: ${e.message}`);
             });
             fs.closeSync(dbFile);
           }
@@ -151,13 +144,11 @@ export class HadithDbHelper {
           // 6. Version persisted only on full success.
           await PreferencesHelper.setString(versionKey, bundledVersion);
           await PreferencesHelper.flushNow();
-          AppLogger.info('HadithDbHelper',
-            `Extracted ${lang}.db at bundle version ${bundledVersion}`);
+          AppLogger.info('HadithDbHelper', `Extracted ${lang}.db at bundle version ${bundledVersion}`);
 
         } catch (extractErr) {
           const e = extractErr as Error;
-          AppLogger.warn('HadithDbHelper',
-            `Extraction failed for ${lang}: ${e.message}`);
+          AppLogger.warn('HadithDbHelper', `Extraction failed for ${lang}: ${e.message}`);
 
           // Clean temp file — live dbPath is untouched.
           if (fs.accessSync(tmpPath)) {
@@ -169,12 +160,9 @@ export class HadithDbHelper {
 
           if (!hasValidExisting) {
             throw e;
-          }
-          // Fall through: old dbPath is still valid.
-          AppLogger.info('HadithDbHelper',
-            `Using existing ${lang}.db (version ${storedVersion})`);
-        } finally {
-          // Always clean temp .gz.
+          } // Fall through: old dbPath is still valid.
+          AppLogger.info('HadithDbHelper', `Using existing ${lang}.db (version ${storedVersion})`);
+        } finally { // Always clean temp .gz.
           if (fs.accessSync(tempGzPath)) {
             try {
               fs.unlinkSync(tempGzPath);
@@ -198,8 +186,7 @@ export class HadithDbHelper {
       await HadithDbHelper.discoverSchema();
       await HadithDbHelper.loadMetadata(context, lang);
 
-      AppLogger.info('HadithDbHelper',
-        `Opened ${lang}.db (version ${bundledVersion})`);
+      AppLogger.info('HadithDbHelper', `Opened ${lang}.db (version ${bundledVersion})`);
       return true;
 
     } catch (error) {
@@ -432,12 +419,9 @@ export class HadithDbHelper {
       return 0;
     }
 
-    try {
-      // We use LIKE because the collection column might be "urd-bukhari" or "bukhari"
-      const resultSet = await HadithDbHelper.store.querySql(
-        'SELECT COUNT(*) FROM hadiths WHERE collection LIKE ?',
-        [`%${collectionId}%`]
-      );
+    try { // We use LIKE because the collection column might be "urd-bukhari" or "bukhari"
+      const resultSet = await HadithDbHelper.store.querySql('SELECT COUNT(*) FROM hadiths WHERE collection LIKE ?',
+        [`%${collectionId}%`]);
 
       let count = 0;
       if (resultSet.goToFirstRow()) {
@@ -490,8 +474,7 @@ export class HadithDbHelper {
           HadithDbHelper.localizedSectionsMap.set(lang, JSON.parse(langStr) as Record<string, string>);
         } catch (e) {
           if (lang !== 'en') {
-            const masterData: Uint8Array =
-              await ctx.resourceManager.getRawFileContent(RawPaths.MASTER_SECTIONS);
+            const masterData: Uint8Array = await ctx.resourceManager.getRawFileContent(RawPaths.MASTER_SECTIONS);
             const masterStr: string = util.TextDecoder.create('utf-8').decodeToString(masterData);
             HadithDbHelper.localizedSectionsMap.set(lang, JSON.parse(masterStr) as Record<string, string>);
           }
@@ -558,14 +541,12 @@ export class HadithDbHelper {
     } else if (lang === 'ur') {
       prefix = 'urd-';
     } else if (lang === 'en') {
-      prefix =
-        'eng-';
+      prefix = 'eng-';
     } else if (lang === 'bn') {
       prefix = 'ben-';
     } else if (lang === 'tr') {
       prefix = 'tur-';
-    } else if (lang ===
-      'id') {
+    } else if (lang === 'id') {
       prefix = 'ind-';
     }
 
@@ -590,14 +571,10 @@ export class HadithDbHelper {
    * Pipeline bumps it whenever hadith content changes; apps ship the
    * new manifest alongside the new DBs.
    */
-  private static async readBundledVersion(
-    context: common.Context
-  ): Promise<string> {
+  private static async readBundledVersion(context: common.Context): Promise<string> {
     try {
       const data: Uint8Array = await context.resourceManager.getRawFileContent(RawPaths.DATABASE_VERSION);
-      const version = util.TextDecoder.create('utf-8')
-        .decodeToString(data)
-        .trim();
+      const version = util.TextDecoder.create('utf-8').decodeToString(data).trim();
       return version.length > 0 ? version : '0';
     } catch (e) {
       return '0';

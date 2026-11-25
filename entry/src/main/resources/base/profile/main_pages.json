@@ -20,6 +20,7 @@
     "pages/HadithHomePage",
     "pages/HadithDetailsPage",
     "pages/HadithBrowsePage",
-    "pages/PrivacyPolicyPage"
+    "pages/PrivacyPolicyPage",
+    "pages/NotificationCenterPage"
   ]
 }

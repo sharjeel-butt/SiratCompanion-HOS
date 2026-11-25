@@ -10,12 +10,8 @@ import { L } from '../../i18n/LocalizationHelper';
 import { AppLogger } from '../app/AppLogger';
 
 export class PdfExportHelper {
-  static async exportBuilderToPdf(
-    context: common.UIAbilityContext,
-    uiContext: UIContext,
-    builder: () => void,
-    fileName: string
-  ): Promise<void> {
+  static async exportBuilderToPdf(context: common.UIAbilityContext, uiContext: UIContext, builder: () => void,
+    fileName: string): Promise<void> {
     let sandboxJpgPath = '';
     let sandboxPdfPath = '';
 
@@ -24,13 +20,11 @@ export class PdfExportHelper {
 
       // ── 1. Snapshot ──────────────────────────────────────
       const snapshotOptions: componentSnapshot.SnapshotOptions = { scale: 1 };
-      const pixelMap: image.PixelMap = await uiContext
-        .getComponentSnapshot()
-        .createFromBuilder(builder, 10, false, snapshotOptions);
+      const pixelMap: image.PixelMap =
+        await uiContext.getComponentSnapshot().createFromBuilder(builder, 10, false, snapshotOptions);
 
       AppLogger.info('PdfExportHelper',
-        `snapshot ok: ${pixelMap.getImageInfoSync().size.width}×` +
-          `${pixelMap.getImageInfoSync().size.height}`);
+        `snapshot ok: ${pixelMap.getImageInfoSync().size.width}×` + `${pixelMap.getImageInfoSync().size.height}`);
 
       // ── 2. JPEG ──────────────────────────────────────────
       sandboxJpgPath = context.filesDir + '/' + fileName + '.jpg';
@@ -38,10 +32,8 @@ export class PdfExportHelper {
 
       const imagePacker: image.ImagePacker = image.createImagePacker();
       const packOpts: image.PackingOption = { format: 'image/jpeg', quality: 95 };
-      const imageFile: fs.File = fs.openSync(
-        sandboxJpgPath,
-        fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC
-      );
+      const imageFile: fs.File =
+        fs.openSync(sandboxJpgPath, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC);
       await imagePacker.packToFile(pixelMap, imageFile.fd, packOpts);
       fs.closeSync(imageFile);
 
@@ -52,8 +44,7 @@ export class PdfExportHelper {
       }
 
       // ── 3. PDF in sandbox ────────────────────────────────
-      sandboxPdfPath = context.filesDir + '/' + fileName + '.pdf';
-      // Delete any stale PDF from a previous failed run so
+      sandboxPdfPath = context.filesDir + '/' + fileName + '.pdf'; // Delete any stale PDF from a previous failed run so
       // saveDocument() starts on a clean path.
       PdfExportHelper.deleteIfExists(sandboxPdfPath);
 
@@ -92,8 +83,7 @@ export class PdfExportHelper {
       promptAction.showToast({ message: L.get('export_success') });
     } catch (err) {
       const e = err as BusinessError;
-      AppLogger.error('PdfExportHelper',
-        `export failed: code=${e.code ?? ''} msg=${e.message ?? JSON.stringify(err)}`);
+      AppLogger.error('PdfExportHelper', `export failed: code=${e.code ?? ''} msg=${e.message ?? JSON.stringify(err)}`);
       promptAction.showToast({ message: L.get('export_failed') });
     } finally {
       PdfExportHelper.deleteIfExists(sandboxJpgPath);
@@ -123,18 +113,13 @@ export class PdfExportHelper {
    */
   private static copyFileToUri(srcPath: string, dstUri: string): boolean {
     let dstFile: fs.File | null = null;
-    try {
-      // Picker pre-creates the file, so no CREATE flag needed.
+    try { // Picker pre-creates the file, so no CREATE flag needed.
       // TRUNC may be rejected on some firmware — fall back to
       // plain WRITE_ONLY if it throws.
       try {
-        dstFile = fs.openSync(
-          dstUri,
-          fs.OpenMode.WRITE_ONLY | fs.OpenMode.TRUNC
-        );
+        dstFile = fs.openSync(dstUri, fs.OpenMode.WRITE_ONLY | fs.OpenMode.TRUNC);
       } catch (e1) {
-        AppLogger.warn('PdfExportHelper',
-          'WRITE_ONLY|TRUNC failed, retrying WRITE_ONLY');
+        AppLogger.warn('PdfExportHelper', 'WRITE_ONLY|TRUNC failed, retrying WRITE_ONLY');
         dstFile = fs.openSync(dstUri, fs.OpenMode.WRITE_ONLY);
       }
 
@@ -144,8 +129,7 @@ export class PdfExportHelper {
 
       // Verify the write actually landed.
       const dstStat = fs.statSync(dstUri);
-      AppLogger.info('PdfExportHelper',
-        `copy complete: dst size = ${dstStat.size} bytes`);
+      AppLogger.info('PdfExportHelper', `copy complete: dst size = ${dstStat.size} bytes`);
 
       return dstStat.size > 0;
     } catch (err) {
@@ -167,10 +151,7 @@ export class PdfExportHelper {
   // HELPERS
   // ============================================================
 
-  private static async pickSaveLocation(
-    context: common.UIAbilityContext,
-    fileName: string
-  ): Promise<string> {
+  private static async pickSaveLocation(context: common.UIAbilityContext, fileName: string): Promise<string> {
     try {
       const documentPicker = new picker.DocumentViewPicker(context);
       const options = new picker.DocumentSaveOptions();

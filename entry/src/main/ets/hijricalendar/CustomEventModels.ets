@@ -1,10 +1,7 @@
 // entry/src/main/ets/models/CustomEventModels.ets
 
 export enum RecurrenceType {
-  NONE = 'none',
-  YEARLY = 'yearly',
-  MONTHLY = 'monthly',
-  WEEKLY = 'weekly'
+  NONE = 'none', YEARLY = 'yearly', MONTHLY = 'monthly', WEEKLY = 'weekly'
 }
 
 export interface CustomEvent {

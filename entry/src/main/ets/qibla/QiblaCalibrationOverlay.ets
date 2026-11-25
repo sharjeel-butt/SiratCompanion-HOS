@@ -76,20 +76,15 @@ export struct QiblaCalibrationOverlay {
   // ============================================================
 
   build() {
-    Stack() {
-      // ---- Dim backdrop ----
+    Stack() { // ---- Dim backdrop ----
       Column()
-        .width('100%').height('100%')
-        .backgroundColor(this.isDarkMode
-          ? 'rgba(0, 0, 0, 0.85)'
-          : 'rgba(0, 0, 0, 0.72)')
+        .width('100%')
+        .height('100%')
+        .backgroundColor(this.isDarkMode ? 'rgba(0, 0, 0, 0.85)' : 'rgba(0, 0, 0, 0.72)')
 
       // ---- Centered card ----
       Column() {
-        Image($r('app.media.tab_compass'))
-          .width(48).height(48)
-          .fillColor('#FFFFFF')
-          .margin({ bottom: 16 })
+        Image($r('app.media.tab_compass')).width(48).height(48).fillColor('#FFFFFF').margin({ bottom: 16 })
 
         // Title
         Text(L.get('qibla_calibrate_title', this.currentLanguage))
@@ -125,17 +120,11 @@ export struct QiblaCalibrationOverlay {
             .onClick(() => {
               this.onSkip();
             })
-        } else {
-          // Placeholder keeps the layout height stable
+        } else { // Placeholder keeps the layout height stable
           Row().height(38).margin({ top: 8 })
         }
-      }
-      .width('100%')
-      .padding({ top: 40, bottom: 40 })
-      .alignItems(HorizontalAlign.Center)
-    }
-    .width('100%').height('100%')
-    .alignContent(Alignment.Center)
+      }.width('100%').padding({ top: 40, bottom: 40 }).alignItems(HorizontalAlign.Center)
+    }.width('100%').height('100%').alignContent(Alignment.Center)
   }
 
   // ============================================================
@@ -144,13 +133,11 @@ export struct QiblaCalibrationOverlay {
 
   @Builder
   FigureEightTrack() {
-    Stack() {
-      // ---- Ghost path — the ∞ shape drawn with dots ----
+    Stack() { // ---- Ghost path — the ∞ shape drawn with dots ----
       this.GhostPath()
 
       // ---- Animated tracer (a glowing dot with a phone glyph) ----
-      Stack() {
-        // Outer glow
+      Stack() { // Outer glow
         Column()
           .width(52)
           .height(52)
@@ -171,9 +158,7 @@ export struct QiblaCalibrationOverlay {
             offsetY: 0
           })
 
-      }
-      .width(24).height(24)
-      .translate({ x: this.tracerX, y: this.tracerY })
+      }.width(24).height(24).translate({ x: this.tracerX, y: this.tracerY })
 
       // The tracer stays visible always — it's the focal point.
     }
@@ -196,25 +181,18 @@ export struct QiblaCalibrationOverlay {
           .width(6)
           .height(6)
           .borderRadius(3)
-          .backgroundColor(i <= Math.floor(this.pathProgress * 48)
-            ? 'rgba(255, 193, 7, 0.75)'
-            : 'rgba(255, 255, 255, 0.18)')
+          .backgroundColor(
+            i <= Math.floor(this.pathProgress * 48) ? 'rgba(255, 193, 7, 0.75)' : 'rgba(255, 255, 255, 0.18)')
           .translate({ x: pt.x, y: pt.y })
-      }, (pt: GhostPoint, i: number) =>
-      // FIX: Include pathProgress so the component rebuilds when the animation ticks
-      `pt-${i}-${Math.floor(this.pathProgress * 48)}`
-      )
-    }
-    .width(QiblaCalibrationOverlay.TRACE_W)
-    .height(QiblaCalibrationOverlay.TRACE_H)
-    .direction(Direction.Ltr)
+      }, (pt: GhostPoint, i: number) => // FIX: Include pathProgress so the component rebuilds when the animation ticks
+      `pt-${i}-${Math.floor(this.pathProgress * 48)}`)
+    }.width(QiblaCalibrationOverlay.TRACE_W).height(QiblaCalibrationOverlay.TRACE_H).direction(Direction.Ltr)
   }
 
   private animateTracer(): void {
     this.animTimerId = setInterval(() => {
       const elapsed = Date.now() - this.startTime;
-      const t = (elapsed % QiblaCalibrationOverlay.LOOP_MS)
-        / QiblaCalibrationOverlay.LOOP_MS;
+      const t = (elapsed % QiblaCalibrationOverlay.LOOP_MS) / QiblaCalibrationOverlay.LOOP_MS;
 
       // Parametric figure-8:
       //   x = A · sin(2πt)
@@ -248,8 +226,7 @@ export struct QiblaCalibrationOverlay {
     for (let i = 0; i < N; i++) {
       const angle = (i / N) * 2 * Math.PI;
       const p: GhostPoint = {
-        x: Math.sin(angle) * A,
-        y: Math.sin(2 * angle) * B
+        x: Math.sin(angle) * A, y: Math.sin(2 * angle) * B
       };
       out.push(p);
     }

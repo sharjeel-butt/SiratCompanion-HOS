@@ -36,13 +36,11 @@ export class SourceParser {
         } else if (col === 'musl') {
           col = 'muslim';
         } else if (col === 'abud') {
-          col =
-            'abudawud';
+          col = 'abudawud';
         } else if (col === 'tirm') {
           col = 'tirmidhi';
         } else if (col === 'nasa') {
-          col =
-            'nasai';
+          col = 'nasai';
         } else if (col === 'ibnm') {
           col = 'ibnmajah';
         } else if (col === 'mali') {
@@ -50,8 +48,7 @@ export class SourceParser {
         }
 
         const colKey = 'collection_' + col;
-        const locCol = L.get(colKey, lang);
-        // Fallback to capitalized English name if localized key is missing
+        const locCol = L.get(colKey, lang); // Fallback to capitalized English name if localized key is missing
         const finalCol = locCol !== colKey ? locCol : col.charAt(0).toUpperCase() + col.slice(1);
 
         return `${finalCol} ${num}`;

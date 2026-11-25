@@ -50,8 +50,7 @@ export class PrayerOffsetsHelper {
     return value;
   }
 
-  static format(value: number): string {
-    // Always show a sign, including for zero, so the pill reads like
+  static format(value: number): string { // Always show a sign, including for zero, so the pill reads like
     // a signed delta rather than a plain number. Uses the Unicode
     // minus sign (U+2212) so it looks balanced next to the plus.
     if (value === 0) {

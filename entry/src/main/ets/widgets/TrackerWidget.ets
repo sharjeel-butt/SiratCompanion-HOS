@@ -27,8 +27,7 @@ struct TrackerWidget {
   @LocalStorageProp('taskHadith') taskHadith: string = 'Hadith';
 
   build() {
-    Stack() {
-      // 👇 NEW: Background Layer
+    Stack() { // 👇 NEW: Background Layer
       Column()
         .width('100%')
         .height('100%')
@@ -44,8 +43,7 @@ struct TrackerWidget {
           .fillColor('#FFFFFF')
           .opacity(0.03)
           .position({ x: '60%', y: '-10%' })
-      }
-      .width('100%').height('100%').clip(true).borderRadius(24)
+      }.width('100%').height('100%').clip(true).borderRadius(24)
 
       Column() {
         if (this.error.length > 0) {
@@ -369,8 +367,7 @@ struct TrackerWidget {
 
               // 👇 ROW 2: HADITH & RECITATIONS
               Row({ space: 8 }) {
-                if (this.isRtl) {
-                  // RTL: Recitations on Left, Hadith on Right
+                if (this.isRtl) { // RTL: Recitations on Left, Hadith on Right
                   Row({ space: 8 }) {
                     Image($r('app.media.ic_book')).width('18vp').height('18vp').fillColor('#E8A44C')
                     Text(this.taskRecitations)
@@ -416,8 +413,7 @@ struct TrackerWidget {
                       params: { targetPage: 'pages/HadithHomePage' }
                     });
                   })
-                } else {
-                  // LTR: Hadith on Left, Recitations on Right
+                } else { // LTR: Hadith on Left, Recitations on Right
                   Row({ space: 8 }) {
                     Image($r('app.media.ic_hadith_book')).width('18vp').height('18vp').fillColor('#E8A44C')
                     Text(this.taskHadith)
@@ -468,8 +464,7 @@ struct TrackerWidget {
 
               // 👇 ROW 3: DUAS & TASBIH
               Row({ space: 8 }) {
-                if (this.isRtl) {
-                  // RTL: Tasbih on Left, Duas on Right
+                if (this.isRtl) { // RTL: Tasbih on Left, Duas on Right
                   Row({ space: 8 }) {
                     Image($r('app.media.ic_nav_tasbih')).width('18vp').height('18vp').fillColor('#E8A44C')
                     Text(this.taskTasbih)
@@ -515,8 +510,7 @@ struct TrackerWidget {
                       params: { targetPage: 'pages/DuasPage' }
                     });
                   })
-                } else {
-                  // LTR: Duas on Left, Tasbih on Right
+                } else { // LTR: Duas on Left, Tasbih on Right
                   Row({ space: 8 }) {
                     Image($r('app.media.ic_dua')).width('18vp').height('18vp').fillColor('#E8A44C')
                     Text(this.taskDua)
@@ -567,11 +561,8 @@ struct TrackerWidget {
             }.width('100%').margin({ top: 12 }).direction(Direction.Ltr)
           }
         }
-      }
-      .width('100%').height('100%').padding(16).justifyContent(FlexAlign.SpaceBetween)
-    }
-    .width('100%').height('100%').direction(Direction.Ltr)
-    .onClick(() => {
+      }.width('100%').height('100%').padding(16).justifyContent(FlexAlign.SpaceBetween)
+    }.width('100%').height('100%').direction(Direction.Ltr).onClick(() => {
       postCardAction(this, {
         action: 'router',
         bundleName: 'com.siratcompanion.hos.app',

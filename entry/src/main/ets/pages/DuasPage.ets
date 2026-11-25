@@ -23,10 +23,7 @@ interface CategoryEntry {
 @Component
 struct DuasPage {
   @StorageLink(STORAGE_KEY_DUA_TRANSLATION_LANG) @Watch('onDuaLangChanged') duaTransLang: string = 'default';
-
-  @StorageLink(STORAGE_KEY_LANGUAGE)
-  @Watch('onLangChanged')
-  appLanguage: string = 'en';
+  @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLangChanged') appLanguage: string = 'en';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State duas: CompleteDua[] = [];
   @State filteredDuas: CompleteDua[] = [];
@@ -94,8 +91,7 @@ struct DuasPage {
     await HadithSearchService.loadI18n(ctx, this.appLanguage);
 
     // 5. Build chips — canonical order, filter to non-empty
-    const chips: CategoryEntry[] = [];
-    // Always show "all" and "favorites" first
+    const chips: CategoryEntry[] = []; // Always show "all" and "favorites" first
     chips.push({ name: 'all', count: this.duas.length });
     chips.push({ name: 'favorites', count: this.duas.filter(d => d.isFavorite).length });
     for (const cat of canonical) {
@@ -132,18 +128,14 @@ struct DuasPage {
 
     if (this.searchQuery.trim().length > 0) {
       const q = this.searchQuery.toLowerCase();
-      result = result.filter((d: CompleteDua) =>
-      d.arabic.includes(q) ||
-        d.translatedName.toLowerCase().includes(q) ||
-        d.translatedText.toLowerCase().includes(q)
-      );
+      result = result.filter((d: CompleteDua) => d.arabic.includes(q) || d.translatedName.toLowerCase().includes(q) ||
+        d.translatedText.toLowerCase().includes(q));
     }
     this.filteredDuas = result;
   }
 
   build() {
-    Column() {
-      // ===== Top Bar =====
+    Column() { // ===== Top Bar =====
       Row({ space: 16 }) {
         Row() {
           Image($r('app.media.ic_chevron_right'))
@@ -177,26 +169,20 @@ struct DuasPage {
 
       // ===== Search Bar =====
       Search({
-        value: this.searchQuery,
-        placeholder: L.get('search_duas', this.appLanguage)
-      })
-        .onChange((val: string) => {
-          this.searchQuery = val;
-          this.applyFilters();
-        })
-        .margin({
-          left: 16,
-          right: 16,
-          top: 16,
-          bottom: 12
-        })
-        .backgroundColor(this.colors.cardDark)
-        .placeholderColor(this.colors.textMuted)
+        value: this.searchQuery, placeholder: L.get('search_duas', this.appLanguage)
+      }).onChange((val: string) => {
+        this.searchQuery = val;
+        this.applyFilters();
+      }).margin({
+        left: 16,
+        right: 16,
+        top: 16,
+        bottom: 12
+      }).backgroundColor(this.colors.cardDark).placeholderColor(this.colors.textMuted)
 
       // ===== Categories Scroll =====
       Scroll() {
-        Row({ space: 8 }) {
-          // Active prayer filter pill — clear button
+        Row({ space: 8 }) { // Active prayer filter pill — clear button
           if (this.filterPrayer.length > 0) {
             Row({ space: 4 }) {
               Text(`${L.get('duas_for', this.appLanguage)} ${this.getPrayerLabel(this.filterPrayer)}`)
@@ -206,21 +192,13 @@ struct DuasPage {
                 .textOverflow({ overflow: TextOverflow.Ellipsis })
                 .flexShrink(1)
 
-              Image($r('app.media.ic_close'))
-                .width(12)
-                .height(12)
-                .fillColor(this.colors.textOnAccent)
-                .flexShrink(0)
-            }
-            .backgroundColor(this.colors.accentGold)
-            .padding({
+              Image($r('app.media.ic_close')).width(12).height(12).fillColor(this.colors.textOnAccent).flexShrink(0)
+            }.backgroundColor(this.colors.accentGold).padding({
               left: 16,
               right: 12,
               top: 6,
               bottom: 6
-            })
-            .borderRadius(16)
-            .onClick(() => {
+            }).borderRadius(16).onClick(() => {
               this.filterPrayer = '';
               this.applyFilters();
             })
@@ -230,10 +208,8 @@ struct DuasPage {
           ForEach(this.categoryChips, (chip: CategoryEntry) => {
             Text(`${this.categoryLabel(chip.name)} (${chip.count})`)
               .fontSize(TypographyHelper.getFontSize(this.appLanguage, 13))
-              .fontColor(this.activeCategory === chip.name
-                ? this.colors.textOnAccent : this.colors.textMuted)
-              .backgroundColor(this.activeCategory === chip.name
-                ? this.colors.accentGold : this.colors.cardDark)
+              .fontColor(this.activeCategory === chip.name ? this.colors.textOnAccent : this.colors.textMuted)
+              .backgroundColor(this.activeCategory === chip.name ? this.colors.accentGold : this.colors.cardDark)
               .padding({
                 left: 16,
                 right: 16,
@@ -245,14 +221,9 @@ struct DuasPage {
                 this.activeCategory = chip.name;
                 this.applyFilters();
               })
-          }, (chip: CategoryEntry) =>
-          `cat-${chip.name}-${chip.count}-${this.activeCategory}-${this.appLanguage}`)
-        }
-        .padding({ left: 16, right: 16 })
-      }
-      .scrollable(ScrollDirection.Horizontal)
-      .scrollBar(BarState.Off)
-      .margin({ bottom: 16 })
+          }, (chip: CategoryEntry) => `cat-${chip.name}-${chip.count}-${this.activeCategory}-${this.appLanguage}`)
+        }.padding({ left: 16, right: 16 })
+      }.scrollable(ScrollDirection.Horizontal).scrollBar(BarState.Off).margin({ bottom: 16 })
 
       // ===== Dua List =====
       if (this.isLoading) {
@@ -264,13 +235,11 @@ struct DuasPage {
               this.DuaCard(dua)
             }
           }, (dua: CompleteDua) => `dua-${dua.id}-${dua.isFavorite}-${this.appLanguage}-${this.duaTransLang}`)
-        }
-        .width('100%')
-        .layoutWeight(1)
-        .padding({ left: 16, right: 16 })
+        }.width('100%').layoutWeight(1).padding({ left: 16, right: 16 })
       }
     }
-    .width('100%').height('100%')
+    .width('100%')
+    .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
   }
@@ -288,8 +257,7 @@ struct DuasPage {
    */
   @Builder
   DuaCard(dua: CompleteDua) {
-    Column() {
-      // ---- Header: Name + Favorite ----
+    Column() { // ---- Header: Name + Favorite ----
       Row() {
         Text(dua.translatedName)
           .fontSize(TypographyHelper.getFontSize(this.appLanguage, 16))
@@ -304,17 +272,12 @@ struct DuasPage {
           .fillColor(dua.isFavorite ? this.colors.statusExpress : this.colors.textMuted)
           .flexShrink(0)
           .onClick(async () => {
-            await DuaService.toggleFavorite(
-              dua.id,
-              this.duas
-                .filter((d: CompleteDua) => d.isFavorite)
-                .map((d: CompleteDua) => d.id)
-            );
+            await DuaService.toggleFavorite(dua.id, this.duas
+              .filter((d: CompleteDua) => d.isFavorite)
+              .map((d: CompleteDua) => d.id));
             this.loadData();
           })
-      }
-      .width('100%').margin({ bottom: 12 })
-      .alignItems(VerticalAlign.Center)
+      }.width('100%').margin({ bottom: 12 }).alignItems(VerticalAlign.Center)
 
       // ---- Arabic text — always Arabic metrics ----
       Text(dua.arabic)
@@ -335,8 +298,7 @@ struct DuasPage {
         .margin({ bottom: 12 })
 
       // ---- Footer: Reference + Bind menu ----
-      Row() {
-        // Text(dua.translatedReference)
+      Row() { // Text(dua.translatedReference)
         //   .fontSize(TypographyHelper.getFontSize(this.appLanguage, 11))
         //   .fontColor(this.colors.textMuted)
         //   .fontStyle(FontStyle.Italic)
@@ -348,15 +310,11 @@ struct DuasPage {
 
             // Left side - sources
             Flex({
-              wrap: FlexWrap.Wrap,
-              justifyContent: FlexAlign.Start
+              wrap: FlexWrap.Wrap, justifyContent: FlexAlign.Start
             }) {
               ForEach(dua.sources, (src: DuaSource, i: number) => {
                 Row({ space: 4 }) {
-                  Image($r('app.media.ic_link'))
-                    .width(10)
-                    .height(10)
-                    .fillColor(this.colors.accentGold)
+                  Image($r('app.media.ic_link')).width(10).height(10).fillColor(this.colors.accentGold)
 
                   Text(SourceParser.getLabel(src, this.appLanguage))
                     .fontSize(10)
@@ -372,17 +330,14 @@ struct DuasPage {
                 .backgroundColor(this.colors.tintSoft)
                 .borderRadius(12)
                 .border({
-                  width: 1,
-                  color: this.colors.borderSoft
+                  width: 1, color: this.colors.borderSoft
                 })
                 .margin({
-                  right: 6,
-                  top: 6
+                  right: 6, top: 6
                 })
                 .onClick(() => this.onSourceTap(src))
               }, (src: DuaSource, i: number) => `dsrc-${dua.id}-${i}`)
-            }
-            .layoutWeight(1)
+            }.layoutWeight(1)
 
             // Right side - bind prayer
             Text(L.get('bind_prayer', this.appLanguage))
@@ -398,14 +353,9 @@ struct DuasPage {
               .borderRadius(8)
               .margin({ left: 8, top: 6 })
               .bindMenu(this.buildPrayerMenu(dua))
-          }
-          .width('100%')
-          .justifyContent(FlexAlign.SpaceBetween)
-          .alignItems(VerticalAlign.Top)
-          .margin({ top: 4 })
+          }.width('100%').justifyContent(FlexAlign.SpaceBetween).alignItems(VerticalAlign.Top).margin({ top: 4 })
         }
-      }
-      .width('100%').alignItems(VerticalAlign.Center)
+      }.width('100%').alignItems(VerticalAlign.Center)
 
     }
     .width('100%')
@@ -452,13 +402,11 @@ struct DuasPage {
 
     return prayerIds.map((id: string) => {
       const isBound = dua.boundPrayerIds.includes(id);
-      const label = this.getPrayerLabel(id);
-      // Prefix with checkmark if bound, else spaces for alignment
+      const label = this.getPrayerLabel(id); // Prefix with checkmark if bound, else spaces for alignment
       const displayValue = isBound ? `✓  ${label}` : `     ${label}`;
 
       const item: MenuElement = {
-        value: displayValue,
-        action: () => {
+        value: displayValue, action: () => {
           this.toggleBind(dua, id);
         }
       };
@@ -507,8 +455,7 @@ struct DuasPage {
         const hadithId = `${col}:${parts[1]}`;
         NavHelper.prepareForward();
         router.pushUrl({
-          url: 'pages/HadithDetailsPage',
-          params: { id: hadithId }
+          url: 'pages/HadithDetailsPage', params: { id: hadithId }
         }).catch((e: Error) => console.error(JSON.stringify(e)));
         return;
       }
@@ -516,17 +463,14 @@ struct DuasPage {
     if (src.type === 'quran' && src.surah !== undefined && src.ayah !== undefined) {
       NavHelper.prepareForward();
       router.pushUrl({
-        url: 'pages/SurahDetailsPage',
-        params: { surahId: src.surah, startVerse: src.ayah, endVerse: src.ayah }
+        url: 'pages/SurahDetailsPage', params: { surahId: src.surah, startVerse: src.ayah, endVerse: src.ayah }
       }).catch((e: Error) => console.error(JSON.stringify(e)));
       return;
     }
     const title = L.get('hadith_evidence_title', this.appLanguage);
     const msg = src.display || src.id || 'Unknown Source';
     promptAction.showDialog({
-      title: title,
-      message: msg,
-      buttons: [{ text: L.get('ok', this.appLanguage), color: this.colors.accentGold }]
+      title: title, message: msg, buttons: [{ text: L.get('ok', this.appLanguage), color: this.colors.accentGold }]
     });
   }
 }

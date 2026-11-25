@@ -75,18 +75,13 @@ export class AppInfoHelper {
     let bundleName = '—';
 
     try {
-      const info = bundleManager.getBundleInfoForSelfSync(
-        bundleManager.BundleFlag.GET_BUNDLE_INFO_DEFAULT
-      );
+      const info = bundleManager.getBundleInfoForSelfSync(bundleManager.BundleFlag.GET_BUNDLE_INFO_DEFAULT);
       versionName = info.versionName;
       versionCode = info.versionCode;
       bundleName = info.name;
     } catch (err) {
       const e = err as BusinessError;
-      console.error(
-        `[AppInfoHelper] getBundleInfoForSelfSync failed: ` +
-          `${e.code} ${e.message}`
-      );
+      console.error(`[AppInfoHelper] getBundleInfoForSelfSync failed: ` + `${e.code} ${e.message}`);
     }
 
     const result: VersionInfo = { versionName, versionCode, bundleName };

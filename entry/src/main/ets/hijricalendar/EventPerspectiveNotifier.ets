@@ -22,9 +22,7 @@ export class EventPerspectiveNotifier {
 
   static unsubscribe(fn: EventPerspectiveListener): void {
     EventPerspectiveNotifier.listeners =
-      EventPerspectiveNotifier.listeners.filter(
-        (l: EventPerspectiveListener): boolean => l !== fn
-      );
+      EventPerspectiveNotifier.listeners.filter((l: EventPerspectiveListener): boolean => l !== fn);
   }
 
   static notify(): void {
@@ -32,10 +30,7 @@ export class EventPerspectiveNotifier {
       try {
         fn();
       } catch (e) {
-        console.error(
-          '[EventPerspectiveNotifier] listener failed: '
-            + JSON.stringify(e)
-        );
+        console.error('[EventPerspectiveNotifier] listener failed: ' + JSON.stringify(e));
       }
     }
   }

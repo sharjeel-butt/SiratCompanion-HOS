@@ -12,13 +12,12 @@ export interface TasbihSoundOption {
   file: string;
 }
 
-export const TASBIH_SOUND_OPTIONS: TasbihSoundOption[] = [
-  { id: 'glass_tap', file: 'sounds/tasbih/tasbih_glass_tap.ogg' },
-  { id: 'light_chime', file: 'sounds/tasbih/tasbih_light_chime.ogg' },
-  { id: 'muted_bead', file: 'sounds/tasbih/tasbih_muted_bead.ogg' },
-  { id: 'soft_click', file: 'sounds/tasbih/tasbih_soft_click.ogg' },
-  { id: 'warm_knock', file: 'sounds/tasbih/tasbih_warm_knock.ogg' }
-];
+export const TASBIH_SOUND_OPTIONS: TasbihSoundOption[] =
+  [{ id: 'glass_tap', file: 'sounds/tasbih/tasbih_glass_tap.ogg' },
+    { id: 'light_chime', file: 'sounds/tasbih/tasbih_light_chime.ogg' },
+    { id: 'muted_bead', file: 'sounds/tasbih/tasbih_muted_bead.ogg' },
+    { id: 'soft_click', file: 'sounds/tasbih/tasbih_soft_click.ogg' },
+    { id: 'warm_knock', file: 'sounds/tasbih/tasbih_warm_knock.ogg' }];
 
 export class SoundOptions {
   /** Default sound used when nothing has been chosen. */
@@ -36,8 +35,7 @@ export class SoundOptions {
   /**
    * Derive a display name from the file name.
    */
-  static deriveDisplayName(file: string): string {
-    // 1. Extract just the filename (e.g., "tasbih_glass_tap.ogg")
+  static deriveDisplayName(file: string): string { // 1. Extract just the filename (e.g., "tasbih_glass_tap.ogg")
     // This handles files in subdirectories correctly.
     const filename = file.substring(file.lastIndexOf('/') + 1);
 

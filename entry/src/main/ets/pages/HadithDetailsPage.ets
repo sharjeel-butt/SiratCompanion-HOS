@@ -44,8 +44,7 @@ struct HadithDetailsPage {
           try {
             const meta = JSON.parse(params['meta']) as Record<string, Object>;
             if (meta['section']) {
-              this.hadith.section =
-                HadithDbHelper.translateSection(meta['section'] as string, this.appLanguage);
+              this.hadith.section = HadithDbHelper.translateSection(meta['section'] as string, this.appLanguage);
             }
             if (meta['contexts']) {
               this.hadith.life_contexts = meta['contexts'] as string[];
@@ -99,10 +98,8 @@ struct HadithDetailsPage {
   @Builder
   HadithHeader() {
     if (this.hadith !== null) {
-      Column() {
-        // 1. Top Row: Hadith Number Badge Only
-        Row() {
-          // Gold Badge for Hadith Number (e.g., "#2123")
+      Column() { // 1. Top Row: Hadith Number Badge Only
+        Row() { // Gold Badge for Hadith Number (e.g., "#2123")
           Text(`#${this.hadith.hadith_number}`)
             .fontSize(13)
             .fontWeight(FontWeight.Bold)
@@ -115,9 +112,7 @@ struct HadithDetailsPage {
               bottom: 6
             })
             .borderRadius(8)
-        }
-        .width('100%')
-        .justifyContent(L.isRtlLang(this.appLanguage) ? FlexAlign.End : FlexAlign.Start)
+        }.width('100%').justifyContent(L.isRtlLang(this.appLanguage) ? FlexAlign.End : FlexAlign.Start)
 
         // 2. Middle Row: Section Name
         if (this.hadith.section && this.hadith.section.length > 0) {
@@ -136,11 +131,9 @@ struct HadithDetailsPage {
         if ((this.hadith.life_contexts && this.hadith.life_contexts.length > 0) ||
           (this.hadith.topics && this.hadith.topics.length > 0)) {
 
-          Flex({ wrap: FlexWrap.Wrap }) {
-            // Context Tags
+          Flex({ wrap: FlexWrap.Wrap }) { // Context Tags
             if (this.hadith.life_contexts) {
-              ForEach(this.hadith.life_contexts, (ctx: string) => {
-                // 👇 FIX: Use HadithSearchService.translate
+              ForEach(this.hadith.life_contexts, (ctx: string) => { // 👇 FIX: Use HadithSearchService.translate
                 Text(HadithSearchService.translate('context_' + ctx, this.appLanguage))
                   .fontSize(11)
                   .fontColor(this.colors.accentGold)
@@ -155,11 +148,9 @@ struct HadithDetailsPage {
                   .margin({ top: 8, right: 6 })
                   .border({ width: 1, color: this.colors.borderSoft })
               })
-            }
-            // Topic Tags
+            } // Topic Tags
             if (this.hadith.topics) {
-              ForEach(this.hadith.topics, (topic: string) => {
-                // 👇 FIX: Use HadithSearchService.translate
+              ForEach(this.hadith.topics, (topic: string) => { // 👇 FIX: Use HadithSearchService.translate
                 Text(HadithSearchService.translate('topic_' + topic, this.appLanguage))
                   .fontSize(11)
                   .fontColor(this.colors.textMuted)
@@ -194,11 +185,12 @@ struct HadithDetailsPage {
   }
 
   build() {
-    Column() {
-      // === TOP BAR ===
+    Column() { // === TOP BAR ===
       Row({ space: 16 }) {
         Row() {
-          Image($r('app.media.ic_chevron_right')).width(20).height(20)
+          Image($r('app.media.ic_chevron_right'))
+            .width(20)
+            .height(20)
             .fillColor(this.colors.textWhite)
             .rotate({ angle: L.isRtlLang(this.appLanguage) ? 0 : 180 })
         }
@@ -216,9 +208,7 @@ struct HadithDetailsPage {
           .layoutWeight(1)
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
-      }
-      .width('100%').height(72).padding({ left: 16, right: 16 })
-      .backgroundColor(this.colors.cardDark)
+      }.width('100%').height(72).padding({ left: 16, right: 16 }).backgroundColor(this.colors.cardDark)
 
       // === CONTENT ===
       if (this.hadith !== null) {
@@ -229,16 +219,12 @@ struct HadithDetailsPage {
             this.HadithHeader()
             if (this.grades.length > 0) {
               GradeBadge({
-                colors: this.colors,
-                grades: this.grades,
-                currentLanguage: this.appLanguage
+                colors: this.colors, grades: this.grades, currentLanguage: this.appLanguage
               })
             }
             if (this.sanad !== null && this.sanad.confidence !== 'none') {
               SanadTimeline({
-                colors: this.colors,
-                sanad: this.sanad,
-                currentLanguage: this.appLanguage
+                colors: this.colors, sanad: this.sanad, currentLanguage: this.appLanguage
               })
             }
 
@@ -259,8 +245,7 @@ struct HadithDetailsPage {
               .borderRadius(16)
               .border({ width: 1, color: this.colors.borderSoft })
               .margin({ bottom: 20 })
-            } else {
-              // The DB entry exists but the Arabic column is empty. This is
+            } else { // The DB entry exists but the Arabic column is empty. This is
               // rare — the pipeline guarantees Arabic for every row — but if
               // it happens, show a localized placeholder rather than leaking
               // the internal ID to the user.
@@ -301,15 +286,15 @@ struct HadithDetailsPage {
             }
 
             Column().height(40)
-          }
-          .width('100%').padding({ left: 16, right: 16 })
-        }
-        .layoutWeight(1)
+          }.width('100%').padding({ left: 16, right: 16 })
+        }.layoutWeight(1)
       } else {
         LoadingProgress().width(40).height(40).color(this.colors.accentGold).margin({ top: 40 })
       }
     }
-    .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
+    .width('100%')
+    .height('100%')
+    .backgroundColor(this.colors.primaryGreen)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
   }
 

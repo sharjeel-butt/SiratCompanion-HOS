@@ -21,40 +21,34 @@ export struct GradeBadge {
             .fontWeight(FontWeight.Bold)
             .letterSpacing(1.2)
             .layoutWeight(1)
-        }
-        .width('100%')
-        .padding({ bottom: 8 })
+        }.width('100%').padding({ bottom: 8 })
 
         Flex({ wrap: FlexWrap.Wrap }) {
-          ForEach(
-            this.grades,
-            (g: HadithGrading, i: number) => {
-              Row({ space: 4 }) {
-                Image(this.iconFor(g.grade))
-                  .width(12).height(12)
-                  .fillColor(GradeThemeHelper.getTextColor(g.grade, this.colors)) // 👈 Global Color
-                Text(`${this.gradeLabel(g.grade)} (${this.graderLabel(g.grader)})`)
-                  .fontSize(10)
-                  .fontColor(GradeThemeHelper.getTextColor(g.grade, this.colors)) // 👈 Global Color
-                  .fontWeight(FontWeight.Medium)
-                  .maxLines(1)
-                  .textOverflow({ overflow: TextOverflow.Ellipsis })
-              }
-              .padding({
-                left: 8,
-                right: 8,
-                top: 4,
-                bottom: 4
-              })
-              .backgroundColor(GradeThemeHelper.getBgColor(g.grade, this.colors)) // 👈 Global Color
-              .borderRadius(6)
-              .border({ width: 1, color: GradeThemeHelper.getTextColor(g.grade, this.colors) }) // 👈 Global Color
-              .margin({ right: 4, top: 4 })
-            },
-            (g: HadithGrading, i: number) => `grade-${i}-${g.grade}-${g.grader}`
-          )
-        }
-        .width('100%')
+          ForEach(this.grades, (g: HadithGrading, i: number) => {
+            Row({ space: 4 }) {
+              Image(this.iconFor(g.grade))
+                .width(12)
+                .height(12)
+                .fillColor(GradeThemeHelper.getTextColor(g.grade, this.colors)) // 👈 Global Color
+              Text(`${this.gradeLabel(g.grade)} (${this.graderLabel(g.grader)})`)
+                .fontSize(10)
+                .fontColor(GradeThemeHelper.getTextColor(g.grade, this.colors)) // 👈 Global Color
+                .fontWeight(FontWeight.Medium)
+                .maxLines(1)
+                .textOverflow({ overflow: TextOverflow.Ellipsis })
+            }
+            .padding({
+              left: 8,
+              right: 8,
+              top: 4,
+              bottom: 4
+            })
+            .backgroundColor(GradeThemeHelper.getBgColor(g.grade, this.colors)) // 👈 Global Color
+            .borderRadius(6)
+            .border({ width: 1, color: GradeThemeHelper.getTextColor(g.grade, this.colors) }) // 👈 Global Color
+            .margin({ right: 4, top: 4 })
+          }, (g: HadithGrading, i: number) => `grade-${i}-${g.grade}-${g.grader}`)
+        }.width('100%')
       }
       .width('100%')
       .padding(12)

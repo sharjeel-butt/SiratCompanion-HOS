@@ -21,20 +21,13 @@ import { PrayerManager } from '../prayer/PrayerManager';
 
 const FORM_DIM_KEY = 'ohos.extra.param.key.form_dimension';
 const FORM_NAME_KEY = 'ohos.extra.param.key.form_name'; // NEW
-const FORM_ID_KEYS: string[] = [
-  'ohos.extra.param.key.form_id',
-  'ohos.extra.param.key.form_identity'
-];
+const FORM_ID_KEYS: string[] = ['ohos.extra.param.key.form_id', 'ohos.extra.param.key.form_identity'];
 
 const TAG = 'EntryFormAbility';
 
 export default class EntryFormAbility extends FormExtensionAbility {
-  private static async doAsyncRefresh(
-    ctx: common.Context,
-    formId: string,
-    dimension: string,
-    formName: string
-  ): Promise<void> {
+  private static async doAsyncRefresh(ctx: common.Context, formId: string, dimension: string,
+    formName: string): Promise<void> {
     try {
       let safeCtx = ctx;
       if (!safeCtx) {
@@ -48,8 +41,7 @@ export default class EntryFormAbility extends FormExtensionAbility {
         await PrayerManager.primeStateMap();
         AppLogger.info(TAG, 'primeStateMap refreshed');
       } catch (e) {
-        AppLogger.warn(TAG,
-          `primeStateMap failed: ${(e as Error).message}`);
+        AppLogger.warn(TAG, `primeStateMap failed: ${(e as Error).message}`);
       }
 
       // ---- Prime the prayer-state map ----
@@ -74,11 +66,9 @@ export default class EntryFormAbility extends FormExtensionAbility {
       // app wrote since the last refresh.
       try {
         await PrayerManager.primeStateMap();
-      } catch (e) {
-        // Non-fatal — the widget will still render, just with stale
+      } catch (e) { // Non-fatal — the widget will still render, just with stale
         // checked state. Log so the diagnostic path exists.
-        AppLogger.warn(TAG,
-          `primeStateMap failed: ${(e as Error).message}`);
+        AppLogger.warn(TAG, `primeStateMap failed: ${(e as Error).message}`);
       }
 
       const savedOverride: string = await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE_OVERRIDE, 'system');
@@ -252,13 +242,10 @@ export default class EntryFormAbility extends FormExtensionAbility {
     L.applySystemLanguage(savedOverride);
 
     PreferencesHelper.init(ctx).then(async (): Promise<void> => {
-      const dim: string = await PreferencesHelper.getString(
-        STORAGE_KEY_WIDGET_DIM_PREFIX + formId, '2*2'
-      );
-      // Read the saved formName from preferences
-      const formName: string = await PreferencesHelper.getString(
-        STORAGE_KEY_WIDGET_NAME_PREFIX + formId, 'prayer_widget'
-      );
+      const dim: string = await PreferencesHelper.getString(STORAGE_KEY_WIDGET_DIM_PREFIX + formId,
+        '2*2'); // Read the saved formName from preferences
+      const formName: string =
+        await PreferencesHelper.getString(STORAGE_KEY_WIDGET_NAME_PREFIX + formId, 'prayer_widget');
 
       await EntryFormAbility.doAsyncRefresh(ctx, formId, dim, formName);
     }).catch((e: Error): void => {
@@ -288,17 +275,11 @@ export default class EntryFormAbility extends FormExtensionAbility {
     const resolved = L.matchSystemLocale();
 
     if (current !== resolved) {
-      AppLogger.info(
-        'EntryAbility',
-        `System language changed → '${resolved}'`
-      );
+      AppLogger.info('EntryAbility', `System language changed → '${resolved}'`);
 
       L.applySystemLanguage(resolved);
 
-      PreferencesHelper.setString(
-        STORAGE_KEY_LANGUAGE,
-        resolved
-      );
+      PreferencesHelper.setString(STORAGE_KEY_LANGUAGE, resolved);
     }
   }
 }

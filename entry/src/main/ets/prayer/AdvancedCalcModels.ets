@@ -2,31 +2,24 @@
 
 /** How displayed times are rounded. */
 export enum RoundingMethod {
-  NEAREST = 'Nearest',
-  UP = 'Up',
-  NONE = 'None'
+  NEAREST = 'Nearest', UP = 'Up', NONE = 'None'
 }
 
 /** Which night boundary defines Islamic midnight. */
 export enum MidnightMethod {
   /** Sunset → next sunrise. Common default. */
-  STANDARD = 'Standard',
-  /** Sunset → next Fajr. Jafari / Shia convention. */
+  STANDARD = 'Standard', /** Sunset → next Fajr. Jafari / Shia convention. */
   JAFARI = 'Jafari'
 }
 
 /** Twilight colour used by the Moonsighting Committee method. */
 export enum Shafaq {
-  GENERAL = 'General',
-  AHMER = 'Ahmer',
-  ABYAD = 'Abyad'
+  GENERAL = 'General', AHMER = 'Ahmer', ABYAD = 'Abyad'
 }
 
 /** What to do at extreme latitudes when an angle can't be reached. */
 export enum PolarResolution {
-  UNRESOLVED = 'Unresolved',
-  AQRAB_BALAD = 'AqrabBalad',
-  AQRAB_YAUM = 'AqrabYaum'
+  UNRESOLVED = 'Unresolved', AQRAB_BALAD = 'AqrabBalad', AQRAB_YAUM = 'AqrabYaum'
 }
 
 /** Everything the Advanced Calculation Settings screen persists. */
@@ -41,5 +34,5 @@ export const DEFAULT_ADVANCED_CALC: AdvancedCalcSettings = {
   rounding: RoundingMethod.NEAREST,
   midnight: MidnightMethod.STANDARD,
   polarResolution: PolarResolution.UNRESOLVED,
-  shafaq: Shafaq.GENERAL,
+  shafaq: Shafaq.GENERAL
 };

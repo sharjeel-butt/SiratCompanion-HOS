@@ -8,7 +8,6 @@ import { CalculationSource } from '../settings/SettingsModels';
 import { ClockFormat, ClockFormatHelper } from '../core/util/ClockFormat';
 import { STORAGE_KEY_THEME_MODE, STORAGE_KEY_TIME_FORMAT } from '../core/common/StorageKeys';
 import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
-import { PageTheme } from '../core/ui/PageTheme';
 import { router } from '@kit.ArkUI';
 
 /**
@@ -40,11 +39,8 @@ export struct PageHeader {
   @Prop asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
   @Prop calcSource: CalculationSource = CalculationSource.LOCAL;
   @Prop showCalcPills: boolean = true;
-  @StorageLink(STORAGE_KEY_THEME_MODE)
-  themeMode: string = ThemeMode.SYSTEM;
-  @StorageLink(STORAGE_KEY_TIME_FORMAT)
-  @Watch('onClockFormatChanged')
-  clockFormat: string = ClockFormat.SYSTEM;
+  @StorageLink(STORAGE_KEY_THEME_MODE) themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_TIME_FORMAT) @Watch('onClockFormatChanged') clockFormat: string = ClockFormat.SYSTEM;
   @Prop isRamadan: boolean = false;
   @Prop fastingEndTime: string = '';
   onOpenLocationSettings: () => void = () => {
@@ -57,14 +53,10 @@ export struct PageHeader {
   // ============================================================
 
   build() {
-    Column() {
-      // ============ Row 1: Hijri pill + Location pill ============
-      Column() {
-        // Hijri date pill
+    Column() { // ============ Row 1: Hijri pill + Location pill ============
+      Column() { // Hijri date pill
         Row({ space: 6 }) {
-          Image($r('app.media.ic_nav_calendar'))
-            .width(14).height(14)
-            .fillColor(this.colors.accentGold)
+          Image($r('app.media.ic_nav_calendar')).width(14).height(14).fillColor(this.colors.accentGold)
           Text(this.hijriDateString)
             .fontSize(13)
             .fontFamily(TypographyHelper.getFont(this.currentLanguage, true))
@@ -82,9 +74,7 @@ export struct PageHeader {
 
         // Location pill
         Row({ space: 8 }) {
-          Image($r('app.media.ic_pin'))
-            .width(16).height(16)
-            .fillColor(this.colors.accentGold)
+          Image($r('app.media.ic_pin')).width(16).height(16).fillColor(this.colors.accentGold)
           Text(this.currentLocation)
             .fontSize(16)
             .fontFamily(TypographyHelper.getFont(this.currentLanguage, true))
@@ -93,9 +83,7 @@ export struct PageHeader {
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
           if (this.isLoadingLocation) {
-            LoadingProgress()
-              .width(16).height(16)
-              .color(this.colors.accentGold)
+            LoadingProgress().width(16).height(16).color(this.colors.accentGold)
           } else {
             Image($r('app.media.ic_chevron_right'))
               .width(16)
@@ -119,9 +107,7 @@ export struct PageHeader {
         .onClick(() => {
           this.onOpenLocationSettings();
         })
-      }
-      .alignItems(HorizontalAlign.Start)
-      .width('100%')
+      }.alignItems(HorizontalAlign.Start).width('100%')
 
       // ============ Row 2: Current prayer ============
       Column({ space: 2 }) {
@@ -150,9 +136,7 @@ export struct PageHeader {
             .fontFeature('"tnum" 1')
             .maxLines(1)
             .flexShrink(0)
-        }
-        .width('100%')
-        .alignItems(VerticalAlign.Center)
+        }.width('100%').alignItems(VerticalAlign.Center)
       }
       .width('100%')
       .padding({
@@ -171,13 +155,9 @@ export struct PageHeader {
       // ============ Row 3: Calc pills or Fasting Window ============
       if (this.isRamadan) {
         Row({ space: 8 }) {
-          Image($r('app.media.ic_fast'))
-            .width(16).height(16)
-            .fillColor(this.colors.accentGold)
-            .flexShrink(0)
+          Image($r('app.media.ic_fast')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
 
-          Text(this.tr('fasting_ends_at'))
-            .fontSize(12).fontColor(this.colors.textMuted)
+          Text(this.tr('fasting_ends_at')).fontSize(12).fontColor(this.colors.textMuted)
 
           Text(this.dt(this.fastingEndTime))
             .fontSize(14)
@@ -188,11 +168,10 @@ export struct PageHeader {
           Blank()
 
           Row({ space: 2 }) {
-            Text(this.tr('details_view'))
-              .fontSize(11).fontColor(this.colors.accentGold)
-              .fontWeight(FontWeight.Medium)
+            Text(this.tr('details_view')).fontSize(11).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
             Image($r('app.media.ic_chevron_right'))
-              .width(12).height(12)
+              .width(12)
+              .height(12)
               .fillColor(this.colors.accentGold)
               .rotate({ angle: this.isRtl() ? 180 : 0 })
           }
@@ -206,17 +185,12 @@ export struct PageHeader {
         .margin({ bottom: 8 })
         .alignItems(VerticalAlign.Center)
         .onClick(() => {
-          router.pushUrl({ url: 'pages/RamadanDetailsPage' })
-            .catch((e: Error) => console.error(JSON.stringify(e)));
+          router.pushUrl({ url: 'pages/RamadanDetailsPage' }).catch((e: Error) => console.error(JSON.stringify(e)));
         })
       } else if (this.showCalcPills) {
-        Row({ space: 4 }) {
-          // Method
+        Row({ space: 4 }) { // Method
           Row({ space: 6 }) {
-            Image($r('app.media.ic_nav_mosque'))
-              .width(14).height(14)
-              .fillColor(this.colors.accentGold)
-              .flexShrink(0)
+            Image($r('app.media.ic_nav_mosque')).width(14).height(14).fillColor(this.colors.accentGold).flexShrink(0)
             Text(SettingsHelper.getCalcMethodShortLabel(this.calcMethod))
               .fontSize(12)
               .fontColor(this.colors.accentGold)
@@ -238,10 +212,7 @@ export struct PageHeader {
 
           // Asr rule
           Row({ space: 6 }) {
-            Image($r('app.media.ic_asr_rule'))
-              .width(14).height(14)
-              .fillColor(this.colors.accentGold)
-              .flexShrink(0)
+            Image($r('app.media.ic_asr_rule')).width(14).height(14).fillColor(this.colors.accentGold).flexShrink(0)
             Text(SettingsHelper.getAsrRuleShortLabel(this.asrRule))
               .fontSize(12)
               .fontColor(this.colors.accentGold)
@@ -263,10 +234,7 @@ export struct PageHeader {
 
           // Source
           Row({ space: 6 }) {
-            Image($r('app.media.ic_globe'))
-              .width(14).height(14)
-              .fillColor(this.colors.accentGold)
-              .flexShrink(0)
+            Image($r('app.media.ic_globe')).width(14).height(14).fillColor(this.colors.accentGold).flexShrink(0)
             Text(SettingsHelper.getCalcSourceShortLabel(this.calcSource))
               .fontSize(12)
               .fontColor(this.colors.accentGold)
@@ -285,15 +253,9 @@ export struct PageHeader {
           .onClick(() => {
             this.onOpenSettings();
           })
-        }
-        .width('100%')
-        .padding({ bottom: 8 })
-        .alignItems(VerticalAlign.Center)
+        }.width('100%').padding({ bottom: 8 }).alignItems(VerticalAlign.Center)
       }
-    }
-    .width('100%')
-    .padding({ left: 16, right: 16 })
-    .backgroundColor(this.colors.primaryGreen)
+    }.width('100%').padding({ left: 16, right: 16 }).backgroundColor(this.colors.primaryGreen)
   }
 
   private tr(key: string): string {
@@ -307,8 +269,7 @@ export struct PageHeader {
     return ClockFormatHelper.reformat(t);
   }
 
-  private onClockFormatChanged(): void {
-    // Re-render is handled by the @StorageLink.
+  private onClockFormatChanged(): void { // Re-render is handled by the @StorageLink.
   }
 
   private isRtl(): boolean {

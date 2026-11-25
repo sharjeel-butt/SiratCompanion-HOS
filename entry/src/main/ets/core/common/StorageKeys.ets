@@ -232,3 +232,9 @@ export const STORAGE_KEY_DUA_TRANSLATION_LANG = 'dua_translation_lang';
 export const STORAGE_KEY_ARABIC_FONT = 'arabic_font_family';
 
 export const STORAGE_KEY_TRANSLATION_FONT = 'translation_font_family';
+
+export const STORAGE_KEY_UNREAD_NOTIFICATIONS = 'unread_notifications';
+
+export const STORAGE_KEY_NOTIFICATION_COUNT = 'notification_count';
+
+export const STORAGE_KEY_DISMISSED_ACHIEVEMENTS = 'dismissed_achievements';

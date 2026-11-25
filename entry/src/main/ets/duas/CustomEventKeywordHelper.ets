@@ -40,8 +40,7 @@ export class CustomEventKeywordHelper {
     const lowerText = text.toLowerCase();
     const resultIds: string[] = [];
 
-    for (const map of CustomEventKeywordHelper.mappings) {
-      // Get keywords for the current language, fallback to English
+    for (const map of CustomEventKeywordHelper.mappings) { // Get keywords for the current language, fallback to English
       const keywords = map.keywords[lang] || map.keywords['en'] || [];
 
       for (const kw of keywords) {

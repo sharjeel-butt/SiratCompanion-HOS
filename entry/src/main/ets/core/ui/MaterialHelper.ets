@@ -62,13 +62,8 @@ export class MaterialHelper {
    * framework still applies material to the sheet surface because
    * the app declares UIMaterial.state = enable in module.json5.
    */
-  static buildSheetOptions(
-    height: number | SheetSize | string,
-    dragBar: boolean,
-    fallbackBackground: string,
-    maskColor: string,
-    onDisappear?: () => void
-  ): SheetOptions {
+  static buildSheetOptions(height: number | SheetSize | string, dragBar: boolean, fallbackBackground: string,
+    maskColor: string, onDisappear?: () => void): SheetOptions {
     const opts: SheetOptions = {
       height: height,
       dragBar: dragBar,
@@ -88,15 +83,11 @@ export class MaterialHelper {
    */
   static logCapability(): void {
     try {
-      AppLogger.info(
-        'MaterialHelper',
-        `SDK=${deviceInfo.sdkApiVersion}, ` +
-          `distOS=${deviceInfo.distributionOSApiVersion}, ` +
+      AppLogger.info('MaterialHelper',
+        `SDK=${deviceInfo.sdkApiVersion}, ` + `distOS=${deviceInfo.distributionOSApiVersion}, ` +
           `uiMaterial=disabled-in-this-build, ` +
-          `hdsMaterial=${deviceInfo.sdkApiVersion >= 23 ? 'available' : 'unavailable'}`
-      );
-    } catch (err) {
-      // Never let diagnostics break startup.
+          `hdsMaterial=${deviceInfo.sdkApiVersion >= 23 ? 'available' : 'unavailable'}`);
+    } catch (err) { // Never let diagnostics break startup.
     }
   }
 }

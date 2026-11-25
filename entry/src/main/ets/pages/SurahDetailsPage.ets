@@ -47,13 +47,14 @@ struct SurahDetailsPage {
   }
 
   build() {
-    Column() {
-      // ==========================================
+    Column() { // ==========================================
       // 1. TOP BAR
       // ==========================================
       Row({ space: 12 }) {
         Row() {
-          Image($r('app.media.ic_chevron_right')).width(20).height(20)
+          Image($r('app.media.ic_chevron_right'))
+            .width(20)
+            .height(20)
             .fillColor(this.colors.textWhite)
             .rotate({ angle: this.isRtl() ? 0 : 180 })
         }
@@ -76,16 +77,18 @@ struct SurahDetailsPage {
 
           if (this.readingMode === 'mushaf') {
             Text(`Page ${this.mushafCurrentPage} / 604`)
-              .fontSize(10).fontColor(this.colors.accentGold).margin({ top: 2 })
+              .fontSize(10)
+              .fontColor(this.colors.accentGold)
+              .margin({ top: 2 })
           } else {
-            Text(this.isLoading ? '' : `${this.tr('juz_label')} ${Math.ceil(
-              this.surah!.id / 2)} · ${this.sourceLabelRevelation(
-              this.surah!.revelationPlace)} · ${this.surah!.ayahCount} ${this.tr('ayahs')}`)
-              .fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
+            Text(this.isLoading ? '' :
+              `${this.tr('juz_label')} ${Math.ceil(this.surah!.id / 2)} · ${this.sourceLabelRevelation(
+                this.surah!.revelationPlace)} · ${this.surah!.ayahCount} ${this.tr('ayahs')}`)
+              .fontSize(10)
+              .fontColor(this.colors.textMuted)
+              .margin({ top: 2 })
           }
-        }
-        .alignItems(HorizontalAlign.Center)
-        .layoutWeight(1)
+        }.alignItems(HorizontalAlign.Center).layoutWeight(1)
 
       }
       .width('100%')
@@ -130,10 +133,11 @@ struct SurahDetailsPage {
         Row() {
           Row({ space: 6 }) {
             Image($r('app.media.ic_chevron_right'))
-              .width(14).height(14).fillColor(this.colors.accentGold)
+              .width(14)
+              .height(14)
+              .fillColor(this.colors.accentGold)
               .rotate({ angle: this.isRtl() ? 0 : 180 })
-            Text(this.tr('previous_surah'))
-              .fontSize(13).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
+            Text(this.tr('previous_surah')).fontSize(13).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
           }
           .layoutWeight(1)
           .height(44)
@@ -142,10 +146,11 @@ struct SurahDetailsPage {
           .onClick(() => this.goToPrevious())
 
           Row({ space: 6 }) {
-            Text(this.tr('next_surah'))
-              .fontSize(13).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
+            Text(this.tr('next_surah')).fontSize(13).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
             Image($r('app.media.ic_chevron_right'))
-              .width(14).height(14).fillColor(this.colors.accentGold)
+              .width(14)
+              .height(14)
+              .fillColor(this.colors.accentGold)
               .rotate({ angle: this.isRtl() ? 180 : 0 })
           }
           .layoutWeight(1)
@@ -154,12 +159,15 @@ struct SurahDetailsPage {
           .opacity(this.currentIndex < this.allSurahs.length - 1 ? 1.0 : 0.3)
           .onClick(() => this.goToNext())
         }
-        .width('100%').padding({ left: 16, right: 16, bottom: 8 })
+        .width('100%')
+        .padding({ left: 16, right: 16, bottom: 8 })
         .backgroundColor(this.colors.cardDark)
         .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
       }
     }
-    .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
+    .width('100%')
+    .height('100%')
+    .backgroundColor(this.colors.primaryGreen)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 
@@ -181,8 +189,7 @@ struct SurahDetailsPage {
   @Builder
   VerseByVerseView() {
     Scroll() {
-      Column() {
-        // 1. Bismillah Header (Show for ALL surahs except Surah 9)
+      Column() { // 1. Bismillah Header (Show for ALL surahs except Surah 9)
         if (this.surah!.id !== 9) {
           Text("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ")
             .fontSize(TypographyHelper.getArabicFontSize(26))
@@ -195,8 +202,7 @@ struct SurahDetailsPage {
 
         // 2. Verses
         ForEach(this.displayVerses, (verse: Verse, index: number) => {
-          Column() {
-            // Arabic Text
+          Column() { // Arabic Text
             Text(this.getFormattedVerseForReading(verse))
               .fontSize(TypographyHelper.getArabicFontSize(26))
               .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
@@ -218,17 +224,12 @@ struct SurahDetailsPage {
                 .width('100%')
                 .padding({ top: 4, bottom: 20 })
             }
-          }
-          .width('100%')
+          }.width('100%')
         }, (verse: Verse) => `v-${this.surah?.id}-${verse.ayah}`)
 
         Column().height(40)
-      }
-      .width('100%')
-      .padding({ left: 20, right: 20 })
-    }
-    .layoutWeight(1)
-    .scrollBar(BarState.Auto)
+      }.width('100%').padding({ left: 20, right: 20 })
+    }.layoutWeight(1).scrollBar(BarState.Auto)
   }
 
   @Builder
@@ -244,12 +245,10 @@ struct SurahDetailsPage {
 
         // 1. Arabic Text (Exact properties as MushafView)
         Text(this.stripTrailingArabicNumber(verse.arabic))
-          .fontSize(TypographyHelper.getArabicFontSize(
-            TypographyHelper.QURAN_FONT_SIZE_VERSE))
+          .fontSize(TypographyHelper.getArabicFontSize(TypographyHelper.QURAN_FONT_SIZE_VERSE))
           .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
           .fontColor(this.colors.textWhite)
-          .lineHeight(TypographyHelper.getArabicLineHeight(
-            TypographyHelper.QURAN_LINE_HEIGHT_VERSE))
+          .lineHeight(TypographyHelper.getArabicLineHeight(TypographyHelper.QURAN_LINE_HEIGHT_VERSE))
           .textAlign(TextAlign.Start) // Aligns to Right in RTL
           .direction(Direction.Rtl)   // Forces RTL layout
           .width('100%')
@@ -271,11 +270,8 @@ struct SurahDetailsPage {
             .fontWeight(FontWeight.Medium)
             .textAlign(TextAlign.Center)
             .translate({ y: -1.5 })
-        }
-        .width(28).height(28)
-        .margin({ top: 8, left: 8 }) // Position on the left
-      }
-      .width('100%')
+        }.width(28).height(28).margin({ top: 8, left: 8 }) // Position on the left
+      }.width('100%')
 
       // 3. Translation (Only in 'translation' mode)
       if (this.readingMode === 'translation' && this.getTranslationForVerse(verse).trim().length > 0) {
@@ -288,15 +284,13 @@ struct SurahDetailsPage {
           .width('100%')
           .padding({ top: 20, bottom: 16 })
       }
-    }
-    .width('100%').padding({ left: 20, right: 20 })
+    }.width('100%').padding({ left: 20, right: 20 })
   }
 
   @Builder
   MushafView() {
     Scroll() {
-      Column() {
-        // Ornate Header
+      Column() { // Ornate Header
         Stack() {
           Column()
             .width('100%')
@@ -308,8 +302,7 @@ struct SurahDetailsPage {
             .fontSize(TypographyHelper.getArabicFontSize(TypographyHelper.SURAH_HEADER_FONT_SIZE))
             .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
             .fontColor(this.colors.accentGold)
-        }
-        .width('95%').margin({ top: 16, bottom: 24 })
+        }.width('95%').margin({ top: 16, bottom: 24 })
 
         // Bismillah (Show for ALL surahs except Surah 9)
         if (this.surah && this.surah.id !== 9) {
@@ -336,11 +329,8 @@ struct SurahDetailsPage {
           .padding({ left: 20, right: 20 })
 
         Column().height(40)
-      }
-      .width('100%')
-    }
-    .layoutWeight(1)
-    .scrollBar(BarState.Auto)
+      }.width('100%')
+    }.layoutWeight(1).scrollBar(BarState.Auto)
   }
 
   private async loadInitialData(): Promise<void> {
@@ -379,8 +369,7 @@ struct SurahDetailsPage {
 
     this.surah = loaded;
 
-    if (loaded === null) {
-      // quran.db failed to load (extraction error, missing row, etc.).
+    if (loaded === null) { // quran.db failed to load (extraction error, missing row, etc.).
       // Keep the loading spinner in build() visible so the user sees
       // something rather than a blank page. A proper error state can
       // be added in a follow-up — for now, degrade gracefully.
@@ -388,9 +377,7 @@ struct SurahDetailsPage {
       return;
     }
 
-    this.currentMushafSurahName = this.appLanguage === 'ar'
-      ? `سورة ${loaded.nameArabic}`
-      : loaded.nameTransliteration;
+    this.currentMushafSurahName = this.appLanguage === 'ar' ? `سورة ${loaded.nameArabic}` : loaded.nameTransliteration;
 
     if (!isInitial) {
       this.startVerse = 1;
@@ -399,14 +386,10 @@ struct SurahDetailsPage {
 
     if (this.startVerse > 1 || this.endVerse !== null) {
       const end = this.endVerse !== null ? this.endVerse : loaded.ayahCount;
-      this.displayVerses = loaded.verses.filter(
-        (v: Verse): boolean => v.ayah >= this.startVerse && v.ayah <= end
-      );
+      this.displayVerses = loaded.verses.filter((v: Verse): boolean => v.ayah >= this.startVerse && v.ayah <= end);
     } else {
       if (loaded.id === 1) {
-        this.displayVerses = loaded.verses.filter(
-          (v: Verse): boolean => v.ayah !== 1
-        );
+        this.displayVerses = loaded.verses.filter((v: Verse): boolean => v.ayah !== 1);
       } else {
         this.displayVerses = loaded.verses;
       }
@@ -416,8 +399,7 @@ struct SurahDetailsPage {
   private goToNext(): void {
     if (this.currentIndex < this.allSurahs.length - 1) {
       this.currentIndex++;
-      this.loadCurrentSurah(false).catch((e: Error) =>
-      console.error('[SurahDetails] load next failed', e));
+      this.loadCurrentSurah(false).catch((e: Error) => console.error('[SurahDetails] load next failed', e));
     }
   }
 
@@ -428,17 +410,13 @@ struct SurahDetailsPage {
   private goToPrevious(): void {
     if (this.currentIndex > 0) {
       this.currentIndex--;
-      this.loadCurrentSurah(false).catch((e: Error) =>
-      console.error('[SurahDetails] load prev failed', e));
+      this.loadCurrentSurah(false).catch((e: Error) => console.error('[SurahDetails] load prev failed', e));
     }
   }
 
   private stripTrailingArabicNumber(text: string): string {
-    return text
-      .replace(/[\u0660-\u0669]+$/, '') // Remove Arabic numbers
-      .replace(/[\r\n]+/g, ' ')         // Remove hidden newlines
-      .replace(/\s+/g, ' ')             // Collapse multiple spaces
-      .trim();
+    return text.replace(/[\u0660-\u0669]+$/,
+      '') // Remove Arabic numbers.replace(/[\r\n]+/g, ' ')         // Remove hidden newlines.replace(/\s+/g, ' ')             // Collapse multiple spaces.trim();
   }
 
   private toArabicNumerals(num: number): string {
@@ -450,8 +428,7 @@ struct SurahDetailsPage {
     return L.isRtlLang(this.appLanguage);
   }
 
-  private getFormattedVerseForReading(verse: Verse): string {
-    // 1. Clean the Arabic text
+  private getFormattedVerseForReading(verse: Verse): string { // 1. Clean the Arabic text
     const cleanArabic = this.stripTrailingArabicNumber(verse.arabic);
     const arabicNum = this.toArabicNumerals(verse.ayah);
 

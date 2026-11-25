@@ -47,8 +47,8 @@ export class TimezoneResolver {
       case DstRule.EU:
         return TimezoneResolver.isNorthernDst(date, year) ? 60 : 0;
       case DstRule.CHILE:
-        return TimezoneResolver.isSouthernDst(DstRule.CHILE, date, year) ? 60 : 0;
-      // Note: CHILE is southern hemisphere, see isSouthernDst below.
+        return TimezoneResolver.isSouthernDst(DstRule.CHILE, date, year) ? 60 :
+          0; // Note: CHILE is southern hemisphere, see isSouthernDst below.
       case DstRule.AU:
       case DstRule.NZ:
         return TimezoneResolver.isSouthernDst(rule, date, year) ? 60 : 0;
@@ -119,15 +119,13 @@ export class TimezoneResolver {
       start = TimezoneResolver.lastWeekdayOfMonth(year, 9, 0); // last Sunday of Sept
     } else if (rule === DstRule.CHILE) {
       start = TimezoneResolver.nthSunday(year, 9, 1); // first Sunday of Sept (approx.)
-    } else {
-      // Australia, Lord Howe.
+    } else { // Australia, Lord Howe.
       start = TimezoneResolver.nthSunday(year, 10, 1); // first Sunday of Oct
     }
     return t >= start.getTime();
   }
 
-  private static isEgyptDst(date: Date, year: number): boolean {
-    // Last Friday of April -> Last Thursday of October
+  private static isEgyptDst(date: Date, year: number): boolean { // Last Friday of April -> Last Thursday of October
     const start = TimezoneResolver.lastWeekdayOfMonth(year, 4, 5);
     const lastThu = TimezoneResolver.lastWeekdayOfMonth(year, 10, 4);
     const end = new Date(lastThu.getTime() + MS_PER_DAY);
@@ -135,8 +133,8 @@ export class TimezoneResolver {
     return t >= start.getTime() && t < end.getTime();
   }
 
-  private static isPalestineDst(date: Date, year: number): boolean {
-    // Approximation: Last Friday of March -> Last Friday of October
+  private static isPalestineDst(date: Date,
+    year: number): boolean { // Approximation: Last Friday of March -> Last Friday of October
     // (Official dates vary annually; this matches 95% of years).
     const start = TimezoneResolver.lastWeekdayOfMonth(year, 3, 5);
     const end = TimezoneResolver.lastWeekdayOfMonth(year, 10, 5);
@@ -144,8 +142,8 @@ export class TimezoneResolver {
     return t >= start.getTime() && t < end.getTime();
   }
 
-  private static isMoroccoRamadan(date: Date): boolean {
-    // In Morocco, standard is UTC+1, but drops to UTC+0 during Ramadan.
+  private static isMoroccoRamadan(
+    date: Date): boolean { // In Morocco, standard is UTC+1, but drops to UTC+0 during Ramadan.
     try {
       let offsetDays = 0;
       const stored = AppStorage.get<number>(STORAGE_KEY_HIJRI_OFFSET);

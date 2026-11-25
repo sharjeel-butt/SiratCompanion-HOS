@@ -82,21 +82,13 @@ export class SystemFeedbackHelper {
     if (SystemFeedbackHelper.context === null) {
       return;
     }
-    try {
-      // '1' = enabled, '0' = disabled. Default to enabled.
-      const raw = settings.getValueSync(
-        SystemFeedbackHelper.context,
-        settings.sound.HAPTIC_FEEDBACK_STATUS,
-        '1'
-      );
+    try { // '1' = enabled, '0' = disabled. Default to enabled.
+      const raw = settings.getValueSync(SystemFeedbackHelper.context, settings.sound.HAPTIC_FEEDBACK_STATUS, '1');
       const enabled = raw === '1';
       AppStorage.setOrCreate(STORAGE_KEY_SYSTEM_HAPTICS_ENABLED, enabled);
     } catch (err) {
       const e = err as BusinessError;
-      AppLogger.warn(
-        'SystemFeedbackHelper',
-        `haptics read failed: ${e.code} ${e.message}`
-      );
+      AppLogger.warn('SystemFeedbackHelper', `haptics read failed: ${e.code} ${e.message}`);
       AppStorage.setOrCreate(STORAGE_KEY_SYSTEM_HAPTICS_ENABLED, true);
     }
   }
@@ -116,9 +108,7 @@ export class SystemFeedbackHelper {
     try {
       const audioManager = audio.getAudioManager();
       const volumeManager = audioManager.getVolumeManager();
-      const groupManager = volumeManager.getVolumeGroupManagerSync(
-        audio.DEFAULT_VOLUME_GROUP_ID
-      );
+      const groupManager = volumeManager.getVolumeGroupManagerSync(audio.DEFAULT_VOLUME_GROUP_ID);
 
       const mode: audio.AudioRingMode = groupManager.getRingerModeSync();
 
@@ -131,15 +121,10 @@ export class SystemFeedbackHelper {
       // Cache the group manager so we can register the change listener.
       SystemFeedbackHelper.volumeGroupManager = groupManager;
 
-      console.info(
-        `[SystemFeedbackHelper] ringer mode = ${mode}, soundAllowed = ${soundAllowed}`
-      );
+      console.info(`[SystemFeedbackHelper] ringer mode = ${mode}, soundAllowed = ${soundAllowed}`);
     } catch (err) {
       const e = err as BusinessError;
-      AppLogger.warn(
-        'SystemFeedbackHelper',
-        `ringer mode read failed: ${e.code} ${e.message}`
-      );
+      AppLogger.warn('SystemFeedbackHelper', `ringer mode read failed: ${e.code} ${e.message}`);
       AppStorage.setOrCreate(STORAGE_KEY_SYSTEM_SOUND_ENABLED, true);
     }
   }
@@ -162,21 +147,14 @@ export class SystemFeedbackHelper {
     }
 
     try {
-      settings.registerKeyObserver(
-        SystemFeedbackHelper.context,
-        settings.sound.HAPTIC_FEEDBACK_STATUS,
-        settings.domainName.USER_PROPERTY,
-        () => {
+      settings.registerKeyObserver(SystemFeedbackHelper.context, settings.sound.HAPTIC_FEEDBACK_STATUS,
+        settings.domainName.USER_PROPERTY, () => {
           SystemFeedbackHelper.refreshHaptics();
-        }
-      );
+        });
       SystemFeedbackHelper.observerRegistered = true;
     } catch (err) {
       const e = err as BusinessError;
-      AppLogger.warn(
-        'SystemFeedbackHelper',
-        `haptics observer registration failed: ${e.code} ${e.message}`
-      );
+      AppLogger.warn('SystemFeedbackHelper', `haptics observer registration failed: ${e.code} ${e.message}`);
     }
   }
 
@@ -184,8 +162,7 @@ export class SystemFeedbackHelper {
     if (SystemFeedbackHelper.ringerObserverRegistered) {
       return;
     }
-    if (SystemFeedbackHelper.volumeGroupManager === null) {
-      // Try once more to obtain it — the initial read may have
+    if (SystemFeedbackHelper.volumeGroupManager === null) { // Try once more to obtain it — the initial read may have
       // failed before the audio service was fully available.
       SystemFeedbackHelper.refreshRingerMode();
       if (SystemFeedbackHelper.volumeGroupManager === null) {
@@ -194,23 +171,15 @@ export class SystemFeedbackHelper {
     }
 
     try {
-      SystemFeedbackHelper.volumeGroupManager!.on(
-        'ringerModeChange',
-        (mode: audio.AudioRingMode) => {
-          const soundAllowed = (mode === audio.AudioRingMode.RINGER_MODE_NORMAL);
-          AppStorage.setOrCreate(STORAGE_KEY_SYSTEM_SOUND_ENABLED, soundAllowed);
-          console.info(
-            `[SystemFeedbackHelper] ringerModeChange → ${mode}, soundAllowed = ${soundAllowed}`
-          );
-        }
-      );
+      SystemFeedbackHelper.volumeGroupManager!.on('ringerModeChange', (mode: audio.AudioRingMode) => {
+        const soundAllowed = (mode === audio.AudioRingMode.RINGER_MODE_NORMAL);
+        AppStorage.setOrCreate(STORAGE_KEY_SYSTEM_SOUND_ENABLED, soundAllowed);
+        console.info(`[SystemFeedbackHelper] ringerModeChange → ${mode}, soundAllowed = ${soundAllowed}`);
+      });
       SystemFeedbackHelper.ringerObserverRegistered = true;
     } catch (err) {
       const e = err as BusinessError;
-      AppLogger.warn(
-        'SystemFeedbackHelper',
-        `ringer observer registration failed: ${e.code} ${e.message}`
-      );
+      AppLogger.warn('SystemFeedbackHelper', `ringer observer registration failed: ${e.code} ${e.message}`);
     }
   }
 }

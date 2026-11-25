@@ -14,6 +14,8 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LOCATION_VERSION,
   STORAGE_KEY_NAV_TARGET_TAB,
+  STORAGE_KEY_NOTIFICATION_COUNT,
+  STORAGE_KEY_PRAYER_STATE_VERSION,
   STORAGE_KEY_TAB_REFRESH_TICK,
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
@@ -42,49 +44,32 @@ import { TasbihPage } from '../tasbih/TasbihPage';
 import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
 import { AppLogger } from '../core/app/AppLogger';
 import { WidgetHelper } from '../widgets/WidgetHelper';
+import { NotificationService } from '../core/notifications/NotificationService';
 
 const HDS_MIN_API = 23;
 
 @Entry
 @Component
 struct MainTabs {
-  @StorageLink(STORAGE_KEY_THEME_MODE)
-  @Watch('onThemeModeChanged')
-  themeMode: string = ThemeMode.SYSTEM;
-  @StorageLink(STORAGE_KEY_APP_THEME)
-  @Watch('onAppThemePresetChanged')
-  appThemePreset: string = '';
-  @StorageLink(STORAGE_KEY_LANGUAGE)
-  @Watch('onLanguageChanged')
-  appLanguage: string = 'en';
-  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
-  appForegroundTick: number = 0;
-  @StorageLink(STORAGE_KEY_BREAKPOINT)
-  @Watch('onBreakpointChanged')
-  breakpoint: string = 'sm';
+  @StorageLink(STORAGE_KEY_THEME_MODE) @Watch('onThemeModeChanged') themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_APP_THEME) @Watch('onAppThemePresetChanged') appThemePreset: string = '';
+  @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLanguageChanged') appLanguage: string = 'en';
+  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK) appForegroundTick: number = 0;
+  @StorageLink(STORAGE_KEY_BREAKPOINT) @Watch('onBreakpointChanged') breakpoint: string = 'sm';
   // NEW watchers — add these
-  @StorageLink(STORAGE_KEY_CALC_SETTINGS_VERSION)
-  @Watch('onCalcSettingsChanged')
-  calcSettingsVersion: number = 0;
-  @StorageLink(STORAGE_KEY_LOCATION_VERSION)
-  @Watch('onLocationVersionChanged')
-  locationVersion: number = 0;
-  @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_VERSION)
-  @Watch('onHijriCalendarVersionChanged')
-  calendarVersion: number = 0;
-  @StorageLink(STORAGE_KEY_NAV_TARGET_TAB)
-  @Watch('onNavTargetTabChanged')
-  navTargetTab: string = '';
-  @StorageLink(STORAGE_KEY_TIME_FORMAT)
-  @Watch('onTimeFormatChanged')
-  timeFormat: string = 'System';
+  @StorageLink(STORAGE_KEY_CALC_SETTINGS_VERSION) @Watch('onCalcSettingsChanged') calcSettingsVersion: number = 0;
+  @StorageLink(STORAGE_KEY_LOCATION_VERSION) @Watch('onLocationVersionChanged') locationVersion: number = 0;
+  @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_VERSION) @Watch('onHijriCalendarVersionChanged') calendarVersion: number = 0;
+  @StorageLink(STORAGE_KEY_NAV_TARGET_TAB) @Watch('onNavTargetTabChanged') navTargetTab: string = '';
+  @StorageLink(STORAGE_KEY_TIME_FORMAT) @Watch('onTimeFormatChanged') timeFormat: string = 'System';
+  @StorageLink(STORAGE_KEY_PRAYER_STATE_VERSION) @Watch('onPrayerStateChanged') prayerStateVersion: number = 0;
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
+  @StorageLink(STORAGE_KEY_NOTIFICATION_COUNT) notificationCount: number = 0;
   @State private currentLanguage: string = 'en';
   @State private currentIndex: number = 0;
   @State private barWidth: number = 340;
   @State private isMenuVisible: boolean = false;
-  private readonly useHds: boolean =
-    deviceInfo.sdkApiVersion >= HDS_MIN_API;
+  private readonly useHds: boolean = deviceInfo.sdkApiVersion >= HDS_MIN_API;
   private tabsController: TabsController = new TabsController();
   private hdsController: HdsTabsController = new HdsTabsController();
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
@@ -93,12 +78,10 @@ struct MainTabs {
   aboutToAppear(): void {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
-    this.systemDarkListener = PageTheme.installSystemListener(
-      this.themeMode,
-      (c) => {
-        this.colors = c;
-      }
-    );
+    this.refreshNotifications();
+    this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
+      this.colors = c;
+    });
     this.recomputeBarWidth();
     try {
       const context = getContext(this) as common.UIAbilityContext;
@@ -112,21 +95,24 @@ struct MainTabs {
     this.handleWidgetIntent();
   }
 
+  aboutToReuse(): void {
+    this.refreshNotifications();
+  }
+
   aboutToDisappear(): void {
     PageTheme.uninstallSystemListener(this.systemDarkListener);
-    this.systemDarkListener = null;
-    // Unregister EventHub listener
+    this.systemDarkListener = null; // Unregister EventHub listener
     try {
       const context = getContext(this) as common.UIAbilityContext;
       context.eventHub.off('widget_nav_event', this.onWidgetNavEvent);
-    } catch (e) {
-      // ignore
+    } catch (e) { // ignore
     }
   }
 
   onPageShow(): void {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
+    this.refreshNotifications();
 
     // Force Event Settings refresh
     const prevEv = AppStorage.get<number>(STORAGE_KEY_EVENT_SETTINGS_VERSION);
@@ -161,16 +147,14 @@ struct MainTabs {
     Stack() {
       HdsNavigation() {
         HdsTabs({
-          barPosition: BarPosition.End,
-          controller: this.hdsController
+          barPosition: BarPosition.End, controller: this.hdsController
         }) {
           this.TabContents()
         }
         .barOverlap(true)
         .vertical(false)
-        .barHeight(80)
-        // Only apply floating style if HDS accepted it.
-        // If buildHdsFloatingStyle() throws, we skip it and
+        .barHeight(
+          80) // Only apply floating style if HDS accepted it. // If buildHdsFloatingStyle() throws, we skip it and
         // HDS falls back to a plain tab bar — stable on every SDK.
         .barFloatingStyle(this.safeFloatingStyle())
         .scrollable(false)
@@ -191,12 +175,9 @@ struct MainTabs {
         },
         style: {
           scrollEffectOpts: {
-            enableScrollEffect: false,
-            scrollEffectType: ScrollEffectType.GRADIENT_BLUR
-          },
-          systemMaterialEffect: {
-            materialType: hdsMaterial.MaterialType.ADAPTIVE,
-            materialLevel: hdsMaterial.MaterialLevel.ADAPTIVE
+            enableScrollEffect: false, scrollEffectType: ScrollEffectType.GRADIENT_BLUR
+          }, systemMaterialEffect: {
+            materialType: hdsMaterial.MaterialType.ADAPTIVE, materialLevel: hdsMaterial.MaterialLevel.ADAPTIVE
           }
         },
         avoidLayoutSafeArea: false,
@@ -209,15 +190,14 @@ struct MainTabs {
 
       Row() {
         Blank()
+        this.NotificationButton()
         this.HamburgerButton()
       }
       .width('100%')
       .height('100%')
       .alignItems(VerticalAlign.Top)
       .padding({
-        top: 8,
-        left: this.isRtl() ? 8 : 0,
-        right: this.isRtl() ? 0 : 8
+        top: 8, left: this.isRtl() ? 8 : 0, right: this.isRtl() ? 0 : 8
       })
       .hitTestBehavior(HitTestMode.Transparent)
     }
@@ -245,15 +225,13 @@ struct MainTabs {
       .width('100%')
       .height(56)
       .padding({
-        left: this.isRtl() ? 12 : 16,
-        right: this.isRtl() ? 16 : 12
+        left: this.isRtl() ? 12 : 16, right: this.isRtl() ? 16 : 12
       })
       .alignItems(VerticalAlign.Center)
       .backgroundColor(this.colors.primaryGreen)
 
       Tabs({
-        barPosition: BarPosition.End,
-        controller: this.tabsController
+        barPosition: BarPosition.End, controller: this.tabsController
       }) {
         this.TabContents()
       }
@@ -264,8 +242,7 @@ struct MainTabs {
       .barBackgroundColor(this.fallbackBarColor())
       .scrollable(false)
       .onChange((index: number) => {
-        this.currentIndex = index;
-        // FIX: Bump the tick so child pages refresh
+        this.currentIndex = index; // FIX: Bump the tick so child pages refresh
         const prev = AppStorage.get<number>(STORAGE_KEY_TAB_REFRESH_TICK) ?? 0;
         AppStorage.setOrCreate(STORAGE_KEY_TAB_REFRESH_TICK, prev + 1);
       })
@@ -282,11 +259,7 @@ struct MainTabs {
   @Builder
   HamburgerButton() {
     Button({ type: ButtonType.Circle, stateEffect: true }) {
-      Image($r('app.media.ic_menu'))
-        .width(22)
-        .height(22)
-        .fillColor(this.colors.textWhite)
-        .objectFit(ImageFit.Contain)
+      Image($r('app.media.ic_menu')).width(22).height(22).fillColor(this.colors.textWhite).objectFit(ImageFit.Contain)
     }
     .width(44)
     .height(44)
@@ -295,24 +268,69 @@ struct MainTabs {
     .onClick(() => {
       this.toggleMenu();
     })
-    .bindMenu(
-      this.isMenuVisible,
-      this.HamburgerMenuContent(),
-      {
-        placement: Placement.BottomRight,
-        enableArrow: false,
-        backgroundColor: this.colors.cardDark,
-        onDisappear: () => {
-          this.isMenuVisible = false;
-        }
+    .bindMenu(this.isMenuVisible, this.HamburgerMenuContent(), {
+      placement: Placement.BottomRight,
+      enableArrow: false,
+      backgroundColor: this.colors.cardDark,
+      onDisappear: () => {
+        this.isMenuVisible = false;
       }
-    )
+    })
+  }
+
+  @Builder
+  NotificationButton() {
+
+    Stack() {
+
+      Button({ type: ButtonType.Circle }) {
+
+        Image($r('app.media.ic_bell')).width(22).height(22).fillColor(this.colors.textWhite).objectFit(ImageFit.Contain)
+
+      }
+      .width(44)
+      .height(44)
+      .backgroundColor(this.colors.tintSoft)
+      .border({
+        width: 1, color: this.colors.borderSoft
+      })
+      .onClick(() => {
+
+        router.pushUrl({
+          url: 'pages/NotificationCenterPage'
+        }).catch((e: Error) => {
+          console.error(JSON.stringify(e));
+        });
+
+      })
+
+      if (this.notificationCount > 0) {
+
+        Text(this.notificationCount > 99 ? '99+' : this.notificationCount.toString())
+          .fontSize(8)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(Color.White)
+          .backgroundColor('#E53935')
+          .borderRadius(8)
+          .padding({
+            left: 4, right: 4
+          })
+          .position({
+            x: 28, y: 2
+          })
+      }
+    }.margin({
+      right: this.isRtl() ? 0 : 8, left: this.isRtl() ? 8 : 0
+    }).onClick(() => {
+      router.pushUrl({
+        url: 'pages/NotificationCenterPage'
+      });
+    })
   }
 
   @Builder
   HamburgerMenuContent() {
-    Menu() {
-      // ---- Customize ----
+    Menu() { // ---- Customize ----
       MenuItem() {
         Row({ space: 12 }) {
           Image($r('app.media.ic_menu_customize'))
@@ -329,18 +347,13 @@ struct MainTabs {
             .maxLines(1)
             .layoutWeight(1) // Expands to fill available space
             .textAlign(TextAlign.Start) // Aligns properly in RTL
-        }
-        .constraintSize({ minWidth: 160 }) // 👈 Prevents the menu from shrinking too much
-        .padding({
+        }.constraintSize({ minWidth: 160 }).padding({
           top: 12,
           bottom: 12,
           left: 16,
           right: 16
-        })
-        .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
-        .alignItems(VerticalAlign.Center)
-      }
-      .onClick(() => {
+        }).direction(this.isRtl() ? Direction.Rtl : Direction.Ltr).alignItems(VerticalAlign.Center)
+      }.onClick(() => {
         this.isMenuVisible = false;
         this.closeMenuAndNavigate('pages/CustomizePage');
       })
@@ -362,18 +375,13 @@ struct MainTabs {
             .maxLines(1)
             .layoutWeight(1)
             .textAlign(TextAlign.Start)
-        }
-        .constraintSize({ minWidth: 160 })
-        .padding({
+        }.constraintSize({ minWidth: 160 }).padding({
           top: 12,
           bottom: 12,
           left: 16,
           right: 16
-        })
-        .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
-        .alignItems(VerticalAlign.Center)
-      }
-      .onClick(() => {
+        }).direction(this.isRtl() ? Direction.Rtl : Direction.Ltr).alignItems(VerticalAlign.Center)
+      }.onClick(() => {
         this.isMenuVisible = false;
         this.closeMenuAndNavigate('pages/SettingsPage');
       })
@@ -396,174 +404,152 @@ struct MainTabs {
             .maxLines(1)
             .layoutWeight(1)
             .textAlign(TextAlign.Start)
-        }
-        .constraintSize({ minWidth: 160 })
-        .padding({
+        }.constraintSize({ minWidth: 160 }).padding({
           top: 12,
           bottom: 12,
           left: 16,
           right: 16
-        })
-        .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
-        .alignItems(VerticalAlign.Center)
-      }
-      .onClick(() => {
+        }).direction(this.isRtl() ? Direction.Rtl : Direction.Ltr).alignItems(VerticalAlign.Center)
+      }.onClick(() => {
         this.isMenuVisible = false;
         this.exitApp();
       })
     }
   }
 
+  private onPrayerStateChanged(): void {
+    this.refreshNotifications();
+  }
+
   @Builder
   TabContents() {
     TabContent() {
       HomePage()
-    }
-    .tabBar(this.HomeTabBar())
+    }.tabBar(this.HomeTabBar())
 
     TabContent() {
       Prayer()
-    }
-    .tabBar(this.PrayersTabBar())
+    }.tabBar(this.PrayersTabBar())
 
     TabContent() {
       HijriCalendarPage()
-    }
-    .tabBar(this.CalendarTabBar())
+    }.tabBar(this.CalendarTabBar())
 
     TabContent() {
       QiblaPage()
-    }
-    .tabBar(this.CompassTabBar())
+    }.tabBar(this.CompassTabBar())
 
     TabContent() {
       TasbihPage()
-    }
-    .tabBar(this.TasbihTabBar())
+    }.tabBar(this.TasbihTabBar())
   }
 
   @Builder
   HomeTabBar() {
     Column() {
       Image($r('app.media.tab_home'))
-        .width(26).height(26)
-        .fillColor(this.currentIndex === 0
-          ? this.colors.accentGold : this.colors.textMuted)
+        .width(26)
+        .height(26)
+        .fillColor(this.currentIndex === 0 ? this.colors.accentGold : this.colors.textMuted)
         .objectFit(ImageFit.Contain)
       Text(L.get('tab_home', this.currentLanguage))
         .fontSize(10)
         .fontFamily(TypographyHelper.getFont(this.currentLanguage, this.currentIndex === 0)) // <---
-        .fontWeight(this.currentIndex === 0
-          ? FontWeight.Bold : FontWeight.Medium)
-        .fontColor(this.currentIndex === 0
-          ? this.colors.accentGold : this.colors.textMuted)
+        .fontWeight(this.currentIndex === 0 ? FontWeight.Bold : FontWeight.Medium)
+        .fontColor(this.currentIndex === 0 ? this.colors.accentGold : this.colors.textMuted)
         .margin({ top: 4 })
         .maxLines(2)
         .textAlign(TextAlign.Center)
         .lineHeight(11)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
-    }
-    .width('100%').height(68).justifyContent(FlexAlign.Center)
+    }.width('100%').height(68).justifyContent(FlexAlign.Center)
   }
 
   @Builder
   PrayersTabBar() {
     Column() {
       Image($r('app.media.tab_prayers'))
-        .width(26).height(26)
-        .fillColor(this.currentIndex === 1
-          ? this.colors.accentGold : this.colors.textMuted)
+        .width(26)
+        .height(26)
+        .fillColor(this.currentIndex === 1 ? this.colors.accentGold : this.colors.textMuted)
         .objectFit(ImageFit.Contain)
       Text(L.get('tab_prayers', this.currentLanguage))
         .fontSize(10)
-        .fontWeight(this.currentIndex === 1
-          ? FontWeight.Bold : FontWeight.Medium)
-        .fontColor(this.currentIndex === 1
-          ? this.colors.accentGold : this.colors.textMuted)
+        .fontWeight(this.currentIndex === 1 ? FontWeight.Bold : FontWeight.Medium)
+        .fontColor(this.currentIndex === 1 ? this.colors.accentGold : this.colors.textMuted)
         .margin({ top: 4 })
         .maxLines(2)
         .textAlign(TextAlign.Center)
         .lineHeight(11)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
-    }
-    .width('100%').height(68).justifyContent(FlexAlign.Center)
+    }.width('100%').height(68).justifyContent(FlexAlign.Center)
   }
 
   @Builder
   CalendarTabBar() {
     Column() {
       Image($r('app.media.tab_calendar'))
-        .width(26).height(26)
-        .fillColor(this.currentIndex === 2
-          ? this.colors.accentGold : this.colors.textMuted)
+        .width(26)
+        .height(26)
+        .fillColor(this.currentIndex === 2 ? this.colors.accentGold : this.colors.textMuted)
         .objectFit(ImageFit.Contain)
       Text(L.get('tab_calendar', this.currentLanguage))
         .fontSize(10)
-        .fontWeight(this.currentIndex === 2
-          ? FontWeight.Bold : FontWeight.Medium)
-        .fontColor(this.currentIndex === 2
-          ? this.colors.accentGold : this.colors.textMuted)
+        .fontWeight(this.currentIndex === 2 ? FontWeight.Bold : FontWeight.Medium)
+        .fontColor(this.currentIndex === 2 ? this.colors.accentGold : this.colors.textMuted)
         .margin({ top: 4 })
         .maxLines(2)
         .textAlign(TextAlign.Center)
         .lineHeight(11)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
-    }
-    .width('100%').height(68).justifyContent(FlexAlign.Center)
+    }.width('100%').height(68).justifyContent(FlexAlign.Center)
   }
 
   @Builder
   CompassTabBar() {
     Column() {
       Image($r('app.media.tab_compass'))
-        .width(26).height(26)
-        .fillColor(this.currentIndex === 3
-          ? this.colors.accentGold : this.colors.textMuted)
+        .width(26)
+        .height(26)
+        .fillColor(this.currentIndex === 3 ? this.colors.accentGold : this.colors.textMuted)
         .objectFit(ImageFit.Contain)
       Text(L.get('tab_compass', this.currentLanguage))
         .fontSize(10)
-        .fontWeight(this.currentIndex === 3
-          ? FontWeight.Bold : FontWeight.Medium)
-        .fontColor(this.currentIndex === 3
-          ? this.colors.accentGold : this.colors.textMuted)
+        .fontWeight(this.currentIndex === 3 ? FontWeight.Bold : FontWeight.Medium)
+        .fontColor(this.currentIndex === 3 ? this.colors.accentGold : this.colors.textMuted)
         .margin({ top: 4 })
         .maxLines(2)
         .textAlign(TextAlign.Center)
         .lineHeight(11)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
-    }
-    .width('100%').height(68).justifyContent(FlexAlign.Center)
+    }.width('100%').height(68).justifyContent(FlexAlign.Center)
   }
 
   @Builder
   TasbihTabBar() {
     Column() {
       Image($r('app.media.tab_tasbih'))
-        .width(26).height(26)
-        .fillColor(this.currentIndex === 4
-          ? this.colors.accentGold : this.colors.textMuted)
+        .width(26)
+        .height(26)
+        .fillColor(this.currentIndex === 4 ? this.colors.accentGold : this.colors.textMuted)
         .objectFit(ImageFit.Contain)
       Text(L.get('tab_tasbih', this.currentLanguage))
         .fontSize(10)
-        .fontWeight(this.currentIndex === 4
-          ? FontWeight.Bold : FontWeight.Medium)
-        .fontColor(this.currentIndex === 4
-          ? this.colors.accentGold : this.colors.textMuted)
+        .fontWeight(this.currentIndex === 4 ? FontWeight.Bold : FontWeight.Medium)
+        .fontColor(this.currentIndex === 4 ? this.colors.accentGold : this.colors.textMuted)
         .margin({ top: 4 })
         .maxLines(2)
         .textAlign(TextAlign.Center)
         .lineHeight(11)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
-    }
-    .width('100%').height(68).justifyContent(FlexAlign.Center)
+    }.width('100%').height(68).justifyContent(FlexAlign.Center)
   }
 
-  private handleWidgetIntent(): void {
-    // 1. Handle specific pages (e.g., RamadanDetailsPage)
+  private handleWidgetIntent(): void { // 1. Handle specific pages (e.g., RamadanDetailsPage)
     const targetPage = AppStorage.get<string>('widget_target_page');
     if (targetPage && targetPage.length > 0) {
-      AppStorage.setOrCreate('widget_target_page', '');
-      // Delay slightly to ensure router is ready on this page during cold start
+      AppStorage.setOrCreate('widget_target_page',
+        ''); // Delay slightly to ensure router is ready on this page during cold start
       setTimeout(() => {
         NavHelper.prepareForward();
         router.pushUrl({ url: targetPage }).catch((e: Error) => {
@@ -640,16 +626,14 @@ struct MainTabs {
     this.currentIndex = targetIndex;
 
     setTimeout((): void => {
-      try {
-        // CRITICAL FIX: Only call the controller that exists
+      try { // CRITICAL FIX: Only call the controller that exists
         if (this.useHds) {
           this.hdsController.changeIndex(targetIndex);
         } else {
           this.tabsController.changeIndex(targetIndex);
         }
         AppLogger.info('MainTabs', `changeIndex(${targetIndex}) dispatched successfully`);
-      } catch (e) {
-        // Catch the silent exception if the controller is not ready
+      } catch (e) { // Catch the silent exception if the controller is not ready
         AppLogger.warn('MainTabs', `changeIndex failed: ${(e as Error).message}`);
       }
     }, deferred ? 100 : 0);
@@ -722,9 +706,7 @@ struct MainTabs {
    * from the system state directly, ensuring they always contrast.
    */
   private menuIconColor(): string {
-    return PageTheme.isSystemDark()
-      ? '#FFFFFF'
-      : '#1A1A1A';
+    return PageTheme.isSystemDark() ? '#FFFFFF' : '#1A1A1A';
   }
 
   // ============================================================
@@ -732,9 +714,7 @@ struct MainTabs {
   // ============================================================
 
   private menuTextColor(): string {
-    return PageTheme.isSystemDark()
-      ? '#FFFFFF'
-      : '#1A1A1A';
+    return PageTheme.isSystemDark() ? '#FFFFFF' : '#1A1A1A';
   }
 
   // ---- Five parameterless tab bar builders ----
@@ -779,10 +759,8 @@ struct MainTabs {
     try {
       return this.buildHdsFloatingStyle();
     } catch (err) {
-      AppLogger.warn('MainTabs',
-        `buildHdsFloatingStyle failed: ${(err as Error).message}`);
-      // Return an empty style — HDS will not create the floating
-      // handler, but it will still render a standard tab bar.
+      AppLogger.warn('MainTabs', `buildHdsFloatingStyle failed: ${(err as
+        Error).message}`); // Return an empty style — HDS will not create the floating // handler, but it will still render a standard tab bar.
       const empty: HdsTabsFloatingStyle = {};
       return empty;
     }
@@ -790,27 +768,20 @@ struct MainTabs {
 
   private fallbackBarColor(): string {
     const dark = PageTheme.isDarkFor(this.themeMode);
-    return dark
-      ? 'rgba(20, 27, 46, 0.55)'
-      : 'rgba(255, 255, 255, 0.55)';
+    return dark ? 'rgba(20, 27, 46, 0.55)' : 'rgba(255, 255, 255, 0.55)';
   }
 
   private buildHdsFloatingStyle(): HdsTabsFloatingStyle {
     const widths: HdsBarWidthRangeOptions = {
-      smallWidth: this.barWidth,
-      mediumWidth: this.barWidth,
-      largeWidth: this.barWidth
+      smallWidth: this.barWidth, mediumWidth: this.barWidth, largeWidth: this.barWidth
     };
 
     const material: SystemMaterialParams = {
-      materialType: hdsMaterial.MaterialType.ADAPTIVE,
-      materialLevel: hdsMaterial.MaterialLevel.ADAPTIVE
+      materialType: hdsMaterial.MaterialType.ADAPTIVE, materialLevel: hdsMaterial.MaterialLevel.ADAPTIVE
     };
 
     const style: HdsTabsFloatingStyle = {
-      barBottomMargin: 24,
-      barWidth: widths,
-      systemMaterialEffect: material
+      barBottomMargin: 24, barWidth: widths, systemMaterialEffect: material
     };
     return style;
   }
@@ -822,24 +793,18 @@ struct MainTabs {
   private closeMenuAndNavigate(url: string): void {
     setTimeout(() => {
       NavHelper.prepareForward();
-      router.pushUrl({ url })
-        .catch((err: Error) =>
-        console.error('Navigation failed:', JSON.stringify(err)));
+      router.pushUrl({ url }).catch((err: Error) => console.error('Navigation failed:', JSON.stringify(err)));
     }, 120);
   }
 
-  private exitApp(): void {
-    // FIX: Explicitly get PromptAction from the current UIContext.
-    // This prevents the "context is nullptr" error on emulators and laptops.
+  private exitApp(): void { // FIX: Explicitly get PromptAction from the current UIContext. // This prevents the "context is nullptr" error on emulators and laptops.
     const uiPromptAction = this.getUIContext().getPromptAction();
 
     uiPromptAction.showDialog({
       title: L.get('exit', this.currentLanguage),
       message: L.get('exit_confirm_message', this.currentLanguage),
-      buttons: [
-        { text: L.get('cancel', this.currentLanguage), color: this.colors.dialogCancel },
-        { text: L.get('exit', this.currentLanguage), color: this.colors.accentGold }
-      ]
+      buttons: [{ text: L.get('cancel', this.currentLanguage), color: this.colors.dialogCancel },
+        { text: L.get('exit', this.currentLanguage), color: this.colors.accentGold }]
     }).then((result: promptAction.ShowDialogSuccessResponse) => {
       if (result.index === 1) {
         const ctx = getContext(this) as common.UIAbilityContext;
@@ -850,8 +815,8 @@ struct MainTabs {
           console.info('[Exit] Minimizing app to background...');
           win.minimize();
         }).catch((err: Error) => {
-          console.error('[Exit] Minimize failed, falling back to terminateSelf:', JSON.stringify(err));
-          // Fallback with a delay to let the UI thread clear
+          console.error('[Exit] Minimize failed, falling back to terminateSelf:',
+            JSON.stringify(err)); // Fallback with a delay to let the UI thread clear
           setTimeout(() => {
             ctx.terminateSelf();
           }, 300);
@@ -860,5 +825,13 @@ struct MainTabs {
     }).catch((err: Error) => {
       console.error('[Exit] Dialog error:', JSON.stringify(err));
     });
+  }
+
+  private async refreshNotifications(): Promise<void> {
+    try {
+      this.notificationCount = await NotificationService.getUnreadCount();
+    } catch (e) {
+      console.error('[Notification] refresh failed');
+    }
   }
 }

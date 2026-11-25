@@ -47,6 +47,7 @@ import {
   STORAGE_KEY_THEME_OVERRIDE,
   STORAGE_KEY_TIME_FORMAT,
   STORAGE_KEY_TRANSLATION_FONT,
+  STORAGE_KEY_UNREAD_NOTIFICATIONS,
   STORAGE_KEY_VIBRATION_ENABLED,
   STORAGE_KEY_WIZARD_COMPLETED
 } from '../core/common/StorageKeys';
@@ -73,6 +74,7 @@ import { IslamicEventService } from '../hijricalendar/IslamicEventService';
 import { ThemeService } from '../core/ui/themes/ThemeService';
 import { TasbihThemes } from '../tasbih/TasbihThemes';
 import { LanguageService } from '../i18n/LanguageService';
+import { NotificationService } from '../core/notifications/NotificationService';
 
 /** How long the splash stays visible, in milliseconds. */
 const SPLASH_DELAY_MS = 1500;
@@ -103,21 +105,11 @@ export default class EntryAbility extends UIAbility {
    *
    * Extend this list when a new widget needs a new destination.
    */
-  private static readonly WIDGET_TARGET_PAGES: string[] = [
-    'pages/RamadanDetailsPage',
-    'pages/QuranPage',
-    'pages/SurahDetailsPage',
-    'pages/DuasPage',
-    'pages/PrayerProgressPage',
-    'pages/TasbihProgressPage',
-    'pages/SettingsPage',
-    'pages/CustomizePage',
-    'pages/AdvancedCalcPage',
-    'pages/RecitationsPage',
-    'pages/LicensesPage',
-    'pages/HadithHomePage',
-    'pages/HadithBrowsePage'
-  ];
+  private static readonly WIDGET_TARGET_PAGES: string[] =
+    ['pages/RamadanDetailsPage', 'pages/QuranPage', 'pages/SurahDetailsPage', 'pages/DuasPage',
+      'pages/PrayerProgressPage', 'pages/TasbihProgressPage', 'pages/SettingsPage', 'pages/CustomizePage',
+      'pages/AdvancedCalcPage', 'pages/RecitationsPage', 'pages/LicensesPage', 'pages/HadithHomePage',
+      'pages/HadithBrowsePage'];
 
   // ============================================================
   // LIFECYCLE — onCreate
@@ -145,25 +137,22 @@ export default class EntryAbility extends UIAbility {
     L.init(this.context);
     LayoutHelper.install();
     TypographyHelper.init();
+    NotificationService.init(this.context);
 
     OfflineCityLookup.init(this.context).then(() => {
-      PreferencesHelper.init(this.context).then(async () => {
-        // ========================================================
+      PreferencesHelper.init(this.context)
+        .then(async () => { // ========================================================
         // LOAD PERSISTED PREFERENCES INTO APPSTORAGE
         // ========================================================
 
         // ---- Theme Override ----
-        let savedThemeOverride = await PreferencesHelper.getString(
-          STORAGE_KEY_THEME_OVERRIDE, ''
-        );
+          let savedThemeOverride = await PreferencesHelper.getString(STORAGE_KEY_THEME_OVERRIDE, '');
         await BundleBootstrap.init(this.context);
         await IslamicEventService.init(this.context);
         await LanguageService.init(this.context);
-        if (savedThemeOverride.length === 0) {
-          // Migrate from previous versions (which only had THEME_MODE)
-          const legacyTheme = await PreferencesHelper.getString(
-            STORAGE_KEY_THEME_MODE, ThemeMode.SYSTEM
-          );
+
+          if (savedThemeOverride.length === 0) { // Migrate from previous versions (which only had THEME_MODE)
+            const legacyTheme = await PreferencesHelper.getString(STORAGE_KEY_THEME_MODE, ThemeMode.SYSTEM);
           savedThemeOverride = legacyTheme;
           PreferencesHelper.setString(STORAGE_KEY_THEME_OVERRIDE, savedThemeOverride);
           AppLogger.info('EntryAbility', `Theme override migrated → '${savedThemeOverride}'`);
@@ -171,16 +160,13 @@ export default class EntryAbility extends UIAbility {
 
         AppStorage.setOrCreate(STORAGE_KEY_THEME_OVERRIDE, savedThemeOverride);
         AppStorage.setOrCreate(STORAGE_KEY_THEME_MODE, savedThemeOverride);
+          AppStorage.setOrCreate(STORAGE_KEY_UNREAD_NOTIFICATIONS, 0);
         PageTheme.applyColorMode(savedThemeOverride, this.context);
 
         // ---- Language Override ----
-        let savedOverride = await PreferencesHelper.getString(
-          STORAGE_KEY_LANGUAGE_OVERRIDE, ''
-        );
+          let savedOverride = await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE_OVERRIDE, '');
         if (savedOverride.length === 0) {
-          const legacyLang = await PreferencesHelper.getString(
-            STORAGE_KEY_LANGUAGE, ''
-          );
+          const legacyLang = await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE, '');
           if (legacyLang.length > 0 && legacyLang !== 'system') {
             savedOverride = legacyLang;
           } else {
@@ -198,35 +184,22 @@ export default class EntryAbility extends UIAbility {
         PrivacyPolicyProvider.preload(this.context, resolvedLanguage);
 
         // ---- Other Preferences ----
-        const tasbihSound = await PreferencesHelper.getString(
-          STORAGE_KEY_TASBIH_SOUND, SoundOptions.DEFAULT_ID
-        );
+          const tasbihSound = await PreferencesHelper.getString(STORAGE_KEY_TASBIH_SOUND, SoundOptions.DEFAULT_ID);
         AppStorage.setOrCreate(STORAGE_KEY_TASBIH_SOUND, tasbihSound);
 
-        const soundEnabled = await PreferencesHelper.getBoolean(
-          STORAGE_KEY_SOUND_ENABLED, true
-        );
+          const soundEnabled = await PreferencesHelper.getBoolean(STORAGE_KEY_SOUND_ENABLED, true);
         AppStorage.setOrCreate(STORAGE_KEY_SOUND_ENABLED, soundEnabled);
 
-        const savedArabicFont = await PreferencesHelper.getString(
-          STORAGE_KEY_ARABIC_FONT, 'auto'
-        );
+          const savedArabicFont = await PreferencesHelper.getString(STORAGE_KEY_ARABIC_FONT, 'auto');
         AppStorage.setOrCreate(STORAGE_KEY_ARABIC_FONT, savedArabicFont);
 
         const savedTransFont = await PreferencesHelper.getString(STORAGE_KEY_TRANSLATION_FONT, 'auto');
         AppStorage.setOrCreate(STORAGE_KEY_TRANSLATION_FONT, savedTransFont);
 
-        const savedAppTheme = ThemeService.ensureValidThemeId(
-          await PreferencesHelper.getString(
-            STORAGE_KEY_APP_THEME,
-            ThemeService.getDefaultThemeId()
-          )
-        );
+          const savedAppTheme = ThemeService.ensureValidThemeId(
+            await PreferencesHelper.getString(STORAGE_KEY_APP_THEME, ThemeService.getDefaultThemeId()));
 
-        AppStorage.setOrCreate(
-          STORAGE_KEY_APP_THEME,
-          savedAppTheme
-        );
+          AppStorage.setOrCreate(STORAGE_KEY_APP_THEME, savedAppTheme);
 
         const savedQuranLang = await PreferencesHelper.getString(STORAGE_KEY_QURAN_TRANSLATION_LANG, 'default');
         AppStorage.setOrCreate(STORAGE_KEY_QURAN_TRANSLATION_LANG, savedQuranLang);
@@ -237,108 +210,61 @@ export default class EntryAbility extends UIAbility {
         const savedDuaLang = await PreferencesHelper.getString(STORAGE_KEY_DUA_TRANSLATION_LANG, 'default');
         AppStorage.setOrCreate(STORAGE_KEY_DUA_TRANSLATION_LANG, savedDuaLang);
 
-        const savedHijriOffset = await PreferencesHelper.getNumber(
-          STORAGE_KEY_HIJRI_OFFSET, 0
-        );
+          const savedHijriOffset = await PreferencesHelper.getNumber(STORAGE_KEY_HIJRI_OFFSET, 0);
         AppStorage.setOrCreate(STORAGE_KEY_HIJRI_OFFSET, savedHijriOffset);
 
-        const savedHijriCalendarType = await PreferencesHelper.getString(
-          STORAGE_KEY_HIJRI_CALENDAR_TYPE, HijriCalendarType.UMM_AL_QURA
-        );
-        AppStorage.setOrCreate(
-          STORAGE_KEY_HIJRI_CALENDAR_TYPE, savedHijriCalendarType
-        );
+          const savedHijriCalendarType =
+            await PreferencesHelper.getString(STORAGE_KEY_HIJRI_CALENDAR_TYPE, HijriCalendarType.UMM_AL_QURA);
+          AppStorage.setOrCreate(STORAGE_KEY_HIJRI_CALENDAR_TYPE, savedHijriCalendarType);
 
-        const savedShowIslamicEvents = await PreferencesHelper.getBoolean(
-          STORAGE_KEY_SHOW_ISLAMIC_EVENTS, true
-        );
-        AppStorage.setOrCreate(
-          STORAGE_KEY_SHOW_ISLAMIC_EVENTS, savedShowIslamicEvents
-        );
+          const savedShowIslamicEvents = await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_ISLAMIC_EVENTS, true);
+          AppStorage.setOrCreate(STORAGE_KEY_SHOW_ISLAMIC_EVENTS, savedShowIslamicEvents);
 
-        const savedAutoShowRamadanView = await PreferencesHelper.getBoolean(
-          STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW, true
-        );
+          const savedAutoShowRamadanView = await PreferencesHelper.getBoolean(STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW, true);
         AppStorage.setOrCreate(STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW, savedAutoShowRamadanView);
 
         // ---- Event perspective ----
-        const savedEventPerspective = await PreferencesHelper.getString(
-          STORAGE_KEY_EVENT_PERSPECTIVE, 'universal'
-        );
-        AppStorage.setOrCreate(
-          STORAGE_KEY_EVENT_PERSPECTIVE, savedEventPerspective
-        );
+          const savedEventPerspective = await PreferencesHelper.getString(STORAGE_KEY_EVENT_PERSPECTIVE, 'universal');
+          AppStorage.setOrCreate(STORAGE_KEY_EVENT_PERSPECTIVE, savedEventPerspective);
 
-        const vibrationEnabled = await PreferencesHelper.getBoolean(
-          STORAGE_KEY_VIBRATION_ENABLED, true
-        );
+          const vibrationEnabled = await PreferencesHelper.getBoolean(STORAGE_KEY_VIBRATION_ENABLED, true);
         AppStorage.setOrCreate(STORAGE_KEY_VIBRATION_ENABLED, vibrationEnabled);
 
-        const savedTimeFormat = await PreferencesHelper.getString(
-          STORAGE_KEY_TIME_FORMAT, ClockFormat.SYSTEM
-        );
+          const savedTimeFormat = await PreferencesHelper.getString(STORAGE_KEY_TIME_FORMAT, ClockFormat.SYSTEM);
         AppStorage.setOrCreate(STORAGE_KEY_TIME_FORMAT, savedTimeFormat);
 
-        const savedQuranScript = await PreferencesHelper.getString(
-          'active_quran_script', 'indopak'
-        );
+          const savedQuranScript = await PreferencesHelper.getString('active_quran_script', 'indopak');
         AppStorage.setOrCreate('active_quran_script', savedQuranScript);
 
         // ========================================================
         // PER-TIMING VISIBILITY — MIGRATION
         // ========================================================
-        const legacyGroup = await PreferencesHelper.getBoolean(
-          STORAGE_KEY_SHOW_EXTRA_TIMINGS, true
-        );
+          const legacyGroup = await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_EXTRA_TIMINGS, true);
 
-        const legacyImsak = await PreferencesHelper.getBoolean(
-          STORAGE_KEY_SHOW_IMSAK, legacyGroup
-        );
-        const legacyFirstThird = await PreferencesHelper.getBoolean(
-          STORAGE_KEY_SHOW_FIRST_THIRD, legacyGroup
-        );
-        const legacyMidnight = await PreferencesHelper.getBoolean(
-          STORAGE_KEY_SHOW_MIDNIGHT, legacyGroup
-        );
-        const legacyLastThird = await PreferencesHelper.getBoolean(
-          STORAGE_KEY_SHOW_LAST_THIRD, legacyGroup
-        );
+          const legacyImsak = await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_IMSAK, legacyGroup);
+          const legacyFirstThird = await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_FIRST_THIRD, legacyGroup);
+          const legacyMidnight = await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_MIDNIGHT, legacyGroup);
+          const legacyLastThird = await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_LAST_THIRD, legacyGroup);
 
-        AppStorage.setOrCreate(
-          STORAGE_KEY_SHOW_IMSAK_LIST,
-          await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_IMSAK_LIST, legacyImsak)
-        );
-        AppStorage.setOrCreate(
-          STORAGE_KEY_SHOW_IMSAK_SUNPATH,
-          await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_IMSAK_SUNPATH, legacyImsak)
-        );
+          AppStorage.setOrCreate(STORAGE_KEY_SHOW_IMSAK_LIST,
+            await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_IMSAK_LIST, legacyImsak));
+          AppStorage.setOrCreate(STORAGE_KEY_SHOW_IMSAK_SUNPATH,
+            await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_IMSAK_SUNPATH, legacyImsak));
 
-        AppStorage.setOrCreate(
-          STORAGE_KEY_SHOW_FIRST_THIRD_LIST,
-          await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_FIRST_THIRD_LIST, legacyFirstThird)
-        );
-        AppStorage.setOrCreate(
-          STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH,
-          await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH, legacyFirstThird)
-        );
+          AppStorage.setOrCreate(STORAGE_KEY_SHOW_FIRST_THIRD_LIST,
+            await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_FIRST_THIRD_LIST, legacyFirstThird));
+          AppStorage.setOrCreate(STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH,
+            await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH, legacyFirstThird));
 
-        AppStorage.setOrCreate(
-          STORAGE_KEY_SHOW_MIDNIGHT_LIST,
-          await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_MIDNIGHT_LIST, legacyMidnight)
-        );
-        AppStorage.setOrCreate(
-          STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH,
-          await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH, legacyMidnight)
-        );
+          AppStorage.setOrCreate(STORAGE_KEY_SHOW_MIDNIGHT_LIST,
+            await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_MIDNIGHT_LIST, legacyMidnight));
+          AppStorage.setOrCreate(STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH,
+            await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH, legacyMidnight));
 
-        AppStorage.setOrCreate(
-          STORAGE_KEY_SHOW_LAST_THIRD_LIST,
-          await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_LAST_THIRD_LIST, legacyLastThird)
-        );
-        AppStorage.setOrCreate(
-          STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH,
-          await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH, legacyLastThird)
-        );
+          AppStorage.setOrCreate(STORAGE_KEY_SHOW_LAST_THIRD_LIST,
+            await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_LAST_THIRD_LIST, legacyLastThird));
+          AppStorage.setOrCreate(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH,
+            await PreferencesHelper.getBoolean(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH, legacyLastThird));
 
         // ========================================================
         // REMAINING STARTUP
@@ -349,8 +275,7 @@ export default class EntryAbility extends UIAbility {
         try {
           const deviceOffset = -new Date().getTimezoneOffset() / 60;
           const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-          AppLogger.info('EntryAbility',
-            `Device timezone = ${tz}, offset = ${deviceOffset} h`);
+          AppLogger.info('EntryAbility', `Device timezone = ${tz}, offset = ${deviceOffset} h`);
         } catch (err) {
           AppLogger.info('EntryAbility', 'Device timezone lookup failed');
         }
@@ -360,9 +285,7 @@ export default class EntryAbility extends UIAbility {
         await ThemeService.init(this.context);
 
         // ---- Decide the start page ----
-        const wizardDone = await PreferencesHelper.getBoolean(
-          STORAGE_KEY_WIZARD_COMPLETED, false
-        );
+          const wizardDone = await PreferencesHelper.getBoolean(STORAGE_KEY_WIZARD_COMPLETED, false);
         const startPage = wizardDone ? 'pages/MainTabs' : 'pages/WizardPage';
 
         // ---- Tasbih sound player (non-blocking) ----
@@ -378,14 +301,11 @@ export default class EntryAbility extends UIAbility {
         }
 
         // ---- Renew the prayer-reminder window on app start ----
-        this.renewRemindersOnStart().catch(() => {
-          // Never reached — renewRemindersOnStart never throws.
+          this.renewRemindersOnStart().catch(() => { // Never reached — renewRemindersOnStart never throws.
         });
 
         // ---- Show splash, then load the start page ----
-        const splashMs = deviceInfo.deviceType === '2in1'
-          ? SPLASH_DELAY_2IN1_MS
-          : SPLASH_DELAY_MS;
+          const splashMs = deviceInfo.deviceType === '2in1' ? SPLASH_DELAY_2IN1_MS : SPLASH_DELAY_MS;
 
         setTimeout(() => {
           windowStage.loadContent(startPage, (err) => {
@@ -407,20 +327,19 @@ export default class EntryAbility extends UIAbility {
                 });
               }
               AppStorage.setOrCreate('nav_target_page', '');
-            }
-            // ----------------------
+            } // ----------------------
           });
         }, splashMs);
       }).catch((err: Error) => {
         AppLogger.error('EntryAbility', `init failed: ${err.message}`);
-        windowStage.loadContent('pages/MainTabs', () => {
-          // Fallback load — apply the 2-in-1 resize on the same
+        windowStage.loadContent('pages/MainTabs', () => { // Fallback load — apply the 2-in-1 resize on the same
           // post-paint schedule as the primary path.
           this.resizeWindowFor2in1(windowStage);
         });
       });
-    }).catch((err: Error) => {
-      // Fallback if OfflineCityLookup fails (though its internal try/catch should prevent this)
+    })
+      .catch(
+        (err: Error) => { // Fallback if OfflineCityLookup fails (though its internal try/catch should prevent this)
       AppLogger.error('EntryAbility', `OfflineCityLookup init failed: ${err.message}`);
       windowStage.loadContent('pages/MainTabs', () => {
         this.resizeWindowFor2in1(windowStage);
@@ -448,8 +367,7 @@ export default class EntryAbility extends UIAbility {
     });
 
     // NEW: push settings changes to any installed widgets
-    WidgetHelper.refreshAll().catch((): void => {
-      // swallow
+    WidgetHelper.refreshAll().catch((): void => { // swallow
     });
   }
 
@@ -477,31 +395,24 @@ export default class EntryAbility extends UIAbility {
    * full-screen, which is the current (pre-fix) behaviour.
    */
   private installSplitModeListener(windowStage: window.WindowStage): void {
-    windowStage.getMainWindow()
-      .then((win: window.Window) => {
-        // Initial state.
-        try {
-          const status: window.WindowStatusType = win.getWindowStatus();
-          LayoutHelper.setSplitMode(status === window.WindowStatusType.SPLIT_SCREEN);
-        } catch (e) {
-          // getWindowStatus unavailable on some SDK builds — fall
-          // through to the change listener below.
-        }
+    windowStage.getMainWindow().then((win: window.Window) => { // Initial state.
+      try {
+        const status: window.WindowStatusType = win.getWindowStatus();
+        LayoutHelper.setSplitMode(status === window.WindowStatusType.SPLIT_SCREEN);
+      } catch (e) { // getWindowStatus unavailable on some SDK builds — fall // through to the change listener below.
+      }
 
-        // Future changes.
-        try {
-          win.on('windowStatusChange', (status: window.WindowStatusType) => {
-            LayoutHelper.setSplitMode(status === window.WindowStatusType.SPLIT_SCREEN);
-          });
-        } catch (e) {
-          AppLogger.warn('EntryAbility',
-            `windowStatusChange listener failed: ${(e as Error).message}`);
-        }
-      })
-      .catch((err: Error) => {
-        AppLogger.warn('EntryAbility',
-          `installSplitModeListener: getMainWindow failed: ${err.message}`);
-      });
+      // Future changes.
+      try {
+        win.on('windowStatusChange', (status: window.WindowStatusType) => {
+          LayoutHelper.setSplitMode(status === window.WindowStatusType.SPLIT_SCREEN);
+        });
+      } catch (e) {
+        AppLogger.warn('EntryAbility', `windowStatusChange listener failed: ${(e as Error).message}`);
+      }
+    }).catch((err: Error) => {
+      AppLogger.warn('EntryAbility', `installSplitModeListener: getMainWindow failed: ${err.message}`);
+    });
   }
 
   // ============================================================
@@ -535,9 +446,8 @@ export default class EntryAbility extends UIAbility {
     const targetHijriMonth = params['targetHijriMonth'];
     const targetHijriDay = params['targetHijriDay'];
 
-    if (typeof targetHijriYear === 'number' && targetHijriYear > 0 &&
-      typeof targetHijriMonth === 'number' && targetHijriMonth > 0 &&
-      typeof targetHijriDay === 'number' && targetHijriDay > 0) {
+    if (typeof targetHijriYear === 'number' && targetHijriYear > 0 && typeof targetHijriMonth === 'number' &&
+      targetHijriMonth > 0 && typeof targetHijriDay === 'number' && targetHijriDay > 0) {
 
       // Clear old targets first to ensure @Watch fires
       AppStorage.setOrCreate('nav_target_hijri_year', 0);
@@ -551,8 +461,8 @@ export default class EntryAbility extends UIAbility {
 
     if (hasTarget) {
       const currentTop = this.getCurrentPagePath();
-      if (currentTop !== 'pages/MainTabs' && currentTop.length > 0) {
-        // FIX: router.back() returns void, so we wrap it in try/catch instead of .catch()
+      if (currentTop !== 'pages/MainTabs' &&
+        currentTop.length > 0) { // FIX: router.back() returns void, so we wrap it in try/catch instead of .catch()
         try {
           router.back({ url: 'pages/MainTabs' });
         } catch (e) {
@@ -579,8 +489,7 @@ export default class EntryAbility extends UIAbility {
       if (typeof pathRaw === 'string') {
         return pathRaw as string;
       }
-    } catch (e) {
-      // Router not ready (cold start) or getState unavailable
+    } catch (e) { // Router not ready (cold start) or getState unavailable
     }
     return '';
   }
@@ -626,20 +535,13 @@ export default class EntryAbility extends UIAbility {
     if (deviceInfo.deviceType !== '2in1') {
       return;
     }
-    windowStage.getMainWindow()
-      .then((win: window.Window) => {
-        win.resize(
-          PREFERRED_WINDOW_WIDTH_2IN1,
-          PREFERRED_WINDOW_HEIGHT_2IN1
-        ).catch((err: Error) => {
-          AppLogger.info('EntryAbility',
-            `Window resize skipped: ${err.message}`);
-        });
-      })
-      .catch((err: Error) => {
-        AppLogger.info('EntryAbility',
-          `getMainWindow failed: ${err.message}`);
+    windowStage.getMainWindow().then((win: window.Window) => {
+      win.resize(PREFERRED_WINDOW_WIDTH_2IN1, PREFERRED_WINDOW_HEIGHT_2IN1).catch((err: Error) => {
+        AppLogger.info('EntryAbility', `Window resize skipped: ${err.message}`);
       });
+    }).catch((err: Error) => {
+      AppLogger.info('EntryAbility', `getMainWindow failed: ${err.message}`);
+    });
   }
 
   /**
@@ -651,17 +553,14 @@ export default class EntryAbility extends UIAbility {
       const currentOffset = -new Date().getTimezoneOffset() / 60;
       const lastOffset = AppStorage.get<number>(APP_STORAGE_LAST_TZ_OFFSET);
 
-      if (lastOffset !== undefined &&
-        Math.abs(lastOffset - currentOffset) > 0.25) {
-        AppLogger.info('EntryAbility',
-          `Timezone changed ${lastOffset}h → ${currentOffset}h; clearing location cache`);
+      if (lastOffset !== undefined && Math.abs(lastOffset - currentOffset) > 0.25) {
+        AppLogger.info('EntryAbility', `Timezone changed ${lastOffset}h → ${currentOffset}h; clearing location cache`);
         LocationCache.clear().catch(() => { /* non-fatal */
         });
       }
 
       AppStorage.setOrCreate(APP_STORAGE_LAST_TZ_OFFSET, currentOffset);
-    } catch (err) {
-      // Never let this break foreground handling.
+    } catch (err) { // Never let this break foreground handling.
     }
   }
 
@@ -684,19 +583,16 @@ export default class EntryAbility extends UIAbility {
         if (customEvents.length > 0) {
           const hijriOffset = await SettingsHelper.getHijriOffset();
           await CustomEventNotifier.reschedule(customEvents, hijriOffset);
-          AppLogger.info('EntryAbility',
-            `Rescheduled ${customEvents.length} custom event reminder(s)`);
+          AppLogger.info('EntryAbility', `Rescheduled ${customEvents.length} custom event reminder(s)`);
         }
       } catch (e) {
-        AppLogger.warn('EntryAbility',
-          `Custom event reschedule failed: ${(e as Error).message}`);
+        AppLogger.warn('EntryAbility', `Custom event reschedule failed: ${(e as Error).message}`);
       }
 
       AppLogger.info('EntryAbility', 'Reminder renewal complete');
     } catch (e) {
       const err = e as Error;
-      AppLogger.warn('EntryAbility',
-        `Reminder reschedule on start failed: ${err.message}`);
+      AppLogger.warn('EntryAbility', `Reminder reschedule on start failed: ${err.message}`);
     }
   }
 }

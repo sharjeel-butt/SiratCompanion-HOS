@@ -7,24 +7,11 @@ import {
 import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
 import { IslamicEventService } from './IslamicEventService';
 
-export const HIJRI_MONTH_NAMES: string[] = [
-  'Muharram',
-  'Safar',
-  'Rabi al-Awwal',
-  'Rabi al-Thani',
-  'Jumada al-Awwal',
-  'Jumada al-Thani',
-  'Rajab',
-  "Sha'ban",
-  'Ramadan',
-  'Shawwal',
-  "Dhu al-Qi'dah",
-  'Dhu al-Hijjah'
-];
+export const HIJRI_MONTH_NAMES: string[] =
+  ['Muharram', 'Safar', 'Rabi al-Awwal', 'Rabi al-Thani', 'Jumada al-Awwal', 'Jumada al-Thani', 'Rajab', "Sha'ban",
+    'Ramadan', 'Shawwal', "Dhu al-Qi'dah", 'Dhu al-Hijjah'];
 
-export const DAYS_OF_WEEK_SHORT: string[] = [
-  'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'
-];
+export const DAYS_OF_WEEK_SHORT: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 const MS_PER_DAY = 86400000;
 
@@ -82,21 +69,13 @@ export class HijriCalendarHelper {
    * searching ±`range` days from the anchor. Default ±60 is enough
    * for month navigation.
    */
-  static findGregorianForHijri(
-    year: number,
-    month: number,
-    day: number,
-    offsetDays: number,
-    anchor: Date,
-    range?: number
-  ): Date | null {
+  static findGregorianForHijri(year: number, month: number, day: number, offsetDays: number, anchor: Date,
+    range?: number): Date | null {
     let effectiveRange: number;
     if (range !== undefined) {
       effectiveRange = range;
     } else {
-      effectiveRange = HijriCalendarHelper.safeSearchRange(
-        year, month, day, offsetDays, anchor
-      );
+      effectiveRange = HijriCalendarHelper.safeSearchRange(year, month, day, offsetDays, anchor);
     }
 
     for (let i = -effectiveRange; i <= effectiveRange; i++) {
@@ -115,16 +94,9 @@ export class HijriCalendarHelper {
    * Build the ordered list of days for a Hijri month. Length is 29 or 30.
    * Empty array if the anchor can't resolve the month.
    */
-  static buildMonthDays(
-    year: number,
-    month: number,
-    offsetDays: number,
-    anchor: Date,
-    perspective: string = 'universal'
-  ): CalendarDay[] {
-    const firstGreg = HijriCalendarHelper.findGregorianForHijri(
-      year, month, 1, offsetDays, anchor
-    );
+  static buildMonthDays(year: number, month: number, offsetDays: number, anchor: Date,
+    perspective: string = 'universal'): CalendarDay[] {
+    const firstGreg = HijriCalendarHelper.findGregorianForHijri(year, month, 1, offsetDays, anchor);
     if (firstGreg === null) {
       return [];
     }
@@ -145,9 +117,7 @@ export class HijriCalendarHelper {
       const gm = new Date(g.getTime());
       gm.setHours(0, 0, 0, 0);
 
-      const events = HijriCalendarHelper.eventsFor(
-        h.month, h.day, g, perspective
-      );
+      const events = HijriCalendarHelper.eventsFor(h.month, h.day, g, perspective);
       const cd: CalendarDay = {
         gregorianDate: g,
         hijri: h,
@@ -174,17 +144,13 @@ export class HijriCalendarHelper {
    *                    rule-based events like FIRST_THURSDAY_NIGHT
    *                    that depend on the day of the week.
    */
-  static eventsFor(
-    hijriMonth: number,
-    hijriDay: number,
-    gregorianDate: Date | undefined,
-    perspective: string = 'universal'
-  ): string[] {
+  static eventsFor(hijriMonth: number, hijriDay: number, gregorianDate: Date | undefined,
+    perspective: string = 'universal'): string[] {
     const out: string[] = [];
     const allEvents = IslamicEventService.getEvents(perspective);
     for (const e of allEvents) {
-      if (e.recurrence === EventRecurrence.FIRST_THURSDAY_NIGHT) {
-        // Thursday = 4. The event fires on the Thursday whose
+      if (e.recurrence ===
+        EventRecurrence.FIRST_THURSDAY_NIGHT) { // Thursday = 4. The event fires on the Thursday whose
         // next day (Friday) is within the first seven days of
         // the target Hijri month. Since the Thursday precedes
         // that Friday by one day, its Hijri day must be 0–6.
@@ -194,10 +160,8 @@ export class HijriCalendarHelper {
         // Thursday before the SECOND Friday of the month
         // (Hijri day 8) while missing the actual first Friday
         // when the month happened to start mid-week.
-        if (gregorianDate !== undefined &&
-          e.month === hijriMonth &&
-          gregorianDate.getDay() === 4 &&
-          hijriDay >= 1 && hijriDay <= 6) {
+        if (gregorianDate !== undefined && e.month === hijriMonth && gregorianDate.getDay() === 4 && hijriDay >= 1 &&
+          hijriDay <= 6) {
           out.push(e.key);
         }
         continue;
@@ -210,10 +174,7 @@ export class HijriCalendarHelper {
   }
 
   /** All events in a Hijri month, in calendar order. */
-  static eventsInMonth(
-    hijriMonth: number,
-    perspective: string = 'universal'
-  ): IslamicEvent[] {
+  static eventsInMonth(hijriMonth: number, perspective: string = 'universal'): IslamicEvent[] {
     const out: IslamicEvent[] = [];
     const allEvents = IslamicEventService.getEvents(perspective);
     for (const e of allEvents) {
@@ -232,18 +193,14 @@ export class HijriCalendarHelper {
    *              Localizes month abbreviations via Intl.DateTimeFormat.
    *              Falls back to English when Intl is unavailable.
    */
-  static formatGregorianSpan(
-    days: CalendarDay[], lang: string = 'en'
-  ): string {
+  static formatGregorianSpan(days: CalendarDay[], lang: string = 'en'): string {
     if (days.length === 0) {
       return '';
     }
     const first = days[0].gregorianDate;
     const last = days[days.length - 1].gregorianDate;
 
-    const locale = lang === 'zh' ? 'zh-CN'
-      : lang === 'ar' ? 'ar'
-        : 'en-US';
+    const locale = lang === 'zh' ? 'zh-CN' : lang === 'ar' ? 'ar' : 'en-US';
 
     const monthShort = (d: Date): string => {
       try {
@@ -254,25 +211,17 @@ export class HijriCalendarHelper {
     };
     const year = last.getFullYear();
 
-    if (first.getMonth() === last.getMonth() &&
-      first.getFullYear() === last.getFullYear()) {
+    if (first.getMonth() === last.getMonth() && first.getFullYear() === last.getFullYear()) {
       return `${monthShort(first)} ${first.getDate()} – ${last.getDate()}, ${year}`;
     }
-    return `${monthShort(first)} ${first.getDate()} – ` +
-      `${monthShort(last)} ${last.getDate()}, ${year}`;
+    return `${monthShort(first)} ${first.getDate()} – ` + `${monthShort(last)} ${last.getDate()}, ${year}`;
   }
 
   /**
    * Estimate the maximum number of days between the anchor and the
    * target Hijri date, with 60 days of slack for offset drift.
    */
-  private static safeSearchRange(
-    year: number,
-    month: number,
-    day: number,
-    offsetDays: number,
-    anchor: Date
-  ): number {
+  private static safeSearchRange(year: number, month: number, day: number, offsetDays: number, anchor: Date): number {
     try {
       const anchorShifted = new Date(anchor.getTime());
       anchorShifted.setDate(anchorShifted.getDate() + offsetDays);

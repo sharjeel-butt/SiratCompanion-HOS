@@ -16,8 +16,7 @@ export class MosqueService {
     try {
       const req = http.createHttp();
       const response = await req.request(`${MosqueService.CDN_BASE_URL}manifest.json`, {
-        method: http.RequestMethod.GET,
-        expectDataType: http.HttpDataType.STRING
+        method: http.RequestMethod.GET, expectDataType: http.HttpDataType.STRING
       });
       req.destroy();
 
@@ -31,14 +30,13 @@ export class MosqueService {
     }
   }
 
-  static async downloadPack(context: common.Context, countryCode: string, expectedSize: number): Promise<boolean> {
-    // ✅ CORRECTED PATH: Match the rdb directory used by relationalStore
+  static async downloadPack(context: common.Context, countryCode: string,
+    expectedSize: number): Promise<boolean> { // ✅ CORRECTED PATH: Match the rdb directory used by relationalStore
     const dirPath = `${context.databaseDir}/rdb/mosques`;
     const filePath = `${dirPath}/${countryCode}.db`;
     let file: fs.File | null = null;
 
-    try {
-      // 1. Ensure the correct rdb directory exists
+    try { // 1. Ensure the correct rdb directory exists
       if (!fs.accessSync(dirPath)) {
         fs.mkdirSync(dirPath, true); // Use recursive mkdir to create nested folders if needed
       }
@@ -65,8 +63,7 @@ export class MosqueService {
       // 3. Download the file (using the same HTTP logic as before)
       const req = http.createHttp();
       const response = await req.request(`${MosqueService.CDN_BASE_URL}${countryCode}.db`, {
-        method: http.RequestMethod.GET,
-        expectDataType: http.HttpDataType.ARRAY_BUFFER
+        method: http.RequestMethod.GET, expectDataType: http.HttpDataType.ARRAY_BUFFER
       });
       req.destroy();
 
@@ -79,8 +76,7 @@ export class MosqueService {
         // 4a. Validate size
         const stat = fs.statSync(filePath);
         if (stat.size < 10240) {
-          AppLogger.error('MosqueService',
-            `File too small (${stat.size} bytes). Deleting.`);
+          AppLogger.error('MosqueService', `File too small (${stat.size} bytes). Deleting.`);
           try {
             fs.unlinkSync(filePath);
           } catch (err) { /* ignore */
@@ -95,19 +91,15 @@ export class MosqueService {
           const headerBuf = new ArrayBuffer(16);
           fs.readSync(headerFile.fd, headerBuf);
           fs.closeSync(headerFile);
-          const headerStr = buffer
-            .from(new Uint8Array(headerBuf))
-            .toString('utf8');
-          // The magic is exactly "SQLite format 3\0"
+          const headerStr =
+            buffer.from(new Uint8Array(headerBuf)).toString('utf8'); // The magic is exactly "SQLite format 3\0"
           headerOk = headerStr === 'SQLite format 3\u0000';
           if (!headerOk) {
             AppLogger.error('MosqueService',
-              `Invalid SQLite header (got "${headerStr.slice(0, 16)}"). ` +
-                `Deleting ${countryCode}.db.`);
+              `Invalid SQLite header (got "${headerStr.slice(0, 16)}"). ` + `Deleting ${countryCode}.db.`);
           }
         } catch (readErr) {
-          AppLogger.error('MosqueService',
-            `Header read failed for ${countryCode}.db: ${JSON.stringify(readErr)}`);
+          AppLogger.error('MosqueService', `Header read failed for ${countryCode}.db: ${JSON.stringify(readErr)}`);
           headerOk = false;
         }
 
@@ -127,8 +119,7 @@ export class MosqueService {
           return false;
         }
 
-        AppLogger.info('MosqueService',
-          `Successfully downloaded and verified ${countryCode}.db`);
+        AppLogger.info('MosqueService', `Successfully downloaded and verified ${countryCode}.db`);
         return true;
       }
       return false;
@@ -148,13 +139,8 @@ export class MosqueService {
     }
   }
 
-  static async searchNearby(
-    context: common.Context,
-    countryCode: string,
-    userLat: number,
-    userLng: number,
-    radiusKm: number = 15
-  ): Promise<MosqueModel[]> {
+  static async searchNearby(context: common.Context, countryCode: string, userLat: number, userLng: number,
+    radiusKm: number = 15): Promise<MosqueModel[]> {
     const results: MosqueModel[] = [];
 
     // 1. Fetch Custom Mosques
@@ -181,10 +167,9 @@ export class MosqueService {
             predicates.and();
             predicates.between('lng', userLng - lngDelta, userLng + lngDelta);
 
-            const resultSet = await store.query(predicates, [
-              'id', 'osm_id', 'name', 'name_ar', 'name_ur', 'name_tr', 'name_id', 'name_bn', 'name_zh',
-              'lat', 'lng', 'city_name', 'address', 'phone', 'website'
-            ]);
+            const resultSet = await store.query(predicates,
+              ['id', 'osm_id', 'name', 'name_ar', 'name_ur', 'name_tr', 'name_id', 'name_bn', 'name_zh', 'lat', 'lng',
+                'city_name', 'address', 'phone', 'website']);
 
             while (resultSet.goToNextRow()) {
               const lat = resultSet.getDouble(resultSet.getColumnIndex('lat'));
@@ -230,13 +215,11 @@ export class MosqueService {
       localized = mosque.nameAr;
     } else if (lang === 'ur') {
       localized = mosque.nameUr;
-    } else if (lang ===
-      'tr') {
+    } else if (lang === 'tr') {
       localized = mosque.nameTr;
     } else if (lang === 'id') {
       localized = mosque.nameId;
-    } else if (lang ===
-      'bn') {
+    } else if (lang === 'bn') {
       localized = mosque.nameBn;
     } else if (lang === 'zh') {
       localized = mosque.nameZh;
@@ -250,8 +233,7 @@ export class MosqueService {
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   }

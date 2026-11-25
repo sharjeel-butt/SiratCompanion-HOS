@@ -58,8 +58,7 @@ export class RamadanHelper {
     let ramadanStart: Date | null = null;
     let hijriYear = todayHijri.year;
 
-    if (isInRamadan) {
-      // Walk backwards until the Hijri month changes or day === 1.
+    if (isInRamadan) { // Walk backwards until the Hijri month changes or day === 1.
       for (let i = 0; i <= 30; i++) {
         const test = new Date(todayMidnight);
         test.setDate(test.getDate() - i);
@@ -98,9 +97,7 @@ export class RamadanHelper {
     }
     fastingEnd.setHours(0, 0, 0, 0);
 
-    const totalDays = Math.round(
-      (fastingEnd.getTime() - ramadanStart.getTime()) / MS_PER_DAY
-    ) + 1;
+    const totalDays = Math.round((fastingEnd.getTime() - ramadanStart.getTime()) / MS_PER_DAY) + 1;
 
     // ---- Ashras ----
     const ashras: RamadanAshra[] = [];
@@ -177,9 +174,8 @@ export class RamadanHelper {
 
     // ---- Current day number & days until start ----
     const currentDayNumber = isInRamadan ? todayHijri.day : 0;
-    const daysUntilStart = isInRamadan
-      ? 0
-      : Math.round((ramadanStart.getTime() - todayMidnight.getTime()) / MS_PER_DAY);
+    const daysUntilStart =
+      isInRamadan ? 0 : Math.round((ramadanStart.getTime() - todayMidnight.getTime()) / MS_PER_DAY);
 
     const info: RamadanInfo = {
       hijriYear,
@@ -198,26 +194,19 @@ export class RamadanHelper {
 
   /** Short date like "Mar 15". Uses the caller's language. */
   static formatShort(date: Date, lang: string): string {
-    const locale = lang === 'zh' ? 'zh-CN'
-      : lang === 'ar' ? 'ar'
-        : 'en-US';
+    const locale = lang === 'zh' ? 'zh-CN' : lang === 'ar' ? 'ar' : 'en-US';
     try {
       const fmt = new Intl.DateTimeFormat(locale, { month: 'short', day: 'numeric' });
       return fmt.format(date);
     } catch (err) {
-      const months: string[] = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-      ];
+      const months: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       return `${months[date.getMonth()]} ${date.getDate()}`;
     }
   }
 
   /** Long date like "March 15, 2026". */
   static formatLong(date: Date, lang: string): string {
-    const locale = lang === 'zh' ? 'zh-CN'
-      : lang === 'ar' ? 'ar'
-        : 'en-US';
+    const locale = lang === 'zh' ? 'zh-CN' : lang === 'ar' ? 'ar' : 'en-US';
     try {
       const fmt = new Intl.DateTimeFormat(locale, {
         month: 'long', day: 'numeric', year: 'numeric'
@@ -252,20 +241,15 @@ export class RamadanHelper {
     const todayHijri: HijriDate = HijriCalendarHelper.getHijriDate(now, offsetDays);
 
     // Shawwal is month 10. Days 1-3 are the Eid period.
-    if (todayHijri.month !== 10
-      || todayHijri.day < 1
-      || todayHijri.day > 3) {
+    if (todayHijri.month !== 10 || todayHijri.day < 1 || todayHijri.day > 3) {
       return null;
     }
 
     // Resolve 1 Shawwal in Gregorian for the same Hijri year.
     // Anchor on `now`; the default search range (±60 days) easily
     // covers the 0-2 day gap between Shawwal 1 and today.
-    const eidDate = HijriCalendarHelper.findGregorianForHijri(
-      todayHijri.year, 10, 1, offsetDays, now
-    );
-    if (eidDate === null) {
-      // Defensive: if the engine can't resolve Shawwal 1 for a year
+    const eidDate = HijriCalendarHelper.findGregorianForHijri(todayHijri.year, 10, 1, offsetDays, now);
+    if (eidDate === null) { // Defensive: if the engine can't resolve Shawwal 1 for a year
       // we're actively in, treat it as "no Eid period" rather than
       // surfacing a broken card.
       return null;

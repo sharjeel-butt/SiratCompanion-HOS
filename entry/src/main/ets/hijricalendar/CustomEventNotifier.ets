@@ -61,10 +61,7 @@ export class CustomEventNotifier {
           } else if (ev.recurrence === RecurrenceType.YEARLY) {
             matches = h.month === ev.hijriMonth && h.day === ev.hijriDay;
           } else {
-            matches =
-              h.year === ev.hijriYear &&
-                h.month === ev.hijriMonth &&
-                h.day === ev.hijriDay;
+            matches = h.year === ev.hijriYear && h.month === ev.hijriMonth && h.day === ev.hijriDay;
           }
         }
 
@@ -92,8 +89,7 @@ export class CustomEventNotifier {
 
       if (scheduled < remaining) {
         AppLogger.info('CustomEventNotifier',
-          `"${ev.title}" (${ev.recurrence}): only scheduled ` +
-            `${scheduled} of ${remaining} expected occurrence(s)`);
+          `"${ev.title}" (${ev.recurrence}): only scheduled ` + `${scheduled} of ${remaining} expected occurrence(s)`);
       }
     }
 

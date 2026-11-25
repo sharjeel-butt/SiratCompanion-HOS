@@ -12,10 +12,8 @@
 /** Fasting status of a single Ramadan day. */
 export enum FastingStatus {
   /** Not marked yet. The default for a freshly created year. */
-  UNMARKED = 'unmarked',
-  /** The user fasted this day. */
-  FASTED = 'fasted',
-  /** The user missed this day. Requires a reason. */
+  UNMARKED = 'unmarked', /** The user fasted this day. */
+  FASTED = 'fasted', /** The user missed this day. Requires a reason. */
   MISSED = 'missed'
 }
 
@@ -29,12 +27,7 @@ export enum FastingStatus {
  * fit.
  */
 export enum MissedReason {
-  TRAVEL = 'travel',
-  ILLNESS = 'illness',
-  MENSTRUATION = 'menstruation',
-  PREGNANCY_NURSING = 'pregnancy_nursing',
-  FORGETFULNESS = 'forgetfulness',
-  OTHER = 'other'
+  TRAVEL = 'travel', ILLNESS = 'illness', MENSTRUATION = 'menstruation', PREGNANCY_NURSING = 'pregnancy_nursing', FORGETFULNESS = 'forgetfulness', OTHER = 'other'
 }
 
 /** One day's tracking entry. */

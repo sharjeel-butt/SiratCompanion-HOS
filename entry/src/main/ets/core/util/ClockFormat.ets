@@ -1,9 +1,11 @@
 // entry/src/main/ets/common/ClockFormat.ets
+import { settings } from '@kit.BasicServicesKit';
+import { common } from '@kit.AbilityKit';
+import { STORAGE_KEY_TIME_FORMAT } from '../common/StorageKeys';
+import { i18n } from '@kit.LocalizationKit';
 
 export enum ClockFormat {
-  SYSTEM = 'System',
-  TWELVE_HOUR = '12h',
-  TWENTY_FOUR_HOUR = '24h'
+  SYSTEM = 'System', TWELVE_HOUR = '12h', TWENTY_FOUR_HOUR = '24h'
 }
 
 export class ClockFormatHelper {
@@ -93,8 +95,7 @@ export class ClockFormatHelper {
     return `${dh}:${mm} ${period}`;
   }
 
-  private static isSystem24Hour(): boolean {
-    // ---- Layer 1: i18n.System.is24HourClock() (authoritative) ----
+  private static isSystem24Hour(): boolean { // ---- Layer 1: i18n.System.is24HourClock() (authoritative) ----
     try {
       const is24: boolean = i18n.System.is24HourClock();
 
@@ -104,24 +105,16 @@ export class ClockFormatHelper {
       }
       return is24;
     } catch (err) {
-      console.warn(
-        '[ClockFormat] i18n.System.is24HourClock() threw: ' +
-          JSON.stringify(err)
-      );
+      console.warn('[ClockFormat] i18n.System.is24HourClock() threw: ' + JSON.stringify(err));
     }
 
     // ---- Layer 2: @ohos.settings TIME_FORMAT ("24" | "12") ----
     // settings.date.TIME_FORMAT: "24" for 24-hour, "12" for 12-hour.
     try {
       const context = getContext() as common.Context;
-      const raw: string = settings.getValueSync(
-        context,
-        settings.date.TIME_FORMAT,
-        '12'
-      );
+      const raw: string = settings.getValueSync(context, settings.date.TIME_FORMAT, '12');
       return raw === '24';
-    } catch (err) {
-      // No context (e.g. called from a plain JS module), or the
+    } catch (err) { // No context (e.g. called from a plain JS module), or the
       // setting isn't readable — fall through.
     }
 
@@ -142,8 +135,7 @@ export class ClockFormatHelper {
       if (hc === 'h11' || hc === 'h12') {
         return false;
       }
-    } catch (err) {
-      // Fall through.
+    } catch (err) { // Fall through.
     }
 
     // Last resort — assume 12-hour.

@@ -97,11 +97,12 @@ struct LicensesPage {
   }
 
   build() {
-    Column() {
-      // Top Bar
+    Column() { // Top Bar
       Row({ space: 16 }) {
         Row() {
-          Image($r('app.media.ic_chevron_right')).width(20).height(20)
+          Image($r('app.media.ic_chevron_right'))
+            .width(20)
+            .height(20)
             .fillColor(this.colors.textWhite)
             .rotate({ angle: this.isRtl() ? 0 : 180 })
         }
@@ -118,25 +119,21 @@ struct LicensesPage {
           .fontColor(this.colors.textWhite)
           .layoutWeight(1)
           .textAlign(TextAlign.Start)
-      }
-      .width('100%').height(72).padding({ left: 16, right: 16 })
-      .backgroundColor(this.colors.cardDark)
+      }.width('100%').height(72).padding({ left: 16, right: 16 }).backgroundColor(this.colors.cardDark)
 
       if (this.isLoading) {
         LoadingProgress().width(40).height(40).color(this.colors.accentGold).margin({ top: 40 })
       } else if (this.sections.length === 0) {
-        Text('No license information available.')
-          .fontSize(14).fontColor(this.colors.textMuted).margin({ top: 40 })
+        Text('No license information available.').fontSize(14).fontColor(this.colors.textMuted).margin({ top: 40 })
       } else {
         Scroll() {
-          Column({ space: 14 }) {
-            // Intro
-            Text(this.tr('licenses_intro'))
-              .fontSize(13).fontColor(this.colors.textMuted).lineHeight(20)
-              .width('100%')
+          Column({ space: 14 }) { // Intro
+            Text(this.tr('licenses_intro')).fontSize(13).fontColor(this.colors.textMuted).lineHeight(20).width('100%')
 
             Text(this.datasetVersion)
-              .fontSize(11).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
+              .fontSize(11)
+              .fontColor(this.colors.accentGold)
+              .fontWeight(FontWeight.Medium)
               .width('100%')
 
             // Sections
@@ -145,10 +142,8 @@ struct LicensesPage {
             }, (section: LicenseSection) => section.id)
 
             Column().height(40)
-          }
-          .width('100%').padding(16)
-        }
-        .layoutWeight(1).scrollBar(BarState.Auto)
+          }.width('100%').padding(16)
+        }.layoutWeight(1).scrollBar(BarState.Auto)
       }
     }
     .width('100%')
@@ -173,8 +168,7 @@ struct LicensesPage {
         ForEach(section.items, (item: LicenseItem) => {
           this.LicenseItemCard(item)
         }, (item: LicenseItem) => `${section.id}-${item.name}`)
-      }
-      .width('100%')
+      }.width('100%')
     }
     .width('100%')
     .padding(16)
@@ -186,22 +180,16 @@ struct LicensesPage {
   @Builder
   LicenseItemCard(item: LicenseItem) {
     Column({ space: 6 }) {
-      Text(item.name)
-        .fontSize(14).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
-        .width('100%')
+      Text(item.name).fontSize(14).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite).width('100%')
 
       Row({ space: 6 }) {
-        Text(this.tr('license_source_label'))
-          .fontSize(11).fontColor(this.colors.textMuted).flexShrink(0)
-        Text(item.source)
-          .fontSize(11).fontColor(this.colors.textLight).layoutWeight(1)
+        Text(this.tr('license_source_label')).fontSize(11).fontColor(this.colors.textMuted).flexShrink(0)
+        Text(item.source).fontSize(11).fontColor(this.colors.textLight).layoutWeight(1)
       }.width('100%')
 
       Row({ space: 6 }) {
-        Text(this.tr('license_license_label'))
-          .fontSize(11).fontColor(this.colors.textMuted).flexShrink(0)
-        Text(item.license)
-          .fontSize(11).fontColor(this.colors.accentGold).layoutWeight(1)
+        Text(this.tr('license_license_label')).fontSize(11).fontColor(this.colors.textMuted).flexShrink(0)
+        Text(item.license).fontSize(11).fontColor(this.colors.accentGold).layoutWeight(1)
       }.width('100%')
 
       // 🚨 FIX: Check if attribution exists and has length
@@ -225,14 +213,10 @@ struct LicensesPage {
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
             .layoutWeight(1)
-        }
-        .width('100%').margin({ top: 4 })
-        .onClick(() => {
+        }.width('100%').margin({ top: 4 }).onClick(() => {
           const ctx = getContext(this) as common.UIAbilityContext;
           ctx.startAbility({
-            action: 'ohos.want.action.viewData',
-            entities: ['entity.system.browsable'],
-            uri: item.licenseUrl
+            action: 'ohos.want.action.viewData', entities: ['entity.system.browsable'], uri: item.licenseUrl
           }).catch((e: Error) => console.error(e.message));
         })
       }

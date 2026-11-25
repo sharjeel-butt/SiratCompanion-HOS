@@ -10,8 +10,7 @@ struct AdhkarWidget {
   @LocalStorageProp('isRtl') isRtl: boolean = false;
 
   build() {
-    Stack() {
-      // Background & Watermark
+    Stack() { // Background & Watermark
       Column()
         .width('100%')
         .height('100%')
@@ -83,8 +82,7 @@ struct AdhkarWidget {
                 .margin({ right: 6 })
               Image($r('app.media.ic_dua')).width('12vp').height('12vp').fillColor('#E8A44C')
             }
-          }
-          .width('100%').direction(Direction.Ltr).margin({ bottom: 4 })
+          }.width('100%').direction(Direction.Ltr).margin({ bottom: 4 })
 
           // Arabic Text (Flexible Container)
           // FIX: Adjusted font size and line height for 2*4 to prevent overlap
@@ -99,8 +97,7 @@ struct AdhkarWidget {
               .width('100%')
               .maxLines(this.dimension === '4*4' ? 5 : 3)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
-          }
-          .width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
+          }.width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
 
           // Footer Section
           Column() {
@@ -148,14 +145,10 @@ struct AdhkarWidget {
         bottom: 14,
         left: 14,
         right: 14
-      })
-      // FIX: Replaced Blank() with SpaceBetween to prevent overflows pushing the footer out
+      }) // FIX: Replaced Blank() with SpaceBetween to prevent overflows pushing the footer out
       .justifyContent(FlexAlign.SpaceBetween)
       .alignItems(HorizontalAlign.Center)
-    }
-    .width('100%').height('100%')
-    .direction(Direction.Ltr)
-    .onClick(() => {
+    }.width('100%').height('100%').direction(Direction.Ltr).onClick(() => {
       postCardAction(this, {
         action: 'router',
         bundleName: 'com.siratcompanion.hos.app',

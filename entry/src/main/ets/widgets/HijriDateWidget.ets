@@ -16,8 +16,7 @@ struct HijriDateWidget {
   @LocalStorageProp('calendarDays') calendarDays: WidgetCalendarDay[] = [];
 
   build() {
-    Stack() {
-      // Background Layer
+    Stack() { // Background Layer
       Column()
         .width('100%')
         .height('100%')
@@ -39,15 +38,13 @@ struct HijriDateWidget {
           .fillColor('#FFFFFF')
           .opacity(0.03)
           .position({ x: '60%', y: '-10%' })
-      }
-      .width('100%').height('100%').clip(true).borderRadius(24)
+      }.width('100%').height('100%').clip(true).borderRadius(24)
 
       // ==========================================
       // 4x4 CALENDAR LAYOUT
       // ==========================================
       if (this.dimension === '4*4') {
-        Column() {
-          // Header
+        Column() { // Header
           Row() {
             Text(this.headerTitle)
               .fontSize('14vp')
@@ -55,24 +52,19 @@ struct HijriDateWidget {
               .fontColor('#FFFFFF')
               .maxLines(1)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
-          }
-          .width('100%').justifyContent(FlexAlign.Center).margin({ bottom: 10 })
+          }.width('100%').justifyContent(FlexAlign.Center).margin({ bottom: 10 })
 
           // Weekday Headers
           Row() {
             ForEach(this.weekdays, (day: string) => {
-              Text(day)
-                .fontSize('9vp').fontColor('#A5B8CC').textAlign(TextAlign.Center)
-                .layoutWeight(1)
+              Text(day).fontSize('9vp').fontColor('#A5B8CC').textAlign(TextAlign.Center).layoutWeight(1)
             })
-          }
-          .width('100%').margin({ bottom: 6 }).direction(Direction.Ltr)
+          }.width('100%').margin({ bottom: 6 }).direction(Direction.Ltr)
 
           // Days Grid
           // Days Grid
           Flex({
-            wrap: FlexWrap.Wrap,
-            alignContent: FlexAlign.SpaceBetween, // <-- FIX: Distributes rows evenly vertically
+            wrap: FlexWrap.Wrap, alignContent: FlexAlign.SpaceBetween, // <-- FIX: Distributes rows evenly vertically
             justifyContent: FlexAlign.Center
           }) {
             ForEach(this.calendarDays, (cell: WidgetCalendarDay) => {
@@ -89,31 +81,20 @@ struct HijriDateWidget {
                     .borderRadius(11) // Circle shape
 
                   if (cell.hasEvent) {
-                    Circle()
-                      .width('4vp').height('4vp')
-                      .fill(cell.isToday ? '#141B2E' : '#E8A44C')
-                      .margin({ top: 2 })
+                    Circle().width('4vp').height('4vp').fill(cell.isToday ? '#141B2E' : '#E8A44C').margin({ top: 2 })
                   } else {
                     Circle().width('4vp').height('4vp').fill(Color.Transparent).margin({ top: 2 })
                   }
                 }
               }
-              .width('14.28%') // 100% / 7 columns
-              .height('34vp') // <-- FIX: Taller cells to fill the widget
-              .justifyContent(FlexAlign.Center)
-              .alignItems(HorizontalAlign.Center)
+              .width(
+                '14.28%') // 100% / 7 columns.height('34vp') // <-- FIX: Taller cells to fill the widget.justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center)
             })
-          }
-          .width('100%')
-          .layoutWeight(1)
-          .direction(Direction.Ltr) // Keeps structural flex LTR
+          }.width('100%').layoutWeight(1).direction(Direction.Ltr) // Keeps structural flex LTR
 
-        }
-        .width('100%').height('100%').padding(14)
-        .direction(Direction.Ltr)
+        }.width('100%').height('100%').padding(14).direction(Direction.Ltr)
 
-      } else {
-        // ==========================================
+      } else { // ==========================================
         // 2x2 / 2x4 STANDARD LAYOUT
         // ==========================================
         Column() {
@@ -136,8 +117,7 @@ struct HijriDateWidget {
                   .fontWeight(FontWeight.Medium)
                   .constraintSize({ minWidth: 0 })
               }
-            }
-            .width('100%').justifyContent(FlexAlign.Center).margin({ top: 8, bottom: 4 })
+            }.width('100%').justifyContent(FlexAlign.Center).margin({ top: 8, bottom: 4 })
 
             Text(this.hijriDay)
               .fontSize('56vp')
@@ -175,9 +155,7 @@ struct HijriDateWidget {
         .alignItems(HorizontalAlign.Center)
         .direction(Direction.Ltr)
       }
-    }
-    .width('100%').height('100%')
-    .onClick(() => {
+    }.width('100%').height('100%').onClick(() => {
       postCardAction(this, {
         action: 'router',
         bundleName: 'com.siratcompanion.hos.app',

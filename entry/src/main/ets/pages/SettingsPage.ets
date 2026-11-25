@@ -50,24 +50,13 @@ type PickerKind = 'none' | 'method' | 'asr' | 'source' | 'hijriType';
 @Component
 struct SettingsPage {
   // ---- storage links ----
-  @StorageLink(STORAGE_KEY_THEME_MODE)
-  @Watch('onThemeModeChanged')
-  themeMode: string = ThemeMode.SYSTEM;
-  @StorageLink(STORAGE_KEY_LANGUAGE)
-  @Watch('onLanguageChanged')
-  appLanguage: string = 'en';
-  @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
-  hijriOffset: number = 0;
-  @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_TYPE)
-  hijriCalendarType: string = HijriCalendarType.UMM_AL_QURA;
-  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
-  @Watch('onAppForegrounded')
-  appForegroundTick: number = 0;
-  @StorageLink(STORAGE_KEY_BREAKPOINT)
-  breakpoint: string = 'sm';
-  @StorageLink(STORAGE_KEY_APP_THEME)
-  @Watch('onAppThemePresetChanged')
-  appThemePreset: string = '';
+  @StorageLink(STORAGE_KEY_THEME_MODE) @Watch('onThemeModeChanged') themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLanguageChanged') appLanguage: string = 'en';
+  @StorageLink(STORAGE_KEY_HIJRI_OFFSET) hijriOffset: number = 0;
+  @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_TYPE) hijriCalendarType: string = HijriCalendarType.UMM_AL_QURA;
+  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK) @Watch('onAppForegrounded') appForegroundTick: number = 0;
+  @StorageLink(STORAGE_KEY_BREAKPOINT) breakpoint: string = 'sm';
+  @StorageLink(STORAGE_KEY_APP_THEME) @Watch('onAppThemePresetChanged') appThemePreset: string = '';
   // ---- state ----
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State calcMethod: CalculationMethod = CalculationMethod.KARACHI;
@@ -120,19 +109,14 @@ struct SettingsPage {
   aboutToAppear(): void {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
-    this.systemDarkListener = PageTheme.installSystemListener(
-      this.themeMode,
-      (c) => {
-        this.colors = c;
-      }
-    );
+    this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
+      this.colors = c;
+    });
 
     // Read the one-shot category hint set by Home / Prayer before
     // navigating. Cleared immediately so a subsequent open via the
     // hamburger menu defaults to Location.
-    const hint = AppStorage.get<string>(
-      STORAGE_KEY_SETTINGS_INITIAL_CATEGORY
-    );
+    const hint = AppStorage.get<string>(STORAGE_KEY_SETTINGS_INITIAL_CATEGORY);
     if (hint !== undefined && hint.length > 0) {
       this.expandedCategory = hint;
       AppStorage.setOrCreate(STORAGE_KEY_SETTINGS_INITIAL_CATEGORY, '');
@@ -173,8 +157,7 @@ struct SettingsPage {
                 expanded: this.expandedCategory === 'Location',
                 currentLanguage: this.currentLanguage,
                 onTap: () => {
-                  this.expandedCategory =
-                    this.expandedCategory === 'Location' ? null : 'Location';
+                  this.expandedCategory = this.expandedCategory === 'Location' ? null : 'Location';
                 }
               })
               if (this.expandedCategory === 'Location') {
@@ -189,9 +172,7 @@ struct SettingsPage {
                 expanded: this.expandedCategory === 'Prayer Times',
                 currentLanguage: this.currentLanguage,
                 onTap: () => {
-                  this.expandedCategory =
-                    this.expandedCategory === 'Prayer Times'
-                      ? null : 'Prayer Times';
+                  this.expandedCategory = this.expandedCategory === 'Prayer Times' ? null : 'Prayer Times';
                 }
               })
               if (this.expandedCategory === 'Prayer Times') {
@@ -207,9 +188,7 @@ struct SettingsPage {
                   expanded: this.expandedCategory === 'Notifications',
                   currentLanguage: this.currentLanguage,
                   onTap: () => {
-                    this.expandedCategory =
-                      this.expandedCategory === 'Notifications'
-                        ? null : 'Notifications';
+                    this.expandedCategory = this.expandedCategory === 'Notifications' ? null : 'Notifications';
                   }
                 })
                 if (this.expandedCategory === 'Notifications') {
@@ -225,9 +204,7 @@ struct SettingsPage {
                 expanded: this.expandedCategory === 'Hijri Calendar',
                 currentLanguage: this.currentLanguage,
                 onTap: () => {
-                  this.expandedCategory =
-                    this.expandedCategory === 'Hijri Calendar'
-                      ? null : 'Hijri Calendar';
+                  this.expandedCategory = this.expandedCategory === 'Hijri Calendar' ? null : 'Hijri Calendar';
                 }
               })
               if (this.expandedCategory === 'Hijri Calendar') {
@@ -242,9 +219,7 @@ struct SettingsPage {
                 expanded: this.expandedCategory === 'Backup & Restore',
                 currentLanguage: this.currentLanguage,
                 onTap: () => {
-                  this.expandedCategory =
-                    this.expandedCategory === 'Backup & Restore'
-                      ? null : 'Backup & Restore';
+                  this.expandedCategory = this.expandedCategory === 'Backup & Restore' ? null : 'Backup & Restore';
                 }
               })
               if (this.expandedCategory === 'Backup & Restore') {
@@ -259,8 +234,7 @@ struct SettingsPage {
                 expanded: this.expandedCategory === 'Logs',
                 currentLanguage: this.currentLanguage,
                 onTap: () => {
-                  this.expandedCategory =
-                    this.expandedCategory === 'Logs' ? null : 'Logs';
+                  this.expandedCategory = this.expandedCategory === 'Logs' ? null : 'Logs';
                 }
               })
               if (this.expandedCategory === 'Logs') {
@@ -275,8 +249,7 @@ struct SettingsPage {
                 expanded: this.expandedCategory === 'About',
                 currentLanguage: this.currentLanguage,
                 onTap: () => {
-                  this.expandedCategory =
-                    this.expandedCategory === 'About' ? null : 'About';
+                  this.expandedCategory = this.expandedCategory === 'About' ? null : 'About';
                 }
               })
               if (this.expandedCategory === 'About') {
@@ -284,15 +257,10 @@ struct SettingsPage {
               }
 
               Column().height(40)
-            }
-            .width('100%')
-            .constraintSize({
+            }.width('100%').constraintSize({
               maxWidth: Breakpoints.maxContentWidth(this.breakpoint)
-            })
-            .padding({ left: 16, right: 16, top: 20 })
-          }
-          .width('100%')
-          .justifyContent(FlexAlign.Center)
+            }).padding({ left: 16, right: 16, top: 20 })
+          }.width('100%').justifyContent(FlexAlign.Center)
         }
         .layoutWeight(1)
         .width('100%')
@@ -308,18 +276,12 @@ struct SettingsPage {
 
       // ---- Picker overlay (topmost) ----
       if (this.showPickerSheet) {
-        this.PickerOverlay(
-          this.pickerTitle(),
-          this.pickerIcon(),
-          this.pickerItems(),
-          (id: string) => {
-            this.pickItem(id);
-          },
-          () => {
-            this.showPickerSheet = false;
-            this.activePicker = 'none';
-          }
-        )
+        this.PickerOverlay(this.pickerTitle(), this.pickerIcon(), this.pickerItems(), (id: string) => {
+          this.pickItem(id);
+        }, () => {
+          this.showPickerSheet = false;
+          this.activePicker = 'none';
+        })
       }
     }
     .width('100%')
@@ -340,21 +302,17 @@ struct SettingsPage {
 
   @Builder
   BackupRestoreContent() {
-    Column() {
-      // ---- Backup to File ----
+    Column() { // ---- Backup to File ----
       Row({ space: 8 }) {
         Column() {
-          Text(this.tr('backup_to_file'))
-            .fontSize(15).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
+          Text(this.tr('backup_to_file')).fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
           Text(this.tr('backup_to_file_desc'))
             .fontSize(11)
             .fontColor(this.colors.textMuted)
             .margin({ top: 2 })
             .maxLines(3)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+        }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
         Image($r('app.media.ic_chevron_right'))
           .width(16)
@@ -383,17 +341,14 @@ struct SettingsPage {
       // ---- Restore from File ----
       Row({ space: 8 }) {
         Column() {
-          Text(this.tr('restore_from_file'))
-            .fontSize(15).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
+          Text(this.tr('restore_from_file')).fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
           Text(this.tr('restore_from_file_desc'))
             .fontSize(11)
             .fontColor(this.colors.textMuted)
             .margin({ top: 2 })
             .maxLines(3)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+        }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
         Image($r('app.media.ic_chevron_right'))
           .width(16)
@@ -479,15 +434,11 @@ struct SettingsPage {
   LocationContent() {
     Column() {
       Row() {
-        Text(this.tr('location_desc'))
-          .fontSize(11).fontColor(this.colors.textMuted)
-          .layoutWeight(1)
+        Text(this.tr('location_desc')).fontSize(11).fontColor(this.colors.textMuted).layoutWeight(1)
 
         Button() {
           if (this.isRefreshing) {
-            LoadingProgress()
-              .width(18).height(18)
-              .color(this.colors.accentGold)
+            LoadingProgress().width(18).height(18).color(this.colors.accentGold)
           } else {
             Image($r('app.media.ic_refresh')).width(18).height(18).fillColor(this.colors.accentGold)
           }
@@ -500,27 +451,23 @@ struct SettingsPage {
         .onClick(() => {
           this.refreshLocation();
         })
-      }
-      .width('100%')
-      .padding({ bottom: 14 })
-      .alignItems(VerticalAlign.Center)
+      }.width('100%').padding({ bottom: 14 }).alignItems(VerticalAlign.Center)
 
       Row() {
         this.ModeButton(this.tr('gps'), LocationMode.GPS)
         this.ModeButton(this.tr('manual_location'), LocationMode.MANUAL)
-      }
-      .width('100%')
-      .padding({ bottom: 14 })
+      }.width('100%').padding({ bottom: 14 })
 
       if (this.locationMode === LocationMode.MANUAL) {
         Column() {
           Column() {
             Text(this.tr('latitude_hint'))
-              .fontSize(11).fontColor(this.colors.textMuted)
-              .width('100%').margin({ bottom: 4 })
+              .fontSize(11)
+              .fontColor(this.colors.textMuted)
+              .width('100%')
+              .margin({ bottom: 4 })
             TextInput({
-              text: this.manualLatInput,
-              placeholder: 'e.g. 33.6844'
+              text: this.manualLatInput, placeholder: 'e.g. 33.6844'
             })
               .type(InputType.Normal)
               .inputFilter('[\\-0-9\\.]')
@@ -540,16 +487,16 @@ struct SettingsPage {
                 top: 8,
                 bottom: 8
               })
-          }
-          .width('100%').margin({ bottom: 10 })
+          }.width('100%').margin({ bottom: 10 })
 
           Column() {
             Text(this.tr('longitude_hint'))
-              .fontSize(11).fontColor(this.colors.textMuted)
-              .width('100%').margin({ bottom: 4 })
+              .fontSize(11)
+              .fontColor(this.colors.textMuted)
+              .width('100%')
+              .margin({ bottom: 4 })
             TextInput({
-              text: this.manualLngInput,
-              placeholder: 'e.g. 73.0479'
+              text: this.manualLngInput, placeholder: 'e.g. 73.0479'
             })
               .type(InputType.Normal)
               .inputFilter('[\\-0-9\\.]')
@@ -569,16 +516,16 @@ struct SettingsPage {
                 top: 8,
                 bottom: 8
               })
-          }
-          .width('100%').margin({ bottom: 10 })
+          }.width('100%').margin({ bottom: 10 })
 
           Column() {
             Text(this.tr('city_name_optional'))
-              .fontSize(11).fontColor(this.colors.textMuted)
-              .width('100%').margin({ bottom: 4 })
+              .fontSize(11)
+              .fontColor(this.colors.textMuted)
+              .width('100%')
+              .margin({ bottom: 4 })
             TextInput({
-              text: this.manualCityInput,
-              placeholder: this.tr('city_name_placeholder')
+              text: this.manualCityInput, placeholder: this.tr('city_name_placeholder')
             })
               .type(InputType.Normal)
               .onChange((v: string) => {
@@ -596,12 +543,12 @@ struct SettingsPage {
                 top: 8,
                 bottom: 8
               })
-          }
-          .width('100%').margin({ bottom: 12 })
+          }.width('100%').margin({ bottom: 12 })
 
           Button() {
             Text(this.tr('save_coordinates'))
-              .fontSize(14).fontWeight(FontWeight.Medium)
+              .fontSize(14)
+              .fontWeight(FontWeight.Medium)
               .fontColor(this.colors.textOnAccent)
           }
           .width('100%')
@@ -611,57 +558,53 @@ struct SettingsPage {
           .onClick(() => {
             this.saveManualCoords();
           })
-        }
-        .width('100%').padding({ bottom: 14 })
+        }.width('100%').padding({ bottom: 14 })
       }
 
       Column() {
         Row() {
           Text(this.tr('current_position'))
-            .fontSize(11).fontColor(this.colors.accentGold)
-            .fontWeight(FontWeight.Medium).letterSpacing(1)
-        }
-        .width('100%').padding({ bottom: 8 })
+            .fontSize(11)
+            .fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Medium)
+            .letterSpacing(1)
+        }.width('100%').padding({ bottom: 8 })
 
         Row() {
-          Text(this.tr('latitude'))
-            .fontSize(12).fontColor(this.colors.textMuted)
+          Text(this.tr('latitude')).fontSize(12).fontColor(this.colors.textMuted)
           Blank()
           Text(this.formatCoord(this.effectiveLat))
-            .fontSize(12).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium).direction(Direction.Ltr)
-        }
-        .width('100%').padding({ top: 4, bottom: 4 })
+            .fontSize(12)
+            .fontColor(this.colors.textWhite)
+            .fontWeight(FontWeight.Medium)
+            .direction(Direction.Ltr)
+        }.width('100%').padding({ top: 4, bottom: 4 })
 
         Row() {
-          Text(this.tr('longitude'))
-            .fontSize(12).fontColor(this.colors.textMuted)
+          Text(this.tr('longitude')).fontSize(12).fontColor(this.colors.textMuted)
           Blank()
           Text(this.formatCoord(this.effectiveLng))
-            .fontSize(12).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium).direction(Direction.Ltr)
-        }
-        .width('100%').padding({ top: 4, bottom: 4 })
-
-        Row() {
-          Text(this.tr('city'))
-            .fontSize(12).fontColor(this.colors.textMuted)
-          Blank()
-          Text(this.effectiveCity)
-            .fontSize(12).fontColor(this.colors.textWhite)
+            .fontSize(12)
+            .fontColor(this.colors.textWhite)
             .fontWeight(FontWeight.Medium)
-        }
-        .width('100%').padding({ top: 4, bottom: 4 })
+            .direction(Direction.Ltr)
+        }.width('100%').padding({ top: 4, bottom: 4 })
 
         Row() {
-          Text(this.tr('last_refreshed'))
-            .fontSize(12).fontColor(this.colors.textMuted)
+          Text(this.tr('city')).fontSize(12).fontColor(this.colors.textMuted)
+          Blank()
+          Text(this.effectiveCity).fontSize(12).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+        }.width('100%').padding({ top: 4, bottom: 4 })
+
+        Row() {
+          Text(this.tr('last_refreshed')).fontSize(12).fontColor(this.colors.textMuted)
           Blank()
           Text(this.formatRefreshTime(this.lastRefreshTime))
-            .fontSize(12).fontColor(this.colors.accentGold)
-            .fontWeight(FontWeight.Medium).direction(Direction.Ltr)
-        }
-        .width('100%').padding({ top: 4, bottom: 4 })
+            .fontSize(12)
+            .fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Medium)
+            .direction(Direction.Ltr)
+        }.width('100%').padding({ top: 4, bottom: 4 })
       }
       .width('100%')
       .padding(12)
@@ -685,12 +628,9 @@ struct SettingsPage {
   ModeButton(label: string, mode: LocationMode) {
     Text(label)
       .fontSize(12)
-      .fontWeight(this.locationMode === mode
-        ? FontWeight.Bold : FontWeight.Normal)
-      .fontColor(this.locationMode === mode
-        ? this.colors.textOnAccent : this.colors.textWhite)
-      .backgroundColor(this.locationMode === mode
-        ? this.colors.accentGold : this.colors.tintSoft)
+      .fontWeight(this.locationMode === mode ? FontWeight.Bold : FontWeight.Normal)
+      .fontColor(this.locationMode === mode ? this.colors.textOnAccent : this.colors.textWhite)
+      .backgroundColor(this.locationMode === mode ? this.colors.accentGold : this.colors.tintSoft)
       .textAlign(TextAlign.Center)
       .maxLines(1)
       .textOverflow({ overflow: TextOverflow.Ellipsis })
@@ -698,8 +638,7 @@ struct SettingsPage {
       .layoutWeight(1)
       .borderRadius(10)
       .margin({
-        right: mode === LocationMode.GPS ? 6 : 0,
-        left: mode === LocationMode.MANUAL ? 6 : 0
+        right: mode === LocationMode.GPS ? 6 : 0, left: mode === LocationMode.MANUAL ? 6 : 0
       })
       .onClick(() => {
         this.pickLocationMode(mode);
@@ -723,12 +662,8 @@ struct SettingsPage {
       SettingsRow({
         colors: this.colors,
         title: this.tr('madhab'),
-        description: this.isMadhabLocked()
-          ? this.tr('madhab_desc_diyanet')
-          : this.tr('madhab_desc'),
-        value: this.isMadhabLocked()
-          ? this.tr('asr_standard')
-          : SettingsHelper.getAsrRuleLabel(this.asrRule),
+        description: this.isMadhabLocked() ? this.tr('madhab_desc_diyanet') : this.tr('madhab_desc'),
+        value: this.isMadhabLocked() ? this.tr('asr_standard') : SettingsHelper.getAsrRuleLabel(this.asrRule),
         onTap: () => {
           if (!this.isMadhabLocked()) {
             this.activePicker = 'asr';
@@ -754,14 +689,11 @@ struct SettingsPage {
         colors: this.colors,
         title: this.tr('advanced_calc_title'),
         description: '',
-        value: this.tr('rounding_method') + ' · '
-          + this.tr('midnight_method') + ' · '
-          + this.tr('high_latitude'),
+        value: this.tr('rounding_method') + ' · ' + this.tr('midnight_method') + ' · ' + this.tr('high_latitude'),
         onTap: () => {
           NavHelper.prepareForward();
           router.pushUrl({ url: 'pages/AdvancedCalcPage' })
-            .catch((err: Error) =>
-            console.error('Navigation failed: ' + err.message));
+            .catch((err: Error) => console.error('Navigation failed: ' + err.message));
         }
       })
     }
@@ -782,18 +714,11 @@ struct SettingsPage {
     Column() {
       Row({ space: 8 }) {
         Column() {
-          Text(this.tr('prayer_offsets'))
-            .fontSize(15).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
-          Text(this.tr('prayer_offsets_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted)
-            .margin({ top: 2 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+          Text(this.tr('prayer_offsets')).fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+          Text(this.tr('prayer_offsets_desc')).fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+        }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
-        Image(this.showOffsets
-          ? $r('app.media.ic_chevron_down')
-          : $r('app.media.ic_chevron_right'))
+        Image(this.showOffsets ? $r('app.media.ic_chevron_down') : $r('app.media.ic_chevron_right'))
           .width(16)
           .height(16)
           .fillColor(this.colors.accentGold)
@@ -803,15 +728,12 @@ struct SettingsPage {
             angle: this.showOffsets ? 0 : (this.isRtl() ? 180 : 0)
           })
           .animation({ duration: 200, curve: Curve.EaseInOut })
-      }
-      .width('100%')
-      .padding({
+      }.width('100%').padding({
         top: 14,
         bottom: 14,
         left: 16,
         right: 16
-      })
-      .onClick(() => {
+      }).onClick(() => {
         this.showOffsets = !this.showOffsets;
       })
 
@@ -833,7 +755,8 @@ struct SettingsPage {
 
           Button() {
             Text(this.tr('reset_all_offsets'))
-              .fontSize(13).fontWeight(FontWeight.Medium)
+              .fontSize(13)
+              .fontWeight(FontWeight.Medium)
               .fontColor(this.colors.textWhite)
           }
           .width('100%')
@@ -844,8 +767,7 @@ struct SettingsPage {
           .onClick(() => {
             this.resetOffsets();
           })
-        }
-        .width('100%').padding({ left: 8, right: 8, bottom: 12 })
+        }.width('100%').padding({ left: 8, right: 8, bottom: 12 })
       }
     }
     .width('100%')
@@ -858,12 +780,10 @@ struct SettingsPage {
   @Builder
   OffsetRow(label: string, key: OffsetKey) {
     Row() {
-      Text(label).fontSize(14).fontColor(this.colors.textWhite)
-        .layoutWeight(1)
+      Text(label).fontSize(14).fontColor(this.colors.textWhite).layoutWeight(1)
 
       Button({ type: ButtonType.Normal }) {
-        Text('\u2212').fontSize(24).fontWeight(FontWeight.Bold)
-          .fontColor(this.colors.textWhite)
+        Text('\u2212').fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
       }
       .width(38)
       .height(38)
@@ -874,18 +794,15 @@ struct SettingsPage {
         this.changeOffset(key, -1);
       })
 
-      Text(PrayerOffsetsHelper.format(
-        PrayerOffsetsHelper.get(this.offsets, key)))
+      Text(PrayerOffsetsHelper.format(PrayerOffsetsHelper.get(this.offsets, key)))
         .fontSize(15)
         .fontWeight(FontWeight.Bold)
-        .fontColor(PrayerOffsetsHelper.get(this.offsets, key) === 0
-          ? this.colors.textMuted : this.colors.accentGold)
+        .fontColor(PrayerOffsetsHelper.get(this.offsets, key) === 0 ? this.colors.textMuted : this.colors.accentGold)
         .width(56)
         .textAlign(TextAlign.Center)
 
       Button({ type: ButtonType.Normal }) {
-        Text('+').fontSize(24).fontWeight(FontWeight.Bold)
-          .fontColor(this.colors.textOnAccent)
+        Text('+').fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.textOnAccent)
       }
       .width(38)
       .height(38)
@@ -894,9 +811,7 @@ struct SettingsPage {
       .onClick(() => {
         this.changeOffset(key, 1);
       })
-    }
-    .width('100%')
-    .padding({
+    }.width('100%').padding({
       top: 8,
       bottom: 8,
       left: 8,
@@ -910,13 +825,11 @@ struct SettingsPage {
       Row() {
         Column() {
           Text(this.tr('notifications_master'))
-            .fontSize(15).fontColor(this.colors.textWhite)
+            .fontSize(15)
+            .fontColor(this.colors.textWhite)
             .fontWeight(FontWeight.Medium)
-          Text(this.tr('notifications_master_desc'))
-            .fontSize(11).fontColor(this.colors.textMuted)
-            .margin({ top: 2 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+          Text(this.tr('notifications_master_desc')).fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+        }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
         Toggle({ type: ToggleType.Switch, isOn: this.notifMaster })
           .selectedColor(this.colors.accentGold)
@@ -937,7 +850,8 @@ struct SettingsPage {
 
       Button() {
         Text(this.tr('notif_test_button'))
-          .fontSize(14).fontWeight(FontWeight.Medium)
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
           .fontColor(this.colors.textOnAccent)
       }
       .width('100%')
@@ -973,19 +887,15 @@ struct SettingsPage {
         Column() {
           Row() {
             Column() {
-              Text(this.tr('notify_before'))
-                .fontSize(15).fontColor(this.colors.textWhite)
-                .fontWeight(FontWeight.Medium)
-              Text(this.tr('notify_before_desc'))
-                .fontSize(11).fontColor(this.colors.textMuted)
-                .margin({ top: 2 })
-            }
-            .alignItems(HorizontalAlign.Start).layoutWeight(1)
+              Text(this.tr('notify_before')).fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+              Text(this.tr('notify_before_desc')).fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+            }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
             Button({ type: ButtonType.Normal }) {
-              Text('\u2212').fontSize(20).fontWeight(FontWeight.Bold)
-                .fontColor(this.notifBefore <= MIN_BEFORE_MINUTES
-                  ? this.colors.textMuted : this.colors.textWhite)
+              Text('\u2212')
+                .fontSize(20)
+                .fontWeight(FontWeight.Bold)
+                .fontColor(this.notifBefore <= MIN_BEFORE_MINUTES ? this.colors.textMuted : this.colors.textWhite)
             }
             .width(38)
             .height(38)
@@ -999,30 +909,27 @@ struct SettingsPage {
 
             Column() {
               Text(this.formatNotifBefore())
-                .fontSize(18).fontWeight(FontWeight.Bold)
-                .fontColor(this.notifBefore === 0
-                  ? this.colors.textMuted : this.colors.accentGold)
-              Text(this.tr('notif_minutes_suffix'))
-                .fontSize(10).fontColor(this.colors.textMuted)
-            }
-            .width(64).alignItems(HorizontalAlign.Center)
+                .fontSize(18)
+                .fontWeight(FontWeight.Bold)
+                .fontColor(this.notifBefore === 0 ? this.colors.textMuted : this.colors.accentGold)
+              Text(this.tr('notif_minutes_suffix')).fontSize(10).fontColor(this.colors.textMuted)
+            }.width(64).alignItems(HorizontalAlign.Center)
 
             Button({ type: ButtonType.Normal }) {
-              Text('+').fontSize(20).fontWeight(FontWeight.Bold)
-                .fontColor(this.notifBefore >= MAX_BEFORE_MINUTES
-                  ? this.colors.textMuted : this.colors.textOnAccent)
+              Text('+')
+                .fontSize(20)
+                .fontWeight(FontWeight.Bold)
+                .fontColor(this.notifBefore >= MAX_BEFORE_MINUTES ? this.colors.textMuted : this.colors.textOnAccent)
             }
             .width(38)
             .height(38)
-            .backgroundColor(this.notifBefore >= MAX_BEFORE_MINUTES
-              ? this.colors.tintMedium : this.colors.accentGold)
+            .backgroundColor(this.notifBefore >= MAX_BEFORE_MINUTES ? this.colors.tintMedium : this.colors.accentGold)
             .borderRadius(10)
             .enabled(this.notifBefore < MAX_BEFORE_MINUTES)
             .onClick(() => {
               this.changeNotifBefore(STEP_BEFORE_MINUTES);
             })
-          }
-          .width('100%').alignItems(VerticalAlign.Center)
+          }.width('100%').alignItems(VerticalAlign.Center)
         }
         .width('100%')
         .padding({
@@ -1039,15 +946,12 @@ struct SettingsPage {
           Row() {
             Column() {
               Text(this.tr('notify_prayers'))
-                .fontSize(15).fontColor(this.colors.textWhite)
+                .fontSize(15)
+                .fontColor(this.colors.textWhite)
                 .fontWeight(FontWeight.Medium)
-              Text(this.tr('notify_prayers_desc'))
-                .fontSize(11).fontColor(this.colors.textMuted)
-                .margin({ top: 2 })
-            }
-            .alignItems(HorizontalAlign.Start).layoutWeight(1)
-          }
-          .width('100%').padding({ bottom: 8 })
+              Text(this.tr('notify_prayers_desc')).fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+            }.alignItems(HorizontalAlign.Start).layoutWeight(1)
+          }.width('100%').padding({ bottom: 8 })
 
           this.NotifPrayerRow('fajr')
           this.NotifPrayerRow('dhuhr')
@@ -1068,23 +972,18 @@ struct SettingsPage {
             .fillColor(this.colors.textMuted)
             .opacity(0.7)
             .flexShrink(0)
-          Text(CALENDAR_REMINDERS_ENABLED
-            ? this.tr('notifications_footer_calendar')
-            : this.tr('notifications_footer'))
+          Text(CALENDAR_REMINDERS_ENABLED ? this.tr('notifications_footer_calendar') : this.tr('notifications_footer'))
             .fontSize(10)
             .fontColor(this.colors.textMuted)
             .fontStyle(FontStyle.Italic)
             .layoutWeight(1)
             .lineHeight(15)
-        }
-        .width('100%')
-        .padding({
+        }.width('100%').padding({
           left: 6,
           right: 6,
           top: 4,
           bottom: 8
-        })
-        .alignItems(VerticalAlign.Top)
+        }).alignItems(VerticalAlign.Top)
       }
     }
     .width('100%')
@@ -1102,20 +1001,12 @@ struct SettingsPage {
   @Builder
   NotifPrayerRow(prayerId: string) {
     Row() {
-      Text(this.tr('prayer_' + prayerId))
-        .fontSize(14).fontColor(this.colors.textWhite)
-        .layoutWeight(1)
+      Text(this.tr('prayer_' + prayerId)).fontSize(14).fontColor(this.colors.textWhite).layoutWeight(1)
 
       Toggle({
-        type: ToggleType.Switch,
-        isOn: this.getNotifPrayerValue(prayerId)
-      })
-        .selectedColor(this.colors.accentGold)
-        .onChange((isOn: boolean) =>
-        this.toggleNotifPrayer(prayerId, isOn))
-    }
-    .width('100%')
-    .padding({
+        type: ToggleType.Switch, isOn: this.getNotifPrayerValue(prayerId)
+      }).selectedColor(this.colors.accentGold).onChange((isOn: boolean) => this.toggleNotifPrayer(prayerId, isOn))
+    }.width('100%').padding({
       top: 6,
       bottom: 6,
       left: 2,
@@ -1129,13 +1020,12 @@ struct SettingsPage {
       Image($r('app.media.ic_log')).width(14).height(14).fillColor(this.colors.accentGold).flexShrink(0)
       Column() {
         Text(this.tr('log_view_button'))
-          .fontSize(13).fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium).width('100%')
-        Text(this.tr('log_view_desc'))
-          .fontSize(10).fontColor(this.colors.textMuted)
-          .margin({ top: 2 }).width('100%')
-      }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+          .fontSize(13)
+          .fontColor(this.colors.textWhite)
+          .fontWeight(FontWeight.Medium)
+          .width('100%')
+        Text(this.tr('log_view_desc')).fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 }).width('100%')
+      }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
       // Use SVG Image instead of Text to bypass Bidi mirroring
       Image($r('app.media.ic_chevron_right'))
@@ -1176,23 +1066,21 @@ struct SettingsPage {
 
       Row() {
         Column() {
-          Text(this.tr('hijri_offset'))
-            .fontSize(15).fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Medium)
+          Text(this.tr('hijri_offset')).fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
           Text(this.tr('hijri_offset_desc'))
             .fontSize(11)
             .fontColor(this.colors.textMuted)
             .margin({ top: 2 })
             .maxLines(2)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+        }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
         Row() {
           Button({ type: ButtonType.Normal }) {
-            Text('\u2212').fontSize(20).fontWeight(FontWeight.Bold)
-              .fontColor(this.hijriOffset <= -MAX_HIJRI_OFFSET
-                ? this.colors.textMuted : this.colors.textWhite)
+            Text('\u2212')
+              .fontSize(20)
+              .fontWeight(FontWeight.Bold)
+              .fontColor(this.hijriOffset <= -MAX_HIJRI_OFFSET ? this.colors.textMuted : this.colors.textWhite)
           }
           .width(38)
           .height(38)
@@ -1207,27 +1095,25 @@ struct SettingsPage {
           Text(this.formatHijriOffset())
             .fontSize(15)
             .fontWeight(FontWeight.Bold)
-            .fontColor(this.hijriOffset === 0
-              ? this.colors.textMuted : this.colors.accentGold)
+            .fontColor(this.hijriOffset === 0 ? this.colors.textMuted : this.colors.accentGold)
             .width(48)
             .textAlign(TextAlign.Center)
 
           Button({ type: ButtonType.Normal }) {
-            Text('+').fontSize(20).fontWeight(FontWeight.Bold)
-              .fontColor(this.hijriOffset >= MAX_HIJRI_OFFSET
-                ? this.colors.textMuted : this.colors.textOnAccent)
+            Text('+')
+              .fontSize(20)
+              .fontWeight(FontWeight.Bold)
+              .fontColor(this.hijriOffset >= MAX_HIJRI_OFFSET ? this.colors.textMuted : this.colors.textOnAccent)
           }
           .width(38)
           .height(38)
-          .backgroundColor(this.hijriOffset >= MAX_HIJRI_OFFSET
-            ? this.colors.tintMedium : this.colors.accentGold)
+          .backgroundColor(this.hijriOffset >= MAX_HIJRI_OFFSET ? this.colors.tintMedium : this.colors.accentGold)
           .borderRadius(10)
           .enabled(this.hijriOffset < MAX_HIJRI_OFFSET)
           .onClick(() => {
             this.changeHijriOffset(1);
           })
-        }
-        .alignItems(VerticalAlign.Center)
+        }.alignItems(VerticalAlign.Center)
       }
       .width('100%')
       .padding({
@@ -1265,15 +1151,10 @@ struct SettingsPage {
   AboutContent() {
     Column() {
       Column() {
-        Text(this.appInfo.name)
-          .fontSize(20).fontWeight(FontWeight.Bold)
-          .fontColor(this.colors.textWhite)
-        Text(this.tr('app_tagline'))
-          .fontSize(12).fontColor(this.colors.accentGold)
-          .margin({ top: 4 })
+        Text(this.appInfo.name).fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+        Text(this.tr('app_tagline')).fontSize(12).fontColor(this.colors.accentGold).margin({ top: 4 })
 
-        Divider().color(this.colors.borderSoft).width('80%')
-          .margin({ top: 14, bottom: 14 })
+        Divider().color(this.colors.borderSoft).width('80%').margin({ top: 14, bottom: 14 })
 
         this.AboutRow(this.tr('about_version'), this.appInfo.versionName)
         this.AboutRow(this.tr('about_build'), `${this.appInfo.versionCode}`)
@@ -1288,8 +1169,7 @@ struct SettingsPage {
 
         // --- Report Issues/Features Row ---
         Row({ space: 8 }) {
-          Image($r('app.media.ic_features_bugs'))
-            .width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
+          Image($r('app.media.ic_features_bugs')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
           Text(this.tr('feature_issues'))
             .fontSize(14)
             .fontColor(this.colors.accentGold)
@@ -1298,12 +1178,11 @@ struct SettingsPage {
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
           Image($r('app.media.ic_chevron_right'))
-            .width(14).height(14).fillColor(this.colors.accentGold)
+            .width(14)
+            .height(14)
+            .fillColor(this.colors.accentGold)
             .rotate({ angle: this.isRtl() ? 180 : 0 })
-        }
-        .width('100%')
-        .padding({ top: 8, bottom: 8 })
-        .onClick(() => {
+        }.width('100%').padding({ top: 8, bottom: 8 }).onClick(() => {
           const ctx = getContext(this) as common.UIAbilityContext;
           ctx.startAbility({
             action: 'ohos.want.action.viewData',
@@ -1314,8 +1193,7 @@ struct SettingsPage {
 
         // --- Telegram Row ---
         Row({ space: 8 }) {
-          Image($r('app.media.ic_telegram'))
-            .width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
+          Image($r('app.media.ic_telegram')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
           Text(this.tr('telegram_channel'))
             .fontSize(14)
             .fontColor(this.colors.accentGold)
@@ -1324,12 +1202,11 @@ struct SettingsPage {
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
           Image($r('app.media.ic_chevron_right'))
-            .width(14).height(14).fillColor(this.colors.accentGold)
+            .width(14)
+            .height(14)
+            .fillColor(this.colors.accentGold)
             .rotate({ angle: this.isRtl() ? 180 : 0 })
-        }
-        .width('100%')
-        .padding({ top: 8, bottom: 8 })
-        .onClick(() => {
+        }.width('100%').padding({ top: 8, bottom: 8 }).onClick(() => {
           const ctx = getContext(this) as common.UIAbilityContext;
           ctx.startAbility({
             action: 'ohos.want.action.viewData',
@@ -1340,8 +1217,7 @@ struct SettingsPage {
 
         // --- Privacy Policy Row ---
         Row({ space: 8 }) {
-          Image($r('app.media.ic_privacy'))
-            .width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
+          Image($r('app.media.ic_privacy')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
           Text(this.tr('privacy_step_title')) // Uses the existing wizard string for "Privacy Policy"
             .fontSize(14)
             .fontColor(this.colors.accentGold)
@@ -1350,32 +1226,30 @@ struct SettingsPage {
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
           Image($r('app.media.ic_chevron_right'))
-            .width(14).height(14).fillColor(this.colors.accentGold)
+            .width(14)
+            .height(14)
+            .fillColor(this.colors.accentGold)
             .rotate({ angle: this.isRtl() ? 180 : 0 })
-        }
-        .width('100%')
-        .padding({ top: 8, bottom: 8 })
-        .onClick(() => {
+        }.width('100%').padding({ top: 8, bottom: 8 }).onClick(() => {
           this.openPrivacyPolicy();
         })
 
         // --- Licenses Row (existing) ---
         Row({ space: 8 }) {
-          Image($r('app.media.ic_licenses'))
-            .width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
+          Image($r('app.media.ic_licenses')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
           Text(this.tr('licenses_title'))
-            .fontSize(14).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
+            .fontSize(14)
+            .fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Medium)
             .layoutWeight(1)
           Image($r('app.media.ic_chevron_right'))
-            .width(14).height(14).fillColor(this.colors.accentGold)
+            .width(14)
+            .height(14)
+            .fillColor(this.colors.accentGold)
             .rotate({ angle: this.isRtl() ? 180 : 0 })
-        }
-        .width('100%')
-        .padding({ top: 8, bottom: 8 })
-        .onClick(() => {
+        }.width('100%').padding({ top: 8, bottom: 8 }).onClick(() => {
           NavHelper.prepareForward();
-          router.pushUrl({ url: 'pages/LicensesPage' })
-            .catch((e: Error) => console.error(e.message));
+          router.pushUrl({ url: 'pages/LicensesPage' }).catch((e: Error) => console.error(e.message));
         })
       }
       .width('100%')
@@ -1399,10 +1273,7 @@ struct SettingsPage {
   @Builder
   AboutRow(label: string, value: string) {
     Row({ space: 16 }) {
-      Text(label)
-        .fontSize(13)
-        .fontColor(this.colors.textMuted)
-        .flexShrink(0)
+      Text(label).fontSize(13).fontColor(this.colors.textMuted).flexShrink(0)
 
       Text(value)
         .fontSize(12)
@@ -1413,28 +1284,15 @@ struct SettingsPage {
         .textOverflow({ overflow: TextOverflow.Ellipsis })
         .layoutWeight(1)
         .textAlign(this.isRtl() ? TextAlign.Start : TextAlign.End)
-    }
-    .width('100%')
-    .padding({ left: 8, right: 8 })
-    .margin({ top: 6 })
-    .alignItems(VerticalAlign.Center)
+    }.width('100%').padding({ left: 8, right: 8 }).margin({ top: 6 }).alignItems(VerticalAlign.Center)
   }
 
   @Builder
-  PickerOverlay(
-    title: string,
-    icon: Resource,
-    items: PickerItem[],
-    onSelect: (id: string) => void,
-    onCancel: () => void
-  ) {
-    // ---- Dim backdrop ----
-    Column()
-      .width('100%').height('100%')
-      .backgroundColor(this.colors.overlayDim)
-      .onClick(() => {
-        onCancel();
-      })
+  PickerOverlay(title: string, icon: Resource, items: PickerItem[], onSelect: (id: string) => void,
+    onCancel: () => void) { // ---- Dim backdrop ----
+    Column().width('100%').height('100%').backgroundColor(this.colors.overlayDim).onClick(() => {
+      onCancel();
+    })
 
     // ---- Bottom sheet ----
     Column() {
@@ -1464,9 +1322,7 @@ struct SettingsPage {
           .fontColor(this.colors.textWhite)
           .layoutWeight(1)
           .textAlign(TextAlign.Start)
-      }
-      .width('100%')
-      .padding({
+      }.width('100%').padding({
         top: 20,
         bottom: 20,
         left: this.isRtl() ? 20 : 16,
@@ -1481,16 +1337,14 @@ struct SettingsPage {
             Row({ space: 14 }) { // <-- Added Row space
               Row() {
                 if (item.selected) {
-                  Row().width(10).height(10).borderRadius(5)
-                    .backgroundColor(this.colors.accentGold)
+                  Row().width(10).height(10).borderRadius(5).backgroundColor(this.colors.accentGold)
                 }
               }
               .width(22)
               .height(22)
               .borderRadius(11)
               .border({
-                width: item.selected ? 2 : 1.5,
-                color: item.selected ? this.colors.accentGold : this.colors.borderStrong
+                width: item.selected ? 2 : 1.5, color: item.selected ? this.colors.accentGold : this.colors.borderStrong
               })
               .justifyContent(FlexAlign.Center)
               .alignItems(VerticalAlign.Center)
@@ -1511,28 +1365,20 @@ struct SettingsPage {
               left: 20,
               right: 20
             })
-            .backgroundColor(item.selected
-              ? this.colors.tintSoft : 'transparent')
+            .backgroundColor(item.selected ? this.colors.tintSoft : 'transparent')
             .borderRadius(12)
             .margin({ bottom: 4 })
             .onClick(() => {
               onSelect(item.id);
             })
-          }, (item: PickerItem) =>
-          `${this.activePicker}-${item.id}-${item.selected ? 's' : 'u'}`)
-        }
-        .width('100%')
-        .padding({
+          }, (item: PickerItem) => `${this.activePicker}-${item.id}-${item.selected ? 's' : 'u'}`)
+        }.width('100%').padding({
           left: 8,
           right: 8,
           top: 12,
           bottom: 12
         })
-      }
-      .layoutWeight(1)
-      .width('100%')
-      .scrollBar(BarState.Auto)
-      .edgeEffect(EdgeEffect.Spring)
+      }.layoutWeight(1).width('100%').scrollBar(BarState.Auto).edgeEffect(EdgeEffect.Spring)
 
       Button(this.tr('cancel'))
         .width('90%')
@@ -1577,7 +1423,8 @@ struct SettingsPage {
       Row({ space: 10 }) {
         Image($r('app.media.ic_log')).width(20).height(20).fillColor(this.colors.accentGold).flexShrink(0)
         Text(this.tr('log_view_title'))
-          .fontSize(18).fontWeight(FontWeight.Bold)
+          .fontSize(18)
+          .fontWeight(FontWeight.Bold)
           .fontColor(this.colors.textWhite)
           .layoutWeight(1)
         Row() {
@@ -1591,15 +1438,12 @@ struct SettingsPage {
         .onClick(() => {
           this.showLogViewer = false;
         })
-      }
-      .width('100%')
-      .padding({
+      }.width('100%').padding({
         top: 16,
         bottom: 12,
         left: this.isRtl() ? 12 : 20,
         right: this.isRtl() ? 20 : 12
-      })
-      .alignItems(VerticalAlign.Center)
+      }).alignItems(VerticalAlign.Center)
 
       Text(AppLogger.getPath())
         .fontSize(10)
@@ -1612,8 +1456,7 @@ struct SettingsPage {
       Divider().color(this.colors.borderSoft).width('90%')
 
       Scroll() {
-        Text(this.logContents.length > 0
-          ? this.logContents : this.tr('log_empty'))
+        Text(this.logContents.length > 0 ? this.logContents : this.tr('log_empty'))
           .fontSize(11)
           .fontColor(this.colors.textWhite)
           .lineHeight(16)
@@ -1632,9 +1475,7 @@ struct SettingsPage {
 
       Row({ space: 8 }) {
         Button() {
-          Text(this.tr('log_copy'))
-            .fontSize(14).fontWeight(FontWeight.Medium)
-            .fontColor(this.colors.textOnAccent)
+          Text(this.tr('log_copy')).fontSize(14).fontWeight(FontWeight.Medium).fontColor(this.colors.textOnAccent)
         }
         .layoutWeight(1)
         .height(44)
@@ -1645,9 +1486,7 @@ struct SettingsPage {
         })
 
         Button() {
-          Text(this.tr('log_clear'))
-            .fontSize(14).fontWeight(FontWeight.Medium)
-            .fontColor(this.colors.textWhite)
+          Text(this.tr('log_clear')).fontSize(14).fontWeight(FontWeight.Medium).fontColor(this.colors.textWhite)
         }
         .layoutWeight(1)
         .height(44)
@@ -1656,27 +1495,19 @@ struct SettingsPage {
         .onClick(() => {
           this.clearLogs();
         })
-      }
-      .width('100%')
-      .padding({
+      }.width('100%').padding({
         left: 20,
         right: 20,
         top: 12,
         bottom: 24
       })
-    }
-    .width('100%').height('100%')
-    .backgroundColor(this.colors.cardDark)
+    }.width('100%').height('100%').backgroundColor(this.colors.cardDark)
   }
 
   @Builder
   LogsContent() {
     Column() {
-      Text(this.tr('log_view_desc'))
-        .fontSize(12)
-        .fontColor(this.colors.textMuted)
-        .width('100%')
-        .padding({ bottom: 12 })
+      Text(this.tr('log_view_desc')).fontSize(12).fontColor(this.colors.textMuted).width('100%').padding({ bottom: 12 })
 
       this.LogAccessRowInternal()
     }
@@ -1689,8 +1520,7 @@ struct SettingsPage {
   }
 
   private isMadhabLocked(): boolean {
-    return this.calcMethod === CalculationMethod.TURKEY ||
-      this.calcMethod === CalculationMethod.TURKEY_EUROPE;
+    return this.calcMethod === CalculationMethod.TURKEY || this.calcMethod === CalculationMethod.TURKEY_EUROPE;
   }
 
   private pickerTitle(): string {
@@ -1736,9 +1566,7 @@ struct SettingsPage {
       case 'source':
         return SettingsHelper.buildSourcePickerItems(this.calcSource);
       case 'hijriType':
-        return SettingsHelper.buildHijriCalendarTypePickerItems(
-          this.hijriCalendarType
-        );
+        return SettingsHelper.buildHijriCalendarTypePickerItems(this.hijriCalendarType);
       default:
         return [];
     }
@@ -1796,11 +1624,9 @@ struct SettingsPage {
     await this.reload();
   }
 
-  private async openPrivacyPolicy(): Promise<void> {
-    // 👇 FIX: Open the local page instead of the browser
+  private async openPrivacyPolicy(): Promise<void> { // 👇 FIX: Open the local page instead of the browser
     NavHelper.prepareForward();
-    router.pushUrl({ url: 'pages/PrivacyPolicyPage' })
-      .catch((e: Error) => console.error(e.message));
+    router.pushUrl({ url: 'pages/PrivacyPolicyPage' }).catch((e: Error) => console.error(e.message));
   }
 
   private async reload(): Promise<void> {
@@ -1914,8 +1740,7 @@ struct SettingsPage {
     const storageKey = this.getStorageKeyForOffset(key);
     if (storageKey.length > 0) {
       SettingsHelper.saveOffset(storageKey, next);
-      WidgetHelper.refreshAll().catch((): void => {
-        // swallow
+      WidgetHelper.refreshAll().catch((): void => { // swallow
       });
     }
   }
@@ -2084,9 +1909,7 @@ struct SettingsPage {
     const d = new Date(ts);
     const now = new Date();
     const isToday =
-      d.getDate() === now.getDate() &&
-        d.getMonth() === now.getMonth() &&
-        d.getFullYear() === now.getFullYear();
+      d.getDate() === now.getDate() && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
     const hh = d.getHours().toString().padStart(2, '0');
     const mm = d.getMinutes().toString().padStart(2, '0');
     const time = `${hh}:${mm}`;
@@ -2117,17 +1940,14 @@ struct SettingsPage {
 
     if (result.ok) {
       this.notifDiagnostic = '';
-      const okMsg = CALENDAR_REMINDERS_ENABLED
-        ? 'notif_test_ok_calendar'
-        : 'notif_test_ok';
+      const okMsg = CALENDAR_REMINDERS_ENABLED ? 'notif_test_ok_calendar' : 'notif_test_ok';
       promptAction.showToast({
         message: this.tr(okMsg), duration: 3000
       });
     } else {
       this.notifDiagnostic = result.errorMessage;
       promptAction.showToast({
-        message: `${this.tr('notif_test_failed')} (code ${result.errorCode})`,
-        duration: 4000
+        message: `${this.tr('notif_test_failed')} (code ${result.errorCode})`, duration: 4000
       });
     }
   }
@@ -2150,8 +1970,7 @@ struct SettingsPage {
           message: this.tr('calendar_write_permission_denied'), duration: 3000
         });
       }
-    } else {
-      // Standard notification permission
+    } else { // Standard notification permission
       promptAction.showToast({
         message: this.tr('notification_permission_denied'), duration: 2500
       });
@@ -2169,8 +1988,7 @@ struct SettingsPage {
         return;
       }
       await CalendarReminderHelper.init(ctx, false);
-    } else {
-      // Turning OFF. We still need the backend ready to DELETE the
+    } else { // Turning OFF. We still need the backend ready to DELETE the
       // existing events — otherwise rescheduleAll() will hit the
       // "backend not ready" guard and return before cancelAll() runs.
       //
@@ -2182,8 +2000,7 @@ struct SettingsPage {
       if (!CalendarReminderHelper.isReady()) {
         try {
           await CalendarReminderHelper.init(ctx, false);
-        } catch (e) {
-          // Swallow — the reschedule call below will log if it
+        } catch (e) { // Swallow — the reschedule call below will log if it
           // can't cancel because the backend is unavailable.
         }
       }
@@ -2211,9 +2028,7 @@ struct SettingsPage {
     await NotificationHelper.rescheduleAll();
   }
 
-  private async toggleNotifPrayer(
-    prayerId: string, value: boolean
-  ): Promise<void> {
+  private async toggleNotifPrayer(prayerId: string, value: boolean): Promise<void> {
     switch (prayerId) {
       case 'fajr':
         this.notifFajr = value;
@@ -2259,15 +2074,12 @@ struct SettingsPage {
   private openLogViewer(): void {
     try {
       const content = AppLogger.readAll();
-      this.logContents = (typeof content === 'string')
-        ? content
-        : '(log read returned an unexpected type)';
+      this.logContents = (typeof content === 'string') ? content : '(log read returned an unexpected type)';
       this.showLogViewer = true;
     } catch (err) {
       const e = err as Error;
       promptAction.showToast({
-        message: `Log read failed: ${e.message}`,
-        duration: 3000
+        message: `Log read failed: ${e.message}`, duration: 3000
       });
       this.logContents = '';
       this.showLogViewer = true;
@@ -2281,17 +2093,14 @@ struct SettingsPage {
     this.isBackupBusy = true;
     try {
       const ctx = getContext(this) as common.UIAbilityContext;
-      const result = await UserBackupService.backupToFile(
-        ctx, this.appInfo.versionName
-      );
+      const result = await UserBackupService.backupToFile(ctx, this.appInfo.versionName);
       if (result.ok) {
         promptAction.showToast({
           message: this.tr('backup_success'), duration: 2500
         });
       } else if (result.message !== 'cancelled') {
         promptAction.showToast({
-          message: `${this.tr('backup_failed')}: ${result.message}`,
-          duration: 3000
+          message: `${this.tr('backup_failed')}: ${result.message}`, duration: 3000
         });
       }
     } finally {
@@ -2309,10 +2118,8 @@ struct SettingsPage {
       const confirmResult = await promptAction.showDialog({
         title: this.tr('restore_confirm_title'),
         message: this.tr('restore_confirm_message'),
-        buttons: [
-          { text: this.tr('cancel'), color: this.colors.dialogCancel },
-          { text: this.tr('restore_from_file'), color: this.colors.accentGold }
-        ]
+        buttons: [{ text: this.tr('cancel'), color: this.colors.dialogCancel },
+          { text: this.tr('restore_from_file'), color: this.colors.accentGold }]
       });
       if (confirmResult.index !== 1) {
         return;
@@ -2328,8 +2135,7 @@ struct SettingsPage {
       if (!result.ok) {
         if (result.message !== 'cancelled') {
           promptAction.showToast({
-            message: `${this.tr('restore_failed')}: ${result.message}`,
-            duration: 3000
+            message: `${this.tr('restore_failed')}: ${result.message}`, duration: 3000
           });
         }
         return;
@@ -2375,30 +2181,20 @@ struct SettingsPage {
     let res: promptAction.ShowDialogSuccessResponse;
     try {
       res = await promptAction.showDialog({
-        title: this.tr('restore_restart_title'),
-        message: this.tr('restore_restart_message'),
-        buttons: [
-          {
-            text: this.tr('restore_restart_later'),
-            color: this.colors.dialogCancel
-          },
-          {
-            text: this.tr('restore_restart_now'),
-            color: this.colors.accentGold
-          }
-        ]
+        title: this.tr('restore_restart_title'), message: this.tr('restore_restart_message'), buttons: [{
+          text: this.tr('restore_restart_later'), color: this.colors.dialogCancel
+        }, {
+          text: this.tr('restore_restart_now'), color: this.colors.accentGold
+        }]
       });
     } catch (err) {
-      console.error('[SettingsPage] restart prompt failed: ' +
-        JSON.stringify(err));
+      console.error('[SettingsPage] restart prompt failed: ' + JSON.stringify(err));
       return;
     }
 
-    if (res.index !== 1) {
-      // "Later" — confirm success via toast, leave user where they are.
+    if (res.index !== 1) { // "Later" — confirm success via toast, leave user where they are.
       promptAction.showToast({
-        message: this.tr('restore_success'),
-        duration: 2500
+        message: this.tr('restore_success'), duration: 2500
       });
       return;
     }
@@ -2407,8 +2203,7 @@ struct SettingsPage {
     // completes and the tap ripple is visible before the window
     // tears down.
     setTimeout(() => {
-      AppRestartHelper.restart(ctx).catch((err: Error) => {
-        // Reached only when terminateSelf itself failed — the
+      AppRestartHelper.restart(ctx).catch((err: Error) => { // Reached only when terminateSelf itself failed — the
         // ability is still alive, so a navigation fallback works.
         console.error('[SettingsPage] restart failed: ' + err.message);
         NavHelper.prepareForward();
@@ -2421,18 +2216,14 @@ struct SettingsPage {
 
   private copyLogsToClipboard(): void {
     try {
-      const data = pasteboard.createData(
-        pasteboard.MIMETYPE_TEXT_PLAIN, this.logContents
-      );
-      pasteboard.getSystemPasteboard().setData(data)
-        .then(() => {
-          promptAction.showToast({
-            message: this.tr('log_copied'), duration: 1500
-          });
-        })
-        .catch((err: Error) => {
-          console.error('[SettingsPage] clipboard failed: ' + err.message);
+      const data = pasteboard.createData(pasteboard.MIMETYPE_TEXT_PLAIN, this.logContents);
+      pasteboard.getSystemPasteboard().setData(data).then(() => {
+        promptAction.showToast({
+          message: this.tr('log_copied'), duration: 1500
         });
+      }).catch((err: Error) => {
+        console.error('[SettingsPage] clipboard failed: ' + err.message);
+      });
     } catch (err) {
       const e = err as Error;
       console.error('[SettingsPage] clipboard threw: ' + e.message);
@@ -2450,8 +2241,7 @@ struct SettingsPage {
     } catch (err) {
       const e = err as Error;
       promptAction.showToast({
-        message: `Log clear failed: ${e.message}`,
-        duration: 3000
+        message: `Log clear failed: ${e.message}`, duration: 3000
       });
     }
   }

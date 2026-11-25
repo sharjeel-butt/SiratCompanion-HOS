@@ -52,8 +52,7 @@ struct QuranCollectionPage {
     this.aboutToAppear(); // Reload data immediately when the setting changes
   }
 
-  async onPageShow() {
-    // Reload when navigating back from Customize or DuaDetailsPage
+  async onPageShow() { // Reload when navigating back from Customize or DuaDetailsPage
     await this.aboutToAppear();
   }
 
@@ -69,7 +68,9 @@ struct QuranCollectionPage {
     Column() {
       Row({ space: 16 }) {
         Row() {
-          Image($r('app.media.ic_chevron_right')).width(20).height(20)
+          Image($r('app.media.ic_chevron_right'))
+            .width(20)
+            .height(20)
             .fillColor(this.colors.textWhite)
             .rotate({ angle: L.isRtlLang(this.appLanguage) ? 0 : 180 })
         }
@@ -87,15 +88,15 @@ struct QuranCollectionPage {
           .layoutWeight(1)
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
-      }
-      .width('100%').height(72).padding({ left: 16, right: 16 })
-      .backgroundColor(this.colors.cardDark)
+      }.width('100%').height(72).padding({ left: 16, right: 16 }).backgroundColor(this.colors.cardDark)
 
       if (this.isLoading) {
         LoadingProgress().width(40).height(40).color(this.colors.accentGold).margin({ top: 40 })
       } else if (this.duas.length === 0) {
         Text(L.get('hadith_no_results', this.appLanguage))
-          .fontSize(16).fontColor(this.colors.textMuted).margin({ top: 40 })
+          .fontSize(16)
+          .fontColor(this.colors.textMuted)
+          .margin({ top: 40 })
       } else {
         List({ space: 12 }) {
           ForEach(this.duas, (dua: CompleteDua) => {
@@ -115,17 +116,16 @@ struct QuranCollectionPage {
               .onClick(() => {
                 NavHelper.prepareForward();
                 router.pushUrl({
-                  url: 'pages/DuaDetailsPage',
-                  params: { id: dua.id }
+                  url: 'pages/DuaDetailsPage', params: { id: dua.id }
                 });
               })
             }
           }, (dua: CompleteDua) => `dua-${dua.id}-${this.appLanguage}-${this.duaTransLang}`)
-        }
-        .layoutWeight(1).padding(16)
+        }.layoutWeight(1).padding(16)
       }
     }
-    .width('100%').height('100%')
+    .width('100%')
+    .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
   }

@@ -14,8 +14,7 @@ export class CustomEventStorage {
 
       // Migration: ensure every event has an explicit recurrence
       return events.map((ev: CustomEvent): CustomEvent => {
-        if (!ev.recurrence) {
-          // Explicit construction — no spread operator
+        if (!ev.recurrence) { // Explicit construction — no spread operator
           const migrated: CustomEvent = {
             id: ev.id,
             title: ev.title,
@@ -24,9 +23,7 @@ export class CustomEventStorage {
             hijriDay: ev.hijriDay,
             notificationEnabled: ev.notificationEnabled,
             inputType: ev.inputType,
-            recurrence: ev.hijriYear === -1
-              ? RecurrenceType.YEARLY
-              : RecurrenceType.NONE,
+            recurrence: ev.hijriYear === -1 ? RecurrenceType.YEARLY : RecurrenceType.NONE,
             gregorianDayOfWeek: ev.gregorianDayOfWeek
           };
           return migrated;
