@@ -16,8 +16,7 @@ struct EventWidget {
   @LocalStorageProp('lblViewCal') lblViewCal: string = 'View Details';
 
   build() {
-    Stack() {
-      // Background
+    Stack() { // Background
       Column()
         .width('100%')
         .height('100%')
@@ -45,13 +44,14 @@ struct EventWidget {
       Column() {
         if (this.error.length > 0) {
           Text(this.error)
-            .fontSize('12vp').fontColor('#FF6B6B')
-            .maxLines(3).textOverflow({ overflow: TextOverflow.Ellipsis })
+            .fontSize('12vp')
+            .fontColor('#FF6B6B')
+            .maxLines(3)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
         } else {
 
           // TOP SECTION
-          Column() {
-            // Header Row
+          Column() { // Header Row
             Row() {
               if (this.isRtl) {
                 Image($r('app.media.ic_star')).width('12vp').height('12vp').fillColor('#E8A44C')
@@ -88,14 +88,12 @@ struct EventWidget {
               .maxLines(1)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
               .textAlign(this.isRtl ? TextAlign.RIGHT : TextAlign.LEFT)
-          }
-          .width('100%')
+          }.width('100%')
 
           // MIDDLE SECTION (Countdown & Description)
           if (this.dimension === '2*4') {
             Row({ space: 12 }) {
-              if (this.isRtl) {
-                // Description Left, Countdown Right
+              if (this.isRtl) { // Description Left, Countdown Right
                 Column() {
                   Text(this.eventDesc)
                     .fontSize('12vp')
@@ -105,12 +103,10 @@ struct EventWidget {
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
                     .textAlign(TextAlign.RIGHT)
                     .lineHeight('16vp')
-                }
-                .layoutWeight(1).justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.End)
+                }.layoutWeight(1).justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.End)
 
                 Column({ space: 4 }) {
-                  Row() {
-                    // FIX: Manually swapped for RTL (Days first, Number second visually)
+                  Row() { // FIX: Manually swapped for RTL (Days first, Number second visually)
                     Text(` ${this.lblDays}`)
                       .fontSize('12vp')
                       .fontColor('#A5B8CC')
@@ -140,8 +136,7 @@ struct EventWidget {
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
                 }.alignItems(HorizontalAlign.Start)
 
-              } else {
-                // Countdown Left, Description Right
+              } else { // Countdown Left, Description Right
                 Column({ space: 4 }) {
                   Row() {
                     Text(this.eventDays)
@@ -182,18 +177,14 @@ struct EventWidget {
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
                     .textAlign(TextAlign.LEFT)
                     .lineHeight('16vp')
-                }
-                .layoutWeight(1).justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.End)
+                }.layoutWeight(1).justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.End)
               }
-            }
-            .width('100%').alignItems(VerticalAlign.Center).direction(Direction.Ltr)
+            }.width('100%').alignItems(VerticalAlign.Center).direction(Direction.Ltr)
 
-          } else {
-            // 2x2 LAYOUT
+          } else { // 2x2 LAYOUT
             Row() {
               if (this.isRtl) {
-                Blank()
-                // FIX: Manually swapped for RTL
+                Blank() // FIX: Manually swapped for RTL
                 Text(` ${this.lblDays} `)
                   .fontSize('12vp')
                   .fontColor('#A5B8CC')
@@ -221,11 +212,7 @@ struct EventWidget {
                   .textOverflow({ overflow: TextOverflow.Ellipsis })
                 Blank()
               }
-            }
-            .width('100%')
-            .margin({ top: 4 })
-            .alignItems(VerticalAlign.Bottom)
-            .direction(Direction.Ltr)
+            }.width('100%').margin({ top: 4 }).alignItems(VerticalAlign.Bottom).direction(Direction.Ltr)
           }
 
           // BOTTOM SECTION (Footer)
@@ -256,10 +243,7 @@ struct EventWidget {
                 .fillColor('#E8A44C')
                 .margin({ left: 4 })
             }
-          }
-          .width('100%')
-          .justifyContent(this.isRtl ? FlexAlign.Start : FlexAlign.End)
-          .direction(Direction.Ltr)
+          }.width('100%').justifyContent(this.isRtl ? FlexAlign.Start : FlexAlign.End).direction(Direction.Ltr)
 
         }
       }
@@ -273,18 +257,14 @@ struct EventWidget {
       })
       .justifyContent(FlexAlign.SpaceBetween)
       .alignItems(this.isRtl ? HorizontalAlign.Start : HorizontalAlign.End)
-    }
-    .width('100%').height('100%')
-    .direction(Direction.Ltr)
-    .onClick(() => {
+    }.width('100%').height('100%').direction(Direction.Ltr).onClick(() => {
       postCardAction(this, {
         action: 'router',
         bundleName: 'com.siratcompanion.hos.app',
         abilityName: 'EntryAbility',
         params: {
           targetPage: 'pages/MainTabs',
-          targetTab: 'calendar',
-          // NEW: Pass the specific date
+          targetTab: 'calendar', // NEW: Pass the specific date
           targetHijriYear: this.eventHijriYear,
           targetHijriMonth: this.eventHijriMonth,
           targetHijriDay: this.eventHijriDay

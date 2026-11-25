@@ -67,11 +67,8 @@ export struct PrayerSunPath {
   @Prop @Watch('onVisualChanged') showFirstThirdGuide: boolean = true;
   @Prop @Watch('onVisualChanged') showMidnightGuide: boolean = true;
   @Prop @Watch('onVisualChanged') showLastThirdGuide: boolean = true;
-  @StorageLink(STORAGE_KEY_TIME_FORMAT)
-  @Watch('onVisualChanged')
-  clockFormat: string = ClockFormat.SYSTEM;
-  private ctx: CanvasRenderingContext2D =
-    new CanvasRenderingContext2D(new RenderingContextSettings(true));
+  @StorageLink(STORAGE_KEY_TIME_FORMAT) @Watch('onVisualChanged') clockFormat: string = ClockFormat.SYSTEM;
+  private ctx: CanvasRenderingContext2D = new CanvasRenderingContext2D(new RenderingContextSettings(true));
   private canvasWidth: number = 340;
   private canvasHeight: number = CANVAS_HEIGHT;
   private canvasReady: boolean = false;
@@ -98,35 +95,30 @@ export struct PrayerSunPath {
 
   build() {
     Column() {
-      Canvas(this.ctx)
-        .width('100%')
-        .height(this.canvasHeight)
-        .onReady(() => {
-          this.canvasReady = true;
-          const w: number = this.ctx.width;
-          const h: number = this.ctx.height;
-          if (w > 0) {
-            this.canvasWidth = w;
-            if (h > 0) {
-              this.canvasHeight = h;
-            }
+      Canvas(this.ctx).width('100%').height(this.canvasHeight).onReady(() => {
+        this.canvasReady = true;
+        const w: number = this.ctx.width;
+        const h: number = this.ctx.height;
+        if (w > 0) {
+          this.canvasWidth = w;
+          if (h > 0) {
+            this.canvasHeight = h;
+          }
+        }
+        this.redraw();
+      }).onAreaChange((oldArea: Area, newArea: Area) => {
+        const w: number = parseFloat(String(newArea.width));
+        const h: number = parseFloat(String(newArea.height));
+        if (!isNaN(w) && w > 0 && w !== this.canvasWidth) {
+          this.canvasWidth = w;
+          if (!isNaN(h) && h > 0) {
+            this.canvasHeight = h;
           }
           this.redraw();
-        })
-        .onAreaChange((oldArea: Area, newArea: Area) => {
-          const w: number = parseFloat(String(newArea.width));
-          const h: number = parseFloat(String(newArea.height));
-          if (!isNaN(w) && w > 0 && w !== this.canvasWidth) {
-            this.canvasWidth = w;
-            if (!isNaN(h) && h > 0) {
-              this.canvasHeight = h;
-            }
-            this.redraw();
-          }
-        })
+        }
+      })
     }
-    .width('100%')
-    // .padding({ top: 4, bottom: 4 })
+    .width('100%') // .padding({ top: 4, bottom: 4 })
     .backgroundColor(this.colors.cardDark)
     .borderRadius(20)
     .border({ width: 1, color: this.colors.borderSoft })
@@ -178,11 +170,9 @@ export struct PrayerSunPath {
 
   private tick(): void {
     const now = new Date();
-    const rawMinute = now.getHours() * 60
-      + now.getMinutes() + now.getSeconds() / 60;
+    const rawMinute = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
 
-    const wrappingNow = this.tickerWrapStartMs > 0
-      && (Date.now() - this.tickerWrapStartMs) < TICKER_WRAP_MS;
+    const wrappingNow = this.tickerWrapStartMs > 0 && (Date.now() - this.tickerWrapStartMs) < TICKER_WRAP_MS;
 
     if (this.tickerWasWrapping && !wrappingNow) {
       this.restartTickerTimer(TICKER_TICK_MS);
@@ -326,11 +316,8 @@ export struct PrayerSunPath {
     const maghribHour = timeToHour(this.prayers[3].time);
     const ishaHour = timeToHour(this.prayers[4].time);
 
-    if (!isValidTime(this.prayers[0].time) ||
-      !isValidTime(this.prayers[1].time) ||
-      !isValidTime(this.prayers[2].time) ||
-      !isValidTime(this.prayers[3].time) ||
-      !isValidTime(this.prayers[4].time)) {
+    if (!isValidTime(this.prayers[0].time) || !isValidTime(this.prayers[1].time) ||
+      !isValidTime(this.prayers[2].time) || !isValidTime(this.prayers[3].time) || !isValidTime(this.prayers[4].time)) {
       return;
     }
 
@@ -482,27 +469,22 @@ export struct PrayerSunPath {
       drawExtraLabel(imsakX, L.get('timing_imsak', this.currentLanguage), this.imsakTime);
     }
     if (firstThirdX >= 0) {
-      drawExtraLabel(firstThirdX, L.get('timing_first_third', this.currentLanguage),
-        this.firstThirdTime);
+      drawExtraLabel(firstThirdX, L.get('timing_first_third', this.currentLanguage), this.firstThirdTime);
     }
     if (midnightX >= 0) {
       drawExtraLabel(midnightX, L.get('timing_midnight', this.currentLanguage), this.midnightTime);
     }
     if (lastThirdX >= 0) {
-      drawExtraLabel(lastThirdX, L.get('timing_last_third', this.currentLanguage),
-        this.lastThirdTime);
+      drawExtraLabel(lastThirdX, L.get('timing_last_third', this.currentLanguage), this.lastThirdTime);
     }
 
     // ---- Current prayer index ----
     const now = new Date();
     const nowMinute = now.getHours() * 60 + now.getMinutes();
-    const prayerMinutes: number[] = [
-      PrayerManager.timeToMinutes(this.prayers[0].time),
-      PrayerManager.timeToMinutes(this.prayers[1].time),
-      PrayerManager.timeToMinutes(this.prayers[2].time),
-      PrayerManager.timeToMinutes(this.prayers[3].time),
-      PrayerManager.timeToMinutes(this.prayers[4].time)
-    ];
+    const prayerMinutes: number[] =
+      [PrayerManager.timeToMinutes(this.prayers[0].time), PrayerManager.timeToMinutes(this.prayers[1].time),
+        PrayerManager.timeToMinutes(this.prayers[2].time), PrayerManager.timeToMinutes(this.prayers[3].time),
+        PrayerManager.timeToMinutes(this.prayers[4].time)];
     let activeIdx: number = -1;
     for (let i = 0; i < prayerMinutes.length; i++) {
       if (isValidTime(this.prayers[i].time) && prayerMinutes[i] <= nowMinute) {
@@ -511,17 +493,12 @@ export struct PrayerSunPath {
     }
 
     // ---- Prayer dots + labels ----
-    const names: string[] = [
-      this.translatePrayerName(this.prayers[0].name),
-      this.translatePrayerName(this.prayers[1].name),
-      this.translatePrayerName(this.prayers[2].name),
-      this.translatePrayerName(this.prayers[3].name),
-      this.translatePrayerName(this.prayers[4].name)
-    ];
-    const times: string[] = [
-      this.prayers[0].time, this.prayers[1].time, this.prayers[2].time,
-      this.prayers[3].time, this.prayers[4].time
-    ];
+    const names: string[] =
+      [this.translatePrayerName(this.prayers[0].name), this.translatePrayerName(this.prayers[1].name),
+        this.translatePrayerName(this.prayers[2].name), this.translatePrayerName(this.prayers[3].name),
+        this.translatePrayerName(this.prayers[4].name)];
+    const times: string[] =
+      [this.prayers[0].time, this.prayers[1].time, this.prayers[2].time, this.prayers[3].time, this.prayers[4].time];
     const hours: number[] = [fajrHour, dhuhrHour, asrHour, maghribHour, ishaHour];
     const leaderLengths: number[] = [30, 70, 55, 40, 30];
 
@@ -624,24 +601,17 @@ export struct PrayerSunPath {
     };
 
     if (hasSunrise) {
-      drawHorizonMarker(timeToHour(this.sunriseTime), L.get('timing_sunrise', this.currentLanguage),
-        this.sunriseTime);
+      drawHorizonMarker(timeToHour(this.sunriseTime), L.get('timing_sunrise', this.currentLanguage), this.sunriseTime);
     }
     if (hasSunset) {
-      drawHorizonMarker(timeToHour(this.sunsetTime), L.get('timing_sunset', this.currentLanguage),
-        this.sunsetTime);
+      drawHorizonMarker(timeToHour(this.sunsetTime), L.get('timing_sunset', this.currentLanguage), this.sunsetTime);
     }
 
     // ---- Ticker ----
     this.drawTicker(ctx, tickerColor, tickerX, tickerY);
   }
 
-  private drawTicker(
-    ctx: CanvasRenderingContext2D,
-    tickerColor: string,
-    tickerX: number,
-    tickerY: number
-  ): void {
+  private drawTicker(ctx: CanvasRenderingContext2D, tickerColor: string, tickerX: number, tickerY: number): void {
     if (this.tickerMonotonicMinute < 0) {
       return;
     }

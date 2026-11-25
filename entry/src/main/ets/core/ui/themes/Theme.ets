@@ -3,9 +3,7 @@
 import { ThemeService } from './ThemeService';
 
 export enum ThemeMode {
-  LIGHT = 'Light',
-  DARK = 'Dark',
-  SYSTEM = 'System'
+  LIGHT = 'Light', DARK = 'Dark', SYSTEM = 'System'
 }
 
 export class ThemeColors {
@@ -57,15 +55,7 @@ export class Theme {
   static readonly radiusMedium = 16;
   static readonly radiusLarge = 24;
 
-  static getColors(
-    mode: string,
-    isSystemDark: boolean,
-    themeId: string
-  ): ThemeColors {
-    return ThemeService.generateColors(
-      themeId,
-      mode,
-      isSystemDark
-    );
+  static getColors(mode: string, isSystemDark: boolean, themeId: string): ThemeColors {
+    return ThemeService.generateColors(themeId, mode, isSystemDark);
   }
 }

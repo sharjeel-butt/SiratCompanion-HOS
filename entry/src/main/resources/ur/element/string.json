@@ -3583,6 +3583,154 @@
     {
       "name": "theme_preset",
       "value": "تھیم سیٹ"
+    },
+    {
+      "name": "notif_prayer_due_title",
+      "value": "نماز باقی ہے"
+    },
+    {
+      "name": "notif_fajr_due",
+      "value": "فجر کی نماز ابھی نشان زد نہیں کی گئی۔"
+    },
+    {
+      "name": "notif_dhuhr_due",
+      "value": "ظہر کی نماز ابھی نشان زد نہیں کی گئی۔"
+    },
+    {
+      "name": "notif_asr_due",
+      "value": "عصر کی نماز ابھی نشان زد نہیں کی گئی۔"
+    },
+    {
+      "name": "notif_maghrib_due",
+      "value": "مغرب کی نماز ابھی نشان زد نہیں کی گئی۔"
+    },
+    {
+      "name": "notif_isha_due",
+      "value": "عشاء کی نماز ابھی نشان زد نہیں کی گئی۔"
+    },
+    {
+      "name": "title_notifications",
+      "value": "اطلاعات"
+    },
+    {
+      "name": "notifications_empty",
+      "value": "آپ سب کچھ دیکھ چکے ہیں۔"
+    },
+    {
+      "name": "all_prayers_completed",
+      "value": "الحمد للہ!"
+    },
+    {
+      "name": "all_prayers_completed_subtitle",
+      "value": "آج کی تمام نمازیں مکمل کر لی گئی ہیں۔"
+    },
+    {
+      "name": "notif_day_complete_title",
+      "value": "الحمد للہ!"
+    },
+    {
+      "name": "notif_day_complete_message",
+      "value": "آپ نے آج کی تمام نمازیں مکمل کر لی ہیں۔"
+    },
+    {
+      "name": "notif_streak_title",
+      "value": "نماز کا مسلسل سلسلہ"
+    },
+    {
+      "name": "notif_streak_3",
+      "value": "آپ نے مسلسل 3 دن نمازیں مکمل کیں۔"
+    },
+    {
+      "name": "notif_streak_7",
+      "value": "آپ نے مسلسل 7 دن نمازیں مکمل کیں۔"
+    },
+    {
+      "name": "notif_streak_14",
+      "value": "آپ نے مسلسل 14 دن نمازیں مکمل کیں۔"
+    },
+    {
+      "name": "notif_streak_30",
+      "value": "آپ نے مسلسل 30 دن نمازیں مکمل کیں۔"
+    },
+    {
+      "name": "notif_streak_100",
+      "value": "آپ نے مسلسل 100 دن نمازیں مکمل کیں۔"
+    },
+    {
+      "name": "notif_streak_1000",
+      "value": "آپ نے مسلسل 1,000 دن نمازیں مکمل کیں۔"
+    },
+    {
+      "name": "notif_streak_10000",
+      "value": "آپ نے مسلسل 10,000 دن نمازیں مکمل کیں۔"
+    },
+    {
+      "name": "notif_ramadan_start_title",
+      "value": "رمضان قریب ہے"
+    },
+    {
+      "name": "notif_ramadan_start_7",
+      "value": "رمضان 7 دن بعد شروع ہوگا۔"
+    },
+    {
+      "name": "notif_ramadan_mubarak_title",
+      "value": "رمضان مبارک"
+    },
+    {
+      "name": "notif_ramadan_mubarak_message",
+      "value": "اللہ آپ کے روزے اور عبادات قبول فرمائے۔"
+    },
+    {
+      "name": "notif_last_ashra_title",
+      "value": "آخری عشرہ شروع"
+    },
+    {
+      "name": "notif_last_ashra_message",
+      "value": "رمضان کی آخری دس راتیں شروع ہو چکی ہیں۔"
+    },
+    {
+      "name": "notif_laylatul_qadr_title",
+      "value": "لیلۃ القدر"
+    },
+    {
+      "name": "notif_laylatul_qadr_message",
+      "value": "آج رات آخری عشرے کی بابرکت طاق راتوں میں سے ایک ہے۔"
+    },
+    {
+      "name": "notif_eid_title",
+      "value": "عید مبارک"
+    },
+    {
+      "name": "notif_eid_message",
+      "value": "اللہ آپ کے روزے، نمازیں اور نیک اعمال قبول فرمائے۔"
+    },
+    {
+      "name": "notif_laylatul_qadr_21",
+      "value": "آج رمضان کی اکیسویں رات ہے۔ نماز، تلاوتِ قرآن اور ذکرِ الٰہی میں اضافہ کریں۔"
+    },
+    {
+      "name": "notif_laylatul_qadr_23",
+      "value": "آج رمضان کی تئیسویں رات ہے۔ اخلاص کے ساتھ عبادت کرکے اللہ کی رحمت اور مغفرت طلب کریں۔"
+    },
+    {
+      "name": "notif_laylatul_qadr_25",
+      "value": "آج رمضان کی پچیسویں رات ہے۔ ان بابرکت راتوں میں عبادت کی کوشش جاری رکھیں۔"
+    },
+    {
+      "name": "notif_laylatul_qadr_27",
+      "value": "آج رمضان کی ستائیسویں رات ہے، ایک ایسی رات جس میں بہت سے مسلمان لیلۃ القدر کی تلاش میں خصوصی عبادت کرتے ہیں۔"
+    },
+    {
+      "name": "notif_laylatul_qadr_29",
+      "value": "آج رمضان کی انتیسویں رات ہے۔ اس مبارک مہینے کے آخری مواقع سے بھرپور فائدہ اٹھائیں۔"
+    },
+    {
+      "name": "home_worship",
+      "value": "عبادت"
+    },
+    {
+      "name": "home_insights",
+      "value": "جائزہ"
     }
   ]
 }

@@ -18,6 +18,5 @@
  * but can differ from the Umm al-Qura calendar by 1–2 days.
  */
 export enum HijriCalendarType {
-  UMM_AL_QURA = 'UmmAlQura',
-  TABULAR = 'Tabular'
+  UMM_AL_QURA = 'UmmAlQura', TABULAR = 'Tabular'
 }

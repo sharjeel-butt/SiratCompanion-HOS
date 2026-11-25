@@ -42,9 +42,7 @@ export class QiblaCalculator {
     const Δφ = QiblaCalculator.toRadians(QiblaCalculator.KAABA_LAT - latitude);
     const ΔL = QiblaCalculator.toRadians(QiblaCalculator.KAABA_LNG - longitude);
 
-    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-      Math.cos(φ1) * Math.cos(φ2) *
-        Math.sin(ΔL / 2) * Math.sin(ΔL / 2);
+    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(ΔL / 2) * Math.sin(ΔL / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     return R * c;

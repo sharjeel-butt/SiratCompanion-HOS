@@ -8,9 +8,7 @@ export struct DuaIndicator {
   @Prop colors: ThemeColors;
   @Prop prayerId: string;
   @Prop currentLanguage: string = 'en';
-  @StorageLink(STORAGE_KEY_DUA_BINDINGS_VERSION)
-  @Watch('loadData')
-  version: number = 0;
+  @StorageLink(STORAGE_KEY_DUA_BINDINGS_VERSION) @Watch('loadData') version: number = 0;
   @State private count: number = 0;
 
   aboutToAppear(): void {
@@ -38,16 +36,9 @@ export struct DuaIndicator {
   build() {
     if (this.count > 0) {
       Row({ space: 4 }) {
-        Image($r('app.media.ic_dua'))
-          .width(12)
-          .height(12)
-          .fillColor(this.colors.accentGold)
-          .flexShrink(0)
+        Image($r('app.media.ic_dua')).width(12).height(12).fillColor(this.colors.accentGold).flexShrink(0)
 
-        Text(`${this.count}`)
-          .fontSize(12)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(this.colors.accentGold)
+        Text(`${this.count}`).fontSize(12).fontWeight(FontWeight.Bold).fontColor(this.colors.accentGold)
       }
       .padding({
         left: 8,
@@ -58,11 +49,9 @@ export struct DuaIndicator {
       .backgroundColor(this.colors.tintSoft)
       .borderRadius(12)
       .border({ width: 1, color: this.colors.borderSoft })
-      .onClick(() => {
-        // Pass filterPrayer so DuasPage shows only the ones for this prayer
+      .onClick(() => { // Pass filterPrayer so DuasPage shows only the ones for this prayer
         router.pushUrl({
-          url: 'pages/DuasPage',
-          params: { filterPrayer: this.prayerId }
+          url: 'pages/DuasPage', params: { filterPrayer: this.prayerId }
         }).catch((e: Error) => console.error(JSON.stringify(e)));
       })
     }

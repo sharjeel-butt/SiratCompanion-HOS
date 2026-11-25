@@ -17,10 +17,8 @@ import { STORAGE_KEY_HIJRI_CALENDAR_TYPE } from '../core/common/StorageKeys';
  * effect on the next conversion without any invalidation step.
  */
 export class HijriEngineResolver {
-  private static readonly ummAlQura: UmmAlQuraEngine =
-    new UmmAlQuraEngine();
-  private static readonly tabular: TabularHijriEngine =
-    new TabularHijriEngine();
+  private static readonly ummAlQura: UmmAlQuraEngine = new UmmAlQuraEngine();
+  private static readonly tabular: TabularHijriEngine = new TabularHijriEngine();
 
   static current(): HijriCalendarEngine {
     const type = AppStorage.get<string>(STORAGE_KEY_HIJRI_CALENDAR_TYPE);

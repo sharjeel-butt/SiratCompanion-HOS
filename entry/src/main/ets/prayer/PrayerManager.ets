@@ -4,7 +4,8 @@ import { ExtraTiming, PrayerModel } from './PrayerModel';
 import { DailyPrayerTimes } from './PrayerTimeCalculator';
 import { PrayerOffsets } from '../settings/SettingsHelper';
 import { PreferencesHelper } from '../core/util/PreferencesHelper';
-import { STORAGE_KEY_PRAYER_STATE_VERSION } from '../core/common/StorageKeys';
+import { STORAGE_KEY_NOTIFICATION_COUNT, STORAGE_KEY_PRAYER_STATE_VERSION } from '../core/common/StorageKeys';
+import { NotificationService } from '../core/notifications/NotificationService';
 
 export interface PrayerCheckState {
   fajr: boolean;
@@ -142,11 +143,7 @@ export class PrayerManager {
   // FRIDAY NAMING
   // ============================================================
 
-  static isPrayerCheckable(
-    prayer: PrayerModel,
-    viewingDate?: Date,
-    locationOffsetHours?: number
-  ): boolean {
+  static isPrayerCheckable(prayer: PrayerModel, viewingDate?: Date, locationOffsetHours?: number): boolean {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -179,8 +176,7 @@ export class PrayerManager {
       return false;
     }
 
-    const currentMinutes =
-      PrayerManager.getCurrentMinutesInLocation(locationOffsetHours);
+    const currentMinutes = PrayerManager.getCurrentMinutesInLocation(locationOffsetHours);
     const prayerMinutes = PrayerManager.timeToMinutes(prayer.time);
 
     // prayerMinutes can be 0 for a genuine 12:00 AM prayer — that is
@@ -213,12 +209,8 @@ export class PrayerManager {
     });
   }
 
-  static applyTimesToPrayers(
-    prayers: PrayerModel[],
-    times: DailyPrayerTimes,
-    offsets: PrayerOffsets = DEFAULT_OFFSETS,
-    date?: Date
-  ): PrayerModel[] {
+  static applyTimesToPrayers(prayers: PrayerModel[], times: DailyPrayerTimes, offsets: PrayerOffsets = DEFAULT_OFFSETS,
+    date?: Date): PrayerModel[] {
     const mapped = prayers.map((prayer): PrayerModel => {
       let rawTime = prayer.time;
       let offset = 0;
@@ -265,11 +257,8 @@ export class PrayerManager {
   // STATUS RECALCULATION (date-aware, time-only)
   // ============================================================
 
-  static applyTimesToExtraTimings(
-    timings: ExtraTiming[],
-    times: DailyPrayerTimes,
-    offsets: PrayerOffsets = DEFAULT_OFFSETS
-  ): ExtraTiming[] {
+  static applyTimesToExtraTimings(timings: ExtraTiming[], times: DailyPrayerTimes,
+    offsets: PrayerOffsets = DEFAULT_OFFSETS): ExtraTiming[] {
     return timings.map((timing): ExtraTiming => {
       let rawTime = timing.time;
       let offset = 0;
@@ -325,11 +314,7 @@ export class PrayerManager {
   // and recreation. Mirrored to AppStorage for @StorageLink watchers.
   // Persisted to disk via PreferencesHelper so it survives restarts.
 
-  static updateStatuses(
-    prayers: PrayerModel[],
-    viewingDate?: Date,
-    locationOffsetHours?: number
-  ): PrayerModel[] {
+  static updateStatuses(prayers: PrayerModel[], viewingDate?: Date, locationOffsetHours?: number): PrayerModel[] {
     if (viewingDate) {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -441,8 +426,7 @@ export class PrayerManager {
       } else if (i === actualPrayIndex) {
         status = 'pray';
       } else if (i === actualNextIndex) {
-        status =
-          'next';
+        status = 'next';
       } else {
         status = 'abbreviation';
       }
@@ -460,17 +444,12 @@ export class PrayerManager {
 
   /** Call once at app startup, after PreferencesHelper.init(). */
   static async primeStateMap(): Promise<void> {
-    const raw = await PreferencesHelper.getString(
-      PrayerManager.STATE_MAP_PREF_KEY, ''
-    );
+    const raw = await PreferencesHelper.getString(PrayerManager.STATE_MAP_PREF_KEY, '');
 
     if (raw && raw.length > 0) {
       try {
         PrayerManager.stateMap = JSON.parse(raw) as Record<string, string>;
-        console.info(
-          '[PrayerStore] primed with ' +
-            Object.keys(PrayerManager.stateMap).length + ' days'
-        );
+        console.info('[PrayerStore] primed with ' + Object.keys(PrayerManager.stateMap).length + ' days');
       } catch (err) {
         console.error('[PrayerStore] prime parse failed');
         PrayerManager.stateMap = {};
@@ -481,10 +460,7 @@ export class PrayerManager {
     }
 
     // Mirror into AppStorage.
-    AppStorage.setOrCreate(
-      PrayerManager.STATE_MAP_PREF_KEY,
-      JSON.stringify(PrayerManager.stateMap)
-    );
+    AppStorage.setOrCreate(PrayerManager.STATE_MAP_PREF_KEY, JSON.stringify(PrayerManager.stateMap));
   }
 
   static saveStateForDate(dateKey: string, prayers: PrayerModel[]): void {
@@ -505,8 +481,7 @@ export class PrayerManager {
     };
 
     for (const p of prayers) {
-      const checked = p.checked === true;
-      // Preserve previous timestamp when re-saving an already-checked
+      const checked = p.checked === true; // Preserve previous timestamp when re-saving an already-checked
       // prayer. Stamp `now` the moment a prayer transitions from
       // unchecked → checked. Clear on uncheck.
       switch (p.id) {
@@ -531,6 +506,7 @@ export class PrayerManager {
           state.ishaAt = checked ? (prev.isha ? prev.ishaAt : now) : undefined;
           break;
       }
+
     }
 
     const json = JSON.stringify(state);
@@ -542,24 +518,17 @@ export class PrayerManager {
 
     // Disk write — fire-and-forget.
     PreferencesHelper.setString(PrayerManager.STATE_MAP_PREF_KEY, mapJson)
-      .catch((e: Error) =>
-      console.error('[PrayerStore] disk write failed: ' + e.message)
-      );
+      .catch((e: Error) => console.error('[PrayerStore] disk write failed: ' + e.message));
 
     // Bump the version counter so any page observing it re-reads state.
     const prevVer = AppStorage.get<number>(STORAGE_KEY_PRAYER_STATE_VERSION);
     const nextVer = (prevVer === undefined ? 0 : prevVer) + 1;
     AppStorage.setOrCreate(STORAGE_KEY_PRAYER_STATE_VERSION, nextVer);
+    AppStorage.setOrCreate(STORAGE_KEY_NOTIFICATION_COUNT, NotificationService.getUnreadCount());
   }
 
-  static loadStateForDate(
-    dateKey: string,
-    prayers: PrayerModel[],
-    date?: Date
-  ): PrayerModel[] {
-    const resolvedDate = date !== undefined
-      ? date
-      : PrayerManager.dateFromKey(dateKey);
+  static loadStateForDate(dateKey: string, prayers: PrayerModel[], date?: Date): PrayerModel[] {
+    const resolvedDate = date !== undefined ? date : PrayerManager.dateFromKey(dateKey);
 
     const resetPrayers = prayers.map((p): PrayerModel => ({
       id: p.id,
@@ -646,17 +615,11 @@ export class PrayerManager {
    */
   static isDayFullyPrayed(dateKey: string): boolean {
     const state = PrayerManager.getCheckState(dateKey);
-    return state.fajr === true
-      && state.dhuhr === true
-      && state.asr === true
-      && state.maghrib === true
-      && state.isha === true;
+    return state.fajr === true && state.dhuhr === true && state.asr === true && state.maghrib === true &&
+      state.isha === true;
   }
 
-  static getCurrentPrayer(
-    prayers: PrayerModel[],
-    locationOffsetHours?: number
-  ): PrayerModel | null {
+  static getCurrentPrayer(prayers: PrayerModel[], locationOffsetHours?: number): PrayerModel | null {
     if (prayers.length === 0) {
       return null;
     }

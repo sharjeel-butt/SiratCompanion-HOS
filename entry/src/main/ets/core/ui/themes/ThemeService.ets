@@ -34,18 +34,11 @@ export class ThemeService {
     const isDark = effectiveMode === ThemeMode.DARK;
 
     // Fallback to default if not found
-    const safeThemeId =
-      ThemeService.ensureValidThemeId(
-        themeId
-      );
+    const safeThemeId = ThemeService.ensureValidThemeId(themeId);
 
-    const theme = ThemeService.themes.find(
-      (t: AppThemeJson) => t.id === safeThemeId
-    ) ?? ThemeService.getDefaultTheme();
+    const theme = ThemeService.themes.find((t: AppThemeJson) => t.id === safeThemeId) ?? ThemeService.getDefaultTheme();
 
-    const cfg = isDark
-      ? theme.dark
-      : theme.light;
+    const cfg = isDark ? theme.dark : theme.light;
 
     const c = new ThemeColors();
     c.primaryGreen = cfg.bg;
@@ -84,9 +77,7 @@ export class ThemeService {
   static getDefaultTheme(): AppThemeJson {
     const themes = ThemeService.getAllThemes();
 
-    const defaultTheme = themes.find(
-      (t: AppThemeJson) => t.isDefault === true
-    );
+    const defaultTheme = themes.find((t: AppThemeJson) => t.isDefault === true);
 
     if (defaultTheme !== undefined) {
       return defaultTheme;
@@ -122,25 +113,17 @@ export class ThemeService {
   }
 
   static isValidThemeId(themeId: string): boolean {
-    return ThemeService.themes.some(
-      (t: AppThemeJson) => t.id === themeId
-    );
+    return ThemeService.themes.some((t: AppThemeJson) => t.id === themeId);
   }
 
-  static ensureValidThemeId(
-    themeId?: string
-  ): string {
+  static ensureValidThemeId(themeId?: string): string {
 
     // Themes not loaded yet
     if (!ThemeService.isLoaded) {
       return themeId ?? 'sirat';
     }
 
-    if (
-      themeId !== undefined &&
-        themeId.length > 0 &&
-        ThemeService.isValidThemeId(themeId)
-    ) {
+    if (themeId !== undefined && themeId.length > 0 && ThemeService.isValidThemeId(themeId)) {
       return themeId;
     }
 

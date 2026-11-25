@@ -3583,6 +3583,154 @@
     {
       "name": "theme_preset",
       "value": "Theme Preset"
+    },
+    {
+      "name": "notif_prayer_due_title",
+      "value": "Prayer Pending"
+    },
+    {
+      "name": "notif_fajr_due",
+      "value": "Fajr prayer has not been marked."
+    },
+    {
+      "name": "notif_dhuhr_due",
+      "value": "Dhuhr prayer has not been marked."
+    },
+    {
+      "name": "notif_asr_due",
+      "value": "Asr prayer has not been marked."
+    },
+    {
+      "name": "notif_maghrib_due",
+      "value": "Maghrib prayer has not been marked."
+    },
+    {
+      "name": "notif_isha_due",
+      "value": "Isha prayer has not been marked."
+    },
+    {
+      "name": "title_notifications",
+      "value": "Notifications"
+    },
+    {
+      "name": "notifications_empty",
+      "value": "You're all caught up."
+    },
+    {
+      "name": "all_prayers_completed",
+      "value": "Alhamdulillah!"
+    },
+    {
+      "name": "all_prayers_completed_subtitle",
+      "value": "All prayers have been completed today."
+    },
+    {
+      "name": "notif_day_complete_title",
+      "value": "Alhamdulillah!"
+    },
+    {
+      "name": "notif_day_complete_message",
+      "value": "You have completed all prayers for today."
+    },
+    {
+      "name": "notif_streak_title",
+      "value": "Prayer Streak"
+    },
+    {
+      "name": "notif_streak_3",
+      "value": "You completed prayers for 3 consecutive days."
+    },
+    {
+      "name": "notif_streak_7",
+      "value": "You completed prayers for 7 consecutive days."
+    },
+    {
+      "name": "notif_streak_14",
+      "value": "You completed prayers for 14 consecutive days."
+    },
+    {
+      "name": "notif_streak_30",
+      "value": "You completed prayers for 30 consecutive days."
+    },
+    {
+      "name": "notif_streak_100",
+      "value": "You completed prayers for 100 consecutive days."
+    },
+    {
+      "name": "notif_streak_1000",
+      "value": "You completed prayers for 1,000 consecutive days."
+    },
+    {
+      "name": "notif_streak_10000",
+      "value": "You completed prayers for 10,000 consecutive days."
+    },
+    {
+      "name": "notif_ramadan_start_title",
+      "value": "Ramadan Approaching"
+    },
+    {
+      "name": "notif_ramadan_start_7",
+      "value": "Ramadan begins in 7 days."
+    },
+    {
+      "name": "notif_ramadan_mubarak_title",
+      "value": "Ramadan Mubarak"
+    },
+    {
+      "name": "notif_ramadan_mubarak_message",
+      "value": "May Allah accept your fasting and worship."
+    },
+    {
+      "name": "notif_last_ashra_title",
+      "value": "Final Ashra Begins"
+    },
+    {
+      "name": "notif_last_ashra_message",
+      "value": "The final ten nights of Ramadan have begun."
+    },
+    {
+      "name": "notif_laylatul_qadr_title",
+      "value": "Laylat al-Qadr"
+    },
+    {
+      "name": "notif_laylatul_qadr_message",
+      "value": "Tonight is one of the blessed odd nights of the final Ashra."
+    },
+    {
+      "name": "notif_eid_title",
+      "value": "Eid Mubarak"
+    },
+    {
+      "name": "notif_eid_message",
+      "value": "May Allah accept your fasting, prayers, and good deeds."
+    },
+    {
+      "name": "notif_laylatul_qadr_21",
+      "value": "Tonight is the 21st night of Ramadan. Increase your prayer, recitation, and remembrance of Allah."
+    },
+    {
+      "name": "notif_laylatul_qadr_23",
+      "value": "Tonight is the 23rd night of Ramadan. Seek Allah’s mercy and forgiveness through sincere worship."
+    },
+    {
+      "name": "notif_laylatul_qadr_25",
+      "value": "Tonight is the 25th night of Ramadan. Continue striving in worship during these blessed nights."
+    },
+    {
+      "name": "notif_laylatul_qadr_27",
+      "value": "Tonight is the 27th night of Ramadan, a night many Muslims especially devote to worship in search of Laylat al-Qadr."
+    },
+    {
+      "name": "notif_laylatul_qadr_29",
+      "value": "Tonight is the 29th night of Ramadan. Make the most of the final opportunities of this blessed month."
+    },
+    {
+      "name": "home_worship",
+      "value": "Worship"
+    },
+    {
+      "name": "home_insights",
+      "value": "INSIGHTS"
     }
   ]
 }

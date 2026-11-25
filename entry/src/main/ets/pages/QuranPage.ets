@@ -43,21 +43,21 @@ struct QuranPage {
     if (this.searchQuery.trim().length === 0) {
       this.filteredSurahs = this.allSurahs;
     } else {
-      const q = this.searchQuery.toLowerCase();
-      // Explicitly typing the callback return as boolean fixes arkts-no-implicit-return-types
+      const q =
+        this.searchQuery.toLowerCase(); // Explicitly typing the callback return as boolean fixes arkts-no-implicit-return-types
       this.filteredSurahs = this.allSurahs.filter((s: CompleteSurah): boolean => {
-        return s.nameTransliteration.toLowerCase().includes(q) ||
-          s.id.toString() === q;
+        return s.nameTransliteration.toLowerCase().includes(q) || s.id.toString() === q;
       });
     }
   }
 
   build() {
-    Column() {
-      // Top Bar
+    Column() { // Top Bar
       Row({ space: 16 }) {
         Row() {
-          Image($r('app.media.ic_chevron_right')).width(20).height(20)
+          Image($r('app.media.ic_chevron_right'))
+            .width(20)
+            .height(20)
             .fillColor(this.colors.textWhite)
             .rotate({ angle: L.isRtlLang(this.appLanguage) ? 0 : 180 })
         }
@@ -74,17 +74,19 @@ struct QuranPage {
           .fontColor(this.colors.textWhite)
           .layoutWeight(1)
           .textAlign(TextAlign.Start)
-      }
-      .width('100%').height(72).padding({ left: 16, right: 16 })
-      .backgroundColor(this.colors.cardDark)
+      }.width('100%').height(72).padding({ left: 16, right: 16 }).backgroundColor(this.colors.cardDark)
 
       // Quran Graph
       Row() {
         Text(L.get('quran_explorer', this.appLanguage))
-          .fontSize(15).fontWeight(FontWeight.Bold).fontColor(this.colors.accentGold)
+          .fontSize(15)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(this.colors.accentGold)
           .layoutWeight(1)
         Image($r('app.media.ic_chevron_right'))
-          .width(16).height(16).fillColor(this.colors.accentGold)
+          .width(16)
+          .height(16)
+          .fillColor(this.colors.accentGold)
           .rotate({ angle: L.isRtlLang(this.appLanguage) ? 180 : 0 })
       }
       .width('90%')
@@ -99,8 +101,7 @@ struct QuranPage {
 
       // Search Bar
       Search({
-        value: this.searchQuery,
-        placeholder: L.get('search_surahs', this.appLanguage)
+        value: this.searchQuery, placeholder: L.get('search_surahs', this.appLanguage)
       })
         .onChange((val: string) => {
           this.searchQuery = val;
@@ -123,12 +124,9 @@ struct QuranPage {
         List({ space: 12 }) {
           ForEach(this.filteredSurahs, (surah: CompleteSurah) => {
             ListItem() {
-              Row() {
-                // Surah Number
+              Row() { // Surah Number
                 Column() {
-                  Text(`${surah.id}`)
-                    .fontSize(14).fontWeight(FontWeight.Bold)
-                    .fontColor(this.colors.accentGold)
+                  Text(`${surah.id}`).fontSize(14).fontWeight(FontWeight.Bold).fontColor(this.colors.accentGold)
                 }
                 .width(40)
                 .height(40)
@@ -156,9 +154,7 @@ struct QuranPage {
                     .margin({ top: 4 })
                     .maxLines(1)
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
-                }
-                .alignItems(HorizontalAlign.Start).layoutWeight(1)
-                .padding({ left: 12, right: 12 })
+                }.alignItems(HorizontalAlign.Start).layoutWeight(1).padding({ left: 12, right: 12 })
 
                 // Arabic Name (Uses the correct script)
                 Text(surah.nameArabic)
@@ -176,14 +172,12 @@ struct QuranPage {
               .onClick(() => {
                 NavHelper.prepareForward();
                 router.pushUrl({
-                  url: 'pages/SurahDetailsPage',
-                  params: { surahId: surah.id }
+                  url: 'pages/SurahDetailsPage', params: { surahId: surah.id }
                 }).catch((e: Error) => console.error('Navigation failed', e));
               })
             }
           }, (surah: CompleteSurah) => `quran-${surah.id}`)
-        }
-        .width('100%').layoutWeight(1).padding({ left: 16, right: 16, bottom: 16 })
+        }.width('100%').layoutWeight(1).padding({ left: 16, right: 16, bottom: 16 })
       }
     }
     .width('100%')

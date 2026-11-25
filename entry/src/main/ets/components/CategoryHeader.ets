@@ -15,10 +15,7 @@ export struct CategoryHeader {
   build() {
     Row({ space: 14 }) {
       Row() {
-        Image(this.icon)
-          .width(20)
-          .height(20)
-          .fillColor(this.colors.accentGold)
+        Image(this.icon).width(20).height(20).fillColor(this.colors.accentGold)
       }
       .width(40)
       .height(40)
@@ -36,9 +33,7 @@ export struct CategoryHeader {
         .layoutWeight(1)
         .textAlign(TextAlign.Start)
 
-      Image(this.expanded
-        ? $r('app.media.ic_chevron_up')
-        : $r('app.media.ic_chevron_down'))
+      Image(this.expanded ? $r('app.media.ic_chevron_up') : $r('app.media.ic_chevron_down'))
         .width(16)
         .height(16)
         .fillColor(this.colors.accentGold)

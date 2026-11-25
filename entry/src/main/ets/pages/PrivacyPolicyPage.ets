@@ -39,9 +39,7 @@ struct PrivacyPolicyPage {
     const ctx = getContext(this) as common.UIAbilityContext;
     const targetUrl = PrivacyPolicyProvider.getFullUrl(this.appLanguage);
     const want: Want = {
-      action: 'ohos.want.action.viewData',
-      entities: ['entity.system.browsable'],
-      uri: targetUrl
+      action: 'ohos.want.action.viewData', entities: ['entity.system.browsable'], uri: targetUrl
     };
     try {
       await ctx.startAbility(want);
@@ -53,11 +51,12 @@ struct PrivacyPolicyPage {
   }
 
   build() {
-    Column() {
-      // === TOP BAR ===
+    Column() { // === TOP BAR ===
       Row({ space: 16 }) {
         Row() {
-          Image($r('app.media.ic_chevron_right')).width(20).height(20)
+          Image($r('app.media.ic_chevron_right'))
+            .width(20)
+            .height(20)
             .fillColor(this.colors.textWhite)
             .rotate({ angle: L.isRtlLang(this.appLanguage) ? 0 : 180 })
         }
@@ -75,9 +74,7 @@ struct PrivacyPolicyPage {
           .layoutWeight(1)
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
-      }
-      .width('100%').height(72).padding({ left: 16, right: 16 })
-      .backgroundColor(this.colors.cardDark)
+      }.width('100%').height(72).padding({ left: 16, right: 16 }).backgroundColor(this.colors.cardDark)
 
       // === CONTENT ===
       if (this.isLoading) {
@@ -100,7 +97,9 @@ struct PrivacyPolicyPage {
               Row({ space: 8 }) {
                 Image($r('app.media.ic_globe')).width(16).height(16).fillColor(this.colors.textOnAccent)
                 Text(L.get('privacy_view_online', this.appLanguage))
-                  .fontSize(14).fontWeight(FontWeight.Medium).fontColor(this.colors.textOnAccent)
+                  .fontSize(14)
+                  .fontWeight(FontWeight.Medium)
+                  .fontColor(this.colors.textOnAccent)
               }
             }
             .width('100%')
@@ -110,16 +109,13 @@ struct PrivacyPolicyPage {
             .margin({ bottom: 40 })
             .onClick(() => this.openOnlinePolicy())
 
-          }
-          .width('100%')
-          .padding({ left: 20, right: 20, top: 20 })
-        }
-        .layoutWeight(1)
-        .scrollBar(BarState.Auto)
-        .edgeEffect(EdgeEffect.Spring)
+          }.width('100%').padding({ left: 20, right: 20, top: 20 })
+        }.layoutWeight(1).scrollBar(BarState.Auto).edgeEffect(EdgeEffect.Spring)
       }
     }
-    .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
+    .width('100%')
+    .height('100%')
+    .backgroundColor(this.colors.primaryGreen)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
   }
 }

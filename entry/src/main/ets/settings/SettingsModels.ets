@@ -7,13 +7,11 @@ export interface PickerItem {
 }
 
 export enum CalculationSource {
-  LOCAL = 'Local',
-  API = 'API'
+  LOCAL = 'Local', API = 'API'
 }
 
 export enum LocationMode {
-  GPS = 'GPS',
-  MANUAL = 'Manual'
+  GPS = 'GPS', MANUAL = 'Manual'
 }
 
 export interface ManualCoords {

@@ -40,8 +40,7 @@ export class HadithSearchService {
     try {
       const data: Uint8Array = await ctx.resourceManager.getRawFileContent(RawPaths.i18n(lang));
       const jsonStr: string = util.TextDecoder.create('utf-8').decodeToString(data);
-      const parsed: Object = JSON.parse(jsonStr);
-      // v4.1.0 format: Array<{name, value}>. Convert to Record for
+      const parsed: Object = JSON.parse(jsonStr); // v4.1.0 format: Array<{name, value}>. Convert to Record for
       // existing lookups throughout the app.
       const record: Record<string, string> = {};
       if (Array.isArray(parsed)) {
@@ -50,8 +49,7 @@ export class HadithSearchService {
             record[e.name] = e.value;
           }
         }
-      } else {
-        // Defensive: fall back to Record if bundle ships old format
+      } else { // Defensive: fall back to Record if bundle ships old format
         const asRecord = parsed as Record<string, string>;
         const keys = Object.keys(asRecord);
         for (const k of keys) {
@@ -90,15 +88,13 @@ export class HadithSearchService {
       raw = raw.replace('collection_', '');
     }
 
-    raw = raw.replace(/_/g, ' ');
-    // Capitalize the first letter of every word
+    raw = raw.replace(/_/g, ' '); // Capitalize the first letter of every word
     return raw.replace(/\b\w/g, (c: string) => c.toUpperCase());
   }
 
   static async setLanguage(ctx: common.Context, transLang: string, uiLang: string): Promise<boolean> {
     const dbSuccess = await HadithDbHelper.openDatabase(ctx, transLang);
-    if (dbSuccess) {
-      // Load UI language dictionary, NOT the translation language
+    if (dbSuccess) { // Load UI language dictionary, NOT the translation language
       await HadithSearchService.loadI18n(ctx, uiLang);
     }
     return dbSuccess;
@@ -126,9 +122,7 @@ export class HadithSearchService {
           } // Safety check
           if (!HadithSearchService.metadataCache.has(ref.id)) {
             HadithSearchService.metadataCache.set(ref.id, {
-              section: ref.section || '',
-              life_contexts: ref.life_contexts || [],
-              topics: ref.topics || []
+              section: ref.section || '', life_contexts: ref.life_contexts || [], topics: ref.topics || []
             });
           }
         }
@@ -138,15 +132,12 @@ export class HadithSearchService {
 
     // Load all contexts
     if (HadithSearchService.catalog && HadithSearchService.catalog.contexts) {
-      for (const c of HadithSearchService.catalog.contexts) {
-        // 👇 FIX: c is a string, not an object
+      for (const c of HadithSearchService.catalog.contexts) { // 👇 FIX: c is a string, not an object
         await loadFile(RawPaths.context(c));
       }
-    }
-    // Load all topics
+    } // Load all topics
     if (HadithSearchService.catalog && HadithSearchService.catalog.topics) {
-      for (const t of HadithSearchService.catalog.topics) {
-        // 👇 FIX: t is a string, not an object
+      for (const t of HadithSearchService.catalog.topics) { // 👇 FIX: t is a string, not an object
         await loadFile(RawPaths.topic(t));
       }
     }

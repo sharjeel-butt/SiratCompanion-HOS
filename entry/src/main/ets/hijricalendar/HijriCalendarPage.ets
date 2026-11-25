@@ -41,37 +41,20 @@ export interface CalendarExportDay {
 
 @Component
 export struct HijriCalendarPage {
-  @StorageLink(STORAGE_KEY_THEME_MODE)
-  @Watch('onThemeModeChanged')
-  themeMode: string = ThemeMode.SYSTEM;
-  @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
-  @Watch('onHijriOffsetChanged')
-  offsetDays: number = 0;
-  @StorageLink(STORAGE_KEY_LANGUAGE)
-  @Watch('onLanguageChanged')
-  appLanguage: string = 'en';
-  @StorageLink(STORAGE_KEY_APP_THEME)
-  @Watch('onAppThemePresetChanged')
-  appThemePreset: string = '';
-  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
-  @Watch('onAppForegrounded')
-  appForegroundTick: number = 0;
-  @StorageLink(STORAGE_KEY_BREAKPOINT)
-  breakpoint: string = 'sm';
-  @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_TYPE)
-  @Watch('onCalendarTypeChanged')
-  hijriCalendarType: string = HijriCalendarType.UMM_AL_QURA;
+  @StorageLink(STORAGE_KEY_THEME_MODE) @Watch('onThemeModeChanged') themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_HIJRI_OFFSET) @Watch('onHijriOffsetChanged') offsetDays: number = 0;
+  @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLanguageChanged') appLanguage: string = 'en';
+  @StorageLink(STORAGE_KEY_APP_THEME) @Watch('onAppThemePresetChanged') appThemePreset: string = '';
+  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK) @Watch('onAppForegrounded') appForegroundTick: number = 0;
+  @StorageLink(STORAGE_KEY_BREAKPOINT) breakpoint: string = 'sm';
+  @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_TYPE) @Watch('onCalendarTypeChanged') hijriCalendarType: string =
+    HijriCalendarType.UMM_AL_QURA;
   @State currentLanguage: string = 'en';
-  @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_VERSION)
-  @Watch('onCalendarVersionChanged')
-  calendarVersion: number = 0;
-  @StorageLink(STORAGE_KEY_EVENT_SETTINGS_VERSION)
-  @Watch('onEventSettingsVersionChanged')
-  eventSettingsVersion: number = 0;
+  @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_VERSION) @Watch('onCalendarVersionChanged') calendarVersion: number = 0;
+  @StorageLink(STORAGE_KEY_EVENT_SETTINGS_VERSION) @Watch(
+    'onEventSettingsVersionChanged') eventSettingsVersion: number = 0;
   @State targetedDay: number = 0;
-  @StorageLink('nav_target_hijri_day')
-  @Watch('onNavTargetHijriDayChanged')
-  navTargetHijriDay: number = 0;
+  @StorageLink('nav_target_hijri_day') @Watch('onNavTargetHijriDayChanged') navTargetHijriDay: number = 0;
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State viewingHijriYear: number = 1447;
   @State viewingHijriMonth: number = 1;
@@ -124,8 +107,7 @@ export struct HijriCalendarPage {
     const targetMonth = AppStorage.get<number>('nav_target_hijri_month');
     const targetDay = AppStorage.get<number>('nav_target_hijri_day');
 
-    if (targetYear !== undefined && targetYear > 0
-      && targetMonth !== undefined && targetMonth > 0) {
+    if (targetYear !== undefined && targetYear > 0 && targetMonth !== undefined && targetMonth > 0) {
       this.viewingHijriYear = targetYear;
       this.viewingHijriMonth = targetMonth;
       this.targetedDay = (targetDay !== undefined && targetDay > 0) ? targetDay : 0;
@@ -153,8 +135,7 @@ export struct HijriCalendarPage {
     const targetMonth = AppStorage.get<number>('nav_target_hijri_month');
     const targetDay = AppStorage.get<number>('nav_target_hijri_day');
 
-    if (targetYear !== undefined && targetYear > 0
-      && targetMonth !== undefined && targetMonth > 0) {
+    if (targetYear !== undefined && targetYear > 0 && targetMonth !== undefined && targetMonth > 0) {
       this.viewingHijriYear = targetYear;
       this.viewingHijriMonth = targetMonth;
       this.targetedDay = (targetDay !== undefined && targetDay > 0) ? targetDay : 0;
@@ -174,8 +155,7 @@ export struct HijriCalendarPage {
 
   // ============================================================
   build() {
-    Stack() {
-      // Main Content
+    Stack() { // Main Content
       Column() {
         Scroll() {
           Row() {
@@ -190,8 +170,7 @@ export struct HijriCalendarPage {
             .width('100%')
             .constraintSize({ maxWidth: Breakpoints.maxContentWidth(this.breakpoint) })
             .padding({ left: 16, right: 16, top: 16 })
-          }
-          .width('100%').justifyContent(FlexAlign.Center)
+          }.width('100%').justifyContent(FlexAlign.Center)
         }
         .layoutWeight(1)
         .width('100%')
@@ -199,14 +178,11 @@ export struct HijriCalendarPage {
         .scrollable(ScrollDirection.Vertical)
         .scrollBar(BarState.Auto)
         .edgeEffect(EdgeEffect.Spring)
-      }
-      .width('100%').height('100%')
+      }.width('100%').height('100%')
 
       // --- Floating Action Button ---
       Row() {
-        Image($r('app.media.ic_add'))
-          .width(24).height(24)
-          .fillColor(this.colors.textOnAccent)
+        Image($r('app.media.ic_add')).width(24).height(24).fillColor(this.colors.textOnAccent)
       }
       .width(56)
       .height(56)
@@ -222,9 +198,7 @@ export struct HijriCalendarPage {
       .alignItems(VerticalAlign.Center)
       .zIndex(10)
       .position({
-        right: this.isRtl() ? undefined : 24,
-        left: this.isRtl() ? 24 : undefined,
-        bottom: 100
+        right: this.isRtl() ? undefined : 24, left: this.isRtl() ? 24 : undefined, bottom: 100
       })
       .onClick(() => {
         this.openNewEventSheet();
@@ -247,11 +221,11 @@ export struct HijriCalendarPage {
   @Builder
   MonthHeader() {
     Column() {
-      Row() {
-        // Previous Month
+      Row() { // Previous Month
         Row() {
           Image($r('app.media.ic_chevron_right'))
-            .width(16).height(16)
+            .width(16)
+            .height(16)
             .fillColor(this.colors.accentGold)
             .rotate({ angle: this.isRtl() ? 0 : 180 })
         }
@@ -275,19 +249,16 @@ export struct HijriCalendarPage {
             .width('100%')
           Row({ space: 6 }) {
             Text(`${this.viewingHijriYear} ${this.tr('hijri_year_suffix')}`)
-              .fontSize(13).fontColor(this.colors.accentGold)
+              .fontSize(13)
+              .fontColor(this.colors.accentGold)
 
-            Text('·')
-              .fontSize(11).fontColor(this.colors.textMuted)
+            Text('·').fontSize(11).fontColor(this.colors.textMuted)
 
             Text(SettingsHelper.getHijriCalendarTypeLabel(this.hijriCalendarType, this.currentLanguage))
               .fontSize(11)
               .fontColor(this.colors.accentGold)
               .fontWeight(FontWeight.Medium)
-          }
-          .justifyContent(FlexAlign.Center)
-          .width('100%')
-          .margin({ top: 2 })
+          }.justifyContent(FlexAlign.Center).width('100%').margin({ top: 2 })
 
           Text(HijriCalendarHelper.formatGregorianSpan(this.monthDays, this.currentLanguage))
             .fontSize(11)
@@ -295,13 +266,13 @@ export struct HijriCalendarPage {
             .textAlign(TextAlign.Center)
             .width('100%')
             .margin({ top: 4 })
-        }
-        .layoutWeight(1).alignItems(HorizontalAlign.Center)
+        }.layoutWeight(1).alignItems(HorizontalAlign.Center)
 
         // Next Month
         Row() {
           Image($r('app.media.ic_chevron_right'))
-            .width(16).height(16)
+            .width(16)
+            .height(16)
             .fillColor(this.colors.accentGold)
             .rotate({ angle: this.isRtl() ? 180 : 0 })
         }
@@ -317,13 +288,9 @@ export struct HijriCalendarPage {
         })
 
         if (this.isExporting) {
-          LoadingProgress()
-            .width(24).height(24)
-            .color(this.colors.accentGold)
-            .margin({
-              left: this.isRtl() ? 0 : 12,
-              right: this.isRtl() ? 12 : 0
-            })
+          LoadingProgress().width(24).height(24).color(this.colors.accentGold).margin({
+            left: this.isRtl() ? 0 : 12, right: this.isRtl() ? 12 : 0
+          })
         } else {
           Image($r('app.media.ic_printer'))
             .width(16)
@@ -336,17 +303,14 @@ export struct HijriCalendarPage {
             .backgroundColor(this.colors.cardDark)
             .border({ width: 1, color: this.colors.borderSoft })
             .margin({
-              left: this.isRtl() ? 0 : 8,
-              right: this.isRtl() ? 8 : 0
+              left: this.isRtl() ? 0 : 8, right: this.isRtl() ? 8 : 0
             })
             .onClick(() => {
               this.handleExport();
             })
         }
-      }
-      .width('100%').alignItems(VerticalAlign.Center)
-    }
-    .width('100%').padding({ top: 8, bottom: 16 })
+      }.width('100%').alignItems(VerticalAlign.Center)
+    }.width('100%').padding({ top: 8, bottom: 16 })
   }
 
   @Builder
@@ -360,8 +324,7 @@ export struct HijriCalendarPage {
           .textAlign(TextAlign.Center)
           .layoutWeight(1)
       }, (d: string) => `dow-${d}`)
-    }
-    .width('100%').padding({ bottom: 6 }).direction(Direction.Ltr)
+    }.width('100%').padding({ bottom: 6 }).direction(Direction.Ltr)
   }
 
   @Builder
@@ -382,18 +345,15 @@ export struct HijriCalendarPage {
             return `c-${cell.hijri.year}-${cell.hijri.month}-${cell.hijri.day}` +
               `-${cell.isToday ? 'T' : 'f'}-${cell.events.length}-${this.hasCustomEvent(cell)}`;
           })
-        }
-        .width('100%').margin({ bottom: 4 })
+        }.width('100%').margin({ bottom: 4 })
       }, (week: Array<CalendarDay | null>, wi: number) => {
         const parts: string[] = [];
         for (const cell of week) {
           if (cell === null) {
             parts.push('_');
           } else {
-            parts.push(
-              `${cell.hijri.year}-${cell.hijri.month}-${cell.hijri.day}-` +
-                `${cell.isToday ? 'T' : 'f'}-${cell.events.length}-${this.hasCustomEvent(cell)}`
-            );
+            parts.push(`${cell.hijri.year}-${cell.hijri.month}-${cell.hijri.day}-` +
+              `${cell.isToday ? 'T' : 'f'}-${cell.events.length}-${this.hasCustomEvent(cell)}`);
           }
         }
         return `w${wi}-${parts.join('|')}`;
@@ -416,13 +376,14 @@ export struct HijriCalendarPage {
       Text(`${cell.hijri.day}`)
         .fontSize(17)
         .fontWeight(cell.isToday ? FontWeight.Bold : FontWeight.Medium)
-        .fontColor(cell.isToday ? this.colors.textOnAccent
-          : (cell.events.length > 0 || this.hasCustomEvent(cell) ? this.colors.accentGold : this.colors.textWhite))
+        .fontColor(cell.isToday ? this.colors.textOnAccent :
+          (cell.events.length > 0 || this.hasCustomEvent(cell) ? this.colors.accentGold : this.colors.textWhite))
 
       Text(`${cell.gregorianDate.getDate()}`)
         .fontSize(10)
         .fontColor(cell.isToday ? this.colors.textOnAccent : this.colors.textMuted)
-        .opacity(cell.isToday ? 0.85 : 0.7).margin({ top: -2 })
+        .opacity(cell.isToday ? 0.85 : 0.7)
+        .margin({ top: -2 })
 
       if ((cell.events.length > 0 || this.hasCustomEvent(cell)) && !cell.isToday) {
         Row()
@@ -446,8 +407,8 @@ export struct HijriCalendarPage {
     .height(56)
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
-    .backgroundColor(cell.isToday ? this.colors.accentGold
-      : (this.isWeekend(cell.gregorianDate.getDay()) ? this.colors.tintSubtle : Color.Transparent))
+    .backgroundColor(cell.isToday ? this.colors.accentGold :
+      (this.isWeekend(cell.gregorianDate.getDay()) ? this.colors.tintSubtle : Color.Transparent))
     .borderRadius(10)
     .border(this.dayCellBorder(cell))
     .margin({ left: 2, right: 2 })
@@ -457,15 +418,13 @@ export struct HijriCalendarPage {
   EventsList() {
     Column() {
       Row({ space: 8 }) {
-        Image($r('app.media.ic_nav_calendar'))
-          .width(16).height(16)
-          .fillColor(this.colors.accentGold)
-          .flexShrink(0)
+        Image($r('app.media.ic_nav_calendar')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
         Text(this.tr('important_dates'))
-          .fontSize(12).fontColor(this.colors.accentGold)
-          .fontWeight(FontWeight.Bold).letterSpacing(1.5)
-      }
-      .width('100%').padding({ bottom: 12 })
+          .fontSize(12)
+          .fontColor(this.colors.accentGold)
+          .fontWeight(FontWeight.Bold)
+          .letterSpacing(1.5)
+      }.width('100%').padding({ bottom: 12 })
 
       if (this.getMonthEvents().length === 0) {
         Text(this.tr('no_events_this_month'))
@@ -489,9 +448,7 @@ export struct HijriCalendarPage {
                 .fontSize(14)
                 .fontColor(this.colors.textWhite)
                 .layoutWeight(1)
-            }
-            .width('100%')
-            .alignItems(VerticalAlign.Center)
+            }.width('100%').alignItems(VerticalAlign.Center)
 
             // Citations — hidden when no_sources
             if (e.migrationStatus !== 'no_sources' && e.sources && e.sources.length > 0) {
@@ -512,11 +469,8 @@ export struct HijriCalendarPage {
                     .maxLines(1)
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
                     .onClick(() => this.onSourceTap(src))
-                }, (src: IslamicEventSource, i: number) =>
-                `${e.key}-src-${i}-${src.type}`)
-              }
-              .width('100%')
-              .margin({ left: 44, top: 4 })
+                }, (src: IslamicEventSource, i: number) => `${e.key}-src-${i}-${src.type}`)
+              }.width('100%').margin({ left: 44, top: 4 })
             }
           }
           .width('100%')
@@ -530,8 +484,7 @@ export struct HijriCalendarPage {
           .margin({ bottom: 4 })
           .backgroundColor(this.colors.tintSubtle)
           .alignItems(HorizontalAlign.Start)
-        }, (e: IslamicEvent) =>
-        `event-${e.month}-${e.day}-${e.key}-${e.sources?.length ?? 0}-${this.currentLanguage}`)
+        }, (e: IslamicEvent) => `event-${e.month}-${e.day}-${e.key}-${e.sources?.length ?? 0}-${this.currentLanguage}`)
       }
     }
     .width('100%')
@@ -551,10 +504,8 @@ export struct HijriCalendarPage {
     if (this.getFilteredCustomEvents().length > 0) {
       Column() {
         Row({ space: 8 }) {
-          Image($r('app.media.ic_custom_event')) // (Assuming you updated this icon)
-            .width(16).height(16)
-            .fillColor(this.colors.accentGold)
-            .flexShrink(0)
+          Image($r(
+            'app.media.ic_custom_event')) // (Assuming you updated this icon).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
           Text(this.tr('custom_events_title'))
             .fontSize(12)
             .fontColor(this.colors.accentGold)
@@ -562,8 +513,7 @@ export struct HijriCalendarPage {
             .letterSpacing(1.5)
             .layoutWeight(1)
             .textAlign(TextAlign.Start)
-        }
-        .width('100%').padding({ bottom: 12 })
+        }.width('100%').padding({ bottom: 12 })
 
         ForEach(this.getFilteredCustomEvents(), (ev: CustomEvent) => {
           Row({ space: 8 }) {
@@ -585,29 +535,24 @@ export struct HijriCalendarPage {
                 .width('100%')
               if (ev.recurrence && ev.recurrence !== RecurrenceType.NONE) {
                 Text(this.tr('recur_' + ev.recurrence))
-                  .fontSize(10).fontColor(this.colors.textMuted)
+                  .fontSize(10)
+                  .fontColor(this.colors.textMuted)
                   .textAlign(TextAlign.Start)
                   .width('100%')
               }
-            }
-            .layoutWeight(1)
-            .alignItems(HorizontalAlign.Start)
+            }.layoutWeight(1).alignItems(HorizontalAlign.Start)
 
             // Edit Button
             Row() {
               Image($r('app.media.ic_edit')).width(16).height(16).fillColor(this.colors.accentGold)
-            }
-            .width(32).height(32).justifyContent(FlexAlign.Center)
-            .onClick(() => {
+            }.width(32).height(32).justifyContent(FlexAlign.Center).onClick(() => {
               this.openEditEventSheet(ev);
             })
 
             // Delete Button
             Row() {
               Image($r('app.media.ic_delete')).width(16).height(16).fillColor(this.colors.statusExpress)
-            }
-            .width(32).height(32).justifyContent(FlexAlign.Center)
-            .onClick(() => {
+            }.width(32).height(32).justifyContent(FlexAlign.Center).onClick(() => {
               this.deleteCustomEvent(ev.id);
             })
           }
@@ -636,8 +581,7 @@ export struct HijriCalendarPage {
 
   @Builder
   AddEventSheet() {
-    Column() {
-      // 1. Drag Bar
+    Column() { // 1. Drag Bar
       Row()
         .width(44)
         .height(4)
@@ -648,9 +592,7 @@ export struct HijriCalendarPage {
       // 2. Header
       Row({ space: 12 }) {
         Row() {
-          Image($r('app.media.ic_nav_calendar'))
-            .width(20).height(20)
-            .fillColor(this.colors.accentGold)
+          Image($r('app.media.ic_nav_calendar')).width(20).height(20).fillColor(this.colors.accentGold)
         }
         .width(44)
         .height(44)
@@ -668,9 +610,7 @@ export struct HijriCalendarPage {
           .fontColor(this.colors.textWhite)
           .layoutWeight(1)
           .textAlign(TextAlign.Start)
-      }
-      .width('100%')
-      .padding({ left: 20, right: 20, bottom: 20 })
+      }.width('100%').padding({ left: 20, right: 20, bottom: 20 })
 
       Divider().color(this.colors.borderSoft).width('90%').margin({ bottom: 20 })
 
@@ -701,8 +641,7 @@ export struct HijriCalendarPage {
                 bottom: 12
               })
               .border({ width: 1, color: this.colors.borderSoft })
-          }
-          .width('100%')
+          }.width('100%')
 
           // --- Date Type Segmented Toggle ---
           Column({ space: 8 }) {
@@ -741,8 +680,7 @@ export struct HijriCalendarPage {
             .backgroundColor(this.colors.tintSoft)
             .borderRadius(12)
             .border({ width: 1, color: this.colors.borderSoft })
-          }
-          .width('100%')
+          }.width('100%')
 
           // --- Date Inputs ---
           if (this.formDateType === 'hijri') {
@@ -750,28 +688,27 @@ export struct HijriCalendarPage {
               this.DateInput(this.tr('day'), this.formHijriDay, (v) => this.formHijriDay = v)
               this.DateInput(this.tr('month'), this.formHijriMonth, (v) => this.formHijriMonth = v)
               this.DateInput(this.tr('year'), this.formHijriYear, (v) => this.formHijriYear = v)
-            }
-            .width('100%')
+            }.width('100%')
           } else {
             Column({ space: 8 }) {
               Row({ space: 10 }) {
                 this.DateInput(this.tr('day'), this.formGregDay, (v) => this.formGregDay = v)
                 this.DateInput(this.tr('month'), this.formGregMonth, (v) => this.formGregMonth = v)
                 this.DateInput(this.tr('year'), this.formGregYear, (v) => this.formGregYear = v)
-              }
-              .width('100%')
+              }.width('100%')
 
               // Live preview of resultant Hijri date
               if (this.getHijriPreviewFromGregorian().length > 0) {
                 Row({ space: 6 }) {
                   Image($r('app.media.ic_nav_calendar'))
-                    .width(14).height(14)
+                    .width(14)
+                    .height(14)
                     .fillColor(this.colors.accentGold)
                     .flexShrink(0)
-                  Text(this.tr('hijri_equivalent'))
-                    .fontSize(11).fontColor(this.colors.textMuted)
+                  Text(this.tr('hijri_equivalent')).fontSize(11).fontColor(this.colors.textMuted)
                   Text(this.getHijriPreviewFromGregorian())
-                    .fontSize(12).fontColor(this.colors.accentGold)
+                    .fontSize(12)
+                    .fontColor(this.colors.accentGold)
                     .fontWeight(FontWeight.Medium)
                 }
                 .width('100%')
@@ -780,15 +717,15 @@ export struct HijriCalendarPage {
                 .borderRadius(8)
                 .border({ width: 1, color: this.colors.borderSoft })
               }
-            }
-            .width('100%')
+            }.width('100%')
           }
 
           // --- Notification Toggle ---
           Row() {
             Row() {
               Image($r('app.media.ic_bell'))
-                .width(20).height(20)
+                .width(20)
+                .height(20)
                 .fillColor(this.formNotify ? this.colors.accentGold : this.colors.textMuted)
             }
             .width(36)
@@ -812,9 +749,7 @@ export struct HijriCalendarPage {
                 .width('100%')
                 .textAlign(TextAlign.Start)
                 .margin({ top: 2 })
-            }
-            .layoutWeight(1)
-            .alignItems(HorizontalAlign.Start)
+            }.layoutWeight(1).alignItems(HorizontalAlign.Start)
 
             Toggle({ type: ToggleType.Switch, isOn: this.formNotify })
               .selectedColor(this.colors.accentGold)
@@ -830,7 +765,8 @@ export struct HijriCalendarPage {
           Row() {
             Row() {
               Image($r('app.media.ic_refresh'))
-                .width(20).height(20)
+                .width(20)
+                .height(20)
                 .fillColor(
                   this.formRecurrence === RecurrenceType.YEARLY ? this.colors.accentGold : this.colors.textMuted)
             }
@@ -855,9 +791,7 @@ export struct HijriCalendarPage {
                 .width('100%')
                 .textAlign(TextAlign.Start)
                 .margin({ top: 2 })
-            }
-            .layoutWeight(1)
-            .alignItems(HorizontalAlign.Start)
+            }.layoutWeight(1).alignItems(HorizontalAlign.Start)
 
             Toggle({ type: ToggleType.Switch, isOn: this.formRecurrence === RecurrenceType.YEARLY })
               .selectedColor(this.colors.accentGold)
@@ -871,14 +805,8 @@ export struct HijriCalendarPage {
           .borderRadius(12)
           .border({ width: 1, color: this.colors.borderSoft })
 
-        }
-        .width('100%')
-        .padding({ left: 20, right: 20, bottom: 20 })
-      }
-      .flexShrink(1)
-      .width('100%')
-      .scrollBar(BarState.Auto)
-      .edgeEffect(EdgeEffect.Spring)
+        }.width('100%').padding({ left: 20, right: 20, bottom: 20 })
+      }.flexShrink(1).width('100%').scrollBar(BarState.Auto).edgeEffect(EdgeEffect.Spring)
 
       Divider().color(this.colors.borderSoft).width('90%').margin({ top: 10 })
 
@@ -907,26 +835,19 @@ export struct HijriCalendarPage {
           .onClick(async () => {
             await this.saveCustomEvent();
           })
-      }
-      .width('100%')
-      .padding({
+      }.width('100%').padding({
         top: 16,
         bottom: 24,
         left: 20,
         right: 20
       })
-    }
-    .width('100%')
-    .backgroundColor(this.colors.cardDark)
-    .borderRadius({ topLeft: 24, topRight: 24 })
+    }.width('100%').backgroundColor(this.colors.cardDark).borderRadius({ topLeft: 24, topRight: 24 })
   }
 
   @Builder
   DateInput(label: string, value: string, onChange: (v: string) => void) {
     Column({ space: 6 }) {
-      Text(label)
-        .fontSize(12).fontColor(this.colors.textMuted)
-        .width('100%').textAlign(TextAlign.Center)
+      Text(label).fontSize(12).fontColor(this.colors.textMuted).width('100%').textAlign(TextAlign.Center)
       TextInput({ text: value })
         .type(InputType.Number)
         .onChange(onChange)
@@ -938,15 +859,13 @@ export struct HijriCalendarPage {
         .borderRadius(10)
         .padding(12)
         .border({ width: 1, color: this.colors.borderSoft })
-    }
-    .layoutWeight(1)
+    }.layoutWeight(1)
   }
 
   // ============================================================
   @Builder
   CalendarExportLayout() {
-    Column() {
-      // Header
+    Column() { // Header
       Row({ space: 16 }) {
         Image($r('app.media.foreground'))
           .syncLoad(true)
@@ -957,32 +876,34 @@ export struct HijriCalendarPage {
 
         Column() {
           Text(`${this.getLocalizedMonthName()} ${this.viewingHijriYear} ${this.tr('hijri_year_suffix')}`)
-            .fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.pdfColors.textWhite)
+            .fontSize(24)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.pdfColors.textWhite)
             .width('100%')
 
           Row() {
             Text(this.getLocalizedGregorianSpan())
-              .fontSize(12).fontColor(this.pdfColors.accentGold).fontWeight(FontWeight.Medium)
-            Text(' · ')
-              .fontSize(12).fontColor(this.pdfColors.textMuted)
+              .fontSize(12)
+              .fontColor(this.pdfColors.accentGold)
+              .fontWeight(FontWeight.Medium)
+            Text(' · ').fontSize(12).fontColor(this.pdfColors.textMuted)
             Text(SettingsHelper.getHijriCalendarTypeLabel(this.hijriCalendarType, this.currentLanguage))
-              .fontSize(12).fontColor(this.pdfColors.accentGold)
+              .fontSize(12)
+              .fontColor(this.pdfColors.accentGold)
           }.margin({ top: 4 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+        }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
         Text(this.tr('generated_by'))
-          .fontSize(9).fontColor(this.pdfColors.textMuted).alignSelf(ItemAlign.Start).margin({ top: 4 })
-      }
-      .width('100%')
-      .padding({
+          .fontSize(9)
+          .fontColor(this.pdfColors.textMuted)
+          .alignSelf(ItemAlign.Start)
+          .margin({ top: 4 })
+      }.width('100%').padding({
         top: 30,
         bottom: 20,
         left: 24,
         right: 24
-      })
-      .backgroundColor(this.pdfColors.cardDark)
-      .alignItems(VerticalAlign.Center)
+      }).backgroundColor(this.pdfColors.cardDark).alignItems(VerticalAlign.Center)
 
       Row().width('100%').height(4).backgroundColor(this.pdfColors.accentGold)
 
@@ -998,8 +919,7 @@ export struct HijriCalendarPage {
               .fontColor(this.pdfColors.textMuted)
               .margin({ bottom: 6 })
           })
-        }
-        .width('100%')
+        }.width('100%')
 
         ForEach(this.pdfWeeks, (week: Array<CalendarExportDay | null>, wi: number) => {
           Row() {
@@ -1013,10 +933,7 @@ export struct HijriCalendarPage {
                     .fontWeight(FontWeight.Medium)
                     .fontColor(day.hasEvents ? this.pdfColors.accentGold : this.pdfColors.textWhite)
 
-                  Text(day.gregorianDay)
-                    .fontSize(9)
-                    .fontColor(this.pdfColors.textMuted)
-                    .margin({ top: 2 })
+                  Text(day.gregorianDay).fontSize(9).fontColor(this.pdfColors.textMuted).margin({ top: 2 })
 
                   if (day.hasEvents) {
                     Row()
@@ -1036,13 +953,9 @@ export struct HijriCalendarPage {
                 .margin({ left: 2, right: 2 })
               }
             }, (day: CalendarExportDay | null, di: number) => `pdf-cell-${wi}-${di}`)
-          }
-          .width('100%')
-          .margin({ bottom: 4 })
+          }.width('100%').margin({ bottom: 4 })
         }, (week: Array<CalendarExportDay | null>, wi: number) => `pdf-week-${wi}`)
-      }
-      .width('100%')
-      .padding({ left: 24, right: 24, top: 10 })
+      }.width('100%').padding({ left: 24, right: 24, top: 10 })
 
       // Important Dates & Custom Events
       Column() {
@@ -1059,8 +972,7 @@ export struct HijriCalendarPage {
             .fontColor(this.pdfColors.textMuted)
             .width('100%')
             .textAlign(TextAlign.Start)
-        } else {
-          // Built-in Events
+        } else { // Built-in Events
           ForEach(this.getMonthEvents(), (e: IslamicEvent) => {
             Row({ space: 8 }) {
               Text(`${e.day}`)
@@ -1082,8 +994,7 @@ export struct HijriCalendarPage {
                   .margin({ top: 2 })
                   .lineHeight(12)
               }.alignItems(HorizontalAlign.Start).layoutWeight(1)
-            }
-            .width('100%').padding({ top: 6, bottom: 6 }).alignItems(VerticalAlign.Top)
+            }.width('100%').padding({ top: 6, bottom: 6 }).alignItems(VerticalAlign.Top)
           })
 
           // Custom Events
@@ -1098,13 +1009,9 @@ export struct HijriCalendarPage {
                 .flexShrink(0)
 
               Column() {
-                Text(ev.title)
-                  .fontSize(11)
-                  .fontWeight(FontWeight.Medium)
-                  .fontColor(this.pdfColors.textWhite)
+                Text(ev.title).fontSize(11).fontWeight(FontWeight.Medium).fontColor(this.pdfColors.textWhite)
               }.alignItems(HorizontalAlign.Start).layoutWeight(1)
-            }
-            .width('100%').padding({ top: 6, bottom: 6 }).alignItems(VerticalAlign.Top)
+            }.width('100%').padding({ top: 6, bottom: 6 }).alignItems(VerticalAlign.Top)
           })
         }
       }
@@ -1115,7 +1022,9 @@ export struct HijriCalendarPage {
       .borderRadius(12)
       .margin({ left: 24, right: 24, bottom: 10 })
     }
-    .width(595).height(842).backgroundColor(this.pdfColors.primaryGreen)
+    .width(595)
+    .height(842)
+    .backgroundColor(this.pdfColors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
   }
 
@@ -1237,19 +1146,15 @@ export struct HijriCalendarPage {
     }
   }
 
-  private dayCellBorder(cell: CalendarDay): BorderOptions {
-    // Priority 1 — targeted day from Home navigation (2 px ring).
+  private dayCellBorder(
+    cell: CalendarDay): BorderOptions { // Priority 1 — targeted day from Home navigation (2 px ring).
     // Skipped on today because the background is already gold.
-    if (this.targetedDay > 0
-      && cell.hijri.day === this.targetedDay
-      && !cell.isToday) {
+    if (this.targetedDay > 0 && cell.hijri.day === this.targetedDay && !cell.isToday) {
       return { width: 2, color: this.colors.accentGold };
-    }
-    // Priority 2 — today has a filled background, no border.
+    } // Priority 2 — today has a filled background, no border.
     if (cell.isToday) {
       return { width: 0 };
-    }
-    // Priority 3 — weekend tint gets a subtle border.
+    } // Priority 3 — weekend tint gets a subtle border.
     if (this.isWeekend(cell.gregorianDate.getDay())) {
       return { width: 1, color: this.colors.borderSoft };
     }
@@ -1271,8 +1176,7 @@ export struct HijriCalendarPage {
   // ============================================================
   // BUILD UI
 
-  private rebuildFromAnchor(anchor: Date): void {
-    // Pass the user's Event Perspective so the day-cell dots and
+  private rebuildFromAnchor(anchor: Date): void { // Pass the user's Event Perspective so the day-cell dots and
     // the events list below the grid always agree. Without the
     // 5th argument, buildMonthDays defaults to 'universal', which
     // hides the dot for every SUNNI-only and SHIA-only event on
@@ -1284,13 +1188,9 @@ export struct HijriCalendarPage {
     // the next render pass. The ForEach keys include cell.events.length,
     // so changing the perspective re-keys the affected cells and
     // forces ArkUI to redraw their dots.
-    this.monthDays = HijriCalendarHelper.buildMonthDays(
-      this.viewingHijriYear,
-      this.viewingHijriMonth,
-      this.offsetDays,
-      anchor,
-      SettingsHelper.getEventPerspective()
-    );
+    this.monthDays =
+      HijriCalendarHelper.buildMonthDays(this.viewingHijriYear, this.viewingHijriMonth, this.offsetDays, anchor,
+        SettingsHelper.getEventPerspective());
   }
 
   private eventMatchesDay(ev: CustomEvent, day: CalendarDay): boolean {
@@ -1322,9 +1222,7 @@ export struct HijriCalendarPage {
 
   private navigate(delta: number): void {
     this.targetedDay = 0;
-    const shifted = HijriCalendarHelper.shiftMonth(
-      this.viewingHijriYear, this.viewingHijriMonth, delta
-    );
+    const shifted = HijriCalendarHelper.shiftMonth(this.viewingHijriYear, this.viewingHijriMonth, delta);
     const anchor = this.monthDays.length > 0 ? this.monthDays[0].gregorianDate : new Date();
     this.viewingHijriYear = shifted.year;
     this.viewingHijriMonth = shifted.month;
@@ -1332,10 +1230,7 @@ export struct HijriCalendarPage {
   }
 
   private getMonthEvents(): IslamicEvent[] {
-    return HijriCalendarHelper.eventsInMonth(
-      this.viewingHijriMonth,
-      SettingsHelper.getEventPerspective()
-    );
+    return HijriCalendarHelper.eventsInMonth(this.viewingHijriMonth, SettingsHelper.getEventPerspective());
   }
 
   private getLocalizedMonthName(): string {
@@ -1343,8 +1238,7 @@ export struct HijriCalendarPage {
     return names[this.viewingHijriMonth - 1] || HijriCalendarHelper.monthName(this.viewingHijriMonth);
   }
 
-  private getLocalizedDaysOfWeek(): string[] {
-    // FIX: Use short names (Sun, Mon) so they fit the 7-column grid
+  private getLocalizedDaysOfWeek(): string[] { // FIX: Use short names (Sun, Mon) so they fit the 7-column grid
     return this.trArray('days_of_week_short');
   }
 
@@ -1415,9 +1309,8 @@ export struct HijriCalendarPage {
       const ctx = getContext(this) as common.UIAbilityContext;
       await new Promise<void>((resolve) => setTimeout(() => resolve(), 100));
 
-      await PdfExportHelper.exportBuilderToPdf(
-        ctx, this.getUIContext(), this.CalendarExportLayout.bind(this), 'Hijri_Calendar'
-      );
+      await PdfExportHelper.exportBuilderToPdf(ctx, this.getUIContext(), this.CalendarExportLayout.bind(this),
+        'Hijri_Calendar');
     } catch (err) {
       console.error('Export failed', JSON.stringify(err));
     } finally {
@@ -1425,8 +1318,7 @@ export struct HijriCalendarPage {
     }
   }
 
-  private getFilteredCustomEvents(): CustomEvent[] {
-    // Now just returns the events for the currently viewed month
+  private getFilteredCustomEvents(): CustomEvent[] { // Now just returns the events for the currently viewed month
     return this.getCustomEventsForMonth();
   }
 
@@ -1476,9 +1368,8 @@ export struct HijriCalendarPage {
     const targetHijriYear = ev.hijriYear === -1 ? currentHijri.year : ev.hijriYear;
     this.formHijriYear = targetHijriYear.toString();
 
-    const greg = HijriCalendarHelper.findGregorianForHijri(
-      targetHijriYear, ev.hijriMonth, ev.hijriDay, this.offsetDays, today
-    );
+    const greg =
+      HijriCalendarHelper.findGregorianForHijri(targetHijriYear, ev.hijriMonth, ev.hijriDay, this.offsetDays, today);
 
     if (greg) {
       this.formGregDay = greg.getDate().toString();
@@ -1523,13 +1414,10 @@ export struct HijriCalendarPage {
       hYear = h.year;
       hMonth = h.month;
       hDay = h.day;
-    } else {
-      // If Hijri, we still need to calculate the Gregorian weekday for Weekly recurrence
+    } else { // If Hijri, we still need to calculate the Gregorian weekday for Weekly recurrence
       if (this.formRecurrence === RecurrenceType.WEEKLY) {
         const today = new Date();
-        const gDate = HijriCalendarHelper.findGregorianForHijri(
-          hYear, hMonth, hDay, this.offsetDays, today
-        );
+        const gDate = HijriCalendarHelper.findGregorianForHijri(hYear, hMonth, hDay, this.offsetDays, today);
         if (gDate) {
           gDayOfWeek = gDate.getDay();
         }
@@ -1593,8 +1481,7 @@ export struct HijriCalendarPage {
     try {
       firstMonth = first.toLocaleString(locale, { month: 'short' });
       lastMonth = last.toLocaleString(locale, { month: 'short' });
-    } catch (err) {
-      // Rare: runtime has no CLDR data for this locale tag.
+    } catch (err) { // Rare: runtime has no CLDR data for this locale tag.
       // Fall back to English month abbreviations so the export
       // still completes rather than throwing out of the PDF
       // builder.
@@ -1620,9 +1507,7 @@ export struct HijriCalendarPage {
 
     // Validate: reject impossible dates like Feb 31
     const testDate = new Date(gYear, gMonth - 1, gDay);
-    if (testDate.getFullYear() !== gYear ||
-      testDate.getMonth() !== gMonth - 1 ||
-      testDate.getDate() !== gDay) {
+    if (testDate.getFullYear() !== gYear || testDate.getMonth() !== gMonth - 1 || testDate.getDate() !== gDay) {
       return this.tr('invalid_date');
     }
 
@@ -1634,15 +1519,13 @@ export struct HijriCalendarPage {
 
   private getCustomEventsForMonth(): CustomEvent[] {
     return this.customEvents.filter(ev => {
-      const rec = ev.recurrence || RecurrenceType.NONE;
-      // One-off and yearly events must match the current month
+      const rec = ev.recurrence || RecurrenceType.NONE; // One-off and yearly events must match the current month
       if (rec === RecurrenceType.NONE) {
         return ev.hijriYear === this.viewingHijriYear && ev.hijriMonth === this.viewingHijriMonth;
       }
       if (rec === RecurrenceType.YEARLY) {
         return ev.hijriMonth === this.viewingHijriMonth;
-      }
-      // Monthly and weekly events always appear (they occur every month)
+      } // Monthly and weekly events always appear (they occur every month)
       return true;
     });
   }
@@ -1659,9 +1542,7 @@ export struct HijriCalendarPage {
    * day, so they keep the numeric label.
    */
   private eventDayLabel(ev: CustomEvent): string {
-    if (ev.recurrence === RecurrenceType.WEEKLY &&
-      ev.gregorianDayOfWeek !== undefined &&
-      ev.gregorianDayOfWeek >= 0 &&
+    if (ev.recurrence === RecurrenceType.WEEKLY && ev.gregorianDayOfWeek !== undefined && ev.gregorianDayOfWeek >= 0 &&
       ev.gregorianDayOfWeek <= 6) {
       const weekdays = this.trArray('days_of_week_short');
       return weekdays[ev.gregorianDayOfWeek] || `${ev.hijriDay}`;
@@ -1680,14 +1561,12 @@ export struct HijriCalendarPage {
     if (src.type === 'quran' && src.surah !== undefined && src.ayah !== undefined) {
       NavHelper.prepareForward();
       router.pushUrl({
-        url: 'pages/SurahDetailsPage',
-        params: { surahId: src.surah, startVerse: src.ayah, endVerse: src.ayah }
+        url: 'pages/SurahDetailsPage', params: { surahId: src.surah, startVerse: src.ayah, endVerse: src.ayah }
       }).catch((e: Error) => console.error(JSON.stringify(e)));
     } else if (src.type === 'hadith' && src.id !== undefined) {
       NavHelper.prepareForward();
       router.pushUrl({
-        url: 'pages/HadithDetailsPage',
-        params: { id: src.id }
+        url: 'pages/HadithDetailsPage', params: { id: src.id }
       }).catch((e: Error) => console.error(JSON.stringify(e)));
     }
   }

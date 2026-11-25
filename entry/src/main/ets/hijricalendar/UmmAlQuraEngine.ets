@@ -48,8 +48,7 @@ export class UmmAlQuraEngine implements HijriCalendarEngine {
   private static readonly MAX_YEAR = 1500;
   /** JDN of 1 Muharram 1318 AH (30 April 1900 CE). */
   private static readonly EPOCH_JDN = 2415140;
-  private static readonly fallback: TabularHijriEngine =
-    new TabularHijriEngine();
+  private static readonly fallback: TabularHijriEngine = new TabularHijriEngine();
   /**
    * Month-length bitmasks for Hijri years 1318–1500.
    *
@@ -59,38 +58,27 @@ export class UmmAlQuraEngine implements HijriCalendarEngine {
    * Values are the flags column from the .NET `UmAlQuraCalendar`
    * `rawData` table (every fourth short value, starting at index 0).
    */
-  private static readonly MONTH_LENGTH_FLAGS: number[] = [
-    0x02EA, 0x06E9, 0x0ED2, 0x0EA4, 0x0D4A, 0x0A96, 0x0536, 0x0AB5,
-    0x0DAA, 0x0BA4, 0x0B49, 0x0A93, 0x052B, 0x0A57, 0x04B6, 0x0AB5,
-    0x05AA, 0x0D55, 0x0D2A, 0x0A56, 0x04AE, 0x095D, 0x02EC, 0x06D5,
-    0x06AA, 0x0555, 0x04AB, 0x095B, 0x02BA, 0x0575, 0x0BB2, 0x0764,
-    0x0749, 0x0655, 0x02AB, 0x055B, 0x0ADA, 0x06D4, 0x0EC9, 0x0D92,
-    0x0D25, 0x0A4D, 0x02AD, 0x056D, 0x0B6A, 0x0B52, 0x0AA5, 0x0A4B,
-    0x0497, 0x0937, 0x02B6, 0x0575, 0x0D6A, 0x0D52, 0x0A96, 0x092D,
-    0x025D, 0x04DD, 0x0ADA, 0x05D4, 0x0DA9, 0x0D52, 0x0AAA, 0x04D6,
-    0x09B6, 0x0374, 0x0769, 0x0752, 0x06A5, 0x054B, 0x0AAB, 0x055A,
-    0x0AD5, 0x0DD2, 0x0DA4, 0x0D49, 0x0A95, 0x052D, 0x0A5D, 0x055A,
-    0x0AD5, 0x06AA, 0x0695, 0x052B, 0x0A57, 0x04AE, 0x0976, 0x056C,
-    0x0B55, 0x0AAA, 0x0A55, 0x04AD, 0x095D, 0x02DA, 0x05D9, 0x0DB2,
-    0x0BA4, 0x0B4A, 0x0A55, 0x02B5, 0x0575, 0x0B6A, 0x0BD2, 0x0BC4,
-    0x0B89, 0x0A95, 0x052D, 0x05AD, 0x0B6A, 0x06D4, 0x0DC9, 0x0D92,
-    0x0AA6, 0x0956, 0x02AE, 0x056D, 0x036A, 0x0B55, 0x0AAA, 0x094D,
-    0x049D, 0x095D, 0x02BA, 0x05B5, 0x05AA, 0x0D55, 0x0A9A, 0x092E,
-    0x026E, 0x055D, 0x0ADA, 0x06D4, 0x06A5, 0x054B, 0x0A97, 0x054E,
-    0x0AAE, 0x05AC, 0x0BA9, 0x0D92, 0x0B25, 0x064B, 0x0CAB, 0x055A,
-    0x0B55, 0x06D2, 0x0EA5, 0x0E4A, 0x0A95, 0x052D, 0x0AAD, 0x036C,
-    0x0759, 0x06D2, 0x0695, 0x052D, 0x0A5B, 0x04BA, 0x09BA, 0x03B4,
-    0x0B69, 0x0B52, 0x0AA6, 0x04B6, 0x096D, 0x02EC, 0x06D9, 0x0EB2,
-    0x0D54, 0x0D2A, 0x0A56, 0x04AE, 0x096D, 0x0D6A, 0x0B54, 0x0B29,
-    0x0A93, 0x052B, 0x0A57, 0x0536, 0x0AB5, 0x06AA, 0x0E93
-  ];
+  private static readonly MONTH_LENGTH_FLAGS: number[] =
+    [0x02EA, 0x06E9, 0x0ED2, 0x0EA4, 0x0D4A, 0x0A96, 0x0536, 0x0AB5, 0x0DAA, 0x0BA4, 0x0B49, 0x0A93, 0x052B, 0x0A57,
+      0x04B6, 0x0AB5, 0x05AA, 0x0D55, 0x0D2A, 0x0A56, 0x04AE, 0x095D, 0x02EC, 0x06D5, 0x06AA, 0x0555, 0x04AB, 0x095B,
+      0x02BA, 0x0575, 0x0BB2, 0x0764, 0x0749, 0x0655, 0x02AB, 0x055B, 0x0ADA, 0x06D4, 0x0EC9, 0x0D92, 0x0D25, 0x0A4D,
+      0x02AD, 0x056D, 0x0B6A, 0x0B52, 0x0AA5, 0x0A4B, 0x0497, 0x0937, 0x02B6, 0x0575, 0x0D6A, 0x0D52, 0x0A96, 0x092D,
+      0x025D, 0x04DD, 0x0ADA, 0x05D4, 0x0DA9, 0x0D52, 0x0AAA, 0x04D6, 0x09B6, 0x0374, 0x0769, 0x0752, 0x06A5, 0x054B,
+      0x0AAB, 0x055A, 0x0AD5, 0x0DD2, 0x0DA4, 0x0D49, 0x0A95, 0x052D, 0x0A5D, 0x055A, 0x0AD5, 0x06AA, 0x0695, 0x052B,
+      0x0A57, 0x04AE, 0x0976, 0x056C, 0x0B55, 0x0AAA, 0x0A55, 0x04AD, 0x095D, 0x02DA, 0x05D9, 0x0DB2, 0x0BA4, 0x0B4A,
+      0x0A55, 0x02B5, 0x0575, 0x0B6A, 0x0BD2, 0x0BC4, 0x0B89, 0x0A95, 0x052D, 0x05AD, 0x0B6A, 0x06D4, 0x0DC9, 0x0D92,
+      0x0AA6, 0x0956, 0x02AE, 0x056D, 0x036A, 0x0B55, 0x0AAA, 0x094D, 0x049D, 0x095D, 0x02BA, 0x05B5, 0x05AA, 0x0D55,
+      0x0A9A, 0x092E, 0x026E, 0x055D, 0x0ADA, 0x06D4, 0x06A5, 0x054B, 0x0A97, 0x054E, 0x0AAE, 0x05AC, 0x0BA9, 0x0D92,
+      0x0B25, 0x064B, 0x0CAB, 0x055A, 0x0B55, 0x06D2, 0x0EA5, 0x0E4A, 0x0A95, 0x052D, 0x0AAD, 0x036C, 0x0759, 0x06D2,
+      0x0695, 0x052D, 0x0A5B, 0x04BA, 0x09BA, 0x03B4, 0x0B69, 0x0B52, 0x0AA6, 0x04B6, 0x096D, 0x02EC, 0x06D9, 0x0EB2,
+      0x0D54, 0x0D2A, 0x0A56, 0x04AE, 0x096D, 0x0D6A, 0x0B54, 0x0B29, 0x0A93, 0x052B, 0x0A57, 0x0536, 0x0AB5, 0x06AA,
+      0x0E93];
   /**
    * Pre-computed JDN for the first day of each Hijri year in range,
    * plus one extra entry for the day after the last year ends.
    * `YEAR_START_JDN[y - MIN_YEAR]` = JDN of 1 Muharram of year y.
    */
-  private static readonly YEAR_START_JDN: number[] =
-    UmmAlQuraEngine.initYearStarts();
+  private static readonly YEAR_START_JDN: number[] = UmmAlQuraEngine.initYearStarts();
   readonly type: HijriCalendarType = HijriCalendarType.UMM_AL_QURA;
 
   // ============================================================
@@ -118,9 +106,7 @@ export class UmmAlQuraEngine implements HijriCalendarEngine {
   }
 
   private static staticDaysInMonth(year: number, month: number): number {
-    const flags = UmmAlQuraEngine.MONTH_LENGTH_FLAGS[
-    year - UmmAlQuraEngine.MIN_YEAR
-    ];
+    const flags = UmmAlQuraEngine.MONTH_LENGTH_FLAGS[year - UmmAlQuraEngine.MIN_YEAR];
     const bitIndex = month - 1;
     const isThirty = ((flags >> bitIndex) & 1) === 1;
     return isThirty ? 30 : 29;
@@ -130,8 +116,7 @@ export class UmmAlQuraEngine implements HijriCalendarEngine {
     const out: number[] = [];
     let jdn = UmmAlQuraEngine.EPOCH_JDN;
     out.push(jdn);
-    for (let y = UmmAlQuraEngine.MIN_YEAR;
-      y <= UmmAlQuraEngine.MAX_YEAR; y++) {
+    for (let y = UmmAlQuraEngine.MIN_YEAR; y <= UmmAlQuraEngine.MAX_YEAR; y++) {
       let yearDays = 0;
       for (let m = 1; m <= 12; m++) {
         yearDays += UmmAlQuraEngine.staticDaysInMonth(y, m);
@@ -152,13 +137,8 @@ export class UmmAlQuraEngine implements HijriCalendarEngine {
     const y = year + 4800 - a;
     const m = month + 12 * a - 3;
 
-    return day
-      + Math.floor((153 * m + 2) / 5)
-      + 365 * y
-      + Math.floor(y / 4)
-      - Math.floor(y / 100)
-      + Math.floor(y / 400)
-      - 32045;
+    return day + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) +
+      Math.floor(y / 400) - 32045;
   }
 
   /** JDN → Gregorian date at local midnight. */
@@ -184,8 +164,7 @@ export class UmmAlQuraEngine implements HijriCalendarEngine {
   // ============================================================
 
   isLeapYear(year: number): boolean {
-    if (year < UmmAlQuraEngine.MIN_YEAR
-      || year > UmmAlQuraEngine.MAX_YEAR) {
+    if (year < UmmAlQuraEngine.MIN_YEAR || year > UmmAlQuraEngine.MAX_YEAR) {
       return UmmAlQuraEngine.fallback.isLeapYear(year);
     }
     let total = 0;
@@ -199,8 +178,7 @@ export class UmmAlQuraEngine implements HijriCalendarEngine {
     if (month < 1 || month > 12) {
       return 0;
     }
-    if (year < UmmAlQuraEngine.MIN_YEAR
-      || year > UmmAlQuraEngine.MAX_YEAR) {
+    if (year < UmmAlQuraEngine.MIN_YEAR || year > UmmAlQuraEngine.MAX_YEAR) {
       return UmmAlQuraEngine.fallback.daysInMonth(year, month);
     }
     return UmmAlQuraEngine.staticDaysInMonth(year, month);
@@ -221,8 +199,7 @@ export class UmmAlQuraEngine implements HijriCalendarEngine {
     }
 
     const minJdn = UmmAlQuraEngine.EPOCH_JDN;
-    const maxJdn =
-      UmmAlQuraEngine.YEAR_START_JDN[UmmAlQuraEngine.YEAR_START_JDN.length - 1];
+    const maxJdn = UmmAlQuraEngine.YEAR_START_JDN[UmmAlQuraEngine.YEAR_START_JDN.length - 1];
 
     if (jdn < minJdn || jdn >= maxJdn) {
       return UmmAlQuraEngine.fallback.toHijri(gregorian);
@@ -233,9 +210,7 @@ export class UmmAlQuraEngine implements HijriCalendarEngine {
     const yearIdx = UmmAlQuraEngine.findYearIndexForJdn(jdn);
     const year = UmmAlQuraEngine.MIN_YEAR + yearIdx;
 
-    let remaining = jdn - UmmAlQuraEngine.YEAR_START_JDN[
-    year - UmmAlQuraEngine.MIN_YEAR
-    ];
+    let remaining = jdn - UmmAlQuraEngine.YEAR_START_JDN[year - UmmAlQuraEngine.MIN_YEAR];
 
     let month = 12;
     for (let m = 1; m <= 12; m++) {
@@ -257,8 +232,7 @@ export class UmmAlQuraEngine implements HijriCalendarEngine {
       return null;
     }
 
-    if (hijri.year < UmmAlQuraEngine.MIN_YEAR
-      || hijri.year > UmmAlQuraEngine.MAX_YEAR) {
+    if (hijri.year < UmmAlQuraEngine.MIN_YEAR || hijri.year > UmmAlQuraEngine.MAX_YEAR) {
       return UmmAlQuraEngine.fallback.toGregorian(hijri);
     }
     if (hijri.month < 1 || hijri.month > 12) {
@@ -266,16 +240,12 @@ export class UmmAlQuraEngine implements HijriCalendarEngine {
     }
 
     // Validate day against this month's actual length.
-    const monthDays = UmmAlQuraEngine.staticDaysInMonth(
-      hijri.year, hijri.month
-    );
+    const monthDays = UmmAlQuraEngine.staticDaysInMonth(hijri.year, hijri.month);
     if (hijri.day < 1 || hijri.day > monthDays) {
       return null;
     }
 
-    let jdn = UmmAlQuraEngine.YEAR_START_JDN[
-    hijri.year - UmmAlQuraEngine.MIN_YEAR
-    ];
+    let jdn = UmmAlQuraEngine.YEAR_START_JDN[hijri.year - UmmAlQuraEngine.MIN_YEAR];
     for (let m = 1; m < hijri.month; m++) {
       jdn += UmmAlQuraEngine.staticDaysInMonth(hijri.year, m);
     }

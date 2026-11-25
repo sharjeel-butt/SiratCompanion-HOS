@@ -30,22 +30,12 @@ type Period = 'week' | 'month' | 'year';
 @Entry
 @Component
 struct PrayerDetailsPage {
-  @StorageLink(STORAGE_KEY_THEME_MODE)
-  @Watch('onThemeModeChanged')
-  themeMode: string = ThemeMode.SYSTEM;
-  @StorageLink(STORAGE_KEY_LANGUAGE)
-  appLanguage: string = 'en';
-  @StorageLink(STORAGE_KEY_APP_THEME)
-  @Watch('onAppThemePresetChanged')
-  appThemePreset: string = '';
-  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
-  @Watch('onAppForegrounded')
-  appForegroundTick: number = 0;
-  @StorageLink(STORAGE_KEY_PRAYER_STATE_VERSION)
-  @Watch('onPrayerStateChanged')
-  prayerStateVersion: number = 0;
-  @StorageLink(STORAGE_KEY_BREAKPOINT)
-  breakpoint: string = 'sm';
+  @StorageLink(STORAGE_KEY_THEME_MODE) @Watch('onThemeModeChanged') themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_LANGUAGE) appLanguage: string = 'en';
+  @StorageLink(STORAGE_KEY_APP_THEME) @Watch('onAppThemePresetChanged') appThemePreset: string = '';
+  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK) @Watch('onAppForegrounded') appForegroundTick: number = 0;
+  @StorageLink(STORAGE_KEY_PRAYER_STATE_VERSION) @Watch('onPrayerStateChanged') prayerStateVersion: number = 0;
+  @StorageLink(STORAGE_KEY_BREAKPOINT) breakpoint: string = 'sm';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State period: Period = 'week';
   @State snapshot: PrayerDetailsSnapshot = {
@@ -94,19 +84,15 @@ struct PrayerDetailsPage {
   };
   @State weekDetail: WeekDetailCell[] = [];
   @State yearDetail: YearDetailSnapshot = {
-    year: 2026,
-    months: [],
-    totalCompleted: 0
+    year: 2026, months: [], totalCompleted: 0
   };
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
 
   aboutToAppear(): void {
     this.colors = PageTheme.compute(this.themeMode);
-    this.systemDarkListener = PageTheme.installSystemListener(
-      this.themeMode, (c) => {
+    this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
       this.colors = c;
-    }
-    );
+    });
     this.reload();
   }
 
@@ -133,14 +119,10 @@ struct PrayerDetailsPage {
               this.PerPrayerCard()
               this.PeriodViewCard()
               Column().height(40)
-            }
-            .width('100%')
-            .constraintSize({
+            }.width('100%').constraintSize({
               maxWidth: Breakpoints.maxContentWidth(this.breakpoint)
-            })
-            .padding({ left: 16, right: 16, top: 16 })
-          }
-          .width('100%').justifyContent(FlexAlign.Center)
+            }).padding({ left: 16, right: 16, top: 16 })
+          }.width('100%').justifyContent(FlexAlign.Center)
         }
         .layoutWeight(1)
         .width('100%')
@@ -148,9 +130,7 @@ struct PrayerDetailsPage {
         .scrollable(ScrollDirection.Vertical)
         .scrollBar(BarState.Auto)
         .edgeEffect(EdgeEffect.Spring)
-      }
-      .width('100%').height('100%')
-      .backgroundColor(this.colors.primaryGreen)
+      }.width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
     }
     .width('100%')
     .height('100%')
@@ -173,10 +153,7 @@ struct PrayerDetailsPage {
   WeekViewCard() {
     Column() {
       Row({ space: 8 }) {
-        Image($r('app.media.ic_weekly_stats'))
-          .width(16).height(16)
-          .fillColor(this.colors.accentGold)
-          .flexShrink(0)
+        Image($r('app.media.ic_weekly_stats')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
 
         // FIX: Show the Week Number in the heading
         Text(`${this.tr('details_period_week')} ${this.snapshot.currentWeekNumber}`)
@@ -191,44 +168,36 @@ struct PrayerDetailsPage {
           .fontColor(this.colors.accentGold)
           .fontWeight(FontWeight.Medium)
           .direction(Direction.Ltr)
-      }
-      .width('100%').padding({ bottom: 14 })
+      }.width('100%').padding({ bottom: 14 })
 
       Row({ space: 4 }) {
         ForEach(this.weekDetail, (cell: WeekDetailCell) => {
           this.WeekDayCell(cell)
-        }, (cell: WeekDetailCell) =>
-        `wd-${cell.dateKey}-${cell.completed}-${cell.isToday ? 'T' : ''}`)
-      }
-      .width('100%')
+        }, (cell: WeekDetailCell) => `wd-${cell.dateKey}-${cell.completed}-${cell.isToday ? 'T' : ''}`)
+      }.width('100%')
 
       Row({ space: 6 }) {
         Text(`${this.snapshot.weekTotal}`)
-          .fontSize(18).fontWeight(FontWeight.Bold)
+          .fontSize(18)
+          .fontWeight(FontWeight.Bold)
           .fontColor(this.colors.accentGold)
           .direction(Direction.Ltr)
         Text(`${this.tr('details_prayers_completed')}`)
-          .fontSize(11).fontColor(this.colors.textMuted)
+          .fontSize(11)
+          .fontColor(this.colors.textMuted)
           .margin({ bottom: 2 })
-      }
-      .width('100%').margin({ top: 14 })
-      .alignItems(VerticalAlign.Bottom)
+      }.width('100%').margin({ top: 14 }).alignItems(VerticalAlign.Bottom)
     }
     .width('100%')
     .padding(18)
     .backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
     .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
+      width: 1, color: PageTheme.isDarkFor(this.themeMode) ? 'rgba(255, 255, 255, 0.08)' : this.colors.borderSoft
     })
     .shadow({
       radius: 16,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(0, 0, 0, 0.35)'
-        : 'rgba(0, 0, 0, 0.08)',
+      color: PageTheme.isDarkFor(this.themeMode) ? 'rgba(0, 0, 0, 0.35)' : 'rgba(0, 0, 0, 0.08)',
       offsetX: 0,
       offsetY: 6
     })
@@ -258,8 +227,7 @@ struct PrayerDetailsPage {
       .backgroundColor(this.weekCellBg(cell))
       .borderRadius(8)
       .border({
-        width: cell.isToday ? 2 : 0,
-        color: this.colors.accentGold
+        width: cell.isToday ? 2 : 0, color: this.colors.accentGold
       })
 
       Text(`${cell.completed}/5`)
@@ -268,19 +236,14 @@ struct PrayerDetailsPage {
         .margin({ top: 4 })
         .direction(Direction.Ltr)
         .opacity(cell.isFuture ? 0.45 : 1.0)
-    }
-    .layoutWeight(1)
-    .alignItems(HorizontalAlign.Center)
+    }.layoutWeight(1).alignItems(HorizontalAlign.Center)
   }
 
   @Builder
   YearViewCard() {
     Column() {
       Row({ space: 8 }) {
-        Image($r('app.media.ic_nav_calendar'))
-          .width(16).height(16)
-          .fillColor(this.colors.accentGold)
-          .flexShrink(0)
+        Image($r('app.media.ic_nav_calendar')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
         Text(this.tr('details_period_year'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
@@ -292,43 +255,35 @@ struct PrayerDetailsPage {
           .fontColor(this.colors.accentGold)
           .fontWeight(FontWeight.Medium)
           .direction(Direction.Ltr)
-      }
-      .width('100%').padding({ bottom: 14 })
+      }.width('100%').padding({ bottom: 14 })
 
       Column() {
         ForEach(this.yearDetail.months, (m: YearMonthRow) => {
           this.YearMonthRow(m)
-        }, (m: YearMonthRow) =>
-        `ym-${m.monthIndex}-${m.totalCompleted}-${m.isFuture ? 'f' : 'p'}`)
-      }
-      .width('100%')
+        }, (m: YearMonthRow) => `ym-${m.monthIndex}-${m.totalCompleted}-${m.isFuture ? 'f' : 'p'}`)
+      }.width('100%')
 
       Row() {
         Text(`${this.yearDetail.totalCompleted}`)
-          .fontSize(18).fontWeight(FontWeight.Bold)
+          .fontSize(18)
+          .fontWeight(FontWeight.Bold)
           .fontColor(this.colors.accentGold)
         Text(`  ${this.tr('details_prayers_completed')}`)
-          .fontSize(11).fontColor(this.colors.textMuted)
+          .fontSize(11)
+          .fontColor(this.colors.textMuted)
           .margin({ left: 6, bottom: 2 })
-      }
-      .width('100%').margin({ top: 14 })
-      .alignItems(VerticalAlign.Bottom)
+      }.width('100%').margin({ top: 14 }).alignItems(VerticalAlign.Bottom)
     }
     .width('100%')
     .padding(18)
     .backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
     .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
+      width: 1, color: PageTheme.isDarkFor(this.themeMode) ? 'rgba(255, 255, 255, 0.08)' : this.colors.borderSoft
     })
     .shadow({
       radius: 16,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(0, 0, 0, 0.35)'
-        : 'rgba(0, 0, 0, 0.08)',
+      color: PageTheme.isDarkFor(this.themeMode) ? 'rgba(0, 0, 0, 0.35)' : 'rgba(0, 0, 0, 0.08)',
       offsetX: 0,
       offsetY: 6
     })
@@ -354,18 +309,10 @@ struct PrayerDetailsPage {
             .borderRadius(2)
             .margin({ left: 1, right: 1 })
             .opacity(c < 0 ? 0.2 : 1.0)
-        }, (c: number, i: number) =>
-        // FIX: Include `c` so the cell re-renders when the count changes
-        `yc-${m.monthIndex}-${i}-${c}`
-        )
-      }
-      .layoutWeight(1)
-      .alignItems(VerticalAlign.Center)
-      .padding({ left: 6, right: 0 })
-    }
-    .width('100%')
-    .padding({ top: 3, bottom: 3 })
-    .alignItems(VerticalAlign.Center)
+        }, (c: number, i: number) => // FIX: Include `c` so the cell re-renders when the count changes
+        `yc-${m.monthIndex}-${i}-${c}`)
+      }.layoutWeight(1).alignItems(VerticalAlign.Center).padding({ left: 6, right: 0 })
+    }.width('100%').padding({ top: 3, bottom: 3 }).alignItems(VerticalAlign.Center)
   }
 
   @Builder
@@ -425,21 +372,18 @@ struct PrayerDetailsPage {
       Text(this.periodLabel(id))
         .fontSize(13)
         .fontWeight(this.period === id ? FontWeight.Bold : FontWeight.Normal)
-        .fontColor(this.period === id
-          ? this.colors.textOnAccent : this.colors.textWhite)
+        .fontColor(this.period === id ? this.colors.textOnAccent : this.colors.textWhite)
 
       Text(this.getPillNumberLabel(id))
         .fontSize(10)
-        .fontColor(this.period === id
-          ? this.colors.textOnAccent : this.colors.textMuted)
+        .fontColor(this.period === id ? this.colors.textOnAccent : this.colors.textMuted)
         .margin({ top: 2 })
     }
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
     .height(44) // Slightly increased height to fit two lines
     .layoutWeight(1)
-    .backgroundColor(this.period === id
-      ? this.colors.accentGold : Color.Transparent)
+    .backgroundColor(this.period === id ? this.colors.accentGold : Color.Transparent)
     .borderRadius(9)
     .onClick(() => {
       this.period = id as Period;
@@ -459,16 +403,13 @@ struct PrayerDetailsPage {
               .fontColor(this.colors.textWhite)
               .fontFeature('"tnum" 1')
             Text(` / ${this.possibleForPeriod()}`)
-              .fontSize(20).fontColor(this.colors.textMuted)
+              .fontSize(20)
+              .fontColor(this.colors.textMuted)
               .margin({ left: 4, bottom: 8 })
-          }
-          .alignItems(VerticalAlign.Bottom)
+          }.alignItems(VerticalAlign.Bottom)
 
-          Text(this.tr('details_prayers_completed'))
-            .fontSize(12).fontColor(this.colors.textMuted)
-            .margin({ top: -4 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+          Text(this.tr('details_prayers_completed')).fontSize(12).fontColor(this.colors.textMuted).margin({ top: -4 })
+        }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
         Stack() {
           Circle()
@@ -483,84 +424,63 @@ struct PrayerDetailsPage {
             .fill(Color.Transparent)
             .stroke(this.colors.accentGold)
             .strokeWidth(6)
-            .strokeDashArray([
-              this.percentForPeriod() / 100 * 226.2, 500
-            ])
+            .strokeDashArray([this.percentForPeriod() / 100 * 226.2, 500])
             .strokeLineCap(LineCapStyle.Round)
             .rotate({ angle: -90 })
-          Text(`${this.percentForPeriod()}%`)
-            .fontSize(15).fontWeight(FontWeight.Bold)
-            .fontColor(this.colors.textWhite)
-        }
-        .width(72).height(72)
-      }
-      .width('100%')
+          Text(`${this.percentForPeriod()}%`).fontSize(15).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+        }.width(72).height(72)
+      }.width('100%')
 
       Row() {
         Row({ space: 6 }) {
-          Image($r('app.media.ic_streak_fire'))
-            .width(28).height(28)
-            .fillColor(this.colors.accentGold)
-            .flexShrink(0)
+          Image($r('app.media.ic_streak_fire')).width(28).height(28).fillColor(this.colors.accentGold).flexShrink(0)
           Column() {
             Row() {
               Text(`${this.snapshot.currentStreak}`)
-                .fontSize(18).fontWeight(FontWeight.Bold)
+                .fontSize(18)
+                .fontWeight(FontWeight.Bold)
                 .fontColor(this.colors.accentGold)
               Text(` ${this.tr('home_days')}`)
-                .fontSize(10).fontColor(this.colors.textMuted)
+                .fontSize(10)
+                .fontColor(this.colors.textMuted)
                 .margin({ left: 2, bottom: 3 })
             }.alignItems(VerticalAlign.Bottom)
 
-            Text(this.tr('home_streak'))
-              .fontSize(10).fontColor(this.colors.textMuted)
-          }
-          .alignItems(HorizontalAlign.Start)
-        }
-        .layoutWeight(1)
+            Text(this.tr('home_streak')).fontSize(10).fontColor(this.colors.textMuted)
+          }.alignItems(HorizontalAlign.Start)
+        }.layoutWeight(1)
 
         Divider().vertical(true).height(36).color(this.colors.borderSoft)
 
         Row({ space: 6 }) {
-          Image($r('app.media.ic_trophy'))
-            .width(28).height(28)
-            .fillColor(this.colors.accentGold)
-            .flexShrink(0)
+          Image($r('app.media.ic_trophy')).width(28).height(28).fillColor(this.colors.accentGold).flexShrink(0)
           Column() {
             Row() {
               Text(`${this.snapshot.bestStreak}`)
-                .fontSize(18).fontWeight(FontWeight.Bold)
+                .fontSize(18)
+                .fontWeight(FontWeight.Bold)
                 .fontColor(this.colors.accentGoldLight)
               Text(` ${this.tr('home_days')}`)
-                .fontSize(10).fontColor(this.colors.textMuted)
+                .fontSize(10)
+                .fontColor(this.colors.textMuted)
                 .margin({ left: 2, bottom: 3 })
             }.alignItems(VerticalAlign.Bottom)
 
-            Text(this.tr('details_best_streak'))
-              .fontSize(10).fontColor(this.colors.textMuted)
-          }
-          .alignItems(HorizontalAlign.Start)
-        }
-        .layoutWeight(1).padding({ left: this.isRtl() ? 0 : 12, right: this.isRtl() ? 12 : 0 })
-      }
-      .width('100%').margin({ top: 18 })
-      .alignItems(VerticalAlign.Center)
+            Text(this.tr('details_best_streak')).fontSize(10).fontColor(this.colors.textMuted)
+          }.alignItems(HorizontalAlign.Start)
+        }.layoutWeight(1).padding({ left: this.isRtl() ? 0 : 12, right: this.isRtl() ? 12 : 0 })
+      }.width('100%').margin({ top: 18 }).alignItems(VerticalAlign.Center)
     }
     .width('100%')
     .padding(18)
     .backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
     .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
+      width: 1, color: PageTheme.isDarkFor(this.themeMode) ? 'rgba(255, 255, 255, 0.08)' : this.colors.borderSoft
     })
     .shadow({
       radius: 16,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(0, 0, 0, 0.35)'
-        : 'rgba(0, 0, 0, 0.08)',
+      color: PageTheme.isDarkFor(this.themeMode) ? 'rgba(0, 0, 0, 0.35)' : 'rgba(0, 0, 0, 0.08)',
       offsetX: 0,
       offsetY: 6
     })
@@ -620,16 +540,11 @@ struct PrayerDetailsPage {
     .backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
     .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
+      width: 1, color: PageTheme.isDarkFor(this.themeMode) ? 'rgba(255, 255, 255, 0.08)' : this.colors.borderSoft
     })
     .shadow({
       radius: 16,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(0, 0, 0, 0.35)'
-        : 'rgba(0, 0, 0, 0.08)',
+      color: PageTheme.isDarkFor(this.themeMode) ? 'rgba(0, 0, 0, 0.35)' : 'rgba(0, 0, 0, 0.08)',
       offsetX: 0,
       offsetY: 6
     })
@@ -640,21 +555,18 @@ struct PrayerDetailsPage {
   PrayerRow(id: string, count: number) {
     Column() {
       Row() {
-        Text(this.prayerLabel(id)) // Use the helper here instead of the parameter
-          .fontSize(14).fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium)
-          .layoutWeight(1)
+        Text(this.prayerLabel(
+          id)) // Use the helper here instead of the parameter.fontSize(14).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium).layoutWeight(1)
         Text(`${count} / ${this.periodPossible()}`)
-          .fontSize(13).fontColor(this.colors.accentGold)
+          .fontSize(13)
+          .fontColor(this.colors.accentGold)
           .fontWeight(FontWeight.Bold)
           .direction(Direction.Ltr)
-      }
-      .width('100%')
+      }.width('100%')
 
       Row() {
         Row()
-          .width(`${this.periodPossible() > 0
-            ? Math.round(count / this.periodPossible() * 100) : 0}%`)
+          .width(`${this.periodPossible() > 0 ? Math.round(count / this.periodPossible() * 100) : 0}%`)
           .height(6)
           .backgroundColor(this.colors.accentGold)
           .borderRadius(3)
@@ -664,48 +576,31 @@ struct PrayerDetailsPage {
       .backgroundColor(this.colors.tintMedium)
       .borderRadius(3)
       .margin({ top: 6 })
-    }
-    .width('100%')
-    .margin({ bottom: 12 })
+    }.width('100%').margin({ bottom: 12 })
   }
 
   @Builder
   MonthHeatmapCard() {
     Column() {
       Row({ space: 8 }) {
-        Image($r('app.media.ic_chart'))
-          .width(16).height(16)
-          .fillColor(this.colors.accentGold)
-          .flexShrink(0)
+        Image($r('app.media.ic_chart')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
         Text(this.tr('details_this_month'))
           .fontSize(12)
           .fontColor(this.colors.textMuted)
           .fontWeight(FontWeight.Bold)
           .letterSpacing(1.2)
           .layoutWeight(1)
-        Text(ProgressHelper.formatGregorianMonth(
-          this.snapshot.monthProgress.year,
-          this.snapshot.monthProgress.monthIndex,
-          this.appLanguage
-        ))
-          .fontSize(12).fontColor(this.colors.accentGold)
-          .fontWeight(FontWeight.Medium)
-      }
-      .width('100%').padding({ bottom: 14 })
+        Text(
+          ProgressHelper.formatGregorianMonth(this.snapshot.monthProgress.year, this.snapshot.monthProgress.monthIndex,
+            this.appLanguage)).fontSize(12).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
+      }.width('100%').padding({ bottom: 14 })
 
       Column() {
         Row() {
           ForEach(L.getArray('days_of_week_short', this.appLanguage), (day: string) => {
-            Text(day)
-              .fontSize(10)
-              .fontColor(this.colors.textMuted)
-              .textAlign(TextAlign.Center)
-              .layoutWeight(1)
+            Text(day).fontSize(10).fontColor(this.colors.textMuted).textAlign(TextAlign.Center).layoutWeight(1)
           })
-        }
-        .width('100%')
-        .margin({ bottom: 8 })
-        .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+        }.width('100%').margin({ bottom: 8 }).direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
 
         ForEach(this.snapshot.monthProgress.weeks, (week: MonthDayCell[], wi: number) => {
           Row() {
@@ -727,15 +622,13 @@ struct PrayerDetailsPage {
                 .backgroundColor(this.cellBg(cell))
                 .borderRadius(8)
                 .border({
-                  width: cell.isToday ? 2 : 0,
-                  color: this.colors.accentGold
+                  width: cell.isToday ? 2 : 0, color: this.colors.accentGold
                 })
                 .margin({ left: 2, right: 2 })
               }
-            }, (cell: MonthDayCell, di: number) =>
-            `d-${wi}-${di}-${cell.dayOfMonth}-${cell.completed}-${cell.isToday ? 'T' : ''}`)
-          }
-          .width('100%').margin({ bottom: 4 })
+            }, (cell: MonthDayCell, di: number) => `d-${wi}-${di}-${cell.dayOfMonth}-${cell.completed}-${cell.isToday ?
+              'T' : ''}`)
+          }.width('100%').margin({ bottom: 4 })
         }, (week: MonthDayCell[], wi: number) => {
           let sig = '';
           for (const c of week) {
@@ -743,36 +636,27 @@ struct PrayerDetailsPage {
           }
           return `dw-${wi}-${this.snapshot.monthProgress.year}-${this.snapshot.monthProgress.monthIndex}-${sig}`;
         })
-      }
-      .width('100%').direction(Direction.Ltr)
+      }.width('100%').direction(Direction.Ltr)
 
       Row({ space: 6 }) {
         Text(`${this.snapshot.monthProgress.perfectDays}`)
-          .fontSize(18).fontWeight(FontWeight.Bold)
+          .fontSize(18)
+          .fontWeight(FontWeight.Bold)
           .fontColor(this.colors.accentGold)
           .direction(Direction.Ltr)
-        Text(`${this.tr('details_perfect_days')}`)
-          .fontSize(11).fontColor(this.colors.textMuted)
-          .margin({ bottom: 2 })
-      }
-      .width('100%').margin({ top: 14 })
-      .alignItems(VerticalAlign.Bottom)
+        Text(`${this.tr('details_perfect_days')}`).fontSize(11).fontColor(this.colors.textMuted).margin({ bottom: 2 })
+      }.width('100%').margin({ top: 14 }).alignItems(VerticalAlign.Bottom)
     }
     .width('100%')
     .padding(18)
     .backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
     .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
+      width: 1, color: PageTheme.isDarkFor(this.themeMode) ? 'rgba(255, 255, 255, 0.08)' : this.colors.borderSoft
     })
     .shadow({
       radius: 16,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(0, 0, 0, 0.35)'
-        : 'rgba(0, 0, 0, 0.08)',
+      color: PageTheme.isDarkFor(this.themeMode) ? 'rgba(0, 0, 0, 0.35)' : 'rgba(0, 0, 0, 0.08)',
       offsetX: 0,
       offsetY: 6
     })
@@ -782,8 +666,7 @@ struct PrayerDetailsPage {
     if (id === 'week') {
       return `#${this.snapshot.currentWeekNumber}`;
     }
-    if (id === 'month') {
-      // monthIndex is 0-based, so we add 1
+    if (id === 'month') { // monthIndex is 0-based, so we add 1
       return `#${this.snapshot.monthProgress.monthIndex + 1}`;
     }
     return `#${this.snapshot.monthProgress.year}`;
@@ -861,8 +744,7 @@ struct PrayerDetailsPage {
     return this.snapshot.weekPerPrayer;
   }
 
-  private periodPossible(): number {
-    // Returns the number of days in the period (7, 30/31, or 365)
+  private periodPossible(): number { // Returns the number of days in the period (7, 30/31, or 365)
     if (this.period === 'month') {
       return Math.max(1, Math.round(this.snapshot.monthPossible / 5));
     }
@@ -952,8 +834,7 @@ struct PrayerDetailsPage {
   }
 
   private yearCellBg(completed: number): string {
-    if (completed < 0) {
-      // FIX: Return a faint color instead of transparent so the box takes up space
+    if (completed < 0) { // FIX: Return a faint color instead of transparent so the box takes up space
       return this.colors.tintSubtle;
     }
     if (completed === 5) {
@@ -969,17 +850,12 @@ struct PrayerDetailsPage {
   }
 
   private monthShortLabel(monthIndex: number): string {
-    const locale = this.appLanguage === 'zh' ? 'zh-CN'
-      : this.appLanguage === 'ar' ? 'ar'
-        : 'en-US';
+    const locale = this.appLanguage === 'zh' ? 'zh-CN' : this.appLanguage === 'ar' ? 'ar' : 'en-US';
     try {
       const fmt = new Intl.DateTimeFormat(locale, { month: 'short' });
       return fmt.format(new Date(this.yearDetail.year, monthIndex, 1));
     } catch (err) {
-      const fallback: string[] = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-      ];
+      const fallback: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       return fallback[monthIndex];
     }
   }
@@ -1007,15 +883,16 @@ struct PrayerRowView {
     Column() {
       Row() {
         Text(this.getLabel(this.prayerId))
-          .fontSize(14).fontColor(this.colors.textWhite)
+          .fontSize(14)
+          .fontColor(this.colors.textWhite)
           .fontWeight(FontWeight.Medium)
           .layoutWeight(1)
         Text(`${this.count} / ${this.possible}`)
-          .fontSize(13).fontColor(this.colors.accentGold)
+          .fontSize(13)
+          .fontColor(this.colors.accentGold)
           .fontWeight(FontWeight.Bold)
           .direction(Direction.Ltr)
-      }
-      .width('100%')
+      }.width('100%')
 
       Row() {
         Row()
@@ -1029,9 +906,7 @@ struct PrayerRowView {
       .backgroundColor(this.colors.tintMedium)
       .borderRadius(3)
       .margin({ top: 6 })
-    }
-    .width('100%')
-    .margin({ bottom: 12 })
+    }.width('100%').margin({ bottom: 12 })
   }
 
   private getLabel(id: string): string {

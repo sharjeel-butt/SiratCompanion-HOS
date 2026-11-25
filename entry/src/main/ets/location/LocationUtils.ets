@@ -24,10 +24,7 @@ interface ReverseResult {
 export class LocationHelper {
   static async requestLocationPermission(context: Context): Promise<boolean> {
     const atManager = abilityAccessCtrl.createAtManager();
-    const permissions: Array<Permissions> = [
-      'ohos.permission.APPROXIMATELY_LOCATION',
-      'ohos.permission.LOCATION'
-    ];
+    const permissions: Array<Permissions> = ['ohos.permission.APPROXIMATELY_LOCATION', 'ohos.permission.LOCATION'];
     try {
       const result: PermissionRequestResult = await atManager.requestPermissionsFromUser(context, permissions);
       return result.authResults.every((grant) => grant === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED);
@@ -89,10 +86,8 @@ export class LocationHelper {
    *                                 prompts. Used for background refreshes
    *                                 on page load and foreground.
    */
-  static async fetchLocationData(
-    context: Context,
-    mode: 'interactive' | 'silent' = 'interactive'
-  ): Promise<LocationData> {
+  static async fetchLocationData(context: Context,
+    mode: 'interactive' | 'silent' = 'interactive'): Promise<LocationData> {
     const enabled = await LocationHelper.isLocationEnabled();
     if (!enabled) {
       throw new Error('GPS_OFF');
@@ -109,18 +104,14 @@ export class LocationHelper {
     }
 
     const request: geoLocationManager.CurrentLocationRequest = {
-      priority: geoLocationManager.LocationRequestPriority.LOW_POWER,
-      timeoutMs: 10000,
-      maxAccuracy: 1000
+      priority: geoLocationManager.LocationRequestPriority.LOW_POWER, timeoutMs: 10000, maxAccuracy: 1000
     };
     const location = await geoLocationManager.getCurrentLocation(request);
 
     const cityName = await LocationHelper.reverseGeocode(location.latitude, location.longitude);
 
     return {
-      latitude: location.latitude,
-      longitude: location.longitude,
-      cityName: cityName
+      latitude: location.latitude, longitude: location.longitude, cityName: cityName
     };
   }
 
@@ -160,27 +151,19 @@ export class LocationHelper {
    */
   private static async checkLocationPermission(): Promise<boolean> {
     try {
-      const bundleInfo = bundleManager.getBundleInfoForSelfSync(
-        bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION
-      );
+      const bundleInfo =
+        bundleManager.getBundleInfoForSelfSync(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION);
       const tokenId = bundleInfo.appInfo.accessTokenId;
 
       const atManager = abilityAccessCtrl.createAtManager();
-      const status1 = await atManager.checkAccessToken(
-        tokenId, 'ohos.permission.APPROXIMATELY_LOCATION'
-      );
-      const status2 = await atManager.checkAccessToken(
-        tokenId, 'ohos.permission.LOCATION'
-      );
+      const status1 = await atManager.checkAccessToken(tokenId, 'ohos.permission.APPROXIMATELY_LOCATION');
+      const status2 = await atManager.checkAccessToken(tokenId, 'ohos.permission.LOCATION');
 
-      return status1 === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED
-        && status2 === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED;
+      return status1 === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED &&
+        status2 === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED;
     } catch (err) {
       const error = err as BusinessError;
-      console.warn(
-        `[LocationHelper] checkLocationPermission failed: ` +
-          `${error.code} ${error.message}`
-      );
+      console.warn(`[LocationHelper] checkLocationPermission failed: ` + `${error.code} ${error.message}`);
       return false;
     }
   }
@@ -218,11 +201,8 @@ export class LocationHelper {
     return out;
   }
 
-  private static async tryReverseGeocode(
-    latitude: number,
-    longitude: number,
-    locale: string
-  ): Promise<ReverseResult | null> {
+  private static async tryReverseGeocode(latitude: number, longitude: number,
+    locale: string): Promise<ReverseResult | null> {
     try {
       const request: geoLocationManager.ReverseGeoCodeRequest = {
         latitude: latitude,
@@ -243,12 +223,8 @@ export class LocationHelper {
       // Karachi"), which reads wrong in the Home header.
       // locality + subAdministrativeArea cover the common case;
       // administrativeArea is the state/province fallback.
-      const cityCandidates: Array<string | undefined> = [
-        addr.locality,
-        addr.subLocality,
-        addr.subAdministrativeArea,
-        addr.administrativeArea
-      ];
+      const cityCandidates: Array<string | undefined> =
+        [addr.locality, addr.subLocality, addr.subAdministrativeArea, addr.administrativeArea];
 
       for (const s of cityCandidates) {
         if (typeof s === 'string' && s.length > 0) {
@@ -265,10 +241,7 @@ export class LocationHelper {
       return null;
     } catch (err) {
       const error = err as BusinessError;
-      console.warn(
-        `[LocationHelper] reverseGeocode locale='${locale}' failed: ` +
-          `${error.code}, ${error.message}`
-      );
+      console.warn(`[LocationHelper] reverseGeocode locale='${locale}' failed: ` + `${error.code}, ${error.message}`);
       return null;
     }
   }

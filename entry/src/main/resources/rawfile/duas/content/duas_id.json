@@ -1,99 +1,19 @@
 {
-  "dua_breaking_the_fast": {
-    "name": "Doa Berbuka Puasa",
-    "translation": "Telah hilang rasa haus, telah basah kerongkongan, dan telah tetap pahalanya, insya Allah.",
-    "reference": "Sunan Abu Dawud 2357",
-    "reference_display": "Sunan Abu Dawud 2357",
+  "dua_acceptance_of_good_deeds": {
+    "name": "Doa Diterimanya Amal Saleh",
+    "translation": "Ya Tuhan kami, terimalah (amal) dari kami. Sungguh, Engkaulah Yang Maha Mendengar, Maha Mengetahui.",
+    "reference": "Quran 2:127",
+    "reference_display": "Quran 2:127",
     "sources": [
       {
-        "type": "hadith",
-        "id": "abudawud:2357",
+        "type": "quran",
+        "surah": 2,
+        "ayah": 127,
         "role": "primary"
       }
     ],
-    "migration_status": "ok",
-    "category": "fasting",
-    "transliteration": "Dhahaba adh-dhama'u wabtallatil-'urooqu wa thabata al-ajru in sha Allah."
-  },
-  "dua_suhoor": {
-    "name": "Niat Puasa",
-    "translation": "Aku berniat puasa esok hari di bulan Ramadan.",
-    "reference": "Niat puasa tradisional",
-    "reference_display": "Niat puasa tradisional",
-    "sources": [],
-    "migration_status": "needs_curation",
-    "category": "fasting",
-    "transliteration": "Wa bisawmi ghadinn nawaiytu min shahri Ramadan."
-  },
-  "dua_laylatul_qadr": {
-    "name": "Doa Malam Lailatul Qadar",
-    "translation": "Ya Allah, sesungguhnya Engkau Maha Pengampun dan mencintai ampunan, maka ampunilah aku.",
-    "reference": "Jami' at-Tirmidzi 3513; Sunan Ibnu Majah 3850",
-    "reference_display": "Jami' at-Tirmidzi 3513; Sunan Ibnu Majah 3850",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "tirmidhi:3513",
-        "role": "primary"
-      },
-      {
-        "type": "hadith",
-        "id": "ibnmajah:3850",
-        "role": "supporting"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "forgiveness"
-  },
-  "dua_waking_up": {
-    "name": "Doa Bangun Tidur",
-    "translation": "Segala puji bagi Allah yang telah menghidupkan kami setelah mematikan kami, dan kepada-Nya kami dibangkitkan.",
-    "reference": "Sahih al-Bukhari 6312",
-    "reference_display": "Sahih al-Bukhari 6312",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "bukhari:6312",
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "morning_evening"
-  },
-  "dua_before_sleeping": {
-    "name": "Doa Sebelum Tidur",
-    "translation": "Dengan nama-Mu ya Allah, aku mati dan aku hidup.",
-    "reference": "Sahih al-Bukhari 6324",
-    "reference_display": "Sahih al-Bukhari 6324",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "bukhari:6324",
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "daily"
-  },
-  "dua_before_eating": {
-    "name": "Doa Sebelum Makan",
-    "translation": "Dengan nama Allah.",
-    "reference": "Sunan Abu Dawud 3767; Jami' at-Tirmidzi 1858",
-    "reference_display": "Sunan Abu Dawud 3767; Jami' at-Tirmidzi 1858",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "abudawud:3767",
-        "role": "primary"
-      },
-      {
-        "type": "hadith",
-        "id": "tirmidhi:1858",
-        "role": "supporting"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "daily"
+    "migration_status": "machine_translated",
+    "category": "worship"
   },
   "dua_after_eating": {
     "name": "Doa Setelah Makan",
@@ -115,56 +35,6 @@
     "migration_status": "ok",
     "category": "gratitude"
   },
-  "dua_leaving_the_home": {
-    "name": "Doa Keluar Rumah",
-    "translation": "Dengan nama Allah, aku bertawakal kepada Allah; tidak ada daya dan kekuatan kecuali dengan pertolongan Allah.",
-    "reference": "Sunan Abu Dawud 5095; Jami' at-Tirmidzi 3426",
-    "reference_display": "Sunan Abu Dawud 5095; Jami' at-Tirmidzi 3426",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "abudawud:5095",
-        "role": "primary"
-      },
-      {
-        "type": "hadith",
-        "id": "tirmidhi:3426",
-        "role": "supporting"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "protection"
-  },
-  "dua_entering_home": {
-    "name": "Doa Masuk Rumah",
-    "translation": "Dengan nama Allah kami masuk, dengan nama Allah kami keluar, dan kepada Tuhan kami kami bertawakal.",
-    "reference": "Sunan Abu Dawud 5096",
-    "reference_display": "Sunan Abu Dawud 5096",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "abudawud:5096",
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "daily"
-  },
-  "dua_travel": {
-    "name": "Doa Bepergian",
-    "translation": "Mahasuci Allah yang telah menundukkan kendaraan ini bagi kami, padahal kami sebelumnya tidak mampu menguasainya. Dan sesungguhnya kepada Tuhan kami, kami akan kembali.",
-    "reference": "Sahih Muslim 1342",
-    "reference_display": "Sahih Muslim 1342",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "muslim:1342",
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "travel"
-  },
   "dua_after_fajr": {
     "name": "Doa Setelah Salat Subuh",
     "translation": "Ya Allah, lindungilah aku dari api neraka.",
@@ -180,6 +50,26 @@
     "migration_status": "ok",
     "category": "prayer"
   },
+  "dua_after_leaving_the_restroom": {
+    "name": "Doa Setelah Keluar dari Toilet",
+    "translation": "Aku memohon ampunan-Mu.",
+    "reference": "Sunan Abi Dawud 30; Jami at-Tirmidhi 7",
+    "reference_display": "Sunan Abi Dawud 30; Jami at-Tirmidhi 7",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:30",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "tirmidhi:7",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "daily"
+  },
   "dua_after_the_adhan": {
     "name": "Doa Setelah Adzan",
     "translation": "Ya Allah, Tuhan pemilik seruan yang sempurna dan salat yang ditegakkan, berikanlah kepada Muhammad kedudukan wasilah dan keutamaan, serta bangkitkanlah dia pada tempat yang terpuji yang telah Engkau janjikan.",
@@ -189,51 +79,6 @@
       {
         "type": "hadith",
         "id": "bukhari:614",
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "prayer"
-  },
-  "dua_entering_the_mosque": {
-    "name": "Doa Masuk Masjid",
-    "translation": "Ya Allah, bukakanlah untukku pintu-pintu rahmat-Mu.",
-    "reference": "Sahih Muslim 713",
-    "reference_display": "Sahih Muslim 713",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "muslim:713",
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "prayer"
-  },
-  "dua_leaving_the_mosque": {
-    "name": "Doa Keluar Masjid",
-    "translation": "Ya Allah, aku memohon kepada-Mu sebagian dari karunia-Mu.",
-    "reference": "Sahih Muslim 713",
-    "reference_display": "Sahih Muslim 713",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "muslim:713",
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "prayer"
-  },
-  "dua_between_the_two_prostrations": {
-    "name": "Doa Antara Dua Sujud",
-    "translation": "Tuhanku, ampunilah aku; Tuhanku, ampunilah aku.",
-    "reference": "Sunan Abu Dawud 874",
-    "reference_display": "Sunan Abu Dawud 874",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "abudawud:874",
         "role": "primary"
       }
     ],
@@ -255,118 +100,40 @@
     "migration_status": "ok",
     "category": "purification"
   },
-  "dua_qunut_witr": {
-    "name": "Doa Qunut Witir",
-    "translation": "Ya Allah, berilah aku petunjuk di antara orang-orang yang Engkau beri petunjuk; berilah aku kesehatan di antara orang-orang yang Engkau beri kesehatan; peliharalah aku di antara orang-orang yang Engkau pelihara; berkahilah aku pada apa yang Engkau berikan; dan lindungilah aku dari keburukan yang Engkau tetapkan. Sesungguhnya Engkau yang menetapkan dan tidak ditetapkan atas-Mu. Sesungguhnya tidak akan hina orang yang Engkau jadikan wali. Mahasuci Engkau, ya Tuhan kami, dan Mahatinggi.",
-    "reference": "Sunan Abu Dawud 1425; Jami' at-Tirmidzi 464",
-    "reference_display": "Sunan Abu Dawud 1425; Jami' at-Tirmidzi 464",
+  "dua_all_good": {
+    "name": "Doa Menghimpun Segala Kebaikan",
+    "translation": "Ya Allah, aku memohon kepada-Mu segala kebaikan, yang segera maupun yang tertunda, yang aku ketahui maupun yang tidak aku ketahui. Dan aku berlindung kepada-Mu dari segala keburukan, yang segera maupun yang tertunda, yang aku ketahui maupun yang tidak aku ketahui.",
+    "reference": "Sunan Ibnu Majah 3846; dinyatakan sahih oleh al-Albani",
+    "reference_display": "Sunan Ibnu Majah 3846; dinyatakan sahih oleh al-Albani",
     "sources": [
       {
         "type": "hadith",
-        "id": "abudawud:1425",
-        "role": "primary"
-      },
-      {
-        "type": "hadith",
-        "id": "tirmidhi:464",
-        "role": "supporting"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "prayer"
-  },
-  "dua_sayyidul_istighfar": {
-    "name": "Sayyidul Istighfar",
-    "translation": "Ya Allah, Engkau adalah Tuhanku, tiada tuhan selain Engkau. Engkau menciptakanku dan aku adalah hamba-Mu. Aku berusaha menepati perjanjian dan janjiku kepada-Mu sekuat kemampuanku. Aku berlindung kepada-Mu dari keburukan yang telah aku perbuat. Aku mengakui nikmat-Mu atasku dan aku mengakui dosaku. Maka ampunilah aku, karena tidak ada yang mengampuni dosa selain Engkau.",
-    "reference": "Sahih al-Bukhari 6306",
-    "reference_display": "Sahih al-Bukhari 6306",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "bukhari:6306",
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "forgiveness"
-  },
-  "dua_guidance_to_the_straight_path": {
-    "name": "Doa Memohon Petunjuk Jalan yang Lurus",
-    "translation": "Tunjukilah kami ke jalan yang lurus.",
-    "reference": "Al-Quran 1:6",
-    "reference_display": "Al-Quran 1:6",
-    "sources": [
-      {
-        "type": "quran",
-        "surah": 1,
-        "ayah": 6,
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "guidance"
-  },
-  "dua_good_in_this_world_and_the_hereafter": {
-    "name": "Doa Kebaikan Dunia dan Akhirat",
-    "translation": "Tuhan kami, berilah kami kebaikan di dunia dan kebaikan di akhirat, dan lindungilah kami dari azab neraka.",
-    "reference": "Al-Quran 2:201",
-    "reference_display": "Al-Quran 2:201",
-    "sources": [
-      {
-        "type": "quran",
-        "surah": 2,
-        "ayah": 201,
+        "id": "ibnmajah:3846",
         "role": "primary"
       }
     ],
     "migration_status": "ok",
     "category": "general"
   },
-  "dua_protection": {
-    "name": "Doa Perlindungan",
-    "translation": "Dengan nama Allah yang tidak ada sesuatu pun yang dapat membahayakan bersama nama-Nya, baik di bumi maupun di langit. Dia Maha Mendengar, Maha Mengetahui.",
-    "reference": "Sunan Abu Dawud 5088",
-    "reference_display": "Sunan Abu Dawud 5088",
+  "dua_anger": {
+    "name": "Doa Saat Marah",
+    "translation": "Aku berlindung kepada Allah dari setan yang terkutuk.",
+    "reference": "Sahih al-Bukhari 3282; Sahih Muslim 2610",
+    "reference_display": "Sahih al-Bukhari 3282; Sahih Muslim 2610",
     "sources": [
       {
         "type": "hadith",
-        "id": "abudawud:5088",
+        "id": "bukhari:3282",
         "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "muslim:2610",
+        "role": "supporting"
       }
     ],
-    "migration_status": "ok",
+    "migration_status": "machine_translated",
     "category": "protection"
-  },
-  "dua_morning": {
-    "name": "Dzikir Pagi",
-    "translation": "Kami telah memasuki waktu pagi, dan kerajaan hanya milik Allah. Segala puji bagi Allah. Tiada tuhan selain Allah, Yang Maha Esa, tiada sekutu bagi-Nya.",
-    "reference": "Sahih Muslim 2723",
-    "reference_display": "Sahih Muslim 2723",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "muslim:2723",
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "morning_evening"
-  },
-  "dua_forgiveness_and_mercy": {
-    "name": "Doa Ampunan dan Rahmat",
-    "translation": "Tuhanku, ampunilah dan rahmatilah, Engkaulah sebaik-baik pemberi rahmat.",
-    "reference": "Al-Quran 23:118",
-    "reference_display": "Al-Quran 23:118",
-    "sources": [
-      {
-        "type": "quran",
-        "surah": 23,
-        "ayah": 118,
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "forgiveness"
   },
   "dua_anxiety": {
     "name": "Doa Menghilangkan Rasa Cemas dan Sedih",
@@ -383,6 +150,198 @@
     "migration_status": "ok",
     "category": "distress"
   },
+  "dua_bad_dream": {
+    "name": "Doa Setelah Mimpi Buruk",
+    "translation": "Aku berlindung kepada Allah dari setan dan dari keburukan apa yang telah kulihat.",
+    "reference": "Sahih Muslim 2261",
+    "reference_display": "Sahih Muslim 2261",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:2261",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "protection"
+  },
+  "dua_before_eating": {
+    "name": "Doa Sebelum Makan",
+    "translation": "Dengan nama Allah.",
+    "reference": "Sunan Abu Dawud 3767; Jami' at-Tirmidzi 1858",
+    "reference_display": "Sunan Abu Dawud 3767; Jami' at-Tirmidzi 1858",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:3767",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "tirmidhi:1858",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "daily"
+  },
+  "dua_before_entering_the_restroom": {
+    "name": "Doa Sebelum Masuk Toilet",
+    "translation": "Ya Allah, aku berlindung kepada-Mu dari setan laki-laki dan setan perempuan.",
+    "reference": "Sahih al-Bukhari 142; Sahih Muslim 375",
+    "reference_display": "Sahih al-Bukhari 142; Sahih Muslim 375",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:142",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "muslim:375",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "daily"
+  },
+  "dua_before_intimacy": {
+    "name": "Doa Sebelum Berhubungan Suami Istri",
+    "translation": "Dengan nama Allah. Ya Allah, jauhkanlah setan dari kami dan jauhkanlah setan dari apa yang Engkau karuniakan kepada kami.",
+    "reference": "Sahih al-Bukhari 141; Sahih Muslim 1434",
+    "reference_display": "Sahih al-Bukhari 141; Sahih Muslim 1434",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:141",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "muslim:1434",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "family"
+  },
+  "dua_before_sleeping": {
+    "name": "Doa Sebelum Tidur",
+    "translation": "Dengan nama-Mu ya Allah, aku mati dan aku hidup.",
+    "reference": "Sahih al-Bukhari 6324",
+    "reference_display": "Sahih al-Bukhari 6324",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:6324",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "daily"
+  },
+  "dua_between_the_two_prostrations": {
+    "name": "Doa Antara Dua Sujud",
+    "translation": "Tuhanku, ampunilah aku; Tuhanku, ampunilah aku.",
+    "reference": "Sunan Abu Dawud 874",
+    "reference_display": "Sunan Abu Dawud 874",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:874",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "prayer"
+  },
+  "dua_breaking_the_fast": {
+    "name": "Doa Berbuka Puasa",
+    "translation": "Telah hilang rasa haus, telah basah kerongkongan, dan telah tetap pahalanya, insya Allah.",
+    "reference": "Sunan Abu Dawud 2357",
+    "reference_display": "Sunan Abu Dawud 2357",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:2357",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "fasting",
+    "transliteration": "Dhahaba adh-dhama'u wabtallatil-'urooqu wa thabata al-ajru in sha Allah."
+  },
+  "dua_condolence": {
+    "name": "Ucapan Belasungkawa",
+    "translation": "Milik Allah apa yang Dia ambil dan milik-Nya apa yang Dia berikan, dan segala sesuatu di sisi-Nya memiliki batas waktu yang telah ditentukan. Maka bersabarlah dan berharaplah pahala dari Allah.",
+    "reference": "Sahih al-Bukhari 1284; Sahih Muslim 923",
+    "reference_display": "Sahih al-Bukhari 1284; Sahih Muslim 923",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:1284",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "muslim:923",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "funeral"
+  },
+  "dua_contentment_with_allah_islam_and_muhammad": {
+    "name": "Rida kepada Allah, Islam, dan Muhammad",
+    "translation": "Aku rida Allah sebagai Tuhan, Islam sebagai agama, dan Muhammad sebagai nabi.",
+    "reference": "Sunan Abi Dawud 5072; Jami at-Tirmidhi 3389",
+    "reference_display": "Sunan Abi Dawud 5072; Jami at-Tirmidhi 3389",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:5072",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "tirmidhi:3389",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "faith"
+  },
+  "dua_creation_and_protection_from_fire": {
+    "name": "Doa Merenungi Penciptaan dan Perlindungan dari Api Neraka",
+    "translation": "Ya Tuhan kami, tidaklah Engkau menciptakan semua ini dengan sia-sia. Mahasuci Engkau, maka lindungilah kami dari azab api neraka.",
+    "reference": "Quran 3:191",
+    "reference_display": "Quran 3:191",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 3,
+        "ayah": 191,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "reflection"
+  },
+  "dua_debt_sufficiency": {
+    "name": "Doa Memohon Kecukupan dengan yang Halal dan Terbebas dari Utang",
+    "translation": "Ya Allah, cukupkanlah aku dengan apa yang Engkau halalkan sehingga aku tidak memerlukan apa yang Engkau haramkan, dan kayakanlah aku dengan karunia-Mu sehingga aku tidak bergantung kepada siapa pun selain Engkau.",
+    "reference": "Jami at-Tirmidhi 3563",
+    "reference_display": "Jami at-Tirmidhi 3563",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "tirmidhi:3563",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "provision"
+  },
   "dua_difficult_matter": {
     "name": "Doa Ketika Menghadapi Kesulitan",
     "translation": "Ya Allah, tidak ada kemudahan kecuali yang Engkau jadikan mudah; dan Engkau menjadikan kesusahan menjadi mudah jika Engkau kehendaki.",
@@ -398,20 +357,196 @@
     "migration_status": "partial",
     "category": "distress"
   },
-  "dua_when_afflicted_by_calamity": {
-    "name": "Doa Ketika Ditimpa Musibah",
-    "translation": "Sesungguhnya kami milik Allah dan kepada-Nya kami kembali. Ya Allah, berilah aku pahala atas musibahku ini dan gantilah dengan yang lebih baik.",
-    "reference": "Sahih Muslim 918",
-    "reference_display": "Sahih Muslim 918",
+  "dua_do_not_leave_me_to_myself": {
+    "name": "Doa Agar Tidak Diserahkan pada Diri Sendiri",
+    "translation": "Wahai Yang Mahahidup, Wahai Yang Maha Berdiri Sendiri, dengan rahmat-Mu aku memohon pertolongan. Perbaikilah seluruh urusanku, dan jangan Engkau serahkan aku kepada diriku sendiri walau sekejap mata.",
+    "reference": "Al-Hakim 1/545; dinyatakan sahih oleh al-Albani",
+    "reference_display": "Al-Hakim 1/545; dinyatakan sahih oleh al-Albani",
     "sources": [
       {
-        "type": "hadith",
-        "id": "muslim:918",
+        "type": "external",
+        "display": "Al-Hakim 545",
         "role": "primary"
       }
     ],
-    "migration_status": "ok",
-    "category": "distress"
+    "migration_status": "partial",
+    "category": "guidance"
+  },
+  "dua_dua_of_adam_and_hawwa": {
+    "name": "Doa Adam dan Hawa",
+    "translation": "Ya Tuhan kami, kami telah menzalimi diri kami sendiri. Jika Engkau tidak mengampuni kami dan tidak merahmati kami, niscaya kami termasuk orang-orang yang rugi.",
+    "reference": "Quran 7:23",
+    "reference_display": "Quran 7:23",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 7,
+        "ayah": 23,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "forgiveness"
+  },
+  "dua_dua_of_ayyub_in_illness": {
+    "name": "Doa Ayyub saat Sakit",
+    "translation": "Sungguh, kesusahan telah menimpaku, dan Engkaulah Yang Paling Penyayang di antara para penyayang.",
+    "reference": "Quran 21:83",
+    "reference_display": "Quran 21:83",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 21,
+        "ayah": 83,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "healing"
+  },
+  "dua_dua_of_ibrahim_for_a_secure_city": {
+    "name": "Doa Ibrahim untuk Negeri yang Aman",
+    "translation": "Ya Tuhanku, jadikanlah negeri ini aman, dan jauhkanlah aku beserta anak-anakku dari menyembah berhala.",
+    "reference": "Quran 14:35",
+    "reference_display": "Quran 14:35",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 14,
+        "ayah": 35,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "protection"
+  },
+  "dua_dua_of_ibrahim_for_prayer": {
+    "name": "Doa Ibrahim tentang Salat",
+    "translation": "Ya Tuhanku, jadikanlah aku orang yang mendirikan salat, demikian pula dari keturunanku. Ya Tuhan kami, kabulkanlah doaku.",
+    "reference": "Quran 14:40",
+    "reference_display": "Quran 14:40",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 14,
+        "ayah": 40,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "family"
+  },
+  "dua_dua_of_ibrahim_for_wisdom": {
+    "name": "Doa Ibrahim untuk Memohon Hikmah",
+    "translation": "Ya Tuhanku, anugerahkanlah kepadaku hikmah dan gabungkanlah aku dengan orang-orang yang saleh.",
+    "reference": "Quran 26:83",
+    "reference_display": "Quran 26:83",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 26,
+        "ayah": 83,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "guidance"
+  },
+  "dua_dua_of_musa_for_ease_and_eloquence": {
+    "name": "Doa Musa untuk Kemudahan dan Kefasihan Berbicara",
+    "translation": "Ya Tuhanku, lapangkanlah dadaku, mudahkanlah urusanku, dan lepaskanlah kekakuan dari lidahku agar mereka mengerti perkataanku.",
+    "reference": "Quran 20:25-28",
+    "reference_display": "Quran 20:25-28",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 20,
+        "ayah": 25,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "guidance"
+  },
+  "dua_dua_of_musa_for_help": {
+    "name": "Doa Musa untuk Memohon Pertolongan",
+    "translation": "Ya Tuhanku, sungguh aku sangat membutuhkan kebaikan apa pun yang Engkau turunkan kepadaku.",
+    "reference": "Quran 28:24",
+    "reference_display": "Quran 28:24",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 28,
+        "ayah": 24,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "need"
+  },
+  "dua_dua_of_nuh_for_believers": {
+    "name": "Doa Nuh untuk Kaum Mukmin",
+    "translation": "Ya Tuhanku, ampunilah aku, kedua orang tuaku, siapa pun yang masuk ke rumahku dalam keadaan beriman, serta semua mukmin laki-laki dan mukmin perempuan.",
+    "reference": "Quran 71:28",
+    "reference_display": "Quran 71:28",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 71,
+        "ayah": 28,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "forgiveness"
+  },
+  "dua_dua_of_nuh_for_forgiveness": {
+    "name": "Doa Nuh untuk Memohon Ampunan",
+    "translation": "Ya Tuhanku, aku berlindung kepada-Mu dari memohon kepada-Mu sesuatu yang aku tidak memiliki pengetahuan tentangnya. Jika Engkau tidak mengampuniku dan tidak merahmatiku, niscaya aku termasuk orang-orang yang rugi.",
+    "reference": "Quran 11:47",
+    "reference_display": "Quran 11:47",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 11,
+        "ayah": 47,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "forgiveness"
+  },
+  "dua_dua_of_sulayman_for_gratitude": {
+    "name": "Doa Sulaiman untuk Bersyukur",
+    "translation": "Ya Tuhanku, ilhamkanlah kepadaku agar aku mensyukuri nikmat-Mu yang Engkau karuniakan kepadaku dan kepada kedua orang tuaku, dan agar aku mengerjakan amal saleh yang Engkau ridai.",
+    "reference": "Quran 27:19",
+    "reference_display": "Quran 27:19",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 27,
+        "ayah": 19,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "gratitude"
+  },
+  "dua_dua_of_the_young_believers": {
+    "name": "Doa Para Pemuda Beriman",
+    "translation": "Ya Tuhan kami, berikanlah kepada kami rahmat dari sisi-Mu dan sempurnakanlah bagi kami petunjuk yang lurus dalam urusan kami.",
+    "reference": "Quran 18:10",
+    "reference_display": "Quran 18:10",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 18,
+        "ayah": 10,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "guidance"
   },
   "dua_dua_of_yunus_in_distress": {
     "name": "Doa Nabi Yunus dalam Kesulitan",
@@ -429,53 +564,117 @@
     "migration_status": "ok",
     "category": "distress"
   },
-  "dua_mercy_for_parents": {
-    "name": "Doa untuk Kedua Orang Tua",
-    "translation": "Tuhanku, sayangilah keduanya sebagaimana mereka menyayangiku ketika aku masih kecil.",
-    "reference": "Al-Quran 17:24",
-    "reference_display": "Al-Quran 17:24",
+  "dua_dua_of_yusuf_for_a_muslim_death": {
+    "name": "Doa Yusuf untuk Wafat dalam Keadaan Muslim",
+    "translation": "Ya Tuhanku, Engkau telah menganugerahkan kekuasaan kepadaku dan mengajarkan kepadaku penafsiran peristiwa-peristiwa. Wahai Pencipta langit dan bumi, Engkaulah pelindungku di dunia dan di akhirat. Wafatkanlah aku dalam keadaan Muslim dan gabungkanlah aku dengan orang-orang yang saleh.",
+    "reference": "Quran 12:101",
+    "reference_display": "Quran 12:101",
     "sources": [
       {
         "type": "quran",
-        "surah": 17,
-        "ayah": 24,
+        "surah": 12,
+        "ayah": 101,
         "role": "primary"
       }
     ],
-    "migration_status": "ok",
+    "migration_status": "machine_translated",
+    "category": "hereafter"
+  },
+  "dua_dua_of_zakariyya_for_an_heir": {
+    "name": "Doa Zakaria untuk Memohon Keturunan",
+    "translation": "Ya Tuhanku, janganlah Engkau biarkan aku seorang diri, padahal Engkaulah pewaris yang terbaik.",
+    "reference": "Quran 21:89",
+    "reference_display": "Quran 21:89",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 21,
+        "ayah": 89,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
     "category": "family"
   },
-  "dua_righteous_spouses_and_children": {
-    "name": "Doa untuk Pasangan dan Anak yang Saleh",
-    "translation": "Tuhan kami, karuniakanlah kepada kami pasangan dan keturunan yang menjadi penyejuk mata, dan jadikanlah kami imam bagi orang-orang yang bertakwa.",
-    "reference": "Al-Quran 25:74",
-    "reference_display": "Al-Quran 25:74",
+  "dua_during_strong_wind": {
+    "name": "Doa Saat Angin Kencang",
+    "translation": "Ya Allah, aku memohon kepada-Mu kebaikannya, kebaikan yang ada di dalamnya, dan kebaikan yang untuknya ia diutus. Aku berlindung kepada-Mu dari keburukannya, keburukan yang ada di dalamnya, dan keburukan yang untuknya ia diutus.",
+    "reference": "Sahih Muslim 899",
+    "reference_display": "Sahih Muslim 899",
     "sources": [
       {
-        "type": "quran",
-        "surah": 25,
-        "ayah": 74,
+        "type": "hadith",
+        "id": "muslim:899",
         "role": "primary"
       }
     ],
-    "migration_status": "ok",
-    "category": "family"
+    "migration_status": "machine_translated",
+    "category": "weather"
   },
-  "dua_increase_me_in_knowledge": {
-    "name": "Doa Menambah Ilmu",
-    "translation": "Tuhanku, tambahkanlah ilmu kepadaku.",
-    "reference": "Al-Quran 20:114",
-    "reference_display": "Al-Quran 20:114",
+  "dua_entering_a_marketplace": {
+    "name": "Doa Memasuki Pasar",
+    "translation": "Tiada sesembahan yang berhak disembah selain Allah semata, tiada sekutu bagi-Nya. Milik-Nya kerajaan dan segala puji. Dia menghidupkan dan mematikan. Dia Maha Hidup dan tidak mati. Di tangan-Nya segala kebaikan, dan Dia Mahakuasa atas segala sesuatu.",
+    "reference": "Jami at-Tirmidhi 3428",
+    "reference_display": "Jami at-Tirmidhi 3428",
     "sources": [
       {
-        "type": "quran",
-        "surah": 20,
-        "ayah": 114,
+        "type": "hadith",
+        "id": "tirmidhi:3428",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "daily"
+  },
+  "dua_entering_home": {
+    "name": "Doa Masuk Rumah",
+    "translation": "Dengan nama Allah kami masuk, dengan nama Allah kami keluar, dan kepada Tuhan kami kami bertawakal.",
+    "reference": "Sunan Abu Dawud 5096",
+    "reference_display": "Sunan Abu Dawud 5096",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:5096",
         "role": "primary"
       }
     ],
     "migration_status": "ok",
-    "category": "knowledge"
+    "category": "daily"
+  },
+  "dua_entering_the_mosque": {
+    "name": "Doa Masuk Masjid",
+    "translation": "Ya Allah, bukakanlah untukku pintu-pintu rahmat-Mu.",
+    "reference": "Sahih Muslim 713",
+    "reference_display": "Sahih Muslim 713",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:713",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "prayer"
+  },
+  "dua_expiation_of_a_gathering": {
+    "name": "Doa Penutup Majelis (Kafaratul Majelis)",
+    "translation": "Mahasuci Engkau, ya Allah, dan segala puji bagi-Mu. Aku bersaksi bahwa tidak ada sesembahan yang berhak disembah selain Engkau. Aku memohon ampunan-Mu dan bertobat kepada-Mu.",
+    "reference": "Sunan Abi Dawud 4859; Jami at-Tirmidhi 3433",
+    "reference_display": "Sunan Abi Dawud 4859; Jami at-Tirmidhi 3433",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:4859",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "tirmidhi:3433",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "forgiveness"
   },
   "dua_for_beneficial_knowledge_and_accepted_deeds": {
     "name": "Doa Ilmu Bermanfaat dan Rezeki yang Baik",
@@ -492,50 +691,34 @@
     "migration_status": "ok",
     "category": "knowledge"
   },
-  "dua_steadfast_hearts": {
-    "name": "Doa Keteguhan Hati",
-    "translation": "Tuhan kami, janganlah Engkau jadikan hati kami menyimpang setelah Engkau beri petunjuk kepada kami, dan karuniakanlah kepada kami rahmat dari sisi-Mu. Sesungguhnya Engkau Maha Pemberi.",
-    "reference": "Al-Quran 3:8",
-    "reference_display": "Al-Quran 3:8",
-    "sources": [
-      {
-        "type": "quran",
-        "surah": 3,
-        "ayah": 8,
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "guidance"
-  },
-  "dua_steadfast_heart": {
-    "name": "Doa Keteguhan Hati",
-    "translation": "Wahai Zat yang membolak-balikkan hati, teguhkanlah hatiku pada agama-Mu.",
-    "reference": "Jami' at-Tirmidzi 2140",
-    "reference_display": "Jami' at-Tirmidzi 2140",
+  "dua_for_forgiveness_mercy_guidance_health_and_provision": {
+    "name": "Doa Memohon Ampunan, Rahmat, Petunjuk, Kesehatan, dan Rezeki",
+    "translation": "Ya Allah, ampunilah aku, rahmatilah aku, tunjukilah aku, anugerahkanlah kepadaku keselamatan dan kesehatan, dan berilah aku rezeki.",
+    "reference": "Sahih Muslim 2697",
+    "reference_display": "Sahih Muslim 2697",
     "sources": [
       {
         "type": "hadith",
-        "id": "tirmidhi:2140",
+        "id": "muslim:2697",
         "role": "primary"
       }
     ],
-    "migration_status": "ok",
-    "category": "guidance"
+    "migration_status": "machine_translated",
+    "category": "general"
   },
-  "dua_do_not_leave_me_to_myself": {
-    "name": "Doa Agar Tidak Diserahkan pada Diri Sendiri",
-    "translation": "Wahai Yang Mahahidup, Wahai Yang Maha Berdiri Sendiri, dengan rahmat-Mu aku memohon pertolongan. Perbaikilah seluruh urusanku, dan jangan Engkau serahkan aku kepada diriku sendiri walau sekejap mata.",
-    "reference": "Al-Hakim 1/545; dinyatakan sahih oleh al-Albani",
-    "reference_display": "Al-Hakim 1/545; dinyatakan sahih oleh al-Albani",
+  "dua_for_guidance_piety_chastity_and_sufficiency": {
+    "name": "Doa Memohon Petunjuk, Ketakwaan, Kesucian Diri, dan Kecukupan",
+    "translation": "Ya Allah, aku memohon kepada-Mu petunjuk, ketakwaan, kesucian diri, dan kecukupan.",
+    "reference": "Sahih Muslim 2721",
+    "reference_display": "Sahih Muslim 2721",
     "sources": [
       {
-        "type": "external",
-        "display": "Al-Hakim 545",
+        "type": "hadith",
+        "id": "muslim:2721",
         "role": "primary"
       }
     ],
-    "migration_status": "partial",
+    "migration_status": "machine_translated",
     "category": "guidance"
   },
   "dua_for_healing": {
@@ -558,6 +741,26 @@
     "migration_status": "ok",
     "category": "healing"
   },
+  "dua_for_paradise_and_protection_from_fire": {
+    "name": "Doa Memohon Surga dan Perlindungan dari Api Neraka",
+    "translation": "Ya Allah, aku memohon surga kepada-Mu dan berlindung kepada-Mu dari api neraka.",
+    "reference": "Sunan Abi Dawud 792; Sunan Ibn Majah 910",
+    "reference_display": "Sunan Abi Dawud 792; Sunan Ibn Majah 910",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:792",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "ibnmajah:910",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "hereafter"
+  },
   "dua_for_protection_from_harm": {
     "name": "Doa Perlindungan dari Keburukan",
     "translation": "Aku berlindung dengan kalimat-kalimat Allah yang sempurna dari keburukan makhluk yang Dia ciptakan.",
@@ -567,6 +770,491 @@
       {
         "type": "hadith",
         "id": "muslim:2708",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "protection"
+  },
+  "dua_for_rain": {
+    "name": "Doa Memohon Hujan",
+    "translation": "Ya Allah, jadikanlah ia hujan yang bermanfaat.",
+    "reference": "Sahih al-Bukhari 1032",
+    "reference_display": "Sahih al-Bukhari 1032",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:1032",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "weather"
+  },
+  "dua_for_righteous_child": {
+    "name": "Doa Memohon Keturunan yang Saleh",
+    "translation": "Ya Tuhanku, anugerahkanlah kepadaku keturunan yang termasuk orang-orang yang saleh.",
+    "reference": "Quran 37:100",
+    "reference_display": "Quran 37:100",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 37,
+        "ayah": 100,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "family"
+  },
+  "dua_for_well_being_in_both_worlds": {
+    "name": "Doa Kebaikan Dunia dan Akhirat",
+    "translation": "Ya Allah, aku memohon kepada-Mu ampunan dan kesehatan di dunia dan akhirat.",
+    "reference": "Sunan Ibnu Majah 3871; Sunan Abu Dawud 5074",
+    "reference_display": "Sunan Ibnu Majah 3871; Sunan Abu Dawud 5074",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "ibnmajah:3871",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "abudawud:5074",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "protection"
+  },
+  "dua_forgiveness_and_a_righteous_death": {
+    "name": "Doa Ampunan dan Wafat Bersama Orang-Orang Saleh",
+    "translation": "Ya Tuhan kami, ampunilah dosa-dosa kami, hapuskanlah kesalahan-kesalahan kami, dan wafatkanlah kami bersama orang-orang yang saleh.",
+    "reference": "Quran 3:193",
+    "reference_display": "Quran 3:193",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 3,
+        "ayah": 193,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "forgiveness"
+  },
+  "dua_forgiveness_and_mercy": {
+    "name": "Doa Ampunan dan Rahmat",
+    "translation": "Tuhanku, ampunilah dan rahmatilah, Engkaulah sebaik-baik pemberi rahmat.",
+    "reference": "Al-Quran 23:118",
+    "reference_display": "Al-Quran 23:118",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 23,
+        "ayah": 118,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "forgiveness"
+  },
+  "dua_forgiveness_and_protection_from_fire": {
+    "name": "Doa Ampunan dan Perlindungan dari Api Neraka",
+    "translation": "Ya Tuhan kami, kami telah beriman, maka ampunilah dosa-dosa kami dan lindungilah kami dari azab api neraka.",
+    "reference": "Quran 3:16",
+    "reference_display": "Quran 3:16",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 3,
+        "ayah": 16,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "forgiveness"
+  },
+  "dua_forgiveness_and_steadfastness": {
+    "name": "Doa Ampunan dan Keteguhan",
+    "translation": "Ya Tuhan kami, ampunilah dosa-dosa kami dan tindakan-tindakan kami yang berlebihan, kukuhkanlah langkah kami, dan menangkanlah kami atas kaum yang kafir.",
+    "reference": "Quran 3:147",
+    "reference_display": "Quran 3:147",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 3,
+        "ayah": 147,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "forgiveness"
+  },
+  "dua_forgiveness_for_parents_and_believers": {
+    "name": "Doa Ampunan bagi Kedua Orang Tua dan Kaum Mukmin",
+    "translation": "Ya Tuhan kami, ampunilah aku, kedua orang tuaku, dan orang-orang mukmin pada hari ketika perhitungan ditegakkan.",
+    "reference": "Quran 14:41",
+    "reference_display": "Quran 14:41",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 14,
+        "ayah": 41,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "forgiveness"
+  },
+  "dua_funeral_deceased": {
+    "name": "Doa untuk Jenazah",
+    "translation": "Ya Allah, ampunilah dia, rahmatilah dia, berilah dia keselamatan, dan maafkanlah dia. Muliakanlah penyambutannya, luaskanlah tempat masuknya, mandikanlah dia dengan air, salju, dan hujan es, dan bersihkanlah dia dari dosa-dosa sebagaimana pakaian putih dibersihkan dari noda.",
+    "reference": "Sahih Muslim 963",
+    "reference_display": "Sahih Muslim 963",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:963",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "funeral"
+  },
+  "dua_good_character": {
+    "name": "Doa Memohon Akhlak yang Baik",
+    "translation": "Ya Allah, tunjukilah aku akhlak yang terbaik, karena tidak ada yang dapat menunjukkannya kecuali Engkau; dan jauhkanlah akhlak yang buruk dariku, karena tidak ada yang dapat menjauhkannya dariku kecuali Engkau.",
+    "reference": "Sahih Muslim 771",
+    "reference_display": "Sahih Muslim 771",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:771",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "guidance"
+  },
+  "dua_good_in_this_world_and_the_hereafter": {
+    "name": "Doa Kebaikan Dunia dan Akhirat",
+    "translation": "Tuhan kami, berilah kami kebaikan di dunia dan kebaikan di akhirat, dan lindungilah kami dari azab neraka.",
+    "reference": "Al-Quran 2:201",
+    "reference_display": "Al-Quran 2:201",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 2,
+        "ayah": 201,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "general"
+  },
+  "dua_guidance_to_the_straight_path": {
+    "name": "Doa Memohon Petunjuk Jalan yang Lurus",
+    "translation": "Tunjukilah kami ke jalan yang lurus.",
+    "reference": "Al-Quran 1:6",
+    "reference_display": "Al-Quran 1:6",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 1,
+        "ayah": 6,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "guidance"
+  },
+  "dua_help_me_worship_you_well": {
+    "name": "Doa Memohon Pertolongan untuk Beribadah dengan Baik",
+    "translation": "Ya Allah, tolonglah aku untuk mengingat-Mu, bersyukur kepada-Mu, dan beribadah kepada-Mu dengan baik.",
+    "reference": "Sunan Abi Dawud 1522; Sunan an-Nasai 1303",
+    "reference_display": "Sunan Abi Dawud 1522; Sunan an-Nasai 1303",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:1522",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "nasai:1303",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "worship"
+  },
+  "dua_increase_me_in_knowledge": {
+    "name": "Doa Menambah Ilmu",
+    "translation": "Tuhanku, tambahkanlah ilmu kepadaku.",
+    "reference": "Al-Quran 20:114",
+    "reference_display": "Al-Quran 20:114",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 20,
+        "ayah": 114,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "knowledge"
+  },
+  "dua_istikhara": {
+    "name": "Doa Istikharah",
+    "translation": "Ya Allah, aku memohon pilihan kepada-Mu dengan ilmu-Mu, dan aku memohon kekuatan dengan kekuasaan-Mu, dan aku memohon kepada-Mu sebagian dari karunia-Mu yang besar. Sesungguhnya Engkau Mahakuasa dan aku tidak berdaya; Engkau Maha Mengetahui dan aku tidak tahu; Engkaulah Yang Maha Mengetahui perkara yang gaib. Ya Allah, jika Engkau mengetahui bahwa perkara ini baik bagi agamaku, kehidupanku, dan akhir urusanku, maka takdirkanlah ia bagiku, mudahkanlah untukku, dan berkahilah aku di dalamnya. Jika Engkau mengetahui bahwa perkara ini buruk bagi agamaku, kehidupanku, dan akhir urusanku, maka jauhkanlah ia dariku dan jauhkanlah aku darinya, dan takdirkanlah kebaikan untukku di mana pun ia berada, lalu ridhakanlah aku dengan keputusan-Mu.",
+    "reference": "Sahih al-Bukhari 6382",
+    "reference_display": "Sahih al-Bukhari 6382",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:6382",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "guidance"
+  },
+  "dua_laylatul_qadr": {
+    "name": "Doa Malam Lailatul Qadar",
+    "translation": "Ya Allah, sesungguhnya Engkau Maha Pengampun dan mencintai ampunan, maka ampunilah aku.",
+    "reference": "Jami' at-Tirmidzi 3513; Sunan Ibnu Majah 3850",
+    "reference_display": "Jami' at-Tirmidzi 3513; Sunan Ibnu Majah 3850",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "tirmidhi:3513",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "ibnmajah:3850",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "forgiveness"
+  },
+  "dua_leaving_the_home": {
+    "name": "Doa Keluar Rumah",
+    "translation": "Dengan nama Allah, aku bertawakal kepada Allah; tidak ada daya dan kekuatan kecuali dengan pertolongan Allah.",
+    "reference": "Sunan Abu Dawud 5095; Jami' at-Tirmidzi 3426",
+    "reference_display": "Sunan Abu Dawud 5095; Jami' at-Tirmidzi 3426",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:5095",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "tirmidhi:3426",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "protection"
+  },
+  "dua_leaving_the_mosque": {
+    "name": "Doa Keluar Masjid",
+    "translation": "Ya Allah, aku memohon kepada-Mu sebagian dari karunia-Mu.",
+    "reference": "Sahih Muslim 713",
+    "reference_display": "Sahih Muslim 713",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:713",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "prayer"
+  },
+  "dua_light": {
+    "name": "Doa Memohon Cahaya",
+    "translation": "Ya Allah, jadikanlah cahaya di dalam hatiku, pada penglihatanku, dan pada pendengaranku; jadikanlah cahaya di sebelah kananku dan kiriku, di atas dan di bawahku, di depan dan di belakangku; dan anugerahkanlah cahaya kepadaku.",
+    "reference": "Sahih al-Bukhari 6316; Sahih Muslim 763",
+    "reference_display": "Sahih al-Bukhari 6316; Sahih Muslim 763",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:6316",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "muslim:763",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "guidance"
+  },
+  "dua_light_and_forgiveness": {
+    "name": "Doa Cahaya dan Ampunan",
+    "translation": "Ya Tuhan kami, sempurnakanlah cahaya kami untuk kami dan ampunilah kami. Sungguh, Engkau Mahakuasa atas segala sesuatu.",
+    "reference": "Quran 66:8",
+    "reference_display": "Quran 66:8",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 66,
+        "ayah": 8,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "hereafter"
+  },
+  "dua_mercy_for_parents": {
+    "name": "Doa untuk Kedua Orang Tua",
+    "translation": "Tuhanku, sayangilah keduanya sebagaimana mereka menyayangiku ketika aku masih kecil.",
+    "reference": "Al-Quran 17:24",
+    "reference_display": "Al-Quran 17:24",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 17,
+        "ayah": 24,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "family"
+  },
+  "dua_morning": {
+    "name": "Dzikir Pagi",
+    "translation": "Kami telah memasuki waktu pagi, dan kerajaan hanya milik Allah. Segala puji bagi Allah. Tiada tuhan selain Allah, Yang Maha Esa, tiada sekutu bagi-Nya.",
+    "reference": "Sahih Muslim 2723",
+    "reference_display": "Sahih Muslim 2723",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:2723",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "morning_evening"
+  },
+  "dua_new_garment": {
+    "name": "Doa Saat Memakai Pakaian Baru",
+    "translation": "Ya Allah, segala puji bagi-Mu. Engkaulah yang memakaikannya kepadaku. Aku memohon kepada-Mu kebaikannya dan kebaikan tujuan pembuatannya, dan aku berlindung kepada-Mu dari keburukannya dan keburukan tujuan pembuatannya.",
+    "reference": "Sunan Abi Dawud 4020; Jami at-Tirmidhi 1767",
+    "reference_display": "Sunan Abi Dawud 4020; Jami at-Tirmidhi 1767",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:4020",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "tirmidhi:1767",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "daily"
+  },
+  "dua_no_burden_beyond_capacity": {
+    "name": "Doa Agar Tidak Dibebani di Luar Kemampuan",
+    "translation": "Ya Tuhan kami, janganlah Engkau hukum kami jika kami lupa atau kami salah. Ya Tuhan kami, janganlah Engkau bebankan kepada kami beban yang berat sebagaimana Engkau bebankan kepada orang-orang sebelum kami. Ya Tuhan kami, janganlah Engkau pikulkan kepada kami apa yang tidak sanggup kami memikulnya. Maafkanlah kami, ampunilah kami, dan rahmatilah kami.",
+    "reference": "Quran 2:286",
+    "reference_display": "Quran 2:286",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 2,
+        "ayah": 286,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "mercy"
+  },
+  "dua_opening_supplication_in_prayer": {
+    "name": "Doa Iftitah dalam Salat",
+    "translation": "Ya Allah, jauhkanlah aku dari dosa-dosaku sebagaimana Engkau menjauhkan timur dari barat. Bersihkanlah aku dari dosa-dosa sebagaimana pakaian putih dibersihkan dari noda, dan cucilah dosa-dosaku dengan salju, air, dan hujan es.",
+    "reference": "Sahih al-Bukhari 744; Sahih Muslim 598",
+    "reference_display": "Sahih al-Bukhari 744; Sahih Muslim 598",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:744",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "muslim:598",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "prayer"
+  },
+  "dua_patience_and_a_muslim_death": {
+    "name": "Doa Kesabaran dan Wafat dalam Keadaan Muslim",
+    "translation": "Ya Tuhan kami, limpahkanlah kesabaran kepada kami dan wafatkanlah kami dalam keadaan Muslim.",
+    "reference": "Quran 7:126",
+    "reference_display": "Quran 7:126",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 7,
+        "ayah": 126,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "steadfastness"
+  },
+  "dua_patience_and_firmness": {
+    "name": "Doa Kesabaran dan Keteguhan",
+    "translation": "Ya Tuhan kami, limpahkanlah kesabaran kepada kami, kukuhkanlah langkah kami, dan menangkanlah kami atas kaum yang kafir.",
+    "reference": "Quran 2:250",
+    "reference_display": "Quran 2:250",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 2,
+        "ayah": 250,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "steadfastness"
+  },
+  "dua_promise_of_the_hereafter": {
+    "name": "Doa Janji Akhirat",
+    "translation": "Ya Tuhan kami, berikanlah kepada kami apa yang telah Engkau janjikan kepada kami melalui rasul-rasul-Mu, dan janganlah Engkau hinakan kami pada hari Kiamat. Sungguh, Engkau tidak pernah menyalahi janji.",
+    "reference": "Quran 3:194",
+    "reference_display": "Quran 3:194",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 3,
+        "ayah": 194,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "hereafter"
+  },
+  "dua_protection": {
+    "name": "Doa Perlindungan",
+    "translation": "Dengan nama Allah yang tidak ada sesuatu pun yang dapat membahayakan bersama nama-Nya, baik di bumi maupun di langit. Dia Maha Mendengar, Maha Mengetahui.",
+    "reference": "Sunan Abu Dawud 5088",
+    "reference_display": "Sunan Abu Dawud 5088",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:5088",
         "role": "primary"
       }
     ],
@@ -588,54 +1276,344 @@
     "migration_status": "ok",
     "category": "protection"
   },
-  "dua_istikhara": {
-    "name": "Doa Istikharah",
-    "translation": "Ya Allah, aku memohon pilihan kepada-Mu dengan ilmu-Mu, dan aku memohon kekuatan dengan kekuasaan-Mu, dan aku memohon kepada-Mu sebagian dari karunia-Mu yang besar. Sesungguhnya Engkau Mahakuasa dan aku tidak berdaya; Engkau Maha Mengetahui dan aku tidak tahu; Engkaulah Yang Maha Mengetahui perkara yang gaib. Ya Allah, jika Engkau mengetahui bahwa perkara ini baik bagi agamaku, kehidupanku, dan akhir urusanku, maka takdirkanlah ia bagiku, mudahkanlah untukku, dan berkahilah aku di dalamnya. Jika Engkau mengetahui bahwa perkara ini buruk bagi agamaku, kehidupanku, dan akhir urusanku, maka jauhkanlah ia dariku dan jauhkanlah aku darinya, dan takdirkanlah kebaikan untukku di mana pun ia berada, lalu ridhakanlah aku dengan keputusan-Mu.",
-    "reference": "Sahih al-Bukhari 6382",
-    "reference_display": "Sahih al-Bukhari 6382",
+  "dua_protection_for_children_from_evil_eye": {
+    "name": "Doa Perlindungan bagi Anak-Anak dari Pandangan Mata yang Jahat",
+    "translation": "Aku memohonkan perlindungan bagi kalian berdua dengan kalimat-kalimat Allah yang sempurna dari setiap setan, makhluk yang berbahaya, dan pandangan mata yang jahat.",
+    "reference": "Sahih al-Bukhari 3371",
+    "reference_display": "Sahih al-Bukhari 3371",
     "sources": [
       {
         "type": "hadith",
-        "id": "bukhari:6382",
+        "id": "bukhari:3371",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "protection"
+  },
+  "dua_protection_from_devils": {
+    "name": "Doa Perlindungan dari Setan",
+    "translation": "Ya Tuhanku, aku berlindung kepada-Mu dari bisikan-bisikan setan, dan aku berlindung kepada-Mu, ya Tuhanku, dari kehadiran mereka di dekatku.",
+    "reference": "Quran 23:97-98",
+    "reference_display": "Quran 23:97-98",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 23,
+        "ayah": 97,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "protection"
+  },
+  "dua_protection_from_four_trials": {
+    "name": "Doa Perlindungan dari Empat Fitnah",
+    "translation": "Ya Allah, aku berlindung kepada-Mu dari azab kubur dan azab neraka, dari fitnah kehidupan dan kematian, dan dari fitnah buruk Al-Masih Ad-Dajjal.",
+    "reference": "Sahih al-Bukhari 1377; Sahih Muslim 588",
+    "reference_display": "Sahih al-Bukhari 1377; Sahih Muslim 588",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:1377",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "muslim:588",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "protection"
+  },
+  "dua_qunut_witr": {
+    "name": "Doa Qunut Witir",
+    "translation": "Ya Allah, berilah aku petunjuk di antara orang-orang yang Engkau beri petunjuk; berilah aku kesehatan di antara orang-orang yang Engkau beri kesehatan; peliharalah aku di antara orang-orang yang Engkau pelihara; berkahilah aku pada apa yang Engkau berikan; dan lindungilah aku dari keburukan yang Engkau tetapkan. Sesungguhnya Engkau yang menetapkan dan tidak ditetapkan atas-Mu. Sesungguhnya tidak akan hina orang yang Engkau jadikan wali. Mahasuci Engkau, ya Tuhan kami, dan Mahatinggi.",
+    "reference": "Sunan Abu Dawud 1425; Jami' at-Tirmidzi 464",
+    "reference_display": "Sunan Abu Dawud 1425; Jami' at-Tirmidzi 464",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:1425",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "tirmidhi:464",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "prayer"
+  },
+  "dua_rain_around_us": {
+    "name": "Doa Saat Hujan Terlalu Lebat",
+    "translation": "Ya Allah, turunkanlah hujan di sekitar kami dan bukan menimpa kami; di atas bukit-bukit, gunung-gunung kecil, lembah-lembah, dan tempat tumbuhnya pepohonan.",
+    "reference": "Sahih al-Bukhari 1014; Sahih Muslim 897",
+    "reference_display": "Sahih al-Bukhari 1014; Sahih Muslim 897",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:1014",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "muslim:897",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "weather"
+  },
+  "dua_righteous_spouses_and_children": {
+    "name": "Doa untuk Pasangan dan Anak yang Saleh",
+    "translation": "Tuhan kami, karuniakanlah kepada kami pasangan dan keturunan yang menjadi penyejuk mata, dan jadikanlah kami imam bagi orang-orang yang bertakwa.",
+    "reference": "Al-Quran 25:74",
+    "reference_display": "Al-Quran 25:74",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 25,
+        "ayah": 74,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "family"
+  },
+  "dua_sayyidul_istighfar": {
+    "name": "Sayyidul Istighfar",
+    "translation": "Ya Allah, Engkau adalah Tuhanku, tiada tuhan selain Engkau. Engkau menciptakanku dan aku adalah hamba-Mu. Aku berusaha menepati perjanjian dan janjiku kepada-Mu sekuat kemampuanku. Aku berlindung kepada-Mu dari keburukan yang telah aku perbuat. Aku mengakui nikmat-Mu atasku dan aku mengakui dosaku. Maka ampunilah aku, karena tidak ada yang mengampuni dosa selain Engkau.",
+    "reference": "Sahih al-Bukhari 6306",
+    "reference_display": "Sahih al-Bukhari 6306",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:6306",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "forgiveness"
+  },
+  "dua_steadfast_heart": {
+    "name": "Doa Keteguhan Hati",
+    "translation": "Wahai Zat yang membolak-balikkan hati, teguhkanlah hatiku pada agama-Mu.",
+    "reference": "Jami' at-Tirmidzi 2140",
+    "reference_display": "Jami' at-Tirmidzi 2140",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "tirmidhi:2140",
         "role": "primary"
       }
     ],
     "migration_status": "ok",
     "category": "guidance"
   },
-  "dua_all_good": {
-    "name": "Doa Menghimpun Segala Kebaikan",
-    "translation": "Ya Allah, aku memohon kepada-Mu segala kebaikan, yang segera maupun yang tertunda, yang aku ketahui maupun yang tidak aku ketahui. Dan aku berlindung kepada-Mu dari segala keburukan, yang segera maupun yang tertunda, yang aku ketahui maupun yang tidak aku ketahui.",
-    "reference": "Sunan Ibnu Majah 3846; dinyatakan sahih oleh al-Albani",
-    "reference_display": "Sunan Ibnu Majah 3846; dinyatakan sahih oleh al-Albani",
+  "dua_steadfast_hearts": {
+    "name": "Doa Keteguhan Hati",
+    "translation": "Tuhan kami, janganlah Engkau jadikan hati kami menyimpang setelah Engkau beri petunjuk kepada kami, dan karuniakanlah kepada kami rahmat dari sisi-Mu. Sesungguhnya Engkau Maha Pemberi.",
+    "reference": "Al-Quran 3:8",
+    "reference_display": "Al-Quran 3:8",
     "sources": [
       {
-        "type": "hadith",
-        "id": "ibnmajah:3846",
+        "type": "quran",
+        "surah": 3,
+        "ayah": 8,
         "role": "primary"
       }
     ],
     "migration_status": "ok",
-    "category": "general"
+    "category": "guidance"
   },
-  "dua_for_well_being_in_both_worlds": {
-    "name": "Doa Kebaikan Dunia dan Akhirat",
-    "translation": "Ya Allah, aku memohon kepada-Mu ampunan dan kesehatan di dunia dan akhirat.",
-    "reference": "Sunan Ibnu Majah 3871; Sunan Abu Dawud 5074",
-    "reference_display": "Sunan Ibnu Majah 3871; Sunan Abu Dawud 5074",
+  "dua_submission_and_repentance": {
+    "name": "Doa Berserah Diri dan Tobat",
+    "translation": "Ya Tuhan kami, jadikanlah kami orang yang berserah diri kepada-Mu, dan jadikanlah dari keturunan kami umat yang berserah diri kepada-Mu. Tunjukkanlah kepada kami cara-cara ibadah kami dan terimalah tobat kami. Sungguh, Engkaulah Maha Penerima tobat, Maha Penyayang.",
+    "reference": "Quran 2:128",
+    "reference_display": "Quran 2:128",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 2,
+        "ayah": 128,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "repentance"
+  },
+  "dua_suhoor": {
+    "name": "Niat Puasa",
+    "translation": "Aku berniat puasa esok hari di bulan Ramadan.",
+    "reference": "Niat puasa tradisional",
+    "reference_display": "Niat puasa tradisional",
+    "sources": [],
+    "migration_status": "needs_curation",
+    "category": "fasting",
+    "transliteration": "Wa bisawmi ghadinn nawaiytu min shahri Ramadan."
+  },
+  "dua_the_quran_as_spring_of_the_heart": {
+    "name": "Doa Memohon Al-Qur'an sebagai Penyejuk Hati",
+    "translation": "Ya Allah, aku adalah hamba-Mu, putra hamba laki-laki-Mu dan hamba perempuan-Mu. Ubun-ubunku berada di tangan-Mu; hukum-Mu berlaku atas diriku dan ketetapan-Mu atasku adil. Aku memohon kepada-Mu dengan setiap nama milik-Mu agar Engkau menjadikan Al-Qur'an sebagai penyejuk hatiku, cahaya dadaku, penghilang dukaku, dan pelenyap kegelisahanku.",
+    "reference": "Musnad Ahmad 3712; authenticated by al-Albani",
+    "reference_display": "Musnad Ahmad 3712; authenticated by al-Albani",
+    "sources": [
+      {
+        "type": "external",
+        "display": "Musnad Ahmad 3712",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "distress"
+  },
+  "dua_thunder": {
+    "name": "Zikir Saat Mendengar Petir",
+    "translation": "Mahasuci Dia yang petir bertasbih dengan memuji-Nya, dan para malaikat pun bertasbih karena takut kepada-Nya.",
+    "reference": "Al-Muwatta 2/992; authenticated as a statement of Abdullah ibn al-Zubayr",
+    "reference_display": "Al-Muwatta 2/992; authenticated as a statement of Abdullah ibn al-Zubayr",
     "sources": [
       {
         "type": "hadith",
-        "id": "ibnmajah:3871",
+        "id": "malik:992",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "weather"
+  },
+  "dua_travel": {
+    "name": "Doa Bepergian",
+    "translation": "Mahasuci Allah yang telah menundukkan kendaraan ini bagi kami, padahal kami sebelumnya tidak mampu menguasainya. Dan sesungguhnya kepada Tuhan kami, kami akan kembali.",
+    "reference": "Sahih Muslim 1342",
+    "reference_display": "Sahih Muslim 1342",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:1342",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "travel"
+  },
+  "dua_trust_in_allah": {
+    "name": "Doa Tawakal kepada Allah",
+    "translation": "Ya Tuhan kami, kepada Engkaulah kami bertawakal, kepada Engkaulah kami kembali, dan kepada Engkaulah tempat kembali.",
+    "reference": "Quran 60:4",
+    "reference_display": "Quran 60:4",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 60,
+        "ayah": 4,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "reliance"
+  },
+  "dua_upon_seeing_the_new_moon": {
+    "name": "Doa Saat Melihat Bulan Sabit",
+    "translation": "Ya Allah, terbitkanlah bulan ini atas kami dengan membawa keamanan, keimanan, keselamatan, dan Islam. Tuhanku dan Tuhanmu adalah Allah.",
+    "reference": "Jami at-Tirmidhi 3451",
+    "reference_display": "Jami at-Tirmidhi 3451",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "tirmidhi:3451",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "daily"
+  },
+  "dua_visiting_graves": {
+    "name": "Doa Saat Ziarah Kubur",
+    "translation": "Semoga keselamatan tercurah kepada kalian, wahai penghuni tempat-tempat tinggal ini dari kaum mukminin dan muslimin. Insya Allah, kami akan menyusul kalian. Aku memohon kepada Allah keselamatan untuk kami dan untuk kalian.",
+    "reference": "Sahih Muslim 975",
+    "reference_display": "Sahih Muslim 975",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:975",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "funeral"
+  },
+  "dua_visiting_the_sick": {
+    "name": "Doa Menjenguk Orang Sakit",
+    "translation": "Aku memohon kepada Allah Yang Maha Agung, Tuhan pemilik Arasy yang agung, agar Dia menyembuhkanmu.",
+    "reference": "Sunan Abi Dawud 3106; Jami at-Tirmidhi 2083",
+    "reference_display": "Sunan Abi Dawud 3106; Jami at-Tirmidhi 2083",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:3106",
         "role": "primary"
       },
       {
         "type": "hadith",
-        "id": "abudawud:5074",
+        "id": "tirmidhi:2083",
         "role": "supporting"
       }
     ],
+    "migration_status": "machine_translated",
+    "category": "healing"
+  },
+  "dua_waking_up": {
+    "name": "Doa Bangun Tidur",
+    "translation": "Segala puji bagi Allah yang telah menghidupkan kami setelah mematikan kami, dan kepada-Nya kami dibangkitkan.",
+    "reference": "Sahih al-Bukhari 6312",
+    "reference_display": "Sahih al-Bukhari 6312",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:6312",
+        "role": "primary"
+      }
+    ],
     "migration_status": "ok",
-    "category": "protection"
+    "category": "morning_evening"
+  },
+  "dua_wearing_garment": {
+    "name": "Doa Saat Memakai Pakaian",
+    "translation": "Segala puji bagi Allah yang telah memakaikan pakaian ini kepadaku dan menganugerahkannya kepadaku tanpa daya dan kekuatan dariku.",
+    "reference": "Sunan Abi Dawud 4023; Jami at-Tirmidhi 3458",
+    "reference_display": "Sunan Abi Dawud 4023; Jami at-Tirmidhi 3458",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:4023",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "tirmidhi:3458",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "daily"
+  },
+  "dua_when_afflicted_by_calamity": {
+    "name": "Doa Ketika Ditimpa Musibah",
+    "translation": "Sesungguhnya kami milik Allah dan kepada-Nya kami kembali. Ya Allah, berilah aku pahala atas musibahku ini dan gantilah dengan yang lebih baik.",
+    "reference": "Sahih Muslim 918",
+    "reference_display": "Sahih Muslim 918",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:918",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "distress"
   }
 }

@@ -19,18 +19,12 @@ export class LanguageService {
     }
 
     try {
-      const raw = await ctx.resourceManager.getRawFileContent(
-        RawPaths.APP_LANGS
-      );
+      const raw = await ctx.resourceManager.getRawFileContent(RawPaths.APP_LANGS);
 
-      LanguageService.languages =
-        JSON.parse(
-          util.TextDecoder.create().decodeToString(raw)
-        ) as AppLanguageJson[];
+      LanguageService.languages = JSON.parse(util.TextDecoder.create().decodeToString(raw)) as AppLanguageJson[];
       LanguageService.isLoaded = true;
     } catch (e) {
-      AppLogger.error('LanguageService',
-        `Failed to load languages: ${JSON.stringify(e)}`);
+      AppLogger.error('LanguageService', `Failed to load languages: ${JSON.stringify(e)}`);
     }
   }
 
@@ -55,9 +49,7 @@ export class LanguageService {
   }
 
   static getDefaultLanguage(): AppLanguageJson {
-    const found = LanguageService.languages.find(
-      l => l.isDefault === true
-    );
+    const found = LanguageService.languages.find(l => l.isDefault === true);
 
     return found ?? LanguageService.find('en');
   }
@@ -67,15 +59,11 @@ export class LanguageService {
   }
 
   static supports(id: string): boolean {
-    return LanguageService.languages.some(
-      l => l.id === id
-    );
+    return LanguageService.languages.some(l => l.id === id);
   }
 
   static defaultLanguage(): string {
-    const found = LanguageService.languages.find(
-      l => l.isDefault === true
-    );
+    const found = LanguageService.languages.find(l => l.isDefault === true);
 
     if (found) {
       return found.id;
@@ -86,11 +74,9 @@ export class LanguageService {
 
   static systemLanguage(): string {
     try {
-      const locale =
-        i18n.System.getSystemLocale();
+      const locale = i18n.System.getSystemLocale();
 
-      const lang =
-        locale.split('-')[0].toLowerCase();
+      const lang = locale.split('-')[0].toLowerCase();
 
       if (LanguageService.supports(lang)) {
         return lang;

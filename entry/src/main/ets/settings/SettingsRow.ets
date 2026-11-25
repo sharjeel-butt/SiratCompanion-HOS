@@ -25,10 +25,7 @@ export struct SettingsRow {
   build() {
     Row({ space: 8 }) {
       Column() {
-        Text(this.title)
-          .fontSize(15)
-          .fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium)
+        Text(this.title).fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
 
         if (this.description.length > 0) {
           Text(this.description)
@@ -45,9 +42,7 @@ export struct SettingsRow {
           .maxLines(2)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .margin({ top: 6 })
-      }
-      .alignItems(HorizontalAlign.Start)
-      .layoutWeight(1)
+      }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
       Image($r('app.media.ic_chevron_right'))
         .width(16)

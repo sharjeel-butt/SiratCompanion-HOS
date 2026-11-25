@@ -219,9 +219,7 @@ export class ProgressHelper {
 
     const dayLabels: string[] = L.getArray('days_of_week_short', lang);
 
-    const todayState = ProgressHelper.readState(
-      ProgressHelper.getDateKey(today)
-    );
+    const todayState = ProgressHelper.readState(ProgressHelper.getDateKey(today));
     const todayCompleted = ProgressHelper.countCompleted(todayState);
     const todayFajr = todayState.fajr === true;
     const todayDhuhr = todayState.dhuhr === true;
@@ -248,9 +246,7 @@ export class ProgressHelper {
     let monthCompleted = 0;
     const cursor = new Date(today.getFullYear(), today.getMonth(), 1);
     while (cursor.getTime() <= today.getTime()) {
-      const st = ProgressHelper.readState(
-        ProgressHelper.getDateKey(cursor)
-      );
+      const st = ProgressHelper.readState(ProgressHelper.getDateKey(cursor));
       monthCompleted += ProgressHelper.countCompleted(st);
       cursor.setDate(cursor.getDate() + 1);
     }
@@ -262,9 +258,7 @@ export class ProgressHelper {
       streakCursor.setDate(streakCursor.getDate() - 1);
     }
     while (true) {
-      const st = ProgressHelper.readState(
-        ProgressHelper.getDateKey(streakCursor)
-      );
+      const st = ProgressHelper.readState(ProgressHelper.getDateKey(streakCursor));
       if (ProgressHelper.countCompleted(st) === 5) {
         streak++;
         streakCursor.setDate(streakCursor.getDate() - 1);
@@ -334,8 +328,7 @@ export class ProgressHelper {
 
     // Round (not floor) so a 23-hour or 25-hour day across DST does not
     // shift the computed day-of-year by one.
-    const dayOfYear =
-      Math.round((today.getTime() - yearStart.getTime()) / 86400000) + 1;
+    const dayOfYear = Math.round((today.getTime() - yearStart.getTime()) / 86400000) + 1;
     const currentWeekNumber = Math.ceil(dayOfYear / 7);
 
     const weekStartDate = new Date(currentYear, 0, 1 + (currentWeekNumber - 1) * 7);
@@ -465,9 +458,7 @@ export class ProgressHelper {
    * Because TasbihStorage rolls the count at midnight, the live
    * count is always today's count.
    */
-  static getTasbihTodayProgress(
-    tasbihs: Tasbih[]
-  ): TasbihTodayProgress {
+  static getTasbihTodayProgress(tasbihs: Tasbih[]): TasbihTodayProgress {
     let completed = 0;
     let total = 0;
     let lifetime = 0;
@@ -501,12 +492,8 @@ export class ProgressHelper {
    * complete for a dhikr when that day's logged count reached the
    * dhikr's current target.
    */
-  static getTasbihDetails(
-    tasbihs: Tasbih[],
-    activeId: string,
-    period: TasbihPeriod,
-    lang: string = 'en'
-  ): TasbihDetailsSnapshot {
+  static getTasbihDetails(tasbihs: Tasbih[], activeId: string, period: TasbihPeriod,
+    lang: string = 'en'): TasbihDetailsSnapshot {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const currentYear = today.getFullYear();
@@ -518,8 +505,7 @@ export class ProgressHelper {
       const yearStart = new Date(currentYear, 0, 1);
       yearStart.setHours(0, 0, 0, 0);
 
-      const dayOfYear =
-        Math.round((today.getTime() - yearStart.getTime()) / 86400000) + 1;
+      const dayOfYear = Math.round((today.getTime() - yearStart.getTime()) / 86400000) + 1;
       currentWeekNumber = Math.ceil(dayOfYear / 7);
       fullPeriodDays = 7;
 
@@ -575,9 +561,8 @@ export class ProgressHelper {
           }
         }
 
-        const label = (d.transliterationKey && d.transliterationKey.length > 0)
-          ? L.get(d.transliterationKey, lang)
-          : (d.transliteration.length > 0 ? d.transliteration : d.arabic);
+        const label = (d.transliterationKey && d.transliterationKey.length > 0) ? L.get(d.transliterationKey, lang) :
+          (d.transliteration.length > 0 ? d.transliteration : d.arabic);
 
         perDhikr.push({
           dhikrId: d.id,
@@ -663,9 +648,7 @@ export class ProgressHelper {
 
       let completed = 0;
       if (!isFuture) {
-        const st = ProgressHelper.readState(
-          ProgressHelper.getDateKey(date)
-        );
+        const st = ProgressHelper.readState(ProgressHelper.getDateKey(date));
         completed = ProgressHelper.countCompleted(st);
         totalCompleted += completed;
         if (completed === 5) {
@@ -724,23 +707,17 @@ export class ProgressHelper {
    * Format "October 2026" (or the localized equivalent) using Intl.
    * Falls back to English month names when Intl is unavailable.
    */
-  static formatGregorianMonth(
-    year: number, monthIndex: number, lang: string
-  ): string {
-    const locale = lang === 'zh' ? 'zh-CN'
-      : lang === 'ar' ? 'ar'
-        : 'en-US';
+  static formatGregorianMonth(year: number, monthIndex: number, lang: string): string {
+    const locale = lang === 'zh' ? 'zh-CN' : lang === 'ar' ? 'ar' : 'en-US';
     try {
       const fmt = new Intl.DateTimeFormat(locale, {
-        month: 'long',
-        year: 'numeric'
+        month: 'long', year: 'numeric'
       });
       return fmt.format(new Date(year, monthIndex, 1));
     } catch (err) {
-      const fallback: string[] = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
-      ];
+      const fallback: string[] =
+        ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November',
+          'December'];
       return `${fallback[monthIndex]} ${year}`;
     }
   }
@@ -756,8 +733,7 @@ export class ProgressHelper {
     const yearStart = new Date(today.getFullYear(), 0, 1);
     yearStart.setHours(0, 0, 0, 0);
 
-    const dayOfYear =
-      Math.round((today.getTime() - yearStart.getTime()) / 86400000) + 1;
+    const dayOfYear = Math.round((today.getTime() - yearStart.getTime()) / 86400000) + 1;
     const currentWeekNumber = Math.ceil(dayOfYear / 7);
 
     const weekStart = new Date(yearStart);
@@ -806,9 +782,7 @@ export class ProgressHelper {
         if (date.getTime() > today.getTime()) {
           completed.push(-1);
         } else {
-          const st = ProgressHelper.readState(
-            ProgressHelper.getDateKey(date)
-          );
+          const st = ProgressHelper.readState(ProgressHelper.getDateKey(date));
           const c = ProgressHelper.countCompleted(st);
           completed.push(c);
           monthTotal += c;
@@ -827,9 +801,7 @@ export class ProgressHelper {
     }
 
     const out: YearDetailSnapshot = {
-      year: year,
-      months: months,
-      totalCompleted: totalCompleted
+      year: year, months: months, totalCompleted: totalCompleted
     };
     return out;
   }
@@ -845,9 +817,7 @@ export class ProgressHelper {
     return out;
   }
 
-  private static historyCountFor(
-    t: Tasbih, dateKey: string, dhikrId: string
-  ): number {
+  private static historyCountFor(t: Tasbih, dateKey: string, dhikrId: string): number {
     if (t.history === undefined) {
       return 0;
     }
@@ -866,8 +836,7 @@ export class ProgressHelper {
 
   /** Number of calendar days in a Gregorian year. */
   private static daysInYear(year: number): number {
-    const isLeap =
-      (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+    const isLeap = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
     return isLeap ? 366 : 365;
   }
 }

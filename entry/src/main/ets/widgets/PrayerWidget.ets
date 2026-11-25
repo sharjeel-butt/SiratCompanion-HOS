@@ -32,10 +32,7 @@ struct PrayerWidget {
 
   build() {
     Stack() {
-      Column()
-        .width('100%').height('100%')
-        .backgroundColor('#141B2E')
-        .borderRadius(16)
+      Column().width('100%').height('100%').backgroundColor('#141B2E').borderRadius(16)
 
       // 👇 NEW: Watermark Layer
       Stack() {
@@ -45,15 +42,13 @@ struct PrayerWidget {
           .fillColor('#FFFFFF')
           .opacity(0.03)
           .position({ x: '60%', y: '-10%' })
-      }
-      .width('100%').height('100%').clip(true).borderRadius(16)
+      }.width('100%').height('100%').clip(true).borderRadius(16)
 
       Column() {
         if (this.error.length > 0) {
           Column() {
             Text(this.error).fontSize('14vp').fontColor('#FF6B6B').textAlign(TextAlign.Center).width('100%')
-          }
-          .width('100%').layoutWeight(1).justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center)
+          }.width('100%').layoutWeight(1).justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center)
         } else {
 
           // ========== HEADER ==========
@@ -73,8 +68,7 @@ struct PrayerWidget {
                 .textAlign(this.isRtl() ? TextAlign.RIGHT : TextAlign.LEFT)
                 .maxLines(1)
                 .margin({ top: 2 })
-            }
-            .width('100%').alignItems(this.isRtl() ? HorizontalAlign.End : HorizontalAlign.Start).margin({ bottom: 8 })
+            }.width('100%').alignItems(this.isRtl() ? HorizontalAlign.End : HorizontalAlign.Start).margin({ bottom: 8 })
           } else {
             Row() {
               if (this.isRtl()) {
@@ -96,8 +90,7 @@ struct PrayerWidget {
                   .textAlign(TextAlign.LEFT)
                 Text(this.hijriDate).fontSize('10vp').fontColor('#E8A44C').maxLines(1).flexShrink(0)
               }
-            }
-            .width('100%').margin({ bottom: 12 }).direction(Direction.Ltr)
+            }.width('100%').margin({ bottom: 12 }).direction(Direction.Ltr)
           }
 
           // ========== BODY ==========
@@ -126,8 +119,7 @@ struct PrayerWidget {
                 .margin({ top: 4 })
                 .opacity(0.8)
                 .maxLines(1)
-            }
-            .width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
+            }.width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
 
           } else if (this.dimension === '2*4') {
             Column() {
@@ -383,8 +375,7 @@ struct PrayerWidget {
                   .backgroundColor(this.nextId === 'isha' ? 'rgba(232, 164, 76, 0.15)' : 'rgba(255, 255, 255, 0.05)')
                   .borderRadius(8)
                 }
-              }
-              .width('100%').layoutWeight(1).direction(Direction.Ltr)
+              }.width('100%').layoutWeight(1).direction(Direction.Ltr)
 
               // Progress Bar
               Row() {
@@ -402,12 +393,10 @@ struct PrayerWidget {
               .margin({ top: 8 })
               .direction(Direction.Ltr)
               .justifyContent(this.isRtl() ? FlexAlign.End : FlexAlign.Start)
-            }
-            .width('100%').layoutWeight(1).justifyContent(FlexAlign.SpaceBetween)
+            }.width('100%').layoutWeight(1).justifyContent(FlexAlign.SpaceBetween)
 
           } else if (this.dimension === '4*4') {
-            Column() {
-              // 1. Top Row
+            Column() { // 1. Top Row
               Row() {
                 if (this.isRtl()) {
                   Column() {
@@ -781,17 +770,11 @@ struct PrayerWidget {
                   .borderRadius(8)
                   .direction(Direction.Ltr)
                 }
-              }
-              .width('100%').layoutWeight(1).justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center)
-            }
-            .width('100%').layoutWeight(1)
+              }.width('100%').layoutWeight(1).justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center)
+            }.width('100%').layoutWeight(1)
           }
         }
-      }
-      .width('100%')
-      .height('100%')
-      .padding(14)
-      .onClick(() => {
+      }.width('100%').height('100%').padding(14).onClick(() => {
         postCardAction(this, {
           action: 'router',
           bundleName: 'com.siratcompanion.hos.app',
@@ -799,8 +782,7 @@ struct PrayerWidget {
           params: { targetPage: 'pages/MainTabs', targetTab: 'prayers' }
         });
       })
-    }
-    .width('100%').height('100%').direction(Direction.Ltr)
+    }.width('100%').height('100%').direction(Direction.Ltr)
   }
 
   private isRtl(): boolean {

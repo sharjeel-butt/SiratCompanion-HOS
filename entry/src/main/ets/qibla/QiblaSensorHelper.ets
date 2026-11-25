@@ -11,10 +11,7 @@ import { sensor } from '@kit.SensorServiceKit';
  *   SENSOR_ACCURACY_HIGH       = 3
  */
 export enum SensorAccuracy {
-  UNRELIABLE = 0,
-  LOW = 1,
-  MEDIUM = 2,
-  HIGH = 3
+  UNRELIABLE = 0, LOW = 1, MEDIUM = 2, HIGH = 3
 }
 
 export interface OrientationReading {
@@ -77,8 +74,7 @@ export class QiblaSensorHelper {
     try {
       sensor.on(sensor.SensorId.MAGNETIC_FIELD, (data: sensor.MagneticFieldResponse) => {
         let heading = Math.atan2(data.y, data.x) * 180 / Math.PI;
-        heading = (heading + 360) % 360;
-        // The raw magnetometer reports no accuracy field. Report
+        heading = (heading + 360) % 360; // The raw magnetometer reports no accuracy field. Report
         // MEDIUM rather than HIGH so that QiblaPage.evaluateCalibrationNeed()
         // does not auto-open the calibration overlay (MEDIUM is
         // treated as acceptable) but the manual "Calibrate" link in

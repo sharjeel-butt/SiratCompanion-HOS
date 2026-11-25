@@ -17,43 +17,27 @@ export class TasbihThemes {
     return ThemeService.getAllThemes();
   }
 
-  static getSwatch(
-    themeId: string,
-    appColors: ThemeColors
-  ): string {
+  static getSwatch(themeId: string, appColors: ThemeColors): string {
 
-    const theme = ThemeService
-      .getAllThemes()
-      .find((t: AppThemeJson) => t.id === themeId);
+    const theme = ThemeService.getAllThemes().find((t: AppThemeJson) => t.id === themeId);
 
-    return theme
-      ? theme.light.accent
-      : appColors.accentGold;
+    return theme ? theme.light.accent : appColors.accentGold;
   }
 
-  static getBeadColors(
-    themeId: string,
-    isDark: boolean
-  ): BeadColors {
+  static getBeadColors(themeId: string, isDark: boolean): BeadColors {
 
-    const theme = ThemeService
-      .getAllThemes()
-      .find((t: AppThemeJson) => t.id === themeId);
+    const theme = ThemeService.getAllThemes().find((t: AppThemeJson) => t.id === themeId);
 
     if (!theme) {
       return {
-        hi: '#4ADE80',
-        base: '#1E7A4E',
-        lo: '#0B3B26'
+        hi: '#4ADE80', base: '#1E7A4E', lo: '#0B3B26'
       };
     }
 
     const cfg = isDark ? theme.dark : theme.light;
 
     return {
-      hi: ThemeService.lighten(cfg.accent, 25),
-      base: cfg.accent,
-      lo: ThemeService.lighten(cfg.accent, -25)
+      hi: ThemeService.lighten(cfg.accent, 25), base: cfg.accent, lo: ThemeService.lighten(cfg.accent, -25)
     };
   }
 }

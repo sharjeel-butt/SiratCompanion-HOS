@@ -52,8 +52,7 @@ export struct DuaCard {
 
       // ---- Transliteration + translation ----
       if (this.currentLanguage !== 'ar') {
-        if (this.dua.transliteration &&
-          this.dua.transliteration.length > 0) {
+        if (this.dua.transliteration && this.dua.transliteration.length > 0) {
           Text(this.dua.transliteration)
             .fontSize(12)
             .fontColor(this.colors.accentGold)
@@ -78,9 +77,8 @@ export struct DuaCard {
         Flex({ wrap: FlexWrap.Wrap }) {
           ForEach(this.dua.sources, (src: DuaSource, i: number) => {
             Row({ space: 4 }) {
-              Image($r('app.media.ic_link')) // Using globe icon as a link indicator
-                .width(10).height(10)
-                .fillColor(this.colors.accentGold)
+              Image($r(
+                'app.media.ic_link')) // Using globe icon as a link indicator.width(10).height(10).fillColor(this.colors.accentGold)
               Text(SourceParser.getLabel(src, this.currentLanguage))
                 .fontSize(10)
                 .fontColor(this.colors.accentGold)
@@ -98,20 +96,16 @@ export struct DuaCard {
             .margin({ right: 6, top: 8 })
             .onClick(() => this.onSourceTap(src))
           }, (src: DuaSource, i: number) => `src-${this.dua?.id}-${i}`)
-        }
-        .width('100%').margin({ top: 4 })
+        }.width('100%').margin({ top: 4 })
       }
-    }
-    .width('100%')
-    .alignItems(HorizontalAlign.Center)
+    }.width('100%').alignItems(HorizontalAlign.Center)
   }
 
   private sourceLabel(src: DuaSource): string {
     return SourceParser.getLabel(src, this.currentLanguage);
   }
 
-  private onSourceTap(src: DuaSource): void {
-    // 1. Handle Hadith Sources (Navigate to Hadith Details)
+  private onSourceTap(src: DuaSource): void { // 1. Handle Hadith Sources (Navigate to Hadith Details)
     if (src.type === 'hadith' && src.id) {
       const parts = src.id.split(':');
       if (parts.length === 2) {
@@ -120,8 +114,7 @@ export struct DuaCard {
 
         NavHelper.prepareForward();
         router.pushUrl({
-          url: 'pages/HadithDetailsPage',
-          params: { id: hadithId }
+          url: 'pages/HadithDetailsPage', params: { id: hadithId }
         }).catch((e: Error) => console.error(JSON.stringify(e)));
         return;
       }
@@ -131,8 +124,7 @@ export struct DuaCard {
     if (src.type === 'quran' && src.surah !== undefined && src.ayah !== undefined) {
       NavHelper.prepareForward();
       router.pushUrl({
-        url: 'pages/SurahDetailsPage',
-        params: { surahId: src.surah, startVerse: src.ayah, endVerse: src.ayah }
+        url: 'pages/SurahDetailsPage', params: { surahId: src.surah, startVerse: src.ayah, endVerse: src.ayah }
       }).catch((e: Error) => console.error(JSON.stringify(e)));
       return;
     }
@@ -142,9 +134,7 @@ export struct DuaCard {
     const msg = src.display || src.id || 'Unknown Source';
 
     promptAction.showDialog({
-      title: title,
-      message: msg,
-      buttons: [{ text: L.get('ok', this.currentLanguage), color: this.colors.accentGold }]
+      title: title, message: msg, buttons: [{ text: L.get('ok', this.currentLanguage), color: this.colors.accentGold }]
     });
   }
 

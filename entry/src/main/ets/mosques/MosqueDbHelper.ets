@@ -45,8 +45,7 @@ export class MosqueDbHelper {
     return MosqueDbHelper.store;
   }
 
-  static isDownloaded(context: common.Context, countryCode: string): boolean {
-    // ✅ CORRECTED PATH
+  static isDownloaded(context: common.Context, countryCode: string): boolean { // ✅ CORRECTED PATH
     const path = `${context.databaseDir}/rdb/mosques/${countryCode}.db`;
     try {
       if (!fs.accessSync(path)) {

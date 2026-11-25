@@ -3555,6 +3555,154 @@
     {
       "name": "theme_preset",
       "value": "主题预设"
+    },
+    {
+      "name": "notif_prayer_due_title",
+      "value": "礼拜待记录"
+    },
+    {
+      "name": "notif_fajr_due",
+      "value": "晨礼尚未标记。"
+    },
+    {
+      "name": "notif_dhuhr_due",
+      "value": "晌礼尚未标记。"
+    },
+    {
+      "name": "notif_asr_due",
+      "value": "晡礼尚未标记。"
+    },
+    {
+      "name": "notif_maghrib_due",
+      "value": "昏礼尚未标记。"
+    },
+    {
+      "name": "notif_isha_due",
+      "value": "宵礼尚未标记。"
+    },
+    {
+      "name": "title_notifications",
+      "value": "通知"
+    },
+    {
+      "name": "notifications_empty",
+      "value": "您已查看所有通知。"
+    },
+    {
+      "name": "all_prayers_completed",
+      "value": "赞颂真主！"
+    },
+    {
+      "name": "all_prayers_completed_subtitle",
+      "value": "今天的所有礼拜均已完成。"
+    },
+    {
+      "name": "notif_day_complete_title",
+      "value": "赞颂真主！"
+    },
+    {
+      "name": "notif_day_complete_message",
+      "value": "您已完成今天所有的礼拜。"
+    },
+    {
+      "name": "notif_streak_title",
+      "value": "礼拜连续记录"
+    },
+    {
+      "name": "notif_streak_3",
+      "value": "您已连续 3 天完成所有礼拜。"
+    },
+    {
+      "name": "notif_streak_7",
+      "value": "您已连续 7 天完成所有礼拜。"
+    },
+    {
+      "name": "notif_streak_14",
+      "value": "您已连续 14 天完成所有礼拜。"
+    },
+    {
+      "name": "notif_streak_30",
+      "value": "您已连续 30 天完成所有礼拜。"
+    },
+    {
+      "name": "notif_streak_100",
+      "value": "您已连续 100 天完成所有礼拜。"
+    },
+    {
+      "name": "notif_streak_1000",
+      "value": "您已连续 1,000 天完成所有礼拜。"
+    },
+    {
+      "name": "notif_streak_10000",
+      "value": "您已连续 10,000 天完成所有礼拜。"
+    },
+    {
+      "name": "notif_ramadan_start_title",
+      "value": "斋月将至"
+    },
+    {
+      "name": "notif_ramadan_start_7",
+      "value": "斋月将在 7 天后开始。"
+    },
+    {
+      "name": "notif_ramadan_mubarak_title",
+      "value": "斋月吉庆"
+    },
+    {
+      "name": "notif_ramadan_mubarak_message",
+      "value": "愿真主接受您的斋戒与功修。"
+    },
+    {
+      "name": "notif_last_ashra_title",
+      "value": "最后十日开始"
+    },
+    {
+      "name": "notif_last_ashra_message",
+      "value": "斋月最后十个夜晚已经开始。"
+    },
+    {
+      "name": "notif_laylatul_qadr_title",
+      "value": "盖德尔夜"
+    },
+    {
+      "name": "notif_laylatul_qadr_message",
+      "value": "今晚是最后十夜中受祝福的单数夜之一。"
+    },
+    {
+      "name": "notif_eid_title",
+      "value": "开斋节快乐"
+    },
+    {
+      "name": "notif_eid_message",
+      "value": "愿真主接受您的斋戒、礼拜和善功。"
+    },
+    {
+      "name": "notif_laylatul_qadr_21",
+      "value": "今晚是斋月第21夜。请增加礼拜、诵读《古兰经》和纪念真主。"
+    },
+    {
+      "name": "notif_laylatul_qadr_23",
+      "value": "今晚是斋月第23夜。通过虔诚的崇拜祈求真主的仁慈与宽恕。"
+    },
+    {
+      "name": "notif_laylatul_qadr_25",
+      "value": "今晚是斋月第25夜。请继续在这些吉庆之夜中努力敬拜真主。"
+    },
+    {
+      "name": "notif_laylatul_qadr_27",
+      "value": "今晚是斋月第27夜，许多穆斯林会特别投入崇拜，以寻求盖德尔夜的恩典。"
+    },
+    {
+      "name": "notif_laylatul_qadr_29",
+      "value": "今晚是斋月第29夜。请珍惜这个吉庆月份最后的宝贵机会。"
+    },
+    {
+      "name": "home_worship",
+      "value": "功修"
+    },
+    {
+      "name": "home_insights",
+      "value": "数据洞察"
     }
   ]
 }

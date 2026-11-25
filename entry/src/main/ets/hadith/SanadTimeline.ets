@@ -12,18 +12,14 @@ export struct SanadTimeline {
 
   build() {
     if (this.sanad.confidence !== 'none' && this.sanad.steps.length > 0) {
-      Column() {
-        // Header
+      Column() { // Header
         Row({ space: 8 }) {
           Text(L.get('sanad_title', this.currentLanguage))
             .fontSize(11)
             .fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Bold)
             .letterSpacing(1.2)
-          Text(`${this.sanad.steps.length}`)
-            .fontSize(11)
-            .fontColor(this.colors.textMuted)
-            .layoutWeight(1)
+          Text(`${this.sanad.steps.length}`).fontSize(11).fontColor(this.colors.textMuted).layoutWeight(1)
           Text(this.confidenceLabel())
             .fontSize(10)
             .fontColor(this.colors.accentGold)
@@ -35,70 +31,41 @@ export struct SanadTimeline {
               bottom: 2
             })
             .borderRadius(8)
-        }
-        .width('100%')
-        .padding({ bottom: 10 })
+        }.width('100%').padding({ bottom: 10 })
 
-        ForEach(
-          this.sanad.steps,
-          (step: SanadStep, idx: number) => {
-            Row({ space: 10 }) {
-              // Timeline dot + connector line
-              Column() {
-                if (idx > 0) {
-                  Column()
-                    .width(2).height(12)
-                    .backgroundColor(this.colors.borderSoft)
-                }
-                Circle()
-                  .width(10).height(10)
-                  .fill(this.colors.accentGold)
-                if (idx < this.sanad.steps.length - 1) {
-                  Column()
-                    .width(2).height(12)
-                    .backgroundColor(this.colors.borderSoft)
-                }
+        ForEach(this.sanad.steps, (step: SanadStep, idx: number) => {
+          Row({ space: 10 }) { // Timeline dot + connector line
+            Column() {
+              if (idx > 0) {
+                Column().width(2).height(12).backgroundColor(this.colors.borderSoft)
               }
-              .width(20)
-              .alignItems(HorizontalAlign.Center)
+              Circle().width(10).height(10).fill(this.colors.accentGold)
+              if (idx < this.sanad.steps.length - 1) {
+                Column().width(2).height(12).backgroundColor(this.colors.borderSoft)
+              }
+            }.width(20).alignItems(HorizontalAlign.Center)
 
-              Column() {
-                // FIX: use displayName() which falls back past empty
-                // strings, not just null.
-                Text(this.displayName(step))
-                  .fontSize(13)
-                  .fontColor(this.colors.textWhite)
-                  .fontWeight(FontWeight.Medium)
-                  .maxLines(2)
-                  .textOverflow({ overflow: TextOverflow.Ellipsis })
-                  .width('100%')
-
-                Row({ space: 6 }) {
-                  if (step.generation !== null && step.generation.length > 0) {
-                    Text(step.generation)
-                      .fontSize(10)
-                      .fontColor(this.colors.accentGold)
-                  }
-                  if (step.reliability !== null && step.reliability.length > 0) {
-                    Text('·')
-                      .fontSize(10)
-                      .fontColor(this.colors.textMuted)
-                    Text(step.reliability)
-                      .fontSize(10)
-                      .fontColor(this.colors.textMuted)
-                  }
-                }
-                .margin({ top: 2 })
+            Column() { // FIX: use displayName() which falls back past empty // strings, not just null.
+              Text(this.displayName(step))
+                .fontSize(13)
+                .fontColor(this.colors.textWhite)
+                .fontWeight(FontWeight.Medium)
+                .maxLines(2)
+                .textOverflow({ overflow: TextOverflow.Ellipsis })
                 .width('100%')
-              }
-              .layoutWeight(1)
-              .alignItems(HorizontalAlign.Start)
-            }
-            .width('100%')
-            .padding({ top: 4, bottom: 4 })
-          },
-          (step: SanadStep, idx: number) => `sanad-${idx}-${step.narrator_id}`
-        )
+
+              Row({ space: 6 }) {
+                if (step.generation !== null && step.generation.length > 0) {
+                  Text(step.generation).fontSize(10).fontColor(this.colors.accentGold)
+                }
+                if (step.reliability !== null && step.reliability.length > 0) {
+                  Text('·').fontSize(10).fontColor(this.colors.textMuted)
+                  Text(step.reliability).fontSize(10).fontColor(this.colors.textMuted)
+                }
+              }.margin({ top: 2 }).width('100%')
+            }.layoutWeight(1).alignItems(HorizontalAlign.Start)
+          }.width('100%').padding({ top: 4, bottom: 4 })
+        }, (step: SanadStep, idx: number) => `sanad-${idx}-${step.narrator_id}`)
       }
       .width('100%')
       .padding(16)

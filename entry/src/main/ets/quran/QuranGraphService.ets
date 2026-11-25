@@ -23,8 +23,7 @@ export class QuranGraphService {
     }
 
     QuranGraphService.isLoading = true;
-    try {
-      // 1. Load Entity Graph (structure)
+    try { // 1. Load Entity Graph (structure)
       if (QuranGraphService.graph === null) {
         const graphData = await ctx.resourceManager.getRawFileContent(RawPaths.QURAN_ENTITY_GRAPH);
         QuranGraphService.graph =

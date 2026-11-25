@@ -56,17 +56,9 @@ export class HomeController {
   // PRAYER TIME COMPUTATION
   // ============================================================
 
-  static buildPrayersForDate(
-    date: Date,
-    latitude: number,
-    longitude: number,
-    method: CalculationMethod,
-    asrRule: AsrShadowRule,
-    highLatRule: HighLatitudeRule,
-    offsets: PrayerOffsets,
-    template: PrayerModel[],
-    advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC
-  ): HomePrayerSnapshot | null {
+  static buildPrayersForDate(date: Date, latitude: number, longitude: number, method: CalculationMethod,
+    asrRule: AsrShadowRule, highLatRule: HighLatitudeRule, offsets: PrayerOffsets, template: PrayerModel[],
+    advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC): HomePrayerSnapshot | null {
     if (latitude === 0 && longitude === 0) {
       return null;
     }
@@ -75,10 +67,8 @@ export class HomeController {
       const anchor = HomeController.getLocationAnchor(latitude, longitude, date);
 
       const times: DailyPrayerTimes =
-        PrayerTimeCalculator.calculateWithDeviceTimezone(
-          anchor, latitude, longitude, method, asrRule, highLatRule,
-          advanced
-        );
+        PrayerTimeCalculator.calculateWithDeviceTimezone(anchor, latitude, longitude, method, asrRule, highLatRule,
+          advanced);
 
       // M-N1: pick the day-of-week source for applyDayNames.
       //
@@ -96,23 +86,15 @@ export class HomeController {
       todayMidnight.setHours(0, 0, 0, 0);
       const dateMidnight = new Date(date);
       dateMidnight.setHours(0, 0, 0, 0);
-      const isViewingToday =
-        dateMidnight.getTime() === todayMidnight.getTime();
+      const isViewingToday = dateMidnight.getTime() === todayMidnight.getTime();
       const dayNameSource = isViewingToday ? anchor : date;
 
-      const withOffsets: PrayerModel[] = PrayerManager.applyTimesToPrayers(
-        template, times, offsets, dayNameSource
-      );
-      const offsetHours: number = TimezoneResolver.effectiveOffsetForLocation(
-        latitude, longitude, date
-      );
-      const withStatus: PrayerModel[] = PrayerManager.updateStatuses(
-        withOffsets, date, offsetHours
-      );
+      const withOffsets: PrayerModel[] = PrayerManager.applyTimesToPrayers(template, times, offsets, dayNameSource);
+      const offsetHours: number = TimezoneResolver.effectiveOffsetForLocation(latitude, longitude, date);
+      const withStatus: PrayerModel[] = PrayerManager.updateStatuses(withOffsets, date, offsetHours);
       const emptyExtras: ExtraTiming[] = [];
       const snapshot: HomePrayerSnapshot = {
-        prayers: withStatus,
-        extras: emptyExtras
+        prayers: withStatus, extras: emptyExtras
       };
       return snapshot;
     } catch (err) {
@@ -122,27 +104,17 @@ export class HomeController {
     }
   }
 
-  static buildExtraTimings(
-    date: Date,
-    latitude: number,
-    longitude: number,
-    method: CalculationMethod,
-    asrRule: AsrShadowRule,
-    highLatRule: HighLatitudeRule,
-    offsets: PrayerOffsets,
-    template: ExtraTiming[],
-    advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC
-  ): ExtraTiming[] {
+  static buildExtraTimings(date: Date, latitude: number, longitude: number, method: CalculationMethod,
+    asrRule: AsrShadowRule, highLatRule: HighLatitudeRule, offsets: PrayerOffsets, template: ExtraTiming[],
+    advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC): ExtraTiming[] {
     if (latitude === 0 && longitude === 0) {
       return template;
     }
     try {
       const anchor = HomeController.getLocationAnchor(latitude, longitude, date);
       const times: DailyPrayerTimes =
-        PrayerTimeCalculator.calculateWithDeviceTimezone(
-          anchor, latitude, longitude, method, asrRule, highLatRule,
-          advanced
-        );
+        PrayerTimeCalculator.calculateWithDeviceTimezone(anchor, latitude, longitude, method, asrRule, highLatRule,
+          advanced);
       return PrayerManager.applyTimesToExtraTimings(template, times, offsets);
     } catch (err) {
       return template;
@@ -153,16 +125,9 @@ export class HomeController {
   // TODAY HEADER
   // ============================================================
 
-  static buildTodayHeader(
-    latitude: number,
-    longitude: number,
-    method: CalculationMethod,
-    asrRule: AsrShadowRule,
-    highLatRule: HighLatitudeRule,
-    offsets: PrayerOffsets,
-    template: PrayerModel[],
-    advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC
-  ): HomeHeaderSnapshot | null {
+  static buildTodayHeader(latitude: number, longitude: number, method: CalculationMethod, asrRule: AsrShadowRule,
+    highLatRule: HighLatitudeRule, offsets: PrayerOffsets, template: PrayerModel[],
+    advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC): HomeHeaderSnapshot | null {
     if (latitude === 0 && longitude === 0) {
       return null;
     }
@@ -170,59 +135,41 @@ export class HomeController {
     const anchor = HomeController.getLocationAnchor(latitude, longitude, today);
     try {
       const times: DailyPrayerTimes =
-        PrayerTimeCalculator.calculateWithDeviceTimezone(
-          anchor, latitude, longitude, method, asrRule, highLatRule,
-          advanced
-        );
-      // Pass the location anchor, not the device `today`. applyDayNames
+        PrayerTimeCalculator.calculateWithDeviceTimezone(anchor, latitude, longitude, method, asrRule, highLatRule,
+          advanced); // Pass the location anchor, not the device `today`. applyDayNames
       // reads getDay() to decide Jummah vs Dhuhr. In a cross-timezone
       // setup the device and location can be on different Gregorian
       // days — e.g. Karachi device Tuesday 01:00, NYC location still
       // Monday 20:00. Using `today` labels Dhuhr as Jummah one day
       // early for the NYC user. Using `anchor` reflects what day it
       // actually is at the location.
-      const withOffsets: PrayerModel[] = PrayerManager.applyTimesToPrayers(
-        template, times, offsets, anchor
-      );
-      const offsetHours: number = TimezoneResolver.effectiveOffsetForLocation(
-        latitude, longitude, today
-      );
+      const withOffsets: PrayerModel[] = PrayerManager.applyTimesToPrayers(template, times, offsets, anchor);
+      const offsetHours: number = TimezoneResolver.effectiveOffsetForLocation(latitude, longitude, today);
 
       // Log the offsets actually used so that a "wrong times" report
       // can be traced to a specific device/location pair without
       // guessing.
       try {
         const deviceOffset = -today.getTimezoneOffset() / 60;
-        AppLogger.info('HomeController',
-          `Header offsets: device=${deviceOffset}h, ` +
-            `location=${offsetHours}h, ` +
-            `lat=${latitude.toFixed(4)}, lng=${longitude.toFixed(4)}`);
-      } catch (err) {
-        // Never let diagnostics affect the calculation path.
+        AppLogger.info('HomeController', `Header offsets: device=${deviceOffset}h, ` + `location=${offsetHours}h, ` +
+          `lat=${latitude.toFixed(4)}, lng=${longitude.toFixed(4)}`);
+      } catch (err) { // Never let diagnostics affect the calculation path.
       }
 
-      const withStatus: PrayerModel[] = PrayerManager.updateStatuses(
-        withOffsets, today, offsetHours
-      );
+      const withStatus: PrayerModel[] = PrayerManager.updateStatuses(withOffsets, today, offsetHours);
 
-      let current: PrayerModel | null = PrayerManager.getCurrentPrayer(
-        withStatus, offsetHours
-      );
+      let current: PrayerModel | null = PrayerManager.getCurrentPrayer(withStatus, offsetHours);
 
       // Before Fajr, no prayer has occurred yet today. The logical
       // "current" prayer is the previous day's Isha, whose window
       // runs from Maghrib through to the next Fajr.
       if (current === null) {
-        current = HomeController.buildPreviousIsha(
-          today, latitude, longitude, method, asrRule, highLatRule,
-          offsets, advanced
-        );
+        current =
+          HomeController.buildPreviousIsha(today, latitude, longitude, method, asrRule, highLatRule, offsets, advanced);
       }
 
-      const nextEvent: NextEventInfo | null = HomeController.computeNextEvent(
-        today, latitude, longitude, method, asrRule, highLatRule, offsets,
-        advanced
-      );
+      const nextEvent: NextEventInfo | null =
+        HomeController.computeNextEvent(today, latitude, longitude, method, asrRule, highLatRule, offsets, advanced);
 
       const snapshot: HomeHeaderSnapshot = {
         currentName: current ? current.name : '—',
@@ -271,25 +218,16 @@ export class HomeController {
    *   so both values agree on which day counts as "today" in the
    *   location's clock.
    */
-  static computeNextEvent(
-    now: Date,
-    latitude: number,
-    longitude: number,
-    method: CalculationMethod,
-    asrRule: AsrShadowRule,
-    highLatRule: HighLatitudeRule,
-    offsets: PrayerOffsets,
-    advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC
-  ): NextEventInfo | null {
+  static computeNextEvent(now: Date, latitude: number, longitude: number, method: CalculationMethod,
+    asrRule: AsrShadowRule, highLatRule: HighLatitudeRule, offsets: PrayerOffsets,
+    advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC): NextEventInfo | null {
     const events: TimelineEvent[] = [];
 
     // Shift "now" into the location's wall clock, then take midnight
     // of that day for the -1/0/+1 grid. Same-timezone users get a
     // byte-identical `nowShifted` and `anchor` as before — no
     // behavioural change for the common case.
-    const nowShifted = HomeController.getLocationAnchor(
-      latitude, longitude, now
-    );
+    const nowShifted = HomeController.getLocationAnchor(latitude, longitude, now);
     const anchor = new Date(nowShifted.getTime());
     anchor.setHours(0, 0, 0, 0);
 
@@ -299,19 +237,14 @@ export class HomeController {
 
       try {
         const times: DailyPrayerTimes =
-          PrayerTimeCalculator.calculateWithDeviceTimezone(
-            day, latitude, longitude, method, asrRule, highLatRule,
-            advanced
-          );
+          PrayerTimeCalculator.calculateWithDeviceTimezone(day, latitude, longitude, method, asrRule, highLatRule,
+            advanced);
         HomeController.appendDayEvents(events, day, times, offsets);
-      } catch (err) {
-        // Skip this day silently; the other two days cover "next".
+      } catch (err) { // Skip this day silently; the other two days cover "next".
       }
     }
 
-    events.sort((a: TimelineEvent, b: TimelineEvent): number =>
-    a.time.getTime() - b.time.getTime()
-    );
+    events.sort((a: TimelineEvent, b: TimelineEvent): number => a.time.getTime() - b.time.getTime());
 
     // Compare against the shifted "now", not the raw device time.
     // Both sides of the comparison are now in the location's
@@ -321,8 +254,7 @@ export class HomeController {
       const e: TimelineEvent = events[i];
       if (e.time.getTime() > nowMs) {
         const info: NextEventInfo = {
-          name: e.name,
-          time: HomeController.formatEventTime(e.time)
+          name: e.name, time: HomeController.formatEventTime(e.time)
         };
         return info;
       }
@@ -407,24 +339,15 @@ export class HomeController {
    * The calculator already resolves its own offset from the
    * (date + coords) pair, so we hand it yesterday unmodified.
    */
-  private static buildPreviousIsha(
-    today: Date,
-    latitude: number,
-    longitude: number,
-    method: CalculationMethod,
-    asrRule: AsrShadowRule,
-    highLatRule: HighLatitudeRule,
-    offsets: PrayerOffsets,
-    advanced: AdvancedCalcSettings
-  ): PrayerModel | null {
+  private static buildPreviousIsha(today: Date, latitude: number, longitude: number, method: CalculationMethod,
+    asrRule: AsrShadowRule, highLatRule: HighLatitudeRule, offsets: PrayerOffsets,
+    advanced: AdvancedCalcSettings): PrayerModel | null {
     const yesterday = new Date(today.getTime() - MS_PER_DAY);
 
     try {
       const yTimes: DailyPrayerTimes =
-        PrayerTimeCalculator.calculateWithDeviceTimezone(
-          yesterday, latitude, longitude, method, asrRule, highLatRule,
-          advanced
-        );
+        PrayerTimeCalculator.calculateWithDeviceTimezone(yesterday, latitude, longitude, method, asrRule, highLatRule,
+          advanced);
       const yIsha = PrayerManager.offsetTime(yTimes.isha, offsets.isha);
 
       const result: PrayerModel = {
@@ -441,12 +364,8 @@ export class HomeController {
     }
   }
 
-  private static appendDayEvents(
-    events: TimelineEvent[],
-    prayerDay: Date,
-    times: DailyPrayerTimes,
-    offsets: PrayerOffsets
-  ): void {
+  private static appendDayEvents(events: TimelineEvent[], prayerDay: Date, times: DailyPrayerTimes,
+    offsets: PrayerOffsets): void {
     const isFriday = prayerDay.getDay() === 5;
     const dhuhrName = isFriday ? 'Jummah' : 'Dhuhr';
 
@@ -456,64 +375,51 @@ export class HomeController {
 
     const fajrEv: TimelineEvent = {
       name: 'Fajr',
-      time: HomeController.parseToDate(
-        PrayerManager.offsetTime(times.fajr, offsets.fajr), prayerDay, null)
+      time: HomeController.parseToDate(PrayerManager.offsetTime(times.fajr, offsets.fajr), prayerDay, null)
     };
     events.push(fajrEv);
 
     const dhuhrEv: TimelineEvent = {
       name: dhuhrName,
-      time: HomeController.parseToDate(
-        PrayerManager.offsetTime(times.dhuhr, offsets.dhuhr), prayerDay, null)
+      time: HomeController.parseToDate(PrayerManager.offsetTime(times.dhuhr, offsets.dhuhr), prayerDay, null)
     };
     events.push(dhuhrEv);
 
     const asrEv: TimelineEvent = {
-      name: 'Asr',
-      time: HomeController.parseToDate(
-        PrayerManager.offsetTime(times.asr, offsets.asr), prayerDay, null)
+      name: 'Asr', time: HomeController.parseToDate(PrayerManager.offsetTime(times.asr, offsets.asr), prayerDay, null)
     };
     events.push(asrEv);
 
     const maghribEv: TimelineEvent = {
       name: 'Maghrib',
-      time: HomeController.parseToDate(
-        PrayerManager.offsetTime(times.maghrib, offsets.maghrib), prayerDay, null)
+      time: HomeController.parseToDate(PrayerManager.offsetTime(times.maghrib, offsets.maghrib), prayerDay, null)
     };
     events.push(maghribEv);
 
     const ishaEv: TimelineEvent = {
       name: 'Isha',
-      time: HomeController.parseToDate(
-        PrayerManager.offsetTime(times.isha, offsets.isha), prayerDay, null)
+      time: HomeController.parseToDate(PrayerManager.offsetTime(times.isha, offsets.isha), prayerDay, null)
     };
     events.push(ishaEv);
 
     const firstThirdEv: TimelineEvent = {
-      name: 'First Third',
-      time: HomeController.parseToDate(
-        times.firstThird, prayerDay, maghribMinutes)
+      name: 'First Third', time: HomeController.parseToDate(times.firstThird, prayerDay, maghribMinutes)
     };
     events.push(firstThirdEv);
 
     const midnightEv: TimelineEvent = {
-      name: 'Midnight',
-      time: HomeController.parseToDate(
-        times.midnight, prayerDay, maghribMinutes)
+      name: 'Midnight', time: HomeController.parseToDate(times.midnight, prayerDay, maghribMinutes)
     };
     events.push(midnightEv);
 
     const lastThirdEv: TimelineEvent = {
-      name: 'Last Third',
-      time: HomeController.parseToDate(
-        times.lastThird, prayerDay, maghribMinutes)
+      name: 'Last Third', time: HomeController.parseToDate(times.lastThird, prayerDay, maghribMinutes)
     };
     events.push(lastThirdEv);
 
     const imsakEv: TimelineEvent = {
       name: 'Imsak',
-      time: HomeController.parseToDate(
-        PrayerManager.offsetTime(times.imsak, offsets.fajr), prayerDay, null)
+      time: HomeController.parseToDate(PrayerManager.offsetTime(times.imsak, offsets.fajr), prayerDay, null)
     };
     events.push(imsakEv);
   }
@@ -527,11 +433,7 @@ export class HomeController {
    * since midnight) belongs to the *next* calendar day. Pass `null`
    * for events that are always same-day (prayers, Imsak).
    */
-  private static parseToDate(
-    timeStr: string,
-    prayerDay: Date,
-    minMinutes: number | null
-  ): Date {
+  private static parseToDate(timeStr: string, prayerDay: Date, minMinutes: number | null): Date {
     const result = new Date(prayerDay);
     result.setHours(0, 0, 0, 0);
 
@@ -573,18 +475,12 @@ export class HomeController {
     return result;
   }
 
-  private static getLocationAnchor(
-    latitude: number,
-    longitude: number,
-    now: Date
-  ): Date {
+  private static getLocationAnchor(latitude: number, longitude: number, now: Date): Date {
     if (latitude === 0 && longitude === 0) {
       return new Date(now);
     }
 
-    const locationOffset = TimezoneResolver.effectiveOffsetForLocation(
-      latitude, longitude, now
-    );
+    const locationOffset = TimezoneResolver.effectiveOffsetForLocation(latitude, longitude, now);
     const deviceOffset = -now.getTimezoneOffset() / 60;
     const deltaMs = (locationOffset - deviceOffset) * 3600 * 1000;
     return new Date(now.getTime() + deltaMs);

@@ -6,16 +6,7 @@ import { AppLogger } from '../core/app/AppLogger';
 import { RawPaths } from '../core/common/RawPaths';
 
 export enum DstRule {
-  NONE = 'NONE',
-  US = 'US',
-  EU = 'EU',
-  AU = 'AU',
-  NZ = 'NZ',
-  EGYPT = 'EGYPT',
-  MOROCCO = 'MOROCCO',
-  PALESTINE = 'PALESTINE',
-  CHILE = 'CHILE',
-  LORD_HOWE = 'LORD_HOWE'
+  NONE = 'NONE', US = 'US', EU = 'EU', AU = 'AU', NZ = 'NZ', EGYPT = 'EGYPT', MOROCCO = 'MOROCCO', PALESTINE = 'PALESTINE', CHILE = 'CHILE', LORD_HOWE = 'LORD_HOWE'
 }
 
 export interface City {
@@ -120,10 +111,8 @@ export class OfflineCityLookup {
     const toRad = Math.PI / 180;
     const dLat = (lat2 - lat1) * toRad;
     const dLng = (lng2 - lng1) * toRad;
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * toRad) * Math.cos(lat2 * toRad) *
-          Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * toRad) * Math.cos(lat2 * toRad) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   }

@@ -20,23 +20,15 @@ import { Breakpoints } from '../core/layout/Breakpoints';
 import { SettingsHelper } from '../settings/SettingsHelper';
 import { L } from '../i18n/LocalizationHelper';
 
-type SheetKind = 'none' | 'rounding' | 'midnight' | 'polar'
-  | 'shafaq' | 'highlat';
+type SheetKind = 'none' | 'rounding' | 'midnight' | 'polar' | 'shafaq' | 'highlat';
 
 @Entry
 @Component
 struct AdvancedCalcPage {
-  @StorageLink(STORAGE_KEY_THEME_MODE)
-  @Watch('onThemeModeChanged')
-  themeMode: string = ThemeMode.SYSTEM;
-  @StorageLink(STORAGE_KEY_LANGUAGE)
-  @Watch('onLanguageChanged')
-  appLanguage: string = 'en';
-  @StorageLink(STORAGE_KEY_APP_THEME)
-  @Watch('onAppThemePresetChanged')
-  appThemePreset: string = '';
-  @StorageLink(STORAGE_KEY_BREAKPOINT)
-  breakpoint: string = 'sm';
+  @StorageLink(STORAGE_KEY_THEME_MODE) @Watch('onThemeModeChanged') themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLanguageChanged') appLanguage: string = 'en';
+  @StorageLink(STORAGE_KEY_APP_THEME) @Watch('onAppThemePresetChanged') appThemePreset: string = '';
+  @StorageLink(STORAGE_KEY_BREAKPOINT) breakpoint: string = 'sm';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State currentLanguage: string = 'en';
   @State roundingMethod: RoundingMethod = RoundingMethod.NEAREST;
@@ -56,11 +48,9 @@ struct AdvancedCalcPage {
   aboutToAppear(): void {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
-    this.systemDarkListener = PageTheme.installSystemListener(
-      this.themeMode, (c) => {
+    this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
       this.colors = c;
-    }
-    );
+    });
     this.reload();
   }
 
@@ -102,8 +92,7 @@ struct AdvancedCalcPage {
             .width('100%')
             .constraintSize({ maxWidth: Breakpoints.maxContentWidth(this.breakpoint) })
             .padding({ left: 16, right: 16, top: 20 })
-          }
-          .width('100%').justifyContent(FlexAlign.Center)
+          }.width('100%').justifyContent(FlexAlign.Center)
         }
         .layoutWeight(1)
         .width('100%')
@@ -111,22 +100,14 @@ struct AdvancedCalcPage {
         .scrollable(ScrollDirection.Vertical)
         .scrollBar(BarState.Auto)
         .edgeEffect(EdgeEffect.Spring)
-      }
-      .width('100%').height('100%')
-      .backgroundColor(this.colors.primaryGreen)
+      }.width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
 
       if (this.activeSheet !== 'none') {
-        this.PickerOverlay(
-          this.sheetTitle(),
-          this.sheetIcon(),
-          this.sheetItems(),
-          (id: string) => {
-            this.pickItem(id);
-          },
-          () => {
-            this.activeSheet = 'none';
-          }
-        )
+        this.PickerOverlay(this.sheetTitle(), this.sheetIcon(), this.sheetItems(), (id: string) => {
+          this.pickItem(id);
+        }, () => {
+          this.activeSheet = 'none';
+        })
       }
     }
     .width('100%')
@@ -179,17 +160,10 @@ struct AdvancedCalcPage {
   RoundingRow() {
     Row() {
       Column() {
-        Text(this.tr('rounding_method'))
-          .fontSize(15).fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium)
-        Text(this.tr('rounding_method_desc'))
-          .fontSize(11).fontColor(this.colors.textMuted)
-          .margin({ top: 2 })
-        Text(this.roundingLabel())
-          .fontSize(12).fontColor(this.colors.accentGold)
-          .margin({ top: 6 })
-      }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+        Text(this.tr('rounding_method')).fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+        Text(this.tr('rounding_method_desc')).fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+        Text(this.roundingLabel()).fontSize(12).fontColor(this.colors.accentGold).margin({ top: 6 })
+      }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
       Image($r('app.media.ic_chevron_right'))
         .width(16)
@@ -228,14 +202,12 @@ struct AdvancedCalcPage {
           .fontSize(15)
           .fontColor(this.isMidnightLocked() ? this.colors.textMuted : this.colors.textWhite)
           .fontWeight(FontWeight.Medium)
-        Text(this.tr('midnight_method_desc'))
-          .fontSize(11).fontColor(this.colors.textMuted)
-          .margin({ top: 2 })
+        Text(this.tr('midnight_method_desc')).fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
         Text(this.isMidnightLocked() ? this.tr('midnight_jafari') : this.midnightLabel())
-          .fontSize(12).fontColor(this.colors.accentGold)
+          .fontSize(12)
+          .fontColor(this.colors.accentGold)
           .margin({ top: 6 })
-      }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+      }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
       Image($r('app.media.ic_chevron_right'))
         .width(16)
@@ -266,17 +238,13 @@ struct AdvancedCalcPage {
   HighLatRow() {
     Row() {
       Column() {
-        Text(this.tr('high_latitude'))
-          .fontSize(15).fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium)
-        Text(this.tr('high_latitude_desc'))
-          .fontSize(11).fontColor(this.colors.textMuted)
-          .margin({ top: 2 })
+        Text(this.tr('high_latitude')).fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+        Text(this.tr('high_latitude_desc')).fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
         Text(SettingsHelper.getHighLatRuleLabel(this.highLatRule))
-          .fontSize(12).fontColor(this.colors.accentGold)
+          .fontSize(12)
+          .fontColor(this.colors.accentGold)
           .margin({ top: 6 })
-      }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+      }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
       Image($r('app.media.ic_chevron_right'))
         .width(16)
@@ -304,17 +272,10 @@ struct AdvancedCalcPage {
   PolarRow() {
     Row() {
       Column() {
-        Text(this.tr('polar_resolution'))
-          .fontSize(15).fontColor(this.colors.textWhite)
-          .fontWeight(FontWeight.Medium)
-        Text(this.tr('polar_resolution_desc'))
-          .fontSize(11).fontColor(this.colors.textMuted)
-          .margin({ top: 2 })
-        Text(this.polarLabel())
-          .fontSize(12).fontColor(this.colors.accentGold)
-          .margin({ top: 6 })
-      }
-      .alignItems(HorizontalAlign.Start).layoutWeight(1)
+        Text(this.tr('polar_resolution')).fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+        Text(this.tr('polar_resolution_desc')).fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+        Text(this.polarLabel()).fontSize(12).fontColor(this.colors.accentGold).margin({ top: 6 })
+      }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
       Image($r('app.media.ic_chevron_right'))
         .width(16)
@@ -344,21 +305,14 @@ struct AdvancedCalcPage {
       Column() {
         Text(this.tr('shafaq'))
           .fontSize(15)
-          .fontColor(this.isShafaqApplicable()
-            ? this.colors.textWhite
-            : this.colors.textMuted)
+          .fontColor(this.isShafaqApplicable() ? this.colors.textWhite : this.colors.textMuted)
           .fontWeight(FontWeight.Medium)
 
-        Text(this.tr('shafaq_desc'))
-          .fontSize(11)
-          .fontColor(this.colors.textMuted)
-          .margin({ top: 2 })
+        Text(this.tr('shafaq_desc')).fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
 
         Text(this.shafaqLabel())
           .fontSize(12)
-          .fontColor(this.isShafaqApplicable()
-            ? this.colors.accentGold
-            : this.colors.textMuted)
+          .fontColor(this.isShafaqApplicable() ? this.colors.accentGold : this.colors.textMuted)
           .margin({ top: 6 })
 
         if (!this.isShafaqApplicable()) {
@@ -370,9 +324,7 @@ struct AdvancedCalcPage {
             .maxLines(2)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
         }
-      }
-      .alignItems(HorizontalAlign.Start)
-      .layoutWeight(1)
+      }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
       Image($r('app.media.ic_chevron_right'))
         .width(16)
@@ -400,27 +352,16 @@ struct AdvancedCalcPage {
   }
 
   @Builder
-  PickerOverlay(
-    title: string,
-    icon: Resource,
-    items: PickerItem[],
-    onSelect: (id: string) => void,
-    onCancel: () => void
-  ) {
-    Column()
-      .width('100%').height('100%')
-      .backgroundColor(this.colors.overlayDim)
-      .onClick(() => {
-        onCancel();
-      })
+  PickerOverlay(title: string, icon: Resource, items: PickerItem[], onSelect: (id: string) => void,
+    onCancel: () => void) {
+    Column().width('100%').height('100%').backgroundColor(this.colors.overlayDim).onClick(() => {
+      onCancel();
+    })
 
-    Column() {
-      // Header
+    Column() { // Header
       Row({ space: 14 }) {
         Row() {
-          Image(icon)
-            .width(22).height(22)
-            .fillColor(this.colors.accentGold)
+          Image(icon).width(22).height(22).fillColor(this.colors.accentGold)
         }
         .width(44)
         .height(44)
@@ -431,12 +372,8 @@ struct AdvancedCalcPage {
         .border({ width: 1, color: this.colors.borderSoft })
         .flexShrink(0)
 
-        Text(title)
-          .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
-          .layoutWeight(1)
-      }
-      .width('100%')
-      .padding({
+        Text(title).fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite).layoutWeight(1)
+      }.width('100%').padding({
         top: 20,
         bottom: 20,
         left: this.isRtl() ? 20 : 16,
@@ -451,16 +388,14 @@ struct AdvancedCalcPage {
             Row({ space: 14 }) { // <-- Added Row space
               Row() {
                 if (item.selected) {
-                  Row().width(10).height(10).borderRadius(5)
-                    .backgroundColor(this.colors.accentGold)
+                  Row().width(10).height(10).borderRadius(5).backgroundColor(this.colors.accentGold)
                 }
               }
               .width(22)
               .height(22)
               .borderRadius(11)
               .border({
-                width: item.selected ? 2 : 1.5,
-                color: item.selected ? this.colors.accentGold : this.colors.borderStrong
+                width: item.selected ? 2 : 1.5, color: item.selected ? this.colors.accentGold : this.colors.borderStrong
               })
               .justifyContent(FlexAlign.Center)
               .alignItems(VerticalAlign.Center)
@@ -481,28 +416,20 @@ struct AdvancedCalcPage {
               left: 20,
               right: 20
             })
-            .backgroundColor(item.selected
-              ? this.colors.tintSoft : 'transparent')
+            .backgroundColor(item.selected ? this.colors.tintSoft : 'transparent')
             .borderRadius(12)
             .margin({ bottom: 4 })
             .onClick(() => {
               onSelect(item.id);
             })
-          }, (item: PickerItem) =>
-          `adv-${this.activeSheet}-${item.id}-${item.selected ? 's' : 'u'}`)
-        }
-        .width('100%')
-        .padding({
+          }, (item: PickerItem) => `adv-${this.activeSheet}-${item.id}-${item.selected ? 's' : 'u'}`)
+        }.width('100%').padding({
           left: 8,
           right: 8,
           top: 12,
           bottom: 12
         })
-      }
-      .flexShrink(1)
-      .width('100%')
-      .scrollBar(BarState.Auto)
-      .edgeEffect(EdgeEffect.Spring)
+      }.flexShrink(1).width('100%').scrollBar(BarState.Auto).edgeEffect(EdgeEffect.Spring)
 
       Button(this.tr('cancel'))
         .width('90%')
@@ -536,8 +463,7 @@ struct AdvancedCalcPage {
   // ============================================================
 
   private isMidnightLocked(): boolean {
-    return this.calcMethod === CalculationMethod.JAFARI ||
-      this.calcMethod === CalculationMethod.TEHRAN;
+    return this.calcMethod === CalculationMethod.JAFARI || this.calcMethod === CalculationMethod.TEHRAN;
   }
 
   // ============================================================
@@ -590,9 +516,7 @@ struct AdvancedCalcPage {
         };
         items.push(a);
         const b: PickerItem = {
-          id: RoundingMethod.UP,
-          label: this.tr('rounding_up'),
-          selected: this.roundingMethod === RoundingMethod.UP
+          id: RoundingMethod.UP, label: this.tr('rounding_up'), selected: this.roundingMethod === RoundingMethod.UP
         };
         items.push(b);
         const c: PickerItem = {
@@ -650,23 +574,18 @@ struct AdvancedCalcPage {
         };
         items.push(a);
         const b: PickerItem = {
-          id: Shafaq.AHMER,
-          label: this.tr('shafaq_ahmer'),
-          selected: this.shafaqValue === Shafaq.AHMER
+          id: Shafaq.AHMER, label: this.tr('shafaq_ahmer'), selected: this.shafaqValue === Shafaq.AHMER
         };
         items.push(b);
         const c: PickerItem = {
-          id: Shafaq.ABYAD,
-          label: this.tr('shafaq_abyad'),
-          selected: this.shafaqValue === Shafaq.ABYAD
+          id: Shafaq.ABYAD, label: this.tr('shafaq_abyad'), selected: this.shafaqValue === Shafaq.ABYAD
         };
         items.push(c);
         break;
       }
 
       case 'highlat': {
-        const opts: PickerItem[] =
-          SettingsHelper.buildHighLatPickerItems(this.highLatRule);
+        const opts: PickerItem[] = SettingsHelper.buildHighLatPickerItems(this.highLatRule);
         for (const o of opts) {
           items.push(o);
         }
@@ -724,9 +643,8 @@ struct AdvancedCalcPage {
   }
 
   private midnightLabel(): string {
-    return this.midnightMethod === MidnightMethod.STANDARD
-      ? `${this.tr('midnight_standard')} (${this.tr('midnight_standard_desc')})`
-      : this.tr('midnight_jafari');
+    return this.midnightMethod === MidnightMethod.STANDARD ?
+      `${this.tr('midnight_standard')} (${this.tr('midnight_standard_desc')})` : this.tr('midnight_jafari');
   }
 
   private polarLabel(): string {
@@ -765,38 +683,30 @@ struct AdvancedCalcPage {
   // ============================================================
 
   private reload(): void {
-    SettingsHelper.getAdvancedCalcSettings()
-      .then((adv) => {
-        this.roundingMethod = adv.rounding;
-        this.midnightMethod = adv.midnight;
-        this.polarResolution = adv.polarResolution;
-        this.shafaqValue = adv.shafaq;
+    SettingsHelper.getAdvancedCalcSettings().then((adv) => {
+      this.roundingMethod = adv.rounding;
+      this.midnightMethod = adv.midnight;
+      this.polarResolution = adv.polarResolution;
+      this.shafaqValue = adv.shafaq;
 
-      })
-      .catch((err: Error) => {
-        console.error('[AdvancedCalcPage] reload advanced failed: '
-          + err.message);
-      });
+    }).catch((err: Error) => {
+      console.error('[AdvancedCalcPage] reload advanced failed: ' + err.message);
+    });
 
-    SettingsHelper.getHighLatRule()
-      .then((rule) => {
-        this.highLatRule = rule;
-      })
-      .catch((err: Error) => {
-        console.error('[AdvancedCalcPage] reload highLat failed: '
-          + err.message);
-      });
+    SettingsHelper.getHighLatRule().then((rule) => {
+      this.highLatRule = rule;
+    }).catch((err: Error) => {
+      console.error('[AdvancedCalcPage] reload highLat failed: ' + err.message);
+    });
 
-    SettingsHelper.loadAll()
-      .then((data) => {
-        this.calcMethod = data.method;
-        if (this.isMidnightLocked()) {
-          this.midnightMethod = MidnightMethod.JAFARI;
-        }
-      })
-      .catch((err: Error) => {
-        console.error('[AdvancedCalcPage] reload base failed: ' + err.message);
-      });
+    SettingsHelper.loadAll().then((data) => {
+      this.calcMethod = data.method;
+      if (this.isMidnightLocked()) {
+        this.midnightMethod = MidnightMethod.JAFARI;
+      }
+    }).catch((err: Error) => {
+      console.error('[AdvancedCalcPage] reload base failed: ' + err.message);
+    });
   }
 
   private tr(key: string): string {

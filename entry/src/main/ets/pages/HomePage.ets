@@ -333,6 +333,7 @@ export struct HomePage {
   }
 
   async onPageShow(): Promise<void> {
+
     this.isFriday = new Date().getDay() === 5;
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
@@ -399,42 +400,16 @@ export struct HomePage {
                         .textAlign(TextAlign.Center)
                         .margin({ top: 8, bottom: 12 })
                     }
-                    if (this.showIslamicEvents) {
-                      this.CountdownCard()
-                    }
-                    this.LiveCountdownBanner()
-                    this.PrayerPromptCard()
-                    this.FullQuranAnchorCard()
-                    this.RabbanaCard()
-                    this.HadithAnchorCard()
-                    this.MosqueFinderAnchorCard()
-                    this.RecommendedRecitationsCard()
-                    if (this.eidInfo !== null) {
-                      this.EidCard()
-                    } else if (this.ramadanInfo !== null) {
-                      this.RamadanCard()
-                    }
-                    this.TodayFastCard()
-                  }
-                  .layoutWeight(1)
-                  .alignItems(HorizontalAlign.Start)
+                    this.FocusTodaySection()
+                    this.TodayOverviewSection()
+                    this.WorshipSection()
+                    this.InsightsSection()
 
-                  Column() {
-                    this.DuasCard()
-                    // --- NEW: Bound Tasbihs Card ---
-                    this.BoundTasbihsCard()
-                    this.CustomEventsCard()
-                    // ---- Qada (persistent obligation — bottom of column) ----
-                    if (this.shouldShowQadaCard()) {
-                      this.QadaHomeBanner()
-                    }
-                    this.Next3DaysPreview()
-                    this.TodayProgressCard()
-                    this.TasbihCard()
 
                   }
                   .layoutWeight(1)
                   .alignItems(HorizontalAlign.Start)
+
                 }
                 .width('100%')
                 .alignItems(VerticalAlign.Top)
@@ -450,38 +425,11 @@ export struct HomePage {
                       .textAlign(TextAlign.Center)
                       .margin({ top: 8, bottom: 12 })
                   }
-                  // ---- Next Event ----
-                  if (this.showIslamicEvents) {
-                    this.CountdownCard()
-                  }
-                  this.LiveCountdownBanner()
-                  this.PrayerPromptCard()
-                  this.FullQuranAnchorCard()
-                  this.RecommendedRecitationsCard()
-                  this.RabbanaCard()
-                  this.DuasCard()
-                  this.HadithAnchorCard()
-                  this.MosqueFinderAnchorCard()
+                  this.FocusTodaySection()
+                  this.TodayOverviewSection()
+                  this.WorshipSection()
+                  this.InsightsSection()
 
-                  if (this.eidInfo !== null) {
-                    this.EidCard()
-                  } else if (this.ramadanInfo !== null) {
-                    this.RamadanCard()
-                  }
-                  this.TodayFastCard()
-
-                  // --- NEW: Bound Tasbihs Card ---
-                  this.BoundTasbihsCard()
-                  this.CustomEventsCard()
-                  // ---- Qada (persistent obligation — bottom of page) ----
-                  if (this.shouldShowQadaCard()) {
-                    this.QadaHomeBanner()
-                  }
-                  this.Next3DaysPreview()
-                  // ---- Prayers ----
-                  this.TodayProgressCard()
-                  // ---- Tasbih ----
-                  this.TasbihCard()
 
 
                 }
@@ -520,6 +468,235 @@ export struct HomePage {
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
   }
+
+  @Builder
+  TodayOverviewSection() {
+
+    Column() {
+      Row({ space: 8 }) {
+        Image($r('app.media.ic_check')).width(16).height(16).fillColor(this.colors.accentGold)
+        Text(this.tr('today'))
+          .fontSize(12)
+          .fontColor(this.colors.textMuted)
+          .fontWeight(FontWeight.Bold)
+          .letterSpacing(1.2)
+
+      }.width('100%').padding({
+        bottom: 10
+      })
+
+      this.TodayProgressCard()
+      if (this.ramadanInfo !== null && this.ramadanInfo.isRamadanNow) {
+        this.TodayFastCard()
+      }
+
+      this.TasbihCard()
+    }.width('100%')
+  }
+
+  @Builder
+  WorshipSection() {
+
+    Column() {
+
+      Row({ space: 8 }) {
+
+        Image($r('app.media.ic_quran')).width(16).height(16).fillColor(this.colors.accentGold)
+
+        Text(this.tr('home_worship'))
+          .fontSize(12)
+          .fontColor(this.colors.textMuted)
+          .fontWeight(FontWeight.Bold)
+          .letterSpacing(1.2)
+
+      }.width('100%').padding({ bottom: 14 })
+
+      Column() {
+
+        this.FullQuranAnchorCard()
+
+        Divider().color(this.colors.borderSoft).margin({
+          top: 2, bottom: 16
+        })
+
+        Row({ space: 10 }) {
+
+          this.WorshipMiniTile($r('app.media.ic_hadith_book'), this.tr('hadith_title'), () => {
+
+            NavHelper.prepareForward();
+
+            router.pushUrl({
+              url: 'pages/HadithHomePage'
+            });
+
+          })
+
+          this.WorshipMiniTile($r('app.media.ic_dua'), this.tr('rabbana_title'), () => {
+
+            NavHelper.prepareForward();
+
+            router.pushUrl({
+              url: 'pages/QuranCollectionPage', params: {
+                collectionId: 'rabbana', title: L.get('rabbana_title', this.appLanguage)
+              }
+            });
+
+          })
+
+          this.WorshipMiniTile($r('app.media.ic_nav_mosque'), this.tr('mosque_finder_title'), () => {
+
+            NavHelper.prepareForward();
+
+            router.pushUrl({
+              url: 'pages/MosqueFinderPage'
+            });
+
+          })
+
+        }.width('100%')
+
+      }
+      .width('100%')
+      .padding(18)
+      .backgroundColor(this.colors.cardDark)
+      .borderRadius(Theme.radiusLarge)
+      .border({
+        width: 1, color: this.colors.borderSoft
+      })
+
+    }.margin({ bottom: 14 }).width('100%')
+  }
+
+  @Builder
+  WorshipQuranHero() {
+
+    Row() {
+
+      Column() {
+
+        Text(this.tr('quran_full_title')).fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+
+        Text(this.tr('quran_full_desc')).fontSize(12).fontColor(this.colors.textMuted).margin({ top: 4 })
+
+      }.layoutWeight(1).alignItems(HorizontalAlign.Start)
+
+      Image($r('app.media.ic_quran')).width(32).height(32).fillColor(this.colors.accentGold)
+
+    }.width('100%').onClick(() => {
+
+      NavHelper.prepareForward();
+
+      router.pushUrl({
+        url: 'pages/QuranPage'
+      });
+
+    })
+  }
+
+  @Builder
+  WorshipMiniTile(icon: Resource, title: string, onTap: () => void) {
+
+    Column() {
+
+      Image(icon).width(20).height(20).fillColor(this.colors.accentGold)
+
+      Text(title).fontSize(10).fontColor(this.colors.textWhite).textAlign(TextAlign.Center).margin({ top: 6 })
+
+    }
+    .layoutWeight(1)
+    .height(80)
+    .justifyContent(FlexAlign.Center)
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(10)
+    .onClick(onTap)
+  }
+
+  @Builder
+  WorshipHubCard() {
+
+    Column({ space: 10 }) {
+
+      Row({ space: 10 }) {
+
+        this.WorshipHubTile($r('app.media.ic_quran'), this.tr('quran_full_title'), () => {
+
+          NavHelper.prepareForward();
+
+          router.pushUrl({
+            url: 'pages/QuranPage'
+          });
+        })
+
+        this.WorshipHubTile($r('app.media.ic_dua'), this.tr('home_duas_title'), () => {
+
+          NavHelper.prepareForward();
+
+          router.pushUrl({
+            url: 'pages/DuasPage'
+          });
+        })
+
+      }
+
+      Row({ space: 10 }) {
+
+        this.WorshipHubTile($r('app.media.ic_hadith_book'), this.tr('hadith_title'), () => {
+
+          NavHelper.prepareForward();
+
+          router.pushUrl({
+            url: 'pages/HadithHomePage'
+          });
+        })
+
+        this.WorshipHubTile($r('app.media.ic_dua'), this.tr('rabbana_title'), () => {
+
+          NavHelper.prepareForward();
+
+          router.pushUrl({
+            url: 'pages/QuranCollectionPage', params: {
+              collectionId: 'rabbana', title: L.get('rabbana_title', this.appLanguage)
+            }
+          });
+        })
+
+      }
+
+    }
+    .width('100%')
+    .padding(16)
+    .backgroundColor(this.colors.cardDark)
+    .borderRadius(Theme.radiusLarge)
+    .border({
+      width: 1, color: this.colors.borderSoft
+    })
+    .margin({ bottom: 14 })
+  }
+
+  @Builder
+  WorshipHubTile(icon: Resource, title: string, onTap: () => void) {
+
+    Column() {
+
+      Image(icon).width(24).height(24).fillColor(this.colors.accentGold)
+
+      Text(title)
+        .fontSize(12)
+        .fontWeight(FontWeight.Medium)
+        .fontColor(this.colors.textWhite)
+        .margin({ top: 8 })
+        .textAlign(TextAlign.Center)
+        .maxLines(2)
+
+    }
+    .layoutWeight(1)
+    .height(95)
+    .justifyContent(FlexAlign.Center)
+    .backgroundColor(this.colors.tintSubtle)
+    .borderRadius(12)
+    .onClick(onTap)
+  }
+
 
   @Builder
   RecommendedRecitationsCard() {
@@ -2168,11 +2345,30 @@ export struct HomePage {
     })
     .borderRadius(6)
     .onClick(() => {
+      AppLogger.info('HomePage -> TasbihPage', `SEND prayer=${row.prayerId}`);
+      AppLogger.info('HomePage -> TasbihPage', `SEND tasbih=${row.tasbih.id}
+   prayer=${row.prayerId}`);
       AppLogger.info('HomePage',
         `BoundTasbihRow tapped: tasbih=${row.tasbih.id} prayer=${row.prayerId} dhikrIdx=${row.firstPendingDhikrIndex}`);
-      AppStorage.setOrCreate('nav_target_dhikr', row.firstPendingDhikrIndex);
-      AppStorage.setOrCreate('nav_target_prayer', row.prayerId);
       AppStorage.setOrCreate('nav_target_tasbih', row.tasbih.id);
+
+      const prayerId: string = row.prayerId;
+
+      AppLogger.info('HomePage -> TasbihPage', `row.prayerId='${row.prayerId}'`);
+
+      AppLogger.info('HomePage -> TasbihPage', `prayerId variable='${prayerId}'`);
+
+      AppStorage.setOrCreate('nav_target_prayer', prayerId);
+
+      const storedPrayer: string = AppStorage.get<string>('nav_target_prayer') ?? '';
+
+      AppLogger.info('HomePage -> TasbihPage', `storedPrayer='${storedPrayer}'`);
+
+      AppStorage.setOrCreate('nav_target_dhikr', row.firstPendingDhikrIndex);
+
+      AppStorage.setOrCreate('nav_target_nonce', Date.now().toString()
+
+      );
 
       const ctx = getContext(this) as common.UIAbilityContext;
       ctx.eventHub.emit('widget_nav_event', 'tasbih');
@@ -2186,26 +2382,20 @@ export struct HomePage {
       Column() {
         if (this.upcomingEvents[0].daysUntil === 0) {
           Image($r('app.media.ic_celebration'))
-            .width(30).height(30)
-            .fillColor(this.colors.accentGold)
+            .width(30).height(30).margin({ bottom: 2 })
           Text(this.tr('home_event_today'))
-            .fontSize(12).fontWeight(FontWeight.Bold)
-            .fontColor(this.colors.textOnAccent)
+            .fontSize(12).fontWeight(FontWeight.Bold).fontColor('#FFFFFF')
             .margin({ top: 2 })
         } else if (this.upcomingEvents[0].daysUntil === 1) {
           Text('1')
-            .fontSize(38).fontWeight(FontWeight.Bold)
-            .fontColor(this.colors.textOnAccent)
+            .fontSize(38).fontWeight(FontWeight.Bold).fontColor('#FFFFFF')
           Text(this.tr('home_event_tomorrow'))
-            .fontSize(10).fontWeight(FontWeight.Medium)
-            .fontColor(this.colors.textOnAccent).opacity(0.9)
+            .fontSize(10).fontWeight(FontWeight.Medium).fontColor('#FFFFFF').opacity(0.9)
         } else {
           Text(`${this.upcomingEvents[0].daysUntil}`)
-            .fontSize(38).fontWeight(FontWeight.Bold)
-            .fontColor(this.colors.textOnAccent)
+            .fontSize(38).fontWeight(FontWeight.Bold).fontColor('#FFFFFF')
           Text(this.tr('home_days'))
-            .fontSize(11).fontWeight(FontWeight.Medium)
-            .fontColor(this.colors.textOnAccent).opacity(0.9)
+            .fontSize(11).fontWeight(FontWeight.Medium).fontColor('#FFFFFF').opacity(0.9)
         }
       }
       .width(84)
@@ -2249,6 +2439,34 @@ export struct HomePage {
     }
     .width('100%')
     .alignItems(VerticalAlign.Top)
+  }
+
+  @Builder
+  FocusTodaySection() {
+
+    Column({ space: 14 }) {
+
+      if (this.eidInfo !== null) {
+        this.EidCard()
+      } else if (this.ramadanInfo !== null) {
+        this.RamadanCard()
+      } else if (this.showIslamicEvents && this.upcomingEvents.length > 0) {
+        this.CountdownCard()
+      }
+
+      if (this.pendingPrayerPrompts.length > 0) {
+        this.PrayerPromptCard()
+      }
+
+      if (this.countdownTarget !== '') {
+
+        this.LiveCountdownBanner()
+      }
+
+      if (this.ramadanInfo !== null && this.ramadanInfo.isRamadanNow) {
+        this.TodayFastCard()
+      }
+    }.width('100%')
   }
 
   @Builder
@@ -2675,7 +2893,7 @@ export struct HomePage {
   TodayProgressCard() {
     Column() {
       Row({ space: 8 }) {
-        Image($r('app.media.ic_nav_mosque'))
+        Image($r('app.media.ic_daily_prayers'))
           .width(16).height(16)
           .fillColor(this.colors.accentGold)
           .flexShrink(0)
@@ -2767,6 +2985,52 @@ export struct HomePage {
       offsetY: 4
     })
     .margin({ bottom: 14 })
+  }
+
+  @Builder
+  InsightsSection() {
+
+    Column() {
+
+      Row({ space: 8 }) {
+
+        Image($r('app.media.ic_insights')).width(16).height(16).fillColor(this.colors.accentGold)
+
+        Text(this.tr('home_insights'))
+          .fontSize(12)
+          .fontColor(this.colors.textMuted)
+          .fontWeight(FontWeight.Bold)
+          .letterSpacing(1.2)
+
+      }.width('100%').padding({ bottom: 14 })
+
+      if (this.shouldShowQadaCard()) {
+        this.QadaHomeBanner()
+      }
+
+      if (this.boundTasbihs.length > 0) {
+        this.BoundTasbihsCard()
+      }
+
+      if (this.recommendedRecitations.length > 0) {
+        this.RecommendedRecitationsCard()
+      }
+
+      if (this.dailyDuas.length > 0) {
+
+        this.DuasCard()
+
+      }
+
+      if (this.upcomingCustomEvents.length > 0) {
+        this.CustomEventsCard()
+      }
+
+      if (this.next3Days.length > 0) {
+        this.Next3DaysPreview()
+      }
+
+    }.width('100%')
   }
 
   @Builder

@@ -21,20 +21,12 @@ import { GradeThemeHelper } from '../core/ui/themes/GradeThemeHelper';
 struct RecitationsPage {
   @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLangChanged') appLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_QURAN_TRANSLATION_LANG) @Watch('onLangChanged') quranTransLang: string = 'default';
-
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.SYSTEM);
   @State tasks: RecitationTask[] = [];
   @State isLoading: boolean = true;
 
   async aboutToAppear() {
     await this.loadData();
-  }
-
-  private getQuranTranslationLang(): string {
-    if (this.quranTransLang === 'default' || this.quranTransLang === '') {
-      return this.appLanguage;
-    }
-    return this.quranTransLang;
   }
 
   onLangChanged() {
@@ -58,9 +50,9 @@ struct RecitationsPage {
     }
 
     // Pass `true` to show ALL recitations
-    this.tasks = await QuranService.getRecommendedRecitations(
-      ctx, this.getQuranTranslationLang(), isFriday, upcomingCustomEvents, true
-    );
+    this.tasks =
+      await QuranService.getRecommendedRecitations(ctx, this.getQuranTranslationLang(), isFriday, upcomingCustomEvents,
+        true);
 
     this.isLoading = false;
   }
@@ -69,7 +61,9 @@ struct RecitationsPage {
     Column() {
       Row({ space: 16 }) {
         Row() {
-          Image($r('app.media.ic_chevron_right')).width(20).height(20)
+          Image($r('app.media.ic_chevron_right'))
+            .width(20)
+            .height(20)
             .fillColor(this.colors.textWhite)
             .rotate({ angle: L.isRtlLang(this.appLanguage) ? 0 : 180 })
         }
@@ -86,9 +80,7 @@ struct RecitationsPage {
           .fontColor(this.colors.textWhite)
           .layoutWeight(1)
           .textAlign(TextAlign.Start)
-      }
-      .width('100%').height(72).padding({ left: 16, right: 16 })
-      .backgroundColor(this.colors.cardDark)
+      }.width('100%').height(72).padding({ left: 16, right: 16 }).backgroundColor(this.colors.cardDark)
 
       if (this.isLoading) {
         LoadingProgress().width(40).height(40).color(this.colors.accentGold).margin({ top: 40 })
@@ -96,8 +88,7 @@ struct RecitationsPage {
         List({ space: 12 }) {
           ForEach(this.tasks, (task: RecitationTask) => {
             ListItem() {
-              Row() {
-                // 1. Text Information (Left side in LTR, Right side in RTL)
+              Row() { // 1. Text Information (Left side in LTR, Right side in RTL)
                 Column() {
                   Text(task.name)
                     .fontSize(15)
@@ -121,8 +112,7 @@ struct RecitationsPage {
 
                   Row({ space: 8 }) {
                     Text(`${task.repeatCount > 1 ? `${task.repeatCount}x ` : ''}${L.get('occasion_' + task.occasion,
-                      this.appLanguage)}`)
-                      .fontSize(11).fontColor(this.colors.accentGold)
+                      this.appLanguage)}`).fontSize(11).fontColor(this.colors.accentGold)
 
                     if (task.authenticity) {
                       Text(this.getAuthenticityLabel(task.authenticity))
@@ -141,13 +131,8 @@ struct RecitationsPage {
                           this.handleAuthenticityTap(task);
                         })
                     }
-                  }
-                  .margin({ top: 6 })
-                  .width('100%')
-                  .alignItems(VerticalAlign.Center)
-                }
-                .alignItems(HorizontalAlign.Start)
-                .layoutWeight(1)
+                  }.margin({ top: 6 }).width('100%').alignItems(VerticalAlign.Center)
+                }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
                 // 2. Arabic Text & Chevron (Right side in LTR, Left side in RTL)
                 Column() {
@@ -165,9 +150,7 @@ struct RecitationsPage {
                     .opacity(0.6)
                     .margin({ top: 4 })
                     .rotate({ angle: L.isRtlLang(this.appLanguage) ? 180 : 0 })
-                }
-                .alignItems(HorizontalAlign.End)
-                .margin({ left: this.isRtl() ? 12 : 0, right: this.isRtl() ? 0 : 12 })
+                }.alignItems(HorizontalAlign.End).margin({ left: this.isRtl() ? 12 : 0, right: this.isRtl() ? 0 : 12 })
               }
               .width('100%')
               .padding(16)
@@ -175,8 +158,7 @@ struct RecitationsPage {
               .borderRadius(12)
               .border({ width: 1, color: this.colors.borderSoft })
               .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr) // 👈 FIX: Forces RTL layout for the row
-              .onClick(() => {
-                // Determine the correct verse range
+              .onClick(() => { // Determine the correct verse range
                 let startV = task.startVerse;
                 let endV = task.endVerse;
 
@@ -187,8 +169,7 @@ struct RecitationsPage {
 
                 NavHelper.prepareForward();
                 router.pushUrl({
-                  url: 'pages/SurahDetailsPage',
-                  params: {
+                  url: 'pages/SurahDetailsPage', params: {
                     surahId: task.surahNumber,
                     startVerse: startV,
                     endVerse: endV,
@@ -198,12 +179,20 @@ struct RecitationsPage {
               })
             }
           }, (task: RecitationTask) => `rec-${task.id}-${task.name}-${task.notes}`)
-        }
-        .width('100%').layoutWeight(1).padding({ left: 16, right: 16, top: 16 })
+        }.width('100%').layoutWeight(1).padding({ left: 16, right: 16, top: 16 })
       }
     }
-    .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
+    .width('100%')
+    .height('100%')
+    .backgroundColor(this.colors.primaryGreen)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
+  }
+
+  private getQuranTranslationLang(): string {
+    if (this.quranTransLang === 'default' || this.quranTransLang === '') {
+      return this.appLanguage;
+    }
+    return this.quranTransLang;
   }
 
   /**
@@ -222,8 +211,7 @@ struct RecitationsPage {
     const localized = L.get(key, this.appLanguage);
 
     // L.get returns the key itself if not found
-    if (localized === key) {
-      // Fallback: uppercase the raw string (works for English, safe for others)
+    if (localized === key) { // Fallback: uppercase the raw string (works for English, safe for others)
       return auth.toUpperCase();
     }
 
@@ -260,8 +248,7 @@ struct RecitationsPage {
     return c;
   }
 
-  private handleAuthenticityTap(task: RecitationTask): void {
-    // 1. Try to navigate to the Hadith if evidence exists
+  private handleAuthenticityTap(task: RecitationTask): void { // 1. Try to navigate to the Hadith if evidence exists
     if (task.evidence && task.evidence.length > 0) {
       const primaryEvidence = task.evidence[0];
       const colId = this.getCanonicalCollection(primaryEvidence.collection);
@@ -269,8 +256,7 @@ struct RecitationsPage {
 
       NavHelper.prepareForward();
       router.pushUrl({
-        url: 'pages/HadithDetailsPage',
-        params: { id: hadithId }
+        url: 'pages/HadithDetailsPage', params: { id: hadithId }
       }).catch((e: Error) => console.error(JSON.stringify(e)));
       return;
     }

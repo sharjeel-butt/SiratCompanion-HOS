@@ -5,7 +5,6 @@
 // bundle layout exactly.
 
 export class RawPaths {
-
   static readonly BUNDLE_MANIFEST: string = 'bundle_manifest.json';
   static readonly FEATURED: string = 'featured.json';
   static readonly DATABASE_VERSION: string = 'database/VERSION';
@@ -14,12 +13,9 @@ export class RawPaths {
   static readonly QURAN_VERSION: string = 'quran/VERSION';
   static readonly QURAN_DB: string = 'quran/quran.db.gz';
   static readonly QURAN_RECITATIONS_RAW: string = 'quran/recitations_raw.json';
-  static readonly DUA_KEYWORD_MAP =
-    'duas/catalog/dua_keyword_map.json';
-  static readonly DUA_CATEGORIES =
-    'duas/catalog/categories.json';
-  static readonly DUA_BASE =
-    'duas/content/duas_base.json';
+  static readonly DUA_KEYWORD_MAP = 'duas/catalog/dua_keyword_map.json';
+  static readonly DUA_CATEGORIES = 'duas/catalog/categories.json';
+  static readonly DUA_BASE = 'duas/content/duas_base.json';
   static readonly EVENTS: string = 'events/islamic_events.json';
   static readonly MASTER_SECTIONS: string = 'metadata/master_sections.json';
   static readonly SECTION_ALIASES: string = 'metadata/section_aliases_v2.json';
@@ -34,7 +30,6 @@ export class RawPaths {
   static readonly APP_THEMES: string = 'app/themes/app_themes.json';
   static readonly APP_LANGS: string = 'app/languages/app_languages.json';
   static readonly TASBIH_THEMES: string = 'app/themes/tasbih_themes.json';
-
 
   static quranGraphI18n(lang: string): string {
     return `quran/i18n/quran_graph_${lang}.json`;

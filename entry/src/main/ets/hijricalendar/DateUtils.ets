@@ -13,11 +13,9 @@ const MS_PER_DAY = 86400000;
  * in the app. Kept local rather than imported so this module has no
  * dependency on the calendar-page helper.
  */
-const HIJRI_MONTHS_EN: string[] = [
-  'Muharram', 'Safar', 'Rabi al-Awwal', 'Rabi al-Thani',
-  'Jumada al-Awwal', 'Jumada al-Thani', 'Rajab', "Sha'ban",
-  'Ramadan', 'Shawwal', "Dhu al-Qi'dah", 'Dhu al-Hijjah'
-];
+const HIJRI_MONTHS_EN: string[] =
+  ['Muharram', 'Safar', 'Rabi al-Awwal', 'Rabi al-Thani', 'Jumada al-Awwal', 'Jumada al-Thani', 'Rajab', "Sha'ban",
+    'Ramadan', 'Shawwal', "Dhu al-Qi'dah", 'Dhu al-Hijjah'];
 
 export class DateHelper {
   /**
@@ -33,12 +31,8 @@ export class DateHelper {
    * the engine selected by the user's calendar-type setting, so the
    * result reflects Umm al-Qura or Tabular as configured.
    */
-  static findGregorianDateForHijri(
-    targetMonth: number,
-    targetDay: number,
-    startDate: Date,
-    offsetDays: number
-  ): Date | null {
+  static findGregorianDateForHijri(targetMonth: number, targetDay: number, startDate: Date,
+    offsetDays: number): Date | null {
     const engine = HijriEngineResolver.current();
 
     for (let i = 0; i < 366; i++) {
@@ -62,10 +56,7 @@ export class DateHelper {
    *
    * @param offsetDays  The Hijri offset from Settings (+3 … −3).
    */
-  static getUpcomingImportantDates(
-    offsetDays: number,
-    perspective: string = 'universal'
-  ): UpcomingImportantDate[] {
+  static getUpcomingImportantDates(offsetDays: number, perspective: string = 'universal'): UpcomingImportantDate[] {
     const now = new Date();
     const todayMidnight = new Date(now);
     todayMidnight.setHours(0, 0, 0, 0);
@@ -76,15 +67,12 @@ export class DateHelper {
 
     const events = IslamicEventService.getEvents(perspective);
 
-    for (const event of events) {
-      // 1. Skip if we already processed this event key
+    for (const event of events) { // 1. Skip if we already processed this event key
       if (seenKeys.has(event.key)) {
         continue;
       }
 
-      const gregorianDate = DateHelper.findNextGregorianForEvent(
-        event, now, offsetDays
-      );
+      const gregorianDate = DateHelper.findNextGregorianForEvent(event, now, offsetDays);
       if (!gregorianDate) {
         continue;
       }
@@ -96,14 +84,10 @@ export class DateHelper {
         continue;
       }
 
-      const daysUntil = Math.round(
-        (eventMidnight.getTime() - todayMidnight.getTime()) / MS_PER_DAY
-      );
+      const daysUntil = Math.round((eventMidnight.getTime() - todayMidnight.getTime()) / MS_PER_DAY);
 
       const shiftedForDisplay = new Date(gregorianDate);
-      shiftedForDisplay.setDate(
-        shiftedForDisplay.getDate() + offsetDays
-      );
+      shiftedForDisplay.setDate(shiftedForDisplay.getDate() + offsetDays);
 
       const h = engine.toHijri(shiftedForDisplay);
       let hijriString = '';
@@ -126,9 +110,7 @@ export class DateHelper {
       seenKeys.add(event.key); // <-- ADD THIS: Mark as processed
     }
 
-    found.sort(
-      (a, b) => a.gregorianDate.getTime() - b.gregorianDate.getTime()
-    );
+    found.sort((a, b) => a.gregorianDate.getTime() - b.gregorianDate.getTime());
     return found.slice(0, 3);
   }
 
@@ -164,15 +146,9 @@ export class DateHelper {
    * Thursday whose visible Hijri date falls within the first seven
    * days of the target Hijri month.
    */
-  private static findNextGregorianForEvent(
-    event: IslamicEvent,
-    startDate: Date,
-    offsetDays: number
-  ): Date | null {
+  private static findNextGregorianForEvent(event: IslamicEvent, startDate: Date, offsetDays: number): Date | null {
     if (event.recurrence === EventRecurrence.FIXED) {
-      return DateHelper.findGregorianDateForHijri(
-        event.month, event.day, startDate, offsetDays
-      );
+      return DateHelper.findGregorianDateForHijri(event.month, event.day, startDate, offsetDays);
     }
 
     const engine = HijriEngineResolver.current();
@@ -189,8 +165,7 @@ export class DateHelper {
       shifted.setDate(shifted.getDate() + offsetDays);
 
       const h = engine.toHijri(shifted);
-      if (h !== null && h.month === event.month &&
-        h.day >= 1 && h.day <= 6) {
+      if (h !== null && h.month === event.month && h.day >= 1 && h.day <= 6) {
         return testDate;
       }
     }

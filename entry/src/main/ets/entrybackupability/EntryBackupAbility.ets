@@ -43,106 +43,71 @@ interface PrefSpec {
   type: string;
 }
 
-const SETTINGS_SPECS: PrefSpec[] = [
-  // ---- Calculation & Location ----
-  { key: 'calc_method', type: TYPE_STRING },
-  { key: 'asr_rule', type: TYPE_NUMBER },
-  { key: 'calc_source', type: TYPE_STRING },
-  { key: 'location_mode', type: TYPE_STRING },
-  { key: 'manual_lat', type: TYPE_NUMBER },
-  { key: 'manual_lng', type: TYPE_NUMBER },
-  { key: 'manual_refresh', type: TYPE_NUMBER },
-  { key: 'manual_city', type: TYPE_STRING },
-  { key: 'high_lat_rule', type: TYPE_STRING },
-  { key: 'calc_rounding_method', type: TYPE_STRING },
-  { key: 'calc_midnight_method', type: TYPE_STRING },
-  { key: 'calc_polar_resolution', type: TYPE_STRING },
-  { key: 'calc_shafaq', type: TYPE_STRING },
-  { key: 'offset_fajr', type: TYPE_NUMBER },
-  { key: 'offset_dhuhr', type: TYPE_NUMBER },
-  { key: 'offset_asr', type: TYPE_NUMBER },
-  { key: 'offset_maghrib', type: TYPE_NUMBER },
-  { key: 'offset_isha', type: TYPE_NUMBER },
+const SETTINGS_SPECS: PrefSpec[] =
+  [// ---- Calculation & Location ----{ key: 'calc_method', type: TYPE_STRING }, { key: 'asr_rule', type: TYPE_NUMBER }, { key: 'calc_source', type: TYPE_STRING }, { key: 'location_mode', type: TYPE_STRING }, { key: 'manual_lat', type: TYPE_NUMBER }, { key: 'manual_lng', type: TYPE_NUMBER },{
+    key: 'manual_refresh',
+    type: TYPE_NUMBER
+  }, { key: 'manual_city', type: TYPE_STRING }, { key: 'high_lat_rule', type: TYPE_STRING },
+    { key: 'calc_rounding_method', type: TYPE_STRING }, { key: 'calc_midnight_method', type: TYPE_STRING },
+    { key: 'calc_polar_resolution', type: TYPE_STRING }, { key: 'calc_shafaq', type: TYPE_STRING },
+    { key: 'offset_fajr', type: TYPE_NUMBER }, { key: 'offset_dhuhr', type: TYPE_NUMBER },
+    { key: 'offset_asr', type: TYPE_NUMBER }, { key: 'offset_maghrib', type: TYPE_NUMBER },
+    { key: 'offset_isha', type: TYPE_NUMBER },
 
-  // ---- GPS Cache ----
-  { key: 'gps_lat', type: TYPE_NUMBER },
-  { key: 'gps_lng', type: TYPE_NUMBER },
-  { key: 'gps_city', type: TYPE_STRING },
-  { key: 'gps_refresh', type: TYPE_NUMBER },
+    // ---- GPS Cache ----
+    { key: 'gps_lat', type: TYPE_NUMBER }, { key: 'gps_lng', type: TYPE_NUMBER },
+    { key: 'gps_city', type: TYPE_STRING }, { key: 'gps_refresh', type: TYPE_NUMBER },
 
-  // ---- App Settings ----
-  { key: 'theme_mode', type: TYPE_STRING },
-  { key: 'theme_mode_override', type: TYPE_STRING },
-  { key: 'app_theme_preset', type: TYPE_STRING },
-  { key: 'app_language', type: TYPE_STRING },
-  { key: 'app_language_override', type: TYPE_STRING },
-  { key: 'quran_translation_lang', type: TYPE_STRING },
-  { key: 'hadith_translation_lang', type: TYPE_STRING },
-  { key: 'dua_translation_lang', type: TYPE_STRING },
-  { key: 'time_format', type: TYPE_STRING },
-  { key: 'wizard_completed', type: TYPE_BOOLEAN },
-  { key: 'hijri_offset', type: TYPE_NUMBER },
-  { key: 'hijri_calendar_type', type: TYPE_STRING },
-  { key: 'event_perspective', type: TYPE_STRING },
-  { key: 'auto_show_ramadan_view', type: TYPE_BOOLEAN },
-  { key: 'show_islamic_events', type: TYPE_BOOLEAN },
+    // ---- App Settings ----
+    { key: 'theme_mode', type: TYPE_STRING }, { key: 'theme_mode_override', type: TYPE_STRING },
+    { key: 'app_theme_preset', type: TYPE_STRING }, { key: 'app_language', type: TYPE_STRING },
+    { key: 'app_language_override', type: TYPE_STRING }, { key: 'quran_translation_lang', type: TYPE_STRING },
+    { key: 'hadith_translation_lang', type: TYPE_STRING }, { key: 'dua_translation_lang', type: TYPE_STRING },
+    { key: 'time_format', type: TYPE_STRING }, { key: 'wizard_completed', type: TYPE_BOOLEAN },
+    { key: 'hijri_offset', type: TYPE_NUMBER }, { key: 'hijri_calendar_type', type: TYPE_STRING },
+    { key: 'event_perspective', type: TYPE_STRING }, { key: 'auto_show_ramadan_view', type: TYPE_BOOLEAN },
+    { key: 'show_islamic_events', type: TYPE_BOOLEAN },
 
-  // ---- Extra Timings (Legacy & Current) ----
-  { key: 'show_extra_timings', type: TYPE_BOOLEAN },
-  { key: 'show_extra_timings_list', type: TYPE_BOOLEAN },
-  { key: 'show_extra_timings_sunpath', type: TYPE_BOOLEAN },
-  { key: 'show_imsak', type: TYPE_BOOLEAN },
-  { key: 'show_first_third', type: TYPE_BOOLEAN },
-  { key: 'show_midnight', type: TYPE_BOOLEAN },
-  { key: 'show_last_third', type: TYPE_BOOLEAN },
-  { key: 'show_imsak_list', type: TYPE_BOOLEAN },
-  { key: 'show_first_third_list', type: TYPE_BOOLEAN },
-  { key: 'show_midnight_list', type: TYPE_BOOLEAN },
-  { key: 'show_last_third_list', type: TYPE_BOOLEAN },
-  { key: 'show_imsak_sunpath', type: TYPE_BOOLEAN },
-  { key: 'show_first_third_sunpath', type: TYPE_BOOLEAN },
-  { key: 'show_midnight_sunpath', type: TYPE_BOOLEAN },
-  { key: 'show_last_third_sunpath', type: TYPE_BOOLEAN },
+    // ---- Extra Timings (Legacy & Current) ----
+    { key: 'show_extra_timings', type: TYPE_BOOLEAN }, { key: 'show_extra_timings_list', type: TYPE_BOOLEAN },
+    { key: 'show_extra_timings_sunpath', type: TYPE_BOOLEAN }, { key: 'show_imsak', type: TYPE_BOOLEAN },
+    { key: 'show_first_third', type: TYPE_BOOLEAN }, { key: 'show_midnight', type: TYPE_BOOLEAN },
+    { key: 'show_last_third', type: TYPE_BOOLEAN }, { key: 'show_imsak_list', type: TYPE_BOOLEAN },
+    { key: 'show_first_third_list', type: TYPE_BOOLEAN }, { key: 'show_midnight_list', type: TYPE_BOOLEAN },
+    { key: 'show_last_third_list', type: TYPE_BOOLEAN }, { key: 'show_imsak_sunpath', type: TYPE_BOOLEAN },
+    { key: 'show_first_third_sunpath', type: TYPE_BOOLEAN }, { key: 'show_midnight_sunpath', type: TYPE_BOOLEAN },
+    { key: 'show_last_third_sunpath', type: TYPE_BOOLEAN },
 
-  { key: 'translation_font_family', type: TYPE_STRING },
-  { key: 'arabic_font_family', type: TYPE_STRING },
+    { key: 'translation_font_family', type: TYPE_STRING }, { key: 'arabic_font_family', type: TYPE_STRING },
 
-  // ---- Notifications ----
-  { key: 'notif_master_enabled', type: TYPE_BOOLEAN },
-  { key: 'notif_before_minutes', type: TYPE_NUMBER },
-  { key: 'notif_fajr', type: TYPE_BOOLEAN },
-  { key: 'notif_dhuhr', type: TYPE_BOOLEAN },
-  { key: 'notif_asr', type: TYPE_BOOLEAN },
-  { key: 'notif_maghrib', type: TYPE_BOOLEAN },
-  { key: 'notif_isha', type: TYPE_BOOLEAN },
+    // ---- Notifications ----
+    { key: 'notif_master_enabled', type: TYPE_BOOLEAN }, { key: 'notif_before_minutes', type: TYPE_NUMBER },
+    { key: 'notif_fajr', type: TYPE_BOOLEAN }, { key: 'notif_dhuhr', type: TYPE_BOOLEAN },
+    { key: 'notif_asr', type: TYPE_BOOLEAN }, { key: 'notif_maghrib', type: TYPE_BOOLEAN },
+    { key: 'notif_isha', type: TYPE_BOOLEAN },
 
-  // ---- Sound & Haptics ----
-  { key: 'vibration_enabled', type: TYPE_BOOLEAN },
-  { key: 'sound_enabled', type: TYPE_BOOLEAN },
-  { key: 'tasbih_sound', type: TYPE_STRING },
-  { key: 'tasbih_render_style', type: TYPE_STRING },
-  { key: 'tasbih_theme_preset', type: TYPE_STRING },
+    // ---- Sound & Haptics ----
+    { key: 'vibration_enabled', type: TYPE_BOOLEAN }, { key: 'sound_enabled', type: TYPE_BOOLEAN },
+    { key: 'tasbih_sound', type: TYPE_STRING }, { key: 'tasbih_render_style', type: TYPE_STRING },
+    { key: 'tasbih_theme_preset', type: TYPE_STRING },
 
-  // ---- Progress & Logs ----
-  { key: 'prayer_state_map', type: TYPE_STRING },
-  { key: 'ramadan_log', type: TYPE_STRING },
+    // ---- Progress & Logs ----
+    { key: 'prayer_state_map', type: TYPE_STRING }, { key: 'ramadan_log', type: TYPE_STRING },
 
-  // ---- Duas ----
-  { key: 'dua_favorites', type: TYPE_STRING },
-  { key: 'dua_bindings', type: TYPE_STRING },
+    // ---- Duas ----
+    { key: 'dua_favorites', type: TYPE_STRING }, { key: 'dua_bindings', type: TYPE_STRING },
 
-  // ---- Custom Calendar Events ----
-  { key: 'custom_events', type: TYPE_STRING },
+    // ---- Custom Calendar Events ----
+    { key: 'custom_events', type: TYPE_STRING },
 
-  // ---- Quran & Prayer Prompts (NEW) ----
-  { key: 'active_quran_script', type: TYPE_STRING },
-  { key: 'dismissed_prayers', type: TYPE_STRING },
+    // ---- Quran & Prayer Prompts (NEW) ----
+    { key: 'active_quran_script', type: TYPE_STRING }, { key: 'dismissed_prayers', type: TYPE_STRING },
 
-  // ---- Custom Mosques Data ----
-  { key: 'custom_mosques_data', type: TYPE_STRING }
+    // ---- Custom Mosques Data ----
+    { key: 'custom_mosques_data', type: TYPE_STRING }
 
 
-];
+  ];
 
 /**
  * NOTE on `tasbihs_data`: it carries the JSON-serialized full tasbih
@@ -152,11 +117,9 @@ const SETTINGS_SPECS: PrefSpec[] = [
  * the largest single value in any backup. If backup failures are ever
  * reported for power users, this is the first item to check.
  */
-const TASBIH_SPECS: PrefSpec[] = [
-  { key: 'tasbihs_data', type: TYPE_STRING },
-  { key: 'tasbih_active_id', type: TYPE_STRING },
-  { key: 'tasbih_active_dhikr', type: TYPE_NUMBER }
-];
+const TASBIH_SPECS: PrefSpec[] =
+  [{ key: 'tasbihs_data', type: TYPE_STRING }, { key: 'tasbih_active_id', type: TYPE_STRING },
+    { key: 'tasbih_active_dhikr', type: TYPE_NUMBER }];
 
 /**
  * Backs up and restores the user's data across device migration.
@@ -188,9 +151,7 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
    * present-but-empty value must be written so the empty state
    * survives the round-trip.
    */
-  private static async readAsString(
-    store: preferences.Preferences, spec: PrefSpec
-  ): Promise<string | null> {
+  private static async readAsString(store: preferences.Preferences, spec: PrefSpec): Promise<string | null> {
     try {
       const exists: boolean = await store.has(spec.key);
       if (!exists) {
@@ -207,8 +168,7 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
       const v = await store.get(spec.key, false);
       return String(v);
     } catch (err) {
-      hilog.warn(DOMAIN, TAG,
-        'read failed for %{public}s', spec.key);
+      hilog.warn(DOMAIN, TAG, 'read failed for %{public}s', spec.key);
       return null;
     }
   }
@@ -219,14 +179,10 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
    * @returns the key that was written, or '' on failure. Callers use
    *          the non-empty return value to track successful restores.
    */
-  private static async applyLine(
-    store: preferences.Preferences, line: string
-  ): Promise<string> {
+  private static async applyLine(store: preferences.Preferences, line: string): Promise<string> {
     const parts: string[] = line.split('\t');
     if (parts.length < 3) {
-      hilog.warn(DOMAIN, TAG,
-        'applyLine: malformed line (expected ≥3 fields, got %{public}d)',
-        parts.length);
+      hilog.warn(DOMAIN, TAG, 'applyLine: malformed line (expected ≥3 fields, got %{public}d)', parts.length);
       return '';
     }
 
@@ -237,9 +193,7 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
     // one is present, the line was corrupted in transit. Reconstruct
     // the full value rather than dropping the remainder.
     if (parts.length > 3) {
-      hilog.warn(DOMAIN, TAG,
-        'applyLine: value for key %{public}s contains a raw tab; corruption?',
-        key);
+      hilog.warn(DOMAIN, TAG, 'applyLine: value for key %{public}s contains a raw tab; corruption?', key);
     }
     const raw: string = parts.slice(2).join('\t');
 
@@ -251,8 +205,7 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
       if (type === TYPE_NUMBER) {
         const num: number = Number(raw);
         if (Number.isNaN(num)) {
-          hilog.warn(DOMAIN, TAG,
-            'applyLine: invalid number for key %{public}s', key);
+          hilog.warn(DOMAIN, TAG, 'applyLine: invalid number for key %{public}s', key);
           return '';
         }
         await store.put(key, num);
@@ -262,12 +215,9 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
         await store.put(key, raw === 'true');
         return key;
       }
-      hilog.warn(DOMAIN, TAG,
-        'applyLine: unknown type "%{public}s" for key %{public}s',
-        type, key);
+      hilog.warn(DOMAIN, TAG, 'applyLine: unknown type "%{public}s" for key %{public}s', type, key);
     } catch (err) {
-      hilog.warn(DOMAIN, TAG,
-        'applyLine failed for %{public}s', key);
+      hilog.warn(DOMAIN, TAG, 'applyLine failed for %{public}s', key);
     }
     return '';
   }
@@ -276,9 +226,7 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
   // BACKUP
   // ============================================================
 
-  private static async openPrefs(
-    context: common.Context, storeName: string
-  ): Promise<preferences.Preferences | null> {
+  private static async openPrefs(context: common.Context, storeName: string): Promise<preferences.Preferences | null> {
     try {
       return await preferences.getPreferences(context, storeName);
     } catch (err) {
@@ -286,9 +234,7 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
     }
   }
 
-  private static async clearPrefs(
-    store: preferences.Preferences
-  ): Promise<boolean> {
+  private static async clearPrefs(store: preferences.Preferences): Promise<boolean> {
     try {
       await store.clear();
       return true;
@@ -301,9 +247,7 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
   // RESTORE
   // ============================================================
 
-  private static async flushPrefs(
-    store: preferences.Preferences
-  ): Promise<boolean> {
+  private static async flushPrefs(store: preferences.Preferences): Promise<boolean> {
     try {
       await store.flush();
       return true;
@@ -315,10 +259,7 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
   private static writeTextFile(path: string, content: string): boolean {
     let file: fs.File | null = null;
     try {
-      file = fs.openSync(
-        path,
-        fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE | fs.OpenMode.TRUNC
-      );
+      file = fs.openSync(path, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE | fs.OpenMode.TRUNC);
     } catch (err) {
       return false;
     }
@@ -392,8 +333,7 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
   }
 
   async onRestore(bundleVersion: BundleVersion): Promise<void> {
-    hilog.info(DOMAIN, TAG,
-      'onRestore start: %{public}s', JSON.stringify(bundleVersion));
+    hilog.info(DOMAIN, TAG, 'onRestore start: %{public}s', JSON.stringify(bundleVersion));
 
     // The backup version is logged so we have a record of what was
     // restored. Two layers protect cross-version restore:
@@ -423,24 +363,17 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
     hilog.info(DOMAIN, TAG, 'onRestore complete');
   }
 
-  private async backupStore(
-    storeName: string, specs: PrefSpec[], backupDir: string
-  ): Promise<void> {
-    const store = await EntryBackupAbility.openPrefs(
-      this.context, storeName
-    );
+  private async backupStore(storeName: string, specs: PrefSpec[], backupDir: string): Promise<void> {
+    const store = await EntryBackupAbility.openPrefs(this.context, storeName);
     if (store === null) {
-      hilog.warn(DOMAIN, TAG,
-        'Cannot open %{public}s for backup', storeName);
+      hilog.warn(DOMAIN, TAG, 'Cannot open %{public}s for backup', storeName);
       return;
     }
 
     const lines: string[] = [];
     for (const spec of specs) {
-      const encoded: string | null =
-        await EntryBackupAbility.readAsString(store, spec);
-      if (encoded === null) {
-        // Key is absent from the store — do not write a line for it.
+      const encoded: string | null = await EntryBackupAbility.readAsString(store, spec);
+      if (encoded === null) { // Key is absent from the store — do not write a line for it.
         // On restore, an absent key falls through to its default,
         // which matches the user's current (never-set) state.
         continue;
@@ -449,34 +382,24 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
     }
 
     // Format v1: header declares version and total line count.
-    const header: string =
-      '#v' + BACKUP_FORMAT_VERSION + '\t' + lines.length;
-    const content: string = lines.length > 0
-      ? header + '\n' + lines.join('\n')
-      : header;
+    const header: string = '#v' + BACKUP_FORMAT_VERSION + '\t' + lines.length;
+    const content: string = lines.length > 0 ? header + '\n' + lines.join('\n') : header;
 
     const path: string = backupDir + '/' + storeName + '.txt';
-    const written: boolean =
-      EntryBackupAbility.writeTextFile(path, content);
+    const written: boolean = EntryBackupAbility.writeTextFile(path, content);
 
     if (written) {
-      hilog.info(DOMAIN, TAG,
-        'Backed up %{public}s: %{public}d entries',
-        storeName, lines.length);
+      hilog.info(DOMAIN, TAG, 'Backed up %{public}s: %{public}d entries', storeName, lines.length);
     } else {
-      hilog.error(DOMAIN, TAG,
-        'Write failed for %{public}s', storeName);
+      hilog.error(DOMAIN, TAG, 'Write failed for %{public}s', storeName);
     }
   }
 
-  private async restoreStore(
-    storeName: string, backupDir: string
-  ): Promise<void> {
+  private async restoreStore(storeName: string, backupDir: string): Promise<void> {
     const path: string = backupDir + '/' + storeName + '.txt';
     const content: string = EntryBackupAbility.readTextFile(path);
     if (content.length === 0) {
-      hilog.info(DOMAIN, TAG,
-        'No backup content for %{public}s', storeName);
+      hilog.info(DOMAIN, TAG, 'No backup content for %{public}s', storeName);
       return;
     }
 
@@ -500,34 +423,27 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
           }
         }
       } else {
-        hilog.warn(DOMAIN, TAG,
-          'Restore for %{public}s: unrecognized header "%{public}s"',
-          storeName, headerLine);
+        hilog.warn(DOMAIN, TAG, 'Restore for %{public}s: unrecognized header "%{public}s"', storeName, headerLine);
       }
       startIdx = 1;
     }
 
     if (formatVersion > BACKUP_FORMAT_VERSION) {
       hilog.warn(DOMAIN, TAG,
-        'Restore for %{public}s: backup is v%{public}d, parser is v%{public}d — proceeding with best effort',
-        storeName, formatVersion, BACKUP_FORMAT_VERSION);
+        'Restore for %{public}s: backup is v%{public}d, parser is v%{public}d — proceeding with best effort', storeName,
+        formatVersion, BACKUP_FORMAT_VERSION);
     }
 
     // ---- Open and clear the store ----
-    const store = await EntryBackupAbility.openPrefs(
-      this.context, storeName
-    );
+    const store = await EntryBackupAbility.openPrefs(this.context, storeName);
     if (store === null) {
-      hilog.error(DOMAIN, TAG,
-        'Cannot open %{public}s for restore', storeName);
+      hilog.error(DOMAIN, TAG, 'Cannot open %{public}s for restore', storeName);
       return;
     }
 
-    const cleared: boolean =
-      await EntryBackupAbility.clearPrefs(store);
+    const cleared: boolean = await EntryBackupAbility.clearPrefs(store);
     if (!cleared) {
-      hilog.warn(DOMAIN, TAG,
-        'clear failed for %{public}s; restoring anyway', storeName);
+      hilog.warn(DOMAIN, TAG, 'clear failed for %{public}s; restoring anyway', storeName);
     }
 
     // ---- Apply the data lines ----
@@ -552,8 +468,7 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
         continue;
       }
       actualDataLines++;
-      const appliedKey =
-        await EntryBackupAbility.applyLine(store, line);
+      const appliedKey = await EntryBackupAbility.applyLine(store, line);
       if (appliedKey.length > 0) {
         restored++;
         presentKeys.add(appliedKey);
@@ -577,8 +492,7 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
           storeName, actualDataLines, expectedCount);
       }
       if (restored < expectedCount) {
-        hilog.warn(DOMAIN, TAG,
-          'Restore for %{public}s: only %{public}d of %{public}d key(s) applied successfully',
+        hilog.warn(DOMAIN, TAG, 'Restore for %{public}s: only %{public}d of %{public}d key(s) applied successfully',
           storeName, restored, expectedCount);
       }
     }
@@ -590,11 +504,8 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
     // sitting in the store harmlessly (nothing reads it), but the
     // breadcrumb is useful when a "my settings are wrong after
     // restore" report arrives.
-    const specs = storeName === STORE_SETTINGS
-      ? SETTINGS_SPECS : TASBIH_SPECS;
-    const knownKeys: Set<string> = new Set(
-      specs.map((s: PrefSpec): string => s.key)
-    );
+    const specs = storeName === STORE_SETTINGS ? SETTINGS_SPECS : TASBIH_SPECS;
+    const knownKeys: Set<string> = new Set(specs.map((s: PrefSpec): string => s.key));
     const unknownKeys: string[] = [];
     for (const k of presentKeys) {
       if (!knownKeys.has(k)) {
@@ -602,17 +513,14 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
       }
     }
     if (unknownKeys.length > 0) {
-      hilog.info(DOMAIN, TAG,
-        'Restore for %{public}s: %{public}d key(s) present in backup but unknown to this build',
+      hilog.info(DOMAIN, TAG, 'Restore for %{public}s: %{public}d key(s) present in backup but unknown to this build',
         storeName, unknownKeys.length);
       for (const k of unknownKeys) {
         hilog.info(DOMAIN, TAG, '  unknown key: %{public}s', k);
       }
     }
 
-    hilog.info(DOMAIN, TAG,
-      'Restored %{public}s: %{public}d entries',
-      storeName, restored);
+    hilog.info(DOMAIN, TAG, 'Restored %{public}s: %{public}d entries', storeName, restored);
   }
 
   private safeBackupDir(): string {

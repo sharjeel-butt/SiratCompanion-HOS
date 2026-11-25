@@ -17,9 +17,7 @@ export interface CachedLocation {
 }
 
 export const FALLBACK_LOCATION: FallbackLocation = {
-  latitude: 33.6844,
-  longitude: 73.0479,
-  cityName: 'DEFAULT LOCATION'
+  latitude: 33.6844, longitude: 73.0479, cityName: 'DEFAULT LOCATION'
 };
 
 const KEY_LAT = 'gps_lat';
@@ -50,9 +48,7 @@ export class LocationCache {
    * Persist the cache AND bump a global version counter so any page
    * that observes the version (currently Home) reloads its state.
    */
-  static async save(
-    lat: number, lng: number, city: string
-  ): Promise<void> {
+  static async save(lat: number, lng: number, city: string): Promise<void> {
     await PreferencesHelper.setNumber(KEY_LAT, lat);
     await PreferencesHelper.setNumber(KEY_LNG, lng);
     await PreferencesHelper.setString(KEY_CITY, city);

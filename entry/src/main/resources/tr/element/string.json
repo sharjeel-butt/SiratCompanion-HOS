@@ -3555,6 +3555,154 @@
     {
       "name": "theme_preset",
       "value": "Tema Ön Ayarı"
+    },
+    {
+      "name": "notif_prayer_due_title",
+      "value": "Namaz Bekliyor"
+    },
+    {
+      "name": "notif_fajr_due",
+      "value": "Sabah namazı henüz işaretlenmedi."
+    },
+    {
+      "name": "notif_dhuhr_due",
+      "value": "Öğle namazı henüz işaretlenmedi."
+    },
+    {
+      "name": "notif_asr_due",
+      "value": "İkindi namazı henüz işaretlenmedi."
+    },
+    {
+      "name": "notif_maghrib_due",
+      "value": "Akşam namazı henüz işaretlenmedi."
+    },
+    {
+      "name": "notif_isha_due",
+      "value": "Yatsı namazı henüz işaretlenmedi."
+    },
+    {
+      "name": "title_notifications",
+      "value": "Bildirimler"
+    },
+    {
+      "name": "notifications_empty",
+      "value": "Tüm bildirimleri görüntülediniz."
+    },
+    {
+      "name": "all_prayers_completed",
+      "value": "Elhamdülillah!"
+    },
+    {
+      "name": "all_prayers_completed_subtitle",
+      "value": "Bugünkü tüm namazlar tamamlandı."
+    },
+    {
+      "name": "notif_day_complete_title",
+      "value": "Elhamdülillah!"
+    },
+    {
+      "name": "notif_day_complete_message",
+      "value": "Bugünün tüm namazlarını tamamladınız."
+    },
+    {
+      "name": "notif_streak_title",
+      "value": "Namaz Serisi"
+    },
+    {
+      "name": "notif_streak_3",
+      "value": "3 gün üst üste namazlarınızı tamamladınız."
+    },
+    {
+      "name": "notif_streak_7",
+      "value": "7 gün üst üste namazlarınızı tamamladınız."
+    },
+    {
+      "name": "notif_streak_14",
+      "value": "14 gün üst üste namazlarınızı tamamladınız."
+    },
+    {
+      "name": "notif_streak_30",
+      "value": "30 gün üst üste namazlarınızı tamamladınız."
+    },
+    {
+      "name": "notif_streak_100",
+      "value": "100 gün üst üste namazlarınızı tamamladınız."
+    },
+    {
+      "name": "notif_streak_1000",
+      "value": "1.000 gün üst üste namazlarınızı tamamladınız."
+    },
+    {
+      "name": "notif_streak_10000",
+      "value": "10.000 gün üst üste namazlarınızı tamamladınız."
+    },
+    {
+      "name": "notif_ramadan_start_title",
+      "value": "Ramazan Yaklaşıyor"
+    },
+    {
+      "name": "notif_ramadan_start_7",
+      "value": "Ramazan 7 gün sonra başlayacak."
+    },
+    {
+      "name": "notif_ramadan_mubarak_title",
+      "value": "Hayırlı Ramazanlar"
+    },
+    {
+      "name": "notif_ramadan_mubarak_message",
+      "value": "Allah oruçlarınızı ve ibadetlerinizi kabul etsin."
+    },
+    {
+      "name": "notif_last_ashra_title",
+      "value": "Son On Gün Başlıyor"
+    },
+    {
+      "name": "notif_last_ashra_message",
+      "value": "Ramazan'ın son on gecesi başladı."
+    },
+    {
+      "name": "notif_laylatul_qadr_title",
+      "value": "Kadir Gecesi"
+    },
+    {
+      "name": "notif_laylatul_qadr_message",
+      "value": "Bu gece son on günün mübarek tek gecelerinden biridir."
+    },
+    {
+      "name": "notif_eid_title",
+      "value": "Bayramınız Mübarek Olsun"
+    },
+    {
+      "name": "notif_eid_message",
+      "value": "Allah oruçlarınızı, namazlarınızı ve salih amellerinizi kabul etsin."
+    },
+    {
+      "name": "notif_laylatul_qadr_21",
+      "value": "Bu gece Ramazan'ın 21. gecesidir. Namazınızı, Kur'an tilavetinizi ve Allah'ı zikrinizi artırın."
+    },
+    {
+      "name": "notif_laylatul_qadr_23",
+      "value": "Bu gece Ramazan'ın 23. gecesidir. Samimi ibadetlerle Allah'ın rahmetini ve bağışlamasını arayın."
+    },
+    {
+      "name": "notif_laylatul_qadr_25",
+      "value": "Bu gece Ramazan'ın 25. gecesidir. Bu mübarek gecelerde ibadette gayret göstermeye devam edin."
+    },
+    {
+      "name": "notif_laylatul_qadr_27",
+      "value": "Bu gece Ramazan'ın 27. gecesidir. Pek çok Müslümanın Kadir Gecesi'ni arayarak ibadete yöneldiği özel bir gecedir."
+    },
+    {
+      "name": "notif_laylatul_qadr_29",
+      "value": "Bu gece Ramazan'ın 29. gecesidir. Bu mübarek ayın son fırsatlarını en iyi şekilde değerlendirin."
+    },
+    {
+      "name": "home_worship",
+      "value": "İbadet"
+    },
+    {
+      "name": "home_insights",
+      "value": "İÇGÖRÜLER"
     }
   ]
 }

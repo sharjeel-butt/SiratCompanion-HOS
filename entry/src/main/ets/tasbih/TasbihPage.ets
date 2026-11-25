@@ -73,14 +73,12 @@ export struct TasbihPage {
   @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
   @Watch('onAppForegrounded')
   appForegroundTick: number = 0;
+  @StorageLink('nav_target_nonce') @Watch('onNavTargetNonceChanged') navTargetNonce: string = '';
   @StorageLink(STORAGE_KEY_BREAKPOINT)
   breakpoint: string = 'sm';
   @StorageLink(STORAGE_KEY_APP_THEME)
   @Watch('onAppThemePresetChanged')
   appThemePreset: string = '';
-  @StorageLink('nav_target_tasbih')
-  @Watch('onNavTargetTasbihChanged')
-  navTargetTasbih: string = '';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State tasbihs: Tasbih[] = [];
   @State activeTasbihId: string = '';
@@ -163,37 +161,20 @@ export struct TasbihPage {
       }
     }, 60000);
 
-    // Fallback: catch the nav target before @Watch can fire on mount
-    setTimeout((): void => {
-      const pendingTasbih = AppStorage.get<string>('nav_target_tasbih') ?? '';
-      if (pendingTasbih.length > 0) {
-        const pendingPrayer = AppStorage.get<string>('nav_target_prayer') ?? '';
-        const pendingDhikr = AppStorage.get<number>('nav_target_dhikr') ?? 0;
-
-        AppLogger.info('TasbihPage', `aboutToAppear fallback applying: tasbih=${pendingTasbih}`);
-
-        // Apply the target
-        this.activeTasbihId = pendingTasbih;
-        this.activeDhikrIndex = pendingDhikr;
-        if (pendingPrayer) {
-          this.restorePrayerCount(pendingPrayer);
-        }
-        this.resolveActiveTheme();
-        this.refreshBeadView();
-        this.persist();
-
-        // Clear keys
-        AppStorage.setOrCreate('nav_target_tasbih', '');
-        AppStorage.setOrCreate('nav_target_prayer', '');
-        AppStorage.setOrCreate('nav_target_dhikr', 0);
-      }
-    }, 100);
   }
 
   onAppThemePresetChanged(): void {
     this.colors = PageTheme.compute(this.themeMode);
     this.refreshBeadView();
   }
+
+  private async onNavTargetNonceChanged(): Promise<void> {
+
+    AppLogger.info('TasbihPage', 'onNavTargetNonceChanged fired');
+
+    await this.reloadTasbihs(false);
+  }
+
 
   aboutToDisappear(): void {
     PageTheme.uninstallSystemListener(this.systemDarkListener);
@@ -223,18 +204,13 @@ export struct TasbihPage {
   }
 
   onPageShow(): void {
+    AppLogger.info('TasbihPage', 'onPageShow');
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
 
-    // If there's a pending target, reload to process it. Otherwise, just refresh.
-    const target = AppStorage.get<string>('nav_target_tasbih');
-    if (target) {
-      this.reloadTasbihs();
-    } else {
-      this.resolveActiveTheme();
-      this.ensureActivePrayer();
-      this.refreshBeadView();
-    }
+    this.resolveActiveTheme();
+    this.ensureActivePrayer();
+    this.refreshBeadView();
   }
 
   build() {
@@ -1380,6 +1356,7 @@ export struct TasbihPage {
       // Nav target wins — caller knows the exact dhikr they want.
       const targetDhikr: number = AppStorage.get<number>('nav_target_dhikr') ?? 0;
       const targetPrayer: string = AppStorage.get<string>('nav_target_prayer') ?? '';
+      const targetTasbih: string = AppStorage.get<string>('nav_target_tasbih') ?? '';
       AppLogger.info('TasbihPage',
         `reloadTasbihs: applying nav tasbih='${targetTasbih}' prayer='${targetPrayer}' dhikr=${targetDhikr}`);
       this.applyTasbihNavTarget(targetTasbih, targetDhikr, targetPrayer);
@@ -1413,35 +1390,31 @@ export struct TasbihPage {
   // BEAD VIEWS
   // ============================================================
 
-  private onNavTargetTasbihChanged(): void {
-    if (!this.navTargetTasbih || this.navTargetTasbih.length === 0) {
-      return;
-    }
-    const targetTasbih: string = this.navTargetTasbih;
-    AppLogger.info('TasbihPage',
-      `@Watch fired: navTargetTasbih='${targetTasbih}'`);
-
-    // Defer by one microtask so HomePage's remaining setOrCreate
-    // calls (nav_target_dhikr, nav_target_prayer, nav_target_tab)
-    // can complete before we read the full payload.
-    setTimeout((): void => {
-      const dhikr: number = AppStorage.get<number>('nav_target_dhikr') ?? 0;
-      const prayer: string = AppStorage.get<string>('nav_target_prayer') ?? '';
-      AppLogger.info('TasbihPage',
-        `Applying deferred nav: tasbih='${targetTasbih}' prayer='${prayer}' dhikr=${dhikr}`);
-
-      this.applyTasbihNavTarget(targetTasbih, dhikr, prayer);
-    }, 0);
-  }
 
   private applyTasbihNavTarget(
     targetTasbih: string, targetDhikr: number, targetPrayer: string
   ): void {
     this.activeTasbihId = targetTasbih;
-    this.activeDhikrIndex = targetDhikr;
+
+    const targetTasbihObj = TasbihManager.findTasbih(this.tasbihs, targetTasbih);
+
+    this.activeDhikrIndex = 0;
+
+    if (targetTasbihObj && targetTasbihObj.dhikrs.length > 0) {
+
+      this.activeDhikrIndex = Math.max(0, Math.min(targetDhikr, targetTasbihObj.dhikrs.length - 1));
+    }
 
     if (targetPrayer.length > 0) {
+
+      // Set directly first so any later
+      // resolveActivePrayer() call sees
+      // a non-empty prayer.
+
+      this.activePrayerId = targetPrayer;
+
       this.restorePrayerCount(targetPrayer);
+
     } else {
       const t = this.getActiveTasbih();
       if (t && t.dhikrs.length > 0) {
@@ -1455,13 +1428,9 @@ export struct TasbihPage {
     }
 
     this.persist();
+    AppLogger.info('TasbihPage', `APPLY prayer=${targetPrayer}`);
 
-    // Only clear if still ours — avoids clobbering a newer nav.
-    if (AppStorage.get<string>('nav_target_tasbih') === targetTasbih) {
-      AppStorage.setOrCreate('nav_target_tasbih', '');
-      AppStorage.setOrCreate('nav_target_dhikr', 0);
-      AppStorage.setOrCreate('nav_target_prayer', '');
-    }
+
   }
 
   private getSortedBoundPrayers(prayerIds: string[]): string[] {
@@ -1470,14 +1439,30 @@ export struct TasbihPage {
   }
 
   private resolveActivePrayer(): void {
+
+    // IMPORTANT:
+    // If a prayer is already selected (for example
+    // via Home -> Bound Tasbih navigation),
+    // do not overwrite it.
+
+    if (this.activePrayerId.length > 0) {
+      return;
+    }
+
     const t = this.getActiveTasbih();
+
     if (!t || !t.boundPrayerIds || t.boundPrayerIds.length === 0) {
       this.activePrayerId = '';
       return;
     }
+
     const todayKey = TasbihManager.todayKey();
+
     const pending = t.boundPrayerIds.find(p => !TasbihManager.isTasbihCompleteForPrayer(t, p, todayKey));
+
     const targetPrayer = pending || t.boundPrayerIds[0];
+
+
 
     this.restorePrayerCount(targetPrayer);
   }
@@ -1502,6 +1487,7 @@ export struct TasbihPage {
     if (this.activePrayerId !== '') {
       return;
     }
+    AppLogger.info('TasbihPage', `resolveActivePrayer() active=${this.activePrayerId}`);
     this.resolveActivePrayer();
   }
 
@@ -1543,6 +1529,8 @@ export struct TasbihPage {
 
           // Restore new prayer's count
           const newCount = lc[newPrayer] || 0;
+
+          AppLogger.info('TasbihPage', `restorePrayerCount(${newPrayer})`);
 
           const updatedDhikr: Dhikr = {
             id: d.id,

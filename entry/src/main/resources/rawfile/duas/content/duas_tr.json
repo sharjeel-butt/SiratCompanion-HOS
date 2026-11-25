@@ -1,99 +1,19 @@
 {
-  "dua_breaking_the_fast": {
-    "name": "Oruç Açma Duası",
-    "translation": "Susuzluk gitti, damarlar ıslandı ve Allah dilerse mükâfat sabit oldu.",
-    "reference": "Sünen-i Ebû Dâvûd 2357",
-    "reference_display": "Sünen-i Ebû Dâvûd 2357",
+  "dua_acceptance_of_good_deeds": {
+    "name": "Amellerin Kabulü",
+    "translation": "Rabbimiz, bizden kabul buyur. Şüphesiz sen her şeyi işiten ve bilensin.",
+    "reference": "Quran 2:127",
+    "reference_display": "Quran 2:127",
     "sources": [
       {
-        "type": "hadith",
-        "id": "abudawud:2357",
+        "type": "quran",
+        "surah": 2,
+        "ayah": 127,
         "role": "primary"
       }
     ],
-    "migration_status": "ok",
-    "category": "fasting",
-    "transliteration": "Dhahaba adh-dhama'u wabtallatil-'urooqu wa thabata al-ajru in sha Allah."
-  },
-  "dua_suhoor": {
-    "name": "Oruç Niyeti",
-    "translation": "Ramazan ayında yarınki oruca niyet ettim.",
-    "reference": "Geleneksel niyet",
-    "reference_display": "Geleneksel niyet",
-    "sources": [],
-    "migration_status": "needs_curation",
-    "category": "fasting",
-    "transliteration": "Wa bisawmi ghadinn nawaiytu min shahri Ramadan."
-  },
-  "dua_laylatul_qadr": {
-    "name": "Kadir Gecesi Duası",
-    "translation": "Allah'ım! Sen çok affedicisin, affetmeyi seversin; beni affet.",
-    "reference": "Câmiu't-Tirmizî 3513; Sünen-i İbn Mâce 3850",
-    "reference_display": "Câmiu't-Tirmizî 3513; Sünen-i İbn Mâce 3850",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "tirmidhi:3513",
-        "role": "primary"
-      },
-      {
-        "type": "hadith",
-        "id": "ibnmajah:3850",
-        "role": "supporting"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "forgiveness"
-  },
-  "dua_waking_up": {
-    "name": "Uyanma Duası",
-    "translation": "Bizi öldürdükten sonra dirilten Allah'a hamdolsun; dönüş de O'nadır.",
-    "reference": "Sahih-i Buhârî 6312",
-    "reference_display": "Sahih-i Buhârî 6312",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "bukhari:6312",
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "morning_evening"
-  },
-  "dua_before_sleeping": {
-    "name": "Uyumadan Önce Duası",
-    "translation": "Allah'ım! Senin adınla ölür ve dirilirim.",
-    "reference": "Sahih-i Buhârî 6324",
-    "reference_display": "Sahih-i Buhârî 6324",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "bukhari:6324",
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "daily"
-  },
-  "dua_before_eating": {
-    "name": "Yemekten Önce Duası",
-    "translation": "Allah'ın adıyla.",
-    "reference": "Sünen-i Ebû Dâvûd 3767; Câmiu't-Tirmizî 1858",
-    "reference_display": "Sünen-i Ebû Dâvûd 3767; Câmiu't-Tirmizî 1858",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "abudawud:3767",
-        "role": "primary"
-      },
-      {
-        "type": "hadith",
-        "id": "tirmidhi:1858",
-        "role": "supporting"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "daily"
+    "migration_status": "machine_translated",
+    "category": "worship"
   },
   "dua_after_eating": {
     "name": "Yemekten Sonra Duası",
@@ -115,56 +35,6 @@
     "migration_status": "ok",
     "category": "gratitude"
   },
-  "dua_leaving_the_home": {
-    "name": "Evden Çıkarken Duası",
-    "translation": "Allah'ın adıyla; Allah'a tevekkül ettim. Güç ve kuvvet ancak Allah'ın yardımıyladır.",
-    "reference": "Sünen-i Ebû Dâvûd 5095; Câmiu't-Tirmizî 3426",
-    "reference_display": "Sünen-i Ebû Dâvûd 5095; Câmiu't-Tirmizî 3426",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "abudawud:5095",
-        "role": "primary"
-      },
-      {
-        "type": "hadith",
-        "id": "tirmidhi:3426",
-        "role": "supporting"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "protection"
-  },
-  "dua_entering_home": {
-    "name": "Eve Girerken Duası",
-    "translation": "Allah'ın adıyla girdik, Allah'ın adıyla çıktık ve Rabbimize tevekkül ettik.",
-    "reference": "Sünen-i Ebû Dâvûd 5096",
-    "reference_display": "Sünen-i Ebû Dâvûd 5096",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "abudawud:5096",
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "daily"
-  },
-  "dua_travel": {
-    "name": "Yolculuk Duası",
-    "translation": "Bunu bizim hizmetimize veren Allah'ı tesbih ederiz; yoksa biz buna güç yetiremezdik. Şüphesiz biz Rabbimize döneceğiz.",
-    "reference": "Sahih-i Müslim 1342",
-    "reference_display": "Sahih-i Müslim 1342",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "muslim:1342",
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "travel"
-  },
   "dua_after_fajr": {
     "name": "Sabah Namazından Sonra Duası",
     "translation": "Allah'ım! Beni ateşten koru.",
@@ -180,6 +50,26 @@
     "migration_status": "ok",
     "category": "prayer"
   },
+  "dua_after_leaving_the_restroom": {
+    "name": "Tuvaletten Çıktıktan Sonra",
+    "translation": "Senden mağfiret dilerim.",
+    "reference": "Sunan Abi Dawud 30; Jami at-Tirmidhi 7",
+    "reference_display": "Sunan Abi Dawud 30; Jami at-Tirmidhi 7",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:30",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "tirmidhi:7",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "daily"
+  },
   "dua_after_the_adhan": {
     "name": "Ezan Sonrası Duası",
     "translation": "Allah'ım! Bu eksiksiz davetin ve kılınacak namazın Rabbi! Muhammed'e vesileyi ve fazileti ver, onu kendisine vaad ettiğin Makâm-ı Mahmûd'a ulaştır.",
@@ -189,51 +79,6 @@
       {
         "type": "hadith",
         "id": "bukhari:614",
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "prayer"
-  },
-  "dua_entering_the_mosque": {
-    "name": "Camiye Girerken Duası",
-    "translation": "Allah'ım! Bana rahmet kapılarını aç.",
-    "reference": "Sahih-i Müslim 713",
-    "reference_display": "Sahih-i Müslim 713",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "muslim:713",
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "prayer"
-  },
-  "dua_leaving_the_mosque": {
-    "name": "Camiden Çıkarken Duası",
-    "translation": "Allah'ım! Senden lütfundan istiyorum.",
-    "reference": "Sahih-i Müslim 713",
-    "reference_display": "Sahih-i Müslim 713",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "muslim:713",
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "prayer"
-  },
-  "dua_between_the_two_prostrations": {
-    "name": "İki Secde Arası Duası",
-    "translation": "Rabbim! Beni bağışla; Rabbim! Beni bağışla.",
-    "reference": "Sünen-i Ebû Dâvûd 874",
-    "reference_display": "Sünen-i Ebû Dâvûd 874",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "abudawud:874",
         "role": "primary"
       }
     ],
@@ -255,118 +100,40 @@
     "migration_status": "ok",
     "category": "purification"
   },
-  "dua_qunut_witr": {
-    "name": "Vitir Kunut Duası",
-    "translation": "Allah'ım! Hidayet verdiklerinin arasında bana da hidayet ver; afiyet verdiklerinin arasında bana da afiyet ver; dost edindiklerinin arasında beni de dost edin; bana verdiğini bereketli kıl; ve takdir ettiğin kötülükten beni koru. Muhakkak Sen hükmedersin, Sana hükmedilmez. Senin dost edindiğin kimse zelil olmaz. Ey Rabbimiz! Sen yücesin ve mübareksin.",
-    "reference": "Sünen-i Ebû Dâvûd 1425; Câmiu't-Tirmizî 464",
-    "reference_display": "Sünen-i Ebû Dâvûd 1425; Câmiu't-Tirmizî 464",
+  "dua_all_good": {
+    "name": "Her Hayrı Kapsayan Dua",
+    "translation": "Allah'ım! Bildiğim ve bilmediğim, peşin ve ertelenmiş her hayır için Senden istiyorum; bildiğim ve bilmediğim, peşin ve ertelenmiş her şerden de Sana sığınırım.",
+    "reference": "Sünen-i İbn Mâce 3846; Elbânî sahih saydı",
+    "reference_display": "Sünen-i İbn Mâce 3846; Elbânî sahih saydı",
     "sources": [
       {
         "type": "hadith",
-        "id": "abudawud:1425",
-        "role": "primary"
-      },
-      {
-        "type": "hadith",
-        "id": "tirmidhi:464",
-        "role": "supporting"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "prayer"
-  },
-  "dua_sayyidul_istighfar": {
-    "name": "Seyyidü'l-İstiğfar",
-    "translation": "Allah'ım! Sen benim Rabbimsin, Senden başka ilah yoktur. Beni Sen yarattın ve ben Senin kulunum. Gücüm yettiğince Sana verdiğim ahd ve vaad üzereyim. Yaptıklarımın şerrinden Sana sığınırım. Üzerimdeki nimetini itiraf ediyorum, günahımı da itiraf ediyorum; beni bağışla; çünkü Senden başka günahları bağışlayacak yoktur.",
-    "reference": "Sahih-i Buhârî 6306",
-    "reference_display": "Sahih-i Buhârî 6306",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "bukhari:6306",
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "forgiveness"
-  },
-  "dua_guidance_to_the_straight_path": {
-    "name": "Sırat-ı Müstakîm Duası",
-    "translation": "Bizi doğru yola ilet.",
-    "reference": "Kur'ân-ı Kerîm 1:6",
-    "reference_display": "Kur'ân-ı Kerîm 1:6",
-    "sources": [
-      {
-        "type": "quran",
-        "surah": 1,
-        "ayah": 6,
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "guidance"
-  },
-  "dua_good_in_this_world_and_the_hereafter": {
-    "name": "Dünya ve Ahiret İyiliği Duası",
-    "translation": "Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver ve bizi ateş azabından koru.",
-    "reference": "Kur'ân-ı Kerîm 2:201",
-    "reference_display": "Kur'ân-ı Kerîm 2:201",
-    "sources": [
-      {
-        "type": "quran",
-        "surah": 2,
-        "ayah": 201,
+        "id": "ibnmajah:3846",
         "role": "primary"
       }
     ],
     "migration_status": "ok",
     "category": "general"
   },
-  "dua_protection": {
-    "name": "Koruma Duası",
-    "translation": "Adı anıldığında yerde ve gökte hiçbir şeyin zarar veremeyeceği Allah'ın adıyla; O, her şeyi işitendir, bilendir.",
-    "reference": "Sünen-i Ebû Dâvûd 5088",
-    "reference_display": "Sünen-i Ebû Dâvûd 5088",
+  "dua_anger": {
+    "name": "Öfke Anında Dua",
+    "translation": "Kovulmuş şeytandan Allah'a sığınırım.",
+    "reference": "Sahih al-Bukhari 3282; Sahih Muslim 2610",
+    "reference_display": "Sahih al-Bukhari 3282; Sahih Muslim 2610",
     "sources": [
       {
         "type": "hadith",
-        "id": "abudawud:5088",
+        "id": "bukhari:3282",
         "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "muslim:2610",
+        "role": "supporting"
       }
     ],
-    "migration_status": "ok",
+    "migration_status": "machine_translated",
     "category": "protection"
-  },
-  "dua_morning": {
-    "name": "Sabah Zikri",
-    "translation": "Sabaha erdik; mülk de Allah'a aittir. Hamd Allah'a mahsustur. Allah'tan başka ilah yoktur; O tektir, ortağı yoktur.",
-    "reference": "Sahih-i Müslim 2723",
-    "reference_display": "Sahih-i Müslim 2723",
-    "sources": [
-      {
-        "type": "hadith",
-        "id": "muslim:2723",
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "morning_evening"
-  },
-  "dua_forgiveness_and_mercy": {
-    "name": "Mağfiret ve Rahmet Duası",
-    "translation": "Rabbim! Bağışla ve merhamet et; Sen merhamet edenlerin en hayırlısısın.",
-    "reference": "Kur'ân-ı Kerîm 23:118",
-    "reference_display": "Kur'ân-ı Kerîm 23:118",
-    "sources": [
-      {
-        "type": "quran",
-        "surah": 23,
-        "ayah": 118,
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "forgiveness"
   },
   "dua_anxiety": {
     "name": "Kaygı ve Üzüntü Duası",
@@ -383,6 +150,198 @@
     "migration_status": "ok",
     "category": "distress"
   },
+  "dua_bad_dream": {
+    "name": "Kötü Rüyadan Sonra Dua",
+    "translation": "Şeytandan ve gördüğüm şeyin şerrinden Allah'a sığınırım.",
+    "reference": "Sahih Muslim 2261",
+    "reference_display": "Sahih Muslim 2261",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:2261",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "protection"
+  },
+  "dua_before_eating": {
+    "name": "Yemekten Önce Duası",
+    "translation": "Allah'ın adıyla.",
+    "reference": "Sünen-i Ebû Dâvûd 3767; Câmiu't-Tirmizî 1858",
+    "reference_display": "Sünen-i Ebû Dâvûd 3767; Câmiu't-Tirmizî 1858",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:3767",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "tirmidhi:1858",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "daily"
+  },
+  "dua_before_entering_the_restroom": {
+    "name": "Tuvalete Girmeden Önce",
+    "translation": "Allah'ım, erkek ve dişi şeytanlardan sana sığınırım.",
+    "reference": "Sahih al-Bukhari 142; Sahih Muslim 375",
+    "reference_display": "Sahih al-Bukhari 142; Sahih Muslim 375",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:142",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "muslim:375",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "daily"
+  },
+  "dua_before_intimacy": {
+    "name": "Eşle Birleşmeden Önce Dua",
+    "translation": "Allah'ın adıyla. Allah'ım, şeytanı bizden uzak tut ve bize vereceğin çocuktan da şeytanı uzak tut.",
+    "reference": "Sahih al-Bukhari 141; Sahih Muslim 1434",
+    "reference_display": "Sahih al-Bukhari 141; Sahih Muslim 1434",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:141",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "muslim:1434",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "family"
+  },
+  "dua_before_sleeping": {
+    "name": "Uyumadan Önce Duası",
+    "translation": "Allah'ım! Senin adınla ölür ve dirilirim.",
+    "reference": "Sahih-i Buhârî 6324",
+    "reference_display": "Sahih-i Buhârî 6324",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:6324",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "daily"
+  },
+  "dua_between_the_two_prostrations": {
+    "name": "İki Secde Arası Duası",
+    "translation": "Rabbim! Beni bağışla; Rabbim! Beni bağışla.",
+    "reference": "Sünen-i Ebû Dâvûd 874",
+    "reference_display": "Sünen-i Ebû Dâvûd 874",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:874",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "prayer"
+  },
+  "dua_breaking_the_fast": {
+    "name": "Oruç Açma Duası",
+    "translation": "Susuzluk gitti, damarlar ıslandı ve Allah dilerse mükâfat sabit oldu.",
+    "reference": "Sünen-i Ebû Dâvûd 2357",
+    "reference_display": "Sünen-i Ebû Dâvûd 2357",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:2357",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "fasting",
+    "transliteration": "Dhahaba adh-dhama'u wabtallatil-'urooqu wa thabata al-ajru in sha Allah."
+  },
+  "dua_condolence": {
+    "name": "Taziye Sözleri",
+    "translation": "Alınan da verilen de Allah'ındır ve O'nun katında her şeyin belirlenmiş bir eceli vardır. Öyleyse sabret ve Allah'tan karşılığını bekle.",
+    "reference": "Sahih al-Bukhari 1284; Sahih Muslim 923",
+    "reference_display": "Sahih al-Bukhari 1284; Sahih Muslim 923",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:1284",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "muslim:923",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "funeral"
+  },
+  "dua_contentment_with_allah_islam_and_muhammad": {
+    "name": "Allah'tan, İslam'dan ve Muhammed'den Razı Olmak",
+    "translation": "Rab olarak Allah'tan, din olarak İslam'dan ve peygamber olarak Muhammed'den razı oldum.",
+    "reference": "Sunan Abi Dawud 5072; Jami at-Tirmidhi 3389",
+    "reference_display": "Sunan Abi Dawud 5072; Jami at-Tirmidhi 3389",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:5072",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "tirmidhi:3389",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "faith"
+  },
+  "dua_creation_and_protection_from_fire": {
+    "name": "Yaratılış ve Ateşten Korunma",
+    "translation": "Rabbimiz, sen bunu boşuna yaratmadın. Seni tesbih ederiz; bizi ateş azabından koru.",
+    "reference": "Quran 3:191",
+    "reference_display": "Quran 3:191",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 3,
+        "ayah": 191,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "reflection"
+  },
+  "dua_debt_sufficiency": {
+    "name": "Helal Rızık ve Borçtan Kurtulma Duası",
+    "translation": "Allah'ım, bana helal kıldığınla yetin, haram kıldığından beni uzak tut ve lütfunla beni senden başkasına muhtaç etme.",
+    "reference": "Jami at-Tirmidhi 3563",
+    "reference_display": "Jami at-Tirmidhi 3563",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "tirmidhi:3563",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "provision"
+  },
   "dua_difficult_matter": {
     "name": "Zor Durumlarda Duası",
     "translation": "Allah'ım! Senin kolay kıldığından başka kolay yoktur; Sen dilersen üzüntüyü de kolaylaştırırsın.",
@@ -398,20 +357,196 @@
     "migration_status": "partial",
     "category": "distress"
   },
-  "dua_when_afflicted_by_calamity": {
-    "name": "Musibet Anı Duası",
-    "translation": "Muhakkak biz Allah'a aidiz ve muhakkak O'na döneceğiz. Allah'ım! Musibetimde bana ecir ver ve onun yerine bana daha hayırlısını ver.",
-    "reference": "Sahih-i Müslim 918",
-    "reference_display": "Sahih-i Müslim 918",
+  "dua_do_not_leave_me_to_myself": {
+    "name": "Nefse Bırakılmama Duası",
+    "translation": "Ey Hayy, ey Kayyûm! Rahmetinle yardım istiyorum. Bütün işlerimi düzelt ve beni göz açıp kapayıncaya kadar bile nefsimle baş başa bırakma.",
+    "reference": "El-Müstedrek li'l-Hâkim 1/545; Elbânî sahih saydı",
+    "reference_display": "El-Müstedrek li'l-Hâkim 1/545; Elbânî sahih saydı",
     "sources": [
       {
-        "type": "hadith",
-        "id": "muslim:918",
+        "type": "external",
+        "display": "El-Müstedrek li'l-Hâkim 545",
         "role": "primary"
       }
     ],
-    "migration_status": "ok",
-    "category": "distress"
+    "migration_status": "partial",
+    "category": "guidance"
+  },
+  "dua_dua_of_adam_and_hawwa": {
+    "name": "Âdem ile Havva'nın Duası",
+    "translation": "Rabbimiz, biz kendimize zulmettik. Eğer bizi bağışlamaz ve bize merhamet etmezsen, mutlaka ziyana uğrayanlardan oluruz.",
+    "reference": "Quran 7:23",
+    "reference_display": "Quran 7:23",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 7,
+        "ayah": 23,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "forgiveness"
+  },
+  "dua_dua_of_ayyub_in_illness": {
+    "name": "Eyyûb'ün Hastalıkta Duası",
+    "translation": "Başıma bu dert geldi; sen merhametlilerin en merhametlisisin.",
+    "reference": "Quran 21:83",
+    "reference_display": "Quran 21:83",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 21,
+        "ayah": 83,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "healing"
+  },
+  "dua_dua_of_ibrahim_for_a_secure_city": {
+    "name": "İbrahim'in Güvenli Bir Şehir Duası",
+    "translation": "Rabbim, bu şehri güvenli kıl; beni ve çocuklarımı putlara tapmaktan uzak tut.",
+    "reference": "Quran 14:35",
+    "reference_display": "Quran 14:35",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 14,
+        "ayah": 35,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "protection"
+  },
+  "dua_dua_of_ibrahim_for_prayer": {
+    "name": "İbrahim'in Namaz Duası",
+    "translation": "Rabbim, beni namazı dosdoğru kılanlardan eyle; soyumdan da namaz kılanlar var et. Rabbimiz, duamı kabul buyur.",
+    "reference": "Quran 14:40",
+    "reference_display": "Quran 14:40",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 14,
+        "ayah": 40,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "family"
+  },
+  "dua_dua_of_ibrahim_for_wisdom": {
+    "name": "İbrahim'in Hikmet Duası",
+    "translation": "Rabbim, bana hikmet ver ve beni salihlerle birleştir.",
+    "reference": "Quran 26:83",
+    "reference_display": "Quran 26:83",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 26,
+        "ayah": 83,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "guidance"
+  },
+  "dua_dua_of_musa_for_ease_and_eloquence": {
+    "name": "Musa'nın Kolaylık ve Güzel Konuşma Duası",
+    "translation": "Rabbim, göğsümü genişlet, işimi kolaylaştır ve dilimdeki düğümü çöz ki sözümü anlasınlar.",
+    "reference": "Quran 20:25-28",
+    "reference_display": "Quran 20:25-28",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 20,
+        "ayah": 25,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "guidance"
+  },
+  "dua_dua_of_musa_for_help": {
+    "name": "Musa'nın Yardım Duası",
+    "translation": "Rabbim, ben bana indireceğin her hayra muhtacım.",
+    "reference": "Quran 28:24",
+    "reference_display": "Quran 28:24",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 28,
+        "ayah": 24,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "need"
+  },
+  "dua_dua_of_nuh_for_believers": {
+    "name": "Nuh'un Müminler İçin Duası",
+    "translation": "Rabbim, beni, anne babamı, mümin olarak evime girenleri ve bütün mümin erkekleri ve mümin kadınları bağışla.",
+    "reference": "Quran 71:28",
+    "reference_display": "Quran 71:28",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 71,
+        "ayah": 28,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "forgiveness"
+  },
+  "dua_dua_of_nuh_for_forgiveness": {
+    "name": "Nuh'un Mağfiret Duası",
+    "translation": "Rabbim, hakkında bilgim olmayan bir şeyi senden istemekten sana sığınırım. Eğer beni bağışlamaz ve bana merhamet etmezsen, ziyana uğrayanlardan olurum.",
+    "reference": "Quran 11:47",
+    "reference_display": "Quran 11:47",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 11,
+        "ayah": 47,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "forgiveness"
+  },
+  "dua_dua_of_sulayman_for_gratitude": {
+    "name": "Süleyman'ın Şükür Duası",
+    "translation": "Rabbim, bana ve anne babama verdiğin nimete şükretmeyi ve senin razı olacağın salih amel işlemeyi bana ilham et.",
+    "reference": "Quran 27:19",
+    "reference_display": "Quran 27:19",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 27,
+        "ayah": 19,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "gratitude"
+  },
+  "dua_dua_of_the_young_believers": {
+    "name": "Genç Müminlerin Duası",
+    "translation": "Rabbimiz, bize katından bir rahmet ver ve işimizde bize doğru yolu kolaylaştır.",
+    "reference": "Quran 18:10",
+    "reference_display": "Quran 18:10",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 18,
+        "ayah": 10,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "guidance"
   },
   "dua_dua_of_yunus_in_distress": {
     "name": "Yunus'un Sıkıntı Duası",
@@ -429,53 +564,117 @@
     "migration_status": "ok",
     "category": "distress"
   },
-  "dua_mercy_for_parents": {
-    "name": "Anne-Baba için Rahmet Duası",
-    "translation": "Rabbim! Onlar beni küçüklüğümde nasıl büyüttüyse, Sen de onlara merhamet et.",
-    "reference": "Kur'ân-ı Kerîm 17:24",
-    "reference_display": "Kur'ân-ı Kerîm 17:24",
+  "dua_dua_of_yusuf_for_a_muslim_death": {
+    "name": "Yusuf'un Müslüman Olarak Ölüm Duası",
+    "translation": "Rabbim, bana mülk verdin ve olayların yorumunu öğrettin. Ey gökleri ve yeri yaratan, dünyada da ahirette de sen benim velimsin. Canımı Müslüman olarak al ve beni salihlerle birleştir.",
+    "reference": "Quran 12:101",
+    "reference_display": "Quran 12:101",
     "sources": [
       {
         "type": "quran",
-        "surah": 17,
-        "ayah": 24,
+        "surah": 12,
+        "ayah": 101,
         "role": "primary"
       }
     ],
-    "migration_status": "ok",
+    "migration_status": "machine_translated",
+    "category": "hereafter"
+  },
+  "dua_dua_of_zakariyya_for_an_heir": {
+    "name": "Zekeriyya'nın Evlat Duası",
+    "translation": "Rabbim, beni tek başıma bırakma; sen varislerin en hayırlısısın.",
+    "reference": "Quran 21:89",
+    "reference_display": "Quran 21:89",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 21,
+        "ayah": 89,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
     "category": "family"
   },
-  "dua_righteous_spouses_and_children": {
-    "name": "Salih Eş ve Çocuk Duası",
-    "translation": "Rabbimiz! Bize eşlerimizden ve çocuklarımızdan gözlerimizi aydınlatacak kimseler ver ve bizi takvâ sahiplerine imam kıl.",
-    "reference": "Kur'ân-ı Kerîm 25:74",
-    "reference_display": "Kur'ân-ı Kerîm 25:74",
+  "dua_during_strong_wind": {
+    "name": "Şiddetli Rüzgârda",
+    "translation": "Allah'ım, senden bu rüzgârın hayrını, içindeki hayrı ve gönderildiği hayrı isterim. Bu rüzgârın şerrinden, içindeki şerden ve gönderildiği şerden sana sığınırım.",
+    "reference": "Sahih Muslim 899",
+    "reference_display": "Sahih Muslim 899",
     "sources": [
       {
-        "type": "quran",
-        "surah": 25,
-        "ayah": 74,
+        "type": "hadith",
+        "id": "muslim:899",
         "role": "primary"
       }
     ],
-    "migration_status": "ok",
-    "category": "family"
+    "migration_status": "machine_translated",
+    "category": "weather"
   },
-  "dua_increase_me_in_knowledge": {
-    "name": "İlim Artışı Duası",
-    "translation": "Rabbim! İlmimi artır.",
-    "reference": "Kur'ân-ı Kerîm 20:114",
-    "reference_display": "Kur'ân-ı Kerîm 20:114",
+  "dua_entering_a_marketplace": {
+    "name": "Çarşıya Girerken",
+    "translation": "Tek olan Allah'tan başka ilah yoktur, ortağı yoktur. Mülk O'nundur, hamd O'nadır. O diriltir ve öldürür. O diridir, ölmez. Hayır O'nun elindedir ve O her şeye gücü yetendir.",
+    "reference": "Jami at-Tirmidhi 3428",
+    "reference_display": "Jami at-Tirmidhi 3428",
     "sources": [
       {
-        "type": "quran",
-        "surah": 20,
-        "ayah": 114,
+        "type": "hadith",
+        "id": "tirmidhi:3428",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "daily"
+  },
+  "dua_entering_home": {
+    "name": "Eve Girerken Duası",
+    "translation": "Allah'ın adıyla girdik, Allah'ın adıyla çıktık ve Rabbimize tevekkül ettik.",
+    "reference": "Sünen-i Ebû Dâvûd 5096",
+    "reference_display": "Sünen-i Ebû Dâvûd 5096",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:5096",
         "role": "primary"
       }
     ],
     "migration_status": "ok",
-    "category": "knowledge"
+    "category": "daily"
+  },
+  "dua_entering_the_mosque": {
+    "name": "Camiye Girerken Duası",
+    "translation": "Allah'ım! Bana rahmet kapılarını aç.",
+    "reference": "Sahih-i Müslim 713",
+    "reference_display": "Sahih-i Müslim 713",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:713",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "prayer"
+  },
+  "dua_expiation_of_a_gathering": {
+    "name": "Meclisin Kefareti",
+    "translation": "Allah'ım, sen her türlü eksiklikten münezzehsin ve hamd sanadır. Senden başka ilah olmadığına şahitlik ederim. Senden mağfiret diler ve sana tövbe ederim.",
+    "reference": "Sunan Abi Dawud 4859; Jami at-Tirmidhi 3433",
+    "reference_display": "Sunan Abi Dawud 4859; Jami at-Tirmidhi 3433",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:4859",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "tirmidhi:3433",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "forgiveness"
   },
   "dua_for_beneficial_knowledge_and_accepted_deeds": {
     "name": "Faydalı İlim ve Temiz Rızık Duası",
@@ -492,50 +691,34 @@
     "migration_status": "ok",
     "category": "knowledge"
   },
-  "dua_steadfast_hearts": {
-    "name": "Kalp Sebatı Duası",
-    "translation": "Rabbimiz! Bizi hidayete erdirdikten sonra kalplerimizi saptırma ve bize katından rahmet bağışla. Muhakkak Sen çok bağışlayansın.",
-    "reference": "Kur'ân-ı Kerîm 3:8",
-    "reference_display": "Kur'ân-ı Kerîm 3:8",
-    "sources": [
-      {
-        "type": "quran",
-        "surah": 3,
-        "ayah": 8,
-        "role": "primary"
-      }
-    ],
-    "migration_status": "ok",
-    "category": "guidance"
-  },
-  "dua_steadfast_heart": {
-    "name": "Kalp Sebatı Duası",
-    "translation": "Ey kalpleri evirip çeviren! Kalbimi dinin üzerinde sabit kıl.",
-    "reference": "Câmiu't-Tirmizî 2140",
-    "reference_display": "Câmiu't-Tirmizî 2140",
+  "dua_for_forgiveness_mercy_guidance_health_and_provision": {
+    "name": "Mağfiret, Rahmet, Hidayet, Afiyet ve Rızık İçin",
+    "translation": "Allah'ım, beni bağışla, bana merhamet et, beni doğru yola ilet, bana afiyet ver ve beni rızıklandır.",
+    "reference": "Sahih Muslim 2697",
+    "reference_display": "Sahih Muslim 2697",
     "sources": [
       {
         "type": "hadith",
-        "id": "tirmidhi:2140",
+        "id": "muslim:2697",
         "role": "primary"
       }
     ],
-    "migration_status": "ok",
-    "category": "guidance"
+    "migration_status": "machine_translated",
+    "category": "general"
   },
-  "dua_do_not_leave_me_to_myself": {
-    "name": "Nefse Bırakılmama Duası",
-    "translation": "Ey Hayy, ey Kayyûm! Rahmetinle yardım istiyorum. Bütün işlerimi düzelt ve beni göz açıp kapayıncaya kadar bile nefsimle baş başa bırakma.",
-    "reference": "El-Müstedrek li'l-Hâkim 1/545; Elbânî sahih saydı",
-    "reference_display": "El-Müstedrek li'l-Hâkim 1/545; Elbânî sahih saydı",
+  "dua_for_guidance_piety_chastity_and_sufficiency": {
+    "name": "Hidayet, Takva, İffet ve Gönül Zenginliği İçin",
+    "translation": "Allah'ım, senden hidayet, takva, iffet ve gönül zenginliği isterim.",
+    "reference": "Sahih Muslim 2721",
+    "reference_display": "Sahih Muslim 2721",
     "sources": [
       {
-        "type": "external",
-        "display": "El-Müstedrek li'l-Hâkim 545",
+        "type": "hadith",
+        "id": "muslim:2721",
         "role": "primary"
       }
     ],
-    "migration_status": "partial",
+    "migration_status": "machine_translated",
     "category": "guidance"
   },
   "dua_for_healing": {
@@ -558,6 +741,26 @@
     "migration_status": "ok",
     "category": "healing"
   },
+  "dua_for_paradise_and_protection_from_fire": {
+    "name": "Cennet İçin ve Ateşten Korunmak İçin",
+    "translation": "Allah'ım, senden cenneti isterim ve ateşten sana sığınırım.",
+    "reference": "Sunan Abi Dawud 792; Sunan Ibn Majah 910",
+    "reference_display": "Sunan Abi Dawud 792; Sunan Ibn Majah 910",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:792",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "ibnmajah:910",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "hereafter"
+  },
   "dua_for_protection_from_harm": {
     "name": "Her Türlü Zarardan Korunma Duası",
     "translation": "Yarattığı şeylerin şerrinden Allah'ın eksiksiz kelimelerine sığınırım.",
@@ -567,6 +770,491 @@
       {
         "type": "hadith",
         "id": "muslim:2708",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "protection"
+  },
+  "dua_for_rain": {
+    "name": "Yağmur İçin",
+    "translation": "Allah'ım, bunu faydalı bir yağmur kıl.",
+    "reference": "Sahih al-Bukhari 1032",
+    "reference_display": "Sahih al-Bukhari 1032",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:1032",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "weather"
+  },
+  "dua_for_righteous_child": {
+    "name": "Salih Evlat İçin Dua",
+    "translation": "Rabbim, bana salihlerden olacak bir evlat bağışla.",
+    "reference": "Quran 37:100",
+    "reference_display": "Quran 37:100",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 37,
+        "ayah": 100,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "family"
+  },
+  "dua_for_well_being_in_both_worlds": {
+    "name": "Dünya ve Ahiret Afiyeti Duası",
+    "translation": "Allah'ım! Senden dünyada ve ahirette af ve afiyet isterim.",
+    "reference": "Sünen-i İbn Mâce 3871; Sünen-i Ebû Dâvûd 5074",
+    "reference_display": "Sünen-i İbn Mâce 3871; Sünen-i Ebû Dâvûd 5074",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "ibnmajah:3871",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "abudawud:5074",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "protection"
+  },
+  "dua_forgiveness_and_a_righteous_death": {
+    "name": "Mağfiret ve Salihler Arasında Ölüm",
+    "translation": "Rabbimiz, günahlarımızı bağışla, kötülüklerimizi ört ve canımızı iyilerle beraber al.",
+    "reference": "Quran 3:193",
+    "reference_display": "Quran 3:193",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 3,
+        "ayah": 193,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "forgiveness"
+  },
+  "dua_forgiveness_and_mercy": {
+    "name": "Mağfiret ve Rahmet Duası",
+    "translation": "Rabbim! Bağışla ve merhamet et; Sen merhamet edenlerin en hayırlısısın.",
+    "reference": "Kur'ân-ı Kerîm 23:118",
+    "reference_display": "Kur'ân-ı Kerîm 23:118",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 23,
+        "ayah": 118,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "forgiveness"
+  },
+  "dua_forgiveness_and_protection_from_fire": {
+    "name": "Mağfiret ve Ateşten Korunma",
+    "translation": "Rabbimiz, biz iman ettik; öyleyse günahlarımızı bağışla ve bizi ateş azabından koru.",
+    "reference": "Quran 3:16",
+    "reference_display": "Quran 3:16",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 3,
+        "ayah": 16,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "forgiveness"
+  },
+  "dua_forgiveness_and_steadfastness": {
+    "name": "Mağfiret ve Sebat",
+    "translation": "Rabbimiz, günahlarımızı ve işimizdeki taşkınlıklarımızı bağışla, ayaklarımızı sabit kıl ve kâfirler topluluğuna karşı bize zafer ver.",
+    "reference": "Quran 3:147",
+    "reference_display": "Quran 3:147",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 3,
+        "ayah": 147,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "forgiveness"
+  },
+  "dua_forgiveness_for_parents_and_believers": {
+    "name": "Anne Baba ve Müminler İçin Mağfiret",
+    "translation": "Rabbimiz, hesabın görüleceği gün beni, anne babamı ve müminleri bağışla.",
+    "reference": "Quran 14:41",
+    "reference_display": "Quran 14:41",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 14,
+        "ayah": 41,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "forgiveness"
+  },
+  "dua_funeral_deceased": {
+    "name": "Ölen Kişi İçin Dua",
+    "translation": "Allah'ım, onu bağışla, ona merhamet et, ona afiyet ver ve onu affet. Ona ikramda bulun, girdiği yeri geniş kıl, onu su, kar ve dolu ile yıka ve beyaz elbisenin kirden temizlendiği gibi onu günahlardan arındır.",
+    "reference": "Sahih Muslim 963",
+    "reference_display": "Sahih Muslim 963",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:963",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "funeral"
+  },
+  "dua_good_character": {
+    "name": "Güzel Ahlak İçin Dua",
+    "translation": "Allah'ım, beni en güzel ahlaka ilet; çünkü ona senden başka kimse iletemez. Kötü ahlakı benden uzaklaştır; çünkü onu senden başka kimse uzaklaştıramaz.",
+    "reference": "Sahih Muslim 771",
+    "reference_display": "Sahih Muslim 771",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:771",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "guidance"
+  },
+  "dua_good_in_this_world_and_the_hereafter": {
+    "name": "Dünya ve Ahiret İyiliği Duası",
+    "translation": "Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver ve bizi ateş azabından koru.",
+    "reference": "Kur'ân-ı Kerîm 2:201",
+    "reference_display": "Kur'ân-ı Kerîm 2:201",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 2,
+        "ayah": 201,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "general"
+  },
+  "dua_guidance_to_the_straight_path": {
+    "name": "Sırat-ı Müstakîm Duası",
+    "translation": "Bizi doğru yola ilet.",
+    "reference": "Kur'ân-ı Kerîm 1:6",
+    "reference_display": "Kur'ân-ı Kerîm 1:6",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 1,
+        "ayah": 6,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "guidance"
+  },
+  "dua_help_me_worship_you_well": {
+    "name": "Sana Güzelce İbadet Etmem İçin Bana Yardım Et",
+    "translation": "Allah'ım, seni zikretmem, sana şükretmem ve sana güzelce ibadet etmem için bana yardım et.",
+    "reference": "Sunan Abi Dawud 1522; Sunan an-Nasai 1303",
+    "reference_display": "Sunan Abi Dawud 1522; Sunan an-Nasai 1303",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:1522",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "nasai:1303",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "worship"
+  },
+  "dua_increase_me_in_knowledge": {
+    "name": "İlim Artışı Duası",
+    "translation": "Rabbim! İlmimi artır.",
+    "reference": "Kur'ân-ı Kerîm 20:114",
+    "reference_display": "Kur'ân-ı Kerîm 20:114",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 20,
+        "ayah": 114,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "knowledge"
+  },
+  "dua_istikhara": {
+    "name": "İstihare Duası",
+    "translation": "Allah'ım! İlminle Senden hayır diliyorum, kudretinle Senden güç diliyorum ve Senden büyük lütfundan istiyorum. Sen güç yetirirsin, ben güç yetiremem; Sen bilirsin, ben bilmem; Sen gizlilikleri bilensin. Allah'ım! Eğer bu iş benim dinim, geçimim ve işimin sonu için hayırlı ise onu benim için takdir et, kolaylaştır ve bereketli kıl. Eğer bu iş benim dinim, geçimim ve işimin sonu için şer ise onu benden, beni de ondan uzaklaştır; hayır nerede ise onu benim için takdir et, sonra beni onunla razı et.",
+    "reference": "Sahih-i Buhârî 6382",
+    "reference_display": "Sahih-i Buhârî 6382",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:6382",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "guidance"
+  },
+  "dua_laylatul_qadr": {
+    "name": "Kadir Gecesi Duası",
+    "translation": "Allah'ım! Sen çok affedicisin, affetmeyi seversin; beni affet.",
+    "reference": "Câmiu't-Tirmizî 3513; Sünen-i İbn Mâce 3850",
+    "reference_display": "Câmiu't-Tirmizî 3513; Sünen-i İbn Mâce 3850",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "tirmidhi:3513",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "ibnmajah:3850",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "forgiveness"
+  },
+  "dua_leaving_the_home": {
+    "name": "Evden Çıkarken Duası",
+    "translation": "Allah'ın adıyla; Allah'a tevekkül ettim. Güç ve kuvvet ancak Allah'ın yardımıyladır.",
+    "reference": "Sünen-i Ebû Dâvûd 5095; Câmiu't-Tirmizî 3426",
+    "reference_display": "Sünen-i Ebû Dâvûd 5095; Câmiu't-Tirmizî 3426",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:5095",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "tirmidhi:3426",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "protection"
+  },
+  "dua_leaving_the_mosque": {
+    "name": "Camiden Çıkarken Duası",
+    "translation": "Allah'ım! Senden lütfundan istiyorum.",
+    "reference": "Sahih-i Müslim 713",
+    "reference_display": "Sahih-i Müslim 713",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:713",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "prayer"
+  },
+  "dua_light": {
+    "name": "Nur İçin Dua",
+    "translation": "Allah'ım, kalbime nur koy, gözüme nur koy, kulağıma nur koy; sağıma ve soluma, üstüme ve altıma, önüme ve arkama nur koy ve bana nur ver.",
+    "reference": "Sahih al-Bukhari 6316; Sahih Muslim 763",
+    "reference_display": "Sahih al-Bukhari 6316; Sahih Muslim 763",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:6316",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "muslim:763",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "guidance"
+  },
+  "dua_light_and_forgiveness": {
+    "name": "Nur ve Mağfiret",
+    "translation": "Rabbimiz, nurumuzu bizim için tamamla ve bizi bağışla. Şüphesiz sen her şeye gücü yetensin.",
+    "reference": "Quran 66:8",
+    "reference_display": "Quran 66:8",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 66,
+        "ayah": 8,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "hereafter"
+  },
+  "dua_mercy_for_parents": {
+    "name": "Anne-Baba için Rahmet Duası",
+    "translation": "Rabbim! Onlar beni küçüklüğümde nasıl büyüttüyse, Sen de onlara merhamet et.",
+    "reference": "Kur'ân-ı Kerîm 17:24",
+    "reference_display": "Kur'ân-ı Kerîm 17:24",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 17,
+        "ayah": 24,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "family"
+  },
+  "dua_morning": {
+    "name": "Sabah Zikri",
+    "translation": "Sabaha erdik; mülk de Allah'a aittir. Hamd Allah'a mahsustur. Allah'tan başka ilah yoktur; O tektir, ortağı yoktur.",
+    "reference": "Sahih-i Müslim 2723",
+    "reference_display": "Sahih-i Müslim 2723",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:2723",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "morning_evening"
+  },
+  "dua_new_garment": {
+    "name": "Yeni Elbise Giyerken Dua",
+    "translation": "Allah'ım, hamd sanadır. Bunu bana sen giydirdin. Senden bunun hayrını ve yapıldığı hayrı isterim; bunun şerrinden ve yapıldığı şerden sana sığınırım.",
+    "reference": "Sunan Abi Dawud 4020; Jami at-Tirmidhi 1767",
+    "reference_display": "Sunan Abi Dawud 4020; Jami at-Tirmidhi 1767",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:4020",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "tirmidhi:1767",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "daily"
+  },
+  "dua_no_burden_beyond_capacity": {
+    "name": "Güç Yetirilemeyecek Yük Yüklenmemesi",
+    "translation": "Rabbimiz, unutur veya yanılırsak bizi sorumlu tutma. Rabbimiz, bizden öncekilere yüklediğin gibi bize de ağır yük yükleme. Rabbimiz, gücümüzün yetmeyeceği şeyi bize taşıtma. Bizi affet, bizi bağışla ve bize merhamet et.",
+    "reference": "Quran 2:286",
+    "reference_display": "Quran 2:286",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 2,
+        "ayah": 286,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "mercy"
+  },
+  "dua_opening_supplication_in_prayer": {
+    "name": "Namazda Sübhaneke (Açılış Duası)",
+    "translation": "Allah'ım, doğu ile batıyı birbirinden uzaklaştırdığın gibi benimle günahlarımın arasını uzaklaştır. Beyaz elbisenin kirden temizlendiği gibi beni günahlardan arındır ve günahlarımı kar, su ve dolu ile yıka.",
+    "reference": "Sahih al-Bukhari 744; Sahih Muslim 598",
+    "reference_display": "Sahih al-Bukhari 744; Sahih Muslim 598",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:744",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "muslim:598",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "prayer"
+  },
+  "dua_patience_and_a_muslim_death": {
+    "name": "Sabır ve Müslüman Olarak Ölüm",
+    "translation": "Rabbimiz, üzerimize sabır yağdır ve canımızı Müslüman olarak al.",
+    "reference": "Quran 7:126",
+    "reference_display": "Quran 7:126",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 7,
+        "ayah": 126,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "steadfastness"
+  },
+  "dua_patience_and_firmness": {
+    "name": "Sabır ve Sebat",
+    "translation": "Rabbimiz, üzerimize sabır yağdır, ayaklarımızı sabit kıl ve kâfirler topluluğuna karşı bize zafer ver.",
+    "reference": "Quran 2:250",
+    "reference_display": "Quran 2:250",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 2,
+        "ayah": 250,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "steadfastness"
+  },
+  "dua_promise_of_the_hereafter": {
+    "name": "Ahiret Vaadi",
+    "translation": "Rabbimiz, peygamberlerin aracılığıyla bize vaat ettiklerini ver ve kıyamet günü bizi rezil etme. Şüphesiz sen sözünden dönmezsin.",
+    "reference": "Quran 3:194",
+    "reference_display": "Quran 3:194",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 3,
+        "ayah": 194,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "hereafter"
+  },
+  "dua_protection": {
+    "name": "Koruma Duası",
+    "translation": "Adı anıldığında yerde ve gökte hiçbir şeyin zarar veremeyeceği Allah'ın adıyla; O, her şeyi işitendir, bilendir.",
+    "reference": "Sünen-i Ebû Dâvûd 5088",
+    "reference_display": "Sünen-i Ebû Dâvûd 5088",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:5088",
         "role": "primary"
       }
     ],
@@ -588,54 +1276,344 @@
     "migration_status": "ok",
     "category": "protection"
   },
-  "dua_istikhara": {
-    "name": "İstihare Duası",
-    "translation": "Allah'ım! İlminle Senden hayır diliyorum, kudretinle Senden güç diliyorum ve Senden büyük lütfundan istiyorum. Sen güç yetirirsin, ben güç yetiremem; Sen bilirsin, ben bilmem; Sen gizlilikleri bilensin. Allah'ım! Eğer bu iş benim dinim, geçimim ve işimin sonu için hayırlı ise onu benim için takdir et, kolaylaştır ve bereketli kıl. Eğer bu iş benim dinim, geçimim ve işimin sonu için şer ise onu benden, beni de ondan uzaklaştır; hayır nerede ise onu benim için takdir et, sonra beni onunla razı et.",
-    "reference": "Sahih-i Buhârî 6382",
-    "reference_display": "Sahih-i Buhârî 6382",
+  "dua_protection_for_children_from_evil_eye": {
+    "name": "Çocukların Nazardan Korunması",
+    "translation": "Sizi her şeytandan, zararlı yaratıktan ve kötü gözden Allah'ın eksiksiz kelimelerine sığındırırım.",
+    "reference": "Sahih al-Bukhari 3371",
+    "reference_display": "Sahih al-Bukhari 3371",
     "sources": [
       {
         "type": "hadith",
-        "id": "bukhari:6382",
+        "id": "bukhari:3371",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "protection"
+  },
+  "dua_protection_from_devils": {
+    "name": "Şeytanlardan Korunma",
+    "translation": "Rabbim, şeytanların vesveselerinden sana sığınırım. Rabbim, onların yanımda bulunmasından da sana sığınırım.",
+    "reference": "Quran 23:97-98",
+    "reference_display": "Quran 23:97-98",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 23,
+        "ayah": 97,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "protection"
+  },
+  "dua_protection_from_four_trials": {
+    "name": "Dört Fitneden Korunma",
+    "translation": "Allah'ım, kabir azabından ve cehennem azabından, hayatın ve ölümün fitnelerinden ve Mesih Deccal'in kötü fitnesinden sana sığınırım.",
+    "reference": "Sahih al-Bukhari 1377; Sahih Muslim 588",
+    "reference_display": "Sahih al-Bukhari 1377; Sahih Muslim 588",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:1377",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "muslim:588",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "protection"
+  },
+  "dua_qunut_witr": {
+    "name": "Vitir Kunut Duası",
+    "translation": "Allah'ım! Hidayet verdiklerinin arasında bana da hidayet ver; afiyet verdiklerinin arasında bana da afiyet ver; dost edindiklerinin arasında beni de dost edin; bana verdiğini bereketli kıl; ve takdir ettiğin kötülükten beni koru. Muhakkak Sen hükmedersin, Sana hükmedilmez. Senin dost edindiğin kimse zelil olmaz. Ey Rabbimiz! Sen yücesin ve mübareksin.",
+    "reference": "Sünen-i Ebû Dâvûd 1425; Câmiu't-Tirmizî 464",
+    "reference_display": "Sünen-i Ebû Dâvûd 1425; Câmiu't-Tirmizî 464",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:1425",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "tirmidhi:464",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "prayer"
+  },
+  "dua_rain_around_us": {
+    "name": "Yağmur Aşırı Olunca Dua",
+    "translation": "Allah'ım, yağmuru çevremize yağdır, üzerimize yağdırma; tepelere, küçük dağlara, vadilere ve ağaçların bittiği yerlere yağdır.",
+    "reference": "Sahih al-Bukhari 1014; Sahih Muslim 897",
+    "reference_display": "Sahih al-Bukhari 1014; Sahih Muslim 897",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:1014",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "muslim:897",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "weather"
+  },
+  "dua_righteous_spouses_and_children": {
+    "name": "Salih Eş ve Çocuk Duası",
+    "translation": "Rabbimiz! Bize eşlerimizden ve çocuklarımızdan gözlerimizi aydınlatacak kimseler ver ve bizi takvâ sahiplerine imam kıl.",
+    "reference": "Kur'ân-ı Kerîm 25:74",
+    "reference_display": "Kur'ân-ı Kerîm 25:74",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 25,
+        "ayah": 74,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "family"
+  },
+  "dua_sayyidul_istighfar": {
+    "name": "Seyyidü'l-İstiğfar",
+    "translation": "Allah'ım! Sen benim Rabbimsin, Senden başka ilah yoktur. Beni Sen yarattın ve ben Senin kulunum. Gücüm yettiğince Sana verdiğim ahd ve vaad üzereyim. Yaptıklarımın şerrinden Sana sığınırım. Üzerimdeki nimetini itiraf ediyorum, günahımı da itiraf ediyorum; beni bağışla; çünkü Senden başka günahları bağışlayacak yoktur.",
+    "reference": "Sahih-i Buhârî 6306",
+    "reference_display": "Sahih-i Buhârî 6306",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:6306",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "forgiveness"
+  },
+  "dua_steadfast_heart": {
+    "name": "Kalp Sebatı Duası",
+    "translation": "Ey kalpleri evirip çeviren! Kalbimi dinin üzerinde sabit kıl.",
+    "reference": "Câmiu't-Tirmizî 2140",
+    "reference_display": "Câmiu't-Tirmizî 2140",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "tirmidhi:2140",
         "role": "primary"
       }
     ],
     "migration_status": "ok",
     "category": "guidance"
   },
-  "dua_all_good": {
-    "name": "Her Hayrı Kapsayan Dua",
-    "translation": "Allah'ım! Bildiğim ve bilmediğim, peşin ve ertelenmiş her hayır için Senden istiyorum; bildiğim ve bilmediğim, peşin ve ertelenmiş her şerden de Sana sığınırım.",
-    "reference": "Sünen-i İbn Mâce 3846; Elbânî sahih saydı",
-    "reference_display": "Sünen-i İbn Mâce 3846; Elbânî sahih saydı",
+  "dua_steadfast_hearts": {
+    "name": "Kalp Sebatı Duası",
+    "translation": "Rabbimiz! Bizi hidayete erdirdikten sonra kalplerimizi saptırma ve bize katından rahmet bağışla. Muhakkak Sen çok bağışlayansın.",
+    "reference": "Kur'ân-ı Kerîm 3:8",
+    "reference_display": "Kur'ân-ı Kerîm 3:8",
     "sources": [
       {
-        "type": "hadith",
-        "id": "ibnmajah:3846",
+        "type": "quran",
+        "surah": 3,
+        "ayah": 8,
         "role": "primary"
       }
     ],
     "migration_status": "ok",
-    "category": "general"
+    "category": "guidance"
   },
-  "dua_for_well_being_in_both_worlds": {
-    "name": "Dünya ve Ahiret Afiyeti Duası",
-    "translation": "Allah'ım! Senden dünyada ve ahirette af ve afiyet isterim.",
-    "reference": "Sünen-i İbn Mâce 3871; Sünen-i Ebû Dâvûd 5074",
-    "reference_display": "Sünen-i İbn Mâce 3871; Sünen-i Ebû Dâvûd 5074",
+  "dua_submission_and_repentance": {
+    "name": "Teslimiyet ve Tövbe",
+    "translation": "Rabbimiz, bizi sana teslim olanlardan eyle; soyumuzdan da sana teslim olan bir ümmet var et. Bize ibadet yollarımızı göster ve tövbemizi kabul buyur. Şüphesiz sen tövbeleri çokça kabul edensin, çok merhamet edensin.",
+    "reference": "Quran 2:128",
+    "reference_display": "Quran 2:128",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 2,
+        "ayah": 128,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "repentance"
+  },
+  "dua_suhoor": {
+    "name": "Oruç Niyeti",
+    "translation": "Ramazan ayında yarınki oruca niyet ettim.",
+    "reference": "Geleneksel niyet",
+    "reference_display": "Geleneksel niyet",
+    "sources": [],
+    "migration_status": "needs_curation",
+    "category": "fasting",
+    "transliteration": "Wa bisawmi ghadinn nawaiytu min shahri Ramadan."
+  },
+  "dua_the_quran_as_spring_of_the_heart": {
+    "name": "Kur'an'ın Kalbin Baharı Olması İçin",
+    "translation": "Allah'ım, ben senin kulunum, senin kulunun ve cariyenin oğluyum. Alnımın perçemi senin elindedir; hükmün benim üzerimde geçerlidir, kaderin hakkında adalet iledir. Kendine ait olan her isimle senden isterim ki Kur'an'ı kalbimin baharı, göğsümün nuru, hüznümün gidericisi ve kaygımın giderilmesi kılasın.",
+    "reference": "Musnad Ahmad 3712; authenticated by al-Albani",
+    "reference_display": "Musnad Ahmad 3712; authenticated by al-Albani",
+    "sources": [
+      {
+        "type": "external",
+        "display": "Musnad Ahmad 3712",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "distress"
+  },
+  "dua_thunder": {
+    "name": "Gök Gürültüsünü Duyunca Zikir",
+    "translation": "Gök gürültüsünün hamd ile tesbih ettiği ve meleklerin korkusundan tesbih ettiği Allah'ı tesbih ederim.",
+    "reference": "Al-Muwatta 2/992; authenticated as a statement of Abdullah ibn al-Zubayr",
+    "reference_display": "Al-Muwatta 2/992; authenticated as a statement of Abdullah ibn al-Zubayr",
     "sources": [
       {
         "type": "hadith",
-        "id": "ibnmajah:3871",
+        "id": "malik:992",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "weather"
+  },
+  "dua_travel": {
+    "name": "Yolculuk Duası",
+    "translation": "Bunu bizim hizmetimize veren Allah'ı tesbih ederiz; yoksa biz buna güç yetiremezdik. Şüphesiz biz Rabbimize döneceğiz.",
+    "reference": "Sahih-i Müslim 1342",
+    "reference_display": "Sahih-i Müslim 1342",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:1342",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "travel"
+  },
+  "dua_trust_in_allah": {
+    "name": "Allah'a Tevekkül",
+    "translation": "Rabbimiz, sana tevekkül ettik, sana yöneldik ve dönüş sanadır.",
+    "reference": "Quran 60:4",
+    "reference_display": "Quran 60:4",
+    "sources": [
+      {
+        "type": "quran",
+        "surah": 60,
+        "ayah": 4,
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "reliance"
+  },
+  "dua_upon_seeing_the_new_moon": {
+    "name": "Hilali Görünce",
+    "translation": "Allah'ım, bu ayı üzerimize güvenlik, iman, selamet ve İslam ile doğdur. Benim Rabbim de senin Rabbin de Allah'tır.",
+    "reference": "Jami at-Tirmidhi 3451",
+    "reference_display": "Jami at-Tirmidhi 3451",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "tirmidhi:3451",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "daily"
+  },
+  "dua_visiting_graves": {
+    "name": "Kabir Ziyaretinde Dua",
+    "translation": "Ey bu yurtların sakinleri, müminler ve Müslümanlar, selam olsun size. Allah dilerse biz de size kavuşacağız. Allah'tan bizim için ve sizin için afiyet dilerim.",
+    "reference": "Sahih Muslim 975",
+    "reference_display": "Sahih Muslim 975",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:975",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "funeral"
+  },
+  "dua_visiting_the_sick": {
+    "name": "Hasta Ziyareti",
+    "translation": "Yüce Allah'tan, büyük arşın Rabbinden sana şifa vermesini dilerim.",
+    "reference": "Sunan Abi Dawud 3106; Jami at-Tirmidhi 2083",
+    "reference_display": "Sunan Abi Dawud 3106; Jami at-Tirmidhi 2083",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:3106",
         "role": "primary"
       },
       {
         "type": "hadith",
-        "id": "abudawud:5074",
+        "id": "tirmidhi:2083",
         "role": "supporting"
       }
     ],
+    "migration_status": "machine_translated",
+    "category": "healing"
+  },
+  "dua_waking_up": {
+    "name": "Uyanma Duası",
+    "translation": "Bizi öldürdükten sonra dirilten Allah'a hamdolsun; dönüş de O'nadır.",
+    "reference": "Sahih-i Buhârî 6312",
+    "reference_display": "Sahih-i Buhârî 6312",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "bukhari:6312",
+        "role": "primary"
+      }
+    ],
     "migration_status": "ok",
-    "category": "protection"
+    "category": "morning_evening"
+  },
+  "dua_wearing_garment": {
+    "name": "Elbise Giyerken Dua",
+    "translation": "Bana bu elbiseyi giydiren ve benim herhangi bir güç ve kuvvetim olmaksızın onu bana nasip eden Allah'a hamd olsun.",
+    "reference": "Sunan Abi Dawud 4023; Jami at-Tirmidhi 3458",
+    "reference_display": "Sunan Abi Dawud 4023; Jami at-Tirmidhi 3458",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "abudawud:4023",
+        "role": "primary"
+      },
+      {
+        "type": "hadith",
+        "id": "tirmidhi:3458",
+        "role": "supporting"
+      }
+    ],
+    "migration_status": "machine_translated",
+    "category": "daily"
+  },
+  "dua_when_afflicted_by_calamity": {
+    "name": "Musibet Anı Duası",
+    "translation": "Muhakkak biz Allah'a aidiz ve muhakkak O'na döneceğiz. Allah'ım! Musibetimde bana ecir ver ve onun yerine bana daha hayırlısını ver.",
+    "reference": "Sahih-i Müslim 918",
+    "reference_display": "Sahih-i Müslim 918",
+    "sources": [
+      {
+        "type": "hadith",
+        "id": "muslim:918",
+        "role": "primary"
+      }
+    ],
+    "migration_status": "ok",
+    "category": "distress"
   }
 }

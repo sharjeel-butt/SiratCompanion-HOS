@@ -3555,6 +3555,154 @@
     {
       "name": "theme_preset",
       "value": "Preset Tema"
+    },
+    {
+      "name": "notif_prayer_due_title",
+      "value": "Salat Belum Ditandai"
+    },
+    {
+      "name": "notif_fajr_due",
+      "value": "Salat Subuh belum ditandai."
+    },
+    {
+      "name": "notif_dhuhr_due",
+      "value": "Salat Zuhur belum ditandai."
+    },
+    {
+      "name": "notif_asr_due",
+      "value": "Salat Asar belum ditandai."
+    },
+    {
+      "name": "notif_maghrib_due",
+      "value": "Salat Magrib belum ditandai."
+    },
+    {
+      "name": "notif_isha_due",
+      "value": "Salat Isya belum ditandai."
+    },
+    {
+      "name": "title_notifications",
+      "value": "Notifikasi"
+    },
+    {
+      "name": "notifications_empty",
+      "value": "Semua notifikasi telah dilihat."
+    },
+    {
+      "name": "all_prayers_completed",
+      "value": "Alhamdulillah!"
+    },
+    {
+      "name": "all_prayers_completed_subtitle",
+      "value": "Semua salat hari ini telah diselesaikan."
+    },
+    {
+      "name": "notif_day_complete_title",
+      "value": "Alhamdulillah!"
+    },
+    {
+      "name": "notif_day_complete_message",
+      "value": "Anda telah menyelesaikan semua salat hari ini."
+    },
+    {
+      "name": "notif_streak_title",
+      "value": "Rangkaian Salat"
+    },
+    {
+      "name": "notif_streak_3",
+      "value": "Anda menyelesaikan salat selama 3 hari berturut-turut."
+    },
+    {
+      "name": "notif_streak_7",
+      "value": "Anda menyelesaikan salat selama 7 hari berturut-turut."
+    },
+    {
+      "name": "notif_streak_14",
+      "value": "Anda menyelesaikan salat selama 14 hari berturut-turut."
+    },
+    {
+      "name": "notif_streak_30",
+      "value": "Anda menyelesaikan salat selama 30 hari berturut-turut."
+    },
+    {
+      "name": "notif_streak_100",
+      "value": "Anda menyelesaikan salat selama 100 hari berturut-turut."
+    },
+    {
+      "name": "notif_streak_1000",
+      "value": "Anda menyelesaikan salat selama 1.000 hari berturut-turut."
+    },
+    {
+      "name": "notif_streak_10000",
+      "value": "Anda menyelesaikan salat selama 10.000 hari berturut-turut."
+    },
+    {
+      "name": "notif_ramadan_start_title",
+      "value": "Ramadan Semakin Dekat"
+    },
+    {
+      "name": "notif_ramadan_start_7",
+      "value": "Ramadan dimulai dalam 7 hari."
+    },
+    {
+      "name": "notif_ramadan_mubarak_title",
+      "value": "Ramadan Mubarak"
+    },
+    {
+      "name": "notif_ramadan_mubarak_message",
+      "value": "Semoga Allah menerima puasa dan ibadah Anda."
+    },
+    {
+      "name": "notif_last_ashra_title",
+      "value": "Sepuluh Hari Terakhir Dimulai"
+    },
+    {
+      "name": "notif_last_ashra_message",
+      "value": "Sepuluh malam terakhir Ramadan telah dimulai."
+    },
+    {
+      "name": "notif_laylatul_qadr_title",
+      "value": "Lailatul Qadar"
+    },
+    {
+      "name": "notif_laylatul_qadr_message",
+      "value": "Malam ini adalah salah satu malam ganjil yang penuh berkah pada sepuluh malam terakhir."
+    },
+    {
+      "name": "notif_eid_title",
+      "value": "Selamat Idulfitri"
+    },
+    {
+      "name": "notif_eid_message",
+      "value": "Semoga Allah menerima puasa, salat, dan amal kebaikan Anda."
+    },
+    {
+      "name": "notif_laylatul_qadr_21",
+      "value": "Malam ini adalah malam ke-21 Ramadan. Perbanyak salat, tilawah Al-Qur'an, dan zikir kepada Allah."
+    },
+    {
+      "name": "notif_laylatul_qadr_23",
+      "value": "Malam ini adalah malam ke-23 Ramadan. Mohonlah rahmat dan ampunan Allah melalui ibadah yang tulus."
+    },
+    {
+      "name": "notif_laylatul_qadr_25",
+      "value": "Malam ini adalah malam ke-25 Ramadan. Teruslah bersungguh-sungguh dalam ibadah di malam-malam yang penuh berkah ini."
+    },
+    {
+      "name": "notif_laylatul_qadr_27",
+      "value": "Malam ini adalah malam ke-27 Ramadan, malam yang banyak dikhususkan umat Muslim untuk beribadah dalam mencari Lailatul Qadar."
+    },
+    {
+      "name": "notif_laylatul_qadr_29",
+      "value": "Malam ini adalah malam ke-29 Ramadan. Manfaatkan sebaik-baiknya kesempatan terakhir di bulan yang penuh berkah ini."
+    },
+    {
+      "name": "home_worship",
+      "value": "Ibadah"
+    },
+    {
+      "name": "home_insights",
+      "value": "WAWASAN"
     }
   ]
 }

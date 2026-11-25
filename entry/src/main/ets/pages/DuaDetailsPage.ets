@@ -79,7 +79,9 @@ struct DuaDetailsPage {
     Column() {
       Row({ space: 16 }) {
         Row() {
-          Image($r('app.media.ic_chevron_right')).width(20).height(20)
+          Image($r('app.media.ic_chevron_right'))
+            .width(20)
+            .height(20)
             .fillColor(this.colors.textWhite)
             .rotate({ angle: L.isRtlLang(this.appLanguage) ? 0 : 180 })
         }
@@ -97,16 +99,13 @@ struct DuaDetailsPage {
           .layoutWeight(1)
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
-      }
-      .width('100%').height(72).padding({ left: 16, right: 16 })
-      .backgroundColor(this.colors.cardDark)
+      }.width('100%').height(72).padding({ left: 16, right: 16 }).backgroundColor(this.colors.cardDark)
 
       if (this.isLoading || this.dua === null) {
         LoadingProgress().width(40).height(40).color(this.colors.accentGold).margin({ top: 40 })
       } else {
         Scroll() {
-          Column() {
-            // Main Dua Content
+          Column() { // Main Dua Content
             Column() {
               Text(this.dua.translatedName)
                 .fontSize(20)
@@ -163,9 +162,7 @@ struct DuaDetailsPage {
                   Flex({ wrap: FlexWrap.Wrap, justifyContent: FlexAlign.Center }) {
                     ForEach(this.dua.sources, (src: DuaSource, i: number) => {
                       Row({ space: 4 }) {
-                        Image($r('app.media.ic_link'))
-                          .width(12).height(12)
-                          .fillColor(this.colors.accentGold)
+                        Image($r('app.media.ic_link')).width(12).height(12).fillColor(this.colors.accentGold)
                         Text(SourceParser.getLabel(src, this.appLanguage))
                           .fontSize(11)
                           .fontColor(this.colors.accentGold)
@@ -183,8 +180,7 @@ struct DuaDetailsPage {
                       .margin({ right: 8, top: 12 })
                       .onClick(() => this.onSourceTap(src))
                     }, (rel: CompleteDua) => `rel-${rel.id}-${this.appLanguage}-${this.duaTransLang}`)
-                  }
-                  .width('100%').margin({ top: 4 })
+                  }.width('100%').margin({ top: 4 })
                 }
               }
               .width('100%')
@@ -193,13 +189,12 @@ struct DuaDetailsPage {
               .borderRadius(16)
               .margin({ bottom: 20 })
             }
-          }
-          .width('100%').padding(16)
-        }
-        .layoutWeight(1)
+          }.width('100%').padding(16)
+        }.layoutWeight(1)
       }
     }
-    .width('100%').height('100%')
+    .width('100%')
+    .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
   }
@@ -237,8 +232,7 @@ struct DuaDetailsPage {
                 });
               })
           }, (col: QuranCollection) => `col-${col.id}`)
-        }
-        .width('100%')
+        }.width('100%')
       }
       .width('100%')
       .padding(16)
@@ -289,8 +283,7 @@ struct DuaDetailsPage {
         const hadithId = `${col}:${parts[1]}`;
         NavHelper.prepareForward();
         router.pushUrl({
-          url: 'pages/HadithDetailsPage',
-          params: { id: hadithId }
+          url: 'pages/HadithDetailsPage', params: { id: hadithId }
         }).catch((e: Error) => console.error(JSON.stringify(e)));
         return;
       }
@@ -299,8 +292,7 @@ struct DuaDetailsPage {
     if (src.type === 'quran' && src.surah !== undefined && src.ayah !== undefined) {
       NavHelper.prepareForward();
       router.pushUrl({
-        url: 'pages/SurahDetailsPage',
-        params: { surahId: src.surah, startVerse: src.ayah, endVerse: src.ayah }
+        url: 'pages/SurahDetailsPage', params: { surahId: src.surah, startVerse: src.ayah, endVerse: src.ayah }
       }).catch((e: Error) => console.error(JSON.stringify(e)));
       return;
     }
@@ -308,9 +300,7 @@ struct DuaDetailsPage {
     const title = L.get('hadith_evidence_title', this.appLanguage);
     const msg = src.display || src.id || 'Unknown Source';
     promptAction.showDialog({
-      title: title,
-      message: msg,
-      buttons: [{ text: L.get('ok', this.appLanguage), color: this.colors.accentGold }]
+      title: title, message: msg, buttons: [{ text: L.get('ok', this.appLanguage), color: this.colors.accentGold }]
     });
   }
 }

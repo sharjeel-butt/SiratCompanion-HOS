@@ -42,9 +42,7 @@ export struct ExtraTimingToggleRow {
           .maxLines(2)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .width('100%')
-      }
-      .alignItems(HorizontalAlign.Start)
-      .layoutWeight(1)
+      }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
       Toggle({ type: ToggleType.Switch, isOn: this.isOn })
         .selectedColor(this.colors.accentGold)

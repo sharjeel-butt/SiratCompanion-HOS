@@ -50,26 +50,13 @@ struct RamadanDetailsPage {
   // STORAGE LINKS
   // ============================================================
   @StorageLink(STORAGE_KEY_DUA_TRANSLATION_LANG) @Watch('onDuaLangChanged') duaTransLang: string = 'default';
-  @StorageLink(STORAGE_KEY_THEME_MODE)
-  @Watch('onThemeModeChanged')
-  themeMode: string = ThemeMode.SYSTEM;
-  @StorageLink(STORAGE_KEY_LANGUAGE)
-  @Watch('onLanguageChanged')
-  appLanguage: string = 'en';
-  @StorageLink(STORAGE_KEY_APP_THEME)
-  @Watch('onAppThemePresetChanged')
-  appThemePreset: string = '';
-  @StorageLink(STORAGE_KEY_HIJRI_OFFSET)
-  @Watch('onHijriOffsetChanged')
-  hijriOffset: number = 0;
-  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
-  @Watch('onAppForegrounded')
-  appForegroundTick: number = 0;
-  @StorageLink(STORAGE_KEY_RAMADAN_STATE_VERSION)
-  @Watch('onRamadanStateChanged')
-  ramadanStateVersion: number = 0;
-  @StorageLink(STORAGE_KEY_BREAKPOINT)
-  breakpoint: string = 'sm';
+  @StorageLink(STORAGE_KEY_THEME_MODE) @Watch('onThemeModeChanged') themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLanguageChanged') appLanguage: string = 'en';
+  @StorageLink(STORAGE_KEY_APP_THEME) @Watch('onAppThemePresetChanged') appThemePreset: string = '';
+  @StorageLink(STORAGE_KEY_HIJRI_OFFSET) @Watch('onHijriOffsetChanged') hijriOffset: number = 0;
+  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK) @Watch('onAppForegrounded') appForegroundTick: number = 0;
+  @StorageLink(STORAGE_KEY_RAMADAN_STATE_VERSION) @Watch('onRamadanStateChanged') ramadanStateVersion: number = 0;
+  @StorageLink(STORAGE_KEY_BREAKPOINT) breakpoint: string = 'sm';
   // ============================================================
   // STATE
   // ============================================================
@@ -101,18 +88,16 @@ struct RamadanDetailsPage {
   aboutToAppear(): void {
     this.currentLanguage = this.appLanguage;
     this.colors = PageTheme.compute(this.themeMode);
-    this.systemDarkListener = PageTheme.installSystemListener(
-      this.themeMode, (c) => {
+    this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
       this.colors = c;
-    }
-    );
+    });
     this.loadRamadanInfo();
     this.loadDuasForSection();
 
     // Check if we navigated here from the "Duas" link
     const params = router.getParams() as Record<string, Object>;
-    if (params && params['scrollToDuas'] === true) {
-      // Delay slightly to allow the page to render and measure content height
+    if (params &&
+      params['scrollToDuas'] === true) { // Delay slightly to allow the page to render and measure content height
       setTimeout(() => {
         this.scrollController.scrollEdge(Edge.Bottom);
       }, 300);
@@ -155,15 +140,10 @@ struct RamadanDetailsPage {
               this.QadaSection()
               this.DuasSection()
               Column().height(40)
-            }
-            .width('100%')
-            .constraintSize({
+            }.width('100%').constraintSize({
               maxWidth: Breakpoints.maxContentWidth(this.breakpoint)
-            })
-            .padding({ left: 16, right: 16, top: 20 })
-          }
-          .width('100%')
-          .justifyContent(FlexAlign.Center)
+            }).padding({ left: 16, right: 16, top: 20 })
+          }.width('100%').justifyContent(FlexAlign.Center)
         }
         .layoutWeight(1)
         .width('100%')
@@ -171,9 +151,7 @@ struct RamadanDetailsPage {
         .scrollable(ScrollDirection.Vertical)
         .scrollBar(BarState.Auto)
         .edgeEffect(EdgeEffect.Spring)
-      }
-      .width('100%').height('100%')
-      .backgroundColor(this.colors.primaryGreen)
+      }.width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
 
       if (this.activeSheet === 'mark') {
         this.MarkSheet()
@@ -196,8 +174,7 @@ struct RamadanDetailsPage {
         this.showQadaYearSheet = false;
       }
     })
-    .expandSafeArea([SafeAreaType.SYSTEM],
-      [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 
   @Builder
@@ -239,9 +216,7 @@ struct RamadanDetailsPage {
             .width('100%')
             .textAlign(TextAlign.Start)
         }
-      }
-      .layoutWeight(1)
-      .alignItems(this.isRtl() ? HorizontalAlign.End : HorizontalAlign.Start)
+      }.layoutWeight(1).alignItems(this.isRtl() ? HorizontalAlign.End : HorizontalAlign.Start)
     }
     .width('100%')
     .height(72)
@@ -270,13 +245,11 @@ struct RamadanDetailsPage {
             .fontWeight(FontWeight.Medium)
             .direction(Direction.Ltr)
         }
-      }
-      .width('100%').padding({ bottom: 14 })
+      }.width('100%').padding({ bottom: 14 })
 
       if (this.isLoadingInfo) {
         this.LoadingState()
-      } else if (this.ramadanInfo === null
-        || !this.ramadanInfo.isRamadanNow) {
+      } else if (this.ramadanInfo === null || !this.ramadanInfo.isRamadanNow) {
         this.EmptyState()
       } else if (this.currentYear !== null) {
         this.FastingHeatmap()
@@ -288,10 +261,7 @@ struct RamadanDetailsPage {
     .backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
     .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
+      width: 1, color: PageTheme.isDarkFor(this.themeMode) ? 'rgba(255, 255, 255, 0.08)' : this.colors.borderSoft
     })
     .shadow({
       radius: 12,
@@ -313,8 +283,7 @@ struct RamadanDetailsPage {
           .fontWeight(FontWeight.Bold)
           .letterSpacing(1.2)
           .layoutWeight(1)
-      }
-      .width('100%').padding({ bottom: 14 })
+      }.width('100%').padding({ bottom: 14 })
 
       if (this.qadaSummary === null) {
         this.QadaEmptyState()
@@ -331,10 +300,7 @@ struct RamadanDetailsPage {
     .backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
     .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
+      width: 1, color: PageTheme.isDarkFor(this.themeMode) ? 'rgba(255, 255, 255, 0.08)' : this.colors.borderSoft
     })
     .shadow({
       radius: 12,
@@ -359,10 +325,7 @@ struct RamadanDetailsPage {
         .textAlign(TextAlign.Center)
         .lineHeight(18)
         .padding({ top: 12, left: 24, right: 24 })
-    }
-    .width('100%')
-    .padding({ top: 16, bottom: 16 })
-    .alignItems(HorizontalAlign.Center)
+    }.width('100%').padding({ top: 16, bottom: 16 }).alignItems(HorizontalAlign.Center)
   }
 
   @Builder
@@ -375,55 +338,30 @@ struct RamadanDetailsPage {
         .fontWeight(FontWeight.Medium)
         .textAlign(TextAlign.Center)
         .padding({ top: 12 })
-    }
-    .width('100%')
-    .padding({ top: 16, bottom: 16 })
-    .alignItems(HorizontalAlign.Center)
+    }.width('100%').padding({ top: 16, bottom: 16 }).alignItems(HorizontalAlign.Center)
   }
 
   @Builder
   QadaContent() {
-    Column() {
-      // Top row: big remaining number + 4-stat ledger
+    Column() { // Top row: big remaining number + 4-stat ledger
       Row() {
         Column() {
           Text(`${this.qadaSummary!.remaining}`)
-            .fontSize(46).fontWeight(FontWeight.Bold)
+            .fontSize(46)
+            .fontWeight(FontWeight.Bold)
             .fontColor(this.colors.accentGold)
             .fontFeature('"tnum" 1')
-          Text(this.tr('qada_remaining'))
-            .fontSize(11).fontColor(this.colors.textMuted)
-            .margin({ top: -4 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+          Text(this.tr('qada_remaining')).fontSize(11).fontColor(this.colors.textMuted).margin({ top: -4 })
+        }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
         Column() {
-          this.QadaStatRow(
-            this.tr('qada_total_fasted'),
-            `${this.qadaSummary!.totalFasted}`,
-            this.colors.textWhite
-          )
-          this.QadaStatRow(
-            this.tr('qada_total_missed'),
-            `${this.qadaSummary!.totalMissed}`,
-            this.colors.statusExpress
-          )
-          this.QadaStatRow(
-            this.tr('qada_total_made_up'),
-            `${this.qadaSummary!.totalMadeUp}`,
-            this.colors.accentGoldLight
-          )
-          this.QadaStatRow(
-            this.tr('qada_total_unmarked'),
-            `${this.qadaSummary!.totalUnmarked}`,
-            this.colors.textMuted
-          )
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
-      }
-      .width('100%')
-      .alignItems(VerticalAlign.Center)
-      .margin({ bottom: 16 })
+          this.QadaStatRow(this.tr('qada_total_fasted'), `${this.qadaSummary!.totalFasted}`, this.colors.textWhite)
+          this.QadaStatRow(this.tr('qada_total_missed'), `${this.qadaSummary!.totalMissed}`, this.colors.statusExpress)
+          this.QadaStatRow(this.tr('qada_total_made_up'), `${this.qadaSummary!.totalMadeUp}`,
+            this.colors.accentGoldLight)
+          this.QadaStatRow(this.tr('qada_total_unmarked'), `${this.qadaSummary!.totalUnmarked}`, this.colors.textMuted)
+        }.alignItems(HorizontalAlign.Start).layoutWeight(1)
+      }.width('100%').alignItems(VerticalAlign.Center).margin({ bottom: 16 })
 
       Divider().color(this.colors.borderSoft).width('100%')
 
@@ -439,10 +377,8 @@ struct RamadanDetailsPage {
       Column() {
         ForEach(this.auditYears(), (row: QadaYearRow) => {
           this.QadaYearRowView(row)
-        }, (row: QadaYearRow) =>
-        `qy-${row.hijriYear}-${row.missed}-${row.madeUp}`)
-      }
-      .width('100%').margin({ bottom: 8 })
+        }, (row: QadaYearRow) => `qy-${row.hijriYear}-${row.missed}-${row.madeUp}`)
+      }.width('100%').margin({ bottom: 8 })
 
       // During Ramadan, the year rows remain tappable so the user can
       // view which days have been made up. Toggling is disabled inside
@@ -462,15 +398,12 @@ struct RamadanDetailsPage {
             .fontStyle(FontStyle.Italic)
             .lineHeight(15)
             .layoutWeight(1)
-        }
-        .width('100%')
-        .padding({
+        }.width('100%').padding({
           top: 10,
           bottom: 10,
           left: 6,
           right: 6
-        })
-        .alignItems(VerticalAlign.Top)
+        }).alignItems(VerticalAlign.Top)
       } else {
         Row({ space: 6 }) {
           Image($r('app.media.ic_info'))
@@ -485,19 +418,14 @@ struct RamadanDetailsPage {
             .fontStyle(FontStyle.Italic)
             .lineHeight(15)
             .layoutWeight(1)
-        }
-        .width('100%')
-        .padding({
+        }.width('100%').padding({
           top: 10,
           bottom: 10,
           left: 6,
           right: 6
-        })
-        .alignItems(VerticalAlign.Top)
+        }).alignItems(VerticalAlign.Top)
       }
-    }
-    .width('100%')
-    .alignItems(HorizontalAlign.Start)
+    }.width('100%').alignItems(HorizontalAlign.Start)
   }
 
   @Builder
@@ -509,13 +437,8 @@ struct RamadanDetailsPage {
         .layoutWeight(1)
         .maxLines(1)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
-      Text(value)
-        .fontSize(13).fontColor(valueColor)
-        .fontWeight(FontWeight.Medium)
-        .direction(Direction.Ltr)
-    }
-    .width('100%')
-    .padding({ top: 3, bottom: 3 })
+      Text(value).fontSize(13).fontColor(valueColor).fontWeight(FontWeight.Medium).direction(Direction.Ltr)
+    }.width('100%').padding({ top: 3, bottom: 3 })
   }
 
   @Builder
@@ -531,31 +454,14 @@ struct RamadanDetailsPage {
           .margin({ bottom: 4 })
 
         Flex({
-          wrap: FlexWrap.Wrap,
-          justifyContent: FlexAlign.Start,
-          alignItems: ItemAlign.Center
+          wrap: FlexWrap.Wrap, justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center
         }) {
-          this.YearStatChip(
-            row.fasted, this.tr('qada_row_fasted_suffix'),
-            this.colors.textWhite
-          )
-          this.YearStatChip(
-            row.missed, this.tr('qada_row_missed_suffix'),
-            this.colors.statusExpress
-          )
-          this.YearStatChip(
-            row.madeUp, this.tr('qada_row_made_up_suffix'),
-            this.colors.accentGoldLight
-          )
-          this.YearStatChip(
-            row.unmarked, this.tr('qada_row_unmarked_suffix'),
-            this.colors.textMuted
-          )
-        }
-        .width('100%')
-      }
-      .layoutWeight(1)
-      .alignItems(HorizontalAlign.Start)
+          this.YearStatChip(row.fasted, this.tr('qada_row_fasted_suffix'), this.colors.textWhite)
+          this.YearStatChip(row.missed, this.tr('qada_row_missed_suffix'), this.colors.statusExpress)
+          this.YearStatChip(row.madeUp, this.tr('qada_row_made_up_suffix'), this.colors.accentGoldLight)
+          this.YearStatChip(row.unmarked, this.tr('qada_row_unmarked_suffix'), this.colors.textMuted)
+        }.width('100%')
+      }.layoutWeight(1).alignItems(HorizontalAlign.Start)
 
       Image($r('app.media.ic_chevron_right'))
         .width(16)
@@ -564,29 +470,20 @@ struct RamadanDetailsPage {
         .opacity(0.7)
         .margin({ left: this.isRtl() ? 0 : 8, right: this.isRtl() ? 8 : 0 })
         .rotate({ angle: this.isRtl() ? 180 : 0 })
-    }
-    .width('100%')
-    .padding({
+    }.width('100%').padding({
       top: 8,
       bottom: 8,
       left: 4,
       right: 4
-    })
-    .alignItems(VerticalAlign.Center)
-    .onClick(() => this.openQadaYearSheet(row.hijriYear))
+    }).alignItems(VerticalAlign.Center).onClick(() => this.openQadaYearSheet(row.hijriYear))
   }
 
   @Builder
   YearStatChip(value: number, label: string, valueColor: string) {
     Row() {
-      Text(`${value}`)
-        .fontSize(12).fontColor(valueColor)
-        .fontWeight(FontWeight.Medium)
-        .direction(Direction.Ltr)
-      Text(` ${label}`)
-        .fontSize(10).fontColor(this.colors.textMuted)
-    }
-    .margin({ right: 12, bottom: 2 })
+      Text(`${value}`).fontSize(12).fontColor(valueColor).fontWeight(FontWeight.Medium).direction(Direction.Ltr)
+      Text(` ${label}`).fontSize(10).fontColor(this.colors.textMuted)
+    }.margin({ right: 12, bottom: 2 })
   }
 
   // ============================================================
@@ -611,8 +508,7 @@ struct RamadanDetailsPage {
             .fontWeight(FontWeight.Medium)
             .direction(Direction.Ltr)
         }
-      }
-      .width('100%').padding({ bottom: 14 })
+      }.width('100%').padding({ bottom: 14 })
 
       if (this.currentYear !== null) {
         this.TaraweehGrid()
@@ -623,10 +519,7 @@ struct RamadanDetailsPage {
     .backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
     .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
+      width: 1, color: PageTheme.isDarkFor(this.themeMode) ? 'rgba(255, 255, 255, 0.08)' : this.colors.borderSoft
     })
     .shadow({
       radius: 12,
@@ -639,19 +532,12 @@ struct RamadanDetailsPage {
 
   @Builder
   TaraweehGrid() {
-    Column({ space: 4 }) {
-      // Header row
+    Column({ space: 4 }) { // Header row
       Row({ space: 4 }) {
         ForEach(L.getArray('days_of_week_short', this.currentLanguage), (day: string) => {
-          Text(day)
-            .fontSize(10)
-            .fontColor(this.colors.textMuted)
-            .textAlign(TextAlign.Center)
-            .layoutWeight(1)
+          Text(day).fontSize(10).fontColor(this.colors.textMuted).textAlign(TextAlign.Center).layoutWeight(1)
         })
-      }
-      .width('100%')
-      .margin({ bottom: 4 })
+      }.width('100%').margin({ bottom: 4 })
 
       // Weeks
       ForEach(this.buildWeeks(), (week: number[], wi: number) => {
@@ -663,11 +549,9 @@ struct RamadanDetailsPage {
               this.TaraweehGridCell(dayIndex)
             }
           }, (dayIndex: number, di: number) => `td-${wi}-${di}-${dayIndex}`)
-        }
-        .width('100%')
+        }.width('100%')
       }, (week: number[], wi: number) => `tw-${wi}`)
-    }
-    .width('100%')
+    }.width('100%')
   }
 
   @Builder
@@ -675,11 +559,7 @@ struct RamadanDetailsPage {
     Column() {
       Text(`${idx + 1}`)
         .fontSize(12)
-        .fontWeight(
-          this.currentYear!.taraweehNights[idx]
-            ? FontWeight.Bold
-            : FontWeight.Medium
-        )
+        .fontWeight(this.currentYear!.taraweehNights[idx] ? FontWeight.Bold : FontWeight.Medium)
         .fontColor(this.taraweehTextColor(idx))
     }
     .layoutWeight(1)
@@ -690,11 +570,8 @@ struct RamadanDetailsPage {
     .borderRadius(8)
     .border({
       width: this.isToday(idx) ? 2 : 1,
-      color: this.isToday(idx)
-        ? this.colors.accentGold
-        : (this.currentYear!.taraweehNights[idx]
-          ? this.colors.accentGold
-          : this.colors.borderSoft)
+      color: this.isToday(idx) ? this.colors.accentGold :
+        (this.currentYear!.taraweehNights[idx] ? this.colors.accentGold : this.colors.borderSoft)
     })
     .opacity(this.isTaraweehToggleable(idx) ? 1.0 : 0.35)
     .onClick(() => {
@@ -707,13 +584,8 @@ struct RamadanDetailsPage {
   @Builder
   LoadingState() {
     Column() {
-      LoadingProgress()
-        .width(32).height(32)
-        .color(this.colors.accentGold)
-    }
-    .width('100%')
-    .padding({ top: 32, bottom: 32 })
-    .alignItems(HorizontalAlign.Center)
+      LoadingProgress().width(32).height(32).color(this.colors.accentGold)
+    }.width('100%').padding({ top: 32, bottom: 32 }).alignItems(HorizontalAlign.Center)
   }
 
   @Builder
@@ -726,27 +598,17 @@ struct RamadanDetailsPage {
         .textAlign(TextAlign.Center)
         .lineHeight(20)
         .padding({ left: 24, right: 24, top: 16 })
-    }
-    .width('100%')
-    .padding({ top: 24, bottom: 24 })
-    .alignItems(HorizontalAlign.Center)
+    }.width('100%').padding({ top: 24, bottom: 24 }).alignItems(HorizontalAlign.Center)
   }
 
   @Builder
   FastingHeatmap() {
-    Column({ space: 4 }) {
-      // Header row
+    Column({ space: 4 }) { // Header row
       Row({ space: 4 }) {
         ForEach(L.getArray('days_of_week_short', this.currentLanguage), (day: string) => {
-          Text(day)
-            .fontSize(10)
-            .fontColor(this.colors.textMuted)
-            .textAlign(TextAlign.Center)
-            .layoutWeight(1)
+          Text(day).fontSize(10).fontColor(this.colors.textMuted).textAlign(TextAlign.Center).layoutWeight(1)
         })
-      }
-      .width('100%')
-      .margin({ bottom: 4 })
+      }.width('100%').margin({ bottom: 4 })
 
       // Weeks
       ForEach(this.buildWeeks(), (week: number[], wi: number) => {
@@ -758,11 +620,9 @@ struct RamadanDetailsPage {
               this.FastingGridCell(dayIndex)
             }
           }, (dayIndex: number, di: number) => `fd-${wi}-${di}-${dayIndex}`)
-        }
-        .width('100%')
+        }.width('100%')
       }, (week: number[], wi: number) => `fw-${wi}`)
-    }
-    .width('100%')
+    }.width('100%')
   }
 
   @Builder
@@ -780,8 +640,7 @@ struct RamadanDetailsPage {
     .backgroundColor(this.cellBg(dayIndex))
     .borderRadius(8)
     .border({
-      width: this.isToday(dayIndex) ? 2 : 0,
-      color: this.cellBorderColor(dayIndex)
+      width: this.isToday(dayIndex) ? 2 : 0, color: this.cellBorderColor(dayIndex)
     })
     .opacity(this.isFuture(dayIndex) ? 0.45 : 1.0)
     .onClick(() => {
@@ -799,47 +658,27 @@ struct RamadanDetailsPage {
   FastingSummary() {
     Row() {
       Column() {
-        Text(`${this.countFasted()}`)
-          .fontSize(22).fontWeight(FontWeight.Bold)
-          .fontColor(this.colors.accentGold)
-        Text(this.tr('fasting_summary_fasted'))
-          .fontSize(10).fontColor(this.colors.textMuted)
-          .margin({ top: 2 })
-      }
-      .layoutWeight(1).alignItems(HorizontalAlign.Start)
+        Text(`${this.countFasted()}`).fontSize(22).fontWeight(FontWeight.Bold).fontColor(this.colors.accentGold)
+        Text(this.tr('fasting_summary_fasted')).fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
+      }.layoutWeight(1).alignItems(HorizontalAlign.Start)
 
       Column() {
-        Text(`${this.countMissed()}`)
-          .fontSize(22).fontWeight(FontWeight.Bold)
-          .fontColor(this.colors.statusExpress)
-        Text(this.tr('fasting_summary_missed'))
-          .fontSize(10).fontColor(this.colors.textMuted)
-          .margin({ top: 2 })
-      }
-      .layoutWeight(1).alignItems(HorizontalAlign.Start)
+        Text(`${this.countMissed()}`).fontSize(22).fontWeight(FontWeight.Bold).fontColor(this.colors.statusExpress)
+        Text(this.tr('fasting_summary_missed')).fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
+      }.layoutWeight(1).alignItems(HorizontalAlign.Start)
 
       Column() {
-        Text(`${this.countUnmarked()}`)
-          .fontSize(22).fontWeight(FontWeight.Bold)
-          .fontColor(this.colors.textMuted)
-        Text(this.tr('fasting_summary_unmarked'))
-          .fontSize(10).fontColor(this.colors.textMuted)
-          .margin({ top: 2 })
-      }
-      .layoutWeight(1).alignItems(HorizontalAlign.Start)
-    }
-    .width('100%')
-    .padding({ top: 16, bottom: 4 })
+        Text(`${this.countUnmarked()}`).fontSize(22).fontWeight(FontWeight.Bold).fontColor(this.colors.textMuted)
+        Text(this.tr('fasting_summary_unmarked')).fontSize(10).fontColor(this.colors.textMuted).margin({ top: 2 })
+      }.layoutWeight(1).alignItems(HorizontalAlign.Start)
+    }.width('100%').padding({ top: 16, bottom: 4 })
   }
 
   @Builder
   MarkSheet() {
-    Column()
-      .width('100%').height('100%')
-      .backgroundColor(this.colors.overlayDim)
-      .onClick(() => {
-        this.closeSheet();
-      })
+    Column().width('100%').height('100%').backgroundColor(this.colors.overlayDim).onClick(() => {
+      this.closeSheet();
+    })
 
     Column() {
       Row()
@@ -863,18 +702,13 @@ struct RamadanDetailsPage {
         .flexShrink(0)
 
         Column() {
-          Text(this.tr('fasting_mark_title'))
-            .fontSize(18).fontWeight(FontWeight.Bold)
-            .fontColor(this.colors.textWhite)
+          Text(this.tr('fasting_mark_title')).fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
           Text(`${this.tr('fasting_day_label')} ${this.selectedDay}`)
-            .fontSize(12).fontColor(this.colors.accentGold)
+            .fontSize(12)
+            .fontColor(this.colors.accentGold)
             .margin({ top: 2 })
-        }
-        .alignItems(HorizontalAlign.Start)
-        .layoutWeight(1)
-      }
-      .width('100%')
-      .padding({
+        }.alignItems(HorizontalAlign.Start).layoutWeight(1)
+      }.width('100%').padding({
         top: 20,
         bottom: 20,
         left: this.isRtl() ? 20 : 16,
@@ -888,31 +722,21 @@ struct RamadanDetailsPage {
           this.MarkOption($r('app.media.ic_check'), this.tr('fasting_status_fasted'), this.colors.accentGold,
             (): void => {
               this.markFasted();
-            }
-          )
+            })
           this.MarkOption($r('app.media.ic_close'), this.tr('fasting_status_missed'), this.colors.statusExpress,
             (): void => {
               this.activeSheet = 'reason';
-            }
-          )
-          this.MarkOption($r('app.media.ic_refresh'), this.tr('fasting_clear'), this.colors.textMuted,
-            (): void => {
-              this.clearDay();
-            }
-          )
-        }
-        .width('100%')
-        .padding({
+            })
+          this.MarkOption($r('app.media.ic_refresh'), this.tr('fasting_clear'), this.colors.textMuted, (): void => {
+            this.clearDay();
+          })
+        }.width('100%').padding({
           left: 8,
           right: 8,
           top: 12,
           bottom: 12
         })
-      }
-      .flexShrink(1)
-      .width('100%')
-      .scrollBar(BarState.Auto)
-      .edgeEffect(EdgeEffect.Spring)
+      }.flexShrink(1).width('100%').scrollBar(BarState.Auto).edgeEffect(EdgeEffect.Spring)
 
       Button(this.tr('cancel'))
         .width('90%')
@@ -941,18 +765,10 @@ struct RamadanDetailsPage {
   }
 
   @Builder
-  MarkOption(
-    icon: Resource,
-    label: string,
-    color: string,
-    onTap: () => void
-  ) {
-    Row() {
-      // ICON WRAPPER
+  MarkOption(icon: Resource, label: string, color: string, onTap: () => void) {
+    Row() { // ICON WRAPPER
       Row() {
-        Image(icon)
-          .width(20).height(20)
-          .fillColor(color) // <-- Now works perfectly with the solid SVGs
+        Image(icon).width(20).height(20).fillColor(color) // <-- Now works perfectly with the solid SVGs
       }
       .width(40)
       .height(40)
@@ -990,12 +806,9 @@ struct RamadanDetailsPage {
 
   @Builder
   ReasonSheet() {
-    Column()
-      .width('100%').height('100%')
-      .backgroundColor(this.colors.overlayDim)
-      .onClick(() => {
-        this.closeSheet();
-      })
+    Column().width('100%').height('100%').backgroundColor(this.colors.overlayDim).onClick(() => {
+      this.closeSheet();
+    })
 
     Column() {
       Row()
@@ -1007,9 +820,7 @@ struct RamadanDetailsPage {
 
       Row({ space: 14 }) {
         Row() {
-          Image($r('app.media.ic_edit'))
-            .width(22).height(22)
-            .fillColor(this.colors.accentGold) // <-- Now tints gold
+          Image($r('app.media.ic_edit')).width(22).height(22).fillColor(this.colors.accentGold) // <-- Now tints gold
         }
         .width(44)
         .height(44)
@@ -1022,17 +833,15 @@ struct RamadanDetailsPage {
 
         Column() {
           Text(this.tr('fasting_reason_title'))
-            .fontSize(18).fontWeight(FontWeight.Bold)
+            .fontSize(18)
+            .fontWeight(FontWeight.Bold)
             .fontColor(this.colors.textWhite)
           Text(`${this.tr('fasting_day_label')} ${this.selectedDay}`)
-            .fontSize(12).fontColor(this.colors.accentGold)
+            .fontSize(12)
+            .fontColor(this.colors.accentGold)
             .margin({ top: 2 })
-        }
-        .alignItems(HorizontalAlign.Start)
-        .layoutWeight(1)
-      }
-      .width('100%')
-      .padding({
+        }.alignItems(HorizontalAlign.Start).layoutWeight(1)
+      }.width('100%').padding({
         top: 20,
         bottom: 20,
         left: this.isRtl() ? 20 : 16,
@@ -1046,28 +855,23 @@ struct RamadanDetailsPage {
           ForEach(this.allReasons(), (reason: MissedReason) => {
             this.ReasonRow(reason)
           }, (reason: MissedReason) => `reason-${reason}`)
-        }
-        .width('100%')
-        .padding({
+        }.width('100%').padding({
           left: 8,
           right: 8,
           top: 12,
           bottom: 12
         })
-      }
-      .flexShrink(1)
-      .width('100%')
-      .scrollBar(BarState.Auto)
-      .edgeEffect(EdgeEffect.Spring)
+      }.flexShrink(1).width('100%').scrollBar(BarState.Auto).edgeEffect(EdgeEffect.Spring)
 
       if (this.selectedReason === MissedReason.OTHER) {
         Column() {
           Text(this.tr('fasting_reason_custom_label'))
-            .fontSize(11).fontColor(this.colors.textMuted)
-            .width('100%').margin({ bottom: 6 })
+            .fontSize(11)
+            .fontColor(this.colors.textMuted)
+            .width('100%')
+            .margin({ bottom: 6 })
           TextInput({
-            text: this.customReasonText,
-            placeholder: this.tr('fasting_reason_custom_placeholder')
+            text: this.customReasonText, placeholder: this.tr('fasting_reason_custom_placeholder')
           })
             .type(InputType.Normal)
             .onChange((v: string) => {
@@ -1085,9 +889,7 @@ struct RamadanDetailsPage {
               top: 8,
               bottom: 8
             })
-        }
-        .width('100%')
-        .padding({ left: 16, right: 16, bottom: 12 })
+        }.width('100%').padding({ left: 16, right: 16, bottom: 12 })
 
         Button(this.tr('save'))
           .width('90%')
@@ -1134,10 +936,7 @@ struct RamadanDetailsPage {
     Row() {
       Row() {
         if (this.selectedReason === reason) {
-          Row()
-            .width(10).height(10)
-            .borderRadius(5)
-            .backgroundColor(this.colors.accentGold)
+          Row().width(10).height(10).borderRadius(5).backgroundColor(this.colors.accentGold)
         }
       }
       .width(22)
@@ -1145,21 +944,15 @@ struct RamadanDetailsPage {
       .borderRadius(11)
       .border({
         width: this.selectedReason === reason ? 2 : 1.5,
-        color: this.selectedReason === reason
-          ? this.colors.accentGold
-          : this.colors.borderStrong
+        color: this.selectedReason === reason ? this.colors.accentGold : this.colors.borderStrong
       })
       .justifyContent(FlexAlign.Center)
       .alignItems(VerticalAlign.Center)
 
       Text(this.tr(`fasting_reason_${reason}`))
         .fontSize(15)
-        .fontColor(this.selectedReason === reason
-          ? this.colors.accentGold
-          : this.colors.textWhite)
-        .fontWeight(this.selectedReason === reason
-          ? FontWeight.Bold
-          : FontWeight.Normal)
+        .fontColor(this.selectedReason === reason ? this.colors.accentGold : this.colors.textWhite)
+        .fontWeight(this.selectedReason === reason ? FontWeight.Bold : FontWeight.Normal)
         .layoutWeight(1)
         .margin({ left: 14 })
     }
@@ -1170,9 +963,7 @@ struct RamadanDetailsPage {
       left: 16,
       right: 16
     })
-    .backgroundColor(this.selectedReason === reason
-      ? this.colors.tintSoft
-      : 'transparent')
+    .backgroundColor(this.selectedReason === reason ? this.colors.tintSoft : 'transparent')
     .borderRadius(12)
     .margin({ bottom: 4 })
     .onClick(() => {
@@ -1213,9 +1004,9 @@ struct RamadanDetailsPage {
         .flexShrink(0)
 
         Column() {
-          Text(`${this.tr('qada_year_sheet_title_prefix')} ` +
-            `${this.activeQadaYear} ${this.tr('hijri_year_suffix')}`)
-            .fontSize(18).fontWeight(FontWeight.Bold)
+          Text(`${this.tr('qada_year_sheet_title_prefix')} ` + `${this.activeQadaYear} ${this.tr('hijri_year_suffix')}`)
+            .fontSize(18)
+            .fontWeight(FontWeight.Bold)
             .fontColor(this.colors.textWhite)
           Text(this.qadaYearSheetSubtitle())
             .fontSize(11)
@@ -1223,12 +1014,8 @@ struct RamadanDetailsPage {
             .margin({ top: 2 })
             .maxLines(2)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
-        }
-        .alignItems(HorizontalAlign.Start)
-        .layoutWeight(1)
-      }
-      .width('100%')
-      .padding({
+        }.alignItems(HorizontalAlign.Start).layoutWeight(1)
+      }.width('100%').padding({
         top: 20,
         bottom: 20,
         left: this.isRtl() ? 20 : 16,
@@ -1250,30 +1037,20 @@ struct RamadanDetailsPage {
               left: 24,
               right: 24
             })
-        }
-        .width('100%')
-        .alignItems(HorizontalAlign.Center)
+        }.width('100%').alignItems(HorizontalAlign.Center)
       } else {
         Scroll() {
           Column() {
             ForEach(this.qadaYearDays, (entry: QadaDayEntry) => {
               this.QadaDayRowView(entry)
-            }, (entry: QadaDayEntry) =>
-            `qd-${entry.dayNumber}-${entry.madeUp ? 'y' : 'n'}-` +
-              `${entry.reason ?? 'x'}`)
-          }
-          .width('100%')
-          .padding({
+            }, (entry: QadaDayEntry) => `qd-${entry.dayNumber}-${entry.madeUp ? 'y' : 'n'}-` + `${entry.reason ?? 'x'}`)
+          }.width('100%').padding({
             left: 8,
             right: 8,
             top: 8,
             bottom: 8
           })
-        }
-        .flexShrink(1)
-        .width('100%')
-        .scrollBar(BarState.Auto)
-        .edgeEffect(EdgeEffect.Spring)
+        }.flexShrink(1).width('100%').scrollBar(BarState.Auto).edgeEffect(EdgeEffect.Spring)
       }
 
       Button(this.tr('close'))
@@ -1286,9 +1063,7 @@ struct RamadanDetailsPage {
         .borderRadius(12)
         .margin({ top: 8, bottom: 24 })
         .onClick(() => this.closeQadaYearSheet())
-    }
-    .width('100%').constraintSize({ maxHeight: '85%' })
-    .backgroundColor(this.colors.cardDark)
+    }.width('100%').constraintSize({ maxHeight: '85%' }).backgroundColor(this.colors.cardDark)
   }
 
   @Builder
@@ -1297,15 +1072,15 @@ struct RamadanDetailsPage {
       Column() {
         Row() {
           Text(`${this.tr('fasting_day_label')} ${entry.dayNumber}`)
-            .fontSize(14).fontColor(this.colors.textWhite)
+            .fontSize(14)
+            .fontColor(this.colors.textWhite)
             .fontWeight(FontWeight.Medium)
-        }
-        .width('100%')
+        }.width('100%')
 
         Row() {
-          Text(RamadanHelper.formatShort(
-            entry.gregorianDate, this.currentLanguage))
-            .fontSize(11).fontColor(this.colors.textMuted)
+          Text(RamadanHelper.formatShort(entry.gregorianDate, this.currentLanguage))
+            .fontSize(11)
+            .fontColor(this.colors.textMuted)
             .direction(Direction.Ltr)
           if (entry.reason !== null) {
             Text('  ·  ').fontSize(11).fontColor(this.colors.textMuted)
@@ -1316,45 +1091,35 @@ struct RamadanDetailsPage {
               .textOverflow({ overflow: TextOverflow.Ellipsis })
               .layoutWeight(1)
           }
-        }
-        .width('100%')
-        .margin({ top: 2 })
-        .alignItems(VerticalAlign.Center)
-      }
-      .alignItems(HorizontalAlign.Start)
-      .layoutWeight(1)
+        }.width('100%').margin({ top: 2 }).alignItems(VerticalAlign.Center)
+      }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
       // Toggle state — button or badge
       if (entry.madeUp) {
         Row({ space: 4 }) {
           Image($r('app.media.ic_check')).width(12).height(12).fillColor(this.colors.textOnAccent)
           Text(this.tr('qada_day_made_up'))
-            .fontSize(11).fontColor(this.colors.textOnAccent)
+            .fontSize(11)
+            .fontColor(this.colors.textOnAccent)
             .fontWeight(FontWeight.Medium)
-        }
-        .padding({
+        }.padding({
           left: 12,
           right: 12,
           top: 6,
           bottom: 6
-        })
-        .backgroundColor(this.colors.accentGold)
-        .borderRadius(14)
+        }).backgroundColor(this.colors.accentGold).borderRadius(14)
       } else {
         Row() {
           Text(this.tr('qada_day_mark_made_up'))
-            .fontSize(11).fontColor(this.colors.accentGold)
+            .fontSize(11)
+            .fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
-        }
-        .padding({
+        }.padding({
           left: 12,
           right: 12,
           top: 6,
           bottom: 6
-        })
-        .backgroundColor(this.colors.tintSoft)
-        .borderRadius(14)
-        .border({ width: 1, color: this.colors.borderSoft })
+        }).backgroundColor(this.colors.tintSoft).borderRadius(14).border({ width: 1, color: this.colors.borderSoft })
       }
     }
     .width('100%')
@@ -1364,8 +1129,7 @@ struct RamadanDetailsPage {
       top: 10,
       bottom: 10
     })
-    .backgroundColor(entry.madeUp
-      ? this.colors.tintSubtle : 'transparent')
+    .backgroundColor(entry.madeUp ? this.colors.tintSubtle : 'transparent')
     .borderRadius(10)
     .margin({ bottom: 4 })
     .alignItems(VerticalAlign.Center)
@@ -1379,8 +1143,7 @@ struct RamadanDetailsPage {
 
   @Builder
   AboutRamadanSection() {
-    Column() {
-      // Group heading
+    Column() { // Group heading
       Row() {
         Text(this.tr('ramadan_about_this_month'))
           .fontSize(11)
@@ -1388,25 +1151,19 @@ struct RamadanDetailsPage {
           .fontWeight(FontWeight.Bold)
           .letterSpacing(1.5)
           .width('100%')
-      }
-      .width('100%')
-      .padding({ bottom: 14 })
+      }.width('100%').padding({ bottom: 14 })
 
       // ---- Ashras ----
       this.AshrasContent()
 
-      Divider()
-        .color(this.colors.borderSoft)
-        .margin({ top: 16, bottom: 16 })
+      Divider().color(this.colors.borderSoft).margin({ top: 16, bottom: 16 })
 
       // ---- Laylat al-Qadr ----
       this.LaylatAlQadrContent()
 
       // ---- Jummah tul Widah (only when present) ----
       if (this.ramadanInfo!.jummahTulWidah !== null) {
-        Divider()
-          .color(this.colors.borderSoft)
-          .margin({ top: 16, bottom: 16 })
+        Divider().color(this.colors.borderSoft).margin({ top: 16, bottom: 16 })
         this.JummahTulWidahContent()
       }
     }
@@ -1415,10 +1172,7 @@ struct RamadanDetailsPage {
     .backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
     .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
+      width: 1, color: PageTheme.isDarkFor(this.themeMode) ? 'rgba(255, 255, 255, 0.08)' : this.colors.borderSoft
     })
     .shadow({
       radius: 12,
@@ -1437,10 +1191,7 @@ struct RamadanDetailsPage {
   AshrasContent() {
     Column() {
       Row({ space: 6 }) {
-        Image($r('app.media.ic_ashra'))
-          .width(14).height(14)
-          .fillColor(this.colors.accentGold)
-          .flexShrink(0)
+        Image($r('app.media.ic_ashra')).width(14).height(14).fillColor(this.colors.accentGold).flexShrink(0)
         Text(this.tr('ramadan_ashras'))
           .fontSize(11)
           .fontColor(this.colors.textMuted)
@@ -1449,22 +1200,18 @@ struct RamadanDetailsPage {
           .layoutWeight(1)
         if (this.currentAshra() !== null) {
           Text(this.tr(this.currentAshra()!.nameKey))
-            .fontSize(11).fontColor(this.colors.accentGold)
+            .fontSize(11)
+            .fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
         }
-      }
-      .width('100%').padding({ bottom: 12 })
+      }.width('100%').padding({ bottom: 12 })
 
       Column() {
         ForEach(this.ramadanInfo!.ashras, (a: RamadanAshra) => {
           this.AshraRow(a)
-        }, (a: RamadanAshra) =>
-        `ashra-${a.number}-${a.startHijriDay}-${a.endHijriDay}`)
-      }
-      .width('100%')
-    }
-    .width('100%')
-    .alignItems(HorizontalAlign.Start)
+        }, (a: RamadanAshra) => `ashra-${a.number}-${a.startHijriDay}-${a.endHijriDay}`)
+      }.width('100%')
+    }.width('100%').alignItems(HorizontalAlign.Start)
   }
 
   @Builder
@@ -1478,8 +1225,7 @@ struct RamadanDetailsPage {
           .fontWeight(FontWeight.Bold)
           .letterSpacing(1.2)
           .layoutWeight(1)
-      }
-      .width('100%').padding({ bottom: 8 })
+      }.width('100%').padding({ bottom: 8 })
 
       Text(this.tr('ramadan_laylat_al_qadr_desc'))
         .fontSize(11)
@@ -1489,16 +1235,11 @@ struct RamadanDetailsPage {
         .padding({ bottom: 12 })
 
       Row({ space: 6 }) {
-        ForEach(this.ramadanInfo!.laylatAlQadrNights,
-          (n: LaylatAlQadrNight) => {
-            this.LaylatNightCell(n)
-          }, (n: LaylatAlQadrNight) =>
-          `laq-${n.hijriDay}-${n.isPast ? 'p' : n.isToday ? 't' : 'f'}`)
-      }
-      .width('100%').justifyContent(FlexAlign.SpaceBetween)
-    }
-    .width('100%')
-    .alignItems(HorizontalAlign.Start)
+        ForEach(this.ramadanInfo!.laylatAlQadrNights, (n: LaylatAlQadrNight) => {
+          this.LaylatNightCell(n)
+        }, (n: LaylatAlQadrNight) => `laq-${n.hijriDay}-${n.isPast ? 'p' : n.isToday ? 't' : 'f'}`)
+      }.width('100%').justifyContent(FlexAlign.SpaceBetween)
+    }.width('100%').alignItems(HorizontalAlign.Start)
   }
 
   // ============================================================
@@ -1516,19 +1257,18 @@ struct RamadanDetailsPage {
           .fontWeight(FontWeight.Bold)
           .letterSpacing(1.2)
           .layoutWeight(1)
-        Text(RamadanHelper.formatShort(
-          this.ramadanInfo!.jummahTulWidah!, this.currentLanguage))
-          .fontSize(12).fontColor(this.colors.accentGoldLight)
+        Text(RamadanHelper.formatShort(this.ramadanInfo!.jummahTulWidah!, this.currentLanguage))
+          .fontSize(12)
+          .fontColor(this.colors.accentGoldLight)
           .fontWeight(FontWeight.Medium)
-      }
-      .width('100%').padding({ bottom: 8 })
+      }.width('100%').padding({ bottom: 8 })
 
       Text(this.tr('ramadan_jummah_tul_widah_desc'))
-        .fontSize(12).fontColor(this.colors.textMuted)
-        .lineHeight(18).width('100%')
-    }
-    .width('100%')
-    .alignItems(HorizontalAlign.Start)
+        .fontSize(12)
+        .fontColor(this.colors.textMuted)
+        .lineHeight(18)
+        .width('100%')
+    }.width('100%').alignItems(HorizontalAlign.Start)
   }
 
   @Builder
@@ -1537,27 +1277,23 @@ struct RamadanDetailsPage {
       Text(`${a.number}`)
         .fontSize(12)
         .fontWeight(FontWeight.Bold)
-        .fontColor(this.isCurrentAshra(a)
-          ? this.colors.textOnAccent : this.colors.accentGold)
+        .fontColor(this.isCurrentAshra(a) ? this.colors.textOnAccent : this.colors.accentGold)
         .width(24)
         .height(24)
         .textAlign(TextAlign.Center)
-        .backgroundColor(this.isCurrentAshra(a)
-          ? this.colors.accentGold : this.colors.tintSoft)
+        .backgroundColor(this.isCurrentAshra(a) ? this.colors.accentGold : this.colors.tintSoft)
         .borderRadius(12)
         .border({
-          width: 1,
-          color: this.isCurrentAshra(a)
-            ? this.colors.accentGold : this.colors.borderSoft
+          width: 1, color: this.isCurrentAshra(a) ? this.colors.accentGold : this.colors.borderSoft
         })
         .flexShrink(0) // <-- Prevents circle squishing
 
       Column() {
         Row() {
           Text(this.tr(a.nameKey))
-            .fontSize(13).fontColor(this.colors.textWhite)
-            .fontWeight(this.isCurrentAshra(a)
-              ? FontWeight.Bold : FontWeight.Medium)
+            .fontSize(13)
+            .fontColor(this.colors.textWhite)
+            .fontWeight(this.isCurrentAshra(a) ? FontWeight.Bold : FontWeight.Medium)
           Text('  ·  ').fontSize(11).fontColor(this.colors.textMuted)
           Text(this.tr(a.significanceKey))
             .fontSize(11)
@@ -1565,16 +1301,15 @@ struct RamadanDetailsPage {
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
             .layoutWeight(1)
-        }
-        .width('100%')
+        }.width('100%')
 
         Text(`${RamadanHelper.formatShort(a.startDate, this.currentLanguage)} – ` +
           `${RamadanHelper.formatShort(a.endDate, this.currentLanguage)}`)
-          .fontSize(10).fontColor(this.colors.textMuted)
-          .margin({ top: 2 }).width('100%')
-      }
-      .layoutWeight(1) // <-- Removed margin({ left: 10 })
-      .alignItems(HorizontalAlign.Start)
+          .fontSize(10)
+          .fontColor(this.colors.textMuted)
+          .margin({ top: 2 })
+          .width('100%')
+      }.layoutWeight(1) // <-- Removed margin({ left: 10 }).alignItems(HorizontalAlign.Start)
     }
     .width('100%')
     .padding({
@@ -1583,8 +1318,7 @@ struct RamadanDetailsPage {
       left: 8,
       right: 8
     })
-    .backgroundColor(this.isCurrentAshra(a)
-      ? this.colors.tintSubtle : 'transparent')
+    .backgroundColor(this.isCurrentAshra(a) ? this.colors.tintSubtle : 'transparent')
     .borderRadius(10)
     .margin({ bottom: 4 })
     .alignItems(VerticalAlign.Center)
@@ -1596,28 +1330,22 @@ struct RamadanDetailsPage {
       Text(`${n.hijriDay}`)
         .fontSize(14)
         .fontWeight(n.isToday ? FontWeight.Bold : FontWeight.Medium)
-        .fontColor(n.isToday ? this.colors.textOnAccent
-          : n.isPast ? this.colors.textMuted : this.colors.accentGold)
+        .fontColor(n.isToday ? this.colors.textOnAccent : n.isPast ? this.colors.textMuted : this.colors.accentGold)
       if (n.isToday) {
-        Text(this.tr('ramadan_today'))
-          .fontSize(8).fontColor(this.colors.textOnAccent)
-          .margin({ top: 1 })
+        Text(this.tr('ramadan_today')).fontSize(8).fontColor(this.colors.textOnAccent).margin({ top: 1 })
       } else {
-        Text(RamadanHelper.formatShort(
-          n.gregorianDate, this.currentLanguage))
-          .fontSize(8).fontColor(this.colors.textMuted)
+        Text(RamadanHelper.formatShort(n.gregorianDate, this.currentLanguage))
+          .fontSize(8)
+          .fontColor(this.colors.textMuted)
           .margin({ top: 1 })
       }
     }
     .layoutWeight(1)
     .padding({ top: 8, bottom: 8 })
-    .backgroundColor(n.isToday ? this.colors.accentGold
-      : n.isPast ? 'transparent' : this.colors.tintSubtle)
+    .backgroundColor(n.isToday ? this.colors.accentGold : n.isPast ? 'transparent' : this.colors.tintSubtle)
     .borderRadius(10)
     .border({
-      width: n.isToday ? 0 : 1,
-      color: n.isPast
-        ? this.colors.borderSoft : this.colors.borderMedium
+      width: n.isToday ? 0 : 1, color: n.isPast ? this.colors.borderSoft : this.colors.borderMedium
     })
     .opacity(n.isPast && !n.isToday ? 0.55 : 1.0)
     .alignItems(HorizontalAlign.Center)
@@ -1625,8 +1353,7 @@ struct RamadanDetailsPage {
 
   @Builder
   DuasSection() {
-    Column() {
-      // FIX: Use Row({ space: 8 }) for consistent RTL/LTR alignment
+    Column() { // FIX: Use Row({ space: 8 }) for consistent RTL/LTR alignment
       Row({ space: 8 }) {
         Image($r('app.media.ic_dua')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
         Text(this.tr('section_duas'))
@@ -1635,8 +1362,7 @@ struct RamadanDetailsPage {
           .fontWeight(FontWeight.Bold)
           .letterSpacing(1.2)
           .layoutWeight(1)
-      }
-      .width('100%').padding({ bottom: 14 })
+      }.width('100%').padding({ bottom: 14 })
 
       Column() {
         if (this.suhoorDua !== null) {
@@ -1663,21 +1389,14 @@ struct RamadanDetailsPage {
             showName: true
           })
         }
-      }
-      .width('100%')
-      .padding(16)
-      .backgroundColor(this.colors.tintSubtle)
-      .borderRadius(12)
+      }.width('100%').padding(16).backgroundColor(this.colors.tintSubtle).borderRadius(12)
     }
     .width('100%')
     .padding(18)
     .backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
     .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
+      width: 1, color: PageTheme.isDarkFor(this.themeMode) ? 'rgba(255, 255, 255, 0.08)' : this.colors.borderSoft
     })
     .shadow({
       radius: 12,
@@ -1694,13 +1413,10 @@ struct RamadanDetailsPage {
       const info = RamadanHelper.getRamadanInfo(this.hijriOffset);
       this.ramadanInfo = info;
       if (info !== null && info.isRamadanNow) {
-        this.currentYear = await RamadanStorage.getOrCreateYear(
-          info.hijriYear, info.totalDays
-        );
+        this.currentYear = await RamadanStorage.getOrCreateYear(info.hijriYear, info.totalDays);
       } else {
         this.currentYear = null;
-      }
-      // Qada summary is loaded regardless of whether Ramadan is
+      } // Qada summary is loaded regardless of whether Ramadan is
       // currently active — the section is always visible so the
       // user can review and log make-ups year-round.
       await this.reloadQadaSummary();
@@ -1737,9 +1453,7 @@ struct RamadanDetailsPage {
     if (this.ramadanInfo === null) {
       return;
     }
-    this.currentYear = await RamadanStorage.getOrCreateYear(
-      this.ramadanInfo.hijriYear, this.ramadanInfo.totalDays
-    );
+    this.currentYear = await RamadanStorage.getOrCreateYear(this.ramadanInfo.hijriYear, this.ramadanInfo.totalDays);
   }
 
   // ============================================================
@@ -1770,8 +1484,7 @@ struct RamadanDetailsPage {
     this.loadRamadanInfo();
   }
 
-  private onRamadanStateChanged(): void {
-    // The version counter is bumped by every RamadanStorage write.
+  private onRamadanStateChanged(): void { // The version counter is bumped by every RamadanStorage write.
     // Reload currentYear so the heatmap re-renders with the new
     // state. This is the only reliable refresh signal across the
     // sheet → page transition (the sheet closes before the async
@@ -1828,19 +1541,12 @@ struct RamadanDetailsPage {
     if (this.currentYear === null) {
       return 0;
     }
-    return this.currentYear.totalDays
-      - this.countFasted() - this.countMissed();
+    return this.currentYear.totalDays - this.countFasted() - this.countMissed();
   }
 
   private allReasons(): MissedReason[] {
-    return [
-      MissedReason.TRAVEL,
-      MissedReason.ILLNESS,
-      MissedReason.MENSTRUATION,
-      MissedReason.PREGNANCY_NURSING,
-      MissedReason.FORGETFULNESS,
-      MissedReason.OTHER
-    ];
+    return [MissedReason.TRAVEL, MissedReason.ILLNESS, MissedReason.MENSTRUATION, MissedReason.PREGNANCY_NURSING,
+      MissedReason.FORGETFULNESS, MissedReason.OTHER];
   }
 
   /** Years with at least one missed fast. Used by the audit table. */
@@ -1867,9 +1573,7 @@ struct RamadanDetailsPage {
     // row can show "Day 5 · Mar 15".
     let monthDays: CalendarDay[] = [];
     try {
-      monthDays = HijriCalendarHelper.buildMonthDays(
-        year, 9, this.hijriOffset, new Date()
-      );
+      monthDays = HijriCalendarHelper.buildMonthDays(year, 9, this.hijriOffset, new Date());
     } catch (err) {
       monthDays = [];
     }
@@ -1914,13 +1618,11 @@ struct RamadanDetailsPage {
       return;
     }
     try {
-      await RamadanStorage.toggleDayMadeUp(this.activeQadaYear, day);
-      // Refresh both the sheet list and the summary.
+      await RamadanStorage.toggleDayMadeUp(this.activeQadaYear, day); // Refresh both the sheet list and the summary.
       await this.openQadaYearSheet(this.activeQadaYear);
       await this.reloadQadaSummary();
     } catch (err) {
-      console.error('[RamadanDetailsPage] toggleDayMadeUp failed: ' +
-        JSON.stringify(err));
+      console.error('[RamadanDetailsPage] toggleDayMadeUp failed: ' + JSON.stringify(err));
     }
   }
 
@@ -1952,12 +1654,9 @@ struct RamadanDetailsPage {
       return;
     }
     try {
-      await RamadanStorage.toggleTaraweeh(
-        this.ramadanInfo.hijriYear, night
-      );
+      await RamadanStorage.toggleTaraweeh(this.ramadanInfo.hijriYear, night);
     } catch (err) {
-      console.error('[RamadanDetailsPage] toggleTaraweeh failed: ' +
-        JSON.stringify(err));
+      console.error('[RamadanDetailsPage] toggleTaraweeh failed: ' + JSON.stringify(err));
     }
   }
 
@@ -2018,8 +1717,7 @@ struct RamadanDetailsPage {
     try {
       await RamadanStorage.markDay(year, day, FastingStatus.FASTED);
     } catch (err) {
-      console.error('[RamadanDetailsPage] markFasted failed: ' +
-        JSON.stringify(err));
+      console.error('[RamadanDetailsPage] markFasted failed: ' + JSON.stringify(err));
     }
   }
 
@@ -2033,8 +1731,7 @@ struct RamadanDetailsPage {
     try {
       await RamadanStorage.markDay(year, day, FastingStatus.UNMARKED);
     } catch (err) {
-      console.error('[RamadanDetailsPage] clearDay failed: ' +
-        JSON.stringify(err));
+      console.error('[RamadanDetailsPage] clearDay failed: ' + JSON.stringify(err));
     }
   }
 
@@ -2049,17 +1746,12 @@ struct RamadanDetailsPage {
     const year = this.ramadanInfo.hijriYear;
     const day = this.selectedDay;
     const reason = this.selectedReason;
-    const custom = reason === MissedReason.OTHER
-      ? this.customReasonText.trim()
-      : undefined;
+    const custom = reason === MissedReason.OTHER ? this.customReasonText.trim() : undefined;
     this.closeSheet();
     try {
-      await RamadanStorage.markDay(
-        year, day, FastingStatus.MISSED, reason, custom
-      );
+      await RamadanStorage.markDay(year, day, FastingStatus.MISSED, reason, custom);
     } catch (err) {
-      console.error('[RamadanDetailsPage] confirmMissed failed: ' +
-        JSON.stringify(err));
+      console.error('[RamadanDetailsPage] confirmMissed failed: ' + JSON.stringify(err));
     }
   }
 
@@ -2085,9 +1777,7 @@ struct RamadanDetailsPage {
     if (this.currentYear === null) {
       return this.colors.tintSubtle;
     }
-    return this.currentYear.taraweehNights[idx]
-      ? this.colors.accentGold
-      : this.colors.tintSubtle;
+    return this.currentYear.taraweehNights[idx] ? this.colors.accentGold : this.colors.tintSubtle;
   }
 
   private taraweehTextColor(idx: number): string {
@@ -2197,8 +1887,7 @@ struct RamadanDetailsPage {
   private qadaYearSheetSubtitle(): string {
     const total = this.qadaYearDays.length;
     const done = this.countMadeUpInActiveYear();
-    return `${done} ${this.tr('qada_of')} ${total} ` +
-      `${this.tr('qada_made_up_of_total')}`;
+    return `${done} ${this.tr('qada_of')} ${total} ` + `${this.tr('qada_made_up_of_total')}`;
   }
 
   // ============================================================
@@ -2219,16 +1908,13 @@ struct RamadanDetailsPage {
     const totalDays = this.currentYear.totalDays;
     const firstDow = this.ramadanInfo.fastingStart.getDay(); // 0 = Sunday
 
-    const padded: number[] = [];
-    // Leading padding to align with the correct day of the week
+    const padded: number[] = []; // Leading padding to align with the correct day of the week
     for (let i = 0; i < firstDow; i++) {
       padded.push(-1);
-    }
-    // Actual days (0-indexed)
+    } // Actual days (0-indexed)
     for (let i = 0; i < totalDays; i++) {
       padded.push(i);
-    }
-    // Trailing padding to complete the last row
+    } // Trailing padding to complete the last row
     while (padded.length % 7 !== 0) {
       padded.push(-1);
     }

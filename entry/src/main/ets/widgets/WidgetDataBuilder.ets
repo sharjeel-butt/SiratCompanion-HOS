@@ -33,8 +33,7 @@ export interface WidgetCalendarDay {
 export class WidgetDataBuilder {
   static async build(dimension: string, currentLang?: string): Promise<Record<string, Object>> {
     let lang: string = currentLang ?? '';
-    try {
-      // ALWAYS reload from disk to get the absolute latest language setting
+    try { // ALWAYS reload from disk to get the absolute latest language setting
       await PreferencesHelper.reloadFromDisk();
 
       const override = await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE_OVERRIDE, 'system');
@@ -88,9 +87,9 @@ export class WidgetDataBuilder {
         return WidgetDataBuilder.errorData(dimension, 'Set location in app', lang);
       }
 
-      const times: DailyPrayerTimes = PrayerTimeCalculator.calculateWithDeviceTimezone(
-        new Date(), lat, lng, settings.method, settings.asr, highLat, advanced
-      );
+      const times: DailyPrayerTimes =
+        PrayerTimeCalculator.calculateWithDeviceTimezone(new Date(), lat, lng, settings.method, settings.asr, highLat,
+          advanced);
 
       // Apply offsets to all times
       const fajrRaw = PrayerManager.offsetTime(times.fajr, offsets.fajr);
@@ -113,17 +112,12 @@ export class WidgetDataBuilder {
       const sunset = ClockFormatHelper.reformat(sunsetRaw);
 
       const nowMin: number = new Date().getHours() * 60 + new Date().getMinutes();
-      const ids: string[] = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
-      // --- APPLY JUMMAH ALTERNATE ---
+      const ids: string[] = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']; // --- APPLY JUMMAH ALTERNATE ---
       const isFriday = new Date().getDay() === 5;
       const dhuhrKey = isFriday ? 'prayer_jummah' : 'prayer_dhuhr';
-      const names: string[] = [
-        L.get('prayer_fajr', lang),
-        L.get(dhuhrKey, lang),
-        L.get('prayer_asr', lang),
-        L.get('prayer_maghrib', lang),
-        L.get('prayer_isha', lang)
-      ];
+      const names: string[] =
+        [L.get('prayer_fajr', lang), L.get(dhuhrKey, lang), L.get('prayer_asr', lang), L.get('prayer_maghrib', lang),
+          L.get('prayer_isha', lang)];
       const rawArr: string[] = [fajrRaw, dhuhrRaw, asrRaw, maghribRaw, ishaRaw];
       const timeArr: string[] = [fajr, dhuhr, asr, maghrib, isha];
 
@@ -172,9 +166,8 @@ export class WidgetDataBuilder {
       }
 
       const duration = parts.join(' ');
-      const countdown = duration.length > 0
-        ? `${L.get('countdown_prefix', lang)} ${duration}`
-        : L.get('countdown_now', lang);
+      const countdown =
+        duration.length > 0 ? `${L.get('countdown_prefix', lang)} ${duration}` : L.get('countdown_now', lang);
 
       // Calculate Progress Bar (Between Fajr and Isha)
       const fajrMin = PrayerManager.timeToMinutes(rawArr[0]);
@@ -316,14 +309,12 @@ export class WidgetDataBuilder {
         } else if (lang === 'zh') {
           locale = 'zh-CN';
         } else if (lang === 'ur') {
-          locale =
-            'ur';
+          locale = 'ur';
         } else if (lang === 'tr') {
           locale = 'tr';
         } else if (lang === 'bn') {
           locale = 'bn';
-        } else if (lang ===
-          'id') {
+        } else if (lang === 'id') {
           locale = 'id';
         }
 
@@ -402,8 +393,7 @@ export class WidgetDataBuilder {
 
           finalDays = [];
           for (let i = 0; i < flatDays.length; i += 7) {
-            const week = flatDays.slice(i, i + 7);
-            // Pad the end of the week to make it exactly 7
+            const week = flatDays.slice(i, i + 7); // Pad the end of the week to make it exactly 7
             while (week.length < 7) {
               week.push({
                 dayText: '',
@@ -414,8 +404,7 @@ export class WidgetDataBuilder {
             }
             finalDays.push(...week.reverse());
           }
-        } else {
-          // For LTR, pad the end to make it exactly 7
+        } else { // For LTR, pad the end to make it exactly 7
           while (finalDays.length % 7 !== 0) {
             finalDays.push({
               dayText: '',
@@ -485,11 +474,8 @@ export class WidgetDataBuilder {
     }
   }
 
-  static async buildAdhkarWidget(
-    context: common.Context,
-    dimension: string,
-    currentLang?: string
-  ): Promise<Record<string, Object>> {
+  static async buildAdhkarWidget(context: common.Context, dimension: string,
+    currentLang?: string): Promise<Record<string, Object>> {
     const lang = currentLang || 'en';
     try {
       const out: Record<string, Object> = {};
@@ -548,10 +534,8 @@ export class WidgetDataBuilder {
               localizedSource = locInfo.reference;
             }
           }
-        } catch (locErr) {
-          // Log but don't fail — use English fallback
-          AppLogger.warn('WidgetDataBuilder',
-            `Failed to load localized dua reference for ${lang}`);
+        } catch (locErr) { // Log but don't fail — use English fallback
+          AppLogger.warn('WidgetDataBuilder', `Failed to load localized dua reference for ${lang}`);
         }
 
         out.source = localizedSource;
@@ -630,9 +614,8 @@ export class WidgetDataBuilder {
       // --- If NOT Ramadan, return early with notification payload ---
       if (!isRamadan) {
         out.targetName = L.get('ramadan_card_title', lang);
-        out.countdown = ramadanInfo !== null
-          ? `${ramadanInfo.daysUntilStart} ${L.get('home_days', lang)}`
-          : L.get('coming_soon', lang);
+        out.countdown = ramadanInfo !== null ? `${ramadanInfo.daysUntilStart} ${L.get('home_days', lang)}` :
+          L.get('coming_soon', lang);
         out.imsak = '--:--';
         out.iftar = '--:--';
         out.fajr = '--:--';
@@ -647,9 +630,9 @@ export class WidgetDataBuilder {
       const advanced: AdvancedCalcSettings = await SettingsHelper.getAdvancedCalcSettings();
       const offsets: PrayerOffsets = await SettingsHelper.getPrayerOffsets();
 
-      const times = PrayerTimeCalculator.calculateWithDeviceTimezone(
-        new Date(), lat, lng, settings.method, settings.asr, highLat, advanced
-      );
+      const times =
+        PrayerTimeCalculator.calculateWithDeviceTimezone(new Date(), lat, lng, settings.method, settings.asr, highLat,
+          advanced);
 
       const imsakRaw = PrayerManager.offsetTime(times.imsak, offsets.fajr);
       const maghribRaw = PrayerManager.offsetTime(times.maghrib, offsets.maghrib);
@@ -698,9 +681,8 @@ export class WidgetDataBuilder {
       }
       const duration = parts.join(' ');
 
-      const countdown = duration.length > 0
-        ? `${L.get('countdown_prefix', lang)} ${duration}`
-        : L.get('countdown_now', lang);
+      const countdown =
+        duration.length > 0 ? `${L.get('countdown_prefix', lang)} ${duration}` : L.get('countdown_now', lang);
 
       out.imsak = imsak;
       out.iftar = iftar;

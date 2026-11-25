@@ -3555,6 +3555,154 @@
     {
       "name": "theme_preset",
       "value": "থিম প্রিসেট"
+    },
+    {
+      "name": "notif_prayer_due_title",
+      "value": "নামাজ বাকি আছে"
+    },
+    {
+      "name": "notif_fajr_due",
+      "value": "ফজরের নামাজ এখনো চিহ্নিত করা হয়নি।"
+    },
+    {
+      "name": "notif_dhuhr_due",
+      "value": "যোহরের নামাজ এখনো চিহ্নিত করা হয়নি।"
+    },
+    {
+      "name": "notif_asr_due",
+      "value": "আসরের নামাজ এখনো চিহ্নিত করা হয়নি।"
+    },
+    {
+      "name": "notif_maghrib_due",
+      "value": "মাগরিবের নামাজ এখনো চিহ্নিত করা হয়নি।"
+    },
+    {
+      "name": "notif_isha_due",
+      "value": "ইশার নামাজ এখনো চিহ্নিত করা হয়নি।"
+    },
+    {
+      "name": "title_notifications",
+      "value": "নোটিফিকেশন"
+    },
+    {
+      "name": "notifications_empty",
+      "value": "আপনি সব নোটিফিকেশন দেখে ফেলেছেন।"
+    },
+    {
+      "name": "all_prayers_completed",
+      "value": "আলহামদুলিল্লাহ!"
+    },
+    {
+      "name": "all_prayers_completed_subtitle",
+      "value": "আজকের সব নামাজ সম্পন্ন হয়েছে।"
+    },
+    {
+      "name": "notif_day_complete_title",
+      "value": "আলহামদুলিল্লাহ!"
+    },
+    {
+      "name": "notif_day_complete_message",
+      "value": "আপনি আজকের সকল নামাজ সম্পন্ন করেছেন।"
+    },
+    {
+      "name": "notif_streak_title",
+      "value": "নামাজ ধারাবাহিকতা"
+    },
+    {
+      "name": "notif_streak_3",
+      "value": "আপনি টানা ৩ দিন নামাজ সম্পন্ন করেছেন।"
+    },
+    {
+      "name": "notif_streak_7",
+      "value": "আপনি টানা ৭ দিন নামাজ সম্পন্ন করেছেন।"
+    },
+    {
+      "name": "notif_streak_14",
+      "value": "আপনি টানা ১৪ দিন নামাজ সম্পন্ন করেছেন।"
+    },
+    {
+      "name": "notif_streak_30",
+      "value": "আপনি টানা ৩০ দিন নামাজ সম্পন্ন করেছেন।"
+    },
+    {
+      "name": "notif_streak_100",
+      "value": "আপনি টানা ১০০ দিন নামাজ সম্পন্ন করেছেন।"
+    },
+    {
+      "name": "notif_streak_1000",
+      "value": "আপনি টানা ১,০০০ দিন নামাজ সম্পন্ন করেছেন।"
+    },
+    {
+      "name": "notif_streak_10000",
+      "value": "আপনি টানা ১০,০০০ দিন নামাজ সম্পন্ন করেছেন।"
+    },
+    {
+      "name": "notif_ramadan_start_title",
+      "value": "রমজান আসন্ন"
+    },
+    {
+      "name": "notif_ramadan_start_7",
+      "value": "আর ৭ দিনের মধ্যে রমজান শুরু হবে।"
+    },
+    {
+      "name": "notif_ramadan_mubarak_title",
+      "value": "রমজান মোবারক"
+    },
+    {
+      "name": "notif_ramadan_mubarak_message",
+      "value": "আল্লাহ আপনার রোজা ও ইবাদত কবুল করুন।"
+    },
+    {
+      "name": "notif_last_ashra_title",
+      "value": "শেষ আশরা শুরু"
+    },
+    {
+      "name": "notif_last_ashra_message",
+      "value": "রমজানের শেষ দশ রাত শুরু হয়েছে।"
+    },
+    {
+      "name": "notif_laylatul_qadr_title",
+      "value": "লাইলাতুল কদর"
+    },
+    {
+      "name": "notif_laylatul_qadr_message",
+      "value": "আজ রাত শেষ আশরার বরকতময় বিজোড় রাতগুলোর একটি।"
+    },
+    {
+      "name": "notif_eid_title",
+      "value": "ঈদ মোবারক"
+    },
+    {
+      "name": "notif_eid_message",
+      "value": "আল্লাহ আপনার রোজা, সালাত ও নেক আমল কবুল করুন।"
+    },
+    {
+      "name": "notif_laylatul_qadr_21",
+      "value": "আজ রমজানের ২১তম রাত। সালাত, কুরআন তিলাওয়াত এবং আল্লাহর জিকির বৃদ্ধি করুন।"
+    },
+    {
+      "name": "notif_laylatul_qadr_23",
+      "value": "আজ রমজানের ২৩তম রাত। আন্তরিক ইবাদতের মাধ্যমে আল্লাহর রহমত ও ক্ষমা কামনা করুন।"
+    },
+    {
+      "name": "notif_laylatul_qadr_25",
+      "value": "আজ রমজানের ২৫তম রাত। এই বরকতময় রাতগুলোতে ইবাদতে অবিচল থাকুন।"
+    },
+    {
+      "name": "notif_laylatul_qadr_27",
+      "value": "আজ রমজানের ২৭তম রাত, যে রাতে অনেক মুসলিম বিশেষভাবে লাইলাতুল কদরের সন্ধানে ইবাদতে মগ্ন থাকেন।"
+    },
+    {
+      "name": "notif_laylatul_qadr_29",
+      "value": "আজ রমজানের ২৯তম রাত। এই বরকতময় মাসের শেষ সুযোগগুলোকে কাজে লাগান।"
+    },
+    {
+      "name": "home_worship",
+      "value": "ইবাদত"
+    },
+    {
+      "name": "home_insights",
+      "value": "পরিসংখ্যান"
     }
   ]
 }

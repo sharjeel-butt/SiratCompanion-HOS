@@ -30,8 +30,8 @@ export class L {
    */
   static readonly DEFAULT_LANGUAGE = 'en';
   private static ctx: common.Context | null = null;
-  private static readonly overrideCache: Map<string, resourceManager.ResourceManager>
-    = new Map<string, resourceManager.ResourceManager>();
+  private static readonly overrideCache: Map<string, resourceManager.ResourceManager> =
+    new Map<string, resourceManager.ResourceManager>();
 
   /**
    * Call once at app startup (EntryAbility.onWindowStageCreate)
@@ -55,9 +55,7 @@ export class L {
    * Used by SettingsHelper.saveLanguage() and the migration path
    * in EntryAbility. Safe to call from any context.
    */
-  static resolveOverride(
-    override: string
-  ): string {
+  static resolveOverride(override: string): string {
 
     if (override === 'system') {
       return LanguageService.systemLanguage();
@@ -88,23 +86,15 @@ export class L {
    * This forces native overlays (bindSheet, Menu, TextInput, etc.)
    * to adopt the correct RTL/LTR direction automatically.
    */
-  static applySystemLanguage(
-    override: string
-  ): string {
+  static applySystemLanguage(override: string): string {
 
     try {
 
-      const lang =
-        L.resolveOverride(override);
+      const lang = L.resolveOverride(override);
 
-      i18n.System.setAppPreferredLanguage(
-        lang
-      );
+      i18n.System.setAppPreferredLanguage(lang);
 
-      AppStorage.setOrCreate(
-        STORAGE_KEY_LANGUAGE,
-        lang
-      );
+      AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, lang);
 
       return lang;
 
@@ -120,9 +110,7 @@ export class L {
 
   static current(): string {
     const v = AppStorage.get<string>(STORAGE_KEY_LANGUAGE);
-    return v
-      ? v
-      : LanguageService.defaultLanguage();
+    return v ? v : LanguageService.defaultLanguage();
   }
 
   static setLanguage(lang: string): void {
@@ -147,9 +135,7 @@ export class L {
   // ============================================================
 
   static get(key: string, lang?: string): string {
-    let language = (lang !== undefined && lang.length > 0)
-      ? lang
-      : L.current();
+    let language = (lang !== undefined && lang.length > 0) ? lang : L.current();
 
     if (language === 'system') {
       language = L.matchSystemLocale();
@@ -165,9 +151,7 @@ export class L {
       return mgr.getStringByNameSync(key);
     } catch (_) {
       try {
-        const baseMgr = L.mgrFor(
-          LanguageService.defaultLanguage()
-        );
+        const baseMgr = L.mgrFor(LanguageService.defaultLanguage());
 
         if (baseMgr !== null && baseMgr !== mgr) {
           return baseMgr.getStringByNameSync(key);
@@ -181,9 +165,7 @@ export class L {
   }
 
   static getArray(key: string, lang?: string): string[] {
-    let language = (lang !== undefined && lang.length > 0)
-      ? lang
-      : L.current();
+    let language = (lang !== undefined && lang.length > 0) ? lang : L.current();
 
     if (language === 'system') {
       language = L.matchSystemLocale();
@@ -199,9 +181,7 @@ export class L {
       return mgr.getStringArrayByNameSync(key);
     } catch (_) {
       try {
-        const baseMgr = L.mgrFor(
-          LanguageService.defaultLanguage()
-        );
+        const baseMgr = L.mgrFor(LanguageService.defaultLanguage());
 
         if (baseMgr !== null && baseMgr !== mgr) {
           return baseMgr.getStringArrayByNameSync(key);
@@ -235,8 +215,7 @@ export class L {
       return cached;
     }
 
-    try {
-      // Clone the current configuration instead of constructing
+    try { // Clone the current configuration instead of constructing
       // one from scratch. This preserves every qualifier the
       // system set (density, color mode, mcc/mnc, etc.) and only
       // changes the locale, which is exactly what we need.
@@ -247,16 +226,15 @@ export class L {
       // device locale — so on a Chinese device, picking English
       // rendered Chinese text. All languages now go through the
       // override path so the picked language always wins.
-      const cfg: resourceManager.Configuration =
-        L.ctx.resourceManager.getOverrideConfiguration();
+      const cfg: resourceManager.Configuration = L.ctx.resourceManager.getOverrideConfiguration();
       cfg.locale = lang;
 
       const mgr = L.ctx.resourceManager.getOverrideResourceManager(cfg);
       L.overrideCache.set(lang, mgr);
       return mgr;
     } catch (err) {
-      console.warn(`[L] override manager for "${lang}" failed: ${JSON.stringify(err)}`);
-      // Fall back to the base resource manager. This may return
+      console.warn(`[L] override manager for "${lang}" failed: ${JSON.stringify(
+        err)}`); // Fall back to the base resource manager. This may return
       // device-locale text on non-English devices, but it
       // prevents a total failure.
       return L.ctx.resourceManager;

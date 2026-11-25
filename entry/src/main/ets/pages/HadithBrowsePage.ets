@@ -86,9 +86,8 @@ struct HadithBrowsePage {
       this.pageOffset += this.PAGE_SIZE;
     } else {
       try {
-        const filePath = this.browseType === 'context'
-          ? RawPaths.context(this.browseId)
-          : RawPaths.topic(this.browseId);
+        const filePath =
+          this.browseType === 'context' ? RawPaths.context(this.browseId) : RawPaths.topic(this.browseId);
 
         const data = await ctx.resourceManager.getRawFileContent(filePath);
         const parsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(data)) as HadithRef[];
@@ -96,9 +95,9 @@ struct HadithBrowsePage {
         this.allIds = parsed.map((p: HadithRef) => p.id);
 
         // 👇 FIX: Update title with count for contexts/topics
-        const baseTitle = this.browseType === 'context'
-          ? HadithSearchService.translate('context_' + this.browseId, this.appLanguage)
-          : HadithSearchService.translate('topic_' + this.browseId, this.appLanguage);
+        const baseTitle =
+          this.browseType === 'context' ? HadithSearchService.translate('context_' + this.browseId, this.appLanguage) :
+            HadithSearchService.translate('topic_' + this.browseId, this.appLanguage);
         this.pageTitle = `${baseTitle} (${this.allIds.length})`;
 
         for (let i = 0; i < Math.min(this.allIds.length, this.PAGE_SIZE); i++) {
@@ -141,11 +140,9 @@ struct HadithBrowsePage {
       }
       this.pageOffset += this.PAGE_SIZE;
     } else {
-      try {
-        // Reload JSON to get the metadata (could be cached, but this is safe)
-        const filePath = this.browseType === 'context'
-          ? RawPaths.context(this.browseId)
-          : RawPaths.topic(this.browseId);
+      try { // Reload JSON to get the metadata (could be cached, but this is safe)
+        const filePath =
+          this.browseType === 'context' ? RawPaths.context(this.browseId) : RawPaths.topic(this.browseId);
 
         const data = await ctx.resourceManager.getRawFileContent(filePath);
         const parsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(data)) as HadithRef[];
@@ -169,11 +166,12 @@ struct HadithBrowsePage {
   }
 
   build() {
-    Column() {
-      // Top Bar
+    Column() { // Top Bar
       Row({ space: 16 }) {
         Row() {
-          Image($r('app.media.ic_chevron_right')).width(20).height(20)
+          Image($r('app.media.ic_chevron_right'))
+            .width(20)
+            .height(20)
             .fillColor(this.colors.textWhite)
             .rotate({ angle: L.isRtlLang(this.appLanguage) ? 0 : 180 })
         }
@@ -191,9 +189,7 @@ struct HadithBrowsePage {
           .layoutWeight(1)
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
-      }
-      .width('100%').height(72).padding({ left: 16, right: 16 })
-      .backgroundColor(this.colors.cardDark)
+      }.width('100%').height(72).padding({ left: 16, right: 16 }).backgroundColor(this.colors.cardDark)
 
       // 👇 NEW: Search Bar for local filtering
       Search({ value: this.searchQuery, placeholder: 'Search in ' + this.pageTitle })
@@ -302,17 +298,17 @@ struct HadithBrowsePage {
                 .onClick(() => this.loadMore())
             }
           }
-        }
-        .padding({
+        }.padding({
           left: 16,
           right: 16,
           top: 8,
           bottom: 40
-        })
-        .layoutWeight(1)
+        }).layoutWeight(1)
       }
     }
-    .width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
+    .width('100%')
+    .height('100%')
+    .backgroundColor(this.colors.primaryGreen)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
   }
 
@@ -321,12 +317,9 @@ struct HadithBrowsePage {
       this.filteredHadiths = this.hadiths;
     } else {
       const q = this.searchQuery.toLowerCase();
-      this.filteredHadiths = this.hadiths.filter((h: BilingualHadith) =>
-      h.arabic_text.includes(q) ||
-        h.translated_text.toLowerCase().includes(q) ||
-        h.section.toLowerCase().includes(q) ||
-        h.hadith_number.includes(q)
-      );
+      this.filteredHadiths = this.hadiths.filter(
+        (h: BilingualHadith) => h.arabic_text.includes(q) || h.translated_text.toLowerCase().includes(q) ||
+          h.section.toLowerCase().includes(q) || h.hadith_number.includes(q));
     }
   }
 

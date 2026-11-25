@@ -83,31 +83,24 @@ export class RamadanStorage {
    * switch flipped a 30-day Ramadan to 29, or vice versa), the
    * existing days/nights are preserved and padded or trimmed.
    */
-  static async getOrCreateYear(
-    hijriYear: number,
-    totalDays: number
-  ): Promise<RamadanYearData> {
+  static async getOrCreateYear(hijriYear: number, totalDays: number): Promise<RamadanYearData> {
     return RamadanStorage.enqueue(async (): Promise<RamadanYearData> => {
       const store = await RamadanStorage.doLoad();
 
       const idx = RamadanStorage.findYearIndex(store, hijriYear);
       if (idx >= 0) {
         const existing = store.years[idx];
-        if (existing.totalDays === totalDays
-          && existing.days.length === totalDays
-          && existing.taraweehNights.length === totalDays) {
+        if (existing.totalDays === totalDays && existing.days.length === totalDays &&
+          existing.taraweehNights.length === totalDays) {
           return existing;
-        }
-        // Resize — preserve what we have, pad/trim the tail.
+        } // Resize — preserve what we have, pad/trim the tail.
         const resized = RamadanStorage.resizeYear(existing, totalDays);
         store.years[idx] = resized;
         await RamadanStorage.doSave(store);
         return resized;
       }
 
-      const created = RamadanStorage.createEmptyYear(
-        hijriYear, totalDays
-      );
+      const created = RamadanStorage.createEmptyYear(hijriYear, totalDays);
       store.years.push(created);
       await RamadanStorage.doSave(store);
       return created;
@@ -119,9 +112,7 @@ export class RamadanStorage {
    * year is absent. Used by the year-detail sheet, which should not
    * create empty data just by opening.
    */
-  static async getYear(
-    hijriYear: number
-  ): Promise<RamadanYearData | null> {
+  static async getYear(hijriYear: number): Promise<RamadanYearData | null> {
     const store = await RamadanStorage.load();
     for (const year of store.years) {
       if (year.hijriYear === hijriYear) {
@@ -142,25 +133,18 @@ export class RamadanStorage {
    * `day` is outside 1..totalDays. Callers are expected to have
    * called getOrCreateYear first, and to supply a valid day.
    */
-  static async markDay(
-    hijriYear: number,
-    day: number,
-    status: FastingStatus,
-    reason?: MissedReason,
-    customReason?: string
-  ): Promise<void> {
+  static async markDay(hijriYear: number, day: number, status: FastingStatus, reason?: MissedReason,
+    customReason?: string): Promise<void> {
     return RamadanStorage.enqueue(async (): Promise<void> => {
       const store = await RamadanStorage.doLoad();
       const idx = RamadanStorage.findYearIndex(store, hijriYear);
       if (idx < 0) {
-        AppLogger.warn('RamadanStorage',
-          `markDay: year ${hijriYear} not found`);
+        AppLogger.warn('RamadanStorage', `markDay: year ${hijriYear} not found`);
         return;
       }
       const year = store.years[idx];
       if (day < 1 || day > year.totalDays) {
-        AppLogger.warn('RamadanStorage',
-          `markDay: day ${day} out of range 1..${year.totalDays}`);
+        AppLogger.warn('RamadanStorage', `markDay: day ${day} out of range 1..${year.totalDays}`);
         return;
       }
 
@@ -173,26 +157,16 @@ export class RamadanStorage {
       // different reason) clears it — the user is correcting an
       // error and made-up status should start fresh.
       const sameMissed =
-        isMissed
-          && previous !== undefined
-          && previous.status === FastingStatus.MISSED
-          && previous.reason === reason
-          && previous.customReason ===
-          ((reason === MissedReason.OTHER) ? customReason : undefined);
+        isMissed && previous !== undefined && previous.status === FastingStatus.MISSED && previous.reason === reason &&
+          previous.customReason === ((reason === MissedReason.OTHER) ? customReason : undefined);
 
-      const preservedMadeUp = sameMissed
-        ? (previous.madeUp === true)
-        : false;
-      const preservedMadeUpAt = sameMissed
-        ? previous.madeUpAt
-        : undefined;
+      const preservedMadeUp = sameMissed ? (previous.madeUp === true) : false;
+      const preservedMadeUpAt = sameMissed ? previous.madeUpAt : undefined;
 
       const entry: FastingDay = {
         status: status,
         reason: isMissed ? reason : undefined,
-        customReason: (isMissed && reason === MissedReason.OTHER)
-          ? customReason
-          : undefined,
+        customReason: (isMissed && reason === MissedReason.OTHER) ? customReason : undefined,
         madeUp: preservedMadeUp,
         madeUpAt: preservedMadeUpAt
       };
@@ -207,10 +181,7 @@ export class RamadanStorage {
   // ============================================================
 
   /** Flip one night's taraweeh toggle. */
-  static async toggleTaraweeh(
-    hijriYear: number,
-    night: number
-  ): Promise<void> {
+  static async toggleTaraweeh(hijriYear: number, night: number): Promise<void> {
     return RamadanStorage.enqueue(async (): Promise<void> => {
       const store = await RamadanStorage.doLoad();
       const idx = RamadanStorage.findYearIndex(store, hijriYear);
@@ -221,8 +192,7 @@ export class RamadanStorage {
       if (night < 1 || night > year.totalDays) {
         return;
       }
-      year.taraweehNights[night - 1] =
-        !year.taraweehNights[night - 1];
+      year.taraweehNights[night - 1] = !year.taraweehNights[night - 1];
       await RamadanStorage.doSave(store);
     });
   }
@@ -239,10 +209,7 @@ export class RamadanStorage {
    * Legacy counters are migrated to flags on first load — see
    * doLoad().
    */
-  static async toggleDayMadeUp(
-    hijriYear: number,
-    day: number
-  ): Promise<void> {
+  static async toggleDayMadeUp(hijriYear: number, day: number): Promise<void> {
     return RamadanStorage.enqueue(async (): Promise<void> => {
       const store = await RamadanStorage.doLoad();
       const idx = RamadanStorage.findYearIndex(store, hijriYear);
@@ -313,9 +280,7 @@ export class RamadanStorage {
       totalUnmarked += unmarked;
     }
 
-    perYear.sort((a: QadaYearRow, b: QadaYearRow): number =>
-    a.hijriYear - b.hijriYear
-    );
+    perYear.sort((a: QadaYearRow, b: QadaYearRow): number => a.hijriYear - b.hijriYear);
 
     const remaining = Math.max(0, totalMissed - totalMadeUp);
     const summary: QadaSummary = {
@@ -379,15 +344,12 @@ export class RamadanStorage {
   }
 
   private static enqueue<T>(fn: () => Promise<T>): Promise<T> {
-    const result = RamadanStorage.queue.then((): Promise<T> => fn());
-    // Swallow rejection on the chain continuation so a failed
+    const result =
+      RamadanStorage.queue.then((): Promise<T> => fn()); // Swallow rejection on the chain continuation so a failed
     // write cannot permanently block subsequent writes.
-    RamadanStorage.queue = result.then(
-      (): void => { /* noop */
-      },
-      (): void => { /* noop */
-      }
-    );
+    RamadanStorage.queue = result.then((): void => { /* noop */
+    }, (): void => { /* noop */
+    });
     return result;
   }
 
@@ -396,9 +358,7 @@ export class RamadanStorage {
   // ============================================================
 
   private static async doLoad(): Promise<RamadanLogStore> {
-    const raw = await PreferencesHelper.getString(
-      STORAGE_KEY_RAMADAN_LOG, ''
-    );
+    const raw = await PreferencesHelper.getString(STORAGE_KEY_RAMADAN_LOG, '');
     if (raw.length === 0) {
       const empty: RamadanLogStore = { years: [] };
       return empty;
@@ -407,8 +367,7 @@ export class RamadanStorage {
     try {
       parsed = JSON.parse(raw) as RamadanLogStore;
     } catch (err) {
-      AppLogger.warn('RamadanStorage',
-        'load: parse failed, using empty store');
+      AppLogger.warn('RamadanStorage', 'load: parse failed, using empty store');
       const empty: RamadanLogStore = { years: [] };
       return empty;
     }
@@ -441,8 +400,7 @@ export class RamadanStorage {
         }
         year.qadaMadeUp = 0;
         migrated = true;
-      }
-      // Also seed `madeUp: false` on every MISSED day that lacks the
+      } // Also seed `madeUp: false` on every MISSED day that lacks the
       // field. `typeof` is used instead of `=== undefined` because
       // the interface types the field as required `boolean`, so a
       // direct comparison would fail type checking. At runtime the
@@ -458,8 +416,7 @@ export class RamadanStorage {
 
     if (migrated) {
       AppLogger.info('RamadanStorage',
-        'load: migrated legacy qadaMadeUp counters to per-day flags');
-      // Persist the migration so it only runs once. Fire-and-forget.
+        'load: migrated legacy qadaMadeUp counters to per-day flags'); // Persist the migration so it only runs once. Fire-and-forget.
       RamadanStorage.doPersistMigrated(parsed).catch(() => { /* logged inside */
       });
     }
@@ -467,18 +424,15 @@ export class RamadanStorage {
     return parsed;
   }
 
-  private static async doPersistMigrated(
-    store: RamadanLogStore
-  ): Promise<void> {
+  private static async doPersistMigrated(store: RamadanLogStore): Promise<void> {
     try {
       const json = JSON.stringify(store);
-      await PreferencesHelper.setString(STORAGE_KEY_RAMADAN_LOG, json);
-      // Do not bump the version here — this is a background migration,
+      await PreferencesHelper.setString(STORAGE_KEY_RAMADAN_LOG,
+        json); // Do not bump the version here — this is a background migration,
       // not a user action. Pages will read the migrated state on their
       // next natural load.
     } catch (err) {
-      AppLogger.warn('RamadanStorage',
-        'migration persist failed');
+      AppLogger.warn('RamadanStorage', 'migration persist failed');
     }
   }
 
@@ -489,18 +443,12 @@ export class RamadanStorage {
   }
 
   private static bumpVersion(): void {
-    const prev =
-      AppStorage.get<number>(STORAGE_KEY_RAMADAN_STATE_VERSION);
+    const prev = AppStorage.get<number>(STORAGE_KEY_RAMADAN_STATE_VERSION);
     const next = (prev === undefined ? 0 : prev) + 1;
-    AppStorage.setOrCreate(
-      STORAGE_KEY_RAMADAN_STATE_VERSION, next
-    );
+    AppStorage.setOrCreate(STORAGE_KEY_RAMADAN_STATE_VERSION, next);
   }
 
-  private static findYearIndex(
-    store: RamadanLogStore,
-    hijriYear: number
-  ): number {
+  private static findYearIndex(store: RamadanLogStore, hijriYear: number): number {
     for (let i = 0; i < store.years.length; i++) {
       if (store.years[i].hijriYear === hijriYear) {
         return i;
@@ -509,15 +457,11 @@ export class RamadanStorage {
     return -1;
   }
 
-  private static createEmptyYear(
-    hijriYear: number,
-    totalDays: number
-  ): RamadanYearData {
+  private static createEmptyYear(hijriYear: number, totalDays: number): RamadanYearData {
     const days: FastingDay[] = [];
     for (let i = 0; i < totalDays; i++) {
       const day: FastingDay = {
-        status: FastingStatus.UNMARKED,
-        madeUp: false
+        status: FastingStatus.UNMARKED, madeUp: false
       };
       days.push(day);
     }
@@ -540,18 +484,14 @@ export class RamadanStorage {
    * still has a slot in the new length. Trims the tail when the
    * new length is shorter; pads with UNMARKED / false when longer.
    */
-  private static resizeYear(
-    year: RamadanYearData,
-    newTotalDays: number
-  ): RamadanYearData {
+  private static resizeYear(year: RamadanYearData, newTotalDays: number): RamadanYearData {
     const days: FastingDay[] = [];
     for (let i = 0; i < newTotalDays; i++) {
       if (i < year.days.length) {
         days.push(year.days[i]);
       } else {
         const fresh: FastingDay = {
-          status: FastingStatus.UNMARKED,
-          madeUp: false
+          status: FastingStatus.UNMARKED, madeUp: false
         };
         days.push(fresh);
       }

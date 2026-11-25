@@ -131,11 +131,12 @@ struct MosqueFinderPage {
   build() {
 
     Stack({ alignContent: Alignment.BottomEnd }) {
-      Column() {
-        // Top Bar
+      Column() { // Top Bar
         Row({ space: 16 }) {
           Row() {
-            Image($r('app.media.ic_chevron_right')).width(20).height(20)
+            Image($r('app.media.ic_chevron_right'))
+              .width(20)
+              .height(20)
               .fillColor(this.colors.textWhite)
               .rotate({ angle: L.isRtlLang(this.appLanguage) ? 0 : 180 })
           }
@@ -147,10 +148,11 @@ struct MosqueFinderPage {
           .onClick(() => router.back())
 
           Text('Mosque Finder')
-            .fontSize(22).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+            .fontSize(22)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.textWhite)
             .layoutWeight(1)
-        }
-        .width('100%').height(72).padding({ left: 16, right: 16 }).backgroundColor(this.colors.cardDark)
+        }.width('100%').height(72).padding({ left: 16, right: 16 }).backgroundColor(this.colors.cardDark)
 
         // Content
         if (this.isLoading) {
@@ -159,8 +161,7 @@ struct MosqueFinderPage {
             Text('Resolving location...').fontSize(14).fontColor(this.colors.textMuted).margin({ top: 16 })
           }.width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
 
-        } else if (!MosqueDbHelper.isDownloaded(getContext(this), this.currentCountry)) {
-          // Download Prompt
+        } else if (!MosqueDbHelper.isDownloaded(getContext(this), this.currentCountry)) { // Download Prompt
           Column() {
             Text(this.statusText)
               .fontSize(16)
@@ -170,16 +171,14 @@ struct MosqueFinderPage {
 
             if (this.downloadSizeMb > 0 && this.isCountryAvailable) {
               Text(`Size: ${this.downloadSizeMb.toFixed(2)} MB`)
-                .fontSize(12).fontColor(this.colors.textMuted)
+                .fontSize(12)
+                .fontColor(this.colors.textMuted)
                 .margin({ bottom: 20 })
             }
 
-            Button(
-              this.isDownloading
-                ? 'Downloading...'
-                : (this.isCountryAvailable ? `Download ${this.currentCountryName || this.currentCountry} Pack` :
-                'Data Pack Unavailable')
-            )
+            Button(this.isDownloading ? 'Downloading...' :
+              (this.isCountryAvailable ? `Download ${this.currentCountryName || this.currentCountry} Pack` :
+                'Data Pack Unavailable'))
               .width('80%')
               .height(48)
               // FIX: Change background color to grey if unavailable
@@ -189,18 +188,14 @@ struct MosqueFinderPage {
               // FIX: Disable the button if country not available or currently downloading
               .enabled(this.isCountryAvailable && !this.isDownloading)
               .onClick(() => this.downloadCurrentCountry())
-          }
-          .width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
-        } else {
-          // Filter chip row — direct child of the outer Column, same
+          }.width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
+        } else { // Filter chip row — direct child of the outer Column, same
           // layout context as the original top bar.
           Row({ space: 8 }) {
             this.FilterChip('all')
             this.FilterChip('default')
             this.FilterChip('custom')
-          }
-          .width('100%')
-          .padding({
+          }.width('100%').padding({
             left: 16,
             right: 16,
             top: 12,
@@ -216,8 +211,7 @@ struct MosqueFinderPage {
             List({ space: 12 }) {
               ForEach(this.filteredMosques(), (mosque: MosqueModel) => {
                 ListItem() {
-                  Column() {
-                    // ---- mosque card body — unchanged from current file ----
+                  Column() { // ---- mosque card body — unchanged from current file ----
                     Row() {
                       Text(MosqueService.getLocalizedName(mosque, this.appLanguage))
                         .fontSize(16)
@@ -242,10 +236,7 @@ struct MosqueFinderPage {
                           .margin({ left: 8 })
                           .flexShrink(0)
                       }
-                    }
-                    .width('100%')
-                    .alignItems(VerticalAlign.Center)
-                    .margin({ bottom: 4 })
+                    }.width('100%').alignItems(VerticalAlign.Center).margin({ bottom: 4 })
 
                     Text(`${mosque.distanceKm.toFixed(1)} ${L.get('km_away', this.appLanguage)} (direct)`)
                       .fontSize(12)
@@ -270,31 +261,23 @@ struct MosqueFinderPage {
                   .borderRadius(12)
                   .border({ width: 1, color: this.colors.borderSoft })
                   .clip(true)
-                }
-                .width('100%')
-                .swipeAction({
+                }.width('100%').swipeAction({
                   start: mosque.isCustom ? {
                     builder: () => {
                       this.SwipeEditAction(mosque)
                     }
-                  } : undefined,
-                  end: mosque.isCustom ? {
+                  } : undefined, end: mosque.isCustom ? {
                     builder: () => {
                       this.SwipeDeleteAction(mosque)
                     }
                   } : undefined
-                })
-                .onClick(() => {
+                }).onClick(() => {
                   this.selectedMosque = mosque;
                   this.showDetailsSheet = true;
                 })
-              }, (mosque: MosqueModel) =>
-              `mosque-${mosque.id}-${mosque.isCustom}-${this.activeFilter}-${this.appLanguage}-${mosque.name}`
-              )
-            }
-            .width('100%')
-            .layoutWeight(1)
-            .padding({
+              }, (
+                mosque: MosqueModel) => `mosque-${mosque.id}-${mosque.isCustom}-${this.activeFilter}-${this.appLanguage}-${mosque.name}`)
+            }.width('100%').layoutWeight(1).padding({
               left: 16,
               right: 16,
               top: 12,
@@ -305,9 +288,7 @@ struct MosqueFinderPage {
       }
 
       Row() {
-        Image($r('app.media.ic_add'))
-          .width(24).height(24)
-          .fillColor(this.colors.textOnAccent)
+        Image($r('app.media.ic_add')).width(24).height(24).fillColor(this.colors.textOnAccent)
       }
       .width(56)
       .height(56)
@@ -354,10 +335,7 @@ struct MosqueFinderPage {
   @Builder
   SwipeEditAction(mosque: MosqueModel) {
     Row() {
-      Image($r('app.media.ic_edit'))
-        .width(24)
-        .height(24)
-        .fillColor(this.colors.textOnAccent)
+      Image($r('app.media.ic_edit')).width(24).height(24).fillColor(this.colors.textOnAccent)
     }
     .width(80)
     .height('100%')
@@ -373,10 +351,7 @@ struct MosqueFinderPage {
   @Builder
   SwipeDeleteAction(mosque: MosqueModel) {
     Row() {
-      Image($r('app.media.ic_delete'))
-        .width(24)
-        .height(24)
-        .fillColor('#FFFFFF') // Force white for contrast
+      Image($r('app.media.ic_delete')).width(24).height(24).fillColor('#FFFFFF') // Force white for contrast
     }
     .width(80)
     .height('100%')
@@ -404,12 +379,8 @@ struct MosqueFinderPage {
     Text(`${this.filterLabel(id)} (${this.filterCount(id)})`)
       .fontSize(13)
       .fontWeight(this.activeFilter === id ? FontWeight.Bold : FontWeight.Normal)
-      .fontColor(this.activeFilter === id
-        ? this.colors.textOnAccent
-        : this.colors.textMuted)
-      .backgroundColor(this.activeFilter === id
-        ? this.colors.accentGold
-        : this.colors.cardDark)
+      .fontColor(this.activeFilter === id ? this.colors.textOnAccent : this.colors.textMuted)
+      .backgroundColor(this.activeFilter === id ? this.colors.accentGold : this.colors.cardDark)
       .padding({
         left: 14,
         right: 14,
@@ -418,10 +389,7 @@ struct MosqueFinderPage {
       })
       .borderRadius(16)
       .border({
-        width: 1,
-        color: this.activeFilter === id
-          ? this.colors.accentGold
-          : this.colors.borderSoft
+        width: 1, color: this.activeFilter === id ? this.colors.accentGold : this.colors.borderSoft
       })
       .maxLines(1)
       .onClick(() => {
@@ -463,10 +431,7 @@ struct MosqueFinderPage {
       if (this.activeFilter === 'custom') {
         Button() {
           Row({ space: 6 }) {
-            Image($r('app.media.ic_add'))
-              .width(16)
-              .height(16)
-              .fillColor(this.colors.textOnAccent)
+            Image($r('app.media.ic_add')).width(16).height(16).fillColor(this.colors.textOnAccent)
             Text(L.get('mosque_add_custom_cta', this.appLanguage))
               .fontSize(14)
               .fontWeight(FontWeight.Medium)
@@ -500,24 +465,26 @@ struct MosqueFinderPage {
     Column() {
       Row().height(8)
       Text(this.editingMosque ? 'Edit Custom Mosque' : 'Add Custom Mosque')
-        .fontSize(20).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+        .fontSize(20)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(this.colors.textWhite)
         .margin({ bottom: 20 })
 
       Scroll() {
-        Column({ space: 16 }) {
-          // --- Name Input ---
+        Column({ space: 16 }) { // --- Name Input ---
           TextInput({ text: this.formName, placeholder: 'Mosque Name *' })
             .onChange(v => this.formName = v)
-            .backgroundColor(this.colors.tintSoft).fontColor(this.colors.textWhite)
+            .backgroundColor(this.colors.tintSoft)
+            .fontColor(this.colors.textWhite)
 
           // --- Address Input ---
           TextInput({ text: this.formAddress, placeholder: 'Address (Optional)' })
             .onChange(v => this.formAddress = v)
-            .backgroundColor(this.colors.tintSoft).fontColor(this.colors.textWhite)
+            .backgroundColor(this.colors.tintSoft)
+            .fontColor(this.colors.textWhite)
 
           // --- Lat / Lng Inputs ---
-          Row({ space: 12 }) {
-            // 👇 FIX: Use $$ binding so they update when handleLocationFetch changes the state
+          Row({ space: 12 }) { // 👇 FIX: Use $$ binding so they update when handleLocationFetch changes the state
             TextInput({ text: $$this.formLat, placeholder: 'Latitude' })
               .type(InputType.Normal)
               .backgroundColor(this.colors.tintSoft)
@@ -536,12 +503,10 @@ struct MosqueFinderPage {
             if (this.isFetchingLocation) {
               Row({ space: 8 }) {
                 LoadingProgress().width(16).height(16).color(this.colors.accentGold)
-                Text(L.get('fetching', this.appLanguage))
-                  .fontSize(14).fontColor(this.colors.accentGold)
+                Text(L.get('fetching', this.appLanguage)).fontSize(14).fontColor(this.colors.accentGold)
               }
             } else {
-              Text(L.get('wizard_location_title', this.appLanguage))
-                .fontSize(14).fontColor(this.colors.accentGold)
+              Text(L.get('wizard_location_title', this.appLanguage)).fontSize(14).fontColor(this.colors.accentGold)
             }
           }
           .width('100%')
@@ -551,11 +516,9 @@ struct MosqueFinderPage {
           .backgroundColor(this.colors.tintSubtle)
           .borderRadius(8)
           .border({ width: 1, color: this.colors.borderSoft })
-          .parallelGesture(
-            TapGesture().onAction(() => {
-              this.handleLocationFetch();
-            })
-          )
+          .parallelGesture(TapGesture().onAction(() => {
+            this.handleLocationFetch();
+          }))
 
           // 👇 Debug Status Text
           if (this.locationStatus.length > 0) {
@@ -570,8 +533,7 @@ struct MosqueFinderPage {
               .borderRadius(8)
           }
         }
-      }
-      .key(this.renderTick.toString()) // 👈 FORCE the Sheet to redraw when tick changes
+      }.key(this.renderTick.toString()) // 👈 FORCE the Sheet to redraw when tick changes
 
       // --- Action Buttons (Cancel / Save) ---
       Row({ space: 12 }) {
@@ -588,17 +550,14 @@ struct MosqueFinderPage {
           .backgroundColor(this.colors.accentGold)
           .fontColor(this.colors.textOnAccent)
           .onClick(() => this.saveCustomMosque())
-      }
-      .width('100%').margin({ top: 24 })
-    }
-    .width('100%').padding({ left: 20, right: 20, bottom: 40 })
+      }.width('100%').margin({ top: 24 })
+    }.width('100%').padding({ left: 20, right: 20, bottom: 40 })
   }
 
   @Builder
   MosqueDetailsSheet() {
     if (this.selectedMosque) {
-      Column() {
-        // 1. Drag Bar
+      Column() { // 1. Drag Bar
         Row().height(8)
 
         // 2. Header (Name and Distance)
@@ -619,17 +578,12 @@ struct MosqueFinderPage {
               .margin({ top: 4 })
               .width('100%')
               .textAlign(TextAlign.Start)
-          }
-          .layoutWeight(1).alignItems(HorizontalAlign.Start)
+          }.layoutWeight(1).alignItems(HorizontalAlign.Start)
 
-          Image($r('app.media.ic_close'))
-            .width(24).height(24).fillColor(this.colors.textMuted)
-            .onClick(() => {
-              this.showDetailsSheet = false;
-            })
-        }
-        .width('100%')
-        .padding({
+          Image($r('app.media.ic_close')).width(24).height(24).fillColor(this.colors.textMuted).onClick(() => {
+            this.showDetailsSheet = false;
+          })
+        }.width('100%').padding({
           top: 10,
           bottom: 16,
           left: 20,
@@ -641,36 +595,30 @@ struct MosqueFinderPage {
         // 3. Address (If available)
         if (this.selectedMosque.address && this.selectedMosque.address.length > 0) {
           Row({ space: 12 }) {
-            Image($r('app.media.ic_pin'))
-              .width(16).height(16)
-              .fillColor(this.colors.accentGold)
-              .margin({ top: 2 })
+            Image($r('app.media.ic_pin')).width(16).height(16).fillColor(this.colors.accentGold).margin({ top: 2 })
             Text(this.selectedMosque.address)
-              .fontSize(14).fontColor(this.colors.textMuted).lineHeight(20)
+              .fontSize(14)
+              .fontColor(this.colors.textMuted)
+              .lineHeight(20)
               .layoutWeight(1)
-          }
-          .width('100%')
-          .padding({
+          }.width('100%').padding({
             top: 16,
             bottom: 16,
             left: 20,
             right: 20
-          })
-          .alignItems(VerticalAlign.Top)
+          }).alignItems(VerticalAlign.Top)
 
           Divider().color(this.colors.borderSoft).width('90%')
         }
 
         // 4. Action Buttons
-        Column({ space: 12 }) {
-          // ---- Get Directions — always shown ----
+        Column({ space: 12 }) { // ---- Get Directions — always shown ----
           Button() {
             Row({ space: 8 }) {
-              Image($r('app.media.ic_compass'))
-                .width(18).height(18)
-                .fillColor(this.colors.textOnAccent)
+              Image($r('app.media.ic_compass')).width(18).height(18).fillColor(this.colors.textOnAccent)
               Text(L.get('get_directions', this.appLanguage))
-                .fontSize(15).fontWeight(FontWeight.Medium)
+                .fontSize(15)
+                .fontWeight(FontWeight.Medium)
                 .fontColor(this.colors.textOnAccent)
             }
           }
@@ -688,8 +636,7 @@ struct MosqueFinderPage {
           if (this.selectedMosque.phone && this.selectedMosque.phone.length > 0) {
             Button() {
               Row({ space: 8 }) {
-                Image($r('app.media.ic_phone'))
-                  .width(18).height(18).fillColor(this.colors.textWhite)
+                Image($r('app.media.ic_phone')).width(18).height(18).fillColor(this.colors.textWhite)
                 Text(this.selectedMosque.phone)
                   .fontSize(15)
                   .fontWeight(FontWeight.Medium)
@@ -715,10 +662,10 @@ struct MosqueFinderPage {
           if (this.selectedMosque.website && this.selectedMosque.website.length > 0) {
             Button() {
               Row({ space: 8 }) {
-                Image($r('app.media.ic_globe'))
-                  .width(18).height(18).fillColor(this.colors.textWhite)
+                Image($r('app.media.ic_globe')).width(18).height(18).fillColor(this.colors.textWhite)
                 Text(L.get('visit_website', this.appLanguage))
-                  .fontSize(15).fontWeight(FontWeight.Medium)
+                  .fontSize(15)
+                  .fontWeight(FontWeight.Medium)
                   .fontColor(this.colors.textWhite)
               }
             }
@@ -744,19 +691,14 @@ struct MosqueFinderPage {
               .width('100%')
               .padding({ top: 4 })
           }
-        }
-        .width('100%')
-        .padding({
+        }.width('100%').padding({
           top: 20,
           bottom: 40,
           left: 20,
           right: 20
         })
-      }
-      .width('100%').backgroundColor(this.colors.cardDark)
-      .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
-    } else {
-      // Fallback
+      }.width('100%').backgroundColor(this.colors.cardDark).direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+    } else { // Fallback
       Column().width('100%').height(100).backgroundColor(this.colors.cardDark)
     }
   }
@@ -793,8 +735,7 @@ struct MosqueFinderPage {
     }
 
     const lat = parseFloat(this.formLat);
-    const lng = parseFloat(this.formLng);
-    // FIX: Validate coordinate boundaries
+    const lng = parseFloat(this.formLng); // FIX: Validate coordinate boundaries
     if (isNaN(lat) || lat < -90 || lat > 90) {
       promptAction.showToast({ message: 'Invalid Latitude' });
       return;
@@ -831,15 +772,12 @@ struct MosqueFinderPage {
     await this.initLocationAndData();
   }
 
-  async deleteCustomMosque(mosque: MosqueModel) {
-    // Show confirmation dialog
+  async deleteCustomMosque(mosque: MosqueModel) { // Show confirmation dialog
     promptAction.showDialog({
       title: 'Delete Mosque',
       message: `Are you sure you want to delete "${mosque.name}"?`,
-      buttons: [
-        { text: 'Cancel', color: this.colors.dialogCancel },
-        { text: 'Delete', color: this.colors.statusExpress }
-      ]
+      buttons: [{ text: 'Cancel', color: this.colors.dialogCancel },
+        { text: 'Delete', color: this.colors.statusExpress }]
     }).then(async (res) => {
       if (res.index === 1) {
         await MosqueStorage.delete(mosque.id);
@@ -850,16 +788,13 @@ struct MosqueFinderPage {
   }
 
   openMaps(mosque: MosqueModel) {
-    const ctx = getContext(this) as common.UIAbilityContext;
-    // Standard format: geo:lat,lng?q=lat,lng(label)
+    const ctx = getContext(this) as common.UIAbilityContext; // Standard format: geo:lat,lng?q=lat,lng(label)
     const uri = `geo:${mosque.lat},${mosque.lng}?q=${mosque.lat},${mosque.lng}(${encodeURIComponent(mosque.name)})`;
 
     ctx.startAbility({
-      action: 'ohos.want.action.viewData',
-      uri: uri
+      action: 'ohos.want.action.viewData', uri: uri
     }).catch((e: Error) => {
-      console.error('Maps failed', e.message);
-      // Fallback: open in browser if no map app is installed
+      console.error('Maps failed', e.message); // Fallback: open in browser if no map app is installed
       ctx.startAbility({
         action: 'ohos.want.action.viewData',
         entities: ['entity.system.browsable'],
@@ -871,19 +806,15 @@ struct MosqueFinderPage {
   openDialer(phone: string) {
     const ctx = getContext(this) as common.UIAbilityContext;
     ctx.startAbility({
-      action: 'ohos.want.action.dial',
-      uri: `tel:${phone}`
+      action: 'ohos.want.action.dial', uri: `tel:${phone}`
     }).catch((e: Error) => console.error('Dialer failed', e.message));
   }
 
   openWebsite(url: string) {
-    const ctx = getContext(this) as common.UIAbilityContext;
-    // Ensure URL has a protocol
+    const ctx = getContext(this) as common.UIAbilityContext; // Ensure URL has a protocol
     const finalUrl = url.startsWith('http') ? url : `https://${url}`;
     ctx.startAbility({
-      action: 'ohos.want.action.viewData',
-      entities: ['entity.system.browsable'],
-      uri: finalUrl
+      action: 'ohos.want.action.viewData', entities: ['entity.system.browsable'], uri: finalUrl
     }).catch((e: Error) => console.error('Browser failed', e.message));
   }
 

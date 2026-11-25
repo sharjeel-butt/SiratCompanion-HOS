@@ -12,14 +12,11 @@ import { SourceItem } from '../i18n/SourceParser';
  *   the Friday in the calendar.
  */
 export enum EventRecurrence {
-  FIXED = 'fixed',
-  FIRST_THURSDAY_NIGHT = 'firstThursdayNight'
+  FIXED = 'fixed', FIRST_THURSDAY_NIGHT = 'firstThursdayNight'
 }
 
 export enum EventSect {
-  UNIVERSAL = 'universal',
-  SUNNI = 'sunni',
-  SHIA = 'shia'
+  UNIVERSAL = 'universal', SUNNI = 'sunni', SHIA = 'shia'
 }
 
 export interface IslamicEventSource extends SourceItem {

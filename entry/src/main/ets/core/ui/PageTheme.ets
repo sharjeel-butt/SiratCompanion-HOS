@@ -41,32 +41,20 @@ export class PageTheme {
   }
 
   static compute(themeMode: string): ThemeColors {
-    return Theme.getColors(
-      themeMode,
-      PageTheme.isSystemDark(),
-      PageTheme.currentPreset()
-    );
+    return Theme.getColors(themeMode, PageTheme.isSystemDark(), PageTheme.currentPreset());
   }
 
-  static installSystemListener(
-    themeMode: string,
-    onChange: (colors: ThemeColors) => void
-  ): mediaquery.MediaQueryListener | null {
+  static installSystemListener(themeMode: string,
+    onChange: (colors: ThemeColors) => void): mediaquery.MediaQueryListener | null {
     try {
       const listener = mediaquery.matchMediaSync('(dark-mode: true)');
       listener.on('change', (result: mediaquery.MediaQueryResult) => {
 
         const live = AppStorage.get<string>(STORAGE_KEY_THEME_MODE);
-        const effective = (live !== undefined && live.length > 0)
-          ? live
-          : themeMode;
+        const effective = (live !== undefined && live.length > 0) ? live : themeMode;
 
         if (effective === ThemeMode.SYSTEM) {
-          onChange(Theme.getColors(
-            effective,
-            result.matches,
-            PageTheme.currentPreset()
-          ));
+          onChange(Theme.getColors(effective, result.matches, PageTheme.currentPreset()));
         }
       });
       return listener;
@@ -97,8 +85,7 @@ export class PageTheme {
         sysMode = ConfigurationConstant.ColorMode.COLOR_MODE_DARK;
       } else if (mode === ThemeMode.LIGHT) {
         sysMode = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
-      } else {
-        // SYSTEM (Auto Detect)
+      } else { // SYSTEM (Auto Detect)
         sysMode = ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET;
       }
 
@@ -112,8 +99,6 @@ export class PageTheme {
   private static currentPreset(): string {
     const v = AppStorage.get<string>(STORAGE_KEY_APP_THEME);
 
-    return ThemeService.ensureValidThemeId(
-      v
-    );
+    return ThemeService.ensureValidThemeId(v);
   }
 }

@@ -57,17 +57,12 @@ export class TasbihStorage {
     // 1. Return from cache instantly
     if (TasbihStorage.cachedTasbihs) {
       if (needsRollover) {
-        const rolled = TasbihManager.rollOverStaleCounts(
-          TasbihStorage.cachedTasbihs
-        );
+        const rolled = TasbihManager.rollOverStaleCounts(TasbihStorage.cachedTasbihs);
         TasbihStorage.lastRolloverDateKey = today;
         if (rolled !== TasbihStorage.cachedTasbihs) {
           TasbihStorage.cachedTasbihs = rolled;
-          TasbihStorage.save(
-            rolled,
-            TasbihStorage.cachedActiveTasbihId,
-            TasbihStorage.cachedActiveDhikrIndex
-          ).catch(() => {
+          TasbihStorage.save(rolled, TasbihStorage.cachedActiveTasbihId, TasbihStorage.cachedActiveDhikrIndex)
+            .catch(() => {
           });
         }
       }
@@ -94,12 +89,10 @@ export class TasbihStorage {
         if (!nameKey) {
           if (t.name === 'Classic 33') {
             nameKey = 'tasbih_default_classic_name';
-          } else if (t.name ===
-            'Tahlil 100') {
+          } else if (t.name === 'Tahlil 100') {
             nameKey = 'tasbih_default_tahlil_name';
           } else if (t.name === 'Istighfar') {
-            nameKey =
-              'tasbih_default_istighfar_name';
+            nameKey = 'tasbih_default_istighfar_name';
           }
         }
 
@@ -109,37 +102,27 @@ export class TasbihStorage {
           if (!tKey) {
             if (d.transliteration === 'SubhanAllah') {
               tKey = 'dhikr_subhanallah_translit';
-            } else if (d.transliteration ===
-              'Alhamdulillah') {
+            } else if (d.transliteration === 'Alhamdulillah') {
               tKey = 'dhikr_alhamdulillah_translit';
-            } else if (d.transliteration ===
-              'Allahu Akbar') {
+            } else if (d.transliteration === 'Allahu Akbar') {
               tKey = 'dhikr_allahuakbar_translit';
-            } else if (d.transliteration ===
-              'La ilaha illallahu wahdahu la sharika lah') {
-              tKey =
-                'dhikr_tahlil_translit';
+            } else if (d.transliteration === 'La ilaha illallahu wahdahu la sharika lah') {
+              tKey = 'dhikr_tahlil_translit';
             } else if (d.transliteration === 'Astaghfirullah') {
-              tKey =
-                'dhikr_istighfar_translit';
+              tKey = 'dhikr_istighfar_translit';
             }
           }
           if (!trKey) {
             if (d.translation === 'Glory be to Allah') {
               trKey = 'dhikr_subhanallah_trans';
-            } else if (d.translation ===
-              'All praise is for Allah') {
+            } else if (d.translation === 'All praise is for Allah') {
               trKey = 'dhikr_alhamdulillah_trans';
-            } else if (d.translation ===
-              'Allah is the Greatest') {
+            } else if (d.translation === 'Allah is the Greatest') {
               trKey = 'dhikr_allahuakbar_trans';
-            } else if (d.translation ===
-              'There is no god but Allah, alone, without partner') {
-              trKey =
-                'dhikr_tahlil_trans';
+            } else if (d.translation === 'There is no god but Allah, alone, without partner') {
+              trKey = 'dhikr_tahlil_trans';
             } else if (d.translation === 'I seek forgiveness from Allah') {
-              trKey =
-                'dhikr_istighfar_trans';
+              trKey = 'dhikr_istighfar_trans';
             }
           }
           return {
@@ -195,13 +178,11 @@ export class TasbihStorage {
       TasbihStorage.cachedActiveTasbihId = activeTasbihId;
       TasbihStorage.cachedActiveDhikrIndex = activeDhikrIndex;
 
-      if (needsRollover) {
-        // Cold load always persists the (possibly rolled) state so
+      if (needsRollover) { // Cold load always persists the (possibly rolled) state so
         // migrations from older builds take effect even if the
         // user does nothing else today.
-        TasbihStorage.save(tasbihs, activeTasbihId, activeDhikrIndex)
-          .catch(() => {
-          });
+        TasbihStorage.save(tasbihs, activeTasbihId, activeDhikrIndex).catch(() => {
+        });
       }
 
       return { tasbihs, activeTasbihId, activeDhikrIndex };
@@ -210,8 +191,8 @@ export class TasbihStorage {
     }
   }
 
-  static async save(tasbihs: Tasbih[], activeTasbihId: string, activeDhikrIndex: number): Promise<void> {
-    // 1. Update the in-memory cache — this is the source of truth for
+  static async save(tasbihs: Tasbih[], activeTasbihId: string,
+    activeDhikrIndex: number): Promise<void> { // 1. Update the in-memory cache — this is the source of truth for
     //    every UI subscriber that reads through TasbihStorage.load().
     TasbihStorage.cachedTasbihs = tasbihs;
     TasbihStorage.cachedActiveTasbihId = activeTasbihId;

@@ -29,23 +29,12 @@ import { TasbihThemes } from '../tasbih/TasbihThemes';
 @Entry
 @Component
 struct TasbihDetailsPage {
-  @StorageLink(STORAGE_KEY_THEME_MODE)
-  @Watch('onThemeModeChanged')
-  themeMode: string = ThemeMode.SYSTEM;
-  @StorageLink(STORAGE_KEY_TASBIH_STATE_VERSION)
-  @Watch('onTasbihStateChanged')
-  tasbihStateVersion: number = 0;
-  @StorageLink(STORAGE_KEY_LANGUAGE)
-  @Watch('onLanguageChanged')
-  appLanguage: string = 'en';
-  @StorageLink(STORAGE_KEY_APP_THEME)
-  @Watch('onAppThemePresetChanged')
-  appThemePreset: string = '';
-  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
-  @Watch('onAppForegrounded')
-  appForegroundTick: number = 0;
-  @StorageLink(STORAGE_KEY_BREAKPOINT)
-  breakpoint: string = 'sm';
+  @StorageLink(STORAGE_KEY_THEME_MODE) @Watch('onThemeModeChanged') themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_TASBIH_STATE_VERSION) @Watch('onTasbihStateChanged') tasbihStateVersion: number = 0;
+  @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLanguageChanged') appLanguage: string = 'en';
+  @StorageLink(STORAGE_KEY_APP_THEME) @Watch('onAppThemePresetChanged') appThemePreset: string = '';
+  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK) @Watch('onAppForegrounded') appForegroundTick: number = 0;
+  @StorageLink(STORAGE_KEY_BREAKPOINT) breakpoint: string = 'sm';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State period: TasbihPeriod = 'week';
   @State snapshot: TasbihDetailsSnapshot = {
@@ -62,11 +51,9 @@ struct TasbihDetailsPage {
 
   aboutToAppear(): void {
     this.colors = PageTheme.compute(this.themeMode);
-    this.systemDarkListener = PageTheme.installSystemListener(
-      this.themeMode, (c) => {
+    this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
       this.colors = c;
-    }
-    );
+    });
 
     const ctx = getContext(this) as common.UIAbilityContext;
     TasbihStorage.init(ctx).then(() => {
@@ -97,18 +84,14 @@ struct TasbihDetailsPage {
 
               ForEach(this.snapshot.rows, (row: TasbihProgressRow) => {
                 this.TasbihCard(row)
-              }, (row: TasbihProgressRow) =>
-              `t-${row.tasbihId}-${this.period}-${row.totalDaysCompleted}-${row.totalDaysPossible}`)
+              }, (
+                row: TasbihProgressRow) => `t-${row.tasbihId}-${this.period}-${row.totalDaysCompleted}-${row.totalDaysPossible}`)
 
               Column().height(40)
-            }
-            .width('100%')
-            .constraintSize({
+            }.width('100%').constraintSize({
               maxWidth: Breakpoints.maxContentWidth(this.breakpoint)
-            })
-            .padding({ left: 16, right: 16, top: 16 })
-          }
-          .width('100%').justifyContent(FlexAlign.Center)
+            }).padding({ left: 16, right: 16, top: 16 })
+          }.width('100%').justifyContent(FlexAlign.Center)
         }
         .layoutWeight(1)
         .width('100%')
@@ -116,9 +99,7 @@ struct TasbihDetailsPage {
         .scrollable(ScrollDirection.Vertical)
         .scrollBar(BarState.Auto)
         .edgeEffect(EdgeEffect.Spring)
-      }
-      .width('100%').height('100%')
-      .backgroundColor(this.colors.primaryGreen)
+      }.width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
     }
     .width('100%')
     .height('100%')
@@ -209,20 +190,21 @@ struct TasbihDetailsPage {
         Column() {
           Row({ space: 4 }) {
             Text(`${this.snapshot.totalDaysCompleted}`)
-              .fontSize(48).fontWeight(FontWeight.Bold)
+              .fontSize(48)
+              .fontWeight(FontWeight.Bold)
               .fontColor(this.colors.textWhite)
               .fontFeature('"tnum" 1')
             Text(` / ${this.snapshot.totalDaysPossible}`)
-              .fontSize(20).fontColor(this.colors.textMuted)
+              .fontSize(20)
+              .fontColor(this.colors.textMuted)
               .margin({ bottom: 8 })
-          }
-          .alignItems(VerticalAlign.Bottom)
+          }.alignItems(VerticalAlign.Bottom)
 
           Text(this.tr('details_tasbih_summary_dhikrs'))
-            .fontSize(12).fontColor(this.colors.textMuted)
+            .fontSize(12)
+            .fontColor(this.colors.textMuted)
             .margin({ top: -4 })
-        }
-        .alignItems(HorizontalAlign.Start).layoutWeight(1)
+        }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
         Stack() {
           Circle()
@@ -240,42 +222,33 @@ struct TasbihDetailsPage {
             .strokeDashArray([this.percentForPeriod() / 100 * 226.2, 500])
             .strokeLineCap(LineCapStyle.Round)
             .rotate({ angle: -90 })
-          Text(`${this.percentForPeriod()}%`)
-            .fontSize(15).fontWeight(FontWeight.Bold)
-            .fontColor(this.colors.textWhite)
-        }
-        .width(72).height(72)
-      }
-      .width('100%')
+          Text(`${this.percentForPeriod()}%`).fontSize(15).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+        }.width(72).height(72)
+      }.width('100%')
 
       Row() {
         Column() {
           Text(`${this.snapshot.totalCountInPeriod}`)
-            .fontSize(20).fontWeight(FontWeight.Bold)
+            .fontSize(20)
+            .fontWeight(FontWeight.Bold)
             .fontColor(this.colors.accentGold)
           Text(this.tr('details_tasbih_summary_lifetime'))
-            .fontSize(10).fontColor(this.colors.textMuted)
+            .fontSize(10)
+            .fontColor(this.colors.textMuted)
             .margin({ top: 2 })
-        }
-        .layoutWeight(1).alignItems(HorizontalAlign.Start)
-      }
-      .width('100%').margin({ top: 16 })
+        }.layoutWeight(1).alignItems(HorizontalAlign.Start)
+      }.width('100%').margin({ top: 16 })
     }
     .width('100%')
     .padding(18)
     .backgroundColor(this.colors.cardDark)
     .borderRadius(Theme.radiusLarge)
     .border({
-      width: 1,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(255, 255, 255, 0.08)'
-        : this.colors.borderSoft
+      width: 1, color: PageTheme.isDarkFor(this.themeMode) ? 'rgba(255, 255, 255, 0.08)' : this.colors.borderSoft
     })
     .shadow({
       radius: 16,
-      color: PageTheme.isDarkFor(this.themeMode)
-        ? 'rgba(0, 0, 0, 0.35)'
-        : 'rgba(0, 0, 0, 0.08)',
+      color: PageTheme.isDarkFor(this.themeMode) ? 'rgba(0, 0, 0, 0.35)' : 'rgba(0, 0, 0, 0.08)',
       offsetX: 0,
       offsetY: 6
     })
@@ -285,21 +258,15 @@ struct TasbihDetailsPage {
   @Builder
   TasbihCard(row: TasbihProgressRow) {
     Column() {
-      Row({ space: 12 }) {
-        // Theme Color Swatch
+      Row({ space: 12 }) { // Theme Color Swatch
         Column()
           .width(14)
           .height(14)
           .borderRadius(7)
           .flexShrink(0)
           .backgroundColor(
-            TasbihThemes.getSwatch(
-              row.themePresetId.length > 0
-                ? row.themePresetId
-                : TasbihThemes.DEFAULT_PRESET_ID,
-              this.colors
-            )
-          )
+            TasbihThemes.getSwatch(row.themePresetId.length > 0 ? row.themePresetId : TasbihThemes.DEFAULT_PRESET_ID,
+              this.colors))
 
         // Tasbih Name
         Text(row.tasbihName)
@@ -325,8 +292,7 @@ struct TasbihDetailsPage {
             })
             .borderRadius(8)
             .margin({
-              left: this.isRtl() ? 0 : 4,
-              right: this.isRtl() ? 4 : 0
+              left: this.isRtl() ? 0 : 4, right: this.isRtl() ? 4 : 0
             })
             .flexShrink(0)
         }
@@ -338,20 +304,18 @@ struct TasbihDetailsPage {
           .fontWeight(FontWeight.Bold)
           .direction(Direction.Ltr)
           .flexShrink(0)
-      }
-      .width('100%')
-      .alignItems(VerticalAlign.Center)
-      .padding({ bottom: 12 })
+      }.width('100%').alignItems(VerticalAlign.Center).padding({ bottom: 12 })
 
       if (row.perDhikr.length === 0) {
         Text(this.tr('no_dhikr_title'))
-          .fontSize(12).fontColor(this.colors.textMuted)
-          .width('100%').padding({ top: 4, bottom: 8 })
+          .fontSize(12)
+          .fontColor(this.colors.textMuted)
+          .width('100%')
+          .padding({ top: 4, bottom: 8 })
       } else {
         ForEach(row.perDhikr, (p: TasbihDhikrProgress) => {
           this.DhikrRow(p)
-        }, (p: TasbihDhikrProgress) =>
-        `d-${p.dhikrId}-${p.daysCompleted}-${p.daysInPeriod}-${this.period}`)
+        }, (p: TasbihDhikrProgress) => `d-${p.dhikrId}-${p.daysCompleted}-${p.daysInPeriod}-${this.period}`)
       }
     }
     .width('100%')
@@ -375,12 +339,11 @@ struct TasbihDetailsPage {
           .textAlign(TextAlign.Start) // Forces text to align to the right in RTL
 
         Text(`${p.daysCompleted} / ${p.daysInPeriod} ${this.tr('home_days')}`)
-          .fontSize(12).fontColor(this.colors.accentGold)
-          .fontWeight(FontWeight.Medium)
-          // .direction(Direction.Ltr) <-- REMOVE THIS. It breaks layout in RTL.
-          .textAlign(TextAlign.End) // Forces numbers to align to the left in RTL
-      }
-      .width('100%')
+          .fontSize(12)
+          .fontColor(this.colors.accentGold)
+          .fontWeight(
+            FontWeight.Medium) // .direction(Direction.Ltr) <-- REMOVE THIS. It breaks layout in RTL..textAlign(TextAlign.End) // Forces numbers to align to the left in RTL
+      }.width('100%')
 
       // FIXED: Added the inner Row for the progress fill
       Row() {
@@ -397,31 +360,25 @@ struct TasbihDetailsPage {
       .margin({ top: 6 })
 
       Row() {
-        Text(`${p.totalCount}`)
-          .fontSize(10).fontColor(this.colors.textMuted)
-          .direction(Direction.Ltr)
+        Text(`${p.totalCount}`).fontSize(10).fontColor(this.colors.textMuted).direction(Direction.Ltr)
         Text(` · ${this.tr('target_count')} ${p.target}`)
-          .fontSize(10).fontColor(this.colors.textMuted)
+          .fontSize(10)
+          .fontColor(this.colors.textMuted)
           .direction(Direction.Ltr)
-      }
-      .width('100%').margin({ top: 4 })
-    }
-    .width('100%')
-    .padding({
+      }.width('100%').margin({ top: 4 })
+    }.width('100%').padding({
       top: 8,
       bottom: 8,
       left: 8,
       right: 8
-    })
-    .margin({ bottom: 4 })
+    }).margin({ bottom: 4 })
   }
 
   private getPillNumberLabel(id: string): string {
     if (id === 'week') {
       return `#${this.snapshot.currentWeekNumber}`;
     }
-    if (id === 'month') {
-      // TasbihDetailsSnapshot doesn't store the month/year explicitly,
+    if (id === 'month') { // TasbihDetailsSnapshot doesn't store the month/year explicitly,
       // so we derive it from the current date since the period is always "current".
       return `#${new Date().getMonth() + 1}`;
     }
@@ -436,13 +393,10 @@ struct TasbihDetailsPage {
   }
 
   private recompute(): void {
-    this.snapshot = ProgressHelper.getTasbihDetails(
-      this.tasbihs, this.activeId, this.period, this.appLanguage
-    );
+    this.snapshot = ProgressHelper.getTasbihDetails(this.tasbihs, this.activeId, this.period, this.appLanguage);
   }
 
-  private onLanguageChanged(): void {
-    // The snapshot stores resolved label strings. When the user
+  private onLanguageChanged(): void { // The snapshot stores resolved label strings. When the user
     // switches language while the page is mounted (e.g. via a
     // background Customize open in the split-pane layout), the
     // already-captured labels would go stale. Recompute so the
@@ -480,9 +434,7 @@ struct TasbihDetailsPage {
     if (this.snapshot.totalDaysPossible === 0) {
       return 0;
     }
-    return Math.round(
-      this.snapshot.totalDaysCompleted / this.snapshot.totalDaysPossible * 100
-    );
+    return Math.round(this.snapshot.totalDaysCompleted / this.snapshot.totalDaysPossible * 100);
   }
 
   private periodLabel(id: string): string {

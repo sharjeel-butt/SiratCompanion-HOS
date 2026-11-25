@@ -33,12 +33,8 @@ export class TasbihCanvasRenderer {
   private static readonly FISHEYE_SIGMA_MULT = 3.5;
   private static readonly FISHEYE_GAP_STRETCH = 0.55;
 
-  static drawCanvas(
-    ctx: CanvasRenderingContext2D,
-    canvasWidth: number,
-    canvasHeight: number,
-    cfg: BeadCanvasConfig
-  ): void {
+  static drawCanvas(ctx: CanvasRenderingContext2D, canvasWidth: number, canvasHeight: number,
+    cfg: BeadCanvasConfig): void {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
     const cx = canvasWidth / 2;
@@ -66,11 +62,7 @@ export class TasbihCanvasRenderer {
       return 1 + TasbihCanvasRenderer.FISHEYE_GAP_STRETCH * ((sa + sb) / 2 - 1);
     };
 
-    const palette: BeadColors =
-      TasbihThemes.getBeadColors(
-        cfg.themePresetId,
-        cfg.isDark
-      );
+    const palette: BeadColors = TasbihThemes.getBeadColors(cfg.themePresetId, cfg.isDark);
 
     // ---- TOP STACK ----
     const topColors: BeadColors = cfg.isComplete ? DONE_COLORS : palette;
@@ -84,11 +76,7 @@ export class TasbihCanvasRenderer {
       topCenters.push(r * topScales[0]);
       for (let i = 1; i < topCount; i++) {
         topCenters.push(
-          topCenters[i - 1] +
-            r * topScales[i - 1] +
-            g * gapMult(topScales[i - 1], topScales[i]) +
-            r * topScales[i]
-        );
+          topCenters[i - 1] + r * topScales[i - 1] + g * gapMult(topScales[i - 1], topScales[i]) + r * topScales[i]);
       }
 
       for (let i = 0; i < topCount; i++) {
@@ -97,14 +85,7 @@ export class TasbihCanvasRenderer {
         if (alpha > 0.01) {
           ctx.save();
           ctx.globalAlpha = alpha;
-          TasbihCanvasRenderer.drawBead(
-            ctx,
-            cx,
-            finalY,
-            r * topScales[i],
-            topColors,
-            cfg.renderStyle
-          );
+          TasbihCanvasRenderer.drawBead(ctx, cx, finalY, r * topScales[i], topColors, cfg.renderStyle);
           ctx.restore();
         }
       }
@@ -114,14 +95,7 @@ export class TasbihCanvasRenderer {
         const extraY = tailY + step - shift * step;
         ctx.save();
         ctx.globalAlpha = shift;
-        TasbihCanvasRenderer.drawBead(
-          ctx,
-          cx,
-          extraY,
-          r * topScales[topCount - 1],
-          topColors,
-          cfg.renderStyle
-        );
+        TasbihCanvasRenderer.drawBead(ctx, cx, extraY, r * topScales[topCount - 1], topColors, cfg.renderStyle);
         ctx.restore();
       }
     }
@@ -139,9 +113,7 @@ export class TasbihCanvasRenderer {
       for (let i = 0; i < count; i++) {
         const ny = H - r - (count - 1 - i) * step;
         let s = scaleFor(ny);
-        if (i === count - 1
-          && cfg.bottomPopProgress > 0
-          && cfg.bottomPopProgress < 1) {
+        if (i === count - 1 && cfg.bottomPopProgress > 0 && cfg.bottomPopProgress < 1) {
           const bump = Math.sin(Math.PI * cfg.bottomPopProgress);
           s *= 1 + 0.28 * bump;
         }
@@ -151,24 +123,13 @@ export class TasbihCanvasRenderer {
       const centers: number[] = new Array(count).fill(0);
       centers[count - 1] = H - r * scales[count - 1];
       for (let i = count - 2; i >= 0; i--) {
-        centers[i] =
-          centers[i + 1] -
-            r * scales[i + 1] -
-            g * gapMult(scales[i], scales[i + 1]) -
-            r * scales[i];
+        centers[i] = centers[i + 1] - r * scales[i + 1] - g * gapMult(scales[i], scales[i + 1]) - r * scales[i];
       }
 
       ctx.save();
       ctx.globalAlpha = alpha;
       for (let i = 0; i < count; i++) {
-        TasbihCanvasRenderer.drawBead(
-          ctx,
-          cx,
-          centers[i],
-          r * scales[i],
-          botColors,
-          cfg.renderStyle
-        );
+        TasbihCanvasRenderer.drawBead(ctx, cx, centers[i], r * scales[i], botColors, cfg.renderStyle);
       }
       ctx.restore();
     };
@@ -181,9 +142,7 @@ export class TasbihCanvasRenderer {
     if (prevBotCount > 0 && fly > 0 && fly < 1) {
       const startY = H - r - (prevBotCount - 1) * step;
       const targetY = r + 2 * step;
-      const eased = fly < 0.5
-        ? 2 * fly * fly
-        : 1 - Math.pow(-2 * fly + 2, 2) / 2;
+      const eased = fly < 0.5 ? 2 * fly * fly : 1 - Math.pow(-2 * fly + 2, 2) / 2;
       const currentY = startY + (targetY - startY) * eased;
       const alpha = 1 - eased;
 
@@ -197,18 +156,11 @@ export class TasbihCanvasRenderer {
         // topColors as the flying bead itself, so a themed bead
         // gets a themed glow and a completing bead gets a green
         // glow. Alpha profile is unchanged from the amber version.
-        const halo = ctx.createRadialGradient(
-          cx, currentY, r * 0.4,
-          cx, currentY, haloRadius
-        );
-        halo.addColorStop(0,
-          TasbihCanvasRenderer.rgba(topColors.hi, 0.85 * haloAlpha));
-        halo.addColorStop(0.35,
-          TasbihCanvasRenderer.rgba(topColors.base, 0.45 * haloAlpha));
-        halo.addColorStop(0.70,
-          TasbihCanvasRenderer.rgba(topColors.lo, 0.15 * haloAlpha));
-        halo.addColorStop(1,
-          TasbihCanvasRenderer.rgba(topColors.lo, 0));
+        const halo = ctx.createRadialGradient(cx, currentY, r * 0.4, cx, currentY, haloRadius);
+        halo.addColorStop(0, TasbihCanvasRenderer.rgba(topColors.hi, 0.85 * haloAlpha));
+        halo.addColorStop(0.35, TasbihCanvasRenderer.rgba(topColors.base, 0.45 * haloAlpha));
+        halo.addColorStop(0.70, TasbihCanvasRenderer.rgba(topColors.lo, 0.15 * haloAlpha));
+        halo.addColorStop(1, TasbihCanvasRenderer.rgba(topColors.lo, 0));
         ctx.beginPath();
         ctx.arc(cx, currentY, haloRadius, 0, Math.PI * 2);
         ctx.fillStyle = halo;
@@ -217,14 +169,7 @@ export class TasbihCanvasRenderer {
         // Bead itself.
         ctx.save();
         ctx.globalAlpha = alpha;
-        TasbihCanvasRenderer.drawBead(
-          ctx,
-          cx,
-          currentY,
-          r * scaleFor(currentY),
-          topColors,
-          cfg.renderStyle
-        );
+        TasbihCanvasRenderer.drawBead(ctx, cx, currentY, r * scaleFor(currentY), topColors, cfg.renderStyle);
         ctx.restore();
       }
     }
@@ -234,12 +179,7 @@ export class TasbihCanvasRenderer {
   // GLOSSY STRING
   // ============================================================
 
-  private static drawString(
-    ctx: CanvasRenderingContext2D,
-    cx: number,
-    H: number,
-    cfg: BeadCanvasConfig
-  ): void {
+  private static drawString(ctx: CanvasRenderingContext2D, cx: number, H: number, cfg: BeadCanvasConfig): void {
     const isDark = cfg.isDark;
 
     // Base — thin dark line, matching the reference.
@@ -247,9 +187,7 @@ export class TasbihCanvasRenderer {
     ctx.beginPath();
     ctx.moveTo(cx, 0);
     ctx.lineTo(cx, H);
-    ctx.strokeStyle = isDark
-      ? 'rgba(70, 70, 70, 0.70)'
-      : 'rgba(130, 130, 130, 0.45)';
+    ctx.strokeStyle = isDark ? 'rgba(70, 70, 70, 0.70)' : 'rgba(130, 130, 130, 0.45)';
     ctx.lineWidth = 1.5;
     ctx.lineCap = 'round';
     ctx.stroke();
@@ -260,9 +198,7 @@ export class TasbihCanvasRenderer {
     ctx.beginPath();
     ctx.moveTo(cx - 0.5, 0);
     ctx.lineTo(cx - 0.5, H);
-    ctx.strokeStyle = isDark
-      ? 'rgba(180, 180, 180, 0.28)'
-      : 'rgba(255, 255, 255, 0.55)';
+    ctx.strokeStyle = isDark ? 'rgba(180, 180, 180, 0.28)' : 'rgba(255, 255, 255, 0.55)';
     ctx.lineWidth = 1;
     ctx.lineCap = 'round';
     ctx.stroke();
@@ -307,46 +243,23 @@ export class TasbihCanvasRenderer {
   // DISPATCH
   // ============================================================
 
-  private static drawBead(
-    ctx: CanvasRenderingContext2D,
-    cx: number,
-    cy: number,
-    r: number,
-    colors: BeadColors,
-    style: BeadRenderStyle
-  ): void {
+  private static drawBead(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number, colors: BeadColors,
+    style: BeadRenderStyle): void {
     if (style === 'classic') {
-      TasbihCanvasRenderer.drawClassic(
-        ctx,
-        cx,
-        cy,
-        r,
-        colors
-      );
+      TasbihCanvasRenderer.drawClassic(ctx, cx, cy, r, colors);
       return;
     }
 
-    TasbihCanvasRenderer.drawMatte(
-      ctx,
-      cx,
-      cy,
-      r,
-      colors
-    );
+    TasbihCanvasRenderer.drawMatte(ctx, cx, cy, r, colors);
   }
 
   // ============================================================
   // CLASSIC
   // ============================================================
 
-  private static drawClassic(
-    ctx: CanvasRenderingContext2D,
-    cx: number, cy: number, r: number, colors: BeadColors
-  ): void {
-    const grad = ctx.createRadialGradient(
-      cx - r * 0.28, cy - r * 0.28, r * 0.05,
-      cx, cy, r
-    );
+  private static drawClassic(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number,
+    colors: BeadColors): void {
+    const grad = ctx.createRadialGradient(cx - r * 0.28, cy - r * 0.28, r * 0.05, cx, cy, r);
     grad.addColorStop(0, colors.hi);
     grad.addColorStop(0.55, colors.base);
     grad.addColorStop(1, colors.lo);
@@ -366,21 +279,15 @@ export class TasbihCanvasRenderer {
   // MATTE — full three-pass premium bead
   // ============================================================
 
-  private static drawMatte(
-    ctx: CanvasRenderingContext2D,
-    cx: number, cy: number, r: number, colors: BeadColors
-  ): void {
-    // Extrusion shadow.
+  private static drawMatte(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number,
+    colors: BeadColors): void { // Extrusion shadow.
     ctx.beginPath();
     ctx.arc(cx + 1.5, cy + 2.5, r, 0, Math.PI * 2);
     ctx.fillStyle = 'rgba(0, 0, 0, 0.42)';
     ctx.fill();
 
     // Base sphere — three-stop gradient, strong in the upper-left.
-    const baseGrad = ctx.createRadialGradient(
-      cx - r * 0.30, cy - r * 0.32, r * 0.05,
-      cx, cy, r
-    );
+    const baseGrad = ctx.createRadialGradient(cx - r * 0.30, cy - r * 0.32, r * 0.05, cx, cy, r);
     baseGrad.addColorStop(0, colors.hi);
     baseGrad.addColorStop(0.5, colors.base);
     baseGrad.addColorStop(1, colors.lo);
@@ -395,10 +302,7 @@ export class TasbihCanvasRenderer {
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.clip();
-    const ao = ctx.createRadialGradient(
-      cx + r * 0.35, cy + r * 0.40, 0,
-      cx + r * 0.35, cy + r * 0.40, r * 1.1
-    );
+    const ao = ctx.createRadialGradient(cx + r * 0.35, cy + r * 0.40, 0, cx + r * 0.35, cy + r * 0.40, r * 1.1);
     ao.addColorStop(0, 'rgba(0, 0, 0, 0.15)');
     ao.addColorStop(0.7, 'rgba(0, 0, 0, 0)');
     ctx.fillStyle = ao;
@@ -410,10 +314,7 @@ export class TasbihCanvasRenderer {
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.clip();
-    const spec = ctx.createRadialGradient(
-      cx - r * 0.35, cy - r * 0.40, 0,
-      cx - r * 0.35, cy - r * 0.40, r * 0.55
-    );
+    const spec = ctx.createRadialGradient(cx - r * 0.35, cy - r * 0.40, 0, cx - r * 0.35, cy - r * 0.40, r * 0.55);
     spec.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
     spec.addColorStop(0.25, 'rgba(255, 255, 255, 0.35)');
     spec.addColorStop(0.6, 'rgba(255, 255, 255, 0.05)');
@@ -433,10 +334,8 @@ export class TasbihCanvasRenderer {
   // METALLIC — brushed finish with conic rays
   // ============================================================
 
-  private static drawMetallic(
-    ctx: CanvasRenderingContext2D,
-    cx: number, cy: number, r: number, colors: BeadColors
-  ): void {
+  private static drawMetallic(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number,
+    colors: BeadColors): void {
     ctx.beginPath();
     ctx.arc(cx + 1.5, cy + 3, r, 0, Math.PI * 2);
     ctx.fillStyle = 'rgba(0, 0, 0, 0.42)';
@@ -463,19 +362,15 @@ export class TasbihCanvasRenderer {
       ctx.fillStyle = conic;
       ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
       usedConic = true;
-    } catch (e) {
-      // createConicGradient can throw on older SDK builds or after a
+    } catch (e) { // createConicGradient can throw on older SDK builds or after a
       // GPU reset. Fall through to the radial-gradient path below.
       usedConic = false;
-    } finally {
-      // Always pop the save() so no clip leaks into subsequent draws.
+    } finally { // Always pop the save() so no clip leaks into subsequent draws.
       ctx.restore();
     }
 
     if (!usedConic) {
-      const grad = ctx.createRadialGradient(
-        cx - r * 0.3, cy - r * 0.3, r * 0.05, cx, cy, r
-      );
+      const grad = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.3, r * 0.05, cx, cy, r);
       grad.addColorStop(0, colors.hi);
       grad.addColorStop(0.5, colors.base);
       grad.addColorStop(1, colors.lo);
@@ -501,10 +396,7 @@ export class TasbihCanvasRenderer {
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.clip();
-    const spec = ctx.createRadialGradient(
-      cx - r * 0.40, cy - r * 0.40, 0,
-      cx - r * 0.40, cy - r * 0.40, r * 0.60
-    );
+    const spec = ctx.createRadialGradient(cx - r * 0.40, cy - r * 0.40, 0, cx - r * 0.40, cy - r * 0.40, r * 0.60);
     spec.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
     spec.addColorStop(0.35, 'rgba(255, 255, 255, 0.22)');
     spec.addColorStop(1, 'rgba(255, 255, 255, 0)');

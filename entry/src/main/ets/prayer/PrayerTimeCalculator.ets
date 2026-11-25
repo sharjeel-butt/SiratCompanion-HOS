@@ -15,43 +15,16 @@ import {
 // ---- Enums ----
 
 export enum CalculationMethod {
-  KARACHI = 'Karachi',
-  JAFARI = 'Jafari',
-  ISNA = 'ISNA',
-  MWL = 'MWL',
-  UMM_AL_QURA = 'UmmAlQura',
-  EGYPTIAN = 'Egyptian',
-  SUNNI_IRAQ = 'SunniIraq',
-  QATAR = 'Qatar',
-  SINGAPORE = 'Singapore',
-  FRANCE = 'France',
-  TURKEY = 'Turkey',
-  RUSSIA = 'Russia',
-  UAE = 'UAE',
-  // ---- Adhan-parity additions ----
-  MOONSIGHTING_COMMITTEE = 'MoonsightingCommittee',
-  DUBAI = 'Dubai',
-  KUWAIT = 'Kuwait',
-  FRANCE_15 = 'France15',
-  FRANCE_18 = 'France18',
-  TURKEY_EUROPE = 'TurkeyEurope',
-  TEHRAN = 'Tehran',
-  INDONESIA = 'Indonesia',
-  ALGERIA = 'Algeria',
-  BRUNEI = 'Brunei'
+  KARACHI = 'Karachi', JAFARI = 'Jafari', ISNA = 'ISNA', MWL = 'MWL', UMM_AL_QURA = 'UmmAlQura', EGYPTIAN = 'Egyptian', SUNNI_IRAQ = 'SunniIraq', QATAR = 'Qatar', SINGAPORE = 'Singapore', FRANCE = 'France', TURKEY = 'Turkey', RUSSIA = 'Russia', UAE = 'UAE', // ---- Adhan-parity additions ----
+  MOONSIGHTING_COMMITTEE = 'MoonsightingCommittee', DUBAI = 'Dubai', KUWAIT = 'Kuwait', FRANCE_15 = 'France15', FRANCE_18 = 'France18', TURKEY_EUROPE = 'TurkeyEurope', TEHRAN = 'Tehran', INDONESIA = 'Indonesia', ALGERIA = 'Algeria', BRUNEI = 'Brunei'
 }
 
 export enum AsrShadowRule {
-  STANDARD = 1,
-  HANAFI = 2
+  STANDARD = 1, HANAFI = 2
 }
 
 export enum HighLatitudeRule {
-  NONE = 'None',
-  MIDDLE_OF_NIGHT = 'MiddleOfNight',
-  ONE_SEVENTH = 'OneSeventh',
-  ANGLE_BASED = 'AngleBased',
-  PROPORTIONAL_DEPRESSION = 'ProportionalDepression'
+  NONE = 'None', MIDDLE_OF_NIGHT = 'MiddleOfNight', ONE_SEVENTH = 'OneSeventh', ANGLE_BASED = 'AngleBased', PROPORTIONAL_DEPRESSION = 'ProportionalDepression'
 }
 
 export interface HighLatRuleOption {
@@ -305,16 +278,9 @@ export class PrayerTimeCalculator {
     }
   }
 
-  static calculate(
-    date: Date,
-    latitude: number,
-    longitude: number,
-    timezoneOffset: number,
-    method: CalculationMethod,
-    asrRule: AsrShadowRule = AsrShadowRule.STANDARD,
-    highLatRule: HighLatitudeRule = HighLatitudeRule.NONE,
-    advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC
-  ): DailyPrayerTimes {
+  static calculate(date: Date, latitude: number, longitude: number, timezoneOffset: number, method: CalculationMethod,
+    asrRule: AsrShadowRule = AsrShadowRule.STANDARD, highLatRule: HighLatitudeRule = HighLatitudeRule.NONE,
+    advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC): DailyPrayerTimes {
     const params = PrayerTimeCalculator.getParameters(method);
 
     // --- Diyanet (Turkey) Temkin Offsets & Constraints ---
@@ -337,8 +303,7 @@ export class PrayerTimeCalculator {
 
     // --- Umm al-Qura Ramadan Rule ---
     let effectiveIshaInterval = params.ishaInterval;
-    if (method === CalculationMethod.UMM_AL_QURA) {
-      // The user's Hijri offset shifts their entire Hijri calendar.
+    if (method === CalculationMethod.UMM_AL_QURA) { // The user's Hijri offset shifts their entire Hijri calendar.
       // Apply it here so that the "Ramadan" window during which Isha
       // is extended matches the month the user actually sees on the
       // Home header and the calendar page. Without this, a user who
@@ -350,8 +315,7 @@ export class PrayerTimeCalculator {
         if (stored !== undefined && !isNaN(stored)) {
           offsetDays = stored;
         }
-      } catch (e) {
-        // AppStorage unavailable (e.g. unit tests) — default to zero.
+      } catch (e) { // AppStorage unavailable (e.g. unit tests) — default to zero.
       }
 
       const shifted = new Date(date);
@@ -371,39 +335,34 @@ export class PrayerTimeCalculator {
     const dhuhr = PrayerTimeCalculator.dateFromUTCHours(date, dhuhrUTC + timezoneOffset);
 
     const SUN_HORIZON_ALTITUDE = -0.833;
-    const sunriseUTC = PrayerTimeCalculator.calculateTimeForAltitude(
-      date, latitude, longitude, dec, eot, SUN_HORIZON_ALTITUDE, false
-    );
+    const sunriseUTC =
+      PrayerTimeCalculator.calculateTimeForAltitude(date, latitude, longitude, dec, eot, SUN_HORIZON_ALTITUDE, false);
     const sunrise = PrayerTimeCalculator.dateFromUTCHours(date, sunriseUTC + timezoneOffset);
 
-    const sunsetUTC = PrayerTimeCalculator.calculateTimeForAltitude(
-      date, latitude, longitude, dec, eot, SUN_HORIZON_ALTITUDE, true
-    );
+    const sunsetUTC =
+      PrayerTimeCalculator.calculateTimeForAltitude(date, latitude, longitude, dec, eot, SUN_HORIZON_ALTITUDE, true);
     const sunset = PrayerTimeCalculator.dateFromUTCHours(date, sunsetUTC + timezoneOffset);
 
     let effectiveIshaAngle = params.ishaAngle;
     if (method === CalculationMethod.MOONSIGHTING_COMMITTEE) {
       if (advanced.shafaq === Shafaq.AHMER) {
         effectiveIshaAngle -= 1;
-      } else if (advanced.shafaq ===
-        Shafaq.ABYAD) {
+      } else if (advanced.shafaq === Shafaq.ABYAD) {
         effectiveIshaAngle += 1;
       }
     }
 
     const fajrReachable = PrayerTimeCalculator.isAngleReachable(latitude, dec, -params.fajrAngle);
-    const ishaReachable = effectiveIshaInterval === 0
-      ? PrayerTimeCalculator.isAngleReachable(latitude, dec, -effectiveIshaAngle)
-      : false;
+    const ishaReachable =
+      effectiveIshaInterval === 0 ? PrayerTimeCalculator.isAngleReachable(latitude, dec, -effectiveIshaAngle) : false;
 
     // Tomorrow's solar position
     const tomorrow = new Date(date);
     tomorrow.setDate(tomorrow.getDate() + 1);
     const tomorrowSolarPos = PrayerTimeCalculator.getSolarPosition(tomorrow);
-    const tomorrowSunriseUTC = PrayerTimeCalculator.calculateTimeForAltitude(
-      tomorrow, latitude, longitude, tomorrowSolarPos.declination, tomorrowSolarPos.equationOfTime,
-      SUN_HORIZON_ALTITUDE, false
-    );
+    const tomorrowSunriseUTC =
+      PrayerTimeCalculator.calculateTimeForAltitude(tomorrow, latitude, longitude, tomorrowSolarPos.declination,
+        tomorrowSolarPos.equationOfTime, SUN_HORIZON_ALTITUDE, false);
     const tomorrowSunrise = PrayerTimeCalculator.dateFromUTCHours(tomorrow, tomorrowSunriseUTC + timezoneOffset);
 
     // Night length is from today's standard sunset to tomorrow's standard sunrise
@@ -411,10 +370,9 @@ export class PrayerTimeCalculator {
 
     let tomorrowFajr: Date;
     if (fajrReachable) {
-      const tomorrowFajrUTC = PrayerTimeCalculator.calculateTimeForAltitude(
-        tomorrow, latitude, longitude, tomorrowSolarPos.declination, tomorrowSolarPos.equationOfTime, -params.fajrAngle,
-        false
-      );
+      const tomorrowFajrUTC =
+        PrayerTimeCalculator.calculateTimeForAltitude(tomorrow, latitude, longitude, tomorrowSolarPos.declination,
+          tomorrowSolarPos.equationOfTime, -params.fajrAngle, false);
       tomorrowFajr = PrayerTimeCalculator.dateFromUTCHours(tomorrow, tomorrowFajrUTC + timezoneOffset);
     } else {
       tomorrowFajr =
@@ -423,9 +381,9 @@ export class PrayerTimeCalculator {
 
     // ---- Fajr ----
     let fajr: Date;
-    const fajrPolarUTC = fajrReachable ? null : PrayerTimeCalculator.calculatePolarFallback(
-      date, latitude, longitude, -params.fajrAngle, false, dec, eot, advanced.polarResolution
-    );
+    const fajrPolarUTC = fajrReachable ? null :
+      PrayerTimeCalculator.calculatePolarFallback(date, latitude, longitude, -params.fajrAngle, false, dec, eot,
+        advanced.polarResolution);
 
     if (fajrPolarUTC !== null) {
       fajr = PrayerTimeCalculator.dateFromUTCHours(date, fajrPolarUTC + timezoneOffset);
@@ -433,15 +391,12 @@ export class PrayerTimeCalculator {
       const fajrUTC =
         PrayerTimeCalculator.calculateTimeForAltitude(date, latitude, longitude, dec, eot, -params.fajrAngle, false);
       fajr = PrayerTimeCalculator.dateFromUTCHours(date, fajrUTC + timezoneOffset);
-    } else {
-      // The sun never reaches the Fajr altitude today and no polar resolution
+    } else { // The sun never reaches the Fajr altitude today and no polar resolution
       // applies. calculateTimeForAltitude() clamps its hour angle to ±1 in that
       // case, which would place Fajr at solar noon and then jump by hours on the
       // day the angle becomes unreachable. Fall back to the middle of the night
       // when the user selected no rule; an explicit rule is used as-is.
-      const fajrFallbackRule = highLatRule === HighLatitudeRule.NONE
-        ? HighLatitudeRule.MIDDLE_OF_NIGHT
-        : highLatRule;
+      const fajrFallbackRule = highLatRule === HighLatitudeRule.NONE ? HighLatitudeRule.MIDDLE_OF_NIGHT : highLatRule;
       fajr = PrayerTimeCalculator.applyHighLatFallback(sunrise, nightMs, params.fajrAngle, fajrFallbackRule, true);
     }
 
@@ -459,25 +414,19 @@ export class PrayerTimeCalculator {
 
     let asr: Date;
     if (asrReachable) {
-      const asrUTC = PrayerTimeCalculator.calculateTimeForAltitude(
-        date, latitude, longitude, dec, eot, asrAltitude, true
-      );
+      const asrUTC =
+        PrayerTimeCalculator.calculateTimeForAltitude(date, latitude, longitude, dec, eot, asrAltitude, true);
       asr = PrayerTimeCalculator.dateFromUTCHours(date, asrUTC + timezoneOffset);
-    } else {
-      // 1. Preferred fallback — use the user's polar resolution
+    } else { // 1. Preferred fallback — use the user's polar resolution
       //    (Aqrab al-Balad or Aqrab al-Yaum) to find a reference
       //    latitude/day where the Asr altitude is reachable.
-      const asrPolarUTC = PrayerTimeCalculator.calculatePolarFallback(
-        date, latitude, longitude, asrAltitude, true,
-        dec, eot, advanced.polarResolution
-      );
+      const asrPolarUTC =
+        PrayerTimeCalculator.calculatePolarFallback(date, latitude, longitude, asrAltitude, true, dec, eot,
+          advanced.polarResolution);
 
       if (asrPolarUTC !== null) {
-        asr = PrayerTimeCalculator.dateFromUTCHours(
-          date, asrPolarUTC + timezoneOffset
-        );
-      } else {
-        // 2. Last resort — place Asr at two-thirds of the
+        asr = PrayerTimeCalculator.dateFromUTCHours(date, asrPolarUTC + timezoneOffset);
+      } else { // 2. Last resort — place Asr at two-thirds of the
         //    Dhuhr → sunset interval. This preserves the correct
         //    ordering (Dhuhr < Asr < Maghrib) at every latitude
         //    without requiring a "night" quantity for the
@@ -522,9 +471,9 @@ export class PrayerTimeCalculator {
     if (effectiveIshaInterval > 0) {
       isha = new Date(maghrib.getTime() + effectiveIshaInterval * 60 * 1000);
     } else {
-      const ishaPolarUTC = ishaReachable ? null : PrayerTimeCalculator.calculatePolarFallback(
-        date, latitude, longitude, -effectiveIshaAngle, true, dec, eot, advanced.polarResolution
-      );
+      const ishaPolarUTC = ishaReachable ? null :
+        PrayerTimeCalculator.calculatePolarFallback(date, latitude, longitude, -effectiveIshaAngle, true, dec, eot,
+          advanced.polarResolution);
 
       if (ishaPolarUTC !== null) {
         isha = PrayerTimeCalculator.dateFromUTCHours(date, ishaPolarUTC + timezoneOffset);
@@ -532,12 +481,9 @@ export class PrayerTimeCalculator {
         const ishaUTC =
           PrayerTimeCalculator.calculateTimeForAltitude(date, latitude, longitude, dec, eot, -effectiveIshaAngle, true);
         isha = PrayerTimeCalculator.dateFromUTCHours(date, ishaUTC + timezoneOffset);
-      } else {
-        // Same guard as Fajr: the clamped hour angle would place Isha at solar
+      } else { // Same guard as Fajr: the clamped hour angle would place Isha at solar
         // midnight, which then jumps by hours at the reachability boundary.
-        const ishaFallbackRule = highLatRule === HighLatitudeRule.NONE
-          ? HighLatitudeRule.MIDDLE_OF_NIGHT
-          : highLatRule;
+        const ishaFallbackRule = highLatRule === HighLatitudeRule.NONE ? HighLatitudeRule.MIDDLE_OF_NIGHT : highLatRule;
         isha = PrayerTimeCalculator.applyHighLatFallback(maghrib, nightMs, effectiveIshaAngle, ishaFallbackRule, false);
       }
     }
@@ -587,11 +533,9 @@ export class PrayerTimeCalculator {
     };
   }
 
-  static calculateWithDeviceTimezone(
-    date: Date, latitude: number, longitude: number, method: CalculationMethod,
+  static calculateWithDeviceTimezone(date: Date, latitude: number, longitude: number, method: CalculationMethod,
     asrRule: AsrShadowRule = AsrShadowRule.STANDARD, highLatRule: HighLatitudeRule = HighLatitudeRule.NONE,
-    advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC
-  ): DailyPrayerTimes {
+    advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC): DailyPrayerTimes {
     const effectiveOffset = TimezoneResolver.effectiveOffsetForLocation(latitude, longitude, date);
     return PrayerTimeCalculator.calculate(date, latitude, longitude, effectiveOffset, method, asrRule, highLatRule,
       advanced);
@@ -613,11 +557,9 @@ export class PrayerTimeCalculator {
     let factor = 0;
     if (rule === HighLatitudeRule.MIDDLE_OF_NIGHT) {
       factor = 1 / 2;
-    } else if (rule ===
-      HighLatitudeRule.ONE_SEVENTH) {
+    } else if (rule === HighLatitudeRule.ONE_SEVENTH) {
       factor = 1 / 7;
-    } else if (rule === HighLatitudeRule.ANGLE_BASED ||
-      rule === HighLatitudeRule.PROPORTIONAL_DEPRESSION) {
+    } else if (rule === HighLatitudeRule.ANGLE_BASED || rule === HighLatitudeRule.PROPORTIONAL_DEPRESSION) {
       factor = angle / 60;
     }
 
@@ -625,10 +567,9 @@ export class PrayerTimeCalculator {
     return new Date(base.getTime() + (goBackward ? -portionMs : portionMs));
   }
 
-  private static calculateAtAqrabBaladLatitude(
-    date: Date, latitude: number, longitude: number, targetAltitudeDeg: number,
-    isAfternoon: boolean, declinationDeg: number, equationOfTimeMinutes: number
-  ): number | null {
+  private static calculateAtAqrabBaladLatitude(date: Date, latitude: number, longitude: number,
+    targetAltitudeDeg: number, isAfternoon: boolean, declinationDeg: number,
+    equationOfTimeMinutes: number): number | null {
     if (!PrayerTimeCalculator.isAngleReachable(0, declinationDeg, targetAltitudeDeg)) {
       return null;
     }
@@ -637,9 +578,8 @@ export class PrayerTimeCalculator {
     const STEP = 0.5;
     for (let refLat = latitude - equatorward * STEP; Math.abs(refLat) > 0.001; refLat -= equatorward * STEP) {
       if (PrayerTimeCalculator.isAngleReachable(refLat, declinationDeg, targetAltitudeDeg)) {
-        return PrayerTimeCalculator.calculateTimeForAltitude(
-          date, refLat, longitude, declinationDeg, equationOfTimeMinutes, targetAltitudeDeg, isAfternoon
-        );
+        return PrayerTimeCalculator.calculateTimeForAltitude(date, refLat, longitude, declinationDeg,
+          equationOfTimeMinutes, targetAltitudeDeg, isAfternoon);
       }
     }
     return null;
@@ -649,9 +589,8 @@ export class PrayerTimeCalculator {
   // MAIN CALCULATION
   // ============================================================
 
-  private static calculateAtAqrabYaum(
-    date: Date, latitude: number, longitude: number, targetAltitudeDeg: number, isAfternoon: boolean
-  ): number | null {
+  private static calculateAtAqrabYaum(date: Date, latitude: number, longitude: number, targetAltitudeDeg: number,
+    isAfternoon: boolean): number | null {
     const MS_PER_DAY = 86400000;
     const MAX_DAYS = 183;
     for (let offset = 1; offset <= MAX_DAYS; offset++) {
@@ -659,19 +598,17 @@ export class PrayerTimeCalculator {
         const probe = new Date(date.getTime() + direction * offset * MS_PER_DAY);
         const solar = PrayerTimeCalculator.getSolarPosition(probe);
         if (PrayerTimeCalculator.isAngleReachable(latitude, solar.declination, targetAltitudeDeg)) {
-          return PrayerTimeCalculator.calculateTimeForAltitude(
-            probe, latitude, longitude, solar.declination, solar.equationOfTime, targetAltitudeDeg, isAfternoon
-          );
+          return PrayerTimeCalculator.calculateTimeForAltitude(probe, latitude, longitude, solar.declination,
+            solar.equationOfTime, targetAltitudeDeg, isAfternoon);
         }
       }
     }
     return null;
   }
 
-  private static calculatePolarFallback(
-    date: Date, latitude: number, longitude: number, targetAltitudeDeg: number,
-    isAfternoon: boolean, declinationDeg: number, equationOfTimeMinutes: number, polarResolution: PolarResolution
-  ): number | null {
+  private static calculatePolarFallback(date: Date, latitude: number, longitude: number, targetAltitudeDeg: number,
+    isAfternoon: boolean, declinationDeg: number, equationOfTimeMinutes: number,
+    polarResolution: PolarResolution): number | null {
     if (polarResolution === PolarResolution.AQRAB_BALAD) {
       return PrayerTimeCalculator.calculateAtAqrabBaladLatitude(date, latitude, longitude, targetAltitudeDeg,
         isAfternoon, declinationDeg, equationOfTimeMinutes);
@@ -782,10 +719,8 @@ export class PrayerTimeCalculator {
     return angle;
   }
 
-  private static calculateTimeForAltitude(
-    date: Date, latitude: number, longitude: number, declinationDeg: number,
-    equationOfTimeMinutes: number, targetAltitudeDeg: number, isAfternoon: boolean
-  ): number {
+  private static calculateTimeForAltitude(date: Date, latitude: number, longitude: number, declinationDeg: number,
+    equationOfTimeMinutes: number, targetAltitudeDeg: number, isAfternoon: boolean): number {
     const rad = Math.PI / 180;
     const cosHA = (Math.sin(targetAltitudeDeg * rad) - Math.sin(latitude * rad) * Math.sin(declinationDeg * rad)) /
       (Math.cos(latitude * rad) * Math.cos(declinationDeg * rad));
@@ -804,8 +739,8 @@ export class PrayerTimeCalculator {
     return Math.atan(1 / (Number(rule) + Math.tan(delta))) * 180 / Math.PI;
   }
 
-  private static dateFromUTCHours(date: Date, utcHours: number): Date {
-    // Compute total minutes first so a rounding that lands on a
+  private static dateFromUTCHours(date: Date,
+    utcHours: number): Date { // Compute total minutes first so a rounding that lands on a
     // 60-minute boundary is handled by integer division rather
     // than by relying on Date.setHours' implicit hour overflow.
     // utcHours is bounded by the caller to roughly [0, 24], so

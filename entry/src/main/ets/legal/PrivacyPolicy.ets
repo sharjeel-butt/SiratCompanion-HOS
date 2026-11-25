@@ -45,14 +45,12 @@ export interface PrivacyPolicyDocument {
  * `rawfile/privacy/` and append the code to SUPPORTED below.
  */
 export class PrivacyPolicyProvider {
-  static readonly BASE_URL =
-    'https://sharjeel-butt.github.io/SiratCompanion-HOS/';
+  static readonly BASE_URL = 'https://sharjeel-butt.github.io/SiratCompanion-HOS/';
   static readonly LAST_UPDATED = 'October 27, 2026';
   static readonly APPLIES_TO = '3.5.0 and later';
   /** Locales with a bundled translation. */
   private static ctx: common.UIAbilityContext | null = null;
-  private static cache: Map<string, PrivacyPolicyDocument> =
-    new Map<string, PrivacyPolicyDocument>();
+  private static cache: Map<string, PrivacyPolicyDocument> = new Map<string, PrivacyPolicyDocument>();
   private static loading: Map<string, Promise<PrivacyPolicyDocument>> =
     new Map<string, Promise<PrivacyPolicyDocument>>();
 
@@ -68,13 +66,11 @@ export class PrivacyPolicyProvider {
   static preload(ctx: common.UIAbilityContext, lang: string): void {
     PrivacyPolicyProvider.ctx = ctx;
     PrivacyPolicyProvider.load(lang).catch((e: Error) => {
-      AppLogger.warn('PrivacyPolicyProvider',
-        `preload(${lang}) failed: ${e.message}`);
+      AppLogger.warn('PrivacyPolicyProvider', `preload(${lang}) failed: ${e.message}`);
     });
     if (lang !== 'en') {
       PrivacyPolicyProvider.load('en').catch((e: Error) => {
-        AppLogger.warn('PrivacyPolicyProvider',
-          `preload(en) failed: ${e.message}`);
+        AppLogger.warn('PrivacyPolicyProvider', `preload(en) failed: ${e.message}`);
       });
     }
   }
@@ -86,8 +82,7 @@ export class PrivacyPolicyProvider {
   static getFullUrl(lang: string): string {
     if (!lang || lang === 'en' || lang === 'system') {
       return PrivacyPolicyProvider.BASE_URL;
-    }
-    // Extract primary language code (e.g., 'zh-CN' -> 'zh')
+    } // Extract primary language code (e.g., 'zh-CN' -> 'zh')
     const cleanLang = lang.split('-')[0].toLowerCase();
     return `${PrivacyPolicyProvider.BASE_URL}${cleanLang}/`;
   }
@@ -158,10 +153,7 @@ export class PrivacyPolicyProvider {
 
 
   private static async doLoad(lang: string): Promise<PrivacyPolicyDocument> {
-    const effective =
-      LanguageService.supports(lang)
-        ? lang
-        : LanguageService.defaultLanguage();
+    const effective = LanguageService.supports(lang) ? lang : LanguageService.defaultLanguage();
 
     if (PrivacyPolicyProvider.ctx === null) {
       return PrivacyPolicyProvider.emptyDoc();
@@ -169,38 +161,28 @@ export class PrivacyPolicyProvider {
 
     try {
       const mgr = PrivacyPolicyProvider.ctx.resourceManager;
-      const rawData = await mgr.getRawFileContent(
-        RawPaths.privacy(effective)
-      );
-      const jsonStr = util.TextDecoder.create('utf-8')
-        .decodeToString(rawData);
+      const rawData = await mgr.getRawFileContent(RawPaths.privacy(effective));
+      const jsonStr = util.TextDecoder.create('utf-8').decodeToString(rawData);
       const parsed = JSON.parse(jsonStr) as PrivacyPolicyDocument;
       return PrivacyPolicyProvider.normalize(parsed);
     } catch (e) {
-      AppLogger.warn('PrivacyPolicyProvider',
-        `load(${effective}) failed: ${JSON.stringify(e)}`);
+      AppLogger.warn('PrivacyPolicyProvider', `load(${effective}) failed: ${JSON.stringify(e)}`);
       if (effective !== 'en') {
         try {
           const mgr = PrivacyPolicyProvider.ctx.resourceManager;
-          const rawData = await mgr.getRawFileContent(
-            RawPaths.privacy('en')
-          );
-          const jsonStr = util.TextDecoder.create('utf-8')
-            .decodeToString(rawData);
+          const rawData = await mgr.getRawFileContent(RawPaths.privacy('en'));
+          const jsonStr = util.TextDecoder.create('utf-8').decodeToString(rawData);
           const parsed = JSON.parse(jsonStr) as PrivacyPolicyDocument;
           return PrivacyPolicyProvider.normalize(parsed);
         } catch (e2) {
-          AppLogger.warn('PrivacyPolicyProvider',
-            `load(en) fallback failed: ${JSON.stringify(e2)}`);
+          AppLogger.warn('PrivacyPolicyProvider', `load(en) fallback failed: ${JSON.stringify(e2)}`);
         }
       }
       return PrivacyPolicyProvider.emptyDoc();
     }
   }
 
-  private static normalize(
-    doc: PrivacyPolicyDocument
-  ): PrivacyPolicyDocument {
+  private static normalize(doc: PrivacyPolicyDocument): PrivacyPolicyDocument {
     if (doc === null || doc === undefined) {
       return PrivacyPolicyProvider.emptyDoc();
     }
@@ -208,20 +190,16 @@ export class PrivacyPolicyProvider {
       return PrivacyPolicyProvider.emptyDoc();
     }
     const meta: PrivacyPolicyMetadata =
-      doc.metadata !== undefined && doc.metadata !== null
-        ? doc.metadata
-        : PrivacyPolicyProvider.emptyMetadata();
+      doc.metadata !== undefined && doc.metadata !== null ? doc.metadata : PrivacyPolicyProvider.emptyMetadata();
     const normalized: PrivacyPolicyDocument = {
-      metadata: meta,
-      body: doc.body
+      metadata: meta, body: doc.body
     };
     return normalized;
   }
 
   private static emptyDoc(): PrivacyPolicyDocument {
     const result: PrivacyPolicyDocument = {
-      metadata: PrivacyPolicyProvider.emptyMetadata(),
-      body: ''
+      metadata: PrivacyPolicyProvider.emptyMetadata(), body: ''
     };
     return result;
   }

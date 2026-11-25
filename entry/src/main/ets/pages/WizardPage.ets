@@ -45,23 +45,13 @@ interface ThemeOption {
 @Component
 struct WizardPage {
   private static readonly MAX_NOTIF_ATTEMPTS = 3;
-  @StorageLink(STORAGE_KEY_THEME_MODE)
-  @Watch('onThemeModeChanged')
-  themeMode: string = ThemeMode.SYSTEM;
-  @StorageLink(STORAGE_KEY_LANGUAGE)
-  @Watch('onLanguageChanged')
-  appLanguage: string = LanguageService.defaultLanguage();
-  @StorageLink(STORAGE_KEY_LANGUAGE_OVERRIDE)
-  @Watch('onLanguageOverrideChanged')
-  languageOverride: string = 'system';
-  @StorageLink(STORAGE_KEY_APP_THEME)
-  @Watch('onAppThemeChanged')
-  appTheme: string = '';
-  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK)
-  @Watch('onAppForegrounded')
-  appForegroundTick: number = 0;
-  @StorageLink(STORAGE_KEY_BREAKPOINT)
-  breakpoint: string = 'sm';
+  @StorageLink(STORAGE_KEY_THEME_MODE) @Watch('onThemeModeChanged') themeMode: string = ThemeMode.SYSTEM;
+  @StorageLink(STORAGE_KEY_LANGUAGE) @Watch('onLanguageChanged') appLanguage: string =
+    LanguageService.defaultLanguage();
+  @StorageLink(STORAGE_KEY_LANGUAGE_OVERRIDE) @Watch('onLanguageOverrideChanged') languageOverride: string = 'system';
+  @StorageLink(STORAGE_KEY_APP_THEME) @Watch('onAppThemeChanged') appTheme: string = '';
+  @StorageLink(STORAGE_KEY_APP_FOREGROUND_TICK) @Watch('onAppForegrounded') appForegroundTick: number = 0;
+  @StorageLink(STORAGE_KEY_BREAKPOINT) breakpoint: string = 'sm';
   @State colors: ThemeColors = PageTheme.compute(ThemeMode.LIGHT);
   @State step: number = 0;
   @State selectedLanguage: string = LanguageService.defaultLanguage();
@@ -93,11 +83,9 @@ struct WizardPage {
     this.selectedLanguage = this.languageOverride;
     this.selectedTheme = this.appTheme;
     this.colors = PageTheme.compute(this.themeMode);
-    this.systemDarkListener = PageTheme.installSystemListener(
-      this.themeMode, (c) => {
+    this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
       this.colors = c;
-    }
-    );
+    });
     this.reloadDefaults();
     await this.loadPrivacyPolicy();
   }
@@ -113,22 +101,16 @@ struct WizardPage {
   }
 
   pageTransition() {
-    PageTransitionEnter({ type: RouteType.Push, duration: 300, curve: Curve.Friction })
-      .opacity(0)
-    PageTransitionExit({ type: RouteType.Push, duration: 300, curve: Curve.Friction })
-      .opacity(0)
+    PageTransitionEnter({ type: RouteType.Push, duration: 300, curve: Curve.Friction }).opacity(0)
+    PageTransitionExit({ type: RouteType.Push, duration: 300, curve: Curve.Friction }).opacity(0)
 
-    PageTransitionEnter({ type: RouteType.Pop, duration: 300, curve: Curve.Friction })
-      .opacity(0)
-    PageTransitionExit({ type: RouteType.Pop, duration: 300, curve: Curve.Friction })
-      .opacity(0)
+    PageTransitionEnter({ type: RouteType.Pop, duration: 300, curve: Curve.Friction }).opacity(0)
+    PageTransitionExit({ type: RouteType.Pop, duration: 300, curve: Curve.Friction }).opacity(0)
   }
 
   build() {
     Stack() {
-      Column()
-        .width('100%').height('100%')
-        .backgroundColor(this.colors.primaryGreen)
+      Column().width('100%').height('100%').backgroundColor(this.colors.primaryGreen)
 
       Column() {
         this.ProgressHeader()
@@ -137,7 +119,9 @@ struct WizardPage {
           Column() {
             Column() {
               Text(this.stepTitle())
-                .fontSize(24).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+                .fontSize(24)
+                .fontWeight(FontWeight.Bold)
+                .fontColor(this.colors.textWhite)
                 .width('100%')
               Text(this.stepDescription())
                 .fontSize(13)
@@ -145,15 +129,12 @@ struct WizardPage {
                 .width('100%')
                 .margin({ top: 6 })
                 .lineHeight(20)
-            }
-            .width('100%')
-            .padding({
+            }.width('100%').padding({
               left: this.isTablet() ? 32 : 24,
               right: this.isTablet() ? 32 : 24,
               top: 8,
               bottom: 16
-            })
-            .alignItems(HorizontalAlign.Start)
+            }).alignItems(HorizontalAlign.Start)
 
             if (this.step === 0) {
               this.LanguageStep()
@@ -168,65 +149,39 @@ struct WizardPage {
             } else if (this.step === 5) {
               this.NotificationsStep()
             }
-          }
-          .width('100%')
-          .constraintSize({ maxWidth: Breakpoints.maxContentWidth(this.breakpoint) })
-          .layoutWeight(1)
-        }
-        .width('100%')
-        .justifyContent(FlexAlign.Center)
-        .layoutWeight(1)
+          }.width('100%').constraintSize({ maxWidth: Breakpoints.maxContentWidth(this.breakpoint) }).layoutWeight(1)
+        }.width('100%').justifyContent(FlexAlign.Center).layoutWeight(1)
 
         Row() {
           Column() {
             this.Footer()
-          }
-          .width('100%')
-          .constraintSize({ maxWidth: Breakpoints.maxContentWidth(this.breakpoint) })
-        }
-        .width('100%')
-        .justifyContent(FlexAlign.Center)
-      }
-      .width('100%').height('100%')
+          }.width('100%').constraintSize({ maxWidth: Breakpoints.maxContentWidth(this.breakpoint) })
+        }.width('100%').justifyContent(FlexAlign.Center)
+      }.width('100%').height('100%')
 
       if (this.showMethodPicker) {
-        this.PickerOverlay(
-          this.tr('convention'),
-          $r('app.media.ic_nav_mosque'),
-          SettingsHelper.buildMethodPickerItems(this.calcMethod),
-          (id: string) => {
+        this.PickerOverlay(this.tr('convention'), $r('app.media.ic_nav_mosque'),
+          SettingsHelper.buildMethodPickerItems(this.calcMethod), (id: string) => {
             this.pickMethod(id);
-          },
-          () => {
+          }, () => {
             this.showMethodPicker = false;
-          }
-        )
+          })
       }
       if (this.showAsrPicker) {
-        this.PickerOverlay(
-          this.tr('madhab'),
-          $r('app.media.ic_asr_rule'),
-          SettingsHelper.buildAsrPickerItems(this.asrRule),
-          (id: string) => {
+        this.PickerOverlay(this.tr('madhab'), $r('app.media.ic_asr_rule'),
+          SettingsHelper.buildAsrPickerItems(this.asrRule), (id: string) => {
             this.pickAsrRule(id);
-          },
-          () => {
+          }, () => {
             this.showAsrPicker = false;
-          }
-        )
+          })
       }
       if (this.showSourcePicker) {
-        this.PickerOverlay(
-          this.tr('source'),
-          $r('app.media.ic_language'),
-          SettingsHelper.buildSourcePickerItems(this.calcSource),
-          (id: string) => {
+        this.PickerOverlay(this.tr('source'), $r('app.media.ic_language'),
+          SettingsHelper.buildSourcePickerItems(this.calcSource), (id: string) => {
             this.pickSource(id);
-          },
-          () => {
+          }, () => {
             this.showSourcePicker = false;
-          }
-        )
+          })
       }
     }
     .width('100%')
@@ -239,11 +194,12 @@ struct WizardPage {
   @Builder
   NotificationsStep() {
     Scroll() {
-      Column() {
-        // Header Card
+      Column() { // Header Card
         Column() {
           Text(this.tr('notif_step_title'))
-            .fontSize(18).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
+            .fontSize(18)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.textWhite)
             .width('100%')
           Text(this.tr('notif_step_desc'))
             .fontSize(13)
@@ -260,14 +216,9 @@ struct WizardPage {
         .margin({ bottom: 24 })
 
         // Action Button
-        if (this.notifMasterEnabled) {
-          // Enabled State
+        if (this.notifMasterEnabled) { // Enabled State
           Row({ space: 10 }) {
-            Image($r('app.media.ic_check'))
-              .width(20)
-              .height(20)
-              .fillColor(this.colors.accentGold)
-              .flexShrink(0)
+            Image($r('app.media.ic_check')).width(20).height(20).fillColor(this.colors.accentGold).flexShrink(0)
             Text(this.tr('notifications_master'))
               .fontSize(16)
               .fontWeight(FontWeight.Bold)
@@ -279,13 +230,10 @@ struct WizardPage {
           .borderRadius(16)
           .border({ width: 1, color: this.colors.borderSoft })
           .justifyContent(FlexAlign.Center)
-        } else {
-          // Disabled State (Button to Enable)
+        } else { // Disabled State (Button to Enable)
           Button() {
             if (this.notifRequesting) {
-              LoadingProgress()
-                .width(24).height(24)
-                .color(this.colors.textOnAccent)
+              LoadingProgress().width(24).height(24).color(this.colors.textOnAccent)
             } else {
               Text(this.tr('notifications_master'))
                 .fontSize(16)
@@ -301,18 +249,10 @@ struct WizardPage {
             this.toggleNotifications(true);
           })
         }
-      }
-      .width('100%')
-      .padding({
-        left: this.isTablet() ? 32 : 24,
-        right: this.isTablet() ? 32 : 24,
-        bottom: 24
+      }.width('100%').padding({
+        left: this.isTablet() ? 32 : 24, right: this.isTablet() ? 32 : 24, bottom: 24
       })
-    }
-    .layoutWeight(1)
-    .width('100%')
-    .scrollBar(BarState.Auto)
-    .edgeEffect(EdgeEffect.Spring)
+    }.layoutWeight(1).width('100%').scrollBar(BarState.Auto).edgeEffect(EdgeEffect.Spring)
   }
 
   @Builder
@@ -322,14 +262,11 @@ struct WizardPage {
         Image($r('app.media.ic_chevron_right'))
           .width(18)
           .height(18)
-          .fillColor(this.step === 0
-            ? this.colors.textMuted
-            : this.colors.textWhite)
-          // Parent Row is .direction(Direction.Ltr)-locked, so the
-          // icon stays physically left in both languages. Rotate 180°
-          // unconditionally to point left — matching the "back on the
-          // physical left" design of the wizard header.
-          .rotate({ angle: 180 })
+          .fillColor(this.step === 0 ? this.colors.textMuted :
+            this.colors.textWhite) // Parent Row is .direction(Direction.Ltr)-locked, so the
+        // icon stays physically left in both languages. Rotate 180°
+        // unconditionally to point left — matching the "back on the
+        // physical left" design of the wizard header..rotate({ angle: 180 })
       }
       .width(40)
       .height(40)
@@ -337,9 +274,7 @@ struct WizardPage {
       .alignItems(VerticalAlign.Center)
       .borderRadius(20)
       .backgroundColor(this.step === 0 ? 'transparent' : this.colors.tintSoft)
-      .border(this.step === 0
-        ? { width: 0 }
-        : { width: 1, color: this.colors.borderSoft })
+      .border(this.step === 0 ? { width: 0 } : { width: 1, color: this.colors.borderSoft })
       .flexShrink(0)
       .enabled(this.step > 0)
       .onClick(() => {
@@ -353,10 +288,11 @@ struct WizardPage {
       }
 
       Row({ space: 6 }) {
-        Text(this.tr('wizard_step'))
-          .fontSize(12).fontColor(this.colors.textMuted).letterSpacing(1)
+        Text(this.tr('wizard_step')).fontSize(12).fontColor(this.colors.textMuted).letterSpacing(1)
         Text(`${this.step + 1} / ${TOTAL_STEPS}`)
-          .fontSize(12).fontColor(this.colors.accentGold).fontWeight(FontWeight.Bold)
+          .fontSize(12)
+          .fontColor(this.colors.accentGold)
+          .fontWeight(FontWeight.Bold)
           .direction(Direction.Ltr)
       }
 
@@ -374,11 +310,12 @@ struct WizardPage {
   @Builder
   LanguageStep() {
     Scroll() {
-      Column() {
-        // Welcome Banner
+      Column() { // Welcome Banner
         Column() {
           Text(this.tr('wizard_welcome_title'))
-            .fontSize(15).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
+            .fontSize(15)
+            .fontColor(this.colors.accentGold)
+            .fontWeight(FontWeight.Medium)
             .width('100%')
           Text(this.tr('wizard_welcome_desc'))
             .fontSize(12)
@@ -400,20 +337,16 @@ struct WizardPage {
           Row({ space: 14 }) {
             Column() {
               Text(opt.nativeName)
-                .fontSize(18).fontWeight(FontWeight.Bold)
+                .fontSize(18)
+                .fontWeight(FontWeight.Bold)
                 .fontColor(this.colors.textWhite)
                 .width('100%')
-              Text(opt.localizedName)
-                .fontSize(11).fontColor(this.colors.textMuted)
-                .margin({ top: 2 }).width('100%')
-            }
-            .alignItems(HorizontalAlign.Start)
-            .layoutWeight(1)
+              Text(opt.localizedName).fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 }).width('100%')
+            }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
             Stack() {
               if (opt.id === this.selectedLanguage) {
-                Row().width(12).height(12).borderRadius(6)
-                  .backgroundColor(this.colors.accentGold)
+                Row().width(12).height(12).borderRadius(6).backgroundColor(this.colors.accentGold)
               }
             }
             .width(24)
@@ -421,9 +354,7 @@ struct WizardPage {
             .borderRadius(12)
             .border({
               width: opt.id === this.selectedLanguage ? 2 : 1.5,
-              color: opt.id === this.selectedLanguage
-                ? this.colors.accentGold
-                : this.colors.borderStrong
+              color: opt.id === this.selectedLanguage ? this.colors.accentGold : this.colors.borderStrong
             })
             .alignContent(Alignment.Center)
             .flexShrink(0)
@@ -439,16 +370,14 @@ struct WizardPage {
           .borderRadius(14)
           .border({
             width: opt.id === this.selectedLanguage ? 2 : 1,
-            color: opt.id === this.selectedLanguage
-              ? this.colors.accentGold
-              : this.colors.borderSoft
+            color: opt.id === this.selectedLanguage ? this.colors.accentGold : this.colors.borderSoft
           })
           .margin({ bottom: 10 })
           .onClick(() => {
             this.pickLanguage(opt.id);
           })
-        }, (opt: LanguageOption) =>
-        `lang-${opt.id}-${opt.id === this.selectedLanguage ? 'sel' : 'un'}-${this.currentLanguage}`)
+        }, (opt: LanguageOption) => `lang-${opt.id}-${opt.id === this.selectedLanguage ? 'sel' :
+          'un'}-${this.currentLanguage}`)
 
         // Supported Languages Hint
         Text(this.tr('lang_supported_hint'))
@@ -458,18 +387,10 @@ struct WizardPage {
           .fontStyle(FontStyle.Italic)
           .width('100%')
           .margin({ top: 12, bottom: 24 })
-      }
-      .width('100%')
-      .padding({
-        left: this.isTablet() ? 32 : 24,
-        right: this.isTablet() ? 32 : 24,
-        bottom: 24
+      }.width('100%').padding({
+        left: this.isTablet() ? 32 : 24, right: this.isTablet() ? 32 : 24, bottom: 24
       })
-    }
-    .layoutWeight(1)
-    .width('100%')
-    .scrollBar(BarState.Auto)
-    .edgeEffect(EdgeEffect.Spring)
+    }.layoutWeight(1).width('100%').scrollBar(BarState.Auto).edgeEffect(EdgeEffect.Spring)
   }
 
   @Builder
@@ -486,17 +407,10 @@ struct WizardPage {
               .textAlign(TextAlign.Start)
           } else {
             Column() {
-              LoadingProgress()
-                .width(32).height(32)
-                .color(this.colors.accentGold)
-            }
-            .width('100%')
-            .padding({ top: 40, bottom: 40 })
-            .alignItems(HorizontalAlign.Center)
+              LoadingProgress().width(32).height(32).color(this.colors.accentGold)
+            }.width('100%').padding({ top: 40, bottom: 40 }).alignItems(HorizontalAlign.Center)
           }
-        }
-        .width('100%')
-        .padding(16)
+        }.width('100%').padding(16)
       }
       .layoutWeight(1)
       .width('100%')
@@ -509,21 +423,15 @@ struct WizardPage {
       Row({ space: 12 }) {
         Stack() {
           if (this.privacyAccepted) {
-            Image($r('app.media.ic_check'))
-              .width(14)
-              .height(14)
-              .fillColor(this.colors.textOnAccent)
+            Image($r('app.media.ic_check')).width(14).height(14).fillColor(this.colors.textOnAccent)
           }
         }
         .width(24)
         .height(24)
         .borderRadius(6)
-        .backgroundColor(this.privacyAccepted
-          ? this.colors.accentGold
-          : 'transparent')
+        .backgroundColor(this.privacyAccepted ? this.colors.accentGold : 'transparent')
         .border({
-          width: this.privacyAccepted ? 0 : 1.5,
-          color: this.colors.borderStrong
+          width: this.privacyAccepted ? 0 : 1.5, color: this.colors.borderStrong
         })
         .alignContent(Alignment.Center)
         .flexShrink(0)
@@ -538,30 +446,18 @@ struct WizardPage {
           .onClick(() => {
             this.privacyAccepted = !this.privacyAccepted;
           })
-      }
-      .width('100%')
-      .padding({ top: 16, bottom: 8 })
-      .alignItems(VerticalAlign.Center)
+      }.width('100%').padding({ top: 16, bottom: 8 }).alignItems(VerticalAlign.Center)
 
       Row() {
         Text(this.tr('privacy_view_full'))
           .fontSize(11)
           .fontColor(this.colors.accentGold)
           .decoration({ type: TextDecorationType.Underline })
-      }
-      .width('100%')
-      .padding({ bottom: 4 })
-      .justifyContent(FlexAlign.Start)
-      .onClick(() => {
+      }.width('100%').padding({ bottom: 4 }).justifyContent(FlexAlign.Start).onClick(() => {
         this.openPrivacyPolicyInBrowser();
       })
-    }
-    .width('100%')
-    .layoutWeight(1)
-    .padding({
-      left: this.isTablet() ? 32 : 24,
-      right: this.isTablet() ? 32 : 24,
-      bottom: 12
+    }.width('100%').layoutWeight(1).padding({
+      left: this.isTablet() ? 32 : 24, right: this.isTablet() ? 32 : 24, bottom: 12
     })
   }
 
@@ -573,62 +469,48 @@ struct WizardPage {
           Row({ space: 14 }) {
             Stack() {
               Column()
-                .width('100%').height('100%')
+                .width('100%')
+                .height('100%')
                 .backgroundColor(this.themePreviewBackground(opt.id))
                 .borderRadius(10)
 
-              Row()
-                .width(18).height(18).borderRadius(9)
-                .backgroundColor(this.themePreviewSwatch(opt.id))
+              Row().width(18).height(18).borderRadius(9).backgroundColor(this.themePreviewSwatch(opt.id))
             }
             .width(56)
             .height(56)
             .borderRadius(10)
             .border({
               width: opt.id === this.selectedTheme ? 2 : 1,
-              color: opt.id === this.selectedTheme
-                ? this.colors.accentGold
-                : this.colors.borderSoft
+              color: opt.id === this.selectedTheme ? this.colors.accentGold : this.colors.borderSoft
             })
             .flexShrink(0)
 
             Column() {
               Text(this.tr(opt.nameKey))
-                .fontSize(16).fontWeight(FontWeight.Bold)
-                .fontColor(opt.id === this.selectedTheme
-                  ? this.colors.accentGold
-                  : this.colors.textWhite)
+                .fontSize(16)
+                .fontWeight(FontWeight.Bold)
+                .fontColor(opt.id === this.selectedTheme ? this.colors.accentGold : this.colors.textWhite)
                 .width('100%')
-              Text(opt.descKey
-                ? this.tr(opt.descKey)
-                : '')
+              Text(opt.descKey ? this.tr(opt.descKey) : '')
                 .fontSize(11)
                 .fontColor(this.colors.textMuted)
                 .margin({ top: 4 })
                 .width('100%')
                 .maxLines(2)
                 .textOverflow({ overflow: TextOverflow.Ellipsis })
-            }
-            .alignItems(HorizontalAlign.Start)
-            .layoutWeight(1)
+            }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
             Stack() {
               if (opt.id === this.selectedTheme) {
-                Image($r('app.media.ic_check'))
-                  .width(14)
-                  .height(14)
-                  .fillColor(this.colors.textOnAccent)
+                Image($r('app.media.ic_check')).width(14).height(14).fillColor(this.colors.textOnAccent)
               }
             }
             .width(24)
             .height(24)
             .borderRadius(12)
-            .backgroundColor(opt.id === this.selectedTheme
-              ? this.colors.accentGold
-              : 'transparent')
+            .backgroundColor(opt.id === this.selectedTheme ? this.colors.accentGold : 'transparent')
             .border({
-              width: opt.id === this.selectedTheme ? 0 : 1.5,
-              color: this.colors.borderStrong
+              width: opt.id === this.selectedTheme ? 0 : 1.5, color: this.colors.borderStrong
             })
             .alignContent(Alignment.Center)
             .flexShrink(0)
@@ -644,29 +526,18 @@ struct WizardPage {
           .borderRadius(14)
           .border({
             width: opt.id === this.selectedTheme ? 2 : 1,
-            color: opt.id === this.selectedTheme
-              ? this.colors.accentGold
-              : this.colors.borderSoft
+            color: opt.id === this.selectedTheme ? this.colors.accentGold : this.colors.borderSoft
           })
           .margin({ bottom: 10 })
           .alignItems(VerticalAlign.Center)
           .onClick(() => {
             this.pickAppTheme(opt.id);
           })
-        }, (opt: ThemeOption) =>
-        `theme-${opt.id}-${opt.id === this.selectedTheme ? 'sel' : 'un'}`)
-      }
-      .width('100%')
-      .padding({
-        left: this.isTablet() ? 32 : 24,
-        right: this.isTablet() ? 32 : 24,
-        bottom: 24
+        }, (opt: ThemeOption) => `theme-${opt.id}-${opt.id === this.selectedTheme ? 'sel' : 'un'}`)
+      }.width('100%').padding({
+        left: this.isTablet() ? 32 : 24, right: this.isTablet() ? 32 : 24, bottom: 24
       })
-    }
-    .layoutWeight(1)
-    .width('100%')
-    .scrollBar(BarState.Auto)
-    .edgeEffect(EdgeEffect.Spring)
+    }.layoutWeight(1).width('100%').scrollBar(BarState.Auto).edgeEffect(EdgeEffect.Spring)
   }
 
   @Builder
@@ -676,20 +547,18 @@ struct WizardPage {
         Row({ space: 12 }) {
           this.LocationModeButton(this.tr('gps'), LocationMode.GPS)
           this.LocationModeButton(this.tr('manual_location'), LocationMode.MANUAL)
-        }
-        .width('100%')
-        .padding({ bottom: 16 })
+        }.width('100%').padding({ bottom: 16 })
 
         if (this.locationMode === LocationMode.GPS) {
           Column() {
             if (this.locationStatus === 'ready' && this.detectedCity.length > 0) {
               Row() {
-                Image($r('app.media.ic_check'))
-                  .width(20).height(20)
-                  .fillColor(this.colors.accentGold)
+                Image($r('app.media.ic_check')).width(20).height(20).fillColor(this.colors.accentGold)
                 Column() {
                   Text(this.tr('wizard_location_ready'))
-                    .fontSize(12).fontColor(this.colors.accentGold).fontWeight(FontWeight.Medium)
+                    .fontSize(12)
+                    .fontColor(this.colors.accentGold)
+                    .fontWeight(FontWeight.Medium)
                     .width('100%')
                   Text(this.detectedCity)
                     .fontSize(15)
@@ -699,9 +568,7 @@ struct WizardPage {
                     .width('100%')
                     .maxLines(1)
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
-                }
-                .alignItems(HorizontalAlign.Start)
-                .layoutWeight(1).margin({ left: 12 })
+                }.alignItems(HorizontalAlign.Start).layoutWeight(1).margin({ left: 12 })
               }
               .width('100%')
               .padding(16)
@@ -723,11 +590,13 @@ struct WizardPage {
             } else if (this.locationStatus === 'failed') {
               Column() {
                 Image($r('app.media.ic_warning'))
-                  .width(40).height(40)
+                  .width(40)
+                  .height(40)
                   .fillColor(this.colors.statusExpress)
                   .margin({ bottom: 10 })
                 Text(this.tr('wizard_location_failed'))
-                  .fontSize(14).fontColor(this.colors.textWhite)
+                  .fontSize(14)
+                  .fontColor(this.colors.textWhite)
                   .textAlign(TextAlign.Center)
                 Button(this.tr('wizard_retry'))
                   .width('100%')
@@ -759,25 +628,29 @@ struct WizardPage {
             } else {
               Column() {
                 Image($r('app.media.ic_pin'))
-                  .width(48).height(48)
+                  .width(48)
+                  .height(48)
                   .fillColor(this.colors.accentGold)
                   .margin({ bottom: 12 })
-                Text(this.isGettingLocation
-                  ? this.tr('wizard_getting_location')
-                  : this.tr('wizard_location_desc'))
-                  .fontSize(12).fontColor(this.colors.textMuted)
-                  .textAlign(TextAlign.Center).lineHeight(18)
+                Text(this.isGettingLocation ? this.tr('wizard_getting_location') : this.tr('wizard_location_desc'))
+                  .fontSize(12)
+                  .fontColor(this.colors.textMuted)
+                  .textAlign(TextAlign.Center)
+                  .lineHeight(18)
 
                 Button() {
                   if (this.isGettingLocation) {
                     Row() {
                       LoadingProgress().width(18).height(18).color(this.colors.textOnAccent)
                       Text(this.tr('wizard_getting_location'))
-                        .fontSize(14).fontColor(this.colors.textOnAccent).margin({ left: 8 })
+                        .fontSize(14)
+                        .fontColor(this.colors.textOnAccent)
+                        .margin({ left: 8 })
                     }
                   } else {
                     Text(this.tr('wizard_grant_permission'))
-                      .fontSize(14).fontWeight(FontWeight.Medium)
+                      .fontSize(14)
+                      .fontWeight(FontWeight.Medium)
                       .fontColor(this.colors.textOnAccent)
                   }
                 }
@@ -807,13 +680,15 @@ struct WizardPage {
               .border({ width: 1, color: this.colors.borderSoft })
               .alignItems(HorizontalAlign.Center)
             }
-          }
-          .width('100%')
+          }.width('100%')
         } else {
           Column() {
             Column() {
-              Text(this.tr('latitude_hint')).fontSize(11).fontColor(this.colors.textMuted)
-                .width('100%').margin({ bottom: 4 })
+              Text(this.tr('latitude_hint'))
+                .fontSize(11)
+                .fontColor(this.colors.textMuted)
+                .width('100%')
+                .margin({ bottom: 4 })
               TextInput({ text: this.manualLat, placeholder: 'e.g. 33.6844' })
                 .type(InputType.Normal)
                 .inputFilter('[\\-0-9\\.]')
@@ -833,12 +708,14 @@ struct WizardPage {
                   top: 8,
                   bottom: 8
                 })
-            }
-            .width('100%').margin({ bottom: 10 })
+            }.width('100%').margin({ bottom: 10 })
 
             Column() {
-              Text(this.tr('longitude_hint')).fontSize(11).fontColor(this.colors.textMuted)
-                .width('100%').margin({ bottom: 4 })
+              Text(this.tr('longitude_hint'))
+                .fontSize(11)
+                .fontColor(this.colors.textMuted)
+                .width('100%')
+                .margin({ bottom: 4 })
               TextInput({ text: this.manualLng, placeholder: 'e.g. 73.0479' })
                 .type(InputType.Normal)
                 .inputFilter('[\\-0-9\\.]')
@@ -858,12 +735,14 @@ struct WizardPage {
                   top: 8,
                   bottom: 8
                 })
-            }
-            .width('100%').margin({ bottom: 10 })
+            }.width('100%').margin({ bottom: 10 })
 
             Column() {
-              Text(this.tr('city_name_optional')).fontSize(11).fontColor(this.colors.textMuted)
-                .width('100%').margin({ bottom: 4 })
+              Text(this.tr('city_name_optional'))
+                .fontSize(11)
+                .fontColor(this.colors.textMuted)
+                .width('100%')
+                .margin({ bottom: 4 })
               TextInput({ text: this.manualCity, placeholder: this.tr('city_name_placeholder') })
                 .type(InputType.Normal)
                 .onChange((value: string) => {
@@ -881,15 +760,15 @@ struct WizardPage {
                   top: 8,
                   bottom: 8
                 })
-            }
-            .width('100%').margin({ bottom: 14 })
+            }.width('100%').margin({ bottom: 14 })
 
             Button() {
               if (this.isGettingLocation) {
                 LoadingProgress().width(18).height(18).color(this.colors.textOnAccent)
               } else {
                 Text(this.tr('save_coordinates'))
-                  .fontSize(14).fontWeight(FontWeight.Medium)
+                  .fontSize(14)
+                  .fontWeight(FontWeight.Medium)
                   .fontColor(this.colors.textOnAccent)
               }
             }
@@ -904,9 +783,7 @@ struct WizardPage {
 
             if (this.locationStatus === 'ready' && this.detectedCity.length > 0) {
               Row() {
-                Image($r('app.media.ic_check'))
-                  .width(16).height(16)
-                  .fillColor(this.colors.accentGold)
+                Image($r('app.media.ic_check')).width(16).height(16).fillColor(this.colors.accentGold)
                 Text(this.detectedCity)
                   .fontSize(13)
                   .fontColor(this.colors.accentGold)
@@ -914,8 +791,7 @@ struct WizardPage {
                   .margin({ left: 8 })
                   .maxLines(1)
                   .textOverflow({ overflow: TextOverflow.Ellipsis })
-              }
-              .width('100%').margin({ top: 12 })
+              }.width('100%').margin({ top: 12 })
             }
           }
           .width('100%')
@@ -924,18 +800,10 @@ struct WizardPage {
           .borderRadius(14)
           .border({ width: 1, color: this.colors.borderSoft })
         }
-      }
-      .width('100%')
-      .padding({
-        left: this.isTablet() ? 32 : 24,
-        right: this.isTablet() ? 32 : 24,
-        bottom: 24
+      }.width('100%').padding({
+        left: this.isTablet() ? 32 : 24, right: this.isTablet() ? 32 : 24, bottom: 24
       })
-    }
-    .layoutWeight(1)
-    .width('100%')
-    .scrollBar(BarState.Auto)
-    .edgeEffect(EdgeEffect.Spring)
+    }.layoutWeight(1).width('100%').scrollBar(BarState.Auto).edgeEffect(EdgeEffect.Spring)
   }
 
   @Builder
@@ -943,21 +811,15 @@ struct WizardPage {
     Text(label)
       .fontSize(13)
       .fontWeight(this.locationMode === mode ? FontWeight.Bold : FontWeight.Normal)
-      .fontColor(this.locationMode === mode
-        ? this.colors.textOnAccent
-        : this.colors.textWhite)
-      .backgroundColor(this.locationMode === mode
-        ? this.colors.accentGold
-        : this.colors.tintSoft)
+      .fontColor(this.locationMode === mode ? this.colors.textOnAccent : this.colors.textWhite)
+      .backgroundColor(this.locationMode === mode ? this.colors.accentGold : this.colors.tintSoft)
       .textAlign(TextAlign.Center)
       .maxLines(1)
       .textOverflow({ overflow: TextOverflow.Ellipsis })
       .height(42)
       .layoutWeight(1)
       .borderRadius(10)
-      .border(this.locationMode === mode
-        ? { width: 0 }
-        : { width: 1, color: this.colors.borderSoft })
+      .border(this.locationMode === mode ? { width: 0 } : { width: 1, color: this.colors.borderSoft })
       .onClick(() => {
         this.selectLocationMode(mode);
       })
@@ -966,22 +828,18 @@ struct WizardPage {
   @Builder
   ConventionStep() {
     Scroll() {
-      Column() {
-        // ---- Convention ----
+      Column() { // ---- Convention ----
         Row() {
           Column() {
-            Text(this.tr('convention'))
-              .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-            Text(this.tr('convention_desc'))
-              .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+            Text(this.tr('convention')).fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+            Text(this.tr('convention_desc')).fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
             Text(SettingsHelper.getCalcMethodLabel(this.calcMethod))
               .fontSize(12)
               .fontColor(this.colors.accentGold)
               .maxLines(2)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
               .margin({ top: 6 })
-          }
-          .alignItems(HorizontalAlign.Start).layoutWeight(1)
+          }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
           Image($r('app.media.ic_chevron_right'))
             .width(16)
@@ -1004,18 +862,15 @@ struct WizardPage {
         // ---- Madhab ----
         Row() {
           Column() {
-            Text(this.tr('madhab'))
-              .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-            Text(this.tr('madhab_desc'))
-              .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+            Text(this.tr('madhab')).fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+            Text(this.tr('madhab_desc')).fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
             Text(SettingsHelper.getAsrRuleLabel(this.asrRule))
               .fontSize(12)
               .fontColor(this.colors.accentGold)
               .maxLines(2)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
               .margin({ top: 6 })
-          }
-          .alignItems(HorizontalAlign.Start).layoutWeight(1)
+          }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
           Image($r('app.media.ic_chevron_right'))
             .width(16)
@@ -1038,18 +893,15 @@ struct WizardPage {
         // ---- Source ----
         Row() {
           Column() {
-            Text(this.tr('source'))
-              .fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
-            Text(this.tr('source_desc'))
-              .fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
+            Text(this.tr('source')).fontSize(15).fontColor(this.colors.textWhite).fontWeight(FontWeight.Medium)
+            Text(this.tr('source_desc')).fontSize(11).fontColor(this.colors.textMuted).margin({ top: 2 })
             Text(SettingsHelper.getCalcSourceLabel(this.calcSource))
               .fontSize(12)
               .fontColor(this.colors.accentGold)
               .maxLines(2)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
               .margin({ top: 6 })
-          }
-          .alignItems(HorizontalAlign.Start).layoutWeight(1)
+          }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
           Image($r('app.media.ic_chevron_right'))
             .width(16)
@@ -1068,18 +920,10 @@ struct WizardPage {
         .onClick(() => {
           this.showSourcePicker = true;
         })
-      }
-      .width('100%')
-      .padding({
-        left: this.isTablet() ? 32 : 24,
-        right: this.isTablet() ? 32 : 24,
-        bottom: 24
+      }.width('100%').padding({
+        left: this.isTablet() ? 32 : 24, right: this.isTablet() ? 32 : 24, bottom: 24
       })
-    }
-    .layoutWeight(1)
-    .width('100%')
-    .scrollBar(BarState.Auto)
-    .edgeEffect(EdgeEffect.Spring)
+    }.layoutWeight(1).width('100%').scrollBar(BarState.Auto).edgeEffect(EdgeEffect.Spring)
   }
 
   @Builder
@@ -1094,50 +938,33 @@ struct WizardPage {
             .width('100%')
             .margin({ bottom: 8 })
         }
-        Button(this.step < TOTAL_STEPS - 1
-          ? this.tr('wizard_next') : this.tr('wizard_finish'))
+        Button(this.step < TOTAL_STEPS - 1 ? this.tr('wizard_next') : this.tr('wizard_finish'))
           .width('100%')
           .height(50)
           .fontSize(15)
           .fontWeight(FontWeight.Medium)
-          .fontColor(this.canProceed()
-            ? this.colors.textOnAccent : this.colors.textMuted)
-          .backgroundColor(this.canProceed()
-            ? this.colors.accentGold : this.colors.tintMedium)
+          .fontColor(this.canProceed() ? this.colors.textOnAccent : this.colors.textMuted)
+          .backgroundColor(this.canProceed() ? this.colors.accentGold : this.colors.tintMedium)
           .borderRadius(12)
           .enabled(this.canProceed())
           .onClick(() => {
             this.goNext();
           })
-      }
-      .width('100%')
-      .alignItems(HorizontalAlign.Center)
-    }
-    .width('100%')
-    .padding({
+      }.width('100%').alignItems(HorizontalAlign.Center)
+    }.width('100%').padding({
       left: this.isTablet() ? 32 : 24,
       right: this.isTablet() ? 32 : 24,
       top: 12,
       bottom: 24
-    })
-    .backgroundColor(this.colors.primaryGreen)
+    }).backgroundColor(this.colors.primaryGreen)
   }
 
   @Builder
-  PickerOverlay(
-    title: string,
-    icon: Resource,
-    items: PickerItem[],
-    onSelect: (id: string) => void,
-    onCancel: () => void
-  ) {
-    // ---- Dim backdrop ----
-    Column()
-      .width('100%').height('100%')
-      .backgroundColor(this.colors.overlayDim)
-      .onClick(() => {
-        onCancel();
-      })
+  PickerOverlay(title: string, icon: Resource, items: PickerItem[], onSelect: (id: string) => void,
+    onCancel: () => void) { // ---- Dim backdrop ----
+    Column().width('100%').height('100%').backgroundColor(this.colors.overlayDim).onClick(() => {
+      onCancel();
+    })
 
     // ---- Bottom sheet ----
     Column() {
@@ -1151,10 +978,7 @@ struct WizardPage {
       // Header
       Row({ space: 14 }) {
         Row() {
-          Image(icon)
-            .width(22)
-            .height(22)
-            .fillColor(this.colors.accentGold)
+          Image(icon).width(22).height(22).fillColor(this.colors.accentGold)
         }
         .width(44)
         .height(44)
@@ -1171,9 +995,7 @@ struct WizardPage {
           .fontColor(this.colors.textWhite)
           .layoutWeight(1)
           .textAlign(TextAlign.Start)
-      }
-      .width('100%')
-      .padding({
+      }.width('100%').padding({
         top: 20,
         bottom: 20,
         left: this.isRtl() ? 20 : 16,
@@ -1189,16 +1011,14 @@ struct WizardPage {
             Row({ space: 14 }) {
               Row() {
                 if (item.selected) {
-                  Row().width(10).height(10).borderRadius(5)
-                    .backgroundColor(this.colors.accentGold)
+                  Row().width(10).height(10).borderRadius(5).backgroundColor(this.colors.accentGold)
                 }
               }
               .width(22)
               .height(22)
               .borderRadius(11)
               .border({
-                width: item.selected ? 2 : 1.5,
-                color: item.selected ? this.colors.accentGold : this.colors.borderStrong
+                width: item.selected ? 2 : 1.5, color: item.selected ? this.colors.accentGold : this.colors.borderStrong
               })
               .justifyContent(FlexAlign.Center)
               .alignItems(VerticalAlign.Center)
@@ -1226,19 +1046,13 @@ struct WizardPage {
               onSelect(item.id);
             })
           }, (item: PickerItem) => item.id)
-        }
-        .width('100%')
-        .padding({
+        }.width('100%').padding({
           left: 8,
           right: 8,
           top: 12,
           bottom: 12
         })
-      }
-      .layoutWeight(1)
-      .width('100%')
-      .scrollBar(BarState.Auto)
-      .edgeEffect(EdgeEffect.Spring)
+      }.layoutWeight(1).width('100%').scrollBar(BarState.Auto).edgeEffect(EdgeEffect.Spring)
 
       Button(this.tr('cancel'))
         .width('90%')
@@ -1267,8 +1081,7 @@ struct WizardPage {
     .position({ bottom: 0 })
   }
 
-  private onLanguageOverrideChanged(): void {
-    // No-op — the picker reads languageOverride directly.
+  private onLanguageOverrideChanged(): void { // No-op — the picker reads languageOverride directly.
   }
 
   private tr(key: string): string {
@@ -1353,31 +1166,22 @@ struct WizardPage {
 
   private getLanguageOptions(): LanguageOption[] {
     const system: LanguageOption = {
-      id: 'system',
-      nativeName: this.tr('lang_system'),
-      localizedName: this.tr('lang_system_desc')
+      id: 'system', nativeName: this.tr('lang_system'), localizedName: this.tr('lang_system_desc')
     };
 
-    const languages = LanguageService
-      .getAllLanguages()
-      .map((lang): LanguageOption => {
-        return {
-          id: lang.id,
-          nativeName: lang.nativeName,
-          localizedName: this.tr(lang.nameKey)
-        };
-      });
+    const languages = LanguageService.getAllLanguages().map((lang): LanguageOption => {
+      return {
+        id: lang.id, nativeName: lang.nativeName, localizedName: this.tr(lang.nameKey)
+      };
+    });
 
     return [system, ...languages];
   }
 
   private pickLanguage(id: string): void {
-    this.selectedLanguage = id;
-    // Persist both the override and resolved language.
-    SettingsHelper.saveLanguage(id);
-    // Update local display language for wizard translations.
-    this.currentLanguage = L.resolveOverride(id);
-    // appLanguage auto-syncs via @StorageLink(STORAGE_KEY_LANGUAGE).
+    this.selectedLanguage = id; // Persist both the override and resolved language.
+    SettingsHelper.saveLanguage(id); // Update local display language for wizard translations.
+    this.currentLanguage = L.resolveOverride(id); // appLanguage auto-syncs via @StorageLink(STORAGE_KEY_LANGUAGE).
     NotificationHelper.scheduleRescheduleNow();
   }
 
@@ -1396,8 +1200,7 @@ struct WizardPage {
     // a small number of attempts.
     if (this.notificationPermissionAttempts >= WizardPage.MAX_NOTIF_ATTEMPTS) {
       this.getUIContext().getPromptAction().showToast({
-        message: this.tr('calendar_permission_denied'),
-        duration: 3000
+        message: this.tr('calendar_permission_denied'), duration: 3000
       });
       return;
     }
@@ -1421,15 +1224,12 @@ struct WizardPage {
       promptAction.showDialog({
         title: this.tr('permission_required'),
         message: this.tr('calendar_permission_required_msg'),
-        buttons: [
-          { text: this.tr('cancel'), color: this.colors.dialogCancel },
-          { text: this.tr('grant'), color: this.colors.accentGold }
-        ]
+        buttons: [{ text: this.tr('cancel'), color: this.colors.dialogCancel },
+          { text: this.tr('grant'), color: this.colors.accentGold }]
       }).then((res: promptAction.ShowDialogSuccessResponse) => {
         if (res.index === 1) {
           this.toggleNotifications(true);
-        } else {
-          // User cancelled — budget resets so a deliberate retry
+        } else { // User cancelled — budget resets so a deliberate retry
           // later in the session still works.
           this.notificationPermissionAttempts = 0;
         }
@@ -1469,18 +1269,14 @@ struct WizardPage {
     const targetUrl = PrivacyPolicyProvider.getFullUrl(this.currentLanguage);
 
     const want: Want = {
-      action: 'ohos.want.action.viewData',
-      entities: ['entity.system.browsable'],
-      uri: targetUrl
+      action: 'ohos.want.action.viewData', entities: ['entity.system.browsable'], uri: targetUrl
     };
 
     try {
       await context.startAbility(want);
     } catch (err) {
       const e = err as Error;
-      console.warn(
-        '[WizardPage] openPrivacyPolicyInBrowser failed: ' + e.message
-      );
+      console.warn('[WizardPage] openPrivacyPolicyInBrowser failed: ' + e.message);
       this.getUIContext().getPromptAction().showToast({
         message: targetUrl, // Show the correct localized URL in the fallback
         duration: 4000
@@ -1489,15 +1285,11 @@ struct WizardPage {
   }
 
   private getThemeOptions(): ThemeOption[] {
-    return ThemeService
-      .getAllThemes()
-      .map((theme: AppThemeJson): ThemeOption => {
-        return {
-          id: theme.id,
-          nameKey: theme.nameKey,
-          descKey: theme.descKey
-        };
-      });
+    return ThemeService.getAllThemes().map((theme: AppThemeJson): ThemeOption => {
+      return {
+        id: theme.id, nameKey: theme.nameKey, descKey: theme.descKey
+      };
+    });
   }
 
   private pickAppTheme(id: string): void {
@@ -1508,20 +1300,12 @@ struct WizardPage {
   }
 
   private themePreviewSwatch(preset: string): string {
-    const preview = Theme.getColors(
-      this.themeMode,
-      PageTheme.isSystemDark(),
-      preset
-    );
+    const preview = Theme.getColors(this.themeMode, PageTheme.isSystemDark(), preset);
     return preview.accentGold;
   }
 
   private themePreviewBackground(preset: string): string {
-    const preview = Theme.getColors(
-      this.themeMode,
-      PageTheme.isSystemDark(),
-      preset
-    );
+    const preview = Theme.getColors(this.themeMode, PageTheme.isSystemDark(), preset);
     return preview.primaryGreen;
   }
 
@@ -1569,11 +1353,7 @@ struct WizardPage {
     try {
       const fallbackName = this.tr('default_location');
 
-      await LocationCache.save(
-        FALLBACK_LOCATION.latitude,
-        FALLBACK_LOCATION.longitude,
-        fallbackName
-      );
+      await LocationCache.save(FALLBACK_LOCATION.latitude, FALLBACK_LOCATION.longitude, fallbackName);
       SettingsHelper.saveLocationMode(LocationMode.GPS);
 
       this.locationMode = LocationMode.GPS;
