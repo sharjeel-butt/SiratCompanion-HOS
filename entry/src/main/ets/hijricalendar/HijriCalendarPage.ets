@@ -1,4 +1,4 @@
-// entry/src/main/ets/hijricalendar/HijriCalendarEngine.ets
+// entry/src/main/ets/hijricalendar/HijriCalendarPage.ets
 
 import { mediaquery, promptAction, router } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
@@ -51,8 +51,9 @@ export struct HijriCalendarPage {
     HijriCalendarType.UMM_AL_QURA;
   @State currentLanguage: string = 'en';
   @StorageLink(STORAGE_KEY_HIJRI_CALENDAR_VERSION) @Watch('onCalendarVersionChanged') calendarVersion: number = 0;
-  @StorageLink(STORAGE_KEY_EVENT_SETTINGS_VERSION) @Watch(
-    'onEventSettingsVersionChanged') eventSettingsVersion: number = 0;
+  @StorageLink(STORAGE_KEY_EVENT_SETTINGS_VERSION)
+  @Watch('onEventSettingsVersionChanged')
+  eventSettingsVersion: number = 0;
 
   @State targetedDay: number = 0;
   @StorageLink('nav_target_hijri_day') @Watch('onNavTargetHijriDayChanged') navTargetHijriDay: number = 0;

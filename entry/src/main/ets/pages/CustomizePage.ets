@@ -82,13 +82,14 @@ struct CustomizePage {
   @StorageLink(STORAGE_KEY_SHOW_LAST_THIRD_LIST) @Watch('onShowLastThirdListChanged') showLastThirdList: boolean = true;
   // ---- Per-timing visibility — sun path ----
   @StorageLink(STORAGE_KEY_SHOW_IMSAK_SUNPATH) @Watch('onShowImsakSunpathChanged') showImsakSunpath: boolean = true;
-  @StorageLink(STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH) @Watch(
-    'onShowFirstThirdSunpathChanged') showFirstThirdSunpath: boolean = true;
-  @StorageLink(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH) @Watch(
-    'onShowLastThirdSunpathChanged') showLastThirdSunpath: boolean = true;
+  @StorageLink(STORAGE_KEY_SHOW_FIRST_THIRD_SUNPATH)
+  @Watch('onShowFirstThirdSunpathChanged')
+  showFirstThirdSunpath: boolean = true;
   @StorageLink(STORAGE_KEY_SHOW_MIDNIGHT_SUNPATH) @Watch('onShowMidnightSunpathChanged') showMidnightSunpath: boolean =
     true;
-
+  @StorageLink(STORAGE_KEY_SHOW_LAST_THIRD_SUNPATH)
+  @Watch('onShowLastThirdSunpathChanged')
+  showLastThirdSunpath: boolean = true;
   @StorageLink(STORAGE_KEY_DUA_TRANSLATION_LANG) duaTransLang: string = 'default';
   @State showDuaLangPicker: boolean = false;
   @StorageLink(STORAGE_KEY_QURAN_TRANSLATION_LANG) quranTransLang: string = 'default';
