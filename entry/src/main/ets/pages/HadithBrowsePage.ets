@@ -1,20 +1,20 @@
-import { common } from '@kit.AbilityKit';
-import { router } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
-import { L } from '../i18n/LocalizationHelper';
+import { common } from '@kit.AbilityKit'
+import { router } from '@kit.ArkUI'
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
+import { L } from '../i18n/LocalizationHelper'
 import {
   STORAGE_KEY_HADITH_TRANSLATION_LANG,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
-} from '../core/common/StorageKeys';
-import { BilingualHadith, HadithRef } from '../hadith/HadithModels';
-import { HadithSearchService } from '../hadith/HadithSearchService';
-import { HadithDbHelper } from '../hadith/HadithDbHelper';
-import { NavHelper } from '../core/util/NavHelper';
-import { util } from '@kit.ArkTS';
-import { RawPaths } from '../core/common/RawPaths';
-import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
+} from '../core/common/StorageKeys'
+import { BilingualHadith, HadithRef } from '../hadith/HadithModels'
+import { HadithSearchService } from '../hadith/HadithSearchService'
+import { HadithDbHelper } from '../hadith/HadithDbHelper'
+import { NavHelper } from '../core/util/NavHelper'
+import { util } from '@kit.ArkTS'
+import { RawPaths } from '../core/common/RawPaths'
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper'
 
 @Entry
 @Component
@@ -36,133 +36,131 @@ struct HadithBrowsePage {
   private allIds: string[] = []; // For contexts/topics
 
   async aboutToAppear() {
-    this.colors = PageTheme.compute(this.themeMode);
-    const params = router.getParams() as Record<string, string>;
+    this.colors = PageTheme.compute(this.themeMode)
+    const params = router.getParams() as Record<string, string>
     if (params && params['type'] && params['id']) {
-      this.browseType = params['type'];
-      this.browseId = params['id'];
+      this.browseType = params['type']
+      this.browseId = params['id']
 
       if (this.browseType === 'book') {
-        const baseTitle = HadithSearchService.translate('collection_' + this.browseId, this.appLanguage);
-        this.totalCount = await HadithDbHelper.getCollectionCount(this.browseId);
-        this.pageTitle = this.totalCount > 0 ? `${baseTitle} (${this.totalCount})` : baseTitle;
+        const baseTitle = HadithSearchService.translate('collection_' + this.browseId, this.appLanguage)
+        this.totalCount = await HadithDbHelper.getCollectionCount(this.browseId)
+        this.pageTitle = this.totalCount > 0 ? `${baseTitle} (${this.totalCount})` : baseTitle
       } else if (this.browseType === 'context') {
-        const baseTitle = HadithSearchService.translate('context_' + this.browseId, this.appLanguage);
-        this.pageTitle = baseTitle; // Context length is handled in loadData
+        const baseTitle = HadithSearchService.translate('context_' + this.browseId, this.appLanguage)
+        this.pageTitle = baseTitle // Context length is handled in loadData
       } else {
-        const baseTitle = HadithSearchService.translate('topic_' + this.browseId, this.appLanguage);
-        this.pageTitle = baseTitle;
+        const baseTitle = HadithSearchService.translate('topic_' + this.browseId, this.appLanguage)
+        this.pageTitle = baseTitle
       }
 
-      await this.loadData();
+      await this.loadData()
     }
   }
 
   onThemeModeChanged() {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   async onLangChanged() {
-    await this.loadData();
+    await this.loadData()
   }
 
   async loadData() {
-    this.isLoading = true;
-    const targetLang = this.getHadithTranslationLang();
-    const ctx = getContext(this) as common.UIAbilityContext;
-    await HadithSearchService.setLanguage(ctx, targetLang, this.appLanguage);
+    this.isLoading = true
+    const targetLang = this.getHadithTranslationLang()
+    const ctx = getContext(this) as common.UIAbilityContext
+    await HadithSearchService.setLanguage(ctx, targetLang, this.appLanguage)
 
-    this.hadiths = [];
-    this.pageOffset = 0;
+    this.hadiths = []
+    this.pageOffset = 0
 
     if (this.browseType === 'book') {
-      const recs = await HadithDbHelper.getByCollection(this.browseId, this.PAGE_SIZE, this.pageOffset);
+      const recs = await HadithDbHelper.getByCollection(this.browseId, this.PAGE_SIZE, this.pageOffset)
       for (const r of recs) {
-        const bi = await HadithDbHelper.getBilingualById(ctx, r.hadith_id, targetLang, this.appLanguage);
+        const bi = await HadithDbHelper.getBilingualById(ctx, r.hadith_id, targetLang, this.appLanguage)
         if (bi) {
-          this.hadiths.push(bi);
+          this.hadiths.push(bi)
         }
       }
-      this.pageOffset += this.PAGE_SIZE;
+      this.pageOffset += this.PAGE_SIZE
     } else {
       try {
-        const filePath =
-          this.browseType === 'context' ? RawPaths.context(this.browseId) : RawPaths.topic(this.browseId);
+        const filePath = this.browseType === 'context' ? RawPaths.context(this.browseId) : RawPaths.topic(this.browseId)
 
-        const data = await ctx.resourceManager.getRawFileContent(filePath);
-        const parsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(data)) as HadithRef[];
+        const data = await ctx.resourceManager.getRawFileContent(filePath)
+        const parsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(data)) as HadithRef[]
 
-        this.allIds = parsed.map((p: HadithRef) => p.id);
+        this.allIds = parsed.map((p: HadithRef) => p.id)
 
         // 👇 FIX: Update title with count for contexts/topics
         const baseTitle =
           this.browseType === 'context' ? HadithSearchService.translate('context_' + this.browseId, this.appLanguage) :
-            HadithSearchService.translate('topic_' + this.browseId, this.appLanguage);
-        this.pageTitle = `${baseTitle} (${this.allIds.length})`;
+            HadithSearchService.translate('topic_' + this.browseId, this.appLanguage)
+        this.pageTitle = `${baseTitle} (${this.allIds.length})`
 
         for (let i = 0; i < Math.min(this.allIds.length, this.PAGE_SIZE); i++) {
-          const bi = await HadithDbHelper.getBilingualById(ctx, this.allIds[i], targetLang, this.appLanguage);
+          const bi = await HadithDbHelper.getBilingualById(ctx, this.allIds[i], targetLang, this.appLanguage)
           if (bi) {
-            bi.section = HadithDbHelper.translateSection(parsed[i].section || '', this.appLanguage);
-            bi.life_contexts = parsed[i].life_contexts;
-            bi.topics = parsed[i].topics;
-            this.hadiths.push(bi);
+            bi.section = HadithDbHelper.translateSection(parsed[i].section || '', this.appLanguage)
+            bi.life_contexts = parsed[i].life_contexts
+            bi.topics = parsed[i].topics
+            this.hadiths.push(bi)
           }
         }
-        this.pageOffset = Math.min(this.allIds.length, this.PAGE_SIZE);
+        this.pageOffset = Math.min(this.allIds.length, this.PAGE_SIZE)
       } catch (e) {
       }
     }
 
-    this.applyFilter();
-    this.isLoading = false;
+    this.applyFilter()
+    this.isLoading = false
   }
 
   async loadMore() {
     if (this.isLoading) {
-      return;
+      return
     }
     if (this.searchQuery.length > 0) {
-      return;
+      return
     } // Disable load more while searching
 
-    this.isLoading = true;
-    const targetLang = this.getHadithTranslationLang();
-    const ctx = getContext(this) as common.UIAbilityContext;
+    this.isLoading = true
+    const targetLang = this.getHadithTranslationLang()
+    const ctx = getContext(this) as common.UIAbilityContext
 
     if (this.browseType === 'book') {
-      const recs = await HadithDbHelper.getByCollection(this.browseId, this.PAGE_SIZE, this.pageOffset);
+      const recs = await HadithDbHelper.getByCollection(this.browseId, this.PAGE_SIZE, this.pageOffset)
       for (const r of recs) {
-        const bi = await HadithDbHelper.getBilingualById(ctx, r.hadith_id, targetLang, this.appLanguage);
+        const bi = await HadithDbHelper.getBilingualById(ctx, r.hadith_id, targetLang, this.appLanguage)
         if (bi) {
-          this.hadiths.push(bi);
+          this.hadiths.push(bi)
         }
       }
-      this.pageOffset += this.PAGE_SIZE;
+      this.pageOffset += this.PAGE_SIZE
     } else {
       try { // Reload JSON to get the metadata (could be cached, but this is safe)
-        const filePath =
-          this.browseType === 'context' ? RawPaths.context(this.browseId) : RawPaths.topic(this.browseId);
+        const filePath = this.browseType === 'context' ? RawPaths.context(this.browseId) : RawPaths.topic(this.browseId)
 
-        const data = await ctx.resourceManager.getRawFileContent(filePath);
-        const parsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(data)) as HadithRef[];
+        const data = await ctx.resourceManager.getRawFileContent(filePath)
+        const parsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(data)) as HadithRef[]
 
         for (let i = this.pageOffset; i < Math.min(this.allIds.length, this.pageOffset + this.PAGE_SIZE); i++) {
-          const bi = await HadithDbHelper.getBilingualById(ctx, this.allIds[i], targetLang, this.appLanguage);
+          const bi = await HadithDbHelper.getBilingualById(ctx, this.allIds[i], targetLang, this.appLanguage)
           if (bi) {
-            bi.section = HadithDbHelper.translateSection(parsed[i].section || '', this.appLanguage);
-            bi.life_contexts = parsed[i].life_contexts;
-            bi.topics = parsed[i].topics;
-            this.hadiths.push(bi);
+            bi.section = HadithDbHelper.translateSection(parsed[i].section || '', this.appLanguage)
+            bi.life_contexts = parsed[i].life_contexts
+            bi.topics = parsed[i].topics
+            this.hadiths.push(bi)
           }
         }
-        this.pageOffset += this.PAGE_SIZE;
+        this.pageOffset += this.PAGE_SIZE
       } catch (e) {
       }
     }
 
-    this.applyFilter();
-    this.isLoading = false;
+    this.applyFilter()
+    this.isLoading = false
   }
 
   build() {
@@ -194,8 +192,8 @@ struct HadithBrowsePage {
       // 👇 NEW: Search Bar for local filtering
       Search({ value: this.searchQuery, placeholder: 'Search in ' + this.pageTitle })
         .onChange((v: string) => {
-          this.searchQuery = v;
-          this.applyFilter();
+          this.searchQuery = v
+          this.applyFilter()
         })
         .margin({
           left: 16,
@@ -266,23 +264,23 @@ struct HadithBrowsePage {
                 offsetY: 2
               })
               .onClick(() => {
-                NavHelper.prepareForward();
+                NavHelper.prepareForward()
 
-                const params: Record<string, string> = {};
-                params['id'] = hadith.id;
-                const metaObj: Record<string, Object> = {};
+                const params: Record<string, string> = {}
+                params['id'] = hadith.id
+                const metaObj: Record<string, Object> = {}
                 if (hadith.section) {
-                  metaObj['section'] = hadith.section;
+                  metaObj['section'] = hadith.section
                 }
                 if (hadith.life_contexts) {
-                  metaObj['contexts'] = hadith.life_contexts;
+                  metaObj['contexts'] = hadith.life_contexts
                 }
                 if (hadith.topics) {
-                  metaObj['topics'] = hadith.topics;
+                  metaObj['topics'] = hadith.topics
                 }
-                params['meta'] = JSON.stringify(metaObj);
+                params['meta'] = JSON.stringify(metaObj)
 
-                router.pushUrl({ url: 'pages/HadithDetailsPage', params: params });
+                router.pushUrl({ url: 'pages/HadithDetailsPage', params: params })
               })
             }
           }, (h: BilingualHadith) => `browse-${h.id}-${this.appLanguage}`)
@@ -314,19 +312,19 @@ struct HadithBrowsePage {
 
   private applyFilter() {
     if (this.searchQuery.trim().length === 0) {
-      this.filteredHadiths = this.hadiths;
+      this.filteredHadiths = this.hadiths
     } else {
-      const q = this.searchQuery.toLowerCase();
+      const q = this.searchQuery.toLowerCase()
       this.filteredHadiths = this.hadiths.filter(
         (h: BilingualHadith) => h.arabic_text.includes(q) || h.translated_text.toLowerCase().includes(q) ||
-          h.section.toLowerCase().includes(q) || h.hadith_number.includes(q));
+          h.section.toLowerCase().includes(q) || h.hadith_number.includes(q))
     }
   }
 
   private getHadithTranslationLang(): string {
     if (this.hadithTransLang === 'default' || this.hadithTransLang === '') {
-      return this.appLanguage;
+      return this.appLanguage
     }
-    return this.hadithTransLang;
+    return this.hadithTransLang
   }
 }

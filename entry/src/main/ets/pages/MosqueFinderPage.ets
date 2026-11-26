@@ -1,16 +1,16 @@
-import { promptAction, router } from '@kit.ArkUI';
-import { common } from '@kit.AbilityKit';
-import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
-import { L } from '../i18n/LocalizationHelper';
-import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../core/common/StorageKeys';
-import { MosqueService } from '../mosques/MosqueService';
-import { MosqueModel } from '../mosques/MosqueModels';
-import { MosqueDbHelper } from '../mosques/MosqueDbHelper';
-import { LocationCache } from '../location/LocationCache';
-import { OfflineCityLookup } from '../location/OfflineCityLookup';
-import { MosqueStorage } from '../mosques/MosqueStorage';
-import { LocationHelper } from '../location/LocationUtils';
+import { promptAction, router } from '@kit.ArkUI'
+import { common } from '@kit.AbilityKit'
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
+import { L } from '../i18n/LocalizationHelper'
+import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../core/common/StorageKeys'
+import { MosqueService } from '../mosques/MosqueService'
+import { MosqueModel } from '../mosques/MosqueModels'
+import { MosqueDbHelper } from '../mosques/MosqueDbHelper'
+import { LocationCache } from '../location/LocationCache'
+import { OfflineCityLookup } from '../location/OfflineCityLookup'
+import { MosqueStorage } from '../mosques/MosqueStorage'
+import { LocationHelper } from '../location/LocationUtils'
 
 @Entry
 @Component
@@ -41,95 +41,93 @@ struct MosqueFinderPage {
   @State isFetchingLocation: boolean = false;
 
   async aboutToAppear() {
-    this.colors = PageTheme.compute(this.themeMode);
-    await this.initLocationAndData();
+    this.colors = PageTheme.compute(this.themeMode)
+    await this.initLocationAndData()
   }
 
   onThemeModeChanged() {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   onLangChanged() { /* Re-render localized names */
   }
 
   async initLocationAndData() {
-    this.isLoading = true;
-    this.isCountryAvailable = false;
+    this.isLoading = true
+    this.isCountryAvailable = false
     try {
-      const cache = await LocationCache.load();
+      const cache = await LocationCache.load()
       if (!cache) {
-        this.statusText = 'Location unavailable. Please ensure GPS is on.';
-        return;
+        this.statusText = 'Location unavailable. Please ensure GPS is on.'
+        return
       }
 
-      const city = OfflineCityLookup.nearestCityForTimezone(cache.latitude, cache.longitude);
+      const city = OfflineCityLookup.nearestCityForTimezone(cache.latitude, cache.longitude)
       if (city && city.countryCode) {
-        this.currentCountry = city.countryCode.toUpperCase();
+        this.currentCountry = city.countryCode.toUpperCase()
       } else {
-        this.statusText = 'Could not determine your country.';
-        return;
+        this.statusText = 'Could not determine your country.'
+        return
       }
 
-      const ctx = getContext(this) as common.UIAbilityContext;
-      const isDownloaded = MosqueDbHelper.isDownloaded(ctx, this.currentCountry);
+      const ctx = getContext(this) as common.UIAbilityContext
+      const isDownloaded = MosqueDbHelper.isDownloaded(ctx, this.currentCountry)
 
       if (!isDownloaded) {
-        const manifest = await MosqueService.fetchManifest(ctx);
+        const manifest = await MosqueService.fetchManifest(ctx)
         if (manifest && manifest.countries && manifest.countries[this.currentCountry]) {
-          const item = manifest.countries[this.currentCountry];
-          this.currentCountryName = item.country;
-          this.isCountryAvailable = true;
-          this.downloadSizeMb = item.size_mb;
-          this.statusText = `Data pack for ${item.country} is required.`;
+          const item = manifest.countries[this.currentCountry]
+          this.currentCountryName = item.country
+          this.isCountryAvailable = true
+          this.downloadSizeMb = item.size_mb
+          this.statusText = `Data pack for ${item.country} is required.`
         } else {
-          this.statusText = `Data pack for ${this.currentCountry} is not available on CDN.`;
+          this.statusText = `Data pack for ${this.currentCountry} is not available on CDN.`
         }
-        return;
+        return
       }
 
-      this.mosques = await MosqueService.searchNearby(ctx, this.currentCountry, cache.latitude, cache.longitude, 15);
-      this.statusText = this.mosques.length > 0 ? '' : 'No mosques found nearby.';
-
+      this.mosques = await MosqueService.searchNearby(ctx, this.currentCountry, cache.latitude, cache.longitude, 15)
+      this.statusText = this.mosques.length > 0 ? '' : 'No mosques found nearby.'
     } catch (e) {
-      this.statusText = 'An error occurred while resolving location.';
-      console.error(JSON.stringify(e));
+      this.statusText = 'An error occurred while resolving location.'
+      console.error(JSON.stringify(e))
     } finally {
-      this.isLoading = false; // Guaranteed to run
+      this.isLoading = false // Guaranteed to run
     }
   }
 
   async downloadCurrentCountry() {
-    this.isDownloading = true;
-    this.statusText = 'Downloading...';
+    this.isDownloading = true
+    this.statusText = 'Downloading...'
     try {
-      const ctx = getContext(this) as common.UIAbilityContext;
-      const manifest = await MosqueService.fetchManifest(ctx);
+      const ctx = getContext(this) as common.UIAbilityContext
+      const manifest = await MosqueService.fetchManifest(ctx)
 
-      let expectedSize = 0;
+      let expectedSize = 0
       if (manifest && manifest.countries && manifest.countries[this.currentCountry]) {
-        expectedSize = manifest.countries[this.currentCountry].size_bytes;
+        expectedSize = manifest.countries[this.currentCountry].size_bytes
       }
 
       if (expectedSize === 0) {
-        this.statusText = 'Could not read manifest file size.';
-        return;
+        this.statusText = 'Could not read manifest file size.'
+        return
       }
 
-      const success = await MosqueService.downloadPack(ctx, this.currentCountry, expectedSize);
+      const success = await MosqueService.downloadPack(ctx, this.currentCountry, expectedSize)
       if (success) {
-        await this.initLocationAndData();
+        await this.initLocationAndData()
       } else {
-        this.statusText = 'Download failed. File corrupted or missing on server.';
+        this.statusText = 'Download failed. File corrupted or missing on server.'
       }
     } catch (e) {
-      this.statusText = 'Download failed. Check your connection.';
+      this.statusText = 'Download failed. Check your connection.'
     } finally {
-      this.isDownloading = false; // Guaranteed to run
+      this.isDownloading = false // Guaranteed to run
     }
   }
 
   build() {
-
     Stack({ alignContent: Alignment.BottomEnd }) {
       Column() { // Top Bar
         Row({ space: 16 }) {
@@ -160,7 +158,6 @@ struct MosqueFinderPage {
             LoadingProgress().width(40).height(40).color(this.colors.accentGold)
             Text('Resolving location...').fontSize(14).fontColor(this.colors.textMuted).margin({ top: 16 })
           }.width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
-
         } else if (!MosqueDbHelper.isDownloaded(getContext(this), this.currentCountry)) { // Download Prompt
           Column() {
             Text(this.statusText)
@@ -177,8 +174,8 @@ struct MosqueFinderPage {
             }
 
             Button(this.isDownloading ? 'Downloading...' :
-              (this.isCountryAvailable ? `Download ${this.currentCountryName || this.currentCountry} Pack` :
-                'Data Pack Unavailable'))
+              this.isCountryAvailable ? `Download ${this.currentCountryName || this.currentCountry} Pack` :
+                'Data Pack Unavailable')
               .width('80%')
               .height(48)
               // FIX: Change background color to grey if unavailable
@@ -272,8 +269,8 @@ struct MosqueFinderPage {
                     }
                   } : undefined
                 }).onClick(() => {
-                  this.selectedMosque = mosque;
-                  this.showDetailsSheet = true;
+                  this.selectedMosque = mosque
+                  this.showDetailsSheet = true
                 })
               }, (
                 mosque: MosqueModel) => `mosque-${mosque.id}-${mosque.isCustom}-${this.activeFilter}-${this.appLanguage}-${mosque.name}`)
@@ -309,7 +306,7 @@ struct MosqueFinderPage {
         dragBar: true,
         backgroundColor: this.colors.cardDark,
         onDisappear: () => {
-          this.showFormSheet = false;
+          this.showFormSheet = false
         }
       })
     }
@@ -321,7 +318,7 @@ struct MosqueFinderPage {
       showClose: false,
       backgroundColor: this.colors.cardDark,
       onDisappear: () => {
-        this.selectedMosque = null;
+        this.selectedMosque = null
       }
     })
     .width('100%')
@@ -329,7 +326,6 @@ struct MosqueFinderPage {
     .backgroundColor(this.colors.primaryGreen)
     .direction(L.isRtlLang(this.appLanguage) ? Direction.Rtl : Direction.Ltr)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
-
   }
 
   @Builder
@@ -344,7 +340,7 @@ struct MosqueFinderPage {
     .alignItems(VerticalAlign.Center)
     .borderRadius({ topLeft: 12, bottomLeft: 12 }) // Matches the card's corner
     .onClick(() => {
-      this.openEditForm(mosque);
+      this.openEditForm(mosque)
     })
   }
 
@@ -360,7 +356,7 @@ struct MosqueFinderPage {
     .alignItems(VerticalAlign.Center)
     .borderRadius({ topRight: 12, bottomRight: 12 }) // Matches the card's corner
     .onClick(() => {
-      this.deleteCustomMosque(mosque);
+      this.deleteCustomMosque(mosque)
     })
   }
 
@@ -394,7 +390,7 @@ struct MosqueFinderPage {
       .maxLines(1)
       .onClick(() => {
         if (this.activeFilter !== id) {
-          this.activeFilter = id;
+          this.activeFilter = id
         }
       })
   }
@@ -444,7 +440,7 @@ struct MosqueFinderPage {
         .borderRadius(12)
         .margin({ top: 20 })
         .onClick(() => {
-          this.openAddForm();
+          this.openAddForm()
         })
       }
     }
@@ -472,14 +468,13 @@ struct MosqueFinderPage {
 
       Scroll() {
         Column({ space: 16 }) { // --- Name Input ---
-          TextInput({ text: this.formName, placeholder: 'Mosque Name *' })
-            .onChange(v => this.formName = v)
+          TextInput({ text: this.formName, placeholder: 'Mosque Name *' }).onChange((v) => (this.formName = v))
             .backgroundColor(this.colors.tintSoft)
             .fontColor(this.colors.textWhite)
 
           // --- Address Input ---
           TextInput({ text: this.formAddress, placeholder: 'Address (Optional)' })
-            .onChange(v => this.formAddress = v)
+            .onChange((v) => (this.formAddress = v))
             .backgroundColor(this.colors.tintSoft)
             .fontColor(this.colors.textWhite)
 
@@ -517,7 +512,7 @@ struct MosqueFinderPage {
           .borderRadius(8)
           .border({ width: 1, color: this.colors.borderSoft })
           .parallelGesture(TapGesture().onAction(() => {
-            this.handleLocationFetch();
+            this.handleLocationFetch()
           }))
 
           // 👇 Debug Status Text
@@ -542,7 +537,7 @@ struct MosqueFinderPage {
           .height(48)
           .backgroundColor(this.colors.tintSoft)
           .fontColor(this.colors.textWhite)
-          .onClick(() => this.showFormSheet = false)
+          .onClick(() => (this.showFormSheet = false))
 
         Button('Save')
           .layoutWeight(1)
@@ -581,7 +576,7 @@ struct MosqueFinderPage {
           }.layoutWeight(1).alignItems(HorizontalAlign.Start)
 
           Image($r('app.media.ic_close')).width(24).height(24).fillColor(this.colors.textMuted).onClick(() => {
-            this.showDetailsSheet = false;
+            this.showDetailsSheet = false
           })
         }.width('100%').padding({
           top: 10,
@@ -628,7 +623,7 @@ struct MosqueFinderPage {
           .borderRadius(12)
           .onClick(() => {
             if (this.selectedMosque) {
-              this.openMaps(this.selectedMosque);
+              this.openMaps(this.selectedMosque)
             }
           })
 
@@ -653,7 +648,7 @@ struct MosqueFinderPage {
             .borderRadius(12)
             .onClick(() => {
               if (this.selectedMosque) {
-                this.openDialer(this.selectedMosque.phone);
+                this.openDialer(this.selectedMosque.phone)
               }
             })
           }
@@ -675,7 +670,7 @@ struct MosqueFinderPage {
             .borderRadius(12)
             .onClick(() => {
               if (this.selectedMosque) {
-                this.openWebsite(this.selectedMosque.website);
+                this.openWebsite(this.selectedMosque.website)
               }
             })
           }
@@ -704,45 +699,45 @@ struct MosqueFinderPage {
   }
 
   openAddForm() {
-    this.editingMosque = null;
-    this.formName = '';
-    this.formAddress = '';
+    this.editingMosque = null
+    this.formName = ''
+    this.formAddress = ''
 
     // Pre-fill with current location if available
-    LocationCache.load().then(cache => {
+    LocationCache.load().then((cache) => {
       if (cache) {
-        this.formLat = cache.latitude.toFixed(6);
-        this.formLng = cache.longitude.toFixed(6);
+        this.formLat = cache.latitude.toFixed(6)
+        this.formLng = cache.longitude.toFixed(6)
       }
-    });
+    })
 
-    this.showFormSheet = true;
+    this.showFormSheet = true
   }
 
   openEditForm(mosque: MosqueModel) {
-    this.editingMosque = mosque;
-    this.formName = mosque.name;
-    this.formAddress = mosque.address;
-    this.formLat = mosque.lat.toFixed(6);
-    this.formLng = mosque.lng.toFixed(6);
-    this.showDetailsSheet = false; // Close details
-    this.showFormSheet = true; // Open editor
+    this.editingMosque = mosque
+    this.formName = mosque.name
+    this.formAddress = mosque.address
+    this.formLat = mosque.lat.toFixed(6)
+    this.formLng = mosque.lng.toFixed(6)
+    this.showDetailsSheet = false // Close details
+    this.showFormSheet = true // Open editor
   }
 
   async saveCustomMosque() {
     if (!this.formName.trim()) {
-      return;
+      return
     }
 
-    const lat = parseFloat(this.formLat);
-    const lng = parseFloat(this.formLng); // FIX: Validate coordinate boundaries
+    const lat = parseFloat(this.formLat)
+    const lng = parseFloat(this.formLng) // FIX: Validate coordinate boundaries
     if (isNaN(lat) || lat < -90 || lat > 90) {
-      promptAction.showToast({ message: 'Invalid Latitude' });
-      return;
+      promptAction.showToast({ message: 'Invalid Latitude' })
+      return
     }
     if (isNaN(lng) || lng < -180 || lng > 180) {
-      promptAction.showToast({ message: 'Invalid Longitude' });
-      return;
+      promptAction.showToast({ message: 'Invalid Longitude' })
+      return
     }
 
     const newMosque: MosqueModel = {
@@ -763,13 +758,13 @@ struct MosqueFinderPage {
       website: '',
       distanceKm: 0,
       isCustom: true
-    };
+    }
 
-    await MosqueStorage.addOrUpdate(newMosque);
-    this.showFormSheet = false;
-    this.activeFilter = 'custom';
+    await MosqueStorage.addOrUpdate(newMosque)
+    this.showFormSheet = false
+    this.activeFilter = 'custom'
 
-    await this.initLocationAndData();
+    await this.initLocationAndData()
   }
 
   async deleteCustomMosque(mosque: MosqueModel) { // Show confirmation dialog
@@ -780,85 +775,85 @@ struct MosqueFinderPage {
         { text: 'Delete', color: this.colors.statusExpress }]
     }).then(async (res) => {
       if (res.index === 1) {
-        await MosqueStorage.delete(mosque.id);
-        this.showDetailsSheet = false;
-        await this.initLocationAndData();
+        await MosqueStorage.delete(mosque.id)
+        this.showDetailsSheet = false
+        await this.initLocationAndData()
       }
-    });
+    })
   }
 
   openMaps(mosque: MosqueModel) {
-    const ctx = getContext(this) as common.UIAbilityContext; // Standard format: geo:lat,lng?q=lat,lng(label)
-    const uri = `geo:${mosque.lat},${mosque.lng}?q=${mosque.lat},${mosque.lng}(${encodeURIComponent(mosque.name)})`;
+    const ctx = getContext(this) as common.UIAbilityContext // Standard format: geo:lat,lng?q=lat,lng(label)
+    const uri = `geo:${mosque.lat},${mosque.lng}?q=${mosque.lat},${mosque.lng}(${encodeURIComponent(mosque.name)})`
 
     ctx.startAbility({
       action: 'ohos.want.action.viewData', uri: uri
     }).catch((e: Error) => {
-      console.error('Maps failed', e.message); // Fallback: open in browser if no map app is installed
+      console.error('Maps failed', e.message) // Fallback: open in browser if no map app is installed
       ctx.startAbility({
         action: 'ohos.want.action.viewData',
         entities: ['entity.system.browsable'],
         uri: `https://maps.google.com/?q=${mosque.lat},${mosque.lng}`
-      });
-    });
+      })
+    })
   }
 
   openDialer(phone: string) {
-    const ctx = getContext(this) as common.UIAbilityContext;
+    const ctx = getContext(this) as common.UIAbilityContext
     ctx.startAbility({
       action: 'ohos.want.action.dial', uri: `tel:${phone}`
-    }).catch((e: Error) => console.error('Dialer failed', e.message));
+    }).catch((e: Error) => console.error('Dialer failed', e.message))
   }
 
   openWebsite(url: string) {
-    const ctx = getContext(this) as common.UIAbilityContext; // Ensure URL has a protocol
-    const finalUrl = url.startsWith('http') ? url : `https://${url}`;
+    const ctx = getContext(this) as common.UIAbilityContext // Ensure URL has a protocol
+    const finalUrl = url.startsWith('http') ? url : `https://${url}`
     ctx.startAbility({
       action: 'ohos.want.action.viewData', entities: ['entity.system.browsable'], uri: finalUrl
-    }).catch((e: Error) => console.error('Browser failed', e.message));
+    }).catch((e: Error) => console.error('Browser failed', e.message))
   }
 
   private async handleLocationFetch() {
     if (this.isFetchingLocation) {
-      return;
+      return
     }
-    this.isFetchingLocation = true;
-    this.locationStatus = 'Starting GPS...';
-    this.renderTick++; // 👈 Force UI update
+    this.isFetchingLocation = true
+    this.locationStatus = 'Starting GPS...'
+    this.renderTick++ // 👈 Force UI update
 
     try {
-      const ctx = this.getUIContext().getHostContext() as common.UIAbilityContext;
-      const data = await LocationHelper.fetchLocationData(ctx, 'interactive');
+      const ctx = this.getUIContext().getHostContext() as common.UIAbilityContext
+      const data = await LocationHelper.fetchLocationData(ctx, 'interactive')
 
-      this.formLat = data.latitude.toFixed(6);
-      this.formLng = data.longitude.toFixed(6);
-      this.locationStatus = `Success: ${data.latitude.toFixed(4)}, ${data.longitude.toFixed(4)}`;
+      this.formLat = data.latitude.toFixed(6)
+      this.formLng = data.longitude.toFixed(6)
+      this.locationStatus = `Success: ${data.latitude.toFixed(4)}, ${data.longitude.toFixed(4)}`
 
-      this.getUIContext().getPromptAction().showToast({ message: "Location fetched!" });
+      this.getUIContext().getPromptAction().showToast({ message: 'Location fetched!' })
     } catch (err) {
-      const error = err as Error;
-      this.locationStatus = `ERROR: ${error.message}`;
+      const error = err as Error
+      this.locationStatus = `ERROR: ${error.message}`
 
       if (error.message === 'GPS_OFF') {
-        await LocationHelper.showLocationDisabledDialog(this.colors.accentGold);
+        await LocationHelper.showLocationDisabledDialog(this.colors.accentGold)
       } else if (error.message === 'PERMISSION_DENIED') {
-        await LocationHelper.showPermissionDeniedDialog(this.colors.accentGold);
+        await LocationHelper.showPermissionDeniedDialog(this.colors.accentGold)
       }
 
-      const cache = await LocationCache.load();
+      const cache = await LocationCache.load()
       if (cache) {
-        this.formLat = cache.latitude.toFixed(6);
-        this.formLng = cache.longitude.toFixed(6);
-        this.locationStatus += ' (Used Cache)';
+        this.formLat = cache.latitude.toFixed(6)
+        this.formLng = cache.longitude.toFixed(6)
+        this.locationStatus += ' (Used Cache)'
       }
     } finally {
-      this.isFetchingLocation = false;
-      this.renderTick++; // 👈 Force UI update
+      this.isFetchingLocation = false
+      this.renderTick++ // 👈 Force UI update
     }
   }
 
   private isRtl(): boolean {
-    return L.isRtlLang(this.appLanguage);
+    return L.isRtlLang(this.appLanguage)
   }
 
   /**
@@ -870,62 +865,62 @@ struct MosqueFinderPage {
    */
   private filteredMosques(): MosqueModel[] {
     if (this.activeFilter === 'custom') {
-      return this.mosques.filter((m: MosqueModel): boolean => m.isCustom);
+      return this.mosques.filter((m: MosqueModel): boolean => m.isCustom)
     }
     if (this.activeFilter === 'default') {
-      return this.mosques.filter((m: MosqueModel): boolean => !m.isCustom);
+      return this.mosques.filter((m: MosqueModel): boolean => !m.isCustom)
     }
-    return this.mosques;
+    return this.mosques
   }
 
   /** Number of mosques in the given filter category. */
   private filterCount(filter: string): number {
     if (filter === 'all') {
-      return this.mosques.length;
+      return this.mosques.length
     }
     if (filter === 'custom') {
-      let n = 0;
+      let n = 0
       for (const m of this.mosques) {
         if (m.isCustom) {
-          n++;
+          n++
         }
       }
-      return n;
+      return n
     }
     if (filter === 'default') {
-      let n = 0;
+      let n = 0
       for (const m of this.mosques) {
         if (!m.isCustom) {
-          n++;
+          n++
         }
       }
-      return n;
+      return n
     }
-    return 0;
+    return 0
   }
 
   /** Localized label for the given filter chip. */
   private filterLabel(filter: string): string {
     if (filter === 'all') {
-      return L.get('filter_all', this.appLanguage);
+      return L.get('filter_all', this.appLanguage)
     }
     if (filter === 'custom') {
-      return L.get('filter_custom', this.appLanguage);
+      return L.get('filter_custom', this.appLanguage)
     }
     if (filter === 'default') {
-      return L.get('filter_default', this.appLanguage);
+      return L.get('filter_default', this.appLanguage)
     }
-    return filter;
+    return filter
   }
 
   /** Localized empty-state message key for the current filter. */
   private emptyMessageKey(): string {
     if (this.activeFilter === 'custom') {
-      return 'mosque_filter_empty_custom';
+      return 'mosque_filter_empty_custom'
     }
     if (this.activeFilter === 'default') {
-      return 'mosque_filter_empty_default';
+      return 'mosque_filter_empty_default'
     }
-    return 'mosque_filter_empty_all';
+    return 'mosque_filter_empty_all'
   }
 }

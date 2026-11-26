@@ -1,5 +1,5 @@
 // entry/src/main/ets/models/DateModels.ets
-import { SourceItem } from '../i18n/SourceParser';
+import { SourceItem } from '../i18n/SourceParser'
 
 /**
  * How an Islamic event recurs within the Hijri calendar.
@@ -20,36 +20,36 @@ export enum EventSect {
 }
 
 export interface IslamicEventSource extends SourceItem {
-  type: 'hadith' | 'quran' | 'external';
-  id?: string;
-  surah?: number;
-  ayah?: number;
-  display?: string;
-  role: 'primary' | 'supporting';
+  type: 'hadith' | 'quran' | 'external'
+  id?: string
+  surah?: number
+  ayah?: number
+  display?: string
+  role: 'primary' | 'supporting'
 }
 
 export interface IslamicEvent {
-  key: string;
-  name: string;
-  month: number;
-  day: number;
-  recurrence: EventRecurrence;
-  sect: EventSect;
+  key: string
+  name: string
+  month: number
+  day: number
+  recurrence: EventRecurrence
+  sect: EventSect
 
   // v4.1.0 additions (optional for backward compat)
-  sources?: IslamicEventSource[];
-  duas?: string[];
-  recitations?: string[];
-  migrationStatus?: string;
+  sources?: IslamicEventSource[]
+  duas?: string[]
+  recitations?: string[]
+  migrationStatus?: string
 }
 
 export interface UpcomingImportantDate {
   /** Stable identifier used for localisation — e.g. 'ashura' → event_ashura */
-  key: string;
-  name: string;
-  hijriDate: string;
-  gregorianDate: Date;
+  key: string
+  name: string
+  hijriDate: string
+  gregorianDate: Date
 
   /** Calendar days from today. 0 = today, 1 = tomorrow, etc. */
-  daysUntil: number;
+  daysUntil: number
 }

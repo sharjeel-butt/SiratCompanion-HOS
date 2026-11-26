@@ -1,7 +1,7 @@
 // entry/src/main/ets/components/ExtraTimingToggleRow.ets
 
-import { ThemeColors } from '../core/ui/themes/Theme';
-import { L } from '../i18n/LocalizationHelper';
+import { ThemeColors } from '../core/ui/themes/Theme'
+import { L } from '../i18n/LocalizationHelper'
 
 /**
  * A single toggle row for one extra timing on one surface — either
@@ -47,7 +47,7 @@ export struct ExtraTimingToggleRow {
       Toggle({ type: ToggleType.Switch, isOn: this.isOn })
         .selectedColor(this.colors.accentGold)
         .onChange((value: boolean) => {
-          this.onToggle(value);
+          this.onToggle(value)
         })
     }
     .width('100%')

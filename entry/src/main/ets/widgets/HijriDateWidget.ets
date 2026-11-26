@@ -1,4 +1,4 @@
-import { WidgetCalendarDay } from './WidgetDataBuilder';
+import { WidgetCalendarDay } from './WidgetDataBuilder'
 
 @Entry
 @Component
@@ -20,7 +20,9 @@ struct HijriDateWidget {
       Column()
         .width('100%')
         .height('100%')
-        .linearGradient({ angle: 145, colors: [['#1A2235', 0], ['#0F1522', 1]] })
+        .linearGradient({
+          angle: 145, colors: [['#1A2235', 0], ['#0F1522', 1]]
+        })
         .borderRadius(24)
         .border({ width: 1, color: 'rgba(255, 255, 255, 0.15)' })
         .shadow({
@@ -91,9 +93,7 @@ struct HijriDateWidget {
                 '14.28%') // 100% / 7 columns.height('34vp') // <-- FIX: Taller cells to fill the widget.justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center)
             })
           }.width('100%').layoutWeight(1).direction(Direction.Ltr) // Keeps structural flex LTR
-
         }.width('100%').height('100%').padding(14).direction(Direction.Ltr)
-
       } else { // ==========================================
         // 2x2 / 2x4 STANDARD LAYOUT
         // ==========================================
@@ -161,7 +161,7 @@ struct HijriDateWidget {
         bundleName: 'com.siratcompanion.hos.app',
         abilityName: 'EntryAbility',
         params: { targetPage: 'pages/MainTabs', targetTab: 'calendar' }
-      });
+      })
     })
   }
 }

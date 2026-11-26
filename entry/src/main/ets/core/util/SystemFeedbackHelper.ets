@@ -1,10 +1,10 @@
 // entry/src/main/ets/helper/SystemFeedbackHelper.ets
 
-import { audio } from '@kit.AudioKit';
-import { BusinessError, settings } from '@kit.BasicServicesKit';
-import { common } from '@kit.AbilityKit';
-import { STORAGE_KEY_SYSTEM_HAPTICS_ENABLED, STORAGE_KEY_SYSTEM_SOUND_ENABLED } from '../common/StorageKeys';
-import { AppLogger } from '../app/AppLogger';
+import { audio } from '@kit.AudioKit'
+import { BusinessError, settings } from '@kit.BasicServicesKit'
+import { common } from '@kit.AbilityKit'
+import { STORAGE_KEY_SYSTEM_HAPTICS_ENABLED, STORAGE_KEY_SYSTEM_SOUND_ENABLED } from '../common/StorageKeys'
+import { AppLogger } from '../app/AppLogger'
 
 /**
  * Reads and monitors the system's sound & haptics state.
@@ -28,10 +28,10 @@ import { AppLogger } from '../app/AppLogger';
  * be queried synchronously from any page.
  */
 export class SystemFeedbackHelper {
-  private static context: common.UIAbilityContext | null = null;
-  private static observerRegistered: boolean = false;
-  private static ringerObserverRegistered: boolean = false;
-  private static volumeGroupManager: audio.AudioVolumeGroupManager | null = null;
+  private static context: common.UIAbilityContext | null = null
+  private static observerRegistered: boolean = false
+  private static ringerObserverRegistered: boolean = false
+  private static volumeGroupManager: audio.AudioVolumeGroupManager | null = null
 
   // ============================================================
   // INIT
@@ -39,19 +39,19 @@ export class SystemFeedbackHelper {
 
   /** Call once at app startup (after the ability context exists). */
   static init(context: common.UIAbilityContext): void {
-    SystemFeedbackHelper.context = context;
-    SystemFeedbackHelper.refresh();
-    SystemFeedbackHelper.registerObservers();
+    SystemFeedbackHelper.context = context
+    SystemFeedbackHelper.refresh()
+    SystemFeedbackHelper.registerObservers()
   }
 
   /** Re-read the current system state. */
   static refresh(): void {
     if (SystemFeedbackHelper.context === null) {
-      return;
+      return
     }
 
-    SystemFeedbackHelper.refreshHaptics();
-    SystemFeedbackHelper.refreshRingerMode();
+    SystemFeedbackHelper.refreshHaptics()
+    SystemFeedbackHelper.refreshRingerMode()
   }
 
   // ============================================================
@@ -60,8 +60,8 @@ export class SystemFeedbackHelper {
 
   /** True when the system allows our app to play sound. */
   static isSystemSoundEnabled(): boolean {
-    const v = AppStorage.get<boolean>(STORAGE_KEY_SYSTEM_SOUND_ENABLED);
-    return v === undefined ? true : v;
+    const v = AppStorage.get<boolean>(STORAGE_KEY_SYSTEM_SOUND_ENABLED)
+    return v === undefined ? true : v
   }
 
   // ============================================================
@@ -70,8 +70,8 @@ export class SystemFeedbackHelper {
 
   /** True when the system's haptics toggle is on. */
   static isSystemHapticsEnabled(): boolean {
-    const v = AppStorage.get<boolean>(STORAGE_KEY_SYSTEM_HAPTICS_ENABLED);
-    return v === undefined ? true : v;
+    const v = AppStorage.get<boolean>(STORAGE_KEY_SYSTEM_HAPTICS_ENABLED)
+    return v === undefined ? true : v
   }
 
   // ============================================================
@@ -80,16 +80,16 @@ export class SystemFeedbackHelper {
 
   private static refreshHaptics(): void {
     if (SystemFeedbackHelper.context === null) {
-      return;
+      return
     }
     try { // '1' = enabled, '0' = disabled. Default to enabled.
-      const raw = settings.getValueSync(SystemFeedbackHelper.context, settings.sound.HAPTIC_FEEDBACK_STATUS, '1');
-      const enabled = raw === '1';
-      AppStorage.setOrCreate(STORAGE_KEY_SYSTEM_HAPTICS_ENABLED, enabled);
+      const raw = settings.getValueSync(SystemFeedbackHelper.context, settings.sound.HAPTIC_FEEDBACK_STATUS, '1')
+      const enabled = raw === '1'
+      AppStorage.setOrCreate(STORAGE_KEY_SYSTEM_HAPTICS_ENABLED, enabled)
     } catch (err) {
-      const e = err as BusinessError;
-      AppLogger.warn('SystemFeedbackHelper', `haptics read failed: ${e.code} ${e.message}`);
-      AppStorage.setOrCreate(STORAGE_KEY_SYSTEM_HAPTICS_ENABLED, true);
+      const e = err as BusinessError
+      AppLogger.warn('SystemFeedbackHelper', `haptics read failed: ${e.code} ${e.message}`)
+      AppStorage.setOrCreate(STORAGE_KEY_SYSTEM_HAPTICS_ENABLED, true)
     }
   }
 
@@ -106,32 +106,32 @@ export class SystemFeedbackHelper {
    */
   private static refreshRingerMode(): void {
     try {
-      const audioManager = audio.getAudioManager();
-      const volumeManager = audioManager.getVolumeManager();
-      const groupManager = volumeManager.getVolumeGroupManagerSync(audio.DEFAULT_VOLUME_GROUP_ID);
+      const audioManager = audio.getAudioManager()
+      const volumeManager = audioManager.getVolumeManager()
+      const groupManager = volumeManager.getVolumeGroupManagerSync(audio.DEFAULT_VOLUME_GROUP_ID)
 
-      const mode: audio.AudioRingMode = groupManager.getRingerModeSync();
+      const mode: audio.AudioRingMode = groupManager.getRingerModeSync()
 
       // NORMAL  → sound on
       // VIBRATE → sound off (silent mode, vibration only)
       // SILENT  → sound off
-      const soundAllowed = (mode === audio.AudioRingMode.RINGER_MODE_NORMAL);
-      AppStorage.setOrCreate(STORAGE_KEY_SYSTEM_SOUND_ENABLED, soundAllowed);
+      const soundAllowed = mode === audio.AudioRingMode.RINGER_MODE_NORMAL
+      AppStorage.setOrCreate(STORAGE_KEY_SYSTEM_SOUND_ENABLED, soundAllowed)
 
       // Cache the group manager so we can register the change listener.
-      SystemFeedbackHelper.volumeGroupManager = groupManager;
+      SystemFeedbackHelper.volumeGroupManager = groupManager
 
-      console.info(`[SystemFeedbackHelper] ringer mode = ${mode}, soundAllowed = ${soundAllowed}`);
+      console.info(`[SystemFeedbackHelper] ringer mode = ${mode}, soundAllowed = ${soundAllowed}`)
     } catch (err) {
-      const e = err as BusinessError;
-      AppLogger.warn('SystemFeedbackHelper', `ringer mode read failed: ${e.code} ${e.message}`);
-      AppStorage.setOrCreate(STORAGE_KEY_SYSTEM_SOUND_ENABLED, true);
+      const e = err as BusinessError
+      AppLogger.warn('SystemFeedbackHelper', `ringer mode read failed: ${e.code} ${e.message}`)
+      AppStorage.setOrCreate(STORAGE_KEY_SYSTEM_SOUND_ENABLED, true)
     }
   }
 
   private static registerObservers(): void {
-    SystemFeedbackHelper.registerHapticsObserver();
-    SystemFeedbackHelper.registerRingerModeObserver();
+    SystemFeedbackHelper.registerHapticsObserver()
+    SystemFeedbackHelper.registerRingerModeObserver()
   }
 
   // ============================================================
@@ -140,46 +140,46 @@ export class SystemFeedbackHelper {
 
   private static registerHapticsObserver(): void {
     if (SystemFeedbackHelper.observerRegistered) {
-      return;
+      return
     }
     if (SystemFeedbackHelper.context === null) {
-      return;
+      return
     }
 
     try {
       settings.registerKeyObserver(SystemFeedbackHelper.context, settings.sound.HAPTIC_FEEDBACK_STATUS,
         settings.domainName.USER_PROPERTY, () => {
-          SystemFeedbackHelper.refreshHaptics();
-        });
-      SystemFeedbackHelper.observerRegistered = true;
+          SystemFeedbackHelper.refreshHaptics()
+        })
+      SystemFeedbackHelper.observerRegistered = true
     } catch (err) {
-      const e = err as BusinessError;
-      AppLogger.warn('SystemFeedbackHelper', `haptics observer registration failed: ${e.code} ${e.message}`);
+      const e = err as BusinessError
+      AppLogger.warn('SystemFeedbackHelper', `haptics observer registration failed: ${e.code} ${e.message}`)
     }
   }
 
   private static registerRingerModeObserver(): void {
     if (SystemFeedbackHelper.ringerObserverRegistered) {
-      return;
+      return
     }
     if (SystemFeedbackHelper.volumeGroupManager === null) { // Try once more to obtain it — the initial read may have
       // failed before the audio service was fully available.
-      SystemFeedbackHelper.refreshRingerMode();
+      SystemFeedbackHelper.refreshRingerMode()
       if (SystemFeedbackHelper.volumeGroupManager === null) {
-        return;
+        return
       }
     }
 
     try {
       SystemFeedbackHelper.volumeGroupManager!.on('ringerModeChange', (mode: audio.AudioRingMode) => {
-        const soundAllowed = (mode === audio.AudioRingMode.RINGER_MODE_NORMAL);
-        AppStorage.setOrCreate(STORAGE_KEY_SYSTEM_SOUND_ENABLED, soundAllowed);
-        console.info(`[SystemFeedbackHelper] ringerModeChange → ${mode}, soundAllowed = ${soundAllowed}`);
-      });
-      SystemFeedbackHelper.ringerObserverRegistered = true;
+        const soundAllowed = mode === audio.AudioRingMode.RINGER_MODE_NORMAL
+        AppStorage.setOrCreate(STORAGE_KEY_SYSTEM_SOUND_ENABLED, soundAllowed)
+        console.info(`[SystemFeedbackHelper] ringerModeChange → ${mode}, soundAllowed = ${soundAllowed}`)
+      })
+      SystemFeedbackHelper.ringerObserverRegistered = true
     } catch (err) {
-      const e = err as BusinessError;
-      AppLogger.warn('SystemFeedbackHelper', `ringer observer registration failed: ${e.code} ${e.message}`);
+      const e = err as BusinessError
+      AppLogger.warn('SystemFeedbackHelper', `ringer observer registration failed: ${e.code} ${e.message}`)
     }
   }
 }

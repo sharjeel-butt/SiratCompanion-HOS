@@ -1,16 +1,16 @@
 // entry/src/main/ets/hadith/HadithCoreDbHelper.ets
 
-import { relationalStore } from '@kit.ArkData';
-import { common } from '@kit.AbilityKit';
-import { AppLogger } from '../core/app/AppLogger';
-import { HadithGrading, Sanad, SanadStep } from './HadithModels';
+import { relationalStore } from '@kit.ArkData'
+import { common } from '@kit.AbilityKit'
+import { AppLogger } from '../core/app/AppLogger'
+import { HadithGrading, Sanad, SanadStep } from './HadithModels'
 
 export class HadithCoreDbHelper {
-  private static store: relationalStore.RdbStore | null = null;
+  private static store: relationalStore.RdbStore | null = null
 
   static async open(context: common.Context): Promise<boolean> {
     if (HadithCoreDbHelper.store !== null) {
-      return true;
+      return true
     }
     try {
       const config: relationalStore.StoreConfig = {
@@ -18,38 +18,37 @@ export class HadithCoreDbHelper {
         securityLevel: relationalStore.SecurityLevel.S1,
         customDir: 'core',
         isReadOnly: true
-      };
-      HadithCoreDbHelper.store = await relationalStore.getRdbStore(context, config);
-      return true;
+      }
+      HadithCoreDbHelper.store = await relationalStore.getRdbStore(context, config)
+      return true
     } catch (e) {
-      AppLogger.error('HadithCoreDbHelper', `open failed: ${(e as Error).message}`);
-      return false;
+      AppLogger.error('HadithCoreDbHelper', `open failed: ${(e as Error).message}`)
+      return false
     }
   }
 
   static async getSanad(context: common.Context, hadithId: string): Promise<Sanad | null> {
-    const ok = await HadithCoreDbHelper.open(context);
+    const ok = await HadithCoreDbHelper.open(context)
     if (!ok || HadithCoreDbHelper.store === null) {
-      return null;
+      return null
     }
 
     // 👇 FIX: Normalize the ID before querying
-    const canonicalId = HadithCoreDbHelper.normalizeId(hadithId);
+    const canonicalId = HadithCoreDbHelper.normalizeId(hadithId)
 
     try {
       const metaRs = await HadithCoreDbHelper.store.querySql(
         'SELECT sanad_ar, sanad_normalized, sanad_confidence FROM hadiths WHERE hadith_id = ?',
-        [canonicalId] // 👈 Use canonicalId
-      );
-      let arabic: string | null = null;
-      let normalized: string | null = null;
-      let confidence: string = 'none';
+        [canonicalId] // 👈 Use canonicalId)
+      let arabic: string | null = null
+      let normalized: string | null = null
+      let confidence: string = 'none'
       if (metaRs.goToFirstRow()) {
-        arabic = metaRs.getString(0);
-        normalized = metaRs.getString(1);
-        confidence = metaRs.getString(2) ?? 'none';
+        arabic = metaRs.getString(0)
+        normalized = metaRs.getString(1)
+        confidence = metaRs.getString(2) ?? 'none'
       }
-      metaRs.close();
+      metaRs.close()
 
       // Hide sanad entirely when confidence = 'none'
       if (confidence === 'none') {
@@ -58,7 +57,7 @@ export class HadithCoreDbHelper {
           normalized: null,
           confidence: 'none',
           steps: []
-        };
+        }
       }
 
       const stepsRs = await HadithCoreDbHelper.store.querySql(
@@ -66,9 +65,8 @@ export class HadithCoreDbHelper {
           'n.generation, n.reliability, n.death_hijri, n.auto_derived ' +
           'FROM hadith_narrators hn JOIN narrators n ON n.narrator_id = hn.narrator_id ' +
           'WHERE hn.hadith_id = ? ORDER BY hn.position',
-        [canonicalId] // 👈 Use canonicalId
-      );
-      const steps: SanadStep[] = [];
+        [canonicalId] // 👈 Use canonicalId)
+      const steps: SanadStep[] = []
       while (stepsRs.goToNextRow()) {
         const step: SanadStep = {
           position: stepsRs.getLong(0),
@@ -79,42 +77,40 @@ export class HadithCoreDbHelper {
           reliability: stepsRs.getString(5),
           death_hijri: stepsRs.getLong(6) > 0 ? stepsRs.getLong(6) : null,
           auto_derived: stepsRs.getLong(7)
-        };
-        steps.push(step);
+        }
+        steps.push(step)
       }
-      stepsRs.close();
+      stepsRs.close()
 
       return {
         arabic,
         normalized,
         confidence,
         steps
-      };
+      }
     } catch (e) {
-      AppLogger.warn('HadithCoreDbHelper', `getSanad(${hadithId}): ${(e as Error).message}`);
-      return null;
+      AppLogger.warn('HadithCoreDbHelper', `getSanad(${hadithId}): ${(e as Error).message}`)
+      return null
     }
   }
 
   static async getGrades(context: common.Context, hadithId: string): Promise<HadithGrading[]> {
-    const ok = await HadithCoreDbHelper.open(context);
+    const ok = await HadithCoreDbHelper.open(context)
     if (!ok || HadithCoreDbHelper.store === null) {
-      return [];
+      return []
     }
 
     // 👇 FIX: Normalize the ID before querying
-    const canonicalId = HadithCoreDbHelper.normalizeId(hadithId);
+    const canonicalId = HadithCoreDbHelper.normalizeId(hadithId)
 
     try {
       const rs = await HadithCoreDbHelper.store.querySql(
-        "SELECT grade, grader, source, grade_type, note " +
-          "FROM hadith_gradings WHERE hadith_id = ? " +
-          "ORDER BY CASE grade " +
+        'SELECT grade, grader, source, grade_type, note ' + 'FROM hadith_gradings WHERE hadith_id = ? ' +
+          'ORDER BY CASE grade ' +
           "  WHEN 'sahih' THEN 1 WHEN 'hasan' THEN 2 " +
           "  WHEN 'daif' THEN 3 WHEN 'mawdu' THEN 4 ELSE 5 END",
-        [canonicalId] // 👈 Use canonicalId
-      );
-      const out: HadithGrading[] = [];
+        [canonicalId] // 👈 Use canonicalId)
+      const out: HadithGrading[] = []
       while (rs.goToNextRow()) {
         out.push({
           grade: rs.getString(0) ?? '',
@@ -122,13 +118,13 @@ export class HadithCoreDbHelper {
           source: rs.getString(2) ?? '',
           gradeType: rs.getString(3) ?? 'overall',
           note: rs.getString(4)
-        });
+        })
       }
-      rs.close();
-      return out;
+      rs.close()
+      return out
     } catch (e) {
-      AppLogger.warn('HadithCoreDbHelper', `getGrades(${hadithId}): ${(e as Error).message}`);
-      return [];
+      AppLogger.warn('HadithCoreDbHelper', `getGrades(${hadithId}): ${(e as Error).message}`)
+      return []
     }
   }
 
@@ -137,38 +133,38 @@ export class HadithCoreDbHelper {
    * into the canonical format used by core.db (e.g., 'bukhari:1').
    */
   private static normalizeId(rawId: string): string {
-    let baseId = rawId;
+    let baseId = rawId
     // Strip language prefix (e.g., "eng-", "urd-", "ara-")
     if (baseId.includes('-')) {
-      baseId = baseId.substring(baseId.indexOf('-') + 1);
+      baseId = baseId.substring(baseId.indexOf('-') + 1)
     }
     // Expand collection alias
-    const parts = baseId.split(':');
+    const parts = baseId.split(':')
     if (parts.length === 2) {
-      const col = parts[0].toLowerCase();
-      const num = parts[1];
+      const col = parts[0].toLowerCase()
+      const num = parts[1]
       if (col === 'bukh') {
-        return `bukhari:${num}`;
+        return `bukhari:${num}`
       }
       if (col === 'musl') {
-        return `muslim:${num}`;
+        return `muslim:${num}`
       }
       if (col === 'abud') {
-        return `abudawud:${num}`;
+        return `abudawud:${num}`
       }
       if (col === 'tirm') {
-        return `tirmidhi:${num}`;
+        return `tirmidhi:${num}`
       }
       if (col === 'nasa') {
-        return `nasai:${num}`;
+        return `nasai:${num}`
       }
       if (col === 'ibnm') {
-        return `ibnmajah:${num}`;
+        return `ibnmajah:${num}`
       }
       if (col === 'mali') {
-        return `malik:${num}`;
+        return `malik:${num}`
       }
     }
-    return baseId;
+    return baseId
   }
 }

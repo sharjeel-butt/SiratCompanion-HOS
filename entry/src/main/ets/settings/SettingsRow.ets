@@ -1,7 +1,7 @@
 // entry/src/main/ets/components/SettingsRow.ets
 
-import { ThemeColors } from '../core/ui/themes/Theme';
-import { L } from '../i18n/LocalizationHelper';
+import { ThemeColors } from '../core/ui/themes/Theme'
+import { L } from '../i18n/LocalizationHelper'
 
 /**
  * A single tappable settings row: title, optional description, a
@@ -63,7 +63,7 @@ export struct SettingsRow {
     .borderRadius(12)
     .margin({ bottom: 8 })
     .onClick(() => {
-      this.onTap();
+      this.onTap()
     })
   }
 }

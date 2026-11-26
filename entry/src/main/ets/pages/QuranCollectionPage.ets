@@ -1,18 +1,18 @@
-import { common } from '@kit.AbilityKit';
-import { router } from '@kit.ArkUI';
-import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
-import { L } from '../i18n/LocalizationHelper';
+import { common } from '@kit.AbilityKit'
+import { router } from '@kit.ArkUI'
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
+import { L } from '../i18n/LocalizationHelper'
 import {
   STORAGE_KEY_DUA_TRANSLATION_LANG,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
-} from '../core/common/StorageKeys';
-import { QuranGraphService } from '../quran/QuranGraphService';
-import { DuaService } from '../duas/DuaService';
-import { CompleteDua } from '../duas/DuaModels';
-import { DuaCard } from '../duas/DuaCard';
-import { NavHelper } from '../core/util/NavHelper';
+} from '../core/common/StorageKeys'
+import { QuranGraphService } from '../quran/QuranGraphService'
+import { DuaService } from '../duas/DuaService'
+import { CompleteDua } from '../duas/DuaModels'
+import { DuaCard } from '../duas/DuaCard'
+import { NavHelper } from '../core/util/NavHelper'
 
 @Entry
 @Component
@@ -26,42 +26,42 @@ struct QuranCollectionPage {
   @State isLoading: boolean = true;
 
   async aboutToAppear() {
-    this.colors = PageTheme.compute(this.themeMode);
-    const params = router.getParams() as Record<string, string>;
-    this.title = params['title'] || 'Collection';
-    console.log('QuranCollectionPage Router params: ' + JSON.stringify(params, null, 2));
-    const ctx = getContext(this) as common.UIAbilityContext;
-    await QuranGraphService.init(ctx, this.appLanguage);
+    this.colors = PageTheme.compute(this.themeMode)
+    const params = router.getParams() as Record<string, string>
+    this.title = params['title'] || 'Collection'
+    console.log('QuranCollectionPage Router params: ' + JSON.stringify(params, null, 2))
+    const ctx = getContext(this) as common.UIAbilityContext
+    await QuranGraphService.init(ctx, this.appLanguage)
 
-    let duaIds: string[] = [];
+    let duaIds: string[] = []
     if (params['collectionId']) {
-      duaIds = QuranGraphService.getDuaIdsForCollection(params['collectionId']);
+      duaIds = QuranGraphService.getDuaIdsForCollection(params['collectionId'])
     } else if (params['prophetId']) {
-      duaIds = QuranGraphService.getDuaIdsForProphet(params['prophetId']);
+      duaIds = QuranGraphService.getDuaIdsForProphet(params['prophetId'])
     }
 
     // 👈 Respect the independent Translation Language setting here
-    const transLang = this.duaTransLang === 'default' ? this.appLanguage : this.duaTransLang;
-    const allDuas = await DuaService.loadDuas(ctx, transLang, this.appLanguage);
+    const transLang = this.duaTransLang === 'default' ? this.appLanguage : this.duaTransLang
+    const allDuas = await DuaService.loadDuas(ctx, transLang, this.appLanguage)
 
-    this.duas = allDuas.filter((d: CompleteDua) => duaIds.includes(d.id));
-    this.isLoading = false;
+    this.duas = allDuas.filter((d: CompleteDua) => duaIds.includes(d.id))
+    this.isLoading = false
   }
 
   onDuaLangChanged() {
-    this.aboutToAppear(); // Reload data immediately when the setting changes
+    this.aboutToAppear() // Reload data immediately when the setting changes
   }
 
   async onPageShow() { // Reload when navigating back from Customize or DuaDetailsPage
-    await this.aboutToAppear();
+    await this.aboutToAppear()
   }
 
   onThemeModeChanged() {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   onLangChanged() {
-    this.aboutToAppear();
+    this.aboutToAppear()
   }
 
   build() {
@@ -114,10 +114,10 @@ struct QuranCollectionPage {
               .backgroundColor(this.colors.cardDark)
               .borderRadius(12)
               .onClick(() => {
-                NavHelper.prepareForward();
+                NavHelper.prepareForward()
                 router.pushUrl({
                   url: 'pages/DuaDetailsPage', params: { id: dua.id }
-                });
+                })
               })
             }
           }, (dua: CompleteDua) => `dua-${dua.id}-${this.appLanguage}-${this.duaTransLang}`)

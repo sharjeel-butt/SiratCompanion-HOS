@@ -1,8 +1,8 @@
 // entry/src/main/ets/helper/LayoutHelper.ets
 
-import { mediaquery } from '@kit.ArkUI';
-import { Breakpoints } from './Breakpoints';
-import { STORAGE_KEY_BREAKPOINT } from '../common/StorageKeys';
+import { mediaquery } from '@kit.ArkUI'
+import { Breakpoints } from './Breakpoints'
+import { STORAGE_KEY_BREAKPOINT } from '../common/StorageKeys'
 
 /**
  * Reactive breakpoint tracking for the whole app.
@@ -17,56 +17,56 @@ import { STORAGE_KEY_BREAKPOINT } from '../common/StorageKeys';
  * over the session.
  */
 export class LayoutHelper {
-  private static installed: boolean = false;
-  private static smListener: mediaquery.MediaQueryListener | null = null;
-  private static mdListener: mediaquery.MediaQueryListener | null = null;
-  private static lgListener: mediaquery.MediaQueryListener | null = null;
-  private static splitMode: boolean = false;
+  private static installed: boolean = false
+  private static smListener: mediaquery.MediaQueryListener | null = null
+  private static mdListener: mediaquery.MediaQueryListener | null = null
+  private static lgListener: mediaquery.MediaQueryListener | null = null
+  private static splitMode: boolean = false
 
   /** Install once at app startup. */
   static install(): void {
     if (LayoutHelper.installed) {
-      return;
+      return
     }
-    LayoutHelper.installed = true;
+    LayoutHelper.installed = true
 
     try {
-      LayoutHelper.smListener = mediaquery.matchMediaSync('(width >= 320vp)');
-      LayoutHelper.mdListener = mediaquery.matchMediaSync('(width >= 600vp)');
-      LayoutHelper.lgListener = mediaquery.matchMediaSync('(width >= 840vp)');
+      LayoutHelper.smListener = mediaquery.matchMediaSync('(width >= 320vp)')
+      LayoutHelper.mdListener = mediaquery.matchMediaSync('(width >= 600vp)')
+      LayoutHelper.lgListener = mediaquery.matchMediaSync('(width >= 840vp)')
     } catch (err) {
-      console.warn('[LayoutHelper] listener creation failed');
+      console.warn('[LayoutHelper] listener creation failed')
     }
 
-    LayoutHelper.evaluate();
+    LayoutHelper.evaluate()
 
     const onChange = (): void => {
-      LayoutHelper.evaluate();
-    };
+      LayoutHelper.evaluate()
+    }
 
     if (LayoutHelper.smListener !== null) {
-      LayoutHelper.smListener.on('change', onChange);
+      LayoutHelper.smListener.on('change', onChange)
     }
     if (LayoutHelper.mdListener !== null) {
-      LayoutHelper.mdListener.on('change', onChange);
+      LayoutHelper.mdListener.on('change', onChange)
     }
     if (LayoutHelper.lgListener !== null) {
-      LayoutHelper.lgListener.on('change', onChange);
+      LayoutHelper.lgListener.on('change', onChange)
     }
   }
 
   /** Current breakpoint from AppStorage. */
   static current(): string {
-    const v = AppStorage.get<string>(STORAGE_KEY_BREAKPOINT);
-    return (v !== undefined && v.length > 0) ? v : Breakpoints.SM;
+    const v = AppStorage.get<string>(STORAGE_KEY_BREAKPOINT)
+    return v !== undefined && v.length > 0 ? v : Breakpoints.SM
   }
 
   static isTablet(): boolean {
-    return Breakpoints.isTablet(LayoutHelper.current());
+    return Breakpoints.isTablet(LayoutHelper.current())
   }
 
   static isLarge(): boolean {
-    return Breakpoints.isLarge(LayoutHelper.current());
+    return Breakpoints.isLarge(LayoutHelper.current())
   }
 
   /**
@@ -82,7 +82,7 @@ export class LayoutHelper {
    * setSplitMode() on window-status change and on foreground.
    */
   static isSplitMode(): boolean {
-    return LayoutHelper.splitMode;
+    return LayoutHelper.splitMode
   }
 
   /**
@@ -91,10 +91,10 @@ export class LayoutHelper {
    */
   static setSplitMode(isSplit: boolean): void {
     if (LayoutHelper.splitMode === isSplit) {
-      return;
+      return
     }
-    LayoutHelper.splitMode = isSplit;
-    console.info(`[LayoutHelper] splitMode = ${isSplit}`);
+    LayoutHelper.splitMode = isSplit
+    console.info(`[LayoutHelper] splitMode = ${isSplit}`)
   }
 
   /**
@@ -102,17 +102,17 @@ export class LayoutHelper {
    * Called at install time and whenever a threshold crosses.
    */
   private static evaluate(): void {
-    let bp = Breakpoints.XS;
+    let bp = Breakpoints.XS
 
     if (LayoutHelper.lgListener !== null && LayoutHelper.lgListener.matches) {
-      bp = Breakpoints.LG;
+      bp = Breakpoints.LG
     } else if (LayoutHelper.mdListener !== null && LayoutHelper.mdListener.matches) {
-      bp = Breakpoints.MD;
+      bp = Breakpoints.MD
     } else if (LayoutHelper.smListener !== null && LayoutHelper.smListener.matches) {
-      bp = Breakpoints.SM;
+      bp = Breakpoints.SM
     }
 
-    AppStorage.setOrCreate(STORAGE_KEY_BREAKPOINT, bp);
-    console.info(`[LayoutHelper] breakpoint = ${bp}`);
+    AppStorage.setOrCreate(STORAGE_KEY_BREAKPOINT, bp)
+    console.info(`[LayoutHelper] breakpoint = ${bp}`)
   }
 }

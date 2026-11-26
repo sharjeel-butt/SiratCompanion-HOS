@@ -1,10 +1,10 @@
 // entry/src/main/ets/common/PageTheme.ets
 
-import { mediaquery } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode } from './themes/Theme';
-import { common, ConfigurationConstant } from '@kit.AbilityKit';
-import { STORAGE_KEY_APP_THEME, STORAGE_KEY_THEME_MODE } from '../common/StorageKeys';
-import { ThemeService } from './themes/ThemeService';
+import { mediaquery } from '@kit.ArkUI'
+import { Theme, ThemeColors, ThemeMode } from './themes/Theme'
+import { common, ConfigurationConstant } from '@kit.AbilityKit'
+import { STORAGE_KEY_APP_THEME, STORAGE_KEY_THEME_MODE } from '../common/StorageKeys'
+import { ThemeService } from './themes/ThemeService'
 
 export class PageTheme {
   /**
@@ -16,9 +16,9 @@ export class PageTheme {
    */
   static isSystemDark(): boolean {
     try {
-      return mediaquery.matchMediaSync('(dark-mode: true)').matches;
+      return mediaquery.matchMediaSync('(dark-mode: true)').matches
     } catch (err) {
-      return false;
+      return false
     }
   }
 
@@ -32,43 +32,42 @@ export class PageTheme {
    */
   static isDarkFor(themeMode: string): boolean {
     if (themeMode === ThemeMode.DARK) {
-      return true;
+      return true
     }
     if (themeMode === ThemeMode.LIGHT) {
-      return false;
+      return false
     }
-    return PageTheme.isSystemDark();
+    return PageTheme.isSystemDark()
   }
 
   static compute(themeMode: string): ThemeColors {
-    return Theme.getColors(themeMode, PageTheme.isSystemDark(), PageTheme.currentPreset());
+    return Theme.getColors(themeMode, PageTheme.isSystemDark(), PageTheme.currentPreset())
   }
 
   static installSystemListener(themeMode: string,
     onChange: (colors: ThemeColors) => void): mediaquery.MediaQueryListener | null {
     try {
-      const listener = mediaquery.matchMediaSync('(dark-mode: true)');
+      const listener = mediaquery.matchMediaSync('(dark-mode: true)')
       listener.on('change', (result: mediaquery.MediaQueryResult) => {
-
-        const live = AppStorage.get<string>(STORAGE_KEY_THEME_MODE);
-        const effective = (live !== undefined && live.length > 0) ? live : themeMode;
+        const live = AppStorage.get<string>(STORAGE_KEY_THEME_MODE)
+        const effective = live !== undefined && live.length > 0 ? live : themeMode
 
         if (effective === ThemeMode.SYSTEM) {
-          onChange(Theme.getColors(effective, result.matches, PageTheme.currentPreset()));
+          onChange(Theme.getColors(effective, result.matches, PageTheme.currentPreset()))
         }
-      });
-      return listener;
+      })
+      return listener
     } catch (err) {
-      return null;
+      return null
     }
   }
 
   static uninstallSystemListener(listener: mediaquery.MediaQueryListener | null): void {
     if (!listener) {
-      return;
+      return
     }
     try {
-      listener.off('change');
+      listener.off('change')
     } catch (err) { /* ignore */
     }
   }
@@ -79,26 +78,26 @@ export class PageTheme {
    */
   static applyColorMode(mode: string, context: common.UIAbilityContext): void {
     try {
-      let sysMode: ConfigurationConstant.ColorMode;
+      let sysMode: ConfigurationConstant.ColorMode
 
       if (mode === ThemeMode.DARK) {
-        sysMode = ConfigurationConstant.ColorMode.COLOR_MODE_DARK;
+        sysMode = ConfigurationConstant.ColorMode.COLOR_MODE_DARK
       } else if (mode === ThemeMode.LIGHT) {
-        sysMode = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+        sysMode = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT
       } else { // SYSTEM (Auto Detect)
-        sysMode = ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET;
+        sysMode = ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET
       }
 
-      context.getApplicationContext().setColorMode(sysMode);
+      context.getApplicationContext().setColorMode(sysMode)
     } catch (err) {
-      console.warn(`[PageTheme] Failed to set colorMode: ${JSON.stringify(err)}`);
+      console.warn(`[PageTheme] Failed to set colorMode: ${JSON.stringify(err)}`)
     }
   }
 
   /** Reads the current preset from AppStorage on every call. */
   private static currentPreset(): string {
-    const v = AppStorage.get<string>(STORAGE_KEY_APP_THEME);
+    const v = AppStorage.get<string>(STORAGE_KEY_APP_THEME)
 
-    return ThemeService.ensureValidThemeId(v);
+    return ThemeService.ensureValidThemeId(v)
   }
 }

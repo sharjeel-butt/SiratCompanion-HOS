@@ -14,7 +14,9 @@ struct AdhkarWidget {
       Column()
         .width('100%')
         .height('100%')
-        .linearGradient({ angle: 145, colors: [['#1A2235', 0], ['#0F1522', 1]] })
+        .linearGradient({
+          angle: 145, colors: [['#1A2235', 0], ['#0F1522', 1]]
+        })
         .borderRadius(24)
         .border({ width: 1, color: 'rgba(255, 255, 255, 0.15)' })
         .shadow({
@@ -42,7 +44,6 @@ struct AdhkarWidget {
             .maxLines(4)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
         } else {
-
           // Header Row
           Row() {
             if (this.isRtl) {
@@ -135,7 +136,6 @@ struct AdhkarWidget {
             .margin({ top: 4, bottom: 0 })
             .direction(Direction.Ltr)
           }.width('100%')
-
         }
       }
       .width('100%')
@@ -154,7 +154,7 @@ struct AdhkarWidget {
         bundleName: 'com.siratcompanion.hos.app',
         abilityName: 'EntryAbility',
         params: { targetPage: 'pages/DuasPage' }
-      });
+      })
     })
   }
 }

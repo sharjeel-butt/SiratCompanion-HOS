@@ -1,5 +1,5 @@
 // entry/src/main/ets/core/NavHelper.ets
-import { STORAGE_KEY_NAV_DIRECTION } from '../common/StorageKeys';
+import { STORAGE_KEY_NAV_DIRECTION } from '../common/StorageKeys'
 
 /**
  * Decides the slide direction for routed navigation.
@@ -16,10 +16,10 @@ import { STORAGE_KEY_NAV_DIRECTION } from '../common/StorageKeys';
  */
 export class NavHelper {
   static prepareForward(): void {
-    AppStorage.setOrCreate(STORAGE_KEY_NAV_DIRECTION, 'forward');
+    AppStorage.setOrCreate(STORAGE_KEY_NAV_DIRECTION, 'forward')
   }
 
   static prepareBackward(): void {
-    AppStorage.setOrCreate(STORAGE_KEY_NAV_DIRECTION, 'backward');
+    AppStorage.setOrCreate(STORAGE_KEY_NAV_DIRECTION, 'backward')
   }
 }

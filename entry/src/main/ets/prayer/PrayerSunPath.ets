@@ -1,55 +1,55 @@
 // entry/src/main/ets/components/PrayerSunPath.ets
 
-import { ThemeColors } from '../core/ui/themes/Theme';
-import { L } from '../i18n/LocalizationHelper';
-import { PrayerModel } from '../prayer/PrayerModel';
-import { PrayerManager } from '../prayer/PrayerManager';
-import { ClockFormat, ClockFormatHelper } from '../core/util/ClockFormat';
-import { STORAGE_KEY_TIME_FORMAT } from '../core/common/StorageKeys';
+import { ThemeColors } from '../core/ui/themes/Theme'
+import { L } from '../i18n/LocalizationHelper'
+import { PrayerModel } from '../prayer/PrayerModel'
+import { PrayerManager } from '../prayer/PrayerManager'
+import { ClockFormat, ClockFormatHelper } from '../core/util/ClockFormat'
+import { STORAGE_KEY_TIME_FORMAT } from '../core/common/StorageKeys'
 
 interface PathPoint {
-  x: number;
-  y: number;
+  x: number
+  y: number
 }
 
 interface Star {
-  x: number;
-  y: number;
-  r: number;
-  a: number;
+  x: number
+  y: number
+  r: number
+  a: number
 }
 
-const LABEL_FONT_SIZE = 30;
-const TIME_FONT_SIZE = 22;
-const LABEL_TIME_GAP = 12;
+const LABEL_FONT_SIZE = 30
+const TIME_FONT_SIZE = 22
+const LABEL_TIME_GAP = 12
 
-const TICKER_LABEL_FONT_SIZE = 30;
-const TICKER_TIME_FONT_SIZE = 22;
+const TICKER_LABEL_FONT_SIZE = 30
+const TICKER_TIME_FONT_SIZE = 22
 
-const EXTRA_LABEL_FONT_SIZE = 22;
-const EXTRA_TIME_FONT_SIZE = 18;
+const EXTRA_LABEL_FONT_SIZE = 22
+const EXTRA_TIME_FONT_SIZE = 18
 
-const ARC_EDGE_PAD = 12;
-const CANVAS_HEIGHT = 384;
+const ARC_EDGE_PAD = 12
+const CANVAS_HEIGHT = 384
 
-const ARC_BASE_Y = 220;
-const ARCH_HEIGHT = 90;
+const ARC_BASE_Y = 220
+const ARCH_HEIGHT = 90
 
-const HOUR_TICK_TOP = ARC_BASE_Y + 6;
-const HOUR_TICK_LEN = 6;
+const HOUR_TICK_TOP = ARC_BASE_Y + 6
+const HOUR_TICK_LEN = 6
 
-const SUN_LABEL_Y = 274;
-const SUN_TIME_Y = 286;
-const EXTRA_LABEL_Y = 318;
-const EXTRA_TIME_Y = 330;
-const TICKER_LABEL_Y = 356;
-const TICKER_TIME_Y = 376;
-const EXTRA_LINE_END_Y = 300;
-const SUN_LEADER_GAP = 28;
+const SUN_LABEL_Y = 274
+const SUN_TIME_Y = 286
+const EXTRA_LABEL_Y = 318
+const EXTRA_TIME_Y = 330
+const TICKER_LABEL_Y = 356
+const TICKER_TIME_Y = 376
+const EXTRA_LINE_END_Y = 300
+const SUN_LEADER_GAP = 28
 
-const TICKER_TICK_MS = 500;
-const TICKER_WRAP_TICK_MS = 16;
-const TICKER_WRAP_MS = 2400;
+const TICKER_TICK_MS = 500
+const TICKER_WRAP_TICK_MS = 16
+const TICKER_WRAP_MS = 2400
 
 @Component
 export struct PrayerSunPath {
@@ -82,39 +82,39 @@ export struct PrayerSunPath {
   private canvasWidthForStars: number = 0;
 
   aboutToAppear(): void {
-    this.restartTickerTimer(TICKER_TICK_MS);
-    this.tick();
+    this.restartTickerTimer(TICKER_TICK_MS)
+    this.tick()
   }
 
   aboutToDisappear(): void {
     if (this.tickerTimerId !== -1) {
-      clearInterval(this.tickerTimerId);
-      this.tickerTimerId = -1;
+      clearInterval(this.tickerTimerId)
+      this.tickerTimerId = -1
     }
   }
 
   build() {
     Column() {
       Canvas(this.ctx).width('100%').height(this.canvasHeight).onReady(() => {
-        this.canvasReady = true;
-        const w: number = this.ctx.width;
-        const h: number = this.ctx.height;
+        this.canvasReady = true
+        const w: number = this.ctx.width
+        const h: number = this.ctx.height
         if (w > 0) {
-          this.canvasWidth = w;
+          this.canvasWidth = w
           if (h > 0) {
-            this.canvasHeight = h;
+            this.canvasHeight = h
           }
         }
-        this.redraw();
+        this.redraw()
       }).onAreaChange((oldArea: Area, newArea: Area) => {
-        const w: number = parseFloat(String(newArea.width));
-        const h: number = parseFloat(String(newArea.height));
+        const w: number = parseFloat(String(newArea.width))
+        const h: number = parseFloat(String(newArea.height))
         if (!isNaN(w) && w > 0 && w !== this.canvasWidth) {
-          this.canvasWidth = w;
+          this.canvasWidth = w
           if (!isNaN(h) && h > 0) {
-            this.canvasHeight = h;
+            this.canvasHeight = h
           }
-          this.redraw();
+          this.redraw()
         }
       })
     }
@@ -133,362 +133,362 @@ export struct PrayerSunPath {
   }
 
   private onPrayersChanged(_propName: string): void {
-    this.redraw();
+    this.redraw()
   }
 
   private onVisualChanged(_propName: string): void {
-    this.redraw();
+    this.redraw()
   }
 
   private isRtl(): boolean {
-    return L.isRtlLang(this.currentLanguage);
+    return L.isRtlLang(this.currentLanguage)
   }
 
   private translatePrayerName(raw: string): string {
     switch (raw) {
       case 'Fajr':
-        return L.get('prayer_fajr', this.currentLanguage);
+        return L.get('prayer_fajr', this.currentLanguage)
       case 'Dhuhr':
-        return L.get('prayer_dhuhr', this.currentLanguage);
+        return L.get('prayer_dhuhr', this.currentLanguage)
       case 'Jummah':
-        return L.get('prayer_jummah', this.currentLanguage);
+        return L.get('prayer_jummah', this.currentLanguage)
       case 'Asr':
-        return L.get('prayer_asr', this.currentLanguage);
+        return L.get('prayer_asr', this.currentLanguage)
       case 'Maghrib':
-        return L.get('prayer_maghrib', this.currentLanguage);
+        return L.get('prayer_maghrib', this.currentLanguage)
       case 'Isha':
-        return L.get('prayer_isha', this.currentLanguage);
+        return L.get('prayer_isha', this.currentLanguage)
       default:
-        return raw;
+        return raw
     }
   }
 
   private formatNow(now: Date): string {
-    const totalMinutes = now.getHours() * 60 + now.getMinutes();
-    return ClockFormatHelper.formatMinutes(totalMinutes);
+    const totalMinutes = now.getHours() * 60 + now.getMinutes()
+    return ClockFormatHelper.formatMinutes(totalMinutes)
   }
 
   private tick(): void {
-    const now = new Date();
-    const rawMinute = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
+    const now = new Date()
+    const rawMinute = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60
 
-    const wrappingNow = this.tickerWrapStartMs > 0 && (Date.now() - this.tickerWrapStartMs) < TICKER_WRAP_MS;
+    const wrappingNow = this.tickerWrapStartMs > 0 && Date.now() - this.tickerWrapStartMs < TICKER_WRAP_MS
 
     if (this.tickerWasWrapping && !wrappingNow) {
-      this.restartTickerTimer(TICKER_TICK_MS);
-      this.tickerWrapStartMs = -1;
-      this.tickerWrapFromMinute = -1;
+      this.restartTickerTimer(TICKER_TICK_MS)
+      this.tickerWrapStartMs = -1
+      this.tickerWrapFromMinute = -1
     }
-    this.tickerWasWrapping = wrappingNow;
+    this.tickerWasWrapping = wrappingNow
 
     if (this.tickerMonotonicMinute < 0) {
-      this.tickerMonotonicMinute = rawMinute;
-      this.redraw();
-      return;
+      this.tickerMonotonicMinute = rawMinute
+      this.redraw()
+      return
     }
 
-    const prevRaw = this.tickerMonotonicMinute % 1440;
-    let delta = rawMinute - prevRaw;
+    const prevRaw = this.tickerMonotonicMinute % 1440
+    let delta = rawMinute - prevRaw
 
     if (delta < -720) {
-      delta += 1440;
+      delta += 1440
       if (delta < 60) {
-        this.tickerWrapStartMs = Date.now();
-        this.tickerWrapFromMinute = prevRaw;
-        this.tickerWasWrapping = true;
-        this.restartTickerTimer(TICKER_WRAP_TICK_MS);
+        this.tickerWrapStartMs = Date.now()
+        this.tickerWrapFromMinute = prevRaw
+        this.tickerWasWrapping = true
+        this.restartTickerTimer(TICKER_WRAP_TICK_MS)
       }
     } else if (delta > 720) {
-      delta -= 1440;
+      delta -= 1440
     } else if (delta < 0) {
-      delta = 0;
+      delta = 0
     }
 
-    this.tickerMonotonicMinute += delta;
-    this.redraw();
+    this.tickerMonotonicMinute += delta
+    this.redraw()
   }
 
   private restartTickerTimer(intervalMs: number): void {
     if (this.tickerTimerId !== -1) {
-      clearInterval(this.tickerTimerId);
+      clearInterval(this.tickerTimerId)
     }
     this.tickerTimerId = setInterval(() => {
-      this.tick();
-    }, intervalMs);
+      this.tick()
+    }, intervalMs)
   }
 
   private ensureStars(W: number, H: number): void {
     if (this.canvasWidthForStars === W && this.stars.length > 0) {
-      return;
+      return
     }
     if (W <= 0 || H <= 0) {
-      return;
+      return
     }
 
-    this.canvasWidthForStars = W;
-    this.stars = [];
-    const count = Math.floor(W * 0.4); // Adjust density as needed
+    this.canvasWidthForStars = W
+    this.stars = []
+    const count = Math.floor(W * 0.4) // Adjust density as needed
     for (let i = 0; i < count; i++) {
       this.stars.push({
         x: Math.random() * W,
         y: Math.random() * (H * 0.85), // Keep stars mostly in the upper area
         r: Math.random() * 1.5 + 0.5,
         a: Math.random() * 0.6 + 0.2
-      });
+      })
     }
   }
 
   private drawNightSky(ctx: CanvasRenderingContext2D, W: number, H: number): void {
-    const grad = ctx.createLinearGradient(0, 0, 0, H);
-    grad.addColorStop(0, '#0B132B');
-    grad.addColorStop(0.6, '#1C2541');
-    grad.addColorStop(1, this.colors.cardDark);
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, W, H);
+    const grad = ctx.createLinearGradient(0, 0, 0, H)
+    grad.addColorStop(0, '#0B132B')
+    grad.addColorStop(0.6, '#1C2541')
+    grad.addColorStop(1, this.colors.cardDark)
+    ctx.fillStyle = grad
+    ctx.fillRect(0, 0, W, H)
 
-    this.ensureStars(W, H);
-    ctx.save();
+    this.ensureStars(W, H)
+    ctx.save()
     for (const star of this.stars) {
-      ctx.beginPath();
-      ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255, 255, 255, ${star.a})`;
-      ctx.fill();
+      ctx.beginPath()
+      ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2)
+      ctx.fillStyle = `rgba(255, 255, 255, ${star.a})`
+      ctx.fill()
     }
-    ctx.restore();
+    ctx.restore()
   }
 
   private drawDaySky(ctx: CanvasRenderingContext2D, W: number, H: number, sunX: number, sunY: number): void {
-    const grad = ctx.createLinearGradient(0, 0, 0, H);
-    grad.addColorStop(0, '#E0F2FE');
-    grad.addColorStop(0.7, '#FFFFFF');
-    grad.addColorStop(1, this.colors.cardDark);
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, W, H);
+    const grad = ctx.createLinearGradient(0, 0, 0, H)
+    grad.addColorStop(0, '#E0F2FE')
+    grad.addColorStop(0.7, '#FFFFFF')
+    grad.addColorStop(1, this.colors.cardDark)
+    ctx.fillStyle = grad
+    ctx.fillRect(0, 0, W, H)
 
     if (sunX >= 0 && sunY >= 0) {
-      const sunGlow = ctx.createRadialGradient(sunX, sunY, 2, sunX, sunY, 45);
-      sunGlow.addColorStop(0, 'rgba(255, 235, 150, 0.85)');
-      sunGlow.addColorStop(0.4, 'rgba(255, 200, 100, 0.35)');
-      sunGlow.addColorStop(1, 'rgba(255, 200, 100, 0)');
-      ctx.beginPath();
-      ctx.arc(sunX, sunY, 45, 0, Math.PI * 2);
-      ctx.fillStyle = sunGlow;
-      ctx.fill();
+      const sunGlow = ctx.createRadialGradient(sunX, sunY, 2, sunX, sunY, 45)
+      sunGlow.addColorStop(0, 'rgba(255, 235, 150, 0.85)')
+      sunGlow.addColorStop(0.4, 'rgba(255, 200, 100, 0.35)')
+      sunGlow.addColorStop(1, 'rgba(255, 200, 100, 0)')
+      ctx.beginPath()
+      ctx.arc(sunX, sunY, 45, 0, Math.PI * 2)
+      ctx.fillStyle = sunGlow
+      ctx.fill()
 
-      ctx.beginPath();
-      ctx.arc(sunX, sunY, 7, 0, Math.PI * 2);
-      ctx.fillStyle = '#FFD700';
-      ctx.fill();
+      ctx.beginPath()
+      ctx.arc(sunX, sunY, 7, 0, Math.PI * 2)
+      ctx.fillStyle = '#FFD700'
+      ctx.fill()
     }
   }
 
   private redraw(): void {
     if (!this.canvasReady) {
-      return;
+      return
     }
     if (this.canvasWidth <= 0) {
-      return;
+      return
     }
     if (this.prayers.length < 5) {
-      return;
+      return
     }
 
-    const ctx = this.ctx;
-    const W = this.canvasWidth;
-    const H = this.canvasHeight;
-    ctx.clearRect(0, 0, W, H);
+    const ctx = this.ctx
+    const W = this.canvasWidth
+    const H = this.canvasHeight
+    ctx.clearRect(0, 0, W, H)
 
-    const rtl: boolean = this.isRtl();
-    const px = (logicalX: number): number => rtl ? W - logicalX : logicalX;
+    const rtl: boolean = this.isRtl()
+    const px = (logicalX: number): number => (rtl ? W - logicalX : logicalX)
 
     const isValidTime = (s: string): boolean => {
-      const t = s.trim();
-      return t.length > 0 && t !== '--:--';
-    };
+      const t = s.trim()
+      return t.length > 0 && t !== '--:--'
+    }
 
     const timeToHour = (s: string): number => {
-      return PrayerManager.timeToMinutes(s) / 60;
-    };
+      return PrayerManager.timeToMinutes(s) / 60
+    }
 
-    const fajrHour = timeToHour(this.prayers[0].time);
-    const dhuhrHour = timeToHour(this.prayers[1].time);
-    const asrHour = timeToHour(this.prayers[2].time);
-    const maghribHour = timeToHour(this.prayers[3].time);
-    const ishaHour = timeToHour(this.prayers[4].time);
+    const fajrHour = timeToHour(this.prayers[0].time)
+    const dhuhrHour = timeToHour(this.prayers[1].time)
+    const asrHour = timeToHour(this.prayers[2].time)
+    const maghribHour = timeToHour(this.prayers[3].time)
+    const ishaHour = timeToHour(this.prayers[4].time)
 
     if (!isValidTime(this.prayers[0].time) || !isValidTime(this.prayers[1].time) ||
       !isValidTime(this.prayers[2].time) || !isValidTime(this.prayers[3].time) || !isValidTime(this.prayers[4].time)) {
-      return;
+      return
     }
 
-    const arcStartX = ARC_EDGE_PAD;
-    const arcEndX = W - ARC_EDGE_PAD;
-    const arcW = arcEndX - arcStartX;
+    const arcStartX = ARC_EDGE_PAD
+    const arcEndX = W - ARC_EDGE_PAD
+    const arcW = arcEndX - arcStartX
 
-    const arcBaseY = ARC_BASE_Y;
-    const archH = ARCH_HEIGHT;
+    const arcBaseY = ARC_BASE_Y
+    const archH = ARCH_HEIGHT
 
     const xForHour = (h: number): number => {
-      const normalized = ((h % 24) + 24) % 24;
-      return arcStartX + (normalized / 24) * arcW;
-    };
+      const normalized = ((h % 24) + 24) % 24
+      return arcStartX + (normalized / 24) * arcW
+    }
 
     const yForX = (lx: number): number => {
-      const p = Math.max(0, Math.min(1, (lx - arcStartX) / arcW));
-      return arcBaseY - archH * Math.sin(Math.PI * p);
-    };
+      const p = Math.max(0, Math.min(1, (lx - arcStartX) / arcW))
+      return arcBaseY - archH * Math.sin(Math.PI * p)
+    }
 
     // --- Calculate Ticker Position First ---
-    const wrapActive = this.tickerWrapStartMs > 0 && (Date.now() - this.tickerWrapStartMs) < TICKER_WRAP_MS;
-    let tickerFraction = 0;
+    const wrapActive = this.tickerWrapStartMs > 0 && Date.now() - this.tickerWrapStartMs < TICKER_WRAP_MS
+    let tickerFraction = 0
     if (this.tickerMonotonicMinute >= 0) {
       if (wrapActive) {
-        const t = (Date.now() - this.tickerWrapStartMs) / TICKER_WRAP_MS;
-        const fromFrac = this.tickerWrapFromMinute / 1440;
-        tickerFraction = fromFrac + (0 - fromFrac) * t;
+        const t = (Date.now() - this.tickerWrapStartMs) / TICKER_WRAP_MS
+        const fromFrac = this.tickerWrapFromMinute / 1440
+        tickerFraction = fromFrac + (0 - fromFrac) * t
       } else {
-        const currentMinute = this.tickerMonotonicMinute % 1440;
-        tickerFraction = currentMinute / 1440;
+        const currentMinute = this.tickerMonotonicMinute % 1440
+        tickerFraction = currentMinute / 1440
       }
     }
-    const tickerLx = arcStartX + tickerFraction * arcW;
-    const tickerLy = yForX(tickerLx);
-    const tickerX = px(tickerLx);
-    const tickerY = tickerLy;
+    const tickerLx = arcStartX + tickerFraction * arcW
+    const tickerLy = yForX(tickerLx)
+    const tickerX = px(tickerLx)
+    const tickerY = tickerLy
 
     // --- Draw Sky Background ---
     if (this.isDarkMode) {
-      this.drawNightSky(ctx, W, H);
+      this.drawNightSky(ctx, W, H)
     } else {
-      this.drawDaySky(ctx, W, H, tickerX, tickerY);
+      this.drawDaySky(ctx, W, H, tickerX, tickerY)
     }
 
-    const isDark: boolean = this.isDarkMode;
-    const solidColor = isDark ? '#A5B8CC' : '#7B8FA3';
-    const dotColor = isDark ? '#8892A6' : '#B0B8C0';
-    const labelColor = isDark ? '#E8EDF4' : '#3F4754';
-    const timeColor = isDark ? '#B4C0D0' : '#5A6270';
-    const leaderColor = this.colors.textMuted;
-    const activeLeader = this.colors.accentGold;
-    const leaderAlpha = isDark ? 0.60 : 0.65;
-    const activeAlpha = isDark ? 0.85 : 0.75;
-    const activeDot = isDark ? '#FBBF24' : '#0F5132';
-    const activeLabel = isDark ? '#FCD34D' : '#0F5132';
-    const activeRing = isDark ? 'rgba(251,191,36,0.30)' : 'rgba(15,81,50,0.22)';
-    const horizonColor = isDark ? '#FBBF24' : '#F59E0B';
-    const tickerColor = isDark ? '#C4B5FD' : '#7C3AED';
-    const hourTickColor = isDark ? 'rgba(180,192,208,0.40)' : 'rgba(120,128,140,0.50)';
+    const isDark: boolean = this.isDarkMode
+    const solidColor = isDark ? '#A5B8CC' : '#7B8FA3'
+    const dotColor = isDark ? '#8892A6' : '#B0B8C0'
+    const labelColor = isDark ? '#E8EDF4' : '#3F4754'
+    const timeColor = isDark ? '#B4C0D0' : '#5A6270'
+    const leaderColor = this.colors.textMuted
+    const activeLeader = this.colors.accentGold
+    const leaderAlpha = isDark ? 0.6 : 0.65
+    const activeAlpha = isDark ? 0.85 : 0.75
+    const activeDot = isDark ? '#FBBF24' : '#0F5132'
+    const activeLabel = isDark ? '#FCD34D' : '#0F5132'
+    const activeRing = isDark ? 'rgba(251,191,36,0.30)' : 'rgba(15,81,50,0.22)'
+    const horizonColor = isDark ? '#FBBF24' : '#F59E0B'
+    const tickerColor = isDark ? '#C4B5FD' : '#7C3AED'
+    const hourTickColor = isDark ? 'rgba(180,192,208,0.40)' : 'rgba(120,128,140,0.50)'
 
     // ---- Draw the arc line ----
-    const SAMPLES = 96;
-    ctx.save();
-    ctx.beginPath();
+    const SAMPLES = 96
+    ctx.save()
+    ctx.beginPath()
     for (let i = 0; i <= SAMPLES; i++) {
-      const lx = arcStartX + (arcW * i / SAMPLES);
-      const ly = yForX(lx);
-      const x = px(lx);
+      const lx = arcStartX + (arcW * i) / SAMPLES
+      const ly = yForX(lx)
+      const x = px(lx)
       if (i === 0) {
-        ctx.moveTo(x, ly);
+        ctx.moveTo(x, ly)
       } else {
-        ctx.lineTo(x, ly);
+        ctx.lineTo(x, ly)
       }
     }
-    ctx.strokeStyle = solidColor;
-    ctx.lineWidth = 3;
-    ctx.lineCap = 'round';
-    ctx.stroke();
-    ctx.restore();
+    ctx.strokeStyle = solidColor
+    ctx.lineWidth = 3
+    ctx.lineCap = 'round'
+    ctx.stroke()
+    ctx.restore()
 
     // ---- Hour tick marks ----
-    ctx.save();
-    ctx.strokeStyle = hourTickColor;
-    ctx.lineWidth = 1;
+    ctx.save()
+    ctx.strokeStyle = hourTickColor
+    ctx.lineWidth = 1
     for (let h = 0; h <= 24; h++) {
-      const lx = xForHour(h % 24);
-      const x = px(lx);
-      const isMajor = (h % 3 === 0);
-      const len = isMajor ? HOUR_TICK_LEN : HOUR_TICK_LEN - 2;
-      ctx.beginPath();
-      ctx.moveTo(x, HOUR_TICK_TOP);
-      ctx.lineTo(x, HOUR_TICK_TOP + len);
-      ctx.stroke();
+      const lx = xForHour(h % 24)
+      const x = px(lx)
+      const isMajor = h % 3 === 0
+      const len = isMajor ? HOUR_TICK_LEN : HOUR_TICK_LEN - 2
+      ctx.beginPath()
+      ctx.moveTo(x, HOUR_TICK_TOP)
+      ctx.lineTo(x, HOUR_TICK_TOP + len)
+      ctx.stroke()
     }
-    ctx.restore();
+    ctx.restore()
 
     // ---- Extra timings ----
-    const hasImsak = this.showImsakGuide && isValidTime(this.imsakTime);
-    const hasFirstThird = this.showFirstThirdGuide && isValidTime(this.firstThirdTime);
-    const hasMidnight = this.showMidnightGuide && isValidTime(this.midnightTime);
-    const hasLastThird = this.showLastThirdGuide && isValidTime(this.lastThirdTime);
+    const hasImsak = this.showImsakGuide && isValidTime(this.imsakTime)
+    const hasFirstThird = this.showFirstThirdGuide && isValidTime(this.firstThirdTime)
+    const hasMidnight = this.showMidnightGuide && isValidTime(this.midnightTime)
+    const hasLastThird = this.showLastThirdGuide && isValidTime(this.lastThirdTime)
 
-    const imsakX = hasImsak ? px(xForHour(timeToHour(this.imsakTime))) : -1;
-    const firstThirdX = hasFirstThird ? px(xForHour(timeToHour(this.firstThirdTime))) : -1;
-    const midnightX = hasMidnight ? px(xForHour(timeToHour(this.midnightTime))) : -1;
-    const lastThirdX = hasLastThird ? px(xForHour(timeToHour(this.lastThirdTime))) : -1;
+    const imsakX = hasImsak ? px(xForHour(timeToHour(this.imsakTime))) : -1
+    const firstThirdX = hasFirstThird ? px(xForHour(timeToHour(this.firstThirdTime))) : -1
+    const midnightX = hasMidnight ? px(xForHour(timeToHour(this.midnightTime))) : -1
+    const lastThirdX = hasLastThird ? px(xForHour(timeToHour(this.lastThirdTime))) : -1
 
     const drawExtraLine = (x: number): void => {
-      ctx.save();
-      ctx.globalAlpha = leaderAlpha;
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, EXTRA_LINE_END_Y);
-      ctx.strokeStyle = leaderColor;
-      ctx.lineWidth = 1.5;
-      ctx.setLineDash([5, 5]);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.globalAlpha = 1.0;
-      ctx.restore();
-    };
+      ctx.save()
+      ctx.globalAlpha = leaderAlpha
+      ctx.beginPath()
+      ctx.moveTo(x, 0)
+      ctx.lineTo(x, EXTRA_LINE_END_Y)
+      ctx.strokeStyle = leaderColor
+      ctx.lineWidth = 1.5
+      ctx.setLineDash([5, 5])
+      ctx.stroke()
+      ctx.setLineDash([])
+      ctx.globalAlpha = 1.0
+      ctx.restore()
+    }
 
     if (imsakX >= 0) {
-      drawExtraLine(imsakX);
+      drawExtraLine(imsakX)
     }
     if (firstThirdX >= 0) {
-      drawExtraLine(firstThirdX);
+      drawExtraLine(firstThirdX)
     }
     if (midnightX >= 0) {
-      drawExtraLine(midnightX);
+      drawExtraLine(midnightX)
     }
     if (lastThirdX >= 0) {
-      drawExtraLine(lastThirdX);
+      drawExtraLine(lastThirdX)
     }
 
     const drawExtraLabel = (x: number, label: string, time: string): void => {
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'alphabetic';
-      ctx.font = `bold ${EXTRA_LABEL_FONT_SIZE}px sans-serif`;
-      ctx.fillStyle = this.colors.accentGold;
-      ctx.fillText(label, x, EXTRA_LABEL_Y);
-      ctx.font = `${EXTRA_TIME_FONT_SIZE}px sans-serif`;
-      ctx.fillStyle = this.colors.accentGoldLight;
-      ctx.fillText(ClockFormatHelper.reformat(time), x, EXTRA_TIME_Y);
-    };
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'alphabetic'
+      ctx.font = `bold ${EXTRA_LABEL_FONT_SIZE}px sans-serif`
+      ctx.fillStyle = this.colors.accentGold
+      ctx.fillText(label, x, EXTRA_LABEL_Y)
+      ctx.font = `${EXTRA_TIME_FONT_SIZE}px sans-serif`
+      ctx.fillStyle = this.colors.accentGoldLight
+      ctx.fillText(ClockFormatHelper.reformat(time), x, EXTRA_TIME_Y)
+    }
 
     if (imsakX >= 0) {
-      drawExtraLabel(imsakX, L.get('timing_imsak', this.currentLanguage), this.imsakTime);
+      drawExtraLabel(imsakX, L.get('timing_imsak', this.currentLanguage), this.imsakTime)
     }
     if (firstThirdX >= 0) {
-      drawExtraLabel(firstThirdX, L.get('timing_first_third', this.currentLanguage), this.firstThirdTime);
+      drawExtraLabel(firstThirdX, L.get('timing_first_third', this.currentLanguage), this.firstThirdTime)
     }
     if (midnightX >= 0) {
-      drawExtraLabel(midnightX, L.get('timing_midnight', this.currentLanguage), this.midnightTime);
+      drawExtraLabel(midnightX, L.get('timing_midnight', this.currentLanguage), this.midnightTime)
     }
     if (lastThirdX >= 0) {
-      drawExtraLabel(lastThirdX, L.get('timing_last_third', this.currentLanguage), this.lastThirdTime);
+      drawExtraLabel(lastThirdX, L.get('timing_last_third', this.currentLanguage), this.lastThirdTime)
     }
 
     // ---- Current prayer index ----
-    const now = new Date();
-    const nowMinute = now.getHours() * 60 + now.getMinutes();
+    const now = new Date()
+    const nowMinute = now.getHours() * 60 + now.getMinutes()
     const prayerMinutes: number[] =
       [PrayerManager.timeToMinutes(this.prayers[0].time), PrayerManager.timeToMinutes(this.prayers[1].time),
         PrayerManager.timeToMinutes(this.prayers[2].time), PrayerManager.timeToMinutes(this.prayers[3].time),
-        PrayerManager.timeToMinutes(this.prayers[4].time)];
-    let activeIdx: number = -1;
+        PrayerManager.timeToMinutes(this.prayers[4].time)]
+    let activeIdx: number = -1
     for (let i = 0; i < prayerMinutes.length; i++) {
       if (isValidTime(this.prayers[i].time) && prayerMinutes[i] <= nowMinute) {
-        activeIdx = i;
+        activeIdx = i
       }
     }
 
@@ -496,158 +496,158 @@ export struct PrayerSunPath {
     const names: string[] =
       [this.translatePrayerName(this.prayers[0].name), this.translatePrayerName(this.prayers[1].name),
         this.translatePrayerName(this.prayers[2].name), this.translatePrayerName(this.prayers[3].name),
-        this.translatePrayerName(this.prayers[4].name)];
+        this.translatePrayerName(this.prayers[4].name)]
     const times: string[] =
-      [this.prayers[0].time, this.prayers[1].time, this.prayers[2].time, this.prayers[3].time, this.prayers[4].time];
-    const hours: number[] = [fajrHour, dhuhrHour, asrHour, maghribHour, ishaHour];
-    const leaderLengths: number[] = [30, 70, 55, 40, 30];
+      [this.prayers[0].time, this.prayers[1].time, this.prayers[2].time, this.prayers[3].time, this.prayers[4].time]
+    const hours: number[] = [fajrHour, dhuhrHour, asrHour, maghribHour, ishaHour]
+    const leaderLengths: number[] = [30, 70, 55, 40, 30]
 
     for (let i = 0; i < hours.length; i++) {
-      const lx = xForHour(hours[i]);
-      const ly = yForX(lx);
-      const x = px(lx);
-      const y = ly;
+      const lx = xForHour(hours[i])
+      const ly = yForX(lx)
+      const x = px(lx)
+      const y = ly
 
-      const isActive: boolean = (i === activeIdx);
-      const leaderLen = leaderLengths[i];
+      const isActive: boolean = i === activeIdx
+      const leaderLen = leaderLengths[i]
 
-      const leaderStartY = y - 12 - leaderLen;
-      const timeY = leaderStartY - 10;
-      const labelY = timeY - LABEL_TIME_GAP;
+      const leaderStartY = y - 12 - leaderLen
+      const timeY = leaderStartY - 10
+      const labelY = timeY - LABEL_TIME_GAP
 
-      ctx.save();
-      ctx.globalAlpha = isActive ? activeAlpha : leaderAlpha;
-      ctx.beginPath();
-      ctx.moveTo(x, leaderStartY);
-      ctx.lineTo(x, y - 12);
-      ctx.strokeStyle = isActive ? activeLeader : leaderColor;
-      ctx.lineWidth = 1.5;
-      ctx.setLineDash([2, 3]);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.globalAlpha = 1.0;
-      ctx.restore();
+      ctx.save()
+      ctx.globalAlpha = isActive ? activeAlpha : leaderAlpha
+      ctx.beginPath()
+      ctx.moveTo(x, leaderStartY)
+      ctx.lineTo(x, y - 12)
+      ctx.strokeStyle = isActive ? activeLeader : leaderColor
+      ctx.lineWidth = 1.5
+      ctx.setLineDash([2, 3])
+      ctx.stroke()
+      ctx.setLineDash([])
+      ctx.globalAlpha = 1.0
+      ctx.restore()
 
-      ctx.font = isActive ? `bold ${LABEL_FONT_SIZE}px sans-serif` : `${LABEL_FONT_SIZE}px sans-serif`;
-      ctx.fillStyle = isActive ? activeLabel : labelColor;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'alphabetic';
-      ctx.fillText(names[i], x, labelY);
+      ctx.font = isActive ? `bold ${LABEL_FONT_SIZE}px sans-serif` : `${LABEL_FONT_SIZE}px sans-serif`
+      ctx.fillStyle = isActive ? activeLabel : labelColor
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'alphabetic'
+      ctx.fillText(names[i], x, labelY)
 
-      ctx.font = `${TIME_FONT_SIZE}px sans-serif`;
-      ctx.fillStyle = isActive ? activeLabel : timeColor;
-      ctx.fillText(ClockFormatHelper.reformat(times[i]), x, timeY);
+      ctx.font = `${TIME_FONT_SIZE}px sans-serif`
+      ctx.fillStyle = isActive ? activeLabel : timeColor
+      ctx.fillText(ClockFormatHelper.reformat(times[i]), x, timeY)
 
       if (isActive) {
-        ctx.beginPath();
-        ctx.arc(x, y, 14, 0, Math.PI * 2);
-        ctx.fillStyle = activeRing;
-        ctx.fill();
+        ctx.beginPath()
+        ctx.arc(x, y, 14, 0, Math.PI * 2)
+        ctx.fillStyle = activeRing
+        ctx.fill()
       }
 
-      ctx.beginPath();
-      ctx.arc(x, y, isActive ? 7 : 6, 0, Math.PI * 2);
-      ctx.fillStyle = isActive ? activeDot : dotColor;
-      ctx.fill();
+      ctx.beginPath()
+      ctx.arc(x, y, isActive ? 7 : 6, 0, Math.PI * 2)
+      ctx.fillStyle = isActive ? activeDot : dotColor
+      ctx.fill()
 
       if (isActive) {
-        ctx.beginPath();
-        ctx.arc(x - 2, y - 2, 2.5, 0, Math.PI * 2);
-        ctx.fillStyle = isDark ? 'rgba(20, 27, 46, 0.65)' : 'rgba(255, 255, 255, 0.65)';
-        ctx.fill();
+        ctx.beginPath()
+        ctx.arc(x - 2, y - 2, 2.5, 0, Math.PI * 2)
+        ctx.fillStyle = isDark ? 'rgba(20, 27, 46, 0.65)' : 'rgba(255, 255, 255, 0.65)'
+        ctx.fill()
       }
     }
 
     // ---- Sunrise / Sunset ----
-    const hasSunrise = isValidTime(this.sunriseTime);
-    const hasSunset = isValidTime(this.sunsetTime);
+    const hasSunrise = isValidTime(this.sunriseTime)
+    const hasSunset = isValidTime(this.sunsetTime)
 
     const drawHorizonMarker = (hourVal: number, label: string, time: string): void => {
-      const lx = xForHour(hourVal);
-      const ly = yForX(lx);
-      const sx = px(lx);
-      const sy = ly;
+      const lx = xForHour(hourVal)
+      const ly = yForX(lx)
+      const sx = px(lx)
+      const sy = ly
 
-      ctx.beginPath();
-      ctx.arc(sx, sy, 7, 0, Math.PI * 2);
-      ctx.strokeStyle = horizonColor;
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(sx, sy, 3, 0, Math.PI * 2);
-      ctx.fillStyle = horizonColor;
-      ctx.fill();
+      ctx.beginPath()
+      ctx.arc(sx, sy, 7, 0, Math.PI * 2)
+      ctx.strokeStyle = horizonColor
+      ctx.lineWidth = 2
+      ctx.stroke()
+      ctx.beginPath()
+      ctx.arc(sx, sy, 3, 0, Math.PI * 2)
+      ctx.fillStyle = horizonColor
+      ctx.fill()
 
-      ctx.save();
-      ctx.beginPath();
-      ctx.moveTo(sx, sy + 10);
-      ctx.lineTo(sx, SUN_LABEL_Y - SUN_LEADER_GAP);
-      ctx.strokeStyle = horizonColor;
-      ctx.lineWidth = 1.2;
-      ctx.setLineDash([2, 3]);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.restore();
+      ctx.save()
+      ctx.beginPath()
+      ctx.moveTo(sx, sy + 10)
+      ctx.lineTo(sx, SUN_LABEL_Y - SUN_LEADER_GAP)
+      ctx.strokeStyle = horizonColor
+      ctx.lineWidth = 1.2
+      ctx.setLineDash([2, 3])
+      ctx.stroke()
+      ctx.setLineDash([])
+      ctx.restore()
 
-      ctx.font = `bold ${LABEL_FONT_SIZE}px sans-serif`;
-      ctx.fillStyle = horizonColor;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'alphabetic';
-      ctx.fillText(label, sx, SUN_LABEL_Y);
+      ctx.font = `bold ${LABEL_FONT_SIZE}px sans-serif`
+      ctx.fillStyle = horizonColor
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'alphabetic'
+      ctx.fillText(label, sx, SUN_LABEL_Y)
 
-      ctx.font = `${TIME_FONT_SIZE}px sans-serif`;
-      ctx.fillStyle = horizonColor;
-      ctx.fillText(ClockFormatHelper.reformat(time), sx, SUN_TIME_Y);
-    };
+      ctx.font = `${TIME_FONT_SIZE}px sans-serif`
+      ctx.fillStyle = horizonColor
+      ctx.fillText(ClockFormatHelper.reformat(time), sx, SUN_TIME_Y)
+    }
 
     if (hasSunrise) {
-      drawHorizonMarker(timeToHour(this.sunriseTime), L.get('timing_sunrise', this.currentLanguage), this.sunriseTime);
+      drawHorizonMarker(timeToHour(this.sunriseTime), L.get('timing_sunrise', this.currentLanguage), this.sunriseTime)
     }
     if (hasSunset) {
-      drawHorizonMarker(timeToHour(this.sunsetTime), L.get('timing_sunset', this.currentLanguage), this.sunsetTime);
+      drawHorizonMarker(timeToHour(this.sunsetTime), L.get('timing_sunset', this.currentLanguage), this.sunsetTime)
     }
 
     // ---- Ticker ----
-    this.drawTicker(ctx, tickerColor, tickerX, tickerY);
+    this.drawTicker(ctx, tickerColor, tickerX, tickerY)
   }
 
   private drawTicker(ctx: CanvasRenderingContext2D, tickerColor: string, tickerX: number, tickerY: number): void {
     if (this.tickerMonotonicMinute < 0) {
-      return;
+      return
     }
 
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(tickerX, tickerY + 7);
-    ctx.lineTo(tickerX, TICKER_LABEL_Y - 12);
-    ctx.strokeStyle = tickerColor;
-    ctx.lineWidth = 2.5;
-    ctx.lineCap = 'round';
-    ctx.setLineDash([5, 4]);
-    ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.restore();
+    ctx.save()
+    ctx.beginPath()
+    ctx.moveTo(tickerX, tickerY + 7)
+    ctx.lineTo(tickerX, TICKER_LABEL_Y - 12)
+    ctx.strokeStyle = tickerColor
+    ctx.lineWidth = 2.5
+    ctx.lineCap = 'round'
+    ctx.setLineDash([5, 4])
+    ctx.stroke()
+    ctx.setLineDash([])
+    ctx.restore()
 
-    ctx.beginPath();
-    ctx.arc(tickerX, tickerY, 5, 0, Math.PI * 2);
-    ctx.fillStyle = tickerColor;
-    ctx.fill();
+    ctx.beginPath()
+    ctx.arc(tickerX, tickerY, 5, 0, Math.PI * 2)
+    ctx.fillStyle = tickerColor
+    ctx.fill()
 
-    ctx.beginPath();
-    ctx.arc(tickerX, tickerY, 8, 0, Math.PI * 2);
-    ctx.strokeStyle = tickerColor;
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
+    ctx.beginPath()
+    ctx.arc(tickerX, tickerY, 8, 0, Math.PI * 2)
+    ctx.strokeStyle = tickerColor
+    ctx.lineWidth = 1.5
+    ctx.stroke()
 
-    ctx.font = `bold ${TICKER_LABEL_FONT_SIZE}px sans-serif`;
-    ctx.fillStyle = tickerColor;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'alphabetic';
-    ctx.fillText(L.get('sun_path_we_are_here', this.currentLanguage), tickerX, TICKER_LABEL_Y);
+    ctx.font = `bold ${TICKER_LABEL_FONT_SIZE}px sans-serif`
+    ctx.fillStyle = tickerColor
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'alphabetic'
+    ctx.fillText(L.get('sun_path_we_are_here', this.currentLanguage), tickerX, TICKER_LABEL_Y)
 
-    const now = new Date();
-    ctx.font = `${TICKER_TIME_FONT_SIZE}px sans-serif`;
-    ctx.fillStyle = tickerColor;
-    ctx.fillText(this.formatNow(now), tickerX, TICKER_TIME_Y);
+    const now = new Date()
+    ctx.font = `${TICKER_TIME_FONT_SIZE}px sans-serif`
+    ctx.fillStyle = tickerColor
+    ctx.fillText(this.formatNow(now), tickerX, TICKER_TIME_Y)
   }
 }

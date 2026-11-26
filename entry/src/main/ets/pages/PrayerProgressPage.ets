@@ -1,8 +1,8 @@
 // entry/src/main/ets/pages/PrayerProgressPage.ets
 
-import { mediaquery, router } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
+import { mediaquery, router } from '@kit.ArkUI'
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
 
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
@@ -11,8 +11,8 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_PRAYER_STATE_VERSION,
   STORAGE_KEY_THEME_MODE
-} from '../core/common/StorageKeys';
-import { L } from '../i18n/LocalizationHelper';
+} from '../core/common/StorageKeys'
+import { L } from '../i18n/LocalizationHelper'
 import {
   MonthDayCell,
   PerPrayerCount,
@@ -21,11 +21,11 @@ import {
   WeekDetailCell,
   YearDetailSnapshot,
   YearMonthRow
-} from '../progress/ProgressHelper';
-import { Breakpoints } from '../core/layout/Breakpoints';
-import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
+} from '../progress/ProgressHelper'
+import { Breakpoints } from '../core/layout/Breakpoints'
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper'
 
-type Period = 'week' | 'month' | 'year';
+type Period = 'week' | 'month' | 'year'
 
 @Entry
 @Component
@@ -89,21 +89,21 @@ struct PrayerDetailsPage {
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
 
   aboutToAppear(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
     this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
-      this.colors = c;
-    });
-    this.reload();
+      this.colors = c
+    })
+    this.reload()
   }
 
   aboutToDisappear(): void {
-    PageTheme.uninstallSystemListener(this.systemDarkListener);
-    this.systemDarkListener = null;
+    PageTheme.uninstallSystemListener(this.systemDarkListener)
+    this.systemDarkListener = null
   }
 
   onPageShow(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-    this.reload();
+    this.colors = PageTheme.compute(this.themeMode)
+    this.reload()
   }
 
   build() {
@@ -386,7 +386,7 @@ struct PrayerDetailsPage {
     .backgroundColor(this.period === id ? this.colors.accentGold : Color.Transparent)
     .borderRadius(9)
     .onClick(() => {
-      this.period = id as Period;
+      this.period = id as Period
     })
   }
 
@@ -424,7 +424,7 @@ struct PrayerDetailsPage {
             .fill(Color.Transparent)
             .stroke(this.colors.accentGold)
             .strokeWidth(6)
-            .strokeDashArray([this.percentForPeriod() / 100 * 226.2, 500])
+            .strokeDashArray([(this.percentForPeriod() / 100) * 226.2, 500])
             .strokeLineCap(LineCapStyle.Round)
             .rotate({ angle: -90 })
           Text(`${this.percentForPeriod()}%`).fontSize(15).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
@@ -565,8 +565,7 @@ struct PrayerDetailsPage {
       }.width('100%')
 
       Row() {
-        Row()
-          .width(`${this.periodPossible() > 0 ? Math.round(count / this.periodPossible() * 100) : 0}%`)
+        Row().width(`${this.periodPossible() > 0 ? Math.round((count / this.periodPossible()) * 100) : 0}%`)
           .height(6)
           .backgroundColor(this.colors.accentGold)
           .borderRadius(3)
@@ -630,11 +629,11 @@ struct PrayerDetailsPage {
               'T' : ''}`)
           }.width('100%').margin({ bottom: 4 })
         }, (week: MonthDayCell[], wi: number) => {
-          let sig = '';
+          let sig = ''
           for (const c of week) {
-            sig += c.completed;
+            sig += c.completed
           }
-          return `dw-${wi}-${this.snapshot.monthProgress.year}-${this.snapshot.monthProgress.monthIndex}-${sig}`;
+          return `dw-${wi}-${this.snapshot.monthProgress.year}-${this.snapshot.monthProgress.monthIndex}-${sig}`
         })
       }.width('100%').direction(Direction.Ltr)
 
@@ -664,42 +663,42 @@ struct PrayerDetailsPage {
 
   private getPillNumberLabel(id: string): string {
     if (id === 'week') {
-      return `#${this.snapshot.currentWeekNumber}`;
+      return `#${this.snapshot.currentWeekNumber}`
     }
     if (id === 'month') { // monthIndex is 0-based, so we add 1
-      return `#${this.snapshot.monthProgress.monthIndex + 1}`;
+      return `#${this.snapshot.monthProgress.monthIndex + 1}`
     }
-    return `#${this.snapshot.monthProgress.year}`;
+    return `#${this.snapshot.monthProgress.year}`
   }
 
   private reload(): void {
-    this.snapshot = ProgressHelper.getPrayerDetails();
-    this.weekDetail = ProgressHelper.getWeekDetail();
-    this.yearDetail = ProgressHelper.getYearDetail();
+    this.snapshot = ProgressHelper.getPrayerDetails()
+    this.weekDetail = ProgressHelper.getWeekDetail()
+    this.yearDetail = ProgressHelper.getYearDetail()
   }
 
   private onThemeModeChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   private onAppForegrounded(): void {
-    this.reload();
+    this.reload()
   }
 
   private onPrayerStateChanged(): void {
-    this.reload();
+    this.reload()
   }
 
   private tr(key: string): string {
-    return L.get(key, this.appLanguage);
+    return L.get(key, this.appLanguage)
   }
 
   private isRtl(): boolean {
-    return L.isRtlLang(this.appLanguage);
+    return L.isRtlLang(this.appLanguage)
   }
 
   // ============================================================
@@ -708,166 +707,166 @@ struct PrayerDetailsPage {
 
   private totalForPeriod(): number {
     if (this.period === 'month') {
-      return this.snapshot.monthTotal;
+      return this.snapshot.monthTotal
     }
     if (this.period === 'year') {
-      return this.snapshot.yearTotal;
+      return this.snapshot.yearTotal
     }
-    return this.snapshot.weekTotal;
+    return this.snapshot.weekTotal
   }
 
   private possibleForPeriod(): number {
     if (this.period === 'month') {
-      return this.snapshot.monthPossible;
+      return this.snapshot.monthPossible
     }
     if (this.period === 'year') {
-      return this.snapshot.yearPossible;
+      return this.snapshot.yearPossible
     }
-    return this.snapshot.weekPossible;
+    return this.snapshot.weekPossible
   }
 
   private percentForPeriod(): number {
-    const possible = this.possibleForPeriod();
+    const possible = this.possibleForPeriod()
     if (possible === 0) {
-      return 0;
+      return 0
     }
-    return Math.round(this.totalForPeriod() / possible * 100);
+    return Math.round((this.totalForPeriod() / possible) * 100)
   }
 
   private perPrayerForPeriod(): PerPrayerCount {
     if (this.period === 'month') {
-      return this.snapshot.monthPerPrayer;
+      return this.snapshot.monthPerPrayer
     }
     if (this.period === 'year') {
-      return this.snapshot.yearPerPrayer;
+      return this.snapshot.yearPerPrayer
     }
-    return this.snapshot.weekPerPrayer;
+    return this.snapshot.weekPerPrayer
   }
 
   private periodPossible(): number { // Returns the number of days in the period (7, 30/31, or 365)
     if (this.period === 'month') {
-      return Math.max(1, Math.round(this.snapshot.monthPossible / 5));
+      return Math.max(1, Math.round(this.snapshot.monthPossible / 5))
     }
     if (this.period === 'year') {
-      return Math.max(1, Math.round(this.snapshot.yearPossible / 5));
+      return Math.max(1, Math.round(this.snapshot.yearPossible / 5))
     }
-    return 7; // Week
+    return 7 // Week
   }
 
   private prayerLabel(id: string): string {
     if (id === 'fajr') {
-      return this.tr('prayer_fajr');
+      return this.tr('prayer_fajr')
     }
     if (id === 'dhuhr') {
-      return this.tr('prayer_dhuhr');
+      return this.tr('prayer_dhuhr')
     }
     if (id === 'asr') {
-      return this.tr('prayer_asr');
+      return this.tr('prayer_asr')
     }
     if (id === 'maghrib') {
-      return this.tr('prayer_maghrib');
+      return this.tr('prayer_maghrib')
     }
-    return this.tr('prayer_isha');
+    return this.tr('prayer_isha')
   }
 
   private cellBg(cell: MonthDayCell): string {
     if (cell.isPadding || cell.isFuture) {
-      return 'transparent';
+      return 'transparent'
     }
     if (cell.completed === 5) {
-      return this.colors.accentGold;
+      return this.colors.accentGold
     }
     if (cell.completed >= 3) {
-      return this.colors.tintMedium;
+      return this.colors.tintMedium
     }
     if (cell.completed >= 1) {
-      return this.colors.tintSubtle;
+      return this.colors.tintSubtle
     }
-    return 'transparent';
+    return 'transparent'
   }
 
   private cellTextColor(cell: MonthDayCell): string {
     if (cell.isFuture) {
-      return this.colors.textMuted;
+      return this.colors.textMuted
     }
     if (cell.completed === 5) {
-      return this.colors.textOnAccent;
+      return this.colors.textOnAccent
     }
     if (cell.isToday) {
-      return this.colors.accentGold;
+      return this.colors.accentGold
     }
     if (cell.completed > 0) {
-      return this.colors.accentGold;
+      return this.colors.accentGold
     }
-    return this.colors.textMuted;
+    return this.colors.textMuted
   }
 
   private weekdayShort(dow: number): string {
-    const labels = L.getArray('days_of_week_short', this.appLanguage);
-    return labels[dow];
+    const labels = L.getArray('days_of_week_short', this.appLanguage)
+    return labels[dow]
   }
 
   private weekCellBg(cell: WeekDetailCell): string {
     if (cell.completed === 5) {
-      return this.colors.accentGold;
+      return this.colors.accentGold
     }
     if (cell.completed >= 3) {
-      return this.colors.tintMedium;
+      return this.colors.tintMedium
     }
     if (cell.completed >= 1) {
-      return this.colors.tintSubtle;
+      return this.colors.tintSubtle
     }
-    return 'transparent';
+    return 'transparent'
   }
 
   private weekCellTextColor(cell: WeekDetailCell): string {
     if (cell.completed === 5) {
-      return this.colors.textOnAccent;
+      return this.colors.textOnAccent
     }
     if (cell.completed > 0) {
-      return this.colors.accentGold;
+      return this.colors.accentGold
     }
     if (cell.isToday) {
-      return this.colors.accentGold;
+      return this.colors.accentGold
     }
-    return this.colors.textWhite;
+    return this.colors.textWhite
   }
 
   private yearCellBg(completed: number): string {
     if (completed < 0) { // FIX: Return a faint color instead of transparent so the box takes up space
-      return this.colors.tintSubtle;
+      return this.colors.tintSubtle
     }
     if (completed === 5) {
-      return this.colors.accentGold;
+      return this.colors.accentGold
     }
     if (completed >= 3) {
-      return this.colors.tintMedium;
+      return this.colors.tintMedium
     }
     if (completed >= 1) {
-      return this.colors.tintSubtle;
+      return this.colors.tintSubtle
     }
-    return this.colors.tintSoft;
+    return this.colors.tintSoft
   }
 
   private monthShortLabel(monthIndex: number): string {
-    const locale = this.appLanguage === 'zh' ? 'zh-CN' : this.appLanguage === 'ar' ? 'ar' : 'en-US';
+    const locale = this.appLanguage === 'zh' ? 'zh-CN' : this.appLanguage === 'ar' ? 'ar' : 'en-US'
     try {
-      const fmt = new Intl.DateTimeFormat(locale, { month: 'short' });
-      return fmt.format(new Date(this.yearDetail.year, monthIndex, 1));
+      const fmt = new Intl.DateTimeFormat(locale, { month: 'short' })
+      return fmt.format(new Date(this.yearDetail.year, monthIndex, 1))
     } catch (err) {
-      const fallback: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      return fallback[monthIndex];
+      const fallback: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      return fallback[monthIndex]
     }
   }
 
   private periodLabel(id: string): string {
     if (id === 'week') {
-      return this.tr('details_period_week');
+      return this.tr('details_period_week')
     }
     if (id === 'month') {
-      return this.tr('details_period_month');
+      return this.tr('details_period_month')
     }
-    return this.tr('details_period_year');
+    return this.tr('details_period_year')
   }
 }
 
@@ -895,8 +894,7 @@ struct PrayerRowView {
       }.width('100%')
 
       Row() {
-        Row()
-          .width(`${this.possible > 0 ? Math.round(this.count / this.possible * 100) : 0}%`)
+        Row().width(`${this.possible > 0 ? Math.round((this.count / this.possible) * 100) : 0}%`)
           .height(6)
           .backgroundColor(this.colors.accentGold)
           .borderRadius(3)
@@ -911,17 +909,17 @@ struct PrayerRowView {
 
   private getLabel(id: string): string {
     if (id === 'fajr') {
-      return L.get('prayer_fajr', this.currentLanguage);
+      return L.get('prayer_fajr', this.currentLanguage)
     }
     if (id === 'dhuhr') {
-      return L.get('prayer_dhuhr', this.currentLanguage);
+      return L.get('prayer_dhuhr', this.currentLanguage)
     }
     if (id === 'asr') {
-      return L.get('prayer_asr', this.currentLanguage);
+      return L.get('prayer_asr', this.currentLanguage)
     }
     if (id === 'maghrib') {
-      return L.get('prayer_maghrib', this.currentLanguage);
+      return L.get('prayer_maghrib', this.currentLanguage)
     }
-    return L.get('prayer_isha', this.currentLanguage);
+    return L.get('prayer_isha', this.currentLanguage)
   }
 }

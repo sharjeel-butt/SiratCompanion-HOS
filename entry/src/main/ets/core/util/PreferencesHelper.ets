@@ -1,9 +1,9 @@
 // entry/src/main/ets/utils/PreferencesHelper.ets
 
-import { preferences } from '@kit.ArkData';
-import { common } from '@kit.AbilityKit';
+import { preferences } from '@kit.ArkData'
+import { common } from '@kit.AbilityKit'
 
-const PREF_STORE_NAME = 'sirat_settings';
+const PREF_STORE_NAME = 'sirat_settings'
 
 /**
  * Delay before an automatic flush after the last write, in ms.
@@ -12,7 +12,7 @@ const PREF_STORE_NAME = 'sirat_settings';
  * 5-key offset reset) but short enough that a write is durable well
  * before the user can act on it.
  */
-const FLUSH_DEBOUNCE_MS = 250;
+const FLUSH_DEBOUNCE_MS = 250
 
 /**
  * Async persistence helper backed by @ohos.data.preferences.
@@ -39,107 +39,106 @@ const FLUSH_DEBOUNCE_MS = 250;
  * finished setting up see a correct default rather than throwing.
  */
 export class PreferencesHelper {
-  private static store: preferences.Preferences | null = null;
-  private static initContext: common.Context | null = null;
-  private static initResolve: (() => void) | null = null;
+  private static store: preferences.Preferences | null = null
+  private static initContext: common.Context | null = null
+  private static initResolve: (() => void) | null = null
   private static initPromise: Promise<void> = new Promise<void>((resolve) => {
-    PreferencesHelper.initResolve = resolve;
-  });
+    PreferencesHelper.initResolve = resolve
+  })
   /** Timer id for the debounced flush. -1 when none pending. */
-  private static flushTimerId: number = -1;
+  private static flushTimerId: number = -1
   /** Last attempt timestamp — throttles rapid retries. */
-  private static lastInitAttemptMs: number = 0;
-  private static readonly INIT_RETRY_MS = 30_000;
-  private static readonly INIT_WAIT_MS = 5_000;
+  private static lastInitAttemptMs: number = 0
+  private static readonly INIT_RETRY_MS = 30_000
+  private static readonly INIT_WAIT_MS = 5_000
 
   static async init(context: common.Context): Promise<void> {
-    PreferencesHelper.initContext = context;
+    PreferencesHelper.initContext = context
     if (PreferencesHelper.store) {
-      return;
+      return
     }
 
-    const now = Date.now();
+    const now = Date.now()
     if (now - PreferencesHelper.lastInitAttemptMs < 100) {
-      return;
+      return
     }
-    PreferencesHelper.lastInitAttemptMs = now;
+    PreferencesHelper.lastInitAttemptMs = now
 
     try {
-      PreferencesHelper.store = await preferences.getPreferences(context, PREF_STORE_NAME);
-      console.info('[PreferencesHelper] Store initialized');
+      PreferencesHelper.store = await preferences.getPreferences(context, PREF_STORE_NAME)
+      console.info('[PreferencesHelper] Store initialized')
       if (PreferencesHelper.initResolve) {
-        PreferencesHelper.initResolve();
-        PreferencesHelper.initResolve = null;
+        PreferencesHelper.initResolve()
+        PreferencesHelper.initResolve = null
       }
     } catch (err) {
       console.error(`[PreferencesHelper] Init failed: ${JSON.stringify(
-        err)}`); // Release waiters IMMEDIATELY so their calls return default
+        err)}`) // Release waiters IMMEDIATELY so their calls return default
       // values instead of blocking 5 s in ensureReady()'s race.
       // The next ensureReady() call will retry after INIT_RETRY_MS
       // because initResolve is now null — it skips the wait-race
       // branch entirely.
       if (PreferencesHelper.initResolve) {
-        PreferencesHelper.initResolve();
-        PreferencesHelper.initResolve = null;
+        PreferencesHelper.initResolve()
+        PreferencesHelper.initResolve = null
       }
     }
   }
 
   static async getString(key: string, def: string): Promise<string> {
-    await PreferencesHelper.ensureReady();
+    await PreferencesHelper.ensureReady()
     if (!PreferencesHelper.store) {
-      return def;
+      return def
     }
     try {
-      return (await PreferencesHelper.store.get(key, def)) as string;
+      return (await PreferencesHelper.store.get(key, def)) as string
     } catch (err) {
-      console.error(`[PreferencesHelper] getString(${key}) failed: ${JSON.stringify(err)}`);
-      return def;
+      console.error(`[PreferencesHelper] getString(${key}) failed: ${JSON.stringify(err)}`)
+      return def
     }
   }
-
 
   // ============================================================
   // READS
   // ============================================================
 
   static async getNumber(key: string, def: number): Promise<number> {
-    await PreferencesHelper.ensureReady();
+    await PreferencesHelper.ensureReady()
     if (!PreferencesHelper.store) {
-      return def;
+      return def
     }
     try {
-      return (await PreferencesHelper.store.get(key, def)) as number;
+      return (await PreferencesHelper.store.get(key, def)) as number
     } catch (err) {
-      console.error(`[PreferencesHelper] getNumber(${key}) failed: ${JSON.stringify(err)}`);
-      return def;
+      console.error(`[PreferencesHelper] getNumber(${key}) failed: ${JSON.stringify(err)}`)
+      return def
     }
   }
 
   static async getBoolean(key: string, def: boolean): Promise<boolean> {
-    await PreferencesHelper.ensureReady();
+    await PreferencesHelper.ensureReady()
     if (!PreferencesHelper.store) {
-      return def;
+      return def
     }
     try {
-      return (await PreferencesHelper.store.get(key, def)) as boolean;
+      return (await PreferencesHelper.store.get(key, def)) as boolean
     } catch (err) {
-      console.error(`[PreferencesHelper] getBoolean(${key}) failed: ${JSON.stringify(err)}`);
-      return def;
+      console.error(`[PreferencesHelper] getBoolean(${key}) failed: ${JSON.stringify(err)}`)
+      return def
     }
   }
 
   static async setString(key: string, value: string): Promise<void> {
-    await PreferencesHelper.ensureReady();
+    await PreferencesHelper.ensureReady()
     if (!PreferencesHelper.store) {
-      console.warn(`[PreferencesHelper] setString(${key}) – store not ready, skipping`);
-      return;
+      console.warn(`[PreferencesHelper] setString(${key}) – store not ready, skipping`)
+      return
     }
     try {
-      await PreferencesHelper.store.put(key, value);
-      PreferencesHelper.scheduleFlush();
+      await PreferencesHelper.store.put(key, value)
+      PreferencesHelper.scheduleFlush()
     } catch (err) {
-      console.error(`[PreferencesHelper] setString(${key}) failed: ${JSON.stringify(err)}`);
+      console.error(`[PreferencesHelper] setString(${key}) failed: ${JSON.stringify(err)}`)
     }
   }
 
@@ -148,30 +147,30 @@ export class PreferencesHelper {
   // ============================================================
 
   static async setNumber(key: string, value: number): Promise<void> {
-    await PreferencesHelper.ensureReady();
+    await PreferencesHelper.ensureReady()
     if (!PreferencesHelper.store) {
-      console.warn(`[PreferencesHelper] setNumber(${key}) – store not ready, skipping`);
-      return;
+      console.warn(`[PreferencesHelper] setNumber(${key}) – store not ready, skipping`)
+      return
     }
     try {
-      await PreferencesHelper.store.put(key, value);
-      PreferencesHelper.scheduleFlush();
+      await PreferencesHelper.store.put(key, value)
+      PreferencesHelper.scheduleFlush()
     } catch (err) {
-      console.error(`[PreferencesHelper] setNumber(${key}) failed: ${JSON.stringify(err)}`);
+      console.error(`[PreferencesHelper] setNumber(${key}) failed: ${JSON.stringify(err)}`)
     }
   }
 
   static async setBoolean(key: string, value: boolean): Promise<void> {
-    await PreferencesHelper.ensureReady();
+    await PreferencesHelper.ensureReady()
     if (!PreferencesHelper.store) {
-      console.warn(`[PreferencesHelper] setBoolean(${key}) – store not ready, skipping`);
-      return;
+      console.warn(`[PreferencesHelper] setBoolean(${key}) – store not ready, skipping`)
+      return
     }
     try {
-      await PreferencesHelper.store.put(key, value);
-      PreferencesHelper.scheduleFlush();
+      await PreferencesHelper.store.put(key, value)
+      PreferencesHelper.scheduleFlush()
     } catch (err) {
-      console.error(`[PreferencesHelper] setBoolean(${key}) failed: ${JSON.stringify(err)}`);
+      console.error(`[PreferencesHelper] setBoolean(${key}) failed: ${JSON.stringify(err)}`)
     }
   }
 
@@ -180,15 +179,15 @@ export class PreferencesHelper {
    * Succeeds silently if the key doesn't exist.
    */
   static async remove(key: string): Promise<void> {
-    await PreferencesHelper.ensureReady();
+    await PreferencesHelper.ensureReady()
     if (!PreferencesHelper.store) {
-      return;
+      return
     }
     try {
-      await PreferencesHelper.store.delete(key);
-      PreferencesHelper.scheduleFlush();
+      await PreferencesHelper.store.delete(key)
+      PreferencesHelper.scheduleFlush()
     } catch (err) { // Missing key — treat as success.
-      console.info(`[PreferencesHelper] remove(${key}) — key absent`);
+      console.info(`[PreferencesHelper] remove(${key}) — key absent`)
     }
   }
 
@@ -206,14 +205,14 @@ export class PreferencesHelper {
    * which is no longer true).
    */
   static async flushNow(): Promise<void> {
-    PreferencesHelper.cancelFlush();
+    PreferencesHelper.cancelFlush()
     if (!PreferencesHelper.store) {
-      return;
+      return
     }
     try {
-      await PreferencesHelper.store.flush();
+      await PreferencesHelper.store.flush()
     } catch (err) {
-      console.error(`[PreferencesHelper] flushNow failed: ${JSON.stringify(err)}`);
+      console.error(`[PreferencesHelper] flushNow failed: ${JSON.stringify(err)}`)
     }
   }
 
@@ -228,10 +227,10 @@ export class PreferencesHelper {
    */
   static async reloadFromDisk(): Promise<void> {
     if (!PreferencesHelper.store) {
-      return;
+      return
     }
     try {
-      await PreferencesHelper.store.getAll();
+      await PreferencesHelper.store.getAll()
     } catch (e) { // swallow
     }
   }
@@ -241,45 +240,45 @@ export class PreferencesHelper {
   // ============================================================
 
   static getContext(): common.Context | null {
-    return PreferencesHelper.initContext;
+    return PreferencesHelper.initContext
   }
 
   private static async ensureReady(): Promise<void> {
     if (PreferencesHelper.store) {
-      return;
+      return
     }
 
     // Wait up to INIT_WAIT_MS for the in-flight init to succeed.
     if (PreferencesHelper.initResolve !== null) {
       await Promise.race(
-        [PreferencesHelper.initPromise, new Promise<void>((r) => setTimeout(r, PreferencesHelper.INIT_WAIT_MS))]);
+        [PreferencesHelper.initPromise, new Promise<void>((r) => setTimeout(r, PreferencesHelper.INIT_WAIT_MS))])
     }
 
     if (PreferencesHelper.store) {
-      return;
+      return
     }
 
     // Retry once per INIT_RETRY_MS if we have a context.
     if (PreferencesHelper.initContext !== null &&
       Date.now() - PreferencesHelper.lastInitAttemptMs > PreferencesHelper.INIT_RETRY_MS) {
-      await PreferencesHelper.init(PreferencesHelper.initContext);
+      await PreferencesHelper.init(PreferencesHelper.initContext)
     }
   }
 
   private static scheduleFlush(): void {
     if (PreferencesHelper.flushTimerId !== -1) {
-      clearTimeout(PreferencesHelper.flushTimerId);
+      clearTimeout(PreferencesHelper.flushTimerId)
     }
     PreferencesHelper.flushTimerId = setTimeout(() => {
-      PreferencesHelper.flushTimerId = -1;
-      PreferencesHelper.flushNow();
-    }, FLUSH_DEBOUNCE_MS);
+      PreferencesHelper.flushTimerId = -1
+      PreferencesHelper.flushNow()
+    }, FLUSH_DEBOUNCE_MS)
   }
 
   private static cancelFlush(): void {
     if (PreferencesHelper.flushTimerId !== -1) {
-      clearTimeout(PreferencesHelper.flushTimerId);
-      PreferencesHelper.flushTimerId = -1;
+      clearTimeout(PreferencesHelper.flushTimerId)
+      PreferencesHelper.flushTimerId = -1
     }
   }
 }

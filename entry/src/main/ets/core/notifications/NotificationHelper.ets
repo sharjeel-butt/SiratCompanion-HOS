@@ -1,52 +1,52 @@
 // entry/src/main/ets/helper/NotificationHelper.ets
 
-import { reminderAgentManager } from '@kit.BackgroundTasksKit';
-import { notificationManager } from '@kit.NotificationKit';
-import { common } from '@kit.AbilityKit';
-import { BusinessError } from '@kit.BasicServicesKit';
-import { NotificationsSettings, PrayerOffsets, SettingsHelper } from '../settings/SettingsHelper';
-import { AdvancedCalcSettings } from './AdvancedCalcModels';
+import { reminderAgentManager } from '@kit.BackgroundTasksKit'
+import { notificationManager } from '@kit.NotificationKit'
+import { common } from '@kit.AbilityKit'
+import { BusinessError } from '@kit.BasicServicesKit'
+import { NotificationsSettings, PrayerOffsets, SettingsHelper } from '../../settings/SettingsHelper'
+import { AdvancedCalcSettings } from '../../prayer/AdvancedCalcModels'
 import {
   AsrShadowRule,
   CalculationMethod,
   DailyPrayerTimes,
   HighLatitudeRule,
   PrayerTimeCalculator
-} from './PrayerTimeCalculator';
-import { PrayerCheckState, PrayerManager } from './PrayerManager';
-import { LocationCache } from '../location/LocationCache';
-import { LocationMode } from '../settings/SettingsModels';
-import { L } from '../i18n/LocalizationHelper';
-import { AppLogger } from '../core/app/AppLogger';
-import { CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED } from '../core/common/FeatureFlags';
-import { CalendarReminderEntry, CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
+} from '../../prayer/PrayerTimeCalculator'
+import { PrayerCheckState, PrayerManager } from '../../prayer/PrayerManager'
+import { LocationCache } from '../../location/LocationCache'
+import { LocationMode } from '../../settings/SettingsModels'
+import { L } from '../../i18n/LocalizationHelper'
+import { AppLogger } from '../app/AppLogger'
+import { CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED } from '../common/FeatureFlags'
+import { CalendarReminderEntry, CalendarReminderHelper } from '../../hijricalendar/CalendarReminderHelper'
 
 /** How many days ahead to schedule. Older reminders renew on app open. */
-const DAYS_AHEAD = 3;
+const DAYS_AHEAD = 3
 
-export const MIN_BEFORE_MINUTES = 0;
+export const MIN_BEFORE_MINUTES = 0
 
-export const MAX_BEFORE_MINUTES = 60;
+export const MAX_BEFORE_MINUTES = 60
 
-export const STEP_BEFORE_MINUTES = 5;
+export const STEP_BEFORE_MINUTES = 5
 
 /** Default debounce for scheduled reschedules, in milliseconds. */
-const RESCHEDULE_DEBOUNCE_MS = 600;
+const RESCHEDULE_DEBOUNCE_MS = 600
 
 /** Which backend is currently active. */
-export type ReminderBackend = 'agent' | 'calendar' | 'none';
+export type ReminderBackend = 'agent' | 'calendar' | 'none'
 
 interface PrayerNotificationItem {
-  id: string;
-  name: string;
-  time: string;
+  id: string
+  name: string
+  time: string
 }
 
 export interface ScheduleResult {
-  ok: boolean;
-  scheduled: number;
-  errorCode: number;
-  errorMessage: string;
+  ok: boolean
+  scheduled: number
+  errorCode: number
+  errorMessage: string
 }
 
 /**
@@ -87,7 +87,7 @@ export class NotificationHelper {
   // BACKEND RESOLUTION
   // ============================================================
 
-  private static rescheduleDebounceId: number = -1;
+  private static rescheduleDebounceId: number = -1
   // ============================================================
   // PERMISSION
   // ============================================================
@@ -97,9 +97,9 @@ export class NotificationHelper {
    * in quick succession; without serialization the cancel / schedule
    * pairs interleave and can leave orphaned events.
    */
-  private static rescheduleInFlight: boolean = false;
+  private static rescheduleInFlight: boolean = false
   /** Set to true if a reschedule was requested while one was running. */
-  private static reschedulePending: boolean = false;
+  private static reschedulePending: boolean = false
 
   // ============================================================
   // CANCEL
@@ -110,15 +110,15 @@ export class NotificationHelper {
       AppLogger.warn('NotificationHelper', 'Both CALENDAR_REMINDERS_ENABLED and NOTIFICATIONS_ENABLED are true ' +
         'in FeatureFlags.ets. Calendar backend takes precedence; the ' +
         'agent backend is inactive. This is almost certainly a ' +
-        'misconfiguration — exactly one of the two must be true.');
+        'misconfiguration — exactly one of the two must be true.')
     }
     if (CALENDAR_REMINDERS_ENABLED) {
-      return 'calendar';
+      return 'calendar'
     }
     if (NOTIFICATIONS_ENABLED) {
-      return 'agent';
+      return 'agent'
     }
-    return 'none';
+    return 'none'
   }
 
   // ============================================================
@@ -126,57 +126,57 @@ export class NotificationHelper {
   // ============================================================
 
   static async requestPermission(context: common.UIAbilityContext): Promise<boolean> {
-    const backend = NotificationHelper.resolveBackend();
+    const backend = NotificationHelper.resolveBackend()
 
     if (backend === 'calendar') {
-      return CalendarReminderHelper.requestPermission(context);
+      return CalendarReminderHelper.requestPermission(context)
     }
     if (backend === 'agent') {
       try {
-        await notificationManager.requestEnableNotification(context);
-        AppLogger.info('NotificationHelper', 'Agent permission granted');
-        return true;
+        await notificationManager.requestEnableNotification(context)
+        AppLogger.info('NotificationHelper', 'Agent permission granted')
+        return true
       } catch (err) {
-        const error = err as BusinessError;
-        AppLogger.warn('NotificationHelper', `Agent permission request failed: ${error.code} ${error.message}`);
-        return false;
+        const error = err as BusinessError
+        AppLogger.warn('NotificationHelper', `Agent permission request failed: ${error.code} ${error.message}`)
+        return false
       }
     }
-    return false;
+    return false
   }
 
   static async isPermissionGranted(context: common.UIAbilityContext): Promise<boolean> {
-    const backend = NotificationHelper.resolveBackend();
+    const backend = NotificationHelper.resolveBackend()
 
     if (backend === 'calendar') {
-      return CalendarReminderHelper.isPermissionGranted(context);
+      return CalendarReminderHelper.isPermissionGranted(context)
     }
     if (backend === 'agent') {
       try {
-        return await notificationManager.isNotificationEnabled();
+        return await notificationManager.isNotificationEnabled()
       } catch (err) {
-        const error = err as BusinessError;
-        AppLogger.warn('NotificationHelper', `isNotificationEnabled failed: ${error.code} ${error.message}`);
-        return false;
+        const error = err as BusinessError
+        AppLogger.warn('NotificationHelper', `isNotificationEnabled failed: ${error.code} ${error.message}`)
+        return false
       }
     }
-    return false;
+    return false
   }
 
   static async cancelAll(): Promise<void> {
-    const backend = NotificationHelper.resolveBackend();
+    const backend = NotificationHelper.resolveBackend()
 
     if (backend === 'calendar') {
-      await CalendarReminderHelper.cancelAll();
-      return;
+      await CalendarReminderHelper.cancelAll()
+      return
     }
     if (backend === 'agent') {
       try {
-        await reminderAgentManager.cancelAllReminders();
-        AppLogger.info('NotificationHelper', 'All agent reminders cancelled');
+        await reminderAgentManager.cancelAllReminders()
+        AppLogger.info('NotificationHelper', 'All agent reminders cancelled')
       } catch (err) {
-        const error = err as BusinessError;
-        AppLogger.warn('NotificationHelper', `cancelAll failed: ${error.code} ${error.message}`);
+        const error = err as BusinessError
+        AppLogger.warn('NotificationHelper', `cancelAll failed: ${error.code} ${error.message}`)
       }
     }
   }
@@ -186,7 +186,7 @@ export class NotificationHelper {
   // ============================================================
 
   static async publishTestNotification(): Promise<ScheduleResult> {
-    const backend = NotificationHelper.resolveBackend();
+    const backend = NotificationHelper.resolveBackend()
 
     if (backend === 'none') {
       const disabled: ScheduleResult = {
@@ -194,17 +194,17 @@ export class NotificationHelper {
         scheduled: 0,
         errorCode: -100,
         errorMessage: 'no reminder backend enabled'
-      };
-      return disabled;
+      }
+      return disabled
     }
 
-    const fireAt = new Date(Date.now() + 5000);
-    AppLogger.info('NotificationHelper', `Test reminder requested — fire at ${fireAt.toISOString()}`);
+    const fireAt = new Date(Date.now() + 5000)
+    AppLogger.info('NotificationHelper', `Test reminder requested — fire at ${fireAt.toISOString()}`)
 
     if (backend === 'calendar') {
-      return NotificationHelper.publishCalendarTest(fireAt);
+      return NotificationHelper.publishCalendarTest(fireAt)
     }
-    return NotificationHelper.publishAgentTest(fireAt);
+    return NotificationHelper.publishAgentTest(fireAt)
   }
 
   /**
@@ -220,15 +220,15 @@ export class NotificationHelper {
    */
   static scheduleReschedule(delayMs: number = RESCHEDULE_DEBOUNCE_MS): void {
     if (NotificationHelper.rescheduleDebounceId !== -1) {
-      clearTimeout(NotificationHelper.rescheduleDebounceId);
+      clearTimeout(NotificationHelper.rescheduleDebounceId)
     }
     NotificationHelper.rescheduleDebounceId = setTimeout(() => {
-      NotificationHelper.rescheduleDebounceId = -1;
-      AppLogger.info('NotificationHelper', 'Debounced reschedule firing');
+      NotificationHelper.rescheduleDebounceId = -1
+      AppLogger.info('NotificationHelper', 'Debounced reschedule firing')
       NotificationHelper.rescheduleAll().catch((e: Error) => {
-        AppLogger.warn('NotificationHelper', `Debounced reschedule failed: ${e.message}`);
-      });
-    }, delayMs);
+        AppLogger.warn('NotificationHelper', `Debounced reschedule failed: ${e.message}`)
+      })
+    }, delayMs)
   }
 
   /**
@@ -245,12 +245,12 @@ export class NotificationHelper {
    */
   static scheduleRescheduleNow(): void {
     if (NotificationHelper.rescheduleDebounceId !== -1) {
-      clearTimeout(NotificationHelper.rescheduleDebounceId);
-      NotificationHelper.rescheduleDebounceId = -1;
+      clearTimeout(NotificationHelper.rescheduleDebounceId)
+      NotificationHelper.rescheduleDebounceId = -1
     }
     NotificationHelper.rescheduleAll().catch((e: Error) => {
-      AppLogger.warn('NotificationHelper', `Immediate reschedule failed: ${e.message}`);
-    });
+      AppLogger.warn('NotificationHelper', `Immediate reschedule failed: ${e.message}`)
+    })
   }
 
   // ============================================================
@@ -259,29 +259,29 @@ export class NotificationHelper {
 
   static async rescheduleAll(): Promise<ScheduleResult> {
     if (NotificationHelper.rescheduleInFlight) {
-      NotificationHelper.reschedulePending = true;
-      AppLogger.info('NotificationHelper', 'rescheduleAll queued — one is already in flight');
+      NotificationHelper.reschedulePending = true
+      AppLogger.info('NotificationHelper', 'rescheduleAll queued — one is already in flight')
       return {
         ok: true,
         scheduled: 0,
         errorCode: 0,
         errorMessage: 'queued'
-      };
+      }
     }
 
-    NotificationHelper.rescheduleInFlight = true;
+    NotificationHelper.rescheduleInFlight = true
     try {
-      const result = await NotificationHelper.doRescheduleAll();
-      return result;
+      const result = await NotificationHelper.doRescheduleAll()
+      return result
     } finally {
-      NotificationHelper.rescheduleInFlight = false;
+      NotificationHelper.rescheduleInFlight = false
 
       if (NotificationHelper.reschedulePending) {
-        NotificationHelper.reschedulePending = false;
-        AppLogger.info('NotificationHelper', 'rescheduleAll running queued pass');
+        NotificationHelper.reschedulePending = false
+        AppLogger.info('NotificationHelper', 'rescheduleAll running queued pass')
         NotificationHelper.rescheduleAll().catch((e: Error) => {
-          AppLogger.warn('NotificationHelper', `Queued reschedule failed: ${e.message}`);
-        });
+          AppLogger.warn('NotificationHelper', `Queued reschedule failed: ${e.message}`)
+        })
       }
     }
   }
@@ -292,139 +292,139 @@ export class NotificationHelper {
       startTime: fireAt.getTime(),
       reminderMinutes: [0],
       description: NotificationHelper.hadithFor('Fajr')
-    }; // Non-destructive: publish one test event without cancelling
+    } // Non-destructive: publish one test event without cancelling
     // the user's real prayer reminders. addTestEvent() is the only
     // path that can safely do this — rescheduleAll() would wipe them.
-    const created = await CalendarReminderHelper.addTestEvent(entry);
+    const created = await CalendarReminderHelper.addTestEvent(entry)
     const result: ScheduleResult = {
       ok: created > 0,
       scheduled: created,
       errorCode: created > 0 ? 0 : -1,
       errorMessage: created > 0 ? '' : 'calendar addEvent failed'
-    };
-    return result;
+    }
+    return result
   }
 
   private static async publishAgentTest(fireAt: Date): Promise<ScheduleResult> {
-    const detail = await NotificationHelper.publishReminderDetailed('Fajr', fireAt, -1);
+    const detail = await NotificationHelper.publishReminderDetailed('Fajr', fireAt, -1)
     const result: ScheduleResult = {
       ok: detail.ok,
       scheduled: detail.ok ? 1 : 0,
       errorCode: detail.errorCode,
       errorMessage: detail.errorMessage
-    };
-    return result;
+    }
+    return result
   }
 
   private static async doRescheduleAll(): Promise<ScheduleResult> {
-    const backend = NotificationHelper.resolveBackend();
+    const backend = NotificationHelper.resolveBackend()
 
     if (backend === 'none') {
-      AppLogger.info('NotificationHelper', 'rescheduleAll skipped — no backend enabled');
+      AppLogger.info('NotificationHelper', 'rescheduleAll skipped — no backend enabled')
       return {
         ok: true,
         scheduled: 0,
         errorCode: 0,
         errorMessage: 'no backend enabled'
-      };
+      }
     }
 
-    AppLogger.info('NotificationHelper', `rescheduleAll started (backend=${backend})`);
+    AppLogger.info('NotificationHelper', `rescheduleAll started (backend=${backend})`)
 
     if (backend === 'calendar') {
       if (!CalendarReminderHelper.isReady()) { // If master is disabled we came here specifically to CANCEL
         // reminders — returning before cancelAll() leaves events on
         // the device. Log at WARN with the intent so this is
         // diagnosable.
-        const settings = await SettingsHelper.getNotificationSettings();
-        const intent = settings.masterEnabled ? 'schedule' : 'cancel';
+        const settings = await SettingsHelper.getNotificationSettings()
+        const intent = settings.masterEnabled ? 'schedule' : 'cancel'
         AppLogger.warn('NotificationHelper',
-          `Calendar backend not ready — cannot ${intent}. ` + `Events may be orphaned until permission is re-granted.`);
+          `Calendar backend not ready — cannot ${intent}. ` + `Events may be orphaned until permission is re-granted.`)
         return {
           ok: false,
           scheduled: 0,
           errorCode: -10,
           errorMessage: 'calendar backend not ready'
-        };
+        }
       }
     }
 
     // ---- Step 1: cancel everything ----
-    await NotificationHelper.cancelAll();
+    await NotificationHelper.cancelAll()
 
     // ---- Step 2: check master toggle ----
-    const settings: NotificationsSettings = await SettingsHelper.getNotificationSettings();
+    const settings: NotificationsSettings = await SettingsHelper.getNotificationSettings()
     if (!settings.masterEnabled) {
-      AppLogger.info('NotificationHelper', 'Master disabled — nothing to schedule');
+      AppLogger.info('NotificationHelper', 'Master disabled — nothing to schedule')
       return {
         ok: true,
         scheduled: 0,
         errorCode: 0,
         errorMessage: 'master disabled'
-      };
+      }
     }
 
     // ---- Step 3: resolve location ----
-    const mode = await SettingsHelper.getLocationMode();
-    let latitude = 0;
-    let longitude = 0;
+    const mode = await SettingsHelper.getLocationMode()
+    let latitude = 0
+    let longitude = 0
 
     if (mode === LocationMode.MANUAL) {
-      const coords = await SettingsHelper.getManualCoords();
+      const coords = await SettingsHelper.getManualCoords()
       if (coords.lat === 0 && coords.lng === 0) {
         return {
           ok: false,
           scheduled: 0,
           errorCode: -2,
           errorMessage: 'no manual coordinates set'
-        };
+        }
       }
-      latitude = coords.lat;
-      longitude = coords.lng;
+      latitude = coords.lat
+      longitude = coords.lng
     } else {
-      const cached = await LocationCache.load();
+      const cached = await LocationCache.load()
       if (!cached) {
         return {
           ok: false,
           scheduled: 0,
           errorCode: -3,
           errorMessage: 'no cached GPS location'
-        };
+        }
       }
-      latitude = cached.latitude;
-      longitude = cached.longitude;
+      latitude = cached.latitude
+      longitude = cached.longitude
     }
 
     // ---- Step 4: resolve calculation params ----
-    const data = await SettingsHelper.loadAll();
-    const method: CalculationMethod = data.method;
-    const asrRule: AsrShadowRule = data.asr;
-    const highLatRule: HighLatitudeRule = await SettingsHelper.getHighLatRule();
-    const offsets: PrayerOffsets = await SettingsHelper.getPrayerOffsets();
-    const advanced: AdvancedCalcSettings = await SettingsHelper.getAdvancedCalcSettings();
+    const data = await SettingsHelper.loadAll()
+    const method: CalculationMethod = data.method
+    const asrRule: AsrShadowRule = data.asr
+    const highLatRule: HighLatitudeRule = await SettingsHelper.getHighLatRule()
+    const offsets: PrayerOffsets = await SettingsHelper.getPrayerOffsets()
+    const advanced: AdvancedCalcSettings = await SettingsHelper.getAdvancedCalcSettings()
 
     // ---- Step 5: schedule fresh ----
     // If today's prayers are all marked as prayed, shift the anchor
     // to tomorrow so the rolling window still yields DAYS_AHEAD days
     // of pending reminders. Without this, a completed day would
     // shrink the effective coverage to (DAYS_AHEAD - 1) future days.
-    const anchor = new Date();
-    anchor.setHours(0, 0, 0, 0);
+    const anchor = new Date()
+    anchor.setHours(0, 0, 0, 0)
 
-    const todayKey = PrayerManager.getDateKeyForDate(anchor);
+    const todayKey = PrayerManager.getDateKeyForDate(anchor)
     if (PrayerManager.isDayFullyPrayed(todayKey)) {
-      anchor.setDate(anchor.getDate() + 1);
-      AppLogger.info('NotificationHelper', 'Today fully prayed — anchor shifted to tomorrow');
+      anchor.setDate(anchor.getDate() + 1)
+      AppLogger.info('NotificationHelper', 'Today fully prayed — anchor shifted to tomorrow')
     }
 
-    const nowMs = Date.now();
+    const nowMs = Date.now()
 
     if (backend === 'calendar') {
       return NotificationHelper.scheduleViaCalendar(anchor, nowMs, latitude, longitude, method, asrRule, highLatRule,
-        offsets, advanced, settings);
+        offsets, advanced, settings)
     }
     return NotificationHelper.scheduleViaAgent(anchor, nowMs, latitude, longitude, method, asrRule, highLatRule,
-      offsets, advanced, settings);
+      offsets, advanced, settings)
   }
 
   // ============================================================
@@ -435,43 +435,43 @@ export class NotificationHelper {
     method: CalculationMethod, asrRule: AsrShadowRule, highLatRule: HighLatitudeRule, offsets: PrayerOffsets,
     advanced: AdvancedCalcSettings, settings: NotificationsSettings): Promise<ScheduleResult> {
     AppLogger.info('NotificationHelper',
-      `Scheduling calendar reminders from ` + `${PrayerManager.getDateKeyForDate(anchor)} for ${DAYS_AHEAD} day(s)`);
-    const entries: CalendarReminderEntry[] = [];
-    const leadMinutes = settings.beforeMinutes;
-    const reminderMinutes: number[] = leadMinutes > 0 ? [0, leadMinutes] : [0];
+      `Scheduling calendar reminders from ` + `${PrayerManager.getDateKeyForDate(anchor)} for ${DAYS_AHEAD} day(s)`)
+    const entries: CalendarReminderEntry[] = []
+    const leadMinutes = settings.beforeMinutes
+    const reminderMinutes: number[] = leadMinutes > 0 ? [0, leadMinutes] : [0]
 
     for (let dayOffset = 0; dayOffset < DAYS_AHEAD; dayOffset++) {
-      const day = new Date(anchor);
-      day.setDate(day.getDate() + dayOffset);
+      const day = new Date(anchor)
+      day.setDate(day.getDate() + dayOffset)
 
-      const dateKey = PrayerManager.getDateKeyForDate(day);
-      const dayState: PrayerCheckState = PrayerManager.getCheckState(dateKey);
+      const dateKey = PrayerManager.getDateKeyForDate(day)
+      const dayState: PrayerCheckState = PrayerManager.getCheckState(dateKey)
 
-      let times: DailyPrayerTimes;
+      let times: DailyPrayerTimes
       try {
         times = PrayerTimeCalculator.calculateWithDeviceTimezone(day, latitude, longitude, method, asrRule, highLatRule,
-          advanced);
+          advanced)
       } catch (err) {
-        const e = err as Error;
-        AppLogger.warn('NotificationHelper', `Calculation failed for day ${dayOffset}: ${e.message}`);
-        continue;
+        const e = err as Error
+        AppLogger.warn('NotificationHelper', `Calculation failed for day ${dayOffset}: ${e.message}`)
+        continue
       }
 
-      const prayers = NotificationHelper.buildPrayerList(day, times, offsets);
+      const prayers = NotificationHelper.buildPrayerList(day, times, offsets)
       for (const p of prayers) {
         if (!NotificationHelper.isPrayerEnabled(settings, p.id)) {
-          continue;
+          continue
         }
 
         // Already prayed → no reminder needed for this date.
         if (NotificationHelper.isPrayerChecked(dayState, p.id)) {
-          AppLogger.info('NotificationHelper', `Skipping ${p.name} on ${dateKey} — already prayed`);
-          continue;
+          AppLogger.info('NotificationHelper', `Skipping ${p.name} on ${dateKey} — already prayed`)
+          continue
         }
 
-        const prayerDate = NotificationHelper.parseToDate(p.time, day);
+        const prayerDate = NotificationHelper.parseToDate(p.time, day)
         if (prayerDate.getTime() + leadMinutes * 60 * 1000 <= nowMs) {
-          continue;
+          continue
         }
 
         const entry: CalendarReminderEntry = {
@@ -479,8 +479,8 @@ export class NotificationHelper {
           startTime: prayerDate.getTime(),
           reminderMinutes: reminderMinutes,
           description: NotificationHelper.hadithFor(p.name)
-        };
-        entries.push(entry);
+        }
+        entries.push(entry)
       }
     }
 
@@ -490,18 +490,18 @@ export class NotificationHelper {
         scheduled: 0,
         errorCode: 0,
         errorMessage: 'nothing to schedule'
-      };
+      }
     }
 
-    const created = await CalendarReminderHelper.rescheduleAll(entries);
-    AppLogger.info('NotificationHelper', `Calendar backend scheduled ${created} event(s)`);
+    const created = await CalendarReminderHelper.rescheduleAll(entries)
+    AppLogger.info('NotificationHelper', `Calendar backend scheduled ${created} event(s)`)
 
     return {
       ok: created > 0,
       scheduled: created,
       errorCode: created > 0 ? 0 : -1,
       errorMessage: created > 0 ? '' : 'calendar addEvent failed'
-    };
+    }
   }
 
   // ============================================================
@@ -512,88 +512,88 @@ export class NotificationHelper {
     method: CalculationMethod, asrRule: AsrShadowRule, highLatRule: HighLatitudeRule, offsets: PrayerOffsets,
     advanced: AdvancedCalcSettings, settings: NotificationsSettings): Promise<ScheduleResult> {
     AppLogger.info('NotificationHelper',
-      `Scheduling agent reminders from ` + `${PrayerManager.getDateKeyForDate(anchor)} for ${DAYS_AHEAD} day(s)`);
-    let scheduledCount = 0;
-    let lastErrorCode = 0;
-    let lastErrorMessage = '';
+      `Scheduling agent reminders from ` + `${PrayerManager.getDateKeyForDate(anchor)} for ${DAYS_AHEAD} day(s)`)
+    let scheduledCount = 0
+    let lastErrorCode = 0
+    let lastErrorMessage = ''
 
     for (let dayOffset = 0; dayOffset < DAYS_AHEAD; dayOffset++) {
-      const day = new Date(anchor);
-      day.setDate(day.getDate() + dayOffset);
+      const day = new Date(anchor)
+      day.setDate(day.getDate() + dayOffset)
 
-      const dateKey = PrayerManager.getDateKeyForDate(day);
-      const dayState: PrayerCheckState = PrayerManager.getCheckState(dateKey);
+      const dateKey = PrayerManager.getDateKeyForDate(day)
+      const dayState: PrayerCheckState = PrayerManager.getCheckState(dateKey)
 
-      let times: DailyPrayerTimes;
+      let times: DailyPrayerTimes
       try {
         times = PrayerTimeCalculator.calculateWithDeviceTimezone(day, latitude, longitude, method, asrRule, highLatRule,
-          advanced);
+          advanced)
       } catch (err) {
-        const e = err as Error;
-        AppLogger.warn('NotificationHelper', `Calculation failed for day ${dayOffset}: ${e.message}`);
-        continue;
+        const e = err as Error
+        AppLogger.warn('NotificationHelper', `Calculation failed for day ${dayOffset}: ${e.message}`)
+        continue
       }
 
       const dayResult =
-        await NotificationHelper.scheduleAgentDay(day, dateKey, dayState, times, offsets, settings, nowMs);
-      scheduledCount += dayResult.scheduled;
+        await NotificationHelper.scheduleAgentDay(day, dateKey, dayState, times, offsets, settings, nowMs)
+      scheduledCount += dayResult.scheduled
       if (!dayResult.ok) {
-        lastErrorCode = dayResult.errorCode;
-        lastErrorMessage = dayResult.errorMessage;
+        lastErrorCode = dayResult.errorCode
+        lastErrorMessage = dayResult.errorMessage
       }
     }
 
-    AppLogger.info('NotificationHelper', `Agent backend scheduled ${scheduledCount}, lastError=${lastErrorCode}`);
+    AppLogger.info('NotificationHelper', `Agent backend scheduled ${scheduledCount}, lastError=${lastErrorCode}`)
 
     return {
       ok: scheduledCount > 0 || lastErrorCode === 0,
       scheduled: scheduledCount,
       errorCode: lastErrorCode,
       errorMessage: lastErrorMessage
-    };
+    }
   }
 
   private static async scheduleAgentDay(day: Date, dateKey: string, dayState: PrayerCheckState, times: DailyPrayerTimes,
     offsets: PrayerOffsets, settings: NotificationsSettings, nowMs: number): Promise<ScheduleResult> {
-    const prayers = NotificationHelper.buildPrayerList(day, times, offsets);
-    let count = 0;
-    let lastErr = 0;
-    let lastMsg = '';
+    const prayers = NotificationHelper.buildPrayerList(day, times, offsets)
+    let count = 0
+    let lastErr = 0
+    let lastMsg = ''
 
     for (const p of prayers) {
       if (!NotificationHelper.isPrayerEnabled(settings, p.id)) {
-        continue;
+        continue
       }
 
       // Already prayed → no reminder needed for this date.
       if (NotificationHelper.isPrayerChecked(dayState, p.id)) {
-        AppLogger.info('NotificationHelper', `Skipping ${p.name} on ${dateKey} — already prayed`);
-        continue;
+        AppLogger.info('NotificationHelper', `Skipping ${p.name} on ${dateKey} — already prayed`)
+        continue
       }
 
-      const prayerDate = NotificationHelper.parseToDate(p.time, day);
+      const prayerDate = NotificationHelper.parseToDate(p.time, day)
       if (prayerDate.getTime() <= nowMs) {
-        continue;
+        continue
       }
 
-      const exactOk = await NotificationHelper.publishReminder(p.name, prayerDate, -1);
+      const exactOk = await NotificationHelper.publishReminder(p.name, prayerDate, -1)
       if (exactOk) {
-        count++;
+        count++
       } else {
-        lastErr = -1;
-        lastMsg = `publish failed for ${p.name} exact`;
+        lastErr = -1
+        lastMsg = `publish failed for ${p.name} exact`
       }
 
-      const before = settings.beforeMinutes;
+      const before = settings.beforeMinutes
       if (before > 0) {
-        const beforeDate = new Date(prayerDate.getTime() - before * 60 * 1000);
+        const beforeDate = new Date(prayerDate.getTime() - before * 60 * 1000)
         if (beforeDate.getTime() > nowMs) {
-          const beforeOk = await NotificationHelper.publishReminder(p.name, beforeDate, before);
+          const beforeOk = await NotificationHelper.publishReminder(p.name, beforeDate, before)
           if (beforeOk) {
-            count++;
+            count++
           } else {
-            lastErr = -1;
-            lastMsg = `publish failed for ${p.name} before`;
+            lastErr = -1
+            lastMsg = `publish failed for ${p.name} before`
           }
         }
       }
@@ -604,7 +604,7 @@ export class NotificationHelper {
       scheduled: count,
       errorCode: lastErr,
       errorMessage: lastMsg
-    };
+    }
   }
 
   // ============================================================
@@ -612,19 +612,19 @@ export class NotificationHelper {
   // ============================================================
 
   private static async publishReminder(prayerName: string, fireAt: Date, beforeMinutes: number): Promise<boolean> {
-    const detail = await NotificationHelper.publishReminderDetailed(prayerName, fireAt, beforeMinutes);
-    return detail.ok;
+    const detail = await NotificationHelper.publishReminderDetailed(prayerName, fireAt, beforeMinutes)
+    return detail.ok
   }
 
   private static async publishReminderDetailed(prayerName: string, fireAt: Date,
     beforeMinutes: number): Promise<ScheduleResult> {
-    const titleBase = NotificationHelper.prayTitle(prayerName);
-    const isBefore = beforeMinutes > 0;
+    const titleBase = NotificationHelper.prayTitle(prayerName)
+    const isBefore = beforeMinutes > 0
 
-    const title = isBefore ? `${titleBase} \u2014 ${beforeMinutes} ${L.get('notif_minutes_suffix')}` : titleBase;
-    const content = NotificationHelper.hadithFor(prayerName);
+    const title = isBefore ? `${titleBase} \u2014 ${beforeMinutes} ${L.get('notif_minutes_suffix')}` : titleBase
+    const content = NotificationHelper.hadithFor(prayerName)
 
-    const dismissLabel = NotificationHelper.safeTr('notif_dismiss', 'Dismiss');
+    const dismissLabel = NotificationHelper.safeTr('notif_dismiss', 'Dismiss')
 
     const reminder: reminderAgentManager.ReminderRequestCalendar = {
       reminderType: reminderAgentManager.ReminderType.REMINDER_TYPE_CALENDAR,
@@ -645,50 +645,50 @@ export class NotificationHelper {
       actionButton: [{
         title: dismissLabel, type: reminderAgentManager.ActionButtonType.ACTION_BUTTON_TYPE_CLOSE
       }]
-    };
+    }
 
     try {
-      const id = await reminderAgentManager.publishReminder(reminder);
-      AppLogger.info('NotificationHelper', `Published id=${id} for ${prayerName} at ${fireAt.toISOString()}`);
+      const id = await reminderAgentManager.publishReminder(reminder)
+      AppLogger.info('NotificationHelper', `Published id=${id} for ${prayerName} at ${fireAt.toISOString()}`)
       return {
         ok: true,
         scheduled: 1,
         errorCode: 0,
         errorMessage: ''
-      };
+      }
     } catch (err) {
-      const error = err as BusinessError;
+      const error = err as BusinessError
       AppLogger.error('NotificationHelper', `Publish FAILED for ${prayerName} at ${fireAt.toISOString()}: ` +
-        `code=${error.code}, message=${error.message}`);
+        `code=${error.code}, message=${error.message}`)
       return {
         ok: false,
         scheduled: 0,
         errorCode: error.code,
         errorMessage: NotificationHelper.describeError(error.code, error.message)
-      };
+      }
     }
   }
 
   private static describeError(code: number, message: string): string {
     switch (code) {
       case 1700001:
-        return '1700001 — Notifications are disabled. Enable them in Settings.';
+        return '1700001 — Notifications are disabled. Enable them in Settings.'
       case 1700002:
-        return '1700002 — No Agent-Powered Reminder quota. This capability ' +
-          'must be approved in AppGallery Connect, then the app must ' + 'be re-signed with the updated Profile.';
+        return ('1700002 — No Agent-Powered Reminder quota. This capability ' +
+          'must be approved in AppGallery Connect, then the app must ' + 'be re-signed with the updated Profile.')
       case 1700003:
-        return '1700003 — Reminder not found.';
+        return '1700003 — Reminder not found.'
       case 1700004:
-        return '1700004 — Package name not found. Check that the bundle ' + 'name matches AGC.';
+        return '1700004 — Package name not found. Check that the bundle ' + 'name matches AGC.'
       case 1700007:
-        return '1700007 — Invalid parameters. Check the reminder date/time fields.';
+        return '1700007 — Invalid parameters. Check the reminder date/time fields.'
       case 401:
-        return '401 — Parameter error. Verify the reminder request shape ' +
-          '(slotType, expiredContent, dateTime fields).';
+        return ('401 — Parameter error. Verify the reminder request shape ' +
+          '(slotType, expiredContent, dateTime fields).')
       case 1600013:
-        return '1600013 — Notification permission dialog issue. Grant permission ' + 'in Settings first.';
+        return '1600013 — Notification permission dialog issue. Grant permission ' + 'in Settings first.'
       default:
-        return `Error ${code}: ${message}`;
+        return `Error ${code}: ${message}`
     }
   }
 
@@ -699,38 +699,38 @@ export class NotificationHelper {
   private static prayTitle(prayerName: string): string {
     switch (prayerName) {
       case 'Fajr':
-        return L.get('notif_pray_fajr');
+        return L.get('notif_pray_fajr')
       case 'Dhuhr':
-        return L.get('notif_pray_dhuhr');
+        return L.get('notif_pray_dhuhr')
       case 'Jummah':
-        return L.get('notif_pray_jummah');
+        return L.get('notif_pray_jummah')
       case 'Asr':
-        return L.get('notif_pray_asr');
+        return L.get('notif_pray_asr')
       case 'Maghrib':
-        return L.get('notif_pray_maghrib');
+        return L.get('notif_pray_maghrib')
       case 'Isha':
-        return L.get('notif_pray_isha');
+        return L.get('notif_pray_isha')
       default:
-        return prayerName;
+        return prayerName
     }
   }
 
   private static hadithFor(prayerName: string): string {
     switch (prayerName) {
       case 'Fajr':
-        return L.get('hadith_fajr');
+        return L.get('hadith_fajr')
       case 'Dhuhr':
-        return L.get('hadith_dhuhr');
+        return L.get('hadith_dhuhr')
       case 'Jummah':
-        return L.get('hadith_jummah');
+        return L.get('hadith_jummah')
       case 'Asr':
-        return L.get('hadith_asr');
+        return L.get('hadith_asr')
       case 'Maghrib':
-        return L.get('hadith_maghrib');
+        return L.get('hadith_maghrib')
       case 'Isha':
-        return L.get('hadith_isha');
+        return L.get('hadith_isha')
       default:
-        return '';
+        return ''
     }
   }
 
@@ -746,17 +746,17 @@ export class NotificationHelper {
   private static isPrayerChecked(state: PrayerCheckState, prayerId: string): boolean {
     switch (prayerId) {
       case 'fajr':
-        return state.fajr === true;
+        return state.fajr === true
       case 'dhuhr':
-        return state.dhuhr === true;
+        return state.dhuhr === true
       case 'asr':
-        return state.asr === true;
+        return state.asr === true
       case 'maghrib':
-        return state.maghrib === true;
+        return state.maghrib === true
       case 'isha':
-        return state.isha === true;
+        return state.isha === true
       default:
-        return false;
+        return false
     }
   }
 
@@ -771,149 +771,149 @@ export class NotificationHelper {
    * time. Only the display name is changed.
    */
   private static buildPrayerList(day: Date, times: DailyPrayerTimes, offsets: PrayerOffsets): PrayerNotificationItem[] {
-    const isFriday = day.getDay() === 5;
+    const isFriday = day.getDay() === 5
 
     const fajr: PrayerNotificationItem = {
       id: 'fajr', name: 'Fajr', time: times.fajr
-    };
+    }
     const dhuhr: PrayerNotificationItem = {
       id: 'dhuhr', name: isFriday ? 'Jummah' : 'Dhuhr', time: times.dhuhr
-    };
+    }
     const asr: PrayerNotificationItem = {
       id: 'asr', name: 'Asr', time: times.asr
-    };
+    }
     const maghrib: PrayerNotificationItem = {
       id: 'maghrib', name: 'Maghrib', time: times.maghrib
-    };
+    }
     const isha: PrayerNotificationItem = {
       id: 'isha', name: 'Isha', time: times.isha
-    };
+    }
 
-    const list: PrayerNotificationItem[] = [fajr, dhuhr, asr, maghrib, isha];
+    const list: PrayerNotificationItem[] = [fajr, dhuhr, asr, maghrib, isha]
 
     for (let i = 0; i < list.length; i++) {
-      const p: PrayerNotificationItem = list[i];
-      const off: number = NotificationHelper.offsetForPrayer(p.id, offsets);
+      const p: PrayerNotificationItem = list[i]
+      const off: number = NotificationHelper.offsetForPrayer(p.id, offsets)
       if (off !== 0) {
-        p.time = NotificationHelper.offsetTimeString(p.time, off);
+        p.time = NotificationHelper.offsetTimeString(p.time, off)
       }
     }
-    return list;
+    return list
   }
 
   private static offsetForPrayer(id: string, offsets: PrayerOffsets): number {
     switch (id) {
       case 'fajr':
-        return offsets.fajr;
+        return offsets.fajr
       case 'dhuhr':
-        return offsets.dhuhr;
+        return offsets.dhuhr
       case 'asr':
-        return offsets.asr;
+        return offsets.asr
       case 'maghrib':
-        return offsets.maghrib;
+        return offsets.maghrib
       case 'isha':
-        return offsets.isha;
+        return offsets.isha
       default:
-        return 0;
+        return 0
     }
   }
 
   private static offsetTimeString(timeStr: string, offsetMinutes: number): string {
     if (offsetMinutes === 0) {
-      return timeStr;
+      return timeStr
     }
-    const parts = timeStr.trim().split(' ');
+    const parts = timeStr.trim().split(' ')
     if (parts.length !== 2) {
-      return timeStr;
+      return timeStr
     }
-    const tp = parts[0].split(':');
+    const tp = parts[0].split(':')
     if (tp.length !== 2) {
-      return timeStr;
+      return timeStr
     }
 
-    let hours = parseInt(tp[0], 10);
-    const minutes = parseInt(tp[1], 10);
-    const period = parts[1].toUpperCase();
+    let hours = parseInt(tp[0], 10)
+    const minutes = parseInt(tp[1], 10)
+    const period = parts[1].toUpperCase()
     if (isNaN(hours) || isNaN(minutes)) {
-      return timeStr;
+      return timeStr
     }
 
     if (period === 'PM' && hours !== 12) {
-      hours += 12;
+      hours += 12
     }
     if (period === 'AM' && hours === 12) {
-      hours = 0;
+      hours = 0
     }
 
-    let total = hours * 60 + minutes + offsetMinutes;
-    total = ((total % 1440) + 1440) % 1440;
+    let total = hours * 60 + minutes + offsetMinutes
+    total = ((total % 1440) + 1440) % 1440
 
-    const nh = Math.floor(total / 60);
-    const nm = total % 60;
-    const np = nh >= 12 ? 'PM' : 'AM';
-    let dh = nh % 12;
+    const nh = Math.floor(total / 60)
+    const nm = total % 60
+    const np = nh >= 12 ? 'PM' : 'AM'
+    let dh = nh % 12
     if (dh === 0) {
-      dh = 12;
+      dh = 12
     }
-    return `${dh}:${nm.toString().padStart(2, '0')} ${np}`;
+    return `${dh}:${nm.toString().padStart(2, '0')} ${np}`
   }
 
   private static parseToDate(timeStr: string, day: Date): Date {
-    const result = new Date(day);
-    result.setHours(0, 0, 0, 0);
+    const result = new Date(day)
+    result.setHours(0, 0, 0, 0)
 
-    const trimmed = timeStr.trim();
+    const trimmed = timeStr.trim()
     if (trimmed === '' || trimmed === '--:--') {
-      return result;
+      return result
     }
 
-    const parts = trimmed.split(' ');
+    const parts = trimmed.split(' ')
     if (parts.length !== 2) {
-      return result;
+      return result
     }
 
-    const tp = parts[0].split(':');
+    const tp = parts[0].split(':')
     if (tp.length !== 2) {
-      return result;
+      return result
     }
 
-    let hours = parseInt(tp[0], 10);
-    const minutes = parseInt(tp[1], 10);
-    const period = parts[1].toUpperCase();
+    let hours = parseInt(tp[0], 10)
+    const minutes = parseInt(tp[1], 10)
+    const period = parts[1].toUpperCase()
     if (isNaN(hours) || isNaN(minutes)) {
-      return result;
+      return result
     }
 
     if (period === 'PM' && hours !== 12) {
-      hours += 12;
+      hours += 12
     }
     if (period === 'AM' && hours === 12) {
-      hours = 0;
+      hours = 0
     }
 
-    result.setHours(hours, minutes, 0, 0);
-    return result;
+    result.setHours(hours, minutes, 0, 0)
+    return result
   }
 
   private static isPrayerEnabled(settings: NotificationsSettings, prayerId: string): boolean {
     switch (prayerId) {
       case 'fajr':
-        return settings.fajrEnabled;
+        return settings.fajrEnabled
       case 'dhuhr':
-        return settings.dhuhrEnabled;
+        return settings.dhuhrEnabled
       case 'asr':
-        return settings.asrEnabled;
+        return settings.asrEnabled
       case 'maghrib':
-        return settings.maghribEnabled;
+        return settings.maghribEnabled
       case 'isha':
-        return settings.ishaEnabled;
+        return settings.ishaEnabled
       default:
-        return false;
+        return false
     }
   }
 
   private static safeTr(key: string, fallback: string): string {
-    const value = L.get(key);
-    return value === key ? fallback : value;
+    const value = L.get(key)
+    return value === key ? fallback : value
   }
 }

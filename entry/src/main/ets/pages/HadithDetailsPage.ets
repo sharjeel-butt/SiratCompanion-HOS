@@ -1,20 +1,20 @@
-import { common } from '@kit.AbilityKit';
-import { router } from '@kit.ArkUI';
-import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
-import { L } from '../i18n/LocalizationHelper';
+import { common } from '@kit.AbilityKit'
+import { router } from '@kit.ArkUI'
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
+import { L } from '../i18n/LocalizationHelper'
 import {
   STORAGE_KEY_HADITH_TRANSLATION_LANG,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
-} from '../core/common/StorageKeys';
-import { BilingualHadith, HadithGrading, Sanad } from '../hadith/HadithModels';
-import { HadithDbHelper } from '../hadith/HadithDbHelper';
-import { HadithSearchService } from '../hadith/HadithSearchService';
-import { HadithCoreDbHelper } from '../hadith/HadithCoreDbHelper';
-import { SanadTimeline } from '../hadith/SanadTimeline';
-import { GradeBadge } from '../hadith/GradeBadge';
-import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
+} from '../core/common/StorageKeys'
+import { BilingualHadith, HadithGrading, Sanad } from '../hadith/HadithModels'
+import { HadithDbHelper } from '../hadith/HadithDbHelper'
+import { HadithSearchService } from '../hadith/HadithSearchService'
+import { HadithCoreDbHelper } from '../hadith/HadithCoreDbHelper'
+import { SanadTimeline } from '../hadith/SanadTimeline'
+import { GradeBadge } from '../hadith/GradeBadge'
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper'
 
 @Entry
 @Component
@@ -29,69 +29,67 @@ struct HadithDetailsPage {
   private hadithId: string = '';
 
   async aboutToAppear() {
-    this.colors = PageTheme.compute(this.themeMode);
-    const params = router.getParams() as Record<string, string>;
+    this.colors = PageTheme.compute(this.themeMode)
+    const params = router.getParams() as Record<string, string>
 
     if (params && params['id']) {
-      this.hadithId = params['id'];
-      await this.loadHadith();
+      this.hadithId = params['id']
+      await this.loadHadith()
 
       if (this.hadith !== null) {
-        let metaApplied = false;
+        let metaApplied = false
 
         // 1. Try to get metadata from router params (Search flow)
         if (params['meta']) {
           try {
-            const meta = JSON.parse(params['meta']) as Record<string, Object>;
+            const meta = JSON.parse(params['meta']) as Record<string, Object>
             if (meta['section']) {
-              this.hadith.section = HadithDbHelper.translateSection(meta['section'] as string, this.appLanguage);
+              this.hadith.section = HadithDbHelper.translateSection(meta['section'] as string, this.appLanguage)
             }
             if (meta['contexts']) {
-              this.hadith.life_contexts = meta['contexts'] as string[];
+              this.hadith.life_contexts = meta['contexts'] as string[]
             }
             if (meta['topics']) {
-              this.hadith.topics = meta['topics'] as string[];
+              this.hadith.topics = meta['topics'] as string[]
             }
-            metaApplied = true;
+            metaApplied = true
           } catch (e) {
           }
         }
 
         // 2. If no metadata was passed (Featured flow), look it up dynamically
         if (!metaApplied) {
-          const ctx = getContext(this) as common.UIAbilityContext;
-          const meta = await HadithSearchService.getMetadataForId(ctx, this.hadithId);
+          const ctx = getContext(this) as common.UIAbilityContext
+          const meta = await HadithSearchService.getMetadataForId(ctx, this.hadithId)
           if (meta !== null) {
-            this.hadith.section = meta.section;
-            this.hadith.life_contexts = meta.life_contexts;
-            this.hadith.topics = meta.topics;
+            this.hadith.section = meta.section
+            this.hadith.life_contexts = meta.life_contexts
+            this.hadith.topics = meta.topics
           }
         }
-
-
       }
     }
   }
 
   async onLangChanged() {
-    await this.loadHadith();
+    await this.loadHadith()
   }
 
   onThemeModeChanged() {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   async loadHadith(): Promise<void> {
-    const ctx = getContext(this) as common.UIAbilityContext;
-    const targetLang = this.getHadithTranslationLang();
-    this.hadith = await HadithDbHelper.getBilingualById(ctx, this.hadithId, targetLang, this.appLanguage);
+    const ctx = getContext(this) as common.UIAbilityContext
+    const targetLang = this.getHadithTranslationLang()
+    this.hadith = await HadithDbHelper.getBilingualById(ctx, this.hadithId, targetLang, this.appLanguage)
 
     // v4.1.0 — load sanad + grades from core.db
     try {
-      this.sanad = await HadithCoreDbHelper.getSanad(ctx, this.hadithId);
-      this.grades = await HadithCoreDbHelper.getGrades(ctx, this.hadithId);
+      this.sanad = await HadithCoreDbHelper.getSanad(ctx, this.hadithId)
+      this.grades = await HadithCoreDbHelper.getGrades(ctx, this.hadithId)
     } catch (e) {
-      console.warn('[HadithDetails] core.db load failed', e);
+      console.warn('[HadithDetails] core.db load failed', e)
     }
   }
 
@@ -116,7 +114,7 @@ struct HadithDetailsPage {
 
         // 2. Middle Row: Section Name
         if (this.hadith.section && this.hadith.section.length > 0) {
-          Text(this.hadith.section) // e.g., "Transferance of a Debt..."
+          Text(this.hadith.section // e.g., "Transferance of a Debt...")
             .fontSize(15)
             .fontColor(this.colors.textWhite)
             .fontWeight(FontWeight.Medium)
@@ -130,7 +128,6 @@ struct HadithDetailsPage {
         // 3. Bottom Row: Context & Topic Tags
         if ((this.hadith.life_contexts && this.hadith.life_contexts.length > 0) ||
           (this.hadith.topics && this.hadith.topics.length > 0)) {
-
           Flex({ wrap: FlexWrap.Wrap }) { // Context Tags
             if (this.hadith.life_contexts) {
               ForEach(this.hadith.life_contexts, (ctx: string) => { // 👇 FIX: Use HadithSearchService.translate
@@ -214,8 +211,6 @@ struct HadithDetailsPage {
       if (this.hadith !== null) {
         Scroll() {
           Column() {
-
-
             this.HadithHeader()
             if (this.grades.length > 0) {
               GradeBadge({
@@ -299,13 +294,13 @@ struct HadithDetailsPage {
   }
 
   private tr(key: string): string {
-    return L.get(key, this.appLanguage);
+    return L.get(key, this.appLanguage)
   }
 
   private getHadithTranslationLang(): string {
     if (this.hadithTransLang === 'default' || this.hadithTransLang === '') {
-      return this.appLanguage;
+      return this.appLanguage
     }
-    return this.hadithTransLang;
+    return this.hadithTransLang
   }
 }

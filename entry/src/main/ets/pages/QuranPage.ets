@@ -1,15 +1,15 @@
 // entry/src/main/ets/pages/QuranPage.ets
 
-import { common } from '@kit.AbilityKit';
-import { router } from '@kit.ArkUI';
-import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
-import { L } from '../i18n/LocalizationHelper';
-import { QuranService } from '../quran/QuranService';
-import { CompleteSurah } from '../quran/QuranSurahModels';
-import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
-import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_QURAN_TRANSLATION_LANG } from '../core/common/StorageKeys';
-import { NavHelper } from '../core/util/NavHelper';
+import { common } from '@kit.AbilityKit'
+import { router } from '@kit.ArkUI'
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
+import { L } from '../i18n/LocalizationHelper'
+import { QuranService } from '../quran/QuranService'
+import { CompleteSurah } from '../quran/QuranSurahModels'
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper'
+import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_QURAN_TRANSLATION_LANG } from '../core/common/StorageKeys'
+import { NavHelper } from '../core/util/NavHelper'
 
 @Entry
 @Component
@@ -24,30 +24,30 @@ struct QuranPage {
   private activeScript: string = AppStorage.get<string>('active_quran_script') ?? 'indopak';
 
   async aboutToAppear() {
-    await this.loadData();
+    await this.loadData()
   }
 
   onLangChanged() {
-    this.loadData();
+    this.loadData()
   }
 
   async loadData() {
-    this.isLoading = true;
-    const ctx = getContext(this) as common.UIAbilityContext;
-    this.allSurahs = await QuranService.loadSurahs(ctx, this.getQuranTranslationLang());
-    this.applyFilter();
-    this.isLoading = false;
+    this.isLoading = true
+    const ctx = getContext(this) as common.UIAbilityContext
+    this.allSurahs = await QuranService.loadSurahs(ctx, this.getQuranTranslationLang())
+    this.applyFilter()
+    this.isLoading = false
   }
 
   applyFilter() {
     if (this.searchQuery.trim().length === 0) {
-      this.filteredSurahs = this.allSurahs;
+      this.filteredSurahs = this.allSurahs
     } else {
       const q =
-        this.searchQuery.toLowerCase(); // Explicitly typing the callback return as boolean fixes arkts-no-implicit-return-types
+        this.searchQuery.toLowerCase() // Explicitly typing the callback return as boolean fixes arkts-no-implicit-return-types
       this.filteredSurahs = this.allSurahs.filter((s: CompleteSurah): boolean => {
-        return s.nameTransliteration.toLowerCase().includes(q) || s.id.toString() === q;
-      });
+        return s.nameTransliteration.toLowerCase().includes(q) || s.id.toString() === q
+      })
     }
   }
 
@@ -95,8 +95,8 @@ struct QuranPage {
       .borderRadius(12)
       .margin({ top: 16, bottom: 8 })
       .onClick(() => {
-        NavHelper.prepareForward();
-        router.pushUrl({ url: 'pages/QuranExplorerPage' });
+        NavHelper.prepareForward()
+        router.pushUrl({ url: 'pages/QuranExplorerPage' })
       })
 
       // Search Bar
@@ -104,8 +104,8 @@ struct QuranPage {
         value: this.searchQuery, placeholder: L.get('search_surahs', this.appLanguage)
       })
         .onChange((val: string) => {
-          this.searchQuery = val;
-          this.applyFilter();
+          this.searchQuery = val
+          this.applyFilter()
         })
         .margin({
           left: 16,
@@ -170,10 +170,10 @@ struct QuranPage {
               .border({ width: 1, color: this.colors.borderSoft })
               .direction(L.isRtlLang(this.appLanguage) ? Direction.Rtl : Direction.Ltr)
               .onClick(() => {
-                NavHelper.prepareForward();
+                NavHelper.prepareForward()
                 router.pushUrl({
                   url: 'pages/SurahDetailsPage', params: { surahId: surah.id }
-                }).catch((e: Error) => console.error('Navigation failed', e));
+                }).catch((e: Error) => console.error('Navigation failed', e))
               })
             }
           }, (surah: CompleteSurah) => `quran-${surah.id}`)
@@ -189,9 +189,9 @@ struct QuranPage {
 
   private getQuranTranslationLang(): string {
     if (this.quranTransLang === 'default' || this.quranTransLang === '') {
-      return this.appLanguage;
+      return this.appLanguage
     }
-    return this.quranTransLang;
+    return this.quranTransLang
   }
 
   private sourceLabelRevelation(label_rev: string): string {
@@ -200,7 +200,7 @@ struct QuranPage {
     } else if (label_rev === 'Medinan') {
       return L.get('revelation_place_madinah', this.appLanguage)
     } else {
-      return label_rev;
+      return label_rev
     }
   }
 }

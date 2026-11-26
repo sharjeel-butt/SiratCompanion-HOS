@@ -1,11 +1,11 @@
 // entry/src/main/ets/pages/CustomizePage.ets
 
-import { mediaquery, router } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
-import { SettingsHelper } from '../settings/SettingsHelper';
-import { PickerItem } from '../settings/SettingsModels';
-import { NotificationHelper } from '../prayer/NotificationHelper';
+import { mediaquery, router } from '@kit.ArkUI'
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
+import { SettingsHelper } from '../settings/SettingsHelper'
+import { PickerItem } from '../settings/SettingsModels'
+import { NotificationHelper } from '../core/notifications/NotificationHelper'
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -33,22 +33,22 @@ import {
   STORAGE_KEY_THEME_OVERRIDE,
   STORAGE_KEY_TIME_FORMAT,
   STORAGE_KEY_TRANSLATION_FONT
-} from '../core/common/StorageKeys';
-import { L } from '../i18n/LocalizationHelper';
-import { LanguageService } from '../i18n/LanguageService';
-import { AppLanguageJson } from '../i18n/LanguageModels';
-import { SoundHelper } from '../tasbih/SoundHelper';
-import { SoundOptions, TASBIH_SOUND_OPTIONS, TasbihSoundOption } from '../tasbih/SoundOptions';
-import { Breakpoints } from '../core/layout/Breakpoints';
-import { ClockFormat } from '../core/util/ClockFormat';
-import { SubsectionHeader } from '../components/SubsectionHeader';
-import { ExtraTimingToggleRow } from '../prayer/ExtraTimingToggleRow';
-import { common } from '@kit.AbilityKit';
-import { WidgetHelper } from '../widgets/WidgetHelper';
-import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
-import { ThemeService } from '../core/ui/themes/ThemeService';
-import { AppThemeJson } from '../core/ui/themes/ThemeModels';
-import { AppLogger } from '../core/app/AppLogger';
+} from '../core/common/StorageKeys'
+import { L } from '../i18n/LocalizationHelper'
+import { LanguageService } from '../i18n/LanguageService'
+import { AppLanguageJson } from '../i18n/LanguageModels'
+import { SoundHelper } from '../tasbih/SoundHelper'
+import { SoundOptions, TASBIH_SOUND_OPTIONS, TasbihSoundOption } from '../tasbih/SoundOptions'
+import { Breakpoints } from '../core/layout/Breakpoints'
+import { ClockFormat } from '../core/util/ClockFormat'
+import { SubsectionHeader } from '../components/SubsectionHeader'
+import { ExtraTimingToggleRow } from '../prayer/ExtraTimingToggleRow'
+import { common } from '@kit.AbilityKit'
+import { WidgetHelper } from '../widgets/WidgetHelper'
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper'
+import { ThemeService } from '../core/ui/themes/ThemeService'
+import { AppThemeJson } from '../core/ui/themes/ThemeModels'
+import { AppLogger } from '../core/app/AppLogger'
 
 @Entry
 @Component
@@ -123,25 +123,25 @@ struct CustomizePage {
   // ============================================================
 
   aboutToAppear(): void {
-    this.currentLanguage = this.appLanguage;
-    this.applyTheme();
+    this.currentLanguage = this.appLanguage
+    this.applyTheme()
 
     this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
-      this.colors = c;
-    });
+      this.colors = c
+    })
 
-    this.reload();
+    this.reload()
   }
 
   aboutToDisappear(): void {
-    PageTheme.uninstallSystemListener(this.systemDarkListener);
-    this.systemDarkListener = null;
+    PageTheme.uninstallSystemListener(this.systemDarkListener)
+    this.systemDarkListener = null
   }
 
   onPageShow(): void {
-    this.currentLanguage = this.appLanguage;
-    this.applyTheme();
-    this.reload();
+    this.currentLanguage = this.appLanguage
+    this.applyTheme()
+    this.reload()
   }
 
   // ============================================================
@@ -198,7 +198,7 @@ struct CustomizePage {
               .border({ width: 1, color: this.colors.borderSoft })
               .margin({ bottom: 8 })
               .onClick(() => {
-                this.expandedCategory = this.expandedCategory === 'UI Customization' ? null : 'UI Customization';
+                this.expandedCategory = this.expandedCategory === 'UI Customization' ? null : 'UI Customization'
               })
 
               if (this.expandedCategory === 'UI Customization') {
@@ -249,7 +249,7 @@ struct CustomizePage {
               .border({ width: 1, color: this.colors.borderSoft })
               .margin({ bottom: 8 })
               .onClick(() => {
-                this.expandedCategory = this.expandedCategory === 'Appearance' ? null : 'Appearance';
+                this.expandedCategory = this.expandedCategory === 'Appearance' ? null : 'Appearance'
               })
 
               if (this.expandedCategory === 'Appearance') {
@@ -274,29 +274,29 @@ struct CustomizePage {
       if (this.showLanguagePicker) {
         this.PickerOverlay(this.tr('language'), $r('app.media.ic_language'), this.buildLanguageItems(),
           (id: string) => {
-            this.pickLanguage(id);
+            this.pickLanguage(id)
           }, () => {
-            this.showLanguagePicker = false;
+            this.showLanguagePicker = false
           })
       }
 
       if (this.showTransFontPicker) {
         this.PickerOverlay(this.tr('translation_font'), $r('app.media.ic_language'), this.buildTransFontItems(),
           (id: string) => {
-            this.transFont = id;
-            SettingsHelper.saveTranslationFont(id);
-            this.showTransFontPicker = false;
+            this.transFont = id
+            SettingsHelper.saveTranslationFont(id)
+            this.showTransFontPicker = false
           }, () => {
-            this.showTransFontPicker = false;
+            this.showTransFontPicker = false
           })
       }
 
       if (this.showThemePicker) {
         this.PickerOverlay(this.tr('dark_mode'), $r('app.media.ic_palette'),
           SettingsHelper.buildThemePickerItems(this.themeOverride), (id: string) => {
-            this.pickThemeMode(id);
+            this.pickThemeMode(id)
           }, () => {
-            this.showThemePicker = false;
+            this.showThemePicker = false
           })
       }
 
@@ -311,31 +311,31 @@ struct CustomizePage {
       if (this.showArabicFontPicker) {
         this.PickerOverlay(this.tr('arabic_font'), $r('app.media.ic_language'), // or a font icon
           this.buildArabicFontItems(), (id: string) => {
-            this.arabicFont = id;
-            SettingsHelper.saveArabicFont(id);
-            this.showArabicFontPicker = false;
+            this.arabicFont = id
+            SettingsHelper.saveArabicFont(id)
+            this.showArabicFontPicker = false
           }, () => {
-            this.showArabicFontPicker = false;
+            this.showArabicFontPicker = false
           })
       }
 
       if (this.showClockFormatPicker) {
         this.PickerOverlay(this.tr('time_format'), $r('app.media.ic_clock'),
           SettingsHelper.buildClockFormatPickerItems(this.ClockFormat), (id: string) => {
-            this.pickClockFormat(id);
+            this.pickClockFormat(id)
           }, () => {
-            this.showClockFormatPicker = false;
+            this.showClockFormatPicker = false
           })
       }
 
       if (this.showQuranLangPicker) {
         this.PickerOverlay(this.tr('quran_translation_lang'), $r('app.media.ic_book'),
           this.buildTranslationLangItems(this.quranTransLang, true), (id: string) => {
-            this.quranTransLang = id;
-            SettingsHelper.saveQuranTranslationLang(id);
-            this.showQuranLangPicker = false;
+            this.quranTransLang = id
+            SettingsHelper.saveQuranTranslationLang(id)
+            this.showQuranLangPicker = false
           }, () => {
-            this.showQuranLangPicker = false;
+            this.showQuranLangPicker = false
           })
       }
 
@@ -343,31 +343,31 @@ struct CustomizePage {
         this.PickerOverlay(this.tr('dua_translation_lang'), $r('app.media.ic_dua'),
           this.buildTranslationLangItems(this.duaTransLang, true), // true = supports all 7 langs
           (id: string) => {
-            this.duaTransLang = id;
-            SettingsHelper.saveDuaTranslationLang(id);
-            this.showDuaLangPicker = false;
+            this.duaTransLang = id
+            SettingsHelper.saveDuaTranslationLang(id)
+            this.showDuaLangPicker = false
           }, () => {
-            this.showDuaLangPicker = false;
+            this.showDuaLangPicker = false
           })
       }
 
       if (this.showHadithLangPicker) {
         this.PickerOverlay(this.tr('hadith_translation_lang'), $r('app.media.ic_hadith_book'),
           this.buildTranslationLangItems(this.hadithTransLang, false), (id: string) => {
-            this.hadithTransLang = id;
-            SettingsHelper.saveHadithTranslationLang(id);
-            this.showHadithLangPicker = false;
+            this.hadithTransLang = id
+            SettingsHelper.saveHadithTranslationLang(id)
+            this.showHadithLangPicker = false
           }, () => {
-            this.showHadithLangPicker = false;
+            this.showHadithLangPicker = false
           })
       }
 
       if (this.showEventPerspectivePicker) {
         this.PickerOverlay(this.tr('event_perspective'), $r('app.media.ic_ramadan_moon'),
           SettingsHelper.buildEventPerspectivePickerItems(this.eventPerspective), (id: string) => {
-            this.pickEventPerspective(id);
+            this.pickEventPerspective(id)
           }, () => {
-            this.showEventPerspectivePicker = false;
+            this.showEventPerspectivePicker = false
           })
       }
     }
@@ -440,7 +440,7 @@ struct CustomizePage {
     .borderRadius(12)
     .margin({ bottom: 8 })
     .onClick(() => {
-      this.showTransFontPicker = true;
+      this.showTransFontPicker = true
     })
   }
 
@@ -471,7 +471,7 @@ struct CustomizePage {
     .borderRadius(12)
     .margin({ bottom: 8 })
     .onClick(() => {
-      this.showArabicFontPicker = true;
+      this.showArabicFontPicker = true
     })
   }
 
@@ -512,7 +512,7 @@ struct CustomizePage {
     .borderRadius(12)
     .margin({ bottom: 8 })
     .onClick(() => {
-      this.showClockFormatPicker = true;
+      this.showClockFormatPicker = true
     })
   }
 
@@ -606,7 +606,7 @@ struct CustomizePage {
     .borderRadius(12)
     .margin({ bottom: 8 })
     .onClick(() => {
-      this.showQuranLangPicker = true;
+      this.showQuranLangPicker = true
     })
   }
 
@@ -643,7 +643,7 @@ struct CustomizePage {
     .borderRadius(12)
     .margin({ bottom: 8 })
     .onClick(() => {
-      this.showHadithLangPicker = true;
+      this.showHadithLangPicker = true
     })
   }
 
@@ -663,7 +663,7 @@ struct CustomizePage {
       Toggle({ type: ToggleType.Switch, isOn: this.showIslamicEvents })
         .selectedColor(this.colors.accentGold)
         .onChange((isOn: boolean) => {
-          this.toggleShowIslamicEvents(isOn);
+          this.toggleShowIslamicEvents(isOn)
         })
     }
     .width('100%')
@@ -716,7 +716,7 @@ struct CustomizePage {
     .borderRadius(12)
     .margin({ bottom: 8 })
     .onClick(() => {
-      this.showEventPerspectivePicker = true;
+      this.showEventPerspectivePicker = true
     })
   }
 
@@ -836,7 +836,7 @@ struct CustomizePage {
         .enabled(this.systemHapticsEnabled)
         .opacity(this.systemHapticsEnabled ? 1.0 : 0.5)
         .onChange((isOn: boolean) => {
-          this.toggleVibration(isOn);
+          this.toggleVibration(isOn)
         })
     }
     .width('100%')
@@ -871,7 +871,7 @@ struct CustomizePage {
         .enabled(this.systemSoundEnabled)
         .opacity(this.systemSoundEnabled ? 1.0 : 0.5)
         .onChange((isOn: boolean) => {
-          this.toggleSound(isOn);
+          this.toggleSound(isOn)
         })
     }
     .width('100%')
@@ -919,7 +919,7 @@ struct CustomizePage {
     .borderRadius(12)
     .margin({ bottom: 8 })
     .onClick(() => {
-      this.showDuaLangPicker = true;
+      this.showDuaLangPicker = true
     })
   }
 
@@ -956,7 +956,7 @@ struct CustomizePage {
       .borderRadius(12)
       .margin({ bottom: 8 })
       .onClick(() => {
-        this.showSoundPicker = true;
+        this.showSoundPicker = true
       })
     }
   }
@@ -995,7 +995,7 @@ struct CustomizePage {
     .borderRadius(12)
     .margin({ bottom: 8 })
     .onClick(() => {
-      this.showLanguagePicker = true;
+      this.showLanguagePicker = true
     })
   }
 
@@ -1049,7 +1049,7 @@ struct CustomizePage {
       .borderRadius(12)
       .margin({ bottom: 8 })
       .onClick(() => {
-        this.showAppThemePicker = true;
+        this.showAppThemePicker = true
       })
 
       this.ArabicFontRow()
@@ -1086,7 +1086,7 @@ struct CustomizePage {
       .backgroundColor(this.colors.tintSubtle)
       .borderRadius(12)
       .onClick(() => {
-        this.showThemePicker = true;
+        this.showThemePicker = true
       })
     }
     .width('100%')
@@ -1137,11 +1137,12 @@ struct CustomizePage {
                   if (theme.id === this.appTheme) {
                     Image($r('app.media.ic_check')).width(24).height(24).fillColor('#FFFFFF')
                   }
-                }.onClick(() => this.pickAppTheme(theme.id))
+                  }.onClick(() => this.pickAppTheme(theme.id))
               }
             }
           }, (theme: AppThemeJson) => theme.id)
-        }.columnsTemplate('1fr 1fr 1fr 1fr') // 4 columns like the image.columnsGap(16).rowsGap(16).padding(20)
+        }.columnsTemplate('1fr 1fr 1fr 1fr') // 4 columns like the image
+        .columnsGap(16).rowsGap(16).padding(20)
       }.layoutWeight(1).width('100%')
 
       Button(this.tr('cancel'))
@@ -1151,7 +1152,7 @@ struct CustomizePage {
         .backgroundColor(this.colors.tintSoft)
         .fontColor(this.colors.textWhite)
         .onClick(() => {
-          this.showAppThemePicker = false;
+          this.showAppThemePicker = false
         })
     }
     .width('100%')
@@ -1164,7 +1165,7 @@ struct CustomizePage {
   @Builder
   SoundPicker() {
     Column().width('100%').height('100%').backgroundColor(this.colors.overlayDim).onClick(() => {
-      this.showSoundPicker = false;
+      this.showSoundPicker = false
     })
 
     Column() {
@@ -1210,7 +1211,7 @@ struct CustomizePage {
               .alignContent(Alignment.Center)
               .flexShrink(0)
               .onClick(() => {
-                SoundHelper.preview(opt.id);
+                SoundHelper.preview(opt.id)
               })
 
               Column() {
@@ -1245,7 +1246,7 @@ struct CustomizePage {
             .margin({ bottom: 4 })
             .alignItems(VerticalAlign.Center)
             .onClick(() => {
-              this.pickSound(opt.id);
+              this.pickSound(opt.id)
             })
           }, (opt: TasbihSoundOption) => `sound-${opt.id}`)
         }.width('100%').padding({
@@ -1266,7 +1267,7 @@ struct CustomizePage {
         .borderRadius(12)
         .margin({ top: 8, bottom: 24 })
         .onClick(() => {
-          this.showSoundPicker = false;
+          this.showSoundPicker = false
         })
     }
     .width('100%')
@@ -1287,7 +1288,7 @@ struct CustomizePage {
   PickerOverlay(title: string, icon: Resource, items: PickerItem[], onSelect: (id: string) => void,
     onCancel: () => void) {
     Column().width('100%').height('100%').backgroundColor(this.colors.overlayDim).onClick(() => {
-      onCancel();
+      onCancel()
     })
 
     Column() {
@@ -1359,7 +1360,7 @@ struct CustomizePage {
             .borderRadius(12)
             .margin({ bottom: 4 })
             .onClick(() => {
-              onSelect(item.id);
+              onSelect(item.id)
             })
           }, (item: PickerItem) => item.id)
         }.width('100%').padding({
@@ -1380,7 +1381,7 @@ struct CustomizePage {
         .borderRadius(12)
         .margin({ top: 8, bottom: 24 })
         .onClick(() => {
-          onCancel();
+          onCancel()
         })
     }
     .width('100%')
@@ -1420,8 +1421,8 @@ struct CustomizePage {
       Toggle({ type: ToggleType.Switch, isOn: this.autoShowRamadanView })
         .selectedColor(this.colors.accentGold)
         .onChange((isOn: boolean) => {
-          this.autoShowRamadanView = isOn;
-          SettingsHelper.saveAutoShowRamadanView(isOn);
+          this.autoShowRamadanView = isOn
+          SettingsHelper.saveAutoShowRamadanView(isOn)
         })
     }
     .width('100%')
@@ -1491,30 +1492,30 @@ struct CustomizePage {
   }
 
   private pickClockFormat(id: string): void {
-    this.ClockFormat = id;
-    SettingsHelper.saveClockFormat(id);
-    this.showClockFormatPicker = false;
+    this.ClockFormat = id
+    SettingsHelper.saveClockFormat(id)
+    this.showClockFormatPicker = false
     WidgetHelper.refreshAll().catch((): void => { // swallow
-    });
+    })
   }
 
   private ClockFormatLabel(): string {
     switch (this.ClockFormat) {
       case ClockFormat.TWELVE_HOUR:
-        return this.tr('time_format_12h');
+        return this.tr('time_format_12h')
       case ClockFormat.TWENTY_FOUR_HOUR:
-        return this.tr('time_format_24h');
+        return this.tr('time_format_24h')
       default:
-        return this.tr('time_format_system');
+        return this.tr('time_format_system')
     }
   }
 
   private pickEventPerspective(id: string): void {
-    this.eventPerspective = id;
-    SettingsHelper.saveEventPerspective(id);
-    this.showEventPerspectivePicker = false;
+    this.eventPerspective = id
+    SettingsHelper.saveEventPerspective(id)
+    this.showEventPerspectivePicker = false
     WidgetHelper.refreshAll().catch((): void => { // swallow
-    });
+    })
   }
 
   // ============================================================
@@ -1522,205 +1523,205 @@ struct CustomizePage {
   // ============================================================
 
   private tr(key: string): string {
-    return L.get(key, this.currentLanguage);
+    return L.get(key, this.currentLanguage)
   }
 
   private isRtl(): boolean {
-    return L.isRtlLang(this.currentLanguage);
+    return L.isRtlLang(this.currentLanguage)
   }
 
   private isTablet(): boolean {
-    return Breakpoints.isTablet(this.breakpoint);
+    return Breakpoints.isTablet(this.breakpoint)
   }
 
   private onThemeModeChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   private onLanguageChanged(): void {
-    this.currentLanguage = this.appLanguage;
+    this.currentLanguage = this.appLanguage
   }
 
   private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   private onSystemFeedbackChanged(): void { // UI reacts via the @StorageLink binding itself.
   }
 
   private async onAppForegrounded(): Promise<void> {
-    this.currentLanguage = this.appLanguage;
-    this.applyTheme();
-    await this.reload();
+    this.currentLanguage = this.appLanguage
+    this.applyTheme()
+    await this.reload()
   }
 
   private applyTheme(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   private pickLanguage(
     id: string): void { // Persist the raw pick and resolved value in one call. The // @StorageLink bindings update automatically.
-    SettingsHelper.saveLanguage(id);
-    this.languageOverride = id;
-    this.currentLanguage = L.resolveOverride(id);
-    this.showLanguagePicker = false;
+    SettingsHelper.saveLanguage(id)
+    this.languageOverride = id
+    this.currentLanguage = L.resolveOverride(id)
+    this.showLanguagePicker = false
     WidgetHelper.refreshAll().catch((): void => { // swallow
-    });
-    NotificationHelper.scheduleRescheduleNow();
+    })
+    NotificationHelper.scheduleRescheduleNow()
   }
 
   private pickAppTheme(id: string): void {
-    this.appTheme = id;
-    SettingsHelper.saveAppTheme(id);
-    this.colors = PageTheme.compute(this.themeMode);
-    this.showAppThemePicker = false;
+    this.appTheme = id
+    SettingsHelper.saveAppTheme(id)
+    this.colors = PageTheme.compute(this.themeMode)
+    this.showAppThemePicker = false
   }
 
   private pickSound(id: string): void {
-    this.selectedSound = id;
-    SettingsHelper.saveTasbihSound(id);
-    this.showSoundPicker = false;
+    this.selectedSound = id
+    SettingsHelper.saveTasbihSound(id)
+    this.showSoundPicker = false
     setTimeout(() => {
-      SoundHelper.preview(id);
-    }, 150);
+      SoundHelper.preview(id)
+    }, 150)
   }
 
   private async reload(): Promise<void> {
-    const data = await SettingsHelper.loadAll();
-    this.showIslamicEvents = data.showIslamicEvents;
+    const data = await SettingsHelper.loadAll()
+    this.showIslamicEvents = data.showIslamicEvents
 
-    this.showImsakList = data.showImsakList;
-    this.showFirstThirdList = data.showFirstThirdList;
-    this.showMidnightList = data.showMidnightList;
-    this.showLastThirdList = data.showLastThirdList;
-    this.showImsakSunpath = data.showImsakSunpath;
-    this.showFirstThirdSunpath = data.showFirstThirdSunpath;
-    this.showMidnightSunpath = data.showMidnightSunpath;
-    this.showLastThirdSunpath = data.showLastThirdSunpath;
-    this.autoShowRamadanView = data.autoShowRamadanView;
+    this.showImsakList = data.showImsakList
+    this.showFirstThirdList = data.showFirstThirdList
+    this.showMidnightList = data.showMidnightList
+    this.showLastThirdList = data.showLastThirdList
+    this.showImsakSunpath = data.showImsakSunpath
+    this.showFirstThirdSunpath = data.showFirstThirdSunpath
+    this.showMidnightSunpath = data.showMidnightSunpath
+    this.showLastThirdSunpath = data.showLastThirdSunpath
+    this.autoShowRamadanView = data.autoShowRamadanView
 
-    this.vibrationEnabled = SettingsHelper.getVibrationEnabled();
-    this.soundEnabled = SettingsHelper.getSoundEnabled();
-    this.selectedSound = SettingsHelper.getTasbihSound();
+    this.vibrationEnabled = SettingsHelper.getVibrationEnabled()
+    this.soundEnabled = SettingsHelper.getSoundEnabled()
+    this.selectedSound = SettingsHelper.getTasbihSound()
 
-    const preset = await SettingsHelper.getAppTheme();
-    this.appTheme = preset;
+    const preset = await SettingsHelper.getAppTheme()
+    this.appTheme = preset
   }
 
   private toggleShowIslamicEvents(value: boolean): void {
-    this.showIslamicEvents = value;
-    SettingsHelper.saveShowIslamicEvents(value);
+    this.showIslamicEvents = value
+    SettingsHelper.saveShowIslamicEvents(value)
   }
 
   private toggleShowImsakList(value: boolean): void {
-    this.showImsakList = value;
-    SettingsHelper.saveShowImsakList(value);
+    this.showImsakList = value
+    SettingsHelper.saveShowImsakList(value)
   }
 
   private toggleShowFirstThirdList(value: boolean): void {
-    this.showFirstThirdList = value;
-    SettingsHelper.saveShowFirstThirdList(value);
+    this.showFirstThirdList = value
+    SettingsHelper.saveShowFirstThirdList(value)
   }
 
   private toggleShowMidnightList(value: boolean): void {
-    this.showMidnightList = value;
-    SettingsHelper.saveShowMidnightList(value);
+    this.showMidnightList = value
+    SettingsHelper.saveShowMidnightList(value)
   }
 
   private toggleShowLastThirdList(value: boolean): void {
-    this.showLastThirdList = value;
-    SettingsHelper.saveShowLastThirdList(value);
+    this.showLastThirdList = value
+    SettingsHelper.saveShowLastThirdList(value)
   }
 
   private toggleShowImsakSunpath(value: boolean): void {
-    this.showImsakSunpath = value;
-    SettingsHelper.saveShowImsakSunpath(value);
+    this.showImsakSunpath = value
+    SettingsHelper.saveShowImsakSunpath(value)
   }
 
   private toggleShowFirstThirdSunpath(value: boolean): void {
-    this.showFirstThirdSunpath = value;
-    SettingsHelper.saveShowFirstThirdSunpath(value);
+    this.showFirstThirdSunpath = value
+    SettingsHelper.saveShowFirstThirdSunpath(value)
   }
 
   private toggleShowMidnightSunpath(value: boolean): void {
-    this.showMidnightSunpath = value;
-    SettingsHelper.saveShowMidnightSunpath(value);
+    this.showMidnightSunpath = value
+    SettingsHelper.saveShowMidnightSunpath(value)
   }
 
   private toggleShowLastThirdSunpath(value: boolean): void {
-    this.showLastThirdSunpath = value;
-    SettingsHelper.saveShowLastThirdSunpath(value);
+    this.showLastThirdSunpath = value
+    SettingsHelper.saveShowLastThirdSunpath(value)
   }
 
   private toggleVibration(value: boolean): void {
-    this.vibrationEnabled = value;
-    SettingsHelper.saveVibrationEnabled(value);
+    this.vibrationEnabled = value
+    SettingsHelper.saveVibrationEnabled(value)
   }
 
   private toggleSound(value: boolean): void {
-    this.soundEnabled = value;
-    SettingsHelper.saveSoundEnabled(value);
+    this.soundEnabled = value
+    SettingsHelper.saveSoundEnabled(value)
   }
 
   private soundDisplayName(id: string): string {
-    const opt = SoundOptions.byId(id);
+    const opt = SoundOptions.byId(id)
     if (!opt) {
-      return id;
+      return id
     }
 
-    const base = opt.file.replace(/^tasbih_/, '').replace(/\.ogg$/, '');
-    const key = `sound_${base}_name`;
-    const localized = this.tr(key);
+    const base = opt.file.replace(/^tasbih_/, '').replace(/\.ogg$/, '')
+    const key = `sound_${base}_name`
+    const localized = this.tr(key)
     if (localized !== key) {
-      return localized;
+      return localized
     }
 
-    return SoundOptions.deriveDisplayName(opt.file);
+    return SoundOptions.deriveDisplayName(opt.file)
   }
 
   private soundDescription(id: string): string {
-    const opt = SoundOptions.byId(id);
+    const opt = SoundOptions.byId(id)
     if (!opt) {
-      return '';
+      return ''
     }
 
-    const base = opt.file.replace(/^tasbih_/, '').replace(/\.ogg$/, '');
-    const key = `sound_${base}_desc`;
-    const localized = this.tr(key);
+    const base = opt.file.replace(/^tasbih_/, '').replace(/\.ogg$/, '')
+    const key = `sound_${base}_desc`
+    const localized = this.tr(key)
     if (localized !== key) {
-      return localized;
+      return localized
     }
 
-    return SoundOptions.deriveDescription(opt.file);
+    return SoundOptions.deriveDescription(opt.file)
   }
 
   private buildLanguageItems(): PickerItem[] {
-    AppLogger.info('CustomizePage', `languages=${LanguageService.getAllLanguages().length}`);
+    AppLogger.info('CustomizePage', `languages=${LanguageService.getAllLanguages().length}`)
     return LanguageService.getAllLanguages().map((lang: AppLanguageJson): PickerItem => {
       return {
         id: lang.id, label: this.tr(lang.nameKey), selected: lang.id === this.languageOverride
-      };
-    });
+      }
+    })
   }
 
   private currentLanguageLabel(): string {
-    const lang = LanguageService.find(this.languageOverride);
-    return this.tr(lang.nameKey);
+    const lang = LanguageService.find(this.languageOverride)
+    return this.tr(lang.nameKey)
   }
 
   private appThemeLabel(): string {
-    return SettingsHelper.getAppThemeLabel(this.appTheme);
+    return SettingsHelper.getAppThemeLabel(this.appTheme)
   }
 
   private appThemeSwatch(preset: string): string {
-    const preview = Theme.getColors(this.themeMode, PageTheme.isSystemDark(), preset);
-    return preview.accentGold;
+    const preview = Theme.getColors(this.themeMode, PageTheme.isSystemDark(), preset)
+    return preview.accentGold
   }
 
   private appThemeSubtitle(preset: string): string {
-    const theme = ThemeService.getAllThemes().find((t: AppThemeJson) => t.id === preset);
+    const theme = ThemeService.getAllThemes().find((t: AppThemeJson) => t.id === preset)
 
-    return theme?.descKey ? this.tr(theme.descKey) : '';
+    return theme?.descKey ? this.tr(theme.descKey) : ''
   }
 
   /**
@@ -1732,106 +1733,103 @@ struct CustomizePage {
   private eventPerspectiveLabel(): string {
     switch (this.eventPerspective) {
       case SettingsHelper.EVENT_PERSPECTIVE_SUNNI:
-        return this.tr('event_perspective_sunni');
+        return this.tr('event_perspective_sunni')
       case SettingsHelper.EVENT_PERSPECTIVE_SHIA:
-        return this.tr('event_perspective_shia');
+        return this.tr('event_perspective_shia')
       case SettingsHelper.EVENT_PERSPECTIVE_ALL:
-        return this.tr('event_perspective_all');
+        return this.tr('event_perspective_all')
       case SettingsHelper.EVENT_PERSPECTIVE_UNIVERSAL:
       default:
-        return this.tr('event_perspective_universal');
+        return this.tr('event_perspective_universal')
     }
   }
 
   private themeModeLabel(): string {
     switch (this.themeOverride) {
       case ThemeMode.LIGHT:
-        return this.tr('theme_light');
+        return this.tr('theme_light')
       case ThemeMode.DARK:
-        return this.tr('theme_dark');
+        return this.tr('theme_dark')
       case ThemeMode.SYSTEM:
       default:
-        return this.tr('theme_system');
+        return this.tr('theme_system')
     }
   }
 
   private pickThemeMode(id: string): void {
-    this.themeOverride = id;
-    this.themeMode = id;
-    SettingsHelper.saveThemeMode(id);
+    this.themeOverride = id
+    this.themeMode = id
+    SettingsHelper.saveThemeMode(id)
 
     // Apply immediately to the native system context
-    const ctx = getContext(this) as common.UIAbilityContext;
-    PageTheme.applyColorMode(id, ctx);
+    const ctx = getContext(this) as common.UIAbilityContext
+    PageTheme.applyColorMode(id, ctx)
 
-    this.showThemePicker = false;
+    this.showThemePicker = false
   }
 
   private getTranslationLangLabel(lang: string): string {
     if (lang === 'default' || lang === '') {
-      return this.tr('lang_app_default');
+      return this.tr('lang_app_default')
     }
-    return L.get(`lang_${lang}`, this.currentLanguage);
+    return L.get(`lang_${lang}`, this.currentLanguage)
   }
 
   private buildTranslationLangItems(current: string, isQuran: boolean): PickerItem[] {
-    const items: PickerItem[] = [];
+    const items: PickerItem[] = []
     items.push({
       id: 'default', label: this.tr('lang_app_default'), selected: current === 'default'
-    });
+    })
 
     // Quran supports all 7, Hadith supports 5 (no zh in DBs)
-    const langs = isQuran ? ['en', 'ar', 'ur', 'tr', 'bn', 'id', 'zh'] : ['en', 'ar', 'ur', 'tr', 'bn', 'id'];
+    const langs = isQuran ? ['en', 'ar', 'ur', 'tr', 'bn', 'id', 'zh'] : ['en', 'ar', 'ur', 'tr', 'bn', 'id']
 
     for (const l of langs) {
       items.push({
         id: l, label: L.get(`lang_${l}`, this.currentLanguage), selected: current === l
-      });
+      })
     }
-    return items;
+    return items
   }
 
   private getArabicFontLabel(fontId: string): string {
-    return this.tr('font_' + fontId); // e.g., font_auto, font_Amiri
+    return this.tr('font_' + fontId) // e.g., font_auto, font_Amiri
   }
 
   private buildArabicFontItems(): PickerItem[] {
     const fonts = [TypographyHelper.FONT_AUTO, TypographyHelper.FONT_AMIRI, TypographyHelper.FONT_AMIRI_QURAN,
       TypographyHelper.FONT_HAFS, TypographyHelper.FONT_QPC_HAFS, TypographyHelper.FONT_NASTALIQ,
       TypographyHelper.FONT_NOTO_NASTALIQ, TypographyHelper.FONT_KEMENAG, TypographyHelper.FONT_WARSH,
-      TypographyHelper.FONT_SCHEHERAZADE, TypographyHelper.FONT_NOTONASKH];
+      TypographyHelper.FONT_SCHEHERAZADE, TypographyHelper.FONT_NOTONASKH]
 
     return fonts.map((f): PickerItem => {
       const item: PickerItem = {
         id: f, label: this.getArabicFontLabel(f), selected: f === this.arabicFont
-
-      };
-      return item;
-    });
+      }
+      return item
+    })
   }
 
   private getTransFontLabel(fontId: string): string {
-    return this.tr('trans_font_' + fontId);
+    return this.tr('trans_font_' + fontId)
   }
 
   private buildTransFontItems(): PickerItem[] {
-    const fonts = ['auto', 'Outfit', 'NotoNastaliqUrdu', 'NotoSansBengali', 'NotoSansSC', 'JameelNoori'];
+    const fonts = ['auto', 'Outfit', 'NotoNastaliqUrdu', 'NotoSansBengali', 'NotoSansSC', 'JameelNoori']
     return fonts.map((f): PickerItem => {
       return {
         id: f, label: this.getTransFontLabel(f), selected: f === this.transFont
-      };
-    });
+      }
+    })
   }
 
   private currentThemeName(): string {
-    const theme = ThemeService.getAllThemes().find((t: AppThemeJson) => t.id === this.appTheme);
-
-    return this.tr(theme?.nameKey ?? ThemeService.getDefaultTheme().nameKey);
+    const theme = ThemeService.getAllThemes().find((t: AppThemeJson) => t.id === this.appTheme)
+    return this.tr(theme?.nameKey ?? ThemeService.getDefaultTheme().nameKey)
   }
 
   private currentThemeDescription(): string {
-    const theme = ThemeService.getAllThemes().find((t: AppThemeJson) => t.id === this.appTheme);
-
-    return this.tr(theme?.descKey ?? ThemeService.getDefaultTheme().descKey ?? '');
+    const theme = ThemeService.getAllThemes().find((t: AppThemeJson) => t.id === this.appTheme)
+    return this.tr(theme?.descKey ?? ThemeService.getDefaultTheme().descKey ?? '')
   }
 }

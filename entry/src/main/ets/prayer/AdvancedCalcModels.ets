@@ -8,7 +8,8 @@ export enum RoundingMethod {
 /** Which night boundary defines Islamic midnight. */
 export enum MidnightMethod {
   /** Sunset → next sunrise. Common default. */
-  STANDARD = 'Standard', /** Sunset → next Fajr. Jafari / Shia convention. */
+  STANDARD = 'Standard' /** Sunset → next Fajr. Jafari / Shia convention. */
+  ,
   JAFARI = 'Jafari'
 }
 
@@ -24,10 +25,10 @@ export enum PolarResolution {
 
 /** Everything the Advanced Calculation Settings screen persists. */
 export interface AdvancedCalcSettings {
-  rounding: RoundingMethod;
-  midnight: MidnightMethod;
-  polarResolution: PolarResolution;
-  shafaq: Shafaq;
+  rounding: RoundingMethod
+  midnight: MidnightMethod
+  polarResolution: PolarResolution
+  shafaq: Shafaq
 }
 
 export const DEFAULT_ADVANCED_CALC: AdvancedCalcSettings = {
@@ -35,4 +36,4 @@ export const DEFAULT_ADVANCED_CALC: AdvancedCalcSettings = {
   midnight: MidnightMethod.STANDARD,
   polarResolution: PolarResolution.UNRESOLVED,
   shafaq: Shafaq.GENERAL
-};
+}

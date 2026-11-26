@@ -1,12 +1,11 @@
 // entry/src/main/ets/utils/DateUtils.ets
 
-import { EventRecurrence, IslamicEvent, UpcomingImportantDate } from './DateModels';
-import { HijriEngineResolver } from './HijriEngineResolver';
-import { L } from '../i18n/LocalizationHelper';
-import { IslamicEventService } from './IslamicEventService';
+import { EventRecurrence, IslamicEvent, UpcomingImportantDate } from './DateModels'
+import { HijriEngineResolver } from './HijriEngineResolver'
+import { L } from '../i18n/LocalizationHelper'
+import { IslamicEventService } from './IslamicEventService'
 
-
-const MS_PER_DAY = 86400000;
+const MS_PER_DAY = 86400000
 
 /**
  * Hijri month names in English, matching the names shown elsewhere
@@ -15,7 +14,7 @@ const MS_PER_DAY = 86400000;
  */
 const HIJRI_MONTHS_EN: string[] =
   ['Muharram', 'Safar', 'Rabi al-Awwal', 'Rabi al-Thani', 'Jumada al-Awwal', 'Jumada al-Thani', 'Rajab', "Sha'ban",
-    'Ramadan', 'Shawwal', "Dhu al-Qi'dah", 'Dhu al-Hijjah'];
+    'Ramadan', 'Shawwal', "Dhu al-Qi'dah", 'Dhu al-Hijjah']
 
 export class DateHelper {
   /**
@@ -33,21 +32,21 @@ export class DateHelper {
    */
   static findGregorianDateForHijri(targetMonth: number, targetDay: number, startDate: Date,
     offsetDays: number): Date | null {
-    const engine = HijriEngineResolver.current();
+    const engine = HijriEngineResolver.current()
 
     for (let i = 0; i < 366; i++) {
-      const testDate = new Date(startDate);
-      testDate.setDate(testDate.getDate() + i);
-      testDate.setHours(0, 0, 0, 0);
-      const shifted = new Date(testDate);
-      shifted.setDate(shifted.getDate() + offsetDays);
+      const testDate = new Date(startDate)
+      testDate.setDate(testDate.getDate() + i)
+      testDate.setHours(0, 0, 0, 0)
+      const shifted = new Date(testDate)
+      shifted.setDate(shifted.getDate() + offsetDays)
 
-      const h = engine.toHijri(shifted);
+      const h = engine.toHijri(shifted)
       if (h !== null && h.month === targetMonth && h.day === targetDay) {
-        return testDate;
+        return testDate
       }
     }
-    return null;
+    return null
   }
 
   /**
@@ -57,45 +56,45 @@ export class DateHelper {
    * @param offsetDays  The Hijri offset from Settings (+3 … −3).
    */
   static getUpcomingImportantDates(offsetDays: number, perspective: string = 'universal'): UpcomingImportantDate[] {
-    const now = new Date();
-    const todayMidnight = new Date(now);
-    todayMidnight.setHours(0, 0, 0, 0);
+    const now = new Date()
+    const todayMidnight = new Date(now)
+    todayMidnight.setHours(0, 0, 0, 0)
 
-    const engine = HijriEngineResolver.current();
-    const found: UpcomingImportantDate[] = [];
-    const seenKeys = new Set<string>(); // <-- ADD THIS: Track unique events
+    const engine = HijriEngineResolver.current()
+    const found: UpcomingImportantDate[] = []
+    const seenKeys = new Set<string>() // <-- ADD THIS: Track unique events
 
-    const events = IslamicEventService.getEvents(perspective);
+    const events = IslamicEventService.getEvents(perspective)
 
     for (const event of events) { // 1. Skip if we already processed this event key
       if (seenKeys.has(event.key)) {
-        continue;
+        continue
       }
 
-      const gregorianDate = DateHelper.findNextGregorianForEvent(event, now, offsetDays);
+      const gregorianDate = DateHelper.findNextGregorianForEvent(event, now, offsetDays)
       if (!gregorianDate) {
-        continue;
+        continue
       }
 
-      const eventMidnight = new Date(gregorianDate);
-      eventMidnight.setHours(0, 0, 0, 0);
+      const eventMidnight = new Date(gregorianDate)
+      eventMidnight.setHours(0, 0, 0, 0)
 
       if (eventMidnight.getTime() < todayMidnight.getTime()) {
-        continue;
+        continue
       }
 
-      const daysUntil = Math.round((eventMidnight.getTime() - todayMidnight.getTime()) / MS_PER_DAY);
+      const daysUntil = Math.round((eventMidnight.getTime() - todayMidnight.getTime()) / MS_PER_DAY)
 
-      const shiftedForDisplay = new Date(gregorianDate);
-      shiftedForDisplay.setDate(shiftedForDisplay.getDate() + offsetDays);
+      const shiftedForDisplay = new Date(gregorianDate)
+      shiftedForDisplay.setDate(shiftedForDisplay.getDate() + offsetDays)
 
-      const h = engine.toHijri(shiftedForDisplay);
-      let hijriString = '';
+      const h = engine.toHijri(shiftedForDisplay)
+      let hijriString = ''
       if (h !== null) {
-        const lang = L.current();
-        const localizedMonths = L.getArray('hijri_months', lang);
-        const monthName = localizedMonths[h.month - 1] || HIJRI_MONTHS_EN[h.month - 1];
-        hijriString = `${h.day} ${monthName} ${h.year}`;
+        const lang = L.current()
+        const localizedMonths = L.getArray('hijri_months', lang)
+        const monthName = localizedMonths[h.month - 1] || HIJRI_MONTHS_EN[h.month - 1]
+        hijriString = `${h.day} ${monthName} ${h.year}`
       }
 
       const entry: UpcomingImportantDate = {
@@ -104,14 +103,14 @@ export class DateHelper {
         hijriDate: hijriString,
         gregorianDate: gregorianDate,
         daysUntil: daysUntil
-      };
+      }
 
-      found.push(entry);
-      seenKeys.add(event.key); // <-- ADD THIS: Mark as processed
+      found.push(entry)
+      seenKeys.add(event.key) // <-- ADD THIS: Mark as processed
     }
 
-    found.sort((a, b) => a.gregorianDate.getTime() - b.gregorianDate.getTime());
-    return found.slice(0, 3);
+    found.sort((a, b) => a.gregorianDate.getTime() - b.gregorianDate.getTime())
+    return found.slice(0, 3)
   }
 
   /**
@@ -122,18 +121,18 @@ export class DateHelper {
    * themselves before calling (see HomePage.refreshHijriDate).
    */
   static getFormattedHijriDateFor(date: Date): string {
-    const engine = HijriEngineResolver.current();
-    const h = engine.toHijri(date);
+    const engine = HijriEngineResolver.current()
+    const h = engine.toHijri(date)
     if (h === null) {
-      return '';
+      return ''
     }
 
     // Fetch localized month names
-    const lang = L.current();
-    const months = L.getArray('hijri_months', lang);
-    const monthName = months[h.month - 1] || '';
+    const lang = L.current()
+    const months = L.getArray('hijri_months', lang)
+    const monthName = months[h.month - 1] || ''
 
-    return `${h.day} ${monthName} ${h.year}`;
+    return `${h.day} ${monthName} ${h.year}`
   }
 
   /**
@@ -148,27 +147,27 @@ export class DateHelper {
    */
   private static findNextGregorianForEvent(event: IslamicEvent, startDate: Date, offsetDays: number): Date | null {
     if (event.recurrence === EventRecurrence.FIXED) {
-      return DateHelper.findGregorianDateForHijri(event.month, event.day, startDate, offsetDays);
+      return DateHelper.findGregorianDateForHijri(event.month, event.day, startDate, offsetDays)
     }
 
-    const engine = HijriEngineResolver.current();
+    const engine = HijriEngineResolver.current()
 
     for (let i = 0; i < 366; i++) {
-      const testDate = new Date(startDate);
-      testDate.setDate(testDate.getDate() + i);
-      testDate.setHours(0, 0, 0, 0);
+      const testDate = new Date(startDate)
+      testDate.setDate(testDate.getDate() + i)
+      testDate.setHours(0, 0, 0, 0)
       if (testDate.getDay() !== 4) {
-        continue;
+        continue
       }
 
-      const shifted = new Date(testDate);
-      shifted.setDate(shifted.getDate() + offsetDays);
+      const shifted = new Date(testDate)
+      shifted.setDate(shifted.getDate() + offsetDays)
 
-      const h = engine.toHijri(shifted);
+      const h = engine.toHijri(shifted)
       if (h !== null && h.month === event.month && h.day >= 1 && h.day <= 6) {
-        return testDate;
+        return testDate
       }
     }
-    return null;
+    return null
   }
 }

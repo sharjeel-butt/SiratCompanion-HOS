@@ -1,7 +1,7 @@
 // entry/src/main/ets/helper/MaterialHelper.ets
 
-import { deviceInfo } from '@kit.BasicServicesKit';
-import { AppLogger } from '../app/AppLogger';
+import { deviceInfo } from '@kit.BasicServicesKit'
+import { AppLogger } from '../app/AppLogger'
 
 /**
  * Material capability probe and factory.
@@ -34,7 +34,7 @@ import { AppLogger } from '../app/AppLogger';
  */
 export class MaterialHelper {
   /** Lowest SDK API level that provides uiMaterial. */
-  static readonly MIN_API_FOR_MATERIAL = 26;
+  static readonly MIN_API_FOR_MATERIAL = 26
 
   /**
    * Always false in this build. The app-level UIMaterial.state flag
@@ -42,17 +42,17 @@ export class MaterialHelper {
    * surfaces. No code path in the app constructs a uiMaterial.
    */
   static isImmersiveSupported(): boolean {
-    return false;
+    return false
   }
 
   /** True when the current device could use explicit uiMaterial. */
   static shouldUseSystemMaterial(): boolean {
-    return false;
+    return false
   }
 
   /** Fallback blur for bindSheet on pre-API-26 devices. */
   static fallbackBlurStyle(): BlurStyle {
-    return BlurStyle.COMPONENT_THICK;
+    return BlurStyle.COMPONENT_THICK
   }
 
   /**
@@ -72,8 +72,8 @@ export class MaterialHelper {
       blurStyle: MaterialHelper.fallbackBlurStyle(),
       maskColor: maskColor,
       onDisappear: onDisappear
-    };
-    return opts;
+    }
+    return opts
   }
 
   /**
@@ -86,7 +86,7 @@ export class MaterialHelper {
       AppLogger.info('MaterialHelper',
         `SDK=${deviceInfo.sdkApiVersion}, ` + `distOS=${deviceInfo.distributionOSApiVersion}, ` +
           `uiMaterial=disabled-in-this-build, ` +
-          `hdsMaterial=${deviceInfo.sdkApiVersion >= 23 ? 'available' : 'unavailable'}`);
+          `hdsMaterial=${deviceInfo.sdkApiVersion >= 23 ? 'available' : 'unavailable'}`)
     } catch (err) { // Never let diagnostics break startup.
     }
   }

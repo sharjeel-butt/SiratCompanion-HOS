@@ -1,10 +1,10 @@
-import { ThemeColors } from '../core/ui/themes/Theme';
-import { STORAGE_KEY_TASBIH_STATE_VERSION } from '../core/common/StorageKeys';
-import { TasbihStorage } from './TasbihStorage';
-import { TasbihManager } from './TasbihManager';
-import { Tasbih } from './TasbihModels';
-import { common } from '@kit.AbilityKit';
-import { AppLogger } from '../core/app/AppLogger';
+import { ThemeColors } from '../core/ui/themes/Theme'
+import { STORAGE_KEY_TASBIH_STATE_VERSION } from '../core/common/StorageKeys'
+import { TasbihStorage } from './TasbihStorage'
+import { TasbihManager } from './TasbihManager'
+import { Tasbih } from './TasbihModels'
+import { common } from '@kit.AbilityKit'
+import { AppLogger } from '../core/app/AppLogger'
 
 @Component
 export struct TasbihIndicator {
@@ -17,29 +17,29 @@ export struct TasbihIndicator {
   @State private firstPendingDhikrIndex: number = 0;
 
   aboutToAppear(): void {
-    this.loadData();
+    this.loadData()
   }
 
   async loadData(): Promise<void> {
     try {
-      const ctx = getContext(this) as common.UIAbilityContext;
-      await TasbihStorage.init(ctx);
-      const loaded = await TasbihStorage.load(TasbihManager.createDefaults());
+      const ctx = getContext(this) as common.UIAbilityContext
+      await TasbihStorage.init(ctx)
+      const loaded = await TasbihStorage.load(TasbihManager.createDefaults())
 
-      const bound = loaded.tasbihs.filter((t: Tasbih) => t.boundPrayerIds?.includes(this.prayerId));
+      const bound = loaded.tasbihs.filter((t: Tasbih) => t.boundPrayerIds?.includes(this.prayerId))
 
-      this.count = bound.length;
+      this.count = bound.length
 
       if (this.count > 0) { // Pick the first Tasbih to determine navigation target
-        const t = bound[0];
-        this.firstTasbihId = t.id;
+        const t = bound[0]
+        this.firstTasbihId = t.id
 
         // Find the first incomplete dhikr
-        const pendingIdx = t.dhikrs.findIndex(d => (d.dailyTotal ?? d.count) < d.target);
-        this.firstPendingDhikrIndex = pendingIdx >= 0 ? pendingIdx : 0;
+        const pendingIdx = t.dhikrs.findIndex((d) => (d.dailyTotal ?? d.count) < d.target)
+        this.firstPendingDhikrIndex = pendingIdx >= 0 ? pendingIdx : 0
       }
     } catch (e) {
-      this.count = 0;
+      this.count = 0
     }
   }
 
@@ -60,15 +60,15 @@ export struct TasbihIndicator {
       .border({ width: 1, color: this.colors.borderSoft })
       .onClick(() => {
         AppLogger.info('TasbihIndicator',
-          `Tapped: tasbih=${this.firstTasbihId} prayer=${this.prayerId} dhikrIdx=${this.firstPendingDhikrIndex}`);
-        AppStorage.setOrCreate('nav_target_dhikr', this.firstPendingDhikrIndex);
-        AppStorage.setOrCreate('nav_target_prayer', this.prayerId);
-        AppStorage.setOrCreate('nav_target_tasbih', this.firstTasbihId);
+          `Tapped: tasbih=${this.firstTasbihId} prayer=${this.prayerId} dhikrIdx=${this.firstPendingDhikrIndex}`)
+        AppStorage.setOrCreate('nav_target_dhikr', this.firstPendingDhikrIndex)
+        AppStorage.setOrCreate('nav_target_prayer', this.prayerId)
+        AppStorage.setOrCreate('nav_target_tasbih', this.firstTasbihId)
 
         // Bypass @StorageLink watch batching by emitting directly
-        const ctx = getContext(this) as common.UIAbilityContext;
-        ctx.eventHub.emit('widget_nav_event', 'tasbih');
-        AppStorage.setOrCreate('nav_target_tab', '');
+        const ctx = getContext(this) as common.UIAbilityContext
+        ctx.eventHub.emit('widget_nav_event', 'tasbih')
+        AppStorage.setOrCreate('nav_target_tab', '')
       })
     }
   }

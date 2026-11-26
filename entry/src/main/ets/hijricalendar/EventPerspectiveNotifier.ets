@@ -1,6 +1,6 @@
 // entry/src/main/ets/utils/EventPerspectiveNotifier.ets
 
-export type EventPerspectiveListener = () => void;
+export type EventPerspectiveListener = () => void
 
 /**
  * Fan-out for Event Perspective changes.
@@ -12,25 +12,25 @@ export type EventPerspectiveListener = () => void;
  * immediately, ready for the next render pass.
  */
 export class EventPerspectiveNotifier {
-  private static listeners: EventPerspectiveListener[] = [];
+  private static listeners: EventPerspectiveListener[] = []
 
   static subscribe(fn: EventPerspectiveListener): void {
     if (EventPerspectiveNotifier.listeners.indexOf(fn) === -1) {
-      EventPerspectiveNotifier.listeners.push(fn);
+      EventPerspectiveNotifier.listeners.push(fn)
     }
   }
 
   static unsubscribe(fn: EventPerspectiveListener): void {
     EventPerspectiveNotifier.listeners =
-      EventPerspectiveNotifier.listeners.filter((l: EventPerspectiveListener): boolean => l !== fn);
+      EventPerspectiveNotifier.listeners.filter((l: EventPerspectiveListener): boolean => l !== fn)
   }
 
   static notify(): void {
     for (const fn of EventPerspectiveNotifier.listeners) {
       try {
-        fn();
+        fn()
       } catch (e) {
-        console.error('[EventPerspectiveNotifier] listener failed: ' + JSON.stringify(e));
+        console.error('[EventPerspectiveNotifier] listener failed: ' + JSON.stringify(e))
       }
     }
   }

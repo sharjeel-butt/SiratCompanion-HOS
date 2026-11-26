@@ -36,7 +36,6 @@ struct RamadanWidget {
             Text(this.error).fontSize('14vp').fontColor('#FF6B6B').textAlign(TextAlign.Center).width('100%')
           }.width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
         } else {
-
           /// ========== HEADER ==========
           if (this.dimension === '2*2') {
             Column() {
@@ -86,7 +85,6 @@ struct RamadanWidget {
               Text(this.targetName).fontSize('16vp').fontWeight(FontWeight.Bold).fontColor('#FFFFFF').maxLines(1)
               Text(this.countdown).fontSize('14vp').fontColor('#E8A44C').margin({ top: 4 }).maxLines(1)
             }.width('100%').layoutWeight(1).justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center)
-
           } else if (this.dimension === '2*2') {
             Column() {
               Text(this.targetName)
@@ -110,7 +108,6 @@ struct RamadanWidget {
                 .margin({ top: 4 })
                 .opacity(0.8)
             }.width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
-
           } else if (this.dimension === '2*4') {
             Row() {
               if (this.isRtl()) { // RTL: Iftar on Left (End of day), Imsak on Right (Start of day)
@@ -165,12 +162,12 @@ struct RamadanWidget {
           bundleName: 'com.siratcompanion.hos.app',
           abilityName: 'EntryAbility',
           params: { targetPage: 'pages/RamadanDetailsPage' }
-        });
+        })
       })
     }.width('100%').height('100%').direction(Direction.Ltr) // FORCE LTR ON ROOT TO PREVENT SYSTEM DOUBLE-MIRRORING
   }
 
   private isRtl(): boolean {
-    return this.lang === 'ar' || this.lang === 'ur';
+    return this.lang === 'ar' || this.lang === 'ur'
   }
 }

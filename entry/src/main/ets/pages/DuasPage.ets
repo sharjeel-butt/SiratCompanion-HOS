@@ -1,22 +1,22 @@
-import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
-import { CompleteDua, DuaSource } from '../duas/DuaModels';
-import { STORAGE_KEY_DUA_TRANSLATION_LANG, STORAGE_KEY_LANGUAGE } from '../core/common/StorageKeys';
-import { RawPaths } from '../core/common/RawPaths';
-import { util } from '@kit.ArkTS';
-import { AppLogger } from '../core/app/AppLogger';
-import { promptAction, router } from '@kit.ArkUI';
-import { common } from '@kit.AbilityKit';
-import { DuaService } from '../duas/DuaService';
-import { HadithSearchService } from '../hadith/HadithSearchService';
-import { L } from '../i18n/LocalizationHelper';
-import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
-import { SourceParser } from '../i18n/SourceParser';
-import { NavHelper } from '../core/util/NavHelper';
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
+import { CompleteDua, DuaSource } from '../duas/DuaModels'
+import { STORAGE_KEY_DUA_TRANSLATION_LANG, STORAGE_KEY_LANGUAGE } from '../core/common/StorageKeys'
+import { RawPaths } from '../core/common/RawPaths'
+import { util } from '@kit.ArkTS'
+import { AppLogger } from '../core/app/AppLogger'
+import { promptAction, router } from '@kit.ArkUI'
+import { common } from '@kit.AbilityKit'
+import { DuaService } from '../duas/DuaService'
+import { HadithSearchService } from '../hadith/HadithSearchService'
+import { L } from '../i18n/LocalizationHelper'
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper'
+import { SourceParser } from '../i18n/SourceParser'
+import { NavHelper } from '../core/util/NavHelper'
 
 interface CategoryEntry {
-  name: string;
-  count: number;
+  name: string
+  count: number
 }
 
 @Entry
@@ -36,102 +36,102 @@ struct DuasPage {
   @State private categoryChips: CategoryEntry[] = [];
 
   async aboutToAppear() {
-    this.colors = PageTheme.compute(ThemeMode.SYSTEM);
+    this.colors = PageTheme.compute(ThemeMode.SYSTEM)
 
-    const params = router.getParams() as Record<string, Object>;
+    const params = router.getParams() as Record<string, Object>
     if (params && params['filterCategory']) {
-      this.filterCategory = params['filterCategory'] as string;
-      this.activeCategory = this.filterCategory;
+      this.filterCategory = params['filterCategory'] as string
+      this.activeCategory = this.filterCategory
     }
     if (params && params['filterPrayer']) {
-      this.filterPrayer = params['filterPrayer'] as string;
+      this.filterPrayer = params['filterPrayer'] as string
     }
 
-    await this.loadData();
+    await this.loadData()
   }
 
   onDuaLangChanged() {
-    this.loadData();
+    this.loadData()
   }
 
   async onPageShow() {
-    await this.loadData();
+    await this.loadData()
   }
 
   onLangChanged() {
-    this.loadData();
+    this.loadData()
   }
 
   async loadData(): Promise<void> {
-    this.isLoading = true;
-    const ctx = getContext(this) as common.UIAbilityContext;
+    this.isLoading = true
+    const ctx = getContext(this) as common.UIAbilityContext
 
     // 1. Load duas
-    this.duas = await DuaService.loadDuas(ctx, this.getDuaTranslationLang(), this.appLanguage);
+    this.duas = await DuaService.loadDuas(ctx, this.getDuaTranslationLang(), this.appLanguage)
 
     // 2. Load canonical categories (for stable ordering)
-    let canonical: string[] = [];
+    let canonical: string[] = []
     try {
-      const bytes = await ctx.resourceManager.getRawFileContent(RawPaths.DUA_CATEGORIES);
-      const parsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(bytes)) as CategoryEntry[];
+      const bytes = await ctx.resourceManager.getRawFileContent(RawPaths.DUA_CATEGORIES)
+      const parsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(bytes)) as CategoryEntry[]
       for (const c of parsed) {
-        canonical.push(c.name);
+        canonical.push(c.name)
       }
     } catch (e) {
-      AppLogger.warn('DuasPage', 'categories.json not found');
+      AppLogger.warn('DuasPage', 'categories.json not found')
     }
 
     // 3. Build per-language counts from actual duas
-    const actualCounts: Record<string, number> = {};
+    const actualCounts: Record<string, number> = {}
     for (const d of this.duas) {
-      actualCounts[d.category] = (actualCounts[d.category] || 0) + 1;
+      actualCounts[d.category] = (actualCounts[d.category] || 0) + 1
     }
 
     // 4. Ensure HadithSearchService i18n is loaded for category labels
-    await HadithSearchService.loadI18n(ctx, this.appLanguage);
+    await HadithSearchService.loadI18n(ctx, this.appLanguage)
 
     // 5. Build chips — canonical order, filter to non-empty
-    const chips: CategoryEntry[] = []; // Always show "all" and "favorites" first
-    chips.push({ name: 'all', count: this.duas.length });
-    chips.push({ name: 'favorites', count: this.duas.filter(d => d.isFavorite).length });
+    const chips: CategoryEntry[] = [] // Always show "all" and "favorites" first
+    chips.push({ name: 'all', count: this.duas.length })
+    chips.push({ name: 'favorites', count: this.duas.filter((d) => d.isFavorite).length })
     for (const cat of canonical) {
-      const cnt = actualCounts[cat] || 0;
+      const cnt = actualCounts[cat] || 0
       if (cnt > 0) {
-        chips.push({ name: cat, count: cnt });
+        chips.push({ name: cat, count: cnt })
       }
     }
-    this.categoryChips = chips;
+    this.categoryChips = chips
 
     // 6. Restore active filter if still valid
     if (this.activeCategory !== 'all' && this.activeCategory !== 'favorites') {
       if (!canonical.includes(this.activeCategory)) {
-        this.activeCategory = 'all';
+        this.activeCategory = 'all'
       }
     }
 
-    this.applyFilters();
-    this.isLoading = false;
+    this.applyFilters()
+    this.isLoading = false
   }
 
   applyFilters() {
-    let result = this.duas;
+    let result = this.duas
 
     if (this.filterPrayer.length > 0) {
-      result = result.filter((d: CompleteDua) => d.boundPrayerIds.includes(this.filterPrayer));
+      result = result.filter((d: CompleteDua) => d.boundPrayerIds.includes(this.filterPrayer))
     }
 
     if (this.activeCategory === 'favorites') {
-      result = result.filter((d: CompleteDua) => d.isFavorite);
+      result = result.filter((d: CompleteDua) => d.isFavorite)
     } else if (this.activeCategory !== 'all') {
-      result = result.filter((d: CompleteDua) => d.category === this.activeCategory);
+      result = result.filter((d: CompleteDua) => d.category === this.activeCategory)
     }
 
     if (this.searchQuery.trim().length > 0) {
-      const q = this.searchQuery.toLowerCase();
+      const q = this.searchQuery.toLowerCase()
       result = result.filter((d: CompleteDua) => d.arabic.includes(q) || d.translatedName.toLowerCase().includes(q) ||
-        d.translatedText.toLowerCase().includes(q));
+        d.translatedText.toLowerCase().includes(q))
     }
-    this.filteredDuas = result;
+    this.filteredDuas = result
   }
 
   build() {
@@ -171,8 +171,8 @@ struct DuasPage {
       Search({
         value: this.searchQuery, placeholder: L.get('search_duas', this.appLanguage)
       }).onChange((val: string) => {
-        this.searchQuery = val;
-        this.applyFilters();
+        this.searchQuery = val
+        this.applyFilters()
       }).margin({
         left: 16,
         right: 16,
@@ -199,8 +199,8 @@ struct DuasPage {
               top: 6,
               bottom: 6
             }).borderRadius(16).onClick(() => {
-              this.filterPrayer = '';
-              this.applyFilters();
+              this.filterPrayer = ''
+              this.applyFilters()
             })
           }
 
@@ -218,8 +218,8 @@ struct DuasPage {
               })
               .borderRadius(16)
               .onClick(() => {
-                this.activeCategory = chip.name;
-                this.applyFilters();
+                this.activeCategory = chip.name
+                this.applyFilters()
               })
           }, (chip: CategoryEntry) => `cat-${chip.name}-${chip.count}-${this.activeCategory}-${this.appLanguage}`)
         }.padding({ left: 16, right: 16 })
@@ -272,10 +272,9 @@ struct DuasPage {
           .fillColor(dua.isFavorite ? this.colors.statusExpress : this.colors.textMuted)
           .flexShrink(0)
           .onClick(async () => {
-            await DuaService.toggleFavorite(dua.id, this.duas
-              .filter((d: CompleteDua) => d.isFavorite)
-              .map((d: CompleteDua) => d.id));
-            this.loadData();
+            await DuaService.toggleFavorite(dua.id,
+              this.duas.filter((d: CompleteDua) => d.isFavorite).map((d: CompleteDua) => d.id))
+            this.loadData()
           })
       }.width('100%').margin({ bottom: 12 }).alignItems(VerticalAlign.Center)
 
@@ -307,7 +306,6 @@ struct DuasPage {
 
         if (dua.sources && dua.sources.length > 0) {
           Row() {
-
             // Left side - sources
             Flex({
               wrap: FlexWrap.Wrap, justifyContent: FlexAlign.Start
@@ -356,7 +354,6 @@ struct DuasPage {
           }.width('100%').justifyContent(FlexAlign.SpaceBetween).alignItems(VerticalAlign.Top).margin({ top: 4 })
         }
       }.width('100%').alignItems(VerticalAlign.Center)
-
     }
     .width('100%')
     .padding(20)
@@ -367,9 +364,9 @@ struct DuasPage {
   }
 
   async toggleBind(dua: CompleteDua, prayerId: string) {
-    const isBound = dua.boundPrayerIds.includes(prayerId);
-    await DuaService.bindToPrayer(dua.id, prayerId, !isBound);
-    this.loadData();
+    const isBound = dua.boundPrayerIds.includes(prayerId)
+    await DuaService.bindToPrayer(dua.id, prayerId, !isBound)
+    this.loadData()
   }
 
   // ============================================================
@@ -378,99 +375,99 @@ struct DuasPage {
 
   private categoryLabel(cat: string): string {
     if (cat === 'all') {
-      return L.get('dua_cat_all', this.appLanguage);
+      return L.get('dua_cat_all', this.appLanguage)
     }
     if (cat === 'favorites') {
-      return L.get('dua_cat_favorites', this.appLanguage);
+      return L.get('dua_cat_favorites', this.appLanguage)
     }
-    return HadithSearchService.translate('category_' + cat, this.appLanguage);
+    return HadithSearchService.translate('category_' + cat, this.appLanguage)
   }
 
   private isFriday(): boolean {
-    return new Date().getDay() === 5;
+    return new Date().getDay() === 5
   }
 
   private getPrayerLabel(prayerId: string): string {
     if (prayerId === 'dhuhr' && this.isFriday()) {
-      return L.get('prayer_jummah', this.appLanguage);
+      return L.get('prayer_jummah', this.appLanguage)
     }
-    return L.get('prayer_' + prayerId, this.appLanguage);
+    return L.get('prayer_' + prayerId, this.appLanguage)
   }
 
   private buildPrayerMenu(dua: CompleteDua): MenuElement[] {
-    const prayerIds = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
+    const prayerIds = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']
 
     return prayerIds.map((id: string) => {
-      const isBound = dua.boundPrayerIds.includes(id);
-      const label = this.getPrayerLabel(id); // Prefix with checkmark if bound, else spaces for alignment
-      const displayValue = isBound ? `✓  ${label}` : `     ${label}`;
+      const isBound = dua.boundPrayerIds.includes(id)
+      const label = this.getPrayerLabel(id) // Prefix with checkmark if bound, else spaces for alignment
+      const displayValue = isBound ? `✓  ${label}` : `     ${label}`
 
       const item: MenuElement = {
         value: displayValue, action: () => {
-          this.toggleBind(dua, id);
+          this.toggleBind(dua, id)
         }
-      };
-      return item;
-    });
+      }
+      return item
+    })
   }
 
   private getDuaTranslationLang(): string {
     if (this.duaTransLang === 'default' || this.duaTransLang === '') {
-      return this.appLanguage;
+      return this.appLanguage
     }
-    return this.duaTransLang;
+    return this.duaTransLang
   }
 
   private getCanonicalCollection(col: string): string {
-    const c = col.toLowerCase();
+    const c = col.toLowerCase()
     if (c.includes('bukhari') || c === 'bukh') {
-      return 'bukhari';
+      return 'bukhari'
     }
     if (c.includes('muslim') || c === 'musl') {
-      return 'muslim';
+      return 'muslim'
     }
     if (c.includes('abu dawud') || c.includes('abudawud') || c === 'abud') {
-      return 'abudawud';
+      return 'abudawud'
     }
     if (c.includes('tirmidhi') || c === 'tirm') {
-      return 'tirmidhi';
+      return 'tirmidhi'
     }
     if (c.includes('nasai') || c === 'nasa') {
-      return 'nasai';
+      return 'nasai'
     }
     if (c.includes('ibn majah') || c.includes('ibnmajah') || c === 'ibnm') {
-      return 'ibnmajah';
+      return 'ibnmajah'
     }
     if (c.includes('malik') || c === 'mali') {
-      return 'malik';
+      return 'malik'
     }
-    return c;
+    return c
   }
 
   private onSourceTap(src: DuaSource): void {
     if (src.type === 'hadith' && src.id) {
-      const parts = src.id.split(':');
+      const parts = src.id.split(':')
       if (parts.length === 2) {
-        const col = this.getCanonicalCollection(parts[0]);
-        const hadithId = `${col}:${parts[1]}`;
-        NavHelper.prepareForward();
+        const col = this.getCanonicalCollection(parts[0])
+        const hadithId = `${col}:${parts[1]}`
+        NavHelper.prepareForward()
         router.pushUrl({
           url: 'pages/HadithDetailsPage', params: { id: hadithId }
-        }).catch((e: Error) => console.error(JSON.stringify(e)));
-        return;
+        }).catch((e: Error) => console.error(JSON.stringify(e)))
+        return
       }
     }
     if (src.type === 'quran' && src.surah !== undefined && src.ayah !== undefined) {
-      NavHelper.prepareForward();
+      NavHelper.prepareForward()
       router.pushUrl({
         url: 'pages/SurahDetailsPage', params: { surahId: src.surah, startVerse: src.ayah, endVerse: src.ayah }
-      }).catch((e: Error) => console.error(JSON.stringify(e)));
-      return;
+      }).catch((e: Error) => console.error(JSON.stringify(e)))
+      return
     }
-    const title = L.get('hadith_evidence_title', this.appLanguage);
-    const msg = src.display || src.id || 'Unknown Source';
+    const title = L.get('hadith_evidence_title', this.appLanguage)
+    const msg = src.display || src.id || 'Unknown Source'
     promptAction.showDialog({
       title: title, message: msg, buttons: [{ text: L.get('ok', this.appLanguage), color: this.colors.accentGold }]
-    });
+    })
   }
 }

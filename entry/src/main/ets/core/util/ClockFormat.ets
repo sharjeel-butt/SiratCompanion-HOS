@@ -1,55 +1,55 @@
 // entry/src/main/ets/common/ClockFormat.ets
-import { settings } from '@kit.BasicServicesKit';
-import { common } from '@kit.AbilityKit';
-import { STORAGE_KEY_TIME_FORMAT } from '../common/StorageKeys';
-import { i18n } from '@kit.LocalizationKit';
+import { settings } from '@kit.BasicServicesKit'
+import { common } from '@kit.AbilityKit'
+import { STORAGE_KEY_TIME_FORMAT } from '../common/StorageKeys'
+import { i18n } from '@kit.LocalizationKit'
 
 export enum ClockFormat {
   SYSTEM = 'System', TWELVE_HOUR = '12h', TWENTY_FOUR_HOUR = '24h'
 }
 
 export class ClockFormatHelper {
-  private static hourCycleLogged: boolean = false;
+  private static hourCycleLogged: boolean = false
 
   /** Current preference as stored by the user. */
   static current(): ClockFormat {
-    const v = AppStorage.get<string>(STORAGE_KEY_TIME_FORMAT);
+    const v = AppStorage.get<string>(STORAGE_KEY_TIME_FORMAT)
     if (v === ClockFormat.TWELVE_HOUR) {
-      return ClockFormat.TWELVE_HOUR;
+      return ClockFormat.TWELVE_HOUR
     }
     if (v === ClockFormat.TWENTY_FOUR_HOUR) {
-      return ClockFormat.TWENTY_FOUR_HOUR;
+      return ClockFormat.TWENTY_FOUR_HOUR
     }
-    return ClockFormat.SYSTEM;
+    return ClockFormat.SYSTEM
   }
 
   /** Resolved boolean — true when times should be shown as 24-hour. */
   static use24Hour(): boolean {
-    const f = ClockFormatHelper.current();
+    const f = ClockFormatHelper.current()
     if (f === ClockFormat.TWENTY_FOUR_HOUR) {
-      return true;
+      return true
     }
     if (f === ClockFormat.TWELVE_HOUR) {
-      return false;
+      return false
     }
-    return ClockFormatHelper.isSystem24Hour();
+    return ClockFormatHelper.isSystem24Hour()
   }
 
   /** Reformat the app's internal 12-hour string ("5:23 AM") into the
    *  user's preferred display format. */
   static reformat(timeStr: string): string {
     if (timeStr === undefined || timeStr === null) {
-      return '--:--';
+      return '--:--'
     }
-    const trimmed: string = timeStr.trim();
+    const trimmed: string = timeStr.trim()
     if (trimmed.length === 0 || trimmed === '--:--') {
-      return timeStr;
+      return timeStr
     }
-    const minutes: number = ClockFormatHelper.parseToMinutes(trimmed);
+    const minutes: number = ClockFormatHelper.parseToMinutes(trimmed)
     if (minutes < 0) {
-      return timeStr;
+      return timeStr
     }
-    return ClockFormatHelper.formatMinutes(minutes);
+    return ClockFormatHelper.formatMinutes(minutes)
   }
 
   // ============================================================
@@ -79,41 +79,41 @@ export class ClockFormatHelper {
 
   /** Format a minutes-since-midnight value in the user's preferred format. */
   static formatMinutes(totalMinutes: number): string {
-    const clamped: number = ((totalMinutes % 1440) + 1440) % 1440;
-    const h: number = Math.floor(clamped / 60);
-    const m: number = clamped % 60;
-    const mm: string = m.toString().padStart(2, '0');
+    const clamped: number = ((totalMinutes % 1440) + 1440) % 1440
+    const h: number = Math.floor(clamped / 60)
+    const m: number = clamped % 60
+    const mm: string = m.toString().padStart(2, '0')
 
     if (ClockFormatHelper.use24Hour()) {
-      return `${h.toString().padStart(2, '0')}:${mm}`;
+      return `${h.toString().padStart(2, '0')}:${mm}`
     }
-    const period: string = h >= 12 ? 'PM' : 'AM';
-    let dh: number = h % 12;
+    const period: string = h >= 12 ? 'PM' : 'AM'
+    let dh: number = h % 12
     if (dh === 0) {
-      dh = 12;
+      dh = 12
     }
-    return `${dh}:${mm} ${period}`;
+    return `${dh}:${mm} ${period}`
   }
 
   private static isSystem24Hour(): boolean { // ---- Layer 1: i18n.System.is24HourClock() (authoritative) ----
     try {
-      const is24: boolean = i18n.System.is24HourClock();
+      const is24: boolean = i18n.System.is24HourClock()
 
       if (!ClockFormatHelper.hourCycleLogged) {
-        ClockFormatHelper.hourCycleLogged = true;
-        console.info(`[ClockFormat] is24HourClock = ${is24}`);
+        ClockFormatHelper.hourCycleLogged = true
+        console.info(`[ClockFormat] is24HourClock = ${is24}`)
       }
-      return is24;
+      return is24
     } catch (err) {
-      console.warn('[ClockFormat] i18n.System.is24HourClock() threw: ' + JSON.stringify(err));
+      console.warn('[ClockFormat] i18n.System.is24HourClock() threw: ' + JSON.stringify(err))
     }
 
     // ---- Layer 2: @ohos.settings TIME_FORMAT ("24" | "12") ----
     // settings.date.TIME_FORMAT: "24" for 24-hour, "12" for 12-hour.
     try {
-      const context = getContext() as common.Context;
-      const raw: string = settings.getValueSync(context, settings.date.TIME_FORMAT, '12');
-      return raw === '24';
+      const context = getContext() as common.Context
+      const raw: string = settings.getValueSync(context, settings.date.TIME_FORMAT, '12')
+      return raw === '24'
     } catch (err) { // No context (e.g. called from a plain JS module), or the
       // setting isn't readable — fall through.
     }
@@ -122,24 +122,24 @@ export class ClockFormatHelper {
     try {
       const resolved = new Intl.DateTimeFormat(undefined, {
         hour: 'numeric'
-      }).resolvedOptions();
+      }).resolvedOptions()
 
       if (typeof resolved.hour12 === 'boolean') {
-        return !resolved.hour12;
+        return !resolved.hour12
       }
 
-      const hc = resolved.hourCycle;
+      const hc = resolved.hourCycle
       if (hc === 'h23' || hc === 'h24') {
-        return true;
+        return true
       }
       if (hc === 'h11' || hc === 'h12') {
-        return false;
+        return false
       }
     } catch (err) { // Fall through.
     }
 
     // Last resort — assume 12-hour.
-    return false;
+    return false
   }
 
   /**
@@ -147,38 +147,38 @@ export class ClockFormatHelper {
    * Returns -1 on failure.
    */
   private static parseToMinutes(timeStr: string): number {
-    const parts: string[] = timeStr.split(' ');
+    const parts: string[] = timeStr.split(' ')
     if (parts.length === 1) {
-      const tp: string[] = parts[0].split(':');
+      const tp: string[] = parts[0].split(':')
       if (tp.length !== 2) {
-        return -1;
+        return -1
       }
-      const h: number = parseInt(tp[0], 10);
-      const m: number = parseInt(tp[1], 10);
+      const h: number = parseInt(tp[0], 10)
+      const m: number = parseInt(tp[1], 10)
       if (isNaN(h) || isNaN(m)) {
-        return -1;
+        return -1
       }
-      return h * 60 + m;
+      return h * 60 + m
     }
     if (parts.length !== 2) {
-      return -1;
+      return -1
     }
-    const tp: string[] = parts[0].split(':');
+    const tp: string[] = parts[0].split(':')
     if (tp.length !== 2) {
-      return -1;
+      return -1
     }
-    let h: number = parseInt(tp[0], 10);
-    const m: number = parseInt(tp[1], 10);
-    const period: string = parts[1].toUpperCase();
+    let h: number = parseInt(tp[0], 10)
+    const m: number = parseInt(tp[1], 10)
+    const period: string = parts[1].toUpperCase()
     if (isNaN(h) || isNaN(m)) {
-      return -1;
+      return -1
     }
     if (period === 'PM' && h !== 12) {
-      h += 12;
+      h += 12
     }
     if (period === 'AM' && h === 12) {
-      h = 0;
+      h = 0
     }
-    return h * 60 + m;
+    return h * 60 + m
   }
 }

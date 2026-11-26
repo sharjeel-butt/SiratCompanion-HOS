@@ -1,79 +1,78 @@
 // entry/src/main/ets/utils/LocationUtils.ets
 
-import { abilityAccessCtrl, bundleManager, Context, PermissionRequestResult, Permissions } from '@kit.AbilityKit';
-import { L } from '../i18n/LocalizationHelper';
-import { OfflineCityLookup } from './OfflineCityLookup';
-import { geoLocationManager } from '@kit.LocationKit';
-import { promptAction } from '@kit.ArkUI';
-import { STORAGE_KEY_LANGUAGE } from '../core/common/StorageKeys';
-import { i18n } from '@kit.LocalizationKit';
-import { BusinessError } from '@kit.BasicServicesKit';
+import { abilityAccessCtrl, bundleManager, Context, PermissionRequestResult, Permissions } from '@kit.AbilityKit'
+import { L } from '../i18n/LocalizationHelper'
+import { OfflineCityLookup } from './OfflineCityLookup'
+import { geoLocationManager } from '@kit.LocationKit'
+import { promptAction } from '@kit.ArkUI'
+import { STORAGE_KEY_LANGUAGE } from '../core/common/StorageKeys'
+import { i18n } from '@kit.LocalizationKit'
+import { BusinessError } from '@kit.BasicServicesKit'
 
 // ----- Interface for location result -----
 export interface LocationData {
-  latitude: number;
-  longitude: number;
-  cityName: string;
+  latitude: number
+  longitude: number
+  cityName: string
 }
 
 interface ReverseResult {
-  kind: 'city' | 'country';
-  value: string;
+  kind: 'city' | 'country'
+  value: string
 }
 
 export class LocationHelper {
   static async requestLocationPermission(context: Context): Promise<boolean> {
-    const atManager = abilityAccessCtrl.createAtManager();
-    const permissions: Array<Permissions> = ['ohos.permission.APPROXIMATELY_LOCATION', 'ohos.permission.LOCATION'];
+    const atManager = abilityAccessCtrl.createAtManager()
+    const permissions: Array<Permissions> = ['ohos.permission.APPROXIMATELY_LOCATION', 'ohos.permission.LOCATION']
     try {
-      const result: PermissionRequestResult = await atManager.requestPermissionsFromUser(context, permissions);
-      return result.authResults.every((grant) => grant === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED);
+      const result: PermissionRequestResult = await atManager.requestPermissionsFromUser(context, permissions)
+      return result.authResults.every((grant) => grant === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED)
     } catch (err) {
-      const error = err as BusinessError;
-      console.error(`Permission request failed: ${error.code}, ${error.message}`);
-      return false;
+      const error = err as BusinessError
+      console.error(`Permission request failed: ${error.code}, ${error.message}`)
+      return false
     }
   }
 
   static async reverseGeocode(latitude: number, longitude: number): Promise<string> {
-
-    const offline = OfflineCityLookup.nearest(latitude, longitude);
+    const offline = OfflineCityLookup.nearest(latitude, longitude)
 
     if (offline !== null) {
-      console.info(`[LocationHelper] reverseGeocode offline match: ${offline}`);
-      return offline;
+      console.info(`[LocationHelper] reverseGeocode offline match: ${offline}`)
+      return offline
     }
 
-    const locales = LocationHelper.buildLocaleCandidates();
-    let lastCountry: string | null = null;
+    const locales = LocationHelper.buildLocaleCandidates()
+    let lastCountry: string | null = null
 
     for (const locale of locales) {
-      const result = await LocationHelper.tryReverseGeocode(latitude, longitude, locale);
+      const result = await LocationHelper.tryReverseGeocode(latitude, longitude, locale)
       if (result !== null) {
         if (result.kind === 'city') {
-          return result.value;
+          return result.value
         }
         if (result.kind === 'country') {
-          lastCountry = result.value;
+          lastCountry = result.value
         }
       }
     }
 
     if (lastCountry !== null) {
-      console.info(`[LocationHelper] reverseGeocode country-only fallback: ${lastCountry}`);
-      return lastCountry;
+      console.info(`[LocationHelper] reverseGeocode country-only fallback: ${lastCountry}`)
+      return lastCountry
     }
 
-    console.warn('[LocationHelper] reverseGeocode: no data at all');
-    return L.get('unknown_location', LocationHelper.currentLang());
+    console.warn('[LocationHelper] reverseGeocode: no data at all')
+    return L.get('unknown_location', LocationHelper.currentLang())
   }
 
   static async isLocationEnabled(): Promise<boolean> {
     try {
-      return await geoLocationManager.isLocationEnabled();
+      return await geoLocationManager.isLocationEnabled()
     } catch (err) {
-      console.error('Failed to check location status:', JSON.stringify(err));
-      return false;
+      console.error('Failed to check location status:', JSON.stringify(err))
+      return false
     }
   }
 
@@ -88,58 +87,58 @@ export class LocationHelper {
    */
   static async fetchLocationData(context: Context,
     mode: 'interactive' | 'silent' = 'interactive'): Promise<LocationData> {
-    const enabled = await LocationHelper.isLocationEnabled();
+    const enabled = await LocationHelper.isLocationEnabled()
     if (!enabled) {
-      throw new Error('GPS_OFF');
+      throw new Error('GPS_OFF')
     }
 
-    let hasPermission: boolean;
+    let hasPermission: boolean
     if (mode === 'interactive') {
-      hasPermission = await LocationHelper.requestLocationPermission(context);
+      hasPermission = await LocationHelper.requestLocationPermission(context)
     } else {
-      hasPermission = await LocationHelper.checkLocationPermission();
+      hasPermission = await LocationHelper.checkLocationPermission()
     }
     if (!hasPermission) {
-      throw new Error('PERMISSION_DENIED');
+      throw new Error('PERMISSION_DENIED')
     }
 
     const request: geoLocationManager.CurrentLocationRequest = {
       priority: geoLocationManager.LocationRequestPriority.LOW_POWER, timeoutMs: 10000, maxAccuracy: 1000
-    };
-    const location = await geoLocationManager.getCurrentLocation(request);
+    }
+    const location = await geoLocationManager.getCurrentLocation(request)
 
-    const cityName = await LocationHelper.reverseGeocode(location.latitude, location.longitude);
+    const cityName = await LocationHelper.reverseGeocode(location.latitude, location.longitude)
 
     return {
       latitude: location.latitude, longitude: location.longitude, cityName: cityName
-    };
+    }
   }
 
   static async showLocationDisabledDialog(accentColor: string = '#C9A96E'): Promise<void> {
-    const lang = LocationHelper.currentLang();
+    const lang = LocationHelper.currentLang()
     try {
       await promptAction.showDialog({
         title: L.get('dialog_gps_off_title', lang),
         message: L.get('dialog_gps_off_message', lang),
         buttons: [{ text: L.get('ok', lang), color: accentColor }]
-      });
+      })
     } catch (err) {
-      const error = err as BusinessError;
-      console.error(`Dialog error: ${error.code}, ${error.message}`);
+      const error = err as BusinessError
+      console.error(`Dialog error: ${error.code}, ${error.message}`)
     }
   }
 
   static async showPermissionDeniedDialog(accentColor: string = '#C9A96E'): Promise<void> {
-    const lang = LocationHelper.currentLang();
+    const lang = LocationHelper.currentLang()
     try {
       await promptAction.showDialog({
         title: L.get('dialog_permission_title', lang),
         message: L.get('dialog_permission_message', lang),
         buttons: [{ text: L.get('ok', lang), color: accentColor }]
-      });
+      })
     } catch (err) {
-      const error = err as BusinessError;
-      console.error(`Dialog error: ${error.code}, ${error.message}`);
+      const error = err as BusinessError
+      console.error(`Dialog error: ${error.code}, ${error.message}`)
     }
   }
 
@@ -152,42 +151,42 @@ export class LocationHelper {
   private static async checkLocationPermission(): Promise<boolean> {
     try {
       const bundleInfo =
-        bundleManager.getBundleInfoForSelfSync(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION);
-      const tokenId = bundleInfo.appInfo.accessTokenId;
+        bundleManager.getBundleInfoForSelfSync(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION)
+      const tokenId = bundleInfo.appInfo.accessTokenId
 
-      const atManager = abilityAccessCtrl.createAtManager();
-      const status1 = await atManager.checkAccessToken(tokenId, 'ohos.permission.APPROXIMATELY_LOCATION');
-      const status2 = await atManager.checkAccessToken(tokenId, 'ohos.permission.LOCATION');
+      const atManager = abilityAccessCtrl.createAtManager()
+      const status1 = await atManager.checkAccessToken(tokenId, 'ohos.permission.APPROXIMATELY_LOCATION')
+      const status2 = await atManager.checkAccessToken(tokenId, 'ohos.permission.LOCATION')
 
-      return status1 === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED &&
-        status2 === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED;
+      return (status1 === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED &&
+        status2 === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED)
     } catch (err) {
-      const error = err as BusinessError;
-      console.warn(`[LocationHelper] checkLocationPermission failed: ` + `${error.code} ${error.message}`);
-      return false;
+      const error = err as BusinessError
+      console.warn(`[LocationHelper] checkLocationPermission failed: ` + `${error.code} ${error.message}`)
+      return false
     }
   }
 
   /** Current app language, read directly from AppStorage. */
   private static currentLang(): string {
-    const v = AppStorage.get<string>(STORAGE_KEY_LANGUAGE);
-    return v ? v : 'en';
+    const v = AppStorage.get<string>(STORAGE_KEY_LANGUAGE)
+    return v ? v : 'en'
   }
 
   private static buildLocaleCandidates(): string[] {
-    const out: string[] = [];
+    const out: string[] = []
 
     // 1. In-app language first
-    const appLang = L.current();
+    const appLang = L.current()
     if (appLang.length > 0) {
-      out.push(appLang);
+      out.push(appLang)
     }
 
     // 2. System locale second
     try {
-      const sysLang = i18n.System.getSystemLocale().split('-')[0];
+      const sysLang = i18n.System.getSystemLocale().split('-')[0]
       if (sysLang.length > 0 && out.indexOf(sysLang) === -1) {
-        out.push(sysLang);
+        out.push(sysLang)
       }
     } catch (err) {
     }
@@ -195,10 +194,10 @@ export class LocationHelper {
     // 3. Fallbacks
     for (const f of ['en', 'zh', 'ar']) {
       if (out.indexOf(f) === -1) {
-        out.push(f);
+        out.push(f)
       }
     }
-    return out;
+    return out
   }
 
   private static async tryReverseGeocode(latitude: number, longitude: number,
@@ -209,14 +208,14 @@ export class LocationHelper {
         longitude: longitude,
         maxItems: 1,
         locale: locale
-      };
-
-      const results = await geoLocationManager.getAddressesFromLocation(request);
-      if (!results || results.length === 0) {
-        return null;
       }
 
-      const addr = results[0];
+      const results = await geoLocationManager.getAddressesFromLocation(request)
+      if (!results || results.length === 0) {
+        return null
+      }
+
+      const addr = results[0]
 
       // placeName intentionally excluded: HarmonyOS returns a
       // formatted address there (e.g. "Korangi Road, Sector 23,
@@ -224,25 +223,25 @@ export class LocationHelper {
       // locality + subAdministrativeArea cover the common case;
       // administrativeArea is the state/province fallback.
       const cityCandidates: Array<string | undefined> =
-        [addr.locality, addr.subLocality, addr.subAdministrativeArea, addr.administrativeArea];
+        [addr.locality, addr.subLocality, addr.subAdministrativeArea, addr.administrativeArea]
 
       for (const s of cityCandidates) {
         if (typeof s === 'string' && s.length > 0) {
-          const r: ReverseResult = { kind: 'city', value: s.toUpperCase() };
-          return r;
+          const r: ReverseResult = { kind: 'city', value: s.toUpperCase() }
+          return r
         }
       }
 
       if (typeof addr.countryName === 'string' && addr.countryName.length > 0) {
-        const r: ReverseResult = { kind: 'country', value: addr.countryName.toUpperCase() };
-        return r;
+        const r: ReverseResult = { kind: 'country', value: addr.countryName.toUpperCase() }
+        return r
       }
 
-      return null;
+      return null
     } catch (err) {
-      const error = err as BusinessError;
-      console.warn(`[LocationHelper] reverseGeocode locale='${locale}' failed: ` + `${error.code}, ${error.message}`);
-      return null;
+      const error = err as BusinessError
+      console.warn(`[LocationHelper] reverseGeocode locale='${locale}' failed: ` + `${error.code}, ${error.message}`)
+      return null
     }
   }
 }

@@ -1,8 +1,8 @@
 // entry/src/main/ets/hadith/SanadTimeline.ets
 
-import { ThemeColors } from '../core/ui/themes/Theme';
-import { L } from '../i18n/LocalizationHelper';
-import { Sanad, SanadStep } from './HadithModels';
+import { ThemeColors } from '../core/ui/themes/Theme'
+import { L } from '../i18n/LocalizationHelper'
+import { Sanad, SanadStep } from './HadithModels'
 
 @Component
 export struct SanadTimeline {
@@ -62,7 +62,7 @@ export struct SanadTimeline {
                   Text('·').fontSize(10).fontColor(this.colors.textMuted)
                   Text(step.reliability).fontSize(10).fontColor(this.colors.textMuted)
                 }
-              }.margin({ top: 2 }).width('100%')
+                }.margin({ top: 2 }).width('100%')
             }.layoutWeight(1).alignItems(HorizontalAlign.Start)
           }.width('100%').padding({ top: 4, bottom: 4 })
         }, (step: SanadStep, idx: number) => `sanad-${idx}-${step.narrator_id}`)
@@ -90,24 +90,24 @@ export struct SanadTimeline {
    */
   private displayName(step: SanadStep): string {
     if (step.name_en !== null && step.name_en !== undefined && step.name_en.length > 0) {
-      return step.name_en;
+      return step.name_en
     }
     if (step.name_ar !== null && step.name_ar !== undefined && step.name_ar.length > 0) {
-      return step.name_ar;
+      return step.name_ar
     }
-    return step.narrator_id;
+    return step.narrator_id
   }
 
   private confidenceLabel(): string {
     switch (this.sanad.confidence) {
       case 'high':
-        return L.get('sanad_confidence_high', this.currentLanguage);
+        return L.get('sanad_confidence_high', this.currentLanguage)
       case 'medium':
-        return L.get('sanad_confidence_medium', this.currentLanguage);
+        return L.get('sanad_confidence_medium', this.currentLanguage)
       case 'athar':
-        return L.get('sanad_confidence_athar', this.currentLanguage);
+        return L.get('sanad_confidence_athar', this.currentLanguage)
       default:
-        return '';
+        return ''
     }
   }
 }

@@ -1,10 +1,10 @@
 // entry/src/main/ets/helper/CalendarReminderHelper.ets
 
-import { calendarManager } from '@kit.CalendarKit';
-import { abilityAccessCtrl, bundleManager, common, Permissions } from '@kit.AbilityKit';
-import { BusinessError } from '@kit.BasicServicesKit';
-import { AppLogger } from '../core/app/AppLogger';
-import { PreferencesHelper } from '../core/util/PreferencesHelper';
+import { calendarManager } from '@kit.CalendarKit'
+import { abilityAccessCtrl, bundleManager, common, Permissions } from '@kit.AbilityKit'
+import { BusinessError } from '@kit.BasicServicesKit'
+import { AppLogger } from '../core/app/AppLogger'
+import { PreferencesHelper } from '../core/util/PreferencesHelper'
 
 /**
  * Calendar Kit backend for prayer-time reminders.
@@ -52,32 +52,32 @@ import { PreferencesHelper } from '../core/util/PreferencesHelper';
  */
 
 export interface CalendarPermissionState {
-  read: boolean;
-  write: boolean;
+  read: boolean
+  write: boolean
 }
 
 export class CalendarReminderHelper {
   static permissionStatus: CalendarPermissionState = {
     read: false, write: false
-  };
-  static readonly CUSTOM_EVENT_DESCRIPTION = 'Custom Islamic Event';
+  }
+  static readonly CUSTOM_EVENT_DESCRIPTION = 'Custom Islamic Event'
   /** All events we create carry this title prefix, for easy cleanup. */
-  private static readonly EVENT_TITLE_PREFIX = 'Sirat · ';
+  private static readonly EVENT_TITLE_PREFIX = 'Sirat · '
   /** Calendar account name — developer-facing, not shown to the user. */
-  private static readonly ACCOUNT_NAME = 'SiratCompanionCalendar';
+  private static readonly ACCOUNT_NAME = 'SiratCompanionCalendar'
   /** Calendar account display name — shown in the system Calendar app. */
-  private static readonly ACCOUNT_DISPLAY_NAME = 'Sirat Companion';
+  private static readonly ACCOUNT_DISPLAY_NAME = 'Sirat Companion'
   /** Event duration in milliseconds. Calendar events need an end time. */
-  private static readonly EVENT_DURATION_MS = 15 * 60 * 1000;
+  private static readonly EVENT_DURATION_MS = 15 * 60 * 1000
   /** Permissions required by the Calendar Kit backend. */
   private static readonly PERMISSIONS: Permissions[] =
-    ['ohos.permission.READ_CALENDAR', 'ohos.permission.WRITE_CALENDAR'];
-  private static calendarMgr: calendarManager.CalendarManager | null = null;
-  private static calendar: calendarManager.Calendar | null = null;
-  private static initializing: boolean = false;
-  private static ready: boolean = false;
-  private static readonly KEY_PRAYER_EVENT_IDS = 'calendar_prayer_event_ids';
-  private static readonly KEY_CUSTOM_EVENT_IDS = 'calendar_custom_event_ids';
+    ['ohos.permission.READ_CALENDAR', 'ohos.permission.WRITE_CALENDAR']
+  private static calendarMgr: calendarManager.CalendarManager | null = null
+  private static calendar: calendarManager.Calendar | null = null
+  private static initializing: boolean = false
+  private static ready: boolean = false
+  private static readonly KEY_PRAYER_EVENT_IDS = 'calendar_prayer_event_ids'
+  private static readonly KEY_CUSTOM_EVENT_IDS = 'calendar_custom_event_ids'
 
   // ============================================================
   // INIT
@@ -92,59 +92,59 @@ export class CalendarReminderHelper {
    */
   static async init(context: common.UIAbilityContext, requestPermissions: boolean = false): Promise<boolean> {
     if (CalendarReminderHelper.ready) {
-      return true;
+      return true
     }
     if (CalendarReminderHelper.initializing) {
-      return CalendarReminderHelper.waitForReady();
+      return CalendarReminderHelper.waitForReady()
     }
-    CalendarReminderHelper.initializing = true;
+    CalendarReminderHelper.initializing = true
 
     try { // If requestPermissions is true, show the OS prompt.
       // Otherwise, just check if they are already granted silently.
       const granted = requestPermissions ? await CalendarReminderHelper.requestPermission(context) :
-        await CalendarReminderHelper.isPermissionGranted(context);
+        await CalendarReminderHelper.isPermissionGranted(context)
 
       if (!granted) {
-        AppLogger.warn('CalendarReminderHelper', 'Calendar permissions not granted');
-        CalendarReminderHelper.initializing = false;
-        return false;
+        AppLogger.warn('CalendarReminderHelper', 'Calendar permissions not granted')
+        CalendarReminderHelper.initializing = false
+        return false
       }
 
-      CalendarReminderHelper.calendarMgr = calendarManager.getCalendarManager(context);
+      CalendarReminderHelper.calendarMgr = calendarManager.getCalendarManager(context)
 
-      const cal = await CalendarReminderHelper.getOrCreateCalendar();
+      const cal = await CalendarReminderHelper.getOrCreateCalendar()
       if (cal === null) {
-        CalendarReminderHelper.initializing = false;
-        return false;
+        CalendarReminderHelper.initializing = false
+        return false
       }
-      CalendarReminderHelper.calendar = cal;
+      CalendarReminderHelper.calendar = cal
 
       const config: calendarManager.CalendarConfig = {
         enableReminder: true, color: '#0F5132'
-      };
+      }
       try {
-        await cal.setConfig(config);
+        await cal.setConfig(config)
       } catch (err) {
-        const e = err as BusinessError;
-        AppLogger.warn('CalendarReminderHelper', `setConfig failed: ${e.code} ${e.message}`);
+        const e = err as BusinessError
+        AppLogger.warn('CalendarReminderHelper', `setConfig failed: ${e.code} ${e.message}`)
       }
 
-      CalendarReminderHelper.ready = true;
-      AppLogger.info('CalendarReminderHelper', 'Backend ready');
-      return true;
+      CalendarReminderHelper.ready = true
+      AppLogger.info('CalendarReminderHelper', 'Backend ready')
+      return true
     } catch (err) {
-      const e = err as BusinessError;
-      AppLogger.error('CalendarReminderHelper', `init failed: ${e.code} ${e.message}`);
-      CalendarReminderHelper.ready = false;
-      return false;
+      const e = err as BusinessError
+      AppLogger.error('CalendarReminderHelper', `init failed: ${e.code} ${e.message}`)
+      CalendarReminderHelper.ready = false
+      return false
     } finally {
-      CalendarReminderHelper.initializing = false;
+      CalendarReminderHelper.initializing = false
     }
   }
 
   /** True when the backend is ready to schedule events. */
   static isReady(): boolean {
-    return CalendarReminderHelper.ready;
+    return CalendarReminderHelper.ready
   }
 
   /**
@@ -153,28 +153,28 @@ export class CalendarReminderHelper {
    */
   static async requestPermission(context: common.UIAbilityContext): Promise<boolean> {
     try {
-      const atManager = abilityAccessCtrl.createAtManager();
-      const result = await atManager.requestPermissionsFromUser(context, CalendarReminderHelper.PERMISSIONS);
+      const atManager = abilityAccessCtrl.createAtManager()
+      const result = await atManager.requestPermissionsFromUser(context, CalendarReminderHelper.PERMISSIONS)
 
       // Check both individually (0 = granted)
-      const canRead = result.authResults[0] === 0;
-      const canWrite = result.authResults[1] === 0;
+      const canRead = result.authResults[0] === 0
+      const canWrite = result.authResults[1] === 0
 
-      CalendarReminderHelper.permissionStatus.read = canRead;
-      CalendarReminderHelper.permissionStatus.write = canWrite;
+      CalendarReminderHelper.permissionStatus.read = canRead
+      CalendarReminderHelper.permissionStatus.write = canWrite
 
       if (!canRead) {
-        AppLogger.warn('CalendarReminderHelper', 'READ_CALENDAR permission denied');
+        AppLogger.warn('CalendarReminderHelper', 'READ_CALENDAR permission denied')
       }
       if (!canWrite) {
-        AppLogger.warn('CalendarReminderHelper', 'WRITE_CALENDAR permission denied');
+        AppLogger.warn('CalendarReminderHelper', 'WRITE_CALENDAR permission denied')
       }
 
-      return canRead && canWrite;
+      return canRead && canWrite
     } catch (err) {
-      const e = err as BusinessError;
-      AppLogger.warn('CalendarReminderHelper', `permission request failed: ${e.code} ${e.message}`);
-      return false;
+      const e = err as BusinessError
+      AppLogger.warn('CalendarReminderHelper', `permission request failed: ${e.code} ${e.message}`)
+      return false
     }
   }
 
@@ -193,29 +193,29 @@ export class CalendarReminderHelper {
   static async isPermissionGranted(context: common.UIAbilityContext): Promise<boolean> {
     try {
       const bundleInfo =
-        bundleManager.getBundleInfoForSelfSync(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION);
-      const tokenId = bundleInfo.appInfo.accessTokenId;
+        bundleManager.getBundleInfoForSelfSync(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION)
+      const tokenId = bundleInfo.appInfo.accessTokenId
 
-      const atManager = abilityAccessCtrl.createAtManager();
+      const atManager = abilityAccessCtrl.createAtManager()
 
       for (const perm of CalendarReminderHelper.PERMISSIONS) {
-        const status = atManager.checkAccessTokenSync(tokenId, perm);
+        const status = atManager.checkAccessTokenSync(tokenId, perm)
         if (status !== abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED) {
           CalendarReminderHelper.permissionStatus.read =
-            perm === 'ohos.permission.READ_CALENDAR' ? false : CalendarReminderHelper.permissionStatus.read;
+            perm === 'ohos.permission.READ_CALENDAR' ? false : CalendarReminderHelper.permissionStatus.read
           CalendarReminderHelper.permissionStatus.write =
-            perm === 'ohos.permission.WRITE_CALENDAR' ? false : CalendarReminderHelper.permissionStatus.write;
-          return false;
+            perm === 'ohos.permission.WRITE_CALENDAR' ? false : CalendarReminderHelper.permissionStatus.write
+          return false
         }
       }
 
-      CalendarReminderHelper.permissionStatus.read = true;
-      CalendarReminderHelper.permissionStatus.write = true;
-      return true;
+      CalendarReminderHelper.permissionStatus.read = true
+      CalendarReminderHelper.permissionStatus.write = true
+      return true
     } catch (err) {
-      const e = err as BusinessError;
-      AppLogger.warn('CalendarReminderHelper', `isPermissionGranted failed: ${e.code} ${e.message}`);
-      return false;
+      const e = err as BusinessError
+      AppLogger.warn('CalendarReminderHelper', `isPermissionGranted failed: ${e.code} ${e.message}`)
+      return false
     }
   }
 
@@ -234,28 +234,28 @@ export class CalendarReminderHelper {
    */
   static async rescheduleAll(entries: CalendarReminderEntry[]): Promise<number> {
     if (!CalendarReminderHelper.ready || CalendarReminderHelper.calendar === null) {
-      return 0;
+      return 0
     }
 
     // Clears existing events AND the prayer-ID registry.
-    await CalendarReminderHelper.cancelAll();
+    await CalendarReminderHelper.cancelAll()
 
     // Create fresh events, tracking each returned ID.
-    const newIds: number[] = [];
+    const newIds: number[] = []
     for (const entry of entries) {
-      const id = await CalendarReminderHelper.publishEvent(entry);
+      const id = await CalendarReminderHelper.publishEvent(entry)
       if (id > 0) {
-        newIds.push(id);
+        newIds.push(id)
       }
     }
 
     // Persist tracking. Done AFTER the loop so a mid-loop failure
     // still leaves a consistent registry — we track exactly what
     // we successfully created, nothing more.
-    await CalendarReminderHelper.writeEventIds(CalendarReminderHelper.KEY_PRAYER_EVENT_IDS, newIds);
+    await CalendarReminderHelper.writeEventIds(CalendarReminderHelper.KEY_PRAYER_EVENT_IDS, newIds)
 
-    AppLogger.info('CalendarReminderHelper', `Scheduled ${newIds.length} calendar event(s), IDs tracked`);
-    return newIds.length;
+    AppLogger.info('CalendarReminderHelper', `Scheduled ${newIds.length} calendar event(s), IDs tracked`)
+    return newIds.length
   }
 
   // ============================================================
@@ -269,8 +269,8 @@ export class CalendarReminderHelper {
       // permissions are re-granted and a reschedule runs — the user
       // needs to be able to see WHY cancellation didn't happen.
       AppLogger.warn('CalendarReminderHelper', 'cancelAll skipped — backend not ready. Existing events, if any, ' +
-        'remain in the calendar until permission is re-granted.');
-      return;
+        'remain in the calendar until permission is re-granted.')
+      return
     }
 
     // ---- Phase 1: Delete by tracked IDs (primary path) ----
@@ -278,18 +278,18 @@ export class CalendarReminderHelper {
     // Fast, semantic-free, immune to any future changes in
     // EventFilter semantics. deleteWithRetry() already handles
     // "event not found" gracefully — the ID is simply dropped.
-    const trackedIds = await CalendarReminderHelper.readEventIds(CalendarReminderHelper.KEY_PRAYER_EVENT_IDS);
+    const trackedIds = await CalendarReminderHelper.readEventIds(CalendarReminderHelper.KEY_PRAYER_EVENT_IDS)
 
-    let deletedById = 0;
-    const survivingIds: number[] = [];
+    let deletedById = 0
+    const survivingIds: number[] = []
     for (const id of trackedIds) {
-      const ok = await CalendarReminderHelper.deleteWithRetry(id);
+      const ok = await CalendarReminderHelper.deleteWithRetry(id)
       if (ok) {
-        deletedById++;
+        deletedById++
       } else { // Delete failed twice — assume the event is gone anyway
         // (typical cause: user manually deleted it from the
         // Calendar app). The filter sweep below is the safety net.
-        survivingIds.push(id);
+        survivingIds.push(id)
       }
     }
 
@@ -303,35 +303,35 @@ export class CalendarReminderHelper {
     // Skips tracked IDs that phase 1 already tried — avoids a third
     // delete attempt per event in the same cycle. If phase 1's
     // failures still exist, they're caught on the NEXT cycle's sweep.
-    let sweptByFilter = 0;
+    let sweptByFilter = 0
     try {
-      const now = Date.now();
-      const dayMs = 86400000;
-      const filter = calendarManager.EventFilter.filterByTime(now - 7 * dayMs, now + 10 * 365 * dayMs);
-      const events = await CalendarReminderHelper.calendar.getEvents(filter);
+      const now = Date.now()
+      const dayMs = 86400000
+      const filter = calendarManager.EventFilter.filterByTime(now - 7 * dayMs, now + 10 * 365 * dayMs)
+      const events = await CalendarReminderHelper.calendar.getEvents(filter)
 
       for (const ev of events) {
         if (ev.id === undefined) {
-          continue;
+          continue
         }
         if (!CalendarReminderHelper.isOurs(ev)) {
-          continue;
+          continue
         }
         if (ev.description ===
           CalendarReminderHelper.CUSTOM_EVENT_DESCRIPTION) { // Custom-event reminders are managed separately.
-          continue;
+          continue
         }
         if (survivingIds.indexOf(ev.id) >= 0) { // Already tried in phase 1 — skip.
-          continue;
+          continue
         }
-        const ok = await CalendarReminderHelper.deleteWithRetry(ev.id);
+        const ok = await CalendarReminderHelper.deleteWithRetry(ev.id)
         if (ok) {
-          sweptByFilter++;
+          sweptByFilter++
         }
       }
     } catch (err) {
-      const e = err as BusinessError;
-      AppLogger.warn('CalendarReminderHelper', `cancelAll filter sweep failed: ${e.code} ${e.message}`);
+      const e = err as BusinessError
+      AppLogger.warn('CalendarReminderHelper', `cancelAll filter sweep failed: ${e.code} ${e.message}`)
     }
 
     // ---- Phase 3: Clear the prayer-ID registry ----
@@ -339,10 +339,10 @@ export class CalendarReminderHelper {
     // Everything prayer-related should be gone now. If a small
     // number of deletes failed, the registry is cleared anyway —
     // the next cycle's filter sweep will pick up any stragglers.
-    await CalendarReminderHelper.writeEventIds(CalendarReminderHelper.KEY_PRAYER_EVENT_IDS, []);
+    await CalendarReminderHelper.writeEventIds(CalendarReminderHelper.KEY_PRAYER_EVENT_IDS, [])
 
     AppLogger.info('CalendarReminderHelper',
-      `cancelAll: deleted ${deletedById} by ID, ` + `${sweptByFilter} by filter sweep`);
+      `cancelAll: deleted ${deletedById} by ID, ` + `${sweptByFilter} by filter sweep`)
   }
 
   /**
@@ -365,28 +365,28 @@ export class CalendarReminderHelper {
    */
   static async addTestEvent(entry: CalendarReminderEntry): Promise<number> {
     if (!CalendarReminderHelper.ready || CalendarReminderHelper.calendar === null) {
-      return 0;
+      return 0
     }
 
-    const id = await CalendarReminderHelper.publishEvent(entry);
+    const id = await CalendarReminderHelper.publishEvent(entry)
     if (id <= 0) {
-      return 0;
+      return 0
     }
 
     // Track only real custom events.
     if (entry.description === CalendarReminderHelper.CUSTOM_EVENT_DESCRIPTION) {
       try {
-        const existing = await CalendarReminderHelper.readEventIds(CalendarReminderHelper.KEY_CUSTOM_EVENT_IDS);
-        existing.push(id);
-        await CalendarReminderHelper.writeEventIds(CalendarReminderHelper.KEY_CUSTOM_EVENT_IDS, existing);
+        const existing = await CalendarReminderHelper.readEventIds(CalendarReminderHelper.KEY_CUSTOM_EVENT_IDS)
+        existing.push(id)
+        await CalendarReminderHelper.writeEventIds(CalendarReminderHelper.KEY_CUSTOM_EVENT_IDS, existing)
       } catch (e) { // Tracking failure — the filter sweep in
         // cancelCustomEventReminders will catch it next cycle.
       }
     }
 
     AppLogger.info('CalendarReminderHelper',
-      `Test event scheduled: "${entry.title}" at ` + `${new Date(entry.startTime).toISOString()}`);
-    return 1;
+      `Test event scheduled: "${entry.title}" at ` + `${new Date(entry.startTime).toISOString()}`)
+    return 1
   }
 
   // ============================================================
@@ -408,61 +408,60 @@ export class CalendarReminderHelper {
   static async cancelCustomEventReminders(): Promise<void> {
     if (!CalendarReminderHelper.ready || CalendarReminderHelper.calendar === null) {
       AppLogger.warn('CalendarReminderHelper', 'cancelCustomEventReminders skipped — backend not ready. Existing ' +
-        'custom-event reminders, if any, remain in the calendar.');
-      return;
+        'custom-event reminders, if any, remain in the calendar.')
+      return
     }
 
     // ---- Phase 1: Delete by tracked IDs ----
-    const trackedIds = await CalendarReminderHelper.readEventIds(CalendarReminderHelper.KEY_CUSTOM_EVENT_IDS);
+    const trackedIds = await CalendarReminderHelper.readEventIds(CalendarReminderHelper.KEY_CUSTOM_EVENT_IDS)
 
-    let deletedById = 0;
-    const survivingIds: number[] = [];
+    let deletedById = 0
+    const survivingIds: number[] = []
     for (const id of trackedIds) {
-      const ok = await CalendarReminderHelper.deleteWithRetry(id);
+      const ok = await CalendarReminderHelper.deleteWithRetry(id)
       if (ok) {
-        deletedById++;
+        deletedById++
       } else {
-        survivingIds.push(id);
+        survivingIds.push(id)
       }
     }
 
     // ---- Phase 2: Filter sweep ----
-    let sweptByFilter = 0;
+    let sweptByFilter = 0
     try {
-      const now = Date.now();
-      const dayMs = 86400000;
-      const filter = calendarManager.EventFilter.filterByTime(now - 7 * dayMs, now + 10 * 365 * dayMs);
-      const events = await CalendarReminderHelper.calendar.getEvents(filter);
+      const now = Date.now()
+      const dayMs = 86400000
+      const filter = calendarManager.EventFilter.filterByTime(now - 7 * dayMs, now + 10 * 365 * dayMs)
+      const events = await CalendarReminderHelper.calendar.getEvents(filter)
 
       for (const ev of events) {
         if (ev.id === undefined) {
-          continue;
+          continue
         }
         if (!CalendarReminderHelper.isOurs(ev)) {
-          continue;
+          continue
         }
         if (ev.description !== CalendarReminderHelper.CUSTOM_EVENT_DESCRIPTION) { // Prayer reminder — leave it alone.
-          continue;
+          continue
         }
         if (survivingIds.indexOf(ev.id) >= 0) {
-          continue;
+          continue
         }
-        const ok = await CalendarReminderHelper.deleteWithRetry(ev.id);
+        const ok = await CalendarReminderHelper.deleteWithRetry(ev.id)
         if (ok) {
-          sweptByFilter++;
+          sweptByFilter++
         }
       }
     } catch (err) {
-      const e = err as BusinessError;
-      AppLogger.warn('CalendarReminderHelper',
-        `cancelCustomEventReminders filter sweep failed: ${e.code} ${e.message}`);
+      const e = err as BusinessError
+      AppLogger.warn('CalendarReminderHelper', `cancelCustomEventReminders filter sweep failed: ${e.code} ${e.message}`)
     }
 
     // ---- Phase 3: Clear the custom-event registry ----
-    await CalendarReminderHelper.writeEventIds(CalendarReminderHelper.KEY_CUSTOM_EVENT_IDS, []);
+    await CalendarReminderHelper.writeEventIds(CalendarReminderHelper.KEY_CUSTOM_EVENT_IDS, [])
 
     AppLogger.info('CalendarReminderHelper',
-      `cancelCustomEventReminders: deleted ${deletedById} by ID, ` + `${sweptByFilter} by filter sweep`);
+      `cancelCustomEventReminders: deleted ${deletedById} by ID, ` + `${sweptByFilter} by filter sweep`)
   }
 
   /**
@@ -471,33 +470,33 @@ export class CalendarReminderHelper {
    */
   private static async getOrCreateCalendar(): Promise<calendarManager.Calendar | null> {
     if (CalendarReminderHelper.calendarMgr === null) {
-      return null;
+      return null
     }
 
     const account: calendarManager.CalendarAccount = {
       name: CalendarReminderHelper.ACCOUNT_NAME,
       type: calendarManager.CalendarType.LOCAL,
       displayName: CalendarReminderHelper.ACCOUNT_DISPLAY_NAME
-    };
+    }
 
     // Try to fetch an existing account first.
     try {
-      const existing = await CalendarReminderHelper.calendarMgr.getCalendar(account);
+      const existing = await CalendarReminderHelper.calendarMgr.getCalendar(account)
       if (existing !== undefined && existing !== null) {
-        return existing;
+        return existing
       }
     } catch (err) { // Not found — fall through to creation.
     }
 
     // Create a new account.
     try {
-      const created = await CalendarReminderHelper.calendarMgr.createCalendar(account);
-      AppLogger.info('CalendarReminderHelper', 'Created calendar account');
-      return created;
+      const created = await CalendarReminderHelper.calendarMgr.createCalendar(account)
+      AppLogger.info('CalendarReminderHelper', 'Created calendar account')
+      return created
     } catch (err) {
-      const e = err as BusinessError;
-      AppLogger.error('CalendarReminderHelper', `createCalendar failed: ${e.code} ${e.message}`);
-      return null;
+      const e = err as BusinessError
+      AppLogger.error('CalendarReminderHelper', `createCalendar failed: ${e.code} ${e.message}`)
+      return null
     }
   }
 
@@ -510,7 +509,7 @@ export class CalendarReminderHelper {
    */
   private static async publishEvent(entry: CalendarReminderEntry): Promise<number> {
     if (CalendarReminderHelper.calendar === null) {
-      return -1;
+      return -1
     }
 
     const event: calendarManager.Event = {
@@ -520,20 +519,20 @@ export class CalendarReminderHelper {
       endTime: entry.startTime + CalendarReminderHelper.EVENT_DURATION_MS,
       reminderTime: entry.reminderMinutes,
       description: entry.description
-    };
+    }
 
     try {
-      const id = await CalendarReminderHelper.calendar.addEvent(event);
+      const id = await CalendarReminderHelper.calendar.addEvent(event)
       if (typeof id === 'number' && id > 0) {
-        return id;
+        return id
       } // Defensive: addEvent is documented to return a positive ID, but
       // treat any unexpected value as a failure so we never accidentally
       // track `0` or `undefined` as an event ID.
-      return -1;
+      return -1
     } catch (err) {
-      const e = err as BusinessError;
-      AppLogger.warn('CalendarReminderHelper', `addEvent failed for "${entry.title}": ${e.code} ${e.message}`);
-      return -1;
+      const e = err as BusinessError
+      AppLogger.warn('CalendarReminderHelper', `addEvent failed for "${entry.title}": ${e.code} ${e.message}`)
+      return -1
     }
   }
 
@@ -542,11 +541,11 @@ export class CalendarReminderHelper {
    * app, identified by its title prefix.
    */
   private static isOurs(event: calendarManager.Event): boolean {
-    const title = event.title;
+    const title = event.title
     if (title === undefined || title === null || title.length === 0) {
-      return false;
+      return false
     }
-    return title.indexOf(CalendarReminderHelper.EVENT_TITLE_PREFIX) === 0;
+    return title.indexOf(CalendarReminderHelper.EVENT_TITLE_PREFIX) === 0
   }
 
   // ============================================================
@@ -559,37 +558,37 @@ export class CalendarReminderHelper {
    */
   private static async deleteWithRetry(eventId: number): Promise<boolean> {
     if (CalendarReminderHelper.calendar === null) {
-      return false;
+      return false
     }
 
     for (let attempt = 0; attempt < 2; attempt++) {
       try {
-        await CalendarReminderHelper.calendar.deleteEvent(eventId);
-        return true;
+        await CalendarReminderHelper.calendar.deleteEvent(eventId)
+        return true
       } catch (err) {
-        const e = err as BusinessError;
+        const e = err as BusinessError
         if (attempt === 0) {
-          AppLogger.warn('CalendarReminderHelper', `deleteEvent retry for id=${eventId}: ${e.code} ${e.message}`);
-          await new Promise<void>((resolve) => setTimeout(resolve, 80));
+          AppLogger.warn('CalendarReminderHelper', `deleteEvent retry for id=${eventId}: ${e.code} ${e.message}`)
+          await new Promise<void>((resolve) => setTimeout(resolve, 80))
         } else {
-          AppLogger.error('CalendarReminderHelper', `deleteEvent failed for id=${eventId}: ${e.code} ${e.message}`);
+          AppLogger.error('CalendarReminderHelper', `deleteEvent failed for id=${eventId}: ${e.code} ${e.message}`)
         }
       }
     }
-    return false;
+    return false
   }
 
   private static async waitForReady(): Promise<boolean> {
     for (let i = 0; i < 20; i++) {
       if (CalendarReminderHelper.ready) {
-        return true;
+        return true
       }
       if (!CalendarReminderHelper.initializing) {
-        return CalendarReminderHelper.ready;
+        return CalendarReminderHelper.ready
       }
-      await new Promise<void>((resolve) => setTimeout(resolve, 50));
+      await new Promise<void>((resolve) => setTimeout(resolve, 50))
     }
-    return CalendarReminderHelper.ready;
+    return CalendarReminderHelper.ready
   }
 
   /**
@@ -599,20 +598,20 @@ export class CalendarReminderHelper {
    */
   private static async readEventIds(key: string): Promise<number[]> {
     try {
-      const json = await PreferencesHelper.getString(key, '[]');
-      const parsed: Object = JSON.parse(json);
+      const json = await PreferencesHelper.getString(key, '[]')
+      const parsed: Object = JSON.parse(json)
       if (!Array.isArray(parsed)) {
-        return [];
+        return []
       }
-      const out: number[] = [];
+      const out: number[] = []
       for (const v of parsed as Object[]) {
         if (typeof v === 'number' && !isNaN(v) && v > 0) {
-          out.push(v);
+          out.push(v)
         }
       }
-      return out;
+      return out
     } catch (e) {
-      return [];
+      return []
     }
   }
 
@@ -621,14 +620,13 @@ export class CalendarReminderHelper {
    *  catch anything that falls through the tracking cracks). */
   private static async writeEventIds(key: string, ids: number[]): Promise<void> {
     try {
-      await PreferencesHelper.setString(key, JSON.stringify(ids));
+      await PreferencesHelper.setString(key, JSON.stringify(ids))
     } catch (e) {
-      const err = e as Error;
-      AppLogger.warn('CalendarReminderHelper', `writeEventIds(${key}) failed: ${err.message}`);
+      const err = e as Error
+      AppLogger.warn('CalendarReminderHelper', `writeEventIds(${key}) failed: ${err.message}`)
     }
   }
 }
-
 
 /**
  * One calendar event to create. The caller builds these after
@@ -637,18 +635,18 @@ export class CalendarReminderHelper {
 export interface CalendarReminderEntry {
   /** Human-readable title, e.g. "Pray Fajr". The prefix is added by
    *  the helper automatically. */
-  title: string;
+  title: string
 
   /** Event start time, in milliseconds since epoch. */
-  startTime: number;
+  startTime: number
 
   /**
    * Minutes before startTime at which to fire reminders.
    * Use [0] for an at-time reminder, [0, 10] for both at-time and
    * 10 minutes before.
    */
-  reminderMinutes: number[];
+  reminderMinutes: number[]
 
   /** Optional event description — used to carry the Hadith text. */
-  description?: string;
+  description?: string
 }

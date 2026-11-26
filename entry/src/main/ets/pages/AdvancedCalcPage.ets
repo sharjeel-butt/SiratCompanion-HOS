@@ -1,26 +1,22 @@
 // entry/src/main/ets/pages/AdvancedCalcPage.ets
 
-import { mediaquery, router } from '@kit.ArkUI';
-import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
+import { mediaquery, router } from '@kit.ArkUI'
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
 import {
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
-} from '../core/common/StorageKeys';
-import { PickerItem } from '../settings/SettingsModels';
-import {
-  MidnightMethod, PolarResolution, RoundingMethod, Shafaq
-} from '../prayer/AdvancedCalcModels';
-import {
-  CalculationMethod, HighLatitudeRule
-} from '../prayer/PrayerTimeCalculator';
-import { Breakpoints } from '../core/layout/Breakpoints';
-import { SettingsHelper } from '../settings/SettingsHelper';
-import { L } from '../i18n/LocalizationHelper';
+} from '../core/common/StorageKeys'
+import { PickerItem } from '../settings/SettingsModels'
+import { MidnightMethod, PolarResolution, RoundingMethod, Shafaq } from '../prayer/AdvancedCalcModels'
+import { CalculationMethod, HighLatitudeRule } from '../prayer/PrayerTimeCalculator'
+import { Breakpoints } from '../core/layout/Breakpoints'
+import { SettingsHelper } from '../settings/SettingsHelper'
+import { L } from '../i18n/LocalizationHelper'
 
-type SheetKind = 'none' | 'rounding' | 'midnight' | 'polar' | 'shafaq' | 'highlat';
+type SheetKind = 'none' | 'rounding' | 'midnight' | 'polar' | 'shafaq' | 'highlat'
 
 @Entry
 @Component
@@ -46,23 +42,23 @@ struct AdvancedCalcPage {
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
 
   aboutToAppear(): void {
-    this.currentLanguage = this.appLanguage;
-    this.colors = PageTheme.compute(this.themeMode);
+    this.currentLanguage = this.appLanguage
+    this.colors = PageTheme.compute(this.themeMode)
     this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
-      this.colors = c;
-    });
-    this.reload();
+      this.colors = c
+    })
+    this.reload()
   }
 
   aboutToDisappear(): void {
-    PageTheme.uninstallSystemListener(this.systemDarkListener);
-    this.systemDarkListener = null;
+    PageTheme.uninstallSystemListener(this.systemDarkListener)
+    this.systemDarkListener = null
   }
 
   onPageShow(): void {
-    this.currentLanguage = this.appLanguage;
-    this.colors = PageTheme.compute(this.themeMode);
-    this.reload();
+    this.currentLanguage = this.appLanguage
+    this.colors = PageTheme.compute(this.themeMode)
+    this.reload()
   }
 
   build() {
@@ -104,9 +100,9 @@ struct AdvancedCalcPage {
 
       if (this.activeSheet !== 'none') {
         this.PickerOverlay(this.sheetTitle(), this.sheetIcon(), this.sheetItems(), (id: string) => {
-          this.pickItem(id);
+          this.pickItem(id)
         }, () => {
-          this.activeSheet = 'none';
+          this.activeSheet = 'none'
         })
       }
     }
@@ -183,7 +179,7 @@ struct AdvancedCalcPage {
     .borderRadius(12)
     .margin({ bottom: 8 })
     .onClick(() => {
-      this.activeSheet = 'rounding';
+      this.activeSheet = 'rounding'
     })
   }
 
@@ -229,7 +225,7 @@ struct AdvancedCalcPage {
     .opacity(this.isMidnightLocked() ? 0.55 : 1.0)
     .onClick(() => {
       if (!this.isMidnightLocked()) {
-        this.activeSheet = 'midnight';
+        this.activeSheet = 'midnight'
       }
     })
   }
@@ -264,7 +260,7 @@ struct AdvancedCalcPage {
     .borderRadius(12)
     .margin({ bottom: 8 })
     .onClick(() => {
-      this.activeSheet = 'highlat';
+      this.activeSheet = 'highlat'
     })
   }
 
@@ -295,7 +291,7 @@ struct AdvancedCalcPage {
     .borderRadius(12)
     .margin({ bottom: 8 })
     .onClick(() => {
-      this.activeSheet = 'polar';
+      this.activeSheet = 'polar'
     })
   }
 
@@ -346,7 +342,7 @@ struct AdvancedCalcPage {
     .opacity(this.isShafaqApplicable() ? 1.0 : 0.55)
     .onClick(() => {
       if (this.isShafaqApplicable()) {
-        this.activeSheet = 'shafaq';
+        this.activeSheet = 'shafaq'
       }
     })
   }
@@ -355,7 +351,7 @@ struct AdvancedCalcPage {
   PickerOverlay(title: string, icon: Resource, items: PickerItem[], onSelect: (id: string) => void,
     onCancel: () => void) {
     Column().width('100%').height('100%').backgroundColor(this.colors.overlayDim).onClick(() => {
-      onCancel();
+      onCancel()
     })
 
     Column() { // Header
@@ -420,7 +416,7 @@ struct AdvancedCalcPage {
             .borderRadius(12)
             .margin({ bottom: 4 })
             .onClick(() => {
-              onSelect(item.id);
+              onSelect(item.id)
             })
           }, (item: PickerItem) => `adv-${this.activeSheet}-${item.id}-${item.selected ? 's' : 'u'}`)
         }.width('100%').padding({
@@ -441,7 +437,7 @@ struct AdvancedCalcPage {
         .borderRadius(12)
         .margin({ top: 8, bottom: 24 })
         .onClick(() => {
-          onCancel();
+          onCancel()
         })
     }
     .width('100%')
@@ -463,7 +459,7 @@ struct AdvancedCalcPage {
   // ============================================================
 
   private isMidnightLocked(): boolean {
-    return this.calcMethod === CalculationMethod.JAFARI || this.calcMethod === CalculationMethod.TEHRAN;
+    return this.calcMethod === CalculationMethod.JAFARI || this.calcMethod === CalculationMethod.TEHRAN
   }
 
   // ============================================================
@@ -473,39 +469,39 @@ struct AdvancedCalcPage {
   private sheetTitle(): string {
     switch (this.activeSheet) {
       case 'rounding':
-        return this.tr('rounding_method');
+        return this.tr('rounding_method')
       case 'midnight':
-        return this.tr('midnight_method');
+        return this.tr('midnight_method')
       case 'polar':
-        return this.tr('polar_resolution');
+        return this.tr('polar_resolution')
       case 'shafaq':
-        return this.tr('shafaq');
+        return this.tr('shafaq')
       case 'highlat':
-        return this.tr('high_latitude');
+        return this.tr('high_latitude')
       default:
-        return '';
+        return ''
     }
   }
 
   private sheetIcon(): Resource {
     switch (this.activeSheet) {
       case 'rounding':
-        return $r('app.media.ic_chart');
+        return $r('app.media.ic_chart')
       case 'midnight':
-        return $r('app.media.ic_midnight');
+        return $r('app.media.ic_midnight')
       case 'polar':
-        return $r('app.media.ic_polar_lat');
+        return $r('app.media.ic_polar_lat')
       case 'shafaq':
-        return $r('app.media.ic_sunset');
+        return $r('app.media.ic_sunset')
       case 'highlat':
-        return $r('app.media.ic_asr_rule');
+        return $r('app.media.ic_asr_rule')
       default:
-        return $r('app.media.ic_settings');
+        return $r('app.media.ic_settings')
     }
   }
 
   private sheetItems(): PickerItem[] {
-    const items: PickerItem[] = [];
+    const items: PickerItem[] = []
 
     switch (this.activeSheet) {
       case 'rounding': {
@@ -513,19 +509,19 @@ struct AdvancedCalcPage {
           id: RoundingMethod.NEAREST,
           label: this.tr('rounding_nearest'),
           selected: this.roundingMethod === RoundingMethod.NEAREST
-        };
-        items.push(a);
+        }
+        items.push(a)
         const b: PickerItem = {
           id: RoundingMethod.UP, label: this.tr('rounding_up'), selected: this.roundingMethod === RoundingMethod.UP
-        };
-        items.push(b);
+        }
+        items.push(b)
         const c: PickerItem = {
           id: RoundingMethod.NONE,
           label: this.tr('rounding_none'),
           selected: this.roundingMethod === RoundingMethod.NONE
-        };
-        items.push(c);
-        break;
+        }
+        items.push(c)
+        break
       }
 
       case 'midnight': {
@@ -533,15 +529,15 @@ struct AdvancedCalcPage {
           id: MidnightMethod.STANDARD,
           label: `${this.tr('midnight_standard')} (${this.tr('midnight_standard_desc')})`,
           selected: this.midnightMethod === MidnightMethod.STANDARD
-        };
-        items.push(a);
+        }
+        items.push(a)
         const b: PickerItem = {
           id: MidnightMethod.JAFARI,
           label: this.tr('midnight_jafari'),
           selected: this.midnightMethod === MidnightMethod.JAFARI
-        };
-        items.push(b);
-        break;
+        }
+        items.push(b)
+        break
       }
 
       case 'polar': {
@@ -549,21 +545,21 @@ struct AdvancedCalcPage {
           id: PolarResolution.UNRESOLVED,
           label: `${this.tr('polar_unresolved')} (${this.tr('polar_unresolved_desc')})`,
           selected: this.polarResolution === PolarResolution.UNRESOLVED
-        };
-        items.push(a);
+        }
+        items.push(a)
         const b: PickerItem = {
           id: PolarResolution.AQRAB_BALAD,
           label: this.tr('polar_aqrab_balad'),
           selected: this.polarResolution === PolarResolution.AQRAB_BALAD
-        };
-        items.push(b);
+        }
+        items.push(b)
         const c: PickerItem = {
           id: PolarResolution.AQRAB_YAUM,
           label: this.tr('polar_aqrab_yaum'),
           selected: this.polarResolution === PolarResolution.AQRAB_YAUM
-        };
-        items.push(c);
-        break;
+        }
+        items.push(c)
+        break
       }
 
       case 'shafaq': {
@@ -571,60 +567,60 @@ struct AdvancedCalcPage {
           id: Shafaq.GENERAL,
           label: `${this.tr('shafaq_general')} (${this.tr('shafaq_general_desc')})`,
           selected: this.shafaqValue === Shafaq.GENERAL
-        };
-        items.push(a);
+        }
+        items.push(a)
         const b: PickerItem = {
           id: Shafaq.AHMER, label: this.tr('shafaq_ahmer'), selected: this.shafaqValue === Shafaq.AHMER
-        };
-        items.push(b);
+        }
+        items.push(b)
         const c: PickerItem = {
           id: Shafaq.ABYAD, label: this.tr('shafaq_abyad'), selected: this.shafaqValue === Shafaq.ABYAD
-        };
-        items.push(c);
-        break;
+        }
+        items.push(c)
+        break
       }
 
       case 'highlat': {
-        const opts: PickerItem[] = SettingsHelper.buildHighLatPickerItems(this.highLatRule);
+        const opts: PickerItem[] = SettingsHelper.buildHighLatPickerItems(this.highLatRule)
         for (const o of opts) {
-          items.push(o);
+          items.push(o)
         }
-        break;
+        break
       }
 
       default:
-        break;
+        break
     }
 
-    return items;
+    return items
   }
 
   private pickItem(id: string): void {
     switch (this.activeSheet) {
       case 'rounding':
-        this.roundingMethod = id as RoundingMethod;
-        SettingsHelper.saveRounding(this.roundingMethod);
-        break;
+        this.roundingMethod = id as RoundingMethod
+        SettingsHelper.saveRounding(this.roundingMethod)
+        break
       case 'midnight':
-        this.midnightMethod = id as MidnightMethod;
-        SettingsHelper.saveMidnight(this.midnightMethod);
-        break;
+        this.midnightMethod = id as MidnightMethod
+        SettingsHelper.saveMidnight(this.midnightMethod)
+        break
       case 'polar':
-        this.polarResolution = id as PolarResolution;
-        SettingsHelper.savePolarResolution(this.polarResolution);
-        break;
+        this.polarResolution = id as PolarResolution
+        SettingsHelper.savePolarResolution(this.polarResolution)
+        break
       case 'shafaq':
-        this.shafaqValue = id as Shafaq;
-        SettingsHelper.saveShafaq(this.shafaqValue);
-        break;
+        this.shafaqValue = id as Shafaq
+        SettingsHelper.saveShafaq(this.shafaqValue)
+        break
       case 'highlat':
-        this.highLatRule = id as HighLatitudeRule;
-        SettingsHelper.saveHighLatRule(this.highLatRule);
-        break;
+        this.highLatRule = id as HighLatitudeRule
+        SettingsHelper.saveHighLatRule(this.highLatRule)
+        break
       default:
-        break;
+        break
     }
-    this.activeSheet = 'none';
+    this.activeSheet = 'none'
   }
 
   // ============================================================
@@ -634,38 +630,38 @@ struct AdvancedCalcPage {
   private roundingLabel(): string {
     switch (this.roundingMethod) {
       case RoundingMethod.UP:
-        return this.tr('rounding_up');
+        return this.tr('rounding_up')
       case RoundingMethod.NONE:
-        return this.tr('rounding_none');
+        return this.tr('rounding_none')
       default:
-        return this.tr('rounding_nearest');
+        return this.tr('rounding_nearest')
     }
   }
 
   private midnightLabel(): string {
     return this.midnightMethod === MidnightMethod.STANDARD ?
-      `${this.tr('midnight_standard')} (${this.tr('midnight_standard_desc')})` : this.tr('midnight_jafari');
+      `${this.tr('midnight_standard')} (${this.tr('midnight_standard_desc')})` : this.tr('midnight_jafari')
   }
 
   private polarLabel(): string {
     switch (this.polarResolution) {
       case PolarResolution.AQRAB_BALAD:
-        return this.tr('polar_aqrab_balad');
+        return this.tr('polar_aqrab_balad')
       case PolarResolution.AQRAB_YAUM:
-        return this.tr('polar_aqrab_yaum');
+        return this.tr('polar_aqrab_yaum')
       default:
-        return `${this.tr('polar_unresolved')} (${this.tr('polar_unresolved_desc')})`;
+        return `${this.tr('polar_unresolved')} (${this.tr('polar_unresolved_desc')})`
     }
   }
 
   private shafaqLabel(): string {
     switch (this.shafaqValue) {
       case Shafaq.AHMER:
-        return this.tr('shafaq_ahmer');
+        return this.tr('shafaq_ahmer')
       case Shafaq.ABYAD:
-        return this.tr('shafaq_abyad');
+        return this.tr('shafaq_abyad')
       default:
-        return `${this.tr('shafaq_general')} (${this.tr('shafaq_general_desc')})`;
+        return `${this.tr('shafaq_general')} (${this.tr('shafaq_general_desc')})`
     }
   }
 
@@ -675,7 +671,7 @@ struct AdvancedCalcPage {
    * Shafaq has no way to influence.
    */
   private isShafaqApplicable(): boolean {
-    return this.calcMethod === CalculationMethod.MOONSIGHTING_COMMITTEE;
+    return this.calcMethod === CalculationMethod.MOONSIGHTING_COMMITTEE
   }
 
   // ============================================================
@@ -684,52 +680,51 @@ struct AdvancedCalcPage {
 
   private reload(): void {
     SettingsHelper.getAdvancedCalcSettings().then((adv) => {
-      this.roundingMethod = adv.rounding;
-      this.midnightMethod = adv.midnight;
-      this.polarResolution = adv.polarResolution;
-      this.shafaqValue = adv.shafaq;
-
+      this.roundingMethod = adv.rounding
+      this.midnightMethod = adv.midnight
+      this.polarResolution = adv.polarResolution
+      this.shafaqValue = adv.shafaq
     }).catch((err: Error) => {
-      console.error('[AdvancedCalcPage] reload advanced failed: ' + err.message);
-    });
+      console.error('[AdvancedCalcPage] reload advanced failed: ' + err.message)
+    })
 
     SettingsHelper.getHighLatRule().then((rule) => {
-      this.highLatRule = rule;
+      this.highLatRule = rule
     }).catch((err: Error) => {
-      console.error('[AdvancedCalcPage] reload highLat failed: ' + err.message);
-    });
+      console.error('[AdvancedCalcPage] reload highLat failed: ' + err.message)
+    })
 
     SettingsHelper.loadAll().then((data) => {
-      this.calcMethod = data.method;
+      this.calcMethod = data.method
       if (this.isMidnightLocked()) {
-        this.midnightMethod = MidnightMethod.JAFARI;
+        this.midnightMethod = MidnightMethod.JAFARI
       }
     }).catch((err: Error) => {
-      console.error('[AdvancedCalcPage] reload base failed: ' + err.message);
-    });
+      console.error('[AdvancedCalcPage] reload base failed: ' + err.message)
+    })
   }
 
   private tr(key: string): string {
-    return L.get(key, this.currentLanguage);
+    return L.get(key, this.currentLanguage)
   }
 
   private isRtl(): boolean {
-    return L.isRtlLang(this.currentLanguage);
+    return L.isRtlLang(this.currentLanguage)
   }
 
   private isTablet(): boolean {
-    return Breakpoints.isTablet(this.breakpoint);
+    return Breakpoints.isTablet(this.breakpoint)
   }
 
   private onThemeModeChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   private onLanguageChanged(): void {
-    this.currentLanguage = this.appLanguage;
+    this.currentLanguage = this.appLanguage
   }
 }

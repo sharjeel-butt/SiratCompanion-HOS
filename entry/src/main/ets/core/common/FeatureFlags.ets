@@ -38,7 +38,7 @@
  */
 
 /** Agent-Powered Reminder backend. Pending AGC approval. */
-export const NOTIFICATIONS_ENABLED = false;
+export const NOTIFICATIONS_ENABLED = false
 
 /** Calendar Kit backend. Active workaround while AGC is pending. */
-export const CALENDAR_REMINDERS_ENABLED = true;
+export const CALENDAR_REMINDERS_ENABLED = true

@@ -2,7 +2,7 @@
 @Component
 struct EventWidget {
   @LocalStorageProp('dimension') dimension: string = '2*2';
-  @LocalStorageProp('eventName') eventName: string = 'Isra and Mi\'raj';
+  @LocalStorageProp('eventName') eventName: string = "Isra and Mi'raj";
   @LocalStorageProp('eventDays') eventDays: string = '55';
   @LocalStorageProp('eventDate') eventDate: string = '27 Rajab 1448';
   @LocalStorageProp('eventDesc') eventDesc: string = 'The night journey of Prophet Muhammad.';
@@ -20,7 +20,9 @@ struct EventWidget {
       Column()
         .width('100%')
         .height('100%')
-        .linearGradient({ angle: 145, colors: [['#1A2235', 0], ['#0F1522', 1]] })
+        .linearGradient({
+          angle: 145, colors: [['#1A2235', 0], ['#0F1522', 1]]
+        })
         .borderRadius(24)
         .border({ width: 1, color: 'rgba(255, 255, 255, 0.15)' })
         .shadow({
@@ -49,7 +51,6 @@ struct EventWidget {
             .maxLines(3)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
         } else {
-
           // TOP SECTION
           Column() { // Header Row
             Row() {
@@ -135,7 +136,6 @@ struct EventWidget {
                     .maxLines(1)
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
                 }.alignItems(HorizontalAlign.Start)
-
               } else { // Countdown Left, Description Right
                 Column({ space: 4 }) {
                   Row() {
@@ -180,7 +180,6 @@ struct EventWidget {
                 }.layoutWeight(1).justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.End)
               }
             }.width('100%').alignItems(VerticalAlign.Center).direction(Direction.Ltr)
-
           } else { // 2x2 LAYOUT
             Row() {
               if (this.isRtl) {
@@ -244,7 +243,6 @@ struct EventWidget {
                 .margin({ left: 4 })
             }
           }.width('100%').justifyContent(this.isRtl ? FlexAlign.Start : FlexAlign.End).direction(Direction.Ltr)
-
         }
       }
       .width('100%')
@@ -269,7 +267,7 @@ struct EventWidget {
           targetHijriMonth: this.eventHijriMonth,
           targetHijriDay: this.eventHijriDay
         }
-      });
+      })
     })
   }
 }
