@@ -1,20 +1,20 @@
 // entry/src/main/ets/entrybackupability/EntryBackupAbility.ets
 
-import { hilog } from '@kit.PerformanceAnalysisKit';
-import { BackupExtensionAbility, BundleVersion, fileIo as fs, ReadOptions } from '@kit.CoreFileKit';
-import { preferences } from '@kit.ArkData';
-import { common } from '@kit.AbilityKit';
-import { buffer } from '@kit.ArkTS';
+import { hilog } from '@kit.PerformanceAnalysisKit'
+import { BackupExtensionAbility, BundleVersion, fileIo as fs, ReadOptions } from '@kit.CoreFileKit'
+import { preferences } from '@kit.ArkData'
+import { common } from '@kit.AbilityKit'
+import { buffer } from '@kit.ArkTS'
 
-const DOMAIN = 0x0000;
-const TAG = 'SiratBackup';
+const DOMAIN = 0x0000
+const TAG = 'SiratBackup'
 
-const TYPE_STRING = 's';
-const TYPE_NUMBER = 'n';
-const TYPE_BOOLEAN = 'b';
+const TYPE_STRING = 's'
+const TYPE_NUMBER = 'n'
+const TYPE_BOOLEAN = 'b'
 
-const STORE_SETTINGS = 'sirat_settings';
-const STORE_TASBIH = 'tasbih_prefs';
+const STORE_SETTINGS = 'sirat_settings'
+const STORE_TASBIH = 'tasbih_prefs'
 
 /**
  * Current backup file format version.
@@ -36,11 +36,11 @@ const STORE_TASBIH = 'tasbih_prefs';
  * same v1 parser, but no truncation detection is possible for them
  * because the original line count is unknown.
  */
-const BACKUP_FORMAT_VERSION = 1;
+const BACKUP_FORMAT_VERSION = 1
 
 interface PrefSpec {
-  key: string;
-  type: string;
+  key: string
+  type: string
 }
 
 const SETTINGS_SPECS: PrefSpec[] = [{ key: 'calc_method', type: TYPE_STRING }, { key: 'asr_rule', type: TYPE_NUMBER },
@@ -104,9 +104,7 @@ const SETTINGS_SPECS: PrefSpec[] = [{ key: 'calc_method', type: TYPE_STRING }, {
   { key: 'active_quran_script', type: TYPE_STRING }, { key: 'dismissed_prayers', type: TYPE_STRING },
 
   // ---- Custom Mosques Data ----
-  { key: 'custom_mosques_data', type: TYPE_STRING }
-
-];
+  { key: 'custom_mosques_data', type: TYPE_STRING }]
 
 /**
  * NOTE on `tasbihs_data`: it carries the JSON-serialized full tasbih
@@ -118,7 +116,7 @@ const SETTINGS_SPECS: PrefSpec[] = [{ key: 'calc_method', type: TYPE_STRING }, {
  */
 const TASBIH_SPECS: PrefSpec[] =
   [{ key: 'tasbihs_data', type: TYPE_STRING }, { key: 'tasbih_active_id', type: TYPE_STRING },
-    { key: 'tasbih_active_dhikr', type: TYPE_NUMBER }];
+    { key: 'tasbih_active_dhikr', type: TYPE_NUMBER }]
 
 /**
  * Backs up and restores the user's data across device migration.
@@ -152,23 +150,23 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
    */
   private static async readAsString(store: preferences.Preferences, spec: PrefSpec): Promise<string | null> {
     try {
-      const exists: boolean = await store.has(spec.key);
+      const exists: boolean = await store.has(spec.key)
       if (!exists) {
-        return null;
+        return null
       }
       if (spec.type === TYPE_STRING) {
-        const v = await store.get(spec.key, '');
-        return encodeURIComponent(String(v));
+        const v = await store.get(spec.key, '')
+        return encodeURIComponent(String(v))
       }
       if (spec.type === TYPE_NUMBER) {
-        const v = await store.get(spec.key, 0);
-        return String(v);
+        const v = await store.get(spec.key, 0)
+        return String(v)
       }
-      const v = await store.get(spec.key, false);
-      return String(v);
+      const v = await store.get(spec.key, false)
+      return String(v)
     } catch (err) {
-      hilog.warn(DOMAIN, TAG, 'read failed for %{public}s', spec.key);
-      return null;
+      hilog.warn(DOMAIN, TAG, 'read failed for %{public}s', spec.key)
+      return null
     }
   }
 
@@ -179,46 +177,46 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
    *          the non-empty return value to track successful restores.
    */
   private static async applyLine(store: preferences.Preferences, line: string): Promise<string> {
-    const parts: string[] = line.split('\t');
+    const parts: string[] = line.split('\t')
     if (parts.length < 3) {
-      hilog.warn(DOMAIN, TAG, 'applyLine: malformed line (expected ≥3 fields, got %{public}d)', parts.length);
-      return '';
+      hilog.warn(DOMAIN, TAG, 'applyLine: malformed line (expected ≥3 fields, got %{public}d)', parts.length)
+      return ''
     }
 
-    const type: string = parts[0];
-    const key: string = parts[1];
+    const type: string = parts[0]
+    const key: string = parts[1]
 
     // Percent-encoded string values can never contain a raw tab. If
     // one is present, the line was corrupted in transit. Reconstruct
     // the full value rather than dropping the remainder.
     if (parts.length > 3) {
-      hilog.warn(DOMAIN, TAG, 'applyLine: value for key %{public}s contains a raw tab; corruption?', key);
+      hilog.warn(DOMAIN, TAG, 'applyLine: value for key %{public}s contains a raw tab; corruption?', key)
     }
-    const raw: string = parts.slice(2).join('\t');
+    const raw: string = parts.slice(2).join('\t')
 
     try {
       if (type === TYPE_STRING) {
-        await store.put(key, decodeURIComponent(raw));
-        return key;
+        await store.put(key, decodeURIComponent(raw))
+        return key
       }
       if (type === TYPE_NUMBER) {
-        const num: number = Number(raw);
+        const num: number = Number(raw)
         if (Number.isNaN(num)) {
-          hilog.warn(DOMAIN, TAG, 'applyLine: invalid number for key %{public}s', key);
-          return '';
+          hilog.warn(DOMAIN, TAG, 'applyLine: invalid number for key %{public}s', key)
+          return ''
         }
-        await store.put(key, num);
-        return key;
+        await store.put(key, num)
+        return key
       }
       if (type === TYPE_BOOLEAN) {
-        await store.put(key, raw === 'true');
-        return key;
+        await store.put(key, raw === 'true')
+        return key
       }
-      hilog.warn(DOMAIN, TAG, 'applyLine: unknown type "%{public}s" for key %{public}s', type, key);
+      hilog.warn(DOMAIN, TAG, 'applyLine: unknown type "%{public}s" for key %{public}s', type, key)
     } catch (err) {
-      hilog.warn(DOMAIN, TAG, 'applyLine failed for %{public}s', key);
+      hilog.warn(DOMAIN, TAG, 'applyLine failed for %{public}s', key)
     }
-    return '';
+    return ''
   }
 
   // ============================================================
@@ -227,18 +225,18 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
 
   private static async openPrefs(context: common.Context, storeName: string): Promise<preferences.Preferences | null> {
     try {
-      return await preferences.getPreferences(context, storeName);
+      return await preferences.getPreferences(context, storeName)
     } catch (err) {
-      return null;
+      return null
     }
   }
 
   private static async clearPrefs(store: preferences.Preferences): Promise<boolean> {
     try {
-      await store.clear();
-      return true;
+      await store.clear()
+      return true
     } catch (err) {
-      return false;
+      return false
     }
   }
 
@@ -248,29 +246,29 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
 
   private static async flushPrefs(store: preferences.Preferences): Promise<boolean> {
     try {
-      await store.flush();
-      return true;
+      await store.flush()
+      return true
     } catch (err) {
-      return false;
+      return false
     }
   }
 
   private static writeTextFile(path: string, content: string): boolean {
-    let file: fs.File | null = null;
+    let file: fs.File | null = null
     try {
-      file = fs.openSync(path, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE | fs.OpenMode.TRUNC);
+      file = fs.openSync(path, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE | fs.OpenMode.TRUNC)
     } catch (err) {
-      return false;
+      return false
     }
 
     try {
-      fs.writeSync(file.fd, content);
+      fs.writeSync(file.fd, content)
     } catch (err) {
-      EntryBackupAbility.closeFile(file);
-      return false;
+      EntryBackupAbility.closeFile(file)
+      return false
     }
 
-    return EntryBackupAbility.closeFile(file);
+    return EntryBackupAbility.closeFile(file)
   }
 
   // ============================================================
@@ -278,61 +276,61 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
   // ============================================================
 
   private static readTextFile(path: string): string {
-    let stat: fs.Stat;
+    let stat: fs.Stat
     try {
-      stat = fs.statSync(path);
+      stat = fs.statSync(path)
     } catch (err) {
-      return '';
+      return ''
     }
     if (stat.size === 0) {
-      return '';
+      return ''
     }
 
-    let file: fs.File | null = null;
+    let file: fs.File | null = null
     try {
-      file = fs.openSync(path, fs.OpenMode.READ_ONLY);
+      file = fs.openSync(path, fs.OpenMode.READ_ONLY)
     } catch (err) {
-      return '';
+      return ''
     }
 
-    let text: string = '';
+    let text: string = ''
     try {
-      const buf = new ArrayBuffer(stat.size);
-      const opts: ReadOptions = { offset: 0, length: stat.size };
-      const bytesRead: number = fs.readSync(file.fd, buf, opts);
-      const u8 = new Uint8Array(buf, 0, bytesRead);
-      text = buffer.from(u8).toString('utf8');
+      const buf = new ArrayBuffer(stat.size)
+      const opts: ReadOptions = { offset: 0, length: stat.size }
+      const bytesRead: number = fs.readSync(file.fd, buf, opts)
+      const u8 = new Uint8Array(buf, 0, bytesRead)
+      text = buffer.from(u8).toString('utf8')
     } catch (err) {
-      text = '';
+      text = ''
     }
 
-    EntryBackupAbility.closeFile(file);
-    return text;
+    EntryBackupAbility.closeFile(file)
+    return text
   }
 
   private static closeFile(file: fs.File): boolean {
     try {
-      fs.closeSync(file);
-      return true;
+      fs.closeSync(file)
+      return true
     } catch (err) {
-      return false;
+      return false
     }
   }
 
   async onBackup(): Promise<void> {
-    hilog.info(DOMAIN, TAG, 'onBackup start');
-    const backupDir: string = this.safeBackupDir();
+    hilog.info(DOMAIN, TAG, 'onBackup start')
+    const backupDir: string = this.safeBackupDir()
     if (backupDir.length === 0) {
-      hilog.error(DOMAIN, TAG, 'backupDir unavailable');
-      return;
+      hilog.error(DOMAIN, TAG, 'backupDir unavailable')
+      return
     }
-    await this.backupStore(STORE_SETTINGS, SETTINGS_SPECS, backupDir);
-    await this.backupStore(STORE_TASBIH, TASBIH_SPECS, backupDir);
-    hilog.info(DOMAIN, TAG, 'onBackup complete');
+    await this.backupStore(STORE_SETTINGS, SETTINGS_SPECS, backupDir)
+    await this.backupStore(STORE_TASBIH, TASBIH_SPECS, backupDir)
+    hilog.info(DOMAIN, TAG, 'onBackup complete')
   }
 
   async onRestore(bundleVersion: BundleVersion): Promise<void> {
-    hilog.info(DOMAIN, TAG, 'onRestore start: %{public}s', JSON.stringify(bundleVersion));
+    hilog.info(DOMAIN, TAG, 'onRestore start: %{public}s', JSON.stringify(bundleVersion))
 
     // The backup version is logged so we have a record of what was
     // restored. Two layers protect cross-version restore:
@@ -352,97 +350,97 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
     // enforces *which* versions can restore; the `#v1` header + legacy
     // fallback enforce *how* a file within that range is parsed.
 
-    const backupDir: string = this.safeBackupDir();
+    const backupDir: string = this.safeBackupDir()
     if (backupDir.length === 0) {
-      hilog.error(DOMAIN, TAG, 'backupDir unavailable');
-      return;
+      hilog.error(DOMAIN, TAG, 'backupDir unavailable')
+      return
     }
-    await this.restoreStore(STORE_SETTINGS, backupDir);
-    await this.restoreStore(STORE_TASBIH, backupDir);
-    hilog.info(DOMAIN, TAG, 'onRestore complete');
+    await this.restoreStore(STORE_SETTINGS, backupDir)
+    await this.restoreStore(STORE_TASBIH, backupDir)
+    hilog.info(DOMAIN, TAG, 'onRestore complete')
   }
 
   private async backupStore(storeName: string, specs: PrefSpec[], backupDir: string): Promise<void> {
-    const store = await EntryBackupAbility.openPrefs(this.context, storeName);
+    const store = await EntryBackupAbility.openPrefs(this.context, storeName)
     if (store === null) {
-      hilog.warn(DOMAIN, TAG, 'Cannot open %{public}s for backup', storeName);
-      return;
+      hilog.warn(DOMAIN, TAG, 'Cannot open %{public}s for backup', storeName)
+      return
     }
 
-    const lines: string[] = [];
+    const lines: string[] = []
     for (const spec of specs) {
-      const encoded: string | null = await EntryBackupAbility.readAsString(store, spec);
+      const encoded: string | null = await EntryBackupAbility.readAsString(store, spec)
       if (encoded ===
         null) { // Key is absent from the store — do not write a line for it. // On restore, an absent key falls through to its default,
         // which matches the user's current (never-set) state.
-        continue;
+        continue
       }
-      lines.push(spec.type + '\t' + spec.key + '\t' + encoded);
+      lines.push(spec.type + '\t' + spec.key + '\t' + encoded)
     }
 
     // Format v1: header declares version and total line count.
-    const header: string = '#v' + BACKUP_FORMAT_VERSION + '\t' + lines.length;
-    const content: string = lines.length > 0 ? header + '\n' + lines.join('\n') : header;
+    const header: string = '#v' + BACKUP_FORMAT_VERSION + '\t' + lines.length
+    const content: string = lines.length > 0 ? header + '\n' + lines.join('\n') : header
 
-    const path: string = backupDir + '/' + storeName + '.txt';
-    const written: boolean = EntryBackupAbility.writeTextFile(path, content);
+    const path: string = backupDir + '/' + storeName + '.txt'
+    const written: boolean = EntryBackupAbility.writeTextFile(path, content)
 
     if (written) {
-      hilog.info(DOMAIN, TAG, 'Backed up %{public}s: %{public}d entries', storeName, lines.length);
+      hilog.info(DOMAIN, TAG, 'Backed up %{public}s: %{public}d entries', storeName, lines.length)
     } else {
-      hilog.error(DOMAIN, TAG, 'Write failed for %{public}s', storeName);
+      hilog.error(DOMAIN, TAG, 'Write failed for %{public}s', storeName)
     }
   }
 
   private async restoreStore(storeName: string, backupDir: string): Promise<void> {
-    const path: string = backupDir + '/' + storeName + '.txt';
-    const content: string = EntryBackupAbility.readTextFile(path);
+    const path: string = backupDir + '/' + storeName + '.txt'
+    const content: string = EntryBackupAbility.readTextFile(path)
     if (content.length === 0) {
-      hilog.info(DOMAIN, TAG, 'No backup content for %{public}s', storeName);
-      return;
+      hilog.info(DOMAIN, TAG, 'No backup content for %{public}s', storeName)
+      return
     }
 
     // ---- Parse the header, if present ----
-    const rawLines: string[] = content.split('\n');
-    let startIdx = 0;
-    let formatVersion = 1;
-    let expectedCount = -1; // -1 = unknown (legacy file)
+    const rawLines: string[] = content.split('\n')
+    let startIdx = 0
+    let formatVersion = 1
+    let expectedCount = -1 // -1 = unknown (legacy file)
 
     if (rawLines.length > 0 && rawLines[0].startsWith('#')) {
-      const headerLine = rawLines[0].trim();
-      const headerParts = headerLine.split('\t');
+      const headerLine = rawLines[0].trim()
+      const headerParts = headerLine.split('\t')
 
-      const versionMatch = headerParts[0].match(/^#v(\d+)$/);
+      const versionMatch = headerParts[0].match(/^#v(\d+)$/)
       if (versionMatch) {
-        formatVersion = parseInt(versionMatch[1], 10);
+        formatVersion = parseInt(versionMatch[1], 10)
         if (headerParts.length >= 2) {
-          const n = parseInt(headerParts[1], 10);
+          const n = parseInt(headerParts[1], 10)
           if (!isNaN(n) && n >= 0) {
-            expectedCount = n;
+            expectedCount = n
           }
         }
       } else {
-        hilog.warn(DOMAIN, TAG, 'Restore for %{public}s: unrecognized header "%{public}s"', storeName, headerLine);
+        hilog.warn(DOMAIN, TAG, 'Restore for %{public}s: unrecognized header "%{public}s"', storeName, headerLine)
       }
-      startIdx = 1;
+      startIdx = 1
     }
 
     if (formatVersion > BACKUP_FORMAT_VERSION) {
       hilog.warn(DOMAIN, TAG,
         'Restore for %{public}s: backup is v%{public}d, parser is v%{public}d — proceeding with best effort', storeName,
-        formatVersion, BACKUP_FORMAT_VERSION);
+        formatVersion, BACKUP_FORMAT_VERSION)
     }
 
     // ---- Open and clear the store ----
-    const store = await EntryBackupAbility.openPrefs(this.context, storeName);
+    const store = await EntryBackupAbility.openPrefs(this.context, storeName)
     if (store === null) {
-      hilog.error(DOMAIN, TAG, 'Cannot open %{public}s for restore', storeName);
-      return;
+      hilog.error(DOMAIN, TAG, 'Cannot open %{public}s for restore', storeName)
+      return
     }
 
-    const cleared: boolean = await EntryBackupAbility.clearPrefs(store);
+    const cleared: boolean = await EntryBackupAbility.clearPrefs(store)
     if (!cleared) {
-      hilog.warn(DOMAIN, TAG, 'clear failed for %{public}s; restoring anyway', storeName);
+      hilog.warn(DOMAIN, TAG, 'clear failed for %{public}s; restoring anyway', storeName)
     }
 
     // ---- Apply the data lines ----
@@ -457,24 +455,24 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
     //
     // Do NOT change this to iterate PrefSpec[] without also bumping
     // BACKUP_FORMAT_VERSION and adding a migration in restoreStore.
-    let restored = 0;
-    let actualDataLines = 0;
-    const presentKeys: Set<string> = new Set();
+    let restored = 0
+    let actualDataLines = 0
+    const presentKeys: Set<string> = new Set()
 
     for (let i = startIdx; i < rawLines.length; i++) {
-      const line = rawLines[i];
+      const line = rawLines[i]
       if (line.length === 0) {
-        continue;
+        continue
       }
-      actualDataLines++;
-      const appliedKey = await EntryBackupAbility.applyLine(store, line);
+      actualDataLines++
+      const appliedKey = await EntryBackupAbility.applyLine(store, line)
       if (appliedKey.length > 0) {
-        restored++;
-        presentKeys.add(appliedKey);
+        restored++
+        presentKeys.add(appliedKey)
       }
     }
 
-    await EntryBackupAbility.flushPrefs(store);
+    await EntryBackupAbility.flushPrefs(store)
 
     // ---- Truncation detection ----
     //
@@ -488,11 +486,11 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
       if (actualDataLines < expectedCount) {
         hilog.warn(DOMAIN, TAG,
           'Restore for %{public}s: backup appears truncated — parsed %{public}d of %{public}d declared line(s)',
-          storeName, actualDataLines, expectedCount);
+          storeName, actualDataLines, expectedCount)
       }
       if (restored < expectedCount) {
         hilog.warn(DOMAIN, TAG, 'Restore for %{public}s: only %{public}d of %{public}d key(s) applied successfully',
-          storeName, restored, expectedCount);
+          storeName, restored, expectedCount)
       }
     }
 
@@ -503,30 +501,30 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
     // sitting in the store harmlessly (nothing reads it), but the
     // breadcrumb is useful when a "my settings are wrong after
     // restore" report arrives.
-    const specs = storeName === STORE_SETTINGS ? SETTINGS_SPECS : TASBIH_SPECS;
-    const knownKeys: Set<string> = new Set(specs.map((s: PrefSpec): string => s.key));
-    const unknownKeys: string[] = [];
+    const specs = storeName === STORE_SETTINGS ? SETTINGS_SPECS : TASBIH_SPECS
+    const knownKeys: Set<string> = new Set(specs.map((s: PrefSpec): string => s.key))
+    const unknownKeys: string[] = []
     for (const k of presentKeys) {
       if (!knownKeys.has(k)) {
-        unknownKeys.push(k);
+        unknownKeys.push(k)
       }
     }
     if (unknownKeys.length > 0) {
       hilog.info(DOMAIN, TAG, 'Restore for %{public}s: %{public}d key(s) present in backup but unknown to this build',
-        storeName, unknownKeys.length);
+        storeName, unknownKeys.length)
       for (const k of unknownKeys) {
-        hilog.info(DOMAIN, TAG, '  unknown key: %{public}s', k);
+        hilog.info(DOMAIN, TAG, '  unknown key: %{public}s', k)
       }
     }
 
-    hilog.info(DOMAIN, TAG, 'Restored %{public}s: %{public}d entries', storeName, restored);
+    hilog.info(DOMAIN, TAG, 'Restored %{public}s: %{public}d entries', storeName, restored)
   }
 
   private safeBackupDir(): string {
     try {
-      return this.context.backupDir;
+      return this.context.backupDir
     } catch (err) {
-      return '';
+      return ''
     }
   }
 }

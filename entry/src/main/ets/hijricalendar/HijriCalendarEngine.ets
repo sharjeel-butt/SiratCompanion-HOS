@@ -1,7 +1,7 @@
 // entry/src/main/ets/utils/HijriCalendarEngine.ets
 
-import { HijriDate } from './HijriCalendarModels';
-import { HijriCalendarType } from './HijriCalendarType';
+import { HijriDate } from './HijriCalendarModels'
+import { HijriCalendarType } from './HijriCalendarType'
 
 /**
  * A Hijri calendar engine converts between Gregorian dates and
@@ -10,23 +10,23 @@ import { HijriCalendarType } from './HijriCalendarType';
  */
 export interface HijriCalendarEngine {
   /** Engine identifier. */
-  readonly type: HijriCalendarType;
+  readonly type: HijriCalendarType
 
   /**
    * Convert a Gregorian date to a Hijri date.
    * Returns null if the date is outside the engine's valid range.
    */
-  toHijri(gregorian: Date): HijriDate | null;
+  toHijri(gregorian: Date): HijriDate | null
 
   /**
    * Convert a Hijri date to a Gregorian date.
    * Returns null if the date is outside the engine's valid range.
    */
-  toGregorian(hijri: HijriDate): Date | null;
+  toGregorian(hijri: HijriDate): Date | null
 
   /** Number of days in a Hijri month. */
-  daysInMonth(year: number, month: number): number;
+  daysInMonth(year: number, month: number): number
 
   /** True when the Hijri year is a leap year (has 355 days). */
-  isLeapYear(year: number): boolean;
+  isLeapYear(year: number): boolean
 }

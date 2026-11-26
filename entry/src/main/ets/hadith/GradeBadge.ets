@@ -1,9 +1,9 @@
 // entry/src/main/ets/hadith/GradeBadge.ets
 
-import { ThemeColors } from '../core/ui/themes/Theme';
-import { L } from '../i18n/LocalizationHelper';
-import { HadithGrading } from './HadithModels';
-import { GradeThemeHelper } from '../core/ui/themes/GradeThemeHelper';
+import { ThemeColors } from '../core/ui/themes/Theme'
+import { L } from '../i18n/LocalizationHelper'
+import { HadithGrading } from './HadithModels'
+import { GradeThemeHelper } from '../core/ui/themes/GradeThemeHelper'
 
 @Component
 export struct GradeBadge {
@@ -32,7 +32,8 @@ export struct GradeBadge {
                 .fillColor(GradeThemeHelper.getTextColor(g.grade, this.colors)) // 👈 Global Color
               Text(`${this.gradeLabel(g.grade)} (${this.graderLabel(g.grader)})`)
                 .fontSize(10)
-                .fontColor(GradeThemeHelper.getTextColor(g.grade, this.colors)) // 👈 Global Color
+                .fontColor(GradeThemeHelper.getTextColor(g.grade, this.colors))
+                // 👈 Global Color
                 .fontWeight(FontWeight.Medium)
                 .maxLines(1)
                 .textOverflow({ overflow: TextOverflow.Ellipsis })
@@ -72,55 +73,55 @@ export struct GradeBadge {
 
   private iconFor(grade: string): Resource {
     if (grade === 'sahih' || grade === 'hasan') {
-      return $r('app.media.ic_check');
+      return $r('app.media.ic_check')
     }
     if (grade === 'daif') {
-      return $r('app.media.ic_warning');
+      return $r('app.media.ic_warning')
     }
-    return $r('app.media.ic_info');
+    return $r('app.media.ic_info')
   }
 
   private gradeLabel(grade: string): string {
     switch (grade) {
       case 'sahih':
-        return L.get('grade_sahih', this.currentLanguage);
+        return L.get('grade_sahih', this.currentLanguage)
       case 'hasan':
-        return L.get('grade_hasan', this.currentLanguage);
+        return L.get('grade_hasan', this.currentLanguage)
       case 'daif':
-        return L.get('grade_daif', this.currentLanguage);
+        return L.get('grade_daif', this.currentLanguage)
       case 'mawdu':
-        return L.get('grade_mawdu', this.currentLanguage);
+        return L.get('grade_mawdu', this.currentLanguage)
       default:
-        return L.get('grade_unverified', this.currentLanguage);
+        return L.get('grade_unverified', this.currentLanguage)
     }
   }
 
   private graderLabel(grader: string): string {
     switch (grader) {
       case 'albani':
-        return 'Al-Albani';
+        return 'Al-Albani'
       case 'zubair_ali_zai':
-        return 'Zubair Ali Zai';
+        return 'Zubair Ali Zai'
       case 'shuaib_al_arnaut':
-        return 'Shuaib Al Arnaut';
+        return 'Shuaib Al Arnaut'
       case 'abu_ghuddah':
-        return 'Abu Ghuddah';
+        return 'Abu Ghuddah'
       case 'salim_al_hilali':
-        return 'Salim Al-Hilali';
+        return 'Salim Al-Hilali'
       case 'abdul_hamid':
-        return 'Abdul Hamid';
+        return 'Abdul Hamid'
       case 'abd_al_baqi':
-        return 'Abd Al-Baqi';
+        return 'Abd Al-Baqi'
       case 'bukhari':
-        return 'Al-Bukhari';
+        return 'Al-Bukhari'
       case 'muslim':
-        return 'Muslim';
+        return 'Muslim'
       case 'tirmidhi':
-        return 'Al-Tirmidhi';
+        return 'Al-Tirmidhi'
       case 'collection_consensus':
-        return 'Collection Consensus';
+        return 'Collection Consensus'
       default:
-        return grader;
+        return grader
     }
   }
 }

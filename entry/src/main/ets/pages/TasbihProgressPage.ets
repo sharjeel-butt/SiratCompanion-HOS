@@ -1,9 +1,9 @@
 // entry/src/main/ets/pages/TasbihProgressPage.ets
 
-import { mediaquery, router } from '@kit.ArkUI';
-import { common } from '@kit.AbilityKit';
-import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
+import { mediaquery, router } from '@kit.ArkUI'
+import { common } from '@kit.AbilityKit'
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -11,20 +11,20 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_TASBIH_STATE_VERSION,
   STORAGE_KEY_THEME_MODE
-} from '../core/common/StorageKeys';
-import { L } from '../i18n/LocalizationHelper';
-import { Breakpoints } from '../core/layout/Breakpoints';
-import { Tasbih } from '../tasbih/TasbihModels';
-import { TasbihManager } from '../tasbih/TasbihManager';
-import { TasbihStorage } from '../tasbih/TasbihStorage';
+} from '../core/common/StorageKeys'
+import { L } from '../i18n/LocalizationHelper'
+import { Breakpoints } from '../core/layout/Breakpoints'
+import { Tasbih } from '../tasbih/TasbihModels'
+import { TasbihManager } from '../tasbih/TasbihManager'
+import { TasbihStorage } from '../tasbih/TasbihStorage'
 import {
   ProgressHelper,
   TasbihDetailsSnapshot,
   TasbihDhikrProgress,
   TasbihPeriod,
   TasbihProgressRow
-} from '../progress/ProgressHelper';
-import { TasbihThemes } from '../tasbih/TasbihThemes';
+} from '../progress/ProgressHelper'
+import { TasbihThemes } from '../tasbih/TasbihThemes'
 
 @Entry
 @Component
@@ -50,25 +50,25 @@ struct TasbihDetailsPage {
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
 
   aboutToAppear(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
     this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
-      this.colors = c;
-    });
+      this.colors = c
+    })
 
-    const ctx = getContext(this) as common.UIAbilityContext;
+    const ctx = getContext(this) as common.UIAbilityContext
     TasbihStorage.init(ctx).then(() => {
-      this.reload();
-    });
+      this.reload()
+    })
   }
 
   aboutToDisappear(): void {
-    PageTheme.uninstallSystemListener(this.systemDarkListener);
-    this.systemDarkListener = null;
+    PageTheme.uninstallSystemListener(this.systemDarkListener)
+    this.systemDarkListener = null
   }
 
   onPageShow(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-    this.reload();
+    this.colors = PageTheme.compute(this.themeMode)
+    this.reload()
   }
 
   build() {
@@ -178,8 +178,8 @@ struct TasbihDetailsPage {
     .backgroundColor(this.period === id ? this.colors.accentGold : Color.Transparent)
     .borderRadius(9)
     .onClick(() => {
-      this.period = id as TasbihPeriod;
-      this.recompute();
+      this.period = id as TasbihPeriod
+      this.recompute()
     })
   }
 
@@ -219,7 +219,7 @@ struct TasbihDetailsPage {
             .fill(Color.Transparent)
             .stroke(this.colors.accentGold)
             .strokeWidth(6)
-            .strokeDashArray([this.percentForPeriod() / 100 * 226.2, 500])
+            .strokeDashArray([(this.percentForPeriod() / 100) * 226.2, 500])
             .strokeLineCap(LineCapStyle.Round)
             .rotate({ angle: -90 })
           Text(`${this.percentForPeriod()}%`).fontSize(15).fontWeight(FontWeight.Bold).fontColor(this.colors.textWhite)
@@ -348,8 +348,7 @@ struct TasbihDetailsPage {
       // FIXED: Added the inner Row for the progress fill
       Row() {
         Row()
-          .height('100%')
-          .width(`${p.daysInPeriod > 0 ? Math.round(p.daysCompleted / p.daysInPeriod * 100) : 0}%`)
+          .height('100%').width(`${p.daysInPeriod > 0 ? Math.round((p.daysCompleted / p.daysInPeriod) * 100) : 0}%`)
           .backgroundColor(this.colors.accentGold)
           .borderRadius(3)
       }
@@ -376,24 +375,24 @@ struct TasbihDetailsPage {
 
   private getPillNumberLabel(id: string): string {
     if (id === 'week') {
-      return `#${this.snapshot.currentWeekNumber}`;
+      return `#${this.snapshot.currentWeekNumber}`
     }
     if (id === 'month') { // TasbihDetailsSnapshot doesn't store the month/year explicitly,
       // so we derive it from the current date since the period is always "current".
-      return `#${new Date().getMonth() + 1}`;
+      return `#${new Date().getMonth() + 1}`
     }
-    return `#${new Date().getFullYear()}`;
+    return `#${new Date().getFullYear()}`
   }
 
   private async reload(): Promise<void> {
-    const loaded = await TasbihStorage.load(TasbihManager.createDefaults());
-    this.tasbihs = loaded.tasbihs;
-    this.activeId = loaded.activeTasbihId;
-    this.recompute();
+    const loaded = await TasbihStorage.load(TasbihManager.createDefaults())
+    this.tasbihs = loaded.tasbihs
+    this.activeId = loaded.activeTasbihId
+    this.recompute()
   }
 
   private recompute(): void {
-    this.snapshot = ProgressHelper.getTasbihDetails(this.tasbihs, this.activeId, this.period, this.appLanguage);
+    this.snapshot = ProgressHelper.getTasbihDetails(this.tasbihs, this.activeId, this.period, this.appLanguage)
   }
 
   private onLanguageChanged(): void { // The snapshot stores resolved label strings. When the user
@@ -402,48 +401,48 @@ struct TasbihDetailsPage {
     // already-captured labels would go stale. Recompute so the
     // resolved text follows the new language immediately.
     if (this.tasbihs.length > 0) {
-      this.recompute();
+      this.recompute()
     }
   }
 
   private onThemeModeChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   private onTasbihStateChanged(): void {
-    this.reload();
+    this.reload()
   }
 
   private async onAppForegrounded(): Promise<void> {
-    await this.reload();
+    await this.reload()
   }
 
   private tr(key: string): string {
-    return L.get(key, this.appLanguage);
+    return L.get(key, this.appLanguage)
   }
 
   private isRtl(): boolean {
-    return L.isRtlLang(this.appLanguage);
+    return L.isRtlLang(this.appLanguage)
   }
 
   private percentForPeriod(): number {
     if (this.snapshot.totalDaysPossible === 0) {
-      return 0;
+      return 0
     }
-    return Math.round(this.snapshot.totalDaysCompleted / this.snapshot.totalDaysPossible * 100);
+    return Math.round((this.snapshot.totalDaysCompleted / this.snapshot.totalDaysPossible) * 100)
   }
 
   private periodLabel(id: string): string {
     if (id === 'week') {
-      return this.tr('details_period_week');
+      return this.tr('details_period_week')
     }
     if (id === 'month') {
-      return this.tr('details_period_month');
+      return this.tr('details_period_month')
     }
-    return this.tr('details_period_year');
+    return this.tr('details_period_year')
   }
 }

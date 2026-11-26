@@ -1,6 +1,6 @@
 // entry/src/main/ets/utils/QiblaSensorHelper.ets
 
-import { sensor } from '@kit.SensorServiceKit';
+import { sensor } from '@kit.SensorServiceKit'
 
 /**
  * Accuracy levels reported by the orientation sensor.
@@ -15,9 +15,9 @@ export enum SensorAccuracy {
 }
 
 export interface OrientationReading {
-  heading: number; // 0–360, clockwise from North
-  isFlat: boolean;
-  accuracy: SensorAccuracy; // NEW — drives the calibration overlay
+  heading: number // 0–360, clockwise from North
+  isFlat: boolean
+  accuracy: SensorAccuracy // NEW — drives the calibration overlay
 }
 
 export class QiblaSensorHelper {
@@ -34,21 +34,21 @@ export class QiblaSensorHelper {
           heading: data.alpha,
           isFlat: Math.abs(data.beta) < 25 && Math.abs(data.gamma) < 25,
           accuracy: QiblaSensorHelper.readAccuracy(data)
-        });
-      }, { interval: 100_000_000 });
-      return true;
+        })
+      }, { interval: 100_000_000 })
+      return true
     } catch (err) {
-      return QiblaSensorHelper.registerMagnetometerFallback(onReading);
+      return QiblaSensorHelper.registerMagnetometerFallback(onReading)
     }
   }
 
   static unregister(): void {
     try {
-      sensor.off(sensor.SensorId.ORIENTATION);
+      sensor.off(sensor.SensorId.ORIENTATION)
     } catch (err) { /* ignore */
     }
     try {
-      sensor.off(sensor.SensorId.MAGNETIC_FIELD);
+      sensor.off(sensor.SensorId.MAGNETIC_FIELD)
     } catch (err) { /* ignore */
     }
   }
@@ -59,33 +59,33 @@ export class QiblaSensorHelper {
    * it's a first-class field.
    */
   private static readAccuracy(data: sensor.OrientationResponse): SensorAccuracy {
-    const raw: number = data.accuracy;
+    const raw: number = data.accuracy
 
     if (raw <= 0) {
-      return SensorAccuracy.UNRELIABLE;
+      return SensorAccuracy.UNRELIABLE
     }
     if (raw >= 3) {
-      return SensorAccuracy.HIGH;
+      return SensorAccuracy.HIGH
     }
-    return raw as SensorAccuracy;
+    return raw as SensorAccuracy
   }
 
   private static registerMagnetometerFallback(onReading: (r: OrientationReading) => void): boolean {
     try {
       sensor.on(sensor.SensorId.MAGNETIC_FIELD, (data: sensor.MagneticFieldResponse) => {
-        let heading = Math.atan2(data.y, data.x) * 180 / Math.PI;
-        heading = (heading + 360) % 360; // The raw magnetometer reports no accuracy field. Report
-        // MEDIUM rather than HIGH so that QiblaPage.evaluateCalibrationNeed()
+        let heading = (Math.atan2(data.y, data.x) * 180) / Math.PI
+        heading = (heading + 360) %
+          360 // The raw magnetometer reports no accuracy field. Report // MEDIUM rather than HIGH so that QiblaPage.evaluateCalibrationNeed()
         // does not auto-open the calibration overlay (MEDIUM is
         // treated as acceptable) but the manual "Calibrate" link in
         // StatusCard remains tappable if the user perceives bad
         // readings. Reporting HIGH previously suppressed every path
         // to calibration on fallback devices.
-        onReading({ heading, isFlat: true, accuracy: SensorAccuracy.MEDIUM });
-      }, { interval: 100_000_000 });
-      return true;
+        onReading({ heading, isFlat: true, accuracy: SensorAccuracy.MEDIUM })
+      }, { interval: 100_000_000 })
+      return true
     } catch (err) {
-      return false;
+      return false
     }
   }
 }

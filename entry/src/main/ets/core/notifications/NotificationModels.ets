@@ -37,7 +37,7 @@ export interface AppNotification {
    * prayer_due_asr_20261122
    * prayer_missed_fajr_20261122
    */
-  id: string;
+  id: string
 
   /**
    * Localized title key.
@@ -45,7 +45,7 @@ export interface AppNotification {
    * Example:
    * notif_prayer_due_title
    */
-  titleKey: string;
+  titleKey: string
 
   /**
    * Localized message key.
@@ -53,27 +53,27 @@ export interface AppNotification {
    * Example:
    * notif_asr_due_message
    */
-  messageKey: string;
+  messageKey: string
 
   /**
    * Category.
    */
-  category: NotificationCategory;
+  category: NotificationCategory
 
   /**
    * Display order importance.
    */
-  priority: NotificationPriority;
+  priority: NotificationPriority
 
   /**
    * Creation timestamp.
    */
-  createdAt: number;
+  createdAt: number
 
   /**
    * Has the user opened/read it?
    */
-  isRead: boolean;
+  isRead: boolean
 
   /**
    * Optional context.
@@ -83,14 +83,13 @@ export interface AppNotification {
    * Asr
    * event_42
    */
-  payload?: string;
+  payload?: string
 }
 
 /**
  * Collection returned to UI.
  */
 export interface NotificationSummary {
-  items: AppNotification[];
-  unreadCount: number;
+  items: AppNotification[]
+  unreadCount: number
 }
-

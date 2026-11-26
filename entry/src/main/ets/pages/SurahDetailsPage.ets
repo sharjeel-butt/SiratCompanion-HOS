@@ -1,16 +1,16 @@
 // entry/src/main/ets/pages/SurahDetailsPage.ets
 
-import { common } from '@kit.AbilityKit';
-import { router } from '@kit.ArkUI';
-import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
-import { L } from '../i18n/LocalizationHelper';
-import { QuranService } from '../quran/QuranService';
-import { CompleteSurah, Verse } from '../quran/QuranSurahModels';
-import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
-import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_QURAN_TRANSLATION_LANG } from '../core/common/StorageKeys';
+import { common } from '@kit.AbilityKit'
+import { router } from '@kit.ArkUI'
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
+import { L } from '../i18n/LocalizationHelper'
+import { QuranService } from '../quran/QuranService'
+import { CompleteSurah, Verse } from '../quran/QuranSurahModels'
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper'
+import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_QURAN_TRANSLATION_LANG } from '../core/common/StorageKeys'
 
-type ReadingMode = 'translation' | 'reading' | 'mushaf';
+type ReadingMode = 'translation' | 'reading' | 'mushaf'
 
 @Entry
 @Component
@@ -39,11 +39,11 @@ struct SurahDetailsPage {
   private endVerse: number | null = null;
 
   async aboutToAppear() {
-    await this.loadInitialData();
+    await this.loadInitialData()
   }
 
   onLangChanged() {
-    this.loadInitialData();
+    this.loadInitialData()
   }
 
   build() {
@@ -66,8 +66,8 @@ struct SurahDetailsPage {
         .onClick(() => router.back())
 
         Column() {
-          Text(this.isLoading ? '...' :
-            (this.readingMode === 'mushaf' ? this.currentMushafSurahName : this.getSurahTitle()))
+          Text(
+            this.isLoading ? '...' : this.readingMode === 'mushaf' ? this.currentMushafSurahName : this.getSurahTitle())
             .fontSize(18)
             .fontWeight(FontWeight.Bold)
             .fontColor(this.colors.textWhite)
@@ -89,7 +89,6 @@ struct SurahDetailsPage {
               .margin({ top: 2 })
           }
         }.alignItems(HorizontalAlign.Center).layoutWeight(1)
-
       }
       .width('100%')
       .height(64)
@@ -183,7 +182,7 @@ struct SurahDetailsPage {
       .textAlign(TextAlign.Center)
       .borderRadius(18)
       .margin(2)
-      .onClick(() => this.readingMode = mode)
+      .onClick(() => (this.readingMode = mode))
   }
 
   @Builder
@@ -191,7 +190,7 @@ struct SurahDetailsPage {
     Scroll() {
       Column() { // 1. Bismillah Header (Show for ALL surahs except Surah 9)
         if (this.surah!.id !== 9) {
-          Text("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ")
+          Text('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ')
             .fontSize(TypographyHelper.getArabicFontSize(26))
             .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
             .fontColor(this.colors.accentGold)
@@ -208,8 +207,10 @@ struct SurahDetailsPage {
               .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
               .fontColor(this.colors.textWhite)
               .lineHeight(TypographyHelper.getArabicLineHeight(60))
-              .textAlign(TextAlign.Start) // Aligns to Right in RTL
-              .direction(Direction.Rtl)   // Forces RTL layout
+              .textAlign(TextAlign.Start)
+              // Aligns to Right in RTL
+              .direction(Direction.Rtl)
+              // Forces RTL layout
               .width('100%')
               .padding({ top: 12, bottom: 12 })
 
@@ -242,15 +243,16 @@ struct SurahDetailsPage {
       // Use Stack to overlay the number circle, while giving the Text 100% width.
       // This is the EXACT same layout logic used in the Mushaf view.
       Stack({ alignContent: Alignment.TopStart }) {
-
         // 1. Arabic Text (Exact properties as MushafView)
         Text(this.stripTrailingArabicNumber(verse.arabic))
           .fontSize(TypographyHelper.getArabicFontSize(TypographyHelper.QURAN_FONT_SIZE_VERSE))
           .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
           .fontColor(this.colors.textWhite)
           .lineHeight(TypographyHelper.getArabicLineHeight(TypographyHelper.QURAN_LINE_HEIGHT_VERSE))
-          .textAlign(TextAlign.Start) // Aligns to Right in RTL
-          .direction(Direction.Rtl)   // Forces RTL layout
+          .textAlign(TextAlign.Start)
+          // Aligns to Right in RTL
+          .direction(Direction.Rtl)
+          // Forces RTL layout
           .width('100%')
           // Add padding on the left so the text doesn't overlap the circle
           .padding({ left: 48, right: 0 })
@@ -306,7 +308,7 @@ struct SurahDetailsPage {
 
         // Bismillah (Show for ALL surahs except Surah 9)
         if (this.surah && this.surah.id !== 9) {
-          Text("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ")
+          Text('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ')
             .fontSize(TypographyHelper.getArabicFontSize(TypographyHelper.BISMILLAH_FONT_SIZE))
             .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
             .lineHeight(TypographyHelper.getArabicLineHeight(TypographyHelper.BISMILLAH_LINE_HEIGHT))
@@ -317,14 +319,16 @@ struct SurahDetailsPage {
         }
 
         // Continuous Text
-        Text(this.buildMushafText())
-        // FIX: Uses the new increased MUSHAF font size and line height
+        Text(this.buildMushafText()
+          // FIX: Uses the new increased MUSHAF font size and line height)
           .fontSize(TypographyHelper.getArabicFontSize(TypographyHelper.QURAN_FONT_SIZE_MUSHAF))
           .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
           .fontColor(this.colors.textWhite)
           .lineHeight(TypographyHelper.getArabicLineHeight(TypographyHelper.QURAN_LINE_HEIGHT_MUSHAF))
-          .textAlign(TextAlign.Start) // Aligns to the Right in RTL
-          .direction(Direction.Rtl)   // Forces RTL layout
+          .textAlign(TextAlign.Start)
+          // Aligns to the Right in RTL
+          .direction(Direction.Rtl)
+          // Forces RTL layout
           .width('100%')
           .padding({ left: 20, right: 20 })
 
@@ -334,72 +338,72 @@ struct SurahDetailsPage {
   }
 
   private async loadInitialData(): Promise<void> {
-    this.isLoading = true;
-    const params = router.getParams() as Record<string, Object>;
-    const targetId = params ? (params['surahId'] as number || 1) : 1;
-    const paramStart = params ? params['startVerse'] : null;
-    const paramEnd = params ? params['endVerse'] : null;
+    this.isLoading = true
+    const params = router.getParams() as Record<string, Object>
+    const targetId = params ? (params['surahId'] as number) || 1 : 1
+    const paramStart = params ? params['startVerse'] : null
+    const paramEnd = params ? params['endVerse'] : null
 
-    this.startVerse = typeof paramStart === 'number' ? paramStart : 1;
-    this.endVerse = typeof paramEnd === 'number' ? paramEnd : null;
+    this.startVerse = typeof paramStart === 'number' ? paramStart : 1
+    this.endVerse = typeof paramEnd === 'number' ? paramEnd : null
 
-    const ctx = getContext(this) as common.UIAbilityContext;
-    this.allSurahs = await QuranService.loadSurahs(ctx, this.appLanguage);
+    const ctx = getContext(this) as common.UIAbilityContext
+    this.allSurahs = await QuranService.loadSurahs(ctx, this.appLanguage)
 
-    const idx = this.allSurahs.findIndex((s: CompleteSurah): boolean => s.id === targetId);
-    this.currentIndex = idx >= 0 ? idx : 0;
+    const idx = this.allSurahs.findIndex((s: CompleteSurah): boolean => s.id === targetId)
+    this.currentIndex = idx >= 0 ? idx : 0
 
-    await this.loadCurrentSurah(true);
-    this.isLoading = false;
+    await this.loadCurrentSurah(true)
+    this.isLoading = false
   }
 
   private async loadCurrentSurah(isInitial: boolean): Promise<void> {
     if (this.currentIndex < 0 || this.currentIndex >= this.allSurahs.length) {
-      return;
+      return
     }
 
-    const ctx = getContext(this) as common.UIAbilityContext;
-    const meta = this.allSurahs[this.currentIndex];
+    const ctx = getContext(this) as common.UIAbilityContext
+    const meta = this.allSurahs[this.currentIndex]
 
     // Load into a local — ArkTS narrows locals across `if` guards,
     // unlike class properties. All subsequent access goes through
     // `loaded`, which is guaranteed non-null after the guard.
-    const transLang = this.getQuranTranslationLang();
-    const loaded = await QuranService.loadSurah(ctx, meta.id, transLang);
+    const transLang = this.getQuranTranslationLang()
+    const loaded = await QuranService.loadSurah(ctx, meta.id, transLang)
 
-    this.surah = loaded;
+    this.surah = loaded
 
     if (loaded === null) { // quran.db failed to load (extraction error, missing row, etc.).
       // Keep the loading spinner in build() visible so the user sees
       // something rather than a blank page. A proper error state can
       // be added in a follow-up — for now, degrade gracefully.
-      console.error('[SurahDetails] loadSurah returned null for surah ' + meta.id);
-      return;
+      console.error('[SurahDetails] loadSurah returned null for surah ' + meta.id)
+      return
     }
 
-    this.currentMushafSurahName = this.appLanguage === 'ar' ? `سورة ${loaded.nameArabic}` : loaded.nameTransliteration;
+    this.currentMushafSurahName = this.appLanguage === 'ar' ? `سورة ${loaded.nameArabic}` : loaded.nameTransliteration
 
     if (!isInitial) {
-      this.startVerse = 1;
-      this.endVerse = null;
+      this.startVerse = 1
+      this.endVerse = null
     }
 
     if (this.startVerse > 1 || this.endVerse !== null) {
-      const end = this.endVerse !== null ? this.endVerse : loaded.ayahCount;
-      this.displayVerses = loaded.verses.filter((v: Verse): boolean => v.ayah >= this.startVerse && v.ayah <= end);
+      const end = this.endVerse !== null ? this.endVerse : loaded.ayahCount
+      this.displayVerses = loaded.verses.filter((v: Verse): boolean => v.ayah >= this.startVerse && v.ayah <= end)
     } else {
       if (loaded.id === 1) {
-        this.displayVerses = loaded.verses.filter((v: Verse): boolean => v.ayah !== 1);
+        this.displayVerses = loaded.verses.filter((v: Verse): boolean => v.ayah !== 1)
       } else {
-        this.displayVerses = loaded.verses;
+        this.displayVerses = loaded.verses
       }
     }
   }
 
   private goToNext(): void {
     if (this.currentIndex < this.allSurahs.length - 1) {
-      this.currentIndex++;
-      this.loadCurrentSurah(false).catch((e: Error) => console.error('[SurahDetails] load next failed', e));
+      this.currentIndex++
+      this.loadCurrentSurah(false).catch((e: Error) => console.error('[SurahDetails] load next failed', e))
     }
   }
 
@@ -409,8 +413,8 @@ struct SurahDetailsPage {
 
   private goToPrevious(): void {
     if (this.currentIndex > 0) {
-      this.currentIndex--;
-      this.loadCurrentSurah(false).catch((e: Error) => console.error('[SurahDetails] load prev failed', e));
+      this.currentIndex--
+      this.loadCurrentSurah(false).catch((e: Error) => console.error('[SurahDetails] load prev failed', e))
     }
   }
 
@@ -420,70 +424,70 @@ struct SurahDetailsPage {
   }
 
   private toArabicNumerals(num: number): string {
-    const arabicDigits: string[] = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-    return num.toString().split('').map((d: string): string => arabicDigits[parseInt(d, 10)]).join('');
+    const arabicDigits: string[] = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+    return num.toString().split('').map((d: string): string => arabicDigits[parseInt(d, 10)]).join('')
   }
 
   private isRtl(): boolean {
-    return L.isRtlLang(this.appLanguage);
+    return L.isRtlLang(this.appLanguage)
   }
 
   private getFormattedVerseForReading(verse: Verse): string { // 1. Clean the Arabic text
-    const cleanArabic = this.stripTrailingArabicNumber(verse.arabic);
-    const arabicNum = this.toArabicNumerals(verse.ayah);
+    const cleanArabic = this.stripTrailingArabicNumber(verse.arabic)
+    const arabicNum = this.toArabicNumerals(verse.ayah)
 
     // 2. Add the Rub el Hizb star with non-breaking spaces (Exactly like Mushaf)
-    const marker = `\u00A0\u200F۞`;
+    const marker = `\u00A0\u200F۞`
 
-    return cleanArabic + marker;
+    return cleanArabic + marker
   }
 
   private getTranslationForVerse(verse: Verse): string {
-    const transLang = this.getQuranTranslationLang();
+    const transLang = this.getQuranTranslationLang()
     if (transLang === 'ar') {
-      return '';
+      return ''
     }
     if (!verse.translations) {
-      return '';
+      return ''
     }
-    return verse.translations[transLang] || verse.translations['en'] || '';
+    return verse.translations[transLang] || verse.translations['en'] || ''
   }
 
   private tr(key: string): string {
-    return L.get(key, this.appLanguage);
+    return L.get(key, this.appLanguage)
   }
 
   private buildMushafText(): string {
-    const s = this.surah;
+    const s = this.surah
     if (s === null || this.displayVerses.length === 0) {
-      return '';
+      return ''
     }
-    let text = '';
+    let text = ''
     for (const v of this.displayVerses) {
-      const cleanArabic = this.stripTrailingArabicNumber(v.arabic);
-      const arabicNum = this.toArabicNumerals(v.ayah);
-      const marker = `\u00A0\u200F۞ ${arabicNum}\u200F\u00A0`;
-      text += cleanArabic + marker;
+      const cleanArabic = this.stripTrailingArabicNumber(v.arabic)
+      const arabicNum = this.toArabicNumerals(v.ayah)
+      const marker = `\u00A0\u200F۞ ${arabicNum}\u200F\u00A0`
+      text += cleanArabic + marker
     }
-    return text;
+    return text
   }
 
   private getSurahTitle(): string {
-    const s = this.surah;
+    const s = this.surah
     if (s === null) {
-      return '';
+      return ''
     }
     if (this.appLanguage === 'ar') {
-      return `سورة ${s.nameArabic}`;
+      return `سورة ${s.nameArabic}`
     }
-    return s.nameTransliteration;
+    return s.nameTransliteration
   }
 
   private getQuranTranslationLang(): string {
     if (this.quranTransLang === 'default' || this.quranTransLang === '') {
-      return this.appLanguage;
+      return this.appLanguage
     }
-    return this.quranTransLang;
+    return this.quranTransLang
   }
 
   private sourceLabelRevelation(label_rev: string): string {
@@ -492,7 +496,7 @@ struct SurahDetailsPage {
     } else if (label_rev === 'Medinan') {
       return L.get('revelation_place_madinah', this.appLanguage)
     } else {
-      return label_rev;
+      return label_rev
     }
   }
 }

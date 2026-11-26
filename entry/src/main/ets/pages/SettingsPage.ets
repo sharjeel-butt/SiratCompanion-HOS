@@ -1,17 +1,17 @@
 // entry/src/main/ets/pages/SettingsPage.ets
 
-import { mediaquery, promptAction, router } from '@kit.ArkUI';
-import { common } from '@kit.AbilityKit';
-import { pasteboard } from '@kit.BasicServicesKit';
-import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
-import { AppRestartHelper } from '../core/app/AppRestartHelper';
-import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator';
-import { PrayerOffsets, SettingsHelper } from '../settings/SettingsHelper';
-import { LocationData, LocationHelper } from '../location/LocationUtils';
-import { LocationCache } from '../location/LocationCache';
-import { CategoryHeader } from '../components/CategoryHeader';
-import { CalculationSource, LocationMode, PickerItem } from '../settings/SettingsModels';
+import { mediaquery, promptAction, router } from '@kit.ArkUI'
+import { common } from '@kit.AbilityKit'
+import { pasteboard } from '@kit.BasicServicesKit'
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
+import { AppRestartHelper } from '../core/app/AppRestartHelper'
+import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator'
+import { PrayerOffsets, SettingsHelper } from '../settings/SettingsHelper'
+import { LocationData, LocationHelper } from '../location/LocationUtils'
+import { LocationCache } from '../location/LocationCache'
+import { CategoryHeader } from '../components/CategoryHeader'
+import { CalculationSource, LocationMode, PickerItem } from '../settings/SettingsModels'
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -21,30 +21,30 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_SETTINGS_INITIAL_CATEGORY,
   STORAGE_KEY_THEME_MODE
-} from '../core/common/StorageKeys';
-import { HijriCalendarType } from '../hijricalendar/HijriCalendarType';
-import { UserBackupService } from '../backup/UserBackupService';
-import { OffsetKey, PrayerOffsetsHelper } from '../prayer/PrayerOffsetsHelper';
+} from '../core/common/StorageKeys'
+import { HijriCalendarType } from '../hijricalendar/HijriCalendarType'
+import { UserBackupService } from '../backup/UserBackupService'
+import { OffsetKey, PrayerOffsetsHelper } from '../prayer/PrayerOffsetsHelper'
 import {
   MAX_BEFORE_MINUTES,
   MIN_BEFORE_MINUTES,
   NotificationHelper,
   STEP_BEFORE_MINUTES
-} from '../prayer/NotificationHelper';
-import { AppLogger } from '../core/app/AppLogger';
-import { AppInfoHelper, AppInfoSnapshot } from '../core/app/AppInfoHelper';
-import { L } from '../i18n/LocalizationHelper';
-import { Breakpoints } from '../core/layout/Breakpoints';
-import { CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED } from '../core/common/FeatureFlags';
-import { NavHelper } from '../core/util/NavHelper';
-import { SettingsRow } from '../settings/SettingsRow';
-import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
-import { WidgetHelper } from '../widgets/WidgetHelper';
-import { OfflineCityLookup } from '../location/OfflineCityLookup';
+} from '../core/notifications/NotificationHelper'
+import { AppLogger } from '../core/app/AppLogger'
+import { AppInfoHelper, AppInfoSnapshot } from '../core/app/AppInfoHelper'
+import { L } from '../i18n/LocalizationHelper'
+import { Breakpoints } from '../core/layout/Breakpoints'
+import { CALENDAR_REMINDERS_ENABLED, NOTIFICATIONS_ENABLED } from '../core/common/FeatureFlags'
+import { NavHelper } from '../core/util/NavHelper'
+import { SettingsRow } from '../settings/SettingsRow'
+import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper'
+import { WidgetHelper } from '../widgets/WidgetHelper'
+import { OfflineCityLookup } from '../location/OfflineCityLookup'
 
-const MAX_HIJRI_OFFSET = 3;
+const MAX_HIJRI_OFFSET = 3
 
-type PickerKind = 'none' | 'method' | 'asr' | 'source' | 'hijriType';
+type PickerKind = 'none' | 'method' | 'asr' | 'source' | 'hijriType'
 
 @Entry
 @Component
@@ -107,34 +107,34 @@ struct SettingsPage {
   // ============================================================
 
   aboutToAppear(): void {
-    this.currentLanguage = this.appLanguage;
-    this.colors = PageTheme.compute(this.themeMode);
+    this.currentLanguage = this.appLanguage
+    this.colors = PageTheme.compute(this.themeMode)
     this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
-      this.colors = c;
-    });
+      this.colors = c
+    })
 
     // Read the one-shot category hint set by Home / Prayer before
     // navigating. Cleared immediately so a subsequent open via the
     // hamburger menu defaults to Location.
-    const hint = AppStorage.get<string>(STORAGE_KEY_SETTINGS_INITIAL_CATEGORY);
+    const hint = AppStorage.get<string>(STORAGE_KEY_SETTINGS_INITIAL_CATEGORY)
     if (hint !== undefined && hint.length > 0) {
-      this.expandedCategory = hint;
-      AppStorage.setOrCreate(STORAGE_KEY_SETTINGS_INITIAL_CATEGORY, '');
+      this.expandedCategory = hint
+      AppStorage.setOrCreate(STORAGE_KEY_SETTINGS_INITIAL_CATEGORY, '')
     }
 
-    this.appInfo = AppInfoHelper.get();
-    this.reload();
+    this.appInfo = AppInfoHelper.get()
+    this.reload()
   }
 
   aboutToDisappear(): void {
-    PageTheme.uninstallSystemListener(this.systemDarkListener);
-    this.systemDarkListener = null;
+    PageTheme.uninstallSystemListener(this.systemDarkListener)
+    this.systemDarkListener = null
   }
 
   onPageShow(): void {
-    this.currentLanguage = this.appLanguage;
-    this.colors = PageTheme.compute(this.themeMode);
-    this.reload();
+    this.currentLanguage = this.appLanguage
+    this.colors = PageTheme.compute(this.themeMode)
+    this.reload()
   }
 
   // ============================================================
@@ -157,7 +157,7 @@ struct SettingsPage {
                 expanded: this.expandedCategory === 'Location',
                 currentLanguage: this.currentLanguage,
                 onTap: () => {
-                  this.expandedCategory = this.expandedCategory === 'Location' ? null : 'Location';
+                  this.expandedCategory = this.expandedCategory === 'Location' ? null : 'Location'
                 }
               })
               if (this.expandedCategory === 'Location') {
@@ -172,7 +172,7 @@ struct SettingsPage {
                 expanded: this.expandedCategory === 'Prayer Times',
                 currentLanguage: this.currentLanguage,
                 onTap: () => {
-                  this.expandedCategory = this.expandedCategory === 'Prayer Times' ? null : 'Prayer Times';
+                  this.expandedCategory = this.expandedCategory === 'Prayer Times' ? null : 'Prayer Times'
                 }
               })
               if (this.expandedCategory === 'Prayer Times') {
@@ -188,7 +188,7 @@ struct SettingsPage {
                   expanded: this.expandedCategory === 'Notifications',
                   currentLanguage: this.currentLanguage,
                   onTap: () => {
-                    this.expandedCategory = this.expandedCategory === 'Notifications' ? null : 'Notifications';
+                    this.expandedCategory = this.expandedCategory === 'Notifications' ? null : 'Notifications'
                   }
                 })
                 if (this.expandedCategory === 'Notifications') {
@@ -204,7 +204,7 @@ struct SettingsPage {
                 expanded: this.expandedCategory === 'Hijri Calendar',
                 currentLanguage: this.currentLanguage,
                 onTap: () => {
-                  this.expandedCategory = this.expandedCategory === 'Hijri Calendar' ? null : 'Hijri Calendar';
+                  this.expandedCategory = this.expandedCategory === 'Hijri Calendar' ? null : 'Hijri Calendar'
                 }
               })
               if (this.expandedCategory === 'Hijri Calendar') {
@@ -219,7 +219,7 @@ struct SettingsPage {
                 expanded: this.expandedCategory === 'Backup & Restore',
                 currentLanguage: this.currentLanguage,
                 onTap: () => {
-                  this.expandedCategory = this.expandedCategory === 'Backup & Restore' ? null : 'Backup & Restore';
+                  this.expandedCategory = this.expandedCategory === 'Backup & Restore' ? null : 'Backup & Restore'
                 }
               })
               if (this.expandedCategory === 'Backup & Restore') {
@@ -234,7 +234,7 @@ struct SettingsPage {
                 expanded: this.expandedCategory === 'Logs',
                 currentLanguage: this.currentLanguage,
                 onTap: () => {
-                  this.expandedCategory = this.expandedCategory === 'Logs' ? null : 'Logs';
+                  this.expandedCategory = this.expandedCategory === 'Logs' ? null : 'Logs'
                 }
               })
               if (this.expandedCategory === 'Logs') {
@@ -249,7 +249,7 @@ struct SettingsPage {
                 expanded: this.expandedCategory === 'About',
                 currentLanguage: this.currentLanguage,
                 onTap: () => {
-                  this.expandedCategory = this.expandedCategory === 'About' ? null : 'About';
+                  this.expandedCategory = this.expandedCategory === 'About' ? null : 'About'
                 }
               })
               if (this.expandedCategory === 'About') {
@@ -277,10 +277,10 @@ struct SettingsPage {
       // ---- Picker overlay (topmost) ----
       if (this.showPickerSheet) {
         this.PickerOverlay(this.pickerTitle(), this.pickerIcon(), this.pickerItems(), (id: string) => {
-          this.pickItem(id);
+          this.pickItem(id)
         }, () => {
-          this.showPickerSheet = false;
-          this.activePicker = 'none';
+          this.showPickerSheet = false
+          this.activePicker = 'none'
         })
       }
     }
@@ -295,7 +295,7 @@ struct SettingsPage {
       blurStyle: BlurStyle.Thick,
       maskColor: this.colors.overlayDim,
       onDisappear: () => {
-        this.showLogViewer = false;
+        this.showLogViewer = false
       }
     })
   }
@@ -335,7 +335,7 @@ struct SettingsPage {
       .enabled(!this.isBackupBusy)
       .opacity(this.isBackupBusy ? 0.5 : 1.0)
       .onClick(() => {
-        this.handleBackup();
+        this.handleBackup()
       })
 
       // ---- Restore from File ----
@@ -371,7 +371,7 @@ struct SettingsPage {
       .enabled(!this.isBackupBusy)
       .opacity(this.isBackupBusy ? 0.5 : 1.0)
       .onClick(() => {
-        this.handleRestore();
+        this.handleRestore()
       })
 
       // ---- Footer ----
@@ -449,7 +449,7 @@ struct SettingsPage {
         .borderRadius(10)
         .border({ width: 1, color: this.colors.borderStrong })
         .onClick(() => {
-          this.refreshLocation();
+          this.refreshLocation()
         })
       }.width('100%').padding({ bottom: 14 }).alignItems(VerticalAlign.Center)
 
@@ -473,7 +473,7 @@ struct SettingsPage {
               .inputFilter('[\\-0-9\\.]')
               .direction(Direction.Ltr)
               .onChange((v: string) => {
-                this.manualLatInput = v;
+                this.manualLatInput = v
               })
               .fontSize(14)
               .fontColor(this.colors.textWhite)
@@ -502,7 +502,7 @@ struct SettingsPage {
               .inputFilter('[\\-0-9\\.]')
               .direction(Direction.Ltr)
               .onChange((v: string) => {
-                this.manualLngInput = v;
+                this.manualLngInput = v
               })
               .fontSize(14)
               .fontColor(this.colors.textWhite)
@@ -529,7 +529,7 @@ struct SettingsPage {
             })
               .type(InputType.Normal)
               .onChange((v: string) => {
-                this.manualCityInput = v;
+                this.manualCityInput = v
               })
               .fontSize(14)
               .fontColor(this.colors.textWhite)
@@ -556,7 +556,7 @@ struct SettingsPage {
           .backgroundColor(this.colors.accentGold)
           .borderRadius(10)
           .onClick(() => {
-            this.saveManualCoords();
+            this.saveManualCoords()
           })
         }.width('100%').padding({ bottom: 14 })
       }
@@ -641,7 +641,7 @@ struct SettingsPage {
         right: mode === LocationMode.GPS ? 6 : 0, left: mode === LocationMode.MANUAL ? 6 : 0
       })
       .onClick(() => {
-        this.pickLocationMode(mode);
+        this.pickLocationMode(mode)
       })
   }
 
@@ -654,8 +654,8 @@ struct SettingsPage {
         description: this.tr('convention_desc'),
         value: SettingsHelper.getCalcMethodLabel(this.calcMethod),
         onTap: () => {
-          this.activePicker = 'method';
-          this.showPickerSheet = true;
+          this.activePicker = 'method'
+          this.showPickerSheet = true
         }
       })
 
@@ -666,8 +666,8 @@ struct SettingsPage {
         value: this.isMadhabLocked() ? this.tr('asr_standard') : SettingsHelper.getAsrRuleLabel(this.asrRule),
         onTap: () => {
           if (!this.isMadhabLocked()) {
-            this.activePicker = 'asr';
-            this.showPickerSheet = true;
+            this.activePicker = 'asr'
+            this.showPickerSheet = true
           }
         }
       })
@@ -678,8 +678,8 @@ struct SettingsPage {
         description: this.tr('source_desc'),
         value: SettingsHelper.getCalcSourceLabel(this.calcSource),
         onTap: () => {
-          this.activePicker = 'source';
-          this.showPickerSheet = true;
+          this.activePicker = 'source'
+          this.showPickerSheet = true
         }
       })
 
@@ -691,9 +691,9 @@ struct SettingsPage {
         description: '',
         value: this.tr('rounding_method') + ' · ' + this.tr('midnight_method') + ' · ' + this.tr('high_latitude'),
         onTap: () => {
-          NavHelper.prepareForward();
+          NavHelper.prepareForward()
           router.pushUrl({ url: 'pages/AdvancedCalcPage' })
-            .catch((err: Error) => console.error('Navigation failed: ' + err.message));
+            .catch((err: Error) => console.error('Navigation failed: ' + err.message))
         }
       })
     }
@@ -725,7 +725,7 @@ struct SettingsPage {
           .opacity(0.8)
           .flexShrink(0)
           .rotate({
-            angle: this.showOffsets ? 0 : (this.isRtl() ? 180 : 0)
+            angle: this.showOffsets ? 0 : this.isRtl() ? 180 : 0
           })
           .animation({ duration: 200, curve: Curve.EaseInOut })
       }.width('100%').padding({
@@ -734,7 +734,7 @@ struct SettingsPage {
         left: 16,
         right: 16
       }).onClick(() => {
-        this.showOffsets = !this.showOffsets;
+        this.showOffsets = !this.showOffsets
       })
 
       if (this.showOffsets) {
@@ -765,7 +765,7 @@ struct SettingsPage {
           .borderRadius(10)
           .margin({ top: 10, bottom: 4 })
           .onClick(() => {
-            this.resetOffsets();
+            this.resetOffsets()
           })
         }.width('100%').padding({ left: 8, right: 8, bottom: 12 })
       }
@@ -791,7 +791,7 @@ struct SettingsPage {
       .borderRadius(10)
       .border({ width: 1, color: this.colors.borderMedium })
       .onClick(() => {
-        this.changeOffset(key, -1);
+        this.changeOffset(key, -1)
       })
 
       Text(PrayerOffsetsHelper.format(PrayerOffsetsHelper.get(this.offsets, key)))
@@ -809,7 +809,7 @@ struct SettingsPage {
       .backgroundColor(this.colors.accentGold)
       .borderRadius(10)
       .onClick(() => {
-        this.changeOffset(key, 1);
+        this.changeOffset(key, 1)
       })
     }.width('100%').padding({
       top: 8,
@@ -834,7 +834,7 @@ struct SettingsPage {
         Toggle({ type: ToggleType.Switch, isOn: this.notifMaster })
           .selectedColor(this.colors.accentGold)
           .onChange((isOn: boolean) => {
-            this.toggleNotifMaster(isOn);
+            this.toggleNotifMaster(isOn)
           })
       }
       .width('100%')
@@ -862,7 +862,7 @@ struct SettingsPage {
       .enabled(this.notifMaster)
       .opacity(this.notifMaster ? 1.0 : 0.5)
       .onClick(() => {
-        this.sendTestNotification();
+        this.sendTestNotification()
       })
 
       if (this.notifDiagnostic.length > 0) {
@@ -904,7 +904,7 @@ struct SettingsPage {
             .border({ width: 1, color: this.colors.borderMedium })
             .enabled(this.notifBefore > MIN_BEFORE_MINUTES)
             .onClick(() => {
-              this.changeNotifBefore(-STEP_BEFORE_MINUTES);
+              this.changeNotifBefore(-STEP_BEFORE_MINUTES)
             })
 
             Column() {
@@ -927,7 +927,7 @@ struct SettingsPage {
             .borderRadius(10)
             .enabled(this.notifBefore < MAX_BEFORE_MINUTES)
             .onClick(() => {
-              this.changeNotifBefore(STEP_BEFORE_MINUTES);
+              this.changeNotifBefore(STEP_BEFORE_MINUTES)
             })
           }.width('100%').alignItems(VerticalAlign.Center)
         }
@@ -1046,7 +1046,7 @@ struct SettingsPage {
     .backgroundColor(this.colors.tintSubtle)
     .borderRadius(12)
     .onClick(() => {
-      this.openLogViewer();
+      this.openLogViewer()
     })
   }
 
@@ -1059,8 +1059,8 @@ struct SettingsPage {
         description: this.tr('hijri_calendar_type_desc'),
         value: SettingsHelper.getHijriCalendarTypeLabel(this.hijriCalendarType, this.currentLanguage),
         onTap: () => {
-          this.activePicker = 'hijriType';
-          this.showPickerSheet = true;
+          this.activePicker = 'hijriType'
+          this.showPickerSheet = true
         }
       })
 
@@ -1089,7 +1089,7 @@ struct SettingsPage {
           .border({ width: 1, color: this.colors.borderMedium })
           .enabled(this.hijriOffset > -MAX_HIJRI_OFFSET)
           .onClick(() => {
-            this.changeHijriOffset(-1);
+            this.changeHijriOffset(-1)
           })
 
           Text(this.formatHijriOffset())
@@ -1111,7 +1111,7 @@ struct SettingsPage {
           .borderRadius(10)
           .enabled(this.hijriOffset < MAX_HIJRI_OFFSET)
           .onClick(() => {
-            this.changeHijriOffset(1);
+            this.changeHijriOffset(1)
           })
         }.alignItems(VerticalAlign.Center)
       }
@@ -1183,12 +1183,12 @@ struct SettingsPage {
             .fillColor(this.colors.accentGold)
             .rotate({ angle: this.isRtl() ? 180 : 0 })
         }.width('100%').padding({ top: 8, bottom: 8 }).onClick(() => {
-          const ctx = getContext(this) as common.UIAbilityContext;
+          const ctx = getContext(this) as common.UIAbilityContext
           ctx.startAbility({
             action: 'ohos.want.action.viewData',
             entities: ['entity.system.browsable'],
             uri: this.tr('feature_issues_link')
-          }).catch((e: Error) => console.error(e.message));
+          }).catch((e: Error) => console.error(e.message))
         })
 
         // --- Telegram Row ---
@@ -1207,18 +1207,18 @@ struct SettingsPage {
             .fillColor(this.colors.accentGold)
             .rotate({ angle: this.isRtl() ? 180 : 0 })
         }.width('100%').padding({ top: 8, bottom: 8 }).onClick(() => {
-          const ctx = getContext(this) as common.UIAbilityContext;
+          const ctx = getContext(this) as common.UIAbilityContext
           ctx.startAbility({
             action: 'ohos.want.action.viewData',
             entities: ['entity.system.browsable'],
             uri: this.tr('telegram_channel_link')
-          }).catch((e: Error) => console.error(e.message));
+          }).catch((e: Error) => console.error(e.message))
         })
 
         // --- Privacy Policy Row ---
         Row({ space: 8 }) {
           Image($r('app.media.ic_privacy')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
-          Text(this.tr('privacy_step_title')) // Uses the existing wizard string for "Privacy Policy"
+          Text(this.tr('privacy_step_title') // Uses the existing wizard string for "Privacy Policy")
             .fontSize(14)
             .fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
@@ -1231,7 +1231,7 @@ struct SettingsPage {
             .fillColor(this.colors.accentGold)
             .rotate({ angle: this.isRtl() ? 180 : 0 })
         }.width('100%').padding({ top: 8, bottom: 8 }).onClick(() => {
-          this.openPrivacyPolicy();
+          this.openPrivacyPolicy()
         })
 
         // --- Licenses Row (existing) ---
@@ -1248,8 +1248,8 @@ struct SettingsPage {
             .fillColor(this.colors.accentGold)
             .rotate({ angle: this.isRtl() ? 180 : 0 })
         }.width('100%').padding({ top: 8, bottom: 8 }).onClick(() => {
-          NavHelper.prepareForward();
-          router.pushUrl({ url: 'pages/LicensesPage' }).catch((e: Error) => console.error(e.message));
+          NavHelper.prepareForward()
+          router.pushUrl({ url: 'pages/LicensesPage' }).catch((e: Error) => console.error(e.message))
         })
       }
       .width('100%')
@@ -1291,7 +1291,7 @@ struct SettingsPage {
   PickerOverlay(title: string, icon: Resource, items: PickerItem[], onSelect: (id: string) => void,
     onCancel: () => void) { // ---- Dim backdrop ----
     Column().width('100%').height('100%').backgroundColor(this.colors.overlayDim).onClick(() => {
-      onCancel();
+      onCancel()
     })
 
     // ---- Bottom sheet ----
@@ -1369,7 +1369,7 @@ struct SettingsPage {
             .borderRadius(12)
             .margin({ bottom: 4 })
             .onClick(() => {
-              onSelect(item.id);
+              onSelect(item.id)
             })
           }, (item: PickerItem) => `${this.activePicker}-${item.id}-${item.selected ? 's' : 'u'}`)
         }.width('100%').padding({
@@ -1390,7 +1390,7 @@ struct SettingsPage {
         .borderRadius(12)
         .margin({ top: 8, bottom: 24 })
         .onClick(() => {
-          onCancel();
+          onCancel()
         })
     }
     .width('100%')
@@ -1436,7 +1436,7 @@ struct SettingsPage {
         .alignItems(VerticalAlign.Center)
         .flexShrink(0)
         .onClick(() => {
-          this.showLogViewer = false;
+          this.showLogViewer = false
         })
       }.width('100%').padding({
         top: 16,
@@ -1482,7 +1482,7 @@ struct SettingsPage {
         .backgroundColor(this.colors.accentGold)
         .borderRadius(10)
         .onClick(() => {
-          this.copyLogsToClipboard();
+          this.copyLogsToClipboard()
         })
 
         Button() {
@@ -1493,7 +1493,7 @@ struct SettingsPage {
         .backgroundColor(this.colors.tintSoft)
         .borderRadius(10)
         .onClick(() => {
-          this.clearLogs();
+          this.clearLogs()
         })
       }.width('100%').padding({
         left: 20,
@@ -1520,36 +1520,36 @@ struct SettingsPage {
   }
 
   private isMadhabLocked(): boolean {
-    return this.calcMethod === CalculationMethod.TURKEY || this.calcMethod === CalculationMethod.TURKEY_EUROPE;
+    return this.calcMethod === CalculationMethod.TURKEY || this.calcMethod === CalculationMethod.TURKEY_EUROPE
   }
 
   private pickerTitle(): string {
     switch (this.activePicker) {
       case 'method':
-        return this.tr('convention');
+        return this.tr('convention')
       case 'asr':
-        return this.tr('madhab');
+        return this.tr('madhab')
       case 'source':
-        return this.tr('source');
+        return this.tr('source')
       case 'hijriType':
-        return this.tr('hijri_calendar_type');
+        return this.tr('hijri_calendar_type')
       default:
-        return '';
+        return ''
     }
   }
 
   private pickerIcon(): Resource {
     switch (this.activePicker) {
       case 'method':
-        return $r('app.media.ic_nav_mosque');
+        return $r('app.media.ic_nav_mosque')
       case 'asr':
-        return $r('app.media.ic_sunrise');
+        return $r('app.media.ic_sunrise')
       case 'source':
-        return $r('app.media.ic_globe');
+        return $r('app.media.ic_globe')
       case 'hijriType':
-        return $r('app.media.ic_hijri_type');
+        return $r('app.media.ic_hijri_type')
       default:
-        return $r('app.media.ic_settings');
+        return $r('app.media.ic_settings')
     }
   }
 
@@ -1560,37 +1560,37 @@ struct SettingsPage {
   private pickerItems(): PickerItem[] {
     switch (this.activePicker) {
       case 'method':
-        return SettingsHelper.buildMethodPickerItems(this.calcMethod);
+        return SettingsHelper.buildMethodPickerItems(this.calcMethod)
       case 'asr':
-        return SettingsHelper.buildAsrPickerItems(this.asrRule);
+        return SettingsHelper.buildAsrPickerItems(this.asrRule)
       case 'source':
-        return SettingsHelper.buildSourcePickerItems(this.calcSource);
+        return SettingsHelper.buildSourcePickerItems(this.calcSource)
       case 'hijriType':
-        return SettingsHelper.buildHijriCalendarTypePickerItems(this.hijriCalendarType);
+        return SettingsHelper.buildHijriCalendarTypePickerItems(this.hijriCalendarType)
       default:
-        return [];
+        return []
     }
   }
 
   private pickItem(id: string): void {
     switch (this.activePicker) {
       case 'method':
-        this.pickMethod(id);
-        break;
+        this.pickMethod(id)
+        break
       case 'asr':
-        this.pickAsrRule(id);
-        break;
+        this.pickAsrRule(id)
+        break
       case 'source':
-        this.pickSource(id);
-        break;
+        this.pickSource(id)
+        break
       case 'hijriType':
-        this.pickHijriCalendarType(id);
-        break;
+        this.pickHijriCalendarType(id)
+        break
       default:
-        break;
+        break
     }
-    this.showPickerSheet = false;
-    this.activePicker = 'none';
+    this.showPickerSheet = false
+    this.activePicker = 'none'
   }
 
   // ============================================================
@@ -1598,396 +1598,396 @@ struct SettingsPage {
   // ============================================================
 
   private tr(key: string): string {
-    return L.get(key, this.currentLanguage);
+    return L.get(key, this.currentLanguage)
   }
 
   private isRtl(): boolean {
-    return L.isRtlLang(this.currentLanguage);
+    return L.isRtlLang(this.currentLanguage)
   }
 
   private onThemeModeChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   private onLanguageChanged(): void {
-    this.currentLanguage = this.appLanguage;
-    this.appInfo = AppInfoHelper.get();
-    this.reload();
+    this.currentLanguage = this.appLanguage
+    this.appInfo = AppInfoHelper.get()
+    this.reload()
   }
 
   private async onAppForegrounded(): Promise<void> {
-    this.appInfo = AppInfoHelper.get();
-    await this.reload();
+    this.appInfo = AppInfoHelper.get()
+    await this.reload()
   }
 
   private async openPrivacyPolicy(): Promise<void> { // 👇 FIX: Open the local page instead of the browser
-    NavHelper.prepareForward();
-    router.pushUrl({ url: 'pages/PrivacyPolicyPage' }).catch((e: Error) => console.error(e.message));
+    NavHelper.prepareForward()
+    router.pushUrl({ url: 'pages/PrivacyPolicyPage' }).catch((e: Error) => console.error(e.message))
   }
 
   private async reload(): Promise<void> {
-    const data = await SettingsHelper.loadAll();
-    this.calcMethod = data.method;
-    this.asrRule = data.asr;
-    this.calcSource = data.source;
-    this.offsets = await SettingsHelper.getPrayerOffsets();
+    const data = await SettingsHelper.loadAll()
+    this.calcMethod = data.method
+    this.asrRule = data.asr
+    this.calcSource = data.source
+    this.offsets = await SettingsHelper.getPrayerOffsets()
 
-    const ns = await SettingsHelper.getNotificationSettings();
-    this.notifMaster = ns.masterEnabled;
-    this.notifBefore = ns.beforeMinutes;
-    this.notifFajr = ns.fajrEnabled;
-    this.notifDhuhr = ns.dhuhrEnabled;
-    this.notifAsr = ns.asrEnabled;
-    this.notifMaghrib = ns.maghribEnabled;
-    this.notifIsha = ns.ishaEnabled;
+    const ns = await SettingsHelper.getNotificationSettings()
+    this.notifMaster = ns.masterEnabled
+    this.notifBefore = ns.beforeMinutes
+    this.notifFajr = ns.fajrEnabled
+    this.notifDhuhr = ns.dhuhrEnabled
+    this.notifAsr = ns.asrEnabled
+    this.notifMaghrib = ns.maghribEnabled
+    this.notifIsha = ns.ishaEnabled
 
-    const mode = await SettingsHelper.getLocationMode();
-    this.locationMode = mode;
+    const mode = await SettingsHelper.getLocationMode()
+    this.locationMode = mode
 
-    const manual = await SettingsHelper.getManualCoords();
-    this.manualLatInput = manual.lat !== 0 ? manual.lat.toString() : '';
-    this.manualLngInput = manual.lng !== 0 ? manual.lng.toString() : '';
+    const manual = await SettingsHelper.getManualCoords()
+    this.manualLatInput = manual.lat !== 0 ? manual.lat.toString() : ''
+    this.manualLngInput = manual.lng !== 0 ? manual.lng.toString() : ''
 
     if (mode === LocationMode.MANUAL) {
-      this.effectiveLat = manual.lat;
-      this.effectiveLng = manual.lng;
+      this.effectiveLat = manual.lat
+      this.effectiveLng = manual.lng
       if (manual.lat !== 0 || manual.lng !== 0) {
-        const displayCity = this.getDisplayCity(manual.cityName);
-        this.manualCityInput = displayCity; // Update text field
-        this.effectiveCity = `${displayCity} (${this.tr('manual_location')})`;
+        const displayCity = this.getDisplayCity(manual.cityName)
+        this.manualCityInput = displayCity // Update text field
+        this.effectiveCity = `${displayCity} (${this.tr('manual_location')})`
       } else {
-        this.effectiveCity = '—';
-        this.manualCityInput = '';
+        this.effectiveCity = '—'
+        this.manualCityInput = ''
       }
-      this.lastRefreshTime = manual.refresh;
+      this.lastRefreshTime = manual.refresh
     } else {
-      const cached = await LocationCache.load();
+      const cached = await LocationCache.load()
       if (cached) {
-        this.effectiveLat = cached.latitude;
-        this.effectiveLng = cached.longitude;
-        this.effectiveCity = this.getDisplayCity(cached.cityName);
-        this.lastRefreshTime = cached.lastRefreshTime;
+        this.effectiveLat = cached.latitude
+        this.effectiveLng = cached.longitude
+        this.effectiveCity = this.getDisplayCity(cached.cityName)
+        this.lastRefreshTime = cached.lastRefreshTime
       } else {
-        this.effectiveLat = 0;
-        this.effectiveLng = 0;
-        this.effectiveCity = '—';
-        this.lastRefreshTime = 0;
+        this.effectiveLat = 0
+        this.effectiveLng = 0
+        this.effectiveCity = '—'
+        this.lastRefreshTime = 0
       }
     }
   }
 
   private pickMethod(id: string): void {
-    const method = id as CalculationMethod;
-    this.calcMethod = method;
-    SettingsHelper.saveMethod(method);
+    const method = id as CalculationMethod
+    this.calcMethod = method
+    SettingsHelper.saveMethod(method)
   }
 
   private pickAsrRule(id: string): void {
-    const rule = Number(id) as AsrShadowRule;
-    this.asrRule = rule;
-    SettingsHelper.saveAsrRule(rule);
+    const rule = Number(id) as AsrShadowRule
+    this.asrRule = rule
+    SettingsHelper.saveAsrRule(rule)
   }
 
   private pickSource(id: string): void {
-    const source = id as CalculationSource;
+    const source = id as CalculationSource
     if (source === CalculationSource.API) {
       promptAction.showToast({
         message: this.tr('coming_soon'), duration: 1800
-      });
-      return;
+      })
+      return
     }
-    this.calcSource = source;
-    SettingsHelper.saveSource(source);
+    this.calcSource = source
+    SettingsHelper.saveSource(source)
   }
 
   private pickHijriCalendarType(id: string): void {
-    this.hijriCalendarType = id;
-    SettingsHelper.saveHijriCalendarType(id);
+    this.hijriCalendarType = id
+    SettingsHelper.saveHijriCalendarType(id)
   }
 
   private async pickLocationMode(mode: LocationMode): Promise<void> {
-    this.locationMode = mode;
-    SettingsHelper.saveLocationMode(mode);
-    await this.reload();
+    this.locationMode = mode
+    SettingsHelper.saveLocationMode(mode)
+    await this.reload()
   }
 
   private getStorageKeyForOffset(key: OffsetKey): string {
     switch (key) {
       case 'fajr':
-        return SettingsHelper.OFFSET_KEYS.fajr;
+        return SettingsHelper.OFFSET_KEYS.fajr
       case 'dhuhr':
-        return SettingsHelper.OFFSET_KEYS.dhuhr;
+        return SettingsHelper.OFFSET_KEYS.dhuhr
       case 'asr':
-        return SettingsHelper.OFFSET_KEYS.asr;
+        return SettingsHelper.OFFSET_KEYS.asr
       case 'maghrib':
-        return SettingsHelper.OFFSET_KEYS.maghrib;
+        return SettingsHelper.OFFSET_KEYS.maghrib
       case 'isha':
-        return SettingsHelper.OFFSET_KEYS.isha;
+        return SettingsHelper.OFFSET_KEYS.isha
       default:
-        return '';
+        return ''
     }
   }
 
   private changeOffset(key: OffsetKey, delta: number): void {
-    const current = PrayerOffsetsHelper.get(this.offsets, key);
-    const next = PrayerOffsetsHelper.clamp(current + delta);
-    this.offsets = PrayerOffsetsHelper.set(this.offsets, key, next);
+    const current = PrayerOffsetsHelper.get(this.offsets, key)
+    const next = PrayerOffsetsHelper.clamp(current + delta)
+    this.offsets = PrayerOffsetsHelper.set(this.offsets, key, next)
 
-    const storageKey = this.getStorageKeyForOffset(key);
+    const storageKey = this.getStorageKeyForOffset(key)
     if (storageKey.length > 0) {
-      SettingsHelper.saveOffset(storageKey, next);
+      SettingsHelper.saveOffset(storageKey, next)
       WidgetHelper.refreshAll().catch((): void => { // swallow
-      });
+      })
     }
   }
 
   private async resetOffsets(): Promise<void> {
-    const zero = PrayerOffsetsHelper.ZERO;
-    this.offsets = zero;
-    await SettingsHelper.saveAllOffsets(zero);
+    const zero = PrayerOffsetsHelper.ZERO
+    this.offsets = zero
+    await SettingsHelper.saveAllOffsets(zero)
     promptAction.showToast({
       message: this.tr('reset_all_offsets'), duration: 1800
-    });
+    })
   }
 
   private changeHijriOffset(delta: number): void {
-    const next = this.hijriOffset + delta;
+    const next = this.hijriOffset + delta
     if (next < -MAX_HIJRI_OFFSET) {
-      return;
+      return
     }
     if (next > MAX_HIJRI_OFFSET) {
-      return;
+      return
     }
-    this.hijriOffset = next;
-    SettingsHelper.saveHijriOffset(next);
+    this.hijriOffset = next
+    SettingsHelper.saveHijriOffset(next)
   }
 
   private formatHijriOffset(): string {
     if (this.hijriOffset === 0) {
-      return '+0';
+      return '+0'
     }
     if (this.hijriOffset > 0) {
-      return `+${this.hijriOffset}`;
+      return `+${this.hijriOffset}`
     }
-    return `\u2212${Math.abs(this.hijriOffset)}`;
+    return `\u2212${Math.abs(this.hijriOffset)}`
   }
 
   private hijriOffsetDescription(): string {
     if (this.hijriOffset === 0) {
-      return this.tr('matching_standard');
+      return this.tr('matching_standard')
     }
-    const n = Math.abs(this.hijriOffset);
+    const n = Math.abs(this.hijriOffset)
     if (this.hijriOffset > 0) {
-      return `${n} ${this.tr('offset_days_ahead')}`;
+      return `${n} ${this.tr('offset_days_ahead')}`
     }
-    return `${n} ${this.tr('offset_days_behind')}`;
+    return `${n} ${this.tr('offset_days_behind')}`
   }
 
   private async saveManualCoords(): Promise<void> {
-    const lat = parseFloat(this.manualLatInput.trim());
-    const lng = parseFloat(this.manualLngInput.trim());
+    const lat = parseFloat(this.manualLatInput.trim())
+    const lng = parseFloat(this.manualLngInput.trim())
 
     if (isNaN(lat) || lat < -90 || lat > 90) {
       promptAction.showToast({
         message: this.tr('latitude_hint'), duration: 2500
-      });
-      return;
+      })
+      return
     }
     if (isNaN(lng) || lng < -180 || lng > 180) {
       promptAction.showToast({
         message: this.tr('longitude_hint'), duration: 2500
-      });
-      return;
+      })
+      return
     }
 
-    this.isRefreshing = true;
+    this.isRefreshing = true
 
-    let cityName = this.manualCityInput.trim();
+    let cityName = this.manualCityInput.trim()
     if (cityName.length === 0) {
       try {
-        cityName = await LocationHelper.reverseGeocode(lat, lng);
+        cityName = await LocationHelper.reverseGeocode(lat, lng)
       } catch (e) { /* fall through */
       }
-      const unknownLabel = L.get('unknown_location', this.currentLanguage);
+      const unknownLabel = L.get('unknown_location', this.currentLanguage)
       if (cityName === unknownLabel || cityName.length === 0) {
-        cityName = `${lat.toFixed(2)}, ${lng.toFixed(2)}`;
+        cityName = `${lat.toFixed(2)}, ${lng.toFixed(2)}`
       }
     }
 
-    const saved = await SettingsHelper.saveManualCoords(lat, lng, cityName);
-    const displayCity = this.getDisplayCity(saved.cityName);
+    const saved = await SettingsHelper.saveManualCoords(lat, lng, cityName)
+    const displayCity = this.getDisplayCity(saved.cityName)
 
-    this.effectiveLat = saved.lat;
-    this.effectiveLng = saved.lng;
-    this.manualCityInput = displayCity; // <-- Real-time update for text field
-    this.effectiveCity = `${displayCity} (${this.tr('manual_location')})`;
-    this.lastRefreshTime = saved.refresh;
-    this.isRefreshing = false;
+    this.effectiveLat = saved.lat
+    this.effectiveLng = saved.lng
+    this.manualCityInput = displayCity // <-- Real-time update for text field
+    this.effectiveCity = `${displayCity} (${this.tr('manual_location')})`
+    this.lastRefreshTime = saved.refresh
+    this.isRefreshing = false
 
     promptAction.showToast({
       message: `${this.tr('save')}: ${displayCity}`, duration: 2000
-    });
+    })
 
     WidgetHelper.refreshAll().catch(() => {
-    });
+    })
   }
 
   private async refreshLocation(): Promise<void> {
     if (this.isRefreshing) {
-      return;
+      return
     }
-    this.isRefreshing = true;
+    this.isRefreshing = true
 
     if (this.locationMode === LocationMode.MANUAL) {
-      const manual = await SettingsHelper.getManualCoords();
+      const manual = await SettingsHelper.getManualCoords()
       if (manual.lat === 0 && manual.lng === 0) {
-        promptAction.showToast({ message: this.tr('location_desc'), duration: 2000 });
-        this.isRefreshing = false;
-        return;
+        promptAction.showToast({ message: this.tr('location_desc'), duration: 2000 })
+        this.isRefreshing = false
+        return
       }
-      let cityName = this.tr('manual_location');
+      let cityName = this.tr('manual_location')
       try {
-        cityName = await LocationHelper.reverseGeocode(manual.lat, manual.lng);
+        cityName = await LocationHelper.reverseGeocode(manual.lat, manual.lng)
       } catch (e) { /* fall through */
       }
 
-      const saved = await SettingsHelper.saveManualCoords(manual.lat, manual.lng, cityName);
-      const displayCity = this.getDisplayCity(saved.cityName);
+      const saved = await SettingsHelper.saveManualCoords(manual.lat, manual.lng, cityName)
+      const displayCity = this.getDisplayCity(saved.cityName)
 
-      this.effectiveLat = saved.lat;
-      this.effectiveLng = saved.lng;
-      this.manualCityInput = displayCity; // <-- Update text field
-      this.effectiveCity = `${displayCity} (${this.tr('manual_location')})`;
-      this.lastRefreshTime = saved.refresh;
+      this.effectiveLat = saved.lat
+      this.effectiveLng = saved.lng
+      this.manualCityInput = displayCity // <-- Update text field
+      this.effectiveCity = `${displayCity} (${this.tr('manual_location')})`
+      this.lastRefreshTime = saved.refresh
 
-      promptAction.showToast({ message: `${this.tr('save')}: ${displayCity}`, duration: 2000 });
-      this.isRefreshing = false;
-      return;
+      promptAction.showToast({ message: `${this.tr('save')}: ${displayCity}`, duration: 2000 })
+      this.isRefreshing = false
+      return
     }
 
     try {
-      const data: LocationData = await LocationHelper.fetchLocationData(getContext(this));
-      await LocationCache.save(data.latitude, data.longitude, data.cityName);
+      const data: LocationData = await LocationHelper.fetchLocationData(getContext(this))
+      await LocationCache.save(data.latitude, data.longitude, data.cityName)
 
-      this.effectiveLat = data.latitude;
-      this.effectiveLng = data.longitude;
-      this.effectiveCity = this.getDisplayCity(data.cityName); // <-- Real-time update for GPS
-      this.lastRefreshTime = Date.now();
+      this.effectiveLat = data.latitude
+      this.effectiveLng = data.longitude
+      this.effectiveCity = this.getDisplayCity(data.cityName) // <-- Real-time update for GPS
+      this.lastRefreshTime = Date.now()
 
-      promptAction.showToast({ message: `GPS: ${this.effectiveCity}`, duration: 2000 });
+      promptAction.showToast({ message: `GPS: ${this.effectiveCity}`, duration: 2000 })
     } catch (err) {
-      const error = err as Error;
-      let msgKey = 'error_gps_fetch_failed';
+      const error = err as Error
+      let msgKey = 'error_gps_fetch_failed'
       if (error.message === 'GPS_OFF') {
-        msgKey = 'error_gps_off';
+        msgKey = 'error_gps_off'
       } else if (error.message === 'PERMISSION_DENIED') {
-        msgKey = 'error_location_permission_denied';
+        msgKey = 'error_location_permission_denied'
       }
       promptAction.showToast({
         message: this.tr(msgKey), duration: 2500
-      });
+      })
     } finally {
-      this.isRefreshing = false;
+      this.isRefreshing = false
     }
   }
 
   private formatCoord(n: number): string {
     if (n === 0) {
-      return '—';
+      return '—'
     }
-    return n.toFixed(4);
+    return n.toFixed(4)
   }
 
   private formatRefreshTime(ts: number): string {
     if (ts === 0) {
-      return '—';
+      return '—'
     }
-    const d = new Date(ts);
-    const now = new Date();
+    const d = new Date(ts)
+    const now = new Date()
     const isToday =
-      d.getDate() === now.getDate() && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-    const hh = d.getHours().toString().padStart(2, '0');
-    const mm = d.getMinutes().toString().padStart(2, '0');
-    const time = `${hh}:${mm}`;
+      d.getDate() === now.getDate() && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
+    const hh = d.getHours().toString().padStart(2, '0')
+    const mm = d.getMinutes().toString().padStart(2, '0')
+    const time = `${hh}:${mm}`
     if (isToday) {
-      return `${this.tr('today')} ${time}`;
+      return `${this.tr('today')} ${time}`
     }
-    const m2 = (d.getMonth() + 1).toString().padStart(2, '0');
-    const dd = d.getDate().toString().padStart(2, '0');
-    return `${d.getFullYear()}-${m2}-${dd} ${time}`;
+    const m2 = (d.getMonth() + 1).toString().padStart(2, '0')
+    const dd = d.getDate().toString().padStart(2, '0')
+    return `${d.getFullYear()}-${m2}-${dd} ${time}`
   }
 
   private async sendTestNotification(): Promise<void> {
-    const ctx = getContext(this) as common.UIAbilityContext;
-    const granted = await NotificationHelper.isPermissionGranted(ctx);
+    const ctx = getContext(this) as common.UIAbilityContext
+    const granted = await NotificationHelper.isPermissionGranted(ctx)
     if (!granted) {
-      const requested = await NotificationHelper.requestPermission(ctx);
+      const requested = await NotificationHelper.requestPermission(ctx)
       if (!requested) {
-        this.showPermissionError();
-        return;
+        this.showPermissionError()
+        return
       }
     }
 
     promptAction.showToast({
       message: this.tr('notif_test_sending'), duration: 1500
-    });
+    })
 
-    const result = await NotificationHelper.publishTestNotification();
+    const result = await NotificationHelper.publishTestNotification()
 
     if (result.ok) {
-      this.notifDiagnostic = '';
-      const okMsg = CALENDAR_REMINDERS_ENABLED ? 'notif_test_ok_calendar' : 'notif_test_ok';
+      this.notifDiagnostic = ''
+      const okMsg = CALENDAR_REMINDERS_ENABLED ? 'notif_test_ok_calendar' : 'notif_test_ok'
       promptAction.showToast({
         message: this.tr(okMsg), duration: 3000
-      });
+      })
     } else {
-      this.notifDiagnostic = result.errorMessage;
+      this.notifDiagnostic = result.errorMessage
       promptAction.showToast({
         message: `${this.tr('notif_test_failed')} (code ${result.errorCode})`, duration: 4000
-      });
+      })
     }
   }
 
   private showPermissionError(): void {
     if (CALENDAR_REMINDERS_ENABLED) {
-      const canRead = CalendarReminderHelper.permissionStatus.read;
-      const canWrite = CalendarReminderHelper.permissionStatus.write;
+      const canRead = CalendarReminderHelper.permissionStatus.read
+      const canWrite = CalendarReminderHelper.permissionStatus.write
 
       if (!canRead && !canWrite) {
         promptAction.showToast({
           message: this.tr('calendar_permission_denied'), duration: 2500
-        });
+        })
       } else if (!canRead) {
         promptAction.showToast({
           message: this.tr('calendar_read_permission_denied'), duration: 3000
-        });
+        })
       } else if (!canWrite) {
         promptAction.showToast({
           message: this.tr('calendar_write_permission_denied'), duration: 3000
-        });
+        })
       }
     } else { // Standard notification permission
       promptAction.showToast({
         message: this.tr('notification_permission_denied'), duration: 2500
-      });
+      })
     }
   }
 
   private async toggleNotifMaster(value: boolean): Promise<void> {
-    const ctx = getContext(this) as common.UIAbilityContext;
+    const ctx = getContext(this) as common.UIAbilityContext
 
     if (value) {
-      const granted = await NotificationHelper.requestPermission(ctx);
+      const granted = await NotificationHelper.requestPermission(ctx)
       if (!granted) {
-        this.notifMaster = false;
-        this.showPermissionError();
-        return;
+        this.notifMaster = false
+        this.showPermissionError()
+        return
       }
-      await CalendarReminderHelper.init(ctx, false);
+      await CalendarReminderHelper.init(ctx, false)
     } else { // Turning OFF. We still need the backend ready to DELETE the
       // existing events — otherwise rescheduleAll() will hit the
       // "backend not ready" guard and return before cancelAll() runs.
@@ -1999,118 +1999,118 @@ struct SettingsPage {
       // log — which we do below, so this case is diagnosable.
       if (!CalendarReminderHelper.isReady()) {
         try {
-          await CalendarReminderHelper.init(ctx, false);
+          await CalendarReminderHelper.init(ctx, false)
         } catch (e) { // Swallow — the reschedule call below will log if it
           // can't cancel because the backend is unavailable.
         }
       }
     }
 
-    this.notifMaster = value;
-    await SettingsHelper.saveNotifMaster(value);
-    await NotificationHelper.rescheduleAll();
+    this.notifMaster = value
+    await SettingsHelper.saveNotifMaster(value)
+    await NotificationHelper.rescheduleAll()
   }
 
   private async changeNotifBefore(delta: number): Promise<void> {
-    let next = this.notifBefore + delta;
+    let next = this.notifBefore + delta
     if (next < MIN_BEFORE_MINUTES) {
-      next = MIN_BEFORE_MINUTES;
+      next = MIN_BEFORE_MINUTES
     }
     if (next > MAX_BEFORE_MINUTES) {
-      next = MAX_BEFORE_MINUTES;
+      next = MAX_BEFORE_MINUTES
     }
     if (next === this.notifBefore) {
-      return;
+      return
     }
 
-    this.notifBefore = next;
-    await SettingsHelper.saveNotifBeforeMinutes(next);
-    await NotificationHelper.rescheduleAll();
+    this.notifBefore = next
+    await SettingsHelper.saveNotifBeforeMinutes(next)
+    await NotificationHelper.rescheduleAll()
   }
 
   private async toggleNotifPrayer(prayerId: string, value: boolean): Promise<void> {
     switch (prayerId) {
       case 'fajr':
-        this.notifFajr = value;
-        break;
+        this.notifFajr = value
+        break
       case 'dhuhr':
-        this.notifDhuhr = value;
-        break;
+        this.notifDhuhr = value
+        break
       case 'asr':
-        this.notifAsr = value;
-        break;
+        this.notifAsr = value
+        break
       case 'maghrib':
-        this.notifMaghrib = value;
-        break;
+        this.notifMaghrib = value
+        break
       case 'isha':
-        this.notifIsha = value;
-        break;
+        this.notifIsha = value
+        break
     }
-    await SettingsHelper.saveNotifPrayer(prayerId, value);
-    await NotificationHelper.rescheduleAll();
+    await SettingsHelper.saveNotifPrayer(prayerId, value)
+    await NotificationHelper.rescheduleAll()
   }
 
   private getNotifPrayerValue(prayerId: string): boolean {
     switch (prayerId) {
       case 'fajr':
-        return this.notifFajr;
+        return this.notifFajr
       case 'dhuhr':
-        return this.notifDhuhr;
+        return this.notifDhuhr
       case 'asr':
-        return this.notifAsr;
+        return this.notifAsr
       case 'maghrib':
-        return this.notifMaghrib;
+        return this.notifMaghrib
       case 'isha':
-        return this.notifIsha;
+        return this.notifIsha
       default:
-        return false;
+        return false
     }
   }
 
   private formatNotifBefore(): string {
-    return `${this.notifBefore}`;
+    return `${this.notifBefore}`
   }
 
   private openLogViewer(): void {
     try {
-      const content = AppLogger.readAll();
-      this.logContents = (typeof content === 'string') ? content : '(log read returned an unexpected type)';
-      this.showLogViewer = true;
+      const content = AppLogger.readAll()
+      this.logContents = typeof content === 'string' ? content : '(log read returned an unexpected type)'
+      this.showLogViewer = true
     } catch (err) {
-      const e = err as Error;
+      const e = err as Error
       promptAction.showToast({
         message: `Log read failed: ${e.message}`, duration: 3000
-      });
-      this.logContents = '';
-      this.showLogViewer = true;
+      })
+      this.logContents = ''
+      this.showLogViewer = true
     }
   }
 
   private async handleBackup(): Promise<void> {
     if (this.isBackupBusy) {
-      return;
+      return
     }
-    this.isBackupBusy = true;
+    this.isBackupBusy = true
     try {
-      const ctx = getContext(this) as common.UIAbilityContext;
-      const result = await UserBackupService.backupToFile(ctx, this.appInfo.versionName);
+      const ctx = getContext(this) as common.UIAbilityContext
+      const result = await UserBackupService.backupToFile(ctx, this.appInfo.versionName)
       if (result.ok) {
         promptAction.showToast({
           message: this.tr('backup_success'), duration: 2500
-        });
+        })
       } else if (result.message !== 'cancelled') {
         promptAction.showToast({
           message: `${this.tr('backup_failed')}: ${result.message}`, duration: 3000
-        });
+        })
       }
     } finally {
-      this.isBackupBusy = false;
+      this.isBackupBusy = false
     }
   }
 
   private async handleRestore(): Promise<void> {
     if (this.isBackupBusy) {
-      return;
+      return
     }
 
     // Confirm before wiping any current data.
@@ -2120,35 +2120,35 @@ struct SettingsPage {
         message: this.tr('restore_confirm_message'),
         buttons: [{ text: this.tr('cancel'), color: this.colors.dialogCancel },
           { text: this.tr('restore_from_file'), color: this.colors.accentGold }]
-      });
+      })
       if (confirmResult.index !== 1) {
-        return;
+        return
       }
     } catch {
-      return;
+      return
     }
 
-    this.isBackupBusy = true;
+    this.isBackupBusy = true
     try {
-      const ctx = getContext(this) as common.UIAbilityContext;
-      const result = await UserBackupService.restoreFromFile(ctx);
+      const ctx = getContext(this) as common.UIAbilityContext
+      const result = await UserBackupService.restoreFromFile(ctx)
       if (!result.ok) {
         if (result.message !== 'cancelled') {
           promptAction.showToast({
             message: `${this.tr('restore_failed')}: ${result.message}`, duration: 3000
-          });
+          })
         }
-        return;
+        return
       }
 
       // Restore succeeded. Release the busy flag before showing
       // the restart prompt so the button under it is not stuck
       // in a disabled state while the dialog is on screen.
-      this.isBackupBusy = false;
+      this.isBackupBusy = false
 
-      await this.promptRestartAfterRestore();
+      await this.promptRestartAfterRestore()
     } finally {
-      this.isBackupBusy = false;
+      this.isBackupBusy = false
     }
   }
 
@@ -2176,9 +2176,9 @@ struct SettingsPage {
    * restart.
    */
   private async promptRestartAfterRestore(): Promise<void> {
-    const ctx = getContext(this) as common.UIAbilityContext;
+    const ctx = getContext(this) as common.UIAbilityContext
 
-    let res: promptAction.ShowDialogSuccessResponse;
+    let res: promptAction.ShowDialogSuccessResponse
     try {
       res = await promptAction.showDialog({
         title: this.tr('restore_restart_title'), message: this.tr('restore_restart_message'), buttons: [{
@@ -2186,17 +2186,17 @@ struct SettingsPage {
         }, {
           text: this.tr('restore_restart_now'), color: this.colors.accentGold
         }]
-      });
+      })
     } catch (err) {
-      console.error('[SettingsPage] restart prompt failed: ' + JSON.stringify(err));
-      return;
+      console.error('[SettingsPage] restart prompt failed: ' + JSON.stringify(err))
+      return
     }
 
     if (res.index !== 1) { // "Later" — confirm success via toast, leave user where they are.
       promptAction.showToast({
         message: this.tr('restore_success'), duration: 2500
-      });
-      return;
+      })
+      return
     }
 
     // "Restart Now" — small delay so the dialog's dismiss animation
@@ -2205,51 +2205,51 @@ struct SettingsPage {
     setTimeout(() => {
       AppRestartHelper.restart(ctx).catch((err: Error) => { // Reached only when terminateSelf itself failed — the
         // ability is still alive, so a navigation fallback works.
-        console.error('[SettingsPage] restart failed: ' + err.message);
-        NavHelper.prepareForward();
+        console.error('[SettingsPage] restart failed: ' + err.message)
+        NavHelper.prepareForward()
         router.replaceUrl({ url: 'pages/MainTabs' }).catch((e: Error) => {
-          console.error('[SettingsPage] fallback navigate failed: ' + e.message);
-        });
-      });
-    }, 250);
+          console.error('[SettingsPage] fallback navigate failed: ' + e.message)
+        })
+      })
+    }, 250)
   }
 
   private copyLogsToClipboard(): void {
     try {
-      const data = pasteboard.createData(pasteboard.MIMETYPE_TEXT_PLAIN, this.logContents);
+      const data = pasteboard.createData(pasteboard.MIMETYPE_TEXT_PLAIN, this.logContents)
       pasteboard.getSystemPasteboard().setData(data).then(() => {
         promptAction.showToast({
           message: this.tr('log_copied'), duration: 1500
-        });
+        })
       }).catch((err: Error) => {
-        console.error('[SettingsPage] clipboard failed: ' + err.message);
-      });
+        console.error('[SettingsPage] clipboard failed: ' + err.message)
+      })
     } catch (err) {
-      const e = err as Error;
-      console.error('[SettingsPage] clipboard threw: ' + e.message);
+      const e = err as Error
+      console.error('[SettingsPage] clipboard threw: ' + e.message)
     }
   }
 
   private clearLogs(): void {
     try {
-      AppLogger.clear();
-      const content = AppLogger.readAll();
-      this.logContents = (typeof content === 'string') ? content : '';
+      AppLogger.clear()
+      const content = AppLogger.readAll()
+      this.logContents = typeof content === 'string' ? content : ''
       promptAction.showToast({
         message: this.tr('log_cleared'), duration: 1500
-      });
+      })
     } catch (err) {
-      const e = err as Error;
+      const e = err as Error
       promptAction.showToast({
         message: `Log clear failed: ${e.message}`, duration: 3000
-      });
+      })
     }
   }
 
   private getDisplayCity(rawName: string): string {
     if (rawName === 'DEFAULT LOCATION' || rawName.length === 0) {
-      return this.tr('default_location');
+      return this.tr('default_location')
     }
-    return OfflineCityLookup.translateCityName(rawName, this.currentLanguage);
+    return OfflineCityLookup.translateCityName(rawName, this.currentLanguage)
   }
 }

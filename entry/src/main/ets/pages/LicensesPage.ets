@@ -1,33 +1,33 @@
 // entry/src/main/ets/pages/LicensesPage.ets
 
-import { common } from '@kit.AbilityKit';
-import { router } from '@kit.ArkUI';
-import { util } from '@kit.ArkTS';
-import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
-import { L } from '../i18n/LocalizationHelper';
-import { STORAGE_KEY_LANGUAGE } from '../core/common/StorageKeys';
-import { AppLogger } from '../core/app/AppLogger';
-import { RawPaths } from '../core/common/RawPaths';
+import { common } from '@kit.AbilityKit'
+import { router } from '@kit.ArkUI'
+import { util } from '@kit.ArkTS'
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
+import { L } from '../i18n/LocalizationHelper'
+import { STORAGE_KEY_LANGUAGE } from '../core/common/StorageKeys'
+import { AppLogger } from '../core/app/AppLogger'
+import { RawPaths } from '../core/common/RawPaths'
 
 // 🚨 FIX: Make optional fields optional in the interface
 interface LicenseItem {
-  name: string;
-  source: string;
-  sourceUrl: string;
-  license: string;
-  licenseUrl?: string;
-  attribution?: string;
+  name: string
+  source: string
+  sourceUrl: string
+  license: string
+  licenseUrl?: string
+  attribution?: string
 }
 
 interface LicenseSection {
-  id: string;
-  items: LicenseItem[];
+  id: string
+  items: LicenseItem[]
 }
 
 interface LicenseFile {
-  datasetVersion: string;
-  sections: LicenseSection[];
+  datasetVersion: string
+  sections: LicenseSection[]
 }
 
 @Entry
@@ -40,60 +40,59 @@ struct LicensesPage {
   @State isLoading: boolean = true;
 
   async aboutToAppear() {
-    await this.loadData();
+    await this.loadData()
   }
 
   onLangChanged() {
-    this.loadData();
+    this.loadData()
   }
 
   async loadData() {
-    this.isLoading = true;
+    this.isLoading = true
     try {
-      const ctx = getContext(this) as common.UIAbilityContext;
+      const ctx = getContext(this) as common.UIAbilityContext
 
-      let quranSections: LicenseSection[] = [];
-      let quranVersion = '';
+      let quranSections: LicenseSection[] = []
+      let quranVersion = ''
 
-      let hadithSections: LicenseSection[] = [];
-      let hadithVersion = '';
+      let hadithSections: LicenseSection[] = []
+      let hadithVersion = ''
 
       // 1. Load Quran Licenses
       try {
-        const qData = await ctx.resourceManager.getRawFileContent(RawPaths.QURAN_LICENSES);
-        const qParsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(qData)) as LicenseFile;
+        const qData = await ctx.resourceManager.getRawFileContent(RawPaths.QURAN_LICENSES)
+        const qParsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(qData)) as LicenseFile
         if (qParsed && qParsed.sections) {
-          quranSections = qParsed.sections;
-          quranVersion = qParsed.datasetVersion || '1.0';
+          quranSections = qParsed.sections
+          quranVersion = qParsed.datasetVersion || '1.0'
         }
       } catch (e) {
-        AppLogger.warn('LicensesPage', 'Quran licenses not found');
+        AppLogger.warn('LicensesPage', 'Quran licenses not found')
       }
 
       // 2. Load Hadith Licenses
       try {
-        const hData = await ctx.resourceManager.getRawFileContent(RawPaths.HADITH_LICENSES);
-        const hParsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(hData)) as LicenseFile;
+        const hData = await ctx.resourceManager.getRawFileContent(RawPaths.HADITH_LICENSES)
+        const hParsed = JSON.parse(util.TextDecoder.create('utf-8').decodeToString(hData)) as LicenseFile
         if (hParsed && hParsed.sections) {
-          hadithSections = hParsed.sections;
-          hadithVersion = hParsed.datasetVersion || '1.0';
+          hadithSections = hParsed.sections
+          hadithVersion = hParsed.datasetVersion || '1.0'
         }
       } catch (e) {
-        AppLogger.warn('LicensesPage', 'Hadith licenses not found');
+        AppLogger.warn('LicensesPage', 'Hadith licenses not found')
       }
 
       // 3. Merge them
-      this.sections = quranSections.concat(hadithSections);
+      this.sections = quranSections.concat(hadithSections)
 
       // 4. Set dynamic version label
-      const vLabel = this.tr('licenses_version_label');
-      this.datasetVersion = `${vLabel}Quran v${quranVersion}, Hadith v${hadithVersion}`;
-
+      const vLabel = this.tr('licenses_version_label')
+      this.datasetVersion = `${vLabel}Quran v${quranVersion}, Hadith v${hadithVersion}`
     } catch (e) {
-      AppLogger.error('LicensesPage', `Failed to load: ${JSON.stringify(e)}`);
-      this.sections = [];
+      AppLogger.error('LicensesPage', `Failed to load: ${JSON.stringify(e)}`)
+      this.sections = []
     }
-    this.isLoading = false;
+    this.isLoading = false
   }
 
   build() {
@@ -214,10 +213,10 @@ struct LicensesPage {
             .textOverflow({ overflow: TextOverflow.Ellipsis })
             .layoutWeight(1)
         }.width('100%').margin({ top: 4 }).onClick(() => {
-          const ctx = getContext(this) as common.UIAbilityContext;
+          const ctx = getContext(this) as common.UIAbilityContext
           ctx.startAbility({
             action: 'ohos.want.action.viewData', entities: ['entity.system.browsable'], uri: item.licenseUrl
-          }).catch((e: Error) => console.error(e.message));
+          }).catch((e: Error) => console.error(e.message))
         })
       }
     }
@@ -229,10 +228,10 @@ struct LicensesPage {
   }
 
   private tr(key: string): string {
-    return L.get(key, this.appLanguage);
+    return L.get(key, this.appLanguage)
   }
 
   private isRtl(): boolean {
-    return L.isRtlLang(this.appLanguage);
+    return L.isRtlLang(this.appLanguage)
   }
 }

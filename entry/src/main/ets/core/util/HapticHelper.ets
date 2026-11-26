@@ -1,9 +1,9 @@
 // entry/src/main/ets/helper/HapticHelper.ets
 
-import { vibrator } from '@kit.SensorServiceKit';
-import { BusinessError } from '@kit.BasicServicesKit';
-import { STORAGE_KEY_VIBRATION_ENABLED } from '../common/StorageKeys';
-import { SystemFeedbackHelper } from './SystemFeedbackHelper';
+import { vibrator } from '@kit.SensorServiceKit'
+import { BusinessError } from '@kit.BasicServicesKit'
+import { STORAGE_KEY_VIBRATION_ENABLED } from '../common/StorageKeys'
+import { SystemFeedbackHelper } from './SystemFeedbackHelper'
 
 /**
  * Thin wrapper around the vibrator API.
@@ -20,36 +20,36 @@ import { SystemFeedbackHelper } from './SystemFeedbackHelper';
  * Requires `ohos.permission.VIBRATE` in module.json5.
  */
 export class HapticHelper {
-  private static readonly TICK_MS = 15; // light — per count
-  private static readonly CONFIRM_MS = 80; // strong — dhikr completion
+  private static readonly TICK_MS = 15 // light — per count
+  private static readonly CONFIRM_MS = 80 // strong — dhikr completion
 
   /** Short, crisp tick — for a single count. ~15 ms. */
   static tick(): void {
     if (!HapticHelper.allowed()) {
-      return;
+      return
     }
-    HapticHelper.vibrate(HapticHelper.TICK_MS);
+    HapticHelper.vibrate(HapticHelper.TICK_MS)
   }
 
   /** Strong, unmistakable pulse — for completion of a dhikr target. */
   static confirm(): void {
     if (!HapticHelper.allowed()) {
-      return;
+      return
     }
-    HapticHelper.vibrate(HapticHelper.CONFIRM_MS);
+    HapticHelper.vibrate(HapticHelper.CONFIRM_MS)
   }
 
   /** Double pulse — for the very last dhikr in a Tasbih. */
   static complete(): void {
     if (!HapticHelper.allowed()) {
-      return;
+      return
     }
-    HapticHelper.vibrate(60);
+    HapticHelper.vibrate(60)
     setTimeout(() => {
       if (HapticHelper.allowed()) {
-        HapticHelper.vibrate(60);
+        HapticHelper.vibrate(60)
       }
-    }, 120);
+    }, 120)
   }
 
   // ============================================================
@@ -58,18 +58,18 @@ export class HapticHelper {
 
   private static allowed(): boolean {
     // Gate 1 — the user's in-app preference.
-    const userPref = AppStorage.get<boolean>(STORAGE_KEY_VIBRATION_ENABLED);
-    const inAppEnabled = userPref === undefined ? true : userPref;
+    const userPref = AppStorage.get<boolean>(STORAGE_KEY_VIBRATION_ENABLED)
+    const inAppEnabled = userPref === undefined ? true : userPref
     if (!inAppEnabled) {
-      return false;
+      return false
     }
 
     // Gate 2 — the system's haptics toggle.
     if (!SystemFeedbackHelper.isSystemHapticsEnabled()) {
-      return false;
+      return false
     }
 
-    return true;
+    return true
   }
 
   // ============================================================
@@ -78,14 +78,12 @@ export class HapticHelper {
 
   private static vibrate(durationMs: number): void {
     try {
-      vibrator.startVibration(
-        { type: 'time', duration: durationMs },
-        { id: 0, usage: 'unknown' }
-      ).catch((err: BusinessError) => {
-        console.warn(`[HapticHelper] vibrate(${durationMs}ms) failed: ${err.code}, ${err.message}`);
-      });
+      vibrator.startVibration({ type: 'time', duration: durationMs }, { id: 0, usage: 'unknown' })
+        .catch((err: BusinessError) => {
+          console.warn(`[HapticHelper] vibrate(${durationMs}ms) failed: ${err.code}, ${err.message}`)
+        })
     } catch (err) {
-      console.warn('[HapticHelper] vibrate threw synchronously');
+      console.warn('[HapticHelper] vibrate threw synchronously')
     }
   }
 }

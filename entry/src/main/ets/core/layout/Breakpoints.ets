@@ -12,24 +12,24 @@
  *   lg  : 840 – ∞        (large tablets, 2-in-1)
  */
 export class Breakpoints {
-  static readonly XS = 'xs';
-  static readonly SM = 'sm';
-  static readonly MD = 'md';
-  static readonly LG = 'lg';
+  static readonly XS = 'xs'
+  static readonly SM = 'sm'
+  static readonly MD = 'md'
+  static readonly LG = 'lg'
 
   /** True for tablet-class layouts (md or lg). */
   static isTablet(bp: string): boolean {
-    return bp === Breakpoints.MD || bp === Breakpoints.LG;
+    return bp === Breakpoints.MD || bp === Breakpoints.LG
   }
 
   /** True for the widest layouts (lg only). */
   static isLarge(bp: string): boolean {
-    return bp === Breakpoints.LG;
+    return bp === Breakpoints.LG
   }
 
   /** True for phone-class layouts (xs or sm). */
   static isPhone(bp: string): boolean {
-    return bp === Breakpoints.XS || bp === Breakpoints.SM;
+    return bp === Breakpoints.XS || bp === Breakpoints.SM
   }
 
   /**
@@ -43,11 +43,11 @@ export class Breakpoints {
    */
   static maxContentWidth(bp: string): number {
     if (bp === Breakpoints.LG) {
-      return 1000;
+      return 1000
     }
     if (bp === Breakpoints.MD) {
-      return 720;
+      return 720
     }
-    return Number.MAX_SAFE_INTEGER;
+    return Number.MAX_SAFE_INTEGER
   }
 }

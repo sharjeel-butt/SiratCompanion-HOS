@@ -1,8 +1,8 @@
 // entry/src/main/ets/core/AppRestartHelper.ets
 
-import { common, Want } from '@kit.AbilityKit';
-import { BusinessError } from '@kit.BasicServicesKit';
-import { AppLogger } from './AppLogger';
+import { common, Want } from '@kit.AbilityKit'
+import { BusinessError } from '@kit.BasicServicesKit'
+import { AppLogger } from './AppLogger'
 
 /**
  * Restart the app.
@@ -32,27 +32,27 @@ export class AppRestartHelper {
   static async restart(context: common.UIAbilityContext): Promise<boolean> {
     const want: Want = {
       bundleName: 'com.siratcompanion.hos.app', abilityName: 'EntryAbility'
-    };
+    }
 
-    AppLogger.info('AppRestartHelper', 'restart start');
+    AppLogger.info('AppRestartHelper', 'restart start')
 
     // Fire terminateSelf — DO NOT await. The JS thread must
     // continue immediately so startAbility fires while the
     // context is still valid.
     context.terminateSelf().catch((err: BusinessError) => {
-      AppLogger.warn('AppRestartHelper', `terminateSelf failed: code=${err.code ?? ''} msg=${err.message ?? ''}`);
-    });
+      AppLogger.warn('AppRestartHelper', `terminateSelf failed: code=${err.code ?? ''} msg=${err.message ?? ''}`)
+    })
 
     // Fire startAbility immediately — the intent is queued in
     // the system before the current instance finishes teardown.
     try {
-      await context.startAbility(want);
-      AppLogger.info('AppRestartHelper', 'restart dispatched');
-      return true;
+      await context.startAbility(want)
+      AppLogger.info('AppRestartHelper', 'restart dispatched')
+      return true
     } catch (err) {
-      const e = err as BusinessError;
-      AppLogger.error('AppRestartHelper', `startAbility failed: code=${e.code ?? ''} msg=${e.message ?? ''}`);
-      return true;
+      const e = err as BusinessError
+      AppLogger.error('AppRestartHelper', `startAbility failed: code=${e.code ?? ''} msg=${e.message ?? ''}`)
+      return true
     }
   }
 }

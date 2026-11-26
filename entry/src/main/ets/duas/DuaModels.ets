@@ -1,40 +1,40 @@
-import { SourceItem } from '../i18n/SourceParser';
+import { SourceItem } from '../i18n/SourceParser'
 
 export interface BaseDua {
-  id: string;
-  category: string;
-  arabic: string;
-  reference: string;
+  id: string
+  category: string
+  arabic: string
+  reference: string
 
   /** Optional phonetic transliteration, shown in the simple display card. */
-  transliteration?: string;
+  transliteration?: string
 }
 
 export interface TranslatedDua {
-  name: string;
-  translation: string;
-  reference: string;
-  sources?: DuaSource[];
-  reference_display?: string;
-  migration_status?: string;
+  name: string
+  translation: string
+  reference: string
+  sources?: DuaSource[]
+  reference_display?: string
+  migration_status?: string
 }
 
 export interface DuaSource extends SourceItem {
-  type: 'hadith' | 'quran' | 'external';
-  id?: string;
-  surah?: number;
-  ayah?: number;
-  display?: string;
-  role: 'primary' | 'supporting';
+  type: 'hadith' | 'quran' | 'external'
+  id?: string
+  surah?: number
+  ayah?: number
+  display?: string
+  role: 'primary' | 'supporting'
 }
 
 export interface CompleteDua extends BaseDua {
-  translatedName: string;
-  translatedText: string;
-  translatedReference: string;
-  isFavorite: boolean;
-  boundPrayerIds: string[];
-  sources?: DuaSource[];
-  reference_display?: string;
-  migration_status?: string;
+  translatedName: string
+  translatedText: string
+  translatedReference: string
+  isFavorite: boolean
+  boundPrayerIds: string[]
+  sources?: DuaSource[]
+  reference_display?: string
+  migration_status?: string
 }

@@ -1,22 +1,22 @@
 // entry/src/main/ets/data/PrivacyPolicy.ets
 
-import { common } from '@kit.AbilityKit';
-import { util } from '@kit.ArkTS';
-import { AppLogger } from '../core/app/AppLogger';
-import { RawPaths } from '../core/common/RawPaths';
-import { LanguageService } from '../i18n/LanguageService';
+import { common } from '@kit.AbilityKit'
+import { util } from '@kit.ArkTS'
+import { AppLogger } from '../core/app/AppLogger'
+import { RawPaths } from '../core/common/RawPaths'
+import { LanguageService } from '../i18n/LanguageService'
 
 export interface PrivacyPolicyMetadata {
-  title: string;
-  lastUpdated: string;
-  effectiveDate: string;
-  appliesTo: string;
-  fullUrl: string;
+  title: string
+  lastUpdated: string
+  effectiveDate: string
+  appliesTo: string
+  fullUrl: string
 }
 
 export interface PrivacyPolicyDocument {
-  metadata: PrivacyPolicyMetadata;
-  body: string;
+  metadata: PrivacyPolicyMetadata
+  body: string
 }
 
 /**
@@ -45,14 +45,14 @@ export interface PrivacyPolicyDocument {
  * `rawfile/privacy/` and append the code to SUPPORTED below.
  */
 export class PrivacyPolicyProvider {
-  static readonly BASE_URL = 'https://sharjeel-butt.github.io/SiratCompanion-HOS/';
-  static readonly LAST_UPDATED = 'October 27, 2026';
-  static readonly APPLIES_TO = '3.5.0 and later';
+  static readonly BASE_URL = 'https://sharjeel-butt.github.io/SiratCompanion-HOS/'
+  static readonly LAST_UPDATED = 'October 27, 2026'
+  static readonly APPLIES_TO = '3.5.0 and later'
   /** Locales with a bundled translation. */
-  private static ctx: common.UIAbilityContext | null = null;
-  private static cache: Map<string, PrivacyPolicyDocument> = new Map<string, PrivacyPolicyDocument>();
+  private static ctx: common.UIAbilityContext | null = null
+  private static cache: Map<string, PrivacyPolicyDocument> = new Map<string, PrivacyPolicyDocument>()
   private static loading: Map<string, Promise<PrivacyPolicyDocument>> =
-    new Map<string, Promise<PrivacyPolicyDocument>>();
+    new Map<string, Promise<PrivacyPolicyDocument>>()
 
   // ============================================================
   // PUBLIC API
@@ -64,14 +64,14 @@ export class PrivacyPolicyProvider {
    * for locales without a translation.
    */
   static preload(ctx: common.UIAbilityContext, lang: string): void {
-    PrivacyPolicyProvider.ctx = ctx;
+    PrivacyPolicyProvider.ctx = ctx
     PrivacyPolicyProvider.load(lang).catch((e: Error) => {
-      AppLogger.warn('PrivacyPolicyProvider', `preload(${lang}) failed: ${e.message}`);
-    });
+      AppLogger.warn('PrivacyPolicyProvider', `preload(${lang}) failed: ${e.message}`)
+    })
     if (lang !== 'en') {
       PrivacyPolicyProvider.load('en').catch((e: Error) => {
-        AppLogger.warn('PrivacyPolicyProvider', `preload(en) failed: ${e.message}`);
-      });
+        AppLogger.warn('PrivacyPolicyProvider', `preload(en) failed: ${e.message}`)
+      })
     }
   }
 
@@ -81,10 +81,10 @@ export class PrivacyPolicyProvider {
    */
   static getFullUrl(lang: string): string {
     if (!lang || lang === 'en' || lang === 'system') {
-      return PrivacyPolicyProvider.BASE_URL;
+      return PrivacyPolicyProvider.BASE_URL
     } // Extract primary language code (e.g., 'zh-CN' -> 'zh')
-    const cleanLang = lang.split('-')[0].toLowerCase();
-    return `${PrivacyPolicyProvider.BASE_URL}${cleanLang}/`;
+    const cleanLang = lang.split('-')[0].toLowerCase()
+    return `${PrivacyPolicyProvider.BASE_URL}${cleanLang}/`
   }
 
   /**
@@ -93,14 +93,14 @@ export class PrivacyPolicyProvider {
    * when the return value is ''.
    */
   static get(lang: string): string {
-    const doc = PrivacyPolicyProvider.lookup(lang);
-    return doc !== null ? doc.body : '';
+    const doc = PrivacyPolicyProvider.lookup(lang)
+    return doc !== null ? doc.body : ''
   }
 
   /** Synchronous metadata accessor with the same fallback chain. */
   static getMetadata(lang: string): PrivacyPolicyMetadata | null {
-    const doc = PrivacyPolicyProvider.lookup(lang);
-    return doc !== null ? doc.metadata : null;
+    const doc = PrivacyPolicyProvider.lookup(lang)
+    return doc !== null ? doc.metadata : null
   }
 
   /**
@@ -109,23 +109,23 @@ export class PrivacyPolicyProvider {
    * promise — no duplicate disk reads.
    */
   static async load(lang: string): Promise<PrivacyPolicyDocument> {
-    const cached = PrivacyPolicyProvider.cache.get(lang);
+    const cached = PrivacyPolicyProvider.cache.get(lang)
     if (cached !== undefined) {
-      return cached;
+      return cached
     }
-    const inFlight = PrivacyPolicyProvider.loading.get(lang);
+    const inFlight = PrivacyPolicyProvider.loading.get(lang)
     if (inFlight !== undefined) {
-      return inFlight;
+      return inFlight
     }
 
-    const promise = PrivacyPolicyProvider.doLoad(lang);
-    PrivacyPolicyProvider.loading.set(lang, promise);
+    const promise = PrivacyPolicyProvider.doLoad(lang)
+    PrivacyPolicyProvider.loading.set(lang, promise)
     try {
-      const doc = await promise;
-      PrivacyPolicyProvider.cache.set(lang, doc);
-      return doc;
+      const doc = await promise
+      PrivacyPolicyProvider.cache.set(lang, doc)
+      return doc
     } finally {
-      PrivacyPolicyProvider.loading.delete(lang);
+      PrivacyPolicyProvider.loading.delete(lang)
     }
   }
 
@@ -135,73 +135,72 @@ export class PrivacyPolicyProvider {
 
   // NEW: Map the current app language to the correct GitHub Pages URL
   static getUrlForLanguage(lang: string): string {
-    return PrivacyPolicyProvider.getFullUrl(lang);
+    return PrivacyPolicyProvider.getFullUrl(lang)
   }
 
   private static lookup(lang: string): PrivacyPolicyDocument | null {
-    const direct = PrivacyPolicyProvider.cache.get(lang);
+    const direct = PrivacyPolicyProvider.cache.get(lang)
     if (direct !== undefined) {
-      return direct;
+      return direct
     }
-    const en = PrivacyPolicyProvider.cache.get('en');
-    return en !== undefined ? en : null;
+    const en = PrivacyPolicyProvider.cache.get('en')
+    return en !== undefined ? en : null
   }
 
   private static supportsLanguage(lang: string): boolean {
-    return LanguageService.supports(lang);
+    return LanguageService.supports(lang)
   }
 
-
   private static async doLoad(lang: string): Promise<PrivacyPolicyDocument> {
-    const effective = LanguageService.supports(lang) ? lang : LanguageService.defaultLanguage();
+    const effective = LanguageService.supports(lang) ? lang : LanguageService.defaultLanguage()
 
     if (PrivacyPolicyProvider.ctx === null) {
-      return PrivacyPolicyProvider.emptyDoc();
+      return PrivacyPolicyProvider.emptyDoc()
     }
 
     try {
-      const mgr = PrivacyPolicyProvider.ctx.resourceManager;
-      const rawData = await mgr.getRawFileContent(RawPaths.privacy(effective));
-      const jsonStr = util.TextDecoder.create('utf-8').decodeToString(rawData);
-      const parsed = JSON.parse(jsonStr) as PrivacyPolicyDocument;
-      return PrivacyPolicyProvider.normalize(parsed);
+      const mgr = PrivacyPolicyProvider.ctx.resourceManager
+      const rawData = await mgr.getRawFileContent(RawPaths.privacy(effective))
+      const jsonStr = util.TextDecoder.create('utf-8').decodeToString(rawData)
+      const parsed = JSON.parse(jsonStr) as PrivacyPolicyDocument
+      return PrivacyPolicyProvider.normalize(parsed)
     } catch (e) {
-      AppLogger.warn('PrivacyPolicyProvider', `load(${effective}) failed: ${JSON.stringify(e)}`);
+      AppLogger.warn('PrivacyPolicyProvider', `load(${effective}) failed: ${JSON.stringify(e)}`)
       if (effective !== 'en') {
         try {
-          const mgr = PrivacyPolicyProvider.ctx.resourceManager;
-          const rawData = await mgr.getRawFileContent(RawPaths.privacy('en'));
-          const jsonStr = util.TextDecoder.create('utf-8').decodeToString(rawData);
-          const parsed = JSON.parse(jsonStr) as PrivacyPolicyDocument;
-          return PrivacyPolicyProvider.normalize(parsed);
+          const mgr = PrivacyPolicyProvider.ctx.resourceManager
+          const rawData = await mgr.getRawFileContent(RawPaths.privacy('en'))
+          const jsonStr = util.TextDecoder.create('utf-8').decodeToString(rawData)
+          const parsed = JSON.parse(jsonStr) as PrivacyPolicyDocument
+          return PrivacyPolicyProvider.normalize(parsed)
         } catch (e2) {
-          AppLogger.warn('PrivacyPolicyProvider', `load(en) fallback failed: ${JSON.stringify(e2)}`);
+          AppLogger.warn('PrivacyPolicyProvider', `load(en) fallback failed: ${JSON.stringify(e2)}`)
         }
       }
-      return PrivacyPolicyProvider.emptyDoc();
+      return PrivacyPolicyProvider.emptyDoc()
     }
   }
 
   private static normalize(doc: PrivacyPolicyDocument): PrivacyPolicyDocument {
     if (doc === null || doc === undefined) {
-      return PrivacyPolicyProvider.emptyDoc();
+      return PrivacyPolicyProvider.emptyDoc()
     }
     if (typeof doc.body !== 'string') {
-      return PrivacyPolicyProvider.emptyDoc();
+      return PrivacyPolicyProvider.emptyDoc()
     }
     const meta: PrivacyPolicyMetadata =
-      doc.metadata !== undefined && doc.metadata !== null ? doc.metadata : PrivacyPolicyProvider.emptyMetadata();
+      doc.metadata !== undefined && doc.metadata !== null ? doc.metadata : PrivacyPolicyProvider.emptyMetadata()
     const normalized: PrivacyPolicyDocument = {
       metadata: meta, body: doc.body
-    };
-    return normalized;
+    }
+    return normalized
   }
 
   private static emptyDoc(): PrivacyPolicyDocument {
     const result: PrivacyPolicyDocument = {
       metadata: PrivacyPolicyProvider.emptyMetadata(), body: ''
-    };
-    return result;
+    }
+    return result
   }
 
   private static emptyMetadata(): PrivacyPolicyMetadata {
@@ -211,7 +210,7 @@ export class PrivacyPolicyProvider {
       effectiveDate: PrivacyPolicyProvider.LAST_UPDATED,
       appliesTo: PrivacyPolicyProvider.APPLIES_TO,
       fullUrl: PrivacyPolicyProvider.BASE_URL
-    };
-    return result;
+    }
+    return result
   }
 }

@@ -1,16 +1,16 @@
 // entry/src/main/ets/helper/CustomEventStorage.ets
 
-import { PreferencesHelper } from '../core/util/PreferencesHelper';
-import { STORAGE_KEY_CUSTOM_EVENTS_VERSION } from '../core/common/StorageKeys';
-import { CustomEvent, RecurrenceType } from './CustomEventModels';
+import { PreferencesHelper } from '../core/util/PreferencesHelper'
+import { STORAGE_KEY_CUSTOM_EVENTS_VERSION } from '../core/common/StorageKeys'
+import { CustomEvent, RecurrenceType } from './CustomEventModels'
 
-const KEY_CUSTOM_EVENTS = 'custom_events';
+const KEY_CUSTOM_EVENTS = 'custom_events'
 
 export class CustomEventStorage {
   static async load(): Promise<CustomEvent[]> {
     try {
-      const json = await PreferencesHelper.getString(KEY_CUSTOM_EVENTS, '[]');
-      const events = JSON.parse(json) as CustomEvent[];
+      const json = await PreferencesHelper.getString(KEY_CUSTOM_EVENTS, '[]')
+      const events = JSON.parse(json) as CustomEvent[]
 
       // Migration: ensure every event has an explicit recurrence
       return events.map((ev: CustomEvent): CustomEvent => {
@@ -25,28 +25,28 @@ export class CustomEventStorage {
             inputType: ev.inputType,
             recurrence: ev.hijriYear === -1 ? RecurrenceType.YEARLY : RecurrenceType.NONE,
             gregorianDayOfWeek: ev.gregorianDayOfWeek
-          };
-          return migrated;
+          }
+          return migrated
         }
-        return ev;
-      });
+        return ev
+      })
     } catch (e) {
-      return [];
+      return []
     }
   }
 
   static async save(events: CustomEvent[]): Promise<void> {
-    await PreferencesHelper.setString(KEY_CUSTOM_EVENTS, JSON.stringify(events));
+    await PreferencesHelper.setString(KEY_CUSTOM_EVENTS, JSON.stringify(events))
 
     // Bump so any page bound to STORAGE_KEY_CUSTOM_EVENTS_VERSION
     // (Home's CustomEventsCard) refreshes immediately rather than
     // waiting for the next foreground tick.
-    const prev = AppStorage.get<number>(STORAGE_KEY_CUSTOM_EVENTS_VERSION);
-    const next = (prev === undefined ? 0 : prev) + 1;
-    AppStorage.setOrCreate(STORAGE_KEY_CUSTOM_EVENTS_VERSION, next);
+    const prev = AppStorage.get<number>(STORAGE_KEY_CUSTOM_EVENTS_VERSION)
+    const next = (prev === undefined ? 0 : prev) + 1
+    AppStorage.setOrCreate(STORAGE_KEY_CUSTOM_EVENTS_VERSION, next)
   }
 
   static generateId(): string {
-    return `evt_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+    return `evt_${Date.now()}_${Math.floor(Math.random() * 10000)}`
   }
 }

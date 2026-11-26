@@ -1,8 +1,8 @@
 // entry/src/main/ets/helper/TypographyHelper.ets
 
-import { font } from '@kit.ArkUI';
-import { AppLogger } from '../../app/AppLogger';
-import { FontPaths } from '../../common/FontPaths';
+import { font } from '@kit.ArkUI'
+import { AppLogger } from '../../app/AppLogger'
+import { FontPaths } from '../../common/FontPaths'
 
 /**
  * Per-language typography metrics.
@@ -34,34 +34,33 @@ import { FontPaths } from '../../common/FontPaths';
  * only on the map being non-empty and returning sane multipliers.
  */
 interface LanguageMetrics {
-  lineHeightScale: number;
-  fontSizeScale: number;
+  lineHeightScale: number
+  fontSizeScale: number
 }
-
 
 const LANGUAGE_METRICS: Record<string, LanguageMetrics> = {
   // ---- Latin / Cyrillic / Greek (baseline) ----
-  'en': { lineHeightScale: 1.00, fontSizeScale: 1.00 },
-  'fr': { lineHeightScale: 1.00, fontSizeScale: 1.00 },
-  'de': { lineHeightScale: 1.00, fontSizeScale: 1.00 },
-  'es': { lineHeightScale: 1.00, fontSizeScale: 1.00 },
-  'it': { lineHeightScale: 1.00, fontSizeScale: 1.00 },
-  'id': { lineHeightScale: 1.00, fontSizeScale: 1.00 },
-  'ms': { lineHeightScale: 1.00, fontSizeScale: 1.00 },
-  'tr': { lineHeightScale: 1.00, fontSizeScale: 1.00 },
-  'sw': { lineHeightScale: 1.00, fontSizeScale: 1.00 },
-  'ha': { lineHeightScale: 1.00, fontSizeScale: 1.00 },
-  'az': { lineHeightScale: 1.00, fontSizeScale: 1.00 },
-  'uz': { lineHeightScale: 1.00, fontSizeScale: 1.00 },
-  'ru': { lineHeightScale: 1.02, fontSizeScale: 1.00 },
+  'en': { lineHeightScale: 1.0, fontSizeScale: 1.0 },
+  'fr': { lineHeightScale: 1.0, fontSizeScale: 1.0 },
+  'de': { lineHeightScale: 1.0, fontSizeScale: 1.0 },
+  'es': { lineHeightScale: 1.0, fontSizeScale: 1.0 },
+  'it': { lineHeightScale: 1.0, fontSizeScale: 1.0 },
+  'id': { lineHeightScale: 1.0, fontSizeScale: 1.0 },
+  'ms': { lineHeightScale: 1.0, fontSizeScale: 1.0 },
+  'tr': { lineHeightScale: 1.0, fontSizeScale: 1.0 },
+  'sw': { lineHeightScale: 1.0, fontSizeScale: 1.0 },
+  'ha': { lineHeightScale: 1.0, fontSizeScale: 1.0 },
+  'az': { lineHeightScale: 1.0, fontSizeScale: 1.0 },
+  'uz': { lineHeightScale: 1.0, fontSizeScale: 1.0 },
+  'ru': { lineHeightScale: 1.02, fontSizeScale: 1.0 },
 
   // ---- Arabic script ----
   // Arabic diacritics (fatha, kasra, shadda, sukun) extend above
   // and below the baseline. Urdu Nastaliq additionally hangs below.
-  'ar': { lineHeightScale: 1.15, fontSizeScale: 1.00 },
-  'fa': { lineHeightScale: 1.15, fontSizeScale: 1.00 },
-  'ur': { lineHeightScale: 1.20, fontSizeScale: 1.00 },
-  'ps': { lineHeightScale: 1.20, fontSizeScale: 1.00 },
+  'ar': { lineHeightScale: 1.15, fontSizeScale: 1.0 },
+  'fa': { lineHeightScale: 1.15, fontSizeScale: 1.0 },
+  'ur': { lineHeightScale: 1.2, fontSizeScale: 1.0 },
+  'ps': { lineHeightScale: 1.2, fontSizeScale: 1.0 },
 
   // ---- CJK ----
   // Ideographs fill the em-square fully. Slightly smaller font size
@@ -69,75 +68,72 @@ const LANGUAGE_METRICS: Record<string, LanguageMetrics> = {
   // glyphs from touching.
   'zh': { lineHeightScale: 1.05, fontSizeScale: 0.95 },
   'ja': { lineHeightScale: 1.05, fontSizeScale: 0.95 },
-  'ko': { lineHeightScale: 1.10, fontSizeScale: 0.95 },
+  'ko': { lineHeightScale: 1.1, fontSizeScale: 0.95 },
 
   // ---- Indic ----
   // Matras extend above and below; conjuncts stack horizontally at
   // the same baseline, so the line must be tall enough not to clip
   // either the top matra or the bottom vowel stroke.
-  'hi': { lineHeightScale: 1.20, fontSizeScale: 1.00 },
-  'mr': { lineHeightScale: 1.20, fontSizeScale: 1.00 },
-  'bn': { lineHeightScale: 1.25, fontSizeScale: 1.00 },
-  'ta': { lineHeightScale: 1.30, fontSizeScale: 1.00 },
-  'te': { lineHeightScale: 1.28, fontSizeScale: 1.00 },
-  'kn': { lineHeightScale: 1.28, fontSizeScale: 1.00 },
-  'ml': { lineHeightScale: 1.25, fontSizeScale: 1.00 },
-  'si': { lineHeightScale: 1.25, fontSizeScale: 1.00 },
+  'hi': { lineHeightScale: 1.2, fontSizeScale: 1.0 },
+  'mr': { lineHeightScale: 1.2, fontSizeScale: 1.0 },
+  'bn': { lineHeightScale: 1.25, fontSizeScale: 1.0 },
+  'ta': { lineHeightScale: 1.3, fontSizeScale: 1.0 },
+  'te': { lineHeightScale: 1.28, fontSizeScale: 1.0 },
+  'kn': { lineHeightScale: 1.28, fontSizeScale: 1.0 },
+  'ml': { lineHeightScale: 1.25, fontSizeScale: 1.0 },
+  'si': { lineHeightScale: 1.25, fontSizeScale: 1.0 },
 
   // ---- Southeast Asian ----
-  'th': { lineHeightScale: 1.20, fontSizeScale: 1.00 },
-  'lo': { lineHeightScale: 1.20, fontSizeScale: 1.00 },
-  'km': { lineHeightScale: 1.25, fontSizeScale: 1.00 }
-};
-
+  'th': { lineHeightScale: 1.2, fontSizeScale: 1.0 },
+  'lo': { lineHeightScale: 1.2, fontSizeScale: 1.0 },
+  'km': { lineHeightScale: 1.25, fontSizeScale: 1.0 }
+}
 
 const DEFAULT_METRICS: LanguageMetrics = {
-  lineHeightScale: 1.00, fontSizeScale: 1.00
-};
+  lineHeightScale: 1.0, fontSizeScale: 1.0
+}
 
 /** Arabic font metrics — used for Arabic glyphs rendered inside a
  *  non-Arabic UI (e.g. the Dua card showing Arabic text under an
  *  English title). The GLYPHS are Arabic regardless of UI language,
  *  so Arabic metrics apply. */
 const ARABIC_METRICS: LanguageMetrics = {
-  lineHeightScale: 1.15, fontSizeScale: 1.00
-};
+  lineHeightScale: 1.15, fontSizeScale: 1.0
+}
 
 export class TypographyHelper {
   /** Font size for verse-by-verse text (Reading/Translation modes). */
-  static readonly QURAN_FONT_SIZE_VERSE: number = 32;
+  static readonly QURAN_FONT_SIZE_VERSE: number = 32
   /** Base line height for verse-by-verse text. */
-  static readonly QURAN_LINE_HEIGHT_VERSE: number = 60;
+  static readonly QURAN_LINE_HEIGHT_VERSE: number = 60
   /** Font size for continuous Mushaf text (Increased for readability). */
-  static readonly QURAN_FONT_SIZE_MUSHAF: number = 32;
+  static readonly QURAN_FONT_SIZE_MUSHAF: number = 32
   /** Base line height for continuous Mushaf text. */
-  static readonly QURAN_LINE_HEIGHT_MUSHAF: number = 75;
+  static readonly QURAN_LINE_HEIGHT_MUSHAF: number = 75
   /** Font size for the Bismillah header. */
-  static readonly BISMILLAH_FONT_SIZE: number = 26;
+  static readonly BISMILLAH_FONT_SIZE: number = 26
   /** Base line height for the Bismillah header. */
-  static readonly BISMILLAH_LINE_HEIGHT: number = 60;
+  static readonly BISMILLAH_LINE_HEIGHT: number = 60
   /** Font size for the Surah header ornament in Mushaf view. */
-  static readonly SURAH_HEADER_FONT_SIZE: number = 26;
-  static readonly FONT_AUTO = 'auto';
-  static readonly FONT_AMIRI = 'Amiri';
-  static readonly FONT_AMIRI_QURAN = 'AmiriQuran';
-  static readonly FONT_HAFS = 'HafsArabic';
-  static readonly FONT_NASTALIQ = 'JameelNoori';
-  static readonly FONT_NOTO_NASTALIQ = 'NotoNastaliqUrdu';
-  static readonly FONT_QPC_HAFS = 'QPC_Hafs';
-  static readonly FONT_KEMENAG = 'LPMQIsepMisbah';
-  static readonly FONT_WARSH = 'KFGQPCWarsh';
-  static readonly FONT_SCHEHERAZADE = 'ScheherazadeNew';
-  static readonly FONT_NOTONASKH = 'NotoNaskh';
+  static readonly SURAH_HEADER_FONT_SIZE: number = 26
+  static readonly FONT_AUTO = 'auto'
+  static readonly FONT_AMIRI = 'Amiri'
+  static readonly FONT_AMIRI_QURAN = 'AmiriQuran'
+  static readonly FONT_HAFS = 'HafsArabic'
+  static readonly FONT_NASTALIQ = 'JameelNoori'
+  static readonly FONT_NOTO_NASTALIQ = 'NotoNastaliqUrdu'
+  static readonly FONT_QPC_HAFS = 'QPC_Hafs'
+  static readonly FONT_KEMENAG = 'LPMQIsepMisbah'
+  static readonly FONT_WARSH = 'KFGQPCWarsh'
+  static readonly FONT_SCHEHERAZADE = 'ScheherazadeNew'
+  static readonly FONT_NOTONASKH = 'NotoNaskh'
 
   /**
    * Register custom fonts. Call this once in EntryAbility.
    */
   static init(): void {
     try {
-
       const fonts: font.FontOptions[] = [
-
         // ========================================================// LATIN// ========================================================
 
         {
@@ -212,17 +208,15 @@ export class TypographyHelper {
 
         {
           familyName: 'QPC_Hafs', familySrc: $rawfile(FontPaths.QPC_HAFS)
-        }];
+        }]
 
       fonts.forEach((fontOption: font.FontOptions) => {
-        font.registerFont(fontOption);
-      });
+        font.registerFont(fontOption)
+      })
 
-      AppLogger.info('TypographyHelper', `Registered ${fonts.length} fonts successfully.`);
-
+      AppLogger.info('TypographyHelper', `Registered ${fonts.length} fonts successfully.`)
     } catch (err) {
-
-      AppLogger.error('TypographyHelper', `Font registration failed: ${JSON.stringify(err)}`);
+      AppLogger.error('TypographyHelper', `Font registration failed: ${JSON.stringify(err)}`)
     }
   }
 
@@ -244,8 +238,8 @@ export class TypographyHelper {
    * that need more vertical room the value is increased automatically.
    */
   static getLineHeight(lang: string, baseVp: number): number {
-    const metrics = LANGUAGE_METRICS[lang] || DEFAULT_METRICS;
-    return baseVp * metrics.lineHeightScale;
+    const metrics = LANGUAGE_METRICS[lang] || DEFAULT_METRICS
+    return baseVp * metrics.lineHeightScale
   }
 
   /**
@@ -262,8 +256,8 @@ export class TypographyHelper {
    *   .fontSize(TypographyHelper.getFontSize(this.currentLanguage, 14))
    */
   static getFontSize(lang: string, baseFp: number): number {
-    const metrics = LANGUAGE_METRICS[lang] || DEFAULT_METRICS;
-    return baseFp * metrics.fontSizeScale;
+    const metrics = LANGUAGE_METRICS[lang] || DEFAULT_METRICS
+    return baseFp * metrics.fontSizeScale
   }
 
   /**
@@ -277,14 +271,14 @@ export class TypographyHelper {
    *   .lineHeight(TypographyHelper.getArabicLineHeight(38))
    */
   static getArabicLineHeight(baseVp: number): number {
-    return baseVp * ARABIC_METRICS.lineHeightScale;
+    return baseVp * ARABIC_METRICS.lineHeightScale
   }
 
   /**
    * Scale a fontSize for Arabic glyphs shown inside a non-Arabic UI.
    */
   static getArabicFontSize(baseFp: number): number {
-    return baseFp * ARABIC_METRICS.fontSizeScale;
+    return baseFp * ARABIC_METRICS.fontSizeScale
   }
 
   // ============================================================
@@ -293,38 +287,37 @@ export class TypographyHelper {
 
   /** Return the raw metrics for a language. Useful for tests. */
   static metricsFor(lang: string): LanguageMetrics {
-    return LANGUAGE_METRICS[lang] || DEFAULT_METRICS;
+    return LANGUAGE_METRICS[lang] || DEFAULT_METRICS
   }
 
   /** All languages with a tuned baseline. */
   static supportedBaselines(): string[] {
-    return Object.keys(LANGUAGE_METRICS);
+    return Object.keys(LANGUAGE_METRICS)
   }
-
 
   // ============================================================
   // TRANSLATION FONTS
   // ============================================================
 
   static getTranslationFont(lang: string, isBold: boolean = false): string {
-    const pref = AppStorage.get<string>('translation_font_family') ?? 'auto';
+    const pref = AppStorage.get<string>('translation_font_family') ?? 'auto'
 
     if (pref !== 'auto') {
-      return isBold ? `${pref}-Bold, ${pref}, sans-serif` : `${pref}, sans-serif`;
+      return isBold ? `${pref}-Bold, ${pref}, sans-serif` : `${pref}, sans-serif`
     }
 
     // Auto-Detect logic
     if (lang === 'bn') {
-      return 'NotoSansBengali, sans-serif';
+      return 'NotoSansBengali, sans-serif'
     }
     if (lang === 'zh') {
-      return 'NotoSansSC, sans-serif';
+      return 'NotoSansSC, sans-serif'
     }
     if (lang === 'ur') {
-      return 'NotoNastaliqUrdu, sans-serif';
+      return 'NotoNastaliqUrdu, sans-serif'
     }
 
-    return isBold ? 'Outfit-Bold, sans-serif' : 'Outfit, sans-serif';
+    return isBold ? 'Outfit-Bold, sans-serif' : 'Outfit, sans-serif'
   }
 
   // ============================================================
@@ -332,39 +325,39 @@ export class TypographyHelper {
   // ============================================================
 
   static getArabicFont(isQuran: boolean = false, activeScript: string = ''): string {
-    const pref = AppStorage.get<string>('arabic_font_family') ?? 'auto';
+    const pref = AppStorage.get<string>('arabic_font_family') ?? 'auto'
 
     if (pref !== 'auto') {
-      return `${pref}, AmiriQuran, Amiri, sans-serif`;
+      return `${pref}, AmiriQuran, Amiri, sans-serif`
     }
 
     // Auto-Detect logic based on language and context
-    const lang = AppStorage.get<string>('app_language') ?? 'en';
+    const lang = AppStorage.get<string>('app_language') ?? 'en'
 
     if (isQuran) {
       if (activeScript === 'indopak') {
-        return 'JameelNoori, NotoNastaliqUrdu, sans-serif';
+        return 'JameelNoori, NotoNastaliqUrdu, sans-serif'
       }
       if (activeScript === 'kemenag') {
-        return 'LPMQIsepMisbah, sans-serif';
+        return 'LPMQIsepMisbah, sans-serif'
       }
       if (activeScript === 'warsh') {
-        return 'KFGQPCWarsh, AmiriQuran, sans-serif';
+        return 'KFGQPCWarsh, AmiriQuran, sans-serif'
       }
       if (activeScript === 'uthmani' || activeScript === 'qpc-hafs') {
-        return 'QPC_Hafs, AmiriQuran, sans-serif';
+        return 'QPC_Hafs, AmiriQuran, sans-serif'
       }
-      return 'AmiriQuran, sans-serif';
+      return 'AmiriQuran, sans-serif'
     }
 
     if (lang === 'ur') {
-      return 'JameelNoori, NotoNastaliqUrdu, sans-serif';
+      return 'JameelNoori, NotoNastaliqUrdu, sans-serif'
     }
     if (lang === 'id') {
-      return 'LPMQIsepMisbah, Amiri, sans-serif';
+      return 'LPMQIsepMisbah, Amiri, sans-serif'
     }
 
-    return 'Amiri, HafsArabic, sans-serif';
+    return 'Amiri, HafsArabic, sans-serif'
   }
 
   /**
@@ -372,16 +365,16 @@ export class TypographyHelper {
    */
   static getFont(lang: string, isBold: boolean = false): string {
     if (lang === 'ar' || lang === 'ur') {
-      return TypographyHelper.getArabicFont(false);
+      return TypographyHelper.getArabicFont(false)
     }
-    return TypographyHelper.getTranslationFont(lang, isBold);
+    return TypographyHelper.getTranslationFont(lang, isBold)
   }
 
   /**
    * Legacy wrapper for Quran scripts.
    */
   static getQuranFontByScript(script: string): string {
-    return TypographyHelper.getArabicFont(true, script);
+    return TypographyHelper.getArabicFont(true, script)
   }
 
   /**
@@ -389,41 +382,41 @@ export class TypographyHelper {
    * If 'auto', falls back to a script-appropriate default based on the UI language.
    */
   static getActiveArabicFont(isQuran: boolean = false, activeScript: string = ''): string {
-    const pref = AppStorage.get<string>('arabic_font_family') ?? 'auto';
+    const pref = AppStorage.get<string>('arabic_font_family') ?? 'auto'
 
     if (pref !== 'auto') { // User manually selected a font. Ensure fallbacks are appended.
-      return `${pref}, AmiriQuran, Amiri, sans-serif`;
+      return `${pref}, AmiriQuran, Amiri, sans-serif`
     }
 
     // --- AUTO DETECT LOGIC ---
-    const lang = AppStorage.get<string>('app_language') ?? 'en';
+    const lang = AppStorage.get<string>('app_language') ?? 'en'
 
     // 1. Region-specific defaults
     if (lang === 'ur') { // Urdu users default to Nastaliq for general text, Naskh for Quran
-      return isQuran ? 'AmiriQuran, sans-serif' : 'JameelNoori, NotoNastaliqUrdu, sans-serif';
+      return isQuran ? 'AmiriQuran, sans-serif' : 'JameelNoori, NotoNastaliqUrdu, sans-serif'
     }
     if (lang === 'id') {
-      return isQuran ? 'AmiriQuran, LPMQIsepMisbah, sans-serif' : 'LPMQIsepMisbah, Amiri, sans-serif';
+      return isQuran ? 'AmiriQuran, LPMQIsepMisbah, sans-serif' : 'LPMQIsepMisbah, Amiri, sans-serif'
     }
 
     // 2. Context-specific defaults for everyone else
     if (isQuran) { // Respect the specific Quran script setting if provided
       if (activeScript === 'indopak') {
-        return 'JameelNoori, NotoNastaliqUrdu, sans-serif';
+        return 'JameelNoori, NotoNastaliqUrdu, sans-serif'
       }
       if (activeScript === 'kemenag') {
-        return 'LPMQIsepMisbah, sans-serif';
+        return 'LPMQIsepMisbah, sans-serif'
       }
       if (activeScript === 'warsh') {
-        return 'KFGQPCWarsh, AmiriQuran, sans-serif';
+        return 'KFGQPCWarsh, AmiriQuran, sans-serif'
       }
       if (activeScript === 'uthmani' || activeScript === 'qpc-hafs') {
-        return 'QPC_Hafs, AmiriQuran, sans-serif';
+        return 'QPC_Hafs, AmiriQuran, sans-serif'
       }
-      return 'AmiriQuran, sans-serif'; // Standard fallback
+      return 'AmiriQuran, sans-serif' // Standard fallback
     }
 
     // General Arabic text (Hadith, Duas, UI)
-    return 'Amiri, HafsArabic, sans-serif';
+    return 'Amiri, HafsArabic, sans-serif'
   }
 }

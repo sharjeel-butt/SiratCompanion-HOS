@@ -1,14 +1,14 @@
-import { insightIntent, InsightIntentExecutor } from '@kit.AbilityKit';
-import { window } from '@kit.ArkUI';
-import { WidgetDataBuilder } from '../widgets/WidgetDataBuilder';
-import { PreferencesHelper } from '../core/util/PreferencesHelper';
-import { RamadanHelper, RamadanInfo } from '../ramadan/RamadanHelper';
-import { L } from '../i18n/LocalizationHelper';
+import { insightIntent, InsightIntentExecutor } from '@kit.AbilityKit'
+import { window } from '@kit.ArkUI'
+import { WidgetDataBuilder } from '../widgets/WidgetDataBuilder'
+import { PreferencesHelper } from '../core/util/PreferencesHelper'
+import { RamadanHelper, RamadanInfo } from '../ramadan/RamadanHelper'
+import { L } from '../i18n/LocalizationHelper'
 import {
   STORAGE_KEY_HIJRI_OFFSET,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LANGUAGE_OVERRIDE
-} from '../core/common/StorageKeys';
+} from '../core/common/StorageKeys'
 
 /**
  * XiaoYi insight-intent executor.
@@ -32,26 +32,26 @@ export default class PrayerIntentExecutor extends InsightIntentExecutor {
     try { // WidgetDataBuilder.build() resolves location + calculates
       // prayer times + formats the next-prayer pair, all in one
       // pass. Reusing it here avoids duplicating the pipeline.
-      const data: Record<string, Object> = await WidgetDataBuilder.build('2*2');
+      const data: Record<string, Object> = await WidgetDataBuilder.build('2*2')
 
-      const nextName: string = data.nextName as string;
-      const nextTime: string = data.nextTime as string;
-      const message: string = `The next prayer is ${nextName} at ${nextTime}.`;
+      const nextName: string = data.nextName as string
+      const nextTime: string = data.nextTime as string
+      const message: string = `The next prayer is ${nextName} at ${nextTime}.`
 
       const result: insightIntent.ExecuteResult = {
         code: 0, result: {
           message: message
         }
-      };
-      return result;
+      }
+      return result
     } catch (e) {
-      const error: Error = e as Error;
+      const error: Error = e as Error
       const result: insightIntent.ExecuteResult = {
         code: -1, result: {
           message: `Failed to calculate prayer times: ${error.message}`
         }
-      };
-      return result;
+      }
+      return result
     }
   }
 
@@ -63,38 +63,38 @@ export default class PrayerIntentExecutor extends InsightIntentExecutor {
     try { // Reload from disk so a language change made in the app
       // after the executor was last called is reflected. Cheap
       // (one getAll) and safe (no-op if store is null).
-      await PreferencesHelper.reloadFromDisk();
+      await PreferencesHelper.reloadFromDisk()
 
-      const lang = await PrayerIntentExecutor.resolveLanguage();
-      const hijriOffset = await PreferencesHelper.getNumber(STORAGE_KEY_HIJRI_OFFSET, 0);
+      const lang = await PrayerIntentExecutor.resolveLanguage()
+      const hijriOffset = await PreferencesHelper.getNumber(STORAGE_KEY_HIJRI_OFFSET, 0)
 
-      const info: RamadanInfo | null = RamadanHelper.getRamadanInfo(hijriOffset);
+      const info: RamadanInfo | null = RamadanHelper.getRamadanInfo(hijriOffset)
 
       if (info === null) {
         const result: insightIntent.ExecuteResult = {
           code: -1, result: {
             message: 'Ramadan information is not available.'
           }
-        };
-        return result;
+        }
+        return result
       }
 
-      const message = await PrayerIntentExecutor.buildRamadanMessage(info, lang);
+      const message = await PrayerIntentExecutor.buildRamadanMessage(info, lang)
 
       const result: insightIntent.ExecuteResult = {
         code: 0, result: {
           message: message
         }
-      };
-      return result;
+      }
+      return result
     } catch (e) {
-      const error: Error = e as Error;
+      const error: Error = e as Error
       const result: insightIntent.ExecuteResult = {
         code: -1, result: {
           message: `Failed to get Ramadan status: ${error.message}`
         }
-      };
-      return result;
+      }
+      return result
     }
   }
 
@@ -109,45 +109,45 @@ export default class PrayerIntentExecutor extends InsightIntentExecutor {
       // Ramadan widget builder — reusing it keeps the countdown
       // phrasing identical between the widget and the voice reply.
       try {
-        const widgetData = await WidgetDataBuilder.buildRamadanWidget('2*2', lang);
-        const targetName = widgetData.targetName as string;
-        const targetTime = widgetData.targetTime as string;
-        const countdown = widgetData.countdown as string;
+        const widgetData = await WidgetDataBuilder.buildRamadanWidget('2*2', lang)
+        const targetName = widgetData.targetName as string
+        const targetTime = widgetData.targetTime as string
+        const countdown = widgetData.countdown as string
 
-        const hasEvent = targetName.length > 0 && targetTime.length > 0 && targetTime !== '--:--';
+        const hasEvent = targetName.length > 0 && targetTime.length > 0 && targetTime !== '--:--'
 
         if (hasEvent) {
-          const countdownPart = countdown.length > 0 ? `, ${countdown}` : '';
-          return `Ramadan is currently active. Today is day ${info.currentDayNumber} of ${info.totalDays}. ${targetName} at ${targetTime}${countdownPart}.`;
+          const countdownPart = countdown.length > 0 ? `, ${countdown}` : ''
+          return `Ramadan is currently active. Today is day ${info.currentDayNumber} of ${info.totalDays}. ${targetName} at ${targetTime}${countdownPart}.`
         }
       } catch (e) { // Fall through — a basic day-X-of-Y answer is still useful
         // if widget data resolution fails (e.g. no location).
       }
 
-      return `Ramadan is currently active. Today is day ${info.currentDayNumber} of ${info.totalDays}.`;
+      return `Ramadan is currently active. Today is day ${info.currentDayNumber} of ${info.totalDays}.`
     }
 
     // ---- Ramadan is not currently active ----
     // The user asked "when is Ramadan" / "how many days until Ramadan"
     // — answer both: the countdown is the primary answer, the date
     // is the supporting detail.
-    const days = info.daysUntilStart;
-    const startDateStr = PrayerIntentExecutor.formatGregorianDate(info.fastingStart, lang);
+    const days = info.daysUntilStart
+    const startDateStr = PrayerIntentExecutor.formatGregorianDate(info.fastingStart, lang)
 
     if (days === 0) {
-      return `Ramadan begins today, ${startDateStr}.`;
+      return `Ramadan begins today, ${startDateStr}.`
     }
     if (days === 1) {
-      return `Ramadan begins tomorrow, ${startDateStr}.`;
+      return `Ramadan begins tomorrow, ${startDateStr}.`
     }
     if (days < 0) { // Defensive — should not be reachable (isRamadanNow handles
       // the "we are inside Ramadan" case above, and daysUntilStart
       // is 0 whenever isRamadanNow is true). Included so a
       // future RamadanHelper change can't produce a negative-day
       // response.
-      return `Ramadan begins on ${startDateStr}.`;
+      return `Ramadan begins on ${startDateStr}.`
     }
-    return `${days} days remaining until Ramadan, which begins on ${startDateStr}.`;
+    return `${days} days remaining until Ramadan, which begins on ${startDateStr}.`
   }
 
   // ============================================================
@@ -164,15 +164,15 @@ export default class PrayerIntentExecutor extends InsightIntentExecutor {
    * (which is always set by EntryAbility on first run).
    */
   private static async resolveLanguage(): Promise<string> {
-    const override = await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE_OVERRIDE, 'system');
+    const override = await PreferencesHelper.getString(STORAGE_KEY_LANGUAGE_OVERRIDE, 'system')
 
     if (override === 'system') {
-      return L.matchSystemLocale();
+      return L.matchSystemLocale()
     }
     if (override.length > 0) {
-      return override;
+      return override
     }
-    return PreferencesHelper.getString(STORAGE_KEY_LANGUAGE, 'en');
+    return PreferencesHelper.getString(STORAGE_KEY_LANGUAGE, 'en')
   }
 
   // ============================================================
@@ -188,30 +188,30 @@ export default class PrayerIntentExecutor extends InsightIntentExecutor {
    */
   private static formatGregorianDate(date: Date, lang: string): string {
     const locale = lang === 'zh' ? 'zh-CN' : lang === 'ar' ? 'ar' :
-      lang === 'ur' ? 'ur' : lang === 'tr' ? 'tr' : lang === 'bn' ? 'bn' : lang === 'id' ? 'id' : 'en-US';
+      lang === 'ur' ? 'ur' : lang === 'tr' ? 'tr' : lang === 'bn' ? 'bn' : lang === 'id' ? 'id' : 'en-US'
     try {
       const fmt = new Intl.DateTimeFormat(locale, {
         month: 'long', day: 'numeric', year: 'numeric'
-      });
-      return fmt.format(date);
+      })
+      return fmt.format(date)
     } catch (err) {
-      return date.toDateString();
+      return date.toDateString()
     }
   }
 
   async onExecuteInUIAbilityForegroundMode(name: string, param: Record<string, Object>,
     pageLoader: window.WindowStage): Promise<insightIntent.ExecuteResult> {
     if (name === 'GetPrayerTimes') {
-      return PrayerIntentExecutor.handleGetPrayerTimes();
+      return PrayerIntentExecutor.handleGetPrayerTimes()
     }
     if (name === 'GetRamadanStatus') {
-      return PrayerIntentExecutor.handleGetRamadanStatus();
+      return PrayerIntentExecutor.handleGetRamadanStatus()
     } // Fallback for unknown intents
     const defaultResult: insightIntent.ExecuteResult = {
       code: -1, result: {
         message: 'Unknown intent'
       }
-    };
-    return defaultResult;
+    }
+    return defaultResult
   }
 }

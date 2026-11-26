@@ -1,12 +1,10 @@
 // entry/src/main/ets/pages/QiblaPage.ets
 
-import { mediaquery, router } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
-import { QiblaCalibrationOverlay } from './QiblaCalibrationOverlay';
-import {
-  OrientationReading, QiblaSensorHelper, SensorAccuracy
-} from './QiblaSensorHelper';
+import { mediaquery, router } from '@kit.ArkUI'
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
+import { QiblaCalibrationOverlay } from './QiblaCalibrationOverlay'
+import { OrientationReading, QiblaSensorHelper, SensorAccuracy } from './QiblaSensorHelper'
 
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
@@ -15,20 +13,20 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_SETTINGS_INITIAL_CATEGORY,
   STORAGE_KEY_THEME_MODE
-} from '../core/common/StorageKeys';
-import { QiblaCalculator } from './QiblaCalculator';
-import { SettingsHelper } from '../settings/SettingsHelper';
-import { LocationCache } from '../location/LocationCache';
-import { LocationMode } from '../settings/SettingsModels';
-import { NavHelper } from '../core/util/NavHelper';
-import { L } from '../i18n/LocalizationHelper';
-import { OfflineCityLookup } from '../location/OfflineCityLookup';
-import { Breakpoints } from '../core/layout/Breakpoints';
-import { WmmCalculator } from '../location/WmmCalculator';
+} from '../core/common/StorageKeys'
+import { QiblaCalculator } from './QiblaCalculator'
+import { SettingsHelper } from '../settings/SettingsHelper'
+import { LocationCache } from '../location/LocationCache'
+import { LocationMode } from '../settings/SettingsModels'
+import { NavHelper } from '../core/util/NavHelper'
+import { L } from '../i18n/LocalizationHelper'
+import { OfflineCityLookup } from '../location/OfflineCityLookup'
+import { Breakpoints } from '../core/layout/Breakpoints'
+import { WmmCalculator } from '../location/WmmCalculator'
 
-const SENSOR_INTERVAL_MS = 100;
-const ROTATION_ANIM_MS = 90;
-const HEADING_SMOOTHING = 0.35;
+const SENSOR_INTERVAL_MS = 100
+const ROTATION_ANIM_MS = 90
+const HEADING_SMOOTHING = 0.35
 
 @Component
 export struct QiblaPage {
@@ -69,37 +67,37 @@ export struct QiblaPage {
   // ============================================================
 
   aboutToAppear(): void {
-    this.currentLanguage = this.appLanguage;
-    this.colors = PageTheme.compute(this.themeMode);
+    this.currentLanguage = this.appLanguage
+    this.colors = PageTheme.compute(this.themeMode)
     this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
-      this.colors = c;
-    });
+      this.colors = c
+    })
 
-    this.loadLocation();
+    this.loadLocation()
 
     const ok = QiblaSensorHelper.register((r: OrientationReading) => {
-      this.rawHeading = r.heading;
-      this.isFlat = r.isFlat;
-      this.sensorReady = true;
-      this.sensorAccuracy = r.accuracy;
-      this.evaluateCalibrationNeed();
-      this.updateAngles(r.heading);
-    });
+      this.rawHeading = r.heading
+      this.isFlat = r.isFlat
+      this.sensorReady = true
+      this.sensorAccuracy = r.accuracy
+      this.evaluateCalibrationNeed()
+      this.updateAngles(r.heading)
+    })
     if (!ok) {
-      this.sensorReady = false;
+      this.sensorReady = false
     }
   }
 
   aboutToDisappear(): void {
-    PageTheme.uninstallSystemListener(this.systemDarkListener);
-    this.systemDarkListener = null;
-    QiblaSensorHelper.unregister();
+    PageTheme.uninstallSystemListener(this.systemDarkListener)
+    this.systemDarkListener = null
+    QiblaSensorHelper.unregister()
   }
 
   onPageShow(): void {
-    this.currentLanguage = this.appLanguage;
-    this.colors = PageTheme.compute(this.themeMode);
-    this.loadLocation();
+    this.currentLanguage = this.appLanguage
+    this.colors = PageTheme.compute(this.themeMode)
+    this.loadLocation()
   }
 
   // ============================================================
@@ -137,7 +135,7 @@ export struct QiblaPage {
                 .margin({ top: 20 })
                 .alignItems(VerticalAlign.Center)
                 .onClick(() => {
-                  this.openLocationSettings();
+                  this.openLocationSettings()
                 })
 
                 this.CompassView()
@@ -213,7 +211,7 @@ export struct QiblaPage {
               .margin({ top: 20 })
               .alignItems(VerticalAlign.Center)
               .onClick(() => {
-                this.openLocationSettings();
+                this.openLocationSettings()
               })
 
               this.CompassView()
@@ -281,7 +279,7 @@ export struct QiblaPage {
           currentLanguage: this.currentLanguage,
           isDarkMode: this.isDarkMode(),
           onSkip: () => {
-            this.dismissCalibration();
+            this.dismissCalibration()
           }
         })
       }
@@ -375,7 +373,7 @@ export struct QiblaPage {
             .fontColor(this.colors.accentGold)
             .decoration({ type: TextDecorationType.Underline })
             .onClick(() => {
-              this.showCalibrationOverlay = true;
+              this.showCalibrationOverlay = true
             })
         }.width('100%')
       }
@@ -393,28 +391,28 @@ export struct QiblaPage {
   // ============================================================
 
   private tr(key: string): string {
-    return L.get(key, this.currentLanguage);
+    return L.get(key, this.currentLanguage)
   }
 
   private isRtl(): boolean {
-    return L.isRtlLang(this.currentLanguage);
+    return L.isRtlLang(this.currentLanguage)
   }
 
   private onThemeModeChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   private onLanguageChanged(): void {
-    this.currentLanguage = this.appLanguage;
-    this.loadLocation();
+    this.currentLanguage = this.appLanguage
+    this.loadLocation()
   }
 
   private isTablet(): boolean {
-    return Breakpoints.isTablet(this.breakpoint);
+    return Breakpoints.isTablet(this.breakpoint)
   }
 
   private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   /**
@@ -422,22 +420,22 @@ export struct QiblaPage {
    * from the OS alone — see PageTheme.isDarkFor.
    */
   private isDarkMode(): boolean {
-    return PageTheme.isDarkFor(this.themeMode);
+    return PageTheme.isDarkFor(this.themeMode)
   }
 
   private async onAppForegrounded(): Promise<void> {
-    await this.loadLocation();
+    await this.loadLocation()
     if (!this.sensorReady) {
       const ok = QiblaSensorHelper.register((r: OrientationReading) => {
-        this.rawHeading = r.heading;
-        this.isFlat = r.isFlat;
-        this.sensorReady = true;
-        this.sensorAccuracy = r.accuracy;
-        this.evaluateCalibrationNeed();
-        this.updateAngles(r.heading);
-      });
+        this.rawHeading = r.heading
+        this.isFlat = r.isFlat
+        this.sensorReady = true
+        this.sensorAccuracy = r.accuracy
+        this.evaluateCalibrationNeed()
+        this.updateAngles(r.heading)
+      })
       if (!ok) {
-        this.sensorReady = false;
+        this.sensorReady = false
       }
     }
   }
@@ -449,138 +447,138 @@ export struct QiblaPage {
    * redundant state writes.
    */
   private evaluateCalibrationNeed(): void {
-    const isPoor = this.sensorAccuracy === SensorAccuracy.UNRELIABLE || this.sensorAccuracy === SensorAccuracy.LOW;
+    const isPoor = this.sensorAccuracy === SensorAccuracy.UNRELIABLE || this.sensorAccuracy === SensorAccuracy.LOW
 
     if (isPoor && !this.calibrationSkippedThisSession) {
       if (!this.showCalibrationOverlay) {
-        this.showCalibrationOverlay = true;
+        this.showCalibrationOverlay = true
       }
     } else if (!isPoor) {
       if (this.showCalibrationOverlay) {
-        this.showCalibrationOverlay = false;
+        this.showCalibrationOverlay = false
       }
-      this.calibrationSkippedThisSession = false;
+      this.calibrationSkippedThisSession = false
     }
   }
 
   private dismissCalibration(): void {
-    this.calibrationSkippedThisSession = true;
-    this.showCalibrationOverlay = false;
+    this.calibrationSkippedThisSession = true
+    this.showCalibrationOverlay = false
   }
 
   private shortestDelta(from: number, to: number): number {
-    let d = to - from;
+    let d = to - from
     while (d > 180) {
-      d -= 360;
+      d -= 360
     }
     while (d < -180) {
-      d += 360;
+      d += 360
     }
-    return d;
+    return d
   }
 
   private unwrap(current: number, target: number): number {
-    return current + this.shortestDelta(current, target);
+    return current + this.shortestDelta(current, target)
   }
 
   private updateAngles(rawHeading: number): void {
     if (this.firstReading) {
-      this.smoothedHeading = rawHeading;
-      const trueHeading = rawHeading + this.declinationDeg;
-      this.roseAngle = -trueHeading;
-      this.needleAngle = this.qiblaBearing - trueHeading;
-      this.firstReading = false;
-      return;
+      this.smoothedHeading = rawHeading
+      const trueHeading = rawHeading + this.declinationDeg
+      this.roseAngle = -trueHeading
+      this.needleAngle = this.qiblaBearing - trueHeading
+      this.firstReading = false
+      return
     }
 
-    const hDelta = this.shortestDelta(this.smoothedHeading, rawHeading);
-    this.smoothedHeading = (this.smoothedHeading + hDelta * HEADING_SMOOTHING + 360) % 360;
+    const hDelta = this.shortestDelta(this.smoothedHeading, rawHeading)
+    this.smoothedHeading = (this.smoothedHeading + hDelta * HEADING_SMOOTHING + 360) % 360
 
-    const trueHeading = this.smoothedHeading + this.declinationDeg;
+    const trueHeading = this.smoothedHeading + this.declinationDeg
 
-    const targetRose = -trueHeading;
-    this.roseAngle = this.unwrap(this.roseAngle, targetRose);
+    const targetRose = -trueHeading
+    this.roseAngle = this.unwrap(this.roseAngle, targetRose)
 
-    const targetNeedle = this.qiblaBearing - trueHeading;
-    this.needleAngle = this.unwrap(this.needleAngle, targetNeedle);
+    const targetNeedle = this.qiblaBearing - trueHeading
+    this.needleAngle = this.unwrap(this.needleAngle, targetNeedle)
   }
 
   private async loadLocation(): Promise<void> {
-    const mode = await SettingsHelper.getLocationMode();
+    const mode = await SettingsHelper.getLocationMode()
 
     if (mode === LocationMode.MANUAL) {
-      const coords = await SettingsHelper.getManualCoords();
+      const coords = await SettingsHelper.getManualCoords()
       if (coords.lat !== 0 || coords.lng !== 0) {
-        this.latitude = coords.lat;
-        this.longitude = coords.lng;
+        this.latitude = coords.lat
+        this.longitude = coords.lng
 
-        let rawCity = coords.cityName;
+        let rawCity = coords.cityName
         if (rawCity === 'DEFAULT LOCATION' || rawCity.length === 0) {
-          rawCity = this.tr('default_location');
+          rawCity = this.tr('default_location')
         } else {
-          rawCity = OfflineCityLookup.translateCityName(rawCity, this.currentLanguage);
+          rawCity = OfflineCityLookup.translateCityName(rawCity, this.currentLanguage)
         }
 
-        this.cityName = rawCity.length > 0 ? `${rawCity} (${this.tr('manual_location')})` : this.tr('manual_location');
-        this.updateQibla();
-        return;
+        this.cityName = rawCity.length > 0 ? `${rawCity} (${this.tr('manual_location')})` : this.tr('manual_location')
+        this.updateQibla()
+        return
       }
     }
 
-    const cached = await LocationCache.load();
+    const cached = await LocationCache.load()
     if (cached) {
-      this.latitude = cached.latitude;
-      this.longitude = cached.longitude;
+      this.latitude = cached.latitude
+      this.longitude = cached.longitude
 
-      let rawCity = cached.cityName;
+      let rawCity = cached.cityName
       if (rawCity === 'DEFAULT LOCATION' || rawCity.length === 0) {
-        rawCity = this.tr('default_location');
+        rawCity = this.tr('default_location')
       } else {
-        rawCity = OfflineCityLookup.translateCityName(rawCity, this.currentLanguage);
+        rawCity = OfflineCityLookup.translateCityName(rawCity, this.currentLanguage)
       }
-      this.cityName = rawCity;
-      this.updateQibla();
+      this.cityName = rawCity
+      this.updateQibla()
     } else {
-      this.cityName = this.tr('location_unavailable');
+      this.cityName = this.tr('location_unavailable')
     }
   }
 
   private updateQibla(): void {
     if (this.latitude === 0 && this.longitude === 0) {
-      return;
+      return
     }
-    this.qiblaBearing = QiblaCalculator.calculateBearing(this.latitude, this.longitude);
-    this.distanceKm = QiblaCalculator.calculateDistance(this.latitude, this.longitude);
+    this.qiblaBearing = QiblaCalculator.calculateBearing(this.latitude, this.longitude)
+    this.distanceKm = QiblaCalculator.calculateDistance(this.latitude, this.longitude)
 
     try {
       this.declinationDeg = WmmCalculator.getDeclination(this.latitude, this.longitude, 0, // Sea level
-        new Date());
+        new Date())
     } catch (e) {
-      console.error('WMM calculation failed', e);
-      this.declinationDeg = 0; // Fallback
+      console.error('WMM calculation failed', e)
+      this.declinationDeg = 0 // Fallback
     }
 
-    const trueHeading = this.smoothedHeading + this.declinationDeg;
-    const targetNeedle = this.qiblaBearing - trueHeading;
-    this.needleAngle = this.unwrap(this.needleAngle, targetNeedle);
+    const trueHeading = this.smoothedHeading + this.declinationDeg
+    const targetNeedle = this.qiblaBearing - trueHeading
+    this.needleAngle = this.unwrap(this.needleAngle, targetNeedle)
   }
 
   private openLocationSettings(): void {
-    AppStorage.setOrCreate(STORAGE_KEY_SETTINGS_INITIAL_CATEGORY, 'Location');
-    NavHelper.prepareForward();
+    AppStorage.setOrCreate(STORAGE_KEY_SETTINGS_INITIAL_CATEGORY, 'Location')
+    NavHelper.prepareForward()
     router.pushUrl({ url: 'pages/SettingsPage' })
-      .catch((err: Error) => console.error('Navigation failed:', JSON.stringify(err)));
+      .catch((err: Error) => console.error('Navigation failed:', JSON.stringify(err)))
   }
 
   private formatDegree(deg: number): string {
-    const d = ((deg % 360) + 360) % 360;
-    return `${Math.round(d)}°`;
+    const d = ((deg % 360) + 360) % 360
+    return `${Math.round(d)}°`
   }
 
   private formatDistance(km: number): string {
     if (km < 1) {
-      return `${Math.round(km * 1000)} m`;
+      return `${Math.round(km * 1000)} m`
     }
-    return `${Math.round(km).toLocaleString()} km`;
+    return `${Math.round(km).toLocaleString()} km`
   }
 }

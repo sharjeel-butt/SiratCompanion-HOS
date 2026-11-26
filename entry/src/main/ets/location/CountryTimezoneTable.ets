@@ -1,15 +1,15 @@
 // entry/src/main/ets/utils/CountryTimezoneTable.ets
 
-import { DstRule } from './OfflineCityLookup';
+import { DstRule } from './OfflineCityLookup'
 
 export interface CountryZone {
-  code: string;
-  minLat: number;
-  maxLat: number;
-  minLng: number;
-  maxLng: number;
-  standardOffset: number;
-  dstRule: DstRule;
+  code: string
+  minLat: number
+  maxLat: number
+  minLng: number
+  maxLng: number
+  standardOffset: number
+  dstRule: DstRule
 }
 
 /**
@@ -27,7 +27,7 @@ export interface CountryZone {
 
 export const COUNTRY_ZONES: CountryZone[] = [{
   code: 'GE-W',
-  minLat: 41.50,
+  minLat: 41.5,
   maxLat: 43.6,
   minLng: 40.0,
   maxLng: 42.5,
@@ -35,7 +35,7 @@ export const COUNTRY_ZONES: CountryZone[] = [{
   dstRule: DstRule.NONE
 }, {
   code: 'GE-E',
-  minLat: 41.40,
+  minLat: 41.4,
   maxLat: 43.6,
   minLng: 42.5,
   maxLng: 46.8,
@@ -776,8 +776,8 @@ export const COUNTRY_ZONES: CountryZone[] = [{
     minLng: 166.4,
     maxLng: 178.6,
     standardOffset: 12,
-    dstRule: DstRule.NZ    // was: DstRule.AU
-  }];
+    dstRule: DstRule.NZ // was: DstRule.AU
+  }]
 
 export class CountryTimezoneLookup {
   /**
@@ -787,9 +787,9 @@ export class CountryTimezoneLookup {
   static zoneFor(latitude: number, longitude: number): CountryZone | null {
     for (const z of COUNTRY_ZONES) {
       if (latitude >= z.minLat && latitude <= z.maxLat && longitude >= z.minLng && longitude <= z.maxLng) {
-        return z;
+        return z
       }
     }
-    return null;
+    return null
   }
 }

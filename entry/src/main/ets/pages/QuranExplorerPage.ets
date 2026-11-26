@@ -1,12 +1,12 @@
-import { common } from '@kit.AbilityKit';
-import { router } from '@kit.ArkUI';
-import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
-import { L } from '../i18n/LocalizationHelper';
-import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../core/common/StorageKeys';
-import { QuranGraphService } from '../quran/QuranGraphService';
-import { QuranCollection, QuranProphet } from '../quran/QuranGraphModels';
-import { NavHelper } from '../core/util/NavHelper';
+import { common } from '@kit.AbilityKit'
+import { router } from '@kit.ArkUI'
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
+import { L } from '../i18n/LocalizationHelper'
+import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../core/common/StorageKeys'
+import { QuranGraphService } from '../quran/QuranGraphService'
+import { QuranCollection, QuranProphet } from '../quran/QuranGraphModels'
+import { NavHelper } from '../core/util/NavHelper'
 
 @Entry
 @Component
@@ -20,20 +20,20 @@ struct QuranExplorerPage {
   @State isLoading: boolean = true;
 
   async aboutToAppear() {
-    this.colors = PageTheme.compute(this.themeMode);
-    const ctx = getContext(this) as common.UIAbilityContext;
-    await QuranGraphService.init(ctx, this.appLanguage);
-    this.collections = QuranGraphService.getAllCollections();
-    this.prophets = QuranGraphService.getAllProphets();
-    this.isLoading = false;
+    this.colors = PageTheme.compute(this.themeMode)
+    const ctx = getContext(this) as common.UIAbilityContext
+    await QuranGraphService.init(ctx, this.appLanguage)
+    this.collections = QuranGraphService.getAllCollections()
+    this.prophets = QuranGraphService.getAllProphets()
+    this.isLoading = false
   }
 
   onThemeModeChanged() {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   onLangChanged() {
-    this.aboutToAppear();
+    this.aboutToAppear()
   }
 
   build() {
@@ -114,11 +114,11 @@ struct QuranExplorerPage {
       .backgroundColor(this.colors.cardDark)
       .borderRadius(12)
       .onClick(() => {
-        NavHelper.prepareForward();
+        NavHelper.prepareForward()
         router.pushUrl({
           url: 'pages/QuranCollectionPage',
           params: { collectionId: 'rabbana', title: L.get('rabbana_title', this.appLanguage) }
-        });
+        })
       })
 
       // Prophetic Duas Card
@@ -143,11 +143,11 @@ struct QuranExplorerPage {
       .backgroundColor(this.colors.cardDark)
       .borderRadius(12)
       .onClick(() => {
-        NavHelper.prepareForward();
+        NavHelper.prepareForward()
         router.pushUrl({
           url: 'pages/QuranCollectionPage',
           params: { collectionId: 'prophets', title: L.get('prophetic_duas', this.appLanguage) }
-        });
+        })
       })
     }.width('100%').padding({ left: 16, right: 16, top: 16 })
   }
@@ -161,9 +161,11 @@ struct QuranExplorerPage {
       .layoutWeight(1)
       .textAlign(TextAlign.Center)
       .height(48)
-      .border({ width: { bottom: this.activeTab === index ? 3 : 0 }, color: this.colors.accentGold })
+      .border({
+        width: { bottom: this.activeTab === index ? 3 : 0 }, color: this.colors.accentGold
+      })
       .onClick(() => {
-        this.activeTab = index;
+        this.activeTab = index
       })
   }
 
@@ -198,11 +200,11 @@ struct QuranExplorerPage {
         .border({ width: 1, color: this.colors.borderSoft })
         .margin({ bottom: 8 })
         .onClick(() => {
-          NavHelper.prepareForward();
+          NavHelper.prepareForward()
           router.pushUrl({
             url: 'pages/QuranCollectionPage',
             params: { collectionId: col.id, title: QuranGraphService.getCollectionTitle(col.id) }
-          });
+          })
         })
       }, (col: QuranCollection) => `col-${col.id}-${this.appLanguage}`)
     }.width('100%').padding(16)
@@ -231,11 +233,11 @@ struct QuranExplorerPage {
         .border({ width: 1, color: this.colors.borderSoft })
         .margin({ bottom: 8 })
         .onClick(() => {
-          NavHelper.prepareForward();
+          NavHelper.prepareForward()
           router.pushUrl({
             url: 'pages/QuranCollectionPage',
             params: { prophetId: prop.id, title: QuranGraphService.getProphetName(prop.id) }
-          });
+          })
         })
       }, (prop: QuranProphet) => `prop-${prop.id}-${this.appLanguage}`)
     }.width('100%').padding(16)

@@ -1,33 +1,31 @@
 // entry/src/main/ets/tasbih/TasbihManager.ets
 
-import {
-  AddTasbihResult, BeadView, Dhikr, DhikrDayCount, DhikrFields, Tasbih, TasbihDayLog
-} from './TasbihModels';
-import { TasbihThemes } from './TasbihThemes';
+import { AddTasbihResult, BeadView, Dhikr, DhikrDayCount, DhikrFields, Tasbih, TasbihDayLog } from './TasbihModels'
+import { TasbihThemes } from './TasbihThemes'
 
-export const MAX_TOP_BEADS = 5;
+export const MAX_TOP_BEADS = 5
 
-export const MAX_BOTTOM_BEADS = 5;
+export const MAX_BOTTOM_BEADS = 5
 
 /** Rolling history window. Covers a full quarter. */
-export const HISTORY_MAX_DAYS = 90;
+export const HISTORY_MAX_DAYS = 90
 
 export class TasbihManager {
   /** Today's date key, matching ProgressHelper.getDateKey format. */
   static todayKey(): string {
-    const d = new Date();
-    const y = d.getFullYear();
-    const m = (d.getMonth() + 1).toString().padStart(2, '0');
-    const day = d.getDate().toString().padStart(2, '0');
-    return `${y}-${m}-${day}`;
+    const d = new Date()
+    const y = d.getFullYear()
+    const m = (d.getMonth() + 1).toString().padStart(2, '0')
+    const day = d.getDate().toString().padStart(2, '0')
+    return `${y}-${m}-${day}`
   }
 
   static generateId(): string {
-    return `id_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
+    return `id_${Date.now()}_${Math.floor(Math.random() * 100000)}`
   }
 
   static createDefaults(): Tasbih[] {
-    const today = TasbihManager.todayKey();
+    const today = TasbihManager.todayKey()
 
     const classic: Dhikr[] = [{
       id: TasbihManager.generateId(),
@@ -62,7 +60,7 @@ export class TasbihManager {
       count: 0,
       lastCountDate: today,
       dailyTotal: 0
-    }];
+    }]
     const tahlil: Dhikr[] = [{
       id: TasbihManager.generateId(),
       arabic: 'لَا إِلَٰهَ إِلَّا ٱللَّٰهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ ٱلْمُلْكُ وَلَهُ ٱلْحَمْدُ',
@@ -74,7 +72,7 @@ export class TasbihManager {
       count: 0,
       lastCountDate: today,
       dailyTotal: 0
-    }];
+    }]
     const istighfar: Dhikr[] = [{
       id: TasbihManager.generateId(),
       arabic: 'أَسْتَغْفِرُ ٱللَّٰهَ',
@@ -86,7 +84,7 @@ export class TasbihManager {
       count: 0,
       lastCountDate: today,
       dailyTotal: 0
-    }];
+    }]
 
     const out: Tasbih[] = [{
       id: TasbihManager.generateId(),
@@ -121,22 +119,22 @@ export class TasbihManager {
       history: [],
       boundPrayerIds: [],
       prayerCompletions: {}
-    }];
-    return out;
+    }]
+    return out
   }
 
   static findTasbih(tasbihs: Tasbih[], id: string): Tasbih | null {
-    const found = tasbihs.find((t): boolean => t.id === id);
-    return found ? found : null;
+    const found = tasbihs.find((t): boolean => t.id === id)
+    return found ? found : null
   }
 
   static getActiveDhikr(tasbihs: Tasbih[], activeTasbihId: string, index: number): Dhikr | null {
-    const t = TasbihManager.findTasbih(tasbihs, activeTasbihId);
+    const t = TasbihManager.findTasbih(tasbihs, activeTasbihId)
     if (!t || t.dhikrs.length === 0) {
-      return null;
+      return null
     }
-    const safeIdx = Math.min(index, t.dhikrs.length - 1);
-    return t.dhikrs[safeIdx];
+    const safeIdx = Math.min(index, t.dhikrs.length - 1)
+    return t.dhikrs[safeIdx]
   }
 
   static computeBeadView(dhikr: Dhikr | null): BeadView {
@@ -147,22 +145,22 @@ export class TasbihManager {
         isComplete: false,
         topAtCap: false,
         bottomAtCap: false
-      };
-      return empty;
+      }
+      return empty
     }
 
-    const isComplete = dhikr.count >= dhikr.target;
-    const topCount = Math.min(Math.max(0, dhikr.count), MAX_TOP_BEADS);
-    const bottomCount = Math.min(Math.max(0, dhikr.target - dhikr.count), MAX_BOTTOM_BEADS);
+    const isComplete = dhikr.count >= dhikr.target
+    const topCount = Math.min(Math.max(0, dhikr.count), MAX_TOP_BEADS)
+    const bottomCount = Math.min(Math.max(0, dhikr.target - dhikr.count), MAX_BOTTOM_BEADS)
 
-    const topIds: number[] = [];
+    const topIds: number[] = []
     for (let i = 0; i < topCount; i++) {
-      topIds.push(i);
+      topIds.push(i)
     }
 
-    const bottomIds: number[] = [];
+    const bottomIds: number[] = []
     for (let i = 0; i < bottomCount; i++) {
-      bottomIds.push(i);
+      bottomIds.push(i)
     }
 
     const view: BeadView = {
@@ -171,8 +169,8 @@ export class TasbihManager {
       isComplete: isComplete,
       topAtCap: topCount === MAX_TOP_BEADS,
       bottomAtCap: bottomCount === MAX_BOTTOM_BEADS
-    };
-    return view;
+    }
+    return view
   }
 
   // ============================================================
@@ -190,14 +188,14 @@ export class TasbihManager {
         count: d.count + 1,
         lastCountDate: d.lastCountDate,
         dailyTotal: (d.dailyTotal ?? d.count) + 1
-      };
-      return next;
-    });
+      }
+      return next
+    })
   }
 
   static decrement(tasbihs: Tasbih[], activeId: string, dhikrId: string): Tasbih[] {
     return TasbihManager.mutateDhikr(tasbihs, activeId, dhikrId, 0, (d: Dhikr): Dhikr => {
-      const currentTotal = d.dailyTotal ?? d.count;
+      const currentTotal = d.dailyTotal ?? d.count
       const next: Dhikr = {
         id: d.id,
         arabic: d.arabic,
@@ -207,9 +205,9 @@ export class TasbihManager {
         count: d.count > 0 ? d.count - 1 : 0,
         lastCountDate: d.lastCountDate,
         dailyTotal: Math.max(0, currentTotal - 1)
-      };
-      return next;
-    });
+      }
+      return next
+    })
   }
 
   /**
@@ -219,18 +217,18 @@ export class TasbihManager {
    * today is not undone by starting a new round.
    */
   static reset(tasbihs: Tasbih[], activeId: string, dhikrId: string): Tasbih[] {
-    const today = TasbihManager.todayKey();
+    const today = TasbihManager.todayKey()
 
     return tasbihs.map((t: Tasbih): Tasbih => {
       if (t.id !== activeId) {
-        return t;
+        return t
       }
 
       const dhikrs: Dhikr[] = t.dhikrs.map((d: Dhikr): Dhikr => {
         if (d.id !== dhikrId) {
-          return d;
+          return d
         }
-        const preservedTotal = d.dailyTotal ?? d.count;
+        const preservedTotal = d.dailyTotal ?? d.count
         const cleared: Dhikr = {
           id: d.id,
           arabic: d.arabic,
@@ -241,10 +239,10 @@ export class TasbihManager {
           lastCountDate: today,
           dailyTotal: preservedTotal,
           liveCounts: d.liveCounts
-        };
+        }
 
-        return cleared;
-      });
+        return cleared
+      })
 
       const result: Tasbih = {
         id: t.id,
@@ -257,9 +255,9 @@ export class TasbihManager {
         history: t.history,
         boundPrayerIds: t.boundPrayerIds,
         prayerCompletions: t.prayerCompletions
-      };
-      return result;
-    });
+      }
+      return result
+    })
   }
 
   /**
@@ -268,15 +266,15 @@ export class TasbihManager {
    * history are preserved.
    */
   static resetAll(tasbihs: Tasbih[], activeId: string): Tasbih[] {
-    const today = TasbihManager.todayKey();
+    const today = TasbihManager.todayKey()
 
     return tasbihs.map((t: Tasbih): Tasbih => {
       if (t.id !== activeId) {
-        return t;
+        return t
       }
 
       const dhikrs: Dhikr[] = t.dhikrs.map((d: Dhikr): Dhikr => {
-        const preservedTotal = d.dailyTotal ?? d.count;
+        const preservedTotal = d.dailyTotal ?? d.count
         const cleared: Dhikr = {
           id: d.id,
           arabic: d.arabic,
@@ -287,9 +285,9 @@ export class TasbihManager {
           lastCountDate: today,
           dailyTotal: preservedTotal,
           liveCounts: d.liveCounts
-        };
-        return cleared;
-      });
+        }
+        return cleared
+      })
 
       const result: Tasbih = {
         id: t.id,
@@ -302,9 +300,9 @@ export class TasbihManager {
         history: t.history,
         boundPrayerIds: t.boundPrayerIds,
         prayerCompletions: t.prayerCompletions
-      };
-      return result;
-    });
+      }
+      return result
+    })
   }
 
   // ============================================================
@@ -312,7 +310,7 @@ export class TasbihManager {
   // ============================================================
 
   static addTasbih(tasbihs: Tasbih[], name: string, themePresetId: string): AddTasbihResult {
-    const presetId = themePresetId.length > 0 ? themePresetId : TasbihThemes.DEFAULT_PRESET_ID;
+    const presetId = themePresetId.length > 0 ? themePresetId : TasbihThemes.DEFAULT_PRESET_ID
     const newTasbih: Tasbih = {
       id: TasbihManager.generateId(),
       name: name,
@@ -323,19 +321,19 @@ export class TasbihManager {
       history: [],
       boundPrayerIds: [],
       prayerCompletions: {}
-    };
+    }
     const result: AddTasbihResult = {
       tasbihs: [...tasbihs, newTasbih], newId: newTasbih.id
-    };
-    return result;
+    }
+    return result
   }
 
   static renameTasbih(tasbihs: Tasbih[], id: string, name: string, themePresetId: string): Tasbih[] {
     return tasbihs.map((t: Tasbih): Tasbih => {
       if (t.id !== id) {
-        return t;
+        return t
       }
-      const presetId = themePresetId.length > 0 ? themePresetId : (t.themePresetId ?? TasbihThemes.DEFAULT_PRESET_ID);
+      const presetId = themePresetId.length > 0 ? themePresetId : (t.themePresetId ?? TasbihThemes.DEFAULT_PRESET_ID)
 
       const updated: Tasbih = {
         id: t.id,
@@ -348,19 +346,19 @@ export class TasbihManager {
         history: t.history,
         boundPrayerIds: t.boundPrayerIds,
         prayerCompletions: t.prayerCompletions
-      };
-      return updated;
-    });
+      }
+      return updated
+    })
   }
 
   static updateDhikr(tasbihs: Tasbih[], activeId: string, dhikrId: string, fields: DhikrFields): Tasbih[] {
     return tasbihs.map((t: Tasbih): Tasbih => {
       if (t.id !== activeId) {
-        return t;
+        return t
       }
       const updated: Dhikr[] = t.dhikrs.map((d: Dhikr): Dhikr => {
         if (d.id !== dhikrId) {
-          return d;
+          return d
         }
         const next: Dhikr = {
           id: d.id,
@@ -373,9 +371,9 @@ export class TasbihManager {
           count: d.count,
           lastCountDate: d.lastCountDate,
           dailyTotal: d.dailyTotal
-        };
-        return next;
-      });
+        }
+        return next
+      })
       const result: Tasbih = {
         id: t.id,
         name: t.name,
@@ -387,15 +385,15 @@ export class TasbihManager {
         history: t.history,
         boundPrayerIds: t.boundPrayerIds,
         prayerCompletions: t.prayerCompletions
-      };
-      return result;
-    });
+      }
+      return result
+    })
   }
 
   static setTheme(tasbihs: Tasbih[], id: string, themePresetId: string): Tasbih[] {
     return tasbihs.map((t: Tasbih): Tasbih => {
       if (t.id !== id) {
-        return t;
+        return t
       }
       const updated: Tasbih = {
         id: t.id,
@@ -407,16 +405,16 @@ export class TasbihManager {
         history: t.history,
         boundPrayerIds: t.boundPrayerIds,
         prayerCompletions: t.prayerCompletions
-      };
-      return updated;
-    });
+      }
+      return updated
+    })
   }
 
   static removeTasbih(tasbihs: Tasbih[], id: string): Tasbih[] {
     if (tasbihs.length <= 1) {
-      return tasbihs;
+      return tasbihs
     }
-    return tasbihs.filter((t: Tasbih): boolean => t.id !== id);
+    return tasbihs.filter((t: Tasbih): boolean => t.id !== id)
   }
 
   // ============================================================
@@ -424,7 +422,7 @@ export class TasbihManager {
   // ============================================================
 
   static addDhikr(tasbihs: Tasbih[], activeId: string, fields: DhikrFields): Tasbih[] {
-    const today = TasbihManager.todayKey();
+    const today = TasbihManager.todayKey()
     const newDhikr: Dhikr = {
       id: TasbihManager.generateId(),
       arabic: fields.arabic,
@@ -434,10 +432,10 @@ export class TasbihManager {
       count: 0,
       lastCountDate: today,
       dailyTotal: 0
-    };
+    }
     return tasbihs.map((t: Tasbih): Tasbih => {
       if (t.id !== activeId) {
-        return t;
+        return t
       }
       const updated: Tasbih = {
         id: t.id,
@@ -449,17 +447,17 @@ export class TasbihManager {
         history: t.history,
         boundPrayerIds: t.boundPrayerIds,
         prayerCompletions: t.prayerCompletions
-      };
-      return updated;
-    });
+      }
+      return updated
+    })
   }
 
   static removeDhikr(tasbihs: Tasbih[], activeId: string, dhikrId: string): Tasbih[] {
     return tasbihs.map((t: Tasbih): Tasbih => {
       if (t.id !== activeId) {
-        return t;
+        return t
       }
-      const filtered: Dhikr[] = t.dhikrs.filter((d: Dhikr): boolean => d.id !== dhikrId);
+      const filtered: Dhikr[] = t.dhikrs.filter((d: Dhikr): boolean => d.id !== dhikrId)
       const result: Tasbih = {
         id: t.id,
         name: t.name,
@@ -470,9 +468,9 @@ export class TasbihManager {
         history: t.history,
         boundPrayerIds: t.boundPrayerIds,
         prayerCompletions: t.prayerCompletions
-      };
-      return result;
-    });
+      }
+      return result
+    })
   }
 
   // ============================================================
@@ -486,16 +484,16 @@ export class TasbihManager {
    * existed.
    */
   static rollOverStaleCounts(tasbihs: Tasbih[]): Tasbih[] {
-    const today = TasbihManager.todayKey();
-    let anyChanged = false;
+    const today = TasbihManager.todayKey()
+    let anyChanged = false
 
     const out = tasbihs.map((t: Tasbih): Tasbih => {
-      let history: TasbihDayLog[] = t.history !== undefined ? t.history : [];
-      let changed = false;
+      let history: TasbihDayLog[] = t.history !== undefined ? t.history : []
+      let changed = false
 
       const dhikrs: Dhikr[] = t.dhikrs.map((d: Dhikr): Dhikr => { // ---- Migration: seed missing fields ----
         if (d.lastCountDate === undefined) {
-          changed = true;
+          changed = true
           return {
             id: d.id,
             arabic: d.arabic,
@@ -508,11 +506,11 @@ export class TasbihManager {
             lastCountDate: today,
             dailyTotal: d.dailyTotal ?? d.count,
             liveCounts: d.liveCounts
-          };
+          }
         }
 
         if (d.dailyTotal === undefined) {
-          changed = true;
+          changed = true
           return {
             id: d.id,
             arabic: d.arabic,
@@ -525,17 +523,17 @@ export class TasbihManager {
             lastCountDate: d.lastCountDate,
             dailyTotal: d.count,
             liveCounts: d.liveCounts
-          };
+          }
         }
 
         if (d.lastCountDate === today) {
-          return d;
+          return d
         }
 
         // ---- Stale: roll the day's total into history, reset ----
-        changed = true;
+        changed = true
         if (d.dailyTotal > 0) {
-          history = TasbihManager.upsertHistory(history, d.lastCountDate, d.id, d.dailyTotal);
+          history = TasbihManager.upsertHistory(history, d.lastCountDate, d.id, d.dailyTotal)
         }
         return {
           id: d.id,
@@ -549,24 +547,24 @@ export class TasbihManager {
           lastCountDate: today,
           dailyTotal: 0,
           liveCounts: {} // <--- CLEARED
-        };
-      });
+        }
+      })
 
       // Check if prayer completions need resetting
-      let needsCompletionReset = false;
+      let needsCompletionReset = false
       if (t.prayerCompletions && Object.keys(t.prayerCompletions).length > 0) {
         for (const key of Object.keys(t.prayerCompletions)) {
           if (t.prayerCompletions[key] !== today) {
-            needsCompletionReset = true;
-            break;
+            needsCompletionReset = true
+            break
           }
         }
       }
 
       if (!changed && t.history !== undefined && !needsCompletionReset) {
-        return t;
+        return t
       }
-      anyChanged = true;
+      anyChanged = true
 
       return {
         id: t.id,
@@ -579,10 +577,10 @@ export class TasbihManager {
         history: TasbihManager.trimHistory(history),
         boundPrayerIds: t.boundPrayerIds,
         prayerCompletions: needsCompletionReset ? {} : t.prayerCompletions // <--- CLEARED
-      };
-    });
+      }
+    })
 
-    return anyChanged ? out : tasbihs;
+    return anyChanged ? out : tasbihs
   }
 
   // ============================================================
@@ -592,7 +590,7 @@ export class TasbihManager {
   static updateBinding(tasbihs: Tasbih[], id: string, prayerIds: string[]): Tasbih[] {
     return tasbihs.map((t: Tasbih): Tasbih => {
       if (t.id !== id) {
-        return t;
+        return t
       }
       return {
         id: t.id,
@@ -605,41 +603,41 @@ export class TasbihManager {
         history: t.history,
         boundPrayerIds: prayerIds,
         prayerCompletions: t.prayerCompletions
-      };
-    });
+      }
+    })
   }
 
   static isTasbihCompleteForPrayer(tasbih: Tasbih, prayerId: string, dateKey: string): boolean {
     if (!tasbih.prayerCompletions) {
-      return false;
+      return false
     }
     for (const d of tasbih.dhikrs) {
-      const count = d.liveCounts ? (d.liveCounts[prayerId] || 0) : 0;
+      const count = d.liveCounts ? d.liveCounts[prayerId] || 0 : 0
       if (count < d.target) {
-        return false;
+        return false
       }
     }
-    return tasbih.prayerCompletions[prayerId] === dateKey;
+    return tasbih.prayerCompletions[prayerId] === dateKey
   }
 
   static markPrayerComplete(tasbihs: Tasbih[], id: string, prayerId: string, dateKey: string): Tasbih[] {
     return tasbihs.map((t: Tasbih): Tasbih => {
       if (t.id !== id) {
-        return t;
+        return t
       }
 
       // 1. Safely copy without spread operator
-      const pc: Record<string, string> = {};
+      const pc: Record<string, string> = {}
       if (t.prayerCompletions) {
-        const keys = Object.keys(t.prayerCompletions);
+        const keys = Object.keys(t.prayerCompletions)
         for (let i = 0; i < keys.length; i++) {
-          const k = keys[i];
-          pc[k] = t.prayerCompletions[k];
+          const k = keys[i]
+          pc[k] = t.prayerCompletions[k]
         }
       }
 
       // 2. Set the new completion
-      pc[prayerId] = dateKey;
+      pc[prayerId] = dateKey
 
       // 3. Explicitly construct the new Tasbih object
       const updated: Tasbih = {
@@ -653,10 +651,10 @@ export class TasbihManager {
         history: t.history,
         boundPrayerIds: t.boundPrayerIds,
         prayerCompletions: pc
-      };
+      }
 
-      return updated;
-    });
+      return updated
+    })
   }
 
   // ============================================================
@@ -687,46 +685,46 @@ export class TasbihManager {
    */
   static findFirstPendingDhikrIndex(tasbih: Tasbih | null, prayerId: string): number {
     if (!tasbih || tasbih.dhikrs.length === 0) {
-      return 0;
+      return 0
     }
 
     const isBound =
-      prayerId.length > 0 && tasbih.boundPrayerIds !== undefined && tasbih.boundPrayerIds.indexOf(prayerId) >= 0;
+      prayerId.length > 0 && tasbih.boundPrayerIds !== undefined && tasbih.boundPrayerIds.indexOf(prayerId) >= 0
 
     for (let i = 0; i < tasbih.dhikrs.length; i++) {
-      const d = tasbih.dhikrs[i];
-      const current = isBound ? (d.liveCounts ? (d.liveCounts[prayerId] ?? 0) : 0) : (d.dailyTotal ?? d.count);
+      const d = tasbih.dhikrs[i]
+      const current = isBound ? (d.liveCounts ? (d.liveCounts[prayerId] ?? 0) : 0) : (d.dailyTotal ?? d.count)
       if (current < d.target) {
-        return i;
+        return i
       }
     }
-    return 0;
+    return 0
   }
 
   private static mutateDhikr(tasbihs: Tasbih[], activeId: string, dhikrId: string, lifetimeDelta: number,
     fn: (d: Dhikr) => Dhikr): Tasbih[] {
-    const today = TasbihManager.todayKey();
+    const today = TasbihManager.todayKey()
 
     return tasbihs.map((t: Tasbih): Tasbih => {
       if (t.id !== activeId) {
-        return t;
+        return t
       }
 
-      let history: TasbihDayLog[] = t.history !== undefined ? t.history : [];
-      let dhikrChanged = false;
+      let history: TasbihDayLog[] = t.history !== undefined ? t.history : []
+      let dhikrChanged = false
 
       const updated: Dhikr[] = t.dhikrs.map((d: Dhikr): Dhikr => {
         if (d.id !== dhikrId) {
-          return d;
+          return d
         }
-        dhikrChanged = true;
+        dhikrChanged = true
 
         // ---- Day rollover before applying the change ----
-        let baseDhikr = d;
+        let baseDhikr = d
         if (d.lastCountDate !== undefined && d.lastCountDate !== today) {
-          const dayTotal = d.dailyTotal ?? d.count;
+          const dayTotal = d.dailyTotal ?? d.count
           if (dayTotal > 0) {
-            history = TasbihManager.upsertHistory(history, d.lastCountDate, d.id, dayTotal);
+            history = TasbihManager.upsertHistory(history, d.lastCountDate, d.id, dayTotal)
           }
           baseDhikr = {
             id: d.id,
@@ -740,7 +738,7 @@ export class TasbihManager {
             lastCountDate: today,
             dailyTotal: 0,
             liveCounts: d.liveCounts
-          };
+          }
         } else if (d.lastCountDate === undefined) { // First touch after upgrade — seed today.
           baseDhikr = {
             id: d.id,
@@ -754,10 +752,10 @@ export class TasbihManager {
             lastCountDate: today,
             dailyTotal: d.dailyTotal ?? d.count,
             liveCounts: d.liveCounts
-          };
+          }
         }
 
-        const afterFn: Dhikr = fn(baseDhikr);
+        const afterFn: Dhikr = fn(baseDhikr)
 
         // Explicitly reconstruct the object to guarantee we don't lose
         // liveCounts or translation keys if the fn() callback dropped them.
@@ -774,17 +772,17 @@ export class TasbihManager {
           lastCountDate: afterFn.lastCountDate,
           dailyTotal: afterFn.dailyTotal,
           liveCounts: baseDhikr.liveCounts // <--- Forcefully restore liveCounts
-        };
+        }
 
         // ---- Record the day's running total ----
-        const dayTotal = finalDhikr.dailyTotal ?? finalDhikr.count;
-        history = TasbihManager.upsertHistory(history, today, finalDhikr.id, dayTotal);
+        const dayTotal = finalDhikr.dailyTotal ?? finalDhikr.count
+        history = TasbihManager.upsertHistory(history, today, finalDhikr.id, dayTotal)
 
-        return finalDhikr; // <--- RETURN finalDhikr, NOT afterFn
-      });
+        return finalDhikr // <--- RETURN finalDhikr, NOT afterFn
+      })
 
       if (!dhikrChanged) {
-        return t;
+        return t
       }
 
       const result: Tasbih = {
@@ -797,50 +795,50 @@ export class TasbihManager {
         history: TasbihManager.trimHistory(history),
         boundPrayerIds: t.boundPrayerIds,
         prayerCompletions: t.prayerCompletions
-      };
-      return result;
-    });
+      }
+      return result
+    })
   }
 
   private static upsertHistory(history: TasbihDayLog[], dateKey: string, dhikrId: string,
     count: number): TasbihDayLog[] {
-    const out: TasbihDayLog[] = [];
-    let found = false;
+    const out: TasbihDayLog[] = []
+    let found = false
 
     for (const log of history) {
       if (log.dateKey === dateKey) {
-        let dhikrFound = false;
+        let dhikrFound = false
         const updated: DhikrDayCount[] = log.dhikrCounts.map((dc: DhikrDayCount): DhikrDayCount => {
           if (dc.dhikrId === dhikrId) {
-            dhikrFound = true;
-            return { dhikrId: dhikrId, count: count };
+            dhikrFound = true
+            return { dhikrId: dhikrId, count: count }
           }
-          return dc;
-        });
+          return dc
+        })
         if (!dhikrFound) {
-          updated.push({ dhikrId: dhikrId, count: count });
+          updated.push({ dhikrId: dhikrId, count: count })
         }
-        out.push({ dateKey: dateKey, dhikrCounts: updated });
-        found = true;
+        out.push({ dateKey: dateKey, dhikrCounts: updated })
+        found = true
       } else {
-        out.push(log);
+        out.push(log)
       }
     }
 
     if (!found) {
-      const dhikrCounts: DhikrDayCount[] = [{ dhikrId: dhikrId, count: count }];
-      out.push({ dateKey: dateKey, dhikrCounts: dhikrCounts });
+      const dhikrCounts: DhikrDayCount[] = [{ dhikrId: dhikrId, count: count }]
+      out.push({ dateKey: dateKey, dhikrCounts: dhikrCounts })
     }
-    return out;
+    return out
   }
 
   private static trimHistory(history: TasbihDayLog[]): TasbihDayLog[] {
     if (history.length <= HISTORY_MAX_DAYS) {
-      return history;
+      return history
     }
     const sorted = history.slice().sort((a: TasbihDayLog, b: TasbihDayLog): number => {
-      return a.dateKey < b.dateKey ? 1 : (a.dateKey > b.dateKey ? -1 : 0);
-    });
-    return sorted.slice(0, HISTORY_MAX_DAYS);
+      return a.dateKey < b.dateKey ? 1 : a.dateKey > b.dateKey ? -1 : 0
+    })
+    return sorted.slice(0, HISTORY_MAX_DAYS)
   }
 }

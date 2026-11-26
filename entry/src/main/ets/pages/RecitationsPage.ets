@@ -1,20 +1,20 @@
 // entry/src/main/ets/pages/RecitationsPage.ets
 
-import { common } from '@kit.AbilityKit';
-import { promptAction, router } from '@kit.ArkUI';
-import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
-import { L } from '../i18n/LocalizationHelper';
-import { QuranService } from '../quran/QuranService';
-import { RecitationTask } from '../quran/QuranSurahModels';
-import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
-import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_QURAN_TRANSLATION_LANG } from '../core/common/StorageKeys';
-import { NavHelper } from '../core/util/NavHelper';
-import { CustomEventStorage } from '../hijricalendar/CustomEventStorage';
-import { UpcomingCustomEvent } from './HomePage';
-import { CustomEventNotifier } from '../hijricalendar/CustomEventNotifier';
-import { SettingsHelper } from '../settings/SettingsHelper';
-import { GradeThemeHelper } from '../core/ui/themes/GradeThemeHelper';
+import { common } from '@kit.AbilityKit'
+import { promptAction, router } from '@kit.ArkUI'
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
+import { L } from '../i18n/LocalizationHelper'
+import { QuranService } from '../quran/QuranService'
+import { RecitationTask } from '../quran/QuranSurahModels'
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper'
+import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_QURAN_TRANSLATION_LANG } from '../core/common/StorageKeys'
+import { NavHelper } from '../core/util/NavHelper'
+import { CustomEventStorage } from '../hijricalendar/CustomEventStorage'
+import { UpcomingCustomEvent } from './HomePage'
+import { CustomEventNotifier } from '../hijricalendar/CustomEventNotifier'
+import { SettingsHelper } from '../settings/SettingsHelper'
+import { GradeThemeHelper } from '../core/ui/themes/GradeThemeHelper'
 
 @Entry
 @Component
@@ -26,35 +26,35 @@ struct RecitationsPage {
   @State isLoading: boolean = true;
 
   async aboutToAppear() {
-    await this.loadData();
+    await this.loadData()
   }
 
   onLangChanged() {
-    this.loadData();
+    this.loadData()
   }
 
   async loadData() {
-    this.isLoading = true;
-    const ctx = getContext(this) as common.UIAbilityContext;
+    this.isLoading = true
+    const ctx = getContext(this) as common.UIAbilityContext
 
-    const isFriday = new Date().getDay() === 5;
-    const customEventsRaw = await CustomEventStorage.load();
-    const hijriOffset = await SettingsHelper.getHijriOffset();
+    const isFriday = new Date().getDay() === 5
+    const customEventsRaw = await CustomEventStorage.load()
+    const hijriOffset = await SettingsHelper.getHijriOffset()
 
-    const upcomingCustomEvents: UpcomingCustomEvent[] = [];
+    const upcomingCustomEvents: UpcomingCustomEvent[] = []
     for (const ev of customEventsRaw) {
-      const nextDate = CustomEventNotifier.getNextOccurrence(ev, hijriOffset);
+      const nextDate = CustomEventNotifier.getNextOccurrence(ev, hijriOffset)
       if (nextDate) {
-        upcomingCustomEvents.push({ ev: ev, date: nextDate });
+        upcomingCustomEvents.push({ ev: ev, date: nextDate })
       }
     }
 
     // Pass `true` to show ALL recitations
     this.tasks =
       await QuranService.getRecommendedRecitations(ctx, this.getQuranTranslationLang(), isFriday, upcomingCustomEvents,
-        true);
+        true)
 
-    this.isLoading = false;
+    this.isLoading = false
   }
 
   build() {
@@ -126,9 +126,11 @@ struct RecitationsPage {
                           bottom: 1
                         })
                         .borderRadius(4)
-                        .border({ width: 1, color: GradeThemeHelper.getTextColor(task.authenticity, this.colors) })
+                        .border({
+                          width: 1, color: GradeThemeHelper.getTextColor(task.authenticity, this.colors)
+                        })
                         .onClick(() => {
-                          this.handleAuthenticityTap(task);
+                          this.handleAuthenticityTap(task)
                         })
                     }
                   }.margin({ top: 6 }).width('100%').alignItems(VerticalAlign.Center)
@@ -138,7 +140,8 @@ struct RecitationsPage {
                 Column() {
                   Text(task.surahNameArabic)
                     .fontSize(20)
-                    .fontFamily(TypographyHelper.getArabicFont(true)) // 👈 FIX: Uses the new Arabic font resolver
+                    .fontFamily(TypographyHelper.getArabicFont(true))
+                    // 👈 FIX: Uses the new Arabic font resolver
                     .fontColor(this.colors.accentGold)
                     .maxLines(1)
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
@@ -159,15 +162,15 @@ struct RecitationsPage {
               .border({ width: 1, color: this.colors.borderSoft })
               .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr) // 👈 FIX: Forces RTL layout for the row
               .onClick(() => { // Determine the correct verse range
-                let startV = task.startVerse;
-                let endV = task.endVerse;
+                let startV = task.startVerse
+                let endV = task.endVerse
 
                 if (startV === null && task.verseSelections && task.verseSelections.length > 0) {
-                  startV = task.verseSelections[0].startVerse;
-                  endV = task.verseSelections[0].endVerse;
+                  startV = task.verseSelections[0].startVerse
+                  endV = task.verseSelections[0].endVerse
                 }
 
-                NavHelper.prepareForward();
+                NavHelper.prepareForward()
                 router.pushUrl({
                   url: 'pages/SurahDetailsPage', params: {
                     surahId: task.surahNumber,
@@ -175,7 +178,7 @@ struct RecitationsPage {
                     endVerse: endV,
                     taskId: task.id
                   }
-                }).catch((e: Error) => console.error(JSON.stringify(e)));
+                }).catch((e: Error) => console.error(JSON.stringify(e)))
               })
             }
           }, (task: RecitationTask) => `rec-${task.id}-${task.name}-${task.notes}`)
@@ -190,9 +193,9 @@ struct RecitationsPage {
 
   private getQuranTranslationLang(): string {
     if (this.quranTransLang === 'default' || this.quranTransLang === '') {
-      return this.appLanguage;
+      return this.appLanguage
     }
-    return this.quranTransLang;
+    return this.quranTransLang
   }
 
   /**
@@ -203,78 +206,78 @@ struct RecitationsPage {
    */
   private getAuthenticityLabel(auth: string): string {
     if (!auth || auth.length === 0) {
-      return '';
+      return ''
     }
 
     // Standardize to lowercase to match our keys (grade_sahih, grade_hasan)
-    const key = 'grade_' + auth.toLowerCase();
-    const localized = L.get(key, this.appLanguage);
+    const key = 'grade_' + auth.toLowerCase()
+    const localized = L.get(key, this.appLanguage)
 
     // L.get returns the key itself if not found
     if (localized === key) { // Fallback: uppercase the raw string (works for English, safe for others)
-      return auth.toUpperCase();
+      return auth.toUpperCase()
     }
 
-    return localized;
+    return localized
   }
 
   private isRtl(): boolean {
-    return L.isRtlLang(this.appLanguage);
+    return L.isRtlLang(this.appLanguage)
   }
 
   private getCanonicalCollection(col: string): string {
-    const c = col.toLowerCase();
+    const c = col.toLowerCase()
     if (c.includes('bukhari') || c === 'bukh') {
-      return 'bukhari';
+      return 'bukhari'
     }
     if (c.includes('muslim') || c === 'musl') {
-      return 'muslim';
+      return 'muslim'
     }
     if (c.includes('abu dawud') || c.includes('abudawud') || c === 'abud') {
-      return 'abudawud';
+      return 'abudawud'
     }
     if (c.includes('tirmidhi') || c === 'tirm') {
-      return 'tirmidhi';
+      return 'tirmidhi'
     }
     if (c.includes('nasai') || c === 'nasa') {
-      return 'nasai';
+      return 'nasai'
     }
     if (c.includes('ibn majah') || c.includes('ibnmajah') || c === 'ibnm') {
-      return 'ibnmajah';
+      return 'ibnmajah'
     }
     if (c.includes('malik') || c === 'mali') {
-      return 'malik';
+      return 'malik'
     }
-    return c;
+    return c
   }
 
   private handleAuthenticityTap(task: RecitationTask): void { // 1. Try to navigate to the Hadith if evidence exists
     if (task.evidence && task.evidence.length > 0) {
-      const primaryEvidence = task.evidence[0];
-      const colId = this.getCanonicalCollection(primaryEvidence.collection);
-      const hadithId = `${colId}:${primaryEvidence.hadithNumber}`;
+      const primaryEvidence = task.evidence[0]
+      const colId = this.getCanonicalCollection(primaryEvidence.collection)
+      const hadithId = `${colId}:${primaryEvidence.hadithNumber}`
 
-      NavHelper.prepareForward();
+      NavHelper.prepareForward()
       router.pushUrl({
         url: 'pages/HadithDetailsPage', params: { id: hadithId }
-      }).catch((e: Error) => console.error(JSON.stringify(e)));
-      return;
+      }).catch((e: Error) => console.error(JSON.stringify(e)))
+      return
     }
 
     // 2. Fallback: Show the localized dialog
-    let evidenceText = task.reference;
+    let evidenceText = task.reference
     if (task.evidence && task.evidence.length > 0) {
-      const parts: string[] = [];
+      const parts: string[] = []
       for (const e of task.evidence) {
-        parts.push(`${e.collection} ${e.hadithNumber} (${e.grade})`);
+        parts.push(`${e.collection} ${e.hadithNumber} (${e.grade})`)
       }
-      evidenceText = parts.join('\n');
+      evidenceText = parts.join('\n')
     }
 
     promptAction.showDialog({
       title: L.get('hadith_evidence_title', this.appLanguage),
       message: evidenceText,
       buttons: [{ text: L.get('ok', this.appLanguage), color: this.colors.accentGold }]
-    });
+    })
   }
 }

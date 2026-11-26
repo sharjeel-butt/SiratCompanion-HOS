@@ -1,66 +1,58 @@
 // entry/src/main/ets/pages/TasbihPage.ets
 
-import {
-  AnimatorOptions, AnimatorResult, LengthMetrics, mediaquery, promptAction
-} from '@kit.ArkUI';
-import { MaterialHelper } from '../core/ui/MaterialHelper';
-import { common } from '@kit.AbilityKit';
-import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
+import { AnimatorOptions, AnimatorResult, LengthMetrics, mediaquery, promptAction } from '@kit.ArkUI'
+import { MaterialHelper } from '../core/ui/MaterialHelper'
+import { common } from '@kit.AbilityKit'
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
-} from '../core/common/StorageKeys';
-import { BeadView, Dhikr, DhikrFields, Tasbih } from './TasbihModels';
-import { MAX_BOTTOM_BEADS, TasbihManager } from './TasbihManager';
-import { TasbihStorage } from './TasbihStorage';
-import { HapticHelper } from '../core/util/HapticHelper';
-import { SoundHelper } from './SoundHelper';
-import { SettingsHelper } from '../settings/SettingsHelper';
-import { L } from '../i18n/LocalizationHelper';
-import {
-  BeadCanvasConfig, BeadRenderStyle, TasbihCanvasRenderer
-} from './TasbihCanvasRenderer';
-import {
-  TasbihThemes
-} from './TasbihThemes';
-import { Breakpoints } from '../core/layout/Breakpoints';
-import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
-import { AppLogger } from '../core/app/AppLogger';
-import { ThemeService } from '../core/ui/themes/ThemeService';
-import { AppThemeJson } from '../core/ui/themes/ThemeModels';
+} from '../core/common/StorageKeys'
+import { BeadView, Dhikr, DhikrFields, Tasbih } from './TasbihModels'
+import { MAX_BOTTOM_BEADS, TasbihManager } from './TasbihManager'
+import { TasbihStorage } from './TasbihStorage'
+import { HapticHelper } from '../core/util/HapticHelper'
+import { SoundHelper } from './SoundHelper'
+import { SettingsHelper } from '../settings/SettingsHelper'
+import { L } from '../i18n/LocalizationHelper'
+import { BeadCanvasConfig, BeadRenderStyle, TasbihCanvasRenderer } from './TasbihCanvasRenderer'
+import { TasbihThemes } from './TasbihThemes'
+import { Breakpoints } from '../core/layout/Breakpoints'
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper'
+import { AppLogger } from '../core/app/AppLogger'
+import { ThemeService } from '../core/ui/themes/ThemeService'
+import { AppThemeJson } from '../core/ui/themes/ThemeModels'
 
-const BEAD_SIZE = 28;
-const BEAD_GAP = 7;
-const BEAD_STEP = BEAD_SIZE + BEAD_GAP;
-const SWIPE_THRESHOLD = 50;
-const STRING_WIDTH = 2;
-const STRING_LINE_COLOR = 'rgba(232, 164, 76, 0.35)';
-const FISHEYE_ANIM_MS = 180;
-const TOP_SHIFT_MS = 250;
-const BOTTOM_FLY_MS = 500;
+const BEAD_SIZE = 28
+const BEAD_GAP = 7
+const BEAD_STEP = BEAD_SIZE + BEAD_GAP
+const SWIPE_THRESHOLD = 50
+const STRING_WIDTH = 2
+const STRING_LINE_COLOR = 'rgba(232, 164, 76, 0.35)'
+const FISHEYE_ANIM_MS = 180
+const TOP_SHIFT_MS = 250
+const BOTTOM_FLY_MS = 500
 
-const BEAD_COLUMN_TOP_PADDING = 16;
+const BEAD_COLUMN_TOP_PADDING = 16
 
+const SHADE_DONE_HI = '#A7F3C0'
+const SHADE_DONE_BASE = '#4ADE80'
+const SHADE_DONE_LO = '#1E7A4E'
 
-const SHADE_DONE_HI = '#A7F3C0';
-const SHADE_DONE_BASE = '#4ADE80';
-const SHADE_DONE_LO = '#1E7A4E';
+const SHADE_PEND_HI_L = '#EFEAE0'
+const SHADE_PEND_BASE_L = '#C9C2B8'
+const SHADE_PEND_LO_L = '#8E8878'
 
-const SHADE_PEND_HI_L = '#EFEAE0';
-const SHADE_PEND_BASE_L = '#C9C2B8';
-const SHADE_PEND_LO_L = '#8E8878';
-
-const SHADE_PEND_HI_D = '#5A5A5A';
-const SHADE_PEND_BASE_D = '#3A3A3A';
-const SHADE_PEND_LO_D = '#1A1A1A';
+const SHADE_PEND_HI_D = '#5A5A5A'
+const SHADE_PEND_BASE_D = '#3A3A3A'
+const SHADE_PEND_LO_D = '#1A1A1A'
 
 /** Which sheet is currently presented. */
-type TasbihSheet = 'none' | 'tasbihPicker' | 'dhikrPicker'
-  | 'tasbihEditor' | 'dhikrEditor';
+type TasbihSheet = 'none' | 'tasbihPicker' | 'dhikrPicker' | 'tasbihEditor' | 'dhikrEditor'
 
 @Component
 export struct TasbihPage {
@@ -110,11 +102,9 @@ export struct TasbihPage {
   @State private renderStyle: BeadRenderStyle = 'premium';
   @State private canvasWidth: number = 72;
   @State private canvasHeight: number = 0;
-  private ctx: CanvasRenderingContext2D =
-    new CanvasRenderingContext2D(new RenderingContextSettings(true));
+  private ctx: CanvasRenderingContext2D = new CanvasRenderingContext2D(new RenderingContextSettings(true));
   private canvasReady: boolean = false;
-  @State private activeThemePresetId: string =
-    TasbihThemes.DEFAULT_PRESET_ID;
+  @State private activeThemePresetId: string = TasbihThemes.DEFAULT_PRESET_ID;
   @State private currentDateKey: string = TasbihManager.todayKey();
   private dateCheckTimer: number = -1;
   @State private fingerY: number = -1;
@@ -134,89 +124,83 @@ export struct TasbihPage {
   // ============================================================
 
   async aboutToAppear(): Promise<void> {
-    this.currentLanguage = this.appLanguage;
-    this.colors = PageTheme.compute(this.themeMode);
-    this.systemDarkListener = PageTheme.installSystemListener(
-      this.themeMode, (c) => {
-      this.colors = c;
-    }
-    );
+    this.currentLanguage = this.appLanguage
+    this.colors = PageTheme.compute(this.themeMode)
+    this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
+      this.colors = c
+    })
 
-    const storedStyle = await SettingsHelper.getTasbihRenderStyle();
-    this.renderStyle = storedStyle === 'classic' ? 'classic' : 'premium';
+    const storedStyle = await SettingsHelper.getTasbihRenderStyle()
+    this.renderStyle = storedStyle === 'classic' ? 'classic' : 'premium'
 
-    const ctx = getContext(this) as common.UIAbilityContext;
-    await TasbihStorage.init(ctx);
+    const ctx = getContext(this) as common.UIAbilityContext
+    await TasbihStorage.init(ctx)
 
     // REPLACED WITH METHOD CALL
-    await this.reloadTasbihs(true);
+    await this.reloadTasbihs(true)
 
     // ADDED: Midnight Timer
     this.dateCheckTimer = setInterval(() => {
-      const now = TasbihManager.todayKey();
+      const now = TasbihManager.todayKey()
       if (this.currentDateKey !== now) {
-        this.currentDateKey = now;
-        this.activePrayerId = '';
-        this.reloadTasbihs();
+        this.currentDateKey = now
+        this.activePrayerId = ''
+        this.reloadTasbihs()
       }
-    }, 60000);
-
+    }, 60000)
   }
 
   onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-    this.refreshBeadView();
+    this.colors = PageTheme.compute(this.themeMode)
+    this.refreshBeadView()
   }
 
   private async onNavTargetNonceChanged(): Promise<void> {
+    AppLogger.info('TasbihPage', 'onNavTargetNonceChanged fired')
 
-    AppLogger.info('TasbihPage', 'onNavTargetNonceChanged fired');
-
-    await this.reloadTasbihs(false);
+    await this.reloadTasbihs(false)
   }
 
-
   aboutToDisappear(): void {
-    PageTheme.uninstallSystemListener(this.systemDarkListener);
-    this.systemDarkListener = null;
+    PageTheme.uninstallSystemListener(this.systemDarkListener)
+    this.systemDarkListener = null
     if (this.fisheyeAnimId !== -1) {
-      clearInterval(this.fisheyeAnimId);
-      this.fisheyeAnimId = -1;
+      clearInterval(this.fisheyeAnimId)
+      this.fisheyeAnimId = -1
     }
     if (this.topShiftAnimator !== null) {
-      this.topShiftAnimator.cancel();
-      this.topShiftAnimator = null;
+      this.topShiftAnimator.cancel()
+      this.topShiftAnimator = null
     }
     if (this.bottomFlyAnimator !== null) {
-      this.bottomFlyAnimator.cancel();
-      this.bottomFlyAnimator = null;
+      this.bottomFlyAnimator.cancel()
+      this.bottomFlyAnimator = null
     }
 
     // ADDED: Clear date timer
     if (this.dateCheckTimer !== -1) {
-      clearInterval(this.dateCheckTimer);
-      this.dateCheckTimer = -1;
+      clearInterval(this.dateCheckTimer)
+      this.dateCheckTimer = -1
     }
     if (this.advanceTimerId !== -1) {
-      clearTimeout(this.advanceTimerId);
-      this.advanceTimerId = -1;
+      clearTimeout(this.advanceTimerId)
+      this.advanceTimerId = -1
     }
   }
 
   onPageShow(): void {
-    AppLogger.info('TasbihPage', 'onPageShow');
-    this.currentLanguage = this.appLanguage;
-    this.colors = PageTheme.compute(this.themeMode);
+    AppLogger.info('TasbihPage', 'onPageShow')
+    this.currentLanguage = this.appLanguage
+    this.colors = PageTheme.compute(this.themeMode)
 
-    this.resolveActiveTheme();
-    this.ensureActivePrayer();
-    this.refreshBeadView();
+    this.resolveActiveTheme()
+    this.ensureActivePrayer()
+    this.refreshBeadView()
   }
 
   build() {
     Stack() {
-      Column()
-        .width('100%').height('100%')
+      Column().width('100%').height('100%')
         .backgroundColor(this.colors.primaryGreen)
 
       Column() {
@@ -242,9 +226,7 @@ export struct TasbihPage {
                   Image($r('app.media.ic_check'))
                     .width(12)
                     .height(12)
-                    .fillColor(this.activePrayerId === prayer
-                      ? this.colors.textOnAccent
-                      : this.colors.accentGold)
+                    .fillColor(this.activePrayerId === prayer ? this.colors.textOnAccent : this.colors.accentGold)
                     .flexShrink(0)
                 }
               }
@@ -257,14 +239,12 @@ export struct TasbihPage {
               .backgroundColor(this.activePrayerId === prayer ? this.colors.accentGold : this.colors.tintSoft)
               .borderRadius(12)
               .border({
-                width: 1,
-                color: (!this.activePrayerId || this.activePrayerId !== prayer) &&
-                  TasbihManager.isTasbihCompleteForPrayer(this.getActiveTasbih()!, prayer, TasbihManager.todayKey())
-                  ? this.colors.accentGold
-                  : this.colors.borderSoft
+                width: 1, color: (!this.activePrayerId || this.activePrayerId !== prayer) &&
+                  TasbihManager.isTasbihCompleteForPrayer(this.getActiveTasbih()!, prayer, TasbihManager.todayKey()) ?
+                  this.colors.accentGold : this.colors.borderSoft
               })
               .onClick(() => {
-                this.selectPrayer(prayer);
+                this.selectPrayer(prayer)
               })
             })
           }
@@ -282,7 +262,8 @@ export struct TasbihPage {
                 .letterSpacing(0)
                 .fontColor(this.colors.textWhite)
                 .textAlign(TextAlign.Start)
-                .lineHeight(38) // Adjust line height for Naskh
+                .lineHeight(38)
+                // Adjust line height for Naskh
                 .width('100%')
 
               Blank().layoutWeight(1)
@@ -293,30 +274,28 @@ export struct TasbihPage {
                   .fontWeight(FontWeight.Normal)
                   .fontFamily(TypographyHelper.getFont(this.currentLanguage, true))
                   .fontFeature('"tnum" 1')
-                  .fontColor(this.beadView.isComplete
-                    ? SHADE_DONE_BASE : this.colors.textWhite)
+                  .fontColor(this.beadView.isComplete ? SHADE_DONE_BASE : this.colors.textWhite)
 
                 Text(`${this.tr('target_count')} ${this.getActiveDhikr()!.target}`)
-                  .fontSize(16).fontColor(this.colors.textMuted)
+                  .fontSize(16)
+                  .fontColor(this.colors.textMuted)
                   .margin({ top: -6 })
 
                 Text(`${this.getLifetimeCount()} ${this.tr('total_on_tasbih')}`)
-                  .fontSize(12).fontColor(this.colors.textMuted)
-                  .opacity(0.7).margin({ top: 6 })
-              }
-              .alignItems(HorizontalAlign.Start)
+                  .fontSize(12)
+                  .fontColor(this.colors.textMuted)
+                  .opacity(0.7)
+                  .margin({ top: 6 })
+              }.alignItems(HorizontalAlign.Start)
 
               Row({ space: 4 }) {
                 Image($r('app.media.ic_arrow_up')).width(18).height(18).fillColor(this.colors.textMuted).opacity(0.5)
-                Text(this.tr('flick_up_to_count'))
-                  .fontSize(12).fontColor(this.colors.textMuted)
+                Text(this.tr('flick_up_to_count')).fontSize(12).fontColor(this.colors.textMuted)
                   .letterSpacing(1)
               }
               .margin({ top: 24 })
 
-              Text(this.tr('flick_hint'))
-                .fontSize(10).fontColor(this.colors.textMuted)
-                .opacity(0.7).margin({ top: 6 })
+              Text(this.tr('flick_hint')).fontSize(10).fontColor(this.colors.textMuted).opacity(0.7).margin({ top: 6 })
 
               Row() {
                 Row({ space: 6 }) {
@@ -333,7 +312,7 @@ export struct TasbihPage {
                 .borderRadius(16)
                 .border({ width: 1, color: this.colors.borderSoft })
                 .onClick(() => {
-                  this.resetCurrent();
+                  this.resetCurrent()
                 })
 
                 Row({ space: 6 }) {
@@ -351,18 +330,17 @@ export struct TasbihPage {
                 .border({ width: 1, color: this.colors.borderSoft })
                 .margin({ left: 8 })
                 .onClick(() => {
-                  this.resetWholeTasbih();
+                  this.resetWholeTasbih()
                 })
               }
               .margin({ top: 20, bottom: 8 })
             } else {
               this.EmptyState()
             }
-          }
-          .layoutWeight(1).height('100%')
+          }.layoutWeight(1).height('100%')
           .alignItems(HorizontalAlign.Start)
           .padding({
-            left: this.isRtl() ? 8 : (this.isTablet() ? 48 : 24),
+            left: this.isRtl() ? 8 : this.isTablet() ? 48 : 24,
             right: this.isRtl() ? (this.isTablet() ? 48 : 24) : 8,
             top: 16,
             bottom: 110
@@ -373,14 +351,12 @@ export struct TasbihPage {
           } else {
             this.BeadStringColumnCanvas()
           }
-        }
-        .layoutWeight(1).width('100%')
+        }.layoutWeight(1).width('100%')
         .alignItems(VerticalAlign.Top)
         .onTouch((event: TouchEvent) => {
-          this.handleSwipe(event);
+          this.handleSwipe(event)
         })
-      }
-      .width('100%').height('100%')
+      }.width('100%').height('100%')
     }
     .width('100%')
     .height('100%')
@@ -393,15 +369,9 @@ export struct TasbihPage {
     .bindSheet(
       this.activeSheet !== 'none',
       this.ActiveSheetContent(),
-      MaterialHelper.buildSheetOptions(
-        this.sheetHeight(),
-        true,
-        this.colors.cardDark,
-        this.colors.overlayDim,
-        () => {
-          this.activeSheet = 'none';
-        }
-      )
+      MaterialHelper.buildSheetOptions(this.sheetHeight(), true, this.colors.cardDark, this.colors.overlayDim, () => {
+        this.activeSheet = 'none'
+      })
     )
   }
 
@@ -411,9 +381,7 @@ export struct TasbihPage {
       // Tasbih picker
       Row({ space: 6 }) {
         Image($r('app.media.ic_nav_tasbih')).width(14).height(14).fillColor(this.colors.accentGold).flexShrink(0)
-        Text(this.getActiveTasbih()
-          ? this.getTasbihName(this.getActiveTasbih()) // <-- Updated
-          : this.tr('tab_tasbih'))
+        Text(this.getActiveTasbih() ? this.getTasbihName(this.getActiveTasbih()) // <-- Updated : this.tr('tab_tasbih'))
           .fontSize(15)
           .fontColor(this.colors.textWhite)
           .fontWeight(FontWeight.Medium)
@@ -439,16 +407,14 @@ export struct TasbihPage {
       .borderRadius(18)
       .border({ width: 1, color: this.colors.borderSoft })
       .onClick(() => {
-        this.activeSheet = 'tasbihPicker';
+        this.activeSheet = 'tasbihPicker'
       })
 
       Blank()
 
       // Dhikr picker
       Row() {
-        Text(this.getActiveDhikr()
-          ? this.getDhikrLabel(this.getActiveDhikr()) // <-- Updated
-          : this.tr('select_dhikr'))
+        Text(this.getActiveDhikr() ? this.getDhikrLabel(this.getActiveDhikr()) // <-- Updated : this.tr('select_dhikr'))
           .fontSize(13)
           .fontColor(this.colors.accentGold)
           .fontWeight(FontWeight.Medium)
@@ -474,7 +440,7 @@ export struct TasbihPage {
       .borderRadius(18)
       .border({ width: 1, color: this.colors.borderSoft })
       .onClick(() => {
-        this.activeSheet = 'dhikrPicker';
+        this.activeSheet = 'dhikrPicker'
       })
     }
     .width('100%')
@@ -510,8 +476,7 @@ export struct TasbihPage {
         .height(BEAD_SIZE)
         .borderRadius(BEAD_SIZE / 2)
         .linearGradient({
-          angle: 135,
-          colors: [[hi, 0], [base, 0.55], [lo, 1]]
+          angle: 135, colors: [[hi, 0], [base, 0.55], [lo, 1]]
         })
         .shadow({
           radius: 3,
@@ -526,15 +491,13 @@ export struct TasbihPage {
         .borderRadius(BEAD_SIZE * 0.14)
         .backgroundColor('rgba(255,255,255,0.55)')
         .position({ x: BEAD_SIZE * 0.22, y: BEAD_SIZE * 0.18 })
-    }
-    .width(BEAD_SIZE).height(BEAD_SIZE)
+    }.width(BEAD_SIZE).height(BEAD_SIZE)
   }
 
   @Builder
   BeadStringColumnClassic() {
     Stack() {
-      Column()
-        .width(STRING_WIDTH).height('100%')
+      Column().width(STRING_WIDTH).height('100%')
         .backgroundColor(STRING_LINE_COLOR)
         .borderRadius(STRING_WIDTH / 2)
 
@@ -544,26 +507,14 @@ export struct TasbihPage {
             if (this.beadView.isComplete) {
               this.Bead(SHADE_DONE_HI, SHADE_DONE_BASE, SHADE_DONE_LO)
             } else {
-              this.Bead(
-                TasbihThemes.getBeadColors(
-                  this.activeThemePresetId,
-                  PageTheme.isDarkFor(this.themeMode)
-                ).hi,
-                TasbihThemes.getBeadColors(
-                  this.activeThemePresetId,
-                  PageTheme.isDarkFor(this.themeMode)
-                ).base,
-                TasbihThemes.getBeadColors(
-                  this.activeThemePresetId,
-                  PageTheme.isDarkFor(this.themeMode)
-                ).lo
-              )
+              this.Bead(TasbihThemes.getBeadColors(this.activeThemePresetId, PageTheme.isDarkFor(this.themeMode)).hi,
+                TasbihThemes.getBeadColors(this.activeThemePresetId, PageTheme.isDarkFor(this.themeMode)).base,
+                TasbihThemes.getBeadColors(this.activeThemePresetId, PageTheme.isDarkFor(this.themeMode)).lo)
             }
           }
           .margin({ top: i === 0 ? 0 : BEAD_GAP })
           .translate({ y: -this.topShiftProgress * BEAD_STEP })
-          .opacity((i === 0 && this.topShiftProgress > 0)
-            ? 1 - this.topShiftProgress : 1)
+          .opacity(i === 0 && this.topShiftProgress > 0 ? 1 - this.topShiftProgress : 1)
         }, (i: number) => `top-${i}-${this.activeThemePresetId}`
         )
 
@@ -572,19 +523,9 @@ export struct TasbihPage {
             if (this.beadView.isComplete) {
               this.Bead(SHADE_DONE_HI, SHADE_DONE_BASE, SHADE_DONE_LO)
             } else {
-              this.Bead(
-                TasbihThemes.getBeadColors(
-                  this.activeThemePresetId,
-                  PageTheme.isDarkFor(this.themeMode)
-                ).hi,
-                TasbihThemes.getBeadColors(
-                  this.activeThemePresetId,
-                  PageTheme.isDarkFor(this.themeMode)
-                ).base,
-                TasbihThemes.getBeadColors(
-                  this.activeThemePresetId,
-                  PageTheme.isDarkFor(this.themeMode)
-                ).lo
+              this.Bead(TasbihThemes.getBeadColors(this.activeThemePresetId, PageTheme.isDarkFor(this.themeMode)).hi,
+                TasbihThemes.getBeadColors(this.activeThemePresetId, PageTheme.isDarkFor(this.themeMode)).base,
+                TasbihThemes.getBeadColors(this.activeThemePresetId, PageTheme.isDarkFor(this.themeMode)).lo
               )
             }
           }
@@ -602,11 +543,9 @@ export struct TasbihPage {
             } else {
               this.Bead(SHADE_PEND_HI_L, SHADE_PEND_BASE_L, SHADE_PEND_LO_L)
             }
-          }
-          .margin({ top: i === 0 ? 0 : BEAD_GAP })
+          }.margin({ top: i === 0 ? 0 : BEAD_GAP })
         }, (i: number) => `bottom-${i}`)
-      }
-      .width('100%').height('100%').alignItems(HorizontalAlign.Center)
+      }.width('100%').height('100%').alignItems(HorizontalAlign.Center)
     }
     .width(this.isTablet() ? 120 : 72)
     .height('100%')
@@ -614,7 +553,7 @@ export struct TasbihPage {
       top: BEAD_COLUMN_TOP_PADDING,
       bottom: 110,
       left: this.isRtl() ? (this.isTablet() ? 60 : 40) : 0,
-      right: this.isRtl() ? 0 : (this.isTablet() ? 60 : 40)
+      right: this.isRtl() ? 0 : this.isTablet() ? 60 : 40
     })
     .direction(Direction.Ltr)
   }
@@ -622,19 +561,18 @@ export struct TasbihPage {
   @Builder
   BeadStringColumnCanvas() {
     Stack() {
-      Canvas(this.ctx)
-        .width('100%').height('100%')
+      Canvas(this.ctx).width('100%').height('100%')
         .onReady(() => {
-          this.canvasReady = true;
-          this.drawCanvasBeads();
+          this.canvasReady = true
+          this.drawCanvasBeads()
         })
         .onAreaChange((oldArea: Area, newArea: Area) => {
-          const w = parseFloat(String(newArea.width));
-          const h = parseFloat(String(newArea.height));
+          const w = parseFloat(String(newArea.width))
+          const h = parseFloat(String(newArea.height))
           if (!isNaN(w) && w > 0 && h > 0) {
-            this.canvasWidth = w;
-            this.canvasHeight = h;
-            this.drawCanvasBeads();
+            this.canvasWidth = w
+            this.canvasHeight = h
+            this.drawCanvasBeads()
           }
         })
     }
@@ -644,7 +582,7 @@ export struct TasbihPage {
       top: BEAD_COLUMN_TOP_PADDING,
       bottom: 110,
       left: this.isRtl() ? (this.isTablet() ? 60 : 40) : 0,
-      right: this.isRtl() ? 0 : (this.isTablet() ? 60 : 40)
+      right: this.isRtl() ? 0 : this.isTablet() ? 60 : 40
     })
     .direction(Direction.Ltr)
   }
@@ -653,12 +591,9 @@ export struct TasbihPage {
   EmptyState() {
     Column() {
       Image($r('app.media.ic_nav_tasbih')).width(64).height(64).fillColor(this.colors.textMuted).opacity(0.5)
-      Text(this.tr('no_dhikr_title'))
-        .fontSize(16).fontColor(this.colors.textMuted).margin({ top: 16 })
-      Text(this.tr('no_dhikr_hint'))
-        .fontSize(13).fontColor(this.colors.textMuted).margin({ top: 6 })
-    }
-    .width('100%').justifyContent(FlexAlign.Center)
+      Text(this.tr('no_dhikr_title')).fontSize(16).fontColor(this.colors.textMuted).margin({ top: 16 })
+      Text(this.tr('no_dhikr_hint')).fontSize(13).fontColor(this.colors.textMuted).margin({ top: 6 })
+    }.width('100%').justifyContent(FlexAlign.Center)
   }
 
   @Builder
@@ -692,8 +627,7 @@ export struct TasbihPage {
             Row({ space: 12 }) { // <-- Added Row space
               Row() {
                 if (t.id === this.activeTasbihId) {
-                  Row().width(10).height(10).borderRadius(5)
-                    .backgroundColor(this.colors.accentGold)
+                  Row().width(10).height(10).borderRadius(5).backgroundColor(this.colors.accentGold)
                 }
               }
               .width(22)
@@ -701,8 +635,7 @@ export struct TasbihPage {
               .borderRadius(11)
               .border({
                 width: t.id === this.activeTasbihId ? 2 : 1.5,
-                color: t.id === this.activeTasbihId
-                  ? this.colors.accentGold : this.colors.borderStrong
+                color: t.id === this.activeTasbihId ? this.colors.accentGold : this.colors.borderStrong
               })
               .justifyContent(FlexAlign.Center)
               .alignItems(VerticalAlign.Center)
@@ -712,26 +645,23 @@ export struct TasbihPage {
                 .width(16)
                 .height(16)
                 .borderRadius(8)
-                .flexShrink(0) // Prevent squish
-                .backgroundColor(
-                  TasbihThemes.getSwatch(
-                    t.themePresetId ?? this.appThemePreset,
-                    this.colors
-                  )
-                )
+                .flexShrink(0)
+                // Prevent squish
+                .backgroundColor(TasbihThemes.getSwatch(t.themePresetId ?? this.appThemePreset, this.colors))
 
               Column() {
-                Text(this.getTasbihName(t)) // <-- Updated
-                  .fontSize(15).fontColor(this.colors.textWhite)
-                  .fontWeight(FontWeight.Medium).width('100%')
-                Text(`${t.dhikrs.length} ${t.dhikrs.length === 1
-                  ? this.tr('dhikr_count_singular')
-                  : this.tr('dhikr_count_plural')} · ${t.lifetimeCount || 0} ${this.tr('total_on_tasbih')}`)
-                  .fontSize(11).fontColor(this.colors.textMuted)
-                  .margin({ top: 2 }).width('100%')
-              }
-              .alignItems(HorizontalAlign.Start)
-              .layoutWeight(1)
+                Text(this.getTasbihName(t) // <-- Updated)
+                  .fontSize(15)
+                  .fontColor(this.colors.textWhite)
+                  .fontWeight(FontWeight.Medium)
+                  .width('100%')
+                Text(`${t.dhikrs.length} ${t.dhikrs.length === 1 ? this.tr('dhikr_count_singular') :
+                  this.tr('dhikr_count_plural')} · ${t.lifetimeCount || 0} ${this.tr('total_on_tasbih')}`)
+                  .fontSize(11)
+                  .fontColor(this.colors.textMuted)
+                  .margin({ top: 2 })
+                  .width('100%')
+              }.alignItems(HorizontalAlign.Start).layoutWeight(1)
 
               Row() {
                 Image($r('app.media.ic_edit')).width(16).height(16).fillColor(this.colors.accentGold)
@@ -742,7 +672,7 @@ export struct TasbihPage {
               .alignItems(VerticalAlign.Center)
               .flexShrink(0)
               .onClick(() => {
-                this.openEditTasbihEditor(t);
+                this.openEditTasbihEditor(t)
               })
 
               if (this.tasbihs.length > 1) {
@@ -755,7 +685,7 @@ export struct TasbihPage {
                 .alignItems(VerticalAlign.Center)
                 .flexShrink(0)
                 .onClick(() => {
-                  this.deleteTasbih(t.id);
+                  this.deleteTasbih(t.id)
                 })
               }
             }
@@ -766,15 +696,13 @@ export struct TasbihPage {
               left: this.isRtl() ? 8 : 16,
               right: this.isRtl() ? 16 : 8
             })
-            .backgroundColor(t.id === this.activeTasbihId
-              ? this.colors.tintSoft : 'transparent')
+            .backgroundColor(t.id === this.activeTasbihId ? this.colors.tintSoft : 'transparent')
             .borderRadius(12)
             .margin({ bottom: 4 })
             .onClick(() => {
-              this.selectTasbih(t.id);
+              this.selectTasbih(t.id)
             })
-          }, (t: Tasbih) =>
-          `${t.id}-${t.name}-${t.dhikrs.length}-${t.themePresetId ?? 'default'}`)
+          }, (t: Tasbih) => `${t.id}-${t.name}-${t.dhikrs.length}-${t.themePresetId ?? 'default'}`)
         }
         .width('100%')
         .padding({ left: 8, right: 8, bottom: 8 })
@@ -794,7 +722,7 @@ export struct TasbihPage {
         .borderRadius(12)
         .margin({ top: 8, bottom: 8 })
         .onClick(() => {
-          this.openNewTasbihEditor();
+          this.openNewTasbihEditor()
         })
 
       Button(this.tr('cancel'))
@@ -807,10 +735,9 @@ export struct TasbihPage {
         .borderRadius(12)
         .margin({ bottom: 20 })
         .onClick(() => {
-          this.activeSheet = 'none';
+          this.activeSheet = 'none'
         })
-    }
-    .width('100%').height('100%')
+    }.width('100%').height('100%')
   }
 
   // ============================================================
@@ -860,8 +787,7 @@ export struct TasbihPage {
                   .borderRadius(11)
                   .border({
                     width: index === this.activeDhikrIndex ? 2 : 1.5,
-                    color: index === this.activeDhikrIndex
-                      ? this.colors.accentGold : this.colors.borderStrong
+                    color: index === this.activeDhikrIndex ? this.colors.accentGold : this.colors.borderStrong
                   })
                   .justifyContent(FlexAlign.Center)
                   .alignItems(VerticalAlign.Center)
@@ -877,8 +803,10 @@ export struct TasbihPage {
                       .textOverflow({ overflow: TextOverflow.Ellipsis })
                       .width('100%')
                     Text(`${d.count} / ${d.target}`)
-                      .fontSize(11).fontColor(this.colors.textMuted)
-                      .margin({ top: 2 }).width('100%')
+                      .fontSize(11)
+                      .fontColor(this.colors.textMuted)
+                      .margin({ top: 2 })
+                      .width('100%')
                   }
                   .alignItems(HorizontalAlign.Start)
                   .layoutWeight(1)
@@ -893,7 +821,7 @@ export struct TasbihPage {
                   .alignItems(VerticalAlign.Center)
                   .flexShrink(0)
                   .onClick(() => {
-                    this.openEditDhikrEditor(d);
+                    this.openEditDhikrEditor(d)
                   })
 
                   // Delete Button
@@ -906,7 +834,7 @@ export struct TasbihPage {
                   .alignItems(VerticalAlign.Center)
                   .flexShrink(0)
                   .onClick(() => {
-                    this.deleteDhikr(d.id);
+                    this.deleteDhikr(d.id)
                   })
                 }
                 .width('100%')
@@ -916,12 +844,11 @@ export struct TasbihPage {
                   left: this.isRtl() ? 8 : 16,
                   right: this.isRtl() ? 16 : 8
                 })
-                .backgroundColor(index === this.activeDhikrIndex
-                  ? this.colors.tintSoft : 'transparent')
+                .backgroundColor(index === this.activeDhikrIndex ? this.colors.tintSoft : 'transparent')
                 .borderRadius(12)
                 .margin({ bottom: 4 })
                 .onClick(() => {
-                  this.selectDhikr(index);
+                  this.selectDhikr(index)
                 })
               }, (d: Dhikr) => `${d.id}-${d.count}-${d.target}`)
           }
@@ -945,7 +872,7 @@ export struct TasbihPage {
         .borderRadius(12)
         .margin({ top: 8, bottom: 8 })
         .onClick(() => {
-          this.openNewDhikrEditor();
+          this.openNewDhikrEditor()
         })
 
       // Cancel Button
@@ -959,10 +886,9 @@ export struct TasbihPage {
         .borderRadius(12)
         .margin({ bottom: 20 })
         .onClick(() => {
-          this.activeSheet = 'none';
+          this.activeSheet = 'none'
         })
-    }
-    .width('100%').height('100%')
+    }.width('100%').height('100%')
   }
 
   @Builder
@@ -970,8 +896,7 @@ export struct TasbihPage {
     Column() {
       // Header band — title vertically and horizontally centred.
       Row() {
-        Text(this.editingTasbihId.length > 0
-          ? this.tr('edit_tasbih') : this.tr('new_tasbih'))
+        Text(this.editingTasbihId.length > 0 ? this.tr('edit_tasbih') : this.tr('new_tasbih'))
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
           .fontColor(this.colors.textWhite)
@@ -996,15 +921,17 @@ export struct TasbihPage {
           // --- Name Input ---
           Column() {
             Text(this.tr('tasbih_name'))
-              .fontSize(12).fontColor(this.colors.textMuted)
-              .width('100%').margin({ bottom: 6 })
+              .fontSize(12)
+              .fontColor(this.colors.textMuted)
+              .width('100%')
+              .margin({ bottom: 6 })
             TextInput({
               text: this.formTasbihName,
               placeholder: this.tr('tasbih_name_placeholder')
             })
               .type(InputType.Normal)
               .onChange((value: string) => {
-                this.formTasbihName = value;
+                this.formTasbihName = value
               })
               .fontSize(15)
               .fontColor(this.colors.textWhite)
@@ -1031,10 +958,14 @@ export struct TasbihPage {
           // --- Bind to Prayers ---
           Column() {
             Text(L.get('bind_to_prayers', this.currentLanguage))
-              .fontSize(12).fontColor(this.colors.textMuted)
-              .width('100%').margin({ bottom: 8 })
+              .fontSize(12)
+              .fontColor(this.colors.textMuted)
+              .width('100%')
+              .margin({ bottom: 8 })
 
-            Flex({ wrap: FlexWrap.Wrap, space: { main: LengthMetrics.vp(8), cross: LengthMetrics.vp(8) } }) {
+            Flex({
+              wrap: FlexWrap.Wrap, space: { main: LengthMetrics.vp(8), cross: LengthMetrics.vp(8) }
+            }) {
               ForEach(['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'], (prayer: string) => {
                 Text(L.get('prayer_' + prayer, this.currentLanguage))
                   .padding({
@@ -1050,14 +981,13 @@ export struct TasbihPage {
                   .borderRadius(16)
                   .onClick(() => {
                     if (this.formBoundPrayerIds.includes(prayer)) {
-                      this.formBoundPrayerIds = this.formBoundPrayerIds.filter(id => id !== prayer);
+                      this.formBoundPrayerIds = this.formBoundPrayerIds.filter((id) => id !== prayer)
                     } else {
-                      this.formBoundPrayerIds = [...this.formBoundPrayerIds, prayer];
+                      this.formBoundPrayerIds = [...this.formBoundPrayerIds, prayer]
                     }
                   })
               })
-            }
-            .width('100%')
+            }.width('100%')
           }
           .width('100%')
           .padding({ left: 20, right: 20, bottom: 16 })
@@ -1065,48 +995,43 @@ export struct TasbihPage {
           // --- Theme Swatches ---
           Column() {
             Text(this.tr('tasbih_render_style'))
-              .fontSize(12).fontColor(this.colors.textMuted)
-              .width('100%').margin({ bottom: 8 })
+              .fontSize(12)
+              .fontColor(this.colors.textMuted)
+              .width('100%')
+              .margin({ bottom: 8 })
 
-            Flex({ wrap: FlexWrap.Wrap, justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }) {
+            Flex({
+              wrap: FlexWrap.Wrap, justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center
+            }) {
               ForEach(
                 ThemeService.getAllThemes(),
                 (theme: AppThemeJson) => {
-                Stack() {
-                  Column()
-                    .width(36)
-                    .height(36)
-                    .borderRadius(18)
-                    .backgroundColor(theme.light.accent)
-                    .border({ width: 1, color: 'rgba(0,0,0,0.20)' })
-                    .shadow({
-                      radius: 3,
-                      color: 'rgba(0,0,0,0.35)',
-                      offsetX: 0,
-                      offsetY: 2
-                    })
-
-                  if (theme.id === this.formThemePresetId) {
+                  Stack() {
                     Column()
-                      .width(48).height(48).borderRadius(24)
-                      .border({ width: 2, color: this.colors.accentGold })
-                  }
-                }
-                .width(52).height(52)
-                .margin({ right: 6, bottom: 6 })
-                .onClick(() => {
-                  this.formThemePresetId = theme.id;
-                })
+                      .width(36)
+                      .height(36)
+                      .borderRadius(18)
+                      .backgroundColor(theme.light.accent)
+                      .border({ width: 1, color: 'rgba(0,0,0,0.20)' })
+                      .shadow({
+                        radius: 3,
+                        color: 'rgba(0,0,0,0.35)',
+                        offsetX: 0,
+                        offsetY: 2
+                      })
+
+                    if (theme.id === this.formThemePresetId) {
+                      Column().width(48).height(48).borderRadius(24).border({ width: 2, color: this.colors.accentGold })
+                    }
+                  }.width(52).height(52).margin({ right: 6, bottom: 6 }).onClick(() => {
+                    this.formThemePresetId = theme.id
+                  })
                 },
                 (preset: AppThemeJson) => `editor-${preset.id}-${preset.id === this.formThemePresetId ? 'sel' : 'un'}`)
-            }
-            .width('100%')
-          }
-          .width('100%').padding({ left: 20, right: 20, bottom: 16 })
-        }
-        .width('100%')
-      }
-      .flexShrink(1) // <-- Replaced layoutWeight(1) so content auto-sizes
+            }.width('100%')
+          }.width('100%').padding({ left: 20, right: 20, bottom: 16 })
+        }.width('100%')
+      }.flexShrink(1) // <-- Replaced layoutWeight(1) so content auto-sizes
       .width('100%')
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)
@@ -1121,7 +1046,7 @@ export struct TasbihPage {
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .onClick(() => {
-            this.activeSheet = 'none';
+            this.activeSheet = 'none'
           })
         Button(this.tr('save'))
           .layoutWeight(1)
@@ -1133,7 +1058,7 @@ export struct TasbihPage {
           .borderRadius(12)
           .margin({ left: 8 })
           .onClick(() => {
-            this.saveTasbih();
+            this.saveTasbih()
           })
       }
       .width('100%')
@@ -1143,8 +1068,7 @@ export struct TasbihPage {
         top: 8,
         bottom: 20
       })
-    }
-    .width('100%')
+    }.width('100%')
   }
 
   // ============================================================
@@ -1156,8 +1080,7 @@ export struct TasbihPage {
     Column() {
       // Header band — title vertically and horizontally centred.
       Row() {
-        Text(this.editingDhikrId.length > 0
-          ? this.tr('edit_dhikr') : this.tr('new_dhikr'))
+        Text(this.editingDhikrId.length > 0 ? this.tr('edit_dhikr') : this.tr('new_dhikr'))
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
           .fontColor(this.colors.textWhite)
@@ -1181,15 +1104,17 @@ export struct TasbihPage {
         Column() {
           Column() {
             Text(this.tr('dhikr_arabic'))
-              .fontSize(12).fontColor(this.colors.textMuted)
-              .width('100%').margin({ bottom: 6 })
+              .fontSize(12)
+              .fontColor(this.colors.textMuted)
+              .width('100%')
+              .margin({ bottom: 6 })
             TextInput({
               text: this.formDhikrArabic,
               placeholder: 'سُبْحَانَ ٱللَّٰهِ'
             })
               .type(InputType.Normal)
               .onChange((value: string) => {
-                this.formDhikrArabic = value;
+                this.formDhikrArabic = value
               })
               .fontSize(16)
               .fontColor(this.colors.textWhite)
@@ -1208,15 +1133,17 @@ export struct TasbihPage {
 
           Column() {
             Text(this.tr('dhikr_transliteration'))
-              .fontSize(12).fontColor(this.colors.textMuted)
-              .width('100%').margin({ bottom: 6 })
+              .fontSize(12)
+              .fontColor(this.colors.textMuted)
+              .width('100%')
+              .margin({ bottom: 6 })
             TextInput({
               text: this.formDhikrTranslit,
               placeholder: this.tr('dhikr_transliteration_placeholder')
             })
               .type(InputType.Normal)
               .onChange((value: string) => {
-                this.formDhikrTranslit = value;
+                this.formDhikrTranslit = value
               })
               .fontSize(14)
               .fontColor(this.colors.textWhite)
@@ -1235,15 +1162,17 @@ export struct TasbihPage {
 
           Column() {
             Text(this.tr('dhikr_translation'))
-              .fontSize(12).fontColor(this.colors.textMuted)
-              .width('100%').margin({ bottom: 6 })
+              .fontSize(12)
+              .fontColor(this.colors.textMuted)
+              .width('100%')
+              .margin({ bottom: 6 })
             TextInput({
               text: this.formDhikrTranslation,
               placeholder: this.tr('dhikr_translation_placeholder')
             })
               .type(InputType.Normal)
               .onChange((value: string) => {
-                this.formDhikrTranslation = value;
+                this.formDhikrTranslation = value
               })
               .fontSize(14)
               .fontColor(this.colors.textWhite)
@@ -1262,13 +1191,15 @@ export struct TasbihPage {
 
           Column() {
             Text(this.tr('target_count'))
-              .fontSize(12).fontColor(this.colors.textMuted)
-              .width('100%').margin({ bottom: 6 })
+              .fontSize(12)
+              .fontColor(this.colors.textMuted)
+              .width('100%')
+              .margin({ bottom: 6 })
             TextInput({ text: this.formDhikrTarget, placeholder: '33' })
               .type(InputType.Number)
               .direction(Direction.Ltr)
               .onChange((value: string) => {
-                this.formDhikrTarget = value;
+                this.formDhikrTarget = value
               })
               .fontSize(14)
               .fontColor(this.colors.textWhite)
@@ -1307,7 +1238,7 @@ export struct TasbihPage {
           .backgroundColor(this.colors.tintSoft)
           .borderRadius(12)
           .onClick(() => {
-            this.activeSheet = 'none';
+            this.activeSheet = 'none'
           })
         Button(this.tr('save'))
           .layoutWeight(1)
@@ -1318,7 +1249,7 @@ export struct TasbihPage {
           .backgroundColor(this.colors.accentGold)
           .borderRadius(12)
           .onClick(() => {
-            this.saveDhikr();
+            this.saveDhikr()
           })
       }
       .width('100%')
@@ -1328,8 +1259,7 @@ export struct TasbihPage {
         top: 8,
         bottom: 20
       })
-    }
-    .width('100%').height('100%')
+    }.width('100%').height('100%')
   }
 
   /**
@@ -1343,128 +1273,110 @@ export struct TasbihPage {
    *   onPageShow: the user may be mid-dhikr and expects to resume
    *   exactly where they left off.
    */
-  private async reloadTasbihs(
-    resetToFirstPending: boolean = false
-  ): Promise<void> {
-    const loaded = await TasbihStorage.load(TasbihManager.createDefaults());
-    this.tasbihs = loaded.tasbihs;
-    this.activeTasbihId = loaded.activeTasbihId;
-    this.activeDhikrIndex = loaded.activeDhikrIndex;
+  private async reloadTasbihs(resetToFirstPending: boolean = false): Promise<void> {
+    const loaded = await TasbihStorage.load(TasbihManager.createDefaults())
+    this.tasbihs = loaded.tasbihs
+    this.activeTasbihId = loaded.activeTasbihId
+    this.activeDhikrIndex = loaded.activeDhikrIndex
 
-    const targetTasbih: string = AppStorage.get<string>('nav_target_tasbih') ?? '';
+    const targetTasbih: string = AppStorage.get<string>('nav_target_tasbih') ?? ''
     if (targetTasbih.length > 0) {
       // Nav target wins — caller knows the exact dhikr they want.
-      const targetDhikr: number = AppStorage.get<number>('nav_target_dhikr') ?? 0;
-      const targetPrayer: string = AppStorage.get<string>('nav_target_prayer') ?? '';
-      const targetTasbih: string = AppStorage.get<string>('nav_target_tasbih') ?? '';
+      const targetDhikr: number = AppStorage.get<number>('nav_target_dhikr') ?? 0
+      const targetPrayer: string = AppStorage.get<string>('nav_target_prayer') ?? ''
+      const targetTasbih: string = AppStorage.get<string>('nav_target_tasbih') ?? ''
       AppLogger.info('TasbihPage',
-        `reloadTasbihs: applying nav tasbih='${targetTasbih}' prayer='${targetPrayer}' dhikr=${targetDhikr}`);
-      this.applyTasbihNavTarget(targetTasbih, targetDhikr, targetPrayer);
-      return;
+        `reloadTasbihs: applying nav tasbih='${targetTasbih}' prayer='${targetPrayer}' dhikr=${targetDhikr}`)
+      this.applyTasbihNavTarget(targetTasbih, targetDhikr, targetPrayer)
+      return
     }
 
-    this.resolveActiveTheme();
-    this.ensureActivePrayer();
+    this.resolveActiveTheme()
+    this.ensureActivePrayer()
 
     if (resetToFirstPending) {
       // The user opened the Tasbih tab fresh. Land on the first dhikr
       // that isn't complete yet for today, not on whatever index the
       // previous session happened to leave behind.
-      const active = this.getActiveTasbih();
-      const pendingIdx = TasbihManager.findFirstPendingDhikrIndex(
-        active, this.activePrayerId
-      );
+      const active = this.getActiveTasbih()
+      const pendingIdx = TasbihManager.findFirstPendingDhikrIndex(active, this.activePrayerId)
       if (pendingIdx !== this.activeDhikrIndex) {
-        AppLogger.info('TasbihPage',
-          `resetToFirstPending: ${this.activeDhikrIndex} -> ${pendingIdx}`);
-        this.activeDhikrIndex = pendingIdx;
+        AppLogger.info('TasbihPage', `resetToFirstPending: ${this.activeDhikrIndex} -> ${pendingIdx}`)
+        this.activeDhikrIndex = pendingIdx
         // Persist so the reset survives across storage reads.
-        this.persist();
+        this.persist()
       }
     }
 
-    this.refreshBeadView();
+    this.refreshBeadView()
   }
 
   // ============================================================
   // BEAD VIEWS
   // ============================================================
 
+  private applyTasbihNavTarget(targetTasbih: string, targetDhikr: number, targetPrayer: string): void {
+    this.activeTasbihId = targetTasbih
 
-  private applyTasbihNavTarget(
-    targetTasbih: string, targetDhikr: number, targetPrayer: string
-  ): void {
-    this.activeTasbihId = targetTasbih;
+    const targetTasbihObj = TasbihManager.findTasbih(this.tasbihs, targetTasbih)
 
-    const targetTasbihObj = TasbihManager.findTasbih(this.tasbihs, targetTasbih);
-
-    this.activeDhikrIndex = 0;
+    this.activeDhikrIndex = 0
 
     if (targetTasbihObj && targetTasbihObj.dhikrs.length > 0) {
-
-      this.activeDhikrIndex = Math.max(0, Math.min(targetDhikr, targetTasbihObj.dhikrs.length - 1));
+      this.activeDhikrIndex = Math.max(0, Math.min(targetDhikr, targetTasbihObj.dhikrs.length - 1))
     }
 
     if (targetPrayer.length > 0) {
-
       // Set directly first so any later
       // resolveActivePrayer() call sees
       // a non-empty prayer.
 
-      this.activePrayerId = targetPrayer;
+      this.activePrayerId = targetPrayer
 
-      this.restorePrayerCount(targetPrayer);
-
+      this.restorePrayerCount(targetPrayer)
     } else {
-      const t = this.getActiveTasbih();
+      const t = this.getActiveTasbih()
       if (t && t.dhikrs.length > 0) {
-        this.activeDhikrIndex = Math.min(
-          this.activeDhikrIndex, t.dhikrs.length - 1
-        );
+        this.activeDhikrIndex = Math.min(this.activeDhikrIndex, t.dhikrs.length - 1)
       }
-      this.resolveActiveTheme();
-      this.ensureActivePrayer();
-      this.refreshBeadView();
+      this.resolveActiveTheme()
+      this.ensureActivePrayer()
+      this.refreshBeadView()
     }
 
-    this.persist();
-    AppLogger.info('TasbihPage', `APPLY prayer=${targetPrayer}`);
-
-
+    this.persist()
+    AppLogger.info('TasbihPage', `APPLY prayer=${targetPrayer}`)
   }
 
   private getSortedBoundPrayers(prayerIds: string[]): string[] {
-    const order = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
-    return prayerIds.slice().sort((a, b) => order.indexOf(a) - order.indexOf(b));
+    const order = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']
+    return prayerIds.slice().sort((a, b) => order.indexOf(a) - order.indexOf(b))
   }
 
   private resolveActivePrayer(): void {
-
     // IMPORTANT:
     // If a prayer is already selected (for example
     // via Home -> Bound Tasbih navigation),
     // do not overwrite it.
 
     if (this.activePrayerId.length > 0) {
-      return;
+      return
     }
 
-    const t = this.getActiveTasbih();
+    const t = this.getActiveTasbih()
 
     if (!t || !t.boundPrayerIds || t.boundPrayerIds.length === 0) {
-      this.activePrayerId = '';
-      return;
+      this.activePrayerId = ''
+      return
     }
 
-    const todayKey = TasbihManager.todayKey();
+    const todayKey = TasbihManager.todayKey()
 
-    const pending = t.boundPrayerIds.find(p => !TasbihManager.isTasbihCompleteForPrayer(t, p, todayKey));
+    const pending = t.boundPrayerIds.find((p) => !TasbihManager.isTasbihCompleteForPrayer(t, p, todayKey))
 
-    const targetPrayer = pending || t.boundPrayerIds[0];
+    const targetPrayer = pending || t.boundPrayerIds[0]
 
-
-
-    this.restorePrayerCount(targetPrayer);
+    this.restorePrayerCount(targetPrayer)
   }
 
   // ============================================================
@@ -1485,17 +1397,17 @@ export struct TasbihPage {
    */
   private ensureActivePrayer(): void {
     if (this.activePrayerId !== '') {
-      return;
+      return
     }
-    AppLogger.info('TasbihPage', `resolveActivePrayer() active=${this.activePrayerId}`);
-    this.resolveActivePrayer();
+    AppLogger.info('TasbihPage', `resolveActivePrayer() active=${this.activePrayerId}`)
+    this.resolveActivePrayer()
   }
 
   private selectPrayer(prayer: string): void {
     if (this.activePrayerId === prayer) {
-      return;
+      return
     }
-    this.restorePrayerCount(prayer);
+    this.restorePrayerCount(prayer)
   }
 
   // ============================================================
@@ -1503,34 +1415,34 @@ export struct TasbihPage {
   // ============================================================
 
   private restorePrayerCount(newPrayer: string): void {
-    const oldPrayer = this.activePrayerId;
-    this.activePrayerId = newPrayer;
+    const oldPrayer = this.activePrayerId
+    this.activePrayerId = newPrayer
 
-    const t = this.getActiveTasbih();
+    const t = this.getActiveTasbih()
     if (t) {
       this.tasbihs = this.tasbihs.map((tas: Tasbih): Tasbih => {
         if (tas.id !== t.id) {
-          return tas;
+          return tas
         }
 
         const newDhikrs = tas.dhikrs.map((d: Dhikr): Dhikr => {
-          const lc: Record<string, number> = {};
+          const lc: Record<string, number> = {}
           if (d.liveCounts) {
-            const keys = Object.keys(d.liveCounts);
+            const keys = Object.keys(d.liveCounts)
             for (let i = 0; i < keys.length; i++) {
-              lc[keys[i]] = d.liveCounts[keys[i]];
+              lc[keys[i]] = d.liveCounts[keys[i]]
             }
           }
 
           // Save old prayer's count
           if (oldPrayer && oldPrayer.length > 0) {
-            lc[oldPrayer] = d.count;
+            lc[oldPrayer] = d.count
           }
 
           // Restore new prayer's count
-          const newCount = lc[newPrayer] || 0;
+          const newCount = lc[newPrayer] || 0
 
-          AppLogger.info('TasbihPage', `restorePrayerCount(${newPrayer})`);
+          AppLogger.info('TasbihPage', `restorePrayerCount(${newPrayer})`)
 
           const updatedDhikr: Dhikr = {
             id: d.id,
@@ -1544,9 +1456,9 @@ export struct TasbihPage {
             lastCountDate: d.lastCountDate,
             dailyTotal: d.dailyTotal,
             liveCounts: lc
-          };
-          return updatedDhikr;
-        });
+          }
+          return updatedDhikr
+        })
 
         const updatedTasbih: Tasbih = {
           id: tas.id,
@@ -1559,21 +1471,21 @@ export struct TasbihPage {
           history: tas.history,
           boundPrayerIds: tas.boundPrayerIds,
           prayerCompletions: tas.prayerCompletions
-        };
-        return updatedTasbih;
-      });
+        }
+        return updatedTasbih
+      })
     }
 
     // Force index to be valid
-    const active = this.getActiveTasbih();
+    const active = this.getActiveTasbih()
     if (active && active.dhikrs.length > 0) {
-      this.activeDhikrIndex = Math.min(this.activeDhikrIndex, active.dhikrs.length - 1);
+      this.activeDhikrIndex = Math.min(this.activeDhikrIndex, active.dhikrs.length - 1)
     } else {
-      this.activeDhikrIndex = 0;
+      this.activeDhikrIndex = 0
     }
 
-    this.refreshBeadView();
-    this.persist();
+    this.refreshBeadView()
+    this.persist()
   }
 
   // ============================================================
@@ -1585,7 +1497,7 @@ export struct TasbihPage {
    * and DhikrEditor need more room; the two pickers are more compact.
    */
   private sheetHeight(): number | SheetSize {
-    return SheetSize.FIT_CONTENT;
+    return SheetSize.FIT_CONTENT
   }
 
   // ============================================================
@@ -1595,12 +1507,10 @@ export struct TasbihPage {
   private dhikrCountLabel(n: number): string {
     // Arabic dual form ("ذكران") implies "two" and takes no numeral.
     if (this.currentLanguage === 'ar' && n === 2) {
-      return this.tr('dhikr_count_dual');
+      return this.tr('dhikr_count_dual')
     }
-    const word = n === 1
-      ? this.tr('dhikr_count_singular')
-      : this.tr('dhikr_count_plural');
-    return `${n} ${word}`;
+    const word = n === 1 ? this.tr('dhikr_count_singular') : this.tr('dhikr_count_plural')
+    return `${n} ${word}`
   }
 
   // ============================================================
@@ -1608,85 +1518,81 @@ export struct TasbihPage {
   // ============================================================
 
   private tr(key: string): string {
-    return L.get(key, this.currentLanguage);
+    return L.get(key, this.currentLanguage)
   }
 
   private isRtl(): boolean {
-    return L.isRtlLang(this.currentLanguage);
+    return L.isRtlLang(this.currentLanguage)
   }
 
   private isTablet(): boolean {
-    return Breakpoints.isTablet(this.breakpoint);
+    return Breakpoints.isTablet(this.breakpoint)
   }
 
   private onThemeModeChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   private onLanguageChanged(): void {
-    this.currentLanguage = this.appLanguage;
+    this.currentLanguage = this.appLanguage
   }
 
   private async onAppForegrounded(): Promise<void> {
-    await this.reloadTasbihs();
+    await this.reloadTasbihs()
   }
 
   private getActiveTasbih(): Tasbih | null {
-    return TasbihManager.findTasbih(this.tasbihs, this.activeTasbihId);
+    return TasbihManager.findTasbih(this.tasbihs, this.activeTasbihId)
   }
 
   private getActiveDhikr(): Dhikr | null {
-    return TasbihManager.getActiveDhikr(
-      this.tasbihs, this.activeTasbihId, this.activeDhikrIndex
-    );
+    return TasbihManager.getActiveDhikr(this.tasbihs, this.activeTasbihId, this.activeDhikrIndex)
   }
 
   private getLifetimeCount(): number {
-    const t = this.getActiveTasbih();
-    return t ? (t.lifetimeCount || 0) : 0;
+    const t = this.getActiveTasbih()
+    return t ? t.lifetimeCount || 0 : 0
   }
 
   private resolveActiveTheme(): void {
-    const t = this.getActiveTasbih();
+    const t = this.getActiveTasbih()
 
-    this.activeThemePresetId =
-      t?.themePresetId ??
-        TasbihThemes.DEFAULT_PRESET_ID;
+    this.activeThemePresetId = t?.themePresetId ?? TasbihThemes.DEFAULT_PRESET_ID
   }
 
   private refreshBeadView(): void {
-    const dhikr = this.getActiveDhikr();
-    const next = TasbihManager.computeBeadView(dhikr);
+    const dhikr = this.getActiveDhikr()
+    const next = TasbihManager.computeBeadView(dhikr)
 
-    const topSame = next.topIds.length === this.beadView.topIds.length;
+    const topSame = next.topIds.length === this.beadView.topIds.length
     if (topSame && next.topAtCap && next.topIds.length > 0) {
-      this.topPulseTick = this.topPulseTick + 1;
+      this.topPulseTick = this.topPulseTick + 1
     }
 
-    this.beadView = next;
-    this.drawCanvasBeads();
+    this.beadView = next
+    this.drawCanvasBeads()
   }
 
   // Update persist() to save the active count just in case the app closes
   private persist(): void {
     if (this.activePrayerId) {
-      const t = this.getActiveTasbih();
+      const t = this.getActiveTasbih()
       if (t) {
         this.tasbihs = this.tasbihs.map((tas: Tasbih): Tasbih => {
           if (tas.id !== t.id) {
-            return tas;
+            return tas
           }
 
           const newDhikrs: Dhikr[] = tas.dhikrs.map((d: Dhikr): Dhikr => {
-            const lc: Record<string, number> = {};
+            const lc: Record<string, number> = {}
             if (d.liveCounts) {
-              const keys = Object.keys(d.liveCounts);
+              const keys = Object.keys(d.liveCounts)
               for (let i = 0; i < keys.length; i++) {
-                lc[keys[i]] = d.liveCounts[keys[i]];
+                lc[keys[i]] = d.liveCounts[keys[i]]
               }
             }
 
-            lc[this.activePrayerId] = d.count;
+            lc[this.activePrayerId] = d.count
 
             // Explicitly type the object
             const updatedDhikr: Dhikr = {
@@ -1701,9 +1607,9 @@ export struct TasbihPage {
               lastCountDate: d.lastCountDate,
               dailyTotal: d.dailyTotal,
               liveCounts: lc
-            };
-            return updatedDhikr;
-          });
+            }
+            return updatedDhikr
+          })
 
           // Explicitly type the object
           const updatedTasbih: Tasbih = {
@@ -1717,26 +1623,24 @@ export struct TasbihPage {
             boundPrayerIds: tas.boundPrayerIds,
             prayerCompletions: tas.prayerCompletions,
             dhikrs: newDhikrs
-          };
-          return updatedTasbih;
-        });
+          }
+          return updatedTasbih
+        })
       }
     }
 
-    TasbihStorage.save(this.tasbihs, this.activeTasbihId, this.activeDhikrIndex);
+    TasbihStorage.save(this.tasbihs, this.activeTasbihId, this.activeDhikrIndex)
   }
 
   private drawCanvasBeads(): void {
     if (!this.canvasReady || this.canvasHeight <= 0) {
-      return;
+      return
     }
     if (this.renderStyle !== 'premium') {
-      return;
+      return
     }
 
-    const themePresetId =
-      this.getActiveTasbih()?.themePresetId ??
-        TasbihThemes.DEFAULT_PRESET_ID;
+    const themePresetId = this.getActiveTasbih()?.themePresetId ?? TasbihThemes.DEFAULT_PRESET_ID
 
     const cfg: BeadCanvasConfig = {
       topCount: this.beadView.topIds.length,
@@ -1754,54 +1658,52 @@ export struct TasbihPage {
       bottomPrevCount: this.shiftPrevBottomCount,
       bottomFadeProgress: this.shiftFadeProgress,
       bottomPopProgress: this.bottomPopProgress
-    };
+    }
 
-    TasbihCanvasRenderer.drawCanvas(
-      this.ctx, this.canvasWidth, this.canvasHeight, cfg
-    );
+    TasbihCanvasRenderer.drawCanvas(this.ctx, this.canvasWidth, this.canvasHeight, cfg)
   }
 
   private startFisheye(): void {
-    this.animateFisheyeTo(1);
+    this.animateFisheyeTo(1)
   }
 
   private fadeFisheye(): void {
-    this.animateFisheyeTo(0);
+    this.animateFisheyeTo(0)
   }
 
   private animateFisheyeTo(target: number): void {
     if (this.fisheyeAnimId !== -1) {
-      clearInterval(this.fisheyeAnimId);
-      this.fisheyeAnimId = -1;
+      clearInterval(this.fisheyeAnimId)
+      this.fisheyeAnimId = -1
     }
-    const start = this.fisheyeStrength;
-    const startTime = Date.now();
-    const duration = FISHEYE_ANIM_MS;
+    const start = this.fisheyeStrength
+    const startTime = Date.now()
+    const duration = FISHEYE_ANIM_MS
 
     this.fisheyeAnimId = setInterval(() => {
-      const t = Math.min((Date.now() - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
-      this.fisheyeStrength = start + (target - start) * eased;
-      this.drawCanvasBeads();
+      const t = Math.min((Date.now() - startTime) / duration, 1)
+      const eased = 1 - Math.pow(1 - t, 3)
+      this.fisheyeStrength = start + (target - start) * eased
+      this.drawCanvasBeads()
       if (t >= 1) {
-        clearInterval(this.fisheyeAnimId);
-        this.fisheyeAnimId = -1;
+        clearInterval(this.fisheyeAnimId)
+        this.fisheyeAnimId = -1
         if (target === 0) {
-          this.fingerY = -1;
-          this.drawCanvasBeads();
+          this.fingerY = -1
+          this.drawCanvasBeads()
         }
       }
-    }, 16);
+    }, 16)
   }
 
   private startTopShift(): void {
     if (this.topShiftAnimator !== null) {
-      this.topShiftAnimator.cancel();
-      this.topShiftAnimator = null;
+      this.topShiftAnimator.cancel()
+      this.topShiftAnimator = null
     }
 
-    this.topShiftActive = true;
-    this.topShiftProgress = 0;
+    this.topShiftActive = true
+    this.topShiftProgress = 0
 
     const options: AnimatorOptions = {
       duration: TOP_SHIFT_MS,
@@ -1812,39 +1714,38 @@ export struct TasbihPage {
       iterations: 1,
       begin: 0,
       end: 1
-    };
+    }
 
-    const animator: AnimatorResult =
-      this.getUIContext().createAnimator(options);
+    const animator: AnimatorResult = this.getUIContext().createAnimator(options)
 
     animator.onFrame = (value: number) => {
-      this.topShiftProgress = value;
-      this.shiftFadeProgress = value;
-      this.drawCanvasBeads();
-    };
+      this.topShiftProgress = value
+      this.shiftFadeProgress = value
+      this.drawCanvasBeads()
+    }
 
     animator.onFinish = () => {
-      this.topShiftActive = false;
-      this.topShiftProgress = 0;
-      this.shiftFadeProgress = 0;
-      this.shiftPrevBottomCount = -1;
-      this.drawCanvasBeads();
-      this.topShiftAnimator = null;
-    };
+      this.topShiftActive = false
+      this.topShiftProgress = 0
+      this.shiftFadeProgress = 0
+      this.shiftPrevBottomCount = -1
+      this.drawCanvasBeads()
+      this.topShiftAnimator = null
+    }
 
-    this.topShiftAnimator = animator;
-    animator.play();
+    this.topShiftAnimator = animator
+    animator.play()
   }
 
   private startBottomFlyPop(oldBottomCount: number): void {
     if (this.bottomFlyAnimator !== null) {
-      this.bottomFlyAnimator.cancel();
-      this.bottomFlyAnimator = null;
+      this.bottomFlyAnimator.cancel()
+      this.bottomFlyAnimator = null
     }
 
-    this.shiftPrevBottomCount = oldBottomCount;
-    this.shiftFadeProgress = 0;
-    this.bottomPopProgress = 0;
+    this.shiftPrevBottomCount = oldBottomCount
+    this.shiftFadeProgress = 0
+    this.bottomPopProgress = 0
 
     const options: AnimatorOptions = {
       duration: BOTTOM_FLY_MS,
@@ -1855,171 +1756,166 @@ export struct TasbihPage {
       iterations: 1,
       begin: 0,
       end: 1
-    };
+    }
 
-    const animator: AnimatorResult =
-      this.getUIContext().createAnimator(options);
+    const animator: AnimatorResult = this.getUIContext().createAnimator(options)
 
     animator.onFrame = (value: number) => {
-      this.shiftFadeProgress = value;
-      this.bottomPopProgress = Math.min(value / 0.5, 1);
-      this.drawCanvasBeads();
-    };
+      this.shiftFadeProgress = value
+      this.bottomPopProgress = Math.min(value / 0.5, 1)
+      this.drawCanvasBeads()
+    }
 
     animator.onFinish = () => {
-      this.shiftPrevBottomCount = -1;
-      this.shiftFadeProgress = 0;
-      this.bottomPopProgress = 0;
-      this.bottomFlyAnimator = null;
-      this.drawCanvasBeads();
-    };
+      this.shiftPrevBottomCount = -1
+      this.shiftFadeProgress = 0
+      this.bottomPopProgress = 0
+      this.bottomFlyAnimator = null
+      this.drawCanvasBeads()
+    }
 
-    this.bottomFlyAnimator = animator;
-    animator.play();
+    this.bottomFlyAnimator = animator
+    animator.play()
   }
 
   // entry/src/main/ets/tasbih/TasbihPage.ets
 
   private increment(): void {
     if (this.advanceLock) {
-      return;
+      return
     }
 
-    const dhikr = this.getActiveDhikr();
+    const dhikr = this.getActiveDhikr()
     if (!dhikr) {
-      return;
+      return
     }
 
-    HapticHelper.tick();
-    SoundHelper.tick();
+    HapticHelper.tick()
+    SoundHelper.tick()
 
-    const wasAtCap = this.beadView.topAtCap;
-    const oldBottomCount = this.beadView.bottomIds.length;
+    const wasAtCap = this.beadView.topAtCap
+    const oldBottomCount = this.beadView.bottomIds.length
 
-    this.tasbihs = TasbihManager.increment(
-      this.tasbihs, this.activeTasbihId, dhikr.id
-    );
-    this.refreshBeadView();
+    this.tasbihs = TasbihManager.increment(this.tasbihs, this.activeTasbihId, dhikr.id)
+    this.refreshBeadView()
 
     if (wasAtCap && this.beadView.topAtCap) {
-      this.startTopShift();
+      this.startTopShift()
     }
 
     if (oldBottomCount === MAX_BOTTOM_BEADS) {
-      this.startBottomFlyPop(oldBottomCount);
+      this.startBottomFlyPop(oldBottomCount)
     }
 
-    const updatedDhikr = this.getActiveDhikr();
+    const updatedDhikr = this.getActiveDhikr()
     if (!updatedDhikr) {
-      this.persist();
-      return;
+      this.persist()
+      return
     }
 
-    const isComplete = updatedDhikr.count >= updatedDhikr.target;
-    const tasbih = this.getActiveTasbih();
-    const hasNext = tasbih !== null
-      && this.activeDhikrIndex < tasbih.dhikrs.length - 1;
+    const isComplete = updatedDhikr.count >= updatedDhikr.target
+    const tasbih = this.getActiveTasbih()
+    const hasNext = tasbih !== null && this.activeDhikrIndex < tasbih.dhikrs.length - 1
 
     if (isComplete && hasNext) {
-      this.persist();
-      this.advanceLock = true;
-      HapticHelper.confirm();
+      this.persist()
+      this.advanceLock = true
+      HapticHelper.confirm()
 
-      this.advanceLock = true;
-      HapticHelper.confirm();
+      this.advanceLock = true
+      HapticHelper.confirm()
 
       this.advanceTimerId = setTimeout(() => {
-        this.activeDhikrIndex = this.activeDhikrIndex + 1;
-        this.refreshBeadView();
-        this.advanceLock = false;
-        this.persist();
-        this.advanceTimerId = -1;
-      }, 400);
-      return;
+        this.activeDhikrIndex = this.activeDhikrIndex + 1
+        this.refreshBeadView()
+        this.advanceLock = false
+        this.persist()
+        this.advanceTimerId = -1
+      }, 400)
+      return
     }
 
     if (isComplete && !hasNext) {
       // 🚨 FIX: Check if ALL dhikrs are completed, not just the last one
-      let allCompleted = true;
+      let allCompleted = true
       if (tasbih) {
         for (const d of tasbih.dhikrs) {
           if (d.count < d.target) {
-            allCompleted = false;
-            break;
+            allCompleted = false
+            break
           }
         }
       }
 
       if (allCompleted) {
-        HapticHelper.complete();
-        this.getUIContext().getPromptAction().showToast({
-          message: this.tr('all_dhikrs_complete'), duration: 1800
-        });
+        HapticHelper.complete()
+        this.getUIContext()
+          .getPromptAction()
+          .showToast({
+            message: this.tr('all_dhikrs_complete'), duration: 1800
+          })
 
         if (this.activePrayerId && tasbih) {
-          this.tasbihs = TasbihManager.markPrayerComplete(
-            this.tasbihs, tasbih.id, this.activePrayerId, TasbihManager.todayKey()
-          );
+          this.tasbihs = TasbihManager.markPrayerComplete(this.tasbihs, tasbih.id, this.activePrayerId,
+            TasbihManager.todayKey())
         }
       } else {
         // If they finished the last dhikr but missed earlier ones, just give a standard confirm haptic
-        HapticHelper.confirm();
+        HapticHelper.confirm()
       }
 
-      this.persist();
-      return;
+      this.persist()
+      return
     }
 
-    this.persist();
+    this.persist()
   }
 
   private decrement(): void {
     if (this.advanceLock) {
-      return;
+      return
     }
 
-    const dhikr = this.getActiveDhikr();
+    const dhikr = this.getActiveDhikr()
     if (!dhikr || dhikr.count === 0) {
-      return;
+      return
     }
 
-    HapticHelper.tick();
-    SoundHelper.tick();
+    HapticHelper.tick()
+    SoundHelper.tick()
 
-    this.tasbihs = TasbihManager.decrement(
-      this.tasbihs, this.activeTasbihId, dhikr.id
-    );
-    this.refreshBeadView();
-    this.persist();
+    this.tasbihs = TasbihManager.decrement(this.tasbihs, this.activeTasbihId, dhikr.id)
+    this.refreshBeadView()
+    this.persist()
   }
 
   private resetCurrent(): void {
     if (this.advanceLock) {
-      return;
+      return
     }
 
-    const dhikr = this.getActiveDhikr();
+    const dhikr = this.getActiveDhikr()
     if (!dhikr) {
-      return;
+      return
     }
 
-    this.tasbihs = TasbihManager.reset(
-      this.tasbihs, this.activeTasbihId, dhikr.id
-    );
-    this.refreshBeadView();
-    this.persist();
-    this.getUIContext().getPromptAction().showToast({
-      message: this.tr('counter_reset_toast'), duration: 1200
-    });
+    this.tasbihs = TasbihManager.reset(this.tasbihs, this.activeTasbihId, dhikr.id)
+    this.refreshBeadView()
+    this.persist()
+    this.getUIContext()
+      .getPromptAction()
+      .showToast({
+        message: this.tr('counter_reset_toast'), duration: 1200
+      })
   }
 
   private resetWholeTasbih(): void {
     if (this.advanceLock) {
-      return;
+      return
     }
-    const dhikr = this.getActiveDhikr();
+    const dhikr = this.getActiveDhikr()
     if (!dhikr) {
-      return;
+      return
     }
 
     this.getUIContext()
@@ -2034,20 +1930,20 @@ export struct TasbihPage {
       })
       .then((result: promptAction.ShowDialogSuccessResponse) => {
         if (result.index === 1) {
-          this.tasbihs = TasbihManager.resetAll(
-            this.tasbihs, this.activeTasbihId
-          );
-          this.activeDhikrIndex = 0;
-          this.refreshBeadView();
-          this.persist();
-          this.getUIContext().getPromptAction().showToast({
-            message: this.tr('reset_all_done'), duration: 1200
-          });
+          this.tasbihs = TasbihManager.resetAll(this.tasbihs, this.activeTasbihId)
+          this.activeDhikrIndex = 0
+          this.refreshBeadView()
+          this.persist()
+          this.getUIContext()
+            .getPromptAction()
+            .showToast({
+              message: this.tr('reset_all_done'), duration: 1200
+            })
         }
       })
       .catch((err: Error) => {
-        console.error('[TasbihPage] reset dialog failed:', JSON.stringify(err));
-      });
+        console.error('[TasbihPage] reset dialog failed:', JSON.stringify(err))
+      })
   }
 
   private handleSwipe(event: TouchEvent): void {
@@ -2055,34 +1951,34 @@ export struct TasbihPage {
     // Tasbih swipes. The sheet is in the system modal layer, but on
     // some HOS builds the initial drag can still land on this Row.
     if (this.activeSheet !== 'none') {
-      return;
+      return
     }
 
     if (event.touches && event.touches.length > 0) {
-      const rowY = event.touches[0].y;
-      const canvasY = rowY - BEAD_COLUMN_TOP_PADDING;
+      const rowY = event.touches[0].y
+      const canvasY = rowY - BEAD_COLUMN_TOP_PADDING
 
       if (event.type === TouchType.Down) {
-        this.swipeStartY = rowY;
-        this.swipeLastY = rowY;
-        this.fingerY = canvasY;
-        this.startFisheye();
-        this.drawCanvasBeads();
+        this.swipeStartY = rowY
+        this.swipeLastY = rowY
+        this.fingerY = canvasY
+        this.startFisheye()
+        this.drawCanvasBeads()
       } else if (event.type === TouchType.Move) {
-        this.swipeLastY = rowY;
-        this.fingerY = canvasY;
-        this.drawCanvasBeads();
+        this.swipeLastY = rowY
+        this.fingerY = canvasY
+        this.drawCanvasBeads()
       }
     }
 
     if (event.type === TouchType.Up) {
-      const delta = this.swipeLastY - this.swipeStartY;
-      this.fadeFisheye();
+      const delta = this.swipeLastY - this.swipeStartY
+      this.fadeFisheye()
       if (Math.abs(delta) > SWIPE_THRESHOLD) {
         if (delta < 0) {
-          this.increment();
+          this.increment()
         } else {
-          this.decrement();
+          this.decrement()
         }
       }
     }
@@ -2093,204 +1989,169 @@ export struct TasbihPage {
   // ============================================================
 
   private openNewTasbihEditor(): void {
-    this.editingTasbihId = '';
-    this.formTasbihName = '';
-    this.formThemePresetId = TasbihThemes.DEFAULT_PRESET_ID;
-    this.formBoundPrayerIds = [];
-    this.activeSheet = 'tasbihEditor';
+    this.editingTasbihId = ''
+    this.formTasbihName = ''
+    this.formThemePresetId = TasbihThemes.DEFAULT_PRESET_ID
+    this.formBoundPrayerIds = []
+    this.activeSheet = 'tasbihEditor'
   }
 
   private openEditTasbihEditor(t: Tasbih): void {
-    this.editingTasbihId = t.id;
-    this.formTasbihName = this.getTasbihName(t);
-    this.formThemePresetId = t.themePresetId || TasbihThemes.DEFAULT_PRESET_ID;
-    this.formBoundPrayerIds = t.boundPrayerIds || [];
-    this.activeSheet = 'tasbihEditor';
+    this.editingTasbihId = t.id
+    this.formTasbihName = this.getTasbihName(t)
+    this.formThemePresetId = t.themePresetId || TasbihThemes.DEFAULT_PRESET_ID
+    this.formBoundPrayerIds = t.boundPrayerIds || []
+    this.activeSheet = 'tasbihEditor'
   }
 
   private saveTasbih(): void {
-    const name = this.formTasbihName.trim();
-    const finalName = name.length > 0 ? name : 'Tasbih';
+    const name = this.formTasbihName.trim()
+    const finalName = name.length > 0 ? name : 'Tasbih'
 
     // Force Tasbih theme to always match the app theme
-    const themePresetId = this.formThemePresetId;
+    const themePresetId = this.formThemePresetId
 
     if (this.editingTasbihId.length > 0) {
+      this.tasbihs = TasbihManager.renameTasbih(this.tasbihs, this.editingTasbihId, finalName, themePresetId)
 
-      this.tasbihs = TasbihManager.renameTasbih(
-        this.tasbihs,
-        this.editingTasbihId,
-        finalName,
-        themePresetId
-      );
+      this.tasbihs = TasbihManager.setTheme(this.tasbihs, this.editingTasbihId, themePresetId)
 
-      this.tasbihs = TasbihManager.setTheme(
-        this.tasbihs,
-        this.editingTasbihId,
-        themePresetId
-      );
-
-      this.tasbihs = TasbihManager.updateBinding(
-        this.tasbihs,
-        this.editingTasbihId,
-        this.formBoundPrayerIds
-      );
-
+      this.tasbihs = TasbihManager.updateBinding(this.tasbihs, this.editingTasbihId, this.formBoundPrayerIds)
     } else {
+      const res = TasbihManager.addTasbih(this.tasbihs, finalName, themePresetId)
 
-      const res = TasbihManager.addTasbih(
-        this.tasbihs,
-        finalName,
-        themePresetId
-      );
+      this.tasbihs = res.tasbihs
 
-      this.tasbihs = res.tasbihs;
+      this.tasbihs = TasbihManager.updateBinding(this.tasbihs, res.newId, this.formBoundPrayerIds)
 
-      this.tasbihs = TasbihManager.updateBinding(
-        this.tasbihs,
-        res.newId,
-        this.formBoundPrayerIds
-      );
-
-      this.activeTasbihId = res.newId;
-      this.activeDhikrIndex = 0;
+      this.activeTasbihId = res.newId
+      this.activeDhikrIndex = 0
     }
 
-    this.persist();
-    this.refreshBeadView();
-    this.activeSheet = 'none';
+    this.persist()
+    this.refreshBeadView()
+    this.activeSheet = 'none'
 
-    console.info(
-      '[Tasbih Page] SAVED BINDINGS:',
-      JSON.stringify(this.formBoundPrayerIds)
-    );
+    console.info('[Tasbih Page] SAVED BINDINGS:', JSON.stringify(this.formBoundPrayerIds))
   }
 
   private deleteTasbih(id: string): void {
     if (this.tasbihs.length <= 1) {
-      return;
+      return
     }
-    const wasActive = this.activeTasbihId === id;
-    this.tasbihs = TasbihManager.removeTasbih(this.tasbihs, id);
+    const wasActive = this.activeTasbihId === id
+    this.tasbihs = TasbihManager.removeTasbih(this.tasbihs, id)
     if (wasActive) {
-      this.activeTasbihId = this.tasbihs[0].id;
-      this.activeDhikrIndex = 0;
-      this.activePrayerId = '';
+      this.activeTasbihId = this.tasbihs[0].id
+      this.activeDhikrIndex = 0
+      this.activePrayerId = ''
     }
-    this.resolveActiveTheme();
-    this.refreshBeadView();
-    this.ensureActivePrayer();
-    this.persist();
+    this.resolveActiveTheme()
+    this.refreshBeadView()
+    this.ensureActivePrayer()
+    this.persist()
   }
 
   private selectTasbih(id: string): void {
-    const switched = this.activeTasbihId !== id;
-    this.activeTasbihId = id;
-    this.activeDhikrIndex = 0;
+    const switched = this.activeTasbihId !== id
+    this.activeTasbihId = id
+    this.activeDhikrIndex = 0
     if (switched) {
-      this.activePrayerId = '';
+      this.activePrayerId = ''
     }
-    this.resolveActiveTheme();
-    this.ensureActivePrayer();
-    this.refreshBeadView();
-    this.persist();
-    this.activeSheet = 'none';
+    this.resolveActiveTheme()
+    this.ensureActivePrayer()
+    this.refreshBeadView()
+    this.persist()
+    this.activeSheet = 'none'
   }
 
   private selectDhikr(index: number): void {
-    this.activeDhikrIndex = index;
-    this.refreshBeadView();
-    this.persist();
-    this.activeSheet = 'none';
+    this.activeDhikrIndex = index
+    this.refreshBeadView()
+    this.persist()
+    this.activeSheet = 'none'
   }
 
   private openNewDhikrEditor(): void {
-    this.editingDhikrId = '';
-    this.formDhikrArabic = '';
-    this.formDhikrTranslit = '';
-    this.formDhikrTranslation = '';
-    this.formDhikrTarget = '33';
-    this.activeSheet = 'dhikrEditor';
+    this.editingDhikrId = ''
+    this.formDhikrArabic = ''
+    this.formDhikrTranslit = ''
+    this.formDhikrTranslation = ''
+    this.formDhikrTarget = '33'
+    this.activeSheet = 'dhikrEditor'
   }
 
   private openEditDhikrEditor(d: Dhikr): void {
-    this.editingDhikrId = d.id;
-    this.formDhikrArabic = d.arabic;
-    this.formDhikrTranslit = this.getDhikrLabel(d); // Uses translation
-    this.formDhikrTranslation = this.getDhikrTranslation(d); // Uses translation
-    this.formDhikrTarget = d.target.toString();
-    this.activeSheet = 'dhikrEditor';
+    this.editingDhikrId = d.id
+    this.formDhikrArabic = d.arabic
+    this.formDhikrTranslit = this.getDhikrLabel(d) // Uses translation
+    this.formDhikrTranslation = this.getDhikrTranslation(d) // Uses translation
+    this.formDhikrTarget = d.target.toString()
+    this.activeSheet = 'dhikrEditor'
   }
 
   private saveDhikr(): void {
-    const arabic = this.formDhikrArabic.trim();
-    const translit = this.formDhikrTranslit.trim();
-    const translation = this.formDhikrTranslation.trim();
-    const targetNum = parseInt(this.formDhikrTarget, 10);
+    const arabic = this.formDhikrArabic.trim()
+    const translit = this.formDhikrTranslit.trim()
+    const translation = this.formDhikrTranslation.trim()
+    const targetNum = parseInt(this.formDhikrTarget, 10)
 
     if (arabic.length === 0 && translit.length === 0) {
-      return;
+      return
     }
-    const target = isNaN(targetNum) || targetNum <= 0 ? 33 : targetNum;
+    const target = isNaN(targetNum) || targetNum <= 0 ? 33 : targetNum
 
     const fields: DhikrFields = {
       arabic,
       transliteration: translit,
       translation,
       target
-    };
+    }
 
     if (this.editingDhikrId.length > 0) {
-      this.tasbihs = TasbihManager.updateDhikr(
-        this.tasbihs, this.activeTasbihId, this.editingDhikrId, fields
-      );
+      this.tasbihs = TasbihManager.updateDhikr(this.tasbihs, this.activeTasbihId, this.editingDhikrId, fields)
     } else {
-      this.tasbihs = TasbihManager.addDhikr(
-        this.tasbihs, this.activeTasbihId, fields
-      );
-      const t = this.getActiveTasbih();
+      this.tasbihs = TasbihManager.addDhikr(this.tasbihs, this.activeTasbihId, fields)
+      const t = this.getActiveTasbih()
       if (t) {
-        this.activeDhikrIndex = t.dhikrs.length - 1;
+        this.activeDhikrIndex = t.dhikrs.length - 1
       }
     }
-    this.refreshBeadView();
-    this.persist();
-    this.activeSheet = 'none';
+    this.refreshBeadView()
+    this.persist()
+    this.activeSheet = 'none'
   }
 
   private deleteDhikr(id: string): void {
-    this.tasbihs = TasbihManager.removeDhikr(
-      this.tasbihs, this.activeTasbihId, id
-    );
-    this.activeDhikrIndex = 0;
-    this.refreshBeadView();
-    this.persist();
+    this.tasbihs = TasbihManager.removeDhikr(this.tasbihs, this.activeTasbihId, id)
+    this.activeDhikrIndex = 0
+    this.refreshBeadView()
+    this.persist()
   }
 
   private getTasbihName(t: Tasbih | null): string {
     if (!t) {
-      return '';
+      return ''
     }
-    return (t.nameKey && t.nameKey.length > 0)
-      ? L.get(t.nameKey, this.currentLanguage)
-      : t.name;
+    return t.nameKey && t.nameKey.length > 0 ? L.get(t.nameKey, this.currentLanguage) : t.name
   }
 
   private getDhikrLabel(d: Dhikr | null): string {
     if (!d) {
-      return '';
+      return ''
     }
-    const trans = (d.transliterationKey && d.transliterationKey.length > 0)
-      ? L.get(d.transliterationKey, this.currentLanguage)
-      : d.transliteration;
-    return trans.length > 0 ? trans : d.arabic;
+    const trans =
+      d.transliterationKey && d.transliterationKey.length > 0 ? L.get(d.transliterationKey, this.currentLanguage) :
+        d.transliteration
+    return trans.length > 0 ? trans : d.arabic
   }
 
   private getDhikrTranslation(d: Dhikr | null): string {
     if (!d) {
-      return '';
+      return ''
     }
-    return (d.translationKey && d.translationKey.length > 0)
-      ? L.get(d.translationKey, this.currentLanguage) : d.translation;
+    return d.translationKey && d.translationKey.length > 0 ? L.get(d.translationKey, this.currentLanguage) :
+      d.translation
   }
 }

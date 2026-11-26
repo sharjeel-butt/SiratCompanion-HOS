@@ -1,8 +1,8 @@
 // entry/src/main/ets/pages/MainTabs.ets
 
-import { display, mediaquery, promptAction, router, window } from '@kit.ArkUI';
-import { common } from '@kit.AbilityKit';
-import { deviceInfo } from '@kit.BasicServicesKit';
+import { display, mediaquery, promptAction, router, window } from '@kit.ArkUI'
+import { common } from '@kit.AbilityKit'
+import { deviceInfo } from '@kit.BasicServicesKit'
 
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
@@ -19,7 +19,7 @@ import {
   STORAGE_KEY_TAB_REFRESH_TICK,
   STORAGE_KEY_THEME_MODE,
   STORAGE_KEY_TIME_FORMAT
-} from '../core/common/StorageKeys';
+} from '../core/common/StorageKeys'
 import {
   HdsBarWidthRangeOptions,
   hdsMaterial,
@@ -30,23 +30,23 @@ import {
   HdsTabsFloatingStyle,
   ScrollEffectType,
   SystemMaterialParams
-} from '@kit.UIDesignKit';
-import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
-import { L } from '../i18n/LocalizationHelper';
-import { NavHelper } from '../core/util/NavHelper';
+} from '@kit.UIDesignKit'
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
+import { L } from '../i18n/LocalizationHelper'
+import { NavHelper } from '../core/util/NavHelper'
 
-import { HomePage } from './HomePage';
-import { Prayer } from '../prayer/Prayer';
-import { HijriCalendarPage } from '../hijricalendar/HijriCalendarPage';
-import { QiblaPage } from '../qibla/QiblaPage';
-import { TasbihPage } from '../tasbih/TasbihPage';
-import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
-import { AppLogger } from '../core/app/AppLogger';
-import { WidgetHelper } from '../widgets/WidgetHelper';
-import { NotificationService } from '../core/notifications/NotificationService';
+import { HomePage } from './HomePage'
+import { Prayer } from '../prayer/Prayer'
+import { HijriCalendarPage } from '../hijricalendar/HijriCalendarPage'
+import { QiblaPage } from '../qibla/QiblaPage'
+import { TasbihPage } from '../tasbih/TasbihPage'
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper'
+import { AppLogger } from '../core/app/AppLogger'
+import { WidgetHelper } from '../widgets/WidgetHelper'
+import { NotificationService } from '../core/notifications/NotificationService'
 
-const HDS_MIN_API = 23;
+const HDS_MIN_API = 23
 
 @Entry
 @Component
@@ -76,62 +76,62 @@ struct MainTabs {
   @State private isPageVisible: boolean = false;
 
   aboutToAppear(): void {
-    this.currentLanguage = this.appLanguage;
-    this.colors = PageTheme.compute(this.themeMode);
-    this.refreshNotifications();
+    this.currentLanguage = this.appLanguage
+    this.colors = PageTheme.compute(this.themeMode)
+    this.refreshNotifications()
     this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
-      this.colors = c;
-    });
-    this.recomputeBarWidth();
+      this.colors = c
+    })
+    this.recomputeBarWidth()
     try {
-      const context = getContext(this) as common.UIAbilityContext;
-      context.eventHub.on('widget_nav_event', this.onWidgetNavEvent);
+      const context = getContext(this) as common.UIAbilityContext
+      context.eventHub.on('widget_nav_event', this.onWidgetNavEvent)
     } catch (e) {
-      console.warn('MainTabs: EventHub listen failed');
+      console.warn('MainTabs: EventHub listen failed')
     }
     setTimeout(() => {
-      this.applyPendingNavTarget();
-    }, 150);
-    this.handleWidgetIntent();
+      this.applyPendingNavTarget()
+    }, 150)
+    this.handleWidgetIntent()
   }
 
   aboutToReuse(): void {
-    this.refreshNotifications();
+    this.refreshNotifications()
   }
 
   aboutToDisappear(): void {
-    PageTheme.uninstallSystemListener(this.systemDarkListener);
-    this.systemDarkListener = null; // Unregister EventHub listener
+    PageTheme.uninstallSystemListener(this.systemDarkListener)
+    this.systemDarkListener = null // Unregister EventHub listener
     try {
-      const context = getContext(this) as common.UIAbilityContext;
-      context.eventHub.off('widget_nav_event', this.onWidgetNavEvent);
+      const context = getContext(this) as common.UIAbilityContext
+      context.eventHub.off('widget_nav_event', this.onWidgetNavEvent)
     } catch (e) { // ignore
     }
   }
 
   onPageShow(): void {
-    this.currentLanguage = this.appLanguage;
-    this.colors = PageTheme.compute(this.themeMode);
-    this.refreshNotifications();
+    this.currentLanguage = this.appLanguage
+    this.colors = PageTheme.compute(this.themeMode)
+    this.refreshNotifications()
 
     // Force Event Settings refresh
-    const prevEv = AppStorage.get<number>(STORAGE_KEY_EVENT_SETTINGS_VERSION);
-    const nextEv = (prevEv === undefined ? 0 : prevEv) + 1;
-    AppStorage.setOrCreate(STORAGE_KEY_EVENT_SETTINGS_VERSION, nextEv);
+    const prevEv = AppStorage.get<number>(STORAGE_KEY_EVENT_SETTINGS_VERSION)
+    const nextEv = (prevEv === undefined ? 0 : prevEv) + 1
+    AppStorage.setOrCreate(STORAGE_KEY_EVENT_SETTINGS_VERSION, nextEv)
 
     // Force Hijri Calendar refresh
-    const prevCal = AppStorage.get<number>(STORAGE_KEY_HIJRI_CALENDAR_VERSION);
-    const nextCal = (prevCal === undefined ? 0 : prevCal) + 1;
+    const prevCal = AppStorage.get<number>(STORAGE_KEY_HIJRI_CALENDAR_VERSION)
+    const nextCal = (prevCal === undefined ? 0 : prevCal) + 1
 
     // Check for pending nav on Warm Start (returning from background)
-    this.applyPendingNavTarget();
-    AppStorage.setOrCreate(STORAGE_KEY_HIJRI_CALENDAR_VERSION, nextCal);
-    AppLogger.info('MainTabs', `deviceType=${deviceInfo.deviceType}`);
-    this.handleWidgetIntent();
+    this.applyPendingNavTarget()
+    AppStorage.setOrCreate(STORAGE_KEY_HIJRI_CALENDAR_VERSION, nextCal)
+    AppLogger.info('MainTabs', `deviceType=${deviceInfo.deviceType}`)
+    this.handleWidgetIntent()
   }
 
   onPageHide(): void {
-    this.isPageVisible = false;
+    this.isPageVisible = false
   }
 
   build() {
@@ -159,9 +159,9 @@ struct MainTabs {
         .barFloatingStyle(this.safeFloatingStyle())
         .scrollable(false)
         .onChange((index: number) => {
-          this.currentIndex = index;
-          const prev = AppStorage.get<number>(STORAGE_KEY_TAB_REFRESH_TICK) ?? 0;
-          AppStorage.setOrCreate(STORAGE_KEY_TAB_REFRESH_TICK, prev + 1);
+          this.currentIndex = index
+          const prev = AppStorage.get<number>(STORAGE_KEY_TAB_REFRESH_TICK) ?? 0
+          AppStorage.setOrCreate(STORAGE_KEY_TAB_REFRESH_TICK, prev + 1)
         })
         .width('100%')
         .height('100%')
@@ -242,9 +242,9 @@ struct MainTabs {
       .barBackgroundColor(this.fallbackBarColor())
       .scrollable(false)
       .onChange((index: number) => {
-        this.currentIndex = index; // FIX: Bump the tick so child pages refresh
-        const prev = AppStorage.get<number>(STORAGE_KEY_TAB_REFRESH_TICK) ?? 0;
-        AppStorage.setOrCreate(STORAGE_KEY_TAB_REFRESH_TICK, prev + 1);
+        this.currentIndex = index // FIX: Bump the tick so child pages refresh
+        const prev = AppStorage.get<number>(STORAGE_KEY_TAB_REFRESH_TICK) ?? 0
+        AppStorage.setOrCreate(STORAGE_KEY_TAB_REFRESH_TICK, prev + 1)
       })
       .layoutWeight(1)
       .width('100%')
@@ -266,27 +266,23 @@ struct MainTabs {
     .backgroundColor(this.colors.tintSoft)
     .border({ width: 1, color: this.colors.borderSoft })
     .onClick(() => {
-      this.toggleMenu();
+      this.toggleMenu()
     })
     .bindMenu(this.isMenuVisible, this.HamburgerMenuContent(), {
       placement: Placement.BottomRight,
       enableArrow: false,
       backgroundColor: this.colors.cardDark,
       onDisappear: () => {
-        this.isMenuVisible = false;
+        this.isMenuVisible = false
       }
     })
   }
 
   @Builder
   NotificationButton() {
-
     Stack() {
-
       Button({ type: ButtonType.Circle }) {
-
         Image($r('app.media.ic_bell')).width(22).height(22).fillColor(this.colors.textWhite).objectFit(ImageFit.Contain)
-
       }
       .width(44)
       .height(44)
@@ -295,17 +291,14 @@ struct MainTabs {
         width: 1, color: this.colors.borderSoft
       })
       .onClick(() => {
-
         router.pushUrl({
           url: 'pages/NotificationCenterPage'
         }).catch((e: Error) => {
-          console.error(JSON.stringify(e));
-        });
-
+          console.error(JSON.stringify(e))
+        })
       })
 
       if (this.notificationCount > 0) {
-
         Text(this.notificationCount > 99 ? '99+' : this.notificationCount.toString())
           .fontSize(8)
           .fontWeight(FontWeight.Bold)
@@ -324,7 +317,7 @@ struct MainTabs {
     }).onClick(() => {
       router.pushUrl({
         url: 'pages/NotificationCenterPage'
-      });
+      })
     })
   }
 
@@ -345,7 +338,8 @@ struct MainTabs {
             .fontColor(this.menuTextColor())
             .fontWeight(FontWeight.Medium)
             .maxLines(1)
-            .layoutWeight(1) // Expands to fill available space
+            .layoutWeight(1)
+            // Expands to fill available space
             .textAlign(TextAlign.Start) // Aligns properly in RTL
         }.constraintSize({ minWidth: 160 }).padding({
           top: 12,
@@ -354,8 +348,8 @@ struct MainTabs {
           right: 16
         }).direction(this.isRtl() ? Direction.Rtl : Direction.Ltr).alignItems(VerticalAlign.Center)
       }.onClick(() => {
-        this.isMenuVisible = false;
-        this.closeMenuAndNavigate('pages/CustomizePage');
+        this.isMenuVisible = false
+        this.closeMenuAndNavigate('pages/CustomizePage')
       })
 
       // ---- Settings ----
@@ -382,8 +376,8 @@ struct MainTabs {
           right: 16
         }).direction(this.isRtl() ? Direction.Rtl : Direction.Ltr).alignItems(VerticalAlign.Center)
       }.onClick(() => {
-        this.isMenuVisible = false;
-        this.closeMenuAndNavigate('pages/SettingsPage');
+        this.isMenuVisible = false
+        this.closeMenuAndNavigate('pages/SettingsPage')
       })
 
       // ---- Exit ----
@@ -411,14 +405,14 @@ struct MainTabs {
           right: 16
         }).direction(this.isRtl() ? Direction.Rtl : Direction.Ltr).alignItems(VerticalAlign.Center)
       }.onClick(() => {
-        this.isMenuVisible = false;
-        this.exitApp();
+        this.isMenuVisible = false
+        this.exitApp()
       })
     }
   }
 
   private onPrayerStateChanged(): void {
-    this.refreshNotifications();
+    this.refreshNotifications()
   }
 
   @Builder
@@ -454,7 +448,8 @@ struct MainTabs {
         .objectFit(ImageFit.Contain)
       Text(L.get('tab_home', this.currentLanguage))
         .fontSize(10)
-        .fontFamily(TypographyHelper.getFont(this.currentLanguage, this.currentIndex === 0)) // <---
+        .fontFamily(TypographyHelper.getFont(this.currentLanguage, this.currentIndex === 0))
+        // <---
         .fontWeight(this.currentIndex === 0 ? FontWeight.Bold : FontWeight.Medium)
         .fontColor(this.currentIndex === 0 ? this.colors.accentGold : this.colors.textMuted)
         .margin({ top: 4 })
@@ -546,109 +541,109 @@ struct MainTabs {
   }
 
   private handleWidgetIntent(): void { // 1. Handle specific pages (e.g., RamadanDetailsPage)
-    const targetPage = AppStorage.get<string>('widget_target_page');
+    const targetPage = AppStorage.get<string>('widget_target_page')
     if (targetPage && targetPage.length > 0) {
       AppStorage.setOrCreate('widget_target_page',
-        ''); // Delay slightly to ensure router is ready on this page during cold start
+        '') // Delay slightly to ensure router is ready on this page during cold start
       setTimeout(() => {
-        NavHelper.prepareForward();
+        NavHelper.prepareForward()
         router.pushUrl({ url: targetPage }).catch((e: Error) => {
-          AppLogger.warn('MainTabs', `Widget page nav failed: ${e.message}`);
-        });
-      }, 200);
-      return;
+          AppLogger.warn('MainTabs', `Widget page nav failed: ${e.message}`)
+        })
+      }, 200)
+      return
     }
 
     // 2. Handle specific tabs (e.g., Prayer widget -> Prayers tab)
-    const targetTab = AppStorage.get<string>('widget_target_tab');
+    const targetTab = AppStorage.get<string>('widget_target_tab')
     if (targetTab && targetTab.length > 0) {
-      AppStorage.setOrCreate('widget_target_tab', '');
+      AppStorage.setOrCreate('widget_target_tab', '')
       setTimeout(() => {
-        this.applyNavTarget(targetTab, true);
-      }, 200);
+        this.applyNavTarget(targetTab, true)
+      }, 200)
     }
   }
 
   private onWidgetNavEvent = (target: string): void => {
-    console.info(`[MainTabs] Received widget_nav_event: '${target}'`);
+    console.info(`[MainTabs] Received widget_nav_event: '${target}'`)
     if (target && target.length > 0) {
-      this.applyNavTarget(target, false);
-      AppStorage.setOrCreate(STORAGE_KEY_NAV_TARGET_TAB, '');
+      this.applyNavTarget(target, false)
+      AppStorage.setOrCreate(STORAGE_KEY_NAV_TARGET_TAB, '')
     }
   };
 
   private applyPendingNavTarget(): void {
-    const pendingTarget: string = AppStorage.get<string>(STORAGE_KEY_NAV_TARGET_TAB) ?? '';
+    const pendingTarget: string = AppStorage.get<string>(STORAGE_KEY_NAV_TARGET_TAB) ?? ''
     if (pendingTarget.length > 0) {
-      AppLogger.info('MainTabs', `Applying pending nav target: '${pendingTarget}'`);
-      this.applyNavTarget(pendingTarget, false);
-      AppStorage.setOrCreate(STORAGE_KEY_NAV_TARGET_TAB, '');
+      AppLogger.info('MainTabs', `Applying pending nav target: '${pendingTarget}'`)
+      this.applyNavTarget(pendingTarget, false)
+      AppStorage.setOrCreate(STORAGE_KEY_NAV_TARGET_TAB, '')
     }
   }
 
   private onNavTargetTabChanged(): void {
     if (!this.navTargetTab || this.navTargetTab.length === 0) {
-      return;
+      return
     }
-    AppLogger.info('MainTabs', `@Watch fired for nav_target_tab='${this.navTargetTab}'`);
+    AppLogger.info('MainTabs', `@Watch fired for nav_target_tab='${this.navTargetTab}'`)
 
-    this.applyNavTarget(this.navTargetTab, false);
+    this.applyNavTarget(this.navTargetTab, false)
 
     // ALWAYS clear the key, even if applyNavTarget throws
-    AppStorage.setOrCreate('nav_target_tab', '');
+    AppStorage.setOrCreate('nav_target_tab', '')
   }
 
   private tabIndexFor(target: string): number {
     switch (target) {
       case 'home':
-        return 0;
+        return 0
       case 'prayers':
-        return 1;
+        return 1
       case 'calendar':
-        return 2;
+        return 2
       case 'compass':
-        return 3;
+        return 3
       case 'tasbih':
-        return 4;
+        return 4
       default:
-        return -1;
+        return -1
     }
   }
 
   private applyNavTarget(target: string, deferred: boolean): void {
-    const targetIndex: number = this.tabIndexFor(target);
+    const targetIndex: number = this.tabIndexFor(target)
     if (targetIndex < 0) {
-      AppLogger.warn('MainTabs', `applyNavTarget: unknown target '${target}'`);
-      return;
+      AppLogger.warn('MainTabs', `applyNavTarget: unknown target '${target}'`)
+      return
     }
 
-    AppLogger.info('MainTabs', `applyNavTarget: switching to index ${targetIndex} (deferred=${deferred})`);
-    this.currentIndex = targetIndex;
+    AppLogger.info('MainTabs', `applyNavTarget: switching to index ${targetIndex} (deferred=${deferred})`)
+    this.currentIndex = targetIndex
 
     setTimeout((): void => {
       try { // CRITICAL FIX: Only call the controller that exists
         if (this.useHds) {
-          this.hdsController.changeIndex(targetIndex);
+          this.hdsController.changeIndex(targetIndex)
         } else {
-          this.tabsController.changeIndex(targetIndex);
+          this.tabsController.changeIndex(targetIndex)
         }
-        AppLogger.info('MainTabs', `changeIndex(${targetIndex}) dispatched successfully`);
+        AppLogger.info('MainTabs', `changeIndex(${targetIndex}) dispatched successfully`)
       } catch (e) { // Catch the silent exception if the controller is not ready
-        AppLogger.warn('MainTabs', `changeIndex failed: ${(e as Error).message}`);
+        AppLogger.warn('MainTabs', `changeIndex failed: ${(e as Error).message}`)
       }
-    }, deferred ? 100 : 0);
+    }, deferred ? 100 : 0)
   }
 
   private onThemeModeChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   private onCalcSettingsChanged(): void {
-    WidgetHelper.refreshAllDebounced();
+    WidgetHelper.refreshAllDebounced()
   }
 
   // ============================================================
@@ -656,7 +651,7 @@ struct MainTabs {
   // ============================================================
 
   private onLocationVersionChanged(): void {
-    WidgetHelper.refreshAllDebounced();
+    WidgetHelper.refreshAllDebounced()
   }
 
   // ============================================================
@@ -664,11 +659,11 @@ struct MainTabs {
   // ============================================================
 
   private onHijriCalendarVersionChanged(): void {
-    WidgetHelper.refreshAllDebounced();
+    WidgetHelper.refreshAllDebounced()
   }
 
   private onTimeFormatChanged(): void {
-    WidgetHelper.refreshAllDebounced();
+    WidgetHelper.refreshAllDebounced()
   }
 
   // ============================================================
@@ -676,12 +671,12 @@ struct MainTabs {
   // ============================================================
 
   private onLanguageChanged(): void {
-    this.currentLanguage = this.appLanguage;
-    WidgetHelper.refreshAllDebounced();
+    this.currentLanguage = this.appLanguage
+    WidgetHelper.refreshAllDebounced()
   }
 
   private onBreakpointChanged(): void {
-    this.recomputeBarWidth();
+    this.recomputeBarWidth()
   }
 
   // ============================================================
@@ -690,11 +685,11 @@ struct MainTabs {
 
   private recomputeBarWidth(): void {
     try {
-      const info = display.getDefaultDisplaySync();
-      const screenW = px2vp(info.width);
-      this.barWidth = Math.min(screenW - 32, 560);
+      const info = display.getDefaultDisplaySync()
+      const screenW = px2vp(info.width)
+      this.barWidth = Math.min(screenW - 32, 560)
     } catch (err) {
-      this.barWidth = 340;
+      this.barWidth = 340
     }
   }
 
@@ -706,7 +701,7 @@ struct MainTabs {
    * from the system state directly, ensuring they always contrast.
    */
   private menuIconColor(): string {
-    return PageTheme.isSystemDark() ? '#FFFFFF' : '#1A1A1A';
+    return PageTheme.isSystemDark() ? '#FFFFFF' : '#1A1A1A'
   }
 
   // ============================================================
@@ -714,7 +709,7 @@ struct MainTabs {
   // ============================================================
 
   private menuTextColor(): string {
-    return PageTheme.isSystemDark() ? '#FFFFFF' : '#1A1A1A';
+    return PageTheme.isSystemDark() ? '#FFFFFF' : '#1A1A1A'
   }
 
   // ---- Five parameterless tab bar builders ----
@@ -727,26 +722,26 @@ struct MainTabs {
   private currentTabTitle(): string {
     switch (this.currentIndex) {
       case 0:
-        return L.get('tab_home', this.currentLanguage);
+        return L.get('tab_home', this.currentLanguage)
       case 1:
-        return L.get('tab_prayers', this.currentLanguage);
+        return L.get('tab_prayers', this.currentLanguage)
       case 2:
-        return L.get('tab_calendar', this.currentLanguage);
+        return L.get('tab_calendar', this.currentLanguage)
       case 3:
-        return L.get('tab_compass', this.currentLanguage);
+        return L.get('tab_compass', this.currentLanguage)
       case 4:
-        return L.get('tab_tasbih', this.currentLanguage);
+        return L.get('tab_tasbih', this.currentLanguage)
       default:
-        return L.get('app_name', this.currentLanguage);
+        return L.get('app_name', this.currentLanguage)
     }
   }
 
   private toggleMenu(): void {
-    this.isMenuVisible = !this.isMenuVisible;
+    this.isMenuVisible = !this.isMenuVisible
   }
 
   private isRtl(): boolean {
-    return L.isRtlLang(this.currentLanguage);
+    return L.isRtlLang(this.currentLanguage)
   }
 
   /**
@@ -757,33 +752,33 @@ struct MainTabs {
    */
   private safeFloatingStyle(): HdsTabsFloatingStyle {
     try {
-      return this.buildHdsFloatingStyle();
+      return this.buildHdsFloatingStyle()
     } catch (err) {
       AppLogger.warn('MainTabs', `buildHdsFloatingStyle failed: ${(err as
-        Error).message}`); // Return an empty style — HDS will not create the floating // handler, but it will still render a standard tab bar.
-      const empty: HdsTabsFloatingStyle = {};
-      return empty;
+        Error).message}`) // Return an empty style — HDS will not create the floating // handler, but it will still render a standard tab bar.
+      const empty: HdsTabsFloatingStyle = {}
+      return empty
     }
   }
 
   private fallbackBarColor(): string {
-    const dark = PageTheme.isDarkFor(this.themeMode);
-    return dark ? 'rgba(20, 27, 46, 0.55)' : 'rgba(255, 255, 255, 0.55)';
+    const dark = PageTheme.isDarkFor(this.themeMode)
+    return dark ? 'rgba(20, 27, 46, 0.55)' : 'rgba(255, 255, 255, 0.55)'
   }
 
   private buildHdsFloatingStyle(): HdsTabsFloatingStyle {
     const widths: HdsBarWidthRangeOptions = {
       smallWidth: this.barWidth, mediumWidth: this.barWidth, largeWidth: this.barWidth
-    };
+    }
 
     const material: SystemMaterialParams = {
       materialType: hdsMaterial.MaterialType.ADAPTIVE, materialLevel: hdsMaterial.MaterialLevel.ADAPTIVE
-    };
+    }
 
     const style: HdsTabsFloatingStyle = {
       barBottomMargin: 24, barWidth: widths, systemMaterialEffect: material
-    };
-    return style;
+    }
+    return style
   }
 
   // ============================================================
@@ -792,13 +787,13 @@ struct MainTabs {
 
   private closeMenuAndNavigate(url: string): void {
     setTimeout(() => {
-      NavHelper.prepareForward();
-      router.pushUrl({ url }).catch((err: Error) => console.error('Navigation failed:', JSON.stringify(err)));
-    }, 120);
+      NavHelper.prepareForward()
+      router.pushUrl({ url }).catch((err: Error) => console.error('Navigation failed:', JSON.stringify(err)))
+    }, 120)
   }
 
   private exitApp(): void { // FIX: Explicitly get PromptAction from the current UIContext. // This prevents the "context is nullptr" error on emulators and laptops.
-    const uiPromptAction = this.getUIContext().getPromptAction();
+    const uiPromptAction = this.getUIContext().getPromptAction()
 
     uiPromptAction.showDialog({
       title: L.get('exit', this.currentLanguage),
@@ -807,31 +802,31 @@ struct MainTabs {
         { text: L.get('exit', this.currentLanguage), color: this.colors.accentGold }]
     }).then((result: promptAction.ShowDialogSuccessResponse) => {
       if (result.index === 1) {
-        const ctx = getContext(this) as common.UIAbilityContext;
+        const ctx = getContext(this) as common.UIAbilityContext
 
         // BEST PRACTICE: Minimize the app instead of force-killing it.
         // This completely avoids the window manager deadlock on emulators/laptops.
         window.getLastWindow(ctx).then((win) => {
-          console.info('[Exit] Minimizing app to background...');
-          win.minimize();
+          console.info('[Exit] Minimizing app to background...')
+          win.minimize()
         }).catch((err: Error) => {
           console.error('[Exit] Minimize failed, falling back to terminateSelf:',
-            JSON.stringify(err)); // Fallback with a delay to let the UI thread clear
+            JSON.stringify(err)) // Fallback with a delay to let the UI thread clear
           setTimeout(() => {
-            ctx.terminateSelf();
-          }, 300);
-        });
+            ctx.terminateSelf()
+          }, 300)
+        })
       }
     }).catch((err: Error) => {
-      console.error('[Exit] Dialog error:', JSON.stringify(err));
-    });
+      console.error('[Exit] Dialog error:', JSON.stringify(err))
+    })
   }
 
   private async refreshNotifications(): Promise<void> {
     try {
-      this.notificationCount = await NotificationService.getUnreadCount();
+      this.notificationCount = await NotificationService.getUnreadCount()
     } catch (e) {
-      console.error('[Notification] refresh failed');
+      console.error('[Notification] refresh failed')
     }
   }
 }

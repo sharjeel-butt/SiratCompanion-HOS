@@ -4,7 +4,7 @@ struct TrackerWidget {
   @LocalStorageProp('dimension') dimension: string = '4*4';
   @LocalStorageProp('isRtl') isRtl: boolean = false;
   @LocalStorageProp('error') error: string = '';
-  @LocalStorageProp('lblTitle') lblTitle: string = "Daily Faith";
+  @LocalStorageProp('lblTitle') lblTitle: string = 'Daily Faith';
   @LocalStorageProp('fajrName') p1Name: string = 'Fajr';
   @LocalStorageProp('fajrTime24') p1Time: string = '--:--';
   @LocalStorageProp('p1Checked') p1Checked: boolean = false;
@@ -31,7 +31,9 @@ struct TrackerWidget {
       Column()
         .width('100%')
         .height('100%')
-        .linearGradient({ angle: 145, colors: [['#1A2235', 0], ['#0F1522', 1]] })
+        .linearGradient({
+          angle: 145, colors: [['#1A2235', 0], ['#0F1522', 1]]
+        })
         .borderRadius(24)
         .border({ width: 1, color: 'rgba(255, 255, 255, 0.15)' })
 
@@ -53,7 +55,6 @@ struct TrackerWidget {
             .maxLines(3)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
         } else {
-
           // Header Row - FIXED RTL SWAP
           Row() {
             if (this.isRtl) {
@@ -338,7 +339,6 @@ struct TrackerWidget {
           // Bottom Actions
           if (this.dimension === '4*4') {
             Column({ space: 8 }) {
-
               // 👇 ROW 1: QURAN (Full Width)
               Row() {
                 Row({ space: 8 }) {
@@ -361,7 +361,7 @@ struct TrackerWidget {
                     bundleName: 'com.siratcompanion.hos.app',
                     abilityName: 'EntryAbility',
                     params: { targetPage: 'pages/QuranPage' }
-                  });
+                  })
                 })
               }.width('100%').direction(Direction.Ltr)
 
@@ -388,7 +388,7 @@ struct TrackerWidget {
                       bundleName: 'com.siratcompanion.hos.app',
                       abilityName: 'EntryAbility',
                       params: { targetPage: 'pages/RecitationsPage' }
-                    });
+                    })
                   })
 
                   Row({ space: 8 }) {
@@ -411,7 +411,7 @@ struct TrackerWidget {
                       bundleName: 'com.siratcompanion.hos.app',
                       abilityName: 'EntryAbility',
                       params: { targetPage: 'pages/HadithHomePage' }
-                    });
+                    })
                   })
                 } else { // LTR: Hadith on Left, Recitations on Right
                   Row({ space: 8 }) {
@@ -434,7 +434,7 @@ struct TrackerWidget {
                       bundleName: 'com.siratcompanion.hos.app',
                       abilityName: 'EntryAbility',
                       params: { targetPage: 'pages/HadithHomePage' }
-                    });
+                    })
                   })
 
                   Row({ space: 8 }) {
@@ -457,7 +457,7 @@ struct TrackerWidget {
                       bundleName: 'com.siratcompanion.hos.app',
                       abilityName: 'EntryAbility',
                       params: { targetPage: 'pages/RecitationsPage' }
-                    });
+                    })
                   })
                 }
               }.width('100%').direction(Direction.Ltr)
@@ -485,7 +485,7 @@ struct TrackerWidget {
                       bundleName: 'com.siratcompanion.hos.app',
                       abilityName: 'EntryAbility',
                       params: { targetPage: 'pages/MainTabs', targetTab: 'tasbih' }
-                    });
+                    })
                   })
 
                   Row({ space: 8 }) {
@@ -508,7 +508,7 @@ struct TrackerWidget {
                       bundleName: 'com.siratcompanion.hos.app',
                       abilityName: 'EntryAbility',
                       params: { targetPage: 'pages/DuasPage' }
-                    });
+                    })
                   })
                 } else { // LTR: Duas on Left, Tasbih on Right
                   Row({ space: 8 }) {
@@ -531,7 +531,7 @@ struct TrackerWidget {
                       bundleName: 'com.siratcompanion.hos.app',
                       abilityName: 'EntryAbility',
                       params: { targetPage: 'pages/DuasPage' }
-                    });
+                    })
                   })
 
                   Row({ space: 8 }) {
@@ -554,7 +554,7 @@ struct TrackerWidget {
                       bundleName: 'com.siratcompanion.hos.app',
                       abilityName: 'EntryAbility',
                       params: { targetPage: 'pages/MainTabs', targetTab: 'tasbih' }
-                    });
+                    })
                   })
                 }
               }.width('100%').direction(Direction.Ltr)
@@ -568,7 +568,7 @@ struct TrackerWidget {
         bundleName: 'com.siratcompanion.hos.app',
         abilityName: 'EntryAbility',
         params: { targetPage: 'pages/MainTabs', targetTab: 'prayers' }
-      });
+      })
     })
   }
 }

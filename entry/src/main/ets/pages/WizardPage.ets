@@ -1,8 +1,8 @@
 // entry/src/main/ets/pages/WizardPage.ets
 
-import { mediaquery, promptAction, router } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
+import { mediaquery, promptAction, router } from '@kit.ArkUI'
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -10,35 +10,35 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_LANGUAGE_OVERRIDE,
   STORAGE_KEY_THEME_MODE
-} from '../core/common/StorageKeys';
-import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator';
-import { SettingsHelper } from '../settings/SettingsHelper';
-import { LocationData, LocationHelper } from '../location/LocationUtils';
-import { CalculationSource, LocationMode, PickerItem } from '../settings/SettingsModels';
-import { L } from '../i18n/LocalizationHelper';
-import { NavHelper } from '../core/util/NavHelper';
-import { PrivacyPolicyProvider } from '../legal/PrivacyPolicy';
-import { Breakpoints } from '../core/layout/Breakpoints';
-import { FALLBACK_LOCATION, LocationCache } from '../location/LocationCache';
-import { common, Want } from '@kit.AbilityKit';
-import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper';
-import { NotificationHelper } from '../prayer/NotificationHelper';
-import { ThemeService } from '../core/ui/themes/ThemeService';
-import { AppThemeJson } from '../core/ui/themes/ThemeModels';
-import { LanguageService } from '../i18n/LanguageService';
+} from '../core/common/StorageKeys'
+import { AsrShadowRule, CalculationMethod } from '../prayer/PrayerTimeCalculator'
+import { SettingsHelper } from '../settings/SettingsHelper'
+import { LocationData, LocationHelper } from '../location/LocationUtils'
+import { CalculationSource, LocationMode, PickerItem } from '../settings/SettingsModels'
+import { L } from '../i18n/LocalizationHelper'
+import { NavHelper } from '../core/util/NavHelper'
+import { PrivacyPolicyProvider } from '../legal/PrivacyPolicy'
+import { Breakpoints } from '../core/layout/Breakpoints'
+import { FALLBACK_LOCATION, LocationCache } from '../location/LocationCache'
+import { common, Want } from '@kit.AbilityKit'
+import { CalendarReminderHelper } from '../hijricalendar/CalendarReminderHelper'
+import { NotificationHelper } from '../core/notifications/NotificationHelper'
+import { ThemeService } from '../core/ui/themes/ThemeService'
+import { AppThemeJson } from '../core/ui/themes/ThemeModels'
+import { LanguageService } from '../i18n/LanguageService'
 
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 6
 
 interface LanguageOption {
-  id: string;
-  nativeName: string; // language's own name — unchanged across UI languages
-  localizedName: string; // language's name in the current UI language
+  id: string
+  nativeName: string // language's own name — unchanged across UI languages
+  localizedName: string // language's name in the current UI language
 }
 
 interface ThemeOption {
-  id: string;
-  nameKey: string;
-  descKey: string;
+  id: string
+  nameKey: string
+  descKey: string
 }
 
 @Entry
@@ -79,25 +79,25 @@ struct WizardPage {
   @State private privacyPolicyText: string = '';
 
   async aboutToAppear(): Promise<void> {
-    this.currentLanguage = this.appLanguage;
-    this.selectedLanguage = this.languageOverride;
-    this.selectedTheme = this.appTheme;
-    this.colors = PageTheme.compute(this.themeMode);
+    this.currentLanguage = this.appLanguage
+    this.selectedLanguage = this.languageOverride
+    this.selectedTheme = this.appTheme
+    this.colors = PageTheme.compute(this.themeMode)
     this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
-      this.colors = c;
-    });
-    this.reloadDefaults();
-    await this.loadPrivacyPolicy();
+      this.colors = c
+    })
+    this.reloadDefaults()
+    await this.loadPrivacyPolicy()
   }
 
   aboutToDisappear(): void {
-    PageTheme.uninstallSystemListener(this.systemDarkListener);
-    this.systemDarkListener = null;
+    PageTheme.uninstallSystemListener(this.systemDarkListener)
+    this.systemDarkListener = null
   }
 
   onPageShow(): void {
-    this.currentLanguage = this.appLanguage;
-    this.colors = PageTheme.compute(this.themeMode);
+    this.currentLanguage = this.appLanguage
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   pageTransition() {
@@ -162,25 +162,25 @@ struct WizardPage {
       if (this.showMethodPicker) {
         this.PickerOverlay(this.tr('convention'), $r('app.media.ic_nav_mosque'),
           SettingsHelper.buildMethodPickerItems(this.calcMethod), (id: string) => {
-            this.pickMethod(id);
+            this.pickMethod(id)
           }, () => {
-            this.showMethodPicker = false;
+            this.showMethodPicker = false
           })
       }
       if (this.showAsrPicker) {
         this.PickerOverlay(this.tr('madhab'), $r('app.media.ic_asr_rule'),
           SettingsHelper.buildAsrPickerItems(this.asrRule), (id: string) => {
-            this.pickAsrRule(id);
+            this.pickAsrRule(id)
           }, () => {
-            this.showAsrPicker = false;
+            this.showAsrPicker = false
           })
       }
       if (this.showSourcePicker) {
         this.PickerOverlay(this.tr('source'), $r('app.media.ic_language'),
           SettingsHelper.buildSourcePickerItems(this.calcSource), (id: string) => {
-            this.pickSource(id);
+            this.pickSource(id)
           }, () => {
-            this.showSourcePicker = false;
+            this.showSourcePicker = false
           })
       }
     }
@@ -246,7 +246,7 @@ struct WizardPage {
           .backgroundColor(this.colors.accentGold)
           .borderRadius(16)
           .onClick(() => {
-            this.toggleNotifications(true);
+            this.toggleNotifications(true)
           })
         }
       }.width('100%').padding({
@@ -278,7 +278,7 @@ struct WizardPage {
       .flexShrink(0)
       .enabled(this.step > 0)
       .onClick(() => {
-        this.goBack();
+        this.goBack()
       })
 
       if (this.isRtl()) {
@@ -374,7 +374,7 @@ struct WizardPage {
           })
           .margin({ bottom: 10 })
           .onClick(() => {
-            this.pickLanguage(opt.id);
+            this.pickLanguage(opt.id)
           })
         }, (opt: LanguageOption) => `lang-${opt.id}-${opt.id === this.selectedLanguage ? 'sel' :
           'un'}-${this.currentLanguage}`)
@@ -436,7 +436,7 @@ struct WizardPage {
         .alignContent(Alignment.Center)
         .flexShrink(0)
         .onClick(() => {
-          this.privacyAccepted = !this.privacyAccepted;
+          this.privacyAccepted = !this.privacyAccepted
         })
 
         Text(this.tr('privacy_agree_label'))
@@ -444,7 +444,7 @@ struct WizardPage {
           .fontColor(this.colors.textWhite)
           .layoutWeight(1)
           .onClick(() => {
-            this.privacyAccepted = !this.privacyAccepted;
+            this.privacyAccepted = !this.privacyAccepted
           })
       }.width('100%').padding({ top: 16, bottom: 8 }).alignItems(VerticalAlign.Center)
 
@@ -454,7 +454,7 @@ struct WizardPage {
           .fontColor(this.colors.accentGold)
           .decoration({ type: TextDecorationType.Underline })
       }.width('100%').padding({ bottom: 4 }).justifyContent(FlexAlign.Start).onClick(() => {
-        this.openPrivacyPolicyInBrowser();
+        this.openPrivacyPolicyInBrowser()
       })
     }.width('100%').layoutWeight(1).padding({
       left: this.isTablet() ? 32 : 24, right: this.isTablet() ? 32 : 24, bottom: 12
@@ -531,7 +531,7 @@ struct WizardPage {
           .margin({ bottom: 10 })
           .alignItems(VerticalAlign.Center)
           .onClick(() => {
-            this.pickAppTheme(opt.id);
+            this.pickAppTheme(opt.id)
           })
         }, (opt: ThemeOption) => `theme-${opt.id}-${opt.id === this.selectedTheme ? 'sel' : 'un'}`)
       }.width('100%').padding({
@@ -585,7 +585,7 @@ struct WizardPage {
                 .borderRadius(10)
                 .margin({ top: 12 })
                 .onClick(() => {
-                  this.requestGpsLocation();
+                  this.requestGpsLocation()
                 })
             } else if (this.locationStatus === 'failed') {
               Column() {
@@ -608,7 +608,7 @@ struct WizardPage {
                   .borderRadius(10)
                   .margin({ top: 16 })
                   .onClick(() => {
-                    this.requestGpsLocation();
+                    this.requestGpsLocation()
                   })
                 Text(this.tr('wizard_use_default_location'))
                   .fontSize(12)
@@ -616,7 +616,7 @@ struct WizardPage {
                   .decoration({ type: TextDecorationType.Underline })
                   .margin({ top: 12 })
                   .onClick(() => {
-                    this.useDefaultLocation();
+                    this.useDefaultLocation()
                   })
               }
               .width('100%')
@@ -661,7 +661,7 @@ struct WizardPage {
                 .margin({ top: 20 })
                 .enabled(!this.isGettingLocation)
                 .onClick(() => {
-                  this.requestGpsLocation();
+                  this.requestGpsLocation()
                 })
 
                 Text(this.tr('wizard_use_default_location'))
@@ -670,7 +670,7 @@ struct WizardPage {
                   .decoration({ type: TextDecorationType.Underline })
                   .margin({ top: 12 })
                   .onClick(() => {
-                    this.useDefaultLocation();
+                    this.useDefaultLocation()
                   })
               }
               .width('100%')
@@ -694,7 +694,7 @@ struct WizardPage {
                 .inputFilter('[\\-0-9\\.]')
                 .direction(Direction.Ltr)
                 .onChange((value: string) => {
-                  this.manualLat = value;
+                  this.manualLat = value
                 })
                 .fontSize(14)
                 .fontColor(this.colors.textWhite)
@@ -721,7 +721,7 @@ struct WizardPage {
                 .inputFilter('[\\-0-9\\.]')
                 .direction(Direction.Ltr)
                 .onChange((value: string) => {
-                  this.manualLng = value;
+                  this.manualLng = value
                 })
                 .fontSize(14)
                 .fontColor(this.colors.textWhite)
@@ -746,7 +746,7 @@ struct WizardPage {
               TextInput({ text: this.manualCity, placeholder: this.tr('city_name_placeholder') })
                 .type(InputType.Normal)
                 .onChange((value: string) => {
-                  this.manualCity = value;
+                  this.manualCity = value
                 })
                 .fontSize(14)
                 .fontColor(this.colors.textWhite)
@@ -778,7 +778,7 @@ struct WizardPage {
             .borderRadius(10)
             .enabled(!this.isGettingLocation)
             .onClick(() => {
-              this.saveManualCoords();
+              this.saveManualCoords()
             })
 
             if (this.locationStatus === 'ready' && this.detectedCity.length > 0) {
@@ -821,7 +821,7 @@ struct WizardPage {
       .borderRadius(10)
       .border(this.locationMode === mode ? { width: 0 } : { width: 1, color: this.colors.borderSoft })
       .onClick(() => {
-        this.selectLocationMode(mode);
+        this.selectLocationMode(mode)
       })
   }
 
@@ -856,7 +856,7 @@ struct WizardPage {
         .border({ width: 1, color: this.colors.borderSoft })
         .margin({ bottom: 10 })
         .onClick(() => {
-          this.showMethodPicker = true;
+          this.showMethodPicker = true
         })
 
         // ---- Madhab ----
@@ -887,7 +887,7 @@ struct WizardPage {
         .border({ width: 1, color: this.colors.borderSoft })
         .margin({ bottom: 10 })
         .onClick(() => {
-          this.showAsrPicker = true;
+          this.showAsrPicker = true
         })
 
         // ---- Source ----
@@ -918,7 +918,7 @@ struct WizardPage {
         .border({ width: 1, color: this.colors.borderSoft })
         .margin({ bottom: 10 })
         .onClick(() => {
-          this.showSourcePicker = true;
+          this.showSourcePicker = true
         })
       }.width('100%').padding({
         left: this.isTablet() ? 32 : 24, right: this.isTablet() ? 32 : 24, bottom: 24
@@ -948,7 +948,7 @@ struct WizardPage {
           .borderRadius(12)
           .enabled(this.canProceed())
           .onClick(() => {
-            this.goNext();
+            this.goNext()
           })
       }.width('100%').alignItems(HorizontalAlign.Center)
     }.width('100%').padding({
@@ -963,7 +963,7 @@ struct WizardPage {
   PickerOverlay(title: string, icon: Resource, items: PickerItem[], onSelect: (id: string) => void,
     onCancel: () => void) { // ---- Dim backdrop ----
     Column().width('100%').height('100%').backgroundColor(this.colors.overlayDim).onClick(() => {
-      onCancel();
+      onCancel()
     })
 
     // ---- Bottom sheet ----
@@ -1043,7 +1043,7 @@ struct WizardPage {
             .borderRadius(12)
             .margin({ bottom: 4 })
             .onClick(() => {
-              onSelect(item.id);
+              onSelect(item.id)
             })
           }, (item: PickerItem) => item.id)
         }.width('100%').padding({
@@ -1064,7 +1064,7 @@ struct WizardPage {
         .borderRadius(12)
         .margin({ top: 8, bottom: 24 })
         .onClick(() => {
-          onCancel();
+          onCancel()
         })
     }
     .width('100%')
@@ -1085,113 +1085,113 @@ struct WizardPage {
   }
 
   private tr(key: string): string {
-    return L.get(key, this.currentLanguage);
+    return L.get(key, this.currentLanguage)
   }
 
   private isRtl(): boolean {
-    return L.isRtlLang(this.currentLanguage);
+    return L.isRtlLang(this.currentLanguage)
   }
 
   private isTablet(): boolean {
-    return Breakpoints.isTablet(this.breakpoint);
+    return Breakpoints.isTablet(this.breakpoint)
   }
 
   private onThemeModeChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   private onLanguageChanged(): void {
-    this.currentLanguage = this.appLanguage;
-    this.loadPrivacyPolicy();
+    this.currentLanguage = this.appLanguage
+    this.loadPrivacyPolicy()
     if (this.usedDefaultLocation && this.locationStatus === 'ready') {
-      this.detectedCity = this.tr('default_location');
+      this.detectedCity = this.tr('default_location')
     }
   }
 
   private onAppThemeChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
-    this.selectedTheme = this.appTheme;
+    this.colors = PageTheme.compute(this.themeMode)
+    this.selectedTheme = this.appTheme
   }
 
   private async onAppForegrounded(): Promise<void> {
-    this.currentLanguage = this.appLanguage;
-    this.colors = PageTheme.compute(this.themeMode);
-    this.selectedTheme = await SettingsHelper.getAppTheme();
+    this.currentLanguage = this.appLanguage
+    this.colors = PageTheme.compute(this.themeMode)
+    this.selectedTheme = await SettingsHelper.getAppTheme()
   }
 
   private async reloadDefaults(): Promise<void> {
-    const data = await SettingsHelper.loadAll();
-    this.calcMethod = data.method;
-    this.asrRule = data.asr;
-    this.calcSource = data.source;
-    this.locationMode = await SettingsHelper.getLocationMode();
-    this.selectedTheme = await SettingsHelper.getAppTheme();
+    const data = await SettingsHelper.loadAll()
+    this.calcMethod = data.method
+    this.asrRule = data.asr
+    this.calcSource = data.source
+    this.locationMode = await SettingsHelper.getLocationMode()
+    this.selectedTheme = await SettingsHelper.getAppTheme()
   }
 
   private canProceed(): boolean {
     if (this.step === 1 && !this.privacyAccepted) {
-      return false;
+      return false
     }
     if (this.step === 3 && this.locationStatus !== 'ready') {
-      return false;
+      return false
     }
-    return true;
+    return true
   }
 
   private goNext(): void {
     if (!this.canProceed()) {
-      return;
+      return
     }
 
     if (this.step < TOTAL_STEPS - 1) {
-      this.step = this.step + 1;
-      return;
+      this.step = this.step + 1
+      return
     }
-    this.finish();
+    this.finish()
   }
 
   private goBack(): void {
     if (this.step <= 0) {
-      return;
+      return
     }
-    this.step = this.step - 1;
+    this.step = this.step - 1
   }
 
   private finish(): void {
-    SettingsHelper.markWizardCompleted();
-    NavHelper.prepareForward();
+    SettingsHelper.markWizardCompleted()
+    NavHelper.prepareForward()
     router.replaceUrl({ url: 'pages/MainTabs' })
-      .catch((err: Error) => console.error('Wizard finish failed:', JSON.stringify(err)));
+      .catch((err: Error) => console.error('Wizard finish failed:', JSON.stringify(err)))
   }
 
   private getLanguageOptions(): LanguageOption[] {
     const system: LanguageOption = {
       id: 'system', nativeName: this.tr('lang_system'), localizedName: this.tr('lang_system_desc')
-    };
+    }
 
     const languages = LanguageService.getAllLanguages().map((lang): LanguageOption => {
       return {
         id: lang.id, nativeName: lang.nativeName, localizedName: this.tr(lang.nameKey)
-      };
-    });
+      }
+    })
 
-    return [system, ...languages];
+    return [system, ...languages]
   }
 
   private pickLanguage(id: string): void {
-    this.selectedLanguage = id; // Persist both the override and resolved language.
-    SettingsHelper.saveLanguage(id); // Update local display language for wizard translations.
-    this.currentLanguage = L.resolveOverride(id); // appLanguage auto-syncs via @StorageLink(STORAGE_KEY_LANGUAGE).
-    NotificationHelper.scheduleRescheduleNow();
+    this.selectedLanguage = id // Persist both the override and resolved language.
+    SettingsHelper.saveLanguage(id) // Update local display language for wizard translations.
+    this.currentLanguage = L.resolveOverride(id) // appLanguage auto-syncs via @StorageLink(STORAGE_KEY_LANGUAGE).
+    NotificationHelper.scheduleRescheduleNow()
   }
 
   private async toggleNotifications(isOn: boolean): Promise<void> {
     if (!isOn) {
-      this.notifMasterEnabled = false;
-      this.notificationPermissionAttempts = 0;
-      await SettingsHelper.saveNotifMaster(false);
-      await NotificationHelper.cancelAll();
-      return;
+      this.notifMasterEnabled = false
+      this.notificationPermissionAttempts = 0
+      await SettingsHelper.saveNotifMaster(false)
+      await NotificationHelper.cancelAll()
+      return
     }
 
     // Guard against an infinite retry loop: if the user keeps
@@ -1199,27 +1199,29 @@ struct WizardPage {
     // granting the permission at the system level, stop after
     // a small number of attempts.
     if (this.notificationPermissionAttempts >= WizardPage.MAX_NOTIF_ATTEMPTS) {
-      this.getUIContext().getPromptAction().showToast({
-        message: this.tr('calendar_permission_denied'), duration: 3000
-      });
-      return;
+      this.getUIContext()
+        .getPromptAction()
+        .showToast({
+          message: this.tr('calendar_permission_denied'), duration: 3000
+        })
+      return
     }
-    this.notificationPermissionAttempts++;
+    this.notificationPermissionAttempts++
 
-    this.notifRequesting = true;
-    const context = getContext(this) as common.UIAbilityContext;
-    const granted = await CalendarReminderHelper.requestPermission(context);
-    this.notifRequesting = false;
+    this.notifRequesting = true
+    const context = getContext(this) as common.UIAbilityContext
+    const granted = await CalendarReminderHelper.requestPermission(context)
+    this.notifRequesting = false
 
     if (granted) {
-      await CalendarReminderHelper.init(context, false);
-      this.notifMasterEnabled = true;
-      this.notificationPermissionAttempts = 0; // success — reset budget
-      await SettingsHelper.saveNotifMaster(true);
-      await NotificationHelper.rescheduleAll();
+      await CalendarReminderHelper.init(context, false)
+      this.notifMasterEnabled = true
+      this.notificationPermissionAttempts = 0 // success — reset budget
+      await SettingsHelper.saveNotifMaster(true)
+      await NotificationHelper.rescheduleAll()
     } else {
-      this.notifMasterEnabled = false;
-      await SettingsHelper.saveNotifMaster(false);
+      this.notifMasterEnabled = false
+      await SettingsHelper.saveNotifMaster(false)
 
       promptAction.showDialog({
         title: this.tr('permission_required'),
@@ -1228,14 +1230,14 @@ struct WizardPage {
           { text: this.tr('grant'), color: this.colors.accentGold }]
       }).then((res: promptAction.ShowDialogSuccessResponse) => {
         if (res.index === 1) {
-          this.toggleNotifications(true);
+          this.toggleNotifications(true)
         } else { // User cancelled — budget resets so a deliberate retry
           // later in the session still works.
-          this.notificationPermissionAttempts = 0;
+          this.notificationPermissionAttempts = 0
         }
       }).catch((err: Error) => {
-        console.error('Dialog error', err);
-      });
+        console.error('Dialog error', err)
+      })
     }
   }
 
@@ -1247,8 +1249,8 @@ struct WizardPage {
    * the wizard immediately after a cold start.
    */
   private async loadPrivacyPolicy(): Promise<void> {
-    const doc = await PrivacyPolicyProvider.load(this.currentLanguage);
-    this.privacyPolicyText = doc.body;
+    const doc = await PrivacyPolicyProvider.load(this.currentLanguage)
+    this.privacyPolicyText = doc.body
   }
 
   /**
@@ -1263,24 +1265,24 @@ struct WizardPage {
    * at least read and copy the URL manually.
    */
   private async openPrivacyPolicyInBrowser(): Promise<void> {
-    const context = getContext(this) as common.UIAbilityContext;
+    const context = getContext(this) as common.UIAbilityContext
 
     // Dynamically resolve the URL based on the currently selected language
-    const targetUrl = PrivacyPolicyProvider.getFullUrl(this.currentLanguage);
+    const targetUrl = PrivacyPolicyProvider.getFullUrl(this.currentLanguage)
 
     const want: Want = {
       action: 'ohos.want.action.viewData', entities: ['entity.system.browsable'], uri: targetUrl
-    };
+    }
 
     try {
-      await context.startAbility(want);
+      await context.startAbility(want)
     } catch (err) {
-      const e = err as Error;
-      console.warn('[WizardPage] openPrivacyPolicyInBrowser failed: ' + e.message);
+      const e = err as Error
+      console.warn('[WizardPage] openPrivacyPolicyInBrowser failed: ' + e.message)
       this.getUIContext().getPromptAction().showToast({
         message: targetUrl, // Show the correct localized URL in the fallback
         duration: 4000
-      });
+      })
     }
   }
 
@@ -1288,53 +1290,53 @@ struct WizardPage {
     return ThemeService.getAllThemes().map((theme: AppThemeJson): ThemeOption => {
       return {
         id: theme.id, nameKey: theme.nameKey, descKey: theme.descKey
-      };
-    });
+      }
+    })
   }
 
   private pickAppTheme(id: string): void {
-    this.selectedTheme = id;
-    this.appTheme = id;
-    SettingsHelper.saveAppTheme(id);
-    this.colors = PageTheme.compute(this.themeMode);
+    this.selectedTheme = id
+    this.appTheme = id
+    SettingsHelper.saveAppTheme(id)
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   private themePreviewSwatch(preset: string): string {
-    const preview = Theme.getColors(this.themeMode, PageTheme.isSystemDark(), preset);
-    return preview.accentGold;
+    const preview = Theme.getColors(this.themeMode, PageTheme.isSystemDark(), preset)
+    return preview.accentGold
   }
 
   private themePreviewBackground(preset: string): string {
-    const preview = Theme.getColors(this.themeMode, PageTheme.isSystemDark(), preset);
-    return preview.primaryGreen;
+    const preview = Theme.getColors(this.themeMode, PageTheme.isSystemDark(), preset)
+    return preview.primaryGreen
   }
 
   private async requestGpsLocation(): Promise<void> {
     if (this.isGettingLocation) {
-      return;
+      return
     }
-    this.isGettingLocation = true;
-    this.locationStatus = 'idle';
-    this.detectedCity = '';
-    this.usedDefaultLocation = false;
+    this.isGettingLocation = true
+    this.locationStatus = 'idle'
+    this.detectedCity = ''
+    this.usedDefaultLocation = false
 
     try {
-      const data: LocationData = await LocationHelper.fetchLocationData(getContext(this));
-      await LocationCache.save(data.latitude, data.longitude, data.cityName);
-      SettingsHelper.saveLocationMode(LocationMode.GPS);
+      const data: LocationData = await LocationHelper.fetchLocationData(getContext(this))
+      await LocationCache.save(data.latitude, data.longitude, data.cityName)
+      SettingsHelper.saveLocationMode(LocationMode.GPS)
 
-      this.detectedCity = data.cityName;
-      this.locationStatus = 'ready';
+      this.detectedCity = data.cityName
+      this.locationStatus = 'ready'
     } catch (err) {
-      const error = err as Error;
-      this.locationStatus = 'failed';
+      const error = err as Error
+      this.locationStatus = 'failed'
       if (error.message === 'GPS_OFF') {
-        await LocationHelper.showLocationDisabledDialog(this.colors.accentGold);
+        await LocationHelper.showLocationDisabledDialog(this.colors.accentGold)
       } else if (error.message === 'PERMISSION_DENIED') {
-        await LocationHelper.showPermissionDeniedDialog(this.colors.accentGold);
+        await LocationHelper.showPermissionDeniedDialog(this.colors.accentGold)
       }
     } finally {
-      this.isGettingLocation = false;
+      this.isGettingLocation = false
     }
   }
 
@@ -1346,149 +1348,157 @@ struct WizardPage {
    */
   private async useDefaultLocation(): Promise<void> {
     if (this.isGettingLocation) {
-      return;
+      return
     }
-    this.isGettingLocation = true;
+    this.isGettingLocation = true
 
     try {
-      const fallbackName = this.tr('default_location');
+      const fallbackName = this.tr('default_location')
 
-      await LocationCache.save(FALLBACK_LOCATION.latitude, FALLBACK_LOCATION.longitude, fallbackName);
-      SettingsHelper.saveLocationMode(LocationMode.GPS);
+      await LocationCache.save(FALLBACK_LOCATION.latitude, FALLBACK_LOCATION.longitude, fallbackName)
+      SettingsHelper.saveLocationMode(LocationMode.GPS)
 
-      this.locationMode = LocationMode.GPS;
-      this.detectedCity = fallbackName;
-      this.locationStatus = 'ready';
-      this.usedDefaultLocation = true;
+      this.locationMode = LocationMode.GPS
+      this.detectedCity = fallbackName
+      this.locationStatus = 'ready'
+      this.usedDefaultLocation = true
     } catch (err) {
-      const e = err as Error;
-      console.warn('[WizardPage] useDefaultLocation failed:', e.message);
-      this.locationStatus = 'failed';
-      this.usedDefaultLocation = false;
+      const e = err as Error
+      console.warn('[WizardPage] useDefaultLocation failed:', e.message)
+      this.locationStatus = 'failed'
+      this.usedDefaultLocation = false
     } finally {
-      this.isGettingLocation = false;
+      this.isGettingLocation = false
     }
   }
 
   private async saveManualCoords(): Promise<void> {
-    const lat = parseFloat(this.manualLat.trim());
-    const lng = parseFloat(this.manualLng.trim());
+    const lat = parseFloat(this.manualLat.trim())
+    const lng = parseFloat(this.manualLng.trim())
 
     if (isNaN(lat) || lat < -90 || lat > 90) {
-      this.getUIContext().getPromptAction().showToast({
-        message: this.tr('latitude_hint'), duration: 2500
-      });
-      return;
+      this.getUIContext()
+        .getPromptAction()
+        .showToast({
+          message: this.tr('latitude_hint'), duration: 2500
+        })
+      return
     }
     if (isNaN(lng) || lng < -180 || lng > 180) {
-      this.getUIContext().getPromptAction().showToast({
-        message: this.tr('longitude_hint'), duration: 2500
-      });
-      return;
+      this.getUIContext()
+        .getPromptAction()
+        .showToast({
+          message: this.tr('longitude_hint'), duration: 2500
+        })
+      return
     }
 
-    this.isGettingLocation = true;
-    this.usedDefaultLocation = false;
+    this.isGettingLocation = true
+    this.usedDefaultLocation = false
 
-    let cityName = this.manualCity.trim();
+    let cityName = this.manualCity.trim()
     if (cityName.length === 0) {
       try {
-        cityName = await LocationHelper.reverseGeocode(lat, lng);
+        cityName = await LocationHelper.reverseGeocode(lat, lng)
       } catch (e) { /* fall through */
       }
 
-      const unknownLabel = L.get('unknown_location', this.currentLanguage);
+      const unknownLabel = L.get('unknown_location', this.currentLanguage)
       if (cityName === unknownLabel || cityName.length === 0) {
-        cityName = `${lat.toFixed(2)}, ${lng.toFixed(2)}`;
+        cityName = `${lat.toFixed(2)}, ${lng.toFixed(2)}`
       }
     }
 
-    await SettingsHelper.saveManualCoords(lat, lng, cityName);
-    SettingsHelper.saveLocationMode(LocationMode.MANUAL);
-    this.isGettingLocation = false;
+    await SettingsHelper.saveManualCoords(lat, lng, cityName)
+    SettingsHelper.saveLocationMode(LocationMode.MANUAL)
+    this.isGettingLocation = false
 
-    this.detectedCity = cityName;
-    this.locationStatus = 'ready';
+    this.detectedCity = cityName
+    this.locationStatus = 'ready'
 
-    this.getUIContext().getPromptAction().showToast({
-      message: `${this.tr('save')}: ${cityName}`, duration: 2000
-    });
+    this.getUIContext()
+      .getPromptAction()
+      .showToast({
+        message: `${this.tr('save')}: ${cityName}`, duration: 2000
+      })
   }
 
   private async selectLocationMode(mode: LocationMode): Promise<void> {
-    this.locationMode = mode;
-    this.locationStatus = 'idle';
-    this.detectedCity = '';
+    this.locationMode = mode
+    this.locationStatus = 'idle'
+    this.detectedCity = ''
 
     if (mode === LocationMode.GPS) {
-      return;
+      return
     }
-    SettingsHelper.saveLocationMode(mode);
+    SettingsHelper.saveLocationMode(mode)
   }
 
   private pickMethod(id: string): void {
-    const method = id as CalculationMethod;
-    this.calcMethod = method;
-    SettingsHelper.saveMethod(method);
-    this.showMethodPicker = false;
+    const method = id as CalculationMethod
+    this.calcMethod = method
+    SettingsHelper.saveMethod(method)
+    this.showMethodPicker = false
   }
 
   private pickAsrRule(id: string): void {
-    const rule = Number(id) as AsrShadowRule;
-    this.asrRule = rule;
-    SettingsHelper.saveAsrRule(rule);
-    this.showAsrPicker = false;
+    const rule = Number(id) as AsrShadowRule
+    this.asrRule = rule
+    SettingsHelper.saveAsrRule(rule)
+    this.showAsrPicker = false
   }
 
   private pickSource(id: string): void {
-    const source = id as CalculationSource;
+    const source = id as CalculationSource
     if (source === CalculationSource.API) {
-      this.getUIContext().getPromptAction().showToast({
-        message: this.tr('coming_soon'), duration: 1500
-      });
-      this.showSourcePicker = false;
-      return;
+      this.getUIContext()
+        .getPromptAction()
+        .showToast({
+          message: this.tr('coming_soon'), duration: 1500
+        })
+      this.showSourcePicker = false
+      return
     }
-    this.calcSource = source;
-    SettingsHelper.saveSource(source);
-    this.showSourcePicker = false;
+    this.calcSource = source
+    SettingsHelper.saveSource(source)
+    this.showSourcePicker = false
   }
 
   private stepTitle(): string {
     if (this.step === 0) {
-      return this.tr('wizard_language_title');
+      return this.tr('wizard_language_title')
     }
     if (this.step === 1) {
-      return this.tr('wizard_privacy_title');
+      return this.tr('wizard_privacy_title')
     }
     if (this.step === 2) {
-      return this.tr('wizard_theme_title');
+      return this.tr('wizard_theme_title')
     }
     if (this.step === 3) {
-      return this.tr('wizard_location_title');
+      return this.tr('wizard_location_title')
     }
     if (this.step === 4) {
-      return this.tr('wizard_convention_title');
+      return this.tr('wizard_convention_title')
     }
-    return this.tr('notif_step_title');
+    return this.tr('notif_step_title')
   }
 
   private stepDescription(): string {
     if (this.step === 0) {
-      return this.tr('wizard_language_desc');
+      return this.tr('wizard_language_desc')
     }
     if (this.step === 1) {
-      return this.tr('wizard_privacy_desc');
+      return this.tr('wizard_privacy_desc')
     }
     if (this.step === 2) {
-      return this.tr('wizard_theme_desc');
+      return this.tr('wizard_theme_desc')
     }
     if (this.step === 3) {
-      return this.tr('wizard_location_desc');
+      return this.tr('wizard_location_desc')
     }
     if (this.step === 4) {
-      return this.tr('wizard_convention_desc');
+      return this.tr('wizard_convention_desc')
     }
-    return this.tr('notif_step_desc');
+    return this.tr('notif_step_desc')
   }
 }

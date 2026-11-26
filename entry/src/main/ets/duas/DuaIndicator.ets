@@ -1,7 +1,7 @@
-import { router } from '@kit.ArkUI';
-import { ThemeColors } from '../core/ui/themes/Theme';
-import { PreferencesHelper } from '../core/util/PreferencesHelper';
-import { STORAGE_KEY_DUA_BINDINGS_VERSION } from '../core/common/StorageKeys';
+import { router } from '@kit.ArkUI'
+import { ThemeColors } from '../core/ui/themes/Theme'
+import { PreferencesHelper } from '../core/util/PreferencesHelper'
+import { STORAGE_KEY_DUA_BINDINGS_VERSION } from '../core/common/StorageKeys'
 
 @Component
 export struct DuaIndicator {
@@ -12,24 +12,24 @@ export struct DuaIndicator {
   @State private count: number = 0;
 
   aboutToAppear(): void {
-    this.loadData();
+    this.loadData()
   }
 
   async loadData(): Promise<void> {
     try {
-      const bindJson = await PreferencesHelper.getString('dua_bindings', '{}');
-      const bindings: Record<string, string[]> = JSON.parse(bindJson);
+      const bindJson = await PreferencesHelper.getString('dua_bindings', '{}')
+      const bindings: Record<string, string[]> = JSON.parse(bindJson)
 
-      let c = 0;
-      const keys = Object.keys(bindings);
+      let c = 0
+      const keys = Object.keys(bindings)
       for (let i = 0; i < keys.length; i++) {
         if (bindings[keys[i]].includes(this.prayerId)) {
-          c++;
+          c++
         }
       }
-      this.count = c;
+      this.count = c
     } catch (e) {
-      this.count = 0;
+      this.count = 0
     }
   }
 
@@ -52,7 +52,7 @@ export struct DuaIndicator {
       .onClick(() => { // Pass filterPrayer so DuasPage shows only the ones for this prayer
         router.pushUrl({
           url: 'pages/DuasPage', params: { filterPrayer: this.prayerId }
-        }).catch((e: Error) => console.error(JSON.stringify(e)));
+        }).catch((e: Error) => console.error(JSON.stringify(e)))
       })
     }
   }

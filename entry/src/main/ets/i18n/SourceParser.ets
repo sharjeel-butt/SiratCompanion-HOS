@@ -1,12 +1,12 @@
 // entry/src/main/ets/core/SourceParser.ets
-import { L } from './LocalizationHelper';
+import { L } from './LocalizationHelper'
 
 export interface SourceItem {
-  type: string;
-  id?: string;
-  surah?: number;
-  ayah?: number;
-  display?: string;
+  type: string
+  id?: string
+  surah?: number
+  ayah?: number
+  display?: string
 }
 
 export class SourceParser {
@@ -15,47 +15,47 @@ export class SourceParser {
    */
   static getLabel(src: SourceItem, lang: string): string {
     if (src.type === 'external') {
-      return src.display ?? '';
+      return src.display ?? ''
     }
 
     if (src.type === 'quran') {
-      const quranLabel = L.get('quran_full_title', lang); // e.g. "The Noble Quran"
-      const finalQuran = quranLabel !== 'quran_full_title' ? quranLabel : 'Quran';
-      return `${finalQuran} ${src.surah}:${src.ayah}`;
+      const quranLabel = L.get('quran_full_title', lang) // e.g. "The Noble Quran"
+      const finalQuran = quranLabel !== 'quran_full_title' ? quranLabel : 'Quran'
+      return `${finalQuran} ${src.surah}:${src.ayah}`
     }
 
     if (src.type === 'hadith' && src.id) {
-      const parts = src.id.split(':');
+      const parts = src.id.split(':')
       if (parts.length === 2) {
-        let col = parts[0];
-        const num = parts[1];
+        let col = parts[0]
+        const num = parts[1]
 
         // Expand aliases
         if (col === 'bukh') {
-          col = 'bukhari';
+          col = 'bukhari'
         } else if (col === 'musl') {
-          col = 'muslim';
+          col = 'muslim'
         } else if (col === 'abud') {
-          col = 'abudawud';
+          col = 'abudawud'
         } else if (col === 'tirm') {
-          col = 'tirmidhi';
+          col = 'tirmidhi'
         } else if (col === 'nasa') {
-          col = 'nasai';
+          col = 'nasai'
         } else if (col === 'ibnm') {
-          col = 'ibnmajah';
+          col = 'ibnmajah'
         } else if (col === 'mali') {
-          col = 'malik';
+          col = 'malik'
         }
 
-        const colKey = 'collection_' + col;
-        const locCol = L.get(colKey, lang); // Fallback to capitalized English name if localized key is missing
-        const finalCol = locCol !== colKey ? locCol : col.charAt(0).toUpperCase() + col.slice(1);
+        const colKey = 'collection_' + col
+        const locCol = L.get(colKey, lang) // Fallback to capitalized English name if localized key is missing
+        const finalCol = locCol !== colKey ? locCol : col.charAt(0).toUpperCase() + col.slice(1)
 
-        return `${finalCol} ${num}`;
+        return `${finalCol} ${num}`
       }
-      return src.id;
+      return src.id
     }
 
-    return '';
+    return ''
   }
 }

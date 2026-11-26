@@ -50,7 +50,6 @@ struct PrayerWidget {
             Text(this.error).fontSize('14vp').fontColor('#FF6B6B').textAlign(TextAlign.Center).width('100%')
           }.width('100%').layoutWeight(1).justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center)
         } else {
-
           // ========== HEADER ==========
           if (this.dimension === '2*2') {
             Column() {
@@ -120,7 +119,6 @@ struct PrayerWidget {
                 .opacity(0.8)
                 .maxLines(1)
             }.width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
-
           } else if (this.dimension === '2*4') {
             Column() {
               Row({ space: 6 }) {
@@ -394,7 +392,6 @@ struct PrayerWidget {
               .direction(Direction.Ltr)
               .justifyContent(this.isRtl() ? FlexAlign.End : FlexAlign.Start)
             }.width('100%').layoutWeight(1).justifyContent(FlexAlign.SpaceBetween)
-
           } else if (this.dimension === '4*4') {
             Column() { // 1. Top Row
               Row() {
@@ -547,7 +544,7 @@ struct PrayerWidget {
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'isha' ? '#E8A44C' : '#FFFFFF')
                       .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Medium)
-                      .maxLines(1);
+                      .maxLines(1)
                     Text(this.ishaName)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
@@ -570,7 +567,7 @@ struct PrayerWidget {
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#FFFFFF')
                       .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Medium)
-                      .maxLines(1);
+                      .maxLines(1)
                     Text(this.maghribName)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
@@ -593,7 +590,7 @@ struct PrayerWidget {
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'asr' ? '#E8A44C' : '#FFFFFF')
                       .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Medium)
-                      .maxLines(1);
+                      .maxLines(1)
                     Text(this.asrName)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
@@ -616,7 +613,7 @@ struct PrayerWidget {
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#FFFFFF')
                       .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Medium)
-                      .maxLines(1);
+                      .maxLines(1)
                     Text(this.dhuhrName)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
@@ -639,7 +636,7 @@ struct PrayerWidget {
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#FFFFFF')
                       .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Medium)
-                      .maxLines(1);
+                      .maxLines(1)
                     Text(this.fajrName)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
@@ -662,7 +659,7 @@ struct PrayerWidget {
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'fajr' ? '#E8A44C' : '#A5B8CC')
                       .fontWeight(this.nextId === 'fajr' ? FontWeight.Bold : FontWeight.Normal)
-                      .maxLines(1);
+                      .maxLines(1)
                     Text(this.fajrTime)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
@@ -685,7 +682,7 @@ struct PrayerWidget {
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'dhuhr' ? '#E8A44C' : '#A5B8CC')
                       .fontWeight(this.nextId === 'dhuhr' ? FontWeight.Bold : FontWeight.Normal)
-                      .maxLines(1);
+                      .maxLines(1)
                     Text(this.dhuhrTime)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
@@ -708,7 +705,7 @@ struct PrayerWidget {
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'asr' ? '#E8A44C' : '#A5B8CC')
                       .fontWeight(this.nextId === 'asr' ? FontWeight.Bold : FontWeight.Normal)
-                      .maxLines(1);
+                      .maxLines(1)
                     Text(this.asrTime)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
@@ -731,7 +728,7 @@ struct PrayerWidget {
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'maghrib' ? '#E8A44C' : '#A5B8CC')
                       .fontWeight(this.nextId === 'maghrib' ? FontWeight.Bold : FontWeight.Normal)
-                      .maxLines(1);
+                      .maxLines(1)
                     Text(this.maghribTime)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
@@ -754,7 +751,7 @@ struct PrayerWidget {
                       .fontSize('14vp')
                       .fontColor(this.nextId === 'isha' ? '#E8A44C' : '#A5B8CC')
                       .fontWeight(this.nextId === 'isha' ? FontWeight.Bold : FontWeight.Normal)
-                      .maxLines(1);
+                      .maxLines(1)
                     Text(this.ishaTime)
                       .width('50%')
                       .textAlign(TextAlign.RIGHT)
@@ -780,12 +777,12 @@ struct PrayerWidget {
           bundleName: 'com.siratcompanion.hos.app',
           abilityName: 'EntryAbility',
           params: { targetPage: 'pages/MainTabs', targetTab: 'prayers' }
-        });
+        })
       })
     }.width('100%').height('100%').direction(Direction.Ltr)
   }
 
   private isRtl(): boolean {
-    return this.lang === 'ar' || this.lang === 'ur';
+    return this.lang === 'ar' || this.lang === 'ur'
   }
 }

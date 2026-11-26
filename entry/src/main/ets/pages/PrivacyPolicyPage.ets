@@ -1,10 +1,10 @@
-import { common, Want } from '@kit.AbilityKit';
-import { router } from '@kit.ArkUI';
-import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
-import { L } from '../i18n/LocalizationHelper';
-import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../core/common/StorageKeys';
-import { PrivacyPolicyProvider } from '../legal/PrivacyPolicy';
+import { common, Want } from '@kit.AbilityKit'
+import { router } from '@kit.ArkUI'
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
+import { L } from '../i18n/LocalizationHelper'
+import { STORAGE_KEY_LANGUAGE, STORAGE_KEY_THEME_MODE } from '../core/common/StorageKeys'
+import { PrivacyPolicyProvider } from '../legal/PrivacyPolicy'
 
 @Entry
 @Component
@@ -16,37 +16,37 @@ struct PrivacyPolicyPage {
   @State isLoading: boolean = true;
 
   async aboutToAppear() {
-    this.colors = PageTheme.compute(this.themeMode);
-    await this.loadPolicy();
+    this.colors = PageTheme.compute(this.themeMode)
+    await this.loadPolicy()
   }
 
   async onLangChanged() {
-    await this.loadPolicy();
+    await this.loadPolicy()
   }
 
   onThemeModeChanged() {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   async loadPolicy() {
-    this.isLoading = true;
-    const doc = await PrivacyPolicyProvider.load(this.appLanguage);
-    this.policyText = doc.body;
-    this.isLoading = false;
+    this.isLoading = true
+    const doc = await PrivacyPolicyProvider.load(this.appLanguage)
+    this.policyText = doc.body
+    this.isLoading = false
   }
 
   async openOnlinePolicy() {
-    const ctx = getContext(this) as common.UIAbilityContext;
-    const targetUrl = PrivacyPolicyProvider.getFullUrl(this.appLanguage);
+    const ctx = getContext(this) as common.UIAbilityContext
+    const targetUrl = PrivacyPolicyProvider.getFullUrl(this.appLanguage)
     const want: Want = {
       action: 'ohos.want.action.viewData', entities: ['entity.system.browsable'], uri: targetUrl
-    };
+    }
     try {
-      await ctx.startAbility(want);
+      await ctx.startAbility(want)
     } catch (e) {
       this.getUIContext().getPromptAction().showToast({
         message: targetUrl, duration: 4000
-      });
+      })
     }
   }
 
@@ -108,7 +108,6 @@ struct PrivacyPolicyPage {
             .borderRadius(12)
             .margin({ bottom: 40 })
             .onClick(() => this.openOnlinePolicy())
-
           }.width('100%').padding({ left: 20, right: 20, top: 20 })
         }.layoutWeight(1).scrollBar(BarState.Auto).edgeEffect(EdgeEffect.Spring)
       }

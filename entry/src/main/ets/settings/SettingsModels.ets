@@ -1,9 +1,9 @@
 // entry/src/main/ets/models/SettingsModels.ets
 
 export interface PickerItem {
-  id: string;
-  label: string;
-  selected: boolean;
+  id: string
+  label: string
+  selected: boolean
 }
 
 export enum CalculationSource {
@@ -15,8 +15,8 @@ export enum LocationMode {
 }
 
 export interface ManualCoords {
-  lat: number;
-  lng: number;
-  refresh: number; // timestamp (0 = never)
-  cityName: string;
+  lat: number
+  lng: number
+  refresh: number // timestamp (0 = never)
+  cityName: string
 }

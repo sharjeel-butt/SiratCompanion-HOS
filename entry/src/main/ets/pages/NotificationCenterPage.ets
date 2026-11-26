@@ -1,22 +1,14 @@
-import { router } from '@kit.ArkUI';
+import { router } from '@kit.ArkUI'
 
-import {
-  NotificationService
-} from '../core/notifications/NotificationService';
+import { NotificationService } from '../core/notifications/NotificationService'
 
-import {
-  AppNotification, NotificationCategory
-} from '../core/notifications/NotificationModels';
+import { AppNotification, NotificationCategory } from '../core/notifications/NotificationModels'
 
-import {
-  PageTheme
-} from '../core/ui/PageTheme';
+import { PageTheme } from '../core/ui/PageTheme'
 
-import {
-  ThemeColors, ThemeMode
-} from '../core/ui/themes/Theme';
-import { L } from '../i18n/LocalizationHelper';
-import { STORAGE_KEY_LANGUAGE } from '../core/common/StorageKeys';
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { L } from '../i18n/LocalizationHelper'
+import { STORAGE_KEY_LANGUAGE } from '../core/common/StorageKeys'
 
 @Entry
 @Component
@@ -27,7 +19,7 @@ export struct NotificationCenterPage {
   @State private dismissingIds: string[] = [];
 
   aboutToAppear(): void {
-    this.notifications = NotificationService.getNotifications();
+    this.notifications = NotificationService.getNotifications()
   }
 
   onLangChanged() {
@@ -47,7 +39,7 @@ export struct NotificationCenterPage {
         .borderRadius(20)
         .backgroundColor(this.colors.tintSoft)
         .onClick(() => {
-          router.back();
+          router.back()
         })
 
         Text(L.get('title_notifications', this.appLanguage))
@@ -70,9 +62,7 @@ export struct NotificationCenterPage {
       .borderRadius(16)
 
       if (this.notifications.length === 0) {
-
         Column() {
-
           Text(L.get('notifications_empty', this.appLanguage))
             .fontSize(16)
             .fontColor(this.colors.textMuted)
@@ -82,21 +72,14 @@ export struct NotificationCenterPage {
               overflow: TextOverflow.Ellipsis
             })
         }.layoutWeight(1).justifyContent(FlexAlign.Center).width('100%')
-
       } else {
-
         List() {
-
           ForEach(this.notifications, (item: AppNotification, index: number) => {
-
             ListItem() {
-
               Row({ space: 12 }) {
-
                 Image(this.getNotificationIcon(item)).width(22).height(22).fillColor(this.colors.accentGold)
 
                 Column({ space: 6 }) {
-
                   Text(L.get(item.titleKey, this.appLanguage))
                     .fontSize(15)
                     .fontWeight(FontWeight.Bold)
@@ -108,74 +91,37 @@ export struct NotificationCenterPage {
                     .fontColor(this.colors.textMuted)
                     .maxLines(3)
                     .width('100%')
-
                 }.layoutWeight(1)
 
-                if (item.category === NotificationCategory.ACHIEVEMENT) {
-
+                if (NotificationService.canDismiss(item)) {
                   Button({
                     type: ButtonType.Circle
                   }) {
-
                     Image($r('app.media.ic_close')).width(14).height(14).fillColor(this.colors.textMuted)
-
                   }.width(32).height(32).backgroundColor(this.colors.tintSoft).onClick(() => {
-
-                    animateTo({
-                      duration: 280, curve: Curve.EaseOut
-                    }, () => {
-
-                      this.dismissingIds = [...this.dismissingIds, item.id];
-
-                    });
-
-                    setTimeout(() => {
-
-                      NotificationService.dismissAchievement(item.id);
-
-                      this.notifications = NotificationService.getNotifications();
-
-                    }, 300);
+                    this.dismissNotification(item)
                   })
                 }
-
               }
               .width('100%')
               .padding(16)
               .backgroundColor(
-
-                item.category === NotificationCategory.ACHIEVEMENT
-
-                  ? this.colors.tintSubtle
-
-                  : this.colors.cardDark
-
-              )
+                item.category === NotificationCategory.ACHIEVEMENT ? this.colors.tintSubtle : this.colors.cardDark)
               .borderRadius(16)
-              .opacity(
-
-                this.dismissingIds.indexOf(item.id) >= 0
-
-                  ? 0
-
-                  : 1
-
-              )
+              .opacity(this.dismissingIds.indexOf(item.id) >= 0 ? 0 : 1)
               .scale({
                 x: this.dismissingIds.indexOf(item.id) >= 0 ? 0.94 : 1,
                 y: this.dismissingIds.indexOf(item.id) >= 0 ? 0.94 : 1
               })
-
             }.width('100%').padding({
               bottom: 10
             }).onClick(() => {
               if (item.category === NotificationCategory.ACHIEVEMENT) {
-                return;
+                return
               }
 
-              this.openPrayerNotification(item);
+              this.openPrayerNotification(item)
             })
-
           },
             (item: AppNotification, index: number): string => 'notif-' + item.id + '-' + this.appLanguage + '-' + index)
         }.width('100%').layoutWeight(1).margin({
@@ -191,67 +137,62 @@ export struct NotificationCenterPage {
   }
 
   private getNotificationIcon(item: AppNotification): Resource {
-
     if (item.category === NotificationCategory.ACHIEVEMENT) {
-      return $r('app.media.ic_trophy');
+      return $r('app.media.ic_trophy')
     }
 
-    const prayerId = item.payload;
+    const prayerId = item.payload
 
     if (prayerId === undefined) {
-      return $r('app.media.ic_bell');
+      return $r('app.media.ic_bell')
     }
     if (item.category === NotificationCategory.RAMADAN) {
-
-      return $r('app.media.ic_ramadan_moon');
+      return $r('app.media.ic_ramadan_moon')
     }
 
     switch (prayerId) {
-
       case 'fajr':
-        return $r('app.media.ic_fajr');
+        return $r('app.media.ic_fajr')
 
       case 'dhuhr':
-        return $r('app.media.ic_dhuhr');
+        return $r('app.media.ic_dhuhr')
 
       case 'asr':
-        return $r('app.media.ic_asr');
+        return $r('app.media.ic_asr')
 
       case 'maghrib':
-        return $r('app.media.ic_maghrib');
+        return $r('app.media.ic_maghrib')
 
       case 'isha':
-        return $r('app.media.ic_isha');
+        return $r('app.media.ic_isha')
 
       default:
-        return $r('app.media.ic_bell');
+        return $r('app.media.ic_bell')
     }
-
-
   }
 
   private loadNotifications(): void {
-    this.notifications = NotificationService.getNotifications();
+    this.notifications = NotificationService.getNotifications()
   }
 
   private openPrayerNotification(item: AppNotification): void {
     if (item.payload !== undefined) { // Clear first so the Watch always fires
-      AppStorage.setOrCreate('prayer_highlight_target', '');
-      AppStorage.setOrCreate('prayer_highlight_target', item.payload);
+      AppStorage.setOrCreate('prayer_highlight_target', '')
+      AppStorage.setOrCreate('prayer_highlight_target', item.payload)
     }
-    AppStorage.setOrCreate('nav_target_tab', 'prayers');
-    router.back();
+    AppStorage.setOrCreate('nav_target_tab', 'prayers')
+    router.back()
   }
 
   private dismissNotification(item: AppNotification): void {
     if (this.dismissingIds.indexOf(item.id) >= 0) {
-      return;
+      return
     }
-    this.dismissingIds = [...this.dismissingIds, item.id];
+    this.dismissingIds = [...this.dismissingIds, item.id]
     setTimeout(() => {
-      NotificationService.dismissAchievement(item.id);
-      this.notifications = NotificationService.getNotifications();
-      this.dismissingIds = this.dismissingIds.filter((id: string) => id !== item.id);
-    }, 300);
+      NotificationService.dismissAchievement(item.id)
+      this.notifications = NotificationService.getNotifications()
+      this.dismissingIds = this.dismissingIds.filter((id: string) => id !== item.id)
+    }, 300)
   }
 }

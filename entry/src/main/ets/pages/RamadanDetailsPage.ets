@@ -1,10 +1,10 @@
 // entry/src/main/ets/pages/RamadanDetailsPage.ets
 
-import { mediaquery, router } from '@kit.ArkUI';
-import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
-import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper';
-import { CalendarDay } from '../hijricalendar/HijriCalendarModels';
+import { mediaquery, router } from '@kit.ArkUI'
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
+import { HijriCalendarHelper } from '../hijricalendar/HijriCalendarHelper'
+import { CalendarDay } from '../hijricalendar/HijriCalendarModels'
 import {
   STORAGE_KEY_APP_FOREGROUND_TICK,
   STORAGE_KEY_APP_THEME,
@@ -14,16 +14,14 @@ import {
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_RAMADAN_STATE_VERSION,
   STORAGE_KEY_THEME_MODE
-} from '../core/common/StorageKeys';
-import { DuaCard } from '../duas/DuaCard';
-import { DuaService } from '../duas/DuaService';
-import { CompleteDua } from '../duas/DuaModels';
-import { Breakpoints } from '../core/layout/Breakpoints';
-import { L } from '../i18n/LocalizationHelper';
-import {
-  LaylatAlQadrNight, RamadanAshra, RamadanHelper, RamadanInfo
-} from '../ramadan/RamadanHelper';
-import { RamadanStorage } from '../ramadan/RamadanStorage';
+} from '../core/common/StorageKeys'
+import { DuaCard } from '../duas/DuaCard'
+import { DuaService } from '../duas/DuaService'
+import { CompleteDua } from '../duas/DuaModels'
+import { Breakpoints } from '../core/layout/Breakpoints'
+import { L } from '../i18n/LocalizationHelper'
+import { LaylatAlQadrNight, RamadanAshra, RamadanHelper, RamadanInfo } from '../ramadan/RamadanHelper'
+import { RamadanStorage } from '../ramadan/RamadanStorage'
 import {
   FastingDay,
   FastingStatus,
@@ -31,16 +29,16 @@ import {
   QadaSummary,
   QadaYearRow,
   RamadanYearData
-} from '../ramadan/RamadanModels';
-import { common } from '@kit.AbilityKit';
+} from '../ramadan/RamadanModels'
+import { common } from '@kit.AbilityKit'
 
-type SheetKind = 'none' | 'mark' | 'reason';
+type SheetKind = 'none' | 'mark' | 'reason'
 
 interface QadaDayEntry {
-  dayNumber: number;
-  gregorianDate: Date;
-  reason: MissedReason | null;
-  madeUp: boolean;
+  dayNumber: number
+  gregorianDate: Date
+  reason: MissedReason | null
+  madeUp: boolean
 }
 
 @Entry
@@ -86,38 +84,38 @@ struct RamadanDetailsPage {
   // ============================================================
 
   aboutToAppear(): void {
-    this.currentLanguage = this.appLanguage;
-    this.colors = PageTheme.compute(this.themeMode);
+    this.currentLanguage = this.appLanguage
+    this.colors = PageTheme.compute(this.themeMode)
     this.systemDarkListener = PageTheme.installSystemListener(this.themeMode, (c) => {
-      this.colors = c;
-    });
-    this.loadRamadanInfo();
-    this.loadDuasForSection();
+      this.colors = c
+    })
+    this.loadRamadanInfo()
+    this.loadDuasForSection()
 
     // Check if we navigated here from the "Duas" link
-    const params = router.getParams() as Record<string, Object>;
+    const params = router.getParams() as Record<string, Object>
     if (params &&
       params['scrollToDuas'] === true) { // Delay slightly to allow the page to render and measure content height
       setTimeout(() => {
-        this.scrollController.scrollEdge(Edge.Bottom);
-      }, 300);
+        this.scrollController.scrollEdge(Edge.Bottom)
+      }, 300)
     }
   }
 
   aboutToDisappear(): void {
-    PageTheme.uninstallSystemListener(this.systemDarkListener);
-    this.systemDarkListener = null;
+    PageTheme.uninstallSystemListener(this.systemDarkListener)
+    this.systemDarkListener = null
   }
 
   onDuaLangChanged() {
-    this.loadDuasForSection();
+    this.loadDuasForSection()
   }
 
   onPageShow(): void {
-    this.currentLanguage = this.appLanguage;
-    this.colors = PageTheme.compute(this.themeMode);
-    this.loadRamadanInfo();
-    this.loadDuasForSection();
+    this.currentLanguage = this.appLanguage
+    this.colors = PageTheme.compute(this.themeMode)
+    this.loadRamadanInfo()
+    this.loadDuasForSection()
   }
 
   // ============================================================
@@ -171,7 +169,7 @@ struct RamadanDetailsPage {
       blurStyle: BlurStyle.Thick,
       maskColor: this.colors.overlayDim,
       onDisappear: () => {
-        this.showQadaYearSheet = false;
+        this.showQadaYearSheet = false
       }
     })
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
@@ -571,12 +569,12 @@ struct RamadanDetailsPage {
     .border({
       width: this.isToday(idx) ? 2 : 1,
       color: this.isToday(idx) ? this.colors.accentGold :
-        (this.currentYear!.taraweehNights[idx] ? this.colors.accentGold : this.colors.borderSoft)
+        this.currentYear!.taraweehNights[idx] ? this.colors.accentGold : this.colors.borderSoft
     })
     .opacity(this.isTaraweehToggleable(idx) ? 1.0 : 0.35)
     .onClick(() => {
       if (this.isTaraweehToggleable(idx)) {
-        this.toggleTaraweehNight(idx + 1);
+        this.toggleTaraweehNight(idx + 1)
       }
     })
   }
@@ -645,7 +643,7 @@ struct RamadanDetailsPage {
     .opacity(this.isFuture(dayIndex) ? 0.45 : 1.0)
     .onClick(() => {
       if (!this.isFuture(dayIndex)) {
-        this.openMarkSheet(dayIndex + 1);
+        this.openMarkSheet(dayIndex + 1)
       }
     })
   }
@@ -677,7 +675,7 @@ struct RamadanDetailsPage {
   @Builder
   MarkSheet() {
     Column().width('100%').height('100%').backgroundColor(this.colors.overlayDim).onClick(() => {
-      this.closeSheet();
+      this.closeSheet()
     })
 
     Column() {
@@ -721,14 +719,14 @@ struct RamadanDetailsPage {
         Column() {
           this.MarkOption($r('app.media.ic_check'), this.tr('fasting_status_fasted'), this.colors.accentGold,
             (): void => {
-              this.markFasted();
+              this.markFasted()
             })
           this.MarkOption($r('app.media.ic_close'), this.tr('fasting_status_missed'), this.colors.statusExpress,
             (): void => {
-              this.activeSheet = 'reason';
+              this.activeSheet = 'reason'
             })
           this.MarkOption($r('app.media.ic_refresh'), this.tr('fasting_clear'), this.colors.textMuted, (): void => {
-            this.clearDay();
+            this.clearDay()
           })
         }.width('100%').padding({
           left: 8,
@@ -748,7 +746,7 @@ struct RamadanDetailsPage {
         .borderRadius(12)
         .margin({ top: 8, bottom: 24 })
         .onClick(() => {
-          this.closeSheet();
+          this.closeSheet()
         })
     }
     .width('100%')
@@ -807,7 +805,7 @@ struct RamadanDetailsPage {
   @Builder
   ReasonSheet() {
     Column().width('100%').height('100%').backgroundColor(this.colors.overlayDim).onClick(() => {
-      this.closeSheet();
+      this.closeSheet()
     })
 
     Column() {
@@ -875,7 +873,7 @@ struct RamadanDetailsPage {
           })
             .type(InputType.Normal)
             .onChange((v: string) => {
-              this.customReasonText = v;
+              this.customReasonText = v
             })
             .fontSize(14)
             .fontColor(this.colors.textWhite)
@@ -901,7 +899,7 @@ struct RamadanDetailsPage {
           .borderRadius(12)
           .margin({ top: 8, bottom: 8 })
           .onClick(() => {
-            this.confirmMissed();
+            this.confirmMissed()
           })
       }
 
@@ -915,7 +913,7 @@ struct RamadanDetailsPage {
         .borderRadius(12)
         .margin({ top: 4, bottom: 24 })
         .onClick(() => {
-          this.closeSheet();
+          this.closeSheet()
         })
     }
     .width('100%')
@@ -968,10 +966,10 @@ struct RamadanDetailsPage {
     .margin({ bottom: 4 })
     .onClick(() => {
       if (reason === MissedReason.OTHER) {
-        this.selectedReason = MissedReason.OTHER;
+        this.selectedReason = MissedReason.OTHER
       } else {
-        this.selectedReason = reason;
-        this.confirmMissed();
+        this.selectedReason = reason
+        this.confirmMissed()
       }
     })
   }
@@ -1136,7 +1134,7 @@ struct RamadanDetailsPage {
     .opacity(this.isQadaToggleAllowed() ? 1.0 : 0.55)
     .onClick(() => {
       if (this.isQadaToggleAllowed()) {
-        this.toggleDayMadeUp(entry.dayNumber);
+        this.toggleDayMadeUp(entry.dayNumber)
       }
     })
   }
@@ -1408,20 +1406,20 @@ struct RamadanDetailsPage {
   }
 
   private async loadRamadanInfo(): Promise<void> {
-    this.isLoadingInfo = true;
+    this.isLoadingInfo = true
     try {
-      const info = RamadanHelper.getRamadanInfo(this.hijriOffset);
-      this.ramadanInfo = info;
+      const info = RamadanHelper.getRamadanInfo(this.hijriOffset)
+      this.ramadanInfo = info
       if (info !== null && info.isRamadanNow) {
-        this.currentYear = await RamadanStorage.getOrCreateYear(info.hijriYear, info.totalDays);
+        this.currentYear = await RamadanStorage.getOrCreateYear(info.hijriYear, info.totalDays)
       } else {
-        this.currentYear = null;
+        this.currentYear = null
       } // Qada summary is loaded regardless of whether Ramadan is
       // currently active — the section is always visible so the
       // user can review and log make-ups year-round.
-      await this.reloadQadaSummary();
+      await this.reloadQadaSummary()
     } finally {
-      this.isLoadingInfo = false;
+      this.isLoadingInfo = false
     }
   }
 
@@ -1431,12 +1429,12 @@ struct RamadanDetailsPage {
 
   private async loadDuasForSection(): Promise<void> {
     try {
-      const ctx = getContext(this) as common.UIAbilityContext;
-      const all = await DuaService.loadDuas(ctx, this.getDuaTranslationLang(), this.currentLanguage);
-      this.suhoorDua = all.find((d: CompleteDua) => d.id === 'dua_suhoor') ?? null;
-      this.iftarDua = all.find((d: CompleteDua) => d.id === 'dua_breaking_the_fast') ?? null;
+      const ctx = getContext(this) as common.UIAbilityContext
+      const all = await DuaService.loadDuas(ctx, this.getDuaTranslationLang(), this.currentLanguage)
+      this.suhoorDua = all.find((d: CompleteDua) => d.id === 'dua_suhoor') ?? null
+      this.iftarDua = all.find((d: CompleteDua) => d.id === 'dua_breaking_the_fast') ?? null
     } catch (e) {
-      console.error('[RamadanDetailsPage] loadDuasForSection failed', e);
+      console.error('[RamadanDetailsPage] loadDuasForSection failed', e)
     }
   }
 
@@ -1445,15 +1443,15 @@ struct RamadanDetailsPage {
   // ============================================================
 
   private async reloadQadaSummary(): Promise<void> {
-    const store = await RamadanStorage.load();
-    this.qadaSummary = RamadanStorage.computeQadaSummary(store);
+    const store = await RamadanStorage.load()
+    this.qadaSummary = RamadanStorage.computeQadaSummary(store)
   }
 
   private async reloadCurrentYear(): Promise<void> {
     if (this.ramadanInfo === null) {
-      return;
+      return
     }
-    this.currentYear = await RamadanStorage.getOrCreateYear(this.ramadanInfo.hijriYear, this.ramadanInfo.totalDays);
+    this.currentYear = await RamadanStorage.getOrCreateYear(this.ramadanInfo.hijriYear, this.ramadanInfo.totalDays)
   }
 
   // ============================================================
@@ -1461,7 +1459,7 @@ struct RamadanDetailsPage {
   // ============================================================
 
   private onThemeModeChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   // ============================================================
@@ -1469,19 +1467,19 @@ struct RamadanDetailsPage {
   // ============================================================
 
   private onAppThemePresetChanged(): void {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   private onLanguageChanged(): void {
-    this.currentLanguage = this.appLanguage;
+    this.currentLanguage = this.appLanguage
   }
 
   private onHijriOffsetChanged(): void {
-    this.loadRamadanInfo();
+    this.loadRamadanInfo()
   }
 
   private onAppForegrounded(): void {
-    this.loadRamadanInfo();
+    this.loadRamadanInfo()
   }
 
   private onRamadanStateChanged(): void { // The version counter is bumped by every RamadanStorage write.
@@ -1489,16 +1487,16 @@ struct RamadanDetailsPage {
     // state. This is the only reliable refresh signal across the
     // sheet → page transition (the sheet closes before the async
     // write completes, so the caller cannot await the reload).
-    this.reloadCurrentYear();
-    this.reloadQadaSummary();
+    this.reloadCurrentYear()
+    this.reloadQadaSummary()
   }
 
   private tr(key: string): string {
-    return L.get(key, this.currentLanguage);
+    return L.get(key, this.currentLanguage)
   }
 
   private isRtl(): boolean {
-    return L.isRtlLang(this.currentLanguage);
+    return L.isRtlLang(this.currentLanguage)
   }
 
   // ============================================================
@@ -1507,97 +1505,97 @@ struct RamadanDetailsPage {
 
   private ramadanSubtitle(): string {
     if (this.ramadanInfo === null) {
-      return '';
+      return ''
     }
-    const yearSuffix = this.tr('hijri_year_suffix');
+    const yearSuffix = this.tr('hijri_year_suffix')
     if (!this.ramadanInfo.isRamadanNow) {
-      return `${this.ramadanInfo.hijriYear} ${yearSuffix}`;
+      return `${this.ramadanInfo.hijriYear} ${yearSuffix}`
     }
-    return `${this.ramadanInfo.hijriYear} ${yearSuffix} · ` +
-      `${this.ramadanInfo.currentDayNumber} / ${this.ramadanInfo.totalDays}`;
+    return (`${this.ramadanInfo.hijriYear} ${yearSuffix} · ` +
+      `${this.ramadanInfo.currentDayNumber} / ${this.ramadanInfo.totalDays}`)
   }
 
   private countFasted(): number {
     if (this.currentYear === null) {
-      return 0;
+      return 0
     }
-    let n = 0;
+    let n = 0
     for (const d of this.currentYear.days) {
       if (d.status === FastingStatus.FASTED) {
-        n++;
+        n++
       }
     }
-    return n;
+    return n
   }
 
   private countMissed(): number {
     if (this.currentYear === null) {
-      return 0;
+      return 0
     }
-    return RamadanStorage.countMissed(this.currentYear);
+    return RamadanStorage.countMissed(this.currentYear)
   }
 
   private countUnmarked(): number {
     if (this.currentYear === null) {
-      return 0;
+      return 0
     }
-    return this.currentYear.totalDays - this.countFasted() - this.countMissed();
+    return this.currentYear.totalDays - this.countFasted() - this.countMissed()
   }
 
   private allReasons(): MissedReason[] {
     return [MissedReason.TRAVEL, MissedReason.ILLNESS, MissedReason.MENSTRUATION, MissedReason.PREGNANCY_NURSING,
-      MissedReason.FORGETFULNESS, MissedReason.OTHER];
+      MissedReason.FORGETFULNESS, MissedReason.OTHER]
   }
 
   /** Years with at least one missed fast. Used by the audit table. */
   private auditYears(): QadaYearRow[] {
     if (this.qadaSummary === null) {
-      return [];
+      return []
     }
-    const out: QadaYearRow[] = [];
+    const out: QadaYearRow[] = []
     for (const row of this.qadaSummary.perYear) {
       if (row.missed > 0) {
-        out.push(row);
+        out.push(row)
       }
     }
-    return out;
+    return out
   }
 
   private async openQadaYearSheet(year: number): Promise<void> {
-    const yearData = await RamadanStorage.getYear(year);
+    const yearData = await RamadanStorage.getYear(year)
     if (yearData === null) {
-      return;
+      return
     }
 
     // Reconstruct the Gregorian dates for this Hijri month so each
     // row can show "Day 5 · Mar 15".
-    let monthDays: CalendarDay[] = [];
+    let monthDays: CalendarDay[] = []
     try {
-      monthDays = HijriCalendarHelper.buildMonthDays(year, 9, this.hijriOffset, new Date());
+      monthDays = HijriCalendarHelper.buildMonthDays(year, 9, this.hijriOffset, new Date())
     } catch (err) {
-      monthDays = [];
+      monthDays = []
     }
 
-    const entries: QadaDayEntry[] = [];
+    const entries: QadaDayEntry[] = []
     for (const d of monthDays) {
-      const dayData = yearData.days[d.hijri.day - 1];
+      const dayData = yearData.days[d.hijri.day - 1]
       if (dayData === undefined) {
-        continue;
+        continue
       }
       if (dayData.status !== FastingStatus.MISSED) {
-        continue;
+        continue
       }
       entries.push({
         dayNumber: d.hijri.day,
         gregorianDate: d.gregorianDate,
         reason: dayData.reason !== undefined ? dayData.reason : null,
         madeUp: dayData.madeUp === true
-      });
+      })
     }
 
-    this.qadaYearDays = entries;
-    this.activeQadaYear = year;
-    this.showQadaYearSheet = true;
+    this.qadaYearDays = entries
+    this.activeQadaYear = year
+    this.showQadaYearSheet = true
   }
 
   // ============================================================
@@ -1605,92 +1603,92 @@ struct RamadanDetailsPage {
   // ============================================================
 
   private closeQadaYearSheet(): void {
-    this.showQadaYearSheet = false;
-    this.activeQadaYear = 0;
-    this.qadaYearDays = [];
+    this.showQadaYearSheet = false
+    this.activeQadaYear = 0
+    this.qadaYearDays = []
   }
 
   private async toggleDayMadeUp(day: number): Promise<void> {
     if (this.activeQadaYear === 0) {
-      return;
+      return
     }
     if (this.ramadanInfo !== null && this.ramadanInfo.isRamadanNow) {
-      return;
+      return
     }
     try {
-      await RamadanStorage.toggleDayMadeUp(this.activeQadaYear, day); // Refresh both the sheet list and the summary.
-      await this.openQadaYearSheet(this.activeQadaYear);
-      await this.reloadQadaSummary();
+      await RamadanStorage.toggleDayMadeUp(this.activeQadaYear, day) // Refresh both the sheet list and the summary.
+      await this.openQadaYearSheet(this.activeQadaYear)
+      await this.reloadQadaSummary()
     } catch (err) {
-      console.error('[RamadanDetailsPage] toggleDayMadeUp failed: ' + JSON.stringify(err));
+      console.error('[RamadanDetailsPage] toggleDayMadeUp failed: ' + JSON.stringify(err))
     }
   }
 
   private countMadeUpInActiveYear(): number {
-    let n = 0;
+    let n = 0
     for (const e of this.qadaYearDays) {
       if (e.madeUp) {
-        n++;
+        n++
       }
     }
-    return n;
+    return n
   }
 
   private countTaraweeh(): number {
     if (this.currentYear === null) {
-      return 0;
+      return 0
     }
-    let n = 0;
+    let n = 0
     for (const on of this.currentYear.taraweehNights) {
       if (on) {
-        n++;
+        n++
       }
     }
-    return n;
+    return n
   }
 
   private async toggleTaraweehNight(night: number): Promise<void> {
     if (this.ramadanInfo === null) {
-      return;
+      return
     }
     try {
-      await RamadanStorage.toggleTaraweeh(this.ramadanInfo.hijriYear, night);
+      await RamadanStorage.toggleTaraweeh(this.ramadanInfo.hijriYear, night)
     } catch (err) {
-      console.error('[RamadanDetailsPage] toggleTaraweeh failed: ' + JSON.stringify(err));
+      console.error('[RamadanDetailsPage] toggleTaraweeh failed: ' + JSON.stringify(err))
     }
   }
 
   /** True when this night is in the past or is today. */
   private isTaraweehToggleable(idx: number): boolean {
     if (this.ramadanInfo === null) {
-      return false;
+      return false
     }
-    return (idx + 1) <= this.ramadanInfo.currentDayNumber;
+    return idx + 1 <= this.ramadanInfo.currentDayNumber
   }
 
   private currentAshra(): RamadanAshra | null {
     if (this.ramadanInfo === null || !this.ramadanInfo.isRamadanNow) {
-      return null;
+      return null
     }
-    const day = this.ramadanInfo.currentDayNumber;
+    const day = this.ramadanInfo.currentDayNumber
     for (const a of this.ramadanInfo.ashras) {
       if (day >= a.startHijriDay && day <= a.endHijriDay) {
-        return a;
+        return a
       }
     }
-    return null;
+    return null
   }
 
   private isCurrentAshra(a: RamadanAshra): boolean {
-    const cur = this.currentAshra();
-    return cur !== null && cur.number === a.number;
+    const cur = this.currentAshra()
+    return cur !== null && cur.number === a.number
   }
 
   private openMarkSheet(day: number): void {
-    this.selectedDay = day;
-    this.selectedReason = null;
-    this.customReasonText = '';
-    this.activeSheet = 'mark';
+    this.selectedDay = day
+    this.selectedReason = null
+    this.customReasonText = ''
+    this.activeSheet = 'mark'
   }
 
   // ============================================================
@@ -1698,9 +1696,9 @@ struct RamadanDetailsPage {
   // ============================================================
 
   private closeSheet(): void {
-    this.activeSheet = 'none';
-    this.selectedReason = null;
-    this.customReasonText = '';
+    this.activeSheet = 'none'
+    this.selectedReason = null
+    this.customReasonText = ''
   }
 
   // ============================================================
@@ -1709,29 +1707,29 @@ struct RamadanDetailsPage {
 
   private async markFasted(): Promise<void> {
     if (this.ramadanInfo === null) {
-      return;
+      return
     }
-    const year = this.ramadanInfo.hijriYear;
-    const day = this.selectedDay;
-    this.closeSheet();
+    const year = this.ramadanInfo.hijriYear
+    const day = this.selectedDay
+    this.closeSheet()
     try {
-      await RamadanStorage.markDay(year, day, FastingStatus.FASTED);
+      await RamadanStorage.markDay(year, day, FastingStatus.FASTED)
     } catch (err) {
-      console.error('[RamadanDetailsPage] markFasted failed: ' + JSON.stringify(err));
+      console.error('[RamadanDetailsPage] markFasted failed: ' + JSON.stringify(err))
     }
   }
 
   private async clearDay(): Promise<void> {
     if (this.ramadanInfo === null) {
-      return;
+      return
     }
-    const year = this.ramadanInfo.hijriYear;
-    const day = this.selectedDay;
-    this.closeSheet();
+    const year = this.ramadanInfo.hijriYear
+    const day = this.selectedDay
+    this.closeSheet()
     try {
-      await RamadanStorage.markDay(year, day, FastingStatus.UNMARKED);
+      await RamadanStorage.markDay(year, day, FastingStatus.UNMARKED)
     } catch (err) {
-      console.error('[RamadanDetailsPage] clearDay failed: ' + JSON.stringify(err));
+      console.error('[RamadanDetailsPage] clearDay failed: ' + JSON.stringify(err))
     }
   }
 
@@ -1741,32 +1739,32 @@ struct RamadanDetailsPage {
 
   private async confirmMissed(): Promise<void> {
     if (this.ramadanInfo === null || this.selectedReason === null) {
-      return;
+      return
     }
-    const year = this.ramadanInfo.hijriYear;
-    const day = this.selectedDay;
-    const reason = this.selectedReason;
-    const custom = reason === MissedReason.OTHER ? this.customReasonText.trim() : undefined;
-    this.closeSheet();
+    const year = this.ramadanInfo.hijriYear
+    const day = this.selectedDay
+    const reason = this.selectedReason
+    const custom = reason === MissedReason.OTHER ? this.customReasonText.trim() : undefined
+    this.closeSheet()
     try {
-      await RamadanStorage.markDay(year, day, FastingStatus.MISSED, reason, custom);
+      await RamadanStorage.markDay(year, day, FastingStatus.MISSED, reason, custom)
     } catch (err) {
-      console.error('[RamadanDetailsPage] confirmMissed failed: ' + JSON.stringify(err));
+      console.error('[RamadanDetailsPage] confirmMissed failed: ' + JSON.stringify(err))
     }
   }
 
   private cellBorderColor(idx: number): string {
     if (!this.isToday(idx)) {
-      return 'transparent';
+      return 'transparent'
     }
     if (this.currentYear === null) {
-      return this.colors.accentGold;
+      return this.colors.accentGold
     }
-    const entry: FastingDay = this.currentYear.days[idx];
+    const entry: FastingDay = this.currentYear.days[idx]
     if (entry.status === FastingStatus.MISSED) {
-      return this.colors.statusExpress;
+      return this.colors.statusExpress
     }
-    return this.colors.accentGold;
+    return this.colors.accentGold
   }
 
   // ============================================================
@@ -1775,38 +1773,38 @@ struct RamadanDetailsPage {
 
   private taraweehBgColor(idx: number): string {
     if (this.currentYear === null) {
-      return this.colors.tintSubtle;
+      return this.colors.tintSubtle
     }
-    return this.currentYear.taraweehNights[idx] ? this.colors.accentGold : this.colors.tintSubtle;
+    return this.currentYear.taraweehNights[idx] ? this.colors.accentGold : this.colors.tintSubtle
   }
 
   private taraweehTextColor(idx: number): string {
     if (this.currentYear === null) {
-      return this.colors.textMuted;
+      return this.colors.textMuted
     }
     if (this.currentYear.taraweehNights[idx]) {
-      return this.colors.textOnAccent;
+      return this.colors.textOnAccent
     }
     if (this.isToday(idx)) {
-      return this.colors.accentGold;
+      return this.colors.accentGold
     }
-    return this.colors.textMuted;
+    return this.colors.textMuted
   }
 
   private rowIndices(): number[] {
-    const out: number[] = [];
+    const out: number[] = []
     for (let i = 0; i < 6; i++) {
-      out.push(i);
+      out.push(i)
     }
-    return out;
+    return out
   }
 
   private colIndices(): number[] {
-    const out: number[] = [];
+    const out: number[] = []
     for (let i = 0; i < 5; i++) {
-      out.push(i);
+      out.push(i)
     }
-    return out;
+    return out
   }
 
   // ============================================================
@@ -1822,72 +1820,72 @@ struct RamadanDetailsPage {
 
   private cellSize(): number {
     if (this.breakpoint === Breakpoints.LG) {
-      return 48;
+      return 48
     }
     if (this.breakpoint === Breakpoints.MD) {
-      return 44;
+      return 44
     }
-    return 38; // Was 48 for the 5-column layout
+    return 38 // Was 48 for the 5-column layout
   }
 
   // ---- Ashras content (no outer card) ----
 
   private isToday(idx: number): boolean {
     if (this.currentYear === null || this.ramadanInfo === null) {
-      return false;
+      return false
     }
-    return (idx + 1) === this.ramadanInfo.currentDayNumber;
+    return idx + 1 === this.ramadanInfo.currentDayNumber
   }
 
   // ---- Laylat al-Qadr content (no outer card) ----
 
   private isFuture(idx: number): boolean {
     if (this.ramadanInfo === null) {
-      return false;
+      return false
     }
-    return (idx + 1) > this.ramadanInfo.currentDayNumber;
+    return idx + 1 > this.ramadanInfo.currentDayNumber
   }
 
   // ---- Jummah tul Widah content (no outer card) ----
 
   private cellBg(idx: number): string {
     if (this.currentYear === null) {
-      return this.colors.tintSubtle;
+      return this.colors.tintSubtle
     }
-    const entry: FastingDay = this.currentYear.days[idx];
+    const entry: FastingDay = this.currentYear.days[idx]
     if (this.isToday(idx) && entry.status === FastingStatus.UNMARKED) {
-      return this.colors.tintSoft;
+      return this.colors.tintSoft
     }
     if (entry.status === FastingStatus.FASTED) {
-      return this.colors.accentGold;
+      return this.colors.accentGold
     }
     if (entry.status === FastingStatus.MISSED) {
-      return this.colors.statusExpress;
+      return this.colors.statusExpress
     }
-    return this.colors.tintSubtle;
+    return this.colors.tintSubtle
   }
 
   private cellTextColor(idx: number): string {
     if (this.currentYear === null) {
-      return this.colors.textMuted;
+      return this.colors.textMuted
     }
-    const entry: FastingDay = this.currentYear.days[idx];
+    const entry: FastingDay = this.currentYear.days[idx]
     if (entry.status === FastingStatus.FASTED) {
-      return this.colors.textOnAccent;
+      return this.colors.textOnAccent
     }
     if (entry.status === FastingStatus.MISSED) {
-      return '#FFFFFF';
+      return '#FFFFFF'
     }
     if (this.isToday(idx)) {
-      return this.colors.accentGold;
+      return this.colors.accentGold
     }
-    return this.colors.textMuted;
+    return this.colors.textMuted
   }
 
   private qadaYearSheetSubtitle(): string {
-    const total = this.qadaYearDays.length;
-    const done = this.countMadeUpInActiveYear();
-    return `${done} ${this.tr('qada_of')} ${total} ` + `${this.tr('qada_made_up_of_total')}`;
+    const total = this.qadaYearDays.length
+    const done = this.countMadeUpInActiveYear()
+    return `${done} ${this.tr('qada_of')} ${total} ` + `${this.tr('qada_made_up_of_total')}`
   }
 
   // ============================================================
@@ -1896,40 +1894,40 @@ struct RamadanDetailsPage {
 
   private isQadaToggleAllowed(): boolean {
     if (this.ramadanInfo !== null && this.ramadanInfo.isRamadanNow) {
-      return false;
+      return false
     }
-    return true;
+    return true
   }
 
   private buildWeeks(): number[][] {
     if (this.ramadanInfo === null || this.currentYear === null) {
-      return [];
+      return []
     }
-    const totalDays = this.currentYear.totalDays;
-    const firstDow = this.ramadanInfo.fastingStart.getDay(); // 0 = Sunday
+    const totalDays = this.currentYear.totalDays
+    const firstDow = this.ramadanInfo.fastingStart.getDay() // 0 = Sunday
 
-    const padded: number[] = []; // Leading padding to align with the correct day of the week
+    const padded: number[] = [] // Leading padding to align with the correct day of the week
     for (let i = 0; i < firstDow; i++) {
-      padded.push(-1);
+      padded.push(-1)
     } // Actual days (0-indexed)
     for (let i = 0; i < totalDays; i++) {
-      padded.push(i);
+      padded.push(i)
     } // Trailing padding to complete the last row
     while (padded.length % 7 !== 0) {
-      padded.push(-1);
+      padded.push(-1)
     }
 
-    const weeks: number[][] = [];
+    const weeks: number[][] = []
     for (let i = 0; i < padded.length; i += 7) {
-      weeks.push(padded.slice(i, i + 7));
+      weeks.push(padded.slice(i, i + 7))
     }
-    return weeks;
+    return weeks
   }
 
   private getDuaTranslationLang(): string {
     if (this.duaTransLang === 'default' || this.duaTransLang === '') {
-      return this.appLanguage;
+      return this.appLanguage
     }
-    return this.duaTransLang;
+    return this.duaTransLang
   }
 }

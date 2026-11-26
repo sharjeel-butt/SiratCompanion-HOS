@@ -1,20 +1,20 @@
-import { common } from '@kit.AbilityKit';
-import { promptAction, router } from '@kit.ArkUI';
-import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { PageTheme } from '../core/ui/PageTheme';
-import { L } from '../i18n/LocalizationHelper';
+import { common } from '@kit.AbilityKit'
+import { promptAction, router } from '@kit.ArkUI'
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { PageTheme } from '../core/ui/PageTheme'
+import { L } from '../i18n/LocalizationHelper'
 import {
   STORAGE_KEY_DUA_TRANSLATION_LANG,
   STORAGE_KEY_LANGUAGE,
   STORAGE_KEY_THEME_MODE
-} from '../core/common/StorageKeys';
-import { QuranGraphService } from '../quran/QuranGraphService';
-import { DuaService } from '../duas/DuaService';
-import { CompleteDua, DuaSource } from '../duas/DuaModels';
-import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
-import { NavHelper } from '../core/util/NavHelper';
-import { QuranCollection } from '../quran/QuranGraphModels';
-import { SourceParser } from '../i18n/SourceParser';
+} from '../core/common/StorageKeys'
+import { QuranGraphService } from '../quran/QuranGraphService'
+import { DuaService } from '../duas/DuaService'
+import { CompleteDua, DuaSource } from '../duas/DuaModels'
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper'
+import { NavHelper } from '../core/util/NavHelper'
+import { QuranCollection } from '../quran/QuranGraphModels'
+import { SourceParser } from '../i18n/SourceParser'
 
 @Entry
 @Component
@@ -30,49 +30,49 @@ struct DuaDetailsPage {
   private duaId: string = '';
 
   async aboutToAppear() {
-    this.colors = PageTheme.compute(this.themeMode);
-    const params = router.getParams() as Record<string, string>;
-    this.duaId = params['id'];
-    await this.loadData();
+    this.colors = PageTheme.compute(this.themeMode)
+    const params = router.getParams() as Record<string, string>
+    this.duaId = params['id']
+    await this.loadData()
   }
 
   onDuaLangChanged() {
-    this.loadData();
+    this.loadData()
   }
 
   async onPageShow() {
-    await this.loadData();
+    await this.loadData()
   }
 
   async loadData() {
-    this.isLoading = true;
-    const ctx = getContext(this) as common.UIAbilityContext;
-    await QuranGraphService.init(ctx, this.appLanguage);
+    this.isLoading = true
+    const ctx = getContext(this) as common.UIAbilityContext
+    await QuranGraphService.init(ctx, this.appLanguage)
 
     // 👈 Respect Translation Language for Dua Text
-    const transLang = this.duaTransLang === 'default' ? this.appLanguage : this.duaTransLang;
-    const allDuas = await DuaService.loadDuas(ctx, transLang, this.appLanguage);
+    const transLang = this.duaTransLang === 'default' ? this.appLanguage : this.duaTransLang
+    const allDuas = await DuaService.loadDuas(ctx, transLang, this.appLanguage)
 
-    this.dua = allDuas.find(d => d.id === this.duaId) ?? null;
+    this.dua = allDuas.find((d) => d.id === this.duaId) ?? null
 
     if (this.dua !== null) {
-      const relatedIds = QuranGraphService.getRelatedDuaIds(this.duaId);
-      this.relatedDuas = allDuas.filter(d => relatedIds.includes(d.id)).slice(0, 3);
+      const relatedIds = QuranGraphService.getRelatedDuaIds(this.duaId)
+      this.relatedDuas = allDuas.filter((d) => relatedIds.includes(d.id)).slice(0, 3)
 
-      const colIds = QuranGraphService.getCollectionIdsForDua(this.duaId);
-      const allCols = QuranGraphService.getAllCollections();
-      this.collections = allCols.filter(c => colIds.includes(c.id));
+      const colIds = QuranGraphService.getCollectionIdsForDua(this.duaId)
+      const allCols = QuranGraphService.getAllCollections()
+      this.collections = allCols.filter((c) => colIds.includes(c.id))
     }
 
-    this.isLoading = false;
+    this.isLoading = false
   }
 
   onThemeModeChanged() {
-    this.colors = PageTheme.compute(this.themeMode);
+    this.colors = PageTheme.compute(this.themeMode)
   }
 
   onLangChanged() {
-    this.loadData();
+    this.loadData()
   }
 
   build() {
@@ -212,7 +212,7 @@ struct DuaDetailsPage {
 
         Flex({ wrap: FlexWrap.Wrap }) {
           ForEach(this.collections, (col: QuranCollection) => {
-            Text(QuranGraphService.getCollectionTitle(col.id)) // 👈 Localized Title
+            Text(QuranGraphService.getCollectionTitle(col.id) // 👈 Localized Title)
               .fontSize(12)
               .fontColor(this.colors.accentGold)
               .backgroundColor(this.colors.tintSoft)
@@ -225,11 +225,12 @@ struct DuaDetailsPage {
               .borderRadius(8)
               .margin({ right: 8, bottom: 8 })
               .onClick(() => {
-                NavHelper.prepareForward();
+                NavHelper.prepareForward()
                 router.pushUrl({
-                  url: 'pages/QuranCollectionPage',
-                  params: { collectionId: col.id, title: QuranGraphService.getCollectionTitle(col.id) }
-                });
+                  url: 'pages/QuranCollectionPage', params: {
+                    collectionId: col.id, title: QuranGraphService.getCollectionTitle(col.id)
+                  }
+                })
               })
           }, (col: QuranCollection) => `col-${col.id}`)
         }.width('100%')
@@ -244,63 +245,63 @@ struct DuaDetailsPage {
 
   // Add this helper to DuaDetailsPage
   private getCollectionTitle(col: QuranCollection): string {
-    const key = 'qkg_collection_' + col.id;
-    const localized = L.get(key, this.appLanguage);
-    return localized !== key ? localized : col.title;
+    const key = 'qkg_collection_' + col.id
+    const localized = L.get(key, this.appLanguage)
+    return localized !== key ? localized : col.title
   }
 
   private getCanonicalCollection(col: string): string {
-    const c = col.toLowerCase();
+    const c = col.toLowerCase()
     if (c.includes('bukhari') || c === 'bukh') {
-      return 'bukhari';
+      return 'bukhari'
     }
     if (c.includes('muslim') || c === 'musl') {
-      return 'muslim';
+      return 'muslim'
     }
     if (c.includes('abu dawud') || c.includes('abudawud') || c === 'abud') {
-      return 'abudawud';
+      return 'abudawud'
     }
     if (c.includes('tirmidhi') || c === 'tirm') {
-      return 'tirmidhi';
+      return 'tirmidhi'
     }
     if (c.includes('nasai') || c === 'nasa') {
-      return 'nasai';
+      return 'nasai'
     }
     if (c.includes('ibn majah') || c.includes('ibnmajah') || c === 'ibnm') {
-      return 'ibnmajah';
+      return 'ibnmajah'
     }
     if (c.includes('malik') || c === 'mali') {
-      return 'malik';
+      return 'malik'
     }
-    return c;
+    return c
   }
 
   private onSourceTap(src: DuaSource): void {
     if (src.type === 'hadith' && src.id) {
-      const parts = src.id.split(':');
+      const parts = src.id.split(':')
       if (parts.length === 2) {
-        const col = this.getCanonicalCollection(parts[0]);
-        const hadithId = `${col}:${parts[1]}`;
-        NavHelper.prepareForward();
+        const col = this.getCanonicalCollection(parts[0])
+        const hadithId = `${col}:${parts[1]}`
+        NavHelper.prepareForward()
         router.pushUrl({
           url: 'pages/HadithDetailsPage', params: { id: hadithId }
-        }).catch((e: Error) => console.error(JSON.stringify(e)));
-        return;
+        }).catch((e: Error) => console.error(JSON.stringify(e)))
+        return
       }
     }
 
     if (src.type === 'quran' && src.surah !== undefined && src.ayah !== undefined) {
-      NavHelper.prepareForward();
+      NavHelper.prepareForward()
       router.pushUrl({
         url: 'pages/SurahDetailsPage', params: { surahId: src.surah, startVerse: src.ayah, endVerse: src.ayah }
-      }).catch((e: Error) => console.error(JSON.stringify(e)));
-      return;
+      }).catch((e: Error) => console.error(JSON.stringify(e)))
+      return
     }
 
-    const title = L.get('hadith_evidence_title', this.appLanguage);
-    const msg = src.display || src.id || 'Unknown Source';
+    const title = L.get('hadith_evidence_title', this.appLanguage)
+    const msg = src.display || src.id || 'Unknown Source'
     promptAction.showDialog({
       title: title, message: msg, buttons: [{ text: L.get('ok', this.appLanguage), color: this.colors.accentGold }]
-    });
+    })
   }
 }

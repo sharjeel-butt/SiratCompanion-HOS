@@ -12,8 +12,9 @@
 /** Fasting status of a single Ramadan day. */
 export enum FastingStatus {
   /** Not marked yet. The default for a freshly created year. */
-  UNMARKED = 'unmarked', /** The user fasted this day. */
-  FASTED = 'fasted', /** The user missed this day. Requires a reason. */
+  UNMARKED = 'unmarked' /** The user fasted this day. */
+  , FASTED = 'fasted' /** The user missed this day. Requires a reason. */
+  ,
   MISSED = 'missed'
 }
 
@@ -32,11 +33,11 @@ export enum MissedReason {
 
 /** One day's tracking entry. */
 export interface FastingDay {
-  status: FastingStatus;
-  reason?: MissedReason;
-  customReason?: string;
-  madeUp: boolean;
-  madeUpAt?: number;
+  status: FastingStatus
+  reason?: MissedReason
+  customReason?: string
+  madeUp: boolean
+  madeUpAt?: number
 }
 
 /**
@@ -47,38 +48,38 @@ export interface FastingDay {
  * invalidate this data because the year itself is stable.
  */
 export interface RamadanYearData {
-  hijriYear: number;
+  hijriYear: number
 
   /** 29 or 30, from the current calendar engine for that year. */
-  totalDays: number;
+  totalDays: number
 
   /** Length always equals totalDays. Index 0 = Ramadan day 1. */
-  days: FastingDay[];
+  days: FastingDay[]
 
   /** Length always equals totalDays. Index 0 = night 1. */
-  taraweehNights: boolean[];
+  taraweehNights: boolean[]
 
   /** Make-up fasts the user has logged for this year. */
-  qadaMadeUp: number;
+  qadaMadeUp: number
 }
 
 /** Root of the persisted store. */
 export interface RamadanLogStore {
-  years: RamadanYearData[];
+  years: RamadanYearData[]
 }
 
 /** One row in the Qada "by year" breakdown. */
 export interface QadaYearRow {
-  hijriYear: number;
-  fasted: number;
-  missed: number;
+  hijriYear: number
+  fasted: number
+  missed: number
 
   /** Number of missed days that have been made up. Subset of missed. */
-  madeUp: number;
-  unmarked: number;
+  madeUp: number
+  unmarked: number
 
   /** missed - madeUp. The actionable number. */
-  outstanding: number;
+  outstanding: number
 }
 
 /**
@@ -86,17 +87,17 @@ export interface QadaYearRow {
  * RamadanLogStore by RamadanStorage.computeQadaSummary().
  */
 export interface QadaSummary {
-  totalFasted: number;
-  totalMissed: number;
-  totalMadeUp: number;
-  totalUnmarked: number;
+  totalFasted: number
+  totalMissed: number
+  totalMadeUp: number
+  totalUnmarked: number
 
   /** totalMissed - totalMadeUp, floored at 0. */
-  remaining: number;
+  remaining: number
 
   /** Same as remaining — alias for callers that prefer the clearer name. */
-  totalOutstanding: number;
-  perYear: QadaYearRow[];
+  totalOutstanding: number
+  perYear: QadaYearRow[]
 }
 
 /**
@@ -105,12 +106,12 @@ export interface QadaSummary {
  * file is the single source of truth for Ramadan-related shapes.
  */
 export interface EidInfo {
-  isEidPeriod: boolean;
+  isEidPeriod: boolean
 
   /** 1, 2, or 3 (Shawwal day). */
-  eidDay: number;
-  hijriYear: number;
+  eidDay: number
+  hijriYear: number
 
   /** Gregorian date of 1 Shawwal. */
-  eidDate: Date;
+  eidDate: Date
 }

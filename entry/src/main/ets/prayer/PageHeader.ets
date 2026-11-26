@@ -1,14 +1,14 @@
 // entry/src/main/ets/components/PageHeader.ets
 
-import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme';
-import { L } from '../i18n/LocalizationHelper';
-import { SettingsHelper } from '../settings/SettingsHelper';
-import { AsrShadowRule, CalculationMethod } from './PrayerTimeCalculator';
-import { CalculationSource } from '../settings/SettingsModels';
-import { ClockFormat, ClockFormatHelper } from '../core/util/ClockFormat';
-import { STORAGE_KEY_THEME_MODE, STORAGE_KEY_TIME_FORMAT } from '../core/common/StorageKeys';
-import { TypographyHelper } from '../core/ui/themes/TypographyHelper';
-import { router } from '@kit.ArkUI';
+import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { L } from '../i18n/LocalizationHelper'
+import { SettingsHelper } from '../settings/SettingsHelper'
+import { AsrShadowRule, CalculationMethod } from './PrayerTimeCalculator'
+import { CalculationSource } from '../settings/SettingsModels'
+import { ClockFormat, ClockFormatHelper } from '../core/util/ClockFormat'
+import { STORAGE_KEY_THEME_MODE, STORAGE_KEY_TIME_FORMAT } from '../core/common/StorageKeys'
+import { TypographyHelper } from '../core/ui/themes/TypographyHelper'
+import { router } from '@kit.ArkUI'
 
 /**
  * Shared page header used by HomePage and Prayer.
@@ -105,7 +105,7 @@ export struct PageHeader {
         .alignSelf(ItemAlign.Start)
         .hoverEffect(HoverEffect.Highlight)
         .onClick(() => {
-          this.onOpenLocationSettings();
+          this.onOpenLocationSettings()
         })
       }.alignItems(HorizontalAlign.Start).width('100%')
 
@@ -185,7 +185,7 @@ export struct PageHeader {
         .margin({ bottom: 8 })
         .alignItems(VerticalAlign.Center)
         .onClick(() => {
-          router.pushUrl({ url: 'pages/RamadanDetailsPage' }).catch((e: Error) => console.error(JSON.stringify(e)));
+          router.pushUrl({ url: 'pages/RamadanDetailsPage' }).catch((e: Error) => console.error(JSON.stringify(e)))
         })
       } else if (this.showCalcPills) {
         Row({ space: 4 }) { // Method
@@ -207,7 +207,7 @@ export struct PageHeader {
           .border({ width: 1, color: this.colors.borderSoft })
           .hoverEffect(HoverEffect.Highlight)
           .onClick(() => {
-            this.onOpenSettings();
+            this.onOpenSettings()
           })
 
           // Asr rule
@@ -229,7 +229,7 @@ export struct PageHeader {
           .border({ width: 1, color: this.colors.borderSoft })
           .hoverEffect(HoverEffect.Highlight)
           .onClick(() => {
-            this.onOpenSettings();
+            this.onOpenSettings()
           })
 
           // Source
@@ -251,7 +251,7 @@ export struct PageHeader {
           .border({ width: 1, color: this.colors.borderSoft })
           .hoverEffect(HoverEffect.Highlight)
           .onClick(() => {
-            this.onOpenSettings();
+            this.onOpenSettings()
           })
         }.width('100%').padding({ bottom: 8 }).alignItems(VerticalAlign.Center)
       }
@@ -259,21 +259,21 @@ export struct PageHeader {
   }
 
   private tr(key: string): string {
-    return L.get(key, this.currentLanguage);
+    return L.get(key, this.currentLanguage)
   }
 
   private dt(t: string): string {
     if (this.clockFormat.length === 0) {
-      return t;
+      return t
     }
-    return ClockFormatHelper.reformat(t);
+    return ClockFormatHelper.reformat(t)
   }
 
   private onClockFormatChanged(): void { // Re-render is handled by the @StorageLink.
   }
 
   private isRtl(): boolean {
-    return L.isRtlLang(this.currentLanguage);
+    return L.isRtlLang(this.currentLanguage)
   }
 
   // ============================================================
@@ -283,31 +283,31 @@ export struct PageHeader {
   private translateEventName(raw: string): string {
     switch (raw) {
       case 'Fajr':
-        return this.tr('prayer_fajr');
+        return this.tr('prayer_fajr')
       case 'Dhuhr':
-        return this.tr('prayer_dhuhr');
+        return this.tr('prayer_dhuhr')
       case 'Asr':
-        return this.tr('prayer_asr');
+        return this.tr('prayer_asr')
       case 'Maghrib':
-        return this.tr('prayer_maghrib');
+        return this.tr('prayer_maghrib')
       case 'Isha':
-        return this.tr('prayer_isha');
+        return this.tr('prayer_isha')
       case 'Jummah':
-        return this.tr('prayer_jummah');
+        return this.tr('prayer_jummah')
       case 'Imsak':
-        return this.tr('timing_imsak');
+        return this.tr('timing_imsak')
       case 'Sunrise':
-        return this.tr('timing_sunrise');
+        return this.tr('timing_sunrise')
       case 'Sunset':
-        return this.tr('timing_sunset');
+        return this.tr('timing_sunset')
       case 'First Third':
-        return this.tr('timing_first_third');
+        return this.tr('timing_first_third')
       case 'Midnight':
-        return this.tr('timing_midnight');
+        return this.tr('timing_midnight')
       case 'Last Third':
-        return this.tr('timing_last_third');
+        return this.tr('timing_last_third')
       default:
-        return raw;
+        return raw
     }
   }
 }

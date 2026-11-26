@@ -1,19 +1,17 @@
 // entry/src/main/ets/hijricalendar/HijriCalendarHelper.ets
 
-import { CalendarDay, HijriDate } from './HijriCalendarModels';
-import {
-  EventRecurrence, IslamicEvent
-} from './DateModels';
-import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver';
-import { IslamicEventService } from './IslamicEventService';
+import { CalendarDay, HijriDate } from './HijriCalendarModels'
+import { EventRecurrence, IslamicEvent } from './DateModels'
+import { HijriEngineResolver } from '../hijricalendar/HijriEngineResolver'
+import { IslamicEventService } from './IslamicEventService'
 
 export const HIJRI_MONTH_NAMES: string[] =
   ['Muharram', 'Safar', 'Rabi al-Awwal', 'Rabi al-Thani', 'Jumada al-Awwal', 'Jumada al-Thani', 'Rajab', "Sha'ban",
-    'Ramadan', 'Shawwal', "Dhu al-Qi'dah", 'Dhu al-Hijjah'];
+    'Ramadan', 'Shawwal', "Dhu al-Qi'dah", 'Dhu al-Hijjah']
 
-export const DAYS_OF_WEEK_SHORT: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+export const DAYS_OF_WEEK_SHORT: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
-const MS_PER_DAY = 86400000;
+const MS_PER_DAY = 86400000
 
 export class HijriCalendarHelper {
   /**
@@ -27,12 +25,12 @@ export class HijriCalendarHelper {
    * and the Hijri offset preview.
    */
   static getHijriDate(date: Date, offsetDays: number): HijriDate {
-    const adjusted = new Date(date.getTime());
-    adjusted.setDate(adjusted.getDate() + offsetDays);
+    const adjusted = new Date(date.getTime())
+    adjusted.setDate(adjusted.getDate() + offsetDays)
 
-    const h = HijriEngineResolver.current().toHijri(adjusted);
+    const h = HijriEngineResolver.current().toHijri(adjusted)
     if (h !== null) {
-      return h;
+      return h
     }
 
     // The engines return null only when the Gregorian Julian Day
@@ -40,28 +38,28 @@ export class HijriCalendarHelper {
     // for any date a user can enter through the UI. Return a
     // neutral placeholder rather than throwing so a stray call
     // from a preview or a test harness cannot crash the page.
-    const placeholder: HijriDate = { year: 0, month: 0, day: 0 };
-    return placeholder;
+    const placeholder: HijriDate = { year: 0, month: 0, day: 0 }
+    return placeholder
   }
 
   static monthName(month: number): string {
-    return HIJRI_MONTH_NAMES[month - 1] || '';
+    return HIJRI_MONTH_NAMES[month - 1] || ''
   }
 
   /** Add or subtract months, rolling the year over as needed. */
   static shiftMonth(year: number, month: number, delta: number): HijriDate {
-    let m = month + delta;
-    let y = year;
+    let m = month + delta
+    let y = year
     while (m < 1) {
-      m += 12;
-      y -= 1;
+      m += 12
+      y -= 1
     }
     while (m > 12) {
-      m -= 12;
-      y += 1;
+      m -= 12
+      y += 1
     }
-    const result: HijriDate = { year: y, month: m, day: 1 };
-    return result;
+    const result: HijriDate = { year: y, month: m, day: 1 }
+    return result
   }
 
   /**
@@ -71,23 +69,23 @@ export class HijriCalendarHelper {
    */
   static findGregorianForHijri(year: number, month: number, day: number, offsetDays: number, anchor: Date,
     range?: number): Date | null {
-    let effectiveRange: number;
+    let effectiveRange: number
     if (range !== undefined) {
-      effectiveRange = range;
+      effectiveRange = range
     } else {
-      effectiveRange = HijriCalendarHelper.safeSearchRange(year, month, day, offsetDays, anchor);
+      effectiveRange = HijriCalendarHelper.safeSearchRange(year, month, day, offsetDays, anchor)
     }
 
     for (let i = -effectiveRange; i <= effectiveRange; i++) {
-      const candidate = new Date(anchor);
-      candidate.setDate(candidate.getDate() + i);
-      candidate.setHours(0, 0, 0, 0);
-      const h = HijriCalendarHelper.getHijriDate(candidate, offsetDays);
+      const candidate = new Date(anchor)
+      candidate.setDate(candidate.getDate() + i)
+      candidate.setHours(0, 0, 0, 0)
+      const h = HijriCalendarHelper.getHijriDate(candidate, offsetDays)
       if (h.year === year && h.month === month && h.day === day) {
-        return candidate;
+        return candidate
       }
     }
-    return null;
+    return null
   }
 
   /**
@@ -96,38 +94,38 @@ export class HijriCalendarHelper {
    */
   static buildMonthDays(year: number, month: number, offsetDays: number, anchor: Date,
     perspective: string = 'universal'): CalendarDay[] {
-    const firstGreg = HijriCalendarHelper.findGregorianForHijri(year, month, 1, offsetDays, anchor);
+    const firstGreg = HijriCalendarHelper.findGregorianForHijri(year, month, 1, offsetDays, anchor)
     if (firstGreg === null) {
-      return [];
+      return []
     }
 
-    const todayMidnight = new Date();
-    todayMidnight.setHours(0, 0, 0, 0);
+    const todayMidnight = new Date()
+    todayMidnight.setHours(0, 0, 0, 0)
 
-    const out: CalendarDay[] = [];
+    const out: CalendarDay[] = []
     for (let i = 0; i < 31; i++) {
-      const g = new Date(firstGreg);
-      g.setDate(g.getDate() + i);
-      g.setHours(0, 0, 0, 0);
-      const h = HijriCalendarHelper.getHijriDate(g, offsetDays);
+      const g = new Date(firstGreg)
+      g.setDate(g.getDate() + i)
+      g.setHours(0, 0, 0, 0)
+      const h = HijriCalendarHelper.getHijriDate(g, offsetDays)
       if (h.year !== year || h.month !== month) {
-        break;
+        break
       }
 
-      const gm = new Date(g.getTime());
-      gm.setHours(0, 0, 0, 0);
+      const gm = new Date(g.getTime())
+      gm.setHours(0, 0, 0, 0)
 
-      const events = HijriCalendarHelper.eventsFor(h.month, h.day, g, perspective);
+      const events = HijriCalendarHelper.eventsFor(h.month, h.day, g, perspective)
       const cd: CalendarDay = {
         gregorianDate: g,
         hijri: h,
         isToday: gm.getTime() === todayMidnight.getTime(),
         isFriday: g.getDay() === 5,
         events: events
-      };
-      out.push(cd);
+      }
+      out.push(cd)
     }
-    return out;
+    return out
   }
 
   /**
@@ -146,8 +144,8 @@ export class HijriCalendarHelper {
    */
   static eventsFor(hijriMonth: number, hijriDay: number, gregorianDate: Date | undefined,
     perspective: string = 'universal'): string[] {
-    const out: string[] = [];
-    const allEvents = IslamicEventService.getEvents(perspective);
+    const out: string[] = []
+    const allEvents = IslamicEventService.getEvents(perspective)
     for (const e of allEvents) {
       if (e.recurrence ===
         EventRecurrence.FIRST_THURSDAY_NIGHT) { // Thursday = 4. The event fires on the Thursday whose
@@ -162,28 +160,28 @@ export class HijriCalendarHelper {
         // when the month happened to start mid-week.
         if (gregorianDate !== undefined && e.month === hijriMonth && gregorianDate.getDay() === 4 && hijriDay >= 1 &&
           hijriDay <= 6) {
-          out.push(e.key);
+          out.push(e.key)
         }
-        continue;
+        continue
       }
       if (e.month === hijriMonth && e.day === hijriDay) {
-        out.push(e.key);
+        out.push(e.key)
       }
     }
-    return out;
+    return out
   }
 
   /** All events in a Hijri month, in calendar order. */
   static eventsInMonth(hijriMonth: number, perspective: string = 'universal'): IslamicEvent[] {
-    const out: IslamicEvent[] = [];
-    const allEvents = IslamicEventService.getEvents(perspective);
+    const out: IslamicEvent[] = []
+    const allEvents = IslamicEventService.getEvents(perspective)
     for (const e of allEvents) {
       if (e.month === hijriMonth) {
-        out.push(e);
+        out.push(e)
       }
     }
-    out.sort((a: IslamicEvent, b: IslamicEvent): number => a.day - b.day);
-    return out;
+    out.sort((a: IslamicEvent, b: IslamicEvent): number => a.day - b.day)
+    return out
   }
 
   /**
@@ -195,26 +193,26 @@ export class HijriCalendarHelper {
    */
   static formatGregorianSpan(days: CalendarDay[], lang: string = 'en'): string {
     if (days.length === 0) {
-      return '';
+      return ''
     }
-    const first = days[0].gregorianDate;
-    const last = days[days.length - 1].gregorianDate;
+    const first = days[0].gregorianDate
+    const last = days[days.length - 1].gregorianDate
 
-    const locale = lang === 'zh' ? 'zh-CN' : lang === 'ar' ? 'ar' : 'en-US';
+    const locale = lang === 'zh' ? 'zh-CN' : lang === 'ar' ? 'ar' : 'en-US'
 
     const monthShort = (d: Date): string => {
       try {
-        return d.toLocaleDateString(locale, { month: 'short' });
+        return d.toLocaleDateString(locale, { month: 'short' })
       } catch (err) {
-        return d.toLocaleDateString('en-US', { month: 'short' });
+        return d.toLocaleDateString('en-US', { month: 'short' })
       }
-    };
-    const year = last.getFullYear();
+    }
+    const year = last.getFullYear()
 
     if (first.getMonth() === last.getMonth() && first.getFullYear() === last.getFullYear()) {
-      return `${monthShort(first)} ${first.getDate()} – ${last.getDate()}, ${year}`;
+      return `${monthShort(first)} ${first.getDate()} – ${last.getDate()}, ${year}`
     }
-    return `${monthShort(first)} ${first.getDate()} – ` + `${monthShort(last)} ${last.getDate()}, ${year}`;
+    return `${monthShort(first)} ${first.getDate()} – ` + `${monthShort(last)} ${last.getDate()}, ${year}`
   }
 
   /**
@@ -223,18 +221,18 @@ export class HijriCalendarHelper {
    */
   private static safeSearchRange(year: number, month: number, day: number, offsetDays: number, anchor: Date): number {
     try {
-      const anchorShifted = new Date(anchor.getTime());
-      anchorShifted.setDate(anchorShifted.getDate() + offsetDays);
-      const anchorH = HijriEngineResolver.current().toHijri(anchorShifted);
+      const anchorShifted = new Date(anchor.getTime())
+      anchorShifted.setDate(anchorShifted.getDate() + offsetDays)
+      const anchorH = HijriEngineResolver.current().toHijri(anchorShifted)
       if (anchorH === null) {
-        return 60;
+        return 60
       }
-      const yearDiff = Math.abs(year - anchorH.year);
-      const monthDiff = Math.abs(month - anchorH.month);
-      const estimated = yearDiff * 355 + monthDiff * 30 + 60;
-      return Math.max(60, estimated);
+      const yearDiff = Math.abs(year - anchorH.year)
+      const monthDiff = Math.abs(month - anchorH.month)
+      const estimated = yearDiff * 355 + monthDiff * 30 + 60
+      return Math.max(60, estimated)
     } catch (err) {
-      return 60;
+      return 60
     }
   }
 }

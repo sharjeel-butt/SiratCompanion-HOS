@@ -1,7 +1,7 @@
 // entry/src/main/ets/components/QiblaCalibrationOverlay.ets
 
-import { ThemeColors } from '../core/ui/themes/Theme';
-import { L } from '../i18n/LocalizationHelper';
+import { ThemeColors } from '../core/ui/themes/Theme'
+import { L } from '../i18n/LocalizationHelper'
 
 /**
  * Full-screen calibration overlay for the Qibla compass.
@@ -43,17 +43,17 @@ export struct QiblaCalibrationOverlay {
   };
 
   aboutToAppear(): void {
-    this.startTime = Date.now();
-    this.animateTracer();
+    this.startTime = Date.now()
+    this.animateTracer()
 
     this.graceTimerId = setInterval(() => {
-      const elapsed = Date.now() - this.startTime;
+      const elapsed = Date.now() - this.startTime
       if (elapsed >= QiblaCalibrationOverlay.GRACE_MS && !this.showSkip) {
-        this.showSkip = true;
-        clearInterval(this.graceTimerId);
-        this.graceTimerId = -1;
+        this.showSkip = true
+        clearInterval(this.graceTimerId)
+        this.graceTimerId = -1
       }
-    }, 500);
+    }, 500)
   }
 
   // ============================================================
@@ -62,12 +62,12 @@ export struct QiblaCalibrationOverlay {
 
   aboutToDisappear(): void {
     if (this.animTimerId !== -1) {
-      clearInterval(this.animTimerId);
-      this.animTimerId = -1;
+      clearInterval(this.animTimerId)
+      this.animTimerId = -1
     }
     if (this.graceTimerId !== -1) {
-      clearInterval(this.graceTimerId);
-      this.graceTimerId = -1;
+      clearInterval(this.graceTimerId)
+      this.graceTimerId = -1
     }
   }
 
@@ -118,7 +118,7 @@ export struct QiblaCalibrationOverlay {
             .padding({ left: 22, right: 22 })
             .margin({ top: 8 })
             .onClick(() => {
-              this.onSkip();
+              this.onSkip()
             })
         } else { // Placeholder keeps the layout height stable
           Row().height(38).margin({ top: 8 })
@@ -157,7 +157,6 @@ export struct QiblaCalibrationOverlay {
             offsetX: 0,
             offsetY: 0
           })
-
       }.width(24).height(24).translate({ x: this.tracerX, y: this.tracerY })
 
       // The tracer stays visible always — it's the focal point.
@@ -191,21 +190,21 @@ export struct QiblaCalibrationOverlay {
 
   private animateTracer(): void {
     this.animTimerId = setInterval(() => {
-      const elapsed = Date.now() - this.startTime;
-      const t = (elapsed % QiblaCalibrationOverlay.LOOP_MS) / QiblaCalibrationOverlay.LOOP_MS;
+      const elapsed = Date.now() - this.startTime
+      const t = (elapsed % QiblaCalibrationOverlay.LOOP_MS) / QiblaCalibrationOverlay.LOOP_MS
 
       // Parametric figure-8:
       //   x = A · sin(2πt)
       //   y = B · sin(4πt)
       // This traces a lemniscate of Gerono — the classic ∞ shape.
-      const angle = t * 2 * Math.PI;
-      const x = Math.sin(angle) * (QiblaCalibrationOverlay.TRACE_W / 2 - 30);
-      const y = Math.sin(2 * angle) * (QiblaCalibrationOverlay.TRACE_H / 2 - 20);
+      const angle = t * 2 * Math.PI
+      const x = Math.sin(angle) * (QiblaCalibrationOverlay.TRACE_W / 2 - 30)
+      const y = Math.sin(2 * angle) * (QiblaCalibrationOverlay.TRACE_H / 2 - 20)
 
-      this.tracerX = x;
-      this.tracerY = y;
-      this.pathProgress = t;
-    }, 16);
+      this.tracerX = x
+      this.tracerY = y
+      this.pathProgress = t
+    }, 16)
   }
 
   /**
@@ -215,28 +214,28 @@ export struct QiblaCalibrationOverlay {
    */
   private ghostPoints(): GhostPoint[] {
     if (QiblaCalibrationOverlay.cachedGhost !== null) {
-      return QiblaCalibrationOverlay.cachedGhost;
+      return QiblaCalibrationOverlay.cachedGhost
     }
 
-    const out: GhostPoint[] = [];
-    const N = 48;
-    const A = QiblaCalibrationOverlay.TRACE_W / 2 - 30;
-    const B = QiblaCalibrationOverlay.TRACE_H / 2 - 20;
+    const out: GhostPoint[] = []
+    const N = 48
+    const A = QiblaCalibrationOverlay.TRACE_W / 2 - 30
+    const B = QiblaCalibrationOverlay.TRACE_H / 2 - 20
 
     for (let i = 0; i < N; i++) {
-      const angle = (i / N) * 2 * Math.PI;
+      const angle = (i / N) * 2 * Math.PI
       const p: GhostPoint = {
         x: Math.sin(angle) * A, y: Math.sin(2 * angle) * B
-      };
-      out.push(p);
+      }
+      out.push(p)
     }
 
-    QiblaCalibrationOverlay.cachedGhost = out;
-    return out;
+    QiblaCalibrationOverlay.cachedGhost = out
+    return out
   }
 }
 
 interface GhostPoint {
-  x: number;
-  y: number;
+  x: number
+  y: number
 }

@@ -39,22 +39,22 @@
 // WMM2025.COF (US/UK World Magnetic Model 2025, public domain).
 
 interface MagField {
-  val: number;
+  val: number
 }
 
 export class WmmCalculator {
   // WGS84 Ellipsoid Constants
-  private static readonly A = 6378.137;
-  private static readonly B = 6356.7523142;
-  private static readonly RE = 6371.2;
-  private static readonly A2 = WmmCalculator.A * WmmCalculator.A;
-  private static readonly B2 = WmmCalculator.B * WmmCalculator.B;
-  private static readonly C2 = WmmCalculator.A2 - WmmCalculator.B2;
-  private static readonly A4 = WmmCalculator.A2 * WmmCalculator.A2;
-  private static readonly B4 = WmmCalculator.B2 * WmmCalculator.B2;
-  private static readonly C4 = WmmCalculator.A4 - WmmCalculator.B4;
+  private static readonly A = 6378.137
+  private static readonly B = 6356.7523142
+  private static readonly RE = 6371.2
+  private static readonly A2 = WmmCalculator.A * WmmCalculator.A
+  private static readonly B2 = WmmCalculator.B * WmmCalculator.B
+  private static readonly C2 = WmmCalculator.A2 - WmmCalculator.B2
+  private static readonly A4 = WmmCalculator.A2 * WmmCalculator.A2
+  private static readonly B4 = WmmCalculator.B2 * WmmCalculator.B2
+  private static readonly C4 = WmmCalculator.A4 - WmmCalculator.B4
   /** Degree and order of the model. */
-  private static readonly MAXORD = 12;
+  private static readonly MAXORD = 12
   // WMM2025 Coefficients (Degree/Order 12)
   // Format: [n, m, g, h, gdot, hdot]
   private static readonly COEFFS: number[][] =
@@ -87,14 +87,14 @@ export class WmmCalculator {
       [12, 1, -0.2, -1.3, 0.0, -0.0], [12, 2, 0.3, 0.7, -0.0, 0.0], [12, 3, 1.2, 1.0, -0.0, -0.1],
       [12, 4, -1.3, -1.4, -0.0, 0.1], [12, 5, 0.6, -0.0, -0.0, -0.0], [12, 6, 0.6, 0.6, 0.1, -0.0],
       [12, 7, 0.5, -0.1, -0.0, -0.0], [12, 8, -0.1, 0.8, 0.0, 0.0], [12, 9, -0.4, 0.1, 0.0, -0.0],
-      [12, 10, -0.2, -1.0, -0.1, -0.0], [12, 11, -1.3, 0.1, -0.0, 0.0], [12, 12, -0.7, 0.2, -0.1, -0.1]];
+      [12, 10, -0.2, -1.0, -0.1, -0.0], [12, 11, -1.3, 0.1, -0.0, 0.0], [12, 12, -0.7, 0.2, -0.1, -0.1]]
   // ---- Precomputed model state (built once from COEFFS) ----
   // c[order][degree] holds g; the matching h for order m >= 1 is stored in
   // c[degree][order - 1], exactly as the reference implementation packs it.
-  private static c: number[][] = [];
-  private static cd: number[][] = [];
-  private static k: number[][] = [];
-  private static ready: boolean = false;
+  private static c: number[][] = []
+  private static cd: number[][] = []
+  private static k: number[][] = []
+  private static ready: boolean = false
 
   /**
    * Computes the magnetic declination in degrees.
@@ -105,126 +105,126 @@ export class WmmCalculator {
    * @returns Declination in degrees (east is positive)
    */
   static getDeclination(lat: number, lng: number, altitudeKm: number = 0, date: Date): number {
-    WmmCalculator.ensureModel();
+    WmmCalculator.ensureModel()
 
-    const N = WmmCalculator.MAXORD;
-    const n1 = N + 1;
+    const N = WmmCalculator.MAXORD
+    const n1 = N + 1
 
     // 1. Model epoch and elapsed time
-    const epoch = 2025.0; // WMM2025 validity: 2025.0 - 2030.0
-    const dt = WmmCalculator.dateToDecimalYear(date) - epoch;
+    const epoch = 2025.0 // WMM2025 validity: 2025.0 - 2030.0
+    const dt = WmmCalculator.dateToDecimalYear(date) - epoch
 
     // 2. Geodetic -> geocentric (WMM q2 form)
-    const rlat = lat * Math.PI / 180.0;
-    const rlon = lng * Math.PI / 180.0;
-    const srlon = Math.sin(rlon);
-    const crlon = Math.cos(rlon);
-    const srlat = Math.sin(rlat);
-    const crlat = Math.cos(rlat);
-    const srlat2 = srlat * srlat;
-    const crlat2 = crlat * crlat;
+    const rlat = (lat * Math.PI) / 180.0
+    const rlon = (lng * Math.PI) / 180.0
+    const srlon = Math.sin(rlon)
+    const crlon = Math.cos(rlon)
+    const srlat = Math.sin(rlat)
+    const crlat = Math.cos(rlat)
+    const srlat2 = srlat * srlat
+    const crlat2 = crlat * crlat
 
-    const q = Math.sqrt(WmmCalculator.A2 - WmmCalculator.C2 * srlat2);
-    const q1 = altitudeKm * q;
-    const q2 = Math.pow((q1 + WmmCalculator.A2) / (q1 + WmmCalculator.B2), 2.0);
-    const ct = srlat / Math.sqrt(q2 * crlat2 + srlat2); // cos(colatitude)
-    const st = Math.sqrt(1.0 - ct * ct); // sin(colatitude)
+    const q = Math.sqrt(WmmCalculator.A2 - WmmCalculator.C2 * srlat2)
+    const q1 = altitudeKm * q
+    const q2 = Math.pow((q1 + WmmCalculator.A2) / (q1 + WmmCalculator.B2), 2.0)
+    const ct = srlat / Math.sqrt(q2 * crlat2 + srlat2) // cos(colatitude)
+    const st = Math.sqrt(1.0 - ct * ct) // sin(colatitude)
 
-    const r = Math.sqrt(altitudeKm * altitudeKm + 2.0 * q1 + (WmmCalculator.A4 - WmmCalculator.C4 * srlat2) / (q * q));
-    const d = Math.sqrt(WmmCalculator.A2 * crlat2 + WmmCalculator.B2 * srlat2);
-    const ca = (altitudeKm + d) / r; // rotation cos
-    const sa = WmmCalculator.C2 * crlat * srlat / (r * d); // rotation sin
+    const r = Math.sqrt(altitudeKm * altitudeKm + 2.0 * q1 + (WmmCalculator.A4 - WmmCalculator.C4 * srlat2) / (q * q))
+    const d = Math.sqrt(WmmCalculator.A2 * crlat2 + WmmCalculator.B2 * srlat2)
+    const ca = (altitudeKm + d) / r // rotation cos
+    const sa = (WmmCalculator.C2 * crlat * srlat) / (r * d) // rotation sin
 
     // 3. Longitude harmonics, built by angle addition (avoids N cos/sin calls)
-    const sp: number[] = new Array<number>(n1).fill(0.0);
-    const cp: number[] = new Array<number>(n1).fill(0.0);
-    sp[0] = 0.0;
-    cp[0] = 1.0;
-    sp[1] = srlon;
-    cp[1] = crlon;
+    const sp: number[] = new Array<number>(n1).fill(0.0)
+    const cp: number[] = new Array<number>(n1).fill(0.0)
+    sp[0] = 0.0
+    cp[0] = 1.0
+    sp[1] = srlon
+    cp[1] = crlon
     for (let m = 2; m <= N; m++) {
-      sp[m] = sp[1] * cp[m - 1] + cp[1] * sp[m - 1];
-      cp[m] = cp[1] * cp[m - 1] - sp[1] * sp[m - 1];
+      sp[m] = sp[1] * cp[m - 1] + cp[1] * sp[m - 1]
+      cp[m] = cp[1] * cp[m - 1] - sp[1] * sp[m - 1]
     }
 
     // 4. Unnormalised Legendre polynomials and their theta-derivatives.
     //    p[order][degree], dp[order][degree].
-    const size = n1 + 1;
-    const p: number[][] = WmmCalculator.zeros(size);
-    const dp: number[][] = WmmCalculator.zeros(size);
-    const pp: number[] = new Array<number>(n1).fill(0.0);
-    p[0][0] = 1.0;
-    pp[0] = 1.0;
+    const size = n1 + 1
+    const p: number[][] = WmmCalculator.zeros(size)
+    const dp: number[][] = WmmCalculator.zeros(size)
+    const pp: number[] = new Array<number>(n1).fill(0.0)
+    p[0][0] = 1.0
+    pp[0] = 1.0
 
-    const bx: MagField = { val: 0 };
-    const by: MagField = { val: 0 };
+    const bx: MagField = { val: 0 }
+    const by: MagField = { val: 0 }
 
-    const aor = WmmCalculator.RE / r;
-    let ar = aor * aor;
-    let bt = 0.0;
-    let bp = 0.0;
-    let br = 0.0;
-    let bpp = 0.0;
+    const aor = WmmCalculator.RE / r
+    let ar = aor * aor
+    let bt = 0.0
+    let bp = 0.0
+    let br = 0.0
+    let bpp = 0.0
 
     for (let n = 1; n <= N; n++) {
-      ar *= aor;
+      ar *= aor
       for (let m = 0; m <= n; m++) { // --- Legendre recurrence ---
         if (n === m) {
-          p[m][n] = st * p[m - 1][n - 1];
-          dp[m][n] = st * dp[m - 1][n - 1] + ct * p[m - 1][n - 1];
+          p[m][n] = st * p[m - 1][n - 1]
+          dp[m][n] = st * dp[m - 1][n - 1] + ct * p[m - 1][n - 1]
         } else if (n === 1 && m === 0) {
-          p[m][n] = ct * p[m][n - 1];
-          dp[m][n] = ct * dp[m][n - 1] - st * p[m][n - 1];
+          p[m][n] = ct * p[m][n - 1]
+          dp[m][n] = ct * dp[m][n - 1] - st * p[m][n - 1]
         } else if (n > 1) {
           if (m > n - 2) {
-            p[m][n - 2] = 0.0;
-            dp[m][n - 2] = 0.0;
+            p[m][n - 2] = 0.0
+            dp[m][n - 2] = 0.0
           }
-          p[m][n] = ct * p[m][n - 1] - WmmCalculator.k[m][n] * p[m][n - 2];
-          dp[m][n] = ct * dp[m][n - 1] - st * p[m][n - 1] - WmmCalculator.k[m][n] * dp[m][n - 2];
+          p[m][n] = ct * p[m][n - 1] - WmmCalculator.k[m][n] * p[m][n - 2]
+          dp[m][n] = ct * dp[m][n - 1] - st * p[m][n - 1] - WmmCalculator.k[m][n] * dp[m][n - 2]
         }
 
         // --- time-adjusted coefficients (Schmidt factor already folded in) ---
-        const g = WmmCalculator.c[m][n] + dt * WmmCalculator.cd[m][n];
-        let temp1 = 0.0;
-        let temp2 = 0.0;
+        const g = WmmCalculator.c[m][n] + dt * WmmCalculator.cd[m][n]
+        let temp1 = 0.0
+        let temp2 = 0.0
         if (m === 0) {
-          temp1 = g * cp[m];
-          temp2 = g * sp[m];
+          temp1 = g * cp[m]
+          temp2 = g * sp[m]
         } else {
-          const h = WmmCalculator.c[n][m - 1] + dt * WmmCalculator.cd[n][m - 1];
-          temp1 = g * cp[m] + h * sp[m];
-          temp2 = g * sp[m] - h * cp[m];
+          const h = WmmCalculator.c[n][m - 1] + dt * WmmCalculator.cd[n][m - 1]
+          temp1 = g * cp[m] + h * sp[m]
+          temp2 = g * sp[m] - h * cp[m]
         }
 
-        const par = ar * p[m][n];
-        bt -= ar * temp1 * dp[m][n];
-        bp += m * temp2 * par;
-        br += (n + 1) * temp1 * par;
+        const par = ar * p[m][n]
+        bt -= ar * temp1 * dp[m][n]
+        bp += m * temp2 * par
+        br += (n + 1) * temp1 * par
 
         // --- geographic-pole special case (st == 0) ---
         if (st === 0.0 && m === 1) {
           if (n === 1) {
-            pp[n] = pp[n - 1];
+            pp[n] = pp[n - 1]
           } else {
-            pp[n] = ct * pp[n - 1] - WmmCalculator.k[m][n] * pp[n - 2];
+            pp[n] = ct * pp[n - 1] - WmmCalculator.k[m][n] * pp[n - 2]
           }
-          bpp += m * temp2 * ar * pp[n];
+          bpp += m * temp2 * ar * pp[n]
         }
       }
     }
 
     if (st === 0.0) {
-      bp = bpp;
+      bp = bpp
     } else {
-      bp = bp / st;
+      bp = bp / st
     }
 
     // 5. Rotate spherical (bt, bp, br) -> geodetic (X north, Y east)
-    bx.val = -bt * ca - br * sa;
-    by.val = bp;
+    bx.val = -bt * ca - br * sa
+    by.val = bp
 
-    return Math.atan2(by.val, bx.val) * 180.0 / Math.PI;
+    return (Math.atan2(by.val, bx.val) * 180.0) / Math.PI
   }
 
   /**
@@ -233,73 +233,73 @@ export class WmmCalculator {
    */
   private static ensureModel(): void {
     if (WmmCalculator.ready) {
-      return;
+      return
     }
 
-    const N = WmmCalculator.MAXORD;
-    const n1 = N + 1;
-    const size = n1 + 1;
+    const N = WmmCalculator.MAXORD
+    const n1 = N + 1
+    const size = n1 + 1
 
-    const c: number[][] = WmmCalculator.zeros(size);
-    const cd: number[][] = WmmCalculator.zeros(size);
-    const k: number[][] = WmmCalculator.zeros(size);
-    const snorm: number[][] = WmmCalculator.zeros(size);
+    const c: number[][] = WmmCalculator.zeros(size)
+    const cd: number[][] = WmmCalculator.zeros(size)
+    const k: number[][] = WmmCalculator.zeros(size)
+    const snorm: number[][] = WmmCalculator.zeros(size)
 
     // --- raw coefficients ---
     for (let i = 0; i < WmmCalculator.COEFFS.length; i++) {
-      const co = WmmCalculator.COEFFS[i];
-      const n = co[0];
-      const m = co[1];
+      const co = WmmCalculator.COEFFS[i]
+      const n = co[0]
+      const m = co[1]
       if (m <= n) {
-        c[m][n] = co[2];
-        cd[m][n] = co[4];
+        c[m][n] = co[2]
+        cd[m][n] = co[4]
         if (m !== 0) {
-          c[n][m - 1] = co[3];
-          cd[n][m - 1] = co[5];
+          c[n][m - 1] = co[3]
+          cd[n][m - 1] = co[5]
         }
       }
     }
 
     // --- Schmidt quasi-normalisation, folded into the coefficients ---
-    snorm[0][0] = 1.0;
-    k[1][1] = 0.0;
+    snorm[0][0] = 1.0
+    k[1][1] = 0.0
     for (let n = 1; n <= N; n++) {
-      snorm[0][n] = snorm[0][n - 1] * (2.0 * n - 1) / n;
-      let j = 2.0;
+      snorm[0][n] = (snorm[0][n - 1] * (2.0 * n - 1)) / n
+      let j = 2.0
       for (let m = 0; m <= n; m++) {
-        k[m][n] = ((n - 1) * (n - 1) - m * m) / ((2.0 * n - 1) * (2.0 * n - 3.0));
+        k[m][n] = ((n - 1) * (n - 1) - m * m) / ((2.0 * n - 1) * (2.0 * n - 3.0))
         if (m > 0) {
-          const flnmj = ((n - m + 1.0) * j) / (n + m);
-          snorm[m][n] = snorm[m - 1][n] * Math.sqrt(flnmj);
-          j = 1.0;
-          c[n][m - 1] *= snorm[m][n];
-          cd[n][m - 1] *= snorm[m][n];
+          const flnmj = ((n - m + 1.0) * j) / (n + m)
+          snorm[m][n] = snorm[m - 1][n] * Math.sqrt(flnmj)
+          j = 1.0
+          c[n][m - 1] *= snorm[m][n]
+          cd[n][m - 1] *= snorm[m][n]
         }
-        c[m][n] *= snorm[m][n];
-        cd[m][n] *= snorm[m][n];
+        c[m][n] *= snorm[m][n]
+        cd[m][n] *= snorm[m][n]
       }
     }
 
-    WmmCalculator.c = c;
-    WmmCalculator.cd = cd;
-    WmmCalculator.k = k;
-    WmmCalculator.ready = true;
+    WmmCalculator.c = c
+    WmmCalculator.cd = cd
+    WmmCalculator.k = k
+    WmmCalculator.ready = true
   }
 
   /** Square zero-filled matrix helper (ArkTS has no typed 2-D initialiser). */
   private static zeros(size: number): number[][] {
-    const out: number[][] = new Array<number[]>(size);
+    const out: number[][] = new Array<number[]>(size)
     for (let i = 0; i < size; i++) {
-      out[i] = new Array<number>(size).fill(0.0);
+      out[i] = new Array<number>(size).fill(0.0)
     }
-    return out;
+    return out
   }
 
   private static dateToDecimalYear(date: Date): number {
-    const year = date.getUTCFullYear();
-    const start = new Date(Date.UTC(year, 0, 1));
-    const end = new Date(Date.UTC(year + 1, 0, 1));
-    const yearProgress = (date.getTime() - start.getTime()) / (end.getTime() - start.getTime());
-    return year + yearProgress;
+    const year = date.getUTCFullYear()
+    const start = new Date(Date.UTC(year, 0, 1))
+    const end = new Date(Date.UTC(year + 1, 0, 1))
+    const yearProgress = (date.getTime() - start.getTime()) / (end.getTime() - start.getTime())
+    return year + yearProgress
   }
 }

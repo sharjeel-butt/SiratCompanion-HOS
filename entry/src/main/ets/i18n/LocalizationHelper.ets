@@ -1,9 +1,9 @@
 // entry/src/main/ets/helper/LocalizationHelper.ets
 
-import { i18n, resourceManager } from '@kit.LocalizationKit';
-import { common } from '@kit.AbilityKit';
-import { STORAGE_KEY_LANGUAGE } from '../core/common/StorageKeys';
-import { LanguageService } from './LanguageService';
+import { i18n, resourceManager } from '@kit.LocalizationKit'
+import { common } from '@kit.AbilityKit'
+import { STORAGE_KEY_LANGUAGE } from '../core/common/StorageKeys'
+import { LanguageService } from './LanguageService'
 
 /**
  * Localization provider backed by HarmonyOS resources.
@@ -28,10 +28,10 @@ export class L {
    * supported languages. English is the safe default — it is the
    * base resource set and every key is guaranteed to be defined.
    */
-  static readonly DEFAULT_LANGUAGE = 'en';
-  private static ctx: common.Context | null = null;
+  static readonly DEFAULT_LANGUAGE = 'en'
+  private static ctx: common.Context | null = null
   private static readonly overrideCache: Map<string, resourceManager.ResourceManager> =
-    new Map<string, resourceManager.ResourceManager>();
+    new Map<string, resourceManager.ResourceManager>()
 
   /**
    * Call once at app startup (EntryAbility.onWindowStageCreate)
@@ -39,9 +39,9 @@ export class L {
    * if this has not been called.
    */
   static init(context: common.Context): void {
-    L.ctx = context;
+    L.ctx = context
 
-    L.overrideCache.clear();
+    L.overrideCache.clear()
   }
 
   /**
@@ -56,16 +56,15 @@ export class L {
    * in EntryAbility. Safe to call from any context.
    */
   static resolveOverride(override: string): string {
-
     if (override === 'system') {
-      return LanguageService.systemLanguage();
+      return LanguageService.systemLanguage()
     }
 
     if (LanguageService.supports(override)) {
-      return override;
+      return override
     }
 
-    return LanguageService.defaultLanguage();
+    return LanguageService.defaultLanguage()
   }
 
   /**
@@ -78,7 +77,7 @@ export class L {
    * falls through to English.
    */
   static matchSystemLocale(): string {
-    return LanguageService.systemLanguage();
+    return LanguageService.systemLanguage()
   }
 
   /**
@@ -87,20 +86,16 @@ export class L {
    * to adopt the correct RTL/LTR direction automatically.
    */
   static applySystemLanguage(override: string): string {
-
     try {
+      const lang = L.resolveOverride(override)
 
-      const lang = L.resolveOverride(override);
+      i18n.System.setAppPreferredLanguage(lang)
 
-      i18n.System.setAppPreferredLanguage(lang);
+      AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, lang)
 
-      AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, lang);
-
-      return lang;
-
+      return lang
     } catch (err) {
-
-      return LanguageService.defaultLanguage();
+      return LanguageService.defaultLanguage()
     }
   }
 
@@ -109,25 +104,24 @@ export class L {
   // ============================================================
 
   static current(): string {
-    const v = AppStorage.get<string>(STORAGE_KEY_LANGUAGE);
-    return v ? v : LanguageService.defaultLanguage();
+    const v = AppStorage.get<string>(STORAGE_KEY_LANGUAGE)
+    return v ? v : LanguageService.defaultLanguage()
   }
 
   static setLanguage(lang: string): void {
-    AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, lang);
+    AppStorage.setOrCreate(STORAGE_KEY_LANGUAGE, lang)
   }
 
   static isRtl(): boolean {
-    return LanguageService.isRtl(L.current());
+    return LanguageService.isRtl(L.current())
   }
 
   static isRtlLang(lang: string): boolean {
-    return LanguageService.isRtl(lang);
+    return LanguageService.isRtl(lang)
   }
 
-
   static getLanguageLabel(lang: string): string {
-    return L.get(`lang_${lang}`);
+    return L.get(`lang_${lang}`)
   }
 
   // ============================================================
@@ -135,62 +129,62 @@ export class L {
   // ============================================================
 
   static get(key: string, lang?: string): string {
-    let language = (lang !== undefined && lang.length > 0) ? lang : L.current();
+    let language = lang !== undefined && lang.length > 0 ? lang : L.current()
 
     if (language === 'system') {
-      language = L.matchSystemLocale();
+      language = L.matchSystemLocale()
     }
 
-    const mgr = L.mgrFor(language);
+    const mgr = L.mgrFor(language)
 
     if (mgr === null) {
-      return key;
+      return key
     }
 
     try {
-      return mgr.getStringByNameSync(key);
+      return mgr.getStringByNameSync(key)
     } catch (_) {
       try {
-        const baseMgr = L.mgrFor(LanguageService.defaultLanguage());
+        const baseMgr = L.mgrFor(LanguageService.defaultLanguage())
 
         if (baseMgr !== null && baseMgr !== mgr) {
-          return baseMgr.getStringByNameSync(key);
+          return baseMgr.getStringByNameSync(key)
         }
       } catch (_) {
       }
 
-      console.warn(`[L] missing string key: ${key}`);
-      return key;
+      console.warn(`[L] missing string key: ${key}`)
+      return key
     }
   }
 
   static getArray(key: string, lang?: string): string[] {
-    let language = (lang !== undefined && lang.length > 0) ? lang : L.current();
+    let language = lang !== undefined && lang.length > 0 ? lang : L.current()
 
     if (language === 'system') {
-      language = L.matchSystemLocale();
+      language = L.matchSystemLocale()
     }
 
-    const mgr = L.mgrFor(language);
+    const mgr = L.mgrFor(language)
 
     if (mgr === null) {
-      return [];
+      return []
     }
 
     try {
-      return mgr.getStringArrayByNameSync(key);
+      return mgr.getStringArrayByNameSync(key)
     } catch (_) {
       try {
-        const baseMgr = L.mgrFor(LanguageService.defaultLanguage());
+        const baseMgr = L.mgrFor(LanguageService.defaultLanguage())
 
         if (baseMgr !== null && baseMgr !== mgr) {
-          return baseMgr.getStringArrayByNameSync(key);
+          return baseMgr.getStringArrayByNameSync(key)
         }
       } catch (_) {
       }
 
-      console.warn(`[L] missing string-array key: ${key}`);
-      return [];
+      console.warn(`[L] missing string-array key: ${key}`)
+      return []
     }
   }
 
@@ -207,12 +201,12 @@ export class L {
    */
   private static mgrFor(lang: string): resourceManager.ResourceManager | null {
     if (L.ctx === null) {
-      return null;
+      return null
     }
 
-    const cached = L.overrideCache.get(lang);
+    const cached = L.overrideCache.get(lang)
     if (cached !== undefined) {
-      return cached;
+      return cached
     }
 
     try { // Clone the current configuration instead of constructing
@@ -226,18 +220,18 @@ export class L {
       // device locale — so on a Chinese device, picking English
       // rendered Chinese text. All languages now go through the
       // override path so the picked language always wins.
-      const cfg: resourceManager.Configuration = L.ctx.resourceManager.getOverrideConfiguration();
-      cfg.locale = lang;
+      const cfg: resourceManager.Configuration = L.ctx.resourceManager.getOverrideConfiguration()
+      cfg.locale = lang
 
-      const mgr = L.ctx.resourceManager.getOverrideResourceManager(cfg);
-      L.overrideCache.set(lang, mgr);
-      return mgr;
+      const mgr = L.ctx.resourceManager.getOverrideResourceManager(cfg)
+      L.overrideCache.set(lang, mgr)
+      return mgr
     } catch (err) {
       console.warn(`[L] override manager for "${lang}" failed: ${JSON.stringify(
-        err)}`); // Fall back to the base resource manager. This may return
+        err)}`) // Fall back to the base resource manager. This may return
       // device-locale text on non-English devices, but it
       // prevents a total failure.
-      return L.ctx.resourceManager;
+      return L.ctx.resourceManager
     }
   }
 }
