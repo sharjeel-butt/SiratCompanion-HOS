@@ -38,8 +38,7 @@ export class HadithCoreDbHelper {
 
     try {
       const metaRs = await HadithCoreDbHelper.store.querySql(
-        'SELECT sanad_ar, sanad_normalized, sanad_confidence FROM hadiths WHERE hadith_id = ?',
-        [canonicalId] // 👈 Use canonicalId)
+        'SELECT sanad_ar, sanad_normalized, sanad_confidence FROM hadiths WHERE hadith_id = ?', [canonicalId])
       let arabic: string | null = null
       let normalized: string | null = null
       let confidence: string = 'none'
@@ -64,8 +63,7 @@ export class HadithCoreDbHelper {
         'SELECT hn.position, n.narrator_id, n.name_ar, n.name_en, ' +
           'n.generation, n.reliability, n.death_hijri, n.auto_derived ' +
           'FROM hadith_narrators hn JOIN narrators n ON n.narrator_id = hn.narrator_id ' +
-          'WHERE hn.hadith_id = ? ORDER BY hn.position',
-        [canonicalId] // 👈 Use canonicalId)
+          'WHERE hn.hadith_id = ? ORDER BY hn.position', [canonicalId])
       const steps: SanadStep[] = []
       while (stepsRs.goToNextRow()) {
         const step: SanadStep = {
@@ -107,9 +105,8 @@ export class HadithCoreDbHelper {
       const rs = await HadithCoreDbHelper.store.querySql(
         'SELECT grade, grader, source, grade_type, note ' + 'FROM hadith_gradings WHERE hadith_id = ? ' +
           'ORDER BY CASE grade ' +
-          "  WHEN 'sahih' THEN 1 WHEN 'hasan' THEN 2 " +
-          "  WHEN 'daif' THEN 3 WHEN 'mawdu' THEN 4 ELSE 5 END",
-        [canonicalId] // 👈 Use canonicalId)
+          "  WHEN 'sahih' THEN 1 WHEN 'hasan' THEN 2 " + "  WHEN 'daif' THEN 3 WHEN 'mawdu' THEN 4 ELSE 5 END",
+        [canonicalId])
       const out: HadithGrading[] = []
       while (rs.goToNextRow()) {
         out.push({

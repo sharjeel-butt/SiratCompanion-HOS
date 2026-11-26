@@ -864,7 +864,7 @@ export struct HomePage {
   HadithAnchorCard() {
     Row() {
       Column() {
-        Image($r('app.media.ic_hadith_book') // Use the book icon)
+        Image($r('app.media.ic_hadith_book'))
           .width(24)
           .height(24)
           .fillColor(this.colors.accentGold)
@@ -3149,7 +3149,7 @@ export struct HomePage {
   MosqueFinderAnchorCard() {
     Row() {
       Column() {
-        Image($r('app.media.ic_nav_mosque') // Use existing mosque icon).width(24).height(24)
+        Image($r('app.media.ic_nav_mosque')).width(24).height(24)
           .fillColor(this.colors.accentGold)
       }
       .width(44)
@@ -3662,8 +3662,7 @@ export struct HomePage {
         this.ramadanInfo,
         this.isFriday,
         activeEvent,
-        this.upcomingCustomEvents,
-        this.currentLanguage // Pass the language)
+        this.upcomingCustomEvents, this.currentLanguage)
 
       this.iftarDua = allDuas.find((d: CompleteDua) => d.id === 'dua_breaking_the_fast') ?? null
       this.suhoorDua = allDuas.find((d: CompleteDua) => d.id === 'dua_suhoor') ?? null
@@ -3866,8 +3865,7 @@ export struct HomePage {
 
   private onEventPerspectiveListener = (): void => {
     this.upcomingEvents = DateHelper.getUpcomingImportantDates(
-      this.hijriOffset,
-      SettingsHelper.getEventPerspective() // Read directly from SettingsHelper)
+      this.hijriOffset, SettingsHelper.getEventPerspective())
   };
 
   private onHijriOffsetChanged(): void {

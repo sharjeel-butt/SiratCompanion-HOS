@@ -381,7 +381,7 @@ export struct TasbihPage {
       // Tasbih picker
       Row({ space: 6 }) {
         Image($r('app.media.ic_nav_tasbih')).width(14).height(14).fillColor(this.colors.accentGold).flexShrink(0)
-        Text(this.getActiveTasbih() ? this.getTasbihName(this.getActiveTasbih()) // <-- Updated : this.tr('tab_tasbih'))
+        Text(this.getActiveTasbih() ? this.getTasbihName(this.getActiveTasbih()) : this.tr('tab_tasbih'))
           .fontSize(15)
           .fontColor(this.colors.textWhite)
           .fontWeight(FontWeight.Medium)
@@ -414,7 +414,7 @@ export struct TasbihPage {
 
       // Dhikr picker
       Row() {
-        Text(this.getActiveDhikr() ? this.getDhikrLabel(this.getActiveDhikr()) // <-- Updated : this.tr('select_dhikr'))
+        Text(this.getActiveDhikr() ? this.getDhikrLabel(this.getActiveDhikr()) : this.tr('select_dhikr'))
           .fontSize(13)
           .fontColor(this.colors.accentGold)
           .fontWeight(FontWeight.Medium)
@@ -650,7 +650,7 @@ export struct TasbihPage {
                 .backgroundColor(TasbihThemes.getSwatch(t.themePresetId ?? this.appThemePreset, this.colors))
 
               Column() {
-                Text(this.getTasbihName(t) // <-- Updated)
+                Text(this.getTasbihName(t))
                   .fontSize(15)
                   .fontColor(this.colors.textWhite)
                   .fontWeight(FontWeight.Medium)

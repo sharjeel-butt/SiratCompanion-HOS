@@ -114,7 +114,7 @@ struct HadithDetailsPage {
 
         // 2. Middle Row: Section Name
         if (this.hadith.section && this.hadith.section.length > 0) {
-          Text(this.hadith.section // e.g., "Transferance of a Debt...")
+          Text(this.hadith.section)
             .fontSize(15)
             .fontColor(this.colors.textWhite)
             .fontWeight(FontWeight.Medium)

@@ -319,8 +319,7 @@ struct SurahDetailsPage {
         }
 
         // Continuous Text
-        Text(this.buildMushafText()
-          // FIX: Uses the new increased MUSHAF font size and line height)
+        Text(this.buildMushafText())
           .fontSize(TypographyHelper.getArabicFontSize(TypographyHelper.QURAN_FONT_SIZE_MUSHAF))
           .fontFamily(TypographyHelper.getQuranFontByScript(this.activeScript))
           .fontColor(this.colors.textWhite)

@@ -212,7 +212,7 @@ struct DuaDetailsPage {
 
         Flex({ wrap: FlexWrap.Wrap }) {
           ForEach(this.collections, (col: QuranCollection) => {
-            Text(QuranGraphService.getCollectionTitle(col.id) // 👈 Localized Title)
+            Text(QuranGraphService.getCollectionTitle(col.id))
               .fontSize(12)
               .fontColor(this.colors.accentGold)
               .backgroundColor(this.colors.tintSoft)

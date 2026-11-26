@@ -1218,7 +1218,7 @@ struct SettingsPage {
         // --- Privacy Policy Row ---
         Row({ space: 8 }) {
           Image($r('app.media.ic_privacy')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
-          Text(this.tr('privacy_step_title') // Uses the existing wizard string for "Privacy Policy")
+          Text(this.tr('privacy_step_title'))
             .fontSize(14)
             .fontColor(this.colors.accentGold)
             .fontWeight(FontWeight.Medium)
