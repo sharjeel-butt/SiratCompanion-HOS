@@ -3703,6 +3703,30 @@
     {
       "name": "home_insights",
       "value": "الإحصاءات"
+    },
+    {
+      "name": "continue_reading",
+      "value": "متابعة القراءة"
+    },
+    {
+      "name": "last_read",
+      "value": "آخر موضع قراءة"
+    },
+    {
+      "name": "resume_reading",
+      "value": "استئناف القراءة"
+    },
+    {
+      "name": "recent_surahs",
+      "value": "السور الأخيرة"
+    },
+    {
+      "name": "quran_streak",
+      "value": "سلسلة قراءة القرآن"
+    },
+    {
+      "name": "best_streak",
+      "value": "أفضل سلسلة"
     }
   ]
 }

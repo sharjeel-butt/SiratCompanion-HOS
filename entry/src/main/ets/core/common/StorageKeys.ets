@@ -238,3 +238,21 @@ export const STORAGE_KEY_UNREAD_NOTIFICATIONS = 'unread_notifications'
 export const STORAGE_KEY_NOTIFICATION_COUNT = 'notification_count'
 
 export const STORAGE_KEY_DISMISSED_ACHIEVEMENTS = 'dismissed_achievements'
+
+export const STORAGE_KEY_QURAN_LAST_SURAH = 'quran_last_surah'
+
+export const STORAGE_KEY_QURAN_LAST_AYAH = 'quran_last_ayah'
+
+export const STORAGE_KEY_QURAN_LAST_READ = 'quran_last_read'
+
+export const STORAGE_KEY_QURAN_PROGRESS_VERSION = 'quran_progress_version'
+
+export const STORAGE_KEY_QURAN_RECENT_SURAHS = 'quran_recent_surahs'
+
+export const STORAGE_KEY_RECENT_SURAHS_DISMISSED_AT = 'recent_surahs_dismissed_at'
+
+export const STORAGE_KEY_QURAN_CURRENT_STREAK = 'quran_current_streak'
+
+export const STORAGE_KEY_QURAN_BEST_STREAK = 'quran_best_streak'
+
+export const STORAGE_KEY_QURAN_LAST_STREAK_DAY = 'quran_last_streak_day'

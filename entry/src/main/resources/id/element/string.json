@@ -3703,6 +3703,30 @@
     {
       "name": "home_insights",
       "value": "WAWASAN"
+    },
+    {
+      "name": "continue_reading",
+      "value": "Lanjutkan Membaca"
+    },
+    {
+      "name": "last_read",
+      "value": "Terakhir Dibaca"
+    },
+    {
+      "name": "resume_reading",
+      "value": "Lanjutkan Membaca"
+    },
+    {
+      "name": "recent_surahs",
+      "value": "Surah Terakhir Dibaca"
+    },
+    {
+      "name": "quran_streak",
+      "value": "Rangkaian Quran"
+    },
+    {
+      "name": "best_streak",
+      "value": "Rangkaian Terbaik"
     }
   ]
 }

@@ -3731,6 +3731,30 @@
     {
       "name": "home_insights",
       "value": "جائزہ"
+    },
+    {
+      "name": "continue_reading",
+      "value": "مطالعہ جاری رکھیں"
+    },
+    {
+      "name": "last_read",
+      "value": "آخری مطالعہ"
+    },
+    {
+      "name": "resume_reading",
+      "value": "مطالعہ دوبارہ شروع کریں"
+    },
+    {
+      "name": "recent_surahs",
+      "value": "حالیہ سورتیں"
+    },
+    {
+      "name": "quran_streak",
+      "value": "قرآن مطالعہ سلسلہ"
+    },
+    {
+      "name": "best_streak",
+      "value": "بہترین سلسلہ"
     }
   ]
 }

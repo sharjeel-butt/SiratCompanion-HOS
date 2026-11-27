@@ -3703,6 +3703,30 @@
     {
       "name": "home_insights",
       "value": "İÇGÖRÜLER"
+    },
+    {
+      "name": "continue_reading",
+      "value": "Okumaya Devam Et"
+    },
+    {
+      "name": "last_read",
+      "value": "Son Okunan"
+    },
+    {
+      "name": "resume_reading",
+      "value": "Okumaya Devam Et"
+    },
+    {
+      "name": "recent_surahs",
+      "value": "Son Okunan Sureler"
+    },
+    {
+      "name": "quran_streak",
+      "value": "Kur'an Serisi"
+    },
+    {
+      "name": "best_streak",
+      "value": "En İyi Seri"
     }
   ]
 }

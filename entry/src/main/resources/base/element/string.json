@@ -3731,6 +3731,30 @@
     {
       "name": "home_insights",
       "value": "INSIGHTS"
+    },
+    {
+      "name": "continue_reading",
+      "value": "Continue Reading"
+    },
+    {
+      "name": "last_read",
+      "value": "Last Read"
+    },
+    {
+      "name": "resume_reading",
+      "value": "Resume Reading"
+    },
+    {
+      "name": "recent_surahs",
+      "value": "Recent Surahs"
+    },
+    {
+      "name": "quran_streak",
+      "value": "Quran Streak"
+    },
+    {
+      "name": "best_streak",
+      "value": "Best Streak"
     }
   ]
 }

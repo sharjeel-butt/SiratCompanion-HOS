@@ -5,6 +5,7 @@ import { BackupExtensionAbility, BundleVersion, fileIo as fs, ReadOptions } from
 import { preferences } from '@kit.ArkData'
 import { common } from '@kit.AbilityKit'
 import { buffer } from '@kit.ArkTS'
+import { STORAGE_KEY_DISMISSED_ACHIEVEMENTS } from '../core/common/StorageKeys'
 
 const DOMAIN = 0x0000
 const TAG = 'SiratBackup'
@@ -15,6 +16,7 @@ const TYPE_BOOLEAN = 'b'
 
 const STORE_SETTINGS = 'sirat_settings'
 const STORE_TASBIH = 'tasbih_prefs'
+const STORE_NOTIFICATIONS = 'notification_preferences'
 
 /**
  * Current backup file format version.
@@ -50,6 +52,8 @@ const SETTINGS_SPECS: PrefSpec[] = [{ key: 'calc_method', type: TYPE_STRING }, {
   }, { key: 'manual_city', type: TYPE_STRING }, { key: 'high_lat_rule', type: TYPE_STRING },
   { key: 'calc_rounding_method', type: TYPE_STRING }, { key: 'calc_midnight_method', type: TYPE_STRING },
   { key: 'calc_polar_resolution', type: TYPE_STRING }, { key: 'calc_shafaq', type: TYPE_STRING },
+  { key: 'calc_custom_fajr', type: TYPE_NUMBER }, { key: 'calc_custom_isha', type: TYPE_NUMBER },
+  { key: 'calc_custom_isha_interval', type: TYPE_NUMBER },
   { key: 'offset_fajr', type: TYPE_NUMBER }, { key: 'offset_dhuhr', type: TYPE_NUMBER },
   { key: 'offset_asr', type: TYPE_NUMBER }, { key: 'offset_maghrib', type: TYPE_NUMBER },
   { key: 'offset_isha', type: TYPE_NUMBER },
@@ -117,6 +121,10 @@ const SETTINGS_SPECS: PrefSpec[] = [{ key: 'calc_method', type: TYPE_STRING }, {
 const TASBIH_SPECS: PrefSpec[] =
   [{ key: 'tasbihs_data', type: TYPE_STRING }, { key: 'tasbih_active_id', type: TYPE_STRING },
     { key: 'tasbih_active_dhikr', type: TYPE_NUMBER }]
+
+const NOTIFICATION_SPECS: PrefSpec[] = [{
+  key: STORAGE_KEY_DISMISSED_ACHIEVEMENTS, type: TYPE_STRING
+}]
 
 /**
  * Backs up and restores the user's data across device migration.
@@ -326,6 +334,8 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
     }
     await this.backupStore(STORE_SETTINGS, SETTINGS_SPECS, backupDir)
     await this.backupStore(STORE_TASBIH, TASBIH_SPECS, backupDir)
+    await this.backupStore(STORE_NOTIFICATIONS, NOTIFICATION_SPECS, backupDir)
+
     hilog.info(DOMAIN, TAG, 'onBackup complete')
   }
 
@@ -357,6 +367,7 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
     }
     await this.restoreStore(STORE_SETTINGS, backupDir)
     await this.restoreStore(STORE_TASBIH, backupDir)
+    await this.restoreStore(STORE_NOTIFICATIONS, backupDir)
     hilog.info(DOMAIN, TAG, 'onRestore complete')
   }
 
@@ -501,7 +512,15 @@ export default class EntryBackupAbility extends BackupExtensionAbility {
     // sitting in the store harmlessly (nothing reads it), but the
     // breadcrumb is useful when a "my settings are wrong after
     // restore" report arrives.
-    const specs = storeName === STORE_SETTINGS ? SETTINGS_SPECS : TASBIH_SPECS
+    let specs: PrefSpec[]
+
+    if (storeName === STORE_SETTINGS) {
+      specs = SETTINGS_SPECS
+    } else if (storeName === STORE_TASBIH) {
+      specs = TASBIH_SPECS
+    } else {
+      specs = NOTIFICATION_SPECS
+    }
     const knownKeys: Set<string> = new Set(specs.map((s: PrefSpec): string => s.key))
     const unknownKeys: string[] = []
     for (const k of presentKeys) {

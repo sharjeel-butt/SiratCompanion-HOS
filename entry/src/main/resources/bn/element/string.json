@@ -3703,6 +3703,30 @@
     {
       "name": "home_insights",
       "value": "পরিসংখ্যান"
+    },
+    {
+      "name": "continue_reading",
+      "value": "পড়া চালিয়ে যান"
+    },
+    {
+      "name": "last_read",
+      "value": "সর্বশেষ পঠিত"
+    },
+    {
+      "name": "resume_reading",
+      "value": "পড়া পুনরায় শুরু করুন"
+    },
+    {
+      "name": "recent_surahs",
+      "value": "সাম্প্রতিক সূরাসমূহ"
+    },
+    {
+      "name": "quran_streak",
+      "value": "কুরআন ধারাবাহিকতা"
+    },
+    {
+      "name": "best_streak",
+      "value": "সেরা ধারাবাহিকতা"
     }
   ]
 }

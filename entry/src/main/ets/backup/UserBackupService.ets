@@ -20,6 +20,7 @@ import {
   STORAGE_KEY_AUTO_SHOW_RAMADAN_VIEW,
   STORAGE_KEY_CALC_SETTINGS_VERSION,
   STORAGE_KEY_CUSTOM_EVENTS_VERSION,
+  STORAGE_KEY_DISMISSED_ACHIEVEMENTS,
   STORAGE_KEY_DUA_BINDINGS_VERSION,
   STORAGE_KEY_DUA_TRANSLATION_LANG,
   STORAGE_KEY_EVENT_PERSPECTIVE,
@@ -105,6 +106,7 @@ interface BackupFileShape {
   language: string
   settings: Record<string, BackupValue>
   tasbih: Record<string, BackupValue>
+  notifications: Record<string, BackupValue>
 }
 
 // ============================================================
@@ -118,6 +120,7 @@ const BACKUP_FORMAT_VERSION = 1
 // TasbihStorage (tasbih_prefs).
 const STORE_SETTINGS = 'sirat_settings'
 const STORE_TASBIH = 'tasbih_prefs'
+const STORE_NOTIFICATIONS = 'notification_preferences'
 
 // ------------------------------------------------------------
 // The complete set of keys that can appear in a backup. Must be
@@ -140,6 +143,11 @@ const SETTINGS_SPECS: PrefSpec[] = [{ key: 'calc_method', type: 'string', defaul
   { key: 'calc_midnight_method', type: 'string', defaultValue: 'Standard' },
   { key: 'calc_polar_resolution', type: 'string', defaultValue: 'Unresolved' },
   { key: 'calc_shafaq', type: 'string', defaultValue: 'General' },
+  { key: 'calc_custom_fajr', type: 'number', defaultValue: 18 },
+
+  { key: 'calc_custom_isha', type: 'number', defaultValue: 18 },
+
+  { key: 'calc_custom_isha_interval', type: 'number', defaultValue: 0 },
   { key: 'offset_fajr', type: 'number', defaultValue: 0 }, { key: 'offset_dhuhr', type: 'number', defaultValue: 0 },
   { key: 'offset_asr', type: 'number', defaultValue: 0 }, { key: 'offset_maghrib', type: 'number', defaultValue: 0 },
   { key: 'offset_isha', type: 'number', defaultValue: 0 },
@@ -220,6 +228,10 @@ const TASBIH_SPECS: PrefSpec[] = [{ key: 'tasbihs_data', type: 'string', default
   { key: 'tasbih_active_id', type: 'string', defaultValue: '' },
   { key: 'tasbih_active_dhikr', type: 'number', defaultValue: 0 }]
 
+const NOTIFICATION_SPECS: PrefSpec[] = [{
+  key: STORAGE_KEY_DISMISSED_ACHIEVEMENTS, type: 'string', defaultValue: '[]'
+}]
+
 // ============================================================
 // UserBackupService
 // ============================================================
@@ -298,7 +310,10 @@ export class UserBackupService {
   private static async buildBackupObject(context: common.UIAbilityContext,
     appVersion: string): Promise<BackupFileShape> {
     const settings = await UserBackupService.collectStore(context, STORE_SETTINGS, SETTINGS_SPECS)
+
     const tasbih = await UserBackupService.collectStore(context, STORE_TASBIH, TASBIH_SPECS)
+
+    const notifications = await UserBackupService.collectStore(context, STORE_NOTIFICATIONS, NOTIFICATION_SPECS)
     const lang = AppStorage.get<string>(STORAGE_KEY_LANGUAGE) ?? 'en'
 
     return {
@@ -309,7 +324,8 @@ export class UserBackupService {
       createdAtEpochMs: Date.now(),
       language: lang,
       settings,
-      tasbih
+      tasbih,
+      notifications
     }
   }
 
@@ -443,6 +459,9 @@ export class UserBackupService {
     if (!backup || typeof backup !== 'object') {
       return { ok: false, message: 'not_an_object' }
     }
+    if (!backup.notifications) {
+      backup.notifications = {}
+    }
     if (typeof backup.app !== 'string' || backup.app !== BACKUP_APP_MARKER) {
       return { ok: false, message: 'wrong_app' }
     }
@@ -463,7 +482,10 @@ export class UserBackupService {
 
   private static async applyBackup(context: common.UIAbilityContext, backup: BackupFileShape): Promise<void> {
     await UserBackupService.applyStore(context, STORE_SETTINGS, backup.settings, SETTINGS_SPECS)
+
     await UserBackupService.applyStore(context, STORE_TASBIH, backup.tasbih, TASBIH_SPECS)
+
+    await UserBackupService.applyStore(context, STORE_NOTIFICATIONS, backup.notifications ?? {}, NOTIFICATION_SPECS)
   }
 
   private static async applyStore(context: common.UIAbilityContext, storeName: string,
@@ -515,6 +537,16 @@ export class UserBackupService {
     // 4. Re-seed AppStorage from the restored preferences.
     await UserBackupService.seedAppStorageFromPrefs()
 
+    // --------------------------------------------------
+    // Restore notification cache into AppStorage
+    // --------------------------------------------------
+
+    const notificationStore = await preferences.getPreferences(context, STORE_NOTIFICATIONS)
+
+    const dismissedAchievements = await notificationStore.get(STORAGE_KEY_DISMISSED_ACHIEVEMENTS, '[]')
+
+    AppStorage.setOrCreate(STORAGE_KEY_DISMISSED_ACHIEVEMENTS, String(dismissedAchievements))
+
     // 5. Bump every version counter — triggers @Watch on every
     //    subscribed page.
     UserBackupService.bumpVersion(STORAGE_KEY_PRAYER_STATE_VERSION)
@@ -543,6 +575,8 @@ export class UserBackupService {
 
   private static async seedAppStorageFromPrefs(): Promise<void> {
     await UserBackupService.seedString(STORAGE_KEY_THEME_MODE, 'System')
+
+    await UserBackupService.seedString('dismissed_prayers', '[]')
 
     await UserBackupService.seedString(STORAGE_KEY_THEME_OVERRIDE, 'System')
 

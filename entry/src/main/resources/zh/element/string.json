@@ -3703,6 +3703,30 @@
     {
       "name": "home_insights",
       "value": "数据洞察"
+    },
+    {
+      "name": "continue_reading",
+      "value": "继续阅读"
+    },
+    {
+      "name": "last_read",
+      "value": "上次阅读"
+    },
+    {
+      "name": "resume_reading",
+      "value": "恢复阅读"
+    },
+    {
+      "name": "recent_surahs",
+      "value": "最近阅读的苏拉"
+    },
+    {
+      "name": "quran_streak",
+      "value": "古兰经连续阅读"
+    },
+    {
+      "name": "best_streak",
+      "value": "最佳连续记录"
     }
   ]
 }
