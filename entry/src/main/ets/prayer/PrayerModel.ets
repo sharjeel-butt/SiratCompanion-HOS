@@ -7,6 +7,8 @@ export interface PrayerModel {
   time: string
   status: 'next' | 'pray' | 'prayed' | 'abbreviation'
   checked?: boolean
+  windowEnd?: string
+  preferredUntil?: string
 }
 
 export interface ExtraTiming {

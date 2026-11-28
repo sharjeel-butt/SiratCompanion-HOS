@@ -14,7 +14,7 @@ import { LocationMode } from '../settings/SettingsModels'
 import { CachedLocation, FALLBACK_LOCATION, LocationCache } from '../location/LocationCache'
 import { L } from '../i18n/LocalizationHelper'
 import { TimezoneResolver } from '../location/TimezoneResolver'
-import { AdvancedCalcSettings, DEFAULT_ADVANCED_CALC } from './AdvancedCalcModels'
+import { AdvancedCalcSettings, DEFAULT_ADVANCED_CALC, MidnightMethod } from './AdvancedCalcModels'
 import { AppLogger } from '../core/app/AppLogger'
 import { OfflineCityLookup } from '../location/OfflineCityLookup'
 
@@ -28,6 +28,9 @@ export interface HomeHeaderSnapshot {
   currentTime: string
   nextName: string
   nextTime: string
+  currentPrayerValidUntil: string
+  currentPrayerPreferredUntil: string
+  currentPrayerValidUntilTomorrow: boolean
 }
 
 export interface HomeLocationSnapshot {
@@ -68,18 +71,6 @@ export class HomeController {
         PrayerTimeCalculator.calculateWithDeviceTimezone(anchor, latitude, longitude, method, asrRule, highLatRule,
           advanced)
 
-      // M-N1: pick the day-of-week source for applyDayNames.
-      //
-      //   • "Today" (device day) → use `anchor` so the Jummah label
-      //     reflects the location's current Gregorian day, not the
-      //     device's. Fixes the cross-timezone label bug (Karachi
-      //     device Friday morning + NYC location still Thursday
-      //     showed "Jummah" one day early).
-      //
-      //   • Explicit past/future date → use `date` unchanged so the
-      //     user's date selection wins. Shifting it through the tz
-      //     delta can silently roll into the previous Gregorian day,
-      //     which the user did not pick.
       const todayMidnight = new Date()
       todayMidnight.setHours(0, 0, 0, 0)
       const dateMidnight = new Date(date)
@@ -90,9 +81,27 @@ export class HomeController {
       const withOffsets: PrayerModel[] = PrayerManager.applyTimesToPrayers(template, times, offsets, dayNameSource)
       const offsetHours: number = TimezoneResolver.effectiveOffsetForLocation(latitude, longitude, date)
       const withStatus: PrayerModel[] = PrayerManager.updateStatuses(withOffsets, date, offsetHours)
+      const prayers: PrayerModel[] = withStatus.map((p: PrayerModel): PrayerModel => {
+
+        const windowEnd = PrayerTimeCalculator.getPrayerWindowEnd(p.name, times, advanced)
+
+        const preferredUntil = p.name === 'Isha' && advanced.midnight === MidnightMethod.JAFARI ? times.midnight : ''
+
+        return {
+          id: p.id,
+          name: p.name,
+          arabicName: p.arabicName,
+          time: p.time,
+          status: p.status,
+          checked: p.checked,
+
+          windowEnd: windowEnd,
+          preferredUntil: preferredUntil
+        }
+      })
       const emptyExtras: ExtraTiming[] = []
       const snapshot: HomePrayerSnapshot = {
-        prayers: withStatus, extras: emptyExtras
+        prayers, extras: emptyExtras
       }
       return snapshot
     } catch (err) {
@@ -134,19 +143,10 @@ export class HomeController {
     try {
       const times: DailyPrayerTimes =
         PrayerTimeCalculator.calculateWithDeviceTimezone(anchor, latitude, longitude, method, asrRule, highLatRule,
-          advanced) // Pass the location anchor, not the device `today`. applyDayNames
-      // reads getDay() to decide Jummah vs Dhuhr. In a cross-timezone
-      // setup the device and location can be on different Gregorian
-      // days — e.g. Karachi device Tuesday 01:00, NYC location still
-      // Monday 20:00. Using `today` labels Dhuhr as Jummah one day
-      // early for the NYC user. Using `anchor` reflects what day it
-      // actually is at the location.
+          advanced)
       const withOffsets: PrayerModel[] = PrayerManager.applyTimesToPrayers(template, times, offsets, anchor)
       const offsetHours: number = TimezoneResolver.effectiveOffsetForLocation(latitude, longitude, today)
 
-      // Log the offsets actually used so that a "wrong times" report
-      // can be traced to a specific device/location pair without
-      // guessing.
       try {
         const deviceOffset = -today.getTimezoneOffset() / 60
         AppLogger.info('HomeController', `Header offsets: device=${deviceOffset}h, ` + `location=${offsetHours}h, ` +
@@ -158,9 +158,7 @@ export class HomeController {
 
       let current: PrayerModel | null = PrayerManager.getCurrentPrayer(withStatus, offsetHours)
 
-      // Before Fajr, no prayer has occurred yet today. The logical
-      // "current" prayer is the previous day's Isha, whose window
-      // runs from Maghrib through to the next Fajr.
+
       if (current === null) {
         current =
           HomeController.buildPreviousIsha(today, latitude, longitude, method, asrRule, highLatRule, offsets, advanced)
@@ -169,11 +167,28 @@ export class HomeController {
       const nextEvent: NextEventInfo | null =
         HomeController.computeNextEvent(today, latitude, longitude, method, asrRule, highLatRule, offsets, advanced)
 
+      let validUntil = ''
+      let preferredUntil = ''
+      let validUntilTomorrow = false
+
+      if (current !== null) {
+
+        preferredUntil = PrayerTimeCalculator.getPreferredPrayerWindowEnd(current.name, times)
+
+        validUntil = PrayerTimeCalculator.getPrayerWindowEnd(current.name, times, advanced)
+
+        validUntilTomorrow = current.name === 'Isha' && advanced.midnight === MidnightMethod.JAFARI
+      }
+
+
       const snapshot: HomeHeaderSnapshot = {
         currentName: current ? current.name : '—',
         currentTime: current ? current.time : '--:--',
         nextName: nextEvent ? nextEvent.name : '—',
-        nextTime: nextEvent ? nextEvent.time : '--:--'
+        nextTime: nextEvent ? nextEvent.time : '--:--',
+        currentPrayerValidUntil: validUntil,
+        currentPrayerPreferredUntil: preferredUntil,
+        currentPrayerValidUntilTomorrow: validUntilTomorrow
       }
       return snapshot
     } catch (err) {

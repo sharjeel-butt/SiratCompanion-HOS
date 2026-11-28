@@ -29,11 +29,13 @@ export interface AdvancedCalcSettings {
   midnight: MidnightMethod
   polarResolution: PolarResolution
   shafaq: Shafaq
+
 }
 
 export const DEFAULT_ADVANCED_CALC: AdvancedCalcSettings = {
   rounding: RoundingMethod.NEAREST,
   midnight: MidnightMethod.STANDARD,
   polarResolution: PolarResolution.UNRESOLVED,
-  shafaq: Shafaq.GENERAL
+  shafaq: Shafaq.GENERAL,
+
 }

@@ -128,6 +128,10 @@ export struct Prayer {
   @State dateOffset: number = 0;
   @State viewingDate: Date = new Date();
   @State viewingDateKey: string = '';
+  @State currentPrayerValidUntil: string = ''
+  @State currentPrayerPreferredUntil: string = ''
+  @State currentPrayerValidUntilTomorrow: boolean = false
+  @State private nextPrayerCountdown: string = '--:--:--';
   @State viewingHijriDate: string = '';
   @State isExporting: boolean = false;
   @State pdfPrayerDays: PrayerTableRow[] = [];
@@ -239,6 +243,7 @@ export struct Prayer {
   private settingsLoading: boolean = false;
   private settingsPending: boolean = false;
   private locationUpdateTimerId: number = -1;
+  private countdownTimerId: number = -1;
   private systemDarkListener: mediaquery.MediaQueryListener | null = null;
   private advanced: AdvancedCalcSettings = DEFAULT_ADVANCED_CALC;
 
@@ -257,6 +262,7 @@ export struct Prayer {
     this.refreshViewingDate(true)
     this.initialize()
     this.startStatusTimer()
+    this.startCountdownTimer()
 
     this.refreshLocationSilently()
 
@@ -266,6 +272,18 @@ export struct Prayer {
         this.refreshLocationSilently()
       }
     }, 15 * 60 * 1000)
+  }
+
+  private startCountdownTimer(): void {
+    if (this.countdownTimerId !== -1) {
+      clearInterval(this.countdownTimerId)
+    }
+
+    this.updateNextPrayerCountdown()
+
+    this.countdownTimerId = setInterval(() => {
+      this.updateNextPrayerCountdown()
+    }, 1000)
   }
 
   aboutToDisappear(): void {
@@ -280,6 +298,11 @@ export struct Prayer {
       clearInterval(this.locationUpdateTimerId)
       this.locationUpdateTimerId = -1
     }
+
+    if (this.countdownTimerId !== -1) {
+      clearInterval(this.countdownTimerId)
+      this.countdownTimerId = -1
+    }
   }
 
   onPageShow(): void {
@@ -289,7 +312,9 @@ export struct Prayer {
     this.prayers = PrayerManager.loadStateForDate(this.viewingDateKey, this.prayers, this.viewingDate)
     this.prayers = PrayerManager.updateStatuses(this.prayers, this.viewingDate, this.getLocationOffsetHours())
 
-    this.loadSettingsAndLocation()
+    if (!this.settingsLoaded) {
+      this.loadSettingsAndLocation()
+    }
     this.updateTodayHeaderData()
     this.refreshHijriDates()
   }
@@ -305,6 +330,14 @@ export struct Prayer {
           isLoadingLocation: this.isLoadingLocation,
           todayCurrentPrayerName: this.todayCurrentPrayerName,
           todayCurrentPrayerTime: this.todayCurrentPrayerTime,
+
+          currentPrayerValidUntil: this.currentPrayerValidUntil,
+          currentPrayerPreferredUntil: this.currentPrayerPreferredUntil,
+          currentPrayerValidUntilTomorrow: this.currentPrayerValidUntilTomorrow,
+
+          todayNextPrayerName: this.todayNextPrayerName,
+          todayNextPrayerTime: this.todayNextPrayerTime,
+          nextPrayerCountdown: this.nextPrayerCountdown,
           calcMethod: this.calcMethod,
           asrRule: this.asrRule,
           calcSource: this.calcSource,
@@ -353,8 +386,7 @@ export struct Prayer {
                   }.layoutWeight(1).alignItems(HorizontalAlign.Start)
                 }.width('100%').alignItems(VerticalAlign.Top).padding({ left: 24, right: 24 })
               } else {
-                Column() {
-                  this.NextPrayerSection()
+                Column() { // this.NextPrayerSection()
 
                   Column() {
                     PrayerSunPath({
@@ -400,6 +432,64 @@ export struct Prayer {
     .height('100%')
     .backgroundColor(this.colors.primaryGreen)
     .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
+  }
+
+  private updateNextPrayerCountdown(): void {
+    const now = new Date()
+
+    let nextPrayer: PrayerModel | null = null
+    let nextPrayerTime: Date | null = null
+
+    for (const prayer of this.prayers) {
+      if (prayer.time === '--:--') {
+        continue
+      }
+
+      const mins = PrayerManager.timeToMinutes(prayer.time)
+
+      const candidate = new Date()
+      candidate.setHours(Math.floor(mins / 60))
+      candidate.setMinutes(mins % 60)
+      candidate.setSeconds(0)
+      candidate.setMilliseconds(0)
+
+      if (candidate.getTime() <= now.getTime()) {
+        continue
+      }
+
+      if (nextPrayerTime === null || candidate.getTime() < nextPrayerTime.getTime()) {
+        nextPrayer = prayer
+        nextPrayerTime = candidate
+      }
+    }
+
+    // After Isha → tomorrow's Fajr
+    if (nextPrayerTime === null) {
+      const fajr = this.prayers.find((p: PrayerModel) => p.id === 'fajr')
+
+      if (!fajr || fajr.time === '--:--') {
+        this.nextPrayerCountdown = '--:--:--'
+        return
+      }
+
+      const mins = PrayerManager.timeToMinutes(fajr.time)
+
+      nextPrayerTime = new Date()
+      nextPrayerTime.setDate(nextPrayerTime.getDate() + 1)
+      nextPrayerTime.setHours(Math.floor(mins / 60))
+      nextPrayerTime.setMinutes(mins % 60)
+      nextPrayerTime.setSeconds(0)
+      nextPrayerTime.setMilliseconds(0)
+    }
+
+    const diff = Math.max(0, nextPrayerTime.getTime() - now.getTime())
+
+    const hours = Math.floor(diff / 3600000)
+    const minutes = Math.floor((diff % 3600000) / 60000)
+    const seconds = Math.floor((diff % 60000) / 1000)
+
+    this.nextPrayerCountdown = `${hours.toString().padStart(2, '0')}:` + `${minutes.toString().padStart(2, '0')}:` +
+      `${seconds.toString().padStart(2, '0')}`
   }
 
   @Builder
@@ -1002,7 +1092,7 @@ export struct Prayer {
   }
 
   private dt(t: string): string {
-    if (this.clockFormat.length === 0) {
+    if (t === '--:--') {
       return t
     }
     return ClockFormatHelper.reformat(t)
@@ -1097,7 +1187,7 @@ export struct Prayer {
   }
 
   private async onLanguageChangedInHome(): Promise<void> { // Re-render is handled by the @StorageLink.
-    this.loadSettingsAndLocation()
+    await this.loadSettingsAndLocation()
   }
 
   private onHijriOffsetChangedInHome(): void {
@@ -1301,6 +1391,10 @@ export struct Prayer {
     this.todayCurrentPrayerTime = hdr.currentTime
     this.todayNextPrayerName = hdr.nextName
     this.todayNextPrayerTime = hdr.nextTime
+    this.currentPrayerValidUntil = hdr.currentPrayerValidUntil
+    this.currentPrayerPreferredUntil = hdr.currentPrayerPreferredUntil
+    this.currentPrayerValidUntilTomorrow = hdr.currentPrayerValidUntilTomorrow
+    this.updateNextPrayerCountdown()
   }
 
   private buildCombinedTimeline(): TimelineRow[] {
@@ -1401,6 +1495,7 @@ export struct Prayer {
       this.refreshPrayerTimes()
       this.prayers = PrayerManager.updateStatuses(this.prayers, this.viewingDate, this.getLocationOffsetHours())
       this.updateTodayHeaderData()
+      this.refreshHijriDates()
     } catch (err) {
       const e = err as Error
       console.info(`[Prayer] silent location refresh skipped: ${e.message}`)
@@ -1606,7 +1701,7 @@ export struct Prayer {
 
   private hasUncheckedCheckablePrayers(): boolean {
     for (const p of this.prayers) {
-      if (!p.checked && PrayerManager.isPrayerCheckable(p, this.viewingDate)) {
+      if (!p.checked && PrayerManager.isPrayerCheckable(p, this.viewingDate, this.getLocationOffsetHours())) {
         return true
       }
     }

@@ -3755,6 +3755,22 @@
     {
       "name": "best_streak",
       "value": "Best Streak"
+    },
+    {
+      "name": "remaining",
+      "value": "Remaining"
+    },
+    {
+      "name": "active_now",
+      "value": "Active Now"
+    },
+    {
+      "name": "preferred_until",
+      "value": "Preferred Until"
+    },
+    {
+      "name": "valid_until",
+      "value": "Valid Until"
     }
   ]
 }

@@ -3727,6 +3727,22 @@
     {
       "name": "best_streak",
       "value": "সেরা ধারাবাহিকতা"
+    },
+    {
+      "name": "remaining",
+      "value": "বাকি"
+    },
+    {
+      "name": "active_now",
+      "value": "এখন সক্রিয়"
+    },
+    {
+      "name": "preferred_until",
+      "value": "অগ্রাধিকার থাকবে"
+    },
+    {
+      "name": "valid_until",
+      "value": "বৈধ থাকবে"
     }
   ]
 }

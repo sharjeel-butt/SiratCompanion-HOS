@@ -40,13 +40,33 @@ export interface DailyPrayerTimes {
   asr: string
   maghrib: string
   isha: string
+
   sunrise: string
   sunset: string
+
   imsak: string
+
   firstThird: string
   midnight: string
   lastThird: string
+  // Preferred windows
+
+  fajrPreferredUntil: string
+  dhuhrPreferredUntil: string
+  asrPreferredUntil: string
+  maghribPreferredUntil: string
+  ishaPreferredUntil: string
+  // Absolute validity
+
+  fajrValidUntil: string
+  dhuhrValidUntil: string
+  asrValidUntil: string
+  maghribValidUntil: string
+  ishaValidUntilMidnight: string
+  ishaValidUntilFajr: string
+
   date: Date
+
   methodUsed: string
   asrRuleUsed: string
 }
@@ -303,10 +323,8 @@ export class PrayerTimeCalculator {
 
     // --- Umm al-Qura Ramadan Rule ---
     let effectiveIshaInterval = params.ishaInterval
-    if (method === CalculationMethod.UMM_AL_QURA) { // The user's Hijri offset shifts their entire Hijri calendar.
-      // Apply it here so that the "Ramadan" window during which Isha
-      // is extended matches the month the user actually sees on the
-      // Home header and the calendar page. Without this, a user who
+    if (method ===
+      CalculationMethod.UMM_AL_QURA) { // The user's Hijri offset shifts their entire Hijri calendar. // Apply it here so that the "Ramadan" window during which Isha // is extended matches the month the user actually sees on the // Home header and the calendar page. Without this, a user who
       // has offset +2 would see Isha at 90 min for 2–3 days after
       // their own 1 Ramadan, until Umm al-Qura catches up.
       let offsetDays = 0
@@ -391,10 +409,7 @@ export class PrayerTimeCalculator {
       const fajrUTC =
         PrayerTimeCalculator.calculateTimeForAltitude(date, latitude, longitude, dec, eot, -params.fajrAngle, false)
       fajr = PrayerTimeCalculator.dateFromUTCHours(date, fajrUTC + timezoneOffset)
-    } else { // The sun never reaches the Fajr altitude today and no polar resolution
-      // applies. calculateTimeForAltitude() clamps its hour angle to ±1 in that
-      // case, which would place Fajr at solar noon and then jump by hours on the
-      // day the angle becomes unreachable. Fall back to the middle of the night
+    } else { // The sun never reaches the Fajr altitude today and no polar resolution // applies. calculateTimeForAltitude() clamps its hour angle to ±1 in that // case, which would place Fajr at solar noon and then jump by hours on the // day the angle becomes unreachable. Fall back to the middle of the night
       // when the user selected no rule; an explicit rule is used as-is.
       const fajrFallbackRule = highLatRule === HighLatitudeRule.NONE ? HighLatitudeRule.MIDDLE_OF_NIGHT : highLatRule
       fajr = PrayerTimeCalculator.applyHighLatFallback(sunrise, nightMs, params.fajrAngle, fajrFallbackRule, true)
@@ -417,19 +432,14 @@ export class PrayerTimeCalculator {
       const asrUTC =
         PrayerTimeCalculator.calculateTimeForAltitude(date, latitude, longitude, dec, eot, asrAltitude, true)
       asr = PrayerTimeCalculator.dateFromUTCHours(date, asrUTC + timezoneOffset)
-    } else { // 1. Preferred fallback — use the user's polar resolution
-      //    (Aqrab al-Balad or Aqrab al-Yaum) to find a reference
-      //    latitude/day where the Asr altitude is reachable.
+    } else { // 1. Preferred fallback — use the user's polar resolution //    (Aqrab al-Balad or Aqrab al-Yaum) to find a reference //    latitude/day where the Asr altitude is reachable.
       const asrPolarUTC =
         PrayerTimeCalculator.calculatePolarFallback(date, latitude, longitude, asrAltitude, true, dec, eot,
           advanced.polarResolution)
 
       if (asrPolarUTC !== null) {
         asr = PrayerTimeCalculator.dateFromUTCHours(date, asrPolarUTC + timezoneOffset)
-      } else { // 2. Last resort — place Asr at two-thirds of the
-        //    Dhuhr → sunset interval. This preserves the correct
-        //    ordering (Dhuhr < Asr < Maghrib) at every latitude
-        //    without requiring a "night" quantity for the
+      } else { // 2. Last resort — place Asr at two-thirds of the //    Dhuhr → sunset interval. This preserves the correct //    ordering (Dhuhr < Asr < Maghrib) at every latitude //    without requiring a "night" quantity for the
         //    afternoon prayer.
         const dhuhrMs: number = dhuhr.getTime()
         const sunsetMs: number = sunset.getTime()
@@ -481,8 +491,7 @@ export class PrayerTimeCalculator {
         const ishaUTC =
           PrayerTimeCalculator.calculateTimeForAltitude(date, latitude, longitude, dec, eot, -effectiveIshaAngle, true)
         isha = PrayerTimeCalculator.dateFromUTCHours(date, ishaUTC + timezoneOffset)
-      } else { // Same guard as Fajr: the clamped hour angle would place Isha at solar
-        // midnight, which then jumps by hours at the reachability boundary.
+      } else { // Same guard as Fajr: the clamped hour angle would place Isha at solar // midnight, which then jumps by hours at the reachability boundary.
         const ishaFallbackRule = highLatRule === HighLatitudeRule.NONE ? HighLatitudeRule.MIDDLE_OF_NIGHT : highLatRule
         isha = PrayerTimeCalculator.applyHighLatFallback(maghrib, nightMs, effectiveIshaAngle, ishaFallbackRule, false)
       }
@@ -519,7 +528,31 @@ export class PrayerTimeCalculator {
       dhuhr: roundFn(dhuhr),
       asr: roundFn(asr),
       maghrib: roundFn(maghrib),
-      isha: roundFn(isha),
+      isha: roundFn(isha), // Preferred
+
+      fajrPreferredUntil: roundFn(sunrise),
+
+      dhuhrPreferredUntil: roundFn(asr),
+
+      asrPreferredUntil: roundFn(maghrib),
+
+      maghribPreferredUntil: roundFn(isha),
+
+      ishaPreferredUntil: roundFn(midnight),
+
+      // Validity
+
+      fajrValidUntil: roundFn(sunrise),
+
+      dhuhrValidUntil: roundFn(maghrib),
+
+      asrValidUntil: roundFn(maghrib),
+
+      maghribValidUntil: roundFn(isha),
+
+      ishaValidUntilMidnight: roundFn(midnight),
+
+      ishaValidUntilFajr: roundFn(tomorrowFajr),
       sunrise: roundFn(sunrise),
       sunset: roundFn(sunset),
       imsak: roundFn(imsak),
@@ -737,14 +770,7 @@ export class PrayerTimeCalculator {
     return (Math.atan(1 / (Number(rule) + Math.tan(delta))) * 180) / Math.PI
   }
 
-  private static dateFromUTCHours(date: Date,
-    utcHours: number): Date { // Compute total minutes first so a rounding that lands on a
-    // 60-minute boundary is handled by integer division rather
-    // than by relying on Date.setHours' implicit hour overflow.
-    // utcHours is bounded by the caller to roughly [0, 24], so
-    // totalMinutes is [0, 1440]; setHours(0, N, 0, 0) rolls over
-    // into the next day when N >= 1440, which matches the old
-    // behaviour for the "solar noon spills past midnight" case.
+  private static dateFromUTCHours(date: Date, utcHours: number): Date {
     const totalMinutes = Math.round(utcHours * 60)
     const result = new Date(date)
     result.setHours(0, totalMinutes, 0, 0)
@@ -756,5 +782,94 @@ export class PrayerTimeCalculator {
     result.setHours(0, 0, 0, 0)
     result.setMinutes(totalMinutes)
     return result
+  }
+
+  // static getIshaEndTime(times: DailyPrayerTimes, advanced: AdvancedCalcSettings): string {
+  //
+  //   return advanced.midnight === MidnightMethod.JAFARI ? times.ishaEndsAtFajr : times.ishaEndsAtMidnight
+  // }
+
+  static timeToMinutes(time: string): number {
+
+    const parts = time.trim().split(' ')
+
+    if (parts.length !== 2) {
+      return 0
+    }
+
+    const hm = parts[0].split(':')
+    if (hm.length !== 2) {
+      return 0
+    }
+
+    let hour = Number(hm[0])
+    const minute = Number(hm[1])
+    const period = parts[1].toUpperCase()
+
+    if (period === 'PM' && hour !== 12) {
+      hour += 12
+    }
+    if (period === 'AM' && hour === 12) {
+      hour = 0
+    }
+    return hour * 60 + minute
+  }
+
+  static isPrayerWindowExpired(prayerName: string, currentTime: string, times: DailyPrayerTimes,
+    advanced: AdvancedCalcSettings): boolean {
+
+    const expiryTime = PrayerTimeCalculator.getPrayerWindowEnd(prayerName, times, advanced)
+
+    return PrayerTimeCalculator.timeToMinutes(currentTime) >= PrayerTimeCalculator.timeToMinutes(expiryTime)
+  }
+
+  static getPrayerWindowEnd(prayerName: string, times: DailyPrayerTimes, advanced: AdvancedCalcSettings): string {
+
+    switch (prayerName.toLowerCase()) {
+
+      case 'fajr':
+        return times.fajrValidUntil
+
+      case 'dhuhr':
+      case 'jummah':
+        return times.dhuhrValidUntil
+
+      case 'asr':
+        return times.asrValidUntil
+
+      case 'maghrib':
+        return times.maghribValidUntil
+
+      case 'isha':
+        return advanced.midnight === MidnightMethod.JAFARI ? times.ishaValidUntilFajr : times.ishaValidUntilMidnight
+
+      default:
+        return ''
+    }
+  }
+
+  static getPreferredPrayerWindowEnd(prayerName: string, times: DailyPrayerTimes): string {
+
+    switch (prayerName.toLowerCase()) {
+
+      case 'fajr':
+        return times.fajrPreferredUntil
+
+      case 'dhuhr':
+      case 'jummah':
+        return times.dhuhrPreferredUntil
+
+      case 'asr':
+        return times.asrPreferredUntil
+
+      case 'maghrib':
+        return times.maghribPreferredUntil
+
+      case 'isha':
+        return times.ishaPreferredUntil
+
+      default:
+        return ''
+    }
   }
 }
