@@ -1,6 +1,6 @@
 // entry/src/main/ets/components/PageHeader.ets
 
-import { ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
+import { Theme, ThemeColors, ThemeMode } from '../core/ui/themes/Theme'
 import { L } from '../i18n/LocalizationHelper'
 import { SettingsHelper } from '../settings/SettingsHelper'
 import { AsrShadowRule, CalculationMethod } from './PrayerTimeCalculator'
@@ -33,8 +33,14 @@ export struct PageHeader {
   @Prop hijriDateString: string = '';
   @Prop currentLocation: string = '';
   @Prop isLoadingLocation: boolean = true;
+  @Prop todayNextPrayerName: string = '—';
   @Prop todayCurrentPrayerName: string = '—';
   @Prop todayCurrentPrayerTime: string = '--:--';
+  @Prop currentPrayerValidUntil: string = ''
+  @Prop currentPrayerPreferredUntil: string = ''
+  @Prop currentPrayerValidUntilTomorrow: boolean = false
+  @Prop todayNextPrayerTime: string = '--:--';
+  @Prop nextPrayerCountdown: string = '--:--:--';
   @Prop calcMethod: CalculationMethod = CalculationMethod.KARACHI;
   @Prop asrRule: AsrShadowRule = AsrShadowRule.STANDARD;
   @Prop calcSource: CalculationSource = CalculationSource.LOCAL;
@@ -53,6 +59,7 @@ export struct PageHeader {
   // ============================================================
 
   build() {
+
     Column() { // ============ Row 1: Hijri pill + Location pill ============
       Column() { // Hijri date pill
         Row({ space: 6 }) {
@@ -109,50 +116,7 @@ export struct PageHeader {
         })
       }.alignItems(HorizontalAlign.Start).width('100%')
 
-      // ============ Row 2: Current prayer ============
-      Column({ space: 2 }) {
-        Text(this.tr('current_prayer'))
-          .fontSize(10)
-          .fontColor(this.colors.textMuted)
-          .letterSpacing(0.5)
-          .fontWeight(FontWeight.Medium)
-          .width('100%')
-          .textAlign(TextAlign.Start)
-
-        Row() {
-          Text(this.translateEventName(this.todayCurrentPrayerName))
-            .fontSize(28)
-            .fontColor(this.colors.accentGold)
-            .fontWeight(FontWeight.Bold)
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .layoutWeight(1)
-            .textAlign(TextAlign.Start)
-
-          Text(this.dt(this.todayCurrentPrayerTime))
-            .fontSize(28)
-            .fontColor(this.colors.textWhite)
-            .fontWeight(FontWeight.Bold)
-            .fontFeature('"tnum" 1')
-            .maxLines(1)
-            .flexShrink(0)
-        }.width('100%').alignItems(VerticalAlign.Center)
-      }
-      .width('100%')
-      .padding({
-        left: 16,
-        right: 16,
-        top: 8,
-        bottom: 8
-      })
-      .backgroundColor(this.colors.cardDark)
-      .backgroundBlurStyle(BlurStyle.Thin)
-      .borderRadius(19)
-      .border({ width: 1, color: this.colors.borderSoft })
-      .alignItems(HorizontalAlign.Start)
-      .margin({ top: 4, bottom: 12 })
-
-      // ============ Row 3: Calc pills or Fasting Window ============
+      // ============ Row 2: Calc pills or Fasting Window ============
       if (this.isRamadan) {
         Row({ space: 8 }) {
           Image($r('app.media.ic_fast')).width(16).height(16).fillColor(this.colors.accentGold).flexShrink(0)
@@ -253,9 +217,151 @@ export struct PageHeader {
           .onClick(() => {
             this.onOpenSettings()
           })
-        }.width('100%').padding({ bottom: 8 }).alignItems(VerticalAlign.Center)
+
+        }.width('100%').padding({ bottom: 4 }).margin({ top: 6 }).alignItems(VerticalAlign.Center)
       }
-    }.width('100%').padding({ left: 16, right: 16 }).backgroundColor(this.colors.primaryGreen)
+
+      // ============ Row 3: Prayer Cards ============
+      Row({ space: 12 }) {
+
+        // ==================================================
+        // Current Prayer Card
+        // ==================================================
+        Column({ space: 4 }) {
+
+          Text(this.tr('current_prayer'))
+            .fontSize(10)
+            .fontColor(this.colors.textMuted)
+            .fontWeight(FontWeight.Medium)
+            .width('100%')
+            .textAlign(TextAlign.Start)
+
+          Text(this.translateEventName(this.todayCurrentPrayerName))
+            .fontSize(20)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.accentGold)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .width('100%')
+            .textAlign(TextAlign.Start)
+
+          Text(this.dt(this.todayCurrentPrayerTime))
+            .fontSize(16)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.textWhite)
+            .fontFeature('"tnum" 1')
+            .width('100%')
+            .textAlign(TextAlign.Start)
+
+          if (this.currentPrayerPreferredUntil.length > 0) {
+
+            Text(`${this.tr('preferred_until')} ${this.dt(this.currentPrayerPreferredUntil)}`)
+              .fontSize(13)
+              .fontColor(this.colors.textMuted)
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+              .width('100%')
+              .textAlign(TextAlign.Start)
+          }
+
+          if (this.currentPrayerValidUntil.length > 0) {
+
+            Text(this.currentPrayerValidUntilTomorrow ?
+              `${this.tr('valid_until')} ${this.dt(this.currentPrayerValidUntil)} (${this.tr('tomorrow')})` :
+              `${this.tr('valid_until')} ${this.dt(this.currentPrayerValidUntil)}`)
+              .fontSize(13)
+              .fontColor(this.colors.textMuted)
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+              .width('100%')
+              .textAlign(TextAlign.Start)
+
+          }
+
+        }
+        .layoutWeight(1)
+        .height(135)
+        .padding({
+          left: 12,
+          right: 12,
+          top: 12,
+          bottom: 12
+        })
+        .backgroundColor(this.colors.cardDark)
+        .borderRadius(Theme.radiusMedium)
+        .border({
+          width: 1, color: this.colors.borderSoft
+        })
+        .alignItems(HorizontalAlign.Start)
+
+        // ==================================================
+        // Next Prayer Card
+        // ==================================================
+        Column({ space: 4 }) {
+
+          Text(this.tr('next_prayer'))
+            .fontSize(10)
+            .fontColor(this.colors.textMuted)
+            .fontWeight(FontWeight.Medium)
+            .width('100%')
+            .textAlign(TextAlign.Start)
+
+          Text(this.translateEventName(this.todayNextPrayerName))
+            .fontSize(20)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.accentGold)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .width('100%')
+            .textAlign(TextAlign.Start)
+
+          Text(this.dt(this.todayNextPrayerTime))
+            .fontSize(16)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.textWhite)
+            .fontFeature('"tnum" 1')
+            .width('100%')
+            .textAlign(TextAlign.Start)
+
+          Text(this.nextPrayerCountdown)
+            .fontSize(15)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.accentGold)
+            .fontFeature('"tnum" 1')
+            .width('100%')
+            .textAlign(TextAlign.Start)
+
+          Text(this.tr('remaining'))
+            .fontSize(13)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.colors.textMuted)
+            .width('100%')
+            .textAlign(TextAlign.Start)
+
+        }
+        .layoutWeight(1)
+        .height(135)
+        .padding({
+          left: 12,
+          right: 12,
+          top: 12,
+          bottom: 12
+        })
+        .backgroundColor(this.colors.cardDark)
+        .borderRadius(Theme.radiusMedium)
+        .border({
+          width: 1, color: this.colors.borderSoft
+        })
+        .alignItems(HorizontalAlign.Start)
+
+      }.width('100%').margin({
+        top: 4, bottom: 4
+      })
+    }
+    .width('100%')
+    .padding({ left: 16, right: 16, bottom: 4 })
+    .backgroundColor(this.colors.primaryGreen)
+    .direction(this.isRtl() ? Direction.Rtl : Direction.Ltr)
   }
 
   private tr(key: string): string {

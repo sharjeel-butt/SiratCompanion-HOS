@@ -3727,6 +3727,22 @@
     {
       "name": "best_streak",
       "value": "Rangkaian Terbaik"
+    },
+    {
+      "name": "remaining",
+      "value": "Tersisa"
+    },
+    {
+      "name": "active_now",
+      "value": "Sedang Aktif"
+    },
+    {
+      "name": "preferred_until",
+      "value": "Diutamakan Hingga"
+    },
+    {
+      "name": "valid_until",
+      "value": "Berlaku Hingga"
     }
   ]
 }

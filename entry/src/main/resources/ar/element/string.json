@@ -3727,6 +3727,22 @@
     {
       "name": "best_streak",
       "value": "أفضل سلسلة"
+    },
+    {
+      "name": "remaining",
+      "value": "المتبقي"
+    },
+    {
+      "name": "active_now",
+      "value": "نشط الآن"
+    },
+    {
+      "name": "preferred_until",
+      "value": "مفضل حتى"
+    },
+    {
+      "name": "valid_until",
+      "value": "صالح حتى"
     }
   ]
 }

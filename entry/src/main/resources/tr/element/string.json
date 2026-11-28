@@ -3727,6 +3727,22 @@
     {
       "name": "best_streak",
       "value": "En İyi Seri"
+    },
+    {
+      "name": "remaining",
+      "value": "Kalan Süre"
+    },
+    {
+      "name": "active_now",
+      "value": "Şu Anda Aktif"
+    },
+    {
+      "name": "preferred_until",
+      "value": "Tercih Edilen Süre Sonu"
+    },
+    {
+      "name": "valid_until",
+      "value": "Geçerlilik Tarihi"
     }
   ]
 }

@@ -3755,6 +3755,22 @@
     {
       "name": "best_streak",
       "value": "بہترین سلسلہ"
+    },
+    {
+      "name": "remaining",
+      "value": "باقی"
+    },
+    {
+      "name": "active_now",
+      "value": "ابھی فعال"
+    },
+    {
+      "name": "preferred_until",
+      "value": "ترجیحی مدت"
+    },
+    {
+      "name": "valid_until",
+      "value": "درست تا"
     }
   ]
 }

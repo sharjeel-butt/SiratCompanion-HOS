@@ -195,7 +195,12 @@ export struct HomePage {
   @State hijriDateString: string = '';
   @State todayCurrentPrayerName: string = '—';
   @State todayCurrentPrayerTime: string = '--:--';
+  @State currentPrayerValidUntil: string = ''
+  @State currentPrayerPreferredUntil: string = ''
+  @State currentPrayerValidUntilTomorrow: boolean = false
+
   @State todayNextPrayerName: string = '—';
+  @State private nextPrayerCountdown: string = '--:--:--';
   @State todayNextPrayerTime: string = '--:--';
   @State isExportingRamadan: boolean = false;
   @State pdfRamadanDays: RamadanTableRow[] = [];
@@ -355,6 +360,32 @@ export struct HomePage {
     return this.quranTransLang
   }
 
+  private updateNextPrayerCountdown(): void {
+    const next = this.parseTimeToDateToday(this.todayNextPrayerTime)
+
+    if (next === null) {
+      this.nextPrayerCountdown = '--:--:--'
+      return
+    }
+
+    let target = next
+
+    if (target.getTime() < Date.now()) {
+      target.setDate(target.getDate() + 1)
+    }
+
+    const diffMs = target.getTime() - Date.now()
+
+    const totalSeconds = Math.max(0, Math.floor(diffMs / 1000))
+
+    const hours = Math.floor(totalSeconds / 3600)
+    const minutes = Math.floor((totalSeconds % 3600) / 60)
+    const seconds = totalSeconds % 60
+
+    this.nextPrayerCountdown = `${hours.toString().padStart(2, '0')}:` + `${minutes.toString().padStart(2, '0')}:` +
+      `${seconds.toString().padStart(2, '0')}`
+  }
+
   build() {
     Stack() {
       Column() {
@@ -366,6 +397,14 @@ export struct HomePage {
           isLoadingLocation: this.isLoadingLocation,
           todayCurrentPrayerName: this.todayCurrentPrayerName,
           todayCurrentPrayerTime: this.todayCurrentPrayerTime,
+
+          currentPrayerValidUntil: this.currentPrayerValidUntil,
+          currentPrayerPreferredUntil: this.currentPrayerPreferredUntil,
+          currentPrayerValidUntilTomorrow: this.currentPrayerValidUntilTomorrow,
+
+          todayNextPrayerName: this.todayNextPrayerName,
+          todayNextPrayerTime: this.todayNextPrayerTime,
+          nextPrayerCountdown: this.nextPrayerCountdown,
           calcMethod: this.calcMethod,
           asrRule: this.asrRule,
           calcSource: this.calcSource,
@@ -476,6 +515,9 @@ export struct HomePage {
       }
 
       this.TasbihCard()
+      if (this.boundTasbihs.length > 0) {
+        this.BoundTasbihsCard()
+      }
     }.width('100%')
   }
 
@@ -1277,12 +1319,10 @@ export struct HomePage {
             Row({ space: 12 }) { // Date badge (Gregorian — unchanged)
               Column() {
                 Text(item.date.toLocaleDateString(this.currentLanguage, { month: 'short' }).toUpperCase())
-                  .fontSize(9)
-                  .fontColor(this.colors.textOnAccent)
+                  .fontSize(9).fontColor(this.colors.textWhite)
                   .fontWeight(FontWeight.Bold)
                 Text(`${item.date.getDate()}`)
-                  .fontSize(16)
-                  .fontColor(this.colors.textOnAccent)
+                  .fontSize(16).fontColor(this.colors.textWhite)
                   .fontWeight(FontWeight.Bold)
               }
               .width(44)
@@ -2778,10 +2818,6 @@ export struct HomePage {
         this.QadaHomeBanner()
       }
 
-      if (this.boundTasbihs.length > 0) {
-        this.BoundTasbihsCard()
-      }
-
       if (this.recommendedRecitations.length > 0) {
         this.RecommendedRecitationsCard()
       }
@@ -4109,6 +4145,10 @@ export struct HomePage {
     this.todayCurrentPrayerTime = hdr.currentTime
     this.todayNextPrayerName = hdr.nextName
     this.todayNextPrayerTime = hdr.nextTime
+    this.currentPrayerValidUntil = hdr.currentPrayerValidUntil
+    this.currentPrayerPreferredUntil = hdr.currentPrayerPreferredUntil
+    this.currentPrayerValidUntilTomorrow = hdr.currentPrayerValidUntilTomorrow
+    this.updateNextPrayerCountdown()
   }
 
   private refreshFastingWindow(): void {
@@ -4450,9 +4490,13 @@ export struct HomePage {
     if (this.countdownTimerId !== -1) {
       return
     }
+
     this.updateCountdown()
+    this.updateNextPrayerCountdown()
+
     this.countdownTimerId = setInterval(() => {
       this.updateCountdown()
+      this.updateNextPrayerCountdown()
     }, 1000)
   }
 

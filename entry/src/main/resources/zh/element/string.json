@@ -3727,6 +3727,22 @@
     {
       "name": "best_streak",
       "value": "最佳连续记录"
+    },
+    {
+      "name": "remaining",
+      "value": "剩余时间"
+    },
+    {
+      "name": "active_now",
+      "value": "当前进行中"
+    },
+    {
+      "name": "preferred_until",
+      "value": "优先至"
+    },
+    {
+      "name": "valid_until",
+      "value": "有效至"
     }
   ]
 }
